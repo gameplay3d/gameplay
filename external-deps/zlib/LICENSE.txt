@@ -1,0 +1,1 @@
+See license in include/zlib.h

@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{A9A2DD10-BBC9-4023-A825-AB378EC2259C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{78A0DA59-44AA-4905-A75B-6545F58A9570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\fonts">
+      <UniqueIdentifier>{A989C6F3-BBE1-40ca-98FD-36FD40318F28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\shaders">
+      <UniqueIdentifier>{0343E4EF-77F3-4789-9795-0E7C0DAAC01A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\textures">
+      <UniqueIdentifier>{0551207e-628e-48c9-af7a-acb63f1ec44b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\sounds">
+      <UniqueIdentifier>{ec07215c-1661-465e-ac22-0d9582b611b1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icon.png" />
+    <None Include="res\fonts\arial16.gpb">
+      <Filter>res\fonts</Filter>
+    </None>
+    <None Include="res\shaders\textured.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\textured.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\quad.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\quad.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\textures\longboard.png">
+      <Filter>res\textures</Filter>
+    </None>
+    <None Include="res\textures\nice_gradient.png">
+      <Filter>res\textures</Filter>
+    </None>
+    <None Include="res\textures\tileable_asphalt.png">
+      <Filter>res\textures</Filter>
+    </None>
+    <None Include="res\textures\wheels.png">
+      <Filter>res\textures</Filter>
+    </None>
+    <None Include="res\sounds\longboard2.wav">
+      <Filter>res\sounds</Filter>
+    </None>
+    <None Include="bar-descriptor.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\LongboardGame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\LongboardGame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
