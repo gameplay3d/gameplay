@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\DAESceneEncoder.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ReferenceTable.cpp" />
+    <ClCompile Include="src\TTFFontEncoder.cpp" />
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Objects\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CameraInstance.cpp">
+      <Filter>Objects\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Font.cpp">
+      <Filter>Objects\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Glyph.cpp">
+      <Filter>Objects\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Light.cpp">
+      <Filter>Objects\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightInstance.cpp">
+      <Filter>Objects\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Material.cpp">
+      <Filter>Objects\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MaterialParameter.cpp">
+      <Filter>Objects\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>Objects\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshPart.cpp">
+      <Filter>Objects\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshSkin.cpp">
+      <Filter>Objects\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Node.cpp">
+      <Filter>Objects\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Reference.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>Objects\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GPBDecoder.cpp" />
+    <ClCompile Include="src\Animation.cpp">
+      <Filter>Objects\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AnimationChannel.cpp">
+      <Filter>Objects\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GPBFile.cpp" />
+    <ClCompile Include="src\DAEChannelTarget.cpp" />
+    <ClCompile Include="src\Base.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileIO.cpp" />
+    <ClCompile Include="src\StringUtil.cpp" />
+    <ClCompile Include="src\Effect.cpp">
+      <Filter>Objects\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vertex.cpp" />
+    <ClCompile Include="src\VertexElement.cpp" />
+    <ClCompile Include="src\Quaternion.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vector4.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vector3.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vector2.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Transform.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Matrix.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\DAESceneEncoder.h" />
+    <ClInclude Include="src\ReferenceTable.h" />
+    <ClInclude Include="src\TTFFontEncoder.h" />
+    <ClInclude Include="src\CameraInstance.h">
+      <Filter>Objects\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>Objects\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Font.h">
+      <Filter>Objects\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Glyph.h">
+      <Filter>Objects\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LightInstance.h">
+      <Filter>Objects\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Light.h">
+      <Filter>Objects\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MaterialParameter.h">
+      <Filter>Objects\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Material.h">
+      <Filter>Objects\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshSkin.h">
+      <Filter>Objects\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh.h">
+      <Filter>Objects\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshPart.h">
+      <Filter>Objects\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Node.h">
+      <Filter>Objects\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Reference.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model.h">
+      <Filter>Objects\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GPBDecoder.h" />
+    <ClInclude Include="src\AnimationChannel.h">
+      <Filter>Objects\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation.h">
+      <Filter>Objects\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GPBFile.h" />
+    <ClInclude Include="src\DAEChannelTarget.h" />
+    <ClInclude Include="src\Base.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FileIO.h" />
+    <ClInclude Include="src\StringUtil.h" />
+    <ClInclude Include="src\Effect.h">
+      <Filter>Objects\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vertex.h" />
+    <ClInclude Include="src\VertexElement.h" />
+    <ClInclude Include="src\Quaternion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vector4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vector2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Transform.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Matrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{3be0a9f1-9de7-42e9-b264-89400ccf3236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Camera">
+      <UniqueIdentifier>{d2b8cf21-20ee-4838-8bb6-5adab779dc10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Font">
+      <UniqueIdentifier>{1c4dbad5-5351-4fd0-b498-745f7afcf866}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Light">
+      <UniqueIdentifier>{c41a1929-d921-4d2a-9713-12831c0e3ce1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Material">
+      <UniqueIdentifier>{1d8618d6-dbed-40c0-bb22-43350b195ee1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Mesh">
+      <UniqueIdentifier>{80e09f25-6954-4415-b712-62a4a64174c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Node">
+      <UniqueIdentifier>{a74ab546-c248-4bf8-b212-b590514e23e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Animation">
+      <UniqueIdentifier>{dc9b3d2e-25ae-4613-83ce-844abf4f9bf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{4368ed2b-7fce-423a-a9cb-76a0fdc42858}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,297 @@
+/*
+ * Mesh.h
+ */
+
+#ifndef MESH_H_
+#define MESH_H_
+
+#include "VertexFormat.h"
+#include "Vector3.h"
+#include "BoundingBox.h"
+#include "BoundingSphere.h"
+
+namespace gameplay
+{
+
+class MeshPart;
+class Material;
+class Model;
+
+/**
+ * Defines a mesh supporting various vertex formats and 1 or more
+ * MeshPart(s) to define how the vertices are connected.
+ */
+class Mesh : public Ref
+{
+    friend class Model;
+    friend class Package;
+
+public:
+
+    /**
+     * Defines supported index formats.
+     */
+    enum IndexFormat
+    {
+        INDEX8 = GL_UNSIGNED_BYTE,
+        INDEX16 = GL_UNSIGNED_SHORT,
+        INDEX32 = GL_UNSIGNED_INT
+    };
+
+    /**
+     * Defines supported primitive types.
+     */
+    enum PrimitiveType
+    {
+        TRIANGLES = GL_TRIANGLES,
+        TRIANGLE_STRIP = GL_TRIANGLE_STRIP,
+        LINES = GL_LINES,
+        LINE_STRIP = GL_LINE_STRIP,
+        POINTS = GL_POINTS
+    };
+
+    /**
+     * Constructs a basic static mesh with the specified vertex format.
+     *
+     * @param vertexFormat The vertex format.
+     * @param vertexCount The number of vertices.
+     * @param dynamic true if the mesh is dynamic; false otherwise.
+     * 
+     * @return The created mesh.
+     */
+    static Mesh* createMesh(VertexFormat* vertexFormat, unsigned int vertexCount, bool dynamic = false);
+
+    /**
+     * Creates a new textured 3D quad.
+     *
+     * The specified points should describe a triangle strip with the first 3 points
+     * forming a triangle wound in counter-clockwise direction, with the second triangle
+     * formed from the last three points in clockwise direction.
+     *
+     * @param p1 The first point.
+     * @param p2 The second point.
+     * @param p3 The third point.
+     * @param p4 The fourth point.
+     * 
+     * @return The created mesh.
+     */
+    static Mesh* createQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4);
+
+    /**
+     * Constructs a new textured 2D quad.
+     * 
+     * @return The newly created mesh.
+     */
+    static Mesh* createQuad(float x, float y, float width, float height);
+
+    /**
+     * Creates a new full-screen 2D quad.
+     *
+     * The returned mesh's vertex format includes a 2-element (x,y) position
+     * and a 2-element texture coordinate.
+     *
+     * This method returns a mesh describing a fullscreen quad using
+     * normalized device coordinates for vertex positions.
+     * 
+     * @return The newly created mesh.
+     */
+    static Mesh* createQuadFullscreen();
+
+    /**
+     * Creates lines between 2 or more points passed in as a Vector3 array.
+     *
+     * The mesh contains only position data using lines to connect the vertices.
+     * This is useful for drawing basic color elements into a scene.
+     * 
+     * @param points The array of points.
+     * @param pointCount The number of points.
+     */
+    static Mesh* createLines(Vector3* points, unsigned int pointCount);
+
+    /**
+     * Creates a bounding box mesh when passed a BoundingBox.
+     *
+     * The mesh contains only position data using lines to connect the vertices.
+     *
+     * @param box The BoundingBox that will be used to create the mesh.
+     * 
+     * @return The newly created bounding box mesh.
+     */
+    static Mesh* createBoundingBox(const BoundingBox& box);
+
+    /**
+     * Creates a Model of this Mesh that can be used for drawing with materials.
+     * 
+     * @return The Model of this Mesh.
+     */
+    Model* createModel();
+
+    /**
+     * Gets the vertex format for the mesh.
+     *
+     * @return The vertex format.
+     */
+    const VertexFormat* getVertexFormat() const;
+
+    /**
+     * Gets the number of vertices in the mesh.
+     *
+     * @return The number of vertices in the mesh.
+     */
+    unsigned int getVertexCount() const;
+
+    /**
+     * Gets the size of a single vertex in the mesh.
+     *
+     * @return The size of 1 vertex in the mesh.
+     */
+    unsigned int getVertexSize() const;
+
+    /**
+     * Returns a handle to the vertex buffer for the mesh.
+     *
+     * @return The vertex buffer object handle.
+     */
+    VertexBuffer getVertexBuffer() const;
+
+    /**
+     * Determines if the mesh is dynamic.
+     *
+     * @return true if the mesh is dynamic; false otherwise.
+     */
+    bool isDynamic() const;
+
+    /**
+     * Returns the primitive type of the vertices in the mesh.
+     *
+     * The default primitive type for a Mesh is TRIANGLES.
+     * 
+     * @return The primitive type.
+     *
+     * @see setPrimitiveType(PrimitiveType)
+     */
+    PrimitiveType getPrimitiveType() const;
+
+    /**
+     * Sets the primitive type for the vertices in the mesh.
+     *
+     * The primitive type for a Mesh is only meaningful for meshes that do not
+     * have any MeshParts. When there are no MeshParts associated with a mesh,
+     * the Mesh is drawn as non-indexed geometry and the PrimitiveType of the Mesh
+     * determines how the vertices are interpreted when drawn.
+     *
+     * @param type The new primitive type.
+     */
+    void setPrimitiveType(Mesh::PrimitiveType type);
+
+    /**
+     * Sets the specified vertex data into the mapped vertex buffer.
+     *
+     * @param vertexData The vertex data to be set.
+     * @param vertexStart The index of the starting vertex (0 by default).
+     * @param vertexCount The number of vertices to be set (default is 0, for all vertices).
+     */
+    void setVertexData(void* vertexData, unsigned int vertexStart = 0, unsigned int vertexCount = 0);
+
+    /**
+     * Creates and adds a new part of primitive data defining how the vertices are connected.
+     *
+     * @param primitiveType The type of primitive data to connect the indices as.
+     * @param indexFormat The format of the indices. SHORT or INT.
+     * @param indexCount The number of indices to be contained in the part.
+     * @param dynamic true if the index data is dynamic; false otherwise.
+     * 
+     * @return The newly created/added mesh part.
+     */
+    MeshPart* addPart(PrimitiveType primitiveType, Mesh::IndexFormat indexFormat, unsigned int indexCount, bool dynamic = false);
+
+    /**
+     * Gets the number of mesh parts contained within the mesh.
+     *
+     * @return The number of mesh parts contained within the mesh.
+     */
+    unsigned int getPartCount() const;
+
+    /**
+     * Gets a MeshPart by index.
+     * 
+     * @param index The index of the MeshPart to get.
+     * 
+     * @return The MeshPart at the specified index.
+     */
+    MeshPart* getPart(unsigned int index);
+
+    /**
+     * Returns the bounding box for the points in this mesh.
+     * 
+     * Only meshes loaded from package files are imported with valid
+     * bounding volumes. Programmatically created meshes will contain
+     * empty bounding volumes until the setBoundingBox and/or
+     * setBoundingSphere methods are called to specify the mesh's
+     * local bounds.
+     *
+     * @return The bounding box for the mesh.
+     */
+    const BoundingBox& getBoundingBox() const;
+
+    /**
+     * Sets the bounding box for this mesh.
+     *
+     * @param box The new bounding box for the mesh.
+     */
+    void setBoundingBox(const BoundingBox& box);
+
+    /**
+     * Returns the bounding sphere for the points in the mesh.
+     *
+     * Only meshes loaded from package files are imported with valid
+     * bounding volumes. Programmatically created meshes will contain
+     * empty bounding volumes until the setBoundingBox and/or
+     * setBoundingSphere methods are called to specify the mesh's
+     * local bounds.
+     *
+     * @return The bounding sphere for the mesh.
+     */
+    const BoundingSphere& getBoundingSphere() const;
+
+    /**
+     * Sets the bounding sphere for this mesh.
+     *
+     * @param sphere The new bounding sphere for the mesh.
+     */
+    void setBoundingSphere(const BoundingSphere& sphere);
+
+    /**
+     * Destructor.
+     */
+    virtual ~Mesh();
+
+private:
+
+    /**
+     * Constructor.
+     */
+    Mesh();
+
+    /**
+     * Constructor.
+     *
+     * @param copy The mesh to copy from.
+     */
+    Mesh(const Mesh& copy);
+
+    VertexFormat* _vertexFormat;
+    unsigned int _vertexCount;
+    unsigned int _vertexSize;
+    VertexBuffer _vertexBuffer;
+    PrimitiveType _primitiveType;
+    unsigned int _partCount;
+    MeshPart** _parts;
+    bool _dynamic;
+    BoundingBox _boundingBox;
+    BoundingSphere _boundingSphere;
+};
+
+}
+
+#endif
