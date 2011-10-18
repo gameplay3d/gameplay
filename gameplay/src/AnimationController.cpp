@@ -1,0 +1,241 @@
+/*
+ * AnimationController.cpp
+ */
+
+#include "Base.h"
+#include "AnimationController.h"
+#include "Game.h"
+#include "Curve.h"
+
+namespace gameplay
+{
+
+AnimationController::AnimationController()
+    : _state(IDLE), _animations(NULL)
+{
+}
+
+AnimationController::~AnimationController()
+{
+    destroyAllAnimations();
+}
+
+Animation* AnimationController::createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, Curve::InterpolationType type)
+{
+    assert(type != Curve::BEZIER && type != Curve::HERMITE);
+    assert(id && keyCount >= 2 && keyTimes && keyValues);
+    Animation* animation = getAnimation(id);
+
+    if (animation != NULL)
+        return NULL;
+
+    animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, type);
+
+    addAnimation(animation);
+
+    target->addAnimation(animation);
+
+    return animation;
+}
+
+Animation* AnimationController::createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, float* keyTangentIn, float* keyTangentOut, Curve::InterpolationType type)
+{
+    assert(id && keyCount >= 2 && keyTimes && keyValues && keyTangentIn && keyTangentOut);
+    Animation* animation = getAnimation(id);
+
+    if (animation != NULL)
+        return NULL;
+    
+    animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, keyTangentIn, keyTangentOut, (unsigned int) type);
+
+    addAnimation(animation);
+
+    target->addAnimation(animation);
+
+    return animation;
+}
+
+Animation* AnimationController::createAnimationFromTo(const char* id, AnimationTarget* target, int propertyId, float* from, float* to, Curve::InterpolationType type, unsigned long duration)
+{
+    const unsigned int keyCount = 2;
+    const unsigned int propertyComponentCount = target->getAnimationPropertyComponentCount(propertyId);
+    float* keyValues = new float[2 * propertyComponentCount];
+
+    memcpy(keyValues, from, sizeof(float) * propertyComponentCount);
+    memcpy(keyValues + propertyComponentCount, to, sizeof(float) * propertyComponentCount);
+
+    float* keyTimes = new float[2];
+    keyTimes[0] = 0.0f;
+    keyTimes[1] = (float) duration;
+
+    Animation* animation = createAnimation(id, target, propertyId, 2, keyTimes, keyValues, type);
+
+    SAFE_DELETE_ARRAY(keyTimes);
+    
+    return animation;
+}
+
+Animation* AnimationController::createAnimationFromBy(const char* id, AnimationTarget* target, int propertyId, float* from, float* by, Curve::InterpolationType type, unsigned long duration)
+{
+    const unsigned int propertyComponentCount = target->getAnimationPropertyComponentCount(propertyId);
+    float* keyValues = new float[2 * propertyComponentCount];
+
+    memcpy(keyValues, from, sizeof(float) * propertyComponentCount);
+    memcpy(keyValues + propertyComponentCount, by, sizeof(float) * propertyComponentCount);
+
+    float* keyTimes = new float[2];
+    keyTimes[0] = 0.0f;
+    keyTimes[1] = (float) duration;
+
+    Animation* animation = createAnimation(id, target, propertyId, 2, keyTimes, keyValues, type);
+
+    SAFE_DELETE_ARRAY(keyTimes);
+
+    return animation;
+}
+
+Animation* AnimationController::getAnimation(const char* id) const
+{
+    unsigned int animationCount = _animations.size();
+    for (unsigned int i = 0; i < animationCount; i++)
+    {
+        if (_animations.at(i)->_id.compare(id) == 0)
+            return _animations.at(i);
+    }
+    return NULL;
+}
+
+void AnimationController::stopAllAnimations() 
+{
+    std::list<AnimationClip*>::iterator clipIter = _runningClips.begin();
+    while (clipIter != _runningClips.end())
+    {
+        AnimationClip* clip = *clipIter;
+        clipIter = _runningClips.erase(clipIter);
+        clip->_isPlaying = false;
+        SAFE_RELEASE(clip);
+        clipIter++;
+    }
+
+    _state = IDLE;
+}
+
+AnimationController::State AnimationController::getState() const
+{
+    return _state;
+}
+
+void AnimationController::initialize()
+{
+    _state = IDLE;
+}
+
+void AnimationController::finalize()
+{
+    _state = PAUSED;
+}
+
+void AnimationController::resume()
+{
+    if (_runningClips.empty())
+        _state = IDLE;
+    else
+        _state = RUNNING;
+}
+
+void AnimationController::pause()
+{
+    _state = PAUSED;
+}
+
+void AnimationController::schedule(AnimationClip* clip)
+{
+    if (_runningClips.empty())
+    {
+        _state = RUNNING;
+    }
+    
+    if (clip->_isPlaying)
+    {
+        _runningClips.remove(clip);
+    }
+    else
+    {
+        clip->addRef();
+    }
+
+    _runningClips.push_back(clip);
+}
+
+void AnimationController::unschedule(AnimationClip* clip)
+{
+    if (clip->_isPlaying)
+    {
+        _runningClips.remove(clip);
+        SAFE_RELEASE(clip);
+    }
+
+    if (_runningClips.empty())
+        _state = IDLE;
+}
+
+void AnimationController::update(long elapsedTime)
+{
+    if (_state != RUNNING)
+        return;
+
+    std::list<AnimationClip*>::iterator clipIter = _runningClips.begin();
+
+    while (clipIter != _runningClips.end())
+    {
+        if ((*clipIter)->update(elapsedTime))
+        {
+            AnimationClip* clip = *clipIter;
+            clipIter = _runningClips.erase(clipIter);
+            SAFE_RELEASE(clip);
+        }
+        else
+        {
+            clipIter++;
+        }
+    }
+
+    if (_runningClips.empty())
+        _state = IDLE;
+}
+
+void AnimationController::addAnimation(Animation* animation)
+{
+    _animations.push_back(animation);
+}
+
+void AnimationController::destroyAnimation(Animation* animation)
+{
+    std::vector<Animation*>::iterator itr = _animations.begin();
+
+    while (itr != _animations.end())
+    {
+        if (animation == *itr)
+        {
+            _animations.erase(itr);
+            return;
+        }
+        itr++;
+    }
+}
+
+void AnimationController::destroyAllAnimations()
+{
+    std::vector<Animation*>::iterator itr = _animations.begin();
+    
+    while (itr != _animations.end())
+    {
+        Animation* animation = *itr;
+        SAFE_RELEASE(animation);
+        itr++;
+    }
+
+    _animations.clear();
+}
+
+}

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{79160e99-141f-41bf-8592-4e3855de5cc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{529d46d5-f3a6-4e0d-94f1-80461113f474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\fonts">
+      <UniqueIdentifier>{6309f71b-75fe-4cb0-b625-97249d6b79c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\meshes">
+      <UniqueIdentifier>{cb00dd00-32d1-49c0-ab00-d0be47c90894}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\textures">
+      <UniqueIdentifier>{9d23f1fa-f3b6-4091-b3ff-68a286be6185}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icon.png" />
+    <None Include="res\fonts\arial16.gpb">
+      <Filter>res\fonts</Filter>
+    </None>
+    <None Include="res\textures\duck-diffuse.png">
+      <Filter>res\textures</Filter>
+    </None>
+    <None Include="res\fonts\arial.ttf">
+      <Filter>res\fonts</Filter>
+    </None>
+    <None Include="res\meshes\duck.dae">
+      <Filter>res\meshes</Filter>
+    </None>
+    <None Include="res\meshes\duck.gpb">
+      <Filter>res\meshes</Filter>
+    </None>
+    <None Include="bar-descriptor.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\MeshGame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\MeshGame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
