@@ -94,6 +94,7 @@ bool Game::startup()
 
     _animationController.initialize();
     _audioController.initialize();
+	_physicsController.initialize();
 
     // Call user initialization.
     initialize();
@@ -111,6 +112,7 @@ void Game::shutdown()
 
         _animationController.finalize();
         _audioController.finalize();
+        _physicsController.finalize();
     }
 
     _state = UNINITIALIZED;
@@ -124,6 +126,7 @@ void Game::pause()
         _pausedTimeLast = Platform::getAbsoluteTime();
         _animationController.pause();
         _audioController.pause();
+        _physicsController.pause();
     }
 }
 
@@ -135,6 +138,7 @@ void Game::resume()
         _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
         _animationController.resume();
         _audioController.resume();
+        _physicsController.resume();
     }
 }
 
@@ -154,8 +158,10 @@ void Game::frame()
     long elapsedTime = (frameTime - lastFrameTime);
     lastFrameTime = frameTime;
 
-    // Update the schedule and running animations.
+    // Update the scheduled and running animations.
     _animationController.update(elapsedTime);
+    // Update the physics.
+    _physicsController.update(elapsedTime);
     // Application Update.
     update(elapsedTime);
 
@@ -230,6 +236,11 @@ AnimationController* Game::getAnimationController()
 const AudioController& Game::getAudioController() const
 {
     return _audioController;
+}
+
+PhysicsController* Game::getPhysicsController()
+{
+	return &_physicsController;
 }
 
 void Game::menu()

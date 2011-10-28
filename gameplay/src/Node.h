@@ -11,6 +11,7 @@
 #include "Model.h"
 #include "AudioSource.h"
 #include "ParticleEmitter.h"
+#include "PhysicsRigidBody.h"
 #include "BoundingBox.h"
 
 namespace gameplay
@@ -174,7 +175,7 @@ public:
      *
      * @return The world matrix of this node.
      */
-    const Matrix& getWorldMatrix() const;
+    virtual const Matrix& getWorldMatrix() const;
 
     /**
      * Gets the world view matrix corresponding to this node.
@@ -357,6 +358,30 @@ public:
     void setParticleEmitter(ParticleEmitter* emitter);
 
     /**
+     * Returns the pointer to this node's physics rigid body or NULL.
+     *
+     * @return The pointer to this node's physics rigid body or NULL.
+     */
+    PhysicsRigidBody* getPhysicsRigidBody();
+
+    /**
+     * Assigns a physics rigid body to this node.
+     * 
+     * Note: This is only allowed for nodes that have a model attached to them.
+     *
+     * @param type The type of rigid body to set.
+     * @param mass The mass of the rigid body, in kilograms.
+     * @param friction The friction of the rigid body (between 0.0 and 1.0, where 0.0 is
+     *      minimal friction and 1.0 is maximal friction).
+     * @param restitution The restitution of the rigid body (this controls the bouncyness of
+     *      the rigid body; between 0.0 and 1.0, where 0.0 is minimal bouncyness and 1.0 is maximal bouncyness).
+     * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
+     * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
+     */
+    void setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float friction = 0.5,
+        float restitution = 0.0, float linearDamping = 0.0, float angularDamping = 0.0);
+
+    /**
      * Returns the bounding box for the Node, in world space.
      *
      * The returned box is only meaningful for nodes who have a
@@ -451,6 +476,7 @@ protected:
     Model* _model;
     AudioSource* _audioSource;
     ParticleEmitter* _particleEmitter;
+    PhysicsRigidBody* _physicsRigidBody;
     mutable Matrix _world;
     mutable int _dirtyBits;
     bool _notifyHierarchyChanged;

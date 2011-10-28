@@ -187,6 +187,7 @@ void Model::setSkin(MeshSkin* skin)
 
         // Assign the new skin
         _skin = skin;
+        _skin->_model = this;
     }
 }
 
