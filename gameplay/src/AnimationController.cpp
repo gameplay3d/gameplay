@@ -46,7 +46,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     if (animation != NULL)
         return NULL;
     
-    animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, keyTangentIn, keyTangentOut, (unsigned int) type);
+    animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, keyTangentIn, keyTangentOut, type);
 
     addAnimation(animation);
 
@@ -158,6 +158,7 @@ void AnimationController::schedule(AnimationClip* clip)
     if (clip->_isPlaying)
     {
         _runningClips.remove(clip);
+        clip->_isPlaying = false;
     }
     else
     {

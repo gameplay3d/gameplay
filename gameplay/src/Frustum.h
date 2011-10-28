@@ -104,7 +104,7 @@ public:
      * 
      * @param dst The projection matrix to copy into.
      */
-    void getMatrix(Matrix* dst);
+    void getMatrix(Matrix* dst) const;
 
     /**
      * Gets the corners of the frustum in the specified array.

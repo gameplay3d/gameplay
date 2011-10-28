@@ -21,16 +21,46 @@ class Curve
 public:
 
     /**
-     * Defines the type of tangent.
+     * Defines the type of interpolation.
+     *
+     * Note: InterpolationType::BEZIER requires control points and InterpolationType::HERMITE requires tangents.
      */
     enum InterpolationType
     {
+        /**
+         * Bezier interpolation. Requires that two control points are set for each segment.
+         */
         BEZIER,
+
+        /**
+         * B-Spline interpolation. Uses the points as control points, and the curve is guaranteed to only pass through the
+         * first and last point.
+         */
         BSPLINE,
+
+        /**
+         * Flat. A form of Hermite interpolation that generates flat tangents for you. The tangents have a value equal to 0.
+         */
         FLAT,
+
+        /**
+         * Hermite interpolation. Requires that two tangents for each segment.
+         */
         HERMITE,
+
+        /**
+         * Linear interpolation.
+         */
         LINEAR,
+
+        /** 
+         * Smooth. A form of Hermite interpolation that generates tangents for each segment based on the points prior to and after the segment.
+         */
         SMOOTH,
+
+        /**
+         * Discrete interpolation.
+         */ 
         STEP
     };
 
@@ -172,10 +202,20 @@ private:
      */
     void interpolateQuaternion(float s, Point* from, Point* to, float* dst);
 
+    /**
+     * Marks the offset of the rotation component within the point's value data span.
+     */
+    void setRotationOffset(int propertyId);
+
+    /**
+     * Determines the current keyframe to interpolate from based on the specified time.
+     */ 
+    int determineIndex(float time);
+
     unsigned int _pointCount;      // Number of points on the curve.
     unsigned int _componentCount;  // Number of components on the curve.
     unsigned int _componentSize;   // The component size (in bytes).
-    int _rotationOffset;           // Offset for the rotation component.
+    signed char _rotationOffset;   // Offset for the rotation component.
     Point* _points;                // The points on the curve.
 };
 

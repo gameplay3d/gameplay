@@ -12,7 +12,7 @@
 namespace gameplay
 {
 
-MeshSkin::MeshSkin() : _rootJoint(NULL), _matrixPalette(NULL)
+MeshSkin::MeshSkin() : _matrixPalette(NULL), _model(NULL)
 {
 }
 
@@ -37,35 +37,14 @@ Joint* MeshSkin::getJoint(const char* id) const
 {
     assert(id);
 
-    if (_rootJoint)
+    for (unsigned int i = 0, count = _joints.size(); i < count; ++i)
     {
-        Node* n = _rootJoint->findNode(id, true);
-        if (n != NULL && n->getType() == Node::JOINT)
-        {
-            return static_cast<Joint*>(n);
-        }
-    }
-    else
-    {
-        for (unsigned int i = 0, count = _joints.size(); i < count; ++i)
-        {
-            Joint* j = _joints[i];
-            if (j && j->getId() != NULL && strcmp(j->getId(), id) == 0)
-                return j;
-        }
+        Joint* j = _joints[i];
+        if (j && j->getId() != NULL && strcmp(j->getId(), id) == 0)
+            return j;
     }
 
     return NULL;
-}
-
-Joint* MeshSkin::getRootJoint() const
-{
-    return _rootJoint;
-}
-
-void MeshSkin::setRootJoint(const char* id)
-{
-    _rootJoint = getJoint(id);
 }
 
 void MeshSkin::setJointCount(unsigned int jointCount)
@@ -101,25 +80,15 @@ void MeshSkin::setJoint(Joint* joint, unsigned int index)
 {
     assert(index < _joints.size());
 
-    bool rootJoint = false;
-
     if (_joints[index])
     {
-        if (_joints[index] == _rootJoint)
-        {
-            rootJoint = true;
-        }
-
+        _joints[index]->_skin = NULL;
         SAFE_RELEASE(_joints[index]);
     }
 
     _joints[index] = joint;
+    _joints[index]->_skin = this;
     joint->addRef();
-
-    if (rootJoint)
-    {
-        _rootJoint = joint;
-    }
 }
 
 Vector4* MeshSkin::getMatrixPalette() const

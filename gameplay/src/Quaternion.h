@@ -177,6 +177,7 @@ public:
      * quaternion is already unit-length.
      *
      * @param dst A quaternion to store the inverse in.
+     * 
      * @return true if the inverse can be computed, false otherwise.
      */
     bool inverse(Quaternion* dst) const;

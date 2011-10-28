@@ -53,7 +53,7 @@ SpriteBatch::SpriteBatch() :
     _texture(NULL), _material(NULL), _vaPosition(-1), _vaTexCoord(-1), _vaColor(-1),
     _textureWidthRatio(0.0f), _textureHeightRatio(0.0f), _capacity(0), _count(0),
     _vertices(NULL), _verticesPtr(NULL), _indices(NULL), _indicesPtr(NULL), _index(0),
-    _sfactor(GL_SRC_ALPHA), _dfactor(GL_ONE_MINUS_SRC_ALPHA),
+    _blend(true), _sfactor(GL_SRC_ALPHA), _dfactor(GL_ONE_MINUS_SRC_ALPHA),
     _drawing(false), _projectionMatrix(NULL)
 {
 }
@@ -345,13 +345,21 @@ void SpriteBatch::end()
         GLint sfactorAlpha;
         GLint dfactorAlpha;
         glGetBooleanv(GL_BLEND, &blend);
-        glGetIntegerv(GL_BLEND_SRC_RGB, &sfactorRGB);
-        glGetIntegerv(GL_BLEND_DST_RGB, &dfactorRGB);
-        glGetIntegerv(GL_BLEND_SRC_ALPHA, &sfactorAlpha);
-        glGetIntegerv(GL_BLEND_DST_ALPHA, &dfactorAlpha);
 
-        glEnable(GL_BLEND);
-        glBlendFunc(_sfactor, _dfactor);
+        if (_blend)
+        {
+            glGetIntegerv(GL_BLEND_SRC_RGB, &sfactorRGB);
+            glGetIntegerv(GL_BLEND_DST_RGB, &dfactorRGB);
+            glGetIntegerv(GL_BLEND_SRC_ALPHA, &sfactorAlpha);
+            glGetIntegerv(GL_BLEND_DST_ALPHA, &dfactorAlpha);
+
+            glEnable(GL_BLEND);
+            glBlendFunc(_sfactor, _dfactor);
+        }
+        else
+        {
+            glDisable(GL_BLEND);
+        }
 
         // Bind our material.
         _material->bind();
@@ -377,11 +385,15 @@ void SpriteBatch::end()
         glDisableVertexAttribArray(_vaColor);
 
         // Reset blend function.
-        if (!blend)
+        if (blend)
+        {
+            glEnable(GL_BLEND);
+            glBlendFuncSeparate(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
+        }
+        else
         {
             glDisable(GL_BLEND);
         }
-        glBlendFuncSeparate(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
     }
 
     _drawing = false;
@@ -454,10 +466,29 @@ void SpriteBatch::resizeBatch(unsigned int capacity)
     }
 }
 
+void SpriteBatch::setBlendEnabled(bool blend)
+{
+    _blend = blend;
+}
+
+bool SpriteBatch::getBlendEnabled() const
+{
+    return _blend;
+}
+
 void SpriteBatch::setBlendMode(const GLenum sfactor, const GLenum dfactor)
 {
     _sfactor = sfactor;
     _dfactor = dfactor;
+}
+
+void SpriteBatch::getBlendMode(GLenum* sfactor, GLenum* dfactor)
+{
+    assert(sfactor);
+    assert(dfactor);
+
+    *sfactor = _sfactor;
+    *dfactor = _dfactor;
 }
 
 Material* SpriteBatch::getMaterial()

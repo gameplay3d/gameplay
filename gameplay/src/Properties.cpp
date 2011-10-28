@@ -12,6 +12,8 @@ namespace gameplay
 Properties::Properties(FILE* file)
 {
     readProperties(file);
+    _mapIt = _map.begin();
+    _propertiesIt = _properties.begin();
 }
 
 Properties::Properties(FILE* file, const char* name, const char* id) : _namespace(name)
@@ -21,6 +23,8 @@ Properties::Properties(FILE* file, const char* name, const char* id) : _namespac
         _id = id;
     }
     readProperties(file);
+    _mapIt = _map.begin();
+    _propertiesIt = _properties.begin();
 }
 
 Properties* Properties::create(const char* filePath)
@@ -159,7 +163,7 @@ void Properties::readProperties(FILE* file)
                             }
                             else
                             {
-                                _map[name] = string();
+                                _map[name] = std::string();
                             }
                         }
                     }
@@ -219,20 +223,41 @@ char* Properties::trimWhiteSpace(char *str)
     return str;
 }
 
-const map<string, string>* Properties::getMap() const
+const char* Properties::getNextProperty()
 {
-    return &_map;
+    if (_mapIt != _map.end())
+    {
+        if (!_mapIt->first.empty())
+        {
+            const char* c_str = _mapIt->first.c_str();
+            _mapIt++;
+            return c_str; //_mapIt++->first.c_str();
+        }
+    }
+    return NULL;
 }
 
-const vector<Properties*>* Properties::getProperties() const
+Properties* Properties::getNextNamespace()
 {
-    return &_properties;
+    if (_propertiesIt < _properties.end())
+    {
+        Properties* space = *_propertiesIt;
+        _propertiesIt++;
+        return space;
+    }
+    return NULL;
 }
 
-Properties* Properties::getProperties(const char* id) const
+void Properties::rewind()
+{
+    _mapIt = _map.begin();
+    _propertiesIt = _properties.begin();
+}
+
+Properties* Properties::getNamespace(const char* id) const
 {
     Properties* ret = NULL;
-    vector<Properties*>::const_iterator it;
+    std::vector<Properties*>::const_iterator it;
     
     for (it = _properties.begin(); it < _properties.end(); it++)
     {
@@ -243,7 +268,7 @@ Properties* Properties::getProperties(const char* id) const
         }
         
         // Search recursively.
-        ret = ret->getProperties(id);
+        ret = ret->getNamespace(id);
         if (ret != NULL)
         {
             return ret;
@@ -296,7 +321,7 @@ int Properties::getInt(const char* name) const
 {
     if (exists(name))
     {
-        string valueString = _map.find(name)->second;
+        std::string valueString = _map.find(name)->second;
 
         int value;
         int scanned;
@@ -316,7 +341,7 @@ float Properties::getFloat(const char* name) const
 {
     if (exists(name))
     {
-        string valueString = _map.find(name)->second;
+        std::string valueString = _map.find(name)->second;
 
         float value;
         int scanned;
@@ -332,40 +357,38 @@ float Properties::getFloat(const char* name) const
     return 0.0f;
 }
 
-void Properties::getFloatArray(const char* name, float* out, unsigned int length) const
+bool Properties::getFloatArray(const char* name, float* out, unsigned int count) const
 {
     assert(out);
 
     if (exists(name))
     {
-        string valueString = _map.find(name)->second;
+        std::string valueString = _map.find(name)->second;
 
-        for (unsigned int i = 0; i < length; i++)
+        for (unsigned int i = 0; i < count; i++)
         {
             int scanned;
             scanned = sscanf(valueString.c_str(), "%f", &out[i]);
             if (scanned != 1)
             {
                 LOG_ERROR_VARG("Error parsing property: %s", name);
-                out = NULL;
-                return;
+                return false;
             }
 
             int position = valueString.find(',');
             valueString.erase(0, position + 1);
+            return true;
         }
     }
-    else
-    {
-        out = NULL;
-    }
+    
+    return false;
 }
 
 long Properties::getLong(const char* name) const
 {
     if (exists(name))
     {
-        string valueString = _map.find(name)->second;
+        std::string valueString = _map.find(name)->second;
 
         long value;
         int scanned;
@@ -381,13 +404,13 @@ long Properties::getLong(const char* name) const
     return 0L;
 }
     
-void Properties::getMatrix(const char* name, Matrix* out) const
+bool Properties::getMatrix(const char* name, Matrix* out) const
 {
     assert(out);
 
     if (exists(name))
     {
-        string valueString = _map.find(name)->second;
+        std::string valueString = _map.find(name)->second;
 
         float m[16];
         int scanned;
@@ -398,24 +421,24 @@ void Properties::getMatrix(const char* name, Matrix* out) const
         {
             LOG_ERROR_VARG("Error parsing property: %s", name);
             out->setIdentity();
-            return;
+            return false;
         }
     
         out->set(m);
+        return true;
     }
-    else
-    {
-        out->setIdentity();
-    }
+
+    out->setIdentity();
+    return false;
 }
 
-void Properties::getVector2(const char* name, Vector2* out) const
+bool Properties::getVector2(const char* name, Vector2* out) const
 {
     assert(out);
 
     if (exists(name))
     {
-        string valueString = _map.find(name)->second;
+        std::string valueString = _map.find(name)->second;
 
         float x, y;
         int scanned;
@@ -424,24 +447,24 @@ void Properties::getVector2(const char* name, Vector2* out) const
         {
             LOG_ERROR_VARG("Error parsing property: %s", name);
             out->set(0.0f, 0.0f);
-            return;
+            return false;
         }
 
         out->set(x, y);
+        return true;
     }
-    else
-    {
-        out->set(0.0f, 0.0f);
-    }
+    
+    out->set(0.0f, 0.0f);
+    return false;
 }
 
-void Properties::getVector3(const char* name, Vector3* out) const
+bool Properties::getVector3(const char* name, Vector3* out) const
 {
     assert(out);
 
     if (exists(name))
     {
-        string valueString = _map.find(name)->second;
+        std::string valueString = _map.find(name)->second;
 
         float x, y, z;
         int scanned;
@@ -450,24 +473,24 @@ void Properties::getVector3(const char* name, Vector3* out) const
         {
             LOG_ERROR_VARG("Error parsing property: %s", name);
             out->set(0.0f, 0.0f, 0.0f);
-            return;
+            return false;
         }
 
         out->set(x, y, z);
+        return true;
     }
-    else
-    {
-        out->set(0.0f, 0.0f, 0.0f);
-    }
+    
+    out->set(0.0f, 0.0f, 0.0f);
+    return false;
 }
 
-void Properties::getVector4(const char* name, Vector4* out) const
+bool Properties::getVector4(const char* name, Vector4* out) const
 {
     assert(out);
 
     if (exists(name))
     {
-        string valueString = _map.find(name)->second;
+        std::string valueString = _map.find(name)->second;
 
         float x, y, z, w;
         int scanned;
@@ -476,24 +499,24 @@ void Properties::getVector4(const char* name, Vector4* out) const
         {
             LOG_ERROR_VARG("Error parsing property: %s", name);
             out->set(0.0f, 0.0f, 0.0f, 0.0f);
-            return;
+            return false;
         }
 
         out->set(x, y, z, w);
+        return true;
     }
-    else
-    {
-        out->set(0.0f, 0.0f, 0.0f, 0.0f);
-    }
+    
+    out->set(0.0f, 0.0f, 0.0f, 0.0f);
+    return false;
 }
 
-void Properties::getColor(const char* name, Color* out) const
+bool Properties::getColor(const char* name, Color* out) const
 {
     assert(out);
 
     if (exists(name))
     {
-        string valueString = _map.find(name)->second;
+        std::string valueString = _map.find(name)->second;
 
         float r, g, b, a;
         int scanned;
@@ -502,15 +525,15 @@ void Properties::getColor(const char* name, Color* out) const
         {
             LOG_ERROR_VARG("Error parsing property: %s", name);
             out->set(0.0f, 0.0f, 0.0f, 1.0f);
-            return;
+            return false;
         }
 
         out->set(r, g, b, a);
+        return true;
     }
-    else
-    {
-        out->set(0.0f, 0.0f, 0.0f, 1.0f);
-    }
+    
+    out->set(0.0f, 0.0f, 0.0f, 1.0f);
+    return false;
 }
 
 }

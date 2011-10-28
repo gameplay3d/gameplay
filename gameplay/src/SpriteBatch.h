@@ -158,10 +158,37 @@ public:
     void end();
 
     /**
+     * Enable or disable blending when this SpriteBatch is rendered.
+     *
+     * @param blend Whether to enable blending.
+     */
+    void setBlendEnabled(bool blend);
+
+    /**
+     * Gets whether blending is enabled on this SpriteBatch.
+     *
+     * @return Whether blending is enabled on this SpriteBatch.
+     */
+    bool getBlendEnabled() const;
+
+    /**
      * Sets the blend mode to use when rendering.  This blend mode will be set before
      * rendering and then immediately reset to its previous value.
+     *
+     * @param sfactor Specifies how the source blending factors are computed.
+     * @param dfactor Specifies how the destination blending factors are computed.
+     *
+     * @see glBlendFunc()
      */
     void setBlendMode(const GLenum sfactor, const GLenum dfactor);
+
+    /**
+     * Get the blend factors used by this SpriteBatch.
+     *
+     * @param sfactor Pointer to store the source factor in.
+     * @param dfactor Pointer to store the destination factor in.
+     */
+    void getBlendMode(GLenum* sfactor, GLenum* dfactor);
 
     /**
      * Gets the material used by this batch.
@@ -203,6 +230,7 @@ private:
     unsigned short* _indices;
     unsigned short* _indicesPtr;
     unsigned short _index;
+    bool _blend;
     GLint _sfactor;
     GLint _dfactor;
     bool _drawing;

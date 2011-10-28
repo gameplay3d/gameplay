@@ -116,6 +116,9 @@ extern void printError(const char* format, ...);
 #include <alut.h>
 #endif
 
+// Bullet Physics
+#include <btBulletDynamicsCommon.h>
+
 // Graphics (OpenGLES/OpenGL/png)
 #define WINDOW_VSYNC        1
 #define WINDOW_FULLSCREEN   0

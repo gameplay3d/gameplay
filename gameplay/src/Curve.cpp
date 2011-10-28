@@ -6,6 +6,9 @@
 #include "Curve.h"
 #include "Transform.h"
 
+#define ANIMATION_ROTATE_OFFSET 0
+#define ANIMATION_SRT_OFFSET 3
+
 namespace gameplay
 {
 
@@ -106,17 +109,9 @@ void Curve::evaluate(float time, float* dst)
         return;
     }
 
-    // Locate the points we are interpolating between.
-    unsigned int index = 0;
-    for (unsigned int i = 0; i < _pointCount - 1; i++)
-    {
-        if (_points[i].time <= time && time <= _points[i + 1].time)
-        {
-            index = i;
-            break;
-        }
-    }
-
+    // Locate the points we are interpolating between using a binary search.
+    unsigned int index = determineIndex(time);
+    
     Point* from = _points + index;
     Point* to = _points + (index + 1);
 
@@ -389,6 +384,43 @@ void Curve::interpolateQuaternion(float s, Point* from, Point* to, float* dst)
     dst[1] = result.y;
     dst[2] = result.z;
     dst[3] = result.w;
+}
+
+void Curve::setRotationOffset(int propertyId)
+{
+    switch (propertyId)
+    {
+        case Transform::ANIMATE_ROTATE: 
+        case Transform::ANIMATE_ROTATE_TRANSLATE:
+            _rotationOffset = ANIMATION_ROTATE_OFFSET;
+            break;
+        case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
+            _rotationOffset = ANIMATION_SRT_OFFSET;
+            break;
+    }
+}
+
+int Curve::determineIndex(float time)
+{
+    unsigned int min = 0;
+    unsigned int max = _pointCount - 1;
+    unsigned int mid = 0;
+
+    // Do a binary search to determine the index.
+    do 
+    {
+        mid = (min + max) >> 1;
+
+        if (time >= _points[mid].time && time <= _points[mid + 1].time)
+            return mid;
+        else if (time < _points[mid].time)
+            max = mid - 1;
+        else
+            min = mid + 1;
+    } while (min <= max);
+    
+    // We should never hit this!
+    return -1;
 }
 
 }
