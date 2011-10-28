@@ -162,6 +162,12 @@
     <ClCompile Include="src\RenderState.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\PhysicsController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsRigidBody.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -333,6 +339,15 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Tree.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsController.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsMotionState.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsRigidBody.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

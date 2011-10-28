@@ -15,8 +15,8 @@ namespace gameplay
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
-    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _dirtyBits(NODE_DIRTY_ALL),
-    _notifyHierarchyChanged(true), _boundsType(NONE)
+    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL),
+    _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _boundsType(NONE)
 {
     if (id)
     {
@@ -786,6 +786,23 @@ void Node::setParticleEmitter(ParticleEmitter* emitter)
             _particleEmitter->setNode(this);
         }
     }
+}
+
+PhysicsRigidBody* Node::getPhysicsRigidBody()
+{
+    return _physicsRigidBody;
+}
+
+void Node::setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float friction,
+        float restitution, float linearDamping, float angularDamping)
+{
+    if (_physicsRigidBody)
+    {
+        SAFE_RELEASE(_physicsRigidBody);
+    }
+    
+    if (type != PhysicsRigidBody::PHYSICS_SHAPE_NONE)
+        _physicsRigidBody = new PhysicsRigidBody(this, type, mass, friction, restitution, linearDamping, angularDamping);
 }
 
 void Node::childAdded(Node* child)

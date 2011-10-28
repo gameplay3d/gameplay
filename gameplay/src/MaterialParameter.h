@@ -13,8 +13,6 @@
 #include "Texture.h"
 #include "Effect.h"
 
-#define MATERIALPARAMETER_ANIMATE_UNIFORM           1
-
 namespace gameplay
 {
 
@@ -48,6 +46,11 @@ public:
      * Returns the name of this material parameter.
      */
     const char* getName() const;
+
+    /**
+     * MaterialParameter's animation target property.
+     */
+    static const int ANIMATE_UNIFORM = 1;
 
     /**
      * Sets the value of this parameter to a float value.
