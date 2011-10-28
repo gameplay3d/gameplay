@@ -9,7 +9,7 @@ namespace gameplay
 {
 
 Joint::Joint(const char* id)
-    : Node(id), _jointMatrixDirty(true)
+    : Node(id), _jointMatrixDirty(true), _skin(NULL)
 {
 }
 
@@ -43,10 +43,6 @@ void Joint::updateJointMatrix(const Matrix& bindShape, Vector4* matrixPalette)
     {
         _jointMatrixDirty = false;
 
-        float r = (float)rand( ) / (float)RAND_MAX;
-        Matrix w = getWorldMatrix();
-        w.translate(r, r, r);
-
         Matrix t;
         Matrix::multiply(getWorldMatrix(), getInverseBindPose(), &t);
         Matrix::multiply(t, bindShape, &t);
@@ -66,6 +62,32 @@ void Joint::setInverseBindPose(const Matrix& m)
 {
     _bindPose = m;
     _jointMatrixDirty = true;
+}
+
+const Matrix& Joint::getWorldMatrix() const
+{
+    return Node::getWorldMatrix();
+}
+
+const Matrix& Joint::getJointMatrix() const
+{
+    // If this is the root joint, then we 
+    // also apply the transform of the model
+    // that the skin is attached to to get the
+    // actual world matrix.
+    if (_parent == NULL)
+    {
+        if (_skin != NULL)
+            Matrix::multiply(_skin->_model->getNode()->getWorldMatrix(), Node::getWorldMatrix(), &_jointWorld);
+        else if (_firstChild != NULL && ((Joint*)_firstChild)->_skin != NULL)
+            Matrix::multiply(((Joint*)_firstChild)->_skin->_model->getNode()->getWorldMatrix(), Node::getWorldMatrix(), &_jointWorld);
+    }
+    else
+    {
+        memcpy((void*)_jointWorld.m, Node::getWorldMatrix().m, MATRIX_SIZE);
+    }
+
+    return _jointWorld;
 }
 
 }

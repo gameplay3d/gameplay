@@ -305,16 +305,20 @@ void MaterialParameter::bind()
 
 unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyId) const
 {
-    switch (MATERIALPARAMETER_ANIMATE_UNIFORM)
+    switch (propertyId)
     {
-        // These types don't support animation.
-        case NONE:
-        case MATRIX:
-        case TEXTURE:
-        case METHOD:
-            return 0;
-        default:
-            return _count;
+    case ANIMATE_UNIFORM:
+        switch(_type)
+        {
+            // These types don't support animation.
+            case NONE:
+            case MATRIX:
+            case TEXTURE:
+            case METHOD:
+                return 0;
+            default:
+                return _count;
+        }
     }
 
     return 0;
@@ -324,28 +328,25 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
 {
     switch (propertyId)
     {
-        case MATERIALPARAMETER_ANIMATE_UNIFORM:
+    case ANIMATE_UNIFORM:
+        switch (_type)
         {
-            switch (_type)
-            {
-                case FLOAT:
-                    value->setFloat(0, _value.floatValue);
-                    break;
-                case INT:
-                    value->setFloat(0, _value.intValue);
-                    break;
-                case VECTOR2:
-                case VECTOR3:
-                case VECTOR4:
-                    for (unsigned int i = 0; i < _count; i++)
-                    {
-                        value->setFloat(i, _value.floatPtrValue[i]);
-                    }
-                    break;
-
-                // UNSUPPORTED: NONE, MATRIX, METHOD, TEXTURE 
-            }
+        case FLOAT:
+            value->setFloat(0, _value.floatValue);
+            break;
+        case INT:
+            value->setFloat(0, _value.intValue);
+            break;
+        case VECTOR2:
+        case VECTOR3:
+        case VECTOR4:
+            value->setFloat(_value.floatPtrValue, 0, _count);
+            break;
+        default:
+            // UNSUPPORTED: NONE, MATRIX, METHOD, TEXTURE 
+            break;
         }
+        break;
     }
 }
 
@@ -353,29 +354,25 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
 {
     switch (propertyId)
     {
-        case MATERIALPARAMETER_ANIMATE_UNIFORM:
+    case ANIMATE_UNIFORM:
+        switch (_type)
         {
-            switch (_type)
-            {
-                case FLOAT:
-                    _value.floatValue = value->getFloat(0);
-                    break;
-                case INT:
-                    _value.intValue = value->getFloat(0);
-                    break;
-                case VECTOR2:
-                case VECTOR3:
-                case VECTOR4:
-                case MATRIX:
-                    for (unsigned int i = 0; i < _count; i++)
-                    {
-                        _value.floatPtrValue[i] = value->getFloat(i);
-                    }
-                    break;
-
-                // UNSUPPORTED: NONE, MATRIX, METHOD, TEXTURE 
-            }
+        case FLOAT:
+            _value.floatValue = value->getFloat(0);
+            break;
+        case INT:
+            _value.intValue = value->getFloat(0);
+            break;
+        case VECTOR2:
+        case VECTOR3:
+        case VECTOR4:
+            value->getFloat(_value.floatPtrValue, 0, _count);
+            break;
+        default:
+            // UNSUPPORTED: NONE, MATRIX, METHOD, TEXTURE 
+            break;
         }
+        break;
     }
 }
 

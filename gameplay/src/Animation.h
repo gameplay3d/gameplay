@@ -85,13 +85,6 @@ public:
      */
     void stop(const char* clipId = NULL);
 
-    /**
-     * Transfers all of the animation channels from the given animation to this animation.
-     * 
-     * @param animation The animation to transfer the animation channels from.
-     */
-    void transfer(Animation* animation);
-
 private:
 
     /**

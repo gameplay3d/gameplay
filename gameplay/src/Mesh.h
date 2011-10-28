@@ -80,6 +80,11 @@ public:
     /**
      * Constructs a new textured 2D quad.
      * 
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param width The width of the quad.
+     * @param height The height of the quad.
+     * 
      * @return The newly created mesh.
      */
     static Mesh* createQuad(float x, float y, float width, float height);
@@ -105,6 +110,8 @@ public:
      * 
      * @param points The array of points.
      * @param pointCount The number of points.
+     * 
+     * @return The newly created mesh.
      */
     static Mesh* createLines(Vector3* points, unsigned int pointCount);
 

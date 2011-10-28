@@ -14,8 +14,9 @@
 
 #define PACKAGE_TYPE_SCENE 1
 #define PACKAGE_TYPE_NODE 2
-#define PACKAGE_TYPE_ANIMATION 3
-#define PACKAGE_TYPE_ANIMATION_CHANNEL 4
+#define PACKAGE_TYPE_ANIMATIONS 3
+#define PACKAGE_TYPE_ANIMATION 4
+#define PACKAGE_TYPE_ANIMATION_CHANNEL 5
 #define PACKAGE_TYPE_MMODEL 10
 #define PACKAGE_TYPE_MATERIAL 16
 #define PACKAGE_TYPE_EFFECT 18
@@ -361,7 +362,7 @@ Scene* Package::loadScene(const char* id)
     for (unsigned int i = 0; i < _referenceCount; ++i)
     {
         Reference* ref = &_references[i];
-        if (ref->type == PACKAGE_TYPE_ANIMATION)
+        if (ref->type == PACKAGE_TYPE_ANIMATIONS)
         {
             // Found a match
             if (fseek(_file, ref->offset, SEEK_SET) != 0)
@@ -369,7 +370,7 @@ Scene* Package::loadScene(const char* id)
                 LOG_ERROR_VARG("Failed to seek to object '%s' in package '%s'.", ref->id.c_str(), _path.c_str());
                 return NULL;
             }
-            readAnimation(ref->id.c_str(), scene);
+            readAnimations(scene);
         }
     }
 
@@ -694,9 +695,6 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
     MeshSkinData* skinData = new MeshSkinData();
     skinData->skin = meshSkin;
 
-    // Read root joint name
-    skinData->rootJoint = readString(_file);
-
     // Read joint count
     unsigned int jointCount;
     if (!read(&jointCount))
@@ -759,12 +757,6 @@ void Package::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
     {
         MeshSkinData* skinData = _meshSkins[i];
 
-        // Load the root joint first to ensure the full joint hierarchy is loaded if
-        // it was not already.
-        Node* rootJoint = loadNode(skinData->rootJoint.c_str(), sceneContext, nodeContext);
-        if (rootJoint == NULL || rootJoint->getType() != Node::JOINT)
-            continue;
-
         // Resolve all joints in skin joint list
         const unsigned int jointCount = skinData->joints.size();
         for (unsigned int j = 0; j < jointCount; ++j)
@@ -785,24 +777,21 @@ void Package::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
             }
         }
 
-        // Set the root joint (must do this after setting all joints above)
-        skinData->skin->setRootJoint(skinData->rootJoint.c_str());
-
         // Done with this MeshSkinData entry
         SAFE_DELETE(_meshSkins[i]);
     }
     _meshSkins.clear();
 }
 
-void Package::readAnimation(const char* id, Scene* scene)
+void Package::readAnimation(Scene* scene)
 {
-    const char* animationId = getIdFromOffset();
+    const std::string animationId = readString(_file);
 
     // read the number of animation channels in this animation
     unsigned int animationChannelCount;
     if (!read(&animationChannelCount))
     {
-        LOG_ERROR_VARG("Failed to read %s for %s: %s", "animationChannelCount", "animation", id);
+        LOG_ERROR_VARG("Failed to read %s for %s: %s", "animationChannelCount", "animation", animationId.c_str());
         return;
     }
 
@@ -810,7 +799,23 @@ void Package::readAnimation(const char* id, Scene* scene)
 
     for (unsigned int i = 0; i < animationChannelCount; i++)
     {
-        animation = readAnimationChannel(scene, animation, animationId);
+        animation = readAnimationChannel(scene, animation, animationId.c_str());
+    }
+}
+
+void Package::readAnimations(Scene* scene)
+{
+    // read the number of animations in this object
+    unsigned int animationCount;
+    if (!read(&animationCount))
+    {
+        LOG_ERROR_VARG("Failed to read %s for %s: %s", "animationCount", "Animations");
+        return;
+    }
+
+    for (unsigned int i = 0; i < animationCount; i++)
+    {
+        readAnimation(scene);
     }
 }
 

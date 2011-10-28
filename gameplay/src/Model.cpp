@@ -174,6 +174,7 @@ void Model::setSkin(MeshSkin* skin)
             delete _skin;
         }
         _skin = skin;
+        _skin->_model = this;
     }
 }
 

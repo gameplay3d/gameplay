@@ -43,6 +43,8 @@
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\Package.cpp" />
     <ClCompile Include="src\ParticleEmitter.cpp" />
+    <ClCompile Include="src\PhysicsController.cpp" />
+    <ClCompile Include="src\PhysicsRigidBody.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\PlatformQNX.cpp" />
     <ClCompile Include="src\PlatformWin32.cpp" />
@@ -100,6 +102,9 @@
     <ClInclude Include="src\Node.h" />
     <ClInclude Include="src\Package.h" />
     <ClInclude Include="src\ParticleEmitter.h" />
+    <ClInclude Include="src\PhysicsController.h" />
+    <ClInclude Include="src\PhysicsMotionState.h" />
+    <ClInclude Include="src\PhysicsRigidBody.h" />
     <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Platform.h" />
     <ClInclude Include="src\Properties.h" />
@@ -165,7 +170,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -181,7 +186,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -201,12 +201,14 @@ Mesh* Mesh::createLines(Vector3* points, unsigned int pointCount)
     SAFE_RELEASE(format);
     if (mesh == NULL)
     {
+        SAFE_DELETE_ARRAY(vertices);
         return NULL;
     }
 
     mesh->_primitiveType = LINE_STRIP;
     mesh->setVertexData(vertices, 0, pointCount);
 
+    SAFE_DELETE_ARRAY(vertices);
     return mesh;
 }
 
@@ -236,7 +238,6 @@ Mesh* Mesh::createBoundingBox(const BoundingBox& box)
         corners[6].x, corners[6].y, corners[6].z,
         corners[5].x, corners[5].y, corners[5].z
     };
-
 
     VertexFormat::Element elements[] =
     {

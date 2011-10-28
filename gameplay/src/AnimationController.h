@@ -91,6 +91,7 @@ public:
      * Finds the animation with the given ID.
      *
      * @param id The ID of the animation to get. NULL if the Animation is not found.
+     * 
      * @return The animation, or NULL if not found.
      */
     Animation* getAnimation(const char* id) const;

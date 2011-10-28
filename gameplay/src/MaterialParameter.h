@@ -7,8 +7,6 @@
 
 #include "Material.h"
 
-#define MATERIALPARAMETER_ANIMATE_UNIFORM           1
-
 namespace gameplay
 {
 
@@ -32,6 +30,11 @@ class MaterialParameter : public AnimationTarget
     friend class Material;
 
 public:
+
+    /**
+     * MaterialParameter's animation target property.
+     */
+    static const int ANIMATE_UNIFORM = 1;
 
     /**
      * Sets the value of this parameter to a float value.

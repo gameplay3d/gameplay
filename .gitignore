@@ -60,3 +60,9 @@
 /gameplay-samples/sample03-character/Device-Coverage
 /gameplay-samples/sample03-character/Device-Profile
 /gameplay-samples/sample03-character/Device-Release
+/gameplay-samples/sample04-catapult/Simulator
+/gameplay-samples/sample04-catapult/Debug
+/gameplay-samples/sample04-catapult/Device-Debug
+/gameplay-samples/sample04-catapult/Device-Release
+/gameplay-samples/sample04-catapult/Release
+/gameplay-demos

@@ -174,7 +174,7 @@ void Vector3::cross(const Vector3& v1, const Vector3& v2, Vector3* dst)
     dst->z = z;
 }
 
-float Vector3::distance(const Vector3& v)
+float Vector3::distance(const Vector3& v) const
 {
     float dx = v.x - x;
     float dy = v.y - y;
@@ -183,7 +183,7 @@ float Vector3::distance(const Vector3& v)
     return sqrtf(dx * dx + dy * dy + dz * dz);
 }
 
-float Vector3::distanceSquared(const Vector3& v)
+float Vector3::distanceSquared(const Vector3& v) const
 {
     float dx = v.x - x;
     float dy = v.y - y;
@@ -202,12 +202,12 @@ float Vector3::dot(const Vector3& v1, const Vector3& v2)
     return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
 
-float Vector3::length()
+float Vector3::length() const
 {
     return sqrtf(x * x + y * y + z * z);
 }
 
-float Vector3::lengthSquared()
+float Vector3::lengthSquared() const
 {
     return (x * x + y * y + z * z);
 }

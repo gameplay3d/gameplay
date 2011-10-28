@@ -38,6 +38,7 @@ public:
      * If id is NULL then the first scene found is loaded.
      * 
      * @param id The ID of the scene to load (NULL to load the first scene).
+     * 
      * @return The loaded scene, or NULL if the scene could not be loaded.
      */
     Scene* loadScene(const char* id = NULL);
@@ -117,7 +118,6 @@ private:
     {
     public:
         MeshSkin* skin;
-        std::string rootJoint;
         std::vector<std::string> joints;
         std::vector<Matrix> inverseBindPoseMatrices;
     };
@@ -148,7 +148,7 @@ private:
     const char* getIdFromOffset() const;
 
     /**
-     * Returns the ID of the object at the given file offset by searching through the reference table. 
+     * Returns the ID of the object at the given file offset by searching through the reference table.
      * Returns NULL if not found.
      *
      * @param offset The file offset.
@@ -193,8 +193,22 @@ private:
      */
     bool read(unsigned int* ptr);
 
+    /**
+     * Reads an unsigned char from the current file position.
+     * 
+     * @param ptr A pointer to load the value into.
+     * 
+     * @return True if successful, false if an error occurred.
+     */
     bool read(unsigned char* ptr);
 
+    /**
+     * Reads a float from the current file position.
+     * 
+     * @param ptr A pointer to load the value into.
+     * 
+     * @return True if successful, false if an error occurred.
+     */
     bool read(float* ptr);
 
     /**
@@ -217,6 +231,13 @@ private:
      */
     bool readMatrix(float* m);
 
+    /**
+     * Reads an xref string from the current file position.
+     * 
+     * @param id The string to load the ID string into.
+     * 
+     * @return True if successful, false if an error occurred.
+     */
     bool readXref(std::string& id);
 
     /**
@@ -255,7 +276,29 @@ private:
      */
     MeshSkin* readMeshSkin(Scene* sceneContext, Node* nodeContext);
 
-    void readAnimation(const char* id, Scene* scene);
+    /**
+     * Reads an animation from the current file position.
+     * 
+     * @param scene The scene to load the animations into.
+     */
+    void readAnimation(Scene* scene);
+
+    /**
+     * Reads an "animations" object from the current file position and all of the animations contained in it.
+     * 
+     * @param scene The scene to load the animations into.
+     */
+    void readAnimations(Scene* scene);
+
+    /**
+     * Reads an animation channel at the current file position into the given animation.
+     * 
+     * @param scene The scene that the animation is in.
+     * @param animation The animation to the load channel into.
+     * @param animationId The ID of the animation that this channel is loaded into.
+     * 
+     * @return The animation that the channel was loaded into.
+     */
     Animation* readAnimationChannel(Scene* scene, Animation* animation, const char* animationId);
 
     /**
@@ -271,6 +314,7 @@ private:
      */
     void resolveJointReferences(Scene* sceneContext, Node* nodeContext);
 
+private:
     std::string _path;
     unsigned int _referenceCount;
     Reference* _references;

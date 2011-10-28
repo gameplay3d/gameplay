@@ -76,23 +76,7 @@ private:
      */
     ~AnimationValue();
 
-    /**
-     * Sets the initial values to the current value.
-     */
-    //void setInitialToCurrent();
-
-    /**
-     * Set the current value to the initial value.
-     */
-    //void setCurrentToInitial();
-
-    /**
-     * Get the initial value.
-     */
-    //void getOriginalValue();
-
     unsigned int _componentCount;   // The number of float values for the property.
-    //float* _initialValue;         // The initial value of the property.
     float* _currentValue;           // The current value of the property.
 };
 
