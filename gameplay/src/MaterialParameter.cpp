@@ -8,8 +8,8 @@
 namespace gameplay
 {
 
-MaterialParameter::MaterialParameter(Material* material, Uniform* uniform) :
-    _type(MaterialParameter::NONE), _count(1), _dynamic(false), _uniform(uniform), _material(material)
+MaterialParameter::MaterialParameter(const char* name) :
+    _type(MaterialParameter::NONE), _count(1), _dynamic(false), _name(name), _uniform(NULL)
 {
     clearValue();
 }
@@ -30,22 +30,14 @@ void MaterialParameter::clearValue()
         case MaterialParameter::VECTOR3:
         case MaterialParameter::VECTOR4:
         case MaterialParameter::MATRIX:
-            if (_value.floatPtrValue)
-            {
-                delete[] _value.floatPtrValue;
-            }
+            SAFE_DELETE_ARRAY(_value.floatPtrValue);
             break;
         case MaterialParameter::INT:
-            if (_value.intPtrValue)
-            {
-                delete[] _value.intPtrValue;
-            }
+            SAFE_DELETE_ARRAY(_value.intPtrValue);
             break;
         case MaterialParameter::METHOD:
-            if (_value.method)
-            {
-                delete _value.method;
-            }
+            SAFE_DELETE(_value.method);
+            break;
         }
 
         _dynamic = false;
@@ -55,10 +47,10 @@ void MaterialParameter::clearValue()
     {
         switch (_type)
         {
-        case MaterialParameter::TEXTURE:
-            if (_value.textureValue)
+        case MaterialParameter::SAMPLER:
+            if (_value.samplerValue)
             {
-                const_cast<Texture*> (_value.textureValue)->release();
+                const_cast<Texture::Sampler*>(_value.samplerValue)->release();
             }
             break;
         }
@@ -66,6 +58,11 @@ void MaterialParameter::clearValue()
 
     memset(&_value, 0, sizeof(_value));
     _type = MaterialParameter::NONE;
+}
+
+const char* MaterialParameter::getName() const
+{
+    return _name.c_str();
 }
 
 void MaterialParameter::setValue(float value)
@@ -100,29 +97,6 @@ void MaterialParameter::setValue(const int* values, unsigned int count)
     _value.intPtrValue = const_cast<int*> (values);
     _count = count;
     _type = MaterialParameter::INT;
-}
-
-void MaterialParameter::setValue(const Color& value)
-{
-    clearValue();
-
-    // Copy data by-value into a dynamic array.
-    float* array = new float[4];
-    memcpy(array, &value.r, sizeof(float) * 4);
-
-    _value.floatPtrValue = array;
-    _dynamic = true;
-    _count = 1;
-    _type = MaterialParameter::VECTOR4;
-}
-
-void MaterialParameter::setValue(const Color* values, unsigned int count)
-{
-    clearValue();
-
-    _value.floatPtrValue = const_cast<float*> (&values[0].r);
-    _count = count * 4; // 4 elements per color
-    _type = MaterialParameter::VECTOR4;
 }
 
 void MaterialParameter::setValue(const Vector2& value)
@@ -221,36 +195,51 @@ void MaterialParameter::setValue(const Matrix* values, unsigned int count)
     _type = MaterialParameter::MATRIX;
 }
 
-void MaterialParameter::setValue(const Texture* texture)
+void MaterialParameter::setValue(const Texture::Sampler* sampler)
 {
     clearValue();
 
-    if (texture)
+    if (sampler)
     {
-        const_cast<Texture*>(texture)->addRef();
-        _value.textureValue = texture;
-        _type = MaterialParameter::TEXTURE;
+        const_cast<Texture::Sampler*>(sampler)->addRef();
+        _value.samplerValue = sampler;
+        _type = MaterialParameter::SAMPLER;
     }
 }
 
-void MaterialParameter::setValue(const char* texturePath, bool generateMipmaps)
+Texture::Sampler* MaterialParameter::setValue(const char* texturePath, bool generateMipmaps)
 {
     if (texturePath)
     {
         clearValue();
 
-        Texture* texture = Texture::create(texturePath, generateMipmaps);
-        if (texture)
+        Texture::Sampler* sampler = Texture::Sampler::create(texturePath, generateMipmaps);
+        if (sampler)
         {
-            _value.textureValue = texture;
-            _type = MaterialParameter::TEXTURE;
+            _value.samplerValue = sampler;
+            _type = MaterialParameter::SAMPLER;
         }
+        return sampler;
     }
+
+    return NULL;
 }
 
-void MaterialParameter::bind()
+void MaterialParameter::bind(Effect* effect)
 {
-    Effect* effect = _material->getEffect();
+    // If we had a Uniform cached that is not from the passed in effect,
+    // we need to update our uniform to point to the new effect's uniform.
+    if (!_uniform || _uniform->getEffect() != effect)
+    {
+        _uniform = effect->getUniform(_name.c_str());
+
+        if (!_uniform)
+        {
+            // This parameter was not found in the specified effect, so do nothing.
+            WARN_VARG("Warning: Material parameter '%s' not found in effect '%s'.", _name.c_str(), effect->getId());
+            return;
+        }
+    }
 
     switch (_type)
     {
@@ -292,13 +281,13 @@ void MaterialParameter::bind()
         assert(_value.floatPtrValue);
         effect->setValue(_uniform, reinterpret_cast<Matrix*>(_value.floatPtrValue), _count);
         break;
-    case MaterialParameter::TEXTURE:
-        assert(_value.textureValue);
-        effect->setValue(_uniform, _value.textureValue);
+    case MaterialParameter::SAMPLER:
+        assert(_value.samplerValue);
+        effect->setValue(_uniform, _value.samplerValue);
         break;
     case MaterialParameter::METHOD:
         assert(_value.method);
-        _value.method->setValue();
+        _value.method->setValue(effect);
         break;
     }
 }
@@ -310,7 +299,7 @@ unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyI
         // These types don't support animation.
         case NONE:
         case MATRIX:
-        case TEXTURE:
+        case SAMPLER:
         case METHOD:
             return 0;
         default:
@@ -343,7 +332,7 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
                     }
                     break;
 
-                // UNSUPPORTED: NONE, MATRIX, METHOD, TEXTURE 
+                // UNSUPPORTED: NONE, MATRIX, METHOD, SAMPLER 
             }
         }
     }
@@ -373,7 +362,7 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
                     }
                     break;
 
-                // UNSUPPORTED: NONE, MATRIX, METHOD, TEXTURE 
+                // UNSUPPORTED: NONE, MATRIX, METHOD, SAMPLER 
             }
         }
     }

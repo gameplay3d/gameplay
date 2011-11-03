@@ -36,8 +36,6 @@ public:
 
     void setVertexInfluenceCount(unsigned int count);
 
-    void setNode(Node* node);
-
     void setJointNames(const std::list<std::string>& list);
 
     const std::list<std::string>& getJointNames();
@@ -50,36 +48,20 @@ public:
      * Returns true if the MeshSkin contains a joint with the given ID.
      * 
      * @param id The ID of the joint to search for.
+     * 
      * @return True if the joint belongs to this skin, false otherwise.
      */
     bool hasJoint(const char* id);
 
-    /**
-     * Returns the animation that contains the animation channels that target this skin's joints.
-     * 
-     * @return The animation for this skin.
-     */
-    Animation* getAnimation();
-
-    /**
-     * Sets the id of the skin's animation.
-     * 
-     * @param id The new ID.
-     */
-    void setAnimationId(const char* id);
-
 private:
 
-    Node* influences;
-    float bindShape[16];
-    std::list<Node*> joints;
-    std::list<float> bindPoses;
+    float _bindShape[16];
+    std::list<Node*> _joints;
+    std::list<float> _bindPoses;
 
-    std::list<std::string> jointNames;
+    std::list<std::string> _jointNames;
 
-    unsigned int vertexInfluenceCount;
-
-    Animation* animation;
+    unsigned int _vertexInfluenceCount;
 };
 
 }

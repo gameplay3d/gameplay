@@ -6,6 +6,7 @@
 namespace gameplay
 {
 
+bool startsWith(const char* str, const char* prefix, bool ignoreCase = true);
 bool endsWith(const char* str, const char* suffix, bool ignoreCase = true);
 
 /**

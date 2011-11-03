@@ -111,9 +111,9 @@ public:
      *
      * @param plane The plane to test intersection with.
      * 
-     * @return PLANE_INTERSECTS_BACK INTERSECTS_BACK if this bounding box is in the negative half-space of
-     *  the plane, PLANE_INTERSECTS_FRONT INTERSECTS_FRONT if it is in the positive half-space of the plane;
-     *  and PLANE_INTERSECTS_INTERSECTING INTERSECTS_INTERSECTING if it intersects the plane.
+     * @return Plane::INTERSECTS_BACK INTERSECTS_BACK if this bounding box is in the negative half-space of
+     *  the plane, Plane::INTERSECTS_FRONT INTERSECTS_FRONT if it is in the positive half-space of the plane;
+     *  and Plane::INTERSECTS_INTERSECTING INTERSECTS_INTERSECTING if it intersects the plane.
      */
     float intersects(const Plane& plane) const;
 
@@ -123,7 +123,7 @@ public:
      * @param ray The ray to test intersection with.
      * 
      * @return The distance from the origin of the ray to this bounding box or
-     *  RAY_INTERSECTS_NONE INTERSECTS_NONE if the ray does not intersect this bounding box.
+     *  INTERSECTS_NONE INTERSECTS_NONE if the ray does not intersect this bounding box.
      */
     float intersects(const Ray& ray) const;
 

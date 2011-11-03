@@ -80,6 +80,11 @@ public:
     /**
      * Constructs a new textured 2D quad.
      * 
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param width The width of the quad.
+     * @param height The height of the quad.
+     * 
      * @return The newly created mesh.
      */
     static Mesh* createQuad(float x, float y, float width, float height);
@@ -105,6 +110,8 @@ public:
      * 
      * @param points The array of points.
      * @param pointCount The number of points.
+     * 
+     * @return The newly created mesh.
      */
     static Mesh* createLines(Vector3* points, unsigned int pointCount);
 
@@ -118,13 +125,6 @@ public:
      * @return The newly created bounding box mesh.
      */
     static Mesh* createBoundingBox(const BoundingBox& box);
-
-    /**
-     * Creates a Model of this Mesh that can be used for drawing with materials.
-     * 
-     * @return The Model of this Mesh.
-     */
-    Model* createModel();
 
     /**
      * Gets the vertex format for the mesh.
@@ -282,7 +282,6 @@ private:
 
     VertexFormat* _vertexFormat;
     unsigned int _vertexCount;
-    unsigned int _vertexSize;
     VertexBuffer _vertexBuffer;
     PrimitiveType _primitiveType;
     unsigned int _partCount;

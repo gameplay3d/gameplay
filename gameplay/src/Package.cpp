@@ -14,8 +14,9 @@
 
 #define PACKAGE_TYPE_SCENE 1
 #define PACKAGE_TYPE_NODE 2
-#define PACKAGE_TYPE_ANIMATION 3
-#define PACKAGE_TYPE_ANIMATION_CHANNEL 4
+#define PACKAGE_TYPE_ANIMATIONS 3
+#define PACKAGE_TYPE_ANIMATION 4
+#define PACKAGE_TYPE_ANIMATION_CHANNEL 5
 #define PACKAGE_TYPE_MMODEL 10
 #define PACKAGE_TYPE_MATERIAL 16
 #define PACKAGE_TYPE_EFFECT 18
@@ -50,11 +51,7 @@ Package::~Package()
         __packageCache.erase(itr);
     }
 
-    if (_references)
-    {
-        delete[] _references;
-        _references = NULL;
-    }
+    SAFE_DELETE_ARRAY(_references);
 
     if (_file)
     {
@@ -98,14 +95,14 @@ std::string readString(FILE* fp)
     {
         if (fread(str, 1, length, fp) != length)
         {
-            delete[] str;
+            SAFE_DELETE_ARRAY(str);
             return std::string();
         }
     }
 
     str[length] = '\0';
     std::string result(str);
-    delete[] str;
+    SAFE_DELETE_ARRAY(str);
     return result;
 }
 
@@ -161,7 +158,7 @@ Package* Package::create(const char* path)
             fread(&refs[i].offset, 4, 1, fp) != 1)
         {
             fclose(fp);
-            delete[] refs;
+            SAFE_DELETE_ARRAY(refs);
             return NULL;
         }
     }
@@ -361,7 +358,7 @@ Scene* Package::loadScene(const char* id)
     for (unsigned int i = 0; i < _referenceCount; ++i)
     {
         Reference* ref = &_references[i];
-        if (ref->type == PACKAGE_TYPE_ANIMATION)
+        if (ref->type == PACKAGE_TYPE_ANIMATIONS)
         {
             // Found a match
             if (fseek(_file, ref->offset, SEEK_SET) != 0)
@@ -369,7 +366,7 @@ Scene* Package::loadScene(const char* id)
                 LOG_ERROR_VARG("Failed to seek to object '%s' in package '%s'.", ref->id.c_str(), _path.c_str());
                 return NULL;
             }
-            readAnimation(ref->id.c_str(), scene);
+            readAnimations(scene);
         }
     }
 
@@ -441,10 +438,10 @@ Node* Package::readNode(Scene* sceneContext, Node* nodeContext)
     switch (nodeType)
     {
     case Node::NODE:
-        node = Node::create(id == NULL ? "" : id);
+        node = Node::create(id);
         break;
     case Node::JOINT:
-        node = Joint::create(id == NULL ? "" : id);
+        node = Joint::create(id);
         break;
     default:
         return NULL;
@@ -608,22 +605,21 @@ Light* Package::readLight()
     }
     else if (type == Light::POINT)
     {
-        float constantAttenuation, linearAttenuation, quadraticAttenuation;
-        if (!read(&constantAttenuation) || !read(&linearAttenuation) || !read(&quadraticAttenuation))
+        float range;
+        if (!read(&range))
         {
             LOG_ERROR_VARG("Failed to load point light %s in package '%s'.", "point", _path.c_str());
         }
-        light = Light::createPoint(color, constantAttenuation, linearAttenuation, quadraticAttenuation);
+        light = Light::createPoint(color, range);
     }
     else if (type == Light::SPOT)
     {
-        float constantAttenuation, linearAttenuation, quadraticAttenuation, falloffAngle, falloffExponent;
-        if (!read(&constantAttenuation) || !read(&linearAttenuation) || !read(&quadraticAttenuation) ||
-                !read(&falloffAngle) || !read(&falloffExponent))
+        float range, innerAngle, outerAngle;
+        if (!read(&range) || !read(&innerAngle) || !read(&outerAngle))
         {
             LOG_ERROR_VARG("Failed to load spot light %s in package '%s'.", "spot", _path.c_str());
         }
-        light = Light::createSpot(color, constantAttenuation, linearAttenuation, quadraticAttenuation, falloffAngle, falloffExponent);
+        light = Light::createSpot(color, range, innerAngle, outerAngle);
     }
     else
     {
@@ -686,7 +682,7 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
     if (!readMatrix(bindShape))
     {
         LOG_ERROR_VARG("Failed to load MeshSkin in package '%s'.", _path.c_str());
-        delete meshSkin;
+        SAFE_DELETE(meshSkin);
         return NULL;
     }
     meshSkin->setBindShape(bindShape);
@@ -694,22 +690,19 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
     MeshSkinData* skinData = new MeshSkinData();
     skinData->skin = meshSkin;
 
-    // Read root joint name
-    skinData->rootJoint = readString(_file);
-
     // Read joint count
     unsigned int jointCount;
     if (!read(&jointCount))
     {
         LOG_ERROR_VARG("Failed to load MeshSkin in package '%s'.", _path.c_str());
-        delete meshSkin;
-        delete skinData;
+        SAFE_DELETE(meshSkin);
+        SAFE_DELETE(skinData);
         return NULL;
     }
     if (jointCount == 0)
     {
-        delete meshSkin;
-        delete skinData;
+        SAFE_DELETE(meshSkin);
+        SAFE_DELETE(skinData);
         return NULL;
     }
     meshSkin->setJointCount(jointCount);
@@ -725,8 +718,8 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
     if (!read(&jointsBindPosesCount))
     {
         LOG_ERROR_VARG("Failed to load MeshSkin in package '%s'.", _path.c_str());
-        delete meshSkin;
-        delete skinData;
+        SAFE_DELETE(meshSkin);
+        SAFE_DELETE(skinData);
         return NULL;
     }
     if (jointsBindPosesCount > 0)
@@ -738,8 +731,8 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
             if (!readMatrix(m))
             {
                 LOG_ERROR_VARG("Failed to load MeshSkin in package '%s'.", _path.c_str());
-                delete meshSkin;
-                delete skinData;
+                SAFE_DELETE(meshSkin);
+                SAFE_DELETE(skinData);
                 return NULL;
             }
             skinData->inverseBindPoseMatrices.push_back(m);
@@ -758,12 +751,6 @@ void Package::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
     for (unsigned int i = 0; i < skinCount; ++i)
     {
         MeshSkinData* skinData = _meshSkins[i];
-
-        // Load the root joint first to ensure the full joint hierarchy is loaded if
-        // it was not already.
-        Node* rootJoint = loadNode(skinData->rootJoint.c_str(), sceneContext, nodeContext);
-        if (rootJoint == NULL || rootJoint->getType() != Node::JOINT)
-            continue;
 
         // Resolve all joints in skin joint list
         const unsigned int jointCount = skinData->joints.size();
@@ -785,24 +772,21 @@ void Package::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
             }
         }
 
-        // Set the root joint (must do this after setting all joints above)
-        skinData->skin->setRootJoint(skinData->rootJoint.c_str());
-
         // Done with this MeshSkinData entry
         SAFE_DELETE(_meshSkins[i]);
     }
     _meshSkins.clear();
 }
 
-void Package::readAnimation(const char* id, Scene* scene)
+void Package::readAnimation(Scene* scene)
 {
-    const char* animationId = getIdFromOffset();
+    const std::string animationId = readString(_file);
 
     // read the number of animation channels in this animation
     unsigned int animationChannelCount;
     if (!read(&animationChannelCount))
     {
-        LOG_ERROR_VARG("Failed to read %s for %s: %s", "animationChannelCount", "animation", id);
+        LOG_ERROR_VARG("Failed to read %s for %s: %s", "animationChannelCount", "animation", animationId.c_str());
         return;
     }
 
@@ -810,7 +794,23 @@ void Package::readAnimation(const char* id, Scene* scene)
 
     for (unsigned int i = 0; i < animationChannelCount; i++)
     {
-        animation = readAnimationChannel(scene, animation, animationId);
+        animation = readAnimationChannel(scene, animation, animationId.c_str());
+    }
+}
+
+void Package::readAnimations(Scene* scene)
+{
+    // read the number of animations in this object
+    unsigned int animationCount;
+    if (!read(&animationCount))
+    {
+        LOG_ERROR_VARG("Failed to read %s for %s: %s", "animationCount", "Animations");
+        return;
+    }
+
+    for (unsigned int i = 0; i < animationCount; i++)
+    {
+        readAnimation(scene);
     }
 }
 
@@ -850,7 +850,7 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
         }
     }
 
-    float* keyTimes = NULL;
+    unsigned long* keyTimes = NULL;
     float* values = NULL;
     float* tangentsIn = NULL;
     float* tangentsOut = NULL;
@@ -963,7 +963,7 @@ Mesh* Package::loadMesh(const char* id)
         unsigned int vUsage, vSize;
         if (fread(&vUsage, 4, 1, _file) != 1 || fread(&vSize, 4, 1, _file) != 1)
         {
-            delete[] vertexElements;
+            SAFE_DELETE_ARRAY(vertexElements);
             return NULL;
         }
 
@@ -973,8 +973,7 @@ Mesh* Package::loadMesh(const char* id)
 
     // Create VertexFormat
     VertexFormat* vertexFormat = VertexFormat::create(vertexElements, vertexElementCount);
-    delete[] vertexElements;
-    vertexElements = NULL;
+    SAFE_DELETE_ARRAY(vertexElements);
     if (vertexFormat == NULL)
     {
         return NULL;
@@ -1018,12 +1017,11 @@ Mesh* Package::loadMesh(const char* id)
     if (mesh == NULL)
     {
         LOG_ERROR_VARG("Failed to create mesh: %s", id);
-        delete[] vertexData;
+        SAFE_DELETE_ARRAY(vertexData);
         return NULL;
     }
     mesh->setVertexData(vertexData, 0, vertexCount);
-    delete[] vertexData;
-    vertexData = NULL;
+    SAFE_DELETE_ARRAY(vertexData);
 
     // Set mesh bounding volumes
     mesh->_boundingBox.set(boundsMin, boundsMax);
@@ -1053,7 +1051,7 @@ Mesh* Package::loadMesh(const char* id)
         if (fread(indexData, 1, iByteCount, _file) != iByteCount)
         {
             LOG_ERROR_VARG("Failed to read %d index data bytes for mesh part (i=%d): %s", iByteCount, i, id);
-            delete[] indexData;
+            SAFE_DELETE_ARRAY(indexData);
             SAFE_RELEASE(mesh);
             return NULL;
         }
@@ -1127,7 +1125,7 @@ Font* Package::loadFont(const char* id)
     if (fread(glyphs, sizeof(Font::Glyph), glyphCount, _file) != glyphCount)
     {
         LOG_ERROR_VARG("Failed to read %d glyphs for font: %s", glyphCount, id);
-        delete[] glyphs;
+        SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
 
@@ -1138,21 +1136,21 @@ Font* Package::loadFont(const char* id)
         fread(&textureByteCount, 4, 1, _file) != 1)
     {
         LOG_ERROR_VARG("Failed to read texture attributes for font: %s", id);
-        delete[] glyphs;
+        SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
     if (textureByteCount != (width * height))
     {
         LOG_ERROR_VARG("Invalid texture byte for font: %s", id);
-        delete[] glyphs;
+        SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
     unsigned char* textureData = new unsigned char[textureByteCount];
     if (fread(textureData, 1, textureByteCount, _file) != textureByteCount)
     {
         LOG_ERROR_VARG("Failed to read %d texture bytes for font: %s", textureByteCount, id);
-        delete[] glyphs;
-        delete[] textureData;
+        SAFE_DELETE_ARRAY(glyphs);
+        SAFE_DELETE_ARRAY(textureData);
         return NULL;
     }
 
@@ -1160,13 +1158,12 @@ Font* Package::loadFont(const char* id)
     Texture* texture = Texture::create(Texture::ALPHA, width, height, textureData);
 
     // Free the texture data (no longer needed)
-    delete[] textureData;
-    textureData = NULL;
+    SAFE_DELETE_ARRAY(textureData);
 
     if (texture == NULL)
     {
         LOG_ERROR_VARG("Failed to create texture for font: %s", id);
-        delete[] glyphs;
+        SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
 
@@ -1174,8 +1171,7 @@ Font* Package::loadFont(const char* id)
     Font* font = Font::create(family.c_str(), Font::PLAIN, size, glyphs, glyphCount, texture);
 
     // Free the glyph array
-    delete[] glyphs;
-    glyphs = NULL;
+    SAFE_DELETE_ARRAY(glyphs);
 
     // Release the texture since the Font now owns it
     SAFE_RELEASE(texture);

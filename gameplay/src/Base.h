@@ -87,23 +87,23 @@ extern void printError(const char* format, ...);
     }
 
 // Math
-#ifndef M_1_PI        
-#define M_1_PI                      0.31830988618379067154
-#endif
+#define MATH_DEG_TO_RAD(x)          ((x) * 0.0174532925f)
+#define MATH_RAD_TO_DEG(x)          ((x)* 57.29577951f)
+#define MATH_RANDOM_MINUS1_1()      ((2.0f*((float)rand()/RAND_MAX))-1.0f)      // Returns a random float between -1 and 1.
+#define MATH_RANDOM_0_1()           ((float)rand()/RAND_MAX)                    // Returns a random float between 0 and 1.
 #define MATH_FLOAT_SMALL            1.0e-37f
 #define MATH_TOLERANCE              2e-37f
 #define MATH_E                      2.71828182845904523536f
 #define MATH_LOG10E                 0.4342944819032518f
 #define MATH_LOG2E                  1.442695040888963387f
 #define MATH_PI                     3.14159265358979323846f
-#define MATH_PIOOVER2               1.57079632679489661923f
-#define MATH_PIOOVER4               M_PI_4
+#define MATH_PIOVER2                1.57079632679489661923f
+#define MATH_PIOVER4                M_PI_4
 #define MATH_PIX2                   6.28318530717958647693f
 #define MATH_EPSILON                0.000001f
-#define MATH_DEG_TO_RAD(x)          ((x) * 0.0174532925f)
-#define MATH_RAD_TO_DEG(x)          ((x)* 57.29577951f)
-#define MATH_RANDOM_MINUS1_1()      ((2.0f*((float)rand()/RAND_MAX))-1.0f)      // Returns a random float between -1 and 1.
-#define MATH_RANDOM_0_1()           ((float)rand()/RAND_MAX)                    // Returns a random float between 0 and 1.
+#ifndef M_1_PI
+#define M_1_PI                      0.31830988618379067154
+#endif
 
 // Audio (OpenAL/alut)
 #ifdef __QNX__
@@ -122,7 +122,6 @@ extern void printError(const char* format, ...);
 #define WINDOW_WIDTH        1024
 #define WINDOW_HEIGHT       600
 
-#include <png.h>
 #ifdef __QNX__
     #include <EGL/egl.h>
     #include <GLES2/gl2.h>
@@ -131,12 +130,13 @@ extern void printError(const char* format, ...);
     extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
+    #define glClearDepth glClearDepthf
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
-    #define GL_VERSION3
     #include <GL/glew.h>
     #include <GL/wglew.h>
 #endif
+#include <png.h>
 
 // Attributes
 #define VERTEX_ATTRIBUTE_POSITION_NAME              "a_position"
@@ -147,13 +147,6 @@ extern void printError(const char* format, ...);
 #define VERTEX_ATTRIBUTE_BLENDWEIGHTS_NAME          "a_blendWeights"
 #define VERTEX_ATTRIBUTE_BLENDINDICES_NAME          "a_blendIndices"
 #define VERTEX_ATTRIBUTE_TEXCOORD_PREFIX            "a_texCoord"
-
-// Uniforms
-#define UNIFORM_WORLD_MATRIX                        "u_worldMatrix"
-#define UNIFORM_VIEW_MATRIX                         "u_viewMatrix"
-#define UNIFORM_WORLD_VIEW_PROJECTION_MATRIX        "u_worldViewProjectionMatrix"
-#define UNIFORM_INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX "u_inverseTransposeWorldViewMatrix"
-#define UNIFORM_CAMERA_POSITION                     "u_cameraPosition"
 
 // Hardware Resources
 namespace gameplay

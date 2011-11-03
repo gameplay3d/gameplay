@@ -13,8 +13,9 @@
 namespace gameplay
 {
 
-Mesh::Mesh() :
-    _vertexFormat(NULL), _vertexCount(0), _vertexBuffer(0), _primitiveType(TRIANGLES), _partCount(0), _parts(NULL), _dynamic(false)
+Mesh::Mesh() 
+    : _vertexFormat(NULL), _vertexCount(0), _vertexBuffer(0), _primitiveType(TRIANGLES), 
+      _partCount(0), _parts(NULL), _dynamic(false)
 {
 }
 
@@ -27,15 +28,9 @@ Mesh::~Mesh()
 {
     for (unsigned int i = 0; i < _partCount; ++i)
     {
-        if (_parts[i])
-        {
-            delete _parts[i];
-            _parts[i] = NULL;
-        }
+        SAFE_DELETE(_parts[i]);
     }
-
-    delete[] _parts;
-    _parts = NULL;
+    SAFE_DELETE_ARRAY(_parts);
 
     if (_vertexBuffer)
     {
@@ -201,12 +196,14 @@ Mesh* Mesh::createLines(Vector3* points, unsigned int pointCount)
     SAFE_RELEASE(format);
     if (mesh == NULL)
     {
+        SAFE_DELETE_ARRAY(vertices);
         return NULL;
     }
 
     mesh->_primitiveType = LINE_STRIP;
     mesh->setVertexData(vertices, 0, pointCount);
 
+    SAFE_DELETE_ARRAY(vertices);
     return mesh;
 }
 
@@ -237,7 +234,6 @@ Mesh* Mesh::createBoundingBox(const BoundingBox& box)
         corners[5].x, corners[5].y, corners[5].z
     };
 
-
     VertexFormat::Element elements[] =
     {
         VertexFormat::Element(VertexFormat::POSITION, 3)
@@ -254,11 +250,6 @@ Mesh* Mesh::createBoundingBox(const BoundingBox& box)
     mesh->setVertexData(vertices, 0, 18);
 
     return mesh;
-}
-
-Model* Mesh::createModel()
-{
-    return new Model(this);
 }
 
 const VertexFormat* Mesh::getVertexFormat() const
@@ -333,7 +324,7 @@ MeshPart* Mesh::addPart(PrimitiveType primitiveType, IndexFormat indexFormat, un
         _parts[_partCount++] = part;
 
         // Delete old part array.
-        delete[] oldParts;
+        SAFE_DELETE_ARRAY(oldParts);
     }
 
     return part;

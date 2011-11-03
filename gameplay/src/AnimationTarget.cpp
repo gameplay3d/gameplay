@@ -27,8 +27,8 @@ AnimationTarget::~AnimationTarget()
             SAFE_RELEASE((*animationIter));
             animationIter++;
         }
+        SAFE_DELETE(_animations);
     }
-    SAFE_DELETE(_animations);
 }
 
 void AnimationTarget::addAnimation(Animation* animation)
@@ -67,7 +67,9 @@ Animation* AnimationTarget::getAnimation(const char* id) const
         while(animationIter != _animations->end())
         {
             if ((*animationIter)->_id.compare(id) == 0)
+            {
                 return *animationIter;
+            }
 
             animationIter++;
         }

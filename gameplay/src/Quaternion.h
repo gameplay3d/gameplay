@@ -177,6 +177,7 @@ public:
      * quaternion is already unit-length.
      *
      * @param dst A quaternion to store the inverse in.
+     * 
      * @return true if the inverse can be computed, false otherwise.
      */
     bool inverse(Quaternion* dst) const;
@@ -232,6 +233,14 @@ public:
      * @param array An array containing the elements of the quaternion in the order x, y, z, w.
      */
     void set(float* array);
+
+    /**
+     * Sets the quaternion equal to the rotation from the specified axis and angle.
+     * 
+     * @param axis The axis of rotation.
+     * @param angle The angle of rotation (in radians).
+     */
+    void set(const Vector3& axis, float angle);
 
     /**
      * Sets the elements of this quaternion to a copy of the specified quaternion.

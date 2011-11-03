@@ -23,7 +23,6 @@
     <ClCompile Include="src\BoundingBox.cpp" />
     <ClCompile Include="src\BoundingSphere.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\Color.cpp" />
     <ClCompile Include="src\Curve.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
@@ -34,6 +33,7 @@
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\Pass.cpp" />
     <ClCompile Include="src\MaterialParameter.cpp" />
     <ClCompile Include="src\Matrix.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
@@ -51,8 +51,10 @@
     <ClCompile Include="src\Ray.cpp" />
     <ClCompile Include="src\Rectangle.cpp" />
     <ClCompile Include="src\Ref.cpp" />
+    <ClCompile Include="src\RenderState.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
+    <ClCompile Include="src\Technique.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\Vector2.cpp" />
@@ -76,7 +78,6 @@
     <ClInclude Include="src\BoundingBox.h" />
     <ClInclude Include="src\BoundingSphere.h" />
     <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\Color.h" />
     <ClInclude Include="src\Curve.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FileSystem.h" />
@@ -91,6 +92,7 @@
     <ClInclude Include="src\Joint.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Material.h" />
+    <ClInclude Include="src\Pass.h" />
     <ClInclude Include="src\MaterialParameter.h" />
     <ClInclude Include="src\Matrix.h" />
     <ClInclude Include="src\Mesh.h" />
@@ -107,11 +109,12 @@
     <ClInclude Include="src\Ray.h" />
     <ClInclude Include="src\Rectangle.h" />
     <ClInclude Include="src\Ref.h" />
+    <ClInclude Include="src\RenderState.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SpriteBatch.h" />
+    <ClInclude Include="src\Technique.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Transform.h" />
-    <ClInclude Include="src\Tree.h" />
     <ClInclude Include="src\Vector2.h" />
     <ClInclude Include="src\Vector3.h" />
     <ClInclude Include="src\Vector4.h" />

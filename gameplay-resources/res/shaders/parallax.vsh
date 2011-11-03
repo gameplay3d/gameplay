@@ -1,21 +1,21 @@
 // Uniforms
-uniform    vec3 u_lightDirection;                        // Direction of the light
+uniform    vec3 u_lightDirection;                    // Direction of the light
 uniform mat4 u_worldViewProjectionMatrix;            // Matrix to transform a position to clip space.
-uniform mat4 u_inverseTransposeWorldViewMatrix;        // Matrix to transform a normal to view space.
-uniform mat4 u_worldMatrix;                            // Matrix to tranform a position to world space.
-uniform vec3 u_cameraPosition;                        // Position of the camera.
+uniform mat4 u_inverseTransposeWorldViewMatrix;      // Matrix to transform a normal to view space.
+uniform mat4 u_worldMatrix;                          // Matrix to tranform a position to world space.
+uniform vec3 u_cameraPosition;                       // Position of the camera.
 
 // Inputs
-attribute vec4 a_position;                            // Vertex Position (x, y, z, w)
-attribute vec3 a_normal;                            // Vertex Normal (x, y, z)
-attribute vec2 a_texCoord;                            // Vertex Texture Coordinate (u, v)
+attribute vec4 a_position;                           // Vertex Position (x, y, z, w)
+attribute vec3 a_normal;                             // Vertex Normal (x, y, z)
+attribute vec2 a_texCoord;                           // Vertex Texture Coordinate (u, v)
 attribute vec3 a_tangent;                            // Vertex Tangent (x, y, z)
-attribute vec3 a_binormal;                            // Vertex Binormal (actually Bi-tangent) (x, y, z)
+attribute vec3 a_binormal;                           // Vertex Binormal (actually Bi-tangent) (x, y, z)
 
 // Outputs
-varying vec2 v_texCoord;                            // Texture Coordinate (u,v)
-varying vec3 v_lightDirectionTangentSpace;            // Direction of the light in tangent space.
-varying vec3 v_cameraDirectionTangentSpace;         // Direction the camera is looking at in tangent space.
+varying vec2 v_texCoord;                             // Texture Coordinate (u,v)
+varying vec3 v_lightDirectionTangentSpace;           // Direction of the light in tangent space.
+varying vec3 v_cameraDirectionTangentSpace;          // Direction the camera is looking at in tangent space.
 
 void main()
 {

@@ -138,6 +138,7 @@ public:
      * Sets if this node is a joint node.
      */
     void setIsJoint(bool value);
+
     /**
      * Returns true if this is a joint node.
      */
@@ -156,7 +157,7 @@ public:
     bool hasLight() const;
     
 private:
-    float transform[16];
+    float _transform[16];
 
     int _childCount;
     Node* _nextSibling;
@@ -165,11 +166,11 @@ private:
     Node* _lastChild;
     Node* _parent;
 
-    CameraInstance* camera;
-    LightInstance* light;
-    Model* model;
+    CameraInstance* _camera;
+    LightInstance* _light;
+    Model* _model;
 
-    bool joint;
+    bool _joint;
 };
 
 

@@ -12,14 +12,10 @@ AnimationValue::AnimationValue(unsigned int componentCount)
   : _componentCount(componentCount)
 {
     _currentValue = new float[_componentCount];
-    //_initialValue = new float[_componentCount];
 }
 
 AnimationValue::~AnimationValue()
 {
-    /*
-    SAFE_DELETE_ARRAY(_initialValue);
-    */
     SAFE_DELETE_ARRAY(_currentValue);
 }
 
@@ -50,17 +46,5 @@ void AnimationValue::setFloat(float* value, unsigned int offset, unsigned int le
 
     memcpy(_currentValue, value + offset, length * sizeof(float));
 }
-
-/*
-void AnimationValue::setInitialToCurrent()
-{
-    memcpy(_initialValue, _currentValue, sizeof(float) * _componentCount);
-}
-
-void AnimationValue::setCurrentToInitial()
-{
-    memcpy(_currentValue, _initialValue, sizeof(float) * _componentCount);
-}
-*/
 
 }

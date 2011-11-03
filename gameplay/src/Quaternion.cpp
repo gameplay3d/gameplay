@@ -192,6 +192,17 @@ void Quaternion::set(float* array)
     w = array[3];
 }
 
+void Quaternion::set(const Vector3& axis, float angle)
+{
+    Quaternion rotationQuat;
+    Quaternion::createFromAxisAngle(axis, angle, &rotationQuat);
+
+    this->x = rotationQuat.x;
+    this->y = rotationQuat.y;
+    this->z = rotationQuat.z;
+    this->w = rotationQuat.w;
+}
+
 void Quaternion::set(const Quaternion& q)
 {
     this->x = q.x;
@@ -227,6 +238,17 @@ void Quaternion::lerp(const Quaternion& q1, const Quaternion& q2, float t, Quate
     assert(dst);
     assert(!(t < 0.0f || t > 1.0f));
 
+    if (t == 0.0f)
+    {
+        memcpy(dst, &q1, sizeof(float) * 4);
+        return;
+    }
+    else if (t == 1.0f)
+    {
+        memcpy(dst, &q2, sizeof(float) * 4);
+        return;
+    }
+
     float t1 = 1.0f - t;
 
     dst->x = t1 * q1.x + t * q2.x;
@@ -243,6 +265,17 @@ void Quaternion::slerp(const Quaternion& q1, const Quaternion& q2, float t, Quat
     // errors in the input quaternions, it actually corrects for them.
     assert(dst);
     assert(!(t < 0.0f || t > 1.0f));
+
+    if (t == 0.0f)
+    {
+        memcpy(dst, &q1, sizeof(float) * 4);
+        return;
+    }
+    else if (t == 1.0f)
+    {
+        memcpy(dst, &q2, sizeof(float) * 4);
+        return;
+    }
 
     float halfY, alpha, beta;
     float u, f1, f2a, f2b;

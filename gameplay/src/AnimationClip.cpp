@@ -12,7 +12,7 @@ namespace gameplay
 {
 
 AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long startTime, unsigned long endTime)
-    : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _elapsedTime(0), _channelCount(animation->_channels.size()), _repeatCount(1.0f), _speed(1.0f), _isPlaying(false), _beginListeners(NULL), _endListeners(NULL)
+    : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _elapsedTime(0), _runningTime(0), _channelCount(animation->_channels.size()), _repeatCount(1.0f), _speed(1.0f), _isPlaying(false), _beginListeners(NULL), _endListeners(NULL)
 {
     assert(0 <= startTime && startTime <= animation->_duration && 0 <= endTime && endTime <= animation->_duration);
 
@@ -47,7 +47,7 @@ AnimationClip::~AnimationClip()
         SAFE_DELETE(_beginListeners);
     }
 
-    if (_beginListeners)
+    if (_endListeners)
     {
         std::vector<Listener*>::iterator eIter = _endListeners->begin();
         while (eIter != _endListeners->end())
@@ -87,11 +87,11 @@ unsigned long AnimationClip::getElaspedTime() const
 
 void AnimationClip::setRepeatCount(float repeatCount)
 {
-    assert(repeatCount == ANIMATION_REPEAT_COUNT_INDEFINITE || repeatCount > 0.0f);
+    assert(repeatCount == REPEAT_INDEFINITE || repeatCount > 0.0f);
 
     _repeatCount = repeatCount;
 
-    if (repeatCount == ANIMATION_REPEAT_COUNT_INDEFINITE)
+    if (repeatCount == REPEAT_INDEFINITE)
     {
         _activeDuration = _duration;
     }
@@ -104,6 +104,28 @@ void AnimationClip::setRepeatCount(float repeatCount)
 float AnimationClip::getRepeatCount() const
 {
     return _repeatCount;
+}
+
+void AnimationClip::setActiveDuration(unsigned long duration)
+{
+    if (duration == REPEAT_INDEFINITE)
+    {
+        _repeatCount = REPEAT_INDEFINITE;
+        _activeDuration = _duration;
+    }
+    else
+    {
+        _activeDuration = _duration;
+        _repeatCount = (float) _activeDuration / (float) _duration;
+    }
+}
+
+unsigned long AnimationClip::getActiveDuration() const
+{
+    if (_repeatCount == REPEAT_INDEFINITE)
+        return REPEAT_INDEFINITE;
+
+    return _activeDuration;
 }
 
 void AnimationClip::setSpeed(float speed)
@@ -151,59 +173,71 @@ void AnimationClip::addEndListener(AnimationClip::Listener* listener)
 bool AnimationClip::update(unsigned long elapsedTime)
 {
     if (!_isPlaying)
-    {
-        // Initialize animation to play.
-        _isPlaying = true;
-        _elapsedTime = 0;
         onBegin();
-    }
 
     // Update elapsed time.
-    if (_speed < 0.0f && _repeatCount != ANIMATION_REPEAT_COUNT_INDEFINITE)
-        _elapsedTime -= elapsedTime * _speed;
-    else
-        _elapsedTime += elapsedTime * _speed;
-    
-    bool animationComplete = false;
+    _elapsedTime += elapsedTime;
+    _runningTime += elapsedTime * _speed;
+
     float percentComplete = 0.0f;
 
     // Check to see if clip is complete.
-    if (_repeatCount != ANIMATION_REPEAT_COUNT_INDEFINITE && _elapsedTime >= _activeDuration)
+    if (_repeatCount != REPEAT_INDEFINITE && ((_speed >= 0 && _runningTime >= (long) _activeDuration) || (_speed < 0 && _runningTime <= 0)))
     {
-        percentComplete = _repeatCount;
-        animationComplete = true;
         _isPlaying = false;
+        if (_speed >= 0)
+            percentComplete = _activeDuration % _duration; // Get's the fractional part of the final repeat.
+        else
+            percentComplete = 0.0f; // If we are negative speed, the end value should be 0.
     }
     else
     {
-        percentComplete = (float) _elapsedTime / _duration;
+        // Gets portion/fraction of the repeat.
+        percentComplete = (float) (_runningTime % _duration);
     }
 
-    // Get out fractional part of percent complete (can ignore repeats!)
-    // Add in start time, so we evaluate the correct part of the curve.
-    float intPart;
-    percentComplete = (std::min)((float)(_startTime + std::modf(percentComplete, &intPart) * _duration) / _animation->_duration, 1.0f);
+    // Add back in start time, and divide by the total animation's duration to get the actual percentage complete
+    percentComplete = (float)(_startTime + percentComplete) / (float) _animation->_duration;
 
     // Evaluate this clip.
+    Animation::Channel* channel = NULL;
+    AnimationValue* value = NULL;
     for (unsigned int i = 0; i < _channelCount; i++)
     {
-        AnimationValue* value = _values.at(i);
+        channel = _animation->_channels[i];
+        value = _values.at(i);
 
         // Evaluate point on curve.
-        _animation->_channels[i]->_curve->evaluate(percentComplete, value->_currentValue);
+        channel->_curve->evaluate(percentComplete, value->_currentValue);
         
         // Set the animation value on the target property.
-        _animation->_channels[i]->_target->setAnimationPropertyValue(_animation->_channels[i]->_propertyId, value);
+        channel->_target->setAnimationPropertyValue(channel->_propertyId, value);
     }
 
-    if (animationComplete)
+    // When ended. Probably should move to it's own method so we can call it when the clip is ended early.
+    if (!_isPlaying)
+    {
         onEnd();
+    }
 
-    return animationComplete;
+    return !_isPlaying;
 }
 
 void AnimationClip::onBegin()
 {
+    // Initialize animation to play.
+    _isPlaying = true;
+    _elapsedTime = 0;
+
+    if (_speed > 0)
+    {
+        _runningTime = 0;
+    }
+    else
+    {
+        _runningTime = _activeDuration;
+    }
+
     if (_beginListeners)
     {
         std::vector<Listener*>::iterator listener = _beginListeners->begin();

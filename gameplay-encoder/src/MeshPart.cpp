@@ -4,8 +4,8 @@ namespace gameplay
 {
 
 MeshPart::MeshPart(void) :
-    primitiveType(TRIANGLES),
-    indexFormat(INDEX8)
+    _primitiveType(TRIANGLES),
+    _indexFormat(INDEX8)
 {
 }
 
@@ -25,13 +25,13 @@ void MeshPart::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
 
-    write(primitiveType, file);
-    write(indexFormat, file);
+    write(_primitiveType, file);
+    write(_indexFormat, file);
 
     // write the number of bytes
     write(indicesByteSize(), file);
     // for each index
-    for (std::vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++)
+    for (std::vector<unsigned int>::const_iterator i = _indices.begin(); i != _indices.end(); i++)
     {
         writeBinaryIndex(*i, file);
     }
@@ -39,31 +39,31 @@ void MeshPart::writeBinary(FILE* file)
 void MeshPart::writeText(FILE* file)
 {
     fprintElementStart(file);
-    fprintfElement(file, "primitiveType", primitiveType);
-    fprintfElement(file, "indexFormat", indexFormat);
-    fprintfElement(file, "%d ", "indices", indices);
+    fprintfElement(file, "primitiveType", _primitiveType);
+    fprintfElement(file, "indexFormat", _indexFormat);
+    fprintfElement(file, "%d ", "indices", _indices);
     fprintElementEnd(file);
 }
 
 void MeshPart::addIndex(unsigned int index)
 {
     updateIndexFormat(index);
-    indices.push_back(index);
+    _indices.push_back(index);
 }
 
 size_t MeshPart::getIndicesCount() const
 {
-    return indices.size();
+    return _indices.size();
 }
 
 unsigned int MeshPart::indicesByteSize() const
 {
-    return indices.size() * indexFormatSize();
+    return _indices.size() * indexFormatSize();
 }
 
 unsigned int MeshPart::indexFormatSize() const
 {
-    switch (indexFormat)
+    switch (_indexFormat)
     {
     case INDEX32:
         return 4;
@@ -77,7 +77,7 @@ unsigned int MeshPart::indexFormatSize() const
 
 void MeshPart::writeBinaryIndex(unsigned int index, FILE* file)
 {
-    switch (indexFormat)
+    switch (_indexFormat)
     {
     case INDEX32:
         write(index, file);
@@ -95,9 +95,13 @@ void MeshPart::writeBinaryIndex(unsigned int index, FILE* file)
 void MeshPart::updateIndexFormat(unsigned int newIndex)
 {
     if (newIndex >= 65536)
-        indexFormat = INDEX32;
-    else if (newIndex >= 256 && indexFormat != INDEX32)
-        indexFormat = INDEX16;
+    {
+        _indexFormat = INDEX32;
+    }
+    else if (newIndex >= 256 && _indexFormat != INDEX32)
+    {
+        _indexFormat = INDEX16;
+    }
 }
 
 }

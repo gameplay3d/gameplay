@@ -40,8 +40,8 @@ public:
     std::string readString(FILE* fp);
 
 private:
-    FILE* file;
-    FILE* outFile;
+    FILE* _file;
+    FILE* _outFile;
 };
 
 }

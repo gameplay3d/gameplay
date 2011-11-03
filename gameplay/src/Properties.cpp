@@ -12,6 +12,8 @@ namespace gameplay
 Properties::Properties(FILE* file)
 {
     readProperties(file);
+    _propertiesItr = _properties.end();
+    _namespacesItr = _namespaces.end();
 }
 
 Properties::Properties(FILE* file, const char* name, const char* id) : _namespace(name)
@@ -21,6 +23,8 @@ Properties::Properties(FILE* file, const char* name, const char* id) : _namespac
         _id = id;
     }
     readProperties(file);
+    _propertiesItr = _properties.end();
+    _namespacesItr = _namespaces.end();
 }
 
 Properties* Properties::create(const char* filePath)
@@ -48,7 +52,7 @@ void Properties::readProperties(FILE* file)
     char* value;
     char* rc;
 
-    while(!feof(file))
+    while (!feof(file))
     {
         skipWhiteSpace(file);
 
@@ -89,7 +93,7 @@ void Properties::readProperties(FILE* file)
                 value = trimWhiteSpace(value);
 
                 // Store name/value pair.
-                _map[name] = value;
+                _properties[name] = value;
 
                 if (rc != NULL)
                 {
@@ -125,7 +129,7 @@ void Properties::readProperties(FILE* file)
                 {
                     // New namespace without an ID.
                     Properties* space = new Properties(file, name, NULL);
-                    _properties.push_back(space);
+                    _namespaces.push_back(space);
                 }
                 else
                 {
@@ -134,7 +138,7 @@ void Properties::readProperties(FILE* file)
                     {
                         // Create new namespace.
                         Properties* space = new Properties(file, name, value);
-                        _properties.push_back(space);
+                        _namespaces.push_back(space);
                     }
                     else
                     {
@@ -145,7 +149,7 @@ void Properties::readProperties(FILE* file)
                         {
                             // Create new namespace.
                             Properties* space = new Properties(file, name, value);
-                            _properties.push_back(space);
+                            _namespaces.push_back(space);
                         }
                         else
                         {
@@ -155,11 +159,11 @@ void Properties::readProperties(FILE* file)
                             // Store "name value" as a name/value pair, or even just "name".
                             if (value != NULL)
                             {
-                                _map[name] = value;
+                                _properties[name] = value;
                             }
                             else
                             {
-                                _map[name] = string();
+                                _properties[name] = std::string();
                             }
                         }
                     }
@@ -171,10 +175,10 @@ void Properties::readProperties(FILE* file)
 
 Properties::~Properties()
 {
-    unsigned int count = _properties.size();
+    unsigned int count = _namespaces.size();
     for (unsigned int i = 0; i < count; i++)
     {
-        SAFE_DELETE(_properties[i]);
+        SAFE_DELETE(_namespaces[i]);
     }
 }
 
@@ -185,7 +189,7 @@ void Properties::skipWhiteSpace(FILE* file)
     do
     {
         c = fgetc(file);
-    } while (c == ' ' || c == 0x0D || c == '\n');
+    } while (isspace(c));
 
     // We found a non-whitespace character; put the cursor back in front of it.
     fseek(file, -1, SEEK_CUR);
@@ -201,17 +205,19 @@ char* Properties::trimWhiteSpace(char *str)
     char *end;
 
     // Trim leading space.
-    while(isspace(*str)) str++;
+    while (isspace(*str))
+        str++;
 
     // All spaces?
-    if(*str == 0)  
+    if (*str == 0)  
     {
         return str;
     }
 
     // Trim trailing space.
     end = str + strlen(str) - 1;
-    while(end > str && isspace(*end)) end--;
+    while (end > str && isspace(*end))
+        end--;
 
     // Write new null terminator.
     *(end+1) = 0;
@@ -219,22 +225,68 @@ char* Properties::trimWhiteSpace(char *str)
     return str;
 }
 
-const map<string, string>* Properties::getMap() const
+const char* Properties::getNextProperty(const char** value)
 {
-    return &_map;
+    if (_propertiesItr == _properties.end())
+    {
+        // Restart from the beginning
+        _propertiesItr = _properties.begin();
+    }
+    else
+    {
+        // Move to the next property
+        _propertiesItr++;
+    }
+
+    if (_propertiesItr != _properties.end())
+    {
+        const std::string& name = _propertiesItr->first;
+        if (!name.empty())
+        {
+            if (value)
+            {
+                *value = _propertiesItr->second.c_str();
+            }
+            return name.c_str();
+        }
+    }
+
+    return NULL;
 }
 
-const vector<Properties*>* Properties::getProperties() const
+Properties* Properties::getNextNamespace()
 {
-    return &_properties;
+    if (_namespacesItr == _namespaces.end())
+    {
+        // Restart from the beginning
+        _namespacesItr = _namespaces.begin();
+    }
+    else
+    {
+        _namespacesItr++;
+    }
+
+    if (_namespacesItr != _namespaces.end())
+    {
+        Properties* ns = *_namespacesItr;
+        return ns;
+    }
+
+    return NULL;
 }
 
-Properties* Properties::getProperties(const char* id) const
+void Properties::rewind()
+{
+    _propertiesItr = _properties.end();
+    _namespacesItr = _namespaces.end();
+}
+
+Properties* Properties::getNamespace(const char* id) const
 {
     Properties* ret = NULL;
-    vector<Properties*>::const_iterator it;
+    std::vector<Properties*>::const_iterator it;
     
-    for (it = _properties.begin(); it < _properties.end(); it++)
+    for (it = _namespaces.begin(); it < _namespaces.end(); it++)
     {
         ret = *it;
         if (strcmp(ret->_id.c_str(), id) == 0)
@@ -243,7 +295,7 @@ Properties* Properties::getProperties(const char* id) const
         }
         
         // Search recursively.
-        ret = ret->getProperties(id);
+        ret = ret->getNamespace(id);
         if (ret != NULL)
         {
             return ret;
@@ -258,7 +310,7 @@ const char* Properties::getNamespace() const
     return _namespace.c_str();
 }
 
-const char* Properties::getID() const
+const char* Properties::getId() const
 {
     return _id.c_str();
 }
@@ -266,14 +318,91 @@ const char* Properties::getID() const
 bool Properties::exists(const char* name) const
 {
     assert(name);
-    return _map.find(name) != _map.end();
+    return _properties.find(name) != _properties.end();
+}
+
+bool isStringNumeric(const char* str)
+{
+    char* ptr = const_cast<char*>(str);
+
+    // First character must be a digit
+    if (!isdigit(*ptr))
+        return false;
+    ptr++;
+
+    // All remaining characters must be digits, with a single decimal (.) permitted
+    unsigned int decimalCount = 0;
+    while (*ptr)
+    {
+        if (!isdigit(*ptr))
+        {
+            if (*ptr == '.' && decimalCount == 0)
+            {
+                // Max of 1 decimal allowed
+                decimalCount++;
+            }
+            else
+            {
+                // Not a number
+            }
+        }
+        ptr++;
+    }
+    
+    return true;
+}
+
+Properties::Type Properties::getType(const char* name) const
+{
+    const char* value = getString(name);
+    if (!value)
+    {
+        return Properties::NONE;
+    }
+
+    // Parse the value to determine the format
+    unsigned int commaCount = 0;
+    unsigned int length = strlen(value);
+    char* valuePtr = const_cast<char*>(value);
+    while (valuePtr = strchr(valuePtr, ','))
+    {
+        valuePtr++;
+        commaCount++;
+    }
+
+    switch (commaCount)
+    {
+    case 0:
+        return isStringNumeric(value) ? Properties::NUMBER : Properties::STRING;
+    case 1:
+        return Properties::VECTOR2;
+    case 2:
+        return Properties::VECTOR3;
+    case 3:
+        return Properties::VECTOR4;
+    case 15:
+        return Properties::MATRIX;
+    default:
+        return Properties::STRING;
+    }
 }
 
 const char* Properties::getString(const char* name) const
 {
-    if (exists(name))
+    if (name)
     {
-        return (_map.find(name)->second).c_str();
+        std::map<std::string, std::string>::const_iterator itr = _properties.find(name);
+        if (itr != _properties.end())
+        {
+            return itr->second.c_str();
+        }
+    }
+    else
+    {
+        if (_propertiesItr != _properties.end())
+        {
+            return _propertiesItr->second.c_str();
+        }
     }
 
     return NULL;
@@ -283,7 +412,7 @@ bool Properties::getBool(const char* name) const
 {
     if (exists(name))
     {
-        if (_map.find(name)->second == "true")
+        if (_properties.find(name)->second == "true")
         {
             return true;
         }
@@ -294,13 +423,12 @@ bool Properties::getBool(const char* name) const
 
 int Properties::getInt(const char* name) const
 {
-    if (exists(name))
+    const char* valueString = getString(name);
+    if (valueString)
     {
-        string valueString = _map.find(name)->second;
-
         int value;
         int scanned;
-        scanned = sscanf(valueString.c_str(), "%d", &value);
+        scanned = sscanf(valueString, "%d", &value);
         if (scanned != 1)
         {
             LOG_ERROR_VARG("Error parsing property: %s", name);
@@ -314,13 +442,12 @@ int Properties::getInt(const char* name) const
 
 float Properties::getFloat(const char* name) const
 {
-    if (exists(name))
+    const char* valueString = getString(name);
+    if (valueString)
     {
-        string valueString = _map.find(name)->second;
-
         float value;
         int scanned;
-        scanned = sscanf(valueString.c_str(), "%f", &value);
+        scanned = sscanf(valueString, "%f", &value);
         if (scanned != 1)
         {
             LOG_ERROR_VARG("Error parsing property: %s", name);
@@ -332,44 +459,14 @@ float Properties::getFloat(const char* name) const
     return 0.0f;
 }
 
-void Properties::getFloatArray(const char* name, float* out, unsigned int length) const
-{
-    assert(out);
-
-    if (exists(name))
-    {
-        string valueString = _map.find(name)->second;
-
-        for (unsigned int i = 0; i < length; i++)
-        {
-            int scanned;
-            scanned = sscanf(valueString.c_str(), "%f", &out[i]);
-            if (scanned != 1)
-            {
-                LOG_ERROR_VARG("Error parsing property: %s", name);
-                out = NULL;
-                return;
-            }
-
-            int position = valueString.find(',');
-            valueString.erase(0, position + 1);
-        }
-    }
-    else
-    {
-        out = NULL;
-    }
-}
-
 long Properties::getLong(const char* name) const
 {
-    if (exists(name))
+    const char* valueString = getString(name);
+    if (valueString)
     {
-        string valueString = _map.find(name)->second;
-
         long value;
         int scanned;
-        scanned = sscanf(valueString.c_str(), "%ld", &value);
+        scanned = sscanf(valueString, "%ld", &value);
         if (scanned != 1)
         {
             LOG_ERROR_VARG("Error parsing property: %s", name);
@@ -380,137 +477,108 @@ long Properties::getLong(const char* name) const
 
     return 0L;
 }
-    
-void Properties::getMatrix(const char* name, Matrix* out) const
+
+bool Properties::getMatrix(const char* name, Matrix* out) const
 {
     assert(out);
 
-    if (exists(name))
+    const char* valueString = getString(name);
+    if (valueString)
     {
-        string valueString = _map.find(name)->second;
-
         float m[16];
         int scanned;
-        scanned = sscanf(valueString.c_str(), "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f",
+        scanned = sscanf(valueString, "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f",
                 &m[0], &m[1], &m[2], &m[3], &m[4], &m[5], &m[6], &m[7],
                 &m[8], &m[9], &m[10], &m[11], &m[12], &m[13], &m[14], &m[15]);
+
         if (scanned != 16)
         {
             LOG_ERROR_VARG("Error parsing property: %s", name);
             out->setIdentity();
-            return;
+            return false;
         }
-    
+
         out->set(m);
+        return true;
     }
-    else
-    {
-        out->setIdentity();
-    }
+
+    out->setIdentity();
+    return false;
 }
 
-void Properties::getVector2(const char* name, Vector2* out) const
+bool Properties::getVector2(const char* name, Vector2* out) const
 {
     assert(out);
 
-    if (exists(name))
+    const char* valueString = getString(name);
+    if (valueString)
     {
-        string valueString = _map.find(name)->second;
-
         float x, y;
         int scanned;
-        scanned = sscanf(valueString.c_str(), "%f,%f", &x, &y);
+        scanned = sscanf(valueString, "%f,%f", &x, &y);
         if (scanned != 2)
         {
             LOG_ERROR_VARG("Error parsing property: %s", name);
             out->set(0.0f, 0.0f);
-            return;
+            return false;
         }
 
         out->set(x, y);
+        return true;
     }
-    else
-    {
-        out->set(0.0f, 0.0f);
-    }
+    
+    out->set(0.0f, 0.0f);
+    return false;
 }
 
-void Properties::getVector3(const char* name, Vector3* out) const
+bool Properties::getVector3(const char* name, Vector3* out) const
 {
     assert(out);
 
-    if (exists(name))
+    const char* valueString = getString(name);
+    if (valueString)
     {
-        string valueString = _map.find(name)->second;
-
         float x, y, z;
         int scanned;
-        scanned = sscanf(valueString.c_str(), "%f,%f,%f", &x, &y, &z);
+        scanned = sscanf(valueString, "%f,%f,%f", &x, &y, &z);
         if (scanned != 3)
         {
             LOG_ERROR_VARG("Error parsing property: %s", name);
             out->set(0.0f, 0.0f, 0.0f);
-            return;
+            return false;
         }
 
         out->set(x, y, z);
+        return true;
     }
-    else
-    {
-        out->set(0.0f, 0.0f, 0.0f);
-    }
+    
+    out->set(0.0f, 0.0f, 0.0f);
+    return false;
 }
 
-void Properties::getVector4(const char* name, Vector4* out) const
+bool Properties::getVector4(const char* name, Vector4* out) const
 {
     assert(out);
 
-    if (exists(name))
+    const char* valueString = getString(name);
+    if (valueString)
     {
-        string valueString = _map.find(name)->second;
-
         float x, y, z, w;
         int scanned;
-        scanned = sscanf(valueString.c_str(), "%f,%f,%f,%f", &x, &y, &z, &w);
+        scanned = sscanf(valueString, "%f,%f,%f,%f", &x, &y, &z, &w);
         if (scanned != 4)
         {
             LOG_ERROR_VARG("Error parsing property: %s", name);
             out->set(0.0f, 0.0f, 0.0f, 0.0f);
-            return;
+            return false;
         }
 
         out->set(x, y, z, w);
+        return true;
     }
-    else
-    {
-        out->set(0.0f, 0.0f, 0.0f, 0.0f);
-    }
-}
-
-void Properties::getColor(const char* name, Color* out) const
-{
-    assert(out);
-
-    if (exists(name))
-    {
-        string valueString = _map.find(name)->second;
-
-        float r, g, b, a;
-        int scanned;
-        scanned = sscanf(valueString.c_str(), "%f,%f,%f,%f", &r, &g, &b, &a);
-        if (scanned != 4)
-        {
-            LOG_ERROR_VARG("Error parsing property: %s", name);
-            out->set(0.0f, 0.0f, 0.0f, 1.0f);
-            return;
-        }
-
-        out->set(r, g, b, a);
-    }
-    else
-    {
-        out->set(0.0f, 0.0f, 0.0f, 1.0f);
-    }
+    
+    out->set(0.0f, 0.0f, 0.0f, 0.0f);
+    return false;
 }
 
 }

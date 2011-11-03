@@ -28,7 +28,7 @@ AudioSource::~AudioSource()
         _alSource = 0;
     }
 
-    SAFE_DELETE(_buffer);
+    SAFE_RELEASE(_buffer);
 }
 
 AudioSource* AudioSource::create(const char* path)

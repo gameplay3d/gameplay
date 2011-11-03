@@ -11,7 +11,9 @@
 
 namespace gameplay
 {
-
+/**
+ * Object is the abstract base class of all the objects that can be written in the GamePlay Binary file.
+ */
 class Object
 {
 public:
@@ -21,8 +23,9 @@ public:
     {
         SCENE_ID = 1,
         NODE_ID = 2,
-        ANIMATION_ID = 3,
-        ANIMATIONCHANNEL_ID = 4,
+        ANIMATIONS_ID = 3,
+        ANIMATION_ID = 4,
+        ANIMATIONCHANNEL_ID = 5,
         NODEINSTANCE_ID = 8,
         CAMERAINSTANCE_ID = 9,
         LIGHTINSTANCE_ID = 10,
@@ -47,19 +50,23 @@ public:
      * Destructor.
      */
     virtual ~Object(void);
+
     /**
      * Returns the Object TypeID.
      */
     virtual unsigned int getTypeId(void) const;
+
     /**
      * Returns the string element name of the object.
      * Used for printing the gameplayfile as text.
      */
     virtual const char* getElementName(void) const = 0;
+
     /**
      * Writes this object to the file stream as binary.
      */
     virtual void writeBinary(FILE* file);
+
     /**
      * Writes this object to the file stream as text.
      */
@@ -69,23 +76,28 @@ public:
      * Returns this objects id string.
      */
     const std::string& getId() const;
+
     /**
      * Sets this object's id string.
      */
     void setId(const char* id);
+
     /**
      * Sets this object's id string.
      */
     void setId(const std::string& id);
+
     /**
      * Prints an XML start element with the name of this object to the text file stream.
      * Also prints the id as an attribute if the id length is greater than zero.
      */
     void fprintElementStart(FILE* file);
+
     /**
      * Prints an XML end element with the name of this object to the text file stream.
      */
     void fprintElementEnd(FILE* file);
+
     /**
      * Writes the xref of this object to the binary file stream.
      */
@@ -135,12 +147,9 @@ private:
      */
     void saveFilePosition(FILE* file);
 
-protected:
-
-    std::string id;
-
 private:
-    long fposition;
+    std::string _id;
+    long _fposition;
 };
 
 }

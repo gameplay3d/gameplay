@@ -25,8 +25,9 @@ public:
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
 
-    std::vector<float> value;
-    unsigned int type;
+private:
+    std::vector<float> _value;
+    unsigned int _type;
 };
 
 

@@ -4,7 +4,7 @@
 namespace gameplay
 {
 
-LightInstance::LightInstance(void) : ref(NULL)
+LightInstance::LightInstance(void) : _ref(NULL)
 {
 
 }
@@ -24,29 +24,32 @@ const char* LightInstance::getElementName(void) const
 
 void LightInstance::writeBinary(FILE* file)
 {
-    //assert(ref != NULL);
-    if (ref != NULL)
-        ref->writeBinary(file);
+    if (_ref != NULL)
+    {
+        _ref->writeBinary(file);
+    }
 }
 void LightInstance::writeText(FILE* file)
 {
-    if (ref != NULL)
-        ref->writeText(file);
+    if (_ref != NULL)
+    {
+        _ref->writeText(file);
+    }
 }
 
 Light* LightInstance::getLight() const
 {
-    return ref;
+    return _ref;
 }
 
 void LightInstance::setLight(Light* light)
 {
-    ref = light;
+    _ref = light;
 }
 
 bool LightInstance::isAmbient() const
 {
-    return ref != NULL && ref->isAmbient();
+    return _ref != NULL && _ref->isAmbient();
 }
 
 }

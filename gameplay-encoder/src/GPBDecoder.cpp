@@ -3,7 +3,7 @@
 namespace gameplay
 {
 
-GPBDecoder::GPBDecoder(void) : file(NULL), outFile(NULL)
+GPBDecoder::GPBDecoder(void) : _file(NULL), _outFile(NULL)
 {
 }
 
@@ -15,25 +15,25 @@ GPBDecoder::~GPBDecoder(void)
 void GPBDecoder::readBinary(const std::string& filepath)
 {
     // open files
-    file = fopen(filepath.c_str(), "rb");
+    _file = fopen(filepath.c_str(), "rb");
     std::string outfilePath = filepath;
     outfilePath += ".xml";
-    outFile = fopen(outfilePath.c_str(), "w");
+    _outFile = fopen(outfilePath.c_str(), "w");
 
     // read and write files
     assert(validateHeading());
 
-    fprintf(outFile, "<root>\n");
+    fprintf(_outFile, "<root>\n");
     readRefs();
-    fprintf(outFile, "</root>\n");
+    fprintf(_outFile, "</root>\n");
 
 
     // close files
-    fclose(outFile);
-    outFile = NULL;
+    fclose(_outFile);
+    _outFile = NULL;
 
-    fclose(file);
-    file = NULL;
+    fclose(_file);
+    _file = NULL;
 }
 
 bool GPBDecoder::validateHeading()
@@ -51,7 +51,7 @@ bool GPBDecoder::validateHeading()
     }
     // read version
     unsigned char version[2];
-    fread(version, sizeof(unsigned char), 2, file);
+    fread(version, sizeof(unsigned char), 2, _file);
     // don't care about version
 
     return true;
@@ -59,7 +59,7 @@ bool GPBDecoder::validateHeading()
 
 void GPBDecoder::readRefs()
 {
-    fprintf(outFile, "<RefTable>\n");
+    fprintf(_outFile, "<RefTable>\n");
     // read number of refs
     unsigned int refCount;
     assert(read(&refCount));
@@ -67,26 +67,26 @@ void GPBDecoder::readRefs()
     {
         readRef();
     }
-    fprintf(outFile, "</RefTable>\n");
+    fprintf(_outFile, "</RefTable>\n");
 }
 
 void GPBDecoder::readRef()
-{   
-    std::string xref = readString(file);
+{
+    std::string xref = readString(_file);
     unsigned int type, offset;
     assert(read(&type));
     assert(read(&offset));
     
-    fprintf(outFile, "<Reference>\n");
-    fprintfElement(outFile, "xref", xref);
-    fprintfElement(outFile, "type", type);
-    fprintfElement(outFile, "offset", offset);
-    fprintf(outFile, "</Reference>\n");
+    fprintf(_outFile, "<Reference>\n");
+    fprintfElement(_outFile, "xref", xref);
+    fprintfElement(_outFile, "type", type);
+    fprintfElement(_outFile, "offset", offset);
+    fprintf(_outFile, "</Reference>\n");
 }
 
 bool GPBDecoder::read(unsigned int* ptr)
 {
-    return fread(ptr, sizeof(unsigned int), 1, file) == 1;
+    return fread(ptr, sizeof(unsigned int), 1, _file) == 1;
 }
 
 std::string GPBDecoder::readString(FILE* fp)

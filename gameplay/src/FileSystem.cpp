@@ -14,6 +14,20 @@ FileSystem::FileSystem()
 {
 }
 
+FileSystem::~FileSystem()
+{
+}
+
+void FileSystem::setResourcePath(const char* path)
+{
+    __resourcePath = path == NULL ? "" : path;
+}
+
+const char* FileSystem::getResourcePath()
+{
+    return __resourcePath.c_str();
+}
+
 FILE* FileSystem::openFile(const char* path, const char* mode)
 {
     std::string fullPath(__resourcePath);
@@ -57,7 +71,7 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     if (read != size)
     {
         LOG_ERROR_VARG("Read error for file: %s (%d < %d)", filePath, (int)read, (int)size);
-        delete[] buffer;
+        SAFE_DELETE_ARRAY(buffer);
         return NULL;
     }
 
@@ -67,19 +81,11 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     // Close file and return.
     fclose(file);
     if (fileSize)
+    {
         *fileSize = size; 
+    }
     return buffer;
 }
 
-
-void FileSystem::setResourcePath(const char* path)
-{
-    __resourcePath = path == NULL ? "" : path;
-}
-
-const char* FileSystem::getResourcePath()
-{
-    return __resourcePath.c_str();
-}
 
 }
