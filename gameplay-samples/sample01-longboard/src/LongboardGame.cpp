@@ -8,10 +8,28 @@
 LongboardGame game;
 
 // Pick some arbitrarily large world size for our playground
-#define WORLD_SIZE            20.0f
+#define WORLD_SIZE          20.0f
 
-LongboardGame::LongboardGame() :
-    _ground(NULL), _board(NULL), _wheels(NULL), _gradient(NULL), _velocity(VELOCITY_MIN_MS)
+// Maximum velocity, in meters/sec
+#define VELOCITY_MAX        2.0f
+#define VELOCITY_MAX_MS     (VELOCITY_MAX / 1000.0f)
+
+// Minimum velocity, in meters/sec
+#define VELOCITY_MIN        0.2f
+#define VELOCITY_MIN_MS     (VELOCITY_MIN / 1000.0f)
+
+// Accelerometer pitch control
+#define PITCH_MIN            20.0f
+#define PITCH_MAX            70.0f
+#define PITCH_RANGE          (PITCH_MAX - PITCH_MIN)
+
+// Maximum turn rate (rate of change in direction at full velocity), in degrees/sec
+#define TURN_RATE_MAX        75.0f
+#define TURN_RATE_MAX_MS     (TURN_RATE_MAX / 1000.0f)
+#define ROLL_MAX             40.0f
+
+LongboardGame::LongboardGame() 
+    : _ground(NULL), _board(NULL), _wheels(NULL), _gradient(NULL), _stateBlock(NULL), _velocity(VELOCITY_MIN_MS)
 {
 }
 
@@ -19,19 +37,14 @@ LongboardGame::~LongboardGame()
 {
 }
 
-/**
- * Initializes the game.
- */
 void LongboardGame::initialize()
 {
-    // Set initial OpenGL ES state
-    glClearColor(1,1,1, 1);
-    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glFrontFace(GL_CCW);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // Create our render state block that will be reused across all materials
+    _stateBlock = RenderState::StateBlock::create();
+    _stateBlock->setCullFace(true);
+    _stateBlock->setBlend(true);
+    _stateBlock->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
+    _stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 
     // Calculate initial matrices
     Matrix::createPerspective(45.0f, (float)getWidth() / (float)getHeight(), 0.25f, 100.0f, &_projectionMatrix);
@@ -49,11 +62,9 @@ void LongboardGame::initialize()
     _velocity = VELOCITY_MIN_MS;
 }
 
-/**
- * Called when the game is shutting down to cleanup.
- */
 void LongboardGame::finalize()
 {
+    SAFE_RELEASE(_stateBlock);
     SAFE_RELEASE(_ground);
     SAFE_RELEASE(_board);
     SAFE_RELEASE(_wheels);
@@ -61,9 +72,6 @@ void LongboardGame::finalize()
     SAFE_RELEASE(_wheelsSound);
 }
 
-/**
- * Builds the ground model, which is simply a texture quad.
- */
 void LongboardGame::buildGround()
 {
     // Create a large quad for the ground
@@ -71,31 +79,26 @@ void LongboardGame::buildGround()
                                         Vector3(-WORLD_SIZE, 0, WORLD_SIZE),
                                         Vector3(WORLD_SIZE, 0, -WORLD_SIZE),
                                         Vector3(WORLD_SIZE, 0, WORLD_SIZE));
+    // Create the ground model
+    _ground = Model::create(groundMesh);
 
     // Create the ground material
-    Material* groundMaterial = Material::createMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+    Material* groundMaterial = _ground->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+
+    // Set render state block
+    groundMaterial->setStateBlock(_stateBlock);
 
     // Bind ground material parameters
-    Texture* groundTexture = Texture::create("res/textures/tileable_asphalt.png", true);
-    groundTexture->setWrapMode(true, true);
-    groundMaterial->getParameter("texture")->setValue(groundTexture);
+    Texture::Sampler* groundSampler = groundMaterial->getParameter("texture")->setValue("res/textures/tileable_asphalt.png", true);
+    groundSampler->setWrapMode(Texture::REPEAT, Texture::REPEAT);
     groundMaterial->getParameter("worldViewProjection")->setValue(&_groundWorldViewProjectionMatrix);
     groundMaterial->getParameter("textureRepeat")->setValue(Vector2(WORLD_SIZE/2, WORLD_SIZE/2));
     groundMaterial->getParameter("textureTransform")->setValue(&_groundUVTransform);
 
-    // Create the ground model
-    _ground = groundMesh->createModel();
-    _ground->setMaterial(groundMaterial);
-
     // Release objects that are owned by mesh instances
-    SAFE_RELEASE(groundTexture);
-    SAFE_RELEASE(groundMaterial);
     SAFE_RELEASE(groundMesh);
 }
 
-/**
- * Builds the longboard model.
- */
 void LongboardGame::buildBoard()
 {
     // Create longboard mesh
@@ -103,30 +106,26 @@ void LongboardGame::buildBoard()
                                         Vector3(-0.5f, 0.1f, 1.0f),
                                         Vector3(0.5f, 0.1f, -1.0f),
                                         Vector3(0.5f, 0.1f, 1.0f) );
+    // Create the board model
+    _board = Model::create(boardMesh);
+
     // Create the board material
-    Material* boardMaterial = Material::createMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+    Material* boardMaterial = _board->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+
+    // Set render state block
+    boardMaterial->setStateBlock(_stateBlock);
 
     // Bind board material parameters
-    Texture* boardTexture = Texture::create("res/textures/longboard.png", true);
-    boardTexture->setWrapMode(false, false);
-    boardMaterial->getParameter("texture")->setValue(boardTexture);
+    Texture::Sampler* boardSampler = boardMaterial->getParameter("texture")->setValue("res/textures/longboard.png", true);
+    boardSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
     boardMaterial->getParameter("worldViewProjection")->setValue(&_boardWorldViewProjectionMatrix);
     boardMaterial->getParameter("textureRepeat")->setValue(Vector2::one());
     boardMaterial->getParameter("textureTransform")->setValue(Vector2::zero());
 
-    // Create the board model
-    _board = boardMesh->createModel();
-    _board->setMaterial(boardMaterial);
-
     // Release objects that are owned by mesh instances
-    SAFE_RELEASE(boardTexture);
-    SAFE_RELEASE(boardMaterial);
     SAFE_RELEASE(boardMesh);
 }
 
-/**
- * Builds the longboard wheels model.
- */
 void LongboardGame::buildWheels()
 {
     // Create wheels mesh
@@ -134,20 +133,21 @@ void LongboardGame::buildWheels()
                                         Vector3(-0.5f, 0.025f, 0.25f),
                                         Vector3(0.5f, 0.025f, -0.25f),
                                         Vector3(0.5f, 0.025f, 0.25f));
+    // Create the wheels model
+    _wheels = Model::create(wheelsMesh);
+
     // Create the wheels material
-    Material* wheelsMaterial = Material::createMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+    Material* wheelsMaterial = _wheels->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+
+    // Set render state block
+    wheelsMaterial->setStateBlock(_stateBlock);
 
     // Bind wheels material parameters
-    Texture* wheelsTexture = Texture::create("res/textures/wheels.png", true);
-    wheelsTexture->setWrapMode(false, false);
-    wheelsMaterial->getParameter("texture")->setValue(wheelsTexture);
+    Texture::Sampler* wheelsSampler = wheelsMaterial->getParameter("texture")->setValue("res/textures/wheels.png", true);
+    wheelsSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
     wheelsMaterial->getParameter("worldViewProjection")->setValue(&_wheelsWorldViewProjectionMatrix);
     wheelsMaterial->getParameter("textureRepeat")->setValue(Vector2::one());
     wheelsMaterial->getParameter("textureTransform")->setValue(Vector2::zero());
-
-    // Create the wheels model
-    _wheels = wheelsMesh->createModel();
-    _wheels->setMaterial(wheelsMaterial);
 
     // Load audio sound
     _wheelsSound = AudioSource::create("res/sounds/longboard2.wav");
@@ -155,35 +155,28 @@ void LongboardGame::buildWheels()
         _wheelsSound->setLooped(true);
 
     // Release objects that are owned by mesh instances
-    SAFE_RELEASE(wheelsTexture);
-    SAFE_RELEASE(wheelsMaterial);
     SAFE_RELEASE(wheelsMesh);
 }
 
-/**
- * Builds a textured gradient model that we use as a cheap/fake
- * static screen-space lighting effect to give a bit more realism.
- */
 void LongboardGame::buildGradient()
 {
     // Create a full-screen quad for rendering a screen-space gradient effect to the scene
     Mesh* gradientMesh = Mesh::createQuadFullscreen();
 
+    // Create the wheels model
+    _gradient = Model::create(gradientMesh);
+
     // Create the gradient material
-    Material* gradientMaterial = Material::createMaterial("res/shaders/quad.vsh", "res/shaders/quad.fsh");
+    Material* gradientMaterial = _gradient->setMaterial("res/shaders/quad.vsh", "res/shaders/quad.fsh");
+
+    // Set render state block
+    gradientMaterial->setStateBlock(_stateBlock);
 
     // Bind material parameters
-    Texture* gradientTexture = Texture::create("res/textures/nice_gradient.png", false);
-    gradientTexture->setWrapMode(false, false);
-    gradientMaterial->getParameter("texture")->setValue(gradientTexture);
-
-    // Create the wheels model
-    _gradient = gradientMesh->createModel();
-    _gradient->setMaterial(gradientMaterial);
+    Texture::Sampler* gradientSampler = gradientMaterial->getParameter("texture")->setValue("res/textures/nice_gradient.png", false);
+    gradientSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
 
     // Release objects that are owned by mesh instances
-    SAFE_RELEASE(gradientTexture);
-    SAFE_RELEASE(gradientMaterial);
     SAFE_RELEASE(gradientMesh);
 }
 
@@ -218,8 +211,8 @@ void LongboardGame::update(long elapsedTime)
 
     // Update direction based on accelerometer roll and max turn rate
     static Matrix rotMat;
-    Matrix::createRotationY(-MATH_DEG_TO_RAD((TURNRATE_MAX_MS * elapsedTime) * (roll / ROLL_MAX) * throttle), &rotMat);
-    rotMat.transformNormal(&_direction);
+    Matrix::createRotationY(-MATH_DEG_TO_RAD((TURN_RATE_MAX_MS * elapsedTime) * (roll / ROLL_MAX) * throttle), &rotMat);
+    rotMat.transformVector(&_direction);
     _direction.normalize();
 
     // Transform the ground. We rotate the ground instead of the board since we don't actually
@@ -229,15 +222,15 @@ void LongboardGame::update(long elapsedTime)
 
     // Transform the wheels
     Matrix::createScale(1.2f, 1.2f, 1.2f, &_wheelsWorldMatrix);
-    _wheelsWorldMatrix.translate(-roll / ROLL_MAX * 0.05f/*HACK*/, 0, 0.05f);
+    _wheelsWorldMatrix.translate(-roll / ROLL_MAX * 0.05f, 0, 0.05f);
     _wheelsWorldMatrix.rotateY(MATH_DEG_TO_RAD(roll * 0.45f));
     Matrix::multiply(_viewProjectionMatrix, _wheelsWorldMatrix, &_wheelsWorldViewProjectionMatrix);
 
     // Transform and tilt the board
     Matrix::createScale(1.25f, 1.25f, 1.25f, &_boardWorldMatrix);
-    _boardWorldMatrix.translate(0, 0, 0.65f);//0.15f
+    _boardWorldMatrix.translate(0, 0, 0.65f);
     _boardWorldMatrix.rotateZ(MATH_DEG_TO_RAD(roll * 0.5f));
-    _boardWorldMatrix.rotateY(MATH_DEG_TO_RAD(roll * 0.1f));//HACK
+    _boardWorldMatrix.rotateY(MATH_DEG_TO_RAD(roll * 0.1f));
     Matrix::multiply(_viewProjectionMatrix, _boardWorldMatrix, &_boardWorldViewProjectionMatrix);
 
     // Transform the ground texture coords to give the illusion of the board moving.
@@ -256,8 +249,8 @@ void LongboardGame::update(long elapsedTime)
 
 void LongboardGame::render(long elapsedTime)
 {
-    // Clear the frame buffer
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Clear the color and depth buffers.
+    clear(CLEAR_COLOR, Vector4::one(), 1.0f, 0);
 
     // Draw the scene
     _ground->draw();

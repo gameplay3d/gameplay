@@ -6,7 +6,6 @@
 #define EFFECT_H_
 
 #include "Ref.h"
-#include "Color.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -55,9 +54,10 @@ public:
     static Effect* createFromSource(const char* vshSource, const char* fshSource, const char* defines = NULL);
 
     /**
-     * Destroys the specified effect.
+     * Returns the unique string identifier for the effect, which is a concatenation of
+     * the shader paths it was loaded from.
      */
-    static void destroyEffect(Effect*& effect);
+    const char* getId() const;
 
     /**
      * Returns the vertex attribute handle for the vertex attribute with the specified name.
@@ -196,12 +196,12 @@ public:
     void setValue(Uniform* uniform, const Vector4* values, unsigned int count = 1);
 
     /**
-     * Sets a texture uniform value.
+     * Sets a sampler uniform value.
      *
      * @param uniform The uniform to set.
-     * @param texture The texture to set.
+     * @param sampler The sampler to set.
      */
-    void setValue(Uniform* uniform, const Texture* texture);
+    void setValue(Uniform* uniform, const Texture::Sampler* sampler);
 
     /**
      * Binds this effect to make it the currently active effect for the rendering system.
@@ -259,6 +259,13 @@ public:
      */
     const GLenum getType() const;
 
+    /**
+     * Returns the effect for this uniform.
+     *
+     * @return The uniform's effect.
+     */
+    Effect* getEffect() const;
+
 private:
 
     /**
@@ -280,6 +287,7 @@ private:
     GLint _location;
     GLenum _type;
     unsigned int _index;
+    Effect* _effect;
 };
 
 }

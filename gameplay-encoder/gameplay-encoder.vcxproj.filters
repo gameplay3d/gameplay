@@ -90,6 +90,12 @@
     <ClCompile Include="src\Matrix.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\DAEOptimizer.cpp" />
+    <ClCompile Include="src\DAEUtil.cpp" />
+    <ClCompile Include="src\EncoderArguments.cpp" />
+    <ClCompile Include="src\Animations.cpp">
+      <Filter>Objects\Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\DAESceneEncoder.h" />
@@ -179,6 +185,12 @@
     </ClInclude>
     <ClInclude Include="src\Matrix.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DAEOptimizer.h" />
+    <ClInclude Include="src\DAEUtil.h" />
+    <ClInclude Include="src\EncoderArguments.h" />
+    <ClInclude Include="src\Animations.h">
+      <Filter>Objects\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -80,9 +80,9 @@ private:
     void writeBinaryIndex(unsigned int index, FILE* file);
 
 private:
-    unsigned int primitiveType;
-    unsigned int indexFormat;
-    std::vector<unsigned int> indices;
+    unsigned int _primitiveType;
+    unsigned int _indexFormat;
+    std::vector<unsigned int> _indices;
 };
 
 

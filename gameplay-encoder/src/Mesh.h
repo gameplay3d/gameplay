@@ -65,7 +65,8 @@ private:
 
     void computeBounds();
 
-    std::vector<VertexElement> vertexFormats;
+private:
+    std::vector<VertexElement> _vertexFormats;
 
 };
 

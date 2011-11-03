@@ -9,9 +9,9 @@ Matrix::Matrix(void)
     setIdentity(m);
 }
 
-Matrix::Matrix(float m0, float m1, float m2, float m3, 
-               float m4, float m5, float m6, float m7, 
-               float m8, float m9, float m10, float m11, 
+Matrix::Matrix(float m0, float m1, float m2, float m3,
+               float m4, float m5, float m6, float m7,
+               float m8, float m9, float m10, float m11,
                float m12, float m13, float m14, float m15)
 {
     m[0] = m0;
@@ -233,7 +233,9 @@ bool Matrix::decompose(Vector3* scale, Quaternion* rotation, Vector3* translatio
 
     // nothing left to do
     if (scale == NULL && rotation == NULL)
+    {
         return true;
+    }
 
     // Extract the scale.
     // This is simply the length of each axis (row/column) in the matrix.
@@ -250,7 +252,9 @@ bool Matrix::decompose(Vector3* scale, Quaternion* rotation, Vector3* translatio
     // In this case, we simply negate a single axis of the scale.
     float det = determinant();
     if (det < 0)
+    {
         scaleZ = -scaleZ;
+    }
 
     if (scale)
     {

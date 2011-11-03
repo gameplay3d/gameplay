@@ -31,11 +31,7 @@ VertexAttributeBinding::~VertexAttributeBinding()
 
     SAFE_RELEASE(_effect);
 
-    if (_attributes)
-    {
-        delete[] _attributes;
-        _attributes = NULL;
-    }
+    SAFE_DELETE_ARRAY(_attributes);
 
     if (_handle)
     {
@@ -77,6 +73,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, Effect* effec
     // Create a new VertexAttributeBinding.
     b = new VertexAttributeBinding();
 
+#ifdef USE_GL_VAOS
     if (glGenVertexArrays)
     {
         GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, 0) );
@@ -87,7 +84,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, Effect* effec
 
         if (b->_handle == 0)
         {
-            delete b;
+            SAFE_DELETE(b);
             return NULL;
         }
 
@@ -98,6 +95,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, Effect* effec
         GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, mesh->getVertexBuffer()) );
     }
     else
+#endif
     {
         // Construct a software representation of a VAO.
         VertexAttribute* attribs = new VertexAttribute[__maxVertexAttribs];
@@ -181,7 +179,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, Effect* effec
 
         if (attrib == -1)
         {
-            WARN_VARG("Vertex attribute not found for usage %d", (int)e.usage);
+            WARN_VARG("Warning: Vertex attribute not found for usage %d", (int)e.usage);
         }
         else
         {
@@ -195,6 +193,9 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, Effect* effec
     {
         GL_ASSERT( glBindVertexArray(0) );
     }
+
+    // Add the new vertex attribute binding to the cache
+    __vertexAttributeBindingCache.push_back(b);
 
     return b;
 }

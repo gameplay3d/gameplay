@@ -51,6 +51,7 @@ protected:
      * Creates a new joint with the given id.
      * 
      * @param id ID string.
+     * 
      * @return Newly created joint.
      */
     static Joint* create(const char* id);

@@ -32,7 +32,7 @@ public:
     bool isAmbient() const;
 
 private:
-    Light* ref;
+    Light* _ref;
 };
 
 }

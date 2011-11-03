@@ -13,7 +13,6 @@
 #include "Package.h"
 
 // Math
-#include "Color.h"
 #include "Rectangle.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -32,8 +31,9 @@
 #include "Texture.h"
 #include "Mesh.h"
 #include "MeshPart.h"
-#include "Material.h"
 #include "Effect.h"
+#include "Material.h"
+#include "RenderState.h"
 #include "VertexFormat.h"
 #include "VertexAttributeBinding.h"
 #include "Model.h"

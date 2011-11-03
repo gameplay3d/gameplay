@@ -9,13 +9,11 @@
 #include "gameplay-main.h"
 using namespace gameplay;
 
-
 /**
  * This is a mesh demo game for rendering Mesh.
  */
 class MeshGame: public Game
 {
-
 public:
 
     /**
@@ -26,7 +24,7 @@ public:
     /**
      * Touch event handler.
      */
-    void touch(int x, int y, int touchEven);
+    void touch(int x, int y, int touchEvent);
 
 protected:
 
@@ -34,6 +32,11 @@ protected:
      * @see Game::initialize
      */
     void initialize();
+
+    /**
+     * @see Game::finalize
+     */
+    void finalize();
 
     /**
      * @see Game::update
@@ -45,14 +48,10 @@ protected:
      */
     void render(long elapsedTime);
 
-    /**
-     * @see Game::finalize
-     */
-    void finalize();
-
 private:
 
     void visitNode(Node* node, long cookie);
+
     void getModelNode(Node* node, long cookie);
 
     void createDefaultCamera(Scene* scene);

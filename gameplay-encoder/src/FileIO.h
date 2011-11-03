@@ -58,6 +58,7 @@ void write(unsigned char value, FILE* file);
 void write(char value, FILE* file);
 void write(const char* str, FILE* file);
 void write(unsigned int value, FILE* file);
+void write(unsigned long value, FILE* file);
 void write(unsigned short value, FILE* file);
 void write(bool value, FILE* file);
 void write(float value, FILE* file);

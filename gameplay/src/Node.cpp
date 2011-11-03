@@ -7,16 +7,16 @@
 #include "Scene.h"
 
 #define NODE_DIRTY_WORLD 1
-#define NODE_DIRTY_WORLD_VIEW_PROJ 2
-#define NODE_DIRTY_BOUNDS 4
-#define NODE_DIRTY_ALL (NODE_DIRTY_WORLD | NODE_DIRTY_WORLD_VIEW_PROJ | NODE_DIRTY_BOUNDS)
+#define NODE_DIRTY_BOUNDS 2
+#define NODE_DIRTY_ALL (NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS)
 
 namespace gameplay
 {
 
 Node::Node(const char* id)
-    : _scene(NULL), _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL),
-    _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _boundsType(NONE)
+    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
+    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _dirtyBits(NODE_DIRTY_ALL),
+    _notifyHierarchyChanged(true), _boundsType(NONE)
 {
     if (id)
     {
@@ -33,28 +33,24 @@ Node::Node(const Node& node)
 
 Node::~Node()
 {
+    removeAllChildren();
+
     // Free bounding volume.
     switch (_boundsType)
     {
     case BOX:
-        if (_bounds.box)
-        {
-            delete _bounds.box;
-            _bounds.box = NULL;
-        }
+        SAFE_DELETE(_bounds.box);
         break;
     case SPHERE:
-        if (_bounds.sphere)
-        {
-            delete _bounds.sphere;
-            _bounds.sphere = NULL;
-        }
+        SAFE_DELETE(_bounds.sphere);
         break;
     }
 
     SAFE_RELEASE(_camera);
     SAFE_RELEASE(_light);
     SAFE_RELEASE(_model);
+    SAFE_RELEASE(_audioSource);
+    SAFE_RELEASE(_particleEmitter);
 }
 
 Node* Node::create(const char* id)
@@ -78,6 +74,124 @@ void Node::setId(const char* id)
 Node::Type Node::getType() const
 {
     return Node::NODE;
+}
+
+void Node::addChild(Node* child)
+{
+    assert(child);
+
+    // If the item belongs to another hierarchy, remove it first.
+    Node* parent = child->_parent;
+    if (parent)
+    {
+        parent->removeChild(child);
+    }
+
+    // Order is irrelevant, so add to the beginning of the list.
+    if (_firstChild)
+    {
+        _firstChild->_prevSibling = child;
+        child->_nextSibling = _firstChild;
+        _firstChild = child;
+    }
+    else
+    {
+        _firstChild = child;
+    }
+
+    child->_parent = this;
+
+    ++_childCount;
+
+    // Fire events.
+    child->parentChanged(parent);
+    childAdded(child);
+}
+
+void Node::removeChild(Node* child)
+{
+    if (child == NULL || child->_parent != this)
+    {
+        // The child is not in our hierarchy.
+        return;
+    }
+
+    // Call remove on the child.
+    child->remove();
+}
+
+void Node::removeAllChildren()
+{
+    _notifyHierarchyChanged = false;
+
+    while (_firstChild)
+    {
+        removeChild(_firstChild);
+    }
+
+    _notifyHierarchyChanged = true;
+    hierarchyChanged();
+}
+
+void Node   ::remove()
+{
+    // Re-link our neighbours.
+    if (_prevSibling)
+    {
+        _prevSibling->_nextSibling = _nextSibling;
+    }
+    if (_nextSibling)
+    {
+        _nextSibling->_prevSibling = _prevSibling;
+    }
+
+    // Update our parent.
+    Node* parent = _parent;
+    if (parent)
+    {
+        if (this == parent->_firstChild)
+        {
+            parent->_firstChild = _nextSibling;
+        }
+
+        --parent->_childCount;
+    }
+
+    _nextSibling = NULL;
+    _prevSibling = NULL;
+    _parent = NULL;
+
+    // Fire events.
+    if (parent)
+    {
+        parentChanged(parent);
+        parent->childRemoved(this);
+    }
+}
+
+Node* Node::getFirstChild() const
+{
+    return _firstChild;
+}
+
+Node* Node::getNextSibling() const
+{
+    return _nextSibling;
+}
+
+Node* Node::getPreviousSibling() const
+{
+    return _prevSibling;
+}
+
+Node* Node::getParent() const
+{
+    return _parent;
+}
+
+unsigned int Node::getChildCount() const
+{
+    return _childCount;
 }
 
 Node* Node::findNode(const char* id, bool recursive, bool exactMatch)
@@ -145,7 +259,9 @@ Scene* Node::getScene() const
     for (Node* n = const_cast<Node*>(this); n != NULL; n = n->getParent())
     {
         if (n->_scene)
+        {
             return n->_scene;
+        }
     }
 
     return NULL;
@@ -192,6 +308,15 @@ const Matrix& Node::getWorldMatrix() const
     }
 
     return _world;
+}
+
+const Matrix& Node::getWorldViewMatrix() const
+{
+    static Matrix worldView;
+    
+    Matrix::multiply(getViewMatrix(), getWorldMatrix(), &worldView);
+
+    return worldView;
 }
 
 const Matrix& Node::getInverseTransposeWorldViewMatrix() const
@@ -267,33 +392,60 @@ const Matrix& Node::getWorldViewProjectionMatrix() const
 {
     static Matrix worldViewProj;
 
-    //if (_dirtyBits & NODE_DIRTY_WORLD_VIEW_PROJ)
-    //{
-        // Note that currently we always keep the NODE_DIRTY_WORLD_VIEW_PROJ dirty bit set.
-        // In order to correctly track whether the WorldViewProjection matrix is dirty, it
-        // would be neccessary to track changes to the camera's view matrix, which would 
-        // result in a large number of events/scene traversals each time the camera
-        // was transformed.
-        // 
-        // A possible trick we can implement here would be to store a "dirty frame" in
-        // the camera, which is updated to the current frame number whenever the camera
-        // is modified. This method could then compare the camera's dirty frame to the 
-        // current frame number - if they are the same, it means the camera was changed
-        // in the current frame and our view/projection matrices are dirty.
-        //
-        //_dirtyBits &= ~NODE_DIRTY_WORLD_VIEW_PROJ;
-
-        Matrix::multiply(getViewProjectionMatrix(), getWorldMatrix(), &worldViewProj);
-    //}
+    // Always re-calculate worldViewProjection matrix since it's extremely difficult
+    // to track whether the camera has changed (it may frequently change every frame).
+    Matrix::multiply(getViewProjectionMatrix(), getWorldMatrix(), &worldViewProj);
 
     return worldViewProj;
 }
 
-const Vector3& Node::getWorldTranslation() const
+Vector3 Node::getTranslationWorld() const
 {
-    static Vector3 translation;
+    Vector3 translation;
     getWorldMatrix().getTranslation(&translation);
     return translation;
+}
+
+Vector3 Node::getTranslationView() const
+{
+    Vector3 translation;
+    getWorldMatrix().getTranslation(&translation);
+    getViewMatrix().transformPoint(&translation);
+    return translation;
+}
+
+Vector3 Node::getForwardVectorWorld() const
+{
+    Vector3 vector;
+    getWorldMatrix().getForwardVector(&vector);
+    return vector;
+}
+
+Vector3 Node::getForwardVectorView() const
+{
+    Vector3 vector;
+    getWorldMatrix().getForwardVector(&vector);
+    getViewMatrix().transformVector(&vector);
+    return vector;
+}
+
+Vector3 Node::getActiveCameraTranslationWorld() const
+{
+    Scene* scene = getScene();
+    if (scene)
+    {
+        Camera* camera = scene->getActiveCamera();
+        if (camera)
+        {
+            Node* cameraNode = camera->getNode();
+            if (cameraNode)
+            {
+                return cameraNode->getTranslationWorld();
+            }
+        }
+    }
+
+    return Vector3::zero();
 }
 
 void Node::hierarchyChanged()
@@ -305,7 +457,7 @@ void Node::hierarchyChanged()
 void Node::transformChanged()
 {
     // Our local transform was changed, so mark our world matrices dirty.
-    _dirtyBits |= NODE_DIRTY_WORLD | NODE_DIRTY_WORLD_VIEW_PROJ | NODE_DIRTY_BOUNDS;
+    _dirtyBits |= NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS;
 
     // Notify our children that their transform has also changed (since transforms are inherited).
     Node* n = getFirstChild();
@@ -555,10 +707,10 @@ void Node::setBoundsType(Node::BoundsType type)
         switch (_boundsType)
         {
         case BOX:
-            delete _bounds.box;
+            SAFE_DELETE(_bounds.box);
             break;
         case SPHERE:
-            delete _bounds.sphere;
+            SAFE_DELETE(_bounds.sphere);
             break;
         }
         memset(&_bounds, 0, sizeof(_bounds));
@@ -634,16 +786,6 @@ void Node::setParticleEmitter(ParticleEmitter* emitter)
             _particleEmitter->setNode(this);
         }
     }
-}
-
-void Node::removeAllChildren()
-{
-    _notifyHierarchyChanged = false;
-
-    Tree<Node>::removeAllChildren();
-
-    _notifyHierarchyChanged = true;
-    hierarchyChanged();
 }
 
 void Node::childAdded(Node* child)

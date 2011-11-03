@@ -51,7 +51,7 @@ public:
     void setFalloffExponent(float value);
 
     enum LightType
-    {   
+    {
         DirectionalLight = 1,
         PointLight = 2,
         SpotLight = 3,
@@ -60,14 +60,21 @@ public:
 
 private:
 
-    unsigned char lightType;
-    float color[COLOR_SIZE];
+    static float computeRange(float constantAttenuation, float linearAttenuation, float quadraticAttenuation);
+    static float computeInnerAngle(float outerAngle);
+    
+    unsigned char _lightType;
+    float _color[COLOR_SIZE];
 
-    float constantAttenuation;
-    float linearAttenuation;
-    float quadraticAttenuation;
-    float falloffAngle;
-    float falloffExponent;
+    float _constantAttenuation;
+    float _linearAttenuation;
+    float _quadraticAttenuation;
+    float _falloffAngle;
+    float _falloffExponent;
+
+    float _range;
+    float _innerAngle;
+    float _outerAngle;
 };
 
 

@@ -23,14 +23,14 @@ const char* Effect::getElementName(void) const
 void Effect::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
-    write(vertexShader, file);
-    write(fragmentShader, file);
+    write(_vertexShader, file);
+    write(_fragmentShader, file);
 }
 void Effect::writeText(FILE* file)
 {
     fprintElementStart(file);
-    fprintfElement(file, "vertexShader", vertexShader);
-    fprintfElement(file, "fragmentShader", fragmentShader);
+    fprintfElement(file, "vertexShader", _vertexShader);
+    fprintfElement(file, "fragmentShader", _fragmentShader);
     fprintElementEnd(file);
 }
 

@@ -62,10 +62,10 @@ SpaceshipGame game;
 // Clamp function
 #define CLAMP(x, min, max) (x < min ? min : (x > max ? max : x))
 
-SpaceshipGame::SpaceshipGame() :
-    _scene(NULL), _cameraNode(NULL), _shipGroupNode(NULL), _shipNode(NULL), _propulsionNode(NULL), _glowNode(NULL),
-    _font(NULL), _throttle(0), _shipTilt(0), _finished(false), _finishedTime(0), _pushing(false), _time(0),
-    _glowDiffuseParameter(NULL), _shipSpecularParameter(NULL), _spaceshipSound(NULL)
+SpaceshipGame::SpaceshipGame() 
+    : _scene(NULL), _cameraNode(NULL), _shipGroupNode(NULL), _shipNode(NULL), _propulsionNode(NULL), _glowNode(NULL),
+      _stateBlock(NULL), _font(NULL), _throttle(0), _shipTilt(0), _finished(false), _finishedTime(0), _pushing(false), _time(0),
+      _glowDiffuseParameter(NULL), _shipSpecularParameter(NULL), _spaceshipSound(NULL)
 {
 }
 
@@ -75,13 +75,13 @@ SpaceshipGame::~SpaceshipGame()
 
 void SpaceshipGame::initialize()
 {
-    // Set initial OpenGL ES state
-    glClearColor(0, 0, 0, 1);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // Create our render state block that will be reused across all materials
+    _stateBlock = RenderState::StateBlock::create();
+    _stateBlock->setDepthTest(true);
+    _stateBlock->setCullFace(true);
+    _stateBlock->setBlend(true);
+    _stateBlock->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
+    _stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 
     // Load our scene from file
     Package* pkg = Package::create("res/models/spaceship.gpb");
@@ -92,8 +92,8 @@ void SpaceshipGame::initialize()
     _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
 
     // Initialize scene data
-    initSpaceship();
-    initEnvironment();
+    initializeSpaceship();
+    initializeEnvironment();
 
     // Create font
     _font = Font::create("res/fonts/airstrip28.gpb");
@@ -107,7 +107,7 @@ void SpaceshipGame::initialize()
     _initialCameraPos = _cameraNode->getTranslation();
 }
 
-void SpaceshipGame::initSpaceship()
+void SpaceshipGame::initializeSpaceship()
 {
     Material* material;
 
@@ -119,33 +119,31 @@ void SpaceshipGame::initSpaceship()
     _shipNode = _scene->findNode("pSpaceShip");
     _shipNode->setBoundsType(Node::SPHERE);
     material = _shipNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh", NULL, 0);
-    material->getParameter("u_diffuseColor")->setValue(Color(0.53544f, 0.53544f, 0.53544f, 1.0f));
-    material->getParameter("u_specularExponent")->setValue(SPECULAR);
-    setLightMaterialParams(material);
+    material->getParameter("u_diffuseColor")->setValue(Vector4(0.53544f, 0.53544f, 0.53544f, 1.0f));
+    initializeMaterial(material, true, true);
     // Part 1
     material = _shipNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh", NULL, 1);
-    material->getParameter("u_diffuseColor")->setValue(Color(0.8f, 0.8f, 0.8f, 1.0f));
+    material->getParameter("u_diffuseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
     _shipSpecularParameter = material->getParameter("u_specularExponent");
-    setLightMaterialParams(material);
+    initializeMaterial(material, true, true);
     // Part 2
     material = _shipNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh", NULL, 2);
-    material->getParameter("u_diffuseColor")->setValue(Color(0.280584f, 0.5584863f, 0.6928f, 1.0f));
-    material->getParameter("u_specularExponent")->setValue(SPECULAR);
-    setLightMaterialParams(material);
+    material->getParameter("u_diffuseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
+    initializeMaterial(material, true, true);
 
     // Setup spaceship propulsion model
     _propulsionNode = _scene->findNode("pPropulsion");
     _propulsionNode->setBoundsType(Node::BOX);
     material = _propulsionNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh");
-    material->getParameter("u_diffuseColor")->setValue(Color(0.8f, 0.8f, 0.8f, 1.0f));
-    material->getParameter("u_specularExponent")->setValue(SPECULAR);
-    setLightMaterialParams(material);
+    material->getParameter("u_diffuseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+    initializeMaterial(material, true, true);
 
     // Glow effect node
     _glowNode = _scene->findNode("pGlow");
     material = _glowNode->getModel()->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
     material->getParameter("u_diffuseTexture")->setValue("res/textures/propulsion_glow.png", true);
     _glowDiffuseParameter = material->getParameter("u_diffuseColor");
+    initializeMaterial(material, false, false);
 
     // Setup the sound
     _spaceshipSound = AudioSource::create("res/sounds/spaceship.wav");
@@ -153,7 +151,7 @@ void SpaceshipGame::initSpaceship()
         _spaceshipSound->setLooped(true);
 }
 
-void SpaceshipGame::initEnvironment()
+void SpaceshipGame::initializeEnvironment()
 {
     Material* material;
     std::vector<Node*> nodes;
@@ -164,9 +162,8 @@ void SpaceshipGame::initEnvironment()
     {
         Node* pGround = nodes[i];
         material = pGround->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh");
-        material->getParameter("u_diffuseColor")->setValue(Color(0.280584f, 0.5584863f, 0.6928f, 1.0f));
-        material->getParameter("u_specularExponent")->setValue(SPECULAR);
-        setLightMaterialParams(material);
+        material->getParameter("u_diffuseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
+        initializeMaterial(material, true, true);
     }
 
     // Setup roof model
@@ -176,9 +173,8 @@ void SpaceshipGame::initEnvironment()
     {
         Node* pRoof = nodes[i];
         material = pRoof->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh");
-        material->getParameter("u_diffuseColor")->setValue(Color(0.280584f, 0.5584863f, 0.6928f, 1.0f));
-        material->getParameter("u_specularExponent")->setValue(SPECULAR);
-        setLightMaterialParams(material);
+        material->getParameter("u_diffuseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
+        initializeMaterial(material, true, true);
     }
 
     // Setup background model
@@ -186,28 +182,43 @@ void SpaceshipGame::initEnvironment()
     Node* pBackground = _scene->findNode("pBackground");
     material = pBackground->getModel()->setMaterial("res/shaders/diffuse.vsh", "res/shaders/diffuse.fsh");
     material->getParameter("u_diffuseTexture")->setValue("res/textures/background.png", true);
-    setLightMaterialParams(material);
+    initializeMaterial(material, true, false);
 }
 
-void SpaceshipGame::setLightMaterialParams(Material* material)
+void SpaceshipGame::initializeMaterial(Material* material, bool lighting, bool specular)
 {
-    // Set lighting parameters (if present)
-    MaterialParameter* param = material->getParameter("u_lightDirection");
-    if (param)
+    // Set the common render state block for the material
+    material->setStateBlock(_stateBlock);
+
+    // Bind the WorldViewProjection matrix
+    material->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
+
+    if (lighting)
     {
+        // Apply lighting material parameters
+        material->setParameterAutoBinding("u_inverseTransposeWorldViewMatrix", RenderState::INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX);
+
         Node* lightNode = _scene->findNode("directionalLight1");
         Vector3 lightDirection = lightNode->getForwardVector();
         lightDirection.normalize();
 
-        param->setValue(lightDirection);
         material->getParameter("u_lightDirection")->setValue(lightDirection);
         material->getParameter("u_lightColor")->setValue(lightNode->getLight()->getColor());
         material->getParameter("u_ambientColor")->setValue(AMBIENT_LIGHT_COLOR);
+
+        if (specular)
+        {
+            // Apply specular lighting parameters
+            material->getParameter("u_specularExponent")->setValue(SPECULAR);
+            material->setParameterAutoBinding("u_worldMatrix", RenderState::WORLD_MATRIX);
+            material->setParameterAutoBinding("u_cameraPosition", RenderState::CAMERA_WORLD_POSITION);
+        }
     }
 }
 
 void SpaceshipGame::finalize()
 {
+    SAFE_RELEASE(_stateBlock);
     SAFE_RELEASE(_scene);
 }
 
@@ -310,6 +321,8 @@ void SpaceshipGame::update(long elapsedTime)
         // Play sound effect
         if (_spaceshipSound->getState() != AudioSource::PLAYING)
             _spaceshipSound->play();
+
+        // Set the pitch based on the throttle
         _spaceshipSound->setPitch(_throttle * SOUND_PITCH_SCALE);
     }
     else
@@ -319,7 +332,7 @@ void SpaceshipGame::update(long elapsedTime)
     }
 
     // Modify ship glow effect based on the throttle
-    _glowDiffuseParameter->setValue(Color(1, 1, 1, _throttle * ENGINE_POWER));
+    _glowDiffuseParameter->setValue(Vector4(1, 1, 1, _throttle * ENGINE_POWER));
     _shipSpecularParameter->setValue(SPECULAR - ((SPECULAR-2.0f) * _throttle));
 }
 
@@ -415,7 +428,7 @@ void SpaceshipGame::resetGame()
 
 void SpaceshipGame::render(long elapsedTime)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
     // Visit scene nodes for opaque drawing
     _scene->visit(this, &SpaceshipGame::visitNode, 0);
@@ -423,16 +436,14 @@ void SpaceshipGame::render(long elapsedTime)
     // Visit scene nodes for transparent drawing
     _scene->visit(this, &SpaceshipGame::visitNode, 1);
 
-    // Draw game text
+    // Draw game text (yellow)
     _font->begin();
     char text[1024];
-    //sprintf(text, "%dfps", (int)getFrameRate());
-    //_font->drawText(text, 10, 10, Color::yellow());
     sprintf(text, "%dsec.", (int)_time);
-    _font->drawText(text, getWidth() - 120, 10, Color::yellow());
+    _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1));
     if (_finished)
     {
-        _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Color::white());
+        _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one());
     }
     _font->end();
 }
@@ -446,10 +457,12 @@ void SpaceshipGame::visitNode(Node* node, long cookie)
     // Transparent nodes must be drawn last (stage 1)
     bool isTransparent = (node == _glowNode);
 
+    // Skip transparent objects for stage 0
     if (cookie == 0 && isTransparent)
-        return; // skip transparent objects for stage 0
+        return;
+    // Skip opaque objects for stage 1
     if (cookie == 1 && !isTransparent)
-        return; // skip opaque objects for stage 1
+        return;
 
     model->draw();
 }

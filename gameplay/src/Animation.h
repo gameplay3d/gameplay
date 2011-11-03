@@ -85,13 +85,6 @@ public:
      */
     void stop(const char* clipId = NULL);
 
-    /**
-     * Transfers all of the animation channels from the given animation to this animation.
-     * 
-     * @param animation The animation to transfer the animation channels from.
-     */
-    void transfer(Animation* animation);
-
 private:
 
     /**
@@ -106,6 +99,7 @@ private:
         friend class Animation;
 
     private:
+
         Channel(AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration);
         Channel(const Channel& copy);
         ~Channel();
@@ -130,12 +124,12 @@ private:
     /**
      * Constructor.
      */
-    Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, float* keyTangentIn, float* keyTangentOut, unsigned int type);
+    Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type);
     
     /**
      * Constructor.
      */
-    Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, unsigned int type);
+    Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type);
 
     /**
      * Destructor.
@@ -160,12 +154,12 @@ private:
     /**
      * Creates a channel within this animation.
      */ 
-    Channel* createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, unsigned int type);
+    Channel* createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type);
 
     /**
      * Creates a channel within this animation.
      */
-    Channel* createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, float* keyTangentIn, float* keyTangentOut, unsigned int type);
+    Channel* createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type);
 
     /**
      * Adds a channel to the animation.

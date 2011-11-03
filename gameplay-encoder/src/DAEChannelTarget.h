@@ -1,5 +1,5 @@
-#ifndef CHANNELTARGET_H_
-#define CHANNELTARGET_H_
+#ifndef DAECHANNELTARGET_H_
+#define DAECHANNELTARGET_H_
 
 #include <dae.h>
 #include <dae/daeSIDResolver.h>
@@ -27,7 +27,7 @@ public:
     /**
      * Constructs the DAEChannelTarget from the given channel element.
      */
-    DAEChannelTarget(const domChannel* channelRef);
+    DAEChannelTarget(const domChannelRef channelRef);
 
     /**
      * Destructor.
@@ -68,17 +68,17 @@ public:
 
 private:
     /**
-     * Pointer to the <channel> element. 
+     * The channel element.
      */
-    const domChannel* channel;
+    const domChannelRef _channel;
 
-    domElement* targetElement;
+    domElement* _targetElement;
 
     /**
-     * The first part is the id attribute of an element in the instance document 
+     * The first part is the id attribute of an element in the instance document
      * or a dot segment (".") indicating that this is a relative address.
      */
-    std::string targetId;
+    std::string _targetId;
 
     /**
      * A channel target can have zero or more target attributes.
@@ -87,7 +87,7 @@ private:
      * Result: attributeIds will contain 2 elements. "Translate.X" and "Translate.Y"
      * Refer to the COLLADA spec "COLLADA Target Addressing".
      */
-    std::vector<std::string> attributeIds;
+    std::vector<std::string> _attributeIds;
 };
 
 }

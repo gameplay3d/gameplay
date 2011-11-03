@@ -35,7 +35,7 @@ public:
     unsigned int getAnimationChannelCount() const;
 
 private:
-    std::vector<AnimationChannel*> channels;
+    std::vector<AnimationChannel*> _channels;
 };
 
 }

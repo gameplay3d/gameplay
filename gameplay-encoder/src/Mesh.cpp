@@ -26,8 +26,8 @@ void Mesh::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
     // vertex formats
-    write(vertexFormats.size(), file);
-    for (std::vector<VertexElement>::iterator i = vertexFormats.begin(); i != vertexFormats.end(); i++)
+    write(_vertexFormats.size(), file);
+    for (std::vector<VertexElement>::iterator i = _vertexFormats.begin(); i != _vertexFormats.end(); i++)
     {
         i->writeBinary(file);
     }
@@ -74,7 +74,7 @@ void Mesh::writeText(FILE* file)
     // for each VertexFormat
     if (vertices.size() > 0 )
     {
-        for (std::vector<VertexElement>::iterator i = vertexFormats.begin(); i != vertexFormats.end(); i++)
+        for (std::vector<VertexElement>::iterator i = _vertexFormats.begin(); i != _vertexFormats.end(); i++)
         {
             i->writeText(file);
         }
@@ -124,7 +124,7 @@ void Mesh::addMeshPart(Vertex* vertex)
 
 void Mesh::addVetexAttribute(unsigned int usage, unsigned int count)
 {
-    vertexFormats.push_back(VertexElement(usage, count));
+    _vertexFormats.push_back(VertexElement(usage, count));
 }
 
 size_t Mesh::getVertexCount() const
@@ -194,7 +194,9 @@ void Mesh::computeBounds()
     {
         float d = Vector3::distanceSquared(bounds.center, i->position);
         if (d > bounds.radius)
+        {
             bounds.radius = d;
+        }
     }
 
     // Convert squared distance to distance for radius
