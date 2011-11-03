@@ -173,6 +173,7 @@ public:
      * quaternion is already unit-length.
      *
      * @param dst A quaternion to store the inverse in.
+     * 
      * @return true if the inverse can be computed, false otherwise.
      */
     bool inverse(Quaternion* dst) const;
@@ -245,6 +246,7 @@ public:
      * Converts this Quaternion4f to axis-angle notation. The axis is normalized.
      *
      * @param e The Vector3f which stores the axis.
+     * 
      * @return The angle (in radians).
      */
     float toAxisAngle(Vector3* e) const;

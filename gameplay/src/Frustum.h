@@ -104,7 +104,7 @@ public:
      * 
      * @param dst The projection matrix to copy into.
      */
-    void getMatrix(Matrix* dst);
+    void getMatrix(Matrix* dst) const;
 
     /**
      * Gets the corners of the frustum in the specified array.
@@ -140,9 +140,9 @@ public:
      *
      * @param plane The plane to test intersection with.
      * 
-     * @return PLANE_INTERSECTS_BACK if the specified bounding object is in the negative half-space of
-     *  this plane, PLANE_INTERSECTS_FRONT if it is in the positive half-space of this plane,
-     *  and PLANE_INTERSECTS_INTERSECTING if it intersects this plane.
+     * @return Plane::INTERSECTS_BACK if the specified bounding object is in the negative half-space of
+     *  this plane, Plane::INTERSECTS_FRONT if it is in the positive half-space of this plane,
+     *  and Plane::INTERSECTS_INTERSECTING if it intersects this plane.
      */
     float intersects(const Plane& plane) const;
 
@@ -151,9 +151,9 @@ public:
      *
      * @param ray The ray to test intersection with.
      * 
-     * @return PLANE_INTERSECTS_BACK if the specified ray is in the negative half-space of
-     *  this plane, PLANE_INTERSECTS_FRONT if it is in the positive half-space of this plane,
-     *  and PLANE_INTERSECTS_INTERSECTING if it intersects this plane.
+     * @return Plane::INTERSECTS_BACK if the specified ray is in the negative half-space of
+     *  this plane, Plane::INTERSECTS_FRONT if it is in the positive half-space of this plane,
+     *  and Plane::INTERSECTS_INTERSECTING if it intersects this plane.
      */
     float intersects(const Ray& ray) const;
 

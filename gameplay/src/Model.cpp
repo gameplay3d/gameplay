@@ -6,32 +6,20 @@
 #include "Model.h"
 #include "MeshPart.h"
 #include "Scene.h"
+#include "Technique.h"
+#include "Pass.h"
 
 namespace gameplay
 {
 
 Model::Model(Mesh* mesh) :
-    _mesh(mesh), _material(NULL), _vaBinding(NULL), _partCount(0), _partMaterials(NULL), _partVaBindings(NULL), _node(NULL), _skin(NULL)
+    _mesh(mesh), _material(NULL), _partCount(0), _partMaterials(NULL), _node(NULL), _skin(NULL)
 {
     _partCount = mesh->getPartCount();
-    mesh->addRef();
 }
 
 Model::~Model()
 {
-    SAFE_RELEASE(_vaBinding);
-
-    if (_partVaBindings)
-    {
-        for (unsigned int i = 0; i < _partCount; ++i)
-        {
-            SAFE_RELEASE(_partVaBindings[i]);
-        }
-
-        delete[] _partVaBindings;
-        _partVaBindings = NULL;
-    }
-
     SAFE_RELEASE(_material);
 
     if (_partMaterials)
@@ -40,14 +28,18 @@ Model::~Model()
         {
             SAFE_RELEASE(_partMaterials[i]);
         }
-
-        delete[] _partMaterials;
-        _partMaterials = NULL;
+        SAFE_DELETE_ARRAY(_partMaterials);
     }
 
     SAFE_RELEASE(_mesh);
 
     SAFE_DELETE(_skin);
+}
+
+Model* Model::create(Mesh* mesh)
+{
+    mesh->addRef();
+    return new Model(mesh);
 }
 
 Mesh* Model::getMesh()
@@ -91,18 +83,18 @@ void Model::setMaterial(Material* material, int partIndex)
     if (partIndex == -1)
     {
         // Release existing shared material and binding.
-        SAFE_RELEASE(_material);
-        SAFE_RELEASE(_vaBinding)
+        if (_material)
+        {
+            _material->setMeshBinding(NULL);
+            SAFE_RELEASE(_material);
+        }
 
         // Set new shared material.
         if (material)
         {
-            _vaBinding = VertexAttributeBinding::create(_mesh, material->getEffect());
-            if (_vaBinding)
-            {
-                _material = material;
-                material->addRef();
-            }
+            _material = material;
+            _material->addRef();
+            _material->setMeshBinding(_mesh);
         }
     }
     else if (partIndex >= 0 && partIndex < (int)getMeshPartCount())
@@ -113,8 +105,11 @@ void Model::setMaterial(Material* material, int partIndex)
         // Release existing part material and part binding.
         if (_partMaterials)
         {
-            SAFE_RELEASE(_partMaterials[partIndex]);
-            SAFE_RELEASE(_partVaBindings[partIndex]);
+            if (_partMaterials[partIndex])
+            {
+                _partMaterials[partIndex]->setMeshBinding(NULL);
+                SAFE_RELEASE(_partMaterials[partIndex]);
+            }
         }
         else
         {
@@ -123,41 +118,59 @@ void Model::setMaterial(Material* material, int partIndex)
             {
                 _partMaterials = new Material*[_partCount];
                 memset(_partMaterials, 0, sizeof(Material*) * _partCount);
-
-                _partVaBindings = new VertexAttributeBinding*[_partCount];
-                memset(_partVaBindings, 0, sizeof(VertexAttributeBinding*) * _partCount);
             }
         }
 
         // Set new part material.
         if (material)
         {
-            _partVaBindings[partIndex] = VertexAttributeBinding::create(_mesh, material->getEffect());
             _partMaterials[partIndex] = material;
             material->addRef();
+            material->setMeshBinding(_mesh);
         }
     }
 
-    // Auto bind materials.
-    autoBindParameters(material);
+    // Apply node binding for the new material.
+    if (material && _node)
+    {
+        setMaterialNodeBinding(material);
+    }
 }
 
 Material* Model::setMaterial(const char* vshPath, const char* fshPath, const char* defines, int partIndex)
 {
     // Try to create a Material with the given parameters.
-    Material* mat = Material::createMaterial(vshPath, fshPath, defines);
-    if (mat == NULL)
+    Material* material = Material::create(vshPath, fshPath, defines);
+    if (material == NULL)
     {
         return NULL;
     }
 
     // Assign the material to us.
-    setMaterial(mat, partIndex);
+    setMaterial(material, partIndex);
 
     // Release the material since we now have a reference to it.
-    mat->release();
+    material->release();
 
-    return mat;
+    return material;
+}
+
+Material* Model::setMaterial(const char* materialPath, int partIndex)
+{
+    // Try to create a Material from the specified material file.
+    Material* material = Material::create(materialPath);
+    if (material == NULL)
+    {
+        return NULL;
+    }
+
+    // Assign the material to us
+    setMaterial(material, partIndex);
+
+    // Release the material since we now have a reference to it
+    material->release();
+
+    return material;
 }
 
 MeshSkin* Model::getSkin()
@@ -169,10 +182,10 @@ void Model::setSkin(MeshSkin* skin)
 {
     if (_skin != skin)
     {
-        if (_skin)
-        {
-            delete _skin;
-        }
+        // Free the old skin
+        SAFE_DELETE(_skin);
+
+        // Assign the new skin
         _skin = skin;
     }
 }
@@ -195,6 +208,25 @@ void Model::setNode(Node* node)
             node->addRef();
         }
     }
+
+    // Re-bind node related material parameters
+    if (node)
+    {
+        if (_material)
+        {
+           setMaterialNodeBinding(_material);
+        }
+        if (_partMaterials)
+        {
+            for (unsigned int i = 0; i < _partCount; ++i)
+            {
+                if (_partMaterials[i])
+                {
+                    setMaterialNodeBinding(_partMaterials[i]);
+                }
+            }
+        }
+    }
 }
 
 void Model::draw(bool wireframe)
@@ -203,22 +235,26 @@ void Model::draw(bool wireframe)
     if (count == 0)
     {
         // No mesh parts (index buffers).
-        if (_material && _vaBinding)
+        if (_material)
         {
-            _material->bind();
-            _vaBinding->bind();
-            if (wireframe)
+            Technique* technique = _material->getTechnique();
+            for (unsigned int i = 0, count = technique->getPassCount(); i < count; ++i)
             {
-                for (unsigned int i = 0, count = _mesh->getVertexCount(); i < count; i += 3)
+                Pass* pass = technique->getPass(i);
+                pass->bind();
+                if (wireframe)
                 {
-                    GL_ASSERT( glDrawArrays(GL_LINE_LOOP, i, 3) );
+                    for (unsigned int i = 0, count = _mesh->getVertexCount(); i < count; i += 3)
+                    {
+                        GL_ASSERT( glDrawArrays(GL_LINE_LOOP, i, 3) );
+                    }
                 }
+                else
+                {
+                    GL_ASSERT( glDrawArrays(_mesh->getPrimitiveType(), 0, _mesh->getVertexCount()) );
+                }
+                pass->unbind();
             }
-            else
-            {
-                GL_ASSERT( glDrawArrays(_mesh->getPrimitiveType(), 0, _mesh->getVertexCount()) );
-            }
-            _vaBinding->unbind();
         }
     }
     else
@@ -238,24 +274,27 @@ void Model::draw(bool wireframe)
                 material = _material; // Use shared material
             }
 
-            // Get the vertex attribute binding for this mesh part.
-            VertexAttributeBinding* partVaBinding;
-            if (_partVaBindings && i < _partCount && _partVaBindings[i])
+            if (material)
             {
-                partVaBinding = _partVaBindings[i]; // Use part binding
-            }
-            else
-            {
-                partVaBinding = _vaBinding; // Use shared binding
-            }
-
-            if (material && partVaBinding)
-            {
-                material->bind();
-                partVaBinding->bind();
-                GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, part->_indexBuffer) );
-                GL_ASSERT( glDrawElements(part->getPrimitiveType(), part->getIndexCount(), part->getIndexFormat(), 0) );
-                partVaBinding->unbind();
+                Technique* technique = material->getTechnique();
+                for (unsigned int i = 0, count = technique->getPassCount(); i < count; ++i)
+                {
+                    Pass* pass = technique->getPass(i);
+                    pass->bind();
+                    GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, part->_indexBuffer) );
+                    if (wireframe)
+                    {
+                        for (unsigned int i = 0, count = part->getIndexCount(); i < count; i += 3)
+                        {
+                            GL_ASSERT( glDrawElements(GL_LINE_LOOP, 3, part->getIndexFormat(), (const GLvoid*)i) );
+                        }
+                    }
+                    else
+                    {
+                        GL_ASSERT( glDrawElements(part->getPrimitiveType(), part->getIndexCount(), part->getIndexFormat(), 0) );
+                    }
+                    pass->unbind();
+                }
             }
         }
     }
@@ -277,21 +316,7 @@ void Model::validatePartCount()
             {
                 _partMaterials[i] = oldArray[i];
             }
-            delete[] oldArray;
-            oldArray = NULL;
-        }
-
-        if (_partVaBindings)
-        {
-            VertexAttributeBinding** oldArray = _partVaBindings;
-            _partVaBindings = new VertexAttributeBinding*[partCount];
-            memset(_partVaBindings, 0, sizeof(VertexAttributeBinding*) * partCount);
-            for (unsigned int i = 0; i < _partCount; ++i)
-            {
-                _partVaBindings[i] = oldArray[i];
-            }
-            delete[] oldArray;
-            oldArray = NULL;
+            SAFE_DELETE_ARRAY(oldArray);
         }
 
         // Update local part count.
@@ -299,51 +324,28 @@ void Model::validatePartCount()
     }
 }
 
-void Model::autoBindParameters(Material *m)
+void Model::setMaterialNodeBinding(Material *material)
 {
-    Effect* e = m->getEffect();
-    
-    // Go through all the shader uniforms to find the auto-bind(able) uniforms.
-    int uniformCount = e->getUniformCount();
-    for (int i = 0; i < uniformCount; i++)
+    if (_node)
     {
-        char* uniformName = (char*)e->getUniform(i)->getName();
-        if (strcmp(uniformName, UNIFORM_WORLD_MATRIX) == 0)
-        {
-            m->getParameter(UNIFORM_WORLD_MATRIX)->bindValue(getNode(), &Node::getWorldMatrix);
-        }
-        else if (strcmp(uniformName, UNIFORM_VIEW_MATRIX) == 0)
-        {
-            m->getParameter(UNIFORM_VIEW_MATRIX)->bindValue(getNode(), &Node::getViewMatrix);
-        }
-        else if (strcmp(uniformName, UNIFORM_WORLD_VIEW_PROJECTION_MATRIX) == 0)
-        {
-            m->getParameter(UNIFORM_WORLD_VIEW_PROJECTION_MATRIX)->bindValue(getNode(), &Node::getWorldViewProjectionMatrix);
-        }
-        else if (strcmp(uniformName, UNIFORM_INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX) == 0)
-        {
-            m->getParameter(UNIFORM_INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX)->bindValue(getNode(), &Node::getInverseTransposeWorldViewMatrix);
-        }
+        material->setNodeBinding(_node);
 
-        else if (strcmp(uniformName, UNIFORM_CAMERA_POSITION) == 0)
+        unsigned int techniqueCount = material->getTechniqueCount();
+        for (unsigned int i = 0; i < techniqueCount; ++i)
         {
-            Node* node = getNode();
-            if (node)
+            Technique* technique = material->getTechnique(i);
+            
+            technique->setNodeBinding(_node);
+
+            unsigned int passCount = technique->getPassCount();
+            for (unsigned int j = 0; j < passCount; ++j)
             {
-                // Get this scene's active camera and try to bind its world-space position.
-                Camera* c = node->getScene()->getActiveCamera();
-                if (c)
-                {
-                    m->getParameter(UNIFORM_CAMERA_POSITION)->bindValue(c->getNode(), &Node::getWorldTranslation);
-                }
+                Pass* pass = technique->getPass(j);
+
+                pass->setNodeBinding(_node);
             }
         }
     }
-}
-
-Model* Model::create(Mesh* mesh)
-{
-    return new Model(mesh);
 }
 
 }

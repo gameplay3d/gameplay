@@ -15,16 +15,16 @@ Light::Light(Light::Type type, const Vector3& color) :
     _directional = new Directional(color);
 }
 
-Light::Light(Light::Type type, const Vector3& color, float constantAttenuation, float linearAttenuation, float quadraticAttenuation) :
+Light::Light(Light::Type type, const Vector3& color, float range) :
     _type(type), _node(NULL)
 {
-    _point = new Point(color, constantAttenuation, linearAttenuation, quadraticAttenuation);
+    _point = new Point(color, range);
 }
 
-Light::Light(Light::Type type, const Vector3& color, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, float falloffAngle, float falloffExponent) :
+Light::Light(Light::Type type, const Vector3& color, float range, float innerAngle, float outerAngle) :
     _type(type), _node(NULL)
 {
-    _spot = new Spot(color, constantAttenuation, linearAttenuation, quadraticAttenuation, falloffAngle, falloffExponent);
+    _spot = new Spot(color, range, innerAngle, outerAngle);
 }
 
 Light::~Light()
@@ -32,25 +32,13 @@ Light::~Light()
     switch (_type)
     {
     case DIRECTIONAL:
-        if (_directional)
-        {
-            delete _directional;
-            _directional = NULL;
-        }
+        SAFE_DELETE(_directional);
         break;
     case POINT:
-        if (_point)
-        {
-            delete _point;
-            _point = NULL;
-        }
+        SAFE_DELETE(_point);
         break;
     case SPOT:
-        if (_spot)
-        {
-            delete _spot;
-            _spot = NULL;
-        }
+        SAFE_DELETE(_spot);
         break;
     }
 }
@@ -60,14 +48,14 @@ Light* Light::createDirectional(const Vector3& color)
     return new Light(DIRECTIONAL, color);
 }
 
-Light* Light::createPoint(const Vector3& color, float constantAttenuation, float linearAttenuation, float quadraticAttenuation)
+Light* Light::createPoint(const Vector3& color, float range)
 {
-    return new Light(POINT, color, constantAttenuation, linearAttenuation, quadraticAttenuation);
+    return new Light(POINT, color, range);
 }
 
-Light* Light::createSpot(const Vector3& color, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, float falloffAngle, float falloffExponent)
+Light* Light::createSpot(const Vector3& color, float range, float innerAngle, float outerAngle)
 {
-    return new Light(SPOT, color, constantAttenuation, linearAttenuation, quadraticAttenuation, falloffAngle, falloffExponent);
+    return new Light(SPOT, color, range, innerAngle, outerAngle);
 }
 
 Light::Type Light::getLightType() const
@@ -110,6 +98,7 @@ const Vector3& Light::getColor() const
     default:
         assert(0);
         return Vector3::zero();
+
     }
 }
 
@@ -129,20 +118,96 @@ void Light::setColor(const Vector3& color)
     }
 }
 
+float Light::getRange()  const
+{
+    assert(_type != DIRECTIONAL);
+
+    switch (_type)
+    {
+    case POINT:
+        return _point->range;
+    case SPOT:
+        return _spot->range;
+    default:
+        assert(0);
+        return 0.0f;
+    }
+}
+    
+void Light::setRange(float range)
+{
+    assert(_type != DIRECTIONAL);
+
+    switch (_type)
+    {
+    case POINT:
+        _point->range = range;
+        break;
+    case SPOT:
+        _spot->range = range;
+        break;
+    }
+}
+    
+float Light::getInnerAngle()  const
+{
+    assert(_type == SPOT);
+
+    return _spot->innerAngle;
+}
+
+void Light::setInnerAngle(float innerAngle)
+{
+    assert(_type == SPOT);
+
+    _spot->innerAngle = innerAngle;
+    _spot->innerAngleCos = cos(innerAngle);
+}
+    
+float Light::getOuterAngle()  const
+{
+    assert(_type == SPOT);
+
+    return _spot->outerAngle;
+}
+
+void Light::setOuterAngle(float outerAngle)
+{
+    assert(_type == SPOT);
+
+    _spot->outerAngle = outerAngle;
+    _spot->outerAngleCos = cos(outerAngle);
+}
+    
+float Light::getInnerAngleCos()  const
+{
+    assert(_type == SPOT);
+
+    return _spot->innerAngleCos;
+}
+    
+float Light::getOuterAngleCos()  const
+{
+    assert(_type == SPOT);
+
+    return _spot->outerAngleCos;
+}
+
 Light::Directional::Directional(const Vector3& color)
     : color(color)
 {
 }
 
-Light::Point::Point(const Vector3& color, float constantAttenuation, float linearAttenuation, float quadraticAttenuation)
-    : color(color), constantAttenuation(constantAttenuation), linearAttenuation(linearAttenuation), quadraticAttenuation(quadraticAttenuation)
+Light::Point::Point(const Vector3& color, float range)
+    : color(color), range(range)
 {
 }
 
-Light::Spot::Spot(const Vector3& color, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, float falloffAngle, float falloffExponent)
-    : color(color), constantAttenuation(constantAttenuation), linearAttenuation(linearAttenuation), quadraticAttenuation(quadraticAttenuation),
-      falloffAngle(falloffAngle), falloffExponent(falloffExponent)
+Light::Spot::Spot(const Vector3& color, float range, float innerAngle, float outerAngle)
+    : color(color), range(range), innerAngle(innerAngle), outerAngle(outerAngle)
 {
+    innerAngleCos = cos(innerAngle);
+    outerAngleCos = cos(outerAngle);
 }
 
 }

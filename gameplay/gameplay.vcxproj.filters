@@ -27,9 +27,6 @@
     <ClCompile Include="src\Camera.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Color.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Curve.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -52,9 +49,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Light.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Material.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Matrix.cpp">
@@ -156,6 +150,18 @@
     <ClCompile Include="src\Properties.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Material.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Technique.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pass.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderState.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -183,9 +189,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Camera.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Color.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Curve.h">
@@ -222,9 +225,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Light.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Material.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Matrix.h">
@@ -318,6 +318,18 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Properties.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Material.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Technique.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pass.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RenderState.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Tree.h">

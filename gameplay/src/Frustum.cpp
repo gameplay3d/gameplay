@@ -59,7 +59,7 @@ const Plane& Frustum::getTop() const
     return _top;
 }
 
-void Frustum::getMatrix(Matrix* dst)
+void Frustum::getMatrix(Matrix* dst) const
 {
     dst->set(_matrix);
 }

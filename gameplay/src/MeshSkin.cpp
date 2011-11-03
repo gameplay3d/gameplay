@@ -12,7 +12,7 @@
 namespace gameplay
 {
 
-MeshSkin::MeshSkin() : _rootJoint(NULL), _matrixPalette(NULL)
+MeshSkin::MeshSkin() : _matrixPalette(NULL)
 {
 }
 
@@ -37,35 +37,16 @@ Joint* MeshSkin::getJoint(const char* id) const
 {
     assert(id);
 
-    if (_rootJoint)
+    for (unsigned int i = 0, count = _joints.size(); i < count; ++i)
     {
-        Node* n = _rootJoint->findNode(id, true);
-        if (n != NULL && n->getType() == Node::JOINT)
+        Joint* j = _joints[i];
+        if (j && j->getId() != NULL && strcmp(j->getId(), id) == 0)
         {
-            return static_cast<Joint*>(n);
-        }
-    }
-    else
-    {
-        for (unsigned int i = 0, count = _joints.size(); i < count; ++i)
-        {
-            Joint* j = _joints[i];
-            if (j && j->getId() != NULL && strcmp(j->getId(), id) == 0)
-                return j;
+            return j;
         }
     }
 
     return NULL;
-}
-
-Joint* MeshSkin::getRootJoint() const
-{
-    return _rootJoint;
-}
-
-void MeshSkin::setRootJoint(const char* id)
-{
-    _rootJoint = getJoint(id);
 }
 
 void MeshSkin::setJointCount(unsigned int jointCount)
@@ -81,10 +62,8 @@ void MeshSkin::setJointCount(unsigned int jointCount)
     }
 
     // Rebuild the matrix palette. Each matrix is 3 rows of Vector4.
-    if (_matrixPalette)
-    {
-        delete[] _matrixPalette;
-    }
+    SAFE_DELETE_ARRAY(_matrixPalette);
+
     if (jointCount > 0)
     {
         _matrixPalette = new Vector4[jointCount * PALETTE_ROWS];
@@ -101,25 +80,13 @@ void MeshSkin::setJoint(Joint* joint, unsigned int index)
 {
     assert(index < _joints.size());
 
-    bool rootJoint = false;
-
     if (_joints[index])
     {
-        if (_joints[index] == _rootJoint)
-        {
-            rootJoint = true;
-        }
-
         SAFE_RELEASE(_joints[index]);
     }
 
     _joints[index] = joint;
     joint->addRef();
-
-    if (rootJoint)
-    {
-        _rootJoint = joint;
-    }
 }
 
 Vector4* MeshSkin::getMatrixPalette() const

@@ -5,12 +5,12 @@ namespace gameplay
 {
 
 Camera::Camera(void) :
-    fieldOfView(0.0f),
-    aspectRatio(0.0f),
-    nearPlane(0.0f),
-    farPlane(0.0f),
-    viewportWidth(0.0f),
-    viewportHeight(0.0f)
+    _fieldOfView(0.0f),
+    _aspectRatio(0.0f),
+    _nearPlane(0.0f),
+    _farPlane(0.0f),
+    _viewportWidth(0.0f),
+    _viewportHeight(0.0f)
 {
 }
 
@@ -20,25 +20,25 @@ Camera::~Camera(void)
 
 void Camera::setFieldOfView(float value)
 {
-    fieldOfView = value;
+    _fieldOfView = value;
 }
 
 
 void Camera::setAspectRatio(float value)
 {
-    aspectRatio = value;
+    _aspectRatio = value;
 }
 
 
 void Camera::setNearPlane(float value)
 {
-    nearPlane = value;
+    _nearPlane = value;
 }
 
 
 void Camera::setFarPlane(float value)
 {
-    farPlane = value;
+    _farPlane = value;
 }
 
 unsigned int Camera::getTypeId(void) const
@@ -53,16 +53,16 @@ const char* Camera::getElementName(void) const
 void Camera::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
-    write(cameraType, file);
-    write(aspectRatio, file);
-    write(nearPlane, file);
-    write(farPlane, file);
+    write(_cameraType, file);
+    write(_aspectRatio, file);
+    write(_nearPlane, file);
+    write(_farPlane, file);
 
-    if (cameraType == CameraPerspective)
+    if (_cameraType == CameraPerspective)
     {
-        write(fieldOfView, file);
+        write(_fieldOfView, file);
     }
-    else if (cameraType == CameraOrthographic)
+    else if (_cameraType == CameraOrthographic)
     {
         write(getViewPortWidth(), file);
         write(getViewPortHeight(), file);
@@ -75,19 +75,19 @@ void Camera::writeBinary(FILE* file)
 void Camera::writeText(FILE* file)
 {
     fprintElementStart(file);
-    fprintfElement(file, "cameraType", cameraType == CameraPerspective ? "CameraPerspective" : "CameraOrthographic");
-    fprintfElement(file, "aspectRatio", aspectRatio);
-    fprintfElement(file, "nearPlane", nearPlane);
-    fprintfElement(file, "farPlane", farPlane);
+    fprintfElement(file, "cameraType", _cameraType == CameraPerspective ? "CameraPerspective" : "CameraOrthographic");
+    fprintfElement(file, "aspectRatio", _aspectRatio);
+    fprintfElement(file, "nearPlane", _nearPlane);
+    fprintfElement(file, "farPlane", _farPlane);
 
-    if (cameraType == CameraPerspective)
+    if (_cameraType == CameraPerspective)
     {
-        fprintfElement(file, "fieldOfView", fieldOfView);
+        fprintfElement(file, "fieldOfView", _fieldOfView);
     }
-    else if (cameraType == CameraOrthographic)
+    else if (_cameraType == CameraOrthographic)
     {
-        fprintfElement(file, "viewportWidth", viewportWidth);
-        fprintfElement(file, "viewportHeight", viewportHeight);
+        fprintfElement(file, "viewportWidth", _viewportWidth);
+        fprintfElement(file, "viewportHeight", _viewportHeight);
     }
     else
     {
@@ -98,28 +98,28 @@ void Camera::writeText(FILE* file)
 
 void Camera::setPerspective()
 {
-    cameraType = CameraPerspective;
+    _cameraType = CameraPerspective;
 }
 void Camera::setOrthographic()
 {
-    cameraType = CameraOrthographic;
+    _cameraType = CameraOrthographic;
 }
 void Camera::setViewportWidth(float width)
 {
-    viewportWidth = width;
+    _viewportWidth = width;
 }
 void Camera::setViewportHeight(float height)
 {
-    viewportHeight = height;
+    _viewportHeight = height;
 }
 
 float Camera::getViewPortWidth()
 {
-    return viewportWidth;
+    return _viewportWidth;
 }
 float Camera::getViewPortHeight()
 {
-    return viewportHeight;
+    return _viewportHeight;
 }
 
 }

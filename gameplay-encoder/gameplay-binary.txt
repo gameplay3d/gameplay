@@ -142,13 +142,17 @@ Reference
                 light                   Light
                 model                   Model
 ------------------------------------------------------------------------------------------------------
-3->Animation
+3->Animations
+                animations              Animation[]
+------------------------------------------------------------------------------------------------------
+4->Animation
+                id                      string
                 channels                AnimationChannel[]
 -----------------------------------------------------------------------------------------------------
-4->AnimationChannel
+5->AnimationChannel
                 targetId                string
                 targetAttribute         uint
-                keyTimes                float[]  (milliseconds)
+                keyTimes                unsigned long[]  (milliseconds)
                 values                  float[]
                 tangents_in             float[]
                 tangents_out            float[]
@@ -180,19 +184,15 @@ Reference
                 ]
 ------------------------------------------------------------------------------------------------------
 33->Light
-                lightType               byte {ambient|directional|spot|point}
+                lightType               byte {directional|point|spot}
                 color                   float[3]
-                [ lightType : spot
-                  constantAttenuation   float
-                  linearAttenuation     float
-                  quadraticAttenuation  float
-                  falloffAngle          float
-                  falloffExponent       float
-                ]
                 [ lightType : point
-                  constantAttenuation   float
-                  linearAttenuation     float
-                  quadraticAttenuation  float
+                  range                 float
+                ]
+                [ lightType : spot
+                  range                 float 
+                  innerAngle            float (in radians)
+                  outerAngle            float (in radians)
                 ]
 ------------------------------------------------------------------------------------------------------
 34->Mesh
@@ -209,7 +209,6 @@ Reference
 ------------------------------------------------------------------------------------------------------
 36->MeshSkin
                 bindShape               float[16]
-                rootJoint               string
                 joints                  xref:Node[]
                 jointsBindPoses         float[] // 16 * joints.length
 ------------------------------------------------------------------------------------------------------

@@ -14,6 +14,37 @@ inline char lowercase(char c)
     return c;
 }
 
+bool startsWith(const char* str, const char* prefix, bool ignoreCase)
+{
+    size_t length = strlen(str);
+    size_t prefixLength = strlen(prefix);
+
+    if (prefixLength > length)
+    {
+        return false;
+    }
+
+    const char* p = str;
+    while (*p != '\0' && *prefix != '\0')
+    {
+        if (ignoreCase)
+        {
+            if (lowercase(*p) != lowercase(*prefix))
+            {
+                return false;
+            }
+        }
+        else if (*p != *prefix)
+        {
+            return false;
+        }
+        
+        ++p;
+        ++prefix;
+    }
+    return true;
+}
+
 bool endsWith(const char* str, const char* suffix, bool ignoreCase)
 {
     size_t length = strlen(str);
@@ -27,7 +58,7 @@ bool endsWith(const char* str, const char* suffix, bool ignoreCase)
     size_t offset = length - suffixLength;
 
     const char* p = str + offset;
-    while (*p != '\0')
+    while (*p != '\0' && *suffix != '\0')
     {
         if (ignoreCase)
         {

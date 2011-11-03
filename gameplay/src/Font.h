@@ -99,7 +99,7 @@ public:
      * @param y The viewport y position to draw text at.
      * @param color The color of text.
      */
-    void drawText(const char* text, int x, int y, const Color& color = Color::white());
+    void drawText(const char* text, int x, int y, const Vector4& color);
 
     /**
      * Ends text drawing for this font.
@@ -132,7 +132,6 @@ private:
     unsigned int _glyphCount;
     Texture* _texture;
     SpriteBatch* _batch;
-    Material* _material;
 };
 
 }

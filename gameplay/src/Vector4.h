@@ -190,7 +190,7 @@ public:
      * 
      * @see distanceSquared
      */
-    float distance(const Vector4& v);
+    float distance(const Vector4& v) const;
 
     /**
      * Returns the squared distance between this vector and v.
@@ -206,7 +206,7 @@ public:
      * 
      * @see distance
      */
-    float distanceSquared(const Vector4& v);
+    float distanceSquared(const Vector4& v) const;
 
     /**
      * Returns the dot product of this vector and the specified vector.
@@ -234,7 +234,7 @@ public:
      * 
      * @see lengthSquared
      */
-    float length();
+    float length() const;
 
     /**
      * Returns the squared length of this vector.
@@ -248,7 +248,7 @@ public:
      * 
      * @see length
      */
-    float lengthSquared();
+    float lengthSquared() const;
 
     /**
      * Negates this vector.

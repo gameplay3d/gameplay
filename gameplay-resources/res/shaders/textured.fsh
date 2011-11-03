@@ -1,11 +1,11 @@
 precision highp float;
 
 // Uniforms
-uniform sampler2D u_diffuseTexture;         // Diffuse texture
-uniform vec4 u_diffuseColor;                // Diffuse color/tint
+uniform sampler2D u_diffuseTexture;     // Diffuse texture
+uniform vec4 u_diffuseColor;            // Diffuse color/tint
 
 // Inputs
-varying vec2 v_texCoord;                    // Texture coordinate (u, v).
+varying vec2 v_texCoord;                // Texture coordinate (u, v).
 
 void main()
 {

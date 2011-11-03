@@ -39,11 +39,7 @@ Transform::Transform(const Transform& copy)
 
 Transform::~Transform()
 {
-    if (_listeners)
-    {
-        delete _listeners;
-        _listeners = NULL;
-    }
+    SAFE_DELETE(_listeners);
 }
 
 const Matrix& Transform::getMatrix() const
@@ -171,7 +167,7 @@ Vector3 Transform::getForwardVector() const
 
 void Transform::getForwardVector(Vector3* dst) const
 {
-    getMatrix().getForward(dst);
+    getMatrix().getForwardVector(dst);
 }
 
 Vector3 Transform::getBackVector() const
@@ -183,8 +179,7 @@ Vector3 Transform::getBackVector() const
 
 void Transform::getBackVector(Vector3* dst) const
 {
-    getMatrix().getForward(dst);
-    dst->negate();
+    getMatrix().getBackVector(dst);
 }
 
 Vector3 Transform::getUpVector() const
@@ -196,7 +191,7 @@ Vector3 Transform::getUpVector() const
 
 void Transform::getUpVector(Vector3* dst) const
 {
-    getMatrix().getUp(dst);
+    getMatrix().getUpVector(dst);
 }
 
 Vector3 Transform::getDownVector() const
@@ -208,8 +203,7 @@ Vector3 Transform::getDownVector() const
 
 void Transform::getDownVector(Vector3* dst) const
 {
-    getMatrix().getUp(dst);
-    dst->negate();
+    getMatrix().getDownVector(dst);
 }
 
 Vector3 Transform::getLeftVector() const
@@ -221,7 +215,7 @@ Vector3 Transform::getLeftVector() const
 
 void Transform::getLeftVector(Vector3* dst) const
 {
-    getMatrix().getLeft(dst);
+    getMatrix().getLeftVector(dst);
 }
 
 Vector3 Transform::getRightVector() const
@@ -233,8 +227,7 @@ Vector3 Transform::getRightVector() const
 
 void Transform::getRightVector(Vector3* dst) const
 {
-    getMatrix().getLeft(dst);
-    dst->negate();
+    getMatrix().getRightVector(dst);
 }
 
 void Transform::rotate(const Quaternion& rotation)
@@ -340,6 +333,13 @@ void Transform::set(const Vector3& scale, const Matrix& rotation, const Vector3&
     _rotation.set(rotationQuat);
     _translation.set(translation);
     dirty();
+}
+
+void Transform::set(const Vector3& scale, const Vector3& axis, float angle, const Vector3& translation)
+{
+    _scale.set(scale);
+    _rotation.set(axis, angle);
+    _translation.set(translation);
 }
 
 void Transform::set(const Transform& transform)
@@ -476,7 +476,7 @@ void Transform::translateLeft(float amount)
     getMatrix();
 
     Vector3 left;
-    _matrix.getLeft(&left);
+    _matrix.getLeftVector(&left);
     left.normalize();
     left.scale(amount);
 
@@ -489,7 +489,7 @@ void Transform::translateUp(float amount)
     getMatrix();
 
     Vector3 up;
-    _matrix.getUp(&up);
+    _matrix.getUpVector(&up);
     up.normalize();
     up.scale(amount);
 
@@ -502,7 +502,7 @@ void Transform::translateForward(float amount)
     getMatrix();
 
     Vector3 forward;
-    _matrix.getForward(&forward);
+    _matrix.getForwardVector(&forward);
     forward.normalize();
     forward.scale(amount);
 
@@ -525,18 +525,18 @@ void Transform::transformPoint(const Vector3& point, Vector3* dst)
     _matrix.transformPoint(point, dst);
 }
 
-void Transform::transformNormal(Vector3* normal)
+void Transform::transformVector(Vector3* normal)
 {
     assert(normal);
 
     getMatrix();
-    _matrix.transformNormal(normal);
+    _matrix.transformVector(normal);
 }
 
-void Transform::transformNormal(const Vector3& normal, Vector3* dst)
+void Transform::transformVector(const Vector3& normal, Vector3* dst)
 {
     getMatrix();
-    _matrix.transformNormal(normal, dst);
+    _matrix.transformVector(normal, dst);
 }
 
 void Transform::transformVector(float x, float y, float z, float w, Vector3* dst)
@@ -549,28 +549,28 @@ unsigned int Transform::getAnimationPropertyComponentCount(int propertyId) const
 {
     switch (propertyId)
     {
-        case TRANSFORM_ANIMATE_SCALE_X:
-        case TRANSFORM_ANIMATE_SCALE_Y:
-        case TRANSFORM_ANIMATE_SCALE_Z:
-        case TRANSFORM_ANIMATE_TRANSLATE_X:
-        case TRANSFORM_ANIMATE_TRANSLATE_Y:
-        case TRANSFORM_ANIMATE_TRANSLATE_Z:
+        case ANIMATE_SCALE_X:
+        case ANIMATE_SCALE_Y:
+        case ANIMATE_SCALE_Z:
+        case ANIMATE_TRANSLATE_X:
+        case ANIMATE_TRANSLATE_Y:
+        case ANIMATE_TRANSLATE_Z:
             return 1;
-        case TRANSFORM_ANIMATE_SCALE_XY:
-        case TRANSFORM_ANIMATE_SCALE_XZ:
-        case TRANSFORM_ANIMATE_SCALE_YZ:
-        case TRANSFORM_ANIMATE_TRANSLATE_XY:
-        case TRANSFORM_ANIMATE_TRANSLATE_XZ:
-        case TRANSFORM_ANIMATE_TRANSLATE_YZ:
+        case ANIMATE_SCALE_XY:
+        case ANIMATE_SCALE_XZ:
+        case ANIMATE_SCALE_YZ:
+        case ANIMATE_TRANSLATE_XY:
+        case ANIMATE_TRANSLATE_XZ:
+        case ANIMATE_TRANSLATE_YZ:
             return 2;
-        case TRANSFORM_ANIMATE_SCALE:
-        case TRANSFORM_ANIMATE_TRANSLATE:
+        case ANIMATE_SCALE:
+        case ANIMATE_TRANSLATE:
             return 3;
-        case TRANSFORM_ANIMATE_ROTATE:
+        case ANIMATE_ROTATE:
             return 4;
-        case TRANSFORM_ANIMATE_ROTATE_TRANSLATE:
+        case ANIMATE_ROTATE_TRANSLATE:
             return 7;
-        case TRANSFORM_ANIMATE_SCALE_ROTATE_TRANSLATE:
+        case ANIMATE_SCALE_ROTATE_TRANSLATE:
             return 10;
         default:
             return -1;
@@ -581,65 +581,65 @@ void Transform::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 {
     switch (propertyId)
     {
-        case TRANSFORM_ANIMATE_SCALE:
+        case ANIMATE_SCALE:
             value->setFloat(0, _scale.x);
             value->setFloat(1, _scale.y);
             value->setFloat(2, _scale.z);
             break;
-        case TRANSFORM_ANIMATE_SCALE_X:
+        case ANIMATE_SCALE_X:
             value->setFloat(0, _scale.x);
             break;
-        case TRANSFORM_ANIMATE_SCALE_Y:
+        case ANIMATE_SCALE_Y:
             value->setFloat(0, _scale.y);
             break;
-        case TRANSFORM_ANIMATE_SCALE_Z:
+        case ANIMATE_SCALE_Z:
             value->setFloat(0, _scale.z);
             break;
-        case TRANSFORM_ANIMATE_SCALE_XY:
+        case ANIMATE_SCALE_XY:
             value->setFloat(0, _scale.x);
             value->setFloat(1, _scale.y);
             break;
-        case TRANSFORM_ANIMATE_SCALE_XZ:
+        case ANIMATE_SCALE_XZ:
             value->setFloat(0, _scale.x);
             value->setFloat(1, _scale.z);
             break;
-        case TRANSFORM_ANIMATE_SCALE_YZ:
+        case ANIMATE_SCALE_YZ:
             value->setFloat(0, _scale.y);
             value->setFloat(1, _scale.z);
             break;
-        case TRANSFORM_ANIMATE_ROTATE:
+        case ANIMATE_ROTATE:
             value->setFloat(0, _rotation.x);
             value->setFloat(1, _rotation.y);
             value->setFloat(2, _rotation.z);
             value->setFloat(3, _rotation.w);
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE:
+        case ANIMATE_TRANSLATE:
             value->setFloat(0, _translation.x);
             value->setFloat(1, _translation.y);
             value->setFloat(2, _translation.z);
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE_X:
+        case ANIMATE_TRANSLATE_X:
             value->setFloat(0, _translation.x);
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE_Y:
+        case ANIMATE_TRANSLATE_Y:
             value->setFloat(0, _translation.y);
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE_Z:
+        case ANIMATE_TRANSLATE_Z:
             value->setFloat(0, _translation.z);
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE_XY:
+        case ANIMATE_TRANSLATE_XY:
             value->setFloat(0, _translation.x);
             value->setFloat(1, _translation.y);
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE_XZ:
+        case ANIMATE_TRANSLATE_XZ:
             value->setFloat(0, _translation.x);
             value->setFloat(1, _translation.z);
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE_YZ:
+        case ANIMATE_TRANSLATE_YZ:
             value->setFloat(0, _translation.y);
             value->setFloat(1, _translation.z);
             break;
-        case TRANSFORM_ANIMATE_ROTATE_TRANSLATE:
+        case ANIMATE_ROTATE_TRANSLATE:
             value->setFloat(0, _rotation.x);
             value->setFloat(1, _rotation.y);
             value->setFloat(2, _rotation.z);
@@ -648,7 +648,7 @@ void Transform::getAnimationPropertyValue(int propertyId, AnimationValue* value)
             value->setFloat(5, _translation.y);
             value->setFloat(6, _translation.z);
             break;
-        case TRANSFORM_ANIMATE_SCALE_ROTATE_TRANSLATE:
+        case ANIMATE_SCALE_ROTATE_TRANSLATE:
             value->setFloat(0, _scale.x);
             value->setFloat(1, _scale.y);
             value->setFloat(2, _scale.z);
@@ -669,62 +669,62 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value)
 {
     switch (propertyId)
     {
-        case TRANSFORM_ANIMATE_SCALE:
+        case ANIMATE_SCALE:
             setScale(value->getFloat(0), value->getFloat(1), value->getFloat(2));
             break;
-        case TRANSFORM_ANIMATE_SCALE_X:
+        case ANIMATE_SCALE_X:
             setScaleX(value->getFloat(0));
             break;
-        case TRANSFORM_ANIMATE_SCALE_Y:
+        case ANIMATE_SCALE_Y:
             setScaleY(value->getFloat(0));
             break;
-        case TRANSFORM_ANIMATE_SCALE_Z:
+        case ANIMATE_SCALE_Z:
             setScaleZ(value->getFloat(0));
             break;
-        case TRANSFORM_ANIMATE_SCALE_XY:
+        case ANIMATE_SCALE_XY:
             setScaleX(value->getFloat(0));
             setScaleY(value->getFloat(1));
             break;
-        case TRANSFORM_ANIMATE_SCALE_XZ:
+        case ANIMATE_SCALE_XZ:
             setScaleX(value->getFloat(0));
             setScaleZ(value->getFloat(1));
             break;
-        case TRANSFORM_ANIMATE_SCALE_YZ:
+        case ANIMATE_SCALE_YZ:
             setScaleY(value->getFloat(0));
             setScaleZ(value->getFloat(1));
             break;
-        case TRANSFORM_ANIMATE_ROTATE:
+        case ANIMATE_ROTATE:
             setRotation(value->getFloat(0), value->getFloat(1), value->getFloat(2), value->getFloat(3));
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE:
+        case ANIMATE_TRANSLATE:
             setTranslation(value->getFloat(0), value->getFloat(1), value->getFloat(2));
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE_X:
+        case ANIMATE_TRANSLATE_X:
             setTranslationX(value->getFloat(0));
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE_Y:
+        case ANIMATE_TRANSLATE_Y:
             setTranslationY(value->getFloat(0));
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE_Z:
+        case ANIMATE_TRANSLATE_Z:
             setTranslationZ(value->getFloat(0));
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE_XY:
+        case ANIMATE_TRANSLATE_XY:
             setTranslationX(value->getFloat(0));
             setTranslationY(value->getFloat(1));
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE_XZ:
+        case ANIMATE_TRANSLATE_XZ:
             setTranslationX(value->getFloat(0));
             setTranslationZ(value->getFloat(1));
             break;
-        case TRANSFORM_ANIMATE_TRANSLATE_YZ:
+        case ANIMATE_TRANSLATE_YZ:
             setTranslationY(value->getFloat(0));
             setTranslationZ(value->getFloat(1));
             break;
-        case TRANSFORM_ANIMATE_ROTATE_TRANSLATE:
+        case ANIMATE_ROTATE_TRANSLATE:
             setRotation(value->getFloat(0), value->getFloat(1), value->getFloat(2), value->getFloat(3));
             setTranslation(value->getFloat(4), value->getFloat(5), value->getFloat(6));
             break;
-        case TRANSFORM_ANIMATE_SCALE_ROTATE_TRANSLATE:
+        case ANIMATE_SCALE_ROTATE_TRANSLATE:
             setScale(value->getFloat(0), value->getFloat(1), value->getFloat(2));
             setRotation(value->getFloat(3), value->getFloat(4), value->getFloat(5), value->getFloat(6));
             setTranslation(value->getFloat(7), value->getFloat(8), value->getFloat(9));

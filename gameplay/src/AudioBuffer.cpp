@@ -44,10 +44,6 @@ AudioBuffer* AudioBuffer::create(const char* path)
     }
 
     ALuint alBuffer;
-    ALenum format;
-    ALsizei size;
-    ALvoid* data = NULL;
-    ALsizei freq;
     ALboolean loop = AL_TRUE;
     ALCenum al_error;
 
@@ -65,24 +61,11 @@ AudioBuffer* AudioBuffer::create(const char* path)
     fullPath += "/";
     fullPath += path;
     
-    // Load wav file.
-    alutLoadWAVFile((ALbyte*)fullPath.c_str(), &format, &data, &size, &freq, &loop);
-    if (data == NULL)
+    // Load sound file.
+    alBuffer = alutCreateBufferFromFile(fullPath.c_str());
+    if (alBuffer == AL_NONE)
     {
         LOG_ERROR_VARG("AudioBuffer error (%d) loading file: %s", fullPath.c_str());
-    }
-
-    // Buffer the data.
-    alBufferData(alBuffer, format, data, size, freq);
-
-    // Unload the wav data.
-    alutUnloadWAV(format, data, size, freq);
-
-    al_error = alGetError();
-    if (al_error != AL_NO_ERROR)
-    {
-        LOG_ERROR_VARG("AudioBuffer error (%d) buffering data: %s", al_error, fullPath.c_str());
-        alDeleteBuffers(1, &alBuffer);
         return NULL;
     }
 

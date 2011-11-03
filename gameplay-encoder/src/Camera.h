@@ -19,10 +19,6 @@ public:
      * Destructor.
      */
     virtual ~Camera(void);
-    void setFieldOfView(float value);
-    void setAspectRatio(float value);
-    void setNearPlane(float value);
-    void setFarPlane(float value);
 
     virtual unsigned int getTypeId(void) const;
     virtual const char* getElementName(void) const;
@@ -31,8 +27,12 @@ public:
 
     void setPerspective();
     void setOrthographic();
+    void setAspectRatio(float value);
+    void setNearPlane(float value);
+    void setFarPlane(float value);
     void setViewportWidth(float width);
     void setViewportHeight(float height);
+    void setFieldOfView(float value);
 
     float getViewPortWidth();
     float getViewPortHeight();
@@ -44,14 +44,13 @@ public:
     };
 
 private:
-    unsigned char cameraType;
-    float viewport[4];
-    float fieldOfView;
-    float aspectRatio;
-    float nearPlane;
-    float farPlane;
-    float viewportWidth;
-    float viewportHeight;
+    unsigned char _cameraType;
+    float _fieldOfView;
+    float _aspectRatio;
+    float _nearPlane;
+    float _farPlane;
+    float _viewportWidth;
+    float _viewportHeight;
 };
 
 }

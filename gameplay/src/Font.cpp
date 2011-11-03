@@ -10,7 +10,7 @@
 
 // Default font vertex shader
 #define FONT_VSH \
-    "uniform mat4 sb_ortho_projection;" \
+    "uniform mat4 sb_projection_matrix;" \
     "attribute vec3 a_position;" \
     "attribute vec2 a_texcoord;" \
     "attribute vec4 a_color;" \
@@ -18,7 +18,7 @@
     "varying vec4 vcolor;" \
     "void main()" \
     "{" \
-        "gl_Position = sb_ortho_projection * vec4(a_position, 1);" \
+        "gl_Position = sb_projection_matrix * vec4(a_position, 1);" \
         "vtexcoord = a_texcoord;" \
         "vcolor = a_color;" \
     "}"
@@ -43,15 +43,13 @@ static std::vector<Font*> __fontCache;
 static Effect* __fontEffect = NULL;
 
 Font::Font() :
-    _style(PLAIN), _size(0), _glyphs(NULL), _glyphCount(0), _texture(NULL), _batch(NULL), _material(NULL)
+    _style(PLAIN), _size(0), _glyphs(NULL), _glyphCount(0), _texture(NULL), _batch(NULL)
 {
 }
 
 Font::Font(const Font& copy)
 {
-    SAFE_DELETE_ARRAY(_glyphs);
-    SAFE_RELEASE(_texture);
-    SAFE_RELEASE(_material);
+    // hidden
 }
 
 Font::~Font()
@@ -63,11 +61,9 @@ Font::~Font()
         __fontCache.erase(itr);
     }
 
-    if (_batch)
-    {
-        delete _batch;
-        _batch = NULL;
-    }
+    SAFE_DELETE(_batch);
+    SAFE_DELETE_ARRAY(_glyphs);
+    SAFE_RELEASE(_texture);
 }
 
 Font* Font::create(const char* path, const char* id)
@@ -124,8 +120,7 @@ Font* Font::create(const char* path, const char* id)
 
 Font* Font::create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture)
 {
-    // Create the material for the font's sprite batch.
-    Material* material;
+    // Create the effect for the font's sprite batch.
     if (__fontEffect == NULL)
     {
         __fontEffect = Effect::createFromSource(FONT_VSH, FONT_FSH);
@@ -135,23 +130,21 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
             SAFE_RELEASE(texture);
             return NULL;
         }
-
-        material = Material::createMaterial(__fontEffect);
-
-        // Release font effect since the material now has a handle to it.
-        SAFE_RELEASE(__fontEffect);
     }
     else
     {
-        material = Material::createMaterial(__fontEffect);
+        __fontEffect->addRef();
     }
 
     // Create batch for the font.
-    SpriteBatch* batch = SpriteBatch::create(texture, material, 128);
+    SpriteBatch* batch = SpriteBatch::create(texture, __fontEffect, 128);
+
+    // Release __fontEffect since the SpriteBatch keeps a reference to it
+    SAFE_RELEASE(__fontEffect);
+
     if (batch == NULL)
     {
         LOG_ERROR("Failed to create batch for font.");
-        SAFE_RELEASE(material);
         return NULL;
     }
 
@@ -164,7 +157,6 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
     font->_size = size;
     font->_texture = texture;
     font->_batch = batch;
-    font->_material = material;
 
     // Copy the glyphs array.
     font->_glyphs = new Glyph[glyphCount];
@@ -179,7 +171,7 @@ void Font::begin()
     _batch->begin();
 }
 
-void Font::drawText(const char* text, int x, int y, const Color& color)
+void Font::drawText(const char* text, int x, int y, const Vector4& color)
 {
     const int length = strlen(text);
     int xPos = x, yPos = y;

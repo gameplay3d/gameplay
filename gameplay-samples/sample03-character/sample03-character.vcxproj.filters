@@ -10,14 +10,17 @@
     <Filter Include="res\fonts">
       <UniqueIdentifier>{6C29C526-BC3E-42f4-9AEC-B614361A5D2B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="res\meshes">
+    <Filter Include="res\models">
       <UniqueIdentifier>{1B4C3739-77AD-4a58-B2B5-A52CD141AA28}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\shaders">
-      <UniqueIdentifier>{08996726-309D-445f-BA3A-C3259D5884D0}</UniqueIdentifier>
     </Filter>
     <Filter Include="res\textures">
       <UniqueIdentifier>{BDEA3639-6F1D-4531-86FD-2E734FBC0242}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\animations">
+      <UniqueIdentifier>{2175ac63-940c-4e99-9e80-858365d1ab08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\materials">
+      <UniqueIdentifier>{6ea995b8-8f4f-4efa-8259-4f906b59ad73}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -25,30 +28,30 @@
     <None Include="res\fonts\arial16.gpb">
       <Filter>res\fonts</Filter>
     </None>
-    <None Include="res\textures\cobblestone-diffuse.png">
-      <Filter>res\textures</Filter>
-    </None>
-    <None Include="res\textures\cobblestone-normal.png">
-      <Filter>res\textures</Filter>
-    </None>
     <None Include="res\textures\seymour-diffuse.png">
       <Filter>res\textures</Filter>
-    </None>
-    <None Include="res\shaders\skinning.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\skinning.vsh">
-      <Filter>res\shaders</Filter>
     </None>
     <None Include="res\fonts\arial.ttf">
       <Filter>res\fonts</Filter>
     </None>
     <None Include="bar-descriptor.xml" />
-    <None Include="res\meshes\Seymour.dae">
-      <Filter>res\meshes</Filter>
+    <None Include="res\models\Seymour.dae">
+      <Filter>res\models</Filter>
     </None>
-    <None Include="res\meshes\Seymour.gpb">
-      <Filter>res\meshes</Filter>
+    <None Include="res\models\Seymour.gpb">
+      <Filter>res\models</Filter>
+    </None>
+    <None Include="res\materials\plane.material">
+      <Filter>res\materials</Filter>
+    </None>
+    <None Include="res\materials\character.material">
+      <Filter>res\materials</Filter>
+    </None>
+    <None Include="res\animations\seymour.animation">
+      <Filter>res\animations</Filter>
+    </None>
+    <None Include="res\textures\floor.png">
+      <Filter>res\textures</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

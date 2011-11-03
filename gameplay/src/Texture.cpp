@@ -11,7 +11,7 @@ namespace gameplay
 
 static std::vector<Texture*> __textureCache;
 
-Texture::Texture() : _handle(0), _cached(false)
+Texture::Texture() : _handle(0), _mipmapped(false), _cached(false)
 {
 }
 
@@ -46,8 +46,16 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
         Texture* t = __textureCache[i];
         if (t->_path == path)
         {
+            // If 'generateMipmaps' is true, call Texture::generateMipamps() to force the 
+            // texture to generate its mipmap chain if it hasn't already done so.
+            if (generateMipmaps)
+            {
+                t->generateMipmaps();
+            }
+
             // Found a match.
             t->addRef();
+
             return t;
         }
     }
@@ -80,7 +88,7 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
         return texture;
     }
 
-    LOG_ERROR_VARG("Unrecognized file extension for texture: %s", path);
+    LOG_ERROR_VARG("Failed to load texture: %s", path);
     return NULL;
 }
 
@@ -136,10 +144,12 @@ Texture* Texture::loadPNG(const char* path, bool generateMipmaps)
     // Read the entire image into memory.
     png_read_png(png, info, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND, NULL);
 
-    unsigned int width = info->width;
-    unsigned int height = info->height;
+    unsigned int width = png_get_image_width(png, info);
+    unsigned int height = png_get_image_height(png, info);
+    png_byte colorType = png_get_color_type(png, info);
     Format format;
-    switch (info->color_type)
+
+    switch (colorType)
     {
     case PNG_COLOR_TYPE_RGBA:
         format = RGBA8888;
@@ -150,7 +160,7 @@ Texture* Texture::loadPNG(const char* path, bool generateMipmaps)
         break;
 
     default:
-        LOG_ERROR_VARG("Unsupported PNG color type (%d) for texture: %s", (int)info->color_type, path);
+        LOG_ERROR_VARG("Unsupported PNG color type (%d) for texture: %s", (int)colorType, path);
         fclose(fp);
         png_destroy_read_struct(&png, &info, NULL);
         return NULL;
@@ -176,7 +186,7 @@ Texture* Texture::loadPNG(const char* path, bool generateMipmaps)
     Texture* texture = create(format, width, height, data, generateMipmaps);
 
     // Free temporary data.
-    delete[] data;
+    SAFE_DELETE_ARRAY(data);
 
     return texture;
 }
@@ -189,21 +199,18 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
     GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
 
-    if (generateMipmaps)
-    {
-        GL_ASSERT( glGenerateMipmap(GL_TEXTURE_2D) );
-    }
-
-    // TODO: Move texture parameters into material sampler definition
+    // Set initial minification filter based on whether or not mipmaping was enabled
     GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, generateMipmaps ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT) );
 
     Texture* texture = new Texture();
     texture->_handle = textureId;
     texture->_width = width;
     texture->_height = height;
+
+    if (generateMipmaps)
+    {
+        texture->generateMipmaps();
+    }
 
     return texture;
 }
@@ -223,14 +230,94 @@ TextureHandle Texture::getHandle() const
     return _handle;
 }
 
-void Texture::setWrapMode(bool repeatS, bool repeatT)
+void Texture::setWrapMode(Wrap wrapS, Wrap wrapT)
 {
     GLint currentTextureId;
     GL_ASSERT( glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTextureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _handle) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, repeatS ? GL_REPEAT : GL_CLAMP_TO_EDGE) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, repeatT ? GL_REPEAT : GL_CLAMP_TO_EDGE) );
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLenum)wrapS) );
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLenum)wrapT) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, (GLuint)currentTextureId) );
+}
+
+void Texture::setFilterMode(Filter minificationFilter, Filter magnificationFilter)
+{
+    GLint currentTextureId;
+    GL_ASSERT( glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTextureId) );
+    GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _handle) );
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLenum)minificationFilter) );
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLenum)magnificationFilter) );
+    GL_ASSERT( glBindTexture(GL_TEXTURE_2D, (GLuint)currentTextureId) );
+}
+
+void Texture::generateMipmaps()
+{
+    if (!_mipmapped)
+    {
+        GLint currentTextureId;
+        GL_ASSERT( glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTextureId) );
+        GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _handle) );
+        GL_ASSERT( glGenerateMipmap(GL_TEXTURE_2D) );
+        GL_ASSERT( glBindTexture(GL_TEXTURE_2D, (GLuint)currentTextureId) );
+
+        _mipmapped = true;
+    }
+}
+
+bool Texture::isMipmapped() const
+{
+    return _mipmapped;
+}
+
+Texture::Sampler::Sampler(Texture* texture)
+    : _texture(texture), _wrapS(Texture::REPEAT), _wrapT(Texture::REPEAT), _magFilter(Texture::LINEAR)
+{
+    _minFilter = texture->isMipmapped() ? Texture::NEAREST_MIPMAP_LINEAR : Texture::LINEAR;
+}
+
+Texture::Sampler::~Sampler()
+{
+    SAFE_RELEASE(_texture);
+}
+
+Texture::Sampler* Texture::Sampler::create(Texture* texture)
+{
+    assert(texture != NULL);
+
+    texture->addRef();
+    return new Sampler(texture);
+}
+
+Texture::Sampler* Texture::Sampler::create(const char* path, bool generateMipmaps)
+{
+    Texture* texture = Texture::create(path, generateMipmaps);
+    return texture ? new Sampler(texture) : NULL;
+}
+
+void Texture::Sampler::setWrapMode(Wrap wrapS, Wrap wrapT)
+{
+    _wrapS = wrapS;
+    _wrapT = wrapT;
+}
+
+void Texture::Sampler::setFilterMode(Filter minificationFilter, Filter magnificationFilter)
+{
+    _minFilter = minificationFilter;
+    _magFilter = magnificationFilter;
+}
+
+Texture* Texture::Sampler::getTexture() const
+{
+    return _texture;
+}
+
+void Texture::Sampler::bind()
+{
+    GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _texture->_handle) );
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLenum)_wrapS) );
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLenum)_wrapT) );
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLenum)_minFilter) );
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLenum)_magFilter) );
 }
 
 }

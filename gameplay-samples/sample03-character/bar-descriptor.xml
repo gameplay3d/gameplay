@@ -50,36 +50,45 @@
     <!--  The category where the application appears. Either core.games or core.media. -->
     <category>core.games</category>
     <asset path="icon.png">icon.png</asset>
-    <asset path="res">res</asset>
-    <asset path="${QNX_TARGET}\..\target-override\armle-v7\usr\lib\libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
-    <asset path="${QNX_TARGET}\..\target-override\armle-v7\usr\lib\libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
+    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
+    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
+    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
+    <asset path="res/materials">res/materials</asset>
+    <asset path="res/animations">res/animations</asset>
+    <asset path="res/fonts">res/fonts</asset>
+    <asset path="res/models/Seymour.gpb">res/models/Seymour.gpb</asset>
+    <asset path="res/textures">res/textures</asset>
+    <asset path="${workspace_loc:/gameplay-resources/res/shaders/colored-specular.fsh}">res/shaders/colored-specular.fsh</asset>
+    <asset path="${workspace_loc:/gameplay-resources/res/shaders/colored-specular.vsh}">res/shaders/colored-specular.vsh</asset>
+    <asset path="${workspace_loc:/gameplay-resources/res/shaders/diffuse-specular.fsh}">res/shaders/diffuse-specular.fsh</asset>
+    <asset path="${workspace_loc:/gameplay-resources/res/shaders/diffuse-specular.vsh}">res/shaders/diffuse-specular.vsh</asset>
     <configuration id="com.qnx.qcc.configuration.exe.debug.417937691" name="Device-Debug">
+       <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Debug/sample03-character" entry="true" type="Qnx/Elf">sample03-character</asset>
-       <asset path="${QNX_TARGET}\..\target-override\armle-v7\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.release.174417925" name="Device-Release">
+       <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Release/sample03-character" entry="true" type="Qnx/Elf">sample03-character</asset>
-       <asset path="${QNX_TARGET}\..\target-override\armle-v7\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.profile.264906370" name="Device-Profile">
+       <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Profile/sample03-character" entry="true" type="Qnx/Elf">sample03-character</asset>
-       <asset path="${QNX_TARGET}\..\target-override\armle-v7\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.894282514" name="Device-Coverage">
+       <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Coverage/sample03-character" entry="true" type="Qnx/Elf">sample03-character</asset>
-       <asset path="${QNX_TARGET}\..\target-override\armle-v7\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.debug.639567768" name="Simulator">
+       <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator/sample03-character" entry="true" type="Qnx/Elf">sample03-character</asset>
-       <asset path="${QNX_TARGET}\..\target-override\x86\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.profile.63301548" name="Simulator-Profile">
+       <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator-Profile/sample03-character" entry="true" type="Qnx/Elf">sample03-character</asset>
-       <asset path="${QNX_TARGET}\..\target-override\x86\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.1150431402" name="Simulator-Coverage">
+       <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator-Coverage/sample03-character" entry="true" type="Qnx/Elf">sample03-character</asset>
-       <asset path="${QNX_TARGET}\..\target-override\x86\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     
     <!--  The icon for the application, which should be 86x86. -->
@@ -103,5 +112,8 @@
     <!--  <action>post_notification</action> -->
     <!--  <action>set_audio_volume</action> -->
     <!--  <action>read_device_identifying_information</action> -->
+    
+    <!-- Ensure that shared libraries in the package are found at run-time. -->
+    <env var="LD_LIBRARY_PATH" value="app/native/lib"/>
 
 </qnx>

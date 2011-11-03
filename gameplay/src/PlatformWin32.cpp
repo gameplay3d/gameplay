@@ -16,10 +16,10 @@ static long __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static float __roll;
 static float __pitch;
-static HWND __hwnd;
-static HINSTANCE __hinstance;
-static HDC __hdc;
-static HGLRC __hrc;
+static HWND __hwnd = 0;
+static HINSTANCE __hinstance = 0;
+static HDC __hdc = 0;
+static HGLRC __hrc = 0;
 
 // Gets the gameplay::Input::Key enumeration constant that corresponds
 // to the given key and shift modifier combination.
@@ -356,15 +356,18 @@ extern void printError(const char* format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
-    int sz = vfprintf(stderr, format, argptr);
     fprintf(stderr, "\n");
-    char* buf = new char[sz + 2];
-    vsprintf(buf, format, argptr);
-    buf[sz] = '\n';
-    buf[sz+1] = 0;
-    OutputDebugStringA(buf);
+    int sz = vfprintf(stderr, format, argptr);
+    if (sz > 0)
+    {
+        char* buf = new char[sz + 2];
+        vsprintf(buf, format, argptr);
+        buf[sz] = '\n';
+        buf[sz+1] = 0;
+        OutputDebugStringA(buf);
+        SAFE_DELETE_ARRAY(buf);
+    }
     va_end(argptr);
-    delete[] buf;
 }
 
 Platform::Platform(Game* game)
@@ -380,7 +383,10 @@ Platform::Platform(const Platform& copy)
 Platform::~Platform()
 {
     if (__hwnd)
-        delete __hwnd;
+    {
+        DestroyWindow(__hwnd);
+        __hwnd = 0;
+    }
 }
 
 // TODO: Fix Fullscreen + More error handling.

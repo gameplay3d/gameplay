@@ -93,7 +93,7 @@ float Ray::intersects(const Frustum& frustum) const
         (lOD < 0.0f && lD < 0.0f)  || (rOD < 0.0f && rD < 0.0f) ||
         (bOD < 0.0f && bD < 0.0f)  || (tOD < 0.0f && tD < 0.0f) )
     {
-        return RAY_INTERSECTS_NONE;
+        return Ray::INTERSECTS_NONE;
     }
 
     // Otherwise, the intersection distance is the minimum positive intersection distance.
@@ -129,7 +129,7 @@ void Ray::set(const Ray& ray)
 void Ray::transform(const Matrix& matrix)
 {
     matrix.transformPoint(&_origin);
-    matrix.transformNormal(&_direction);
+    matrix.transformVector(&_direction);
     _direction.normalize();
 }
 

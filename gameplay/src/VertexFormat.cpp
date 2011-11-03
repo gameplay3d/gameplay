@@ -24,11 +24,7 @@ VertexFormat::~VertexFormat()
         __vertexFormatCache.erase(itr);
     }
 
-    if (_elements)
-    {
-        delete[] _elements;
-        _elements = NULL;
-    }
+    SAFE_DELETE_ARRAY(_elements);
 }
 
 VertexFormat* VertexFormat::create(const Element* elements, unsigned int elementCount)
@@ -76,7 +72,7 @@ VertexFormat* VertexFormat::create(const Element* elements, unsigned int element
         assert(elements[i].size >= 1 && elements[i].size <= 4);
         if (elements[i].size < 1 || elements[i].size > 4)
         {
-            delete format;
+            SAFE_DELETE(format);
             return NULL;
         }
 
@@ -103,7 +99,7 @@ VertexFormat* VertexFormat::create(const Element* elements, unsigned int element
             break;
         default:
             assert(0); // invalid usage
-            delete format;
+            SAFE_DELETE(format);
             return NULL;
         }
 
@@ -121,18 +117,18 @@ VertexFormat* VertexFormat::create(const Element* elements, unsigned int element
     assert(hasPosition);
     if (!hasPosition)
     {
-        delete format;
+        SAFE_DELETE(format);
         return NULL;
     }
 
     return format;
 }
 
-const VertexFormat::Element& VertexFormat::getElement(unsigned int i) const
+const VertexFormat::Element& VertexFormat::getElement(unsigned int index) const
 {
-    assert(i < _elementCount);
+    assert(index < _elementCount);
 
-    return _elements[i];
+    return _elements[index];
 }
 
 unsigned int VertexFormat::getElementCount() const

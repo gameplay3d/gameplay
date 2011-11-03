@@ -10,7 +10,7 @@ namespace gameplay
 {
 
 Curve::Curve(unsigned int pointCount, unsigned int componentCount)
-    : _pointCount(pointCount), _componentCount(componentCount), _rotationOffset(-1)
+    : _pointCount(pointCount), _componentCount(componentCount), _componentSize(0), _quaternionOffsets(NULL), _quaternionOffsetsCount(0), _points(NULL)
 {
     assert(pointCount > 1 && componentCount > 0);
 
@@ -21,8 +21,8 @@ Curve::Curve(unsigned int pointCount, unsigned int componentCount)
     {
         _points[i].time = 0.0f;
         _points[i].value = new float[_componentCount];
-        _points[i].tangentIn = new float[_componentCount];
-        _points[i].tangentOut = new float[_componentCount];
+        _points[i].inValue = new float[_componentCount];
+        _points[i].outValue = new float[_componentCount];
         _points[i].type = LINEAR;
     }
     _points[_pointCount - 1].time = 1.0f;
@@ -34,15 +34,15 @@ Curve::~Curve()
 }
 
 Curve::Point::Point()
-    : time(0.0f), value(NULL), tangentIn(NULL), tangentOut(NULL)
+    : time(0.0f), value(NULL), inValue(NULL), outValue(NULL)
 {
 }
 
 Curve::Point::~Point()
 {
     SAFE_DELETE_ARRAY(value);
-    SAFE_DELETE_ARRAY(tangentIn);
-    SAFE_DELETE_ARRAY(tangentOut);
+    SAFE_DELETE_ARRAY(inValue);
+    SAFE_DELETE_ARRAY(outValue);
 }
 
 unsigned int Curve::getPointCount() const
@@ -60,7 +60,7 @@ void Curve::setPoint(unsigned int index, float time, float* value, Interpolation
     setPoint(index, time, value, type, NULL, NULL);
 }
 
-void Curve::setPoint(unsigned int index, float time, float* value, InterpolationType type, float* tangentIn, float* tangentOut)
+void Curve::setPoint(unsigned int index, float time, float* value, InterpolationType type, float* inValue, float* outValue)
 {
     assert(index < _pointCount && time >= 0.0f && time <= 1.0f && !(index == 0 && time != 0.0f) && !(index == _pointCount - 1 && time != 1.0f));
 
@@ -70,27 +70,27 @@ void Curve::setPoint(unsigned int index, float time, float* value, Interpolation
     if (value)
         memcpy(_points[index].value, value, _componentSize);
 
-    if (tangentIn)
-        memcpy(_points[index].tangentIn, tangentIn, _componentSize);
+    if (inValue)
+        memcpy(_points[index].inValue, inValue, _componentSize);
 
-    if (tangentOut)
-        memcpy(_points[index].tangentOut, tangentOut, _componentSize);
+    if (outValue)
+        memcpy(_points[index].outValue, outValue, _componentSize);
 }
 
-void Curve::setTangent(unsigned int index, InterpolationType type, float* tangentIn, float* tangentOut)
+void Curve::setTangent(unsigned int index, InterpolationType type, float* inValue, float* outValue)
 {
     assert(index < _pointCount);
 
     _points[index].type = type;
 
-    if (tangentIn)
-        memcpy(_points[index].tangentIn, tangentIn, _componentSize);
+    if (inValue)
+        memcpy(_points[index].inValue, inValue, _componentSize);
 
-    if (tangentOut)
-        memcpy(_points[index].tangentOut, tangentOut, _componentSize);
+    if (outValue)
+        memcpy(_points[index].outValue, outValue, _componentSize);
 }
 
-void Curve::evaluate(float time, float* dst)
+void Curve::evaluate(float time, float* dst) const
 {
     assert(dst && time >= 0 && time <= 1.0f);
 
@@ -106,17 +106,9 @@ void Curve::evaluate(float time, float* dst)
         return;
     }
 
-    // Locate the points we are interpolating between.
-    unsigned int index = 0;
-    for (unsigned int i = 0; i < _pointCount - 1; i++)
-    {
-        if (_points[i].time <= time && time <= _points[i + 1].time)
-        {
-            index = i;
-            break;
-        }
-    }
-
+    // Locate the points we are interpolating between using a binary search.
+    unsigned int index = determineIndex(time);
+    
     Point* from = _points + index;
     Point* to = _points + (index + 1);
 
@@ -138,20 +130,20 @@ void Curve::evaluate(float time, float* dst)
             Point* c1;
             if (index == 0)
             {
-                c0 = to;
+                c0 = from;
             }
             else
             {
-                c0 = _points + index - 1;
+                c0 = (_points + index - 1);
             }
             
             if (index == _pointCount - 2)
             {
-                c1 = from;
+                c1 = to;
             }
             else
             {
-                c1 = _points + index + 2;
+                c1 = (_points + index + 2);
             }
             interpolateBSpline(t, c0, from, to, c1, dst);
             break;
@@ -168,19 +160,7 @@ void Curve::evaluate(float time, float* dst)
         }
         case LINEAR:
         {
-            for (unsigned int i = 0; i < _componentCount; i++)
-            {
-                if ((int) i == _rotationOffset)
-                {
-                    interpolateQuaternion(t, from, to, dst + i);
-                    // Increment counter by 3 because we've handled all the rotation components at once.
-                    i += 3;
-                }
-                else
-                {
-                    dst[i] = from->value[i] + (to->value[i] - from->value[i]) * t; 
-                }
-            }
+            interpolateLinear(t, from, to, dst);
             break;
         }
         case SMOOTH:
@@ -196,7 +176,33 @@ void Curve::evaluate(float time, float* dst)
     }
 }
 
-void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst)
+void Curve::addQuaternionOffset(unsigned int offset)
+{
+    if (!_quaternionOffsets)
+    {
+        _quaternionOffsetsCount = 1;
+        _quaternionOffsets = new unsigned int[_quaternionOffsetsCount];
+        _quaternionOffsets[0] = offset;
+    }
+    else
+    {
+        assert((offset >= _componentCount - 4) && (offset > (_quaternionOffsets[_quaternionOffsetsCount - 1] + 3)));
+
+        unsigned int oldSize = _quaternionOffsetsCount;
+        _quaternionOffsetsCount++;
+        
+        unsigned int* newArray = new unsigned int[_quaternionOffsetsCount];
+        memcpy(newArray, _quaternionOffsets, sizeof(unsigned int) * oldSize);
+        
+        // set new offset.
+        newArray[oldSize] = offset;
+
+        delete[] _quaternionOffsets;    // delete old array
+        _quaternionOffsets = newArray;  // point to new array.
+    }
+}
+
+void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst) const
 {
     float s_2 = s * s;
     float eq0 = 1 - s;
@@ -206,24 +212,56 @@ void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst)
     float eq3 = 3 * s_2 * eq0;
     float eq4 = s_2 * s;
 
-    // Evaluate the curve.
-    for (unsigned int i = 0; i < _componentCount; i++)
+    if (!_quaternionOffsets)
     {
-        if ((int) i == _rotationOffset)
+        for (unsigned int i = 0; i < _componentCount; i++)
         {
-            float interpTime = from->tangentOut[i] * eq2 + to->tangentIn[i] * eq3 + 1.0f * eq4;
-            interpolateQuaternion(interpTime, from, to, dst + i);
-            // Increment counter by 3 because we've handled all the rotation components at once.
-            i += 3;
+            dst[i] = from->value[i] * eq1 + from->outValue[i] * eq2 + to->inValue[i] * eq3 + to->value[i] * eq4;
         }
-        else
+    }
+    else
+    {
+        // Interpolate values as scalars up to first quaternion offset.
+        unsigned int quaternionOffsetIndex = 0;
+        unsigned int quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+        unsigned int i = 0;
+        for (i = 0; i < quaternionOffset; i++)
         {
-            dst[i] = from->value[i] * eq1 + from->tangentOut[i] * eq2 + to->tangentIn[i] * eq3 + to->value[i] * eq4;
+            dst[i] = from->value[i] * eq1 + from->outValue[i] * eq2 + to->inValue[i] * eq3 + to->value[i] * eq4;
+        }
+
+        // Handle quaternion component.
+        float interpTime = from->outValue[quaternionOffset] * eq2 + to->inValue[quaternionOffset] * eq3 + 1.0f * eq4;
+        interpolateQuaternion(interpTime, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+        quaternionOffsetIndex++;
+
+        // Handles additional quaternion components.
+        while (quaternionOffsetIndex < _quaternionOffsetsCount)
+        {
+            quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+            // Loop through values until you hit the next quaternion offset.
+            while (i < quaternionOffset)
+            {
+                // Interpolate as scalar.
+                dst[i] = from->value[i] * eq1 + from->outValue[i] * eq2 + to->inValue[i] * eq3 + to->value[i] * eq4;
+                i++;
+            }
+            // We've hit a quaternion component, so handle it. increase the component counter by 4, and increase quaternionOffsetIndex
+            float interpTime = from->outValue[quaternionOffset] * eq2 + to->inValue[quaternionOffset] * eq3 + 1.0f * eq4;
+            interpolateQuaternion(interpTime, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+            i += 4;
+            quaternionOffsetIndex++;
+        }
+
+        // Handle remaining scalar values.
+        for (i = quaternionOffset + 4; i < _componentCount; i++)
+        {
+            dst[i] = from->value[i] * eq1 + from->outValue[i] * eq2 + to->inValue[i] * eq3 + to->value[i] * eq4;
         }
     }
 }
 
-void Curve::interpolateBSpline(float s, Point* c0, Point* c1, Point* c2, Point* c3, float* dst)
+void Curve::interpolateBSpline(float s, Point* c0, Point* c1, Point* c2, Point* c3, float* dst) const
 {   
     float s_2 = s * s;
     float s_3 = s_2 * s;
@@ -232,25 +270,61 @@ void Curve::interpolateBSpline(float s, Point* c0, Point* c1, Point* c2, Point* 
     float eq2 = (-3 * s_3 + 3 * s_2 + 3 * s + 1) / 6.0f;
     float eq3 = s_3 / 6.0f;
 
-    // Handles the rotation component of a transform.
-    for (unsigned int i = 0; i < _componentCount; i++)
+    if (!_quaternionOffsets)
     {
-        if ((int) i == _rotationOffset)
+        for (unsigned int i = 0; i < _componentCount; i++)
         {
-            Quaternion result;
-            float interpTime = c0->time * eq0 + c1->time * eq1 + c2->time * eq2 + c3->time * eq3;
-            interpolateQuaternion(interpTime, c1, c2, dst + i);
-            // Increment counter by 3 because we've handled all the rotation components at once.
-            i += 3;
+            dst[i] = c0->value[i] * eq0 + c1->value[i] * eq1 + c2->value[i] * eq2 + c3->value[i] * eq3;
         }
+    }
+    else
+    {
+        // Interpolate values as scalars up to first quaternion offset.
+        unsigned int quaternionOffsetIndex = 0;
+        unsigned int quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+        unsigned int i = 0;
+        for (i = 0; i < quaternionOffset; i++)
+        {
+            dst[i] = c0->value[i] * eq0 + c1->value[i] * eq1 + c2->value[i] * eq2 + c3->value[i] * eq3;
+        }
+
+        // Handle quaternion component.
+        float interpTime;
+        if (c0->time == c1->time)
+            interpTime = -c0->time * eq0 + c1->time * eq1 + c2->time * eq2 + c3->time * eq3;
+        else if (c2->time == c3->time)
+            interpTime = c0->time * eq0 + c1->time * eq1 + c2->time * eq2  - c3->time * eq3;
         else
+            interpTime = c0->time * eq0 + c1->time * eq1 + c2->time * eq2 + c3->time * eq3;
+        interpolateQuaternion(s, (c1->value + quaternionOffset) , (c2->value + quaternionOffset), (dst + quaternionOffset));
+        quaternionOffsetIndex++;
+
+        // Handles additional quaternion components.
+        while (quaternionOffsetIndex < _quaternionOffsetsCount)
+        {
+            quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+            // Loop through values until you hit the next quaternion offset.
+            while (i < quaternionOffset)
+            {
+                // Interpolate as scalar.
+                dst[i] = dst[i] = c0->value[i] * eq0 + c1->value[i] * eq1 + c2->value[i] * eq2 + c3->value[i] * eq3;
+                i++;
+            }
+            // We've hit a quaternion component, so handle it. increase the component counter by 4, and increase quaternionOffsetIndex
+            interpolateQuaternion(s, (c1->value + quaternionOffset) , (c2->value + quaternionOffset), (dst + quaternionOffset));
+            i += 4;
+            quaternionOffsetIndex++;
+        }
+
+        // Handle remaining scalar values.
+        for (i = quaternionOffset + 4; i < _componentCount; i++)
         {
             dst[i] = c0->value[i] * eq0 + c1->value[i] * eq1 + c2->value[i] * eq2 + c3->value[i] * eq3;
         }
     }
 }
 
-void Curve::interpolateHermite(float s, Point* from, Point* to, float* dst)
+void Curve::interpolateHermite(float s, Point* from, Point* to, float* dst) const
 {
     // Calculate the hermite basis functions.
     float s_2 = s * s;                   // t^2
@@ -260,24 +334,56 @@ void Curve::interpolateHermite(float s, Point* from, Point* to, float* dst)
     float h10 = s_3 - 2 * s_2 + s;       // basis function 2
     float h11 = s_3 - s_2;               // basis function 3
 
-    // Handles the rotation component of a transform.
-    for (unsigned int i = 0; i < _componentCount; i++)
+    if (!_quaternionOffsets)
     {
-        if ((int) i == _rotationOffset)
+        for (unsigned int i = 0; i < _componentCount; i++)
         {
-            float interpTime = h01 * 1.0f + h10 * from->tangentOut[i] + h11 * to->tangentIn[i];
-            interpolateQuaternion(interpTime, from, to, dst + i);
-            // Increment counter by 3 because we've handled all the rotation components at once.
-            i += 3;
+            dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * from->outValue[i] + h11 * to->inValue[i];
         }
-        else
+    }
+    else
+    {
+        // Interpolate values as scalars up to first quaternion offset.
+        unsigned int quaternionOffsetIndex = 0;
+        unsigned int quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+        unsigned int i = 0;
+        for (i = 0; i < quaternionOffset; i++)
         {
-            dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * from->tangentOut[i] + h11 * to->tangentIn[i];
+            dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * from->outValue[i] + h11 * to->inValue[i];
+        }
+
+        // Handle quaternion component.
+        float interpTime = h01 * 1.0f + h10 * from->outValue[quaternionOffset] + h11 * to->inValue[quaternionOffset];
+        interpolateQuaternion(interpTime, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+        quaternionOffsetIndex++;
+
+        // Handles additional quaternion components.
+        while (quaternionOffsetIndex < _quaternionOffsetsCount)
+        {
+            quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+            // Loop through values until you hit the next quaternion offset.
+            while (i < quaternionOffset)
+            {
+                // Interpolate as scalar.
+                dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * from->outValue[i] + h11 * to->inValue[i];
+                i++;
+            }
+            // We've hit a quaternion component, so handle it. increase the component counter by 4, and increase quaternionOffsetIndex
+            float interpTime = h01 * 1.0f + h10 * from->outValue[quaternionOffset] + h11 * to->inValue[quaternionOffset];
+            interpolateQuaternion(interpTime, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+            i += 4;
+            quaternionOffsetIndex++;
+        }
+
+        // Handle remaining scalar values.
+        for (i = quaternionOffset + 4; i < _componentCount; i++)
+        {
+            dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * from->outValue[i] + h11 * to->inValue[i];
         }
     }
 }
 
-void Curve::interpolateHermiteFlat(float s, Point* from, Point* to, float* dst)
+void Curve::interpolateHermiteFlat(float s, Point* from, Point* to, float* dst) const
 {
     // Calculate the hermite basis functions.
     float s_2 = s * s;                   // t^2
@@ -285,24 +391,55 @@ void Curve::interpolateHermiteFlat(float s, Point* from, Point* to, float* dst)
     float h00 = 2 * s_3 - 3 * s_2 + 1;   // basis function 0
     float h01 = -2 * s_3 + 3 * s_2;      // basis function 1
 
-    // Handles the rotation component of a transform.
-    for (unsigned int i = 0; i < _componentCount; i++)
+    if (!_quaternionOffsets)
     {
-        if ((int) i == _rotationOffset)
+        for (unsigned int i = 0; i < _componentCount; i++)
         {
-            float interpTime = h01 * 1.0f; // Can drop all other terms because they will compute to 0.
-            interpolateQuaternion(interpTime, from, to, dst + i);
-            // Increment counter by 3 because we've handled all the rotation components at once.
-            i += 3;
+            dst[i] = h00 * from->value[i] + h01 * to->value[i];
         }
-        else
+    }
+    else
+    {
+        // Interpolate values as scalars up to first quaternion offset.
+        unsigned int quaternionOffsetIndex = 0;
+        unsigned int quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+        unsigned int i = 0;
+        for (i = 0; i < quaternionOffset; i++)
+        {
+            dst[i] = h00 * from->value[i] + h01 * to->value[i];
+        }
+
+        // Handle quaternion component.
+        float interpTime = h01 * 1.0f; // Can drop all other terms because they will compute to 0.
+        interpolateQuaternion(interpTime, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+        quaternionOffsetIndex++;
+
+        // Handles additional quaternion components.
+        while (quaternionOffsetIndex < _quaternionOffsetsCount)
+        {
+            quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+            // Loop through values until you hit the next quaternion offset.
+            while (i < quaternionOffset)
+            {
+                // Interpolate as scalar.
+                dst[i] = dst[i] = h00 * from->value[i] + h01 * to->value[i];
+                i++;
+            }
+            // We've hit a quaternion component, so handle it. increase the component counter by 4, and increase quaternionOffsetIndex
+            interpolateQuaternion(interpTime, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+            i += 4;
+            quaternionOffsetIndex++;
+        }
+
+        // Handle remaining scalar values.
+        for (i = quaternionOffset + 4; i < _componentCount; i++)
         {
             dst[i] = h00 * from->value[i] + h01 * to->value[i];
         }
     }
 }
 
-void Curve::interpolateHermiteSmooth(float s, unsigned int index, Point* from, Point* to, float* dst)
+void Curve::interpolateHermiteSmooth(float s, unsigned int index, Point* from, Point* to, float* dst) const
 {
     // Calculate the hermite basis functions.
     float s_2 = s * s;                   // t^2
@@ -312,66 +449,184 @@ void Curve::interpolateHermiteSmooth(float s, unsigned int index, Point* from, P
     float h10 = s_3 - 2 * s_2 + s;       // basis function 2
     float h11 = s_3 - s_2;               // basis function 3
 
-    float tangentIn;
-    float tangentOut;
+    float inValue;
+    float outValue;
 
-    for (unsigned int i = 0; i < _componentCount; i++)
+    if (!_quaternionOffsets)
     {
-        if ((int) i == _rotationOffset)
-        {   
-            if (index == 0)
-            {
-                tangentOut = to->time - from->time;
-            }
-            else
-            {
-                tangentOut = (to->time - (from - 1)->time) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
-            }
-
-            if (index == _pointCount - 2)
-            {
-                tangentIn = to->time - from->time;
-            }
-            else
-            {
-                tangentIn = ((to + 1)->time - from->time) * ((to->time - from->time) / ((to + 1)->time - from->time));
-            }
-
-            float interpTime = h01 * 1.0f + h10 * tangentOut + h11 * tangentIn;
-            interpolateQuaternion(interpTime, from, to, dst + i);
-
-            // Increment counter by 3 because we've handled all the rotation components at once.
-            i += 3;
-        }
-        else
+        for (unsigned int i = 0; i < _componentCount; i++)
         {
             if (index == 0)
             {
-                tangentOut = to->value[i] - from->value[i];
+                outValue = to->value[i] - from->value[i];
             }
             else
             {
-                tangentOut = (to->value[i] - (from - 1)->value[i]) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
+                outValue = (to->value[i] - (from - 1)->value[i]) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
             }
 
             if (index == _pointCount - 2)
             {
-                tangentIn = to->value[i] - from->value[i];
+                inValue = to->value[i] - from->value[i];
             }
             else
             {
-                tangentIn = ((to + 1)->value[i] - from->value[i]) * ((to->time - from->time) / ((to + 1)->time - from->time));
+                inValue = ((to + 1)->value[i] - from->value[i]) * ((to->time - from->time) / ((to + 1)->time - from->time));
             }
 
-            dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * tangentOut + h11 * tangentIn;
+            dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * outValue + h11 * inValue;
+        }
+    }
+    else
+    {
+        // Interpolate values as scalars up to first quaternion offset.
+        unsigned int quaternionOffsetIndex = 0;
+        unsigned int quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+        unsigned int i = 0;
+        for (i = 0; i < quaternionOffset; i++)
+        {
+            dst[i] = h00 * from->value[i] + h01 * to->value[i];
+        }
+
+        // Handle quaternion component.
+        if (index == 0)
+        {
+            outValue = to->time - from->time;
+        }
+        else
+        {
+            outValue = (to->time - (from - 1)->time) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
+        }
+
+        if (index == _pointCount - 2)
+        {
+            inValue = to->time - from->time;
+        }
+        else
+        {
+            inValue = ((to + 1)->time - from->time) * ((to->time - from->time) / ((to + 1)->time - from->time));
+        }
+
+        float interpTime = h01 * 1.0f + h10 * outValue + h11 * inValue;
+        interpolateQuaternion(interpTime, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+        quaternionOffsetIndex++;
+
+        // Handles additional quaternion components.
+        while (quaternionOffsetIndex < _quaternionOffsetsCount)
+        {
+            quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+            // Loop through values until you hit the next quaternion offset.
+            while (i < quaternionOffset)
+            {
+                // Interpolate as scalar.
+                if (index == 0)
+                {
+                    outValue = to->value[i] - from->value[i];
+                }
+                else
+                {
+                    outValue = (to->value[i] - (from - 1)->value[i]) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
+                }
+
+                if (index == _pointCount - 2)
+                {
+                    inValue = to->value[i] - from->value[i];
+                }
+                else
+                {
+                    inValue = ((to + 1)->value[i] - from->value[i]) * ((to->time - from->time) / ((to + 1)->time - from->time));
+                }
+
+                dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * outValue + h11 * inValue;
+                i++;
+            }
+            
+            interpolateQuaternion(interpTime, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+            i += 4;
+            quaternionOffsetIndex++;
+        }
+
+        // Handle remaining scalar values.
+        for (i = quaternionOffset + 4; i < _componentCount; i++)
+        {
+            // Interpolate as scalar.
+            if (index == 0)
+            {
+                outValue = to->value[i] - from->value[i];
+            }
+            else
+            {
+                outValue = (to->value[i] - (from - 1)->value[i]) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
+            }
+
+            if (index == _pointCount - 2)
+            {
+                inValue = to->value[i] - from->value[i];
+            }
+            else
+            {
+                inValue = ((to + 1)->value[i] - from->value[i]) * ((to->time - from->time) / ((to + 1)->time - from->time));
+            }
+
+            dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * outValue + h11 * inValue;
         }
     }
 }
 
-void Curve::interpolateQuaternion(float s, Point* from, Point* to, float* dst)
+void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
 {
-    Quaternion quatFrom(from->value + _rotationOffset);
-    Quaternion quatTo(to->value + _rotationOffset);
+    if (!_quaternionOffsets)
+    {
+        for (unsigned int i = 0; i < _componentCount; i++)
+        {
+            dst[i] = from->value[i] + (to->value[i] - from->value[i]) * s; 
+        }
+    }
+    else
+    {
+        // Interpolate values as scalars up to first quaternion offset.
+        unsigned int quaternionOffsetIndex = 0;
+        unsigned int quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+        unsigned int i = 0;
+        for (i = 0; i < quaternionOffset; i++)
+        {
+            dst[i] = from->value[i] + (to->value[i] - from->value[i]) * s; 
+        }
+
+        // Handle quaternion component.
+        interpolateQuaternion(s, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+        
+        quaternionOffsetIndex++;
+
+        // Handles additional quaternion components.
+        while (quaternionOffsetIndex < _quaternionOffsetsCount)
+        {
+            quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+            // Loop through values until you hit the next quaternion offset.
+            while (i < quaternionOffset)
+            {
+                // Interpolate as scalar.
+                dst[i] = from->value[i] + (to->value[i] - from->value[i]) * s;
+                i++;
+            }
+            // We've hit a quaternion component, so handle it. increase the component counter by 4, and increase quaternionOffsetIndex
+            interpolateQuaternion(s, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+            i += 4;
+            quaternionOffsetIndex++;
+        }
+
+        // Handle remaining scalar values.
+        for (i = quaternionOffset + 4; i < _componentCount; i++)
+        {
+            dst[i] = from->value[i] + (to->value[i] - from->value[i]) * s;
+        }
+    }
+}
+
+void Curve::interpolateQuaternion(float s, float* from, float* to, float* dst) const
+{
+    Quaternion quatFrom(from);
+    Quaternion quatTo(to);
     Quaternion result;
 
     // Normalize the quaternions.
@@ -379,7 +634,7 @@ void Curve::interpolateQuaternion(float s, Point* from, Point* to, float* dst)
     quatTo.normalize();
         
     // Evaluate.
-    if (s > 0)
+    if (s >= 0)
         Quaternion::slerp(quatFrom, quatTo, s, &result);
     else
         Quaternion::slerp(quatTo, quatFrom, -s, &result);
@@ -389,6 +644,29 @@ void Curve::interpolateQuaternion(float s, Point* from, Point* to, float* dst)
     dst[1] = result.y;
     dst[2] = result.z;
     dst[3] = result.w;
+}
+
+int Curve::determineIndex(float time) const
+{
+    unsigned int min = 0;
+    unsigned int max = _pointCount - 1;
+    unsigned int mid = 0;
+
+    // Do a binary search to determine the index.
+    do 
+    {
+        mid = (min + max) >> 1;
+
+        if (time >= _points[mid].time && time <= _points[mid + 1].time)
+            return mid;
+        else if (time < _points[mid].time)
+            max = mid - 1;
+        else
+            min = mid + 1;
+    } while (min <= max);
+    
+    // We should never hit this!
+    return -1;
 }
 
 }

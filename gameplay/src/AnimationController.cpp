@@ -20,7 +20,7 @@ AnimationController::~AnimationController()
     destroyAllAnimations();
 }
 
-Animation* AnimationController::createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, Curve::InterpolationType type)
+Animation* AnimationController::createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, Curve::InterpolationType type)
 {
     assert(type != Curve::BEZIER && type != Curve::HERMITE);
     assert(id && keyCount >= 2 && keyTimes && keyValues);
@@ -38,15 +38,15 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     return animation;
 }
 
-Animation* AnimationController::createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, float* keyTangentIn, float* keyTangentOut, Curve::InterpolationType type)
+Animation* AnimationController::createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type)
 {
-    assert(id && keyCount >= 2 && keyTimes && keyValues && keyTangentIn && keyTangentOut);
+    assert(id && keyCount >= 2 && keyTimes && keyValues && keyInValue && keyOutValue);
     Animation* animation = getAnimation(id);
 
     if (animation != NULL)
         return NULL;
     
-    animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, keyTangentIn, keyTangentOut, (unsigned int) type);
+    animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, keyInValue, keyOutValue, type);
 
     addAnimation(animation);
 
@@ -64,9 +64,9 @@ Animation* AnimationController::createAnimationFromTo(const char* id, AnimationT
     memcpy(keyValues, from, sizeof(float) * propertyComponentCount);
     memcpy(keyValues + propertyComponentCount, to, sizeof(float) * propertyComponentCount);
 
-    float* keyTimes = new float[2];
-    keyTimes[0] = 0.0f;
-    keyTimes[1] = (float) duration;
+    unsigned long* keyTimes = new unsigned long[2];
+    keyTimes[0] = 0;
+    keyTimes[1] = duration;
 
     Animation* animation = createAnimation(id, target, propertyId, 2, keyTimes, keyValues, type);
 
@@ -83,9 +83,9 @@ Animation* AnimationController::createAnimationFromBy(const char* id, AnimationT
     memcpy(keyValues, from, sizeof(float) * propertyComponentCount);
     memcpy(keyValues + propertyComponentCount, by, sizeof(float) * propertyComponentCount);
 
-    float* keyTimes = new float[2];
-    keyTimes[0] = 0.0f;
-    keyTimes[1] = (float) duration;
+    unsigned long* keyTimes = new unsigned long[2];
+    keyTimes[0] = 0;
+    keyTimes[1] = duration;
 
     Animation* animation = createAnimation(id, target, propertyId, 2, keyTimes, keyValues, type);
 
@@ -100,7 +100,9 @@ Animation* AnimationController::getAnimation(const char* id) const
     for (unsigned int i = 0; i < animationCount; i++)
     {
         if (_animations.at(i)->_id.compare(id) == 0)
+        {
             return _animations.at(i);
+        }
     }
     return NULL;
 }
@@ -158,6 +160,7 @@ void AnimationController::schedule(AnimationClip* clip)
     if (clip->_isPlaying)
     {
         _runningClips.remove(clip);
+        clip->_isPlaying = false;
     }
     else
     {

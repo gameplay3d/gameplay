@@ -37,7 +37,7 @@ public:
     /**
      * Creates a directional light.
      * 
-     * @param color The light's color.
+     * @param color Color of the light.
      * 
      * @return The new directional light.
      */
@@ -47,27 +47,23 @@ public:
      * Creates a point light.
      * 
      * @param color The light's color.
-     * @param constantAttenuation The light's constant attenuation.
-     * @param linearAttenuation The light's linear attenuation.
-     * @param quadraticAttenuation The light's quadratic attenuation.
+     * @param range The light's range.
      * 
      * @return The new point light.
      */
-    static Light* createPoint(const Vector3& color, float constantAttenuation, float linearAttenuation, float quadraticAttenuation);
+    static Light* createPoint(const Vector3& color, float range);
 
     /**
      * Creates a spot light.
      * 
      * @param color The light's color.
-     * @param constantAttenuation The light's constant attenuation.
-     * @param linearAttenuation The light's linear attenuation.
-     * @param quadraticAttenuation The light's quadratic attenuation.
-     * @param falloffAngle The light's falloff angle.
-     * @param falloffExponent The light's falloff exponent.
+     * @param range The light's range.
+     * @param innerCosAngle The light's inner angle (in radians).
+     * @param outerCosAngle The light's outer angle (in radians).
      * 
      * @return The new spot light.
      */
-    static Light* createSpot(const Vector3& color, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, float falloffAngle, float falloffExponent);
+    static Light* createSpot(const Vector3& color, float range, float innerAngle, float outerAngle);
 
     /**
      * Destructor.
@@ -102,6 +98,63 @@ public:
      */
     Node* getNode() const;
 
+    /**
+     * Returns the Range of the point or spot light. 
+     *
+     * @return The range of the point or spot light.
+     */
+    float getRange() const;
+
+    /**
+     * Sets the range of point or spot light.
+     *
+     * @param range of point or spot light.
+     */
+    void setRange(float range);
+
+    /**
+     * Returns the inner angle the spot light (in radians).
+     *
+     * @return The inner angle of the spot light (in radians).
+     */
+    float getInnerAngle() const;
+
+    /**
+     * Sets the inner angle of a spot light (in radians).
+     *
+     * @param inner angle of spot light (in radians).
+     */
+    void setInnerAngle(float innerAngle);
+
+    /**
+     * Returns the outer angle of the spot light (in radians).
+     *
+     * @return The outer angle of the spot light (in radians).
+     */
+    float getOuterAngle() const;
+
+    /**
+     * Sets the outer angle of a spot light (in radians).
+     *
+     * @param outer angle of spot light (in radians).
+     */
+    void setOuterAngle(float outerAngle);
+
+    /**
+     * Returns the cosine of the inner angle of spot light.
+     *
+     * @return The cosine of the inner angle of spot light.
+     */
+    float getInnerAngleCos() const;
+
+    /**
+     * Returns the cosine of the outer angle of spot light.
+     *
+     * @return The cosine of the outer angle of spot light.
+     */
+    float getOuterAngleCos() const;
+
+
 private:
 
     /**
@@ -122,11 +175,9 @@ private:
     {
     public:
         Vector3 color;
-        float constantAttenuation;
-        float linearAttenuation;
-        float quadraticAttenuation;
+        float range;
 
-        Point(const Vector3& color, float constantAttenuation, float linearAttenuation, float quadraticAttenuation);
+        Point(const Vector3& color, float range);
     };
 
     /**
@@ -136,29 +187,29 @@ private:
     {
     public:
         Vector3 color;
-        float constantAttenuation;
-        float linearAttenuation;
-        float quadraticAttenuation;
-        float falloffAngle;
-        float falloffExponent;
+        float range;
+        float innerAngle;
+        float innerAngleCos;
+        float outerAngle;
+        float outerAngleCos;
 
-        Spot(const Vector3& color, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, float falloffAngle, float falloffExponent);
+        Spot(const Vector3& color, float range, float innerAngle, float outerAngle);
     };
 
     /**
-     * Constructor.
+     * Constructor for the directional light.
      */
     Light(Light::Type type, const Vector3& color);
 
     /**
-     * Constructor.
+     * Constructor for point light.
      */
-    Light(Light::Type type, const Vector3& color, float constantAttenuation, float linearAttenuation, float quadraticAttenuation);
+    Light(Light::Type type, const Vector3& color, float range);
 
     /**
-     * Constructor.
+     * Constructor for spot light.
      */
-    Light(Light::Type type, const Vector3& color, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, float falloffAngle, float falloffExponent);
+    Light(Light::Type type, const Vector3& color, float range, float innerAngle, float outerAngle);
 
     /**
      * Sets the node associated with this light.

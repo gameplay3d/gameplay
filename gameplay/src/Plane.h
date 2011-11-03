@@ -16,19 +16,6 @@ class Frustum;
 class Ray;
 
 /**
- * Represents when a 3D entity intersects a plane.
- */
-#define PLANE_INTERSECTS_INTERSECTING     0
-/**
- * Represents when a 3D entity is in front of (in the positive half-space of) a plane.
- */
-#define PLANE_INTERSECTS_FRONT             1
-/**
- * Represents when a 3D entity is behind (in the negative half-space of) a plane.
- */
-#define PLANE_INTERSECTS_BACK             -1
-
-/**
  * Defines a plane.
  *
  * The plane is represented as a plane using a 3D vector normal and a
@@ -37,6 +24,21 @@ class Ray;
 class Plane
 {
 public:
+
+    /**
+     * Represents when a 3D entity intersects a plane.
+     */
+    static const int INTERSECTS_INTERSECTING = 0;
+
+    /**
+     * Represents when a 3D entity is in front of (in the positive half-space of) a plane.
+     */
+    static const int INTERSECTS_FRONT = 1;
+
+    /**
+     * Represents when a 3D entity is behind (in the negative half-space of) a plane.
+     */
+    static const int INTERSECTS_BACK = -1;
 
     /**
      * Constructor.
@@ -115,9 +117,9 @@ public:
      *
      * @param sphere The bounding sphere to test intersection with.
      * 
-     * @return PLANE_INTERSECTS_BACK if the specified bounding object is in the negative half-space of
-     *  this plane, PLANE_INTERSECTS_FRONT if it is in the positive half-space of this plane,
-     *  and PLANE_INTERSECTS_INTERSECTING if it intersects this plane.
+     * @return Plane::INTERSECTS_BACK if the specified bounding object is in the negative half-space of
+     *  this plane, Plane::INTERSECTS_FRONT if it is in the positive half-space of this plane,
+     *  and Plane::INTERSECTS_INTERSECTING if it intersects this plane.
      */
     float intersects(const BoundingSphere& sphere) const;
 
@@ -126,9 +128,9 @@ public:
      *
      * @param box The bounding box to test intersection with.
      * 
-     * @return PLANE_INTERSECTS_BACK if the specified bounding object is in the negative half-space of
-     *  this plane, PLANE_INTERSECTS_FRONT if it is in the positive half-space of this plane,
-     *  and PLANE_INTERSECTS_INTERSECTING if it intersects this plane.
+     * @return Plane::INTERSECTS_BACK if the specified bounding object is in the negative half-space of
+     *  this plane, Plane::INTERSECTS_FRONT if it is in the positive half-space of this plane,
+     *  and Plane::INTERSECTS_INTERSECTING if it intersects this plane.
      */
     float intersects(const BoundingBox& box) const;
 
@@ -137,9 +139,9 @@ public:
      *
      * @param frustum The frustum to test intersection with.
      * 
-     * @return PLANE_INTERSECTS_BACK if the specified frustum is in the negative half-space of
-     *  this plane, PLANE_INTERSECTS_FRONT if it is in the positive half-space of this plane,
-     *  and PLANE_INTERSECTS_INTERSECTING if it intersects this plane.
+     * @return Plane::INTERSECTS_BACK if the specified frustum is in the negative half-space of
+     *  this plane, Plane::INTERSECTS_FRONT if it is in the positive half-space of this plane,
+     *  and Plane::INTERSECTS_INTERSECTING if it intersects this plane.
      */
     float intersects(const Frustum& frustum) const;
 
@@ -148,9 +150,9 @@ public:
      *
      * @param plane The plane to test intersection with.
      * 
-     * @return PLANE_INTERSECTS_BACK if the specified plane is in the negative half-space of
-     *  this plane, PLANE_INTERSECTS_FRONT if it is in the positive half-space of this plane,
-     *  and PLANE_INTERSECTS_INTERSECTING if it intersects this plane.
+     * @return Plane::INTERSECTS_BACK if the specified plane is in the negative half-space of
+     *  this plane, Plane::INTERSECTS_FRONT if it is in the positive half-space of this plane,
+     *  and Plane::INTERSECTS_INTERSECTING if it intersects this plane.
      */
     float intersects(const Plane& plane) const;
 
@@ -159,9 +161,9 @@ public:
      *
      * @param ray The ray to test intersection with.
      * 
-     * @return PLANE_INTERSECTS_BACK if the specified ray is in the negative half-space of
-     *  this plane, PLANE_INTERSECTS_FRONT if it is in the positive half-space of this plane,
-     *  and PLANE_INTERSECTS_INTERSECTING if it intersects this plane.
+     * @return Plane::INTERSECTS_BACK if the specified ray is in the negative half-space of
+     *  this plane, Plane::INTERSECTS_FRONT if it is in the positive half-space of this plane,
+     *  and Plane::INTERSECTS_INTERSECTING if it intersects this plane.
      */
     float intersects(const Ray& ray) const;
 
@@ -203,10 +205,8 @@ private:
      */
     void normalize();
 
-    /** The normal vector of the Plane. */
-    Vector3 _normal;
-    /** The distance of the Plane along its normal from the origin. */
-    float _distance;
+    Vector3 _normal;    // The normal vector of the Plane.
+    float _distance;    // The distance of the Plane along its normal from the origin.
 };
 
 }

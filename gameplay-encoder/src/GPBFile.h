@@ -17,6 +17,7 @@
 #include "Mesh.h"
 #include "Reference.h"
 #include "ReferenceTable.h"
+#include "Animations.h"
 #include "Animation.h"
 #include "AnimationChannel.h"
 
@@ -28,6 +29,9 @@ namespace gameplay
      */
     const unsigned char VERSION[2] = {1, 0};
 
+/**
+ * The GamePlay Binary file class handles writing the GamePlay Binary file.
+ */
 class GPBFile
 {
 public:
@@ -48,8 +52,9 @@ public:
      * @param filepath The file name and path to save to.
      */
     void saveBinary(const std::string& filepath);
+
     /**
-     * Saves the GPBFile as a text file at filepath.
+     * Saves the GPBFile as a text file at filepath. Useful for debugging.
      *
      * @param filepath The file name and path to save to.
      */
@@ -67,6 +72,7 @@ public:
      * Adds the given object to the ref table.
      */
     void addToRefTable(Object* obj);
+
     /**
      * Returns the object with the given id. Returns NULL if not found.
      */
@@ -87,23 +93,18 @@ public:
      */
     void adjust();
 
-    /**
-     * Returns the animation that the given joint's animation channel's should be added to.
-     * 
-     * @param id The ID of the joint.
-     * @return The animation belonging to the skin that the joint is part of.
-     */
-    Animation* findAnimationForJoint(const char* id);
-
 private:
 
-    FILE* file;
-    std::list<Object*> objects;
-    std::list<Camera*> cameras;
-    std::list<Light*> lights;
-    std::list<Mesh*> geometry;
-    std::list<Node*> nodes; 
-    ReferenceTable refTable;
+    FILE* _file;
+    std::list<Object*> _objects;
+    std::list<Camera*> _cameras;
+    std::list<Light*> _lights;
+    std::list<Mesh*> _geometry;
+    std::list<Node*> _nodes;
+    Animations _animations;
+    bool _animationsAdded;
+
+    ReferenceTable _refTable;
 };
 
 }

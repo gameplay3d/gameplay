@@ -16,29 +16,82 @@ class SpaceshipGame : public Game
 {
 public:
 
+    /**
+     * Constructor.
+     */
     SpaceshipGame();
 
+    /**
+     * Destructor.
+     */
     virtual ~SpaceshipGame();
 
+    /**
+     * @see Game::touch
+     */
+    void touch(int x, int y, int touchEvent);
+
+protected:
+
+    /**
+     * @see Game::initialize
+     */
     void initialize();
 
+    /**
+     * @see Game::finalize
+     */
     void finalize();
     
+    /**
+     * @see Game::update
+     */
     void update(long elapsedTime);
 
+    /**
+     * @see Game::render
+     */
     void render(long elapsedTime);
-
-    void touch(int x, int y, int touchEvent);
 
 private:
 
-    void visitNode(Node* node, long cookie);
-    void initSpaceship();
-    void initEnvironment();
-    void setLightMaterialParams(Material* material);
+    /**
+     * Initializes the spaceship.
+     */
+    void initializeSpaceship();
+
+    /**
+     * Initializes the environment including ground, roof and background.
+     */
+    void initializeEnvironment();
+
+    /**
+     * Initializes the material with common parameter bindings.
+     *
+     * @param lighting true if the material should receive lighting parameters.
+     * @param specular true if the material should receive specular lighting parameters.
+     */
+    void initializeMaterial(Material* material, bool lighting, bool specular);
+
+    /**
+     * Handles foe collisions with the ground and roof.
+     */
     void handleCollisions(float t);
+
+    /**
+     * Updates the camera based on the ships position.
+     */
     void updateCamera();
+
+    /**
+     * Resets the games
+     */
     void resetGame();
+
+    /**
+     * Visits nodes in a scene.
+     */
+    void visitNode(Node* node, long cookie);
 
     // Scene variables
     Scene* _scene;
@@ -47,6 +100,7 @@ private:
     Node* _shipNode;
     Node* _propulsionNode;
     Node* _glowNode;
+    RenderState::StateBlock* _stateBlock;
     Vector3 _initialShipPos;
     Quaternion _initialShipRot;
     Vector3 _initialCameraPos;

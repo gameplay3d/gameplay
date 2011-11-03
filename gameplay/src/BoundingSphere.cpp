@@ -95,12 +95,12 @@ bool BoundingSphere::intersects(const BoundingBox& box) const
 bool BoundingSphere::intersects(const Frustum& frustum) const
 {
     // The sphere must either intersect or be in the positive half-space of all six planes of the frustum.
-    return (intersects(frustum.getNear()) != PLANE_INTERSECTS_BACK &&
-            intersects(frustum.getFar()) != PLANE_INTERSECTS_BACK &&
-            intersects(frustum.getLeft()) != PLANE_INTERSECTS_BACK &&
-            intersects(frustum.getRight()) != PLANE_INTERSECTS_BACK &&
-            intersects(frustum.getBottom()) != PLANE_INTERSECTS_BACK &&
-            intersects(frustum.getTop()) != PLANE_INTERSECTS_BACK );
+    return (intersects(frustum.getNear()) != Plane::INTERSECTS_BACK &&
+            intersects(frustum.getFar()) != Plane::INTERSECTS_BACK &&
+            intersects(frustum.getLeft()) != Plane::INTERSECTS_BACK &&
+            intersects(frustum.getRight()) != Plane::INTERSECTS_BACK &&
+            intersects(frustum.getBottom()) != Plane::INTERSECTS_BACK &&
+            intersects(frustum.getTop()) != Plane::INTERSECTS_BACK );
 }
 
 float BoundingSphere::intersects(const Plane& plane) const
@@ -109,15 +109,15 @@ float BoundingSphere::intersects(const Plane& plane) const
 
     if (fabsf(distance) <= radius)
     {
-        return PLANE_INTERSECTS_INTERSECTING;
+        return Plane::INTERSECTS_INTERSECTING;
     }
     else if (distance > 0.0f)
     {
-        return PLANE_INTERSECTS_FRONT;
+        return Plane::INTERSECTS_FRONT;
     }
     else
     {
-        return PLANE_INTERSECTS_BACK;
+        return Plane::INTERSECTS_BACK;
     }
 }
 
@@ -142,7 +142,7 @@ float BoundingSphere::intersects(const Ray& ray) const
     // If the discriminant is negative, then there is no intersection.
     if (discriminant < 0.0f)
     {
-        return RAY_INTERSECTS_NONE;
+        return Ray::INTERSECTS_NONE;
     }
     else
     {
