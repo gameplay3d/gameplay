@@ -51,35 +51,36 @@
     <category>core.games</category>
     <asset path="icon.png">icon.png</asset>
     <asset path="res">res</asset>
-    <asset path="${QNX_TARGET}\..\target-override\armle-v7\usr\lib\libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
-    <asset path="${QNX_TARGET}\..\target-override\armle-v7\usr\lib\libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
+    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
+    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
+    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     <configuration id="com.qnx.qcc.configuration.exe.debug.347687220" name="Device-Debug">
+       <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Debug/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
-       <asset path="${QNX_TARGET}\..\target-override\armle-v7\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.release.360010498" name="Device-Release">
+       <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Release/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
-       <asset path="${QNX_TARGET}\..\target-override\armle-v7\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.profile.926664736" name="Device-Profile">
+       <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Profile/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
-       <asset path="${QNX_TARGET}\..\target-override\armle-v7\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.2008520055" name="Device-Coverage">
+       <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Coverage/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
-       <asset path="${QNX_TARGET}\..\target-override\armle-v7\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.debug.1109114603" name="Simulator">
+       <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
-       <asset path="${QNX_TARGET}\..\target-override\x86\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.profile.961390645" name="Simulator-Profile">
+       <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator-Profile/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
-       <asset path="${QNX_TARGET}\..\target-override\x86\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.1903530051" name="Simulator-Coverage">
+       <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator-Coverage/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
-       <asset path="${QNX_TARGET}\..\target-override\x86\usr\lib\libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     </configuration>
     
     <!--  The icon for the application, which should be 86x86. -->
@@ -103,5 +104,8 @@
     <!--  <action>post_notification</action> -->
     <!--  <action>set_audio_volume</action> -->
     <!--  <action>read_device_identifying_information</action> -->
+    
+    <!-- Ensure that shared libraries in the package are found at run-time. -->
+    <env var="LD_LIBRARY_PATH" value="app/native/lib"/>
 
 </qnx>

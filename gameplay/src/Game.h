@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "AudioController.h"
 #include "AnimationController.h"
+#include "Vector4.h"
 
 namespace gameplay
 {
@@ -17,12 +18,11 @@ namespace gameplay
  */
 class Game
 {
+
 public:
 
     /**
      * The game states.
-     *
-     * @see Game::getState
      */
     enum State
     {
@@ -30,6 +30,23 @@ public:
         RUNNING,
         PAUSED
     };
+
+    /**
+     * Flags used when clearing the active frame buffer targets.
+     */
+
+     enum ClearFlags
+    {
+        CLEAR_COLOR = GL_COLOR_BUFFER_BIT,
+        CLEAR_DEPTH = GL_DEPTH_BUFFER_BIT,
+        CLEAR_STENCIL = GL_STENCIL_BUFFER_BIT,
+        CLEAR_COLOR_DEPTH = CLEAR_COLOR | CLEAR_DEPTH,
+        CLEAR_COLOR_STENCIL = CLEAR_COLOR | CLEAR_STENCIL,
+        CLEAR_DEPTH_STENCIL = CLEAR_DEPTH | CLEAR_STENCIL,
+        CLEAR_COLOR_DEPTH_STENCIL = CLEAR_COLOR | CLEAR_DEPTH | CLEAR_STENCIL
+    };
+
+
 
     /**
      * Destructor.
@@ -134,6 +151,16 @@ public:
      * @return The game window height.
      */
     unsigned int getHeight() const;
+
+    /**
+     * Clears the specified resource buffers to the specified clear values. 
+     *
+     * @param flags The flags indicating which buffers to be cleared.
+     * @param clearColor The color value to clear to when the flags includes the color buffer.
+     * @param clearDepth The depth value to clear to when the flags includes the color buffer.
+     * @param clearStencil The stencil value to clear to when the flags includes the color buffer.
+     */
+    void clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil);
 
     /**
      * Gets the audio controller for managing control of audio
@@ -249,6 +276,9 @@ private:
     unsigned int _frameRate;                    // The current frame rate.
     unsigned int _width;                        // The game's display width.
     unsigned int _height;                       // The game's display height.
+    Vector4 _clearColor;                        // The clear color value last used for clearing the color buffer.
+    float _clearDepth;                          // The clear depth value last used for clearing the depth buffer.
+    int _clearStencil;                          // The clear stencil value last used for clearing the stencil buffer.
     AnimationController _animationController;   // Controls the scheduling and running of animations.
     AudioController _audioController;           // Controls audio sources that are playing in the game.
 };

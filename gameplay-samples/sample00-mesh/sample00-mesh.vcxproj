@@ -115,8 +115,9 @@
     <None Include="icon.png" />
     <None Include="res\fonts\arial.ttf" />
     <None Include="res\fonts\arial16.gpb" />
-    <None Include="res\meshes\duck.dae" />
-    <None Include="res\meshes\duck.gpb" />
+    <None Include="res\materials\duck.material" />
+    <None Include="res\models\duck.dae" />
+    <None Include="res\models\duck.gpb" />
     <None Include="res\textures\duck-diffuse.png" />
   </ItemGroup>
   <ItemGroup>

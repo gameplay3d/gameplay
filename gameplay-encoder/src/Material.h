@@ -27,8 +27,9 @@ public:
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
 
-    std::list<MaterialParameter> parameters;
-    Effect* effect;
+private:
+    std::list<MaterialParameter> _parameters;
+    Effect* _effect;
 };
 
 

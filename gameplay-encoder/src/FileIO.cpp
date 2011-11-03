@@ -31,6 +31,12 @@ void write(unsigned int value, FILE* file)
     assert(r == 1);
 }
 
+void write(unsigned long value, FILE* file)
+{
+    size_t r = fwrite(&value, sizeof(unsigned long), 1, file);
+    assert(r == 1);
+}
+
 void write(unsigned short value, FILE* file)
 {
     size_t r = fwrite(&value, sizeof(unsigned short), 1, file);
@@ -105,11 +111,17 @@ void fprintfMatrix4f(FILE* file, const float* m)
     {
         float v = m[i];
         if (v == 1.0f)
+        {
             fprintf(file, "1.0 ");
+        }
         else if (v == 0.0)
+        {
             fprintf(file, "0.0 ");
+        }
         else
+        {
             fprintf(file, "%f ",v);
+        }
     }
 }
 void skipString(FILE* file)

@@ -21,17 +21,17 @@
 namespace gameplay
 {
 
-Animation::Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, unsigned int type)
+Animation::Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type)
     : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0)
 {
     createChannel(target, propertyId, keyCount, keyTimes, keyValues, type);
     createDefaultClip();
 }
 
-Animation::Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, float* keyTangentIn, float* keyTangentOut, unsigned int type)
+Animation::Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type)
     : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0)
 {
-    createChannel(target, propertyId, keyCount, keyTimes, keyValues, keyTangentIn, keyTangentOut, type);
+    createChannel(target, propertyId, keyCount, keyTimes, keyValues, keyInValue, keyOutValue, type);
     createDefaultClip();
 }
 
@@ -93,29 +93,23 @@ void Animation::createClips(const char* animationFile)
     Properties* pAnim = Properties::create(animationFile);
     assert(pAnim);
 
-    const vector<Properties*>* vAnim = pAnim->getProperties();
-    
-    Properties* animation = vAnim->front();
+    Properties* animation = pAnim->getNextNamespace();
     int frameCount = animation->getInt("frameCount");
 
-    const std::vector<Properties*>* clips = animation->getProperties();
-    vector<Properties*>::const_iterator itr;
-
-    for (itr = clips->begin(); itr < clips->end(); itr++)
+    const Properties* pClip = animation->getNextNamespace();
+    while (pClip != NULL)
     {
-        Properties* pClip = *itr;
-
         int begin = pClip->getInt("begin");
         int end = pClip->getInt("end");
 
-        AnimationClip* clip = createClip(pClip->getID(), ((float) begin / frameCount) * _duration, ((float) end / frameCount) * _duration);
+        AnimationClip* clip = createClip(pClip->getId(), ((float) begin / frameCount) * _duration, ((float) end / frameCount) * _duration);
 
         const char* repeat = pClip->getString("repeatCount");
         if (repeat)
         {
             if (((std::string)repeat).compare(ANIMATION_INDEFINITE_STR) == 0)
             {
-                clip->setRepeatCount(ANIMATION_REPEAT_COUNT_INDEFINITE);
+                clip->setRepeatCount(AnimationClip::REPEAT_INDEFINITE);
             }
             else
             {
@@ -124,6 +118,16 @@ void Animation::createClips(const char* animationFile)
                 clip->setRepeatCount(value);
             }
         }
+
+        const char* speed = pClip->getString("speed");
+        if (speed)
+        {
+            float value;
+            sscanf(speed, "%f", &value);
+            clip->setSpeed(value);
+        }
+
+        pClip = animation->getNextNamespace();
     }
 
     SAFE_DELETE(pAnim);
@@ -186,11 +190,13 @@ void Animation::stop(const char* id)
         // Find animation clip.. and play.
         AnimationClip* clip = findClip(id);
         if (clip != NULL)
+        {
             clip->stop();
+        }
     }
 }
 
-Animation::Channel* Animation::createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, unsigned int type)
+Animation::Channel* Animation::createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type)
 {
     unsigned int propertyComponentCount = target->getAnimationPropertyComponentCount(propertyId);
     assert(propertyComponentCount > 0);
@@ -200,26 +206,37 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
     {
         switch (propertyId)
         {
-            case TRANSFORM_ANIMATE_ROTATE: 
-            case TRANSFORM_ANIMATE_ROTATE_TRANSLATE:
-                curve->_rotationOffset = ANIMATION_ROTATE_OFFSET;
-                break;
-            case TRANSFORM_ANIMATE_SCALE_ROTATE_TRANSLATE:
-                curve->_rotationOffset = ANIMATION_SRT_OFFSET;
-                break;
+        case Transform::ANIMATE_ROTATE:
+        case Transform::ANIMATE_ROTATE_TRANSLATE:
+            curve->addQuaternionOffset(ANIMATION_ROTATE_OFFSET);
+            break;
+        case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
+            curve->addQuaternionOffset(ANIMATION_SRT_OFFSET);
+            break;
         }
     }
 
-    float lowest = keyTimes[0];
-    float duration = keyTimes[keyCount-1] - lowest;
+    unsigned long lowest = keyTimes[0];
+    unsigned long duration = keyTimes[keyCount-1] - lowest;
 
-    unsigned int pointOffset = 0;
-    for (unsigned int i = 0; i < keyCount; i++)
+    float* normalizedKeyTimes = new float[keyCount];
+
+    normalizedKeyTimes[0] = 0.0f;
+    curve->setPoint(0, normalizedKeyTimes[0], keyValues, (Curve::InterpolationType) type);
+
+    unsigned int pointOffset = propertyComponentCount;
+    unsigned int i = 1;
+    for (; i < keyCount - 1; i++)
     {
-        pointOffset = i * propertyComponentCount;
-        keyTimes[i] = (keyTimes[i] - lowest) / duration;
-        curve->setPoint(i, keyTimes[i], keyValues + pointOffset, (Curve::InterpolationType) type);
+        normalizedKeyTimes[i] = (float) (keyTimes[i] - lowest) / (float) duration;
+        curve->setPoint(i, normalizedKeyTimes[i], (keyValues + pointOffset), (Curve::InterpolationType) type);
+        pointOffset += propertyComponentCount;
     }
+    i = keyCount - 1;
+    normalizedKeyTimes[i] = 1.0f;
+    curve->setPoint(i, normalizedKeyTimes[i], keyValues + pointOffset, (Curve::InterpolationType) type);
+
+    SAFE_DELETE(normalizedKeyTimes);
 
     Channel* channel = new Channel(target, propertyId, curve, duration);
 
@@ -228,7 +245,7 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
     return channel;
 }
 
-Animation::Channel* Animation::createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, float* keyTangentIn, float* keyTangentOut, unsigned int type)
+Animation::Channel* Animation::createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type)
 {
     unsigned int propertyComponentCount = target->getAnimationPropertyComponentCount(propertyId);
     assert(propertyComponentCount > 0);
@@ -238,26 +255,37 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
     {
         switch (propertyId)
         {
-            case TRANSFORM_ANIMATE_ROTATE: 
-            case TRANSFORM_ANIMATE_ROTATE_TRANSLATE:
-                curve->_rotationOffset = ANIMATION_ROTATE_OFFSET;
-                break;
-            case TRANSFORM_ANIMATE_SCALE_ROTATE_TRANSLATE:
-                curve->_rotationOffset = ANIMATION_SRT_OFFSET;
-                break;
+        case Transform::ANIMATE_ROTATE:
+        case Transform::ANIMATE_ROTATE_TRANSLATE:
+            curve->addQuaternionOffset(ANIMATION_ROTATE_OFFSET);
+            break;
+        case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
+            curve->addQuaternionOffset(ANIMATION_SRT_OFFSET);
+            break;
         }
     }
+    
+    unsigned long lowest = keyTimes[0];
+    unsigned long duration = keyTimes[keyCount-1] - lowest;
 
-    float lowest = keyTimes[0];
-    float duration = keyTimes[keyCount-1] - lowest;
+    float* normalizedKeyTimes = new float[keyCount];
+    
+    normalizedKeyTimes[0] = 0.0f;
+    curve->setPoint(0, normalizedKeyTimes[0], keyValues, (Curve::InterpolationType) type, keyInValue, keyOutValue);
 
-    unsigned int pointOffset = 0;
-    for (unsigned int i = 0; i < keyCount; i++)
+    unsigned int pointOffset = propertyComponentCount;
+    unsigned int i = 1;
+    for (; i < keyCount - 1; i++)
     {
-        pointOffset = i * propertyComponentCount;
-        keyTimes[i] = (keyTimes[i] - lowest) / duration;
-        curve->setPoint(i, keyTimes[i], keyValues + pointOffset, (Curve::InterpolationType) type, keyTangentIn + pointOffset, keyTangentOut + pointOffset);
+        normalizedKeyTimes[i] = (float) (keyTimes[i] - lowest) / (float) duration;
+        curve->setPoint(i, normalizedKeyTimes[i], (keyValues + pointOffset), (Curve::InterpolationType) type, (keyInValue + pointOffset), (keyOutValue + pointOffset));
+        pointOffset += propertyComponentCount;
     }
+    i = keyCount - 1;
+    normalizedKeyTimes[i] = 1.0f;
+    curve->setPoint(i, normalizedKeyTimes[i], keyValues + pointOffset, (Curve::InterpolationType) type, keyInValue + pointOffset, keyOutValue + pointOffset);
+
+    SAFE_DELETE(normalizedKeyTimes);
 
     Channel* channel = new Channel(target, propertyId, curve, duration);
 
@@ -291,49 +319,11 @@ AnimationClip* Animation::findClip(const char* id) const
     for (unsigned int i = 0; i < clipCount; i++)
     {
         if (_clips.at(i)->_id.compare(id) == 0)
+        {
             return _clips.at(i);
+        }
     }
     return NULL;
-}
-
-void Animation::transfer(Animation* animation)
-{
-    // WARNING: This function is leaking some memory, but it should be removed when this hack is removed!
-
-    unsigned int count = animation->_channels.size();
-    for (unsigned int i = 0; i < count; i++)
-    {
-        Channel* channel = animation->_channels[i];
-        addChannel(channel);
-    }
-
-    // AnimationChannel is not reference counted so they should not belong to two Animations.
-    // Delete the AnimationChannel array and all of the clips.
-    /*std::vector<Channel*>::iterator channelIter = animation->_channels.begin();
-    
-    while (channelIter != animation->_channels.end())
-    {
-        Channel* channel = *channelIter;
-        channelIter = animation->_channels.erase(channelIter);
-        SAFE_DELETE(channel);
-    }
-    */
-    /*std::vector<AnimationClip*>::iterator clipIter = animation->_clips.begin();
-    
-    while (clipIter != animation->_clips.end())
-    {
-        AnimationClip* clip = *clipIter;
-        clipIter = animation->_clips.erase(clipIter);
-        SAFE_RELEASE(clip);
-    }*/
-    /*
-    animation->_channelCount = 0;
-    SAFE_DELETE_ARRAY(animation->_channels);
-    for (unsigned int i = 0; i < animation->_channelCount; i++)
-    {
-        SAFE_RELEASE(animation->_clips[i]);
-    }
-    SAFE_DELETE_ARRAY(animation->_clips);*/
 }
 
 }

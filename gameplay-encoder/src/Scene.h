@@ -61,9 +61,10 @@ private:
      */
     void calcAmbientColor(const Node* node, float* values) const;
 
-    std::list<Node*> nodes;
-    Node* cameraNode;
-    float ambientColor[Light::COLOR_SIZE];
+private:
+    std::list<Node*> _nodes;
+    Node* _cameraNode;
+    float _ambientColor[Light::COLOR_SIZE];
 };
 
 }

@@ -173,7 +173,7 @@ void Vector4::clamp(const Vector4& v, const Vector4& min, const Vector4& max, Ve
         dst->w = max.w;
 }
 
-float Vector4::distance(const Vector4& v)
+float Vector4::distance(const Vector4& v) const
 {
     float dx = v.x - x;
     float dy = v.y - y;
@@ -183,7 +183,7 @@ float Vector4::distance(const Vector4& v)
     return sqrtf(dx * dx + dy * dy + dz * dz + dw * dw);
 }
 
-float Vector4::distanceSquared(const Vector4& v)
+float Vector4::distanceSquared(const Vector4& v) const
 {
     float dx = v.x - x;
     float dy = v.y - y;
@@ -203,13 +203,13 @@ float Vector4::dot(const Vector4& v1, const Vector4& v2)
     return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w);
 }
 
-float Vector4::length()
+float Vector4::length() const
 {
     return sqrtf(x * x + y * y + z * z + w * w);
 }
 
 
-float Vector4::lengthSquared()
+float Vector4::lengthSquared() const
 {
     return (x * x + y * y + z * z + w * w);
 }

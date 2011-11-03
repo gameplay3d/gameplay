@@ -10,11 +10,14 @@
     <Filter Include="res\fonts">
       <UniqueIdentifier>{6309f71b-75fe-4cb0-b625-97249d6b79c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="res\meshes">
+    <Filter Include="res\models">
       <UniqueIdentifier>{cb00dd00-32d1-49c0-ab00-d0be47c90894}</UniqueIdentifier>
     </Filter>
     <Filter Include="res\textures">
       <UniqueIdentifier>{9d23f1fa-f3b6-4091-b3ff-68a286be6185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\materials">
+      <UniqueIdentifier>{2b0c0f3d-fbfd-4394-971d-4849df917cc6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -28,13 +31,16 @@
     <None Include="res\fonts\arial.ttf">
       <Filter>res\fonts</Filter>
     </None>
-    <None Include="res\meshes\duck.dae">
-      <Filter>res\meshes</Filter>
-    </None>
-    <None Include="res\meshes\duck.gpb">
-      <Filter>res\meshes</Filter>
-    </None>
     <None Include="bar-descriptor.xml" />
+    <None Include="res\materials\duck.material">
+      <Filter>res\materials</Filter>
+    </None>
+    <None Include="res\models\duck.dae">
+      <Filter>res\models</Filter>
+    </None>
+    <None Include="res\models\duck.gpb">
+      <Filter>res\models</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshGame.cpp">

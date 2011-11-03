@@ -16,8 +16,10 @@ static Game* __gameInstance = NULL;
 long Game::_pausedTimeLast = 0L;
 long Game::_pausedTimeTotal = 0L;
 
-Game::Game() :
-    _state(UNINITIALIZED), _frameLastFPS(0), _frameCount(0), _frameRate(0)
+Game::Game() 
+    : _state(UNINITIALIZED), 
+      _frameLastFPS(0), _frameCount(0), _frameRate(0), 
+      _clearColor(Vector4::zero()), _clearDepth(1.0f), _clearStencil(0)
 {
     assert(__gameInstance == NULL);
     __gameInstance = this;
@@ -180,6 +182,44 @@ unsigned int Game::getWidth() const
 unsigned int Game::getHeight() const
 {
     return _height;
+}
+
+void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil)
+{
+    GLbitfield bits = 0;
+    if (flags & CLEAR_COLOR)
+    {
+        if (clearColor.x != _clearColor.x ||
+            clearColor.y != _clearColor.y ||
+            clearColor.z != _clearColor.z ||
+            clearColor.w != _clearColor.w )
+        {
+            glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
+            _clearColor.set(clearColor);
+        }
+        bits |= GL_COLOR_BUFFER_BIT;
+    }
+
+    if (flags & CLEAR_DEPTH)
+    {
+        if (clearDepth != _clearDepth)
+        {
+            glClearDepth(clearDepth);
+            _clearDepth = clearDepth;
+        }
+        bits |= GL_DEPTH_BUFFER_BIT;
+    }
+
+    if (flags & CLEAR_STENCIL)
+    {
+        if (clearStencil != _clearStencil)
+        {
+            glClearStencil(clearStencil);
+            _clearStencil = clearStencil;
+        }
+        bits |= GL_STENCIL_BUFFER_BIT;
+    }
+    glClear(bits);
 }
 
 AnimationController* Game::getAnimationController()

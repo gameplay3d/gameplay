@@ -28,6 +28,7 @@ public:
     /**
      * Updates the offset of this Reference object if it has already need written to file.
      * @param file The file stream.
+     * 
      * @return True if the offset was updates, false otherwise.
      */
     bool updateOffset(FILE* file);
@@ -36,6 +37,7 @@ public:
      * Updates the offset of this Reference object if it has already need written to file.
      * @param file The file stream.
      * @param newOffset The new file offset.
+     * 
      * @return True if the offset in the binary file was updated. False if this ref hasn't been written to file yet.
      */
     bool updateOffset(FILE* file, long newOffset);
@@ -43,11 +45,11 @@ public:
     Object* getObj();
 
 private:
-    std::string xref;
-    unsigned int type;
-    unsigned int offset;
+    std::string _xref;
+    unsigned int _type;
+    unsigned int _offset;
 
-    Object* ref;
+    Object* _ref;
 };
 
 }

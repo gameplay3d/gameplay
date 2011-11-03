@@ -4,17 +4,17 @@ namespace gameplay
 {
 
 Reference::Reference(void) :
-    type(0),
-    offset(0),
-    ref(NULL)
+    _type(0),
+    _offset(0),
+    _ref(NULL)
 {
 }
 
 Reference::Reference(std::string _xref, Object* _ref) :
-    xref(_xref),
-    type(_ref->getTypeId()),
-    offset(0),
-    ref(_ref)
+    _xref(_xref),
+    _type(_ref->getTypeId()),
+    _offset(0),
+    _ref(_ref)
 {
 }
 
@@ -30,22 +30,22 @@ const char* Reference::getElementName(void) const
 void Reference::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
-    write(xref, file);
-    write(type, file);
-    write(offset, file);
+    write(_xref, file);
+    write(_type, file);
+    write(_offset, file);
 }
 void Reference::writeText(FILE* file)
 {
     fprintElementStart(file);
-    fprintfElement(file, "xref", xref);
-    fprintfElement(file, "type", type);
-    fprintfElement(file, "offset", offset);
+    fprintfElement(file, "xref", _xref);
+    fprintfElement(file, "type", _type);
+    fprintfElement(file, "offset", _offset);
     fprintElementEnd(file);
 }
 
 bool Reference::updateOffset(FILE* file)
 {
-    long newOffset = ref->getFilePosition();
+    long newOffset = _ref->getFilePosition();
     return updateOffset(file, newOffset);
 }
 
@@ -57,7 +57,7 @@ bool Reference::updateOffset(FILE* file, long newOffset)
         long savedOffset = ftell(file);
 
         // update the offset data for this
-        offset = newOffset;
+        _offset = newOffset;
         // seek this Reference object in the file
         fseek(file, getFilePosition(), SEEK_SET);
 
@@ -69,7 +69,7 @@ bool Reference::updateOffset(FILE* file, long newOffset)
         //skipUint(file);
 
         // write over the old offset
-        write(offset, file);
+        write(_offset, file);
 
         // restore the offset
         fseek(file, savedOffset, SEEK_SET);
@@ -80,7 +80,7 @@ bool Reference::updateOffset(FILE* file, long newOffset)
 
 Object* Reference::getObj()
 {
-    return ref;
+    return _ref;
 }
 
 }

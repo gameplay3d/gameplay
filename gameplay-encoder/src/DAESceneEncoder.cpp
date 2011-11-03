@@ -5,11 +5,14 @@
 #include <algorithm>
 
 #include "DAESceneEncoder.h"
+#include "DAEOptimizer.h"
+
+//#define ENCODER_PRINT_TIME 1
 
 using namespace gameplay;
 
 DAESceneEncoder::DAESceneEncoder()
-    : _collada(NULL), file(NULL), vertexBlendWeights(NULL), vertexBlendIndices(NULL)
+    : _collada(NULL), _dom(NULL), file(NULL), _vertexBlendWeights(NULL), _vertexBlendIndices(NULL)
 {
 }
 
@@ -47,6 +50,31 @@ unsigned int getMaxOffset(domInputLocalOffset_Array& inputArray)
     }
 
     return maxOffset;
+}
+
+void DAESceneEncoder::optimizeCOLLADA(const EncoderArguments& arguments, domCOLLADA* dom)
+{
+    DAEOptimizer optimizer(dom);
+    const std::vector<std::string>& groupAnimatioNodeIds = arguments.getGroupAnimationNodeId();
+    const std::vector<std::string>& groupAnimatioIds = arguments.getGroupAnimationAnimationId();
+    assert(groupAnimatioNodeIds.size() == groupAnimatioIds.size());
+    size_t size = groupAnimatioNodeIds.size();
+    if (size > 0)
+    {
+        begin();
+        for (size_t i = 0; i < size; i++)
+        {
+            optimizer.combineAnimations(groupAnimatioNodeIds[i], groupAnimatioIds[i]);
+        }
+        end("groupAnimation");
+    }
+    if (arguments.DAEOutputEnabled())
+    {
+        if (!_collada->writeTo(arguments.getFilePath(), arguments.getDAEOutputPath()))
+        {
+            fprintf(stderr,"Error: COLLADA failed to write the dom for file:%s\n", arguments.getDAEOutputPath().c_str());
+        }
+    }
 }
 
 void DAESceneEncoder::triangulate(DAE* dae)
@@ -213,14 +241,21 @@ void DAESceneEncoder::createTrianglesFromPolylist(domMesh* domMesh, domPolylist*
     triangles->setCount(trianglesProcessed);
 }
 
-void DAESceneEncoder::write(const std::string& filepath, const char* nodeId, bool text)
+void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments& arguments)
 {
+    _begin = std::clock();
+    const char* nodeId = arguments.getNodeId();
+    bool text = arguments.textOutputEnabled();
+
     std::string filenameOnly = getFilenameFromFilePath(filepath);
     std::string dstPath = filepath.substr(0, filepath.find_last_of('/'));
     
     // Load the collada document
     _collada = new DAE();
-    if (_collada->load(filepath.c_str()) != DAE_OK)
+    begin();
+    _dom = _collada->open(filepath);
+    end("Open file");
+    if (!_dom)
     {
         fprintf(stderr,"Error: COLLADA failed to open file:%s\n", filepath.c_str());
         if (_collada)
@@ -230,35 +265,35 @@ void DAESceneEncoder::write(const std::string& filepath, const char* nodeId, boo
         }
         return;
     }
-
-    // Get the dom tree
-    domCOLLADA* dom = _collada->getDom(filepath.c_str());
-    if (!dom)
-    {
-        fprintf(stderr,"Error: COLLADA failed to the dom for file:%s\n", filepath.c_str());
-        if (_collada)
-        {
-            delete _collada;
-            _collada = NULL;
-        }
-        return;
-    }
     
     // Run collada conditioners
+    begin();
     triangulate(_collada);
+    end("triangulate");
+
+    // Optimize the dom before encoding
+    optimizeCOLLADA(arguments, _dom);
 
     // Find the <visual_scene> element within the <scene>
-    const domCOLLADA::domSceneRef& domScene = dom->getScene();
+    const domCOLLADA::domSceneRef& domScene = _dom->getScene();
     daeElement* scene = NULL;
     if (domScene && domScene->getInstance_visual_scene())
     {
         scene = domScene->getInstance_visual_scene()->getUrl().getElement();
+        if (scene->getElementType() != COLLADA_TYPE::VISUAL_SCENE)
+        {
+            // This occured once where Maya exported a Node and Scene element with the same ID.
+            fprintf(stderr,"Error: instance_visual_scene does not reference visual_scene for file:%s\n", filepath.c_str());
+            return;
+        }
         if (scene)
         {
             if (nodeId == NULL)
             {
                 // If the -n <node_id> parameter was not passed then write out the entire scene.
+                begin();
                 loadScene((domVisual_scene*)scene);
+                end("load scene");
             }
             else
             {
@@ -286,7 +321,9 @@ void DAESceneEncoder::write(const std::string& filepath, const char* nodeId, boo
     }
     
     // The animations should be loaded last
-    loadAnimations(dom);
+    begin();
+    loadAnimations(_dom);
+    end("loadAnimations");
 
     std::string dstFilename = dstPath;
     dstFilename.append(1, '/');
@@ -296,11 +333,17 @@ void DAESceneEncoder::write(const std::string& filepath, const char* nodeId, boo
 
     if (text)
     {
-        _gamePlayFile.saveText(dstFilename + ".xml");
+        std::string outFile = dstFilename + ".xml";
+        fprintf(stderr, "Saving debug file: %s\n", outFile.c_str());
+        _gamePlayFile.saveText(outFile);
     }
     else
     {
-        _gamePlayFile.saveBinary(dstFilename + ".gpb");
+        std::string outFile = dstFilename + ".gpb";
+        fprintf(stderr, "Saving binary file: %s\n", outFile.c_str());
+        begin();
+        _gamePlayFile.saveBinary(outFile);
+        end("save binary");
     }
     
     // Cleanup
@@ -318,28 +361,32 @@ void DAESceneEncoder::write(const std::string& filepath, const char* nodeId, boo
 void DAESceneEncoder::loadAnimations(const domCOLLADA* dom)
 {
     // Call loadAnimation on all <animation> elements in all <library_animations>
-    const domLibrary_animations_Array& animationLibrary = dom->getLibrary_animations_array();
-    size_t animationLibraryCount = animationLibrary.getCount();
-    for (size_t i = 0; i < animationLibraryCount; i++)
+    const domLibrary_animations_Array& animationLibrarys = dom->getLibrary_animations_array();
+    size_t animationLibrarysCount = animationLibrarys.getCount();
+    for (size_t i = 0; i < animationLibrarysCount; i++)
     {
-        const domLibrary_animationsRef& animationsRef = animationLibrary.get(i);
-        const domAnimation_Array& animationArray = animationsRef->getAnimation_array();
+        const domLibrary_animationsRef& libraryAnimation = animationLibrarys.get(i);
+        const domAnimation_Array& animationArray = libraryAnimation->getAnimation_array();
         size_t animationCount = animationArray.getCount();
-        for (size_t i = 0; i < animationCount; i++)
+        for (size_t j = 0; j < animationCount; j++)
         {
-            const domAnimationRef& animationRef = animationArray.get(i);
+            const domAnimationRef& animationRef = animationArray.get(j);
             loadAnimation(animationRef);
         }
     }
 }
 
-void DAESceneEncoder::loadAnimation(const domAnimation* animationRef)
+void DAESceneEncoder::loadAnimation(const domAnimationRef animationRef)
 {
     // <channel> points to one <sampler>
     // <sampler> points to multiple <input> elements
 
     Animation* animation = new Animation();
-    animation->setId(findAnimationId(animationRef));
+    const char* str = animationRef->getId();
+    if (str)
+    {
+        animation->setId(str);
+    }
 
     // <channel>
     const domChannel_Array& channelArray = animationRef->getChannel_array();
@@ -351,20 +398,18 @@ void DAESceneEncoder::loadAnimation(const domAnimation* animationRef)
         const domChannelRef& channelRef = channelArray.get(i);
 
         // <sampler>
-        daeElement* samplerElement = channelRef->getSource().getElement();
-        assert(samplerElement);
-        const domSampler* sampler = static_cast<domSampler*>(samplerElement);
+        const domSamplerRef sampler = getSampler(channelRef);
+        assert(sampler);
 
         // <input>
         const domInputLocal_Array& inputArray = sampler->getInput_array();
         size_t inputArrayCount = inputArray.getCount();
-        for (size_t i = 0; i < inputArrayCount; i++)
+        for (size_t j = 0; j < inputArrayCount; j++)
         {
-            const domInputLocalRef& inputLocal = inputArray.get(i);
+            const domInputLocalRef& inputLocal = inputArray.get(j);
 
             // <source>
-            daeElement* sourceElement = inputLocal->getSource().getElement();
-            const domSource* source = static_cast<domSource*>(sourceElement);
+            const domSourceRef source = getSource(inputLocal, animationRef);
 
             std::string semantic = inputLocal->getSemantic();
             if (equals(semantic, "INTERPOLATION"))
@@ -380,10 +425,10 @@ void DAESceneEncoder::loadAnimation(const domAnimation* animationRef)
                 if (equals(semantic, "INPUT"))
                 {
                     // TODO: Ensure param name is TIME?
-                    for (std::vector<float>::iterator i = floats.begin(); i != floats.end(); i++)
+                    for (std::vector<float>::iterator k = floats.begin(); k != floats.end(); k++)
                     {
                         // Convert seconds to milliseconds
-                        *i = *i * 1000.0f;
+                        *k = *k * 1000.0f;
                     }
                     animationChannel->setKeyTimes(floats);
                 }
@@ -402,45 +447,10 @@ void DAESceneEncoder::loadAnimation(const domAnimation* animationRef)
             }
         }
         // get target attribute enum value
-        loadTarget(channelRef, animationChannel);
-        
-        // Set the ID of the AnimationChannel
-        std::string channelId = channelRef->getTarget();
-        replace(channelId.begin(), channelId.end(), '/', '_');
-        // ensure no duplicate IDs
-        while (_gamePlayFile.idExists(channelId))
+        if (loadTarget(channelRef, animationChannel))
         {
-            channelId.append("_");
+            animation->add(animationChannel);
         }
-        animationChannel->setId(channelId);
-
-        // Animations that target a joint should be grouped with the other animations for that skin.
-        // If this animation channel targets a joint then add the animation channel to the skin's animation instead.
-        DAEChannelTarget channelTarget(channelRef);
-        daeElement* element = channelTarget.getTargetElement();
-        daeInt type = element->typeID();
-        if (type == domNode::ID())
-        {
-            const domNode* node = daeSafeCast<domNode>(element);
-            if (node->getType() == NODETYPE_JOINT)
-            {
-                const char* id = node->getId();
-                if (id)
-                {
-                    Animation* skinAnimation = _gamePlayFile.findAnimationForJoint(id);
-                    if (skinAnimation)
-                    {
-                        // TODO: Assert will fail if <controller> doesn't have an ID.
-                        assert(skinAnimation->getId().length() > 0);
-                        skinAnimation->add(animationChannel);
-                        _gamePlayFile.addAnimation(skinAnimation);
-                        continue;
-                    }
-                }
-            }
-        }
-
-        animation->add(animationChannel);
     }
     if (animation->getAnimationChannelCount() > 0)
     {
@@ -452,11 +462,13 @@ void DAESceneEncoder::loadAnimation(const domAnimation* animationRef)
     }
 }
 
-void DAESceneEncoder::loadInterpolation(const domSource* source, AnimationChannel* animationChannel)
+void DAESceneEncoder::loadInterpolation(const domSourceRef source, AnimationChannel* animationChannel)
 {
     // COLLADA stores the interpolations as a list of strings while GBP uses unsigned int
     std::vector<unsigned int> values;
-    const domListOfNames& names = source->getName_array()->getValue();
+    const domName_arrayRef nameArray = getSourceNameArray(source);
+    assert(nameArray);
+    const domListOfNames& names = nameArray->getValue();
     size_t count = (size_t)names.getCount();
     values.resize(count);
     if (count > 0)
@@ -486,10 +498,18 @@ void DAESceneEncoder::loadInterpolation(const domSource* source, AnimationChanne
     animationChannel->setInterpolations(values);
 }
 
-void DAESceneEncoder::loadTarget(const domChannel* channelRef, AnimationChannel* animationChannel)
+bool DAESceneEncoder::loadTarget(const domChannelRef& channelRef, AnimationChannel* animationChannel)
 {
+    // GamePlay requires that animations are baked. Use "Bake Transforms" in your 3D modeling tool.
+    // If the target of an animation is not a matrix then an error will be printed.
+
+    const static char* TRANSFORM_WARNING_FORMAT = "Warning: Node \"%s\":\n %s %s\n";
+    const static char* TRANSFORM_MESSAGE = "transform found but not supported.\n Use \"Bake Transforms\" option when exporting.";
+
     unsigned int targetProperty = 0;
     DAEChannelTarget channelTarget(channelRef);
+
+    const char* targetId = channelTarget.getTargetId().c_str();
 
     // TODO: Do we want to support more than one? If yes then this needs to be fixed.
     for (size_t i = 0; i < channelTarget.getTargetAttributeCount(); i++)
@@ -502,6 +522,9 @@ void DAESceneEncoder::loadTarget(const domChannel* channelRef, AnimationChannel*
             daeInt type = attributeElement->typeID();
             if (type == domRotate::ID())
             {
+                printf(TRANSFORM_WARNING_FORMAT, targetId, "Rotate", TRANSFORM_MESSAGE);
+                return false;
+                /*
                 // <rotate>
                 const domRotate* rotate = daeSafeCast<domRotate>(attributeElement);
 
@@ -536,9 +559,13 @@ void DAESceneEncoder::loadTarget(const domChannel* channelRef, AnimationChannel*
                         animationChannel->setKeyValues(floats);
                     }
                 }
+                */
             }
             else if (type == domScale::ID())
             {
+                printf(TRANSFORM_WARNING_FORMAT, targetId, "Scale", TRANSFORM_MESSAGE);
+                return false;
+                /*
                 // <scale>
                 //const domScale* scale = daeSafeCast<domScale>(attributeElement);
                 if (equalsIgnoreCase(prop, "X"))
@@ -557,9 +584,13 @@ void DAESceneEncoder::loadTarget(const domChannel* channelRef, AnimationChannel*
                 {
                     targetProperty = Transform::ANIMATE_SCALE;
                 }
+                */
             }
             else if (type == domTranslate::ID())
             {
+                printf(TRANSFORM_WARNING_FORMAT, targetId, "Translate", TRANSFORM_MESSAGE);
+                return false;
+                /*
                 // <translate>
                 //const domTranslate* translate = daeSafeCast<domTranslate>(attributeElement);
                 if (equalsIgnoreCase(prop, "X"))
@@ -578,6 +609,7 @@ void DAESceneEncoder::loadTarget(const domChannel* channelRef, AnimationChannel*
                 {
                     targetProperty = Transform::ANIMATE_TRANSLATE;
                 }
+                */
             }
             else if (type == domMatrix::ID())
             {
@@ -597,9 +629,9 @@ void DAESceneEncoder::loadTarget(const domChannel* channelRef, AnimationChannel*
                     size_t j = i * 16;
                     // COLLADA used row-major but the Matrix class uses column-major
                     Matrix matrix(
-                        keyValues[j+0], keyValues[j+4], keyValues[j+8], keyValues[j+12], 
-                        keyValues[j+1], keyValues[j+5], keyValues[j+9], keyValues[j+13], 
-                        keyValues[j+2], keyValues[j+6], keyValues[j+10], keyValues[j+14], 
+                        keyValues[j+0], keyValues[j+4], keyValues[j+8], keyValues[j+12],
+                        keyValues[j+1], keyValues[j+5], keyValues[j+9], keyValues[j+13],
+                        keyValues[j+2], keyValues[j+6], keyValues[j+10], keyValues[j+14],
                         keyValues[j+3], keyValues[j+7], keyValues[j+11], keyValues[j+15]);
                     Vector3 scale;
                     Quaternion rotation;
@@ -624,32 +656,22 @@ void DAESceneEncoder::loadTarget(const domChannel* channelRef, AnimationChannel*
     }
     animationChannel->setTargetAttribute(targetProperty);
     animationChannel->setTargetId(channelTarget.getTargetId());
+    return true;
 }
 
-std::string DAESceneEncoder::findAnimationId(const domAnimation* animationRef)
+void DAESceneEncoder::begin()
 {
-    std::string animationId;
-    const char* str = animationRef->getId();
-    if (str)
-    {
-        animationId = str;
-        // check if this ID already exists
-        if (_gamePlayFile.idExists(animationId))
-        {
-            // choose a different id
-            animationId.append("_animation");
-        }
-    }
-    if (animationId.length() == 0)
-    {
-        animationId.assign("animation"); // TODO: Remove this later
-    }
-    // ensure no duplicate IDs
-    while (_gamePlayFile.idExists(animationId))
-    {
-        animationId.append("_");
-    }
-    return animationId;
+    #ifdef ENCODER_PRINT_TIME
+    _begin = std::clock();
+    #endif
+}
+
+void DAESceneEncoder::end(const char* str)
+{
+    #ifdef ENCODER_PRINT_TIME
+    clock_t time = std::clock() - _begin;
+    fprintf(stderr,"%5d %s\n", time, str);
+    #endif
 }
 
 void DAESceneEncoder::copyFloats(const domFloat_array* source, std::vector<float>* target)
@@ -660,7 +682,7 @@ void DAESceneEncoder::copyFloats(const domFloat_array* source, std::vector<float
     t.resize(count);
     const domListOfFloats& listOfFloats = source->getValue();
     for (size_t i = 0; i < count; i++)
-    {   
+    {
         t[i] = (float)listOfFloats.get(i);
     }
 }
@@ -727,7 +749,9 @@ Node* DAESceneEncoder::loadNode(domNode* n, Node* parent)
     {
         node = _gamePlayFile.getNode(n->getID());
         if (node)
+        {
             return node;
+        }
     }
     
     // Load the node
@@ -774,7 +798,9 @@ void DAESceneEncoder::transformNode(domNode* domNode, Node* node)
     {
         const domMatrixRef& matrix = matrixArray.get(0);
         if (!matrix)
+        {
             return;
+        }
         const domFloat4x4& tx = matrix->getValue();
         float transform[] = {(float)tx.get(0), (float)tx.get(4), (float)tx.get(8), (float)tx.get(12),
                               (float)tx.get(1), (float)tx.get(5), (float)tx.get(9), (float)tx.get(13),
@@ -814,7 +840,7 @@ void DAESceneEncoder::calcTransform(domNode* domNode, Matrix& dstTransform)
         {
             case COLLADA_TYPE::TRANSLATE:
             {
-                domTranslate* translateNode = dynamic_cast<domTranslate*>(static_cast<daeElement*>(childElement));
+                domTranslateRef translateNode = daeSafeCast<domTranslate>(childElement);
                 float x = (float)translateNode->getValue().get(0);
                 float y = (float)translateNode->getValue().get(1);
                 float z = (float)translateNode->getValue().get(2);
@@ -823,20 +849,20 @@ void DAESceneEncoder::calcTransform(domNode* domNode, Matrix& dstTransform)
             }
             case COLLADA_TYPE::ROTATE:
             {
-                domRotate* rotateNode = dynamic_cast<domRotate*>(static_cast<daeElement*>(childElement));
+                domRotateRef rotateNode = daeSafeCast<domRotate>(childElement);
                 float x = (float)rotateNode->getValue().get(0);
                 float y = (float)rotateNode->getValue().get(1);
                 float z = (float)rotateNode->getValue().get(2);
-                float angle = MATH_DEG_TO_RAD((float)rotateNode->getValue().get(3));
-                if (x == 1 && y == 0 && z == 0)
+                float angle = MATH_DEG_TO_RAD((float)rotateNode->getValue().get(3)); // COLLADA uses degrees, gameplay uses radians
+                if (x == 1.0f && y == 0.0f && z == 0.0f)
                 {
                     dstTransform.rotateX(angle);
                 }
-                else if (x == 0 && y == 1 && z == 0)
+                else if (x == 0.0f && y == 1.0f && z == 0.0f)
                 {
                     dstTransform.rotateY(angle);
                 }
-                else if (x == 0 && y == 0 && z == 1)
+                else if (x == 0.0f && y == 0.0f && z == 1.0f)
                 {
                     dstTransform.rotateZ(angle);
                 }
@@ -848,7 +874,7 @@ void DAESceneEncoder::calcTransform(domNode* domNode, Matrix& dstTransform)
             }
             case COLLADA_TYPE::SCALE:
             {
-                domScale* scaleNode = dynamic_cast<domScale*>(static_cast<daeElement*>(childElement));
+                domScaleRef scaleNode = daeSafeCast<domScale>(childElement);
                 float x = (float)scaleNode->getValue().get(0);
                 float y = (float)scaleNode->getValue().get(1);
                 float z = (float)scaleNode->getValue().get(2);
@@ -856,12 +882,13 @@ void DAESceneEncoder::calcTransform(domNode* domNode, Matrix& dstTransform)
                 break;
             }
             case COLLADA_TYPE::SKEW:
-            case COLLADA_TYPE::LOOKAT:
-            default:
-            {
-                warning("Skew or lookat transform found but not supported.");
+                warning("Skew transform found but not supported.");
                 break;
-            }
+            case COLLADA_TYPE::LOOKAT:
+                warning("Lookat transform found but not supported.");
+                break;
+            default:
+                break;
         }
     }
 }
@@ -955,8 +982,8 @@ void DAESceneEncoder::loadControllerInstance(const domNode* n, Node* node)
     size_t instanceControllerCount = instanceControllers.getCount();
     for (size_t i = 0; i < instanceControllerCount; i++)
     {
-        const domInstance_controllerRef controllerInstanceRef = instanceControllers.get(i);
-        xsAnyURI controllerURI = controllerInstanceRef->getUrl();
+        const domInstance_controllerRef instanceControllerRef = instanceControllers.get(i);
+        xsAnyURI controllerURI = instanceControllerRef->getUrl();
         domController* controllerRef = daeSafeCast<domController>(controllerURI.getElement());
 
         if (controllerRef)
@@ -967,25 +994,19 @@ void DAESceneEncoder::loadControllerInstance(const domNode* n, Node* node)
                 Model* model = loadSkin(skinElement);
                 if (model)
                 {
-                    // use only the first skeleton
-                    domInstance_controller::domSkeleton_Array& skeletons = controllerInstanceRef->getSkeleton_array();
+                    domInstance_controller::domSkeleton_Array& skeletons = instanceControllerRef->getSkeleton_array();
                     if (skeletons.getCount() == 0)
                     {
                         warning("No skeletons found for instance controller: ");
                         delete model;
                         continue;
                     }
-                    else if (skeletons.getCount() > 1)
-                    {
-                        // Only log a warning, don't exit
-                        warning("More than one skeleton found for instance controller. Using first skeleton only.");
-                    }
                     // Load the skeleton for this skin
-                    loadSkeleton((domInstance_controller::domSkeleton*)skeletons.get((size_t)0), model->getSkin());
+                    domInstance_controller::domSkeletonRef skeleton = getSkeleton(instanceControllerRef);
+                    assert(skeleton);
+                    loadSkeleton(skeleton, model->getSkin());
 
                     node->setModel(model);
-
-                    // TODO: Load animations
                 }
             }
         }
@@ -993,8 +1014,8 @@ void DAESceneEncoder::loadControllerInstance(const domNode* n, Node* node)
         {
             // warning
         }
-        jointLookupTable.clear();
-        jointInverseBindPoseMatrices.clear();
+        _jointLookupTable.clear();
+        _jointInverseBindPoseMatrices.clear();
     }
 }
 
@@ -1118,7 +1139,7 @@ LightInstance* DAESceneEncoder::loadLight(const domLight* lightRef)
         {
             const domLight::domTechnique_common::domSpotRef spotRef = techRef->getSpot();
             if (spotRef.cast())
-            {   
+            {
                 light->setSpotLight();
                 // color
                 const domTargetableFloat3Ref float3Ref = spotRef->getColor();
@@ -1198,20 +1219,19 @@ LightInstance* DAESceneEncoder::loadLight(const domLight* lightRef)
 
 void DAESceneEncoder::loadSkeleton(domInstance_controller::domSkeleton* skeletonElement, MeshSkin* skin)
 {
-    xsAnyURI skeletonUri = skeletonElement->getValue(); 
+    xsAnyURI skeletonUri = skeletonElement->getValue();
     daeString skeletonId = skeletonUri.getID();
     daeSIDResolver resolver(skeletonUri.getElement(), skeletonId);
     domNode* rootNode = daeSafeCast<domNode>(resolver.getElement());
     
-    // Get the lookup scene id (sid) and joint index.     
-    std::string sid = std::string(rootNode->getSid());
-    std::string id = std::string(skeletonId);   
+    // Get the lookup scene id (sid) and joint index.
+    std::string id = std::string(skeletonId);
 
-    // Has the root joint been loaded yet?
-    Node* rootJoint = (Node*)_gamePlayFile.getFromRefTable(id);
+    // Has the skeleton (root joint) been loaded yet?
+    Node* skeleton = (Node*)_gamePlayFile.getFromRefTable(id);
 
-    // The root node is not loaded yet, so let's load it now
-    if (rootJoint == NULL)
+    // The skeleton node is not loaded yet, so let's load it now
+    if (skeleton == NULL)
     {
         // Find the top most parent of rootNode that has not yet been loaded
         domNode* topLevelParent = rootNode;
@@ -1225,29 +1245,27 @@ void DAESceneEncoder::loadSkeleton(domInstance_controller::domSkeleton* skeleton
 
         // Is the parent of this node loaded yet?
         Node* parentNode = NULL;
-        if (topLevelParent->getParent() && 
+        if (topLevelParent->getParent() &&
             topLevelParent->getParent()->getElementType() == COLLADA_TYPE::NODE &&
             _gamePlayFile.getFromRefTable(topLevelParent->getParent()->getID()) != NULL)
         {
             parentNode = (Node*)_gamePlayFile.getFromRefTable(topLevelParent->getParent()->getID());
         }
 
-        // Finally, load the node hierarchy that includes the root node
-        rootJoint = loadNode(topLevelParent, parentNode);
-    }
-    
-    if (rootJoint == NULL)
-    {
-        // This shouldn't really happen..
-        rootJoint = new Node();
-        rootJoint->setId(id);
-        _gamePlayFile.addNode(rootJoint);
+        // Finally, load the node hierarchy that includes the skeleton
+        skeleton = loadNode(topLevelParent, parentNode);
     }
 
-    skin->setNode(rootJoint);
-    
+    if (skeleton == NULL)
+    {
+        // This shouldn't really happen..
+        skeleton = new Node();
+        skeleton->setId(id);
+        _gamePlayFile.addNode(skeleton);
+    }
+
     // Resolve and set joints array for skin
-    std::list<Node*> joints;
+    std::list<Node*> _joints;
     const std::list<std::string>& jointNames = skin->getJointNames();
     for (std::list<std::string>::const_iterator i = jointNames.begin(); i != jointNames.end(); i++)
     {
@@ -1255,10 +1273,10 @@ void DAESceneEncoder::loadSkeleton(domInstance_controller::domSkeleton* skeleton
         if (obj)
         {
             Node* node = (Node*)obj;
-            joints.push_back(node);
+            _joints.push_back(node);
         }
     }
-    skin->setJoints(joints);
+    skin->setJoints(_joints);
 }
 
 Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
@@ -1266,20 +1284,6 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
     ///////////////////////////// SKIN
     Model* model = new Model();
     MeshSkin* skin = new MeshSkin();
-
-    // MeshSkins have an animation container but we need to find an appropriate ID for it.
-    // If the <controller> has an ID, use that ID as the animation's ID.
-    // Need to break const qualified in order to get the parent.
-    daeElement* e = ((domSkin*)skinElement)->getParent();
-    if (e->getElementType() == COLLADA_TYPE::CONTROLLER)
-    {
-        const domController* controller = (domController*)e;
-        const char* controllerId = controller->getId();
-        if (controllerId)
-        {
-            skin->setAnimationId(controllerId);
-        }
-    }
 
     // Bind Shape Matrix
     const domSkin::domBind_shape_matrix* bindShapeMatrix = skinElement->getBind_shape_matrix();
@@ -1294,19 +1298,19 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
     }
 
     // Read and set our joints
-    domSkin::domJointsRef joints = skinElement->getJoints();
-    domInputLocal_Array& jointInputs = joints->getInput_array();
+    domSkin::domJointsRef _joints = skinElement->getJoints();
+    domInputLocal_Array& jointInputs = _joints->getInput_array();
 
 
     // Process "JOINT" input semantic first (we need to do this to set the joint count)
     unsigned int jointCount = 0;
     for (unsigned int i = 0; i < jointInputs.getCount(); i++)
     {
-        domInputLocalRef input = jointInputs.get(i);    
-        std::string inputSemantic = std::string(input->getSemantic());                
+        domInputLocalRef input = jointInputs.get(i);
+        std::string inputSemantic = std::string(input->getSemantic());
         domURIFragmentType* sourceURI = &input->getSource();
-        sourceURI->resolveElement();                
-        domSource* source = (domSource*)(daeElement*)sourceURI->getElement();
+        sourceURI->resolveElement();
+        const domSourceRef source = (domSource*)(daeElement*)sourceURI->getElement();
 
         if (equals(inputSemantic, "JOINT"))
         {
@@ -1317,12 +1321,12 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
             // Go through the joint list and conver them from sid to id because the sid information is
             // lost when converting to the gameplay binary format.
             for (std::list<std::string>::iterator i = list.begin(); i != list.end(); i++)
-            {   
+            {
                 daeSIDResolver resolver(source->getDocument()->getDomRoot(), i->c_str());
                 daeElement* element = resolver.getElement();
                 if (element && element->getElementType() == COLLADA_TYPE::NODE)
                 {
-                    domNode* node = dynamic_cast<domNode*>(static_cast<daeElement*>(element));
+                    domNodeRef node = daeSafeCast<domNode>(element);
                     const char* nodeId = node->getId();
                     if (nodeId && !equals(*i, nodeId))
                     {
@@ -1333,11 +1337,11 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
 
             // Get the joint count and set the capacities for both the
             jointCount = list.size();
-            jointInverseBindPoseMatrices.reserve(jointCount);
+            _jointInverseBindPoseMatrices.reserve(jointCount);
             unsigned int j = 0;
             for (std::list<std::string>::const_iterator i = list.begin(); i != list.end(); i++)
             {
-                jointLookupTable[*i] = j++;
+                _jointLookupTable[*i] = j++;
             }
             skin->setJointNames(list);
         }
@@ -1353,10 +1357,10 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
     // Process "INV_BIND_MATRIX" next
     for (unsigned int i = 0; i < jointInputs.getCount(); i++)
     {
-        domInputLocalRef input = jointInputs.get(i);    
-        std::string inputSemantic = std::string(input->getSemantic());                
+        domInputLocalRef input = jointInputs.get(i);
+        std::string inputSemantic = std::string(input->getSemantic());
         domURIFragmentType* sourceURI = &input->getSource();
-        sourceURI->resolveElement();                
+        sourceURI->resolveElement();
         domSource* source = (domSource*)(daeElement*)sourceURI->getElement();
 
         if (equals(inputSemantic, "INV_BIND_MATRIX"))
@@ -1367,50 +1371,52 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
 
             for (unsigned int j = 0; j < jointCount; j++)
             {
-                Matrix matrix((float)matrixFloats.get(jointIndex + 0), (float)matrixFloats.get(jointIndex + 4), (float)matrixFloats.get(jointIndex + 8), (float)matrixFloats.get(jointIndex + 12), 
-                              (float)matrixFloats.get(jointIndex + 1), (float)matrixFloats.get(jointIndex + 5), (float)matrixFloats.get(jointIndex + 9), (float)matrixFloats.get(jointIndex + 13), 
-                              (float)matrixFloats.get(jointIndex + 2), (float)matrixFloats.get(jointIndex + 6), (float)matrixFloats.get(jointIndex + 10), (float)matrixFloats.get(jointIndex + 14), 
-                              (float)matrixFloats.get(jointIndex + 3), (float)matrixFloats.get(jointIndex + 7), (float)matrixFloats.get(jointIndex + 11), (float)matrixFloats.get(jointIndex + 15));    
+                Matrix matrix((float)matrixFloats.get(jointIndex + 0), (float)matrixFloats.get(jointIndex + 4), (float)matrixFloats.get(jointIndex + 8), (float)matrixFloats.get(jointIndex + 12),
+                              (float)matrixFloats.get(jointIndex + 1), (float)matrixFloats.get(jointIndex + 5), (float)matrixFloats.get(jointIndex + 9), (float)matrixFloats.get(jointIndex + 13),
+                              (float)matrixFloats.get(jointIndex + 2), (float)matrixFloats.get(jointIndex + 6), (float)matrixFloats.get(jointIndex + 10), (float)matrixFloats.get(jointIndex + 14),
+                              (float)matrixFloats.get(jointIndex + 3), (float)matrixFloats.get(jointIndex + 7), (float)matrixFloats.get(jointIndex + 11), (float)matrixFloats.get(jointIndex + 15));
 
-                jointInverseBindPoseMatrices.push_back(matrix);
+                _jointInverseBindPoseMatrices.push_back(matrix);
                 jointIndex += 16;
             }
         }
     }
 
-    skin->setBindPoses(jointInverseBindPoseMatrices);
+    skin->setBindPoses(_jointInverseBindPoseMatrices);
 
     // Get the vertex weights inputs
-    domSkin::domVertex_weights* vertexWeights =  skinElement->getVertex_weights();        
+    domSkin::domVertex_weights* vertexWeights =  skinElement->getVertex_weights();
     domInputLocalOffset_Array& vertexWeightsInputs = vertexWeights->getInput_array();
-    unsigned int vertexWeightsCount = (unsigned int)vertexWeights->getCount();    
-    domListOfFloats jointWeights;    
+    unsigned int vertexWeightsCount = (unsigned int)vertexWeights->getCount();
+    domListOfFloats jointWeights;
 
     for (unsigned int i = 0; i < jointInputs.getCount(); i++)
     {
         domInputLocalOffsetRef input = vertexWeightsInputs.get(i);
-        std::string inputSemantic = std::string(input->getSemantic());                
+        std::string inputSemantic = std::string(input->getSemantic());
         domURIFragmentType* sourceURI = &input->getSource();
-        sourceURI->resolveElement();                
-        domSource* source = (domSource*)(daeElement*)sourceURI->getElement();                
+        sourceURI->resolveElement();
+        domSource* source = (domSource*)(daeElement*)sourceURI->getElement();
 
         if (equals(inputSemantic, "WEIGHT"))
         {
             domFloat_array* weights = source->getFloat_array();
             if (weights)
+            {
                 jointWeights = weights->getValue();
+            }
         }
-    }    
+    }
     
     // Get the number of joint influences per vertex
-    domSkin::domVertex_weights::domVcount* vCountElement = vertexWeights->getVcount();    
-    domListOfUInts skinVertexInfluenceCounts = vCountElement->getValue();                
+    domSkin::domVertex_weights::domVcount* vCountElement = vertexWeights->getVcount();
+    domListOfUInts skinVertexInfluenceCounts = vCountElement->getValue();
     // Get the joint/weight pair data.
     domSkin::domVertex_weights::domV* vElement = vertexWeights->getV();
     domListOfInts skinVertexJointWeightPairIndices = vElement->getValue();
         
     // Get the vertex influence count for any given vertex (up to max of 4)
-    unsigned int maxVertexInfluencesCount = SCENE_SKIN_VERTEXINFLUENCES_MAX;    
+    unsigned int maxVertexInfluencesCount = SCENE_SKIN_VERTEXINFLUENCES_MAX;
     skin->setVertexInfluenceCount(maxVertexInfluencesCount);
 
     // Get the vertex blend weights and joint indices and
@@ -1418,31 +1424,31 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
     // These will be used and cleaned up later in LoadMesh
     int skinVertexInfluenceCountTotal = skinVertexInfluenceCounts.getCount();
     int totalVertexInfluencesCount = vertexWeightsCount * maxVertexInfluencesCount;
-    vertexBlendWeights = new float[totalVertexInfluencesCount];
-    vertexBlendIndices = new unsigned int[totalVertexInfluencesCount];
+    _vertexBlendWeights = new float[totalVertexInfluencesCount];
+    _vertexBlendIndices = new unsigned int[totalVertexInfluencesCount];
 
     // Preset the default blend weights to 0.0f (no effect) and blend indices to 0 (uses the first which when multiplied
     // will have no effect anyhow.
-    memset(vertexBlendWeights, 0, totalVertexInfluencesCount * sizeof(float));        
-    memset(vertexBlendIndices , 0, totalVertexInfluencesCount * sizeof(unsigned int));    
+    memset(_vertexBlendWeights, 0, totalVertexInfluencesCount * sizeof(float));
+    memset(_vertexBlendIndices , 0, totalVertexInfluencesCount * sizeof(unsigned int));
     
-    int vOffset = 0;        
-    int weightOffset = 0;    
+    int vOffset = 0;
+    int weightOffset = 0;
 
-    // Go through all the skin vertex influence weights from the indexed data.    
+    // Go through all the skin vertex influence weights from the indexed data.
     for (int i = 0; i < skinVertexInfluenceCountTotal; i++)
-    {            
-        // Get the influence count and directly get the vertext blend weights and indices.        
-        unsigned int vertexInfluenceCount = (unsigned int)skinVertexInfluenceCounts.get(i);        
+    {
+        // Get the influence count and directly get the vertext blend weights and indices.
+        unsigned int vertexInfluenceCount = (unsigned int)skinVertexInfluenceCounts.get(i);
         float vertexInfluencesTotalWeights = 0.0f;
         std::vector<SkinnedVertexWeightPair> vertexInfluences;
         //vertexInfluences.SetCapacity(vertexInfluenceCount);
 
         // Get the index/weight pairs and some the weight totals while at it.
         for (unsigned int j = 0; j < vertexInfluenceCount; j++)
-        {        
+        {
             float weight = (float)jointWeights.get((unsigned int)skinVertexJointWeightPairIndices[vOffset + 1]);
-            int index = (int)skinVertexJointWeightPairIndices[vOffset];            
+            int index = (int)skinVertexJointWeightPairIndices[vOffset];
             
             // Set invalid index corresponding weights to zero
             if (index < 0 || index > (int)vertexWeightsCount)
@@ -1460,25 +1466,25 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
 
         // Get up the the maximum vertex weight influence count.
          for (unsigned int j = 0; j < maxVertexInfluencesCount; j++)
-        {            
-            if (j < vertexInfluenceCount)                
-            {        
+        {
+            if (j < vertexInfluenceCount)
+            {
                 SkinnedVertexWeightPair pair = vertexInfluences[j];
-                vertexBlendIndices[weightOffset] = pair.BlendIndex;
+                _vertexBlendIndices[weightOffset] = pair.BlendIndex;
                     
-                if (vertexInfluencesTotalWeights > 0.0f)        
-                {                
-                    vertexBlendWeights[weightOffset] = pair.BlendWeight;
+                if (vertexInfluencesTotalWeights > 0.0f)
+                {
+                    _vertexBlendWeights[weightOffset] = pair.BlendWeight;
                 }
                 else
                 {
                     if (j == 0)
                     {
-                        vertexBlendWeights[weightOffset] = 1.0f;
+                        _vertexBlendWeights[weightOffset] = 1.0f;
                     }
                     else
                     {
-                        vertexBlendWeights[weightOffset] = 0.0f;
+                        _vertexBlendWeights[weightOffset] = 0.0f;
                     }
                 }
             }
@@ -1641,8 +1647,10 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
             // If there is a triangle array with a different number of inputs, this is not supported.
             if (inputCount != (unsigned int)inputArray.getCount())
             {
-                for (size_t i = 0; i < polygonInputs.size(); i++)
-                    delete polygonInputs[i];
+                for (size_t j = 0; j < polygonInputs.size(); j++)
+                {
+                    delete polygonInputs[j];
+                }
                 warning(std::string("Triangles do not all have the same number of input sources for geometry mesh: ") + geometryId);
                 return false;
             }
@@ -1684,7 +1692,9 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
             const domListOfFloats& source = polygonInputs[k]->sourceValues;
             unsigned int offset = polygonInputs[k]->offset;
             if (offset > maxOffset)
+            {
                 maxOffset = offset;
+            }
             int type = polygonInputs[k]->type;
 
             unsigned int polyIndex = (unsigned int) polyInts.get(poly + offset);
@@ -1692,19 +1702,19 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
             {
             case POSITION:
                 vertex.reset();
-                if (vertexBlendWeights && vertexBlendIndices)
+                if (_vertexBlendWeights && _vertexBlendIndices)
                 {
                     vertex.hasWeights = true;
 
-                    vertex.blendWeights.x =  vertexBlendWeights[polyIndex * 4];
-                    vertex.blendWeights.y =  vertexBlendWeights[polyIndex * 4 + 1];
-                    vertex.blendWeights.z =  vertexBlendWeights[polyIndex * 4 + 2];
-                    vertex.blendWeights.w =  vertexBlendWeights[polyIndex * 4 + 3];
+                    vertex.blendWeights.x =  _vertexBlendWeights[polyIndex * 4];
+                    vertex.blendWeights.y =  _vertexBlendWeights[polyIndex * 4 + 1];
+                    vertex.blendWeights.z =  _vertexBlendWeights[polyIndex * 4 + 2];
+                    vertex.blendWeights.w =  _vertexBlendWeights[polyIndex * 4 + 3];
 
-                    vertex.blendIndices.x =  (float)vertexBlendIndices[polyIndex * 4];
-                    vertex.blendIndices.y =  (float)vertexBlendIndices[polyIndex * 4 + 1];
-                    vertex.blendIndices.z =  (float)vertexBlendIndices[polyIndex * 4 + 2];
-                    vertex.blendIndices.w =  (float)vertexBlendIndices[polyIndex * 4 + 3];
+                    vertex.blendIndices.x =  (float)_vertexBlendIndices[polyIndex * 4];
+                    vertex.blendIndices.y =  (float)_vertexBlendIndices[polyIndex * 4 + 1];
+                    vertex.blendIndices.z =  (float)_vertexBlendIndices[polyIndex * 4 + 2];
+                    vertex.blendIndices.w =  (float)_vertexBlendIndices[polyIndex * 4 + 3];
                 }
 
                 vertex.position.x = (float)source.get(polyIndex * 3);
@@ -1829,7 +1839,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
         mesh->addVetexAttribute(COLOR, 3);
     }
     // Skinning BlendWeights BlendIndices
-    if (hasWeights /*vertexBlendWeights && vertexBlendIndices*/)
+    if (hasWeights /*_vertexBlendWeights && _vertexBlendIndices*/)
     {
         mesh->addVetexAttribute(BLENDWEIGHTS, 4);
         mesh->addVetexAttribute(BLENDINDICES, 4);
@@ -1847,35 +1857,6 @@ void DAESceneEncoder::warning(const std::string& message)
 void DAESceneEncoder::warning(const char* message)
 {
     printf("Warning: %s\n", message);
-}
-
-void DAESceneEncoder::getJointNames(domSource* source, std::list<std::string>& list)
-{
-    // BLENDER used name_array
-    const domName_arrayRef& nameArray = source->getName_array();
-    if (nameArray.cast())
-    {
-        domListOfNames& ids = nameArray->getValue();
-        size_t jointCount = (size_t)nameArray->getCount();
-        for (size_t j = 0; j < jointCount; j++)
-        {
-            list.push_back(std::string(ids.get(j)));
-        }
-    }
-    else
-    {
-        // Seymour used IDREF_array
-        const domIDREF_arrayRef& idArray = source->getIDREF_array();
-        if (idArray.cast())
-        {
-            xsIDREFS& ids = idArray->getValue();
-            size_t jointCount = (size_t)idArray->getCount();
-            for (size_t j = 0; j < jointCount; j++)
-            {
-                list.push_back(std::string(ids.get(j).getID()));
-            }
-        }
-    }
 }
 
 int DAESceneEncoder::getVertexUsageType(const std::string& semantic)

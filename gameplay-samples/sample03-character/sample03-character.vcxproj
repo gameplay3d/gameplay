@@ -96,14 +96,14 @@
   <ItemGroup>
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
+    <None Include="res\animations\seymour.animation" />
     <None Include="res\fonts\arial.ttf" />
     <None Include="res\fonts\arial16.gpb" />
-    <None Include="res\meshes\Seymour.dae" />
-    <None Include="res\meshes\Seymour.gpb" />
-    <None Include="res\shaders\skinning.fsh" />
-    <None Include="res\shaders\skinning.vsh" />
-    <None Include="res\textures\cobblestone-diffuse.png" />
-    <None Include="res\textures\cobblestone-normal.png" />
+    <None Include="res\materials\character.material" />
+    <None Include="res\materials\plane.material" />
+    <None Include="res\models\Seymour.dae" />
+    <None Include="res\models\Seymour.gpb" />
+    <None Include="res\textures\floor.png" />
     <None Include="res\textures\seymour-diffuse.png" />
   </ItemGroup>
   <ItemGroup>

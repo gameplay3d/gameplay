@@ -1,25 +1,99 @@
 precision highp float;
 
 // Uniforms
-uniform vec3 u_lightDirection;              // Direction of the light
-uniform vec3 u_lightColor;                  // RGB color of the light
+uniform vec3 u_lightColor;                  // Light color
 uniform vec3 u_ambientColor;                // Ambient color
-uniform sampler2D u_diffuseTexture;         // Diffuse texture
+uniform sampler2D u_diffuseTexture;         // Diffuse texture.
 
 // Inputs
-varying vec3 v_normalVector;                // NormalVector in view space (Normalized).
+varying vec3 v_normalVector;                // NormalVector in view space.
 varying vec2 v_texCoord;                    // Texture coordinate (u, v).
+
+// Global variables
+vec4 _baseColor;                            // Base color
+vec3 _ambientColor;                         // Ambient Color
+vec3 _diffuseColor;                         // Diffuse Color
+
+void lighting(vec3 normalVector, vec3 lightDirection, float attenuation)
+{
+    // Ambient
+    _ambientColor = _baseColor.rgb * u_ambientColor;
+
+    // Diffuse
+    float diffuseIntensity = attenuation * max(0.0, dot(normalVector, lightDirection));
+    diffuseIntensity = max(0.0, diffuseIntensity);
+    _diffuseColor = u_lightColor * _baseColor.rgb * diffuseIntensity;
+}
+
+#if defined(POINT_LIGHT)
+
+varying vec4 v_vertexToPointLightDirection;  // Light direction w.r.t current vertex.
+
+void applyLight()
+{
+    // Normalize the vectors.
+    vec3 normalVector = normalize(v_normalVector);
+    
+    vec3 vertexToPointLightDirection = normalize(v_vertexToPointLightDirection.xyz);
+    
+    // Fetch point light attenuation.
+    float pointLightAttenuation = v_vertexToPointLightDirection.w;
+    lighting(normalVector, vertexToPointLightDirection, pointLightAttenuation);
+}
+
+#elif defined(SPOT_LIGHT)
+
+uniform vec3 u_spotLightDirection;          // Direction of the spot light.
+uniform float u_spotLightInnerAngleCos;     // The bright spot [0.0 - 1.0]
+uniform float u_spotLightOuterAngleCos;     // The soft outer part [0.0 - 1.0]
+varying vec3 v_vertexToSpotLightDirection;  // Light direction w.r.t current vertex.
+
+float lerpstep( float lower, float upper, float s)
+{
+    return clamp( ( s - lower ) / ( upper - lower ), 0.0, 1.0 );
+}
+
+void applyLight()
+{
+    // Normalize the vectors.
+    vec3 normalVector = normalize(v_normalVector);
+    vec3 spotLightDirection =normalize(u_spotLightDirection); 
+    vec3 vertexToSpotLightDirection = normalize(v_vertexToSpotLightDirection);
+
+    // "-lightDirection" is used because light direction points in opposite direction to
+    // to spot direction.
+    // Calculate spot light effect.
+    float spotCurrentAngleCos = max(0.0, dot(spotLightDirection, -vertexToSpotLightDirection));
+
+    // Intensity of spot depends on the part of the cone the light direction points to (inner or outer).
+    float spotLightAttenuation = lerpstep(u_spotLightOuterAngleCos, u_spotLightInnerAngleCos, spotCurrentAngleCos);
+
+    lighting(normalVector, vertexToSpotLightDirection, spotLightAttenuation);
+}
+
+#else
+
+uniform vec3 u_lightDirection;       // Light direction
+
+void applyLight()
+{
+    // Normalize the vectors.
+    vec3 normalVector = normalize(v_normalVector);
+    vec3 lightDirection = normalize(u_lightDirection);
+
+    lighting(normalVector, -lightDirection, 1.0);
+}
+#endif
 
 void main()
 {
-    // Ambient
-    vec3 lightColor = u_ambientColor;
+    // Fetch diffuse color from texture.
+    _baseColor = texture2D(u_diffuseTexture, v_texCoord);
 
-    // Diffuse
-    float diffuseIntensity = max(dot(v_normalVector, u_lightDirection), 0.0);
-    lightColor += (u_lightColor * diffuseIntensity);
+    // Apply light
+    applyLight();
 
-    // Light the pixel.
-    gl_FragColor = texture2D(u_diffuseTexture, v_texCoord);
-    gl_FragColor.rgb *= lightColor;
+    // Light the pixel
+    gl_FragColor.a = _baseColor.a;
+    gl_FragColor.rgb = _ambientColor + _diffuseColor;
 }

@@ -47,20 +47,6 @@ public:
     Joint* getJoint(const char* id) const;
 
     /**
-     * Returns the root joint of the skin.
-     * 
-     * @return The root joint.
-     */
-    Joint* getRootJoint() const;
-
-    /**
-     * Sets the root joint for the skin.
-     *
-     * The specified ID must refer to a joint within this MeshSkin.
-     */
-    void setRootJoint(const char* id);
-
-    /**
      * Returns the pointer to the Vector4 array for the purpose of binding to a shader.
      * 
      * @return The pointer to the matrix palette.
@@ -119,7 +105,6 @@ private:
     Joint* getJoint(unsigned int index) const;
 
     Matrix _bindShape;
-    Joint* _rootJoint;
     std::vector<Joint*> _joints;
 
     // Pointer to the array of palette matrices.

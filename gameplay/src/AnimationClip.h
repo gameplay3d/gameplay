@@ -10,11 +10,6 @@
 #include "Curve.h"
 #include "Animation.h"
 
-/**
- * Defines an indefinite repeat count. Used to specify when an AnimationClip will repeat indefinitely until stopped.
- */
-#define ANIMATION_REPEAT_COUNT_INDEFINITE           (-FLT_MAX)
-
 namespace gameplay
 {
 
@@ -30,6 +25,11 @@ class AnimationClip : public Ref
     friend class Animation;
 
 public:
+
+    /**
+     * Defines a constant for indefinitely repeating an AnimationClip.
+     */
+    static const unsigned int REPEAT_INDEFINITE = 0;
 
     /**
      * Defines an animation event listener.
@@ -96,7 +96,9 @@ public:
     unsigned long getElaspedTime() const;
 
     /**
-     * Sets the AnimationClip's repeat count.
+     * Sets the AnimationClip's repeat count. Overrides repeat duration.
+     *
+     * Use ANIMATION_REPEAT_INDEFINITE to play the AnimationClip indefinitely.
      * 
      * @param repeatCount The repeat count to set on the AnimationClip.
      */
@@ -108,6 +110,22 @@ public:
      * @return The repeat count that is set on the AnimationClip.
      */
     float getRepeatCount() const;
+
+    /**
+     * Sets the AnimationClip's active duration. Overrides repeat count.
+     *
+     * Use ANIMATION_REPEAT_INDEFINITE to play the AnimationClip indefinitely.
+     *
+     * @param duration The active duration that is set on the AnimationClip.
+     */
+    void setActiveDuration(unsigned long duration);
+
+    /**
+     * Gets the AnimationClip's active duration.
+     * 
+     * @return the AnimationClip's active duration.
+     */
+    unsigned long getActiveDuration() const;
 
     /**
      * Set the AnimationClip's running speed. 
@@ -181,8 +199,14 @@ private:
      */
     bool update(unsigned long elapsedTime);
 
+    /**
+     * Handles when the AnimationClip begins.
+     */
     void onBegin();
 
+    /**
+     * Handles when the AnimationClip ends.
+     */
     void onEnd();
 
     std::string _id;                          // AnimationClip ID.
@@ -190,6 +214,7 @@ private:
     unsigned long _startTime;                 // Start time of the clip.
     unsigned long _endTime;                   // End time of the clip.
     unsigned long _elapsedTime;               // Time elapsed while the clip is running.
+    long _runningTime;                        // Keeps track of the Animation's relative time in respect to the active duration.
     unsigned int _channelCount;               // The number of channels in the clip.
     std::vector<AnimationValue*> _values;     // AnimationValue holder.
     float _repeatCount;                       // The clip's repeat count.

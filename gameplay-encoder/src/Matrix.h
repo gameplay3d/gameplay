@@ -19,7 +19,7 @@ namespace gameplay
 /**
  * The identify matrix.
  */
-static const float MATRIX4F_IDENTITY[16] = 
+static const float MATRIX4F_IDENTITY[16] =
 {
     1.0f, 0.0f, 0.0f, 0.0f,
     0.0f, 1.0f, 0.0f, 0.0f,
@@ -39,9 +39,9 @@ public:
     /**
      * Constructor.
      */
-    Matrix(float m0, float m1, float m2, float m3, 
-           float m4, float m5, float m6, float m7, 
-           float m8, float m9, float m10, float m11, 
+    Matrix(float m0, float m1, float m2, float m3,
+           float m4, float m5, float m6, float m7,
+           float m8, float m9, float m10, float m11,
            float m12, float m13, float m14, float m15);
 
     /**
@@ -71,7 +71,7 @@ public:
     static void setIdentity(float* matrix);
 
     /**
-     * Multiplies two matrices and stores the results in dst. 
+     * Multiplies two matrices and stores the results in dst.
      * m1 and m2 may be the same as dst.
      */
     static void multiply(const float* m1, const float* m2, float* dst);

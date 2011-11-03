@@ -9,8 +9,6 @@
 #include "gameplay-main.h"
 using namespace gameplay;
 
-#define ANIMATION_ID    "boyShape-lib-skin"
-
 /**
  * This is a mesh demo game for rendering Mesh.
  */
@@ -30,7 +28,7 @@ public:
     virtual ~CharacterGame();
 
     /**
-     * Touch event handler.
+     * @see Game::touch
      */
     void touch(int x, int y, int touchEvent);
 
@@ -42,6 +40,11 @@ protected:
     void initialize();
 
     /**
+     * @see Game::finalize
+     */
+    void finalize();
+
+    /**
      * @see Game::update
      */
     void update(long elapsedTime);
@@ -51,11 +54,6 @@ protected:
      */
     void render(long elapsedTime);
 
-    /**
-     * @see Game::finalize
-     */
-    void finalize();
-
 private:
 
     /**
@@ -64,19 +62,26 @@ private:
     void drawModel(Node* node, long cookie);
 
     /**
-     * Returns the first model node. This is intended to be used with visit.
+     * Gets the first model node. This is intended to be used with visit.
      */
     void getModelNode(Node* node, long cookie);
 
+    /**
+     * Creates the default camera.
+     */
     void createDefaultCamera(Scene* scene);
 
+    /**
+     * Loads the characters animations.
+     */
     void loadCharacterAnimations();
 
     Scene* _scene;
     Font* _font;
     Node* _modelNode;
-    AnimationClip** _clips;
+    Animation* _animation;
     unsigned int _animationState;
+    int _rotateX;
 };
 
 #endif

@@ -30,13 +30,13 @@ public:
      * @param target The animation target.
      * @param propertyId The property on this target to animate.
      * @param keyCount The number of keyframes in the animation. Must be greater than one.
-     * @param keyTimes The list of key times for the animation.
+     * @param keyTimes The list of key times for the animation (in milliseconds).
      * @param keyValues The list of key values for the animation.
      * @param type The curve interpolation type.
      *
      * @return The newly created animation, or NULL if an animation with the given ID already exists.
      */
-    Animation* createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, Curve::InterpolationType type);
+    Animation* createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, Curve::InterpolationType type);
 
     /**
      * Creates an animation on this target from a set of key value and key time pairs.
@@ -45,15 +45,15 @@ public:
      * @param target The animation target.
      * @param propertyId The property on this target to animate.
      * @param keyCount The number of keyframes in the animation. Must be greater than one.
-     * @param keyTimes The list of key times for the animation.
+     * @param keyTimes The list of key times for the animation (in milliseconds).
      * @param keyValues The list of key values for the animation.
-     * @param keyInTangent The list of key tangent in values for the animation.
-     * @param keyOutTangent The list of key tangent out values for the animation.
+     * @param keyInValue The list of key in values for the animation.
+     * @param keyOutValue The list of key out values for the animation.
      * @param type The curve interpolation type.
      *
      * @return The newly created animation, or NULL if an animation with the given ID already exists.
      */
-    Animation* createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, float* keyTimes, float* keyValues, float* keyInTangent, float* keyOutTangent, Curve::InterpolationType type);
+    Animation* createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type);
 
     /**
      * Creates a simple two keyframe from-to animation.
@@ -91,6 +91,7 @@ public:
      * Finds the animation with the given ID.
      *
      * @param id The ID of the animation to get. NULL if the Animation is not found.
+     * 
      * @return The animation, or NULL if not found.
      */
     Animation* getAnimation(const char* id) const;

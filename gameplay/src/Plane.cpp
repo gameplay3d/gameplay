@@ -134,10 +134,10 @@ float Plane::intersects(const Frustum& frustum) const
             distance(corners[6]) <= 0.0f ||
             distance(corners[7]) <= 0.0f)
         {
-            return PLANE_INTERSECTS_INTERSECTING;
+            return Plane::INTERSECTS_INTERSECTING;
         }
 
-        return PLANE_INTERSECTS_FRONT;
+        return Plane::INTERSECTS_FRONT;
     }
     else if (d < 0.0f)
     {
@@ -149,14 +149,14 @@ float Plane::intersects(const Frustum& frustum) const
             distance(corners[6]) >= 0.0f ||
             distance(corners[7]) >= 0.0f)
         {
-            return PLANE_INTERSECTS_INTERSECTING;
+            return Plane::INTERSECTS_INTERSECTING;
         }
 
-        return PLANE_INTERSECTS_BACK;
+        return Plane::INTERSECTS_BACK;
     }
     else
     {
-        return PLANE_INTERSECTS_INTERSECTING;
+        return Plane::INTERSECTS_INTERSECTING;
     }
 }
 
@@ -165,7 +165,7 @@ float Plane::intersects(const Plane& plane) const
     // Check if the planes intersect.
     if (!isParallel(plane))
     {
-        return PLANE_INTERSECTS_INTERSECTING;
+        return Plane::INTERSECTS_INTERSECTING;
     }
 
     // Calculate the point where the given plane's normal vector intersects the given plane.
@@ -175,11 +175,11 @@ float Plane::intersects(const Plane& plane) const
     // (corresponds directly to the sign of the distance from the point calculated above to this plane).
     if (distance(point) > 0.0f)
     {
-        return PLANE_INTERSECTS_FRONT;
+        return Plane::INTERSECTS_FRONT;
     }
     else
     {
-        return PLANE_INTERSECTS_BACK;
+        return Plane::INTERSECTS_BACK;
     }
 }
 
@@ -191,7 +191,7 @@ float Plane::intersects(const Ray& ray) const
     // If the origin of the ray lies in the plane, then it intersects.
     if (d == 0.0f)
     {
-        return PLANE_INTERSECTS_INTERSECTING;
+        return Plane::INTERSECTS_INTERSECTING;
     }
     else
     {
@@ -204,22 +204,22 @@ float Plane::intersects(const Ray& ray) const
         {
             if (d < 0.0f)
             {
-                return PLANE_INTERSECTS_INTERSECTING;
+                return Plane::INTERSECTS_INTERSECTING;
             }
             else
             {
-                return PLANE_INTERSECTS_FRONT;
+                return Plane::INTERSECTS_FRONT;
             }
         }
         else
         {
             if (d > 0.0f)
             {
-                return PLANE_INTERSECTS_INTERSECTING;
+                return Plane::INTERSECTS_INTERSECTING;
             }
             else
             {
-                return PLANE_INTERSECTS_BACK;
+                return Plane::INTERSECTS_BACK;
             }
         }
     }

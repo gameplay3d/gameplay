@@ -4,125 +4,65 @@
 
 #include "CharacterGame.h"
 
-CharacterGame game;
+// Declare our game instance
+CharacterGame game; 
 
 CharacterGame::CharacterGame()
-    : _clips(NULL), _animationState(0)
+    : _animationState(0)
 {
 }
 
 CharacterGame::~CharacterGame()
 {
-    SAFE_DELETE_ARRAY(_clips);
-}
-
-void CharacterGame::touch(int x, int y, int touchEvent)
-{
-    switch (touchEvent)
-    {
-    case Input::TOUCHEVENT_PRESS:
-    {
-        Animation* animation = Game::getInstance()->getAnimationController()->getAnimation(ANIMATION_ID);
-        assert(animation);
-        AnimationClip* clip = NULL;
-        switch (_animationState)
-        {
-            case 0:
-                _clips[2]->stop();
-                _clips[0]->play();
-                break;
-            case 1:
-                _clips[0]->stop();
-                _clips[1]->play();
-                break;
-            case 2:
-                _clips[1]->stop();
-                _clips[2]->play();
-                break;
-        }
-        _animationState = (_animationState + 1) % 3;
-    }
-        break;
-    case Input::TOUCHEVENT_RELEASE:
-        break;
-    case Input::TOUCHEVENT_MOVE:
-        break;
-    default:
-        break;
-    };
-}
-
-void CharacterGame::loadCharacterAnimations()
-{
-    const float FRAME_RATE = 24.0f;
-
-    Animation* animation = Game::getInstance()->getAnimationController()->getAnimation(ANIMATION_ID);
-    assert(animation);
-
-    _clips = new AnimationClip*[3];
-    _clips[0] = animation->createClip("right arm", (61.0f / FRAME_RATE) * 1000L, (120.0f / FRAME_RATE) * 1000L);
-    _clips[0]->setRepeatCount(ANIMATION_REPEAT_COUNT_INDEFINITE);
-    _clips[0]->setSpeed(1.0f);
-
-    _clips[1] = animation->createClip("right leg", (121.0f / FRAME_RATE) * 1000L, (180.0f / FRAME_RATE) * 1000L);
-    _clips[1]->setRepeatCount(ANIMATION_REPEAT_COUNT_INDEFINITE);       
-    _clips[1]->setSpeed(2.0f);
-
-    _clips[2] = animation->createClip("left leg", (181.0f / FRAME_RATE) * 1000L, (240.0f / FRAME_RATE) * 1000L);
-    _clips[2]->setRepeatCount(3.0f);
-    _clips[2]->setSpeed(3.0f);
 }
 
 void CharacterGame::initialize()
 {
-    // Initialize GL state
-    glClearColor(0, 0, 0, 1);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-
     // Load mesh from file
-    Package* meshPackage = Package::create("res/meshes/Seymour.gpb");
-
-    _scene = meshPackage->loadScene();
+    Package* pkg = Package::create("res/models/Seymour.gpb");
+    _scene = pkg->loadScene();
+    SAFE_RELEASE(pkg);
 
     Camera* camera = _scene->getActiveCamera();
     if (!camera)
     {
         createDefaultCamera(_scene);
     }
-    
+
     _scene->visit(this, &CharacterGame::getModelNode);
     assert(_modelNode);
 
-    Vector3 lightDirection(0.0f, 0.0f, 1.0f);
-    _scene->getActiveCamera()->getViewMatrix().transformNormal(&lightDirection);
-
     Model* model = _modelNode->getModel();
     assert(model);
-    MeshSkin* skin = model->getSkin();
-    assert(skin);
 
-    // Load material
-    Material* meshMaterial = Material::createMaterial("res/shaders/skinning.vsh", "res/shaders/skinning.fsh", "#define JOINT_COUNT 35");
-    meshMaterial->getParameter("u_diffuseTexture")->setValue("res/textures/seymour-diffuse.png", true);
-    meshMaterial->getParameter("u_lightDirection")->setValue(lightDirection);
-    meshMaterial->getParameter("u_lightColor")->setValue(Vector3(0.75f, 0.75f, 0.75f));
-    meshMaterial->getParameter("u_ambientColor")->setValue(Vector3(0.2f, 0.2f, 0.2f));
-    meshMaterial->getParameter("u_specularExponent")->setValue(50.0f);
-    // Bind the skins matrix palette to the skinning shader.
-    meshMaterial->getParameter("u_matrixPalette")->bindValue(skin, &MeshSkin::getMatrixPalette, &MeshSkin::getMatrixPaletteSize);
-    model->setMaterial(meshMaterial);
+    // Get spot light position and direction.
+    Node* spotLightNode = _scene->findNode("spotLight1");
 
+    // Load character's material from a .material file
+    Material* meshMaterial = model->setMaterial("res/materials/character.material");
+    meshMaterial->getParameter("u_spotLightPosition")->bindValue(spotLightNode, &Node::getTranslationView);
+    meshMaterial->getParameter("u_spotLightDirection")->bindValue(spotLightNode, &Node::getForwardVectorView);
+    meshMaterial->getParameter("u_spotLightInnerAngleCos")->bindValue(spotLightNode->getLight(), &Light::getInnerAngleCos);
+    meshMaterial->getParameter("u_spotLightOuterAngleCos")->bindValue(spotLightNode->getLight(), &Light::getOuterAngleCos);
+
+    // Load character animations.
     loadCharacterAnimations();
 
-    // Load the font
-    Package* fontPackage = Package::create("res/fonts/arial16.gpb");
-    _font = fontPackage->loadFont("arial16");
+    // Load plane.
+    Node* planeNode = _scene->findNode("pPlane1");
+    assert(planeNode);
+    Model* planeModel = planeNode->getModel();
+    assert(planeModel);
 
-    SAFE_RELEASE(meshMaterial);
-    SAFE_RELEASE(fontPackage);
-    SAFE_RELEASE(meshPackage);
+    // Load material from a .material file.
+    Material* planeMaterial = planeModel->setMaterial("res/materials/plane.material");
+    planeMaterial->getParameter("u_spotLightPosition")->bindValue(spotLightNode, &Node::getTranslationView);
+    planeMaterial->getParameter("u_spotLightDirection")->bindValue(spotLightNode, &Node::getForwardVectorView);
+    planeMaterial->getParameter("u_spotLightInnerAngleCos")->bindValue(spotLightNode->getLight(), &Light::getInnerAngleCos);
+    planeMaterial->getParameter("u_spotLightOuterAngleCos")->bindValue(spotLightNode->getLight(), &Light::getOuterAngleCos);
+
+    // Load the font
+    _font = Font::create("res/fonts/arial16.gpb");
 }
 
 void CharacterGame::finalize()
@@ -135,18 +75,11 @@ void CharacterGame::update(long elapsedTime)
 
 void CharacterGame::render(long elapsedTime)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Clear the color and depth buffers.
+    clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
     // Draw our scene
     _scene->visit(this, &CharacterGame::drawModel);
-
-    /* Draw the FPS
-    char fps[3];
-    sprintf(fps, "%u", Game::getFrameRate()); 
-    _font->begin();
-    _font->drawText(fps, 5, 5, Color::red());
-    _font->end();
-    */
 }
 
 void CharacterGame::drawModel(Node* node, long cookie)
@@ -178,4 +111,63 @@ void CharacterGame::createDefaultCamera(Scene* scene)
     node->setCamera(camera);
     node->translate(0, 5.0f, 20.0f);
     scene->setActiveCamera(camera);
+}
+
+void CharacterGame::touch(int x, int y, int touchEvent)
+{
+    switch (touchEvent)
+    {
+    case Input::TOUCHEVENT_PRESS:
+        {
+            _rotateX = x;
+            switch (_animationState)
+            {
+                case 0:
+                    _animation->stop("head");
+                    _animation->play("right_arm");
+                    break;
+                case 1:
+                    _animation->stop("right_arm");
+                    _animation->play("left_arm");
+                    break;
+                case 2:
+                    _animation->stop("left_arm");
+                    _animation->play("right_leg");
+                    break;
+                case 3:
+                    _animation->stop("right_leg");
+                    _animation->play("left_leg");
+                    break;
+                case 4:
+                    _animation->stop("left_leg");
+                    _animation->play("head");
+                    break;
+            }
+            _animationState = (_animationState + 1) % 5;
+        }
+        break;
+    case Input::TOUCHEVENT_RELEASE:
+        {
+            _rotateX = 0;
+        }
+        break;
+    case Input::TOUCHEVENT_MOVE:
+        {
+            int deltaX = x - _rotateX;
+            _rotateX = x;
+            _modelNode->rotateY(MATH_DEG_TO_RAD(deltaX * 0.5f));
+        }
+        break;
+    default:
+        break;
+    };
+}
+
+void CharacterGame::loadCharacterAnimations()
+{
+    _animation = Game::getInstance()->getAnimationController()->getAnimation("movements");
+    _animation->createClips("res/animations/seymour.animation");
+
+    AnimationClip* clip = _animation->getClip("right_arm");
+    clip->setActiveDuration(AnimationClip::REPEAT_INDEFINITE);
 }
