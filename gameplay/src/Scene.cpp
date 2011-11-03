@@ -219,7 +219,9 @@ void Scene::setActiveCamera(Camera* camera)
         {
             _activeCamera->addRef();
             if (_bindAudioListenerToCamera && AudioListener::getInstance())
+            {
                 AudioListener::getInstance()->setCamera(_activeCamera);
+            }
         }
     }
 }
@@ -230,7 +232,9 @@ void Scene::bindAudioListenerToCamera(bool bind)
     {
         _bindAudioListenerToCamera = bind;
         if (AudioListener::getInstance())
+        {
             AudioListener::getInstance()->setCamera(bind ? _activeCamera : NULL);
+        }
     }
 }
 

@@ -16,7 +16,7 @@ namespace gameplay
 class Node;
 
 /**
- * Defines a view of a scene.
+ * Defines a camera which acts as a view of a scene to be rendered.
  */
 class Camera : public Ref, public Transform::Listener
 {

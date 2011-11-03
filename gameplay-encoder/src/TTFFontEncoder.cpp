@@ -89,16 +89,20 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
     // Find the width of the image.
     for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ascii++)
     {
-        // Load glyph image into the slot (erase previous one) 
+        // Load glyph image into the slot (erase previous one)
         error = FT_Load_Char(face, ascii, FT_LOAD_RENDER);
         if (error)
+        {
             fprintf(stderr, "FT_Load_Char error : %d \n", error);
+        }
         
         int bitmapRows = slot->bitmap.rows;
         actualfontHeight = (actualfontHeight < bitmapRows) ? bitmapRows : actualfontHeight;
         
         if (slot->bitmap.rows > slot->bitmap_top)
-          bitmapRows += (slot->bitmap.rows - slot->bitmap_top);
+        {
+            bitmapRows += (slot->bitmap.rows - slot->bitmap_top);
+        }
         rowSize = (rowSize < bitmapRows) ? bitmapRows : rowSize;
     }
 
@@ -133,7 +137,9 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
             // Load glyph image into the slot (erase the previous one).
             error = FT_Load_Char(face, ascii, FT_LOAD_RENDER);
             if (error)
+            {
                 fprintf(stderr, "FT_Load_Char error : %d \n", error);
+            }
 
             // Glyph image.
             int glyphWidth = slot->bitmap.pitch;
@@ -163,7 +169,9 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
             penY = row * rowSize;
 
             if (ascii == (END_INDEX-1))
+            {
                 textureSizeFound = true;
+            }
 
             i++;
         }
@@ -174,7 +182,9 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
     for (;;)
     {
         if ((penY + rowSize) >= pow(2.0, powerOf2))
+        {
             powerOf2++;
+        }
         else
         {
             imageHeight = (int)pow(2.0, powerOf2);
@@ -194,7 +204,9 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
         // Load glyph image into the slot (erase the previous one).
         error = FT_Load_Char(face, ascii, FT_LOAD_RENDER);
         if (error)
+        {
             fprintf(stderr, "FT_Load_Char error : %d \n", error);
+        }
 
         // Glyph image.
         unsigned char* glyphBuffer =  slot->bitmap.buffer;

@@ -1,18 +1,18 @@
 precision highp float;
 
 // Uniforms
-uniform vec3 u_lightColor;                        // RGB color of the light
+uniform vec3 u_lightColor;                      // RGB color of the light
 uniform vec3 u_ambientColor;                    // Ambient color
-uniform float u_specularExponent;                // Specular exponent or shininess property.
-uniform float u_parallaxHeight;                    // Parallax height
-uniform sampler2D u_diffuseTexture;                // Diffuse texture
-uniform sampler2D u_bumpMapTexture;                // Height map texture
-uniform sampler2D u_normalMapTexture;            // Normal map texture    
+uniform float u_specularExponent;               // Specular exponent or shininess property.
+uniform float u_parallaxHeight;                 // Parallax height
+uniform sampler2D u_diffuseTexture;             // Diffuse texture
+uniform sampler2D u_bumpMapTexture;             // Height map texture
+uniform sampler2D u_normalMapTexture;           // Normal map texture    
 
 // Inputs
 varying vec2 v_texCoord;                        // Texture coordinates (u,v)
-varying vec3 v_lightDirectionTangentSpace;        // Light direction in tangent space
-varying vec3 v_cameraDirectionTangentSpace;        // Camera direction in tangent space
+varying vec3 v_lightDirectionTangentSpace;      // Light direction in tangent space
+varying vec3 v_cameraDirectionTangentSpace;     // Camera direction in tangent space
 
 void main()
 {

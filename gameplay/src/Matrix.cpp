@@ -5,6 +5,7 @@
 #include "Matrix.h"
 #include "Quaternion.h"
 
+#define MATRIX_SIZE     ( sizeof(float) * 16 )
 
 namespace gameplay
 {
@@ -533,16 +534,7 @@ void Matrix::getTranslation(Vector3* translation) const
     decompose(NULL, NULL, translation);
 }
 
-void Matrix::getLeft(Vector3* dst) const
-{
-    assert(dst);
-
-    dst->x = m[0];
-    dst->y = m[1];
-    dst->z = m[2];
-}
-
-void Matrix::getUp(Vector3* dst) const
+void Matrix::getUpVector(Vector3* dst) const
 {
     assert(dst);
 
@@ -551,7 +543,42 @@ void Matrix::getUp(Vector3* dst) const
     dst->z = m[6];
 }
 
-void Matrix::getForward(Vector3* dst) const
+void Matrix::getDownVector(Vector3* dst) const
+{
+    assert(dst);
+    dst->x = -m[4];
+    dst->y = -m[5];
+    dst->z = -m[6];
+}
+
+void Matrix::getLeftVector(Vector3* dst) const
+{
+    assert(dst);
+
+    dst->x = -m[0];
+    dst->y = -m[1];
+    dst->z = -m[2];
+}
+
+void Matrix::getRightVector(Vector3* dst) const
+{
+    assert(dst);
+
+    dst->x = m[0];
+    dst->y = m[1];
+    dst->z = m[2];
+}
+
+void Matrix::getForwardVector(Vector3* dst) const
+{
+    assert(dst);
+
+    dst->x = -m[8];
+    dst->y = -m[9];
+    dst->z = -m[10];
+}
+
+void Matrix::getBackVector(Vector3* dst) const
 {
     assert(dst);
 
@@ -626,9 +653,9 @@ void Matrix::multiply(float scalar)
     multiply(scalar, this);
 }
 
-void Matrix::multiply(float scalar, Matrix* dst)
+void Matrix::multiply(float scalar, Matrix* dst) const
 {
-    multiply(*this, scalar, this);
+    multiply(*this, scalar, dst);
 }
 
 void Matrix::multiply(const Matrix& m, float scalar, Matrix* dst)
@@ -693,7 +720,7 @@ void Matrix::negate()
     negate(this);
 }
 
-void Matrix::negate(Matrix* dst)
+void Matrix::negate(Matrix* dst) const
 {
     dst->m[0]  = -m[0];
     dst->m[1]  = -m[1];
@@ -718,7 +745,7 @@ void Matrix::rotate(const Quaternion& q)
     rotate(q, this);
 }
 
-void Matrix::rotate(const Quaternion& q, Matrix* dst)
+void Matrix::rotate(const Quaternion& q, Matrix* dst) const
 {
     Matrix r;
     createRotation(q, &r);
@@ -730,7 +757,7 @@ void Matrix::rotate(const Vector3& axis, float angle)
     rotate(axis, angle, this);
 }
 
-void Matrix::rotate(const Vector3& axis, float angle, Matrix* dst)
+void Matrix::rotate(const Vector3& axis, float angle, Matrix* dst) const
 {
     Matrix r;
     createRotation(axis, angle, &r);
@@ -742,7 +769,7 @@ void Matrix::rotateX(float angle)
     rotateX(angle, this);
 }
 
-void Matrix::rotateX(float angle, Matrix* dst)
+void Matrix::rotateX(float angle, Matrix* dst) const
 {
     Matrix r;
     createRotationX(angle, &r);
@@ -754,7 +781,7 @@ void Matrix::rotateY(float angle)
     rotateY(angle, this);
 }
 
-void Matrix::rotateY(float angle, Matrix* dst)
+void Matrix::rotateY(float angle, Matrix* dst) const
 {
     Matrix r;
     createRotationY(angle, &r);
@@ -766,7 +793,7 @@ void Matrix::rotateZ(float angle)
     rotateZ(angle, this);
 }
 
-void Matrix::rotateZ(float angle, Matrix* dst)
+void Matrix::rotateZ(float angle, Matrix* dst) const
 {
     assert(dst);
 
@@ -780,7 +807,7 @@ void Matrix::scale(float value)
     scale(value, this);
 }
 
-void Matrix::scale(float value, Matrix* dst)
+void Matrix::scale(float value, Matrix* dst) const
 {
     scale(value, value, value, dst);
 }
@@ -790,7 +817,7 @@ void Matrix::scale(float xScale, float yScale, float zScale)
     scale(xScale, yScale, zScale, this);
 }
 
-void Matrix::scale(float xScale, float yScale, float zScale, Matrix* dst)
+void Matrix::scale(float xScale, float yScale, float zScale, Matrix* dst) const
 {
     assert(dst);
 
@@ -804,7 +831,7 @@ void Matrix::scale(const Vector3& s)
     scale(s.x, s.y, s.z, this);
 }
 
-void Matrix::scale(const Vector3& s, Matrix* dst)
+void Matrix::scale(const Vector3& s, Matrix* dst) const
 {
     scale(s.x, s.y, s.z, dst);
 }
@@ -818,7 +845,7 @@ void Matrix::set(float m11, float m12, float m13, float m14, float m21, float m2
     m[4]  = m12;
     m[5]  = m22;
     m[6]  = m32;
-    m[7]  = m43;
+    m[7]  = m42;
     m[8]  = m13;
     m[9]  = m23;
     m[10] = m33;
@@ -875,14 +902,14 @@ void Matrix::subtract(const Matrix& m1, const Matrix& m2, Matrix* dst)
     dst->m[15] = m1.m[15] - m2.m[15];
 }
 
-void Matrix::transformNormal(Vector3* normal) const
+void Matrix::transformVector(Vector3* vector) const
 {
-    transformVector(normal->x, normal->y, normal->z, 0.0f, normal);
+    transformVector(vector->x, vector->y, vector->z, 0.0f, vector);
 }
 
-void Matrix::transformNormal(const Vector3& normal, Vector3* dst) const
+void Matrix::transformVector(const Vector3& vector, Vector3* dst) const
 {
-    transformVector(normal.x, normal.y, normal.z, 0.0f, dst);
+    transformVector(vector.x, vector.y, vector.z, 0.0f, dst);
 }
 
 void Matrix::transformPoint(Vector3* point) const
@@ -921,7 +948,7 @@ void Matrix::translate(float x, float y, float z)
     translate(x, y, z, this);
 }
 
-void Matrix::translate(float x, float y, float z, Matrix* dst)
+void Matrix::translate(float x, float y, float z, Matrix* dst) const
 {
     assert(dst);
 
@@ -935,7 +962,7 @@ void Matrix::translate(const Vector3& t)
     translate(t.x, t.y, t.z, this);
 }
 
-void Matrix::translate(const Vector3& t, Matrix* dst)
+void Matrix::translate(const Vector3& t, Matrix* dst) const
 {
     translate(t.x, t.y, t.z, dst);
 }
@@ -945,7 +972,7 @@ void Matrix::transpose()
     transpose(this);
 }
 
-void Matrix::transpose(Matrix* dst)
+void Matrix::transpose(Matrix* dst) const
 {
     assert(dst);
     

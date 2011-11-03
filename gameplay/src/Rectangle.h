@@ -19,19 +19,22 @@ public:
     /**
      * Specifies the x-coordinate of the rectangle.
      */
-    int x;
+    float x;
+
     /**
      * Specifies the y-coordinate of the rectangle.
      */
-    int y;
+    float y;
+
     /**
      * Specifies the width of the rectangle.
      */
-    int width;
+    float width;
+
     /**
      * Specifies the height of the rectangle.
      */
-    int height;
+    float height;
 
     /**
      * Constructs a new rectangle initialized to all zeros.
@@ -44,7 +47,7 @@ public:
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    Rectangle(int width, int height);
+    Rectangle(float width, float height);
 
     /**
      * Constructs a new rectangle with the specified x, y, width and height.
@@ -54,7 +57,7 @@ public:
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    Rectangle(int x, int y, int width, int height);
+    Rectangle(float x, float y, float width, float height);
 
     /**
      * Constructs a new rectangle that is a copy of the specified rectangle.
@@ -90,7 +93,7 @@ public:
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    void set(int x, int y, int width, int height);
+    void set(float x, float y, float width, float height);
 
     /**
      * Sets the x-coordinate and y-coordinate values of this rectangle to the specified values.
@@ -98,7 +101,7 @@ public:
      * @param x The x-coordinate of the rectangle.
      * @param y The y-coordinate of the rectangle.
      */
-    void set(int x, int y);
+    void set(float x, float y);
 
     /**
      * Sets the values of this rectangle to those in the specified rectangle.
@@ -112,28 +115,28 @@ public:
      *
      * @return The x-coordinate of the left side of the rectangle.
      */
-    int left() const;
+    float left() const;
 
     /**
      * Returns the y-coordinate of the top of the rectangle.
      *
      * @return The y-coordinate of the top of the rectangle.
      */
-    int top() const;
+    float top() const;
 
     /**
      * Returns the x-coordinate of the right side of the rectangle.
      *
      * @return The x-coordinate of the right side of the rectangle.
      */
-    int right() const;
+    float right() const;
 
     /**
      * Returns the y-coordinate of the bottom of the rectangle.
      *
      * @return The y-coordinate of the bottom of the rectangle.
      */
-    int bottom() const;
+    float bottom() const;
 
     /**
      * Determines whether this rectangle contains a specified point.
@@ -143,7 +146,7 @@ public:
      * 
      * @return true if the rectangle contains the point, false otherwise.
      */
-    bool contains(int x, int y) const;
+    bool contains(float x, float y) const;
 
     /**
      * Determines whether this rectangle contains a specified rectangle.
@@ -156,7 +159,7 @@ public:
      * @return true if the rectangle contains the specified rectangle, false
      * otherwise.
      */
-    bool contains(int x, int y, int width, int height) const;
+    bool contains(float x, float y, float width, float height) const;
 
     /**
      * Determines whether this rectangle contains a specified rectangle.
@@ -178,7 +181,7 @@ public:
      * 
      * @return true if the specified Rectangle intersects with this one, false otherwise.
      */
-    bool intersects(int x, int y, int width, int height) const;
+    bool intersects(float x, float y, float width, float height) const;
 
     /**
      * Determines whether a specified rectangle intersects with this rectangle.
@@ -209,7 +212,7 @@ public:
      * @param horizontalAmount The value to push the sides out by.
      * @param verticalAmount The value to push the top and bottom out by.
      */
-    void inflate(int horizontalAmount, int verticalAmount);
+    void inflate(float horizontalAmount, float verticalAmount);
 
     /**
      * operator =

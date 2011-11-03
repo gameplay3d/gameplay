@@ -14,7 +14,7 @@
 
 // Structure of Glyph.
 class Glyph
-{   
+{
 public:
     unsigned int index;
     unsigned int width;

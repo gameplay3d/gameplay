@@ -9,93 +9,7 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Matrix.h"
-#include <functional>
 #include "AnimationTarget.h"
-
-/**
- * Scale animation property. Data=sx,sy,sz
- */
-#define TRANSFORM_ANIMATE_SCALE                     1
-
-/**
- * Scale x animation property. Data=sx
- */
-#define TRANSFORM_ANIMATE_SCALE_X                   2
-
-/**
- * Scale y animation property. Data=sy
- */
-#define TRANSFORM_ANIMATE_SCALE_Y                   3
-
-/**
- * Scale z animation property. Data=sz
- */
-#define TRANSFORM_ANIMATE_SCALE_Z                   4
-
-/**
- * Scale xy animation property. Data=sx,sy
- */
-#define TRANSFORM_ANIMATE_SCALE_XY                  5
-
-/**
- * Scale xz animation property. Data=sx,sz
- */
-#define TRANSFORM_ANIMATE_SCALE_XZ                  6
-
-/**
- * Scale yz animation property. Data=sy,sz
- */
-#define TRANSFORM_ANIMATE_SCALE_YZ                  7
-
-/**
- * Rotation animation property. Data=qx,qy,qz,qw (as quaternion).
- */
-#define TRANSFORM_ANIMATE_ROTATE                    8
-
-/**
- * Translate animation property. Data=tx,ty,tz
- */
-#define TRANSFORM_ANIMATE_TRANSLATE                 9
-
-/**
- * Translate x animation property. Data=tx
- */
-#define TRANSFORM_ANIMATE_TRANSLATE_X               10
-
-/**
- * Translate y animation property. Data=ty
- */
-#define TRANSFORM_ANIMATE_TRANSLATE_Y               11
-
-/**
- * Translate z animation property. Data=tz
- */
-#define TRANSFORM_ANIMATE_TRANSLATE_Z               12
-
-/**
- * Translate xy animation property. Data=tx,ty
- */
-#define TRANSFORM_ANIMATE_TRANSLATE_XY              13
-
-/**
- * Translate xz animation property. Data=tx,tz
- */
-#define TRANSFORM_ANIMATE_TRANSLATE_XZ              14
-
-/**
- * Translate yz animation property. Data=ty,tz
- */
-#define TRANSFORM_ANIMATE_TRANSLATE_YZ              15
-
-/**
- * Rotation + Translation animation property (Rigid Body). Data=qx,qy,qz,qw,tx,ty,tz
- */
-#define TRANSFORM_ANIMATE_ROTATE_TRANSLATE          16
-
-/**
- * Scale, Rotation + Translation animation property. Data=sx,sy,sz,qx,qy,qz,qw,tx,ty,tz
- */
-#define TRANSFORM_ANIMATE_SCALE_ROTATE_TRANSLATE    17
 
 namespace gameplay
 {
@@ -119,6 +33,91 @@ class BoundingSphere;
 class Transform : public AnimationTarget
 {
 public:
+
+    /**
+     * Scale animation property. Data=sx,sy,sz
+     */
+    static const int ANIMATE_SCALE = 1;
+
+    /**
+     * Scale x animation property. Data=sx
+     */
+    static const int ANIMATE_SCALE_X = 2;
+
+    /**
+     * Scale y animation property. Data=sy
+     */
+    static const int ANIMATE_SCALE_Y = 3;
+
+    /**
+     * Scale z animation property. Data=sz
+     */
+    static const int ANIMATE_SCALE_Z = 4;
+
+    /**
+     * Scale xy animation property. Data=sx,sy
+     */
+    static const int ANIMATE_SCALE_XY = 5;
+
+    /**
+     * Scale xz animation property. Data=sx,sz
+     */
+    static const int ANIMATE_SCALE_XZ = 6;
+
+    /**
+     * Scale yz animation property. Data=sy,sz
+     */
+    static const int ANIMATE_SCALE_YZ = 7;
+
+    /**
+     * Rotation animation property. Data=qx,qy,qz,qw (as quaternion).
+     */
+    static const int ANIMATE_ROTATE = 8;
+
+    /**
+     * Translate animation property. Data=tx,ty,tz
+     */
+    static const int ANIMATE_TRANSLATE = 9;
+
+    /**
+     * Translate x animation property. Data=tx
+     */
+    static const int ANIMATE_TRANSLATE_X = 10;
+
+    /**
+     * Translate y animation property. Data=ty
+     */
+    static const int ANIMATE_TRANSLATE_Y = 11;
+
+    /**
+     * Translate z animation property. Data=tz
+     */
+    static const int ANIMATE_TRANSLATE_Z = 12;
+
+    /**
+     * Translate xy animation property. Data=tx,ty
+     */
+    static const int ANIMATE_TRANSLATE_XY = 13;
+
+    /**
+     * Translate xz animation property. Data=tx,tz
+     */
+    static const int ANIMATE_TRANSLATE_XZ = 14;
+
+    /**
+     * Translate yz animation property. Data=ty,tz
+     */
+    static const int ANIMATE_TRANSLATE_YZ = 15;
+
+    /**
+     * Rotation + Translation animation property (Rigid Body). Data=qx,qy,qz,qw,tx,ty,tz
+     */
+    static const int ANIMATE_ROTATE_TRANSLATE = 16;
+
+    /**
+     * Scale, Rotation + Translation animation property. Data=sx,sy,sz,qx,qy,qz,qw,tx,ty,tz
+     */
+    static const int ANIMATE_SCALE_ROTATE_TRANSLATE = 17;
 
     /**
      * Listener interface for Transform events.
@@ -237,7 +236,7 @@ public:
     void getRotation(Matrix* rotation) const;
 
     /**
-     * Gets the axis of rotation, and stores the axis of rotation
+     * Gets the angle of rotation, and stores the axis of rotation
      * of this transform in the specified Vector3.
      *
      * @param axis The vector to store the axis of rotation.
@@ -464,6 +463,16 @@ public:
     void set(const Vector3& scale, const Matrix& rotation, const Vector3& translation);
 
     /**
+     * Sets the transform to the specified values.
+     *
+     * @param scale The scale vector.
+     * @param axis The axis of rotation.
+     * @param angle The angle of rotation (in radians).
+     * @param translation The translation vector.
+     */
+    void set(const Vector3& scale, const Vector3& axis, float angle, const Vector3& translation);
+
+    /**
      * Sets this transform to the specified transform.
      *
      * @param transform The transform to set this transform to.
@@ -546,6 +555,14 @@ public:
      * @param rotation The rotation as a matrix.
      */
     void setRotation(const Matrix& rotation);
+
+    /**
+     * Sets the rotation component for this transform to the rotation from the specified axis and angle.
+     *
+     * @param axis The axis of rotation.
+     * @param angle The angle of rotation (in radians).
+     */
+    void setRotation(const Vector3& axis, float angle);
 
     /**
      * Sets the translation component for this transform to the
@@ -670,21 +687,21 @@ public:
     void transformPoint(const Vector3& point, Vector3* dst);
 
     /**
-     * Transforms the specified normal vector and stores the
+     * Transforms the specified vector and stores the
      * result in the original vector.
      *
-     * @param normal The normal vector to transform.
+     * @param normal The vector to transform.
      */
-    void transformNormal(Vector3* normal);
+    void transformVector(Vector3* vector);
 
     /**
-     * Transforms the specified normal vector and stores the result
+     * Transforms the specified vector and stores the result
      * in the original vector.
      *
-     * @param normal The normal vector to transform.
-     * @param dst The point to store the result in.
+     * @param transformVector The vector to transform.
+     * @param dst The vector to store the result in.
      */
-    void transformNormal(const Vector3& normal, Vector3* dst);
+    void transformVector(const Vector3& transformVector, Vector3* dst);
 
     /**
      * Transforms the specified vector and stores the result

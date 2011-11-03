@@ -4,8 +4,8 @@ namespace gameplay
 {
 
 Model::Model(void) :
-    ref(NULL),
-    meshSkin(NULL)
+    _ref(NULL),
+    _meshSkin(NULL)
 {
 }
 
@@ -26,52 +26,56 @@ void Model::writeBinary(FILE* file)
     Object::writeBinary(file);
 
     // xref:Mesh
-    if (ref != NULL)
-        ref->writeBinaryXref(file);
+    if (_ref != NULL)
+    {
+        _ref->writeBinaryXref(file);
+    }
     else
+    {
         write((unsigned int)0, file);
-    // meshSkin
+    }
+    // _meshSkin
     // Write one unsigned char to indicate if this model has a skin
-    if (meshSkin != NULL)
+    if (_meshSkin != NULL)
     {
         write((bool)true, file); // has a skin
-        meshSkin->writeBinary(file);
+        _meshSkin->writeBinary(file);
     }
     else
     {
         write((bool)false, file); // doesn't have a skin
     }
     // materials[]
-    writeBinaryObjects(materials, file);
+    writeBinaryObjects(_materials, file);
 
 }
 void Model::writeText(FILE* file)
 {
     fprintElementStart(file);
-    if (ref != NULL)
+    if (_ref != NULL)
     {
-        fprintfElement(file, "ref", ref->getId());
+        fprintfElement(file, "ref", _ref->getId());
     }
-    if (meshSkin != NULL)
+    if (_meshSkin != NULL)
     {
-        meshSkin->writeText(file);
+        _meshSkin->writeText(file);
     }
     fprintElementEnd(file);
 }
 
 MeshSkin* Model::getSkin()
 {
-    return meshSkin;
+    return _meshSkin;
 }
 
 void Model::setMesh(Mesh* mesh)
 {
-    ref = mesh;
+    _ref = mesh;
 }
 
 void Model::setSkin(MeshSkin* skin)
 {
-    meshSkin = skin;
+    _meshSkin = skin;
 }
 
 }

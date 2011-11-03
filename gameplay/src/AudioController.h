@@ -58,8 +58,7 @@ private:
      */
     void update(long elapsedTime);
 
-    ALCdevice*_device;                                  // Audio device.
-    ALCcontext* _context;                               // Audio context.
+
     static std::list<AudioSource*> _playingSources;     // List of currently running sources.
 };
 

@@ -13,13 +13,13 @@ ReferenceTable::~ReferenceTable(void)
 
 void ReferenceTable::add(std::string xref, Object* obj)
 {
-    table[xref] = Reference(xref, obj);
+    _table[xref] = Reference(xref, obj);
 }
 
 Object* ReferenceTable::get(const std::string& xref)
 {
-    std::map<std::string, Reference>::iterator it = table.find(xref);
-    if (it != table.end())
+    std::map<std::string, Reference>::iterator it = _table.find(xref);
+    if (it != _table.end())
     {
         Reference ref = it->second;
         return ref.getObj();
@@ -29,8 +29,8 @@ Object* ReferenceTable::get(const std::string& xref)
 
 void ReferenceTable::writeBinary(FILE* file)
 {
-    write(table.size(), file);
-    for ( std::map<std::string, Reference>::iterator i=table.begin() ; i != table.end(); i++ )
+    write(_table.size(), file);
+    for ( std::map<std::string, Reference>::iterator i=_table.begin() ; i != _table.end(); i++ )
     {
         i->second.writeBinary(file);
     }
@@ -39,7 +39,7 @@ void ReferenceTable::writeBinary(FILE* file)
 void ReferenceTable::writeText(FILE* file)
 {
     fprintf(file, "<RefTable>\n");
-    for ( std::map<std::string, Reference>::iterator i=table.begin() ; i != table.end(); i++ )
+    for ( std::map<std::string, Reference>::iterator i=_table.begin() ; i != _table.end(); i++ )
     {
         i->second.writeText(file);
     }
@@ -48,7 +48,7 @@ void ReferenceTable::writeText(FILE* file)
 
 void ReferenceTable::updateOffsets(FILE* file)
 {
-    for (std::map<std::string, Reference>::iterator i = table.begin(); i != table.end(); i++)
+    for (std::map<std::string, Reference>::iterator i = _table.begin(); i != _table.end(); i++)
     {
         Reference& ref = i->second;
         ref.updateOffset(file);
@@ -57,12 +57,12 @@ void ReferenceTable::updateOffsets(FILE* file)
 
 std::map<std::string, Reference>::iterator ReferenceTable::begin()
 {
-    return table.begin();
+    return _table.begin();
 }
 
 std::map<std::string, Reference>::iterator ReferenceTable::end()
 {
-    return table.end();
+    return _table.end();
 }
 
 }

@@ -18,7 +18,11 @@ class Platform
 public:
 
     /**
-     * Constructor.
+     * Creates a platform for the specified game which is will interacte with.
+     *
+     * @param game The game to create a platform for.
+     * 
+     * @return The created platform interface.
      */
     static Platform* create(Game* game);
 
@@ -27,11 +31,15 @@ public:
      *
      * This method handles all OS window messages and drives the game loop.
      * It normally does not return until the application is closed.
+     * 
+     * @return The platform message pump return code.
      */
     int enterMessagePump();
 
     /**
      * Gets the absolute platform time starting from when the message pump was started.
+     *
+     * @return The absolute platform time. (in milliseconds)
      */
     static long getAbsoluteTime();
 
@@ -73,8 +81,8 @@ public:
     /**
      * Gets the platform accelerometer pitch and roll.
      * 
-     * @param pitch The pitch.
-     * @param roll The roll.
+     * @param pitch The accelerometer pitch.
+     * @param roll The accelerometer roll.
      */
     static void getAccelerometerPitchAndRoll(float* pitch, float* roll);
 

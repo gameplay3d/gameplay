@@ -8,11 +8,11 @@ namespace gameplay
 
 Node::Node(void) :
     _childCount(0),
-    _nextSibling(NULL), _previousSibling(NULL), 
+    _nextSibling(NULL), _previousSibling(NULL),
     _firstChild(NULL), _lastChild(NULL), _parent(NULL),
-    camera(NULL), light(NULL), model(NULL), joint(false)
+    _camera(NULL), _light(NULL), _model(NULL), _joint(false)
 {
-    setIdentityMatrix(transform);
+    setIdentityMatrix(_transform);
 }
 
 Node::~Node(void)
@@ -34,10 +34,10 @@ void Node::writeBinary(FILE* file)
     Object::writeBinary(file);
 
     // node type
-    unsigned int type = joint ? JOINT : NODE;
+    unsigned int type = _joint ? JOINT : NODE;
     write(type, file);
 
-    write(transform, 16, file);
+    write(_transform, 16, file);
     // children
     write(getChildCount(), file); // write number of children
     for (Node* node = getFirstChild(); node != NULL; node = node->getNextSibling())
@@ -46,27 +46,27 @@ void Node::writeBinary(FILE* file)
     }
 
     // camera
-    if (camera != NULL)
+    if (_camera != NULL)
     {
-        camera->writeBinary(file);
+        _camera->writeBinary(file);
     }
     else
     {
         write((unsigned char)0, file);
     }
     // light
-    if (light != NULL && !light->isAmbient())
+    if (_light != NULL && !_light->isAmbient())
     {
-        light->writeBinary(file);
+        _light->writeBinary(file);
     }
     else
     {
         write((unsigned char)0, file);
     }
     // mesh
-    if (model != NULL)
+    if (_model != NULL)
     {
-        model->writeBinary(file);
+        _model->writeBinary(file);
     }
     else
     {
@@ -77,14 +77,14 @@ void Node::writeText(FILE* file)
 {
     if (isJoint())
     {
-        fprintf(file, "<%s id=\"%s\" type=\"%s\">\n", getElementName(), id.c_str(), "JOINT");
+        fprintf(file, "<%s id=\"%s\" type=\"%s\">\n", getElementName(), getId().c_str(), "JOINT");
     }
     else
     {
         fprintElementStart(file);
     }
     fprintf(file, "<transform>");
-    fprintfMatrix4f(file, transform);
+    fprintfMatrix4f(file, _transform);
     fprintf(file, "</transform>\n");
 
     // children
@@ -93,19 +93,19 @@ void Node::writeText(FILE* file)
         node->writeText(file);
     }
     // camera
-    if (camera != NULL)
+    if (_camera != NULL)
     {
-        camera->writeText(file);
+        _camera->writeText(file);
     }
     // light
-    if (light != NULL && !light->isAmbient())
+    if (_light != NULL && !_light->isAmbient())
     {
-        light->writeText(file);
+        _light->writeText(file);
     }
     // mesh
-    if (model != NULL)
+    if (_model != NULL)
     {
-        model->writeText(file);
+        _model->writeText(file);
     }
     fprintElementEnd(file);
 }
@@ -159,9 +159,13 @@ void Node::removeChild(Node* child)
 
     // Was this child our first or last child?
     if (child == _firstChild)
+    {
         _firstChild = child->_nextSibling;
+    }
     if (child == _lastChild)
+    {
         _lastChild = child->_previousSibling;
+    }
 
     // Remove parent and sibling info from the child, now that it is no longer parented
     child->_parent = NULL;
@@ -217,58 +221,58 @@ Node* Node::getParent() const
 
 void Node::setCameraInstance(CameraInstance* cameraInstance)
 {
-    camera = cameraInstance;
+    _camera = cameraInstance;
 }
 void Node::setLightInstance(LightInstance* lightInstance)
 {
-    light = lightInstance;
+    _light = lightInstance;
 }
 void Node::setModel(Model* model)
 {
-    this->model = model;
+    _model = model;
 }
 
 void Node::setTransformMatrix(float matrix[])
 {
     for (int i = 0; i < 16; i++)
     {
-        transform[i] = matrix[i];
+        _transform[i] = matrix[i];
     }
 }
 
 void Node::setIsJoint(bool value)
 {
-    joint = value;
+    _joint = value;
 }
 
 bool Node::isJoint()
 {
-    return joint;
+    return _joint;
 }
 
 Camera* Node::getCamera() const
 {
-    if (camera)
+    if (_camera)
     {
-        return camera->getCamera();
+        return _camera->getCamera();
     }
     return NULL;
 }
 
 Light* Node::getLight() const
 {
-    if (light)
+    if (_light)
     {
-        return light->getLight();
+        return _light->getLight();
     }
     return NULL;
 }
 
 Model* Node::getModel() const
 {
-    if (model)
+    if (_model)
     {
-        return model;
+        return _model;
     }
     return NULL;
 }
@@ -292,12 +296,12 @@ Node* Node::getFirstCameraNode() const
 
 bool Node::hasCamera() const
 {
-    return camera != NULL;
+    return _camera != NULL;
 }
 
 bool Node::hasLight() const
 {
-    return light != NULL;
+    return _light != NULL;
 }
 
-} 
+}
