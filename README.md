@@ -4,8 +4,9 @@ GamePlay is a open-source, cross-platform 3D native gaming framework making it e
 
 Supported platforms
 -------------------
-Microsoft Windows 7 (using Microsoft Visual Studio 2010)
-BlackBerry PlayBook 1.0/2.0 (using BlackBerry Native SDK 1.0)
+- Microsoft Windows 7 (using Microsoft Visual Studio 2010)
+ * Requires OpenAL 1.1 (http://connect.creativelabs.com/openal/Downloads/Forms/AllItems.aspx)
+- BlackBerry PlayBook 1.0/2.0 (using BlackBerry Native SDK 1.0)
 
 Roadmap
 -------
@@ -13,7 +14,7 @@ Roadmap
 - Physics support with Bullet Physics
 - Encoded audio support with Ogg Vorbis
 - FrameBuffer's (RenderTarget + DepthStencilTarget)
-- UI Forms
 - Shadow and Light map generation.
 - Spatial Partitioning with Octree (Visibility Testing and Light Determination)
+- UI Forms
 
