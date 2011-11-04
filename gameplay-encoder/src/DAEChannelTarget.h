@@ -68,17 +68,17 @@ public:
 
 private:
     /**
-     * Pointer to the <channel> element. 
+     * Pointer to the <channel> element.
      */
-    const domChannel* channel;
+    const domChannel* _channel;
 
-    domElement* targetElement;
+    domElement* _targetElement;
 
     /**
-     * The first part is the id attribute of an element in the instance document 
+     * The first part is the id attribute of an element in the instance document
      * or a dot segment (".") indicating that this is a relative address.
      */
-    std::string targetId;
+    std::string _targetId;
 
     /**
      * A channel target can have zero or more target attributes.
@@ -87,7 +87,7 @@ private:
      * Result: attributeIds will contain 2 elements. "Translate.X" and "Translate.Y"
      * Refer to the COLLADA spec "COLLADA Target Addressing".
      */
-    std::vector<std::string> attributeIds;
+    std::vector<std::string> _attributeIds;
 };
 
 }

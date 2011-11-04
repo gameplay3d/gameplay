@@ -8,6 +8,7 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include <ctime>
 
 #include <dae.h>
 #include <dae/daeSIDResolver.h>
@@ -38,6 +39,8 @@
 #include "Transform.h"
 #include "DAEChannelTarget.h"
 #include "GPBFile.h"
+#include "DAEUtil.h"
+#include "EncoderArguments.h"
 
 using namespace gameplay;
 
@@ -63,7 +66,7 @@ public:
     /**
      * Writes out encoded Collada 1.4 file.
      */
-    void write(const std::string& filepath, const char* nodeId, bool text);
+    void write(const std::string& filepath, const EncoderArguments& arguments);
 
 private:
 
@@ -89,14 +92,22 @@ private:
         unsigned int BlendIndex;
 
         SkinnedVertexWeightPair(float blendWeight, unsigned int blendIndex) : BlendWeight(blendWeight), BlendIndex(blendIndex)
-        {                
-        }            
+        {
+        }
 
         bool operator < (const SkinnedVertexWeightPair& value) const
         {
             return value.BlendWeight < BlendWeight;
         }
     };
+
+    /**
+     * Optimizes the COLLADA dom based on the arguments passed to the encoder.
+     * 
+     * @param arguments The command line arguments passed to the encoder.
+     * @param dom The COLLADA dom.
+     */
+    void optimizeCOLLADA(const EncoderArguments& arguments, domCOLLADA* dom);
     
     void triangulate(DAE* dae);
     
@@ -119,9 +130,9 @@ private:
     /**
      * Loads a COLLADA animation element.
      * 
-     * @param animationRef Pointer to the animation dom element to load from.
+     * @param animationRef The animation dom element to load from.
      */
-    void loadAnimation(const domAnimation* animationRef);
+    void loadAnimation(const domAnimationRef animationRef);
 
     CameraInstance* loadCamera(const domCamera* cameraRef);
     LightInstance* loadLight(const domLight* lightRef);
@@ -136,13 +147,14 @@ private:
      * @param source The source dom element to load interpolation curves from.
      * @param animation The destination animation to copy to.
      */
-    void loadInterpolation(const domSource* source, AnimationChannel* animation);
+    void loadInterpolation(const domSourceRef source, AnimationChannel* animation);
 
     /**
      * Returns the active camera node for the given scene.
      * 
      * @param visualScene The collada visual scene node.
      * @param scene The gameplay scene node.
+     * 
      * @return The active camera node or NULL if one was not found.
      */
     Node* findSceneActiveCameraNode(const domVisual_scene* visualScene, Scene* scene);
@@ -162,11 +174,6 @@ private:
      */
     void calcTransform(domNode* domNode, Matrix& dstTransform);
 
-    /**
-     * Gets the joint names for the given source and appends them to the given list.
-     */
-    void getJointNames(domSource* source, std::list<std::string>& list);
-
     void warning(const std::string& message);
     void warning(const char* message);
 
@@ -181,15 +188,8 @@ private:
      */
     void loadTarget(const domChannel* channelRef, AnimationChannel* animation);
 
-    /**
-     * Finds the ID for an animation.
-     * If the COLLADA animation element doesn't have an ID then this method will trying 
-     * to find an appropriate ID for the animation.
-     * 
-     * @param animationRef The COLLADA animation element to find an ID for.
-     * @return The ID string for the animation.
-     */
-    std::string findAnimationId(const domAnimation* animationRef);
+    void begin();
+    void end(const char* str);
 
     /**
      * Copies float values from a domFloat_array to a std::vector<float>.
@@ -207,15 +207,18 @@ private:
      */
     static int getVertexUsageType(const std::string& semantic);
     
+private:
     DAE* _collada;        // Collada datastore in memory to read from.
+    domCOLLADA* _dom;
     FILE* file;        // Output file to write to.
     GPBFile _gamePlayFile;
 
-    std::map<std::string, int> jointLookupTable;
-    std::vector<Matrix>jointInverseBindPoseMatrices;
-    float* vertexBlendWeights;
-    unsigned int* vertexBlendIndices;
+    std::map<std::string, int> _jointLookupTable;
+    std::vector<Matrix>_jointInverseBindPoseMatrices;
+    float* _vertexBlendWeights;
+    unsigned int* _vertexBlendIndices;
 
+    clock_t _begin;
 };
 
 #endif

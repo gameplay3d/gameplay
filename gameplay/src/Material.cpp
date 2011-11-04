@@ -4,13 +4,17 @@
 
 #include "Base.h"
 #include "Material.h"
-//#include "MaterialParameter.h"
+#include "FileSystem.h"
+#include "Effect.h"
+#include "Technique.h"
+#include "Pass.h"
+#include "Properties.h"
 
 namespace gameplay
 {
 
 Material::Material() :
-    _effect(NULL)
+    _currentTechnique(NULL)
 {
 }
 
@@ -20,90 +24,410 @@ Material::Material(const Material& m)
 
 Material::~Material()
 {
-    SAFE_RELEASE(_effect);
-
-    // Destroy parameters.
-    for (unsigned int i = 0, count = _parameters.size(); i < count; ++i)
+	// Destroy all the techniques.
+    for (unsigned int i = 0, count = _techniques.size(); i < count; ++i)
     {
-        MaterialParameter* p = _parameters[i];
-        if (p)
+        Technique* technique = _techniques[i];
+        if (technique)
         {
-            delete p;
+            SAFE_RELEASE(technique);
         }
     }
 }
 
-Material* Material::createMaterial(Effect* effect)
+Material* Material::create(const char* materialPath)
 {
-    assert(effect);
+    assert(materialPath);
 
+    // Load the material properties from file
+    Properties* properties = Properties::create(materialPath);
+    assert(properties);
+    if (properties == NULL)
+    {
+        return NULL;
+    }
+
+    // Check if the Properties is valid and has a valid namespace.
+    Properties* materialProperties = properties->getNextNamespace();
+    assert(materialProperties);
+    if (!materialProperties || !(strcmp(materialProperties->getNamespace(), "material") == 0))
+    {
+        return NULL;
+    }
+
+    // Create new material from the file passed in.
+    Material* material = new Material();
+
+	// Go through all the material properties and create techniques under this material.
+    Properties* techniqueProperties = NULL;
+    while ((techniqueProperties = materialProperties->getNextNamespace()))
+    {
+        if (!loadTechnique(material, techniqueProperties))
+        {
+            SAFE_RELEASE(material);
+            SAFE_DELETE(materialProperties);
+            return NULL;
+        }
+    }
+
+    // Load uniform value parameters for this material
+    loadRenderState(material, materialProperties);
+
+    // Material properties no longer required
+    SAFE_DELETE(materialProperties);
+
+    // Set the current technique to the first found technique
+    if (material->getTechniqueCount() > 0)
+    {
+        material->setTechnique((unsigned int)0);
+    }
+
+    return material;
+}
+
+Material* Material::create(Effect* effect)
+{
+    // Create a new material with a single technique and pass for the given effect
+    Material* material = new Material();
+
+    Technique* technique = new Technique(NULL, material);
+    material->_techniques.push_back(technique);
+
+    Pass* pass = new Pass(NULL, technique, effect);
+    technique->_passes.push_back(pass);
     effect->addRef();
 
-    Material* m = new Material();
-    m->_effect = effect;
+    material->_currentTechnique = technique;
 
-    return m;
+    return material;
 }
 
-Material* Material::createMaterial(const char* vshPath, const char* fshPath, const char* defines)
+Material* Material::create(const char* vshPath, const char* fshPath, const char* defines)
 {
-    Effect* effect = Effect::createFromFile(vshPath, fshPath, defines);
-    if (effect == NULL)
+    // Create a new material with a single technique and pass for the given effect
+    Material* material = new Material();
+
+    Technique* technique = new Technique(NULL, material);
+    material->_techniques.push_back(technique);
+
+    Pass* pass = Pass::create(NULL, technique, vshPath, fshPath, defines);
+    if (!pass)
     {
+        SAFE_RELEASE(material);
         return NULL;
     }
+    technique->_passes.push_back(pass);
 
-    Material* m = new Material();
-    m->_effect = effect;
+    material->_currentTechnique = technique;
 
-    return m;
+    return material;
 }
 
-Effect* Material::getEffect()
+unsigned int Material::getTechniqueCount() const
 {
-    return _effect;
+    return _techniques.size();
 }
 
-MaterialParameter* Material::getParameter(const char* name)
+Technique* Material::getTechnique(unsigned int index) const
 {
-    if (name == NULL)
-    {
-        return NULL;
-    }
+    assert(index < _techniques.size());
 
-    // Search for an existing Parameter with this name.
-    for (unsigned int i = 0, count = _parameters.size(); i < count; ++i)
+    return _techniques[index];
+}
+
+Technique* Material::getTechnique(const char* id) const
+{
+    for (unsigned int i = 0, count = _techniques.size(); i < count; ++i)
     {
-        if (strcmp(name, _parameters[i]->_uniform->getName()) == 0)
+        Technique* t = _techniques[i];
+        if (strcmp(t->getId(), id) == 0)
         {
-            return _parameters[i];
+            return t;
         }
     }
 
-    // Look up the uniform with the specified name.
-    Uniform* uniform = _effect->getUniform(name);
-    if (uniform == NULL)
-    {
-        // No uniform found with this name.
-        return NULL;
-    }
-
-    // Create a new parameter and store it in our list.
-    MaterialParameter* p = new MaterialParameter(this, uniform);
-    _parameters.push_back(p);
-
-    return p;
+    return NULL;
 }
 
-void Material::bind()
+Technique* Material::getTechnique() const
 {
-    // Bind our effect.
-    _effect->bind();
+    return _currentTechnique;
+}
 
-    // Bind all parameters in our list (order doesn't matter).
-    for (unsigned int i = 0, count = _parameters.size(); i < count; ++i)
+void Material::setTechnique(const char* id)
+{
+    Technique* t = getTechnique(id);
+    if (t)
     {
-        _parameters[i]->bind();
+        _currentTechnique = t;
+    }
+}
+
+void Material::setTechnique(unsigned int index)
+{
+    Technique* t = getTechnique(index);
+    if (t)
+    {
+        _currentTechnique = t;
+    }
+}
+
+void Material::setMeshBinding(Mesh* mesh)
+{
+    // Call setMeshBinding() on all passes in all techniques
+    for (unsigned int i = 0, tCount = _techniques.size(); i < tCount; ++i)
+    {
+        Technique* t = _techniques[i];
+        for (unsigned int j = 0, pCount = t->getPassCount(); j < pCount; ++j)
+        {
+            Pass* p = t->getPass(j);
+            p->setMeshBinding(mesh);
+        }
+    }
+}
+
+bool Material::loadTechnique(Material* material, Properties* techniqueProperties)
+{
+    // Check if the Properties is valid and has a valid namespace.
+    if (!techniqueProperties || !(strcmp(techniqueProperties->getNamespace(), "technique") == 0))
+    {
+        return false;
+    }
+
+    // Create a new technique
+    Technique* technique = new Technique(techniqueProperties->getId(), material);
+
+	// Go through all the properties and create passes under this technique.
+    techniqueProperties->rewind();
+    Properties* passProperties = NULL;
+    while ((passProperties = techniqueProperties->getNextNamespace()))
+    {
+        // Create and load passes.
+		if (!loadPass(technique, passProperties))
+        {
+            SAFE_RELEASE(technique);
+            return false;
+        }
+    }
+
+    // Load uniform value parameters for this technique
+    loadRenderState(technique, techniqueProperties);
+
+    // Add the new technique to the material
+    material->_techniques.push_back(technique);
+
+    return true;
+}
+
+bool Material::loadPass(Technique* technique, Properties* passProperties)
+{
+    // Check if the Properties is valid and has a valid namespace.
+    if (!passProperties || !(strcmp(passProperties->getNamespace(), "pass") == 0))
+    {
+        return false;
+    }
+
+    // Fetch shader info required to create the effect of this technique.
+    const char* vertexShaderPath = passProperties->getString("vertexShader");
+    assert(vertexShaderPath);
+    const char* fragmentShaderPath = passProperties->getString("fragmentShader");
+    assert(fragmentShaderPath);
+    const char* defines = passProperties->getString("defines");
+    std::string define = "";
+    if (defines != NULL)
+    {
+        char* token = strtok((char*)defines, ";");
+        while (token)
+        {
+            define += "#define " + std::string(token) + "\n";
+            token = strtok(NULL, ";");
+        }
+    }
+
+    // Create the pass
+    Pass* pass = Pass::create(passProperties->getId(), technique, vertexShaderPath, fragmentShaderPath, define.c_str());
+    if (!pass)
+    {
+        return false;
+    }
+
+    // Load render state
+    loadRenderState(pass, passProperties);
+
+    // Add the new pass to the technique
+    technique->_passes.push_back(pass);
+
+    return true;
+}
+
+bool isMaterialKeyword(const char* str)
+{
+    #define MATERIAL_KEYWORD_COUNT 3
+    static const char* reservedKeywords[MATERIAL_KEYWORD_COUNT] =
+    {
+        "vertexShader",
+        "fragmentShader",
+        "defines"
+    };
+    for (unsigned int i = 0; i < MATERIAL_KEYWORD_COUNT; ++i)
+    {
+        if (strcmp(reservedKeywords[i], str) == 0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+Texture::Filter parseTextureFilterMode(const char* str, Texture::Filter defaultValue)
+{
+    if (str == NULL || strlen(str) == 0)
+    {
+        return defaultValue;
+    }
+    else if (strcmp(str, "NEAREST") == 0)
+    {
+        return Texture::NEAREST;
+    }
+    else if (strcmp(str, "LINEAR") == 0)
+    {
+        return Texture::LINEAR;
+    }
+    else if (strcmp(str, "NEAREST_MIPMAP_NEAREST") == 0)
+    {
+        return Texture::NEAREST_MIPMAP_NEAREST;
+    }
+    else if (strcmp(str, "LINEAR_MIPMAP_NEAREST") == 0)
+    {
+        return Texture::LINEAR_MIPMAP_NEAREST;
+    }
+    else if (strcmp(str, "NEAREST_MIPMAP_LINEAR") == 0)
+    {
+        return Texture::NEAREST_MIPMAP_LINEAR;
+    }
+    else if (strcmp(str, "LINEAR_MIPMAP_LINEAR") == 0)
+    {
+        return Texture::LINEAR_MIPMAP_LINEAR;
+    }
+    return defaultValue;
+}
+
+Texture::Wrap parseTextureWrapMode(const char* str, Texture::Wrap defaultValue)
+{
+    if (str == NULL || strlen(str) == 0)
+    {
+        return defaultValue;
+    }
+    else if (strcmp(str, "REPEAT") == 0)
+    {
+        return Texture::REPEAT;
+    }
+    else if (strcmp(str, "CLAMP") == 0)
+    {
+        return Texture::CLAMP;
+    }
+    return defaultValue;
+}
+
+void Material::loadRenderState(RenderState* renderState, Properties* properties)
+{
+    // Rewind the properties to start reading from the start
+    properties->rewind();
+
+    const char* name;
+    while (name = properties->getNextProperty())
+    {
+        if (isMaterialKeyword(name))
+            continue; // keyword - skip
+
+        switch (properties->getType())
+        {
+        case Properties::NUMBER:
+            renderState->getParameter(name)->setValue(properties->getFloat());
+            break;
+        case Properties::VECTOR2:
+            {
+                Vector2 vector2;
+                if (properties->getVector2(NULL, &vector2))
+                {
+                    renderState->getParameter(name)->setValue(vector2);
+                }
+            }
+            break;
+        case Properties::VECTOR3:
+            {
+                Vector3 vector3;
+                if (properties->getVector3(NULL, &vector3))
+                {
+                    renderState->getParameter(name)->setValue(vector3);
+                }
+            }
+            break;
+        case Properties::VECTOR4:
+            {
+                Vector4 vector4;
+                if (properties->getVector4(NULL, &vector4))
+                {
+                    renderState->getParameter(name)->setValue(vector4);
+                }
+            }
+            break;
+        case Properties::MATRIX:
+            {
+                Matrix matrix;
+                if (properties->getMatrix(NULL, &matrix))
+                {
+                    renderState->getParameter(name)->setValue(matrix);
+                }
+            }
+            break;
+        default:
+            {
+                // Assume this is a parameter auto-binding
+                renderState->setParameterAutoBinding(name, properties->getString());
+            }
+            break;
+        }
+    }
+
+    // Iterate through all child namespaces searching for samplers and render state blocks
+    Properties* ns;
+    while (ns = properties->getNextNamespace())
+    {
+        if (strcmp(ns->getNamespace(), "sampler") == 0)
+        {
+            // Read the texture uniform name
+            name = ns->getId();
+            if (strlen(name) == 0)
+                continue; // missing texture uniform name
+
+            // Get the texture path
+            const char* path = ns->getString("path");
+            if (path == NULL || strlen(path) == 0)
+                continue; // missing texture path
+
+            // Read texture state (booleans default to 'false' if not present)
+            bool mipmap = ns->getBool("mipmap");
+            Texture::Wrap wrapS = parseTextureWrapMode(ns->getString("wrapS"), Texture::REPEAT);
+            Texture::Wrap wrapT = parseTextureWrapMode(ns->getString("wrapT"), Texture::REPEAT);
+            Texture::Filter minFilter = parseTextureFilterMode(ns->getString("minFilter"), mipmap ? Texture::NEAREST_MIPMAP_LINEAR : Texture::LINEAR);
+            Texture::Filter magFilter = parseTextureFilterMode(ns->getString("magFilter"), Texture::LINEAR);
+
+            // Set the sampler parameter
+            Texture::Sampler* sampler = renderState->getParameter(name)->setValue(path, mipmap);
+            if (sampler)
+            {
+                sampler->setWrapMode(wrapS, wrapT);
+                sampler->setFilterMode(minFilter, magFilter);
+            }
+        }
+        else if (strcmp(ns->getNamespace(), "renderState") == 0)
+        {
+            while (name = ns->getNextProperty())
+            {
+                renderState->setRenderState(name, ns->getString());
+            }
+        }
     }
 }
 

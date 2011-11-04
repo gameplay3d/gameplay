@@ -15,8 +15,9 @@ namespace gameplay
 {
 
 Node::Node(const char* id)
-    : _scene(NULL), _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL),
-    _physicsRigidBody(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _boundsType(NONE)
+    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
+    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL), 
+    _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _boundsType(NONE)
 {
     if (id)
     {
@@ -33,22 +34,16 @@ Node::Node(const Node& node)
 
 Node::~Node()
 {
+    removeAllChildren();
+
     // Free bounding volume.
     switch (_boundsType)
     {
     case BOX:
-        if (_bounds.box)
-        {
-            delete _bounds.box;
-            _bounds.box = NULL;
-        }
+        SAFE_DELETE(_bounds.box);
         break;
     case SPHERE:
-        if (_bounds.sphere)
-        {
-            delete _bounds.sphere;
-            _bounds.sphere = NULL;
-        }
+        SAFE_DELETE(_bounds.sphere);
         break;
     }
 
@@ -80,6 +75,124 @@ void Node::setId(const char* id)
 Node::Type Node::getType() const
 {
     return Node::NODE;
+}
+
+void Node::addChild(Node* child)
+{
+    assert(child);
+
+    // If the item belongs to another hierarchy, remove it first.
+    Node* parent = child->_parent;
+    if (parent)
+    {
+        parent->removeChild(child);
+    }
+
+    // Order is irrelevant, so add to the beginning of the list.
+    if (_firstChild)
+    {
+        _firstChild->_prevSibling = child;
+        child->_nextSibling = _firstChild;
+        _firstChild = child;
+    }
+    else
+    {
+        _firstChild = child;
+    }
+
+    child->_parent = this;
+
+    ++_childCount;
+
+    // Fire events.
+    child->parentChanged(parent);
+    childAdded(child);
+}
+
+void Node::removeChild(Node* child)
+{
+    if (child == NULL || child->_parent != this)
+    {
+        // The child is not in our hierarchy.
+        return;
+    }
+
+    // Call remove on the child.
+    child->remove();
+}
+
+void Node::removeAllChildren()
+{
+    _notifyHierarchyChanged = false;
+
+    while (_firstChild)
+    {
+        removeChild(_firstChild);
+    }
+
+    _notifyHierarchyChanged = true;
+    hierarchyChanged();
+}
+
+void Node   ::remove()
+{
+    // Re-link our neighbours.
+    if (_prevSibling)
+    {
+        _prevSibling->_nextSibling = _nextSibling;
+    }
+    if (_nextSibling)
+    {
+        _nextSibling->_prevSibling = _prevSibling;
+    }
+
+    // Update our parent.
+    Node* parent = _parent;
+    if (parent)
+    {
+        if (this == parent->_firstChild)
+        {
+            parent->_firstChild = _nextSibling;
+        }
+
+        --parent->_childCount;
+    }
+
+    _nextSibling = NULL;
+    _prevSibling = NULL;
+    _parent = NULL;
+
+    // Fire events.
+    if (parent)
+    {
+        parentChanged(parent);
+        parent->childRemoved(this);
+    }
+}
+
+Node* Node::getFirstChild() const
+{
+    return _firstChild;
+}
+
+Node* Node::getNextSibling() const
+{
+    return _nextSibling;
+}
+
+Node* Node::getPreviousSibling() const
+{
+    return _prevSibling;
+}
+
+Node* Node::getParent() const
+{
+    return _parent;
+}
+
+unsigned int Node::getChildCount() const
+{
+    return _childCount;
 }
 
 Node* Node::findNode(const char* id, bool recursive, bool exactMatch)
@@ -147,7 +260,9 @@ Scene* Node::getScene() const
     for (Node* n = const_cast<Node*>(this); n != NULL; n = n->getParent())
     {
         if (n->_scene)
+        {
             return n->_scene;
+        }
     }
 
     return NULL;
@@ -174,7 +289,7 @@ const Matrix& Node::getWorldMatrix() const
         // If we have a parent, multiply our parent world transform by our local
         // transform to obtain our final resolved world transform.
         Node* parent = getParent();
-        if (parent)
+        if (parent && !_physicsRigidBody)
         {
             Matrix::multiply(parent->getWorldMatrix(), getMatrix(), &_world);
         }
@@ -194,6 +309,15 @@ const Matrix& Node::getWorldMatrix() const
     }
 
     return _world;
+}
+
+const Matrix& Node::getWorldViewMatrix() const
+{
+    static Matrix worldView;
+    
+    Matrix::multiply(getViewMatrix(), getWorldMatrix(), &worldView);
+
+    return worldView;
 }
 
 const Matrix& Node::getInverseTransposeWorldViewMatrix() const
@@ -291,11 +415,30 @@ const Matrix& Node::getWorldViewProjectionMatrix() const
     return worldViewProj;
 }
 
-const Vector3& Node::getWorldTranslation() const
+Vector3 Node::getWorldTranslation() const
 {
-    static Vector3 translation;
+    Vector3 translation;
     getWorldMatrix().getTranslation(&translation);
     return translation;
+}
+
+Vector3 Node::getActiveCameraTranslation() const
+{
+    Scene* scene = getScene();
+    if (scene)
+    {
+        Camera* camera = scene->getActiveCamera();
+        if (camera)
+        {
+            Node* cameraNode = camera->getNode();
+            if (cameraNode)
+            {
+                return cameraNode->getWorldTranslation();
+            }
+        }
+    }
+
+    return Vector3::zero();
 }
 
 void Node::hierarchyChanged()
@@ -557,10 +700,10 @@ void Node::setBoundsType(Node::BoundsType type)
         switch (_boundsType)
         {
         case BOX:
-            delete _bounds.box;
+            SAFE_DELETE(_bounds.box);
             break;
         case SPHERE:
-            delete _bounds.sphere;
+            SAFE_DELETE(_bounds.sphere);
             break;
         }
         memset(&_bounds, 0, sizeof(_bounds));
@@ -653,16 +796,6 @@ void Node::setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float fr
     
     if (type != PhysicsRigidBody::PHYSICS_SHAPE_NONE)
         _physicsRigidBody = new PhysicsRigidBody(this, type, mass, friction, restitution, linearDamping, angularDamping);
-}
-
-void Node::removeAllChildren()
-{
-    _notifyHierarchyChanged = false;
-
-    Tree<Node>::removeAllChildren();
-
-    _notifyHierarchyChanged = true;
-    hierarchyChanged();
 }
 
 void Node::childAdded(Node* child)

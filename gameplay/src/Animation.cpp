@@ -100,7 +100,7 @@ void Animation::createClips(const char* animationFile)
         int begin = pClip->getInt("begin");
         int end = pClip->getInt("end");
 
-        AnimationClip* clip = createClip(pClip->getID(), ((float) begin / frameCount) * _duration, ((float) end / frameCount) * _duration);
+        AnimationClip* clip = createClip(pClip->getId(), ((float) begin / frameCount) * _duration, ((float) end / frameCount) * _duration);
 
         const char* repeat = pClip->getString("repeatCount");
         if (repeat)
@@ -188,7 +188,9 @@ void Animation::stop(const char* id)
         // Find animation clip.. and play.
         AnimationClip* clip = findClip(id);
         if (clip != NULL)
+        {
             clip->stop();
+        }
     }
 }
 
@@ -271,7 +273,9 @@ AnimationClip* Animation::findClip(const char* id) const
     for (unsigned int i = 0; i < clipCount; i++)
     {
         if (_clips.at(i)->_id.compare(id) == 0)
+        {
             return _clips.at(i);
+        }
     }
     return NULL;
 }

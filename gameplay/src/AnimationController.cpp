@@ -100,7 +100,9 @@ Animation* AnimationController::getAnimation(const char* id) const
     for (unsigned int i = 0; i < animationCount; i++)
     {
         if (_animations.at(i)->_id.compare(id) == 0)
+        {
             return _animations.at(i);
+        }
     }
     return NULL;
 }

@@ -5,11 +5,11 @@
 namespace gameplay
 {
 
-Scene::Scene(void) : cameraNode(NULL)
+Scene::Scene(void) : _cameraNode(NULL)
 {
-    ambientColor[0] = 0.0f;
-    ambientColor[1] = 0.0f;
-    ambientColor[2] = 0.0f;
+    _ambientColor[0] = 0.0f;
+    _ambientColor[1] = 0.0f;
+    _ambientColor[2] = 0.0f;
 }
 
 Scene::~Scene(void)
@@ -29,45 +29,45 @@ const char* Scene::getElementName(void) const
 void Scene::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
-    writeBinaryObjects(nodes, file);
-    if (cameraNode)
+    writeBinaryObjects(_nodes, file);
+    if (_cameraNode)
     {
-        cameraNode->writeBinaryXref(file);
+        _cameraNode->writeBinaryXref(file);
     }
     else
     {
         writeZero(file);
     }
-    write(ambientColor, Light::COLOR_SIZE, file);
+    write(_ambientColor, Light::COLOR_SIZE, file);
 }
 void Scene::writeText(FILE* file)
 {
     fprintElementStart(file);
-    for (std::list<Node*>::const_iterator i = nodes.begin(); i != nodes.end(); i++)
+    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); i++)
     {
         (*i)->writeText(file);
     }
-    if (cameraNode)
+    if (_cameraNode)
     {
-        fprintfElement(file, "activeCamera", cameraNode->getId());
+        fprintfElement(file, "activeCamera", _cameraNode->getId());
     }
-    fprintfElement(file, "ambientColor", ambientColor, Light::COLOR_SIZE);
+    fprintfElement(file, "ambientColor", _ambientColor, Light::COLOR_SIZE);
     fprintElementEnd(file);
 }
 
 void Scene::add(Node* node)
 {
-    nodes.push_back(node);
+    _nodes.push_back(node);
 }
 
 void Scene::setActiveCameraNode(Node* node)
 {
-    cameraNode = node;
+    _cameraNode = node;
 }
 
 Node* Scene::getFirstCameraNode() const
 {
-    for (std::list<Node*>::const_iterator i = nodes.begin(); i != nodes.end(); i++)
+    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); i++)
     {
         Node* n = (*i)->getFirstCameraNode();
         if (n)
@@ -81,14 +81,14 @@ Node* Scene::getFirstCameraNode() const
 void Scene::calcAmbientColor()
 {
     float values[3] = {0.0f, 0.0f, 0.0f};
-    for (std::list<Node*>::const_iterator i = nodes.begin(); i != nodes.end(); i++)
+    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); i++)
     {
         calcAmbientColor(*i, values);
     }
     
-    ambientColor[0] = std::min(values[0], 1.0f);
-    ambientColor[1] = std::min(values[1], 1.0f);
-    ambientColor[2] = std::min(values[2], 1.0f);
+    _ambientColor[0] = std::min(values[0], 1.0f);
+    _ambientColor[1] = std::min(values[1], 1.0f);
+    _ambientColor[2] = std::min(values[2], 1.0f);
 }
 
 void Scene::calcAmbientColor(const Node* node, float* values) const

@@ -9,9 +9,8 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Matrix.h"
-#include <functional>
 #include "AnimationTarget.h"
-
+#include <functional>
 
 namespace gameplay
 {

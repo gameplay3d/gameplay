@@ -320,7 +320,6 @@ Platform* Platform::create(Game* game)
     // Initialize OpenGL ES extensions.
     __glExtensions = (const char*)glGetString(GL_EXTENSIONS);
 
-#ifdef USE_GL_VAOS
     if (strstr(__glExtensions, "GL_OES_vertex_array_object") || strstr(__glExtensions, "GL_ARB_vertex_array_object"))
     {
         // Disable VAO extension for now.
@@ -329,7 +328,6 @@ Platform* Platform::create(Game* game)
         glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
         glIsVertexArray = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress("glIsVertexArrayOES");
     }
-#endif
 
     return platform;
 

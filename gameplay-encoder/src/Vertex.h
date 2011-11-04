@@ -69,7 +69,7 @@ public:
 
     inline bool operator==(const Vertex& v) const
     {
-        return position==v.position && normal==v.normal && tangent==v.tangent && binormal==v.binormal && texCoord==v.texCoord && 
+        return position==v.position && normal==v.normal && tangent==v.tangent && binormal==v.binormal && texCoord==v.texCoord &&
             blendWeights==v.blendWeights && blendIndices==v.blendIndices;
     }
 

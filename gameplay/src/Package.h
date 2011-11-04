@@ -47,7 +47,6 @@ public:
      * Loads a node with the specified ID from the package.
      *
      * @param id The ID of the node to load in the package.
-     * @param scene An optional scene to create/add the node into.
      * 
      * @return The loaded node, or NULL if the node could not be loaded.
      */

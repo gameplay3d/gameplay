@@ -8,7 +8,6 @@
 #include "Mesh.h"
 #include "MeshSkin.h"
 #include "Material.h"
-#include "VertexAttributeBinding.h"
 #include "Node.h"
 
 namespace gameplay
@@ -26,7 +25,6 @@ class Model : public Ref
     friend class Node;
     friend class Mesh;
     friend class Package;
-    
 
 public:
 
@@ -98,6 +96,24 @@ public:
     Material* setMaterial(const char* vshPath, const char* fshPath, const char* defines = NULL, int partIndex = -1);
 
     /**
+     * Sets a material to be used for drawing this Model.
+     *
+     * A Material is created from the specified material file.
+     * The Material is applied for the MeshPart at the given index in this Model's
+     * Mesh. A partIndex of -1 sets a shared Material for all mesh parts, whereas a
+     * value of 0 or greater sets the Material for the specified mesh part only.
+     *
+     * Mesh parts will use an explicitly set part material, if set; otherwise they
+     * will use the globally set material.
+     * 
+     * @param materialPath The path to the material file.
+     * @param partIndex The index of the mesh part to set the material for (-1 for shared material).
+     * 
+     * @return The newly created and bound Material, or NULL if the Material could not be created.
+     */
+    Material* setMaterial(const char* materialPath, int partIndex = -1);
+
+    /**
      * Returns the MeshSkin.
      * 
      * @return The MeshSkin, or NULL if one is not set.
@@ -144,11 +160,10 @@ private:
 
     void validatePartCount();
 
-
     /**
-     * Auto bind possible material parameters.
+     * Sets the specified materia's node binding to this model's node.
      */
-    void autoBindParameters(Material *m);
+    void setMaterialNodeBinding(Material *m);
 
     /**
      * Sets the node that is associated with this model.
@@ -159,10 +174,8 @@ private:
 
     Mesh* _mesh;
     Material* _material;
-    VertexAttributeBinding* _vaBinding;
     unsigned int _partCount;
     Material** _partMaterials;
-    VertexAttributeBinding** _partVaBindings;
     Node* _node;
     MeshSkin* _skin;
 };

@@ -105,11 +105,17 @@ void fprintfMatrix4f(FILE* file, const float* m)
     {
         float v = m[i];
         if (v == 1.0f)
+        {
             fprintf(file, "1.0 ");
+        }
         else if (v == 0.0)
+        {
             fprintf(file, "0.0 ");
+        }
         else
+        {
             fprintf(file, "%f ",v);
+        }
     }
 }
 void skipString(FILE* file)

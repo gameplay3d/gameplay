@@ -5,21 +5,21 @@
 namespace gameplay
 {
 
-DAEChannelTarget::DAEChannelTarget(const domChannel* channelRef) : channel(NULL), targetElement(NULL)
+DAEChannelTarget::DAEChannelTarget(const domChannel* channelRef) : _channel(NULL), _targetElement(NULL)
 {
-    channel = channelRef;
+    _channel = channelRef;
     const std::string target = channelRef->getTarget();
     size_t index = target.find('/');
     if (index == std::string::npos)
     {
         // If the string doesn't contain a '/' then the whole string is the id
         // and there are no sid's being targeted.
-        targetId = target;
+        _targetId = target;
     }
     else
     {
         // The targetId is the part before the first '/'
-        targetId = target.substr(0, index);
+        _targetId = target.substr(0, index);
 
         // each '/' denotes another sid
         size_t start;
@@ -40,7 +40,7 @@ DAEChannelTarget::DAEChannelTarget(const domChannel* channelRef) : channel(NULL)
                 sub = target.substr(start, end - start);
                 index = end + 1;
             }
-            attributeIds.push_back(sub);
+            _attributeIds.push_back(sub);
         } while(end != std::string::npos);
     }
 
@@ -52,31 +52,31 @@ DAEChannelTarget::~DAEChannelTarget(void)
 
 daeElement* DAEChannelTarget::getTargetElement()
 {
-    if (!targetElement && targetId.length() > 0)
+    if (!_targetElement && _targetId.length() > 0)
     {
-        daeSIDResolver resolver(channel->getDocument()->getDomRoot(), targetId.c_str());
-        targetElement = resolver.getElement();
+        daeSIDResolver resolver(_channel->getDocument()->getDomRoot(), _targetId.c_str());
+        _targetElement = resolver.getElement();
     }
-    return targetElement;
+    return _targetElement;
 }
 
 const std::string& DAEChannelTarget::getTargetId() const
 {
-    return targetId;
+    return _targetId;
 }
 
 size_t DAEChannelTarget::getTargetAttributeCount() const
 {
-    return attributeIds.size();
+    return _attributeIds.size();
 }
 
 daeElement* DAEChannelTarget::getTargetAttribute(size_t index)
 {
-    if (index >= attributeIds.size())
+    if (index >= _attributeIds.size())
     {
         return NULL;
     }
-    const std::string& att = attributeIds[index];
+    const std::string& att = _attributeIds[index];
     std::string sid = att.substr(0, att.find('.'));
     daeSIDResolver resolver(getTargetElement(), sid.c_str());
     return resolver.getElement();
@@ -84,14 +84,14 @@ daeElement* DAEChannelTarget::getTargetAttribute(size_t index)
 
 void DAEChannelTarget::getPropertyName(size_t index, std::string* str)
 {
-    if (index < attributeIds.size())
+    if (index < _attributeIds.size())
     {
         // The property name is the string segment after the '.'
         // The propery is optional so it might not be found.
-        const std::string& att = attributeIds[index];
+        const std::string& att = _attributeIds[index];
         size_t i = att.find('.');
         if (i != std::string::npos && i < att.size())
-        {   
+        {
             str->assign(att.substr(i+1));
             return;
         }

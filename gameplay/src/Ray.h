@@ -15,10 +15,6 @@ class Plane;
 class BoundingSphere;
 class BoundingBox;
 
-/**
- * Represents when a 3D entity does not intersect a ray.
- */
-#define RAY_INTERSECTS_NONE            -1
 
 /**
  * Defines a 3-dimensional ray.
@@ -28,6 +24,11 @@ class BoundingBox;
 class Ray
 {
 public:
+
+    /**
+     * Represents when a 3D entity does not intersect a ray.
+     */
+    static const int INTERSECTS_NONE = -1;
 
     /**
      * Constructor.
@@ -88,7 +89,7 @@ public:
      * @param sphere The bounding sphere to test intersection with.
      * 
      * @return The distance from the origin of this ray to the bounding object or
-     *     RAY_INTERSECTS_NONE if this ray does not intersect the bounding object.
+     *     INTERSECTS_NONE if this ray does not intersect the bounding object.
      */
     float intersects(const BoundingSphere& sphere) const;
 
@@ -98,7 +99,7 @@ public:
      * @param box The bounding box to test intersection with.
      * 
      * @return The distance from the origin of this ray to the bounding object or
-     *     RAY_INTERSECTS_NONE if this ray does not intersect the bounding object.
+     *     INTERSECTS_NONE if this ray does not intersect the bounding object.
      */
     float intersects(const BoundingBox& box) const;
 
@@ -108,7 +109,7 @@ public:
      * @param frustum The frustum to test intersection with.
      * 
      * @return The distance from the origin of this ray to the frustum or
-     *     RAY_INTERSECTS_NONE if this ray does not intersect the frustum.
+     *     INTERSECTS_NONE if this ray does not intersect the frustum.
      */
     float intersects(const Frustum& frustum) const;
 
@@ -118,7 +119,7 @@ public:
      * @param plane The plane to test intersection with.
      * 
      * @return The distance from the origin of this ray to the plane or
-     *     RAY_INTERSECTS_NONE if this ray does not intersect the plane.
+     *     INTERSECTS_NONE if this ray does not intersect the plane.
      */
     float intersects(const Plane& plane) const;
 
@@ -151,8 +152,8 @@ private:
      */
     void normalize();
 
-    Vector3 _origin;
-    Vector3 _direction;
+    Vector3 _origin;        // The ray origin position.
+    Vector3 _direction;     // The ray direction vector.
 };
 
 }

@@ -14,7 +14,6 @@ namespace gameplay
 std::list<AudioSource*> AudioController::_playingSources;
 
 AudioController::AudioController()
-    : _device(NULL), _context(NULL)
 {
 }
 
@@ -24,39 +23,19 @@ AudioController::~AudioController()
 
 void AudioController::initialize()
 {    
-    // Open the audio device.
-    _device = alcOpenDevice(NULL);
-    if (!_device)
-        LOG_ERROR_VARG("AudioController::initialize() error. Unable to open device. ALc Error: %d", alcGetError(_device));
+	alutInit(0, 0);
 
-    // Create the audio context.
-    _context = alcCreateContext(_device, NULL);
-    ALCenum alcError = alcGetError(_device);
-    if (_context == NULL)
-        LOG_ERROR_VARG("AudioController::initialize() error. Unable to create context. ALc Error: %d", alcError);
-
-    // Make the context current.
-    alcMakeContextCurrent(_context);
-    alcError = alcGetError(_device);
-    if ( alcError != ALC_NO_ERROR)
+	ALenum errorID = alutGetError();
+    if ( errorID != ALUT_ERROR_NO_ERROR)
     {
-        LOG_ERROR_VARG("AudioController::initialize() error. Unable to make context current. ALc Error: %d", alcError);
-        // no sense in going forward if we couldn't create a device or context
+        LOG_ERROR_VARG("AudioController::initialize() error. Unable to initialize alut: %s\n", alutGetErrorString(errorID));
         return;  
     }
 }
 
 void AudioController::finalize()
 {
-    _context = alcGetCurrentContext();
-    _device = alcGetContextsDevice(_context);
-    alcMakeContextCurrent(NULL);
-    alcDestroyContext(_context);
-
-    if (_device)
-    {
-       alcCloseDevice(_device);
-    }
+	alutExit();
 }
 
 void AudioController::pause()

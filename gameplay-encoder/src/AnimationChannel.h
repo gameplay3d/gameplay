@@ -12,11 +12,11 @@ public:
 
     enum InterpolationTypes
     {
-        LINEAR = 1, 
-        BEZIER = 2, 
-        CARDINAL = 3, 
-        HERMITE = 4, 
-        BSPLINE = 5, 
+        LINEAR = 1,
+        BEZIER = 2,
+        CARDINAL = 3,
+        HERMITE = 4,
+        BSPLINE = 5,
         STEP = 6
     };
 
@@ -51,6 +51,7 @@ public:
      * Example: "LINEAR" returns AnimationChannel::LINEAR
      * 
      * @param str Interpolation such as "LINEAR" or "BSPLINE".
+     * 
      * @return A value from InterpolationTypes enum or zero if not valid.
      */
     static unsigned int getInterpolationType(const char* str);
@@ -58,13 +59,13 @@ public:
 
 private:
 
-    std::string targetId;
-    unsigned int targetAttrib;
-    std::vector<float> keytimes;
-    std::vector<float> keyValues;
-    std::vector<float> tangentsIn;
-    std::vector<float> tangentsOut;
-    std::vector<unsigned int> interpolations;
+    std::string _targetId;
+    unsigned int _targetAttrib;
+    std::vector<float> _keytimes;
+    std::vector<float> _keyValues;
+    std::vector<float> _tangentsIn;
+    std::vector<float> _tangentsOut;
+    std::vector<unsigned int> _interpolations;
 };
 
 

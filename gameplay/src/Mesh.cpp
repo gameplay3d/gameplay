@@ -27,15 +27,9 @@ Mesh::~Mesh()
 {
     for (unsigned int i = 0; i < _partCount; ++i)
     {
-        if (_parts[i])
-        {
-            delete _parts[i];
-            _parts[i] = NULL;
-        }
+        SAFE_DELETE(_parts[i]);
     }
-
-    delete[] _parts;
-    _parts = NULL;
+    SAFE_DELETE_ARRAY(_parts);
 
     if (_vertexBuffer)
     {
@@ -257,11 +251,6 @@ Mesh* Mesh::createBoundingBox(const BoundingBox& box)
     return mesh;
 }
 
-Model* Mesh::createModel()
-{
-    return new Model(this);
-}
-
 const VertexFormat* Mesh::getVertexFormat() const
 {
     return _vertexFormat;
@@ -334,7 +323,7 @@ MeshPart* Mesh::addPart(PrimitiveType primitiveType, IndexFormat indexFormat, un
         _parts[_partCount++] = part;
 
         // Delete old part array.
-        delete[] oldParts;
+        SAFE_DELETE_ARRAY(oldParts);
     }
 
     return part;

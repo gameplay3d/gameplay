@@ -3,7 +3,7 @@
 namespace gameplay
 {
 
-Object::Object(void) : fposition(0)
+Object::Object(void) : _fposition(0)
 {
 }
 
@@ -23,27 +23,35 @@ void Object::writeBinary(FILE* file)
 
 const std::string& Object::getId() const
 {
-    return id;
+    return _id;
 }
 
 void Object::setId(const char* idStr)
 {
     if (idStr)
-        id = idStr;
+    {
+        _id = idStr;
+    }
 }
 
 void Object::setId(const std::string& newId)
 {
     if (newId.length() > 0)
-        id = newId;
+    {
+        _id = newId;
+    }
 }
 
 void Object::fprintElementStart(FILE* file)
 {
-    if (id.length() > 0)
-        fprintf(file, "<%s id=\"%s\">\n", getElementName(), id.c_str());
+    if (_id.length() > 0)
+    {
+        fprintf(file, "<%s id=\"%s\">\n", getElementName(), _id.c_str());
+    }
     else
+    {
         fprintf(file, "<%s>\n", getElementName());
+    }
 }
 
 void Object::fprintElementEnd(FILE* file)
@@ -53,12 +61,12 @@ void Object::fprintElementEnd(FILE* file)
 
 unsigned int Object::getFilePosition()
 {
-    return (unsigned int)fposition;
+    return (unsigned int)_fposition;
 }
 
 void Object::saveFilePosition(FILE* file)
 {
-    fposition = ftell(file);
+    _fposition = ftell(file);
 }
 
 void Object::writeBinaryXref(FILE* file)

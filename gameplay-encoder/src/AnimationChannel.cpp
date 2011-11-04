@@ -4,7 +4,7 @@ namespace gameplay
 {
 
 AnimationChannel::AnimationChannel(void) :
-    targetAttrib(0)
+    _targetAttrib(0)
 {
 }
 
@@ -24,66 +24,66 @@ const char* AnimationChannel::getElementName(void) const
 void AnimationChannel::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
-    write(targetId, file);
-    write(targetAttrib, file);
-    write(keytimes, file);
-    write(keyValues, file);
-    write(tangentsIn, file);
-    write(tangentsOut, file);
-    write(interpolations, file);
+    write(_targetId, file);
+    write(_targetAttrib, file);
+    write(_keytimes, file);
+    write(_keyValues, file);
+    write(_tangentsIn, file);
+    write(_tangentsOut, file);
+    write(_interpolations, file);
 }
 
 void AnimationChannel::writeText(FILE* file)
 {
     fprintElementStart(file);
-    fprintfElement(file, "targetId", targetId);
-    fprintfElement(file, "targetAttrib", targetAttrib);
-    fprintfElement(file, "%f ", "keytimes", keytimes);
-    fprintfElement(file, "%f ", "values", keyValues);
-    fprintfElement(file, "%f ", "tangentsIn", tangentsIn);
-    fprintfElement(file, "%f ", "tangentsOut", tangentsOut);
-    fprintfElement(file, "%u ", "interpolations", interpolations);
+    fprintfElement(file, "targetId", _targetId);
+    fprintfElement(file, "targetAttrib", _targetAttrib);
+    fprintfElement(file, "%f ", "keytimes", _keytimes);
+    fprintfElement(file, "%f ", "values", _keyValues);
+    fprintfElement(file, "%f ", "tangentsIn", _tangentsIn);
+    fprintfElement(file, "%f ", "tangentsOut", _tangentsOut);
+    fprintfElement(file, "%u ", "interpolations", _interpolations);
     fprintElementEnd(file);
 }
 
 void AnimationChannel::setTargetId(const std::string str)
 {
-    targetId = str;
+    _targetId = str;
 }
 
 void AnimationChannel::setTargetAttribute(unsigned int attrib)
 {
-    targetAttrib = attrib;
+    _targetAttrib = attrib;
 }
 
 void AnimationChannel::setKeyTimes(const std::vector<float>& values)
 {
-    keytimes = values;
+    _keytimes = values;
 }
 
 void AnimationChannel::setKeyValues(const std::vector<float>& values)
 {
-    keyValues = values;
+    _keyValues = values;
 }
 
 void AnimationChannel::setTangentsIn(const std::vector<float>& values)
 {
-    tangentsIn = values;
+    _tangentsIn = values;
 }
 
 void AnimationChannel::setTangentsOut(const std::vector<float>& values)
 {
-    tangentsOut = values;
+    _tangentsOut = values;
 }
 
 void AnimationChannel::setInterpolations(const std::vector<unsigned int>& values)
 {
-    interpolations = values;
+    _interpolations = values;
 }
 
 const std::vector<float>& AnimationChannel::getKeyValues() const
 {
-    return keyValues;
+    return _keyValues;
 }
 
 unsigned int AnimationChannel::getInterpolationType(const char* str)

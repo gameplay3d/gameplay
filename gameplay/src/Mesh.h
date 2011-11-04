@@ -127,13 +127,6 @@ public:
     static Mesh* createBoundingBox(const BoundingBox& box);
 
     /**
-     * Creates a Model of this Mesh that can be used for drawing with materials.
-     * 
-     * @return The Model of this Mesh.
-     */
-    Model* createModel();
-
-    /**
      * Gets the vertex format for the mesh.
      *
      * @return The vertex format.

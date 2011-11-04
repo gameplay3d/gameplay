@@ -41,7 +41,9 @@ Joint* MeshSkin::getJoint(const char* id) const
     {
         Joint* j = _joints[i];
         if (j && j->getId() != NULL && strcmp(j->getId(), id) == 0)
+        {
             return j;
+        }
     }
 
     return NULL;
@@ -60,10 +62,8 @@ void MeshSkin::setJointCount(unsigned int jointCount)
     }
 
     // Rebuild the matrix palette. Each matrix is 3 rows of Vector4.
-    if (_matrixPalette)
-    {
-        delete[] _matrixPalette;
-    }
+    SAFE_DELETE_ARRAY(_matrixPalette);
+
     if (jointCount > 0)
     {
         _matrixPalette = new Vector4[jointCount * PALETTE_ROWS];

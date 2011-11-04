@@ -54,7 +54,7 @@ public:
     {
     public:
         /**
-         * The vertex elemnet usage semantic.
+         * The vertex element usage semantic.
          */
         Usage usage;
 
@@ -63,8 +63,17 @@ public:
          */
         unsigned int size;
 
+        /**
+         * Constructor.
+         */
         Element();
 
+        /**
+         * Constructor.
+         *
+         * @param usage The vertex element usage semantic.
+         * @param size The number of float values in the vertex element.
+         */
         Element(Usage usage, unsigned int size);
     };
 
@@ -72,24 +81,28 @@ public:
      * Returns a unique VertexFormat for the request vertex element layout.
      *
      * @param elements The list of vertex elements defining the vertex format.
-     * @param count The number of items in the elements array.
+     * @param elementCount The number of items in the elements array.
      * 
      * @return A unique VertexFormat object.
      */
-    static VertexFormat* create(const Element* elements, unsigned int count);
+    static VertexFormat* create(const Element* elements, unsigned int elementCount);
 
     /**
      * Returns the vertex element at the specified index.
+     *
+     * index The index of the element to retreive.
      */
-    const Element& getElement(unsigned int i) const;
+    const Element& getElement(unsigned int index) const;
 
     /**
      * Returns the number of elements in this VertexFormat.
+     *
+     * @return The number of items in the elements array.
      */
     unsigned int getElementCount() const;
 
     /**
-     * Returns the size of a single vertex using this format (in bytes).
+     * Returns the size (in bytes) of a single vertex using this format.
      */
     unsigned int getVertexSize() const;
 

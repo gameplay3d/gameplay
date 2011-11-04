@@ -23,20 +23,21 @@ const char* Animation::getElementName(void) const
 void Animation::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
-    // Write AnimationChannels
-    write(channels.size(), file);
-    for (std::vector<AnimationChannel*>::iterator i = channels.begin(); i != channels.end(); i++)
+    // Animation writes its ID because it is not listed in the ref table.
+    write(getId(), file);
+    write(_channels.size(), file);
+    for (std::vector<AnimationChannel*>::iterator i = _channels.begin(); i != _channels.end(); i++)
     {
         (*i)->writeBinary(file);
     }
 }
 
 void Animation::writeText(FILE* file)
-{   
+{
     fprintElementStart(file);
-    if (channels.size() > 0 )
+    if (_channels.size() > 0 )
     {
-        for (std::vector<AnimationChannel*>::iterator i = channels.begin(); i != channels.end(); i++)
+        for (std::vector<AnimationChannel*>::iterator i = _channels.begin(); i != _channels.end(); i++)
         {
             (*i)->writeText(file);
         }
@@ -46,12 +47,12 @@ void Animation::writeText(FILE* file)
 
 void Animation::add(AnimationChannel* animationChannel)
 {
-    channels.push_back(animationChannel);
+    _channels.push_back(animationChannel);
 }
 
 unsigned int Animation::getAnimationChannelCount() const
 {
-    return channels.size();
+    return _channels.size();
 }
 
 }

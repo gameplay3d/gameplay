@@ -28,8 +28,9 @@ public:
 
     virtual void writeText(FILE* file);
 
-    std::string vertexShader;
-    std::string fragmentShader;
+private:
+    std::string _vertexShader;
+    std::string _fragmentShader;
 };
 
 

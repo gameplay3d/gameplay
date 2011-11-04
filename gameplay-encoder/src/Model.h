@@ -33,10 +33,11 @@ public:
     void setMesh(Mesh* mesh);
     MeshSkin* getSkin();
     void setSkin(MeshSkin* skin);
+
 private:
-    Mesh* ref;
-    MeshSkin* meshSkin;
-    std::list<Material*> materials;
+    Mesh* _ref;
+    MeshSkin* _meshSkin;
+    std::list<Material*> _materials;
 };
 
 }

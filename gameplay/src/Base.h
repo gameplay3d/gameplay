@@ -96,8 +96,8 @@ extern void printError(const char* format, ...);
 #define MATH_LOG10E                 0.4342944819032518f
 #define MATH_LOG2E                  1.442695040888963387f
 #define MATH_PI                     3.14159265358979323846f
-#define MATH_PIOOVER2               1.57079632679489661923f
-#define MATH_PIOOVER4               M_PI_4
+#define MATH_PIOVER2                1.57079632679489661923f
+#define MATH_PIOVER4                M_PI_4
 #define MATH_PIX2                   6.28318530717958647693f
 #define MATH_EPSILON                0.000001f
 #define MATH_DEG_TO_RAD(x)          ((x) * 0.0174532925f)
@@ -150,13 +150,6 @@ extern void printError(const char* format, ...);
 #define VERTEX_ATTRIBUTE_BLENDWEIGHTS_NAME          "a_blendWeights"
 #define VERTEX_ATTRIBUTE_BLENDINDICES_NAME          "a_blendIndices"
 #define VERTEX_ATTRIBUTE_TEXCOORD_PREFIX            "a_texCoord"
-
-// Uniforms
-#define UNIFORM_WORLD_MATRIX                        "u_worldMatrix"
-#define UNIFORM_VIEW_MATRIX                         "u_viewMatrix"
-#define UNIFORM_WORLD_VIEW_PROJECTION_MATRIX        "u_worldViewProjectionMatrix"
-#define UNIFORM_INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX "u_inverseTransposeWorldViewMatrix"
-#define UNIFORM_CAMERA_POSITION                     "u_cameraPosition"
 
 // Hardware Resources
 namespace gameplay

@@ -20,8 +20,15 @@ class Node;
  */
 class PhysicsRigidBody : public Ref
 {
-public:
+    friend class Node;
+	friend class PhysicsMotionState;
+    friend class PhysicsFixedConstraint;
+    friend class PhysicsGenericConstraint;
+    friend class PhysicsHingeConstraint;
+    friend class PhysicsSocketConstraint;
+    friend class PhysicsSpringConstraint;
 
+public:
 	enum Type
 	{
 		PHYSICS_SHAPE_BOX,
@@ -35,6 +42,8 @@ public:
 	void applyImpulse(const Vector3& impulse, const Vector3* relativePosition = NULL);
 	void applyTorque(const Vector3& torque);
     void applyTorqueImpulse(const Vector3& torque);
+    // TODO!!
+    //void update();
 
     inline void setFriction(float friction);
     inline void setRestitution(float restitution);
@@ -56,12 +65,8 @@ public:
 	inline float getAngularDamping();
 
 private:
-
-	friend class Node;
-	friend class PhysicsMotionState;
-
-    PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, float mass, 
-		float friction = 0.5, float restitution = 0.0, float linearDamping = 0.0, float angularDamping = 0.0);
+    PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, float mass, float friction = 0.5,
+        float restitution = 0.0, float linearDamping = 0.0, float angularDamping = 0.0);
     ~PhysicsRigidBody();
 
     /**
@@ -70,7 +75,8 @@ private:
     PhysicsRigidBody(const PhysicsRigidBody& body) {}
 
 	static btRigidBody* createBulletRigidBody(btCollisionShape* shape, float mass, Node* node,
-        float friction, float restitution, float linearDamping, float angularDamping);
+        float friction, float restitution, float linearDamping, float angularDamping,
+        const Vector3* centerOfMassOffset = NULL);
 
 	btRigidBody* _body;
     Node* _node;

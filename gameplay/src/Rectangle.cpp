@@ -13,12 +13,12 @@ Rectangle::Rectangle()
 {
 }
 
-Rectangle::Rectangle(int width, int height) :
+Rectangle::Rectangle(float width, float height) :
     x(0), y(0), width(width), height(height)
 {
 }
 
-Rectangle::Rectangle(int x, int y, int width, int height) :
+Rectangle::Rectangle(float x, float y, float width, float height) :
     x(x), y(y), width(width), height(height)
 {
 }
@@ -48,7 +48,7 @@ void Rectangle::set(const Rectangle& r)
     set(r.x, r.y, r.width, r.height);
 }
 
-void Rectangle::set(int x, int y, int width, int height)
+void Rectangle::set(float x, float y, float width, float height)
 {
     this->x = x;
     this->y = y;
@@ -56,32 +56,32 @@ void Rectangle::set(int x, int y, int width, int height)
     this->height = height;
 }
 
-int Rectangle::left() const
+float Rectangle::left() const
 {
     return x;
 }
 
-int Rectangle::top() const
+float Rectangle::top() const
 {
     return y;
 }
 
-int Rectangle::right() const
+float Rectangle::right() const
 {
     return x + width;
 }
 
-int Rectangle::bottom() const
+float Rectangle::bottom() const
 {
     return y + height;
 }
 
-bool Rectangle::contains(int x, int y) const
+bool Rectangle::contains(float x, float y) const
 {
     return (x >= x && x <= (x + width) && y >= y && y <= (y + height));
 }
 
-bool Rectangle::contains(int x, int y, int width, int height) const
+bool Rectangle::contains(float x, float y, float width, float height) const
 {
     return (contains(x, y) && contains(x + width, y + height));
 }
@@ -91,12 +91,12 @@ bool Rectangle::contains(const Rectangle& r) const
     return contains(r.x, r.y, r.width, r.height);
 }
 
-bool Rectangle::intersects(int x, int y, int width, int height) const
+bool Rectangle::intersects(float x, float y, float width, float height) const
 {
-    const int left   = fmaxf(static_cast<int>(this->x), x);
-    const int top    = fmaxf(this->y, y);
-    const int right  = fminf(x + width, x + width);
-    const int bottom = fminf(y + height, y + height);
+    const float left   = fmaxf(this->x, x);
+    const float top    = fmaxf(this->y, y);
+    const float right  = fminf(x + width, x + width);
+    const float bottom = fminf(y + height, y + height);
 
     return (right > left && bottom > top);
 }
@@ -114,7 +114,7 @@ void Rectangle::combine(const Rectangle& r1, const Rectangle& r2, Rectangle* dst
     dst->height = fmaxf(r1.y + r1.height, r2.y + r2.height) - dst->y;
 }
 
-void Rectangle::inflate(int horizontalAmount, int verticalAmount)
+void Rectangle::inflate(float horizontalAmount, float verticalAmount)
 {
     x -= horizontalAmount;
     y -= verticalAmount;

@@ -32,25 +32,13 @@ Light::~Light()
     switch (_type)
     {
     case DIRECTIONAL:
-        if (_directional)
-        {
-            delete _directional;
-            _directional = NULL;
-        }
+        SAFE_DELETE(_directional);
         break;
     case POINT:
-        if (_point)
-        {
-            delete _point;
-            _point = NULL;
-        }
+        SAFE_DELETE(_point);
         break;
     case SPOT:
-        if (_spot)
-        {
-            delete _spot;
-            _spot = NULL;
-        }
+        SAFE_DELETE(_spot);
         break;
     }
 }

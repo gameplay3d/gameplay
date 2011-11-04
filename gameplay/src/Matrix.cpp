@@ -5,6 +5,7 @@
 #include "Matrix.h"
 #include "Quaternion.h"
 
+#define MATRIX_SIZE     ( sizeof(float) * 16 )
 
 namespace gameplay
 {

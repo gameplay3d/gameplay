@@ -7,7 +7,6 @@
 
 #include "Base.h"
 #include "Matrix.h"
-#include "Color.h"
 
 namespace gameplay
 {
@@ -129,6 +128,20 @@ class Properties
 public:
 
     /**
+     * Data types supported by the properties class.
+     */
+    enum Type
+    {
+        NONE,
+        STRING,
+        NUMBER,
+        VECTOR2,
+        VECTOR3,
+        VECTOR4,
+        MATRIX
+    };
+
+    /**
      * Creates a Properties runtime settings from a specified file path.
      *
      * @param filePath The file to create the properties from.
@@ -142,8 +155,12 @@ public:
 
     /**
      * Get the name of the next property.
+     *
+     * @param value Optional pointer to a const char* to store the value of the next property in.
+     * 
+     * @return The name of the next property, or NULL if there are no properties remaining.
      */
-    const char* getNextProperty();
+    const char* getNextProperty(const char** value = NULL);
 
     /**
      * Get the next namespace.
@@ -160,7 +177,7 @@ public:
      * Get a specific namespace by ID.  This method will perform a depth-first search
      * on all namespaces and inner namespaces within this Property.
      *
-     * @param The ID of a specific namespace.
+     * @param id The ID of a specific namespace.
      * 
      * @return A properties object with the given ID.
      */
@@ -179,7 +196,7 @@ public:
      *
      * @return The ID of this Property's namespace.
      */
-    const char* getID() const;
+    const char* getId() const;
 
     /**
      * Check if a property with the given name is specified in this Properties object.
@@ -191,79 +208,76 @@ public:
     bool exists(const char* name) const;
 
     /**
+     * Returns the type of a property.
+     *
+     * @param name The name of hte property to interpret, or NULL to return the current property's type.
+     *
+     * @return The type of the property.
+     */
+    Type getType(const char* name = NULL) const;
+
+    /**
      * Get the value of the given property as a string. This can always be retrieved,
      * whatever the intended type of the property.
      *
-     * @param name The name of the property to interpret.
+     * @param name The name of the property to interpret, or NULL to return the current property's value.
      * 
      * @return The value of the given property as a string, or the empty string if no property with that name exists.
      */
-    const char* getString(const char* name) const;
+    const char* getString(const char* name = NULL) const;
 
     /**
      * Interpret the value of the given property as a boolean.
      *
-     * @param name The name of the property to interpret.
+     * @param name The name of the property to interpret, or NULL to return the current property's value.
      * 
      * @return true if the property exists and its value is "true", otherwise false.
      */
-    bool getBool(const char* name) const;
+    bool getBool(const char* name = NULL) const;
 
     /**
      * Interpret the value of the given property as an integer.
      * If the property does not exist, zero will be returned.
      * If the property exists but could not be scanned, an error will be logged and zero will be returned.
      *
-     * @param name The name of the property to interpret.
+     * @param name The name of the property to interpret, or NULL to return the current property's value.
      * 
      * @return The value of the given property interpreted as an integer.
      *   Zero if the property does not exist or could not be scanned.
      */
-    int getInt(const char* name) const;
+    int getInt(const char* name = NULL) const;
 
     /**
      * Interpret the value of the given property as a floating-point number.
      * If the property does not exist, zero will be returned.
      * If the property exists but could not be scanned, an error will be logged and zero will be returned.
      *
-     * @param name The name of the property to interpret.
+     * @param name The name of the property to interpret, or NULL to return the current property's value.
      * 
      * @return The value of the given property interpreted as a float.
      *   Zero if the property does not exist or could not be scanned.
      */
-    float getFloat(const char* name) const;
+    float getFloat(const char* name = NULL) const;
 
     /**
      * Interpret the value of the given property as a long integer.
      * If the property does not exist, zero will be returned.
      * If the property exists but could not be scanned, an error will be logged and zero will be returned.
      *
-     * @param name The name of the property to interpret.
+     * @param name The name of the property to interpret, or NULL to return the current property's value.
      * 
      * @return The value of the given property interpreted as a long.
      *   Zero if the property does not exist or could not be scanned.
      */
-    long getLong(const char* name) const;
-    
-    /**
-     * Read the specified number of floats from the value of the specified property and copy
-     * the floats into the given array.
-     *
-     * @param name The name of the property to interpret.
-     * @param out The array to set to this property's interpreted value.
-     * @param count The number of float elements to read.
-     * 
-     * @return true if the property was found and all elements in the array parsed successfully, false if not.
-     */
-    bool getFloatArray(const char* name, float* out, unsigned int count) const;
-    
+    long getLong(const char* name = NULL) const;
+
     /**
      * Interpret the value of the given property as a Matrix.
      * If the property does not exist, out will be set to the identity matrix.
      * If the property exists but could not be scanned, an error will be logged and out will be set
      * to the identity matrix.
      *
-     * @param name The name of the property to interpret.
+     * @param name The name of the property to interpret, or NULL to return the current property's value.
      * @param out The matrix to set to this property's interpreted value.
      * 
      * @return True on success, false if the property does not exist or could not be scanned.
@@ -276,7 +290,7 @@ public:
      * If the property exists but could not be scanned, an error will be logged and out will be set
      * to Vector2(0.0f, 0.0f).
      *
-     * @param name The name of the property to interpret.
+     * @param name The name of the property to interpret, or NULL to return the current property's value.
      * @param out The matrix to set to this property's interpreted value.
      * 
      * @return True on success, false if the property does not exist or could not be scanned.
@@ -289,7 +303,7 @@ public:
      * If the property exists but could not be scanned, an error will be logged and out will be set
      * to Vector3(0.0f, 0.0f, 0.0f).
      *
-     * @param name The name of the property to interpret.
+     * @param name The name of the property to interpret, or NULL to return the current property's value.
      * @param out The matrix to set to this property's interpreted value.
      * 
      * @return True on success, false if the property does not exist or could not be scanned.
@@ -302,25 +316,13 @@ public:
      * If the property exists but could not be scanned, an error will be logged and out will be set
      * to Vector4(0.0f, 0.0f, 0.0f, 0.0f).
      *
-     * @param name The name of the property to interpret.
+     * @param name The name of the property to interpret, or NULL to return the current property's value.
      * @param out The matrix to set to this property's interpreted value.
      * 
      * @return True on success, false if the property does not exist or could not be scanned.
      */
     bool getVector4(const char* name, Vector4* out) const;
 
-    /**
-     * Interpret the value of the given property as a Color.
-     * If the property does not exist, out will be set to Color(0.0f, 0.0f, 0.0f, 0.0f).
-     * If the property exists but could not be scanned, an error will be logged and out will be set
-     * to Color(0.0f, 0.0f, 0.0f, 0.0f).
-     *
-     * @param name The name of the property to interpret.
-     * @param out The matrix to set to this property's interpreted value.
-     * 
-     * @return True on success, false if the property does not exist or could not be scanned.
-     */
-    bool getColor(const char* name, Color* out) const;
 
 private:
     
@@ -342,10 +344,10 @@ private:
 
     std::string _namespace;
     std::string _id;
-    std::map<std::string, std::string> _map;
-    std::map<std::string, std::string>::const_iterator _mapIt;
-    std::vector<Properties*> _properties;
-    std::vector<Properties*>::const_iterator _propertiesIt;
+    std::map<std::string, std::string> _properties;
+    std::map<std::string, std::string>::const_iterator _propertiesItr;
+    std::vector<Properties*> _namespaces;
+    std::vector<Properties*>::const_iterator _namespacesItr;
 };
 
 }
