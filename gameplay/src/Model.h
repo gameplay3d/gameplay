@@ -151,12 +151,21 @@ private:
      */
     ~Model();
 
+<<<<<<< HEAD
     /**
      * Sets the MeshSkin for this model.
      * 
      * @param skin The MeshSkin for this model.
      */
     void setSkin(MeshSkin* skin);
+=======
+    void validatePartCount();
+
+    /**
+     * Sets the specified materia's node binding to this model's node.
+     */
+    void setMaterialNodeBinding(Material *m);
+>>>>>>> ccc0fd7... - Working changes for physics development.
 
     /**
      * Sets the node that is associated with this model.

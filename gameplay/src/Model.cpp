@@ -325,8 +325,19 @@ void Model::validatePartCount()
     }
 }
 
+<<<<<<< HEAD
 void Model::setMaterialNodeBinding(Material *material)
 {
+=======
+Model* Model::create(Mesh* mesh)
+{
+    mesh->addRef();
+    return new Model(mesh);
+}
+
+void Model::setMaterialNodeBinding(Material *material)
+{
+>>>>>>> ccc0fd7... - Working changes for physics development.
     if (_node)
     {
         material->setNodeBinding(_node);

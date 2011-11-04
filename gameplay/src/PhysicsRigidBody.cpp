@@ -24,7 +24,17 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
             PhysicsController* physics = Game::getInstance()->getPhysicsController();
             btCollisionShape* shape = physics->getBox(box.min, box.max, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
 			
-			_body = createBulletRigidBody(shape, mass, node, friction, restitution, linearDamping, angularDamping);
+            // Use the center of the bounding box as the center of mass offset.
+            Vector3 c(box.min, box.max);
+            c.scale(0.5f);
+            c.add(box.min);
+            c.negate();
+
+            if (c.lengthSquared() > MATH_EPSILON)
+			    _body = createBulletRigidBody(shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
+            else
+                _body = createBulletRigidBody(shape, mass, node, friction, restitution, linearDamping, angularDamping);
+
 			break;
 		}
 		case PhysicsRigidBody::PHYSICS_SHAPE_SPHERE:
@@ -34,7 +44,15 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
 			PhysicsController* physics = Game::getInstance()->getPhysicsController();
 			btCollisionShape* shape = physics->getSphere(sphere.radius, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
 
-            _body = createBulletRigidBody(shape, mass, node, friction, restitution, linearDamping, angularDamping);
+            // Use the center of the bounding sphere as the center of mass offset.
+            Vector3 c(sphere.center);
+            c.negate();
+
+            if (c.lengthSquared() > MATH_EPSILON)
+                _body = createBulletRigidBody(shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
+            else
+                _body = createBulletRigidBody(shape, mass, node, friction, restitution, linearDamping, angularDamping);
+
 			break;
 		}
 		case PhysicsRigidBody::PHYSICS_SHAPE_TRIANGLE_MESH:
@@ -119,8 +137,17 @@ void PhysicsRigidBody::applyTorqueImpulse(const Vector3& torque)
     }
 }
 
+// TODO!!
+/*
+void PhysicsRigidBody::update()
+{
+    if (_body->getMotionState())
+        ((PhysicsMotionState*)_body->getMotionState())->update();
+}
+*/
+
 btRigidBody* PhysicsRigidBody::createBulletRigidBody(btCollisionShape* shape, float mass, Node* node,
-    float friction, float restitution, float linearDamping, float angularDamping)
+    float friction, float restitution, float linearDamping, float angularDamping, const Vector3* centerOfMassOffset)
 {
 	// If the mass is non-zero, then the object is dynamic
 	// and we need to calculate the local inertia.
@@ -129,7 +156,7 @@ btRigidBody* PhysicsRigidBody::createBulletRigidBody(btCollisionShape* shape, fl
 		shape->calculateLocalInertia(mass, localInertia);
 
 	// Create the Bullet physics rigid body object.
-	PhysicsMotionState* motionState = new PhysicsMotionState(node);
+	PhysicsMotionState* motionState = new PhysicsMotionState(node, centerOfMassOffset);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, localInertia);
     rbInfo.m_friction = friction;
     rbInfo.m_restitution = restitution;
