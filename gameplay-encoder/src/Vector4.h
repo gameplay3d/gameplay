@@ -145,6 +145,7 @@ public:
      *
      * @param v1 The first vector.
      * @param v2 The second vector.
+     * 
      * @return The angle between the two vectors, in radians.
      */
     static float angle(const Vector4& v1, const Vector4& v2);
@@ -187,6 +188,7 @@ public:
      * Returns the distance between this vector and v.
      *
      * @param v The other vector.
+     * 
      * @return The distance between this vector and v.
      * @see distanceSquared
      */
@@ -201,6 +203,7 @@ public:
      * this method instead of distance.
      *
      * @param v The other vector.
+     * 
      * @return The squared distance between this vector and v.
      * @see distance
      */
@@ -210,6 +213,7 @@ public:
      * Returns the dot product of this vector and the specified vector.
      *
      * @param v The vector to compute the dot product with.
+     * 
      * @return The dot product.
      */
     float dot(const Vector4& v);
@@ -219,6 +223,7 @@ public:
      *
      * @param v1 The first vector.
      * @param v2 The second vector.
+     * 
      * @return The dot product between the vectors.
      */
     static float dot(const Vector4& v1, const Vector4& v2);

@@ -88,8 +88,6 @@
     <None Include="res\fonts\arial16.gpb" />
     <None Include="res\meshes\physics_test.gpb" />
     <None Include="res\models\physics_rope_joint_rigidbodies.gpb" />
-    <None Include="res\shaders\skinning.fsh" />
-    <None Include="res\shaders\skinning.vsh" />
     <None Include="res\textures\basketball.png" />
     <None Include="res\textures\die.png" />
     <None Include="res\textures\ground.png" />

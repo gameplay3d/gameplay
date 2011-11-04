@@ -15,7 +15,7 @@ namespace gameplay
  */
 class Texture : public Ref
 {
-    friend class AssetManager;
+    friend class Sampler;
 
 public:
 
@@ -29,6 +29,99 @@ public:
         RGBA8888 = GL_RGBA,
         LUMINANCE = GL_LUMINANCE,
         LUMINANCE_ALPHA = GL_LUMINANCE_ALPHA
+    };
+
+    /**
+     * Defines the set of supported texture filters.
+     */
+    enum Filter
+    {
+        NEAREST = GL_NEAREST,
+        LINEAR = GL_LINEAR,
+        NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
+        LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
+        NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
+        LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR
+    };
+
+    /**
+     * Defines the set of supported texture wrapping modes.
+     */
+    enum Wrap
+    {
+        REPEAT = GL_REPEAT,
+        CLAMP = GL_CLAMP_TO_EDGE
+    };
+    
+    /**
+     * Defnies a texture sampler.
+     *
+     * A texture sampler is basically an instance of a texture that can be
+     * used to sample a texture from a material. In addition to the texture
+     * itself, a sampler stores per-instance texture state information, such
+     * as wrap and filter modes.
+     */
+    class Sampler : public Ref
+    {
+        friend class Texture;
+
+    public:
+
+        /**
+         * Creates a sampler for the specified texture.
+         *
+         * @param texture The texture.
+         *
+         * @return The new sampler.
+         */
+        static Sampler* create(Texture* texture);
+
+        /**
+         * Creates a sampler for the specified texture.
+         *
+         * @param path Path to the texture to create a sampler for.
+         * @param generateMipmaps True to force a full mipmap chain to be generated for the texture, false otherwise.
+         *
+         * @return The new sampler.
+         */
+        static Sampler* create(const char* path, bool generateMipmaps = false);
+
+        /**
+         * Sets the wrap mode for this sampler.
+         *
+         * @param wrapS The horizontal wrap mode.
+         * @param wrapT The vertical wrap mode.
+         */
+        void setWrapMode(Wrap wrapS, Wrap wrapT);
+
+        /**
+         * Sets the texture filter modes for this sampler.
+         *
+         * @param minificationFilter The texture minification filter.
+         * @param magnificationFilter The texture magnification filter.
+         */
+        void setFilterMode(Filter minificationFilter, Filter magnificationFilter);
+
+        /**
+         * Returns the texture for this sampler.
+         */
+        Texture* getTexture() const;
+
+        /**
+         * Binds the texture of this sampler to the renderer and applies the sampler state.
+         */
+        void bind();
+
+    private:
+
+        Sampler(Texture* texture);
+        ~Sampler();
+
+        Texture* _texture;
+        Wrap _wrapS;
+        Wrap _wrapT;
+        Filter _minFilter;
+        Filter _magFilter;
     };
 
     /**
@@ -59,10 +152,30 @@ public:
     /**
      * Sets the wrap mode for this texture.
      *
-     * @param repeatS True if the texture should be repeated horizontally, or false if it should be clamped.
-     * @param repeatT True if the texture should be repeated vertically, or false if it should be clamped.
+     * @param wrapS Horizontal wrapping mode for the texture.
+     * @param wrapT Vertical wrapping mode for the texture.
      */
-    void setWrapMode(bool repeatS, bool repeatT);
+    void setWrapMode(Wrap wrapS, Wrap wrapT);
+
+    /**
+     * Sets the minification and magnification filter modes for this texture.
+     *
+     * @param minificationFilter New texture minification filter.
+     * @param magnificationFilter New texture magnification filter.
+     */
+    void setFilterMode(Filter minificationFilter, Filter magnificationFilter);
+
+    /**
+     * Generates a full mipmap chain for this texture if it isn't already mipmapped.
+     */
+    void generateMipmaps();
+
+    /**
+     * Determines if this texture currently contains a full mipmap chain.
+     *
+     * @return True if this texture is currently mipmapped, false otherwise.
+     */
+    bool isMipmapped() const;
 
     /**
      * Returns the texture handle.
@@ -94,6 +207,7 @@ private:
     TextureHandle _handle;
     unsigned int _width;
     unsigned int _height;
+    bool _mipmapped;
     bool _cached;
 };
 

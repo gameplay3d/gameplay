@@ -51,11 +51,7 @@ Package::~Package()
         __packageCache.erase(itr);
     }
 
-    if (_references)
-    {
-        delete[] _references;
-        _references = NULL;
-    }
+    SAFE_DELETE_ARRAY(_references);
 
     if (_file)
     {
@@ -99,14 +95,14 @@ std::string readString(FILE* fp)
     {
         if (fread(str, 1, length, fp) != length)
         {
-            delete[] str;
+            SAFE_DELETE_ARRAY(str);
             return std::string();
         }
     }
 
     str[length] = '\0';
     std::string result(str);
-    delete[] str;
+    SAFE_DELETE_ARRAY(str);
     return result;
 }
 
@@ -162,7 +158,7 @@ Package* Package::create(const char* path)
             fread(&refs[i].offset, 4, 1, fp) != 1)
         {
             fclose(fp);
-            delete[] refs;
+            SAFE_DELETE_ARRAY(refs);
             return NULL;
         }
     }
@@ -442,10 +438,10 @@ Node* Package::readNode(Scene* sceneContext, Node* nodeContext)
     switch (nodeType)
     {
     case Node::NODE:
-        node = Node::create(id == NULL ? "" : id);
+        node = Node::create(id);
         break;
     case Node::JOINT:
-        node = Joint::create(id == NULL ? "" : id);
+        node = Joint::create(id);
         break;
     default:
         return NULL;
@@ -687,7 +683,7 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
     if (!readMatrix(bindShape))
     {
         LOG_ERROR_VARG("Failed to load MeshSkin in package '%s'.", _path.c_str());
-        delete meshSkin;
+        SAFE_DELETE(meshSkin);
         return NULL;
     }
     meshSkin->setBindShape(bindShape);
@@ -700,14 +696,14 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
     if (!read(&jointCount))
     {
         LOG_ERROR_VARG("Failed to load MeshSkin in package '%s'.", _path.c_str());
-        delete meshSkin;
-        delete skinData;
+        SAFE_DELETE(meshSkin);
+        SAFE_DELETE(skinData);
         return NULL;
     }
     if (jointCount == 0)
     {
-        delete meshSkin;
-        delete skinData;
+        SAFE_DELETE(meshSkin);
+        SAFE_DELETE(skinData);
         return NULL;
     }
     meshSkin->setJointCount(jointCount);
@@ -723,8 +719,8 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
     if (!read(&jointsBindPosesCount))
     {
         LOG_ERROR_VARG("Failed to load MeshSkin in package '%s'.", _path.c_str());
-        delete meshSkin;
-        delete skinData;
+        SAFE_DELETE(meshSkin);
+        SAFE_DELETE(skinData);
         return NULL;
     }
     if (jointsBindPosesCount > 0)
@@ -736,8 +732,8 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
             if (!readMatrix(m))
             {
                 LOG_ERROR_VARG("Failed to load MeshSkin in package '%s'.", _path.c_str());
-                delete meshSkin;
-                delete skinData;
+                SAFE_DELETE(meshSkin);
+                SAFE_DELETE(skinData);
                 return NULL;
             }
             skinData->inverseBindPoseMatrices.push_back(m);
@@ -968,7 +964,7 @@ Mesh* Package::loadMesh(const char* id)
         unsigned int vUsage, vSize;
         if (fread(&vUsage, 4, 1, _file) != 1 || fread(&vSize, 4, 1, _file) != 1)
         {
-            delete[] vertexElements;
+            SAFE_DELETE_ARRAY(vertexElements);
             return NULL;
         }
 
@@ -978,8 +974,7 @@ Mesh* Package::loadMesh(const char* id)
 
     // Create VertexFormat
     VertexFormat* vertexFormat = VertexFormat::create(vertexElements, vertexElementCount);
-    delete[] vertexElements;
-    vertexElements = NULL;
+    SAFE_DELETE_ARRAY(vertexElements);
     if (vertexFormat == NULL)
     {
         return NULL;
@@ -1023,12 +1018,11 @@ Mesh* Package::loadMesh(const char* id)
     if (mesh == NULL)
     {
         LOG_ERROR_VARG("Failed to create mesh: %s", id);
-        delete[] vertexData;
+        SAFE_DELETE_ARRAY(vertexData);
         return NULL;
     }
     mesh->setVertexData(vertexData, 0, vertexCount);
-    delete[] vertexData;
-    vertexData = NULL;
+    SAFE_DELETE_ARRAY(vertexData);
 
     // Set mesh bounding volumes
     mesh->_boundingBox.set(boundsMin, boundsMax);
@@ -1058,7 +1052,7 @@ Mesh* Package::loadMesh(const char* id)
         if (fread(indexData, 1, iByteCount, _file) != iByteCount)
         {
             LOG_ERROR_VARG("Failed to read %d index data bytes for mesh part (i=%d): %s", iByteCount, i, id);
-            delete[] indexData;
+            SAFE_DELETE_ARRAY(indexData);
             SAFE_RELEASE(mesh);
             return NULL;
         }
@@ -1132,7 +1126,7 @@ Font* Package::loadFont(const char* id)
     if (fread(glyphs, sizeof(Font::Glyph), glyphCount, _file) != glyphCount)
     {
         LOG_ERROR_VARG("Failed to read %d glyphs for font: %s", glyphCount, id);
-        delete[] glyphs;
+        SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
 
@@ -1143,21 +1137,21 @@ Font* Package::loadFont(const char* id)
         fread(&textureByteCount, 4, 1, _file) != 1)
     {
         LOG_ERROR_VARG("Failed to read texture attributes for font: %s", id);
-        delete[] glyphs;
+        SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
     if (textureByteCount != (width * height))
     {
         LOG_ERROR_VARG("Invalid texture byte for font: %s", id);
-        delete[] glyphs;
+        SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
     unsigned char* textureData = new unsigned char[textureByteCount];
     if (fread(textureData, 1, textureByteCount, _file) != textureByteCount)
     {
         LOG_ERROR_VARG("Failed to read %d texture bytes for font: %s", textureByteCount, id);
-        delete[] glyphs;
-        delete[] textureData;
+        SAFE_DELETE_ARRAY(glyphs);
+        SAFE_DELETE_ARRAY(textureData);
         return NULL;
     }
 
@@ -1165,13 +1159,12 @@ Font* Package::loadFont(const char* id)
     Texture* texture = Texture::create(Texture::ALPHA, width, height, textureData);
 
     // Free the texture data (no longer needed)
-    delete[] textureData;
-    textureData = NULL;
+    SAFE_DELETE_ARRAY(textureData);
 
     if (texture == NULL)
     {
         LOG_ERROR_VARG("Failed to create texture for font: %s", id);
-        delete[] glyphs;
+        SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
 
@@ -1179,8 +1172,7 @@ Font* Package::loadFont(const char* id)
     Font* font = Font::create(family.c_str(), Font::PLAIN, size, glyphs, glyphCount, texture);
 
     // Free the glyph array
-    delete[] glyphs;
-    glyphs = NULL;
+    SAFE_DELETE_ARRAY(glyphs);
 
     // Release the texture since the Font now owns it
     SAFE_RELEASE(texture);

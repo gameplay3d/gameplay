@@ -6,7 +6,6 @@
 #define NODE_H_
 
 #include "Transform.h"
-#include "Tree.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Model.h"
@@ -24,7 +23,7 @@ class Scene;
 /**
  * Defines a basic hierachial structure of transformation spaces.
  */
-class Node : public Transform, public Tree<Node>
+class Node : public Transform
 {
     friend class Scene;
     friend class Package;
@@ -51,6 +50,13 @@ public:
     };
 
     /**
+     * Creates a new node with the specified ID.
+     *
+     * @param id The ID for the new node.
+     */
+    static Node* create(const char* id = NULL);
+
+    /**
      * Gets the identifier for the node.
      *
      * @return The node identifier.
@@ -70,11 +76,58 @@ public:
     virtual Node::Type getType() const;
 
     /**
-     * Removes all child nodes.
+     * Adds a child node.
      *
-     * @see Tree<Node>::removeAllChildren()
+     * @param child The child to add.
      */
-    void removeAllChildren();
+    virtual void addChild(Node* child);
+
+    /**
+     * Removes a child node.
+     *
+     * @param child The child to remove.
+     */
+    virtual void removeChild(Node* child);
+
+    /**
+     * Removes all child nodes.
+     */
+    virtual void removeAllChildren();
+
+    /**
+     * Returns the first child for this node.
+     *
+     * @return The first child.
+     */
+    Node* getFirstChild() const;
+
+    /**
+     * Returns the first sibling of this node.
+     *
+     * @return The first sibling.
+     */
+    Node* getNextSibling() const;
+
+    /**
+     * Returns the previous sibling to this node.
+     *
+     * @return The previous sibling.
+     */
+    Node* getPreviousSibling() const;
+
+    /**
+     * Returns the parent of this node.
+     *
+     * @return The parent.
+     */
+    Node* getParent() const;
+
+    /**
+     * Returns the number of direct children of this item.
+     *
+     * @return The number of children.
+     */
+    unsigned int getChildCount() const;
 
     /**
      * Returns the first child node that matches the given ID.
@@ -123,6 +176,13 @@ public:
      * @return The world matrix of this node.
      */
     virtual const Matrix& getWorldMatrix() const;
+
+    /**
+     * Gets the world view matrix corresponding to this node.
+     *
+     * @return The world view matrix of this node.
+     */
+    const Matrix& getWorldViewMatrix() const;
 
     /**
      * Gets the inverse transpose world view matrix corresponding to this node.
@@ -182,11 +242,18 @@ public:
     const Matrix& getWorldViewProjectionMatrix() const;
 
     /**
-     * Gets the translation vector (or position) of this Node in the world space.
+     * Gets the translation vector (or position) of this Node in world space.
      *
      * @return The world translation vector.
      */
-    const Vector3& getWorldTranslation() const;
+    Vector3 getWorldTranslation() const;
+
+    /**
+     * Returns the translation vector of the currently active camera for this node's scene.
+     *
+     * @return The translation vector of the scene's active camera.
+     */
+    Vector3 getActiveCameraTranslation() const;
 
     /**
      * Returns the pointer to this node's camera.
@@ -351,17 +418,30 @@ protected:
     virtual ~Node();
 
     /**
-     * Creates a new node with the specified ID.
-     *
-     * @param id The ID for the new node.
+     * Removes this node from its parent.
      */
-    static Node* create(const char* id = NULL);
+    void remove();
 
-    void childAdded(Node* child);
+    /**
+     * Called when a child is added to this item in the tree.
+     * 
+     * @param child The child that was added.
+     */
+    virtual void childAdded(Node* child);
 
-    void childRemoved(Node* child);
+    /**
+     * Called when a child is removed from this item in the tree.
+     *
+     * @param child The child that was removed.
+     */
+    virtual void childRemoved(Node* child);
 
-    void parentChanged(Node* oldParent);
+    /**
+     * Called when the parent of this node changes.
+     *
+     * @param oldParent The previous parent for this node.
+     */
+    virtual void parentChanged(Node* oldParent);
 
     void transformChanged();
 
@@ -369,6 +449,11 @@ protected:
 
     Scene* _scene;
     std::string _id;
+    Node* _firstChild;
+    Node* _nextSibling;
+    Node* _prevSibling;
+    Node* _parent;
+    unsigned int _childCount;
     Camera* _camera;
     Light* _light;
     Model* _model;

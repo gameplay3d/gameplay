@@ -4,7 +4,7 @@ namespace gameplay
 {
 
 MaterialParameter::MaterialParameter(void) :
-    type(0)
+    _type(0)
 {
 }
 
@@ -24,14 +24,14 @@ const char* MaterialParameter::getElementName(void) const
 void MaterialParameter::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
-    write(value, file);
-    write(type, file);
+    write(_value, file);
+    write(_type, file);
 }
 void MaterialParameter::writeText(FILE* file)
 {
     fprintElementStart(file);
-    fprintfElement(file, "%f ", "value", value);
-    fprintfElement(file, "type", type);
+    fprintfElement(file, "%f ", "value", _value);
+    fprintfElement(file, "type", _type);
     fprintElementEnd(file);
 }
 

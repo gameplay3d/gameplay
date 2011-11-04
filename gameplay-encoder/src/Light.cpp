@@ -4,14 +4,14 @@ namespace gameplay
 {
 
 Light::Light(void) :
-    lightType(0),
-    constantAttenuation(0.0f),
-    linearAttenuation(0.0f),
-    quadraticAttenuation(0.0f),
-    falloffAngle(0.0f),
-    falloffExponent(0.0f)
+    _lightType(0),
+    _constantAttenuation(0.0f),
+    _linearAttenuation(0.0f),
+    _quadraticAttenuation(0.0f),
+    _falloffAngle(0.0f),
+    _falloffExponent(0.0f)
 {
-    fillArray(color, 0.0f, COLOR_SIZE);
+    fillArray(_color, 0.0f, COLOR_SIZE);
 }
 
 Light::~Light(void)
@@ -29,109 +29,109 @@ const char* Light::getElementName(void) const
 void Light::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
-    write(lightType, file);
-    write(color, COLOR_SIZE, file);
+    write(_lightType, file);
+    write(_color, COLOR_SIZE, file);
 
-    if (lightType == SpotLight)
+    if (_lightType == SpotLight)
     {
-        write(constantAttenuation, file);
-        write(linearAttenuation, file);
-        write(quadraticAttenuation, file);
-        write(falloffAngle, file);
-        write(falloffExponent, file);
+        write(_constantAttenuation, file);
+        write(_linearAttenuation, file);
+        write(_quadraticAttenuation, file);
+        write(_falloffAngle, file);
+        write(_falloffExponent, file);
     }
-    else if (lightType == PointLight)
+    else if (_lightType == PointLight)
     {
-        write(constantAttenuation, file);
-        write(linearAttenuation, file);
-        write(quadraticAttenuation, file);
+        write(_constantAttenuation, file);
+        write(_linearAttenuation, file);
+        write(_quadraticAttenuation, file);
     }
 
 }
 void Light::writeText(FILE* file)
 {
     fprintElementStart(file);
-    fprintfElement(file, "lightType", lightType);
-    fprintfElement(file, "color", color, COLOR_SIZE);
+    fprintfElement(file, "lightType", _lightType);
+    fprintfElement(file, "color", _color, COLOR_SIZE);
 
-    if (lightType == SpotLight)
+    if (_lightType == SpotLight)
     {
-        fprintfElement(file, "constantAttenuation", constantAttenuation);
-        fprintfElement(file, "linearAttenuation", linearAttenuation);
-        fprintfElement(file, "quadraticAttenuation", quadraticAttenuation);
-        fprintfElement(file, "falloffAngle", falloffAngle);
-        fprintfElement(file, "falloffExponent", falloffExponent);
+        fprintfElement(file, "constantAttenuation", _constantAttenuation);
+        fprintfElement(file, "linearAttenuation", _linearAttenuation);
+        fprintfElement(file, "quadraticAttenuation", _quadraticAttenuation);
+        fprintfElement(file, "falloffAngle", _falloffAngle);
+        fprintfElement(file, "falloffExponent", _falloffExponent);
     }
-    else if (lightType == PointLight)
+    else if (_lightType == PointLight)
     {
-        fprintfElement(file, "constantAttenuation", constantAttenuation);
-        fprintfElement(file, "linearAttenuation", linearAttenuation);
-        fprintfElement(file, "quadraticAttenuation", quadraticAttenuation);
+        fprintfElement(file, "constantAttenuation", _constantAttenuation);
+        fprintfElement(file, "linearAttenuation", _linearAttenuation);
+        fprintfElement(file, "quadraticAttenuation", _quadraticAttenuation);
     }
     fprintElementEnd(file);
 }
 
 float Light::getRed() const
 {
-    return color[0];
+    return _color[0];
 }
 float Light::getGreen() const
 {
-    return color[1];
+    return _color[1];
 }
 float Light::getBlue() const
 {
-    return color[2];
+    return _color[2];
 }
 
 bool Light::isAmbient() const
 {
-    return lightType == AmbientLight;
+    return _lightType == AmbientLight;
 }
 
 void Light::setAmbientLight()
 {
-    lightType = AmbientLight;
+    _lightType = AmbientLight;
 }
 void Light::setDirectionalLight()
 {
-    lightType = DirectionalLight;
+    _lightType = DirectionalLight;
 }
 void Light::setPointLight()
 {
-    lightType = PointLight;
+    _lightType = PointLight;
 }
 void Light::setSpotLight()
 {
-    lightType = SpotLight;
+    _lightType = SpotLight;
 }
 
 void Light::setColor(float r, float g, float b)
 {
-    color[0] = r;
-    color[1] = g;
-    color[2] = b;
+    _color[0] = r;
+    _color[1] = g;
+    _color[2] = b;
 }
 
 void Light::setConstantAttenuation(float value)
 {
-    constantAttenuation = value;
+    _constantAttenuation = value;
 }
 void Light::setLinearAttenuation(float value)
 {
-    linearAttenuation = value;
+    _linearAttenuation = value;
 }
 void Light::setQuadraticAttenuation(float value)
 {
-    quadraticAttenuation = value;
+    _quadraticAttenuation = value;
 }
 void Light::setFalloffAngle(float value)
 {
-    falloffAngle = value;
+    _falloffAngle = value;
 }
 void Light::setFalloffExponent(float value)
 {
-    falloffExponent = value;
+    _falloffExponent = value;
 }
 
 }

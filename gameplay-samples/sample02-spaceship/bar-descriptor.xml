@@ -112,5 +112,6 @@
     <!--  <action>post_notification</action> -->
     <!--  <action>set_audio_volume</action> -->
     <!--  <action>read_device_identifying_information</action> -->
-
+    <env var="LD_LIBRARY_PATH" value="app/native/lib"/>
+    
 </qnx>

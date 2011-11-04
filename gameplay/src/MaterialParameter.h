@@ -5,7 +5,15 @@
 #ifndef MATERIALPARAMETER_H_
 #define MATERIALPARAMETER_H_
 
-#include "Material.h"
+#include "AnimationTarget.h"
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
+#include "Matrix.h"
+#include "Texture.h"
+#include "Effect.h"
+
+#define MATERIALPARAMETER_ANIMATE_UNIFORM           1
 
 namespace gameplay
 {
@@ -13,7 +21,7 @@ namespace gameplay
 /**
  * Defines a material parameter.
  *
- * This class represents a parameter that can be set for a Material.
+ * This class represents a parameter that can be set for a material.
  * The methods in this class provide a mechanism to set parameters
  * of all supported types. Some types support setting by value,
  * while others only support setting by reference/pointer.
@@ -22,19 +30,24 @@ namespace gameplay
  * pass an array of values as well as a convenient way to support
  * auto-binding of values to a material parameter. For example, by
  * setting the parameter value to a pointer to a Matrix, any changes
- * to the Matrix will automatically be reflected in the Material the
- * next time the Material's bind() method is called.
+ * to the Matrix will automatically be reflected in the technique the
+ * next time the parameter is applied to the render state.
  */
 class MaterialParameter : public AnimationTarget
 {
-    friend class Material;
+    friend class RenderState;
 
 public:
 
-    /**
-     * MaterialParameter's animation target property.
+     /**
+     * Animates the uniform.
      */
     static const int ANIMATE_UNIFORM = 1;
+
+    /**
+     * Returns the name of this material parameter.
+     */
+    const char* getName() const;
 
     /**
      * Sets the value of this parameter to a float value.
@@ -55,16 +68,6 @@ public:
      * Stores a pointer/array of integer values in this parameter.
      */
     void setValue(const int* values, unsigned int count = 1);
-
-    /**
-     * Stores a copy of the specified color value in this parameter.
-     */
-    void setValue(const Color& value);
-
-    /**
-     * Stores a pointer/array of Color values in this parameter.
-     */
-    void setValue(const Color* values, unsigned int count = 1);
 
     /**
      * Stores a copy of the specified Vector2 value in this parameter.
@@ -107,17 +110,19 @@ public:
     void setValue(const Matrix* values, unsigned int count = 1);
 
     /**
-     * Sets the value of this parameter to the specified texture.
+     * Sets the value of this parameter to the specified texture sampler.
      */
-    void setValue(const Texture* texture);
+    void setValue(const Texture::Sampler* sampler);
 
     /**
-     * Loads the texture from the specified path and sets it as the value of this parameter.
+     * Loads a texture sampler from the specified path and sets it as the value of this parameter.
      *
      * @param texturePath The path to the texture to set.
      * @param generateMipmaps True to generate a full mipmap chain for the texture, false otherwise.
+     *
+     * @return The texture sampler that was set for this material parameter.
      */
-    void setValue(const char* texturePath, bool generateMipmaps);
+    Texture::Sampler* setValue(const char* texturePath, bool generateMipmaps);
 
     /**
      * Binds the return value of a class method to this material parameter.
@@ -179,7 +184,7 @@ private:
          * Destructor.
          */
         virtual ~MethodBinding() { }
-        virtual void setValue() = 0;
+        virtual void setValue(Effect* effect) = 0;
     };
 
     /**
@@ -191,7 +196,7 @@ private:
         typedef ParameterType (ClassType::*ValueMethod)() const;
     public:
         MethodValueBinding(MaterialParameter* param, ClassType* instance, ValueMethod valueMethod);
-        void setValue();
+        void setValue(Effect* effect);
     private:
         MaterialParameter* _parameter;
         ClassType* _instance;
@@ -209,19 +214,18 @@ private:
         typedef unsigned int (ClassType::*CountMethod)() const;
     public:
         MethodArrayBinding(MaterialParameter* param, ClassType* instance, ValueMethod valueMethod, CountMethod countMethod);
-        void setValue();
+        void setValue(Effect* effect);
     private:
         MaterialParameter* _parameter;
         ClassType* _instance;
         ValueMethod _valueMethod;
         CountMethod _countMethod;
-
     };
 
     /**
      * Constructor.
      */
-    MaterialParameter(Material* material, Uniform* uniform);
+    MaterialParameter(const char* name);
 
     /**
      * Destructor.
@@ -230,7 +234,7 @@ private:
 
     void clearValue();
 
-    void bind();
+    void bind(Effect* effect);
 
     union
     {
@@ -238,7 +242,7 @@ private:
         int intValue;
         float* floatPtrValue;
         int* intPtrValue;
-        const Texture* textureValue;
+        const Texture::Sampler* samplerValue;
         MethodBinding* method;
     } _value;
 
@@ -251,14 +255,14 @@ private:
         VECTOR3,
         VECTOR4,
         MATRIX,
-        TEXTURE,
+        SAMPLER,
         METHOD
     } _type;
 
     unsigned int _count;
     bool _dynamic;
+    std::string _name;
     Uniform* _uniform;
-    Material* _material;
 };
 
 template <class ClassType, class ParameterType>
@@ -286,9 +290,9 @@ MaterialParameter::MethodValueBinding<ClassType, ParameterType>::MethodValueBind
 }
 
 template <class ClassType, class ParameterType>
-void MaterialParameter::MethodValueBinding<ClassType, ParameterType>::setValue()
+void MaterialParameter::MethodValueBinding<ClassType, ParameterType>::setValue(Effect* effect)
 {
-    _parameter->_material->getEffect()->setValue(_parameter->_uniform, (_instance->*_valueMethod)());
+    effect->setValue(_parameter->_uniform, (_instance->*_valueMethod)());
 }
 
 template <class ClassType, class ParameterType>
@@ -298,9 +302,9 @@ MaterialParameter::MethodArrayBinding<ClassType, ParameterType>::MethodArrayBind
 }
 
 template <class ClassType, class ParameterType>
-void MaterialParameter::MethodArrayBinding<ClassType, ParameterType>::setValue()
+void MaterialParameter::MethodArrayBinding<ClassType, ParameterType>::setValue(Effect* effect)
 {
-    _parameter->_material->getEffect()->setValue(_parameter->_uniform, (_instance->*_valueMethod)(), (_instance->*_countMethod)());
+    effect->setValue(_parameter->_uniform, (_instance->*_valueMethod)(), (_instance->*_countMethod)());
 }
 
 }

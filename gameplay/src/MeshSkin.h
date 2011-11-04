@@ -63,7 +63,7 @@ public:
      */
     unsigned int getMatrixPaletteSize() const;
 
-//private:
+private:
 
     /**
      * Constructor.

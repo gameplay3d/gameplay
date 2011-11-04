@@ -99,6 +99,7 @@ private:
         friend class Animation;
 
     private:
+
         Channel(AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration);
         Channel(const Channel& copy);
         ~Channel();

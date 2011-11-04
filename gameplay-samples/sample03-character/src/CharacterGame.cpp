@@ -4,16 +4,15 @@
 
 #include "CharacterGame.h"
 
-CharacterGame game;
+CharacterGame game; 
 
 CharacterGame::CharacterGame()
-    : _clips(NULL), _animationState(0)
+    : _animationState(0)
 {
 }
 
 CharacterGame::~CharacterGame()
 {
-    SAFE_DELETE_ARRAY(_clips);
 }
 
 void CharacterGame::touch(int x, int y, int touchEvent)
@@ -22,22 +21,19 @@ void CharacterGame::touch(int x, int y, int touchEvent)
     {
     case Input::TOUCHEVENT_PRESS:
     {
-        Animation* animation = Game::getInstance()->getAnimationController()->getAnimation(ANIMATION_ID);
-        assert(animation);
-        AnimationClip* clip = NULL;
         switch (_animationState)
         {
             case 0:
-                _clips[2]->stop();
-                _clips[0]->play();
+                _animation->stop("left_leg");
+                _animation->play("right_arm");
                 break;
             case 1:
-                _clips[0]->stop();
-                _clips[1]->play();
+                _animation->stop("right_arm");
+                _animation->play("right_leg");
                 break;
             case 2:
-                _clips[1]->stop();
-                _clips[2]->play();
+                _animation->stop("right_leg");
+                _animation->play("left_leg");
                 break;
         }
         _animationState = (_animationState + 1) % 3;
@@ -54,35 +50,23 @@ void CharacterGame::touch(int x, int y, int touchEvent)
 
 void CharacterGame::loadCharacterAnimations()
 {
-    const float FRAME_RATE = 24.0f;
+    _animation = Game::getInstance()->getAnimationController()->getAnimation("movements");
+    _animation->createClips("res/animations/seymour.animation");
 
-    Animation* animation = Game::getInstance()->getAnimationController()->getAnimation(ANIMATION_ID);
-    assert(animation);
-
-    _clips = new AnimationClip*[3];
-    _clips[0] = animation->createClip("right arm", (61.0f / FRAME_RATE) * 1000L, (120.0f / FRAME_RATE) * 1000L);
-    _clips[0]->setRepeatCount(ANIMATION_REPEAT_COUNT_INDEFINITE);
-    _clips[0]->setSpeed(1.0f);
-
-    _clips[1] = animation->createClip("right leg", (121.0f / FRAME_RATE) * 1000L, (180.0f / FRAME_RATE) * 1000L);
-    _clips[1]->setRepeatCount(ANIMATION_REPEAT_COUNT_INDEFINITE);       
-    _clips[1]->setSpeed(2.0f);
-
-    _clips[2] = animation->createClip("left leg", (181.0f / FRAME_RATE) * 1000L, (240.0f / FRAME_RATE) * 1000L);
-    _clips[2]->setRepeatCount(3.0f);
-    _clips[2]->setSpeed(3.0f);
+    AnimationClip* clip = _animation->getClip("right_arm");
+    clip->setActiveDuration(AnimationClip::REPEAT_INDEFINITE);
 }
 
 void CharacterGame::initialize()
 {
-    // Initialize GL state
+    // Initialize the render state
     glClearColor(0, 0, 0, 1);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
     // Load mesh from file
-    Package* meshPackage = Package::create("res/meshes/Seymour.gpb");
+    Package* meshPackage = Package::create("res/models/Seymour.gpb");
 
     _scene = meshPackage->loadScene();
 
@@ -104,23 +88,25 @@ void CharacterGame::initialize()
     assert(skin);
 
     // Load material
-    Material* meshMaterial = Material::createMaterial("res/shaders/skinning.vsh", "res/shaders/skinning.fsh", "#define JOINT_COUNT 35");
+    Material* meshMaterial = model->setMaterial("res/shaders/diffuse-specular.vsh", "res/shaders/diffuse-specular.fsh", "#define SKINNING \n #define SKINNING_JOINT_COUNT 35");
+    meshMaterial->setParameterAutoBinding("u_matrixPalette", RenderState::MATRIX_PALETTE);
     meshMaterial->getParameter("u_diffuseTexture")->setValue("res/textures/seymour-diffuse.png", true);
     meshMaterial->getParameter("u_lightDirection")->setValue(lightDirection);
     meshMaterial->getParameter("u_lightColor")->setValue(Vector3(0.75f, 0.75f, 0.75f));
     meshMaterial->getParameter("u_ambientColor")->setValue(Vector3(0.2f, 0.2f, 0.2f));
     meshMaterial->getParameter("u_specularExponent")->setValue(50.0f);
-    // Bind the skins matrix palette to the skinning shader.
-    meshMaterial->getParameter("u_matrixPalette")->bindValue(skin, &MeshSkin::getMatrixPalette, &MeshSkin::getMatrixPaletteSize);
-    model->setMaterial(meshMaterial);
-
+    meshMaterial->setParameterAutoBinding("u_worldMatrix", RenderState::WORLD_MATRIX);
+    meshMaterial->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
+    meshMaterial->setParameterAutoBinding("u_inverseTransposeWorldViewMatrix", RenderState::INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX);
+    meshMaterial->setParameterAutoBinding("u_cameraPosition", RenderState::CAMERA_POSITION);
+    meshMaterial->setParameterAutoBinding("u_matrixPalette", RenderState::MATRIX_PALETTE);
+    
     loadCharacterAnimations();
 
     // Load the font
     Package* fontPackage = Package::create("res/fonts/arial16.gpb");
     _font = fontPackage->loadFont("arial16");
 
-    SAFE_RELEASE(meshMaterial);
     SAFE_RELEASE(fontPackage);
     SAFE_RELEASE(meshPackage);
 }
@@ -139,14 +125,6 @@ void CharacterGame::render(long elapsedTime)
 
     // Draw our scene
     _scene->visit(this, &CharacterGame::drawModel);
-
-    /* Draw the FPS
-    char fps[3];
-    sprintf(fps, "%u", Game::getFrameRate()); 
-    _font->begin();
-    _font->drawText(fps, 5, 5, Color::red());
-    _font->end();
-    */
 }
 
 void CharacterGame::drawModel(Node* node, long cookie)

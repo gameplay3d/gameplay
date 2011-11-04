@@ -39,11 +39,7 @@ Transform::Transform(const Transform& copy)
 
 Transform::~Transform()
 {
-    if (_listeners)
-    {
-        delete _listeners;
-        _listeners = NULL;
-    }
+    SAFE_DELETE(_listeners);
 }
 
 const Matrix& Transform::getMatrix() const

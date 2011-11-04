@@ -44,14 +44,13 @@ public:
     };
 
 private:
-    unsigned char cameraType;
-    float viewport[4];
-    float fieldOfView;
-    float aspectRatio;
-    float nearPlane;
-    float farPlane;
-    float viewportWidth;
-    float viewportHeight;
+    unsigned char _cameraType;
+    float _fieldOfView;
+    float _aspectRatio;
+    float _nearPlane;
+    float _farPlane;
+    float _viewportWidth;
+    float _viewportHeight;
 };
 
 }

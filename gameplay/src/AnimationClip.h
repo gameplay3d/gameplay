@@ -10,7 +10,6 @@
 #include "Curve.h"
 #include "Animation.h"
 
-
 namespace gameplay
 {
 
@@ -30,7 +29,7 @@ public:
     /**
      * Defines a constant for indefinitely repeating an AnimationClip.
      */
-    static const int REPEAT_INDEFINITE = 0; 
+    static const unsigned int REPEAT_INDEFINITE = 0;
 
     /**
      * Defines an animation event listener.

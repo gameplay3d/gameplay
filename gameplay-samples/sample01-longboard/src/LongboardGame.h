@@ -9,24 +9,6 @@
 #include "gameplay-main.h"
 using namespace gameplay;
 
-// Maximum velocity, in meters/sec
-#define VELOCITY_MAX        2.0f
-#define VELOCITY_MAX_MS        (VELOCITY_MAX / 1000.0f)
-
-// Minimum velocity, in meters/sec
-#define VELOCITY_MIN        0.2f
-#define VELOCITY_MIN_MS        (VELOCITY_MIN / 1000.0f)
-
-// Accelerometer pitch control
-#define PITCH_MIN            20.0f
-#define PITCH_MAX            70.0f
-#define PITCH_RANGE            (PITCH_MAX - PITCH_MIN)
-
-// Maximum turn rate (rate of change in direction at full velocity), in degrees/sec
-#define TURNRATE_MAX        75.0f
-#define TURNRATE_MAX_MS        (TURNRATE_MAX / 1000.0f)
-#define ROLL_MAX            40.0f
-
 /**
  * Longboard game class.
  *
@@ -46,6 +28,8 @@ public:
      * Destructor.
      */
     virtual ~LongboardGame();
+
+protected:
 
     /**
      * @see Game::initialize
@@ -70,8 +54,11 @@ public:
 private:
 
     void buildGround();
+
     void buildBoard();
+
     void buildWheels();
+
     void buildGradient();
 
     // Ground

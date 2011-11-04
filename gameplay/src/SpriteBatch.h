@@ -6,11 +6,9 @@
 #define SPRITEBATCH_H_
 
 #include "Texture.h"
-#include "Material.h"
+#include "Effect.h"
 #include "Mesh.h"
 #include "Rectangle.h"
-#include "Color.h"
-#include "Vector2.h"
 #include "Matrix.h"
 
 namespace gameplay
@@ -20,7 +18,7 @@ namespace gameplay
  * Enables groups of sprites to be drawn with common settings.
  *
  * This class provides efficient rendering and sorting of two-dimensional
- * sprites. Only a single texture and material can be used with a SpriteBatch.
+ * sprites. Only a single texture and effect can be used with a SpriteBatch.
  * This limitation promotes efficient batching by using texture atlases and
  * implicit sorting to minimize state changes. Therefore, it is highly
  * recommended to combine multiple small textures into larger texture atlases
@@ -35,9 +33,13 @@ public:
     /**
      * Creates a new SpriteBatch for drawing sprites with the given texture.
      *
-     * If the material parameter is NULL, a default material is used which
-     * utilizes an orthographic projection for the currently bound viewport.
-     * If a custom material is specified, it must meet the following requirements:
+     * If the effect parameter is NULL, a default effect is used which
+     * applies an orthographic projection for the currently bound viewport.
+     * A custom projection matrix can be used with the default effect by passing
+     * a new projection matrix into the SpriteBatch via the setProjectionMatrix
+     * method.
+     *
+     * If a custom effect is specified, it must meet the following requirements:
      * <ol>
      * <li>The vertex shader inputs must include a vec3 position, a vec2 tex coord
      * and a vec4 color.
@@ -47,12 +49,12 @@ public:
      * </ol>
      *
      * @param texture The texture for this sprite batch.
-     * @param material An optional material to use with the SpriteBatch.
+     * @param effect An optional effect to use with the SpriteBatch.
      * @param initialCapacity An optional initial capacity of the batch (number of sprites).
      * 
      * @return A new SpriteBatch for drawing sprites using the given texture.
      */
-    static SpriteBatch* create(Texture* texture, Material* material = NULL, unsigned int initialCapacity = 0);
+    static SpriteBatch* create(Texture* texture, Effect* effect = NULL, unsigned int initialCapacity = 0);
 
     /**
      * Destructor.
@@ -74,7 +76,7 @@ public:
      * @param src The source rectangle.
      * @param color The color to tint the sprite. Use white for no tint.
      */
-    void draw(const Rectangle& dst, const Rectangle& src, const Color& color = Color::white());
+    void draw(const Rectangle& dst, const Rectangle& src, const Vector4& color = Vector4::one());
 
     /**
      * Draws a single sprite.
@@ -84,7 +86,7 @@ public:
      * @param scale The X and Y scale.
      * @param color The color to tint the sprite. Use white for no tint.
      */
-    void draw(const Vector3& dst, const Rectangle& src, const Vector2& scale, const Color& color = Color::white());
+    void draw(const Vector3& dst, const Rectangle& src, const Vector2& scale, const Vector4& color = Vector4::one());
 
     /**
      * Draws a single sprite, rotated around rotationPoint by rotationAngle.
@@ -97,7 +99,7 @@ public:
      *                      (e.g. Use Vector2(0.5f, 0.5f) to rotate around the quad's center.)
      * @param rotationAngle The rotation angle.
      */
-    void draw(const Vector3& dst, const Rectangle& src, const Vector2& scale, const Color& color,
+    void draw(const Vector3& dst, const Rectangle& src, const Vector2& scale, const Vector4& color,
               const Vector2& rotationPoint, float rotationAngle);
 
     /**
@@ -115,7 +117,7 @@ public:
      *                      (e.g. Use Vector2(0.5f, 0.5f) to rotate around the quad's center.)
      * @param rotationAngle The rotation angle.
      */
-    void draw(const Vector3& dst, float width, float height, float u1, float v1, float u2, float v2, const Color& color,
+    void draw(const Vector3& dst, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color,
               const Vector2& rotationPoint, float rotationAngle);
 
     /**
@@ -131,7 +133,7 @@ public:
      * @param v2 Texture coordinate.
      * @param color The color to tint the sprite. Use white for no tint.
      */
-    void draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Color& color);
+    void draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color);
 
     /**
      * Draws a single sprite.
@@ -147,7 +149,7 @@ public:
      * @param v2 Texture coordinate.
      * @param color The color to tint the sprite. Use white for no tint.
      */
-    void draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Color& color);
+    void draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color);
 
     /**
      * Ends sprite drawing.
@@ -191,11 +193,23 @@ public:
     void getBlendMode(GLenum* sfactor, GLenum* dfactor);
 
     /**
-     * Gets the material used by this batch.
+     * Gets the effect used by this batch.
      * 
-     * @return The material.
+     * @return The effect.
      */
-    Material* getMaterial();
+    Effect* getEffect();
+
+    /**
+     * Sets a custom projection matrix to use with the sprite batch.
+     *
+     * When the default effect is used with a SpriteBatch (i.e. when
+     * NULL is passed into the 'effect' parameter of SpriteBatch::create),
+     * this method sets a custom projection matrix to be used instead
+     * of the default orthographic projection.
+     *
+     * @param matrix The new projection matrix to be used with the default effect.
+     */
+    void setProjectionMatrix(const Matrix& matrix);
 
 private:
 
@@ -215,9 +229,11 @@ private:
 
     void resizeBatch(unsigned int capacity);
 
-    Texture* _texture;
-    Material* _material;
-    bool _customMaterial;
+    Effect* _effect;
+    Texture::Sampler* _sampler;
+    Uniform* _samplerUniform;
+    Uniform* _projectionUniform;
+    bool _customEffect;
     VertexAttribute _vaPosition;
     VertexAttribute _vaTexCoord;
     VertexAttribute _vaColor;
@@ -235,6 +251,7 @@ private:
     GLint _dfactor;
     bool _drawing;
     Matrix* _projectionMatrix;
+    bool _customProjectionMatrix;
 };
 
 }

@@ -47,7 +47,7 @@ AnimationClip::~AnimationClip()
         SAFE_DELETE(_beginListeners);
     }
 
-    if (_beginListeners)
+    if (_endListeners)
     {
         std::vector<Listener*>::iterator eIter = _endListeners->begin();
         while (eIter != _endListeners->end())
@@ -216,7 +216,9 @@ bool AnimationClip::update(unsigned long elapsedTime)
 
     // When ended. Probably should move to it's own method so we can call it when the clip is ended early.
     if (!_isPlaying)
+    {
         onEnd();
+    }
 
     return !_isPlaying;
 }

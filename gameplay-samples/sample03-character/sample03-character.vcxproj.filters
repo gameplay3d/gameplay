@@ -10,11 +10,8 @@
     <Filter Include="res\fonts">
       <UniqueIdentifier>{6C29C526-BC3E-42f4-9AEC-B614361A5D2B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="res\meshes">
+    <Filter Include="res\models">
       <UniqueIdentifier>{1B4C3739-77AD-4a58-B2B5-A52CD141AA28}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\shaders">
-      <UniqueIdentifier>{08996726-309D-445f-BA3A-C3259D5884D0}</UniqueIdentifier>
     </Filter>
     <Filter Include="res\textures">
       <UniqueIdentifier>{BDEA3639-6F1D-4531-86FD-2E734FBC0242}</UniqueIdentifier>
@@ -34,21 +31,15 @@
     <None Include="res\textures\seymour-diffuse.png">
       <Filter>res\textures</Filter>
     </None>
-    <None Include="res\shaders\skinning.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\skinning.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
     <None Include="res\fonts\arial.ttf">
       <Filter>res\fonts</Filter>
     </None>
     <None Include="bar-descriptor.xml" />
-    <None Include="res\meshes\Seymour.dae">
-      <Filter>res\meshes</Filter>
+    <None Include="res\models\Seymour.dae">
+      <Filter>res\models</Filter>
     </None>
-    <None Include="res\meshes\Seymour.gpb">
-      <Filter>res\meshes</Filter>
+    <None Include="res\models\Seymour.gpb">
+      <Filter>res\models</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

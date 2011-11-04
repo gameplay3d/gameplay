@@ -13,13 +13,13 @@
 #define SPRITE_BATCH_GROW_FACTOR 2.0f
 
 // Macro to add a sprite vertex
-#define ADD_SPRITE_VERTEX(ptr, x, y, z, u, v, c) \
+#define ADD_SPRITE_VERTEX(ptr, x, y, z, u, v, r, g, b, a) \
     ptr[0] = x; ptr[1] = y; ptr[2] = z; ptr[3] = u; ptr[4] = v; \
-    ptr[5] = c.r; ptr[6] = c.g; ptr[7] = c.b; ptr[8] = c.a
+    ptr[5] = r; ptr[6] = g; ptr[7] = b; ptr[8] = a
 
 // Default sprite vertex shader
 #define SPRITE_VSH \
-    "uniform mat4 sb_ortho_projection;" \
+    "uniform mat4 sb_projection_matrix;" \
     "attribute vec3 a_position;" \
     "attribute vec2 a_texcoord;" \
     "attribute vec4 a_color;" \
@@ -27,7 +27,7 @@
     "varying vec4 vcolor;" \
     "void main()" \
     "{" \
-        "gl_Position = sb_ortho_projection * vec4(a_position, 1);" \
+        "gl_Position = sb_projection_matrix * vec4(a_position, 1);" \
         "vtexcoord = a_texcoord;" \
         "vcolor = a_color;" \
     "}"
@@ -50,11 +50,11 @@ namespace gameplay
 static Effect* __spriteEffect = NULL;
 
 SpriteBatch::SpriteBatch() :
-    _texture(NULL), _material(NULL), _vaPosition(-1), _vaTexCoord(-1), _vaColor(-1),
+    _effect(NULL), _sampler(NULL), _samplerUniform(NULL), _projectionUniform(NULL), _vaPosition(-1), _vaTexCoord(-1), _vaColor(-1),
     _textureWidthRatio(0.0f), _textureHeightRatio(0.0f), _capacity(0), _count(0),
     _vertices(NULL), _verticesPtr(NULL), _indices(NULL), _indicesPtr(NULL), _index(0),
     _blend(true), _sfactor(GL_SRC_ALPHA), _dfactor(GL_ONE_MINUS_SRC_ALPHA),
-    _drawing(false), _projectionMatrix(NULL)
+    _drawing(false), _projectionMatrix(NULL), _customProjectionMatrix(false)
 {
 }
 
@@ -65,34 +65,18 @@ SpriteBatch::SpriteBatch(const SpriteBatch& copy)
 
 SpriteBatch::~SpriteBatch()
 {
-    if (_vertices)
-    {
-        delete[] _vertices;
-        _vertices = NULL;
-    }
-
-    if (_indices)
-    {
-        delete[] _indices;
-        _indices = NULL;
-    }
-
-    if (_projectionMatrix)
-    {
-        delete _projectionMatrix;
-        _projectionMatrix = NULL;
-    }
-
-    SAFE_RELEASE(_texture);
-
-    SAFE_RELEASE(_material);
+    SAFE_DELETE_ARRAY(_vertices);
+    SAFE_DELETE_ARRAY(_indices);
+    SAFE_DELETE(_projectionMatrix);
+    SAFE_RELEASE(_sampler);
+    SAFE_RELEASE(_effect);
 }
 
-SpriteBatch* SpriteBatch::create(Texture* texture, Material* material, unsigned int initialCapacity)
+SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int initialCapacity)
 {
     assert(texture != NULL);
 
-    if (material == NULL)
+    if (effect == NULL)
     {
         // Create our static sprite effect.
         if (__spriteEffect == NULL)
@@ -104,23 +88,19 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Material* material, unsigned 
                 return NULL;
             }
 
-            material = Material::createMaterial(__spriteEffect);
-
-            // Release effect since Material now has a reference to it.
-            SAFE_RELEASE(__spriteEffect);
+            effect = __spriteEffect;
         }
         else
         {
-            material = Material::createMaterial(__spriteEffect);
+            effect = __spriteEffect;
+            effect->addRef();
         }
     }
     else
     {
-        // Add a reference to the material.
-        material->addRef();
+        // Add a reference to the effect.
+        effect->addRef();
     }
-
-    Effect* effect = material->getEffect();
 
     // Look up vertex attributes.
     VertexAttribute vaPosition = effect->getVertexAttribute("a_position");
@@ -129,39 +109,33 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Material* material, unsigned 
     if (vaPosition == -1 || vaTexCoord == -1 || vaColor == -1)
     {
         LOG_ERROR("Failed to load vertex attributes for sprite effect.");
-        SAFE_RELEASE(material);
+        SAFE_RELEASE(effect);
         return NULL;
     }
 
-    // Search for the first sampler uniform in the material.
-    const char* textureUniformName = NULL;
-    unsigned int uniformCount = effect->getUniformCount();
-    for (unsigned int i = 0; i < uniformCount; ++i)
+    // Search for the first sampler uniform in the effect.
+    Uniform* samplerUniform = NULL;
+    for (unsigned int i = 0, count = effect->getUniformCount(); i < count; ++i)
     {
         Uniform* uniform = effect->getUniform(i);
         if (uniform && uniform->getType() == GL_SAMPLER_2D)
         {
-            textureUniformName = uniform->getName();
+            samplerUniform = uniform;
             break;
         }
     }
-    if (textureUniformName == NULL)
+    if (!samplerUniform)
     {
         LOG_ERROR("No uniform of type GL_SAMPLER_2D found in sprite effect.");
-        SAFE_RELEASE(material);
+        SAFE_RELEASE(effect);
         return NULL;
-    }
-
-    // Set the texture in the material.
-    MaterialParameter* textureParameter = material->getParameter(textureUniformName);
-    if (textureParameter != NULL)
-    {
-        textureParameter->setValue(texture);
     }
 
     // Create the batch.
     SpriteBatch* batch = new SpriteBatch();
-    batch->_material = material;
+    batch->_effect = effect;
+    batch->_sampler = Texture::Sampler::create(texture);
+    batch->_samplerUniform = samplerUniform;
     batch->_vaPosition = vaPosition;
     batch->_vaTexCoord = vaTexCoord;
     batch->_vaColor = vaColor;
@@ -169,12 +143,11 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Material* material, unsigned 
     batch->_textureHeightRatio = 1.0f / (float)texture->getHeight();
     batch->resizeBatch(initialCapacity > 0 ? initialCapacity : SPRITE_BATCH_DEFAULT_SIZE);
 
-    // If there is a uniform named 'sb_ortho_projection', allocate and bind our projection matrix to it.
-    MaterialParameter* projectionParameter = material->getParameter("sb_ortho_projection");
-    if (projectionParameter)
+    // If there is a uniform named 'sb_projection_matrix', store it so that we can set our projection matrix to it
+    batch->_projectionUniform = effect->getUniform("sb_projection_matrix");
+    if (batch->_projectionUniform)
     {
         batch->_projectionMatrix = new Matrix();
-        projectionParameter->setValue(batch->_projectionMatrix);
     }
 
     return batch;
@@ -192,7 +165,7 @@ void SpriteBatch::begin()
     _drawing = true;
 }
 
-void SpriteBatch::draw(const Rectangle& dst, const Rectangle& src, const Color& color)
+void SpriteBatch::draw(const Rectangle& dst, const Rectangle& src, const Vector4& color)
 {
     // Calculate uvs.
     float u1 = _textureWidthRatio * src.x;
@@ -203,7 +176,7 @@ void SpriteBatch::draw(const Rectangle& dst, const Rectangle& src, const Color& 
     draw(dst.x, dst.y, dst.width, dst.height, u1, v1, u2, v2, color);
 }
 
-void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& scale, const Color& color)
+void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& scale, const Vector4& color)
 {
     // Calculate uvs.
     float u1 = _textureWidthRatio * src.x;
@@ -214,7 +187,7 @@ void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& 
     draw(dst.x, dst.y, dst.z, scale.x, scale.y, u2, v2, u1, v1, color);
 }
 
-void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& scale, const Color& color,
+void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& scale, const Vector4& color,
                        const Vector2& rotationPoint, float rotationAngle)
 {
     assert(_drawing);
@@ -233,7 +206,7 @@ void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& 
     draw(dst, scale.x, scale.y, u1, v1, u2, v2, color, rotationPoint, rotationAngle);
 }
 
-void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, float v1, float u2, float v2, const Color& color,
+void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color,
                        const Vector2& rotationPoint, float rotationAngle)
 {
     // Expand dst by scale into 4 points.
@@ -255,12 +228,12 @@ void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, 
     upRight.rotate(pivotPoint, rotationAngle);
     downLeft.rotate(pivotPoint, rotationAngle);
     downRight.rotate(pivotPoint, rotationAngle);
-
+    
     // Write sprite vertex data.
-    ADD_SPRITE_VERTEX(_verticesPtr, upLeft.x, upLeft.y, dst.z, u1, v1, color);
-    ADD_SPRITE_VERTEX((_verticesPtr + 9), upRight.x, upRight.y, dst.z, u1, v2, color);
-    ADD_SPRITE_VERTEX((_verticesPtr + 18), downLeft.x, downLeft.y, dst.z, u2, v1, color);
-    ADD_SPRITE_VERTEX((_verticesPtr + 27), downRight.x, downRight.y, dst.z, u2, v2, color);
+    ADD_SPRITE_VERTEX(_verticesPtr, upLeft.x, upLeft.y, dst.z, u1, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX((_verticesPtr + 9), upRight.x, upRight.y, dst.z, u1, v2, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX((_verticesPtr + 18), downLeft.x, downLeft.y, dst.z, u2, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX((_verticesPtr + 27), downRight.x, downRight.y, dst.z, u2, v2, color.x, color.y, color.z, color.w);
     _verticesPtr += 36; // 4 vertices per sprite, 9 elements per vertex (4*9)
 
     // Write sprite index data.
@@ -282,12 +255,12 @@ void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, 
     ++_count;
 }
 
-void SpriteBatch::draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Color& color)
+void SpriteBatch::draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color)
 {
     draw(x, y, 0, width, height, u1, v1, u2, v2, color);
 }
 
-void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Color& color)
+void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color)
 {
     assert(_drawing);
 
@@ -299,10 +272,10 @@ void SpriteBatch::draw(float x, float y, float z, float width, float height, flo
     // Write sprite vertex data.
     float x2 = x + width;
     float y2 = y + height;
-    ADD_SPRITE_VERTEX(_verticesPtr, x, y, z, u1, v1, color);
-    ADD_SPRITE_VERTEX((_verticesPtr + 9), x, y2, z, u1, v2, color);
-    ADD_SPRITE_VERTEX((_verticesPtr + 18), x2, y, z, u2, v1, color);
-    ADD_SPRITE_VERTEX((_verticesPtr + 27), x2, y2, z, u2, v2, color);
+    ADD_SPRITE_VERTEX(_verticesPtr, x, y, z, u1, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX((_verticesPtr + 9), x, y2, z, u1, v2, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX((_verticesPtr + 18), x2, y, z, u2, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX((_verticesPtr + 27), x2, y2, z, u2, v2, color.x, color.y, color.z, color.w);
     _verticesPtr += 36; // 4 vertices per sprite, 9 elements per vertex (4*9)
 
     // Write sprite index data.
@@ -331,7 +304,7 @@ void SpriteBatch::end()
     if (_count > 0)
     {
         // Flush the batch.
-        if (_projectionMatrix)
+        if (_projectionMatrix && !_customProjectionMatrix)
         {
             // Update projection matrix with ortho projection.
             Game* game = Game::getInstance();
@@ -361,8 +334,16 @@ void SpriteBatch::end()
             glDisable(GL_BLEND);
         }
 
-        // Bind our material.
-        _material->bind();
+        // Bind our effect and any required parameters
+        _effect->bind();
+        if (_samplerUniform && _sampler)
+        {
+            _effect->setValue(_samplerUniform, _sampler);
+        }
+        if (_projectionMatrix)
+        {
+            _effect->setValue(_projectionUniform, _projectionMatrix);
+        }
 
         // Unbind any currently bound VBOs so we can use client arrays.
         GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, 0 ) );
@@ -428,7 +409,7 @@ void SpriteBatch::resizeBatch(unsigned int capacity)
             }
             memcpy(newVertices, _vertices, vertexCount * 9 * sizeof(float));
         }
-        delete[] _vertices;
+        SAFE_DELETE_ARRAY(_vertices);
     }
     if (_indices)
     {
@@ -441,7 +422,7 @@ void SpriteBatch::resizeBatch(unsigned int capacity)
             }
             memcpy(newIndices, _indices, indexCount * sizeof(unsigned short));
         }
-        delete[] _indices;
+        SAFE_DELETE_ARRAY(_indices);
     }
 
     // Store new arrays.
@@ -491,9 +472,18 @@ void SpriteBatch::getBlendMode(GLenum* sfactor, GLenum* dfactor)
     *dfactor = _dfactor;
 }
 
-Material* SpriteBatch::getMaterial()
+Effect* SpriteBatch::getEffect()
 {
-    return _material;
+    return _effect;
+}
+
+void SpriteBatch::setProjectionMatrix(const Matrix& matrix)
+{
+    if (_projectionMatrix)
+    {
+        _projectionMatrix->set(matrix);
+        _customProjectionMatrix = true;
+    }
 }
 
 }

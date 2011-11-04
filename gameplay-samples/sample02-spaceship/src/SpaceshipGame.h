@@ -16,29 +16,58 @@ class SpaceshipGame : public Game
 {
 public:
 
+    /**
+     * Constructor.
+     */
     SpaceshipGame();
 
+    /**
+     * Destructor.
+     */
     virtual ~SpaceshipGame();
 
+    /**
+     * @see Game::touch
+     */
+    void touch(int x, int y, int touchEvent);
+
+protected:
+
+    /**
+     * @see Game::initialize
+     */
     void initialize();
 
+    /**
+     * @see Game::finalize
+     */
     void finalize();
     
+    /**
+     * @see Game::update
+     */
     void update(long elapsedTime);
 
+    /**
+     * @see Game::render
+     */
     void render(long elapsedTime);
-
-    void touch(int x, int y, int touchEvent);
 
 private:
 
-    void visitNode(Node* node, long cookie);
-    void initSpaceship();
-    void initEnvironment();
+    void initializeSpaceship();
+
+    void initializeEnvironment();
+
     void setLightMaterialParams(Material* material);
+
     void handleCollisions(float t);
+
     void updateCamera();
+
     void resetGame();
+
+    void visitNode(Node* node, long cookie);
 
     // Scene variables
     Scene* _scene;

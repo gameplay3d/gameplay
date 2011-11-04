@@ -13,7 +13,6 @@
 #include "Package.h"
 
 // Math
-#include "Color.h"
 #include "Rectangle.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -58,3 +57,14 @@
 #include "AnimationValue.h"
 #include "Animation.h"
 #include "AnimationClip.h"
+
+// Physics
+#include "PhysicsConstraint.h"
+#include "PhysicsController.h"
+#include "PhysicsFixedConstraint.h"
+#include "PhysicsGenericConstraint.h"
+#include "PhysicsHingeConstraint.h"
+#include "PhysicsMotionState.h"
+#include "PhysicsRigidBody.h"
+#include "PhysicsSocketConstraint.h"
+#include "PhysicsSpringConstraint.h"

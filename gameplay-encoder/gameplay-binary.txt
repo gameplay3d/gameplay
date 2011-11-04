@@ -142,10 +142,14 @@ Reference
                 light                   Light
                 model                   Model
 ------------------------------------------------------------------------------------------------------
-3->Animation
+3->Animations
+                animations              Animation[]
+------------------------------------------------------------------------------------------------------
+4->Animation
+                id                      string
                 channels                AnimationChannel[]
 -----------------------------------------------------------------------------------------------------
-4->AnimationChannel
+5->AnimationChannel
                 targetId                string
                 targetAttribute         uint
                 keyTimes                float[]  (milliseconds)
@@ -209,7 +213,6 @@ Reference
 ------------------------------------------------------------------------------------------------------
 36->MeshSkin
                 bindShape               float[16]
-                rootJoint               string
                 joints                  xref:Node[]
                 jointsBindPoses         float[] // 16 * joints.length
 ------------------------------------------------------------------------------------------------------

@@ -75,7 +75,7 @@ SpaceshipGame::~SpaceshipGame()
 
 void SpaceshipGame::initialize()
 {
-    // Set initial OpenGL ES state
+    // Initialize the render state
     glClearColor(0, 0, 0, 1);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -92,8 +92,8 @@ void SpaceshipGame::initialize()
     _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
 
     // Initialize scene data
-    initSpaceship();
-    initEnvironment();
+    initializeSpaceship();
+    initializeEnvironment();
 
     // Create font
     _font = Font::create("res/fonts/airstrip28.gpb");
@@ -107,7 +107,7 @@ void SpaceshipGame::initialize()
     _initialCameraPos = _cameraNode->getTranslation();
 }
 
-void SpaceshipGame::initSpaceship()
+void SpaceshipGame::initializeSpaceship()
 {
     Material* material;
 
@@ -119,17 +119,17 @@ void SpaceshipGame::initSpaceship()
     _shipNode = _scene->findNode("pSpaceShip");
     _shipNode->setBoundsType(Node::SPHERE);
     material = _shipNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh", NULL, 0);
-    material->getParameter("u_diffuseColor")->setValue(Color(0.53544f, 0.53544f, 0.53544f, 1.0f));
+    material->getParameter("u_diffuseColor")->setValue(Vector4(0.53544f, 0.53544f, 0.53544f, 1.0f));
     material->getParameter("u_specularExponent")->setValue(SPECULAR);
     setLightMaterialParams(material);
     // Part 1
     material = _shipNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh", NULL, 1);
-    material->getParameter("u_diffuseColor")->setValue(Color(0.8f, 0.8f, 0.8f, 1.0f));
+    material->getParameter("u_diffuseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
     _shipSpecularParameter = material->getParameter("u_specularExponent");
     setLightMaterialParams(material);
     // Part 2
     material = _shipNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh", NULL, 2);
-    material->getParameter("u_diffuseColor")->setValue(Color(0.280584f, 0.5584863f, 0.6928f, 1.0f));
+    material->getParameter("u_diffuseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
     material->getParameter("u_specularExponent")->setValue(SPECULAR);
     setLightMaterialParams(material);
 
@@ -137,7 +137,7 @@ void SpaceshipGame::initSpaceship()
     _propulsionNode = _scene->findNode("pPropulsion");
     _propulsionNode->setBoundsType(Node::BOX);
     material = _propulsionNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh");
-    material->getParameter("u_diffuseColor")->setValue(Color(0.8f, 0.8f, 0.8f, 1.0f));
+    material->getParameter("u_diffuseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
     material->getParameter("u_specularExponent")->setValue(SPECULAR);
     setLightMaterialParams(material);
 
@@ -146,6 +146,7 @@ void SpaceshipGame::initSpaceship()
     material = _glowNode->getModel()->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
     material->getParameter("u_diffuseTexture")->setValue("res/textures/propulsion_glow.png", true);
     _glowDiffuseParameter = material->getParameter("u_diffuseColor");
+    setLightMaterialParams(material);
 
     // Setup the sound
     _spaceshipSound = AudioSource::create("res/sounds/spaceship.wav");
@@ -153,7 +154,7 @@ void SpaceshipGame::initSpaceship()
         _spaceshipSound->setLooped(true);
 }
 
-void SpaceshipGame::initEnvironment()
+void SpaceshipGame::initializeEnvironment()
 {
     Material* material;
     std::vector<Node*> nodes;
@@ -164,7 +165,7 @@ void SpaceshipGame::initEnvironment()
     {
         Node* pGround = nodes[i];
         material = pGround->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh");
-        material->getParameter("u_diffuseColor")->setValue(Color(0.280584f, 0.5584863f, 0.6928f, 1.0f));
+        material->getParameter("u_diffuseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
         material->getParameter("u_specularExponent")->setValue(SPECULAR);
         setLightMaterialParams(material);
     }
@@ -176,7 +177,7 @@ void SpaceshipGame::initEnvironment()
     {
         Node* pRoof = nodes[i];
         material = pRoof->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh");
-        material->getParameter("u_diffuseColor")->setValue(Color(0.280584f, 0.5584863f, 0.6928f, 1.0f));
+        material->getParameter("u_diffuseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
         material->getParameter("u_specularExponent")->setValue(SPECULAR);
         setLightMaterialParams(material);
     }
@@ -191,6 +192,11 @@ void SpaceshipGame::initEnvironment()
 
 void SpaceshipGame::setLightMaterialParams(Material* material)
 {
+    material->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
+    material->setParameterAutoBinding("u_inverseTransposeWorldViewMatrix", RenderState::INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX);
+    material->setParameterAutoBinding("u_worldMatrix", RenderState::WORLD_MATRIX);
+    material->setParameterAutoBinding("u_cameraPosition", RenderState::CAMERA_POSITION);
+    
     // Set lighting parameters (if present)
     MaterialParameter* param = material->getParameter("u_lightDirection");
     if (param)
@@ -319,7 +325,7 @@ void SpaceshipGame::update(long elapsedTime)
     }
 
     // Modify ship glow effect based on the throttle
-    _glowDiffuseParameter->setValue(Color(1, 1, 1, _throttle * ENGINE_POWER));
+    _glowDiffuseParameter->setValue(Vector4(1, 1, 1, _throttle * ENGINE_POWER));
     _shipSpecularParameter->setValue(SPECULAR - ((SPECULAR-2.0f) * _throttle));
 }
 
@@ -426,13 +432,11 @@ void SpaceshipGame::render(long elapsedTime)
     // Draw game text
     _font->begin();
     char text[1024];
-    //sprintf(text, "%dfps", (int)getFrameRate());
-    //_font->drawText(text, 10, 10, Color::yellow());
     sprintf(text, "%dsec.", (int)_time);
-    _font->drawText(text, getWidth() - 120, 10, Color::yellow());
+    _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1));
     if (_finished)
     {
-        _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Color::white());
+        _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one());
     }
     _font->end();
 }

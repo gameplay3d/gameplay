@@ -25,10 +25,7 @@ Effect::~Effect()
     // Free uniforms.
     for (std::map<std::string, Uniform*>::iterator itr = _uniforms.begin(); itr != _uniforms.end(); itr++)
     {
-        if (itr->second)
-        {
-            delete itr->second;
-        }
+        SAFE_DELETE(itr->second);
     }
 
     if (_program)
@@ -73,17 +70,14 @@ Effect* Effect::createFromFile(const char* vshPath, const char* fshPath, const c
     char* fshSource = FileSystem::readAll(fshPath);
     if (fshSource == NULL)
     {
-        delete[] vshSource;
-        vshSource = NULL;
+        SAFE_DELETE_ARRAY(vshSource);
         return NULL;
     }
 
     Effect* effect = createFromSource(vshPath, vshSource, fshPath, fshSource, defines);
     
-    delete[] vshSource;
-    vshSource = NULL;
-    delete[] fshSource;
-    fshSource = NULL;
+    SAFE_DELETE_ARRAY(vshSource);
+    SAFE_DELETE_ARRAY(fshSource);
 
     if (effect == NULL)
     {
@@ -133,11 +127,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
             infoLog[length-1] = '\0';
         }
         LOG_ERROR_VARG("Compile failed for vertex shader (%s): %s", vshPath == NULL ? "NULL" : vshPath, infoLog == NULL ? "" : infoLog);
-        if (infoLog)
-        {
-            delete[] infoLog;
-            infoLog = NULL;
-        }
+        SAFE_DELETE_ARRAY(infoLog);
 
         // Clean up.
         GL_ASSERT( glDeleteShader(vertexShader) );
@@ -163,11 +153,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
             infoLog[length-1] = '\0';
         }
         LOG_ERROR_VARG("Compile failed for fragment shader (%s): %s", fshPath == NULL ? "NULL" : fshPath, infoLog == NULL ? "" : infoLog);
-        if (infoLog)
-        {
-            delete[] infoLog;
-            infoLog = NULL;
-        }
+        SAFE_DELETE_ARRAY(infoLog);
 
         // Clean up.
         GL_ASSERT( glDeleteShader(vertexShader) );
@@ -198,11 +184,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
             infoLog[length-1] = '\0';
         }
         LOG_ERROR_VARG("Linking program failed (%s,%s): %s", vshPath == NULL ? "NULL" : vshPath, fshPath == NULL ? "NULL" : fshPath, infoLog == NULL ? "" : infoLog);
-        if (infoLog)
-        {
-            delete[] infoLog;
-            infoLog = NULL;
-        }
+        SAFE_DELETE_ARRAY(infoLog);
 
         // Clean up.
         GL_ASSERT( glDeleteProgram(program) );
@@ -244,8 +226,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
                 // Assign the vertex attribute mapping for the effect.
                 effect->_vertexAttributes[attribName] = attribLocation;
             }
-            delete[] attribName;
-            attribName = NULL;
+            SAFE_DELETE_ARRAY(attribName);
         }
     }
 
@@ -284,6 +265,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
                 GL_ASSERT( uniformLocation = glGetUniformLocation(program, uniformName) );
 
                 Uniform* uniform = new Uniform();
+                uniform->_effect = effect;
                 uniform->_name = uniformName;
                 uniform->_location = uniformLocation;
                 uniform->_type = uniformType;
@@ -291,8 +273,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
 
                 effect->_uniforms[uniformName] = uniform;
             }
-            delete[] uniformName;
-            uniformName = NULL;
+            SAFE_DELETE_ARRAY(uniformName);
         }
     }
 
@@ -389,12 +370,15 @@ void Effect::setValue(Uniform* uniform, const Vector4* values, unsigned int coun
     GL_ASSERT( glUniform4fv(uniform->_location, count, (GLfloat*)values) );
 }
 
-void Effect::setValue(Uniform* uniform, const Texture* texture)
+void Effect::setValue(Uniform* uniform, const Texture::Sampler* sampler)
 {
     assert(uniform->_type == GL_SAMPLER_2D);
 
     GL_ASSERT( glActiveTexture(GL_TEXTURE0 + uniform->_index) );
-    GL_ASSERT( glBindTexture(GL_TEXTURE_2D, texture->getHandle()) );
+
+    // Bind the sampler - this binds the texture and applies sampler state
+    const_cast<Texture::Sampler*>(sampler)->bind();
+
     GL_ASSERT( glUniform1i(uniform->_location, uniform->_index) );
 }
 
@@ -423,6 +407,11 @@ Uniform::Uniform(const Uniform& copy)
 Uniform::~Uniform()
 {
     // hidden
+}
+
+Effect* Uniform::getEffect() const
+{
+    return _effect;
 }
 
 const char* Uniform::getName() const

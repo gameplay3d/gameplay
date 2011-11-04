@@ -33,12 +33,6 @@
     <None Include="res\textures\rope_texture.png">
       <Filter>res\textures</Filter>
     </None>
-    <None Include="res\shaders\skinning.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\skinning.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
     <None Include="res\models\physics_rope_joint_rigidbodies.gpb">
       <Filter>res\meshes</Filter>
     </None>
@@ -58,9 +52,6 @@
     </Filter>
     <Filter Include="res\textures">
       <UniqueIdentifier>{08c3358f-cc40-45ab-a855-2a0e0097844c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\shaders">
-      <UniqueIdentifier>{f83eb34c-811a-4556-a9c7-e7750183ad53}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

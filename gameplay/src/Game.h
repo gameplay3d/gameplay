@@ -18,6 +18,7 @@ namespace gameplay
  */
 class Game
 {
+
 public:
 
     /**
@@ -260,7 +261,7 @@ private:
     unsigned int _height;                       // The game's display height.
     AnimationController _animationController;   // Controls the scheduling and running of animations.
     AudioController _audioController;           // Controls audio sources that are playing in the game.
-    PhysicsController _physicsController;     // Controls the simulation of a physics scene and entities.
+    PhysicsController _physicsController;       // Controls the simulation of a physics scene and entities.
 };
 
 }

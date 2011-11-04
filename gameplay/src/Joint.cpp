@@ -39,12 +39,13 @@ void Joint::updateJointMatrix(const Matrix& bindShape, Vector4* matrixPalette)
 {
     const char* id = _id.c_str();
 
-    if (_jointMatrixDirty)
+    // Hack: this is so that a single skeleton/joint can be shared across multiple mesh skins.
+    //if (_jointMatrixDirty)
     {
         _jointMatrixDirty = false;
 
         Matrix t;
-        Matrix::multiply(getWorldMatrix(), getInverseBindPose(), &t);
+        Matrix::multiply(getJointMatrix(), getInverseBindPose(), &t);
         Matrix::multiply(t, bindShape, &t);
 
         matrixPalette[0].set(t.m[0], t.m[4], t.m[8], t.m[12]);
@@ -66,28 +67,25 @@ void Joint::setInverseBindPose(const Matrix& m)
 
 const Matrix& Joint::getWorldMatrix() const
 {
-    return Node::getWorldMatrix();
-}
-
-const Matrix& Joint::getJointMatrix() const
-{
     // If this is the root joint, then we 
     // also apply the transform of the model
     // that the skin is attached to to get the
     // actual world matrix.
-    if (_parent == NULL)
+    if (_parent == NULL && _skin != NULL)
     {
-        if (_skin != NULL)
             Matrix::multiply(_skin->_model->getNode()->getWorldMatrix(), Node::getWorldMatrix(), &_jointWorld);
-        else if (_firstChild != NULL && ((Joint*)_firstChild)->_skin != NULL)
-            Matrix::multiply(((Joint*)_firstChild)->_skin->_model->getNode()->getWorldMatrix(), Node::getWorldMatrix(), &_jointWorld);
     }
     else
     {
-        memcpy((void*)_jointWorld.m, Node::getWorldMatrix().m, MATRIX_SIZE);
+        memcpy((void*)_jointWorld.m, Node::getWorldMatrix().m, sizeof(float) * 16);
     }
 
     return _jointWorld;
+}
+
+const Matrix& Joint::getJointMatrix() const
+{
+    return Node::getWorldMatrix();
 }
 
 }

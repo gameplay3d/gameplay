@@ -4,6 +4,7 @@
 
 #include "Base.h"
 #include "PhysicsController.h"
+#include "PhysicsMotionState.h"
 
 namespace gameplay
 {
@@ -31,6 +32,55 @@ void PhysicsController::setGravity(Vector3 gravity)
 	}
 }
 
+PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBody* a, 
+    const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, PhysicsRigidBody* b,
+    const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
+{
+    PhysicsFixedConstraint* constraint = new PhysicsFixedConstraint(a, rotationOffsetA, 
+        translationOffsetA, b, rotationOffsetB, translationOffsetB);
+    addConstraint(constraint);
+    return constraint;
+}
+
+PhysicsGenericConstraint* PhysicsController::createGenericConstraint(PhysicsRigidBody* a,
+    const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, PhysicsRigidBody* b,
+    const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
+{
+    PhysicsGenericConstraint* constraint = new PhysicsGenericConstraint(a, rotationOffsetA, 
+        translationOffsetA, b, rotationOffsetB, translationOffsetB);
+    addConstraint(constraint);
+    return constraint;
+}
+
+PhysicsHingeConstraint* PhysicsController::createHingeConstraint(PhysicsRigidBody* a,
+    const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, PhysicsRigidBody* b, 
+    const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
+{
+    PhysicsHingeConstraint* constraint = new PhysicsHingeConstraint(a, rotationOffsetA, 
+        translationOffsetA, b, rotationOffsetB, translationOffsetB);
+    addConstraint(constraint);
+    return constraint;
+}
+
+PhysicsSocketConstraint* PhysicsController::createSocketConstraint(PhysicsRigidBody* a,
+    const Vector3& translationOffsetA, PhysicsRigidBody* b, const Vector3& translationOffsetB)
+{
+    PhysicsSocketConstraint* constraint = new PhysicsSocketConstraint(a,
+        translationOffsetA, b, translationOffsetB);
+    addConstraint(constraint);
+    return constraint;
+}
+
+PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidBody* a,
+    const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, PhysicsRigidBody* b, 
+    const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
+{
+    PhysicsSpringConstraint* constraint = new PhysicsSpringConstraint(a, rotationOffsetA, 
+        translationOffsetA, b, rotationOffsetB, translationOffsetB);
+    addConstraint(constraint);
+    return constraint;
+}
+
 void PhysicsController::initialize()
 {
 	// TODO: Should any of this be configurable?
@@ -46,6 +96,20 @@ void PhysicsController::initialize()
 
 void PhysicsController::finalize()
 {
+    // Remove the constraints from the world and delete them.
+	for (int i = _world->getNumConstraints() - 1; i >= 0; i--)
+	{
+		btTypedConstraint* constraint = _world->getConstraint(i);
+		_world->removeConstraint(constraint);
+		delete constraint;
+	}
+
+    // Delete the GamePlay physics constraint objects.
+    for (unsigned int i = 0; i < _constraints.size(); i++)
+    {
+        delete _constraints[i];
+    }
+
 	// Remove the rigid bodies from the world and delete them.
 	for (int i = _world->getNumCollisionObjects() - 1; i >= 0 ; i--)
 	{
@@ -103,6 +167,20 @@ void PhysicsController::update(long elapsedTime)
 	// Note that stepSimulation takes elapsed time in seconds
 	// so we divide by 1000 to convert from milliseconds.
 	_world->stepSimulation((float)elapsedTime * 0.001, 10);
+
+    // TODO!!
+    /*
+    // Update the motion states for each rigid body in the scene.
+    for (int i = _world->getNumCollisionObjects() - 1; i >= 0 ; i--)
+	{
+		btCollisionObject* obj = _world->getCollisionObjectArray()[i];
+		btRigidBody* body = btRigidBody::upcast(obj);
+		if (body && body->getMotionState())
+		{
+            ((PhysicsMotionState*)body->getMotionState())->update();
+        }
+    }
+    */
 }
 
 btCollisionShape* PhysicsController::getBox(const Vector3& min, const Vector3& max, const btVector3& scale)
@@ -138,6 +216,12 @@ btCollisionShape* PhysicsController::getTriangleMesh(float* vertexData, int vert
 btCollisionShape* PhysicsController::getHeightfield(void* data, int width, int height)
 {
 	return NULL;
+}
+
+void PhysicsController::addConstraint(PhysicsConstraint* constraint)
+{
+    _world->addConstraint(constraint->_constraint);
+    _constraints.push_back(constraint);
 }
 
 }

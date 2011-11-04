@@ -16,6 +16,28 @@ class FileSystem
 public:
 
     /**
+     * Destructor.
+     */
+    ~FileSystem();
+
+    /**
+     * Sets the path to the root of the resources folder for the game.
+     *
+     * Once set, all resource/file loading will load from the given path.
+     * The default resource path is "./".
+     * 
+     * @param path The path to the root of the resources folder.
+     */
+    static void setResourcePath(const char* path);
+
+    /**
+     * Returns the currently set resource path.
+     * 
+     * @return The currently set resource path.
+     */
+    static const char* getResourcePath();
+
+    /**
      * Opens the specified file.
      *
      * The file at the specified location is opened, relative to the currently set
@@ -42,25 +64,11 @@ public:
      */
     static char* readAll(const char* filePath, int* fileSize = NULL);
 
-    /**
-     * Sets the path to the root of the resources folder for the game.
-     *
-     * Once set, all resource/file loading will load from the given path.
-     * The default resource path is "./".
-     * 
-     * @param path The path to the root of the resources folder.
-     */
-    static void setResourcePath(const char* path);
-
-    /**
-     * Returns the currently set resource path.
-     * 
-     * @return The currently set resource path.
-     */
-    static const char* getResourcePath();
-
 private:
 
+    /**
+     * Constructor.
+     */
     FileSystem();
 };
 

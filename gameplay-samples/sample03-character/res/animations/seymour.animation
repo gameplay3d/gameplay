@@ -1,0 +1,24 @@
+animation boyShape-lib-skin
+{
+    frameCount = 300
+    clip right_arm
+    {
+        begin = 61
+        end = 120
+        repeatCount = INDEFINITE
+    }
+    clip right_leg
+    {
+        begin = 121
+        end = 180
+        repeatCount = INDEFINITE
+        speed = 2
+    }
+    clip left_leg
+    {
+        begin = 181
+        end = 240
+        repeatCount = INDEFINITE
+        speed = 3
+    }
+}
