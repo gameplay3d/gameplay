@@ -41,7 +41,10 @@ Joint* MeshSkin::getJoint(const char* id) const
     {
         Joint* j = _joints[i];
         if (j && j->getId() != NULL && strcmp(j->getId(), id) == 0)
+        {
             return j;
+        }
+    }
 
     return NULL;
 }

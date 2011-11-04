@@ -15,7 +15,7 @@ namespace gameplay
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
-    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL),
+    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL), 
     _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _boundsType(NONE)
 {
     if (id)
@@ -288,7 +288,7 @@ const Matrix& Node::getWorldMatrix() const
         // If we have a parent, multiply our parent world transform by our local
         // transform to obtain our final resolved world transform.
         Node* parent = getParent();
-        if (parent)
+        if (parent && !_physicsRigidBody)
         {
             Matrix::multiply(parent->getWorldMatrix(), getMatrix(), &_world);
         }
@@ -400,6 +400,9 @@ const Matrix& Node::getWorldViewProjectionMatrix() const
 }
 
 Vector3 Node::getTranslationWorld() const
+}
+
+Vector3 Node::getWorldTranslation() const
 {
     Vector3 translation;
     getWorldMatrix().getTranslation(&translation);

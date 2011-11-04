@@ -58,3 +58,14 @@
 #include "AnimationValue.h"
 #include "Animation.h"
 #include "AnimationClip.h"
+
+// Physics
+#include "PhysicsConstraint.h"
+#include "PhysicsController.h"
+#include "PhysicsFixedConstraint.h"
+#include "PhysicsGenericConstraint.h"
+#include "PhysicsHingeConstraint.h"
+#include "PhysicsMotionState.h"
+#include "PhysicsRigidBody.h"
+#include "PhysicsSocketConstraint.h"
+#include "PhysicsSpringConstraint.h"

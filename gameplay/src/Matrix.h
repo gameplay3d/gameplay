@@ -236,7 +236,7 @@ public:
 //     * @param plane The Plane about which to create a reflection.
 //     * @param dst A matrix to store the result in.
 //     */
-//    static void createRefelction(const Plane& plane, Matrix* dst);
+//    static void createReflection(const Plane& plane, Matrix* dst);
 
     /**
      * Creates a scale matrix.
