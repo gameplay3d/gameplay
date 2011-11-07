@@ -122,6 +122,28 @@
     <ClInclude Include="src\VertexFormat.h" />
     <ClInclude Include="src\Viewport.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\bumped-specular.fsh" />
+    <None Include="res\shaders\bumped-specular.vsh" />
+    <None Include="res\shaders\bumped.fsh" />
+    <None Include="res\shaders\bumped.vsh" />
+    <None Include="res\shaders\colored-specular.fsh" />
+    <None Include="res\shaders\colored-specular.vsh" />
+    <None Include="res\shaders\colored.fsh" />
+    <None Include="res\shaders\colored.vsh" />
+    <None Include="res\shaders\diffuse-specular.fsh" />
+    <None Include="res\shaders\diffuse-specular.vsh" />
+    <None Include="res\shaders\diffuse.fsh" />
+    <None Include="res\shaders\diffuse.vsh" />
+    <None Include="res\shaders\parallax-specular.fsh" />
+    <None Include="res\shaders\parallax-specular.vsh" />
+    <None Include="res\shaders\parallax.fsh" />
+    <None Include="res\shaders\parallax.vsh" />
+    <None Include="res\shaders\solid.fsh" />
+    <None Include="res\shaders\solid.vsh" />
+    <None Include="res\shaders\textured.fsh" />
+    <None Include="res\shaders\textured.vsh" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1032BA4B-57EB-4348-9E03-29DD63E80E4A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
