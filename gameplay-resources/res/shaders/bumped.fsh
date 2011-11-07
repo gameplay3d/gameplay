@@ -60,7 +60,7 @@ void applyLight()
     // Fetch normals from the normal map.
     vec3 normalVector = normalize(texture2D(u_normalMapTexture, v_texCoord).rgb * 2.0 - 1.0);
     vec3 spotLightDirection =normalize(v_spotLightDirection);
-    vec3 vertexToSpotLightDirection = normalize(v_spotLightDirectionCurrent);
+    vec3 vertexToSpotLightDirection = normalize(v_vertexToSpotLightDirection);
     
     // "-lightDirection" because light direction points in opposite direction to
     // to spot direction.
