@@ -400,9 +400,6 @@ const Matrix& Node::getWorldViewProjectionMatrix() const
 }
 
 Vector3 Node::getTranslationWorld() const
-}
-
-Vector3 Node::getWorldTranslation() const
 {
     Vector3 translation;
     getWorldMatrix().getTranslation(&translation);

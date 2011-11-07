@@ -37,7 +37,7 @@ class MaterialParameter : public AnimationTarget
 
 public:
 
-     /**
+    /**
      * Animates the uniform.
      */
     static const int ANIMATE_UNIFORM = 1;
@@ -46,11 +46,6 @@ public:
      * Returns the name of this material parameter.
      */
     const char* getName() const;
-
-    /**
-     * MaterialParameter's animation target property.
-     */
-    static const int ANIMATE_UNIFORM = 1;
 
     /**
      * Sets the value of this parameter to a float value.

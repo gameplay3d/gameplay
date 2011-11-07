@@ -141,7 +141,7 @@ Vector3 getTranslationOffset(Node* a, const Vector3& d, bool negate = false)
     if (negate)
         to.negate();
 
-    w1i.transformNormal(&to);
+    w1i.transformVector(&to);
     //to.x *= 1.0f / a->getScaleX();
     //to.y *= 1.0f / a->getScaleY();
     //to.z *= 1.0f / a->getScaleZ();
@@ -282,8 +282,8 @@ void CatapultGame::initialize()
         _scene->setActiveCamera(camera);
     }
 
-    Vector3 lightDirection(0.0f, 0.0f, 1.0f);
-    _scene->getActiveCamera()->getViewMatrix().transformNormal(&lightDirection);
+    Vector3 lightDirection(0.0f, 0.0f, -1.0f);
+    _scene->getActiveCamera()->getViewMatrix().transformVector(&lightDirection);
 
     Game::getPhysicsController()->setGravity(Vector3(0.0f, 0.0f, -9.8f));
     
@@ -354,7 +354,6 @@ void CatapultGame::initialize()
     joint9->setModel(joint9_body->getModel());
     joint10->setModel(joint10_body->getModel());
     
-    /*
     setColoredMaterial(joint1, lightDirection, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
     setColoredMaterial(joint2, lightDirection);
     setColoredMaterial(joint3, lightDirection);
@@ -364,9 +363,7 @@ void CatapultGame::initialize()
     setColoredMaterial(joint7, lightDirection);
     setColoredMaterial(joint8, lightDirection);
     setColoredMaterial(joint9, lightDirection);
-    //*/
     setColoredMaterial(joint10, lightDirection, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
-    //*/
 
     // Set up the static physics objects.
     _ground->setPhysicsRigidBody(PhysicsRigidBody::PHYSICS_SHAPE_BOX, 0.0, 0.5, 0.0, 0.025f, 0.16f);
@@ -384,10 +381,6 @@ void CatapultGame::initialize()
     _volleyball->translate(0.0f, 0.0f, 10.0f);
     _volleyball->setPhysicsRigidBody(PhysicsRigidBody::PHYSICS_SHAPE_SPHERE, 1.0f, f, 0.0f, l, a);
 
-    // TODO!
-    joint10->setPhysicsRigidBody(PhysicsRigidBody::PHYSICS_SHAPE_BOX, 0.1f, f, 0.0, l, a);
-
-    /*
     joint1->setPhysicsRigidBody(PhysicsRigidBody::PHYSICS_SHAPE_BOX, 0.1f, f, 0.0, l, a);
     joint2->setPhysicsRigidBody(PhysicsRigidBody::PHYSICS_SHAPE_BOX, 0.1f, f, 0.0, l, a);
     joint3->setPhysicsRigidBody(PhysicsRigidBody::PHYSICS_SHAPE_BOX, 0.1f, f, 0.0, l, a);
@@ -398,13 +391,11 @@ void CatapultGame::initialize()
     joint8->setPhysicsRigidBody(PhysicsRigidBody::PHYSICS_SHAPE_BOX, 0.1f, f, 0.0, l, a);
     joint9->setPhysicsRigidBody(PhysicsRigidBody::PHYSICS_SHAPE_BOX, 0.1f, f, 0.0, l, a);
     joint10->setPhysicsRigidBody(PhysicsRigidBody::PHYSICS_SHAPE_BOX, 0.1f, f, 0.0, l, a);
-    //*/
 
-    /*
     const BoundingBox& boxA = joint1->getModel()->getMesh()->getBoundingBox();
     Vector3 pivotInA(-0.5f * (boxA.max.x - boxA.min.x), 0.0f, 0.0f);
     Game::getPhysicsController()->createSocketConstraint(joint1->getPhysicsRigidBody(), pivotInA);
-    
+
     addP2PConstraint(joint1, joint2);
     addP2PConstraint(joint2, joint3);
     addP2PConstraint(joint3, joint4);
@@ -414,71 +405,13 @@ void CatapultGame::initialize()
     addP2PConstraint(joint7, joint8);
     addP2PConstraint(joint8, joint9);
     addP2PConstraint(joint9, joint10);
-    //*/
     
-    const BoundingBox& box = joint10->getModel()->getMesh()->getBoundingBox();
-    float a = 0.5f * (box.max.x - box.min.x);
-    Vector3 toA(a, 0.0f, 0.0f);
-    const BoundingSphere& sphere = _basketball->getModel()->getMesh()->getBoundingSphere();
-    float b = -sphere.radius;
-    Vector3 toB(0.0f, b, 0.0f);
-
-    //Game::getInstance()->getPhysicsController()->createSocketConstraint(joint10->getPhysicsRigidBody(), toA, _basketball->getPhysicsRigidBody(), toB);
+    Game::getInstance()->getPhysicsController()->createFixedConstraint(joint10->getPhysicsRigidBody(), _basketball->getPhysicsRigidBody());
     
-    Vector3 midpoint = getMidpointBetweenObjects(joint10, _basketball);
+    //PhysicsSpringConstraint* spring = Game::getInstance()->getPhysicsController()->createSpringConstraint(_dieTop->getPhysicsRigidBody(), _dieBottom->getPhysicsRigidBody());
+    //spring->setLinearDampingX(0.2f);
+    //spring->setLinearStrengthX(2.0f);
 
-    //*
-    Vector3 transA;
-    joint10->getWorldMatrix().getTranslation(&transA);
-    Vector3 offsetA(transA, midpoint);
-    joint10->getWorldMatrix().transformNormal(&offsetA);
-    offsetA = worldToObject(midpoint, joint10->getWorldMatrix().m);
-
-    Vector3 transB;
-    _basketball->getWorldMatrix().getTranslation(&transB);
-    Vector3 offsetB(transB, midpoint);
-    _basketball->getWorldMatrix().transformNormal(&offsetB);
-    offsetB = worldToObject(midpoint, _basketball->getWorldMatrix().m);
-    //*/
-
-    Matrix m;
-    Matrix::createTranslation(midpoint, &m);
-
-    Matrix m1i;
-    joint10->getWorldMatrix().invert(&m1i);
-    m1i.multiply(m);
-
-    Matrix m2i;
-    _basketball->getWorldMatrix().invert(&m2i);
-    m2i.multiply(m);
-    
-    //*
-    Quaternion rA, rB;
-    joint10->getWorldMatrix().getRotation(&rA);
-    _basketball->getWorldMatrix().getRotation(&rB);
-
-    rA.inverse();
-    rB.inverse();
-    //*/
-
-    Quaternion r1, r2;
-    m1i.getRotation(&r1);
-    m2i.getRotation(&r2);
-    
-    Vector3 t1, t2;
-    m1i.getTranslation(&t1);
-    m2i.getTranslation(&t2);
-
-    //*
-    PhysicsGenericConstraint* constraint = Game::getInstance()->getPhysicsController()->createGenericConstraint(joint10->getPhysicsRigidBody(),
-        r1, t1, _basketball->getPhysicsRigidBody(), r2, t2);
-    constraint->setAngularLowerLimit(Vector3(0.0f, 0.0f, 0.0f));
-    constraint->setAngularUpperLimit(Vector3(0.0f, 0.0f, 0.0f));
-    //constraint->setAngularLowerLimit(Vector3(0.0f, 0.0f, MATH_DEG_TO_RAD(90.0f)));
-    //constraint->setAngularUpperLimit(Vector3(0.0f, 0.0f, MATH_DEG_TO_RAD(90.0f)));
-    constraint->setLinearLowerLimit(Vector3(0.0f, 0.0f, 0.0f));
-    constraint->setLinearUpperLimit(Vector3(0.0f, 0.0f, 0.0f));
-    //*/
 
     _volleyball = _basketball;
     
@@ -503,7 +436,7 @@ void CatapultGame::update(long elapsedTime)
     d++;
     if (d == 4)
     {
-        pause();
+        //pause();
     }
 
     // Query the accelerometer.

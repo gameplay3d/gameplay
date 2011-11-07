@@ -20,7 +20,7 @@ PhysicsController::~PhysicsController()
 {
 }
 
-void PhysicsController::setGravity(Vector3 gravity)
+void PhysicsController::setGravity(const Vector3& gravity)
 {
 	_gravity.setX(gravity.x);
 	_gravity.setY(gravity.y);
@@ -32,13 +32,17 @@ void PhysicsController::setGravity(Vector3 gravity)
 	}
 }
 
-PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBody* a, 
-    const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, PhysicsRigidBody* b,
-    const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
+PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
-    PhysicsFixedConstraint* constraint = new PhysicsFixedConstraint(a, rotationOffsetA, 
-        translationOffsetA, b, rotationOffsetB, translationOffsetB);
-    addConstraint(constraint);
+    PhysicsFixedConstraint* constraint = new PhysicsFixedConstraint(a, b);
+    setupConstraint(a, b, constraint);
+    return constraint;
+}
+
+PhysicsGenericConstraint* PhysicsController::createGenericConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
+{
+    PhysicsGenericConstraint* constraint = new PhysicsGenericConstraint(a, b);
+    setupConstraint(a, b, constraint);
     return constraint;
 }
 
@@ -48,7 +52,7 @@ PhysicsGenericConstraint* PhysicsController::createGenericConstraint(PhysicsRigi
 {
     PhysicsGenericConstraint* constraint = new PhysicsGenericConstraint(a, rotationOffsetA, 
         translationOffsetA, b, rotationOffsetB, translationOffsetB);
-    addConstraint(constraint);
+    setupConstraint(a, b, constraint);
     return constraint;
 }
 
@@ -58,7 +62,14 @@ PhysicsHingeConstraint* PhysicsController::createHingeConstraint(PhysicsRigidBod
 {
     PhysicsHingeConstraint* constraint = new PhysicsHingeConstraint(a, rotationOffsetA, 
         translationOffsetA, b, rotationOffsetB, translationOffsetB);
-    addConstraint(constraint);
+    setupConstraint(a, b, constraint);
+    return constraint;
+}
+
+PhysicsSocketConstraint* PhysicsController::createSocketConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
+{
+    PhysicsSocketConstraint* constraint = new PhysicsSocketConstraint(a, b);
+    setupConstraint(a, b, constraint);
     return constraint;
 }
 
@@ -67,7 +78,14 @@ PhysicsSocketConstraint* PhysicsController::createSocketConstraint(PhysicsRigidB
 {
     PhysicsSocketConstraint* constraint = new PhysicsSocketConstraint(a,
         translationOffsetA, b, translationOffsetB);
-    addConstraint(constraint);
+    setupConstraint(a, b, constraint);
+    return constraint;
+}
+
+PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
+{
+    PhysicsSpringConstraint* constraint = new PhysicsSpringConstraint(a, b);
+    setupConstraint(a, b, constraint);
     return constraint;
 }
 
@@ -77,7 +95,7 @@ PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidB
 {
     PhysicsSpringConstraint* constraint = new PhysicsSpringConstraint(a, rotationOffsetA, 
         translationOffsetA, b, rotationOffsetB, translationOffsetB);
-    addConstraint(constraint);
+    setupConstraint(a, b, constraint);
     return constraint;
 }
 
@@ -96,57 +114,12 @@ void PhysicsController::initialize()
 
 void PhysicsController::finalize()
 {
-    // Remove the constraints from the world and delete them.
-	for (int i = _world->getNumConstraints() - 1; i >= 0; i--)
-	{
-		btTypedConstraint* constraint = _world->getConstraint(i);
-		_world->removeConstraint(constraint);
-		delete constraint;
-	}
-
-    // Delete the GamePlay physics constraint objects.
-    for (unsigned int i = 0; i < _constraints.size(); i++)
-    {
-        delete _constraints[i];
-    }
-
-	// Remove the rigid bodies from the world and delete them.
-	for (int i = _world->getNumCollisionObjects() - 1; i >= 0 ; i--)
-	{
-		btCollisionObject* obj = _world->getCollisionObjectArray()[i];
-		btRigidBody* body = btRigidBody::upcast(obj);
-		if (body && body->getMotionState())
-		{
-			delete body->getMotionState();
-		}
-		_world->removeCollisionObject(obj);
-		delete obj;
-	}
-
-	// Delete all of the collision shapes.
-	for (int i = 0; i < _shapes.size(); i++)
-	{
-		btCollisionShape* shape = _shapes[i];
-		_shapes[i] = 0;
-		delete shape;
-	}
-	_shapes.clear();
-
 	// Clean up the world and its various components.
-	delete _world; 
-	_world = NULL;
-
-	delete _solver; 
-	_solver = NULL;
-
-	delete _overlappingPairCache; 
-	_overlappingPairCache = NULL;
-	
-	delete _dispatcher; 
-	_dispatcher = NULL;
-	
-	delete _collisionConfiguration; 
-	_collisionConfiguration = NULL;
+	SAFE_DELETE(_world);
+	SAFE_DELETE(_solver);
+	SAFE_DELETE(_overlappingPairCache);
+	SAFE_DELETE(_dispatcher);
+	SAFE_DELETE(_collisionConfiguration);
 }
 
 void PhysicsController::pause()
@@ -167,20 +140,6 @@ void PhysicsController::update(long elapsedTime)
 	// Note that stepSimulation takes elapsed time in seconds
 	// so we divide by 1000 to convert from milliseconds.
 	_world->stepSimulation((float)elapsedTime * 0.001, 10);
-
-    // TODO!!
-    /*
-    // Update the motion states for each rigid body in the scene.
-    for (int i = _world->getNumCollisionObjects() - 1; i >= 0 ; i--)
-	{
-		btCollisionObject* obj = _world->getCollisionObjectArray()[i];
-		btRigidBody* body = btRigidBody::upcast(obj);
-		if (body && body->getMotionState())
-		{
-            ((PhysicsMotionState*)body->getMotionState())->update();
-        }
-    }
-    */
 }
 
 btCollisionShape* PhysicsController::getBox(const Vector3& min, const Vector3& max, const btVector3& scale)
@@ -218,10 +177,35 @@ btCollisionShape* PhysicsController::getHeightfield(void* data, int width, int h
 	return NULL;
 }
 
-void PhysicsController::addConstraint(PhysicsConstraint* constraint)
+void PhysicsController::setupConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint)
 {
+    a->addConstraint(constraint);
+    if (b)
+        b->addConstraint(constraint);
+
     _world->addConstraint(constraint->_constraint);
-    _constraints.push_back(constraint);
+}
+
+void PhysicsController::removeConstraint(PhysicsConstraint* constraint)
+{
+    // Find the constraint and remove it from the physics world.
+	for (int i = _world->getNumConstraints() - 1; i >= 0; i--)
+	{
+		btTypedConstraint* currentConstraint = _world->getConstraint(i);
+        if (constraint->_constraint == currentConstraint)
+		    _world->removeConstraint(currentConstraint);
+	}
+}
+
+void PhysicsController::removeRigidBody(PhysicsRigidBody* rigidBody)
+{
+    // Find the rigid body and remove it from the world.
+	for (int i = _world->getNumCollisionObjects() - 1; i >= 0 ; i--)
+	{
+		btCollisionObject* obj = _world->getCollisionObjectArray()[i];
+        if (rigidBody->_body == obj)
+		    _world->removeCollisionObject(obj);
+	}
 }
 
 }

@@ -13,7 +13,7 @@ namespace gameplay
 
 PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, float mass, 
 		float friction, float restitution, float linearDamping, float angularDamping)
-        : _node(node), _body(NULL)
+        : _shape(NULL), _body(NULL), _node(node)
 {
 	switch (type)
 	{
@@ -22,7 +22,7 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
 			const BoundingBox& box = node->getModel()->getMesh()->getBoundingBox();
 
             PhysicsController* physics = Game::getInstance()->getPhysicsController();
-            btCollisionShape* shape = physics->getBox(box.min, box.max, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
+            _shape = physics->getBox(box.min, box.max, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
 			
             // Use the center of the bounding box as the center of mass offset.
             Vector3 c(box.min, box.max);
@@ -31,9 +31,9 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
             c.negate();
 
             if (c.lengthSquared() > MATH_EPSILON)
-			    _body = createBulletRigidBody(shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
+			    _body = createBulletRigidBody(_shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
             else
-                _body = createBulletRigidBody(shape, mass, node, friction, restitution, linearDamping, angularDamping);
+                _body = createBulletRigidBody(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
 
 			break;
 		}
@@ -42,32 +42,32 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
 			const BoundingSphere& sphere = node->getModel()->getMesh()->getBoundingSphere();
 
 			PhysicsController* physics = Game::getInstance()->getPhysicsController();
-			btCollisionShape* shape = physics->getSphere(sphere.radius, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
+			_shape = physics->getSphere(sphere.radius, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
 
             // Use the center of the bounding sphere as the center of mass offset.
             Vector3 c(sphere.center);
             c.negate();
 
             if (c.lengthSquared() > MATH_EPSILON)
-                _body = createBulletRigidBody(shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
+                _body = createBulletRigidBody(_shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
             else
-                _body = createBulletRigidBody(shape, mass, node, friction, restitution, linearDamping, angularDamping);
+                _body = createBulletRigidBody(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
 
 			break;
 		}
 		case PhysicsRigidBody::PHYSICS_SHAPE_TRIANGLE_MESH:
 		{
 			//btTriangleIndexVertexArray meshShape(numTriangles, indexPointer, indexStride, numVertices, vertexPointer, vertexStride);
-			//btCollisionShape* shape = btBvhTriangleMeshShape(meshShape, true);
+			//_shape = btBvhTriangleMeshShape(meshShape, true);
 
-			//_body = createBulletRigidBody(shape, mass, node, friction, restitution, linearDamping, angularDamping);
+			//_body = createBulletRigidBody(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
 			break;
 		}
 		case PhysicsRigidBody::PHYSICS_SHAPE_HEIGHTFIELD:
 		{
-			//btCollisionShape* shape = btHeightfieldTerrainShape(width, length, data, scale, minHeight, maxHeight, upAxis, dataType, false);
+			//_shape = btHeightfieldTerrainShape(width, length, data, scale, minHeight, maxHeight, upAxis, dataType, false);
 
-			//_body = createBulletRigidBody(shape, mass, node, friction, restitution, linearDamping, angularDamping);
+			//_body = createBulletRigidBody(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
 			break;
 		}
 	}
@@ -75,12 +75,24 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
 
 PhysicsRigidBody::~PhysicsRigidBody()
 {
+    // Clean up all constraints linked to this rigid body.
+    for (unsigned int i = 0; i < _constraints.size(); i++)
+    {
+        Game::getInstance()->getPhysicsController()->removeConstraint(_constraints[i]);
+        SAFE_RELEASE(_constraints[i]);
+    }
+
+    // Clean up the rigid body and its related objects.
     if (_body)
     {
         if (_body->getMotionState())
             delete _body->getMotionState();
 
-        delete _body;
+        if (_shape)
+            SAFE_DELETE(_shape);
+
+        Game::getInstance()->getPhysicsController()->removeRigidBody(this);
+        SAFE_DELETE(_body);
     }
 }
 
@@ -137,15 +149,6 @@ void PhysicsRigidBody::applyTorqueImpulse(const Vector3& torque)
     }
 }
 
-// TODO!!
-/*
-void PhysicsRigidBody::update()
-{
-    if (_body->getMotionState())
-        ((PhysicsMotionState*)_body->getMotionState())->update();
-}
-*/
-
 btRigidBody* PhysicsRigidBody::createBulletRigidBody(btCollisionShape* shape, float mass, Node* node,
     float friction, float restitution, float linearDamping, float angularDamping, const Vector3* centerOfMassOffset)
 {
@@ -170,5 +173,7 @@ btRigidBody* PhysicsRigidBody::createBulletRigidBody(btCollisionShape* shape, fl
 
 	return body;
 }
+
+
 
 }

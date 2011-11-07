@@ -373,8 +373,8 @@ public:
      * @param mass The mass of the rigid body, in kilograms.
      * @param friction The friction of the rigid body (between 0.0 and 1.0, where 0.0 is
      *      minimal friction and 1.0 is maximal friction).
-     * @param restitution The restitution of the rigid body (this controls the bouncyness of
-     *      the rigid body; between 0.0 and 1.0, where 0.0 is minimal bouncyness and 1.0 is maximal bouncyness).
+     * @param restitution The restitution of the rigid body (this controls the bounciness of
+     *      the rigid body; between 0.0 and 1.0, where 0.0 is minimal bounciness and 1.0 is maximal bounciness).
      * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
      * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
      */

@@ -24,18 +24,6 @@ class PhysicsHingeConstraint : public PhysicsConstraint
 
 public:
     /**
-     * Destructor.
-     */
-    ~PhysicsHingeConstraint()
-    {
-        if (_constraint)
-        {
-            delete _constraint;
-            _constraint = NULL;
-        }
-    }
-
-    /**
      * Sets the limits (and optionally, some properties) for the hinge.
      * 
      * @param minAngle The minimum angle for the hinge.
@@ -45,10 +33,7 @@ public:
      * @param relaxationFactor The relaxation factor for the hinge (defaults to 1.0).
      */
     void setLimits(float minAngle, float maxAngle, float softness = 0.9f, 
-        float biasFactor = 0.3f, float relaxationFactor = 1.0f)
-    {
-        ((btHingeConstraint*)_constraint)->setLimit(minAngle, maxAngle, softness, biasFactor, relaxationFactor);
-    }
+        float biasFactor = 0.3f, float relaxationFactor = 1.0f);
 
 private:
     /**
@@ -67,23 +52,12 @@ private:
      *      (in its local space) with respect to the constraint joint (optional).
      */
     PhysicsHingeConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
-        PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
-    {
-        if (b)
-        {
-            btTransform frameInA(btQuaternion(rotationOffsetA.x, rotationOffsetA.y, rotationOffsetA.z, rotationOffsetA.w), 
-                btVector3(translationOffsetA.x, translationOffsetA.y, translationOffsetA.z));
-            btTransform frameInB(btQuaternion(rotationOffsetB.x, rotationOffsetB.y, rotationOffsetB.z, rotationOffsetB.w), 
-                btVector3(translationOffsetB.x, translationOffsetB.y, translationOffsetB.z));
-            _constraint = new btHingeConstraint(*a->_body, *b->_body, frameInA, frameInB);
-        }
-        else
-        {
-            btTransform frameInA(btQuaternion(rotationOffsetA.x, rotationOffsetA.y, rotationOffsetA.z, rotationOffsetA.w), 
-                btVector3(translationOffsetA.x, translationOffsetA.y, translationOffsetA.z));
-            _constraint = new btHingeConstraint(*a->_body, frameInA);
-        }
-    }
+        PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
+
+    /**
+     * Destructor.
+     */
+    ~PhysicsHingeConstraint();
 };
 
 }

@@ -6,12 +6,12 @@
 #define PHYSICSGENERICCONSTRAINT_H_
 
 #include "PhysicsConstraint.h"
-#include "PhysicsRigidBody.h"
 #include "Quaternion.h"
 #include "Vector3.h"
 
 namespace gameplay
 {
+    class PhysicsRigidBody;
 
 /**
  * Represents a completely generic constraint between two
@@ -24,16 +24,32 @@ class PhysicsGenericConstraint : public PhysicsConstraint
 
 public:
     /**
-     * Destructor.
+     * Gets the rotation offset for the first rigid body in the constraint.
+     * 
+     * @return The rotation offset.
      */
-    ~PhysicsGenericConstraint()
-    {
-        if (_constraint)
-        {
-            delete _constraint;
-            _constraint = NULL;
-        }
-    }
+    inline Quaternion getRotationOffsetA();
+
+    /**
+     * Gets the rotation offset for the second rigid body in the constraint.
+     * 
+     * @return The rotation offset.
+     */
+    inline Quaternion getRotationOffsetB();
+
+    /**
+     * Gets the translation offset for the first rigid body in the constraint.
+     * 
+     * @return The translation offset.
+     */
+    inline Vector3 getTranslationOffsetA();
+
+    /**
+     * Gets the translation offset for the second rigid body in the constraint.
+     * 
+     * @return The translation offset.
+     */
+    inline Vector3 getTranslationOffsetB();
 
     /**
      * Sets the lower angular limits along the constraint's local
@@ -41,10 +57,7 @@ public:
      * 
      * @param limits The lower angular limits along the local X, Y, and Z axes.
      */
-    inline void setAngularLowerLimit(const Vector3& limits)
-    {
-        ((btGeneric6DofConstraint*)_constraint)->setAngularLowerLimit(btVector3(limits.x, limits.y, limits.z));
-    }
+    inline void setAngularLowerLimit(const Vector3& limits);
 
     /**
      * Sets the upper angular limits along the constraint's local
@@ -52,10 +65,7 @@ public:
      * 
      * @param limits The upper angular limits along the local X, Y, and Z axes.
      */
-    inline void setAngularUpperLimit(const Vector3& limits)
-    {
-        ((btGeneric6DofConstraint*)_constraint)->setAngularUpperLimit(btVector3(limits.x, limits.y, limits.z));
-    }
+    inline void setAngularUpperLimit(const Vector3& limits);
     
     /**
      * Sets the lower linear limits along the constraint's local
@@ -63,10 +73,7 @@ public:
      * 
      * @param limits The lower linear limits along the local X, Y, and Z axes.
      */
-    inline void setLinearLowerLimit(const Vector3& limits)
-    {
-        ((btGeneric6DofConstraint*)_constraint)->setLinearLowerLimit(btVector3(limits.x, limits.y, limits.z));
-    }
+    inline void setLinearLowerLimit(const Vector3& limits);
     
     /**
      * Sets the upper linear limits along the constraint's local
@@ -74,12 +81,55 @@ public:
      * 
      * @param limits The upper linear limits along the local X, Y, and Z axes.
      */
-    inline void setLinearUpperLimit(const Vector3& limits)
-    {
-        ((btGeneric6DofConstraint*)_constraint)->setLinearUpperLimit(btVector3(limits.x, limits.y, limits.z));
-    }
+    inline void setLinearUpperLimit(const Vector3& limits);
+
+    /**
+     * Sets the rotation offset for the first rigid body in the constraint.
+     * 
+     * @param rotationOffset The rotation offset.
+     */
+    inline void setRotationOffsetA(const Quaternion& rotationOffset);
+
+    /**
+     * Sets the rotation offset for the second rigid body in the constraint.
+     * 
+     * @param rotationOffset The rotation offset.
+     */
+    inline void setRotationOffsetB(const Quaternion& rotationOffset);
+
+    /**
+     * Sets the translation offset for the first rigid body in the constraint.
+     * 
+     * @param translationOffset The translation offset.
+     */
+    inline void setTranslationOffsetA(const Vector3& translationOffset);
+
+    /**
+     * Sets the translation offset for the second rigid body in the constraint.
+     * 
+     * @param translationOffset The translation offset.
+     */
+    inline void setTranslationOffsetB(const Vector3& translationOffset);
 
 protected:
+    /**
+     * Constructor.
+     *
+     * Note: This should only used by subclasses that do not want
+     * the _constraint member variable to be initialized.
+     */
+    PhysicsGenericConstraint();
+
+    /**
+     * Creates a generic constraint so that the rigid body (or bodies) is
+     * (are) constrained to its (their) current world position(s).
+     * 
+     * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
+     *      body specified the constraint applies between it and the global physics world object.
+     * @param b The second rigid body to constrain (optional).
+     */
+    PhysicsGenericConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b);
+
     /**
      * Creates a generic constraint.
      * 
@@ -96,25 +146,16 @@ protected:
      *      (in its local space) with respect to the constraint joint (optional).
      */
     PhysicsGenericConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
-        PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
-    {
-        if (b)
-        {
-            btTransform frameInA(btQuaternion(rotationOffsetA.x, rotationOffsetA.y, rotationOffsetA.z, rotationOffsetA.w), 
-                btVector3(translationOffsetA.x, translationOffsetA.y, translationOffsetA.z));
-            btTransform frameInB(btQuaternion(rotationOffsetB.x, rotationOffsetB.y, rotationOffsetB.z, rotationOffsetB.w), 
-                btVector3(translationOffsetB.x, translationOffsetB.y, translationOffsetB.z));
-            _constraint = new btGeneric6DofConstraint(*a->_body, *b->_body, frameInA, frameInB, true);
-        }
-        else
-        {
-            btTransform frameInA(btQuaternion(rotationOffsetA.x, rotationOffsetA.y, rotationOffsetA.z, rotationOffsetA.w), 
-                btVector3(translationOffsetA.x, translationOffsetA.y, translationOffsetA.z));
-            _constraint = new btGeneric6DofConstraint(*a->_body, frameInA, true);
-        }
-    }
+        PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
+
+    /**
+     * Destructor.
+     */
+    virtual ~PhysicsGenericConstraint();
 };
 
 }
+
+#include "PhysicsGenericConstraint.inl"
 
 #endif

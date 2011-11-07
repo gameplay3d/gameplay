@@ -73,7 +73,7 @@ const Matrix& Joint::getWorldMatrix() const
     // actual world matrix.
     if (_parent == NULL && _skin != NULL)
     {
-            Matrix::multiply(_skin->_model->getNode()->getWorldMatrix(), Node::getWorldMatrix(), &_jointWorld);
+        Matrix::multiply(_skin->_model->getNode()->getWorldMatrix(), Node::getWorldMatrix(), &_jointWorld);
     }
     else
     {

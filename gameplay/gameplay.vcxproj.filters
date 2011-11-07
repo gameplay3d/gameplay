@@ -168,6 +168,27 @@
     <ClCompile Include="src\PhysicsRigidBody.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\PhysicsConstraint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsHingeConstraint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsFixedConstraint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsGenericConstraint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsSocketConstraint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsSpringConstraint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsMotionState.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -338,9 +359,6 @@
     <ClInclude Include="src\RenderState.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Tree.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\PhysicsController.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -350,5 +368,40 @@
     <ClInclude Include="src\PhysicsRigidBody.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\PhysicsConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsSpringConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsFixedConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsGenericConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsHingeConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsSocketConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\PhysicsFixedConstraint.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\PhysicsGenericConstraint.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\PhysicsSpringConstraint.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\PhysicsRigidBody.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\PhysicsConstraint.inl">
+      <Filter>src</Filter>
+    </None>
   </ItemGroup>
 </Project>
