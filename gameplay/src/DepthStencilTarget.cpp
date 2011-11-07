@@ -1,3 +1,8 @@
+/**
+ * DepthStencilTarget.cpp
+ */
+
+#include "Base.h"
 #include "DepthStencilTarget.h"
 
 namespace gameplay
@@ -5,12 +10,62 @@ namespace gameplay
 
 static std::vector<DepthStencilTarget*> __depthStencilTargets;
 
-DepthStencilTarget* DepthStencilTarget::create(const char* id, unsigned int width, unsigned int height)
+DepthStencilTarget::DepthStencilTarget(const char* id, Format format)
+    : _id(id), _format(format), _depthTexture(NULL), _stencilBuffer(0)
 {
-    DepthStencilTarget* depthStencilTarget = new DepthStencilTarget(id, width, height);
+}
 
+DepthStencilTarget::~DepthStencilTarget()
+{
+    SAFE_RELEASE(_depthTexture);
+
+    // Destroy GL resources.
+    if (_stencilBuffer)
+    {
+        GL_ASSERT( glDeleteTextures(1, &_stencilBuffer) );
+    }
+
+    // Remove from vector.
+    std::vector<DepthStencilTarget*>::iterator it = std::find(__depthStencilTargets.begin(), __depthStencilTargets.end(), this);
+    if (it != __depthStencilTargets.end())
+    {
+        __depthStencilTargets.erase(it);
+    }
+}
+
+DepthStencilTarget* DepthStencilTarget::create(const char* id, Format format, unsigned int width, unsigned int height)
+{
+    // Create a backing texture buffer.
+    Texture* depthTexture = Texture::create(Texture::DEPTH, width, height, NULL, false);
+    if (depthTexture == NULL)
+    {
+        return NULL;
+    }
+
+    // Create stencil renderbuffer if format is DEPTH24_STENCIL8
+    RenderBufferHandle stencilBuffer = 0;
+    if (format == DEPTH24_STENCIL8)
+    {
+        // Backup the existing render buffer
+        GLint currentRbo = 0;
+        GL_ASSERT( glGetIntegerv(GL_RENDERBUFFER_BINDING, &currentRbo) );
+
+        // Create the new render buffer
+        GL_ASSERT( glGenRenderbuffers(1, &stencilBuffer) );
+        GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, stencilBuffer) );
+        GL_ASSERT( glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, width, height) );
+
+        // Restore the old render buffer
+        GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, currentRbo) );
+    }
+
+    // Create the depth stencil target
+    DepthStencilTarget* depthStencilTarget = new DepthStencilTarget(id, format);
+    depthStencilTarget->_depthTexture = depthTexture;
+    depthStencilTarget->_stencilBuffer = stencilBuffer;
+
+    // Add it to the cache
     __depthStencilTargets.push_back(depthStencilTarget);
-    depthStencilTarget->_index = __depthStencilTargets.size() - 1;
 
     return depthStencilTarget;
 }
@@ -19,7 +74,7 @@ DepthStencilTarget* DepthStencilTarget::getDepthStencilTarget(const char* id)
 {
     // Search the vector for a matching ID.
     std::vector<DepthStencilTarget*>::const_iterator it;
-    for (it = __depthStencilTargets.begin(); it < __depthStencilTargets.end(); ++it)
+    for (it = __depthStencilTargets.begin(); it < __depthStencilTargets.end(); it++)
     {
         DepthStencilTarget* dst = *it;
         if (strcmp(id, dst->getID()) == 0)
@@ -31,30 +86,19 @@ DepthStencilTarget* DepthStencilTarget::getDepthStencilTarget(const char* id)
     return NULL;
 }
 
-DepthStencilTarget::~DepthStencilTarget()
-{
-    // Destroy GL resources.
-    glDeleteTextures(1, &_handle);
-
-    // Remove from vector.
-    std::vector<DepthStencilTarget*>::const_iterator it = __depthStencilTargets.begin() + _index;
-    __depthStencilTargets.erase(it);
-}
-
 const char* DepthStencilTarget::getID() const
 {
     return _id.c_str();
 }
 
-DepthStencilTarget::DepthStencilTarget(const char* id, unsigned int width, unsigned int height)
+DepthStencilTarget::Format DepthStencilTarget::getFormat() const
 {
-    // Create a backing texture / renderbuffer.
-    // Need to experiment to determine whether GL_DEPTH_STENCIL textures are supported.
-    // If not, need to use dual renderbuffers instead.
-    glGenTextures(1, &_handle);
-    glBindTexture(GL_TEXTURE_2D, _handle);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+    return _format;
+}
+
+Texture* DepthStencilTarget::getTexture() const
+{
+    return _depthTexture;
 }
 
 }
