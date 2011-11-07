@@ -21,20 +21,18 @@ class PhysicsSocketConstraint : public PhysicsConstraint
 {
     friend class PhysicsController;
 
-public:
-    /**
-     * Destructor.
-     */
-    ~PhysicsSocketConstraint()
-    {
-        if (_constraint)
-        {
-            delete _constraint;
-            _constraint = NULL;
-        }
-    }
-
 private:
+    /**
+     * Creates a socket constraint so that the rigid body (or bodies) is
+     * (are) constrained using its (their) current world position(s) for
+     * the translation offset(s) to the constraint.
+     * 
+     * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
+     *      body specified the constraint applies between it and the global physics world object.
+     * @param b The second rigid body to constrain (optional).
+     */
+    PhysicsSocketConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b);
+
     /**
      * Creates a socket constraint.
      * 
@@ -47,20 +45,12 @@ private:
      *      (in its local space) with respect to the constraint joint (optional).
      */
     PhysicsSocketConstraint(PhysicsRigidBody* a, const Vector3& translationOffsetA, 
-        PhysicsRigidBody* b, const Vector3& translationOffsetB)
-    {
-        if (b)
-        {
-            _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, 
-                btVector3(translationOffsetA.x, translationOffsetA.y, translationOffsetA.z),
-                btVector3(translationOffsetB.x, translationOffsetB.y, translationOffsetB.z));
-        }
-        else
-        {
-            _constraint = new btPoint2PointConstraint(*a->_body, 
-                btVector3(translationOffsetA.x, translationOffsetA.y, translationOffsetA.z));
-        }
-    }
+        PhysicsRigidBody* b, const Vector3& translationOffsetB);
+
+    /**
+     * Destructor.
+     */
+    ~PhysicsSocketConstraint();
 };
 
 }

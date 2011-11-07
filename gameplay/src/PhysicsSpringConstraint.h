@@ -26,30 +26,21 @@ public:
      * 
      * @param damping The angular damping value.
      */
-    inline void setAngularDampingX(float damping)
-    {
-        setDamping(ANGULAR_X, damping);
-    }
+    inline void setAngularDampingX(float damping);
 
     /**
      * Sets the angular damping along the constraint's local Y axis.
      * 
      * @param damping The angular damping value.
      */
-    inline void setAngularDampingY(float damping)
-    {
-        setDamping(ANGULAR_Y, damping);
-    }
+    inline void setAngularDampingY(float damping);
 
     /**
      * Sets the angular damping along the constraint's local Z axis.
      * 
      * @param damping The angular damping value.
      */
-    inline void setAngularDampingZ(float damping)
-    {
-        setDamping(ANGULAR_Z, damping);
-    }
+    inline void setAngularDampingZ(float damping);
 
     /**
      * Sets the angular strength along the constraint's local X axis.
@@ -59,10 +50,7 @@ public:
      * 
      * @param strength The angular strength value.
      */
-    inline void setAngularStrengthX(float strength)
-    {
-        setStrength(ANGULAR_X, strength);
-    }
+    inline void setAngularStrengthX(float strength);
 
     /**
      * Sets the angular strength along the constraint's local Y axis.
@@ -72,10 +60,7 @@ public:
      * 
      * @param strength The angular strength value.
      */
-    inline void setAngularStrengthY(float strength)
-    {
-        setStrength(ANGULAR_Y, strength);
-    }
+    inline void setAngularStrengthY(float strength);
 
     /**
      * Sets the angular strength along the constraint's local Z axis.
@@ -85,40 +70,28 @@ public:
      * 
      * @param strength The angular strength value.
      */
-    inline void setAngularStrengthZ(float strength)
-    {
-        setStrength(ANGULAR_Z, strength);
-    }
+    inline void setAngularStrengthZ(float strength);
 
     /**
      * Sets the linear damping along the constraint's local X axis.
      * 
      * @param damping The linear damping value.
      */
-    inline void setLinearDampingX(float damping)
-    {
-        setDamping(LINEAR_X, damping);
-    }
+    inline void setLinearDampingX(float damping);
 
     /**
      * Sets the linear damping along the constraint's local Y axis.
      * 
      * @param damping The linear damping value.
      */
-    inline void setLinearDampingY(float damping)
-    {
-        setDamping(LINEAR_Y, damping);
-    }
+    inline void setLinearDampingY(float damping);
 
     /**
      * Sets the linear damping along the constraint's local Z axis.
      * 
      * @param damping The linear damping value.
      */
-    inline void setLinearDampingZ(float damping)
-    {
-        setDamping(LINEAR_Z, damping);
-    }
+    inline void setLinearDampingZ(float damping);
 
     /**
      * Sets the linear strength along the constraint's local X axis.
@@ -128,10 +101,7 @@ public:
      * 
      * @param strength The linear strength value.
      */
-    inline void setLinearStrengthX(float strength)
-    {
-        setStrength(LINEAR_X, strength);
-    }
+    inline void setLinearStrengthX(float strength);
 
     /**
      * Sets the linear strength along the constraint's local Y axis.
@@ -141,10 +111,7 @@ public:
      * 
      * @param strength The linear strength value.
      */
-    inline void setLinearStrengthY(float strength)
-    {
-        setStrength(LINEAR_Y, strength);
-    }
+    inline void setLinearStrengthY(float strength);
 
     /**
      * Sets the linear strength along the constraint's local Z axis.
@@ -154,38 +121,9 @@ public:
      * 
      * @param strength The linear strength value.
      */
-    inline void setLinearStrengthZ(float strength)
-    {
-        setStrength(LINEAR_Z, strength);
-    }
+    inline void setLinearStrengthZ(float strength);
 
 private:
-    /**
-     * Creates a spring constraint.
-     * 
-     * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
-     *      body specified the constraint applies between it and the global physics world object.
-     * @param rotationOffsetA The rotation offset for the first rigid body 
-     *      (in its local space) with respect to the constraint joint.
-     * @param translationOffsetA The translation offset for the first rigid body
-     *      (in its local space) with respect to the constraint joint.
-     * @param b The second rigid body to constrain (optional).
-     * @param rotationOffsetB The rotation offset for the second rigid body
-     *      (in its local space) with respect to the constraint joint (optional).
-     * @param translationOffsetB The translation offset for the second rigid body
-     *      (in its local space) with respect to the constraint joint (optional).
-     */
-    PhysicsSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
-        PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
-        : PhysicsGenericConstraint(a, rotationOffsetA, translationOffsetA, b, rotationOffsetB, translationOffsetB)
-    {
-        btTransform frameInA(btQuaternion(rotationOffsetA.x, rotationOffsetA.y, rotationOffsetA.z, rotationOffsetA.w), 
-            btVector3(translationOffsetA.x, translationOffsetA.y, translationOffsetA.z));
-        btTransform frameInB(btQuaternion(rotationOffsetB.x, rotationOffsetB.y, rotationOffsetB.z, rotationOffsetB.w), 
-            btVector3(translationOffsetB.x, translationOffsetB.y, translationOffsetB.z));
-        _constraint = new btGeneric6DofSpringConstraint(*a->_body, *b->_body, frameInA, frameInB, true);
-    }
-
     // Represents the different properties that
     // can be set on the spring constraint.
     // 
@@ -202,35 +140,52 @@ private:
         ANGULAR_Z
     };
 
+    /**
+     * Creates a spring constraint so that the rigid body (or bodies) is
+     * (are) constrained using its (their) current world position(s) for
+     * the translation offset(s) to the constraint.
+     * 
+     * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
+     *      body specified the constraint applies between it and the global physics world object.
+     * @param b The second rigid body to constrain (optional).
+     */
+    PhysicsSpringConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b);
+
+    /**
+     * Creates a spring constraint.
+     * 
+     * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
+     *      body specified the constraint applies between it and the global physics world object.
+     * @param rotationOffsetA The rotation offset for the first rigid body 
+     *      (in its local space) with respect to the constraint joint.
+     * @param translationOffsetA The translation offset for the first rigid body
+     *      (in its local space) with respect to the constraint joint.
+     * @param b The second rigid body to constrain (optional).
+     * @param rotationOffsetB The rotation offset for the second rigid body
+     *      (in its local space) with respect to the constraint joint (optional).
+     * @param translationOffsetB The translation offset for the second rigid body
+     *      (in its local space) with respect to the constraint joint (optional).
+     */
+    PhysicsSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
+        PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
+
     // Sets the strength for the given angular/linear 
     // X/Y/Z axis combination determined by the given index.
     // 
     // See the Bullet class btGeneric6DofSpringConstraint
     // for more information.
-    void setStrength(SpringProperty property, float strength)
-    {
-        if (strength < MATH_EPSILON)
-            ((btGeneric6DofSpringConstraint*)_constraint)->enableSpring(property, false);
-        else
-        {
-            ((btGeneric6DofSpringConstraint*)_constraint)->enableSpring(property, true);
-            ((btGeneric6DofSpringConstraint*)_constraint)->setStiffness(property, strength);
-            ((btGeneric6DofSpringConstraint*)_constraint)->setEquilibriumPoint(property);
-        }
-    }
+    void setStrength(SpringProperty property, float strength);
 
     // Sets the damping for the given angular/linear 
     // X/Y/Z axis combination determined by the given index.
     // 
     // See the Bullet class btGeneric6DofSpringConstraint
     // for more information.
-    void setDamping(SpringProperty property, float damping)
-    {
-        ((btGeneric6DofSpringConstraint*)_constraint)->setDamping(property, damping);
-        ((btGeneric6DofSpringConstraint*)_constraint)->setEquilibriumPoint(property);
-    }
+    void setDamping(SpringProperty property, float damping);
 };
 
 }
+
+#include "PhysicsSpringConstraint.inl"
 
 #endif
