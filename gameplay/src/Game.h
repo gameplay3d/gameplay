@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "AudioController.h"
 #include "AnimationController.h"
+#include "PhysicsController.h"
 #include "Vector4.h"
 
 namespace gameplay
@@ -179,6 +180,14 @@ public:
     AnimationController* getAnimationController();
 
     /**
+     * Gets the physics controller for managing control of physics
+     * associated with the game.
+     * 
+     * @return The physics controller for this game.
+     */
+    PhysicsController* getPhysicsController();
+
+    /**
      * Menu callback on menu events.
      */
     virtual void menu();
@@ -281,6 +290,7 @@ private:
     int _clearStencil;                          // The clear stencil value last used for clearing the stencil buffer.
     AnimationController _animationController;   // Controls the scheduling and running of animations.
     AudioController _audioController;           // Controls audio sources that are playing in the game.
+    PhysicsController _physicsController;       // Controls the simulation of a physics scene and entities.
 };
 
 }

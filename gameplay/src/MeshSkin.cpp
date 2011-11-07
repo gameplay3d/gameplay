@@ -12,7 +12,7 @@
 namespace gameplay
 {
 
-MeshSkin::MeshSkin() : _matrixPalette(NULL)
+MeshSkin::MeshSkin() : _matrixPalette(NULL), _model(NULL)
 {
 }
 
@@ -82,10 +82,12 @@ void MeshSkin::setJoint(Joint* joint, unsigned int index)
 
     if (_joints[index])
     {
+        _joints[index]->_skin = NULL;
         SAFE_RELEASE(_joints[index]);
     }
 
     _joints[index] = joint;
+    _joints[index]->_skin = this;
     joint->addRef();
 }
 

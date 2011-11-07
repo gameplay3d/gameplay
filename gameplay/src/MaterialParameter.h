@@ -37,7 +37,7 @@ class MaterialParameter : public AnimationTarget
 
 public:
 
-     /**
+    /**
      * Animates the uniform.
      */
     static const int ANIMATE_UNIFORM = 1;

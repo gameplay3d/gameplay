@@ -20,6 +20,7 @@ class MeshSkin
 {
     friend class Package;
     friend class Model;
+    friend class Joint;
 
 public:
 
@@ -112,6 +113,7 @@ private:
     // Each 4x3 row-wise matrix is represented as 3 Vector4's.
     // The number of Vector4's is (_joints.size() * 3).
     Vector4* _matrixPalette;
+    Model* _model;
 };
 
 }
