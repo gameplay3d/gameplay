@@ -2,12 +2,10 @@
 #define RENDERTARGET_H_
 
 #include "Base.h"
-#include "Ref.h"
+#include "Texture.h"
 
 namespace gameplay
 {
-
-class Texture;
 
 class RenderTarget : public Ref
 {
@@ -16,7 +14,9 @@ public:
     /**
      * Create a RenderTarget and add it to the list of available RenderTargets.
      *
-     * @param id The ID of the new RenderTarget.  Uniqueness is recommended but not enforced.
+     * The created RenderTarget contains a 32-bit texture with a single/base mipmap level only.
+     *
+     * @param id The ID of the new RenderTarget.
      * @param width The width of the new RenderTarget.
      * @param height The height of the new RenderTarget.
      *
@@ -32,11 +32,6 @@ public:
      * @return The RenderTarget with the specified ID, or NULL if one was not found.
      */
     static RenderTarget* getRenderTarget(const char* id);
- 
-    /**
-     * Destructor.  Removes this RenderTarget from the list of available RenderTargets.
-     */
-    ~RenderTarget();
 
     /**
      * Get the ID of this RenderTarget.
@@ -53,13 +48,19 @@ public:
     Texture* getTexture() const;
  
 private:
- 
-    RenderTarget(const char* id, unsigned int width, unsigned int height);
-    RenderTarget();
+
+    /**
+     * Constructor.
+     */
+    RenderTarget(const char* id);
+
+    /**
+     * Destructor.
+     */
+    ~RenderTarget();
 
     std::string _id;
     Texture* _texture;
-    unsigned int _index; // Index into vector.
 };
 
 }
