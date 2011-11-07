@@ -45,6 +45,9 @@
 #include "Font.h"
 #include "SpriteBatch.h"
 #include "ParticleEmitter.h"
+#include "FrameBuffer.h"
+#include "RenderTarget.h"
+#include "DepthStencilTarget.h"
 
 // Audio
 #include "AudioController.h"

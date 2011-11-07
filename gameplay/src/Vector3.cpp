@@ -33,6 +33,21 @@ Vector3::Vector3(const Vector3& copy)
     set(copy);
 }
 
+Vector3 Vector3::fromColor(unsigned int color)
+{
+    float components[3];
+    int componentIndex = 0;
+    for (int i = 2; i >= 0; --i)
+    {
+        int component = (color >> i*8) & 0x0000ff;
+
+        components[componentIndex++] = static_cast<float>(component) / 255.0f;
+    }
+
+    Vector3 value(components);
+    return value;
+}
+
 Vector3::~Vector3()
 {
 }

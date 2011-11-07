@@ -155,6 +155,8 @@ typedef GLint VertexAttribute;
 typedef GLuint VertexBuffer;
 typedef GLuint IndexBuffer;
 typedef GLuint TextureHandle;
+typedef GLuint FrameBufferHandle;
+typedef GLuint RenderBufferHandle;
 }
 
 /**

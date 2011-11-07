@@ -291,7 +291,7 @@ public:
      * to Vector2(0.0f, 0.0f).
      *
      * @param name The name of the property to interpret, or NULL to return the current property's value.
-     * @param out The matrix to set to this property's interpreted value.
+     * @param out The vector to set to this property's interpreted value.
      * 
      * @return True on success, false if the property does not exist or could not be scanned.
      */
@@ -304,7 +304,7 @@ public:
      * to Vector3(0.0f, 0.0f, 0.0f).
      *
      * @param name The name of the property to interpret, or NULL to return the current property's value.
-     * @param out The matrix to set to this property's interpreted value.
+     * @param out The vector to set to this property's interpreted value.
      * 
      * @return True on success, false if the property does not exist or could not be scanned.
      */
@@ -317,11 +317,39 @@ public:
      * to Vector4(0.0f, 0.0f, 0.0f, 0.0f).
      *
      * @param name The name of the property to interpret, or NULL to return the current property's value.
-     * @param out The matrix to set to this property's interpreted value.
+     * @param out The vector to set to this property's interpreted value.
      * 
      * @return True on success, false if the property does not exist or could not be scanned.
      */
     bool getVector4(const char* name, Vector4* out) const;
+
+    /**
+     * Interpret the value of the given property as an RGB color in hex and write this color to a Vector3.
+     * E.g. 0xff0000 represents red and sets the vector to (1, 0, 0).
+     * If the property does not exist, out will be set to Vector3(0.0f, 0.0f, 0.0f).
+     * If the property exists but could not be scanned, an error will be logged and out will be set
+     * to Vector3(0.0f, 0.0f, 0.0f).
+     *
+     * @param name The name of the property to interpret, or NULL to return the current property's value.
+     * @param out The vector to set to this property's interpreted value.
+     * 
+     * @return True on success, false if the property does not exist or could not be scanned.
+     */
+    bool getColor(const char* name, Vector3* out) const;
+
+    /**
+     * Interpret the value of the given property as an RGBA color in hex and write this color to a Vector4.
+     * E.g. 0xff0000ff represents opaque red and sets the vector to (1, 0, 0, 1).
+     * If the property does not exist, out will be set to Vector4(0.0f, 0.0f, 0.0f, 0.0f).
+     * If the property exists but could not be scanned, an error will be logged and out will be set
+     * to Vector4(0.0f, 0.0f, 0.0f, 0.0f).
+     *
+     * @param name The name of the property to interpret, or NULL to return the current property's value.
+     * @param out The vector to set to this property's interpreted value.
+     * 
+     * @return True on success, false if the property does not exist or could not be scanned.
+     */
+    bool getColor(const char* name, Vector4* out) const;
 
 
 private:

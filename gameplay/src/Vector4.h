@@ -77,6 +77,16 @@ public:
     Vector4(const Vector4& copy);
 
     /**
+     * Creates a new vector from an integer interpreted as an RGBA value.
+     * E.g. 0xff0000ff represents opaque red or the vector (1, 0, 0, 1).
+     *
+     * @param color The integer to interpret as an RGBA value.
+     *
+     * @return A vector corresponding to the interpreted RGBA color.
+     */
+    static Vector4 fromColor(unsigned int color);
+
+    /**
      * Destructor.
      */
     ~Vector4();
