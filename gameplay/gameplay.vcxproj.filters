@@ -4,6 +4,12 @@
     <Filter Include="src">
       <UniqueIdentifier>{c4d4da1c-81e2-4944-901c-200e1c4d80e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{4a30ac71-e135-47d3-9f56-baac7cffe64c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\shaders">
+      <UniqueIdentifier>{be0b36f1-49ed-4a06-9f1f-57c654a554fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp">
@@ -332,8 +338,67 @@
     <ClInclude Include="src\RenderState.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Tree.h">
-      <Filter>src</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\bumped-specular.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored-specular.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored-specular.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\diffuse.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\diffuse.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\diffuse-specular.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\diffuse-specular.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\parallax.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\parallax.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\parallax-specular.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\parallax-specular.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\solid.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\solid.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\textured.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\textured.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\bumped.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\bumped.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\bumped-specular.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

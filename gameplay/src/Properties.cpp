@@ -600,7 +600,7 @@ bool Properties::getColor(const char* name, Vector3* out) const
 
         // Read the string into an int as hex.
         unsigned int color;
-        sscanf_s(valueString+1, "%x", &color);
+        sscanf(valueString+1, "%x", &color);
 
         out->set(Vector3::fromColor(color));
         return true;
@@ -628,7 +628,7 @@ bool Properties::getColor(const char* name, Vector4* out) const
 
         // Read the string into an int as hex.
         unsigned int color;
-        sscanf_s(valueString+1, "%x", &color);
+        sscanf(valueString+1, "%x", &color);
 
         out->set(Vector4::fromColor(color));
         return true;
