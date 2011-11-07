@@ -2,20 +2,18 @@
 #define FRAMEBUFFER_H_
 
 #include "Base.h"
-#include "Ref.h"
+#include "RenderTarget.h"
+#include "DepthStencilTarget.h"
 
 namespace gameplay
 {
-
-class RenderTarget;
-class DepthStencilTarget;
 
 class FrameBuffer : public Ref
 {
 public:
 
     /**
-     * Create an empty FrameBuffer and add it to the list of available FrameBuffers.
+     * Creates an empty FrameBuffer and adds it to the list of available FrameBuffers.
      *
      * @param id The ID of the new FrameBuffer.  Uniqueness is recommended but not enforced.
      *
@@ -24,8 +22,8 @@ public:
     static FrameBuffer* create(const char* id);
 
     /**
-     * Create an empty FrameBuffer with a RenderTarget of the specified width and height,
-     * and add the FrameBuffer to the list of available FrameBuffers.
+     * Creates a new FrameBuffer with a RenderTarget of the specified width and height,
+     * and adds the FrameBuffer to the list of available FrameBuffers.
      *
      * @param id The ID of the new FrameBuffer.  Uniqueness is recommended but not enforced.
      * @param width The width of the RenderTarget to be created and attached.
@@ -43,11 +41,6 @@ public:
      * @return The FrameBuffer with the specified ID, or NULL if one was not found.
      */
     static FrameBuffer* getFrameBuffer(const char* id);
-     
-    /**
-     * Destructor.  Removes this FrameBuffer from the list of available FrameBuffers.
-     */
-    ~FrameBuffer();
 
     /**
      * Get the ID of this FrameBuffer.
@@ -108,11 +101,15 @@ private:
  
     FrameBuffer(const char* id);
 
+    /**
+     * Destructor.  Removes this FrameBuffer from the list of available FrameBuffers.
+     */
+    ~FrameBuffer();
+
     std::string _id;
     FrameBufferHandle _handle;
-    RenderTarget** __renderTargets;
+    RenderTarget** _renderTargets;
     DepthStencilTarget* _depthStencilTarget;
-    unsigned int _index;
 };
 
 }
