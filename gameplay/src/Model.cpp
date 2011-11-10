@@ -200,14 +200,7 @@ void Model::setNode(Node* node)
 {
     if (_node != node)
     {
-        SAFE_RELEASE(_node);
-
         _node = node;
-
-        if (_node)
-        {
-            node->addRef();
-        }
     }
 
     // Re-bind node related material parameters

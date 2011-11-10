@@ -18,7 +18,8 @@ namespace gameplay
  */
 class PhysicsMotionState : public btMotionState
 {
-	friend class PhysicsRigidBody;
+    friend class PhysicsRigidBody;
+    friend class PhysicsConstraint;
 
 protected:
     /**
@@ -32,7 +33,7 @@ protected:
     /**
      * Destructor.
      */
-	virtual ~PhysicsMotionState();
+    virtual ~PhysicsMotionState();
 
     /**
      * @see btMotionState#getWorldTransform
@@ -45,10 +46,9 @@ protected:
     virtual void setWorldTransform(const btTransform &transform);
 
 private:
-	Node* _node;
+    Node* _node;
     btTransform _centerOfMassOffset;
-	btTransform _worldTransform;
-    bool _needsUpdate;
+    btTransform _worldTransform;
 };
 
 }

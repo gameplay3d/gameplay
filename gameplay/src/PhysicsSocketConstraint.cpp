@@ -10,30 +10,15 @@ namespace gameplay
 {
 
 PhysicsSocketConstraint::PhysicsSocketConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
+    : PhysicsConstraint(a, b)
 {
     if (b)
     {
-        // Create a translation matrix that translates to the midpoint
-        // between the two physics rigid bodies.
-        Matrix m;
-        Matrix::createTranslation(midpoint(a->_node, b->_node), &m);
+        Vector3 origin = centerOfMassMidpoint(a->_node, b->_node);
+        btTransform frameInA = getTransformOffset(a->_node, origin);
+        btTransform frameInB = getTransformOffset(b->_node, origin);
 
-        // Calculate the translation offsets to the rigid bodies
-        // by transforming the translation matrix above into each rigid body's
-        // local space (multiply by the inverse world matrix and extract translation).
-        Matrix mAi;
-        a->_node->getWorldMatrix().invert(&mAi);
-        mAi.multiply(m);
-
-        Matrix mBi;
-        b->_node->getWorldMatrix().invert(&mBi);
-        mBi.multiply(m);
-    
-        Vector3 tA, tB;
-        mAi.getTranslation(&tA);
-        mBi.getTranslation(&tB);
-
-        _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, btVector3(tA.x, tA.y, tA.z), btVector3(tB.x, tB.y, tB.z));
+        _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, frameInA.getOrigin(), frameInB.getOrigin());
     }
     else
     {
@@ -43,17 +28,25 @@ PhysicsSocketConstraint::PhysicsSocketConstraint(PhysicsRigidBody* a, PhysicsRig
 
 PhysicsSocketConstraint::PhysicsSocketConstraint(PhysicsRigidBody* a, const Vector3& translationOffsetA, 
     PhysicsRigidBody* b, const Vector3& translationOffsetB)
+    : PhysicsConstraint(a, b)
 {
+    // Take scale into account for the first node's translation offset.
+    Vector3 sA;
+    a->_node->getWorldMatrix().getScale(&sA);
+    Vector3 tA(translationOffsetA.x * sA.x, translationOffsetA.y * sA.y, translationOffsetA.z * sA.z);
+
     if (b)
     {
-        _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, 
-            btVector3(translationOffsetA.x, translationOffsetA.y, translationOffsetA.z),
-            btVector3(translationOffsetB.x, translationOffsetB.y, translationOffsetB.z));
+        // Take scale into account for the second node's translation offset.
+        Vector3 sB;
+        b->_node->getWorldMatrix().getScale(&sB);
+        Vector3 tB(translationOffsetB.x * sB.x, translationOffsetB.y * sB.y, translationOffsetB.z * sB.z);
+
+        _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, btVector3(tA.x, tA.y, tA.z), btVector3(tB.x, tB.y, tB.z));
     }
     else
     {
-        _constraint = new btPoint2PointConstraint(*a->_body, 
-            btVector3(translationOffsetA.x, translationOffsetA.y, translationOffsetA.z));
+        _constraint = new btPoint2PointConstraint(*a->_body, btVector3(tA.x, tA.y, tA.z));
     }
 }
 

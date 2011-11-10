@@ -53,7 +53,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample03-character", "gamep
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameplay-encoder", "gameplay-encoder\gameplay-encoder.vcxproj", "{9D69B743-4872-4DD1-8E30-0087C64298D7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample04-catapult", "gameplay-samples\sample04-catapult\sample04-catapult.vcxproj", "{FA260001-5B2E-41B7-86DD-C7F26DF3A485}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D3CA8AE2-3ED6-458B-963A-EDA671E6F51C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample04-sandbox", "gameplay-samples\sample04-sandbox\sample04-sandbox.vcxproj", "{FA260001-5B2E-41B7-86DD-C7F26DF3A485}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection

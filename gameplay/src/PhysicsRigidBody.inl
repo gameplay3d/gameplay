@@ -12,13 +12,13 @@ namespace gameplay
 
 inline float PhysicsRigidBody::getAngularDamping() const
 {
-	return _body->getAngularDamping();
+    return _body->getAngularDamping();
 }
 
 inline Vector3 PhysicsRigidBody::getAngularVelocity() const
 {
-	const btVector3& v = _body->getAngularVelocity();
-	return Vector3(v.x(), v.y(), v.z());
+    const btVector3& v = _body->getAngularVelocity();
+    return Vector3(v.x(), v.y(), v.z());
 }
 
 inline Vector3 PhysicsRigidBody::getAnisotropicFriction() const
@@ -40,13 +40,13 @@ inline Vector3 PhysicsRigidBody::getGravity() const
 
 inline float PhysicsRigidBody::getLinearDamping() const
 {
-	return _body->getLinearDamping();
+    return _body->getLinearDamping();
 }
 
 inline Vector3 PhysicsRigidBody::getLinearVelocity() const
 {
-	const btVector3& v = _body->getLinearVelocity();
-	return Vector3(v.x(), v.y(), v.z());
+    const btVector3& v = _body->getLinearVelocity();
+    return Vector3(v.x(), v.y(), v.z());
 }
 
 inline float PhysicsRigidBody::getRestitution() const
@@ -56,7 +56,7 @@ inline float PhysicsRigidBody::getRestitution() const
 
 inline void PhysicsRigidBody::setAngularVelocity(const Vector3& velocity)
 {
-	_body->setAngularVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+    _body->setAngularVelocity(btVector3(velocity.x, velocity.y, velocity.z));
 }
 
 inline void PhysicsRigidBody::setAnisotropicFriction(const Vector3& friction)
@@ -81,17 +81,12 @@ inline void PhysicsRigidBody::setGravity(const Vector3& gravity)
 
 inline void PhysicsRigidBody::setLinearVelocity(const Vector3& velocity)
 {
-	_body->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+    _body->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
 }
 
 inline void PhysicsRigidBody::setRestitution(float restitution)
 {
     _body->setRestitution(restitution);
-}
-
-inline void PhysicsRigidBody::addConstraint(PhysicsConstraint* constraint)
-{
-    _constraints.push_back(constraint);
 }
 
 }

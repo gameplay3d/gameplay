@@ -6,6 +6,7 @@
 #define PHYSICSRIGIDBODY_H_
 
 #include "Mesh.h"
+#include "PhysicsConstraint.h"
 #include "Ref.h"
 #include "Transform.h"
 #include "Vector3.h"
@@ -22,11 +23,11 @@ class PhysicsConstraint;
 class PhysicsRigidBody : public Ref
 {
     friend class Node;
-	friend class PhysicsController;
+    friend class PhysicsConstraint;
+    friend class PhysicsController;
     friend class PhysicsFixedConstraint;
     friend class PhysicsGenericConstraint;
     friend class PhysicsHingeConstraint;
-    friend class PhysicsMotionState;
     friend class PhysicsSocketConstraint;
     friend class PhysicsSpringConstraint;
 
@@ -34,14 +35,14 @@ public:
     /**
      * Represents the different types of rigid bodies.
      */
-	enum Type
-	{
-		PHYSICS_SHAPE_BOX,
-		PHYSICS_SHAPE_SPHERE,
-		PHYSICS_SHAPE_TRIANGLE_MESH,
-		PHYSICS_SHAPE_HEIGHTFIELD,
-        PHYSICS_SHAPE_NONE
-	};
+    enum Type
+    {
+        SHAPE_BOX,
+        SHAPE_SPHERE,
+        SHAPE_TRIANGLE_MESH,
+        SHAPE_HEIGHTFIELD,
+        SHAPE_NONE
+    };
 
     /**
      * Applies the given force to the rigid body (optionally, from the given relative position).
@@ -57,14 +58,14 @@ public:
      * @param impulse The force impulse to be applied.
      * @param relativePosition The relative position from which to apply the force.
      */
-	void applyImpulse(const Vector3& impulse, const Vector3* relativePosition = NULL);
+    void applyImpulse(const Vector3& impulse, const Vector3* relativePosition = NULL);
 
     /**
      * Applies the given torque to the rigid body.
      * 
      * @param torque The torque to be applied.
      */
-	void applyTorque(const Vector3& torque);
+    void applyTorque(const Vector3& torque);
 
     /**
      * Applies the given torque impulse to the rigid body.
@@ -150,7 +151,7 @@ public:
      * @param linearDamping The linear damping; between 0.0 (minimum) and 1.0 (maximum).
      * @param angularDamping The angular damping; between 0.0 (minimum) and 1.0 (maximum).
      */
-	inline void setDamping(float linearDamping, float angularDamping);
+    inline void setDamping(float linearDamping, float angularDamping);
 
     /**
      * Sets the rigid body's friction.
@@ -178,7 +179,7 @@ public:
      * 
      * @param restitution The restitution.
      */
-	inline void setRestitution(float restitution);
+    inline void setRestitution(float restitution);
 
 private:
     /**
@@ -209,14 +210,17 @@ private:
 
     // Creates the underlying Bullet Physics rigid body object
     // for a PhysicsRigidBody object using the given parameters.
-	static btRigidBody* createBulletRigidBody(btCollisionShape* shape, float mass, Node* node,
+    static btRigidBody* createBulletRigidBody(btCollisionShape* shape, float mass, Node* node,
         float friction, float restitution, float linearDamping, float angularDamping,
         const Vector3* centerOfMassOffset = NULL);
 
     // Adds a constraint to this rigid body.
-    inline void addConstraint(PhysicsConstraint* constraint);
+    void addConstraint(PhysicsConstraint* constraint);
 
-	btCollisionShape* _shape;
+    // Removes a constraint from this rigid body (used by the constraint destructor).
+    void removeConstraint(PhysicsConstraint* constraint);
+
+    btCollisionShape* _shape;
     btRigidBody* _body;
     Node* _node;
     std::vector<PhysicsConstraint*> _constraints;

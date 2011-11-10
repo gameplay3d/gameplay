@@ -94,7 +94,9 @@
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\gameplay-main-qnx.h" />
-    <ClInclude Include="src\gameplay-main-win32.h" />
+    <ClInclude Include="src\gameplay-main-win32.h">
+      <FileType>CppHeader</FileType>
+    </ClInclude>
     <ClInclude Include="src\gameplay-main.h" />
     <ClInclude Include="src\gameplay.h" />
     <ClInclude Include="src\Input.h" />

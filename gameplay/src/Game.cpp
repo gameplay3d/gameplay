@@ -94,7 +94,7 @@ bool Game::startup()
 
     _animationController.initialize();
     _audioController.initialize();
-	_physicsController.initialize();
+    _physicsController.initialize();
 
     // Call user initialization.
     initialize();
@@ -240,7 +240,7 @@ const AudioController& Game::getAudioController() const
 
 PhysicsController* Game::getPhysicsController()
 {
-	return &_physicsController;
+    return &_physicsController;
 }
 
 void Game::menu()

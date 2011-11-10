@@ -23,9 +23,9 @@ AudioController::~AudioController()
 
 void AudioController::initialize()
 {    
-	alutInit(0, 0);
+    alutInit(0, 0);
 
-	ALenum errorID = alutGetError();
+    ALenum errorID = alutGetError();
     if ( errorID != ALUT_ERROR_NO_ERROR)
     {
         LOG_ERROR_VARG("AudioController::initialize() error. Unable to initialize alut: %s\n", alutGetErrorString(errorID));
@@ -35,7 +35,7 @@ void AudioController::initialize()
 
 void AudioController::finalize()
 {
-	alutExit();
+    alutExit();
 }
 
 void AudioController::pause()
