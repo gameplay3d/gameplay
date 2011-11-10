@@ -54,6 +54,11 @@ inline float PhysicsRigidBody::getRestitution() const
     return _body->getRestitution();
 }
 
+inline bool PhysicsRigidBody::isKinematic() const
+{
+    return (_body->getCollisionFlags() & btCollisionObject::CF_KINEMATIC_OBJECT) != 0;
+}
+
 inline void PhysicsRigidBody::setAngularVelocity(const Vector3& velocity)
 {
     _body->setAngularVelocity(btVector3(velocity.x, velocity.y, velocity.z));
@@ -77,6 +82,20 @@ inline void PhysicsRigidBody::setFriction(float friction)
 inline void PhysicsRigidBody::setGravity(const Vector3& gravity)
 {
     _body->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
+}
+
+inline void PhysicsRigidBody::setKinematic(bool kinematic)
+{
+    if (kinematic)
+    {
+        _body->setCollisionFlags(_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+        _body->setActivationState(DISABLE_DEACTIVATION);
+    }
+    else
+    {
+        _body->setCollisionFlags(_body->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
+        _body->setActivationState(ACTIVE_TAG);
+    }
 }
 
 inline void PhysicsRigidBody::setLinearVelocity(const Vector3& velocity)
