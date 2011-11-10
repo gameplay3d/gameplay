@@ -10,7 +10,7 @@
 SandboxGame game;
 
 static float f = 0.5f, l = 0.1f, a = 0.5f;
-static const float ACCELEROMETER_SCALE = -0.2f;
+static float ACCELEROMETER_SCALE = 0.75f;
 static const float FORCE_VALUE = 40.0f;
 static const float TORQUE_VALUE = 20.0f;
 
@@ -91,8 +91,9 @@ void SandboxGame::keyPress(int key, int keyEvent)
 
 void SandboxGame::initialize()
 {
-    // Initialize GL state.
-    glClearColor(0, 0, 0, 1);
+    // Depending on the orientation, possibly invert the accelerometer scale.
+    if (Platform::getOrientationAngle() == 0)
+        ACCELEROMETER_SCALE *= -1.0f;
 
     // Load mesh from file.
     Package* meshPackage = Package::create("res/models/physics_sandbox.gpb");
@@ -335,7 +336,7 @@ void SandboxGame::update(long elapsedTime)
 
 void SandboxGame::render(long elapsedTime)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    this->clear(CLEAR_COLOR_DEPTH, Vector4(0.0f, 0.0f, 0.0f, 1.0f), 1.0f, 0.0f);
 
     // Draw our scene.
     _scene->visit(this, &SandboxGame::visitNode);

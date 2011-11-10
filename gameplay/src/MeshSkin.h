@@ -11,6 +11,7 @@ namespace gameplay
 {
 
 class Package;
+class Model;
 class Joint;
 
 /**
