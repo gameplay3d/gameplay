@@ -1,18 +1,45 @@
+/**
+ * RenderTarget.cpp
+ */
+
 #include "Base.h"
 #include "RenderTarget.h"
-#include "Texture.h"
 
 namespace gameplay
 {
 
 static std::vector<RenderTarget*> __renderTargets;
 
+RenderTarget::RenderTarget(const char* id)
+    : _id(id), _texture(NULL)
+{
+}
+
+RenderTarget::~RenderTarget()
+{
+    SAFE_RELEASE(_texture);
+
+    // Remove ourself from the cache
+    std::vector<RenderTarget*>::iterator it = std::find(__renderTargets.begin(), __renderTargets.end(), this);
+    if (it != __renderTargets.end())
+    {
+        __renderTargets.erase(it);
+    }
+}
+
 RenderTarget* RenderTarget::create(const char* id, unsigned int width, unsigned int height)
 {
-    RenderTarget* renderTarget = new RenderTarget(id, width, height);
+    // Create a new texture with the given width
+    Texture* texture = Texture::create(Texture::RGBA8888, width, height, NULL, false);
+    if (texture == NULL)
+    {
+        return NULL;
+    }
+
+    RenderTarget* renderTarget = new RenderTarget(id);
+    renderTarget->_texture = texture;
 
     __renderTargets.push_back(renderTarget);
-    renderTarget->_index = __renderTargets.size() - 1;
 
     return renderTarget;
 }
@@ -21,25 +48,16 @@ RenderTarget* RenderTarget::getRenderTarget(const char* id)
 {
     // Search the vector for a matching ID.
     std::vector<RenderTarget*>::const_iterator it;
-    for (it = __renderTargets.begin(); it < __renderTargets.end(); ++it)
+    for (it = __renderTargets.begin(); it < __renderTargets.end(); it++)
     {
-        RenderTarget* rt = *it;
-        if (strcmp(id, rt->getID()) == 0)
+        RenderTarget* dst = *it;
+        if (strcmp(id, dst->getID()) == 0)
         {
-            return rt;
+            return dst;
         }
     }
 
     return NULL;
-}
- 
-RenderTarget::~RenderTarget()
-{
-    SAFE_RELEASE(_texture);
-
-    // Erase this RenderTarget from the vector.
-    std::vector<RenderTarget*>::const_iterator it = __renderTargets.begin() + _index;
-    __renderTargets.erase(it);
 }
 
 const char* RenderTarget::getID() const
@@ -50,16 +68,6 @@ const char* RenderTarget::getID() const
 Texture* RenderTarget::getTexture() const
 {
     return _texture;
-}
- 
-RenderTarget::RenderTarget(const char* id, unsigned int width, unsigned int height)
-{
-    if (id)
-    {
-        _id = id;
-    }
-
-    _texture = Texture::create(Texture::RGBA8888, width, height, NULL, true);
 }
 
 }

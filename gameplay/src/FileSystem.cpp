@@ -40,7 +40,7 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
     if (fp == NULL)
     {
         fullPath = __resourcePath;
-        fullPath += "../../gameplay-resources/";
+        fullPath += "../../gameplay/";
         fullPath += path;
         fp = fopen(fullPath.c_str(), mode);
     }
