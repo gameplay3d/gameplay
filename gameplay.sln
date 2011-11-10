@@ -3,34 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameplay", "gameplay\gameplay.vcxproj", "{1032BA4B-57EB-4348-9E03-29DD63E80E4A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gameplay-resources", "gameplay-resources", "{366E7E40-BED1-458F-B21E-265FCA8F1D10}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "res", "res", "{923056FA-5AFB-4DB5-9984-C2D72DB5FE6F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{A2CB369B-1D5B-4A0D-BA9E-96D61A2EAB4C}"
-	ProjectSection(SolutionItems) = preProject
-		gameplay-resources\res\shaders\bumped-specular.fsh = gameplay-resources\res\shaders\bumped-specular.fsh
-		gameplay-resources\res\shaders\bumped-specular.vsh = gameplay-resources\res\shaders\bumped-specular.vsh
-		gameplay-resources\res\shaders\bumped.fsh = gameplay-resources\res\shaders\bumped.fsh
-		gameplay-resources\res\shaders\bumped.vsh = gameplay-resources\res\shaders\bumped.vsh
-		gameplay-resources\res\shaders\colored-specular.fsh = gameplay-resources\res\shaders\colored-specular.fsh
-		gameplay-resources\res\shaders\colored-specular.vsh = gameplay-resources\res\shaders\colored-specular.vsh
-		gameplay-resources\res\shaders\colored.fsh = gameplay-resources\res\shaders\colored.fsh
-		gameplay-resources\res\shaders\colored.vsh = gameplay-resources\res\shaders\colored.vsh
-		gameplay-resources\res\shaders\diffuse-specular.fsh = gameplay-resources\res\shaders\diffuse-specular.fsh
-		gameplay-resources\res\shaders\diffuse-specular.vsh = gameplay-resources\res\shaders\diffuse-specular.vsh
-		gameplay-resources\res\shaders\diffuse.fsh = gameplay-resources\res\shaders\diffuse.fsh
-		gameplay-resources\res\shaders\diffuse.vsh = gameplay-resources\res\shaders\diffuse.vsh
-		gameplay-resources\res\shaders\parallax-specular.fsh = gameplay-resources\res\shaders\parallax-specular.fsh
-		gameplay-resources\res\shaders\parallax-specular.vsh = gameplay-resources\res\shaders\parallax-specular.vsh
-		gameplay-resources\res\shaders\parallax.fsh = gameplay-resources\res\shaders\parallax.fsh
-		gameplay-resources\res\shaders\parallax.vsh = gameplay-resources\res\shaders\parallax.vsh
-		gameplay-resources\res\shaders\solid.fsh = gameplay-resources\res\shaders\solid.fsh
-		gameplay-resources\res\shaders\solid.vsh = gameplay-resources\res\shaders\solid.vsh
-		gameplay-resources\res\shaders\textured.fsh = gameplay-resources\res\shaders\textured.fsh
-		gameplay-resources\res\shaders\textured.vsh = gameplay-resources\res\shaders\textured.vsh
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample00-mesh", "gameplay-samples\sample00-mesh\sample00-mesh.vcxproj", "{D672DC66-3CE0-4878-B0D2-813CA731012F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
@@ -97,9 +69,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{923056FA-5AFB-4DB5-9984-C2D72DB5FE6F} = {366E7E40-BED1-458F-B21E-265FCA8F1D10}
-		{A2CB369B-1D5B-4A0D-BA9E-96D61A2EAB4C} = {923056FA-5AFB-4DB5-9984-C2D72DB5FE6F}
 	EndGlobalSection
 EndGlobal

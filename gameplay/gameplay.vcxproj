@@ -143,6 +143,28 @@
     <ClInclude Include="src\Viewport.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\bumped-specular.fsh" />
+    <None Include="res\shaders\bumped-specular.vsh" />
+    <None Include="res\shaders\bumped.fsh" />
+    <None Include="res\shaders\bumped.vsh" />
+    <None Include="res\shaders\colored-specular.fsh" />
+    <None Include="res\shaders\colored-specular.vsh" />
+    <None Include="res\shaders\colored.fsh" />
+    <None Include="res\shaders\colored.vsh" />
+    <None Include="res\shaders\diffuse-specular.fsh" />
+    <None Include="res\shaders\diffuse-specular.vsh" />
+    <None Include="res\shaders\diffuse.fsh" />
+    <None Include="res\shaders\diffuse.vsh" />
+    <None Include="res\shaders\parallax-specular.fsh" />
+    <None Include="res\shaders\parallax-specular.vsh" />
+    <None Include="res\shaders\parallax.fsh" />
+    <None Include="res\shaders\parallax.vsh" />
+    <None Include="res\shaders\solid.fsh" />
+    <None Include="res\shaders\solid.vsh" />
+    <None Include="res\shaders\textured.fsh" />
+    <None Include="res\shaders\textured.vsh" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="src\PhysicsConstraint.inl" />
     <None Include="src\PhysicsFixedConstraint.inl" />
     <None Include="src\PhysicsGenericConstraint.inl" />
