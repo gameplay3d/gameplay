@@ -15,22 +15,23 @@
 
 namespace gameplay
 {
-	
+    
 /**
  * Defines a class for controlling game physics.
  */
 class PhysicsController
 {
-	friend class Game;
-	friend class PhysicsRigidBody;
+    friend class Game;
+    friend class PhysicsConstraint;
+    friend class PhysicsRigidBody;
 
 public:
-	/**
-	 * Sets the gravity vector for the simulated physics world.
-	 * 
-	 * @param gravity The gravity vector.
-	 */
-	void setGravity(const Vector3& gravity);
+    /**
+     * Sets the gravity vector for the simulated physics world.
+     * 
+     * @param gravity The gravity vector.
+     */
+    void setGravity(const Vector3& gravity);
 
     /**
      * Creates a fixed constraint.
@@ -144,52 +145,52 @@ public:
         const Vector3& translationOffsetA, PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
 
 private:
-	/**
-	 * Constructor.
-	 */
-	PhysicsController();
+    /**
+     * Constructor.
+     */
+    PhysicsController();
 
     /**
-	 * Destructor.
-	 */
-	~PhysicsController();
+     * Destructor.
+     */
+    ~PhysicsController();
 
-	/**
-	 * Controller initialize.
-	 */
-	void initialize();
+    /**
+     * Controller initialize.
+     */
+    void initialize();
 
-	/**
-	 * Controller finalize.
-	 */
+    /**
+     * Controller finalize.
+     */
     void finalize();
 
-	/**
-	 * Controller pause.
-	 */
+    /**
+     * Controller pause.
+     */
     void pause();
 
-	/**
-	 * Controller resume.
-	 */
+    /**
+     * Controller resume.
+     */
     void resume();
 
-	/**
-	 * Controller update.
-	 */
+    /**
+     * Controller update.
+     */
     void update(long elapsedTime);
 
     // Creates a box collision shape to be used in the creation of a rigid body.
-	btCollisionShape* getBox(const Vector3& min, const Vector3& max, const btVector3& scale);
+    btCollisionShape* getBox(const Vector3& min, const Vector3& max, const btVector3& scale);
 
     // Creates a sphere collision shape to be used in the creation of a rigid body.
-	btCollisionShape* getSphere(float radius, const btVector3& scale);
+    btCollisionShape* getSphere(float radius, const btVector3& scale);
 
     // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
-	btCollisionShape* getTriangleMesh(float* vertexData, int vertexPositionStride, unsigned char* indexData, Mesh::IndexFormat indexFormat);
+    btCollisionShape* getTriangleMesh(float* vertexData, int vertexPositionStride, unsigned char* indexData, Mesh::IndexFormat indexFormat);
 
     // Creates a heightfield collision shape to be used in the creation of a rigid body.
-	btCollisionShape* getHeightfield(void* data, int width, int height);
+    btCollisionShape* getHeightfield(void* data, int width, int height);
     
     // Sets up the given constraint for the given two rigid bodies.
     void setupConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
@@ -200,13 +201,13 @@ private:
     // Removes the given rigid body from the simulated physics world.
     void removeRigidBody(PhysicsRigidBody* rigidBody);
 
-	btVector3 _gravity;
-	btDefaultCollisionConfiguration* _collisionConfiguration;
-	btCollisionDispatcher* _dispatcher;
-	btBroadphaseInterface* _overlappingPairCache;
-	btSequentialImpulseConstraintSolver* _solver;
-	btDynamicsWorld* _world;
-	btAlignedObjectArray<btCollisionShape*> _shapes;
+    btVector3 _gravity;
+    btDefaultCollisionConfiguration* _collisionConfiguration;
+    btCollisionDispatcher* _dispatcher;
+    btBroadphaseInterface* _overlappingPairCache;
+    btSequentialImpulseConstraintSolver* _solver;
+    btDynamicsWorld* _world;
+    btAlignedObjectArray<btCollisionShape*> _shapes;
 };
 
 }

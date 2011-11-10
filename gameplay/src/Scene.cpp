@@ -164,9 +164,6 @@ void Scene::removeNode(Node* node)
     if (node->_scene != this)
         return;
 
-    node->remove();
-    node->_scene = NULL;
-
     if (node == _firstNode)
     {
         _firstNode = node->_nextSibling;
@@ -175,6 +172,9 @@ void Scene::removeNode(Node* node)
     {
         _lastNode = node->_prevSibling;
     }
+
+    node->remove();
+    node->_scene = NULL;
 
     SAFE_RELEASE(node);
 

@@ -8,7 +8,7 @@ namespace gameplay
 {
 
 PhysicsMotionState::PhysicsMotionState(Node* node, const Vector3* centerOfMassOffset) : _node(node),
-    _needsUpdate(false), _centerOfMassOffset(btTransform::getIdentity())
+    _centerOfMassOffset(btTransform::getIdentity())
 {
     // Store the initial world transform (minus the scale) for use by Bullet later on.
     Quaternion rotation;
@@ -32,8 +32,8 @@ PhysicsMotionState::PhysicsMotionState(Node* node, const Vector3* centerOfMassOf
     }
     else
     {
-		_worldTransform = btTransform(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w), 
-			btVector3(m.m[12], m.m[13], m.m[14]));
+        _worldTransform = btTransform(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w), 
+            btVector3(m.m[12], m.m[13], m.m[14]));
     }
 }
 
@@ -43,7 +43,7 @@ PhysicsMotionState::~PhysicsMotionState()
 
 void PhysicsMotionState::getWorldTransform(btTransform &transform) const
 {
-	transform = _centerOfMassOffset.inverse() * _worldTransform;
+    transform = _centerOfMassOffset.inverse() * _worldTransform;
 }
 
 void PhysicsMotionState::setWorldTransform(const btTransform &transform)
@@ -51,10 +51,10 @@ void PhysicsMotionState::setWorldTransform(const btTransform &transform)
     _worldTransform = transform * _centerOfMassOffset;
         
     const btQuaternion& rot = _worldTransform.getRotation();
-	const btVector3& pos = _worldTransform.getOrigin();
+    const btVector3& pos = _worldTransform.getOrigin();
 
-	_node->setRotation(rot.x(), rot.y(), rot.z(), rot.w());
-	_node->setTranslation(pos.x(), pos.y(), pos.z());
+    _node->setRotation(rot.x(), rot.y(), rot.z(), rot.w());
+    _node->setTranslation(pos.x(), pos.y(), pos.z());
 }
 
 }

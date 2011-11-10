@@ -7,7 +7,7 @@ material duck
             // shaders
             vertexShader = res/shaders/diffuse-specular.vsh
             fragmentShader = res/shaders/diffuse-specular.fsh
-			
+            
             // uniforms
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX

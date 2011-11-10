@@ -6,19 +6,21 @@
 #define PHYSICSCONSTRAINT_H_
 
 #include "Base.h"
-#include "Ref.h"
+#include "Model.h"
 #include "Vector3.h"
 
 namespace gameplay
 {
     class Node;
+    class PhysicsRigidBody;
 
 /**
  * Base class for physics constraints.
  */
-class PhysicsConstraint : public Ref
+class PhysicsConstraint
 {
     friend class PhysicsController;
+    friend class PhysicsRigidBody;
 
 public:
     /**
@@ -52,11 +54,35 @@ public:
      */
     inline void setEnabled(bool enabled);
 
+    /**
+     * Calculates the midpoint between the given nodes' centers of mass.
+     * 
+     * @param a The first node.
+     * @param b The second node.
+     */
+    static Vector3 centerOfMassMidpoint(Node* a, Node* b);
+
+    /**
+     * Calculates the rotation offset to the given point in the given node's local space.
+     * 
+     * @param node The node to calculate a rotation offset for.
+     * @param point The point to calculate the rotation offset to.
+     */
+    static Quaternion getRotationOffset(Node* node, const Vector3& point);
+
+    /**
+     * Calculates the translation offset to the given point in the given node's local space.
+     * 
+     * @param node The node to calculate a translation offset for.
+     * @param point The point to calculate the translation offset to.
+     */
+    static Vector3 getTranslationOffset(Node* node, const Vector3& point);
+
 protected:
     /**
      * Constructor.
      */
-    PhysicsConstraint();
+    PhysicsConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b);
 
     /**
      * Destructor.
@@ -64,10 +90,23 @@ protected:
     virtual ~PhysicsConstraint();
 
     /**
-     * Calculates the midpoint between the two nodes.
+     * Calculates the transform to be used as the offset (i.e. "frame in" 
+     * parameter in Bullet terms) to the given constraint origin.
      */
-    static Vector3 midpoint(Node* a, Node* b);
+    static btTransform getTransformOffset(Node* node, const Vector3& origin);
+    
+    /**
+     * Calculates the center of mass in world space of the given model.
+     */
+    static Vector3 getWorldCenterOfMass(Model* model);
 
+    /**
+     * Offsets the given vector by the given node's center of mass.
+     */
+    static Vector3 offsetByCenterOfMass(Node* node, const Vector3& v);
+
+    PhysicsRigidBody* _a;
+    PhysicsRigidBody* _b;
     btTypedConstraint* _constraint;
 };
 

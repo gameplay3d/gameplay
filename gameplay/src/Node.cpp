@@ -51,6 +51,7 @@ Node::~Node()
     SAFE_RELEASE(_model);
     SAFE_RELEASE(_audioSource);
     SAFE_RELEASE(_particleEmitter);
+    SAFE_RELEASE(_physicsRigidBody);
 }
 
 Node* Node::create(const char* id)
@@ -796,12 +797,9 @@ PhysicsRigidBody* Node::getPhysicsRigidBody()
 void Node::setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float friction,
         float restitution, float linearDamping, float angularDamping)
 {
-    if (_physicsRigidBody)
-    {
-        SAFE_RELEASE(_physicsRigidBody);
-    }
+    SAFE_RELEASE(_physicsRigidBody);
     
-    if (type != PhysicsRigidBody::PHYSICS_SHAPE_NONE)
+    if (type != PhysicsRigidBody::SHAPE_NONE)
         _physicsRigidBody = new PhysicsRigidBody(this, type, mass, friction, restitution, linearDamping, angularDamping);
 }
 

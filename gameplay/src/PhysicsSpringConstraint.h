@@ -169,6 +169,11 @@ private:
     PhysicsSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
         PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
 
+    /**
+     * Destructor.
+     */
+    ~PhysicsSpringConstraint();
+
     // Sets the strength for the given angular/linear 
     // X/Y/Z axis combination determined by the given index.
     // 

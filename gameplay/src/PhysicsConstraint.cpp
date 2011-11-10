@@ -4,28 +4,40 @@
 
 #include "PhysicsConstraint.h"
 
+#include "Game.h"
 #include "Node.h"
+#include "PhysicsMotionState.h"
+#include "PhysicsRigidBody.h"
 
 namespace gameplay
 {
 
-PhysicsConstraint::PhysicsConstraint() : _constraint(NULL)
+PhysicsConstraint::PhysicsConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
+    : _a(a), _b(b), _constraint(NULL)
 {
 }
 
 PhysicsConstraint::~PhysicsConstraint()
 {
-    if (_constraint)
-    {
-        SAFE_DELETE(_constraint);
-    }
+    // Remove the physics rigid bodies' references to this constraint.
+    if (_a)
+        _a->removeConstraint(this);
+    if (_b)
+        _b->removeConstraint(this);
+
+    // Remove the constraint from the physics world and delete the Bullet object.
+    Game::getInstance()->getPhysicsController()->removeConstraint(this);
+    SAFE_DELETE(_constraint);
 }
 
-Vector3 PhysicsConstraint::midpoint(Node* a, Node* b)
+Vector3 PhysicsConstraint::centerOfMassMidpoint(Node* a, Node* b)
 {
     Vector3 tA, tB;
     a->getWorldMatrix().getTranslation(&tA);
     b->getWorldMatrix().getTranslation(&tB);
+
+    tA = getWorldCenterOfMass(a->getModel());
+    tB = getWorldCenterOfMass(b->getModel());
     
     Vector3 d(tA, tB);
     d.scale(0.5f);
@@ -33,6 +45,118 @@ Vector3 PhysicsConstraint::midpoint(Node* a, Node* b)
     c.add(d);
 
     return c;
+}
+
+Quaternion PhysicsConstraint::getRotationOffset(Node* node, const Vector3& point)
+{
+    // Create a translation matrix that translates to the given origin.
+    Matrix m;
+    Matrix::createTranslation(point, &m);
+
+    // Calculate the rotation offset to the rigid body by transforming 
+    // the translation matrix above into the rigid body's local space 
+    // (multiply by the inverse world matrix) and extracting the rotation.
+    Matrix mi;
+    node->getWorldMatrix().invert(&mi);
+    mi.multiply(m);
+    
+    Quaternion r;
+    mi.getRotation(&r);
+
+    return r;
+}
+
+Vector3 PhysicsConstraint::getTranslationOffset(Node* node, const Vector3& point)
+{
+    // Create a translation matrix that translates to the given origin.
+    Matrix m;
+    Matrix::createTranslation(point, &m);
+
+    // Calculate the translation offset to the rigid body by transforming 
+    // the translation matrix above into the rigid body's local space 
+    // (multiply by the inverse world matrix) and extracting the translation.
+    Matrix mi;
+    node->getWorldMatrix().invert(&mi);
+    mi.multiply(m);
+    
+    Vector3 t;
+    mi.getTranslation(&t);
+
+    Vector3 s;
+    node->getWorldMatrix().getScale(&s);
+
+    t.x *= s.x;
+    t.y *= s.y;
+    t.z *= s.z;
+    
+    t = offsetByCenterOfMass(node, t);
+
+    return t;
+}
+
+btTransform PhysicsConstraint::getTransformOffset(Node* node, const Vector3& origin)
+{
+    // Create a translation matrix that translates to the given origin.
+    Matrix m;
+    Matrix::createTranslation(origin, &m);
+
+    // Calculate the translation and rotation offset to the rigid body
+    // by transforming the translation matrix above into the rigid body's
+    // local space (multiply by the inverse world matrix and extract components).
+    Matrix mi;
+    node->getWorldMatrix().invert(&mi);
+    mi.multiply(m);
+
+    Quaternion r;
+    mi.getRotation(&r);
+    
+    Vector3 t;
+    mi.getTranslation(&t);
+
+    Vector3 s;
+    node->getWorldMatrix().getScale(&s);
+
+    t.x *= s.x;
+    t.y *= s.y;
+    t.z *= s.z;
+    
+    t = offsetByCenterOfMass(node, t);
+
+    return btTransform(btQuaternion(r.x, r.y, r.z, r.w), btVector3(t.x, t.y, t.z));
+}
+
+// TODO!!!
+Vector3 PhysicsConstraint::getWorldCenterOfMass(Model* model)
+{
+    Vector3 center;
+
+    const BoundingBox& box = model->getMesh()->getBoundingBox();
+    if (!(box.min.isZero() && box.max.isZero()))
+    {
+        Vector3 bMin, bMax;
+        model->getNode()->getWorldMatrix().transformPoint(box.min, &bMin);
+        model->getNode()->getWorldMatrix().transformPoint(box.max, &bMax);
+        center.set(bMin, bMax);
+        center.scale(0.5f);
+        center.add(bMin);
+    }
+    else
+    {
+        const BoundingSphere& sphere = model->getMesh()->getBoundingSphere();
+        if (!(sphere.center.isZero() && sphere.radius == 0))
+        {
+            model->getNode()->getWorldMatrix().transformPoint(sphere.center, &center);
+        }
+    }
+
+    // TODO: This case needs to be fixed (maybe return an error somehow?).
+    return center;
+}
+
+Vector3 PhysicsConstraint::offsetByCenterOfMass(Node* node, const Vector3& v)
+{
+    btVector3 centerOfMassOffset = ((PhysicsMotionState*)node->getPhysicsRigidBody()->_body->getMotionState())->_centerOfMassOffset.getOrigin();
+    return Vector3(v.x + centerOfMassOffset.x(), v.y + centerOfMassOffset.y(), v.z + centerOfMassOffset.z());
 }
 
 }
