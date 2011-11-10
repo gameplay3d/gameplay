@@ -46,9 +46,12 @@ protected:
     virtual void setWorldTransform(const btTransform &transform);
 
 private:
+    // Updates the motion state's world transform from the GamePlay Node object's world transform.
+    void updateTransformFromNode() const;
+
     Node* _node;
     btTransform _centerOfMassOffset;
-    btTransform _worldTransform;
+    mutable btTransform _worldTransform;
 };
 
 }

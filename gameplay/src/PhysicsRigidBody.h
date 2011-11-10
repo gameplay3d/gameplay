@@ -132,6 +132,13 @@ public:
     inline float getRestitution() const;
 
     /**
+     * Gets whether the rigid body is a kinematic rigid body or not.
+     * 
+     * @return Whether the rigid body is kinematic or not.
+     */
+    inline bool isKinematic() const;
+
+    /**
      * Sets the rigid body's angular velocity.
      * 
      * @param velocity The angular velocity.
@@ -166,6 +173,13 @@ public:
      * @param gravity The gravity.
      */
     inline void setGravity(const Vector3& gravity);
+
+    /**
+     * Sets whether the rigid body is a kinematic rigid body or not.
+     * 
+     * @param kinematic Whether the rigid body is kinematic or not.
+     */
+    inline void setKinematic(bool kinematic);
 
     /**
      * Sets the rigid body's linear velocity.
