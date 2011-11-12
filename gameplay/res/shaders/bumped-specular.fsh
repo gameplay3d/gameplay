@@ -36,8 +36,8 @@ void lighting(vec3 normalVector, vec3 cameraDirection, vec3 lightDirection, floa
 
 #if defined(POINT_LIGHT)
 
-varying vec3 v_vertexToPointLightDirection; // Light direction w.r.t current vertex in tangent space.
-varying float v_pointLightAttenuation;      // Attenuation of point light.
+varying vec3 v_vertexToPointLightDirection;   // Light direction w.r.t current vertex in tangent space.
+varying float v_pointLightAttenuation;        // Attenuation of point light.
 
 void applyLight()
 {
@@ -45,19 +45,20 @@ void applyLight()
     // Fetch normals from the normal map.
     vec3 normalVector = normalize(texture2D(u_normalMapTexture, v_texCoord).rgb * 2.0 - 1.0);
     vec3 cameraDirection = normalize(v_cameraDirection);
-    
     vec3 vertexToPointLightDirection = normalize(v_vertexToPointLightDirection);
     
-    // Fetch point light attenuation.
-    lighting(normalVector, cameraDirection, vertexToPointLightDirection, v_pointLightAttenuation);
+    float pointLightAttenuation = clamp(v_pointLightAttenuation, 0.0, 1.0);
+    
+    lighting(normalVector, cameraDirection, vertexToPointLightDirection, pointLightAttenuation);
 }
 
 #elif defined(SPOT_LIGHT)
 
-uniform float u_spotLightInnerAngleCos;     // The bright spot [0.0 - 1.0]
-uniform float u_spotLightOuterAngleCos;     // The soft outer part [0.0 - 1.0]
-varying vec3 v_spotLightDirection;          // Direction of spot light in tangent space.
-varying vec3 v_vertexToSpotLightDirection;  // Direction of the spot light w.r.t current vertex in tangent space.
+uniform float u_spotLightInnerAngleCos;       // The bright spot [0.0 - 1.0]
+uniform float u_spotLightOuterAngleCos;       // The soft outer part [0.0 - 1.0]
+varying vec3 v_spotLightDirection;            // Direction of spot light in tangent space.
+varying vec3 v_vertexToSpotLightDirection;    // Direction of the spot light w.r.t current vertex in tangent space.
+varying float v_spotLightAttenuation;         // Attenuation of spot light.
 
 float lerpstep( float lower, float upper, float s)
 {
@@ -66,7 +67,6 @@ float lerpstep( float lower, float upper, float s)
 
 void applyLight()
 {
-    // Normalize the vectors.
     // Fetch normals from the normal map.
     vec3 normalVector = normalize(texture2D(u_normalMapTexture, v_texCoord).rgb * 2.0 - 1.0);
     vec3 cameraDirection = normalize(v_cameraDirection);
@@ -78,23 +78,24 @@ void applyLight()
     // Calculate spot light effect.
     float spotCurrentAngleCos = max(0.0, dot(spotLightDirection, -vertexToSpotLightDirection));
     
-    // Intensity of spot depends on the part of the cone the light direction points to (inner or outer).
-    float spotLightAttenuation = lerpstep(u_spotLightOuterAngleCos, u_spotLightInnerAngleCos, spotCurrentAngleCos);
+    // Intensity of spot depends on the spot light attenuation and the 
+    // part of the cone vertexToSpotLightDirection points to (inner or outer).
+    float spotLightAttenuation = clamp(v_spotLightAttenuation, 0.0, 1.0);
+    spotLightAttenuation *= lerpstep(u_spotLightOuterAngleCos, u_spotLightInnerAngleCos, spotCurrentAngleCos);
 
     lighting(normalVector, cameraDirection, vertexToSpotLightDirection, spotLightAttenuation);
 }
 
 #else
 
-varying vec3 v_directionalLightDirection;    // Direction of light in tangent space.
+varying vec3 v_lightDirection;                 // Direction of light in tangent space.
 
 void applyLight()
 {
-    // Normalize vectors.
     // Fetch normals from the normal map
     vec3 normalVector = normalize(texture2D(u_normalMapTexture, v_texCoord).rgb * 2.0 - 1.0);
     vec3 cameraDirection = normalize(v_cameraDirection);
-    vec3 lightDirection = normalize(v_directionalLightDirection);
+    vec3 lightDirection = normalize(v_lightDirection);
 
     lighting(normalVector, cameraDirection, -lightDirection, 1.0);
 }
