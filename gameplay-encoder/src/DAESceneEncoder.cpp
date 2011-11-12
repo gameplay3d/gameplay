@@ -656,6 +656,7 @@ bool DAESceneEncoder::loadTarget(const domChannelRef& channelRef, AnimationChann
     }
     animationChannel->setTargetAttribute(targetProperty);
     animationChannel->setTargetId(channelTarget.getTargetId());
+    //animationChannel->removeDuplicates();
     return true;
 }
 
@@ -1685,8 +1686,8 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
 
         // Go through the polygon indices for each input source retrieve the values
         // and iterate by its offset.
-        Vertex vertex;
 
+        Vertex vertex;
         for (unsigned int k = 0; k < inputSourceCount && poly < polyIntsCount;)
         {
             const domListOfFloats& source = polygonInputs[k]->sourceValues;
@@ -1701,7 +1702,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
             switch (type)
             {
             case POSITION:
-                vertex.reset();
+                vertex = Vertex(); // TODO
                 if (_vertexBlendWeights && _vertexBlendIndices)
                 {
                     vertex.hasWeights = true;
@@ -1768,6 +1769,8 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
                     vertex.texCoord.x = (float)source.get(polyIndex * 2);
                     vertex.texCoord.y = (float)source.get(polyIndex * 2 + 1);
                 }
+                break;
+            default:
                 break;
             }
 
@@ -1890,6 +1893,16 @@ int DAESceneEncoder::getVertexUsageType(const std::string& semantic)
             else if (equals(semantic, "TEXCOORD"))
             {
                 type = TEXCOORD0;
+            }
+            else if (equals(semantic, "TEXTANGENT"))
+            {
+                // Treat TEXTANGENT as TANGENT
+                type = TANGENT;
+            }
+            else if (equals(semantic, "TEXBINORMAL"))
+            {
+                // Treat TEXBINORMAL as BINORMAL
+                type = BINORMAL;
             }
         case 'B':
             if (equals(semantic, "BINORMAL"))
