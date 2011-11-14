@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'sample01-longboard' target in the 'sample01-longboard' project
-//
-
-#ifdef __OBJC__
-    #import <Cocoa/Cocoa.h>
-#endif
