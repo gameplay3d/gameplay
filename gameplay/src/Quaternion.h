@@ -86,6 +86,21 @@ public:
     Quaternion(float* array);
 
     /**
+     * Constructs a quaternion equal to the rotational part of the specified matrix.
+     *
+     * @param m The matrix.
+     */
+    Quaternion(const Matrix& m);
+
+    /**
+     * Constructs a quaternion equal to the rotation from the specified axis and angle.
+     *
+     * @param axis A vector describing the axis of rotation.
+     * @param angle The angle of rotation (in radians).
+     */
+    Quaternion(const Vector3& axis, float angle);
+
+    /**
      * Constructs a new quaternion that is a copy of the specified one.
      *
      * @param copy The quaternion to copy.
@@ -235,6 +250,13 @@ public:
     void set(float* array);
 
     /**
+     * Sets the quaternion equal to the rotational part of the specified matrix.
+     *
+     * @param m The matrix.
+     */
+    void set(const Matrix& m);
+
+    /**
      * Sets the quaternion equal to the rotation from the specified axis and angle.
      * 
      * @param axis The axis of rotation.
@@ -312,11 +334,31 @@ public:
      */
     static void squad(const Quaternion& q1, const Quaternion& q2, const Quaternion& s1, const Quaternion& s2, float t, Quaternion* dst);
 
+    /**
+     * Calculates the quaternion product of this quaternion with the given quaternion.
+     * 
+     * Note: this does not modify this quaternion.
+     * 
+     * @param q The quaternion to multiply.
+     * @return The quaternion product.
+     */
+    inline Quaternion operator*(const Quaternion& q);
+
+    /**
+     * Multiplies this quaternion with the given quaternion.
+     * 
+     * @param q The quaternion to multiply.
+     * @return This quaternion, after the multiplication occurs.
+     */
+    inline Quaternion& operator*=(const Quaternion& q);
+
 private:
 
     static void slerpForSquad(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst);
 };
 
 }
+
+#include "Quaternion.inl"
 
 #endif

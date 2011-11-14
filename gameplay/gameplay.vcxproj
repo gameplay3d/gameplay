@@ -143,6 +143,15 @@
     <None Include="res\shaders\solid.vsh" />
     <None Include="res\shaders\textured.fsh" />
     <None Include="res\shaders\textured.vsh" />
+    <None Include="src\BoundingBox.inl" />
+    <None Include="src\BoundingSphere.inl" />
+    <None Include="src\Matrix.inl" />
+    <None Include="src\Plane.inl" />
+    <None Include="src\Quaternion.inl" />
+    <None Include="src\Ray.inl" />
+    <None Include="src\Vector2.inl" />
+    <None Include="src\Vector3.inl" />
+    <None Include="src\Vector4.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1032BA4B-57EB-4348-9E03-29DD63E80E4A}</ProjectGuid>

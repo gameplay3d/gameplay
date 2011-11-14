@@ -902,16 +902,6 @@ void Matrix::subtract(const Matrix& m1, const Matrix& m2, Matrix* dst)
     dst->m[15] = m1.m[15] - m2.m[15];
 }
 
-void Matrix::transformVector(Vector3* vector) const
-{
-    transformVector(vector->x, vector->y, vector->z, 0.0f, vector);
-}
-
-void Matrix::transformVector(const Vector3& vector, Vector3* dst) const
-{
-    transformVector(vector.x, vector.y, vector.z, 0.0f, dst);
-}
-
 void Matrix::transformPoint(Vector3* point) const
 {
     transformVector(point->x, point->y, point->z, 1.0f, point);
@@ -922,6 +912,16 @@ void Matrix::transformPoint(const Vector3& point, Vector3* dst) const
     transformVector(point.x, point.y, point.z, 1.0f, dst);
 }
 
+void Matrix::transformVector(Vector3* vector) const
+{
+    transformVector(vector->x, vector->y, vector->z, 0.0f, vector);
+}
+
+void Matrix::transformVector(const Vector3& vector, Vector3* dst) const
+{
+    transformVector(vector.x, vector.y, vector.z, 0.0f, dst);
+}
+
 void Matrix::transformVector(float x, float y, float z, float w, Vector3* dst) const
 {
     assert(dst);
@@ -930,6 +930,11 @@ void Matrix::transformVector(float x, float y, float z, float w, Vector3* dst) c
         x * m[0] + y * m[4] + z * m[8] + w * m[12],
         x * m[1] + y * m[5] + z * m[9] + w * m[13],
         x * m[2] + y * m[6] + z * m[10] + w * m[14] );
+}
+
+void Matrix::transformVector(Vector4* vector) const
+{
+    transformVector(*vector, vector);
 }
 
 void Matrix::transformVector(const Vector4& vector, Vector4* dst) const
