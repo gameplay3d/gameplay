@@ -37,14 +37,15 @@ void CharacterGame::initialize()
 
     // Get spot light position and direction.
     Node* spotLightNode = _scene->findNode("spotLight1");
-
+    
     // Load character's material from a .material file
     Material* meshMaterial = model->setMaterial("res/materials/character.material");
     meshMaterial->getParameter("u_spotLightPosition")->bindValue(spotLightNode, &Node::getTranslationView);
     meshMaterial->getParameter("u_spotLightDirection")->bindValue(spotLightNode, &Node::getForwardVectorView);
+    meshMaterial->getParameter("u_spotLightRangeInverse")->bindValue(spotLightNode->getLight(), &Light::getRangeInverse);
     meshMaterial->getParameter("u_spotLightInnerAngleCos")->bindValue(spotLightNode->getLight(), &Light::getInnerAngleCos);
     meshMaterial->getParameter("u_spotLightOuterAngleCos")->bindValue(spotLightNode->getLight(), &Light::getOuterAngleCos);
-
+    
     // Load character animations.
     loadCharacterAnimations();
 
@@ -58,6 +59,7 @@ void CharacterGame::initialize()
     Material* planeMaterial = planeModel->setMaterial("res/materials/plane.material");
     planeMaterial->getParameter("u_spotLightPosition")->bindValue(spotLightNode, &Node::getTranslationView);
     planeMaterial->getParameter("u_spotLightDirection")->bindValue(spotLightNode, &Node::getForwardVectorView);
+    planeMaterial->getParameter("u_spotLightRangeInverse")->bindValue(spotLightNode->getLight(), &Light::getRangeInverse);
     planeMaterial->getParameter("u_spotLightInnerAngleCos")->bindValue(spotLightNode->getLight(), &Light::getInnerAngleCos);
     planeMaterial->getParameter("u_spotLightOuterAngleCos")->bindValue(spotLightNode->getLight(), &Light::getOuterAngleCos);
 

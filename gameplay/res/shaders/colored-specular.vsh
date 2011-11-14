@@ -119,7 +119,7 @@ vec3 getNormal()
 
 uniform mat4 u_worldViewMatrix;                     // Matrix to tranform a position to view space.
 uniform vec3 u_pointLightPosition;                  // Position
-uniform float u_pointLightRadius;                   // Radius 
+uniform float u_pointLightRangeInverse;             // Inverse of light range. 
 varying vec4 v_vertexToPointLightDirection;         // Light direction w.r.t current vertex.
 
 void applyLight(vec4 position)
@@ -134,7 +134,7 @@ void applyLight(vec4 position)
     vertexToPointLightDirection.xyz = lightDirection;
     
     // Attenuation
-    vertexToPointLightDirection.w = 1 - dot (lightDirection * u_pointLightRadius, lightDirection * u_pointLightRadius);
+    vertexToPointLightDirection.w = 1.0 - dot(lightDirection * u_pointLightRangeInverse, lightDirection * u_pointLightRangeInverse);
 
     // Output light direction.
     v_vertexToPointLightDirection =  vertexToPointLightDirection;
@@ -144,7 +144,9 @@ void applyLight(vec4 position)
 
 uniform mat4 u_worldViewMatrix;                     // Matrix to tranform a position to view space.
 uniform vec3 u_spotLightPosition;                   // Position
+uniform float u_spotLightRangeInverse;              // Inverse of light range.
 varying vec3 v_vertexToSpotLightDirection;          // Light direction w.r.t current vertex.
+varying float v_spotLightAttenuation;               // Attenuation of spot light.
 
 void applyLight(vec4 position)
 {
@@ -152,7 +154,13 @@ void applyLight(vec4 position)
     vec4 positionWorldViewSpace = u_worldViewMatrix * position;
 
     // Compute the light direction with light position and the vertex position.
-    v_vertexToSpotLightDirection = u_spotLightPosition - positionWorldViewSpace.xyz;
+    vec3 lightDirection = u_spotLightPosition - positionWorldViewSpace.xyz;
+
+    // Attenuation
+    v_spotLightAttenuation = 1.0 - dot(lightDirection * u_spotLightRangeInverse, lightDirection * u_spotLightRangeInverse);
+
+    // Compute the light direction with light position and the vertex position.
+    v_vertexToSpotLightDirection = lightDirection;
 }
 
 #else
