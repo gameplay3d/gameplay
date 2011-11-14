@@ -362,7 +362,7 @@ public:
      *
      * @return The pointer to this node's physics rigid body or NULL.
      */
-    PhysicsRigidBody* getPhysicsRigidBody();
+    PhysicsRigidBody* getPhysicsRigidBody() const;
 
     /**
      * Assigns a physics rigid body to this node.

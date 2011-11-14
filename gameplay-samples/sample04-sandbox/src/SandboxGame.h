@@ -12,7 +12,7 @@ using namespace gameplay;
 /**
  * This is a simple sample that demonstrates basic usage of the physics API.
  */
-class SandboxGame: public Game
+class SandboxGame: public Game, public PhysicsController::Listener, public PhysicsRigidBody::Listener
 {
 public:
     /**
@@ -29,6 +29,16 @@ public:
      * Key press event handler.
      */
     void keyPress(int key, int keyEvent);
+
+    /** 
+     * Physics status event handler.
+     */
+    void statusEvent(PhysicsController::Listener::EventType type);
+
+    /**
+     * Collision event handler.
+     */
+    void collisionEvent(PhysicsRigidBody* body, const Vector3& point);
 
 protected:
     /**

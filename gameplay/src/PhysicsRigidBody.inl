@@ -15,16 +15,24 @@ inline float PhysicsRigidBody::getAngularDamping() const
     return _body->getAngularDamping();
 }
 
-inline Vector3 PhysicsRigidBody::getAngularVelocity() const
+inline const Vector3& PhysicsRigidBody::getAngularVelocity() const
 {
+    if (!_angularVelocity)
+        _angularVelocity = new Vector3();
+
     const btVector3& v = _body->getAngularVelocity();
-    return Vector3(v.x(), v.y(), v.z());
+    _angularVelocity->set(v.x(), v.y(), v.z());
+    return *_angularVelocity;
 }
 
-inline Vector3 PhysicsRigidBody::getAnisotropicFriction() const
+inline const Vector3& PhysicsRigidBody::getAnisotropicFriction() const
 {
+    if (!_anisotropicFriction)
+        _anisotropicFriction = new Vector3();
+
     const btVector3& af = _body->getAnisotropicFriction();
-    return Vector3(af.x(), af.y(), af.z());
+    _anisotropicFriction->set(af.x(), af.y(), af.z());
+    return *_anisotropicFriction;
 }
 
 inline float PhysicsRigidBody::getFriction() const
@@ -32,10 +40,14 @@ inline float PhysicsRigidBody::getFriction() const
     return _body->getFriction();
 }
 
-inline Vector3 PhysicsRigidBody::getGravity() const
+inline const Vector3& PhysicsRigidBody::getGravity() const
 {
+    if (!_gravity)
+        _gravity = new Vector3();
+
     const btVector3& g = _body->getGravity();
-    return Vector3(g.x(), g.y(), g.z());
+    _gravity->set(g.x(), g.y(), g.z());
+    return *_gravity;
 }
 
 inline float PhysicsRigidBody::getLinearDamping() const
@@ -43,10 +55,19 @@ inline float PhysicsRigidBody::getLinearDamping() const
     return _body->getLinearDamping();
 }
 
-inline Vector3 PhysicsRigidBody::getLinearVelocity() const
+inline const Vector3& PhysicsRigidBody::getLinearVelocity() const
 {
+    if (!_linearVelocity)
+        _linearVelocity = new Vector3();
+
     const btVector3& v = _body->getLinearVelocity();
-    return Vector3(v.x(), v.y(), v.z());
+    _linearVelocity->set(v.x(), v.y(), v.z());
+    return *_linearVelocity;
+}
+
+inline const Node* PhysicsRigidBody::getNode() const
+{
+    return _node;
 }
 
 inline float PhysicsRigidBody::getRestitution() const

@@ -3,6 +3,7 @@
  */
 
 #include "Base.h"
+#include "Game.h"
 #include "PhysicsController.h"
 #include "PhysicsMotionState.h"
 
@@ -12,24 +13,21 @@ namespace gameplay
 // Default gravity is 9.8 along the negative Y axis.
 PhysicsController::PhysicsController()
     : _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionConfiguration(NULL), _dispatcher(NULL),
-    _overlappingPairCache(NULL), _solver(NULL), _world(NULL)
+    _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _status(Listener::DEACTIVATED), _listeners(NULL)
 {
+}
+
+void PhysicsController::addStatusListener(Listener* listener)
+{
+    if (!_listeners)
+        _listeners = new std::vector<Listener*>();
+
+    _listeners->push_back(listener);
 }
 
 PhysicsController::~PhysicsController()
 {
-}
-
-void PhysicsController::setGravity(const Vector3& gravity)
-{
-    _gravity.setX(gravity.x);
-    _gravity.setY(gravity.y);
-    _gravity.setZ(gravity.z);
-
-    if (_world)
-    {
-        _world->setGravity(_gravity);
-    }
+    SAFE_DELETE(_listeners);
 }
 
 PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
@@ -99,9 +97,23 @@ PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidB
     return constraint;
 }
 
+const Vector3& PhysicsController::getGravity(const Vector3& gravity) const
+{
+    return _gravity;
+}
+
+void PhysicsController::setGravity(const Vector3& gravity)
+{
+    _gravity = gravity;
+
+    if (_world)
+    {
+        _world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
+    }
+}
+
 void PhysicsController::initialize()
 {
-    // TODO: Should any of this be configurable?
     _collisionConfiguration = new btDefaultCollisionConfiguration();
     _dispatcher = new btCollisionDispatcher(_collisionConfiguration);
     _overlappingPairCache = new btDbvtBroadphase();
@@ -109,7 +121,7 @@ void PhysicsController::initialize()
 
     // Create the world.
     _world = new btDiscreteDynamicsWorld(_dispatcher, _overlappingPairCache, _solver, _collisionConfiguration);
-    _world->setGravity(_gravity);
+    _world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
 }
 
 void PhysicsController::finalize()
@@ -140,6 +152,69 @@ void PhysicsController::update(long elapsedTime)
     // Note that stepSimulation takes elapsed time in seconds
     // so we divide by 1000 to convert from milliseconds.
     _world->stepSimulation((float)elapsedTime * 0.001, 10);
+
+    // If we have status listeners, then check if our status has changed.
+    if (_listeners)
+    {
+        Listener::EventType oldStatus = _status;
+
+        if (_status = Listener::DEACTIVATED)
+        {
+            for (int i = 0; i < _world->getNumCollisionObjects(); i++)
+            {
+                if (_world->getCollisionObjectArray()[i]->isActive())
+                {
+                    _status = Listener::ACTIVATED;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            bool allInactive = true;
+            for (int i = 0; i < _world->getNumCollisionObjects(); i++)
+            {
+                if (_world->getCollisionObjectArray()[i]->isActive())
+                {
+                    allInactive = false;
+                    break;
+                }
+            }
+
+            if (allInactive)
+                _status = Listener::DEACTIVATED;
+        }
+
+        // If the status has changed, notify our listeners.
+        if (oldStatus != _status)
+        {
+            for (unsigned int k = 0; k < _listeners->size(); k++)
+            {
+                (*_listeners)[k]->statusEvent(_status);
+            }
+        }
+    }
+
+    // Go through the physics rigid bodies and update the collision listeners.
+    for (unsigned int i = 0; i < _bodies.size(); i++)
+    {
+        if (_bodies[i]->_listeners)
+        {
+            for (unsigned int k = 0; k < _bodies[i]->_listeners->size(); k++)
+            {
+                if ((*_bodies[i]->_listeners)[k]->_rbB)
+                    Game::getInstance()->getPhysicsController()->_world->contactPairTest((*_bodies[i]->_listeners)[k]->_rbA->_body, (*_bodies[i]->_listeners)[k]->_rbB->_body, *(*_bodies[i]->_listeners)[k]);
+                else
+                    Game::getInstance()->getPhysicsController()->_world->contactTest((*_bodies[i]->_listeners)[k]->_rbA->_body, *(*_bodies[i]->_listeners)[k]);
+            }
+        }
+    }
+}
+
+void PhysicsController::addRigidBody(PhysicsRigidBody* body)
+{
+    _world->addRigidBody(body->_body);
+    _bodies.push_back(body);
 }
 
 btCollisionShape* PhysicsController::getBox(const Vector3& min, const Vector3& max, const btVector3& scale)
@@ -167,25 +242,16 @@ btCollisionShape* PhysicsController::getSphere(float radius, const btVector3& sc
     return sphere;
 }
 
-btCollisionShape* PhysicsController::getTriangleMesh(float* vertexData, int vertexPositionStride, unsigned char* indexData, Mesh::IndexFormat indexFormat)
+PhysicsRigidBody* PhysicsController::getPhysicsRigidBody(const btCollisionObject* collisionObject)
 {
-    return NULL;
-}
-
-btCollisionShape* PhysicsController::getHeightfield(void* data, int width, int height)
-{
-    return NULL;
-}
-
-void PhysicsController::setupConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint)
-{
-    a->addConstraint(constraint);
-    if (b)
+    // Find the rigid body and remove it from the world.
+    for (unsigned int i = 0; i < _bodies.size(); i++)
     {
-        b->addConstraint(constraint);
+        if (_bodies[i]->_body == collisionObject)
+            return _bodies[i];
     }
 
-    _world->addConstraint(constraint->_constraint);
+    return NULL;
 }
 
 void PhysicsController::removeConstraint(PhysicsConstraint* constraint)
@@ -214,6 +280,17 @@ void PhysicsController::removeRigidBody(PhysicsRigidBody* rigidBody)
             break;
         }
     }
+}
+
+void PhysicsController::setupConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint)
+{
+    a->addConstraint(constraint);
+    if (b)
+    {
+        b->addConstraint(constraint);
+    }
+
+    _world->addConstraint(constraint->_constraint);
 }
 
 }

@@ -27,11 +27,40 @@ class PhysicsController
 
 public:
     /**
-     * Sets the gravity vector for the simulated physics world.
-     * 
-     * @param gravity The gravity vector.
+     * Status listener interface.
      */
-    void setGravity(const Vector3& gravity);
+    class Listener
+    {
+    public:
+
+        /**
+         * The type of physics status event.
+         */
+        enum EventType 
+        {
+            /**
+             * Event fired when there were no active physics objects and at least one is now active.
+             */
+            ACTIVATED,
+
+            /**
+             * Event fired when there are no more active physics objects in the world.
+             */
+            DEACTIVATED
+        };
+
+        /**
+         * Handles when the physics world status changes.
+         */
+        virtual void statusEvent(EventType type) = 0;
+    };
+
+    /**
+     * Adds a status listener.
+     * 
+     * @param listener The listener to add.
+     */
+    void addStatusListener(Listener* listener);
 
     /**
      * Creates a fixed constraint.
@@ -144,6 +173,20 @@ public:
     PhysicsSpringConstraint* createSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, 
         const Vector3& translationOffsetA, PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
 
+    /**
+     * Gets the gravity vector for the simulated physics world.
+     * 
+     * @return The gravity vector.
+     */
+    const Vector3& getGravity(const Vector3& gravity) const;
+
+    /**
+     * Sets the gravity vector for the simulated physics world.
+     * 
+     * @param gravity The gravity vector.
+     */
+    void setGravity(const Vector3& gravity);
+
 private:
     /**
      * Constructor.
@@ -180,34 +223,37 @@ private:
      */
     void update(long elapsedTime);
 
+    // Adds the given rigid body to the world.
+    void addRigidBody(PhysicsRigidBody* body);
+
     // Creates a box collision shape to be used in the creation of a rigid body.
     btCollisionShape* getBox(const Vector3& min, const Vector3& max, const btVector3& scale);
+
+    // Gets the corresponding GamePlay object for the given Bullet object.
+    PhysicsRigidBody* getPhysicsRigidBody(const btCollisionObject* collisionObject);
 
     // Creates a sphere collision shape to be used in the creation of a rigid body.
     btCollisionShape* getSphere(float radius, const btVector3& scale);
 
-    // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
-    btCollisionShape* getTriangleMesh(float* vertexData, int vertexPositionStride, unsigned char* indexData, Mesh::IndexFormat indexFormat);
-
-    // Creates a heightfield collision shape to be used in the creation of a rigid body.
-    btCollisionShape* getHeightfield(void* data, int width, int height);
-    
-    // Sets up the given constraint for the given two rigid bodies.
-    void setupConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
-    
     // Removes the given constraint from the simulated physics world.
     void removeConstraint(PhysicsConstraint* constraint);
 
     // Removes the given rigid body from the simulated physics world.
     void removeRigidBody(PhysicsRigidBody* rigidBody);
 
-    btVector3 _gravity;
+    // Sets up the given constraint for the given two rigid bodies.
+    void setupConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
+    
+    Vector3 _gravity;
     btDefaultCollisionConfiguration* _collisionConfiguration;
     btCollisionDispatcher* _dispatcher;
     btBroadphaseInterface* _overlappingPairCache;
     btSequentialImpulseConstraintSolver* _solver;
     btDynamicsWorld* _world;
     btAlignedObjectArray<btCollisionShape*> _shapes;
+    Listener::EventType _status;
+    std::vector<PhysicsRigidBody*> _bodies;
+    std::vector<Listener*>* _listeners;
 };
 
 }

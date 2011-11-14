@@ -299,6 +299,11 @@ void SandboxGame::initialize()
     Package* fontPackage = Package::create("res/fonts/arial16.gpb");
     _font = fontPackage->loadFont("arial16");
 
+    // Register the game as a listener for physics status events
+    // and for collisions between the volleyball and the door.
+    Game::getInstance()->getPhysicsController()->addStatusListener((SandboxGame*)Game::getInstance());
+    _volleyball->getPhysicsRigidBody()->addCollisionListener((SandboxGame*)Game::getInstance(), door->getPhysicsRigidBody());
+
     SAFE_RELEASE(fontPackage);
     SAFE_RELEASE(meshPackage);
 }
@@ -356,4 +361,23 @@ void SandboxGame::visitNode(Node* node, long cookie)
     {
         model->draw();
     }
+}
+
+void SandboxGame::statusEvent(PhysicsController::Listener::EventType type)
+{
+    switch (type)
+    {
+    case PhysicsController::Listener::ACTIVATED:
+        WARN("Physics is active.");
+        break;
+    case PhysicsController::Listener::DEACTIVATED:
+        WARN("Physics is inactive.");
+        break;
+    }
+}
+
+void SandboxGame::collisionEvent(PhysicsRigidBody* body, const Vector3& point)
+{
+    WARN_VARG("Collision between rigid bodies %s and %s at point (%f, %f, %f).",
+        _rbA->getNode()->getId(), body->getNode()->getId(), point.x, point.y, point.z);
 }

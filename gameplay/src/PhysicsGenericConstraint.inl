@@ -7,28 +7,44 @@
 namespace gameplay
 {
 
-inline Quaternion PhysicsGenericConstraint::getRotationOffsetA()
+inline const Quaternion& PhysicsGenericConstraint::getRotationOffsetA() const
 {
+    if (!_rotationOffsetA)
+        _rotationOffsetA = new Quaternion();
+
     btQuaternion ro = static_cast<btGeneric6DofConstraint*>(_constraint)->getFrameOffsetA().getRotation();
-    return Quaternion(ro.x(), ro.y(), ro.z(), ro.w());
+    _rotationOffsetA->set(ro.x(), ro.y(), ro.z(), ro.w());
+    return *_rotationOffsetA;
 }
 
-inline Quaternion PhysicsGenericConstraint::getRotationOffsetB()
+inline const Quaternion& PhysicsGenericConstraint::getRotationOffsetB() const
 {
+    if (!_rotationOffsetB)
+        _rotationOffsetB = new Quaternion();
+
     btQuaternion ro = static_cast<btGeneric6DofConstraint*>(_constraint)->getFrameOffsetB().getRotation();
-    return Quaternion(ro.x(), ro.y(), ro.z(), ro.w());
+    _rotationOffsetB->set(ro.x(), ro.y(), ro.z(), ro.w());
+    return *_rotationOffsetB;
 }
 
-inline Vector3 PhysicsGenericConstraint::getTranslationOffsetA()
+inline const Vector3& PhysicsGenericConstraint::getTranslationOffsetA() const
 {
+    if (!_translationOffsetA)
+        _translationOffsetA = new Vector3();
+
     btVector3 to = static_cast<btGeneric6DofConstraint*>(_constraint)->getFrameOffsetA().getOrigin();
-    return Vector3(to.x(), to.y(), to.z());
+    _translationOffsetA->set(to.x(), to.y(), to.z());
+    return *_translationOffsetA;
 }
 
-inline Vector3 PhysicsGenericConstraint::getTranslationOffsetB()
+inline const Vector3& PhysicsGenericConstraint::getTranslationOffsetB() const
 {
+    if (!_translationOffsetB)
+        _translationOffsetB = new Vector3();
+
     btVector3 to = static_cast<btGeneric6DofConstraint*>(_constraint)->getFrameOffsetB().getOrigin();
-    return Vector3(to.x(), to.y(), to.z());
+    _translationOffsetB->set(to.x(), to.y(), to.z());
+    return *_translationOffsetB;
 }
 
 inline void PhysicsGenericConstraint::setAngularLowerLimit(const Vector3& limits)
