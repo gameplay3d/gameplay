@@ -30,7 +30,7 @@ PhysicsConstraint::~PhysicsConstraint()
     SAFE_DELETE(_constraint);
 }
 
-Vector3 PhysicsConstraint::centerOfMassMidpoint(Node* a, Node* b)
+Vector3 PhysicsConstraint::centerOfMassMidpoint(const Node* a, const Node* b)
 {
     Vector3 tA, tB;
     a->getWorldMatrix().getTranslation(&tA);
@@ -47,7 +47,7 @@ Vector3 PhysicsConstraint::centerOfMassMidpoint(Node* a, Node* b)
     return c;
 }
 
-Quaternion PhysicsConstraint::getRotationOffset(Node* node, const Vector3& point)
+Quaternion PhysicsConstraint::getRotationOffset(const Node* node, const Vector3& point)
 {
     // Create a translation matrix that translates to the given origin.
     Matrix m;
@@ -66,7 +66,7 @@ Quaternion PhysicsConstraint::getRotationOffset(Node* node, const Vector3& point
     return r;
 }
 
-Vector3 PhysicsConstraint::getTranslationOffset(Node* node, const Vector3& point)
+Vector3 PhysicsConstraint::getTranslationOffset(const Node* node, const Vector3& point)
 {
     // Create a translation matrix that translates to the given origin.
     Matrix m;
@@ -94,7 +94,7 @@ Vector3 PhysicsConstraint::getTranslationOffset(Node* node, const Vector3& point
     return t;
 }
 
-btTransform PhysicsConstraint::getTransformOffset(Node* node, const Vector3& origin)
+btTransform PhysicsConstraint::getTransformOffset(const Node* node, const Vector3& origin)
 {
     // Create a translation matrix that translates to the given origin.
     Matrix m;
@@ -125,8 +125,7 @@ btTransform PhysicsConstraint::getTransformOffset(Node* node, const Vector3& ori
     return btTransform(btQuaternion(r.x, r.y, r.z, r.w), btVector3(t.x, t.y, t.z));
 }
 
-// TODO!!!
-Vector3 PhysicsConstraint::getWorldCenterOfMass(Model* model)
+Vector3 PhysicsConstraint::getWorldCenterOfMass(const Model* model)
 {
     Vector3 center;
 
@@ -147,13 +146,18 @@ Vector3 PhysicsConstraint::getWorldCenterOfMass(Model* model)
         {
             model->getNode()->getWorldMatrix().transformPoint(sphere.center, &center);
         }
+        else
+        {
+            // Warn the user that the model has no bounding volume.
+            WARN_VARG("Model \'%s\' has no bounding volume - center of mass is defaulting to local coordinate origin.", model->getNode()->getId());
+            model->getNode()->getWorldMatrix().transformPoint(&center);
+        }
     }
 
-    // TODO: This case needs to be fixed (maybe return an error somehow?).
     return center;
 }
 
-Vector3 PhysicsConstraint::offsetByCenterOfMass(Node* node, const Vector3& v)
+Vector3 PhysicsConstraint::offsetByCenterOfMass(const Node* node, const Vector3& v)
 {
     btVector3 centerOfMassOffset = ((PhysicsMotionState*)node->getPhysicsRigidBody()->_body->getMotionState())->_centerOfMassOffset.getOrigin();
     return Vector3(v.x + centerOfMassOffset.x(), v.y + centerOfMassOffset.y(), v.z + centerOfMassOffset.z());

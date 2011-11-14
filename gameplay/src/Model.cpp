@@ -42,7 +42,7 @@ Model* Model::create(Mesh* mesh)
     return new Model(mesh);
 }
 
-Mesh* Model::getMesh()
+Mesh* Model::getMesh() const
 {
     return _mesh;
 }

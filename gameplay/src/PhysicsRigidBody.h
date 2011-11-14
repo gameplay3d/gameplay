@@ -39,10 +39,49 @@ public:
     {
         SHAPE_BOX,
         SHAPE_SPHERE,
-        SHAPE_TRIANGLE_MESH,
-        SHAPE_HEIGHTFIELD,
         SHAPE_NONE
     };
+
+    /**
+     * Collision listener interface.
+     */
+    class Listener : public btCollisionWorld::ContactResultCallback
+    {
+        friend class PhysicsRigidBody;
+        friend class PhysicsController;
+
+    public:
+        /**
+         * Constructor.
+         */
+        Listener();
+
+        /**
+         * Handles when a collision occurs for the rigid body where this listener is registered.
+         * 
+         * @param body The other rigid body in the collision.
+         * @param contactPoint The point (in world space) where the collision occurred.
+         */
+        virtual void collisionEvent(PhysicsRigidBody* body, const Vector3& contactPoint) = 0;
+
+        /**
+         * Internal function used for Bullet integration (do not use or override).
+         */
+        btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA,
+            int indexA, const btCollisionObject* b, int partIdB, int indexB);
+        
+    protected:
+        PhysicsRigidBody* _rbA;
+        PhysicsRigidBody* _rbB;
+    };
+
+    /**
+     * Adds a collision listener for this rigid body.
+     * 
+     * @param listener The listener to add.
+     * @param body Specifies that only collisions with the given rigid body should trigger a notification.
+     */
+    void addCollisionListener(Listener* listener, PhysicsRigidBody* body = NULL);
 
     /**
      * Applies the given force to the rigid body (optionally, from the given relative position).
@@ -86,14 +125,14 @@ public:
      * 
      * @return The angular velocity.
      */
-    inline Vector3 getAngularVelocity() const;
+    inline const Vector3& getAngularVelocity() const;
 
     /**
      * Gets the rigid body's anisotropic friction.
      * 
      * @return The anisotropic friction.
      */
-    inline Vector3 getAnisotropicFriction() const;
+    inline const Vector3& getAnisotropicFriction() const;
 
     /**
      * Gets the rigid body's friction.
@@ -108,7 +147,7 @@ public:
      * 
      * @return The gravity.
      */
-    inline Vector3 getGravity() const;
+    inline const Vector3& getGravity() const;
 
     /**
      * Gets the rigid body's linear damping.
@@ -122,7 +161,14 @@ public:
      * 
      * @return The linear velocity.
      */
-    inline Vector3 getLinearVelocity() const;
+    inline const Vector3& getLinearVelocity() const;
+
+    /**
+     * Gets the node that the rigid body is attached to.
+     * 
+     * @return The node.
+     */
+    inline const Node* getNode() const;
 
     /**
      * Gets the rigid body's restitution.
@@ -238,6 +284,11 @@ private:
     btRigidBody* _body;
     Node* _node;
     std::vector<PhysicsConstraint*> _constraints;
+    std::vector<Listener*>* _listeners;
+    mutable Vector3* _angularVelocity;
+    mutable Vector3* _anisotropicFriction;
+    mutable Vector3* _gravity;
+    mutable Vector3* _linearVelocity;
 };
 
 }

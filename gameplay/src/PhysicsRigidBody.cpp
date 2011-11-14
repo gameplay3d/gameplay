@@ -13,7 +13,8 @@ namespace gameplay
 
 PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, float mass, 
         float friction, float restitution, float linearDamping, float angularDamping)
-        : _shape(NULL), _body(NULL), _node(node)
+        : _shape(NULL), _body(NULL), _node(node), _listeners(NULL), _angularVelocity(NULL),
+        _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL)
 {
     switch (type)
     {
@@ -55,22 +56,10 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
 
             break;
         }
-        case PhysicsRigidBody::SHAPE_TRIANGLE_MESH:
-        {
-            //btTriangleIndexVertexArray meshShape(numTriangles, indexPointer, indexStride, numVertices, vertexPointer, vertexStride);
-            //_shape = btBvhTriangleMeshShape(meshShape, true);
-
-            //_body = createBulletRigidBody(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
-            break;
-        }
-        case PhysicsRigidBody::SHAPE_HEIGHTFIELD:
-        {
-            //_shape = btHeightfieldTerrainShape(width, length, data, scale, minHeight, maxHeight, upAxis, dataType, false);
-
-            //_body = createBulletRigidBody(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
-            break;
-        }
     }
+
+    // Add the rigid body to the physics world.
+    Game::getInstance()->getPhysicsController()->addRigidBody(this);
 }
 
 PhysicsRigidBody::~PhysicsRigidBody()
@@ -96,6 +85,24 @@ PhysicsRigidBody::~PhysicsRigidBody()
         Game::getInstance()->getPhysicsController()->removeRigidBody(this);
         SAFE_DELETE(_body);
     }
+
+    SAFE_DELETE(_listeners);
+    SAFE_DELETE(_angularVelocity);
+    SAFE_DELETE(_anisotropicFriction);
+    SAFE_DELETE(_gravity);
+    SAFE_DELETE(_linearVelocity);
+}
+
+void PhysicsRigidBody::addCollisionListener(Listener* listener, PhysicsRigidBody* body)
+{
+    if (!_listeners)
+        _listeners = new std::vector<Listener*>();
+
+    listener->_rbA = this;
+    if (body)
+        listener->_rbB = body;
+
+    _listeners->push_back(listener);
 }
 
 void PhysicsRigidBody::applyForce(const Vector3& force, const Vector3* relativePosition)
@@ -169,10 +176,6 @@ btRigidBody* PhysicsRigidBody::createBulletRigidBody(btCollisionShape* shape, fl
     rbInfo.m_angularDamping = angularDamping;
     btRigidBody* body = new btRigidBody(rbInfo);
 
-    // Add the rigid body to the physics world.
-    PhysicsController* physics = Game::getInstance()->getPhysicsController();
-    physics->_world->addRigidBody(body);
-
     return body;
 }
 
@@ -191,6 +194,26 @@ void PhysicsRigidBody::removeConstraint(PhysicsConstraint* constraint)
             break;
         }
     }
+}
+
+PhysicsRigidBody::Listener::Listener()
+    : _rbA(NULL), _rbB(NULL)
+{
+    // DUMMY FUNCTION
+}
+
+btScalar PhysicsRigidBody::Listener::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a,
+    int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB)
+{
+    PhysicsRigidBody* rbA = Game::getInstance()->getPhysicsController()->getPhysicsRigidBody(a);
+    PhysicsRigidBody* rbB = Game::getInstance()->getPhysicsController()->getPhysicsRigidBody(b);
+
+    if (rbA == _rbA)
+        collisionEvent(rbB, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()));
+    else
+        collisionEvent(rbA, Vector3(cp.getPositionWorldOnB().x(), cp.getPositionWorldOnB().y(), cp.getPositionWorldOnB().z()));
+
+    return 0.0f;
 }
 
 }

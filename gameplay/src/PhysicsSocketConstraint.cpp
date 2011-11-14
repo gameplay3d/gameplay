@@ -14,9 +14,9 @@ PhysicsSocketConstraint::PhysicsSocketConstraint(PhysicsRigidBody* a, PhysicsRig
 {
     if (b)
     {
-        Vector3 origin = centerOfMassMidpoint(a->_node, b->_node);
-        btTransform frameInA = getTransformOffset(a->_node, origin);
-        btTransform frameInB = getTransformOffset(b->_node, origin);
+        Vector3 origin = centerOfMassMidpoint(a->getNode(), b->getNode());
+        btTransform frameInA = getTransformOffset(a->getNode(), origin);
+        btTransform frameInB = getTransformOffset(b->getNode(), origin);
 
         _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, frameInA.getOrigin(), frameInB.getOrigin());
     }
@@ -32,14 +32,14 @@ PhysicsSocketConstraint::PhysicsSocketConstraint(PhysicsRigidBody* a, const Vect
 {
     // Take scale into account for the first node's translation offset.
     Vector3 sA;
-    a->_node->getWorldMatrix().getScale(&sA);
+    a->getNode()->getWorldMatrix().getScale(&sA);
     Vector3 tA(translationOffsetA.x * sA.x, translationOffsetA.y * sA.y, translationOffsetA.z * sA.z);
 
     if (b)
     {
         // Take scale into account for the second node's translation offset.
         Vector3 sB;
-        b->_node->getWorldMatrix().getScale(&sB);
+        b->getNode()->getWorldMatrix().getScale(&sB);
         Vector3 tB(translationOffsetB.x * sB.x, translationOffsetB.y * sB.y, translationOffsetB.z * sB.z);
 
         _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, btVector3(tA.x, tA.y, tA.z), btVector3(tB.x, tB.y, tB.z));

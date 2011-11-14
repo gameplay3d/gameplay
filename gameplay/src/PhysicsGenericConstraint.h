@@ -28,28 +28,28 @@ public:
      * 
      * @return The rotation offset.
      */
-    inline Quaternion getRotationOffsetA();
+    inline const Quaternion& getRotationOffsetA() const;
 
     /**
      * Gets the rotation offset for the second rigid body in the constraint.
      * 
      * @return The rotation offset.
      */
-    inline Quaternion getRotationOffsetB();
+    inline const Quaternion& getRotationOffsetB() const;
 
     /**
      * Gets the translation offset for the first rigid body in the constraint.
      * 
      * @return The translation offset.
      */
-    inline Vector3 getTranslationOffsetA();
+    inline const Vector3& getTranslationOffsetA() const;
 
     /**
      * Gets the translation offset for the second rigid body in the constraint.
      * 
      * @return The translation offset.
      */
-    inline Vector3 getTranslationOffsetB();
+    inline const Vector3& getTranslationOffsetB() const;
 
     /**
      * Sets the lower angular limits along the constraint's local
@@ -152,6 +152,12 @@ protected:
      * Destructor.
      */
     virtual ~PhysicsGenericConstraint();
+
+private:
+    mutable Quaternion* _rotationOffsetA;
+    mutable Quaternion* _rotationOffsetB;
+    mutable Vector3* _translationOffsetA;
+    mutable Vector3* _translationOffsetB;
 };
 
 }

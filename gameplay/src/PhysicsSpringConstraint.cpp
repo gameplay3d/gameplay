@@ -16,8 +16,8 @@ PhysicsSpringConstraint::PhysicsSpringConstraint(PhysicsRigidBody* a, PhysicsRig
     _a = a;
     _b = b;
 
-    Vector3 origin = centerOfMassMidpoint(a->_node, b->_node);
-    _constraint = new btGeneric6DofSpringConstraint(*a->_body, *b->_body, getTransformOffset(a->_node, origin), getTransformOffset(b->_node, origin), true);
+    Vector3 origin = centerOfMassMidpoint(a->getNode(), b->getNode());
+    _constraint = new btGeneric6DofSpringConstraint(*a->_body, *b->_body, getTransformOffset(a->getNode(), origin), getTransformOffset(b->getNode(), origin), true);
 }
 
 PhysicsSpringConstraint::PhysicsSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
@@ -29,11 +29,11 @@ PhysicsSpringConstraint::PhysicsSpringConstraint(PhysicsRigidBody* a, const Quat
 
     // Take scale into account for the translation offsets.
     Vector3 sA;
-    a->_node->getWorldMatrix().getScale(&sA);
+    a->getNode()->getWorldMatrix().getScale(&sA);
     Vector3 tA(translationOffsetA.x * sA.x, translationOffsetA.y * sA.y, translationOffsetA.z * sA.z);
 
     Vector3 sB;
-    b->_node->getWorldMatrix().getScale(&sB);
+    b->getNode()->getWorldMatrix().getScale(&sB);
     Vector3 tB(translationOffsetB.x * sB.x, translationOffsetB.y * sB.y, translationOffsetB.z * sB.z);
 
     btTransform frameInA(btQuaternion(rotationOffsetA.x, rotationOffsetA.y, rotationOffsetA.z, rotationOffsetA.w), btVector3(tA.x, tA.y, tA.z));

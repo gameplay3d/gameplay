@@ -789,7 +789,7 @@ void Node::setParticleEmitter(ParticleEmitter* emitter)
     }
 }
 
-PhysicsRigidBody* Node::getPhysicsRigidBody()
+PhysicsRigidBody* Node::getPhysicsRigidBody() const
 {
     return _physicsRigidBody;
 }
