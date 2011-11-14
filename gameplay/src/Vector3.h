@@ -76,6 +76,16 @@ public:
     Vector3(const Vector3& copy);
 
     /**
+     * Creates a new vector from an integer interpreted as an RGB value.
+     * E.g. 0xff0000 represents red or the vector (1, 0, 0).
+     *
+     * @param color The integer to interpret as an RGB value.
+     *
+     * @return A vector corresponding to the interpreted RGB color.
+     */
+    static Vector3 fromColor(unsigned int color);
+
+    /**
      * Destructor.
      */
     ~Vector3();

@@ -1,18 +1,13 @@
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;           // Matrix to transform a position to clip space.
 uniform mat4 u_inverseTransposeWorldViewMatrix;     // Matrix to transform a normal to view space.
-uniform mat4 u_worldMatrix;                         // Matrix to tranform a position to world space.
-uniform vec3 u_cameraPosition;                      // Position of the camera.
 
 // Inputs
 attribute vec4 a_position;                          // Vertex Position (x, y, z, w)
 attribute vec3 a_normal;                            // Vertex Normal (x, y, z)
-attribute vec2 a_texCoord;                          // Vertex Texture Coordinate (u, v)
 
 // Outputs
 varying vec3 v_normalVector;                        // NormalVector in view space.
-varying vec2 v_texCoord;                            // Texture coordinate (u, v).
-varying vec3 v_cameraDirection;                     // Camera direction
 
 #if defined(SKINNING)
 
@@ -119,22 +114,21 @@ vec3 getNormal()
 
 uniform mat4 u_worldViewMatrix;                     // Matrix to tranform a position to view space.
 uniform vec3 u_pointLightPosition;                  // Position
-uniform float u_pointLightRadius;                   // Radius 
+uniform float u_pointLightRangeInverse;             // Inverse of light range.
 varying vec4 v_vertexToPointLightDirection;         // Light direction w.r.t current vertex.
 
 void applyLight(vec4 position)
 {
-    // World space position.
     vec4 positionWorldViewSpace = u_worldViewMatrix * position;
     
-    // Compute the light direction with light position and the vertex position.
+    // Compute the light direction.
     vec3 lightDirection = u_pointLightPosition - positionWorldViewSpace.xyz;
-
+    
     vec4 vertexToPointLightDirection;
     vertexToPointLightDirection.xyz = lightDirection;
-
-    // Attenuation
-    vertexToPointLightDirection.w = 1 - dot (lightDirection * u_pointLightRadius, lightDirection * u_pointLightRadius);
+    
+    // Attenuation.
+    vertexToPointLightDirection.w = 1.0 - dot(lightDirection * u_pointLightRangeInverse, lightDirection * u_pointLightRangeInverse);
 
     // Output light direction.
     v_vertexToPointLightDirection =  vertexToPointLightDirection;
@@ -144,15 +138,22 @@ void applyLight(vec4 position)
 
 uniform mat4 u_worldViewMatrix;                     // Matrix to tranform a position to view space.
 uniform vec3 u_spotLightPosition;                   // Position
+uniform float u_spotLightRangeInverse;              // Inverse of light range.
 varying vec3 v_vertexToSpotLightDirection;          // Light direction w.r.t current vertex.
+varying float v_spotLightAttenuation;               // Attenuation of spot light.
 
 void applyLight(vec4 position)
 {
-    // World space position.
     vec4 positionWorldViewSpace = u_worldViewMatrix * position;
 
-    // Compute the light direction with light position and the vertex position.
-    v_vertexToSpotLightDirection = u_spotLightPosition - positionWorldViewSpace.xyz;
+    // Compute the light direction.
+    vec3 lightDirection = u_spotLightPosition - positionWorldViewSpace.xyz;
+
+    // Attenuation
+    v_spotLightAttenuation = 1.0 - dot(lightDirection * u_spotLightRangeInverse, lightDirection * u_spotLightRangeInverse);
+
+    // Output light direction.
+    v_vertexToSpotLightDirection = lightDirection;
 }
 
 #else
@@ -167,7 +168,7 @@ void main()
 {
     vec4 position = getPosition();
     vec3 normal = getNormal();
-
+        
     // Transform position to clip space.
     gl_Position = u_worldViewProjectionMatrix * position;
 
@@ -175,13 +176,6 @@ void main()
     mat3 inverseTransposeWorldViewMatrix = mat3(u_inverseTransposeWorldViewMatrix);
     v_normalVector = inverseTransposeWorldViewMatrix * normal;
 
-    // Compute the camera direction.
-    vec4 positionWorldSpace = u_worldMatrix * position;
-    v_cameraDirection = u_cameraPosition - positionWorldSpace.xyz;
-
     // Apply light.
     applyLight(position);
-
-    // Pass on the texture coordinates to Fragment shader.
-    v_texCoord = a_texCoord;
 }

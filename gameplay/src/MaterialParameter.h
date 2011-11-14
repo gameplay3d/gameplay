@@ -13,8 +13,6 @@
 #include "Texture.h"
 #include "Effect.h"
 
-#define MATERIALPARAMETER_ANIMATE_UNIFORM           1
-
 namespace gameplay
 {
 

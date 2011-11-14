@@ -1,6 +1,8 @@
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;           // Matrix to transform a position to clip space.
 uniform mat4 u_inverseTransposeWorldViewMatrix;     // Matrix to transform a normal to view space.
+uniform mat4 u_worldMatrix;                         // Matrix to tranform a position to world space.
+uniform vec3 u_cameraPosition;                      // Position of the camera.
 
 // Inputs
 attribute vec4 a_position;                          // Vertex Position (x, y, z, w)
@@ -115,24 +117,23 @@ vec3 getNormal()
 
 #if defined(POINT_LIGHT)
 
-uniform mat4 u_worldViewMatrix;                     // Matrix to tranform a position to view space.
-uniform vec3 u_pointLightPosition;                  // Position
-uniform float u_pointLightRadius;                   // Radius
-varying vec4 v_vertexToPointLightDirection;         // Light direction w.r.t current vertex.
+uniform mat4 u_worldViewMatrix;                         // Matrix to tranform a position to view space.
+uniform vec3 u_pointLightPosition;                      // Position
+uniform float u_pointLightRangeInverse;                 // Inverse of light range.
+varying vec4 v_vertexToPointLightDirection;             // Light direction w.r.t current vertex.
 
 void applyLight(vec4 position)
 {
-    // World space position.
     vec4 positionWorldViewSpace = u_worldViewMatrix * position;
     
-    // Compute the light direction.
+    // Compute the light direction with light position and the vertex position.
     vec3 lightDirection = u_pointLightPosition - positionWorldViewSpace.xyz;
-    
+
     vec4 vertexToPointLightDirection;
     vertexToPointLightDirection.xyz = lightDirection;
-    
+
     // Attenuation
-    vertexToPointLightDirection.w = 1 - dot (lightDirection * u_pointLightRadius, lightDirection * u_pointLightRadius);
+    vertexToPointLightDirection.w = 1.0 - dot(lightDirection * u_pointLightRangeInverse, lightDirection * u_pointLightRangeInverse);
 
     // Output light direction.
     v_vertexToPointLightDirection =  vertexToPointLightDirection;
@@ -140,9 +141,11 @@ void applyLight(vec4 position)
 
 #elif defined(SPOT_LIGHT)
 
-uniform mat4 u_worldViewMatrix;                     // Matrix to tranform a position to view space.
-uniform vec3 u_spotLightPosition;                   // Position
-varying vec3 v_vertexToSpotLightDirection;          // Light direction w.r.t current vertex.
+uniform mat4 u_worldViewMatrix;                         // Matrix to tranform a position to view space.
+uniform vec3 u_spotLightPosition;                       // Position
+uniform float u_spotLightRangeInverse;                  // Inverse of light range.
+varying vec3 v_vertexToSpotLightDirection;              // Light direction w.r.t current vertex.
+varying float v_spotLightAttenuation;                   // Attenuation of spot light.
 
 void applyLight(vec4 position)
 {
@@ -152,7 +155,10 @@ void applyLight(vec4 position)
     // Compute the light direction with light position and the vertex position.
     vec3 lightDirection = u_spotLightPosition - positionWorldViewSpace.xyz;
 
-    // Output light direction.
+    // Attenuation
+    v_spotLightAttenuation = 1.0 - dot(lightDirection * u_spotLightRangeInverse, lightDirection * u_spotLightRangeInverse);
+
+    // Compute the light direction with light position and the vertex position.
     v_vertexToSpotLightDirection = lightDirection;
 }
 
@@ -168,13 +174,17 @@ void main()
 {
     vec4 position = getPosition();
     vec3 normal = getNormal();
-    
+
     // Transform position to clip space.
     gl_Position = u_worldViewProjectionMatrix * position;
 
     // Transform normal to view space.
     mat3 inverseTransposeWorldViewMatrix = mat3(u_inverseTransposeWorldViewMatrix);
     v_normalVector = inverseTransposeWorldViewMatrix * normal;
+
+    // Compute the camera direction.
+    vec4 positionWorldSpace = u_worldMatrix * position;
+    v_cameraDirection = u_cameraPosition - positionWorldSpace.xyz;
 
     // Apply light.
     applyLight(position);

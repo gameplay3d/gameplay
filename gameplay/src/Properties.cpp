@@ -5,6 +5,7 @@
 #include "Properties.h"
 #include "FileSystem.h"
 #include <xtree>
+#include <sstream>
 
 namespace gameplay
 {
@@ -577,6 +578,62 @@ bool Properties::getVector4(const char* name, Vector4* out) const
         return true;
     }
     
+    out->set(0.0f, 0.0f, 0.0f, 0.0f);
+    return false;
+}
+
+bool Properties::getColor(const char* name, Vector3* out) const
+{
+    assert(out);
+
+    const char* valueString = getString(name);
+    if (valueString)
+    {
+        if (strlen(valueString) != 7 ||
+            valueString[0] != '#')
+        {
+            // Not a color string.
+            LOG_ERROR_VARG("Error parsing property: %s", name);
+            out->set(0.0f, 0.0f, 0.0f);
+            return false;
+        }
+
+        // Read the string into an int as hex.
+        unsigned int color;
+        sscanf(valueString+1, "%x", &color);
+
+        out->set(Vector3::fromColor(color));
+        return true;
+    }
+
+    out->set(0.0f, 0.0f, 0.0f);
+    return false;
+}
+
+bool Properties::getColor(const char* name, Vector4* out) const
+{
+    assert(out);
+
+    const char* valueString = getString(name);
+    if (valueString)
+    {
+        if (strlen(valueString) != 9 ||
+            valueString[0] != '#')
+        {
+            // Not a color string.
+            LOG_ERROR_VARG("Error parsing property: %s", name);
+            out->set(0.0f, 0.0f, 0.0f, 0.0f);
+            return false;
+        }
+
+        // Read the string into an int as hex.
+        unsigned int color;
+        sscanf(valueString+1, "%x", &color);
+
+        out->set(Vector4::fromColor(color));
+        return true;
+    }
+
     out->set(0.0f, 0.0f, 0.0f, 0.0f);
     return false;
 }
