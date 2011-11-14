@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'sample02-spaceship' target in the 'sample02-spaceship' project
-//
-
-#ifdef __OBJC__
-    #import <Cocoa/Cocoa.h>
-#endif
