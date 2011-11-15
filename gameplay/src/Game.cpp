@@ -5,6 +5,7 @@
 #include "Base.h"
 #include "Game.h"
 #include "Platform.h"
+#include "RenderState.h"
 
 // Extern global variables
 GLenum __gl_error_code = GL_NO_ERROR;
@@ -19,7 +20,8 @@ long Game::_pausedTimeTotal = 0L;
 Game::Game() 
     : _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
-      _clearColor(Vector4::zero()), _clearDepth(1.0f), _clearStencil(0)
+      _clearDepth(1.0f), _clearStencil(0),
+      _animationController(NULL), _audioController(NULL)
 {
     assert(__gameInstance == NULL);
     __gameInstance = this;
@@ -33,6 +35,11 @@ Game::~Game()
 {
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.
+
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+    Ref::printLeaks();
+    printMemoryLeaks();
+#endif
 }
 
 Game* Game::getInstance()
@@ -92,8 +99,13 @@ bool Game::startup()
     if (_state != UNINITIALIZED)
         return false;
 
-    _animationController.initialize();
-    _audioController.initialize();
+    RenderState::initialize();
+
+    _animationController = new AnimationController();
+    _animationController->initialize();
+
+    _audioController = new AudioController();
+    _audioController->initialize();
 
     // Call user initialization.
     initialize();
@@ -109,8 +121,15 @@ void Game::shutdown()
     {
         finalize();
 
-        _animationController.finalize();
-        _audioController.finalize();
+        _animationController->finalize();
+        delete _animationController;
+        _animationController = NULL;
+
+        _audioController->finalize();
+        delete _audioController;
+        _audioController = NULL;
+
+        RenderState::finalize();
     }
 
     _state = UNINITIALIZED;
@@ -122,8 +141,8 @@ void Game::pause()
     {
         _state = PAUSED;
         _pausedTimeLast = Platform::getAbsoluteTime();
-        _animationController.pause();
-        _audioController.pause();
+        _animationController->pause();
+        _audioController->pause();
     }
 }
 
@@ -133,8 +152,8 @@ void Game::resume()
     {
         _state = RUNNING;
         _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
-        _animationController.resume();
-        _audioController.resume();
+        _animationController->resume();
+        _audioController->resume();
     }
 }
 
@@ -155,12 +174,12 @@ void Game::frame()
     lastFrameTime = frameTime;
 
     // Update the schedule and running animations.
-    _animationController.update(elapsedTime);
+    _animationController->update(elapsedTime);
     // Application Update.
     update(elapsedTime);
 
     // Audio Rendering.
-    _audioController.update(elapsedTime);
+    _audioController->update(elapsedTime);
     // Graphics Rendering.
     render(elapsedTime);
 
@@ -224,10 +243,10 @@ void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, 
 
 AnimationController* Game::getAnimationController()
 {
-    return &_animationController;
+    return _animationController;
 }
 
-const AudioController& Game::getAudioController() const
+const AudioController* Game::getAudioController() const
 {
     return _audioController;
 }

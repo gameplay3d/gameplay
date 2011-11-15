@@ -18,7 +18,7 @@
 namespace gameplay
 {
 
-RenderState::StateBlock RenderState::StateBlock::_defaultState;
+RenderState::StateBlock* RenderState::StateBlock::_defaultState = NULL;
 
 RenderState::RenderState()
     : _nodeBinding(NULL), _state(NULL), _parent(NULL)
@@ -42,6 +42,19 @@ RenderState::~RenderState()
             SAFE_RELEASE(parameter);
         }
     }
+}
+
+void RenderState::initialize()
+{
+    if (StateBlock::_defaultState == NULL)
+    {
+        StateBlock::_defaultState = StateBlock::create();
+    }
+}
+
+void RenderState::finalize()
+{
+    SAFE_RELEASE(StateBlock::_defaultState);
 }
 
 MaterialParameter* RenderState::getParameter(const char* name) const
@@ -305,75 +318,75 @@ void RenderState::StateBlock::bind()
 void RenderState::StateBlock::bindNoRestore()
 {
     // Update any state that differs from _defaultState and flip _defaultState bits
-    if ((_bits & RS_BLEND) && (_blendEnabled != _defaultState._blendEnabled))
+    if ((_bits & RS_BLEND) && (_blendEnabled != _defaultState->_blendEnabled))
     {
         _blendEnabled ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
-        _defaultState._blendEnabled = _blendEnabled;
+        _defaultState->_blendEnabled = _blendEnabled;
     }
-    if ((_bits & RS_BLEND_FUNC) && (_srcBlend != _defaultState._srcBlend || _dstBlend != _defaultState._dstBlend))
+    if ((_bits & RS_BLEND_FUNC) && (_srcBlend != _defaultState->_srcBlend || _dstBlend != _defaultState->_dstBlend))
     {
         glBlendFunc((GLenum)_srcBlend, (GLenum)_dstBlend);
-        _defaultState._srcBlend = _srcBlend;
-        _defaultState._dstBlend = _dstBlend;
+        _defaultState->_srcBlend = _srcBlend;
+        _defaultState->_dstBlend = _dstBlend;
     }
-    if ((_bits & RS_CULL_FACE) && (_cullFaceEnabled != _defaultState._cullFaceEnabled))
+    if ((_bits & RS_CULL_FACE) && (_cullFaceEnabled != _defaultState->_cullFaceEnabled))
     {
         _cullFaceEnabled ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
-        _defaultState._cullFaceEnabled = _cullFaceEnabled;
+        _defaultState->_cullFaceEnabled = _cullFaceEnabled;
     }
-    if ((_bits & RS_DEPTH_TEST) && (_depthTestEnabled != _defaultState._depthTestEnabled))
+    if ((_bits & RS_DEPTH_TEST) && (_depthTestEnabled != _defaultState->_depthTestEnabled))
     {
         _depthTestEnabled ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
-        _defaultState._depthTestEnabled = _depthTestEnabled;
+        _defaultState->_depthTestEnabled = _depthTestEnabled;
     }
-    if ((_bits & RS_DEPTH_WRITE) && (_depthWriteEnabled != _defaultState._depthWriteEnabled))
+    if ((_bits & RS_DEPTH_WRITE) && (_depthWriteEnabled != _defaultState->_depthWriteEnabled))
     {
         glDepthMask(_depthWriteEnabled);
-        _defaultState._depthWriteEnabled = _depthWriteEnabled;
+        _defaultState->_depthWriteEnabled = _depthWriteEnabled;
     }
 
-    _defaultState._bits |= _bits;
+    _defaultState->_bits |= _bits;
 }
 
 void RenderState::StateBlock::restore(long stateOverrideBits)
 {
     // If there is no state to restore (i.e. no non-default state), do nothing
-    if (_defaultState._bits == 0)
+    if (_defaultState->_bits == 0)
     {
         return;
     }
 
     // Restore any state that is not overridden and is not default
-    if (!(stateOverrideBits & RS_BLEND) && (_defaultState._bits & RS_BLEND))
+    if (!(stateOverrideBits & RS_BLEND) && (_defaultState->_bits & RS_BLEND))
     {
         glDisable(GL_BLEND);
-        _defaultState._bits &= ~RS_BLEND;
-        _defaultState._blendEnabled = false;
+        _defaultState->_bits &= ~RS_BLEND;
+        _defaultState->_blendEnabled = false;
     }
-    if (!(stateOverrideBits & RS_BLEND_FUNC) && (_defaultState._bits & RS_BLEND_FUNC))
+    if (!(stateOverrideBits & RS_BLEND_FUNC) && (_defaultState->_bits & RS_BLEND_FUNC))
     {
         glBlendFunc(GL_ONE, GL_ONE);
-        _defaultState._bits &= ~RS_BLEND_FUNC;
-        _defaultState._srcBlend = RenderState::BLEND_ONE;
-        _defaultState._dstBlend = RenderState::BLEND_ONE;
+        _defaultState->_bits &= ~RS_BLEND_FUNC;
+        _defaultState->_srcBlend = RenderState::BLEND_ONE;
+        _defaultState->_dstBlend = RenderState::BLEND_ONE;
     }
-    if (!(stateOverrideBits & RS_CULL_FACE) && (_defaultState._bits & RS_CULL_FACE))
+    if (!(stateOverrideBits & RS_CULL_FACE) && (_defaultState->_bits & RS_CULL_FACE))
     {
         glDisable(GL_CULL_FACE);
-        _defaultState._bits &= ~RS_CULL_FACE;
-        _defaultState._cullFaceEnabled = false;
+        _defaultState->_bits &= ~RS_CULL_FACE;
+        _defaultState->_cullFaceEnabled = false;
     }
-    if (!(stateOverrideBits & RS_DEPTH_TEST) && (_defaultState._bits & RS_DEPTH_TEST))
+    if (!(stateOverrideBits & RS_DEPTH_TEST) && (_defaultState->_bits & RS_DEPTH_TEST))
     {
         glDisable(GL_DEPTH_TEST);
-        _defaultState._bits &= ~RS_DEPTH_TEST;
-        _defaultState._depthTestEnabled = false;
+        _defaultState->_bits &= ~RS_DEPTH_TEST;
+        _defaultState->_depthTestEnabled = false;
     }
-    if (!(stateOverrideBits & RS_DEPTH_WRITE) && (_defaultState._bits & RS_DEPTH_WRITE))
+    if (!(stateOverrideBits & RS_DEPTH_WRITE) && (_defaultState->_bits & RS_DEPTH_WRITE))
     {
         glDepthMask(GL_TRUE);
-        _defaultState._bits &= ~RS_DEPTH_WRITE;
-        _defaultState._depthWriteEnabled = true;
+        _defaultState->_bits &= ~RS_DEPTH_WRITE;
+        _defaultState->_depthWriteEnabled = true;
     }
 }
 

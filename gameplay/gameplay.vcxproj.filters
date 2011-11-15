@@ -168,6 +168,9 @@
     <ClCompile Include="src\RenderState.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\DebugNew.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -336,6 +339,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\RenderState.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DebugNew.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

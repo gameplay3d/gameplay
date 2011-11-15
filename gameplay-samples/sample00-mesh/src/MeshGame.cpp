@@ -42,6 +42,8 @@ void MeshGame::initialize()
 
 void MeshGame::finalize()
 {
+    SAFE_RELEASE(_font);
+    SAFE_RELEASE(_scene);
 }
 
 void MeshGame::update(long elapsedTime)
@@ -129,4 +131,5 @@ void MeshGame::createDefaultCamera(Scene* scene)
     node->setCamera(camera);
     node->translate(0, 5.0f, 20.0f);
     scene->setActiveCamera(camera);
+    SAFE_RELEASE(camera);
 }
