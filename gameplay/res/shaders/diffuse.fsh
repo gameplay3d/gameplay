@@ -1,18 +1,18 @@
 precision highp float;
 
 // Uniforms
-uniform vec3 u_lightColor;                  // Light color
-uniform vec3 u_ambientColor;                // Ambient color
-uniform sampler2D u_diffuseTexture;         // Diffuse texture.
+uniform vec3 u_lightColor;                      // Light color
+uniform vec3 u_ambientColor;                    // Ambient color
+uniform sampler2D u_diffuseTexture;             // Diffuse texture.
 
 // Inputs
-varying vec3 v_normalVector;                // NormalVector in view space.
-varying vec2 v_texCoord;                    // Texture coordinate (u, v).
+varying vec3 v_normalVector;                    // NormalVector in view space.
+varying vec2 v_texCoord;                        // Texture coordinate (u, v).
 
 // Global variables
-vec4 _baseColor;                            // Base color
-vec3 _ambientColor;                         // Ambient Color
-vec3 _diffuseColor;                         // Diffuse Color
+vec4 _baseColor;                                // Base color
+vec3 _ambientColor;                             // Ambient Color
+vec3 _diffuseColor;                             // Diffuse Color
 
 void lighting(vec3 normalVector, vec3 lightDirection, float attenuation)
 {
@@ -27,7 +27,7 @@ void lighting(vec3 normalVector, vec3 lightDirection, float attenuation)
 
 #if defined(POINT_LIGHT)
 
-varying vec4 v_vertexToPointLightDirection;  // Light direction w.r.t current vertex.
+varying vec4 v_vertexToPointLightDirection;     // Light direction w.r.t current vertex.
 
 void applyLight()
 {
@@ -43,10 +43,11 @@ void applyLight()
 
 #elif defined(SPOT_LIGHT)
 
-uniform vec3 u_spotLightDirection;          // Direction of the spot light.
-uniform float u_spotLightInnerAngleCos;     // The bright spot [0.0 - 1.0]
-uniform float u_spotLightOuterAngleCos;     // The soft outer part [0.0 - 1.0]
-varying vec3 v_vertexToSpotLightDirection;  // Light direction w.r.t current vertex.
+uniform vec3 u_spotLightDirection;              // Direction of the spot light.
+uniform float u_spotLightInnerAngleCos;         // The bright spot [0.0 - 1.0]
+uniform float u_spotLightOuterAngleCos;         // The soft outer part [0.0 - 1.0]
+varying vec3 v_vertexToSpotLightDirection;      // Light direction w.r.t current vertex.
+varying float v_spotLightAttenuation;           // Attenuation of spot light.
 
 float lerpstep( float lower, float upper, float s)
 {
@@ -65,19 +66,20 @@ void applyLight()
     // Calculate spot light effect.
     float spotCurrentAngleCos = max(0.0, dot(spotLightDirection, -vertexToSpotLightDirection));
 
-    // Intensity of spot depends on the part of the cone the light direction points to (inner or outer).
-    float spotLightAttenuation = lerpstep(u_spotLightOuterAngleCos, u_spotLightInnerAngleCos, spotCurrentAngleCos);
+    // Intensity of spot depends on the spot light attenuation and the 
+    // part of the cone vertexToSpotLightDirection points to (inner or outer).
+    float spotLightAttenuation = clamp(v_spotLightAttenuation, 0.0, 1.0);
+    spotLightAttenuation *= lerpstep(u_spotLightOuterAngleCos, u_spotLightInnerAngleCos, spotCurrentAngleCos);
 
     lighting(normalVector, vertexToSpotLightDirection, spotLightAttenuation);
 }
 
 #else
 
-uniform vec3 u_lightDirection;       // Light direction
+uniform vec3 u_lightDirection;                  // Light direction
 
 void applyLight()
 {
-    // Normalize the vectors.
     vec3 normalVector = normalize(v_normalVector);
     vec3 lightDirection = normalize(u_lightDirection);
 
