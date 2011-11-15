@@ -1,4 +1,4 @@
-// Uniform
+// Uniforms
 uniform mat4 u_worldViewProjectionMatrix;        // Matrix to transform a position to clip space.
 
 // Inputs

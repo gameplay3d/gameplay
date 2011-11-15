@@ -1,11 +1,11 @@
-#ifndef GAMEPLAYMAINQNX__H
-#define GAMEPLAYMAINQNX__H
+#ifndef GAMEPLAYMAINQNX_H_
+#define GAMEPLAYMAINQNX_H_
 
 #ifdef __QNX__
 
 #include "gameplay.h"
-using namespace gameplay;
 
+using namespace gameplay;
 
 /**
  * Main entry point.
@@ -17,7 +17,6 @@ int main(int argc, char** argv)
     Platform* platform = Platform::create(game);
     return platform->enterMessagePump();
 }
-
 
 #endif
 
