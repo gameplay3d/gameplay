@@ -142,7 +142,7 @@ extern void printError(const char* format, ...);
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
     #define glClearDepth glClearDepthf
-   #define GL_ES
+   #define OPENGL_ES
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
