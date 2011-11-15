@@ -69,6 +69,8 @@ void CharacterGame::initialize()
 
 void CharacterGame::finalize()
 {
+    SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_font);
 }
 
 void CharacterGame::update(long elapsedTime)
@@ -113,6 +115,7 @@ void CharacterGame::createDefaultCamera(Scene* scene)
     node->setCamera(camera);
     node->translate(0, 5.0f, 20.0f);
     scene->setActiveCamera(camera);
+    SAFE_RELEASE(camera);
 }
 
 void CharacterGame::touch(int x, int y, int touchEvent)
