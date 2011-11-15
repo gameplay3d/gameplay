@@ -1,5 +1,4 @@
 #include "Mesh.h"
-#include <cmath>
 
 namespace gameplay
 {
@@ -81,7 +80,7 @@ void Mesh::writeText(FILE* file)
     }
 
     // for each Vertex
-    fprintf(file, "<vertices count=\"%u\">\n", vertices.size());
+    fprintf(file, "<vertices count=\"%lu\">\n", vertices.size());
     for (std::vector<Vertex>::iterator i = vertices.begin(); i != vertices.end(); i++)
     {
         i->writeText(file);
@@ -200,7 +199,7 @@ void Mesh::computeBounds()
     }
 
     // Convert squared distance to distance for radius
-    bounds.radius = std::sqrtf(bounds.radius);
+    bounds.radius = sqrtf(bounds.radius);
 }
 
 }

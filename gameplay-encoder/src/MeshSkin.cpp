@@ -49,7 +49,7 @@ void MeshSkin::writeText(FILE* file)
         fprintf(file, "%s ", i->c_str());
     }
     fprintf(file, "</joints>\n");
-    fprintf(file, "<bindPoses count=\"%u\">", _bindPoses.size());
+    fprintf(file, "<bindPoses count=\"%lu\">", _bindPoses.size());
     for (std::list<float>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); i++)
     {
         fprintf(file, "%f ", *i);

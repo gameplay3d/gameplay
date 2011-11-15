@@ -39,26 +39,26 @@ Vector2::~Vector2()
 
 const Vector2& Vector2::zero()
 {
-    static Vector2* value = new Vector2(0.0f, 0.0f);
-    return *value;
+    static Vector2 value(0.0f, 0.0f);
+    return value;
 }
 
 const Vector2& Vector2::one()
 {
-    static Vector2* value = new Vector2(1.0f, 1.0f);
-    return *value;
+    static Vector2 value(1.0f, 1.0f);
+    return value;
 }
 
 const Vector2& Vector2::unitX()
 {
-    static Vector2* value = new Vector2(1.0f, 0.0f);
-    return *value;
+    static Vector2 value(1.0f, 0.0f);
+    return value;
 }
 
 const Vector2& Vector2::unitY()
 {
-    static Vector2* value = new Vector2(0.0f, 1.0f);
-    return *value;
+    static Vector2 value(0.0f, 1.0f);
+    return value;
 }
 
 bool Vector2::isZero() const

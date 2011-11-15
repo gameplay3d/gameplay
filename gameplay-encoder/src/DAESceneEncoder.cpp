@@ -831,7 +831,7 @@ void DAESceneEncoder::transformNode(domNode* domNode, Node* node)
 
 void DAESceneEncoder::calcTransform(domNode* domNode, Matrix& dstTransform)
 {
-    daeTArray<daeSmartRef<daeElement>> children;
+    daeTArray<daeSmartRef<daeElement> > children;
     domNode->getChildren(children);
     size_t childCount = children.getCount();
     for (size_t i = 0; i < childCount; i++)
@@ -1653,7 +1653,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
                     delete polygonInputs[j];
                 }
                 warning(std::string("Triangles do not all have the same number of input sources for geometry mesh: ") + geometryId);
-                return false;
+                return NULL;
             }
             else
             {
