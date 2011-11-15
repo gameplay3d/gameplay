@@ -1,0 +1,298 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		42CCD571146EC4B300353661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD570146EC4B300353661 /* Cocoa.framework */; };
+		42CCD5A2146EC5BF00353661 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A1146EC5BF00353661 /* OpenAL.framework */; };
+		42CCD5A4146EC5C600353661 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A3146EC5C600353661 /* OpenGL.framework */; };
+		42CCD5A6146EC5CE00353661 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A5146EC5CE00353661 /* QuartzCore.framework */; };
+		42CCD5A8146EC5DE00353661 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A7146EC5DE00353661 /* libz.dylib */; };
+		42CCD5AA146EC5F000353661 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A9146EC5F000353661 /* libpng.a */; };
+		42CCD5AC146EC5F400353661 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5AB146EC5F400353661 /* libgameplay.a */; };
+		42CCD5AF146EC62000353661 /* CharacterGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CCD5AD146EC62000353661 /* CharacterGame.cpp */; };
+		42CCD5B1146EC62A00353661 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD5B0146EC62A00353661 /* icon.png */; };
+		42CCD5B4146EC65F00353661 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD5B3146EC65F00353661 /* res */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		42CCD56C146EC4B300353661 /* sample03-character.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42CCD570146EC4B300353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		42CCD578146EC4B300353661 /* sample03-character-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "sample03-character-Info.plist"; sourceTree = "<group>"; };
+		42CCD5A1146EC5BF00353661 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		42CCD5A3146EC5C600353661 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		42CCD5A5146EC5CE00353661 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		42CCD5A7146EC5DE00353661 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		42CCD5A9146EC5F000353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		42CCD5AB146EC5F400353661 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-dlmrkofumohcdicgwoccmyysfdmq/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
+		42CCD5AD146EC62000353661 /* CharacterGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CharacterGame.cpp; path = src/CharacterGame.cpp; sourceTree = SOURCE_ROOT; };
+		42CCD5AE146EC62000353661 /* CharacterGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CharacterGame.h; path = src/CharacterGame.h; sourceTree = SOURCE_ROOT; };
+		42CCD5B0146EC62A00353661 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		42CCD5B3146EC65F00353661 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		42CCD569146EC4B300353661 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42CCD5AC146EC5F400353661 /* libgameplay.a in Frameworks */,
+				42CCD5AA146EC5F000353661 /* libpng.a in Frameworks */,
+				42CCD5A8146EC5DE00353661 /* libz.dylib in Frameworks */,
+				42CCD571146EC4B300353661 /* Cocoa.framework in Frameworks */,
+				42CCD5A6146EC5CE00353661 /* QuartzCore.framework in Frameworks */,
+				42CCD5A4146EC5C600353661 /* OpenGL.framework in Frameworks */,
+				42CCD5A2146EC5BF00353661 /* OpenAL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		42CCD561146EC4B300353661 = {
+			isa = PBXGroup;
+			children = (
+				42CCD5B3146EC65F00353661 /* res */,
+				42CCD5B0146EC62A00353661 /* icon.png */,
+				42CCD5AB146EC5F400353661 /* libgameplay.a */,
+				42CCD5A9146EC5F000353661 /* libpng.a */,
+				42CCD5A7146EC5DE00353661 /* libz.dylib */,
+				42CCD576146EC4B300353661 /* sample03-character */,
+				42CCD56F146EC4B300353661 /* Frameworks */,
+				42CCD56D146EC4B300353661 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		42CCD56D146EC4B300353661 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				42CCD56C146EC4B300353661 /* sample03-character.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		42CCD56F146EC4B300353661 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				42CCD570146EC4B300353661 /* Cocoa.framework */,
+				42CCD5A5146EC5CE00353661 /* QuartzCore.framework */,
+				42CCD5A3146EC5C600353661 /* OpenGL.framework */,
+				42CCD5A1146EC5BF00353661 /* OpenAL.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		42CCD576146EC4B300353661 /* sample03-character */ = {
+			isa = PBXGroup;
+			children = (
+				42CCD578146EC4B300353661 /* sample03-character-Info.plist */,
+				42CCD5AD146EC62000353661 /* CharacterGame.cpp */,
+				42CCD5AE146EC62000353661 /* CharacterGame.h */,
+			);
+			path = "sample03-character";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		42CCD56B146EC4B300353661 /* sample03-character */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character" */;
+			buildPhases = (
+				42CCD568146EC4B300353661 /* Sources */,
+				42CCD569146EC4B300353661 /* Frameworks */,
+				4224466E14716AAE0021F131 /* ShellScript */,
+				42CCD56A146EC4B300353661 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "sample03-character";
+			productName = "sample03-character";
+			productReference = 42CCD56C146EC4B300353661 /* sample03-character.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		42CCD563146EC4B300353661 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 42CCD566146EC4B300353661 /* Build configuration list for PBXProject "sample03-character" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 42CCD561146EC4B300353661;
+			productRefGroup = 42CCD56D146EC4B300353661 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				42CCD56B146EC4B300353661 /* sample03-character */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		42CCD56A146EC4B300353661 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42CCD5B1146EC62A00353661 /* icon.png in Resources */,
+				42CCD5B4146EC65F00353661 /* res in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4224466E14716AAE0021F131 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		42CCD568146EC4B300353661 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42CCD5AF146EC62000353661 /* CharacterGame.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		42CCD588146EC4B300353661 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		42CCD589146EC4B300353661 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		42CCD58B146EC4B300353661 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					../../gameplay/src,
+					"../../external-deps/libpng/include",
+				);
+				INFOPLIST_FILE = "sample03-character-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-dlmrkofumohcdicgwoccmyysfdmq/Build/Products/Debug\"",
+				);
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		42CCD58C146EC4B300353661 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					../../gameplay/src,
+					"../../external-deps/libpng/include",
+				);
+				INFOPLIST_FILE = "sample03-character-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-dlmrkofumohcdicgwoccmyysfdmq/Build/Products/Debug\"",
+				);
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		42CCD566146EC4B300353661 /* Build configuration list for PBXProject "sample03-character" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42CCD588146EC4B300353661 /* Debug */,
+				42CCD589146EC4B300353661 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42CCD58B146EC4B300353661 /* Debug */,
+				42CCD58C146EC4B300353661 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 42CCD563146EC4B300353661 /* Project object */;
+}

@@ -44,20 +44,22 @@ Matrix::~Matrix()
 
 const Matrix& Matrix::identity()
 {
-    static Matrix* m = new Matrix( 1, 0, 0, 0,
-                                   0, 1, 0, 0,
-                                   0, 0, 1, 0,
-                                   0, 0, 0, 1 );
-    return *m;
+    static Matrix m(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1 );
+    return m;
 }
 
 const Matrix& Matrix::zero()
 {
-    static Matrix* m = new Matrix( 0, 0, 0, 0,
-                                   0, 0, 0, 0,
-                                   0, 0, 0, 0,
-                                   0, 0, 0, 0 );
-    return *m;
+    static Matrix m(
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0 );
+    return m;
 }
 
 void Matrix::createLookAt(const Vector3& eyePosition, const Vector3& targetPosition, const Vector3& up, Matrix* dst)

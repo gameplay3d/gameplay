@@ -64,7 +64,6 @@ Animation::Channel::Channel(AnimationTarget* target, int propertyId, Curve* curv
     assert(target->getAnimationPropertyComponentCount(propertyId));
 
     _target = target;
-    _target->addRef();
     _propertyId = propertyId;
     _curve = curve;
     _duration = duration;
@@ -72,7 +71,6 @@ Animation::Channel::Channel(AnimationTarget* target, int propertyId, Curve* curv
 
 Animation::Channel::~Channel()
 {
-    SAFE_RELEASE(_target);
     SAFE_DELETE(_curve);
 }
 

@@ -3,17 +3,19 @@
  */
 
 #include "Base.h"
+#include "AudioController.h"
 #include "AudioListener.h"
 #include "AudioBuffer.h"
 #include "AudioSource.h"
-#include "AudioController.h"
+
 
 namespace gameplay
 {
 
 std::list<AudioSource*> AudioController::_playingSources;
 
-AudioController::AudioController()
+AudioController::AudioController() 
+    : _alcDevice(NULL), _alcContext(NULL)
 {
 }
 
@@ -23,19 +25,43 @@ AudioController::~AudioController()
 
 void AudioController::initialize()
 {    
-	alutInit(0, 0);
-
-	ALenum errorID = alutGetError();
-    if ( errorID != ALUT_ERROR_NO_ERROR)
+    _alcDevice = alcOpenDevice (NULL);
+    if (!_alcDevice)
     {
-        LOG_ERROR_VARG("AudioController::initialize() error. Unable to initialize alut: %s\n", alutGetErrorString(errorID));
+        LOG_ERROR("AudioController::initialize() error. Unable to open OpenAL device.\n");
         return;  
+    }
+        
+	_alcContext = alcCreateContext(_alcDevice, NULL);
+    ALCenum alcErr = alcGetError(_alcDevice);
+	if (!_alcContext || alcErr != ALC_NO_ERROR)
+    {
+        alcCloseDevice (_alcDevice);
+        LOG_ERROR_VARG("AudioController::initialize() error. Unable to create OpenAL context. Error: %d\n", alcErr);
+        return;
+    }
+    
+    alcMakeContextCurrent(_alcContext);
+    alcErr = alcGetError(_alcDevice);
+    if (alcErr != ALC_NO_ERROR)
+    {
+        LOG_ERROR_VARG("AudioController::initialize() error. Unable to make OpenAL context current. Error: %d\n", alcErr);
     }
 }
 
 void AudioController::finalize()
 {
-	alutExit();
+    alcMakeContextCurrent(NULL);
+    if (_alcContext)
+    {
+        alcDestroyContext(_alcContext);
+        _alcContext = NULL;
+    }
+    if (_alcDevice)
+    {
+        alcCloseDevice(_alcDevice);
+        _alcDevice = NULL;
+    }
 }
 
 void AudioController::pause()

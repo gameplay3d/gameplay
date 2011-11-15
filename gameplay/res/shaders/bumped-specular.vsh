@@ -229,7 +229,9 @@ void main()
     gl_Position = u_worldViewProjectionMatrix * position;
 
     // Transform the normal, tangent and binormals to  view space.
-    mat3 inverseTransposeWorldViewMatrix = mat3(u_inverseTransposeWorldViewMatrix);
+    mat3 inverseTransposeWorldViewMatrix = mat3(u_inverseTransposeWorldViewMatrix[0].xyz,
+                                                u_inverseTransposeWorldViewMatrix[1].xyz,
+                                                u_inverseTransposeWorldViewMatrix[2].xyz);
     vec3 tangentVector  = normalize(inverseTransposeWorldViewMatrix * tangent);
     vec3 normalVector = normalize(inverseTransposeWorldViewMatrix * normal);
     vec3 binormalVector = normalize(inverseTransposeWorldViewMatrix * binormal);

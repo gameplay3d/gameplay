@@ -167,14 +167,13 @@ void AudioSource::setNode(Node* node)
         if (_node)
         {
             _node->removeListener(this);
-            SAFE_RELEASE(_node);
         }
 
         // Connect the new node.
         _node = node;
+
         if (_node)
         {
-            _node->addRef();
             _node->addListener(this);
         }
     }

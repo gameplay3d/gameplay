@@ -1,4 +1,6 @@
+#ifdef OPENGL_ES
 precision highp float;
+#endif
 
 // Uniforms
 uniform sampler2D u_diffuseTexture;     // Diffuse texture
