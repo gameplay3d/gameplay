@@ -89,7 +89,7 @@ void MeshGame::touch(int x, int y, int touchEvent)
     case Input::TOUCHEVENT_MOVE:
         {
             int deltaX = x - _prevX;
-            int deltaY = y - _prevY;
+            //int deltaY = y - _prevY;
             _prevX = x;
             _prevY = y;
             _modelNode->rotateY(MATH_DEG_TO_RAD(deltaX * 0.5f));

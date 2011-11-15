@@ -34,7 +34,6 @@
 
 // Default sprite fragment shader
 #define SPRITE_FSH \
-    "precision mediump float;" \
     "varying vec2 vtexcoord;" \
     "varying vec4 vcolor;" \
     "uniform sampler2D texture;" \

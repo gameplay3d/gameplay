@@ -25,7 +25,6 @@
 
 // Default font fragment shader
 #define FONT_FSH \
-    "precision mediump float;" \
     "varying vec2 vtexcoord;" \
     "varying vec4 vcolor;" \
     "uniform sampler2D texture;" \
@@ -178,7 +177,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color)
     for (int i = 0; i < length; ++i)
     {
         char c = text[i];
-        unsigned int index = c - 32; // HACK for ASCII
+        int index = c - 32; // HACK for ASCII
         if (index >= 0 && index < _glyphCount)
         {
             Glyph& g = _glyphs[index];

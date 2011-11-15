@@ -1,4 +1,6 @@
+#ifdef OPENGL_ES
 precision highp float;
+#endif
 
 varying vec3 v_normal;
 varying vec2 v_texCoord;

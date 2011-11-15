@@ -6,7 +6,7 @@
 #define CHARACTERGAME_H_
 
 #include "gameplay.h"
-#include "gameplay-main.h"
+
 using namespace gameplay;
 
 /**

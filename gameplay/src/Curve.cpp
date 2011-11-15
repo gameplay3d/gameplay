@@ -233,7 +233,7 @@ void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst) const
                 i++;
             }
             // Handle quaternion component.
-            float interpTime = from->time * eq1 + from->outValue[i] * eq2 + to->inValue[i] * eq3 + to->time * eq4;
+            //float interpTime = from->time * eq1 + from->outValue[i] * eq2 + to->inValue[i] * eq3 + to->time * eq4;
             interpolateQuaternion(s, (from->value + i), (to->value + i), (dst + i));
             i += 4;
             quaternionOffsetIndex++;
