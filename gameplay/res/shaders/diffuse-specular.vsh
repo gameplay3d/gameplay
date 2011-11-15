@@ -179,7 +179,9 @@ void main()
     gl_Position = u_worldViewProjectionMatrix * position;
 
     // Transform normal to view space.
-    mat3 inverseTransposeWorldViewMatrix = mat3(u_inverseTransposeWorldViewMatrix);
+    mat3 inverseTransposeWorldViewMatrix = mat3(u_inverseTransposeWorldViewMatrix[0].xyz,
+                                                u_inverseTransposeWorldViewMatrix[1].xyz,
+                                                u_inverseTransposeWorldViewMatrix[2].xyz);
     v_normalVector = inverseTransposeWorldViewMatrix * normal;
 
     // Compute the camera direction.

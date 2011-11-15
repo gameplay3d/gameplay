@@ -1,4 +1,6 @@
+#ifdef OPENGL_ES
 precision highp float;
+#endif
 
 // Uniforms
 uniform vec3 u_lightColor;                      // Light color.

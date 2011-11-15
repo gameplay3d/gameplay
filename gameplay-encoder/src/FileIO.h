@@ -1,10 +1,6 @@
 #ifndef FILEIO_H_
 #define FILEIO_H_
 
-#include <iostream>
-#include <list>
-#include <vector>
-
 #include "Base.h"
 
 namespace gameplay
@@ -27,7 +23,7 @@ template <class T>
 void fprintfElement(FILE* file, const char* format, const char* elementName, std::vector<T> list)
 {
     fprintf(file, "<%s>", elementName);
-    std::vector<T>::const_iterator i;
+    typename std::vector<T>::const_iterator i;
     for (i = list.begin(); i != list.end(); i++)
     {
         fprintf(file, format, *i);
@@ -39,7 +35,7 @@ template <class T>
 void fprintfElement(FILE* file, const char* format, const char* elementName, std::list<T> list)
 {
     fprintf(file, "<%s>", elementName);
-    std::list<T>::const_iterator i;
+    typename std::list<T>::const_iterator i;
     for (i = list.begin(); i != list.end(); i++)
     {
         fprintf(file, format, *i);
@@ -81,7 +77,7 @@ void write(std::list<T> list, FILE* file)
     // First write the size of the list
     write(list.size(), file);
     // Then write each element
-    std::list<T>::const_iterator i;
+    typename std::list<T>::const_iterator i;
     for (i = list.begin(); i != list.end(); i++)
     {
         write(*i, file);
@@ -99,7 +95,7 @@ void write(std::vector<T> vector, FILE* file)
     // First write the size of the vector
     write(vector.size(), file);
     // Then write each element
-    std::vector<T>::const_iterator i;
+    typename std::vector<T>::const_iterator i;
     for (i = vector.begin(); i != vector.end(); i++)
     {
         write(*i, file);

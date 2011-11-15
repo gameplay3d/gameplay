@@ -21,7 +21,7 @@
 						<toolChain id="com.qnx.qcc.toolChain.exe.debug.1457920850" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.543140018" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.284407654" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample00-mesh/Device-Debug}" id="cdt.managedbuild.target.gnu.builder.base.505389028" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample00-mesh/Device-Debug}" id="cdt.managedbuild.target.gnu.builder.base.505389028" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.208366882" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.139715017" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.security.1844270687" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
@@ -59,7 +59,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 								</option>
@@ -99,7 +98,7 @@
 						<toolChain id="com.qnx.qcc.toolChain.exe.release.980420031" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.1761526343" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.505505845" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample00-mesh/Device-Release}" id="cdt.managedbuild.target.gnu.builder.base.754548990" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample00-mesh/Device-Release}" id="cdt.managedbuild.target.gnu.builder.base.754548990" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.1859104517" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.optlevel.1503352761" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.2" valueType="enumerated"/>
 								<option id="com.qnx.qcc.option.compiler.security.1558473615" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
@@ -135,7 +134,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 								</option>
@@ -175,7 +173,7 @@
 						<toolChain id="com.qnx.qcc.toolChain.exe.profile.1845991974" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.841582420" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.291641862" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample00-mesh/Device-Profile}" id="cdt.managedbuild.target.gnu.builder.base.213445888" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample00-mesh/Device-Profile}" id="cdt.managedbuild.target.gnu.builder.base.213445888" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.614386334" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.2016842657" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.profile2.654771532" name="Build for Profiling (Function Instrumentation) (-finstrument-functions)" superClass="com.qnx.qcc.option.compiler.profile2" value="true" valueType="boolean"/>
@@ -215,7 +213,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 								</option>
@@ -255,7 +252,7 @@
 						<toolChain id="com.qnx.qcc.toolChain.exe.coverage.1058841174" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.1763443935" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.1557345848" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample00-mesh/Device-Coverage}" id="cdt.managedbuild.target.gnu.builder.base.990549776" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample00-mesh/Device-Coverage}" id="cdt.managedbuild.target.gnu.builder.base.990549776" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.2123563242" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.1458020405" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.coverage.2144528412" name="Build for Code Coverage (-Wc,-ftest-coverage -Wc,-fprofile-arcs)" superClass="com.qnx.qcc.option.compiler.coverage" value="true" valueType="boolean"/>
@@ -295,7 +292,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 								</option>
@@ -334,7 +330,7 @@
 					<folderInfo id="com.qnx.qcc.configuration.exe.debug.882133523." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.exe.debug.263886238" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.826917653" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample00-mesh/Simulator}" id="cdt.managedbuild.target.gnu.builder.base.1025219170" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample00-mesh/Simulator}" id="cdt.managedbuild.target.gnu.builder.base.1025219170" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.1408625066" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.1248630188" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.security.2051337094" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
@@ -372,7 +368,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 								</option>
@@ -411,7 +406,7 @@
 					<folderInfo id="com.qnx.qcc.configuration.exe.profile.400335078." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.exe.profile.339344565" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.900231101" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample00-mesh/Simulator-Profile}" id="cdt.managedbuild.target.gnu.builder.base.134792332" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample00-mesh/Simulator-Profile}" id="cdt.managedbuild.target.gnu.builder.base.134792332" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.1403486104" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.505574977" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.profile2.486301444" name="Build for Profiling (Function Instrumentation) (-finstrument-functions)" superClass="com.qnx.qcc.option.compiler.profile2" value="true" valueType="boolean"/>
@@ -451,7 +446,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 								</option>
@@ -490,7 +484,7 @@
 					<folderInfo id="com.qnx.qcc.configuration.exe.profile.coverage.48235134." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.exe.coverage.1175317875" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.1428636360" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample00-mesh/Simulator-Coverage}" id="cdt.managedbuild.target.gnu.builder.base.781926995" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample00-mesh/Simulator-Coverage}" id="cdt.managedbuild.target.gnu.builder.base.781926995" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.1261670176" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.62201864" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.coverage.1226618626" name="Build for Code Coverage (-Wc,-ftest-coverage -Wc,-fprofile-arcs)" superClass="com.qnx.qcc.option.compiler.coverage" value="true" valueType="boolean"/>
@@ -530,7 +524,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 								</option>

@@ -57,7 +57,6 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
 
 Animation* AnimationController::createAnimationFromTo(const char* id, AnimationTarget* target, int propertyId, float* from, float* to, Curve::InterpolationType type, unsigned long duration)
 {
-    const unsigned int keyCount = 2;
     const unsigned int propertyComponentCount = target->getAnimationPropertyComponentCount(propertyId);
     float* keyValues = new float[2 * propertyComponentCount];
 

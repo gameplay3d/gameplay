@@ -25,7 +25,6 @@
 
 // Default font fragment shader
 #define FONT_FSH \
-    "precision mediump float;" \
     "varying vec2 vtexcoord;" \
     "varying vec4 vcolor;" \
     "uniform sampler2D texture;" \

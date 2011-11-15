@@ -12,7 +12,8 @@ namespace gameplay
 {
 
 AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long startTime, unsigned long endTime)
-    : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _elapsedTime(0), _runningTime(0), _channelCount(animation->_channels.size()), _repeatCount(1.0f), _speed(1.0f), _isPlaying(false), _beginListeners(NULL), _endListeners(NULL)
+    : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _elapsedTime(0), _runningTime(0), 
+       _channelCount(animation->_channels.size()), _repeatCount(1.0f), _speed(1.0f), _isPlaying(false), _beginListeners(NULL), _endListeners(NULL)
 {
     assert(0 <= startTime && startTime <= animation->_duration && 0 <= endTime && endTime <= animation->_duration);
 
