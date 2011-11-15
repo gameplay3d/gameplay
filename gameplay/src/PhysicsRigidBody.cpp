@@ -11,6 +11,10 @@
 namespace gameplay
 {
 
+const int PhysicsRigidBody::Listener::DIRTY = 0x01;
+const int PhysicsRigidBody::Listener::COLLISION = 0x02;
+const int PhysicsRigidBody::Listener::REGISTERED = 0x04;
+
 PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, float mass, 
         float friction, float restitution, float linearDamping, float angularDamping)
         : _shape(NULL), _body(NULL), _node(node), _listeners(NULL), _angularVelocity(NULL),
@@ -98,9 +102,8 @@ void PhysicsRigidBody::addCollisionListener(Listener* listener, PhysicsRigidBody
     if (!_listeners)
         _listeners = new std::vector<Listener*>();
 
-    listener->_rbA = this;
-    if (body)
-        listener->_rbB = body;
+    CollisionPair pair(this, body);
+    listener->_collisionStatus[pair] = PhysicsRigidBody::Listener::REGISTERED;
 
     _listeners->push_back(listener);
 }
@@ -158,6 +161,15 @@ void PhysicsRigidBody::applyTorqueImpulse(const Vector3& torque)
     }
 }
 
+bool PhysicsRigidBody::collidesWith(PhysicsRigidBody* body)
+{
+    static CollidesWithCallback callback;
+
+    callback.result = false;
+    Game::getInstance()->getPhysicsController()->_world->contactPairTest(_body, body->_body, callback);
+    return callback.result;
+}
+
 btRigidBody* PhysicsRigidBody::createBulletRigidBody(btCollisionShape* shape, float mass, Node* node,
     float friction, float restitution, float linearDamping, float angularDamping, const Vector3* centerOfMassOffset)
 {
@@ -196,8 +208,13 @@ void PhysicsRigidBody::removeConstraint(PhysicsConstraint* constraint)
     }
 }
 
-PhysicsRigidBody::Listener::Listener()
-    : _rbA(NULL), _rbB(NULL)
+PhysicsRigidBody::CollisionPair::CollisionPair(PhysicsRigidBody* rbA, PhysicsRigidBody* rbB)
+    : _rbA(rbA), _rbB(rbB)
+{
+    // DUMMY FUNCTION
+}
+
+PhysicsRigidBody::Listener::~Listener()
 {
     // DUMMY FUNCTION
 }
@@ -205,14 +222,36 @@ PhysicsRigidBody::Listener::Listener()
 btScalar PhysicsRigidBody::Listener::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a,
     int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB)
 {
+    // Get pointers to the PhysicsRigidBody objects.
     PhysicsRigidBody* rbA = Game::getInstance()->getPhysicsController()->getPhysicsRigidBody(a);
     PhysicsRigidBody* rbB = Game::getInstance()->getPhysicsController()->getPhysicsRigidBody(b);
-
-    if (rbA == _rbA)
-        collisionEvent(rbB, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()));
+    
+    // If the given rigid body pair has collided in the past, then
+    // we notify the listener only if the pair was not colliding
+    // during the previous frame. Otherwise, it's a new pair, so notify the listener.
+    CollisionPair pair(rbA, rbB);
+    if (_collisionStatus.count(pair) > 0)
+    {
+        if ((_collisionStatus[pair] & COLLISION) == 0)
+            collisionEvent(pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()));
+    }
     else
-        collisionEvent(rbA, Vector3(cp.getPositionWorldOnB().x(), cp.getPositionWorldOnB().y(), cp.getPositionWorldOnB().z()));
+    {
+        collisionEvent(pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()));
+    }
 
+    // Update the collision status cache (we remove the dirty bit
+    // set in the controller's update so that this particular collision pair's
+    // status is not reset to 'no collision' when the controller's update completes).
+    _collisionStatus[pair] &= ~DIRTY;
+    _collisionStatus[pair] |= COLLISION;
+    return 0.0f;
+}
+
+btScalar PhysicsRigidBody::CollidesWithCallback::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA,
+            int indexA, const btCollisionObject* b, int partIdB, int indexB)
+{
+    result = true;
     return 0.0f;
 }
 

@@ -9,9 +9,10 @@
 namespace gameplay
 {
 
-void PhysicsHingeConstraint::setLimits(float minAngle, float maxAngle, float softness, float biasFactor, float relaxationFactor)
+void PhysicsHingeConstraint::setLimits(float minAngle, float maxAngle, float bounciness)
 {
-    ((btHingeConstraint*)_constraint)->setLimit(minAngle, maxAngle, softness, biasFactor, relaxationFactor);
+    // Use the defaults for softness (0.9) and biasFactor (0.3).
+    ((btHingeConstraint*)_constraint)->setLimit(minAngle, maxAngle, 0.9f, 0.3f, bounciness);
 }
 
 PhysicsHingeConstraint::PhysicsHingeConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,

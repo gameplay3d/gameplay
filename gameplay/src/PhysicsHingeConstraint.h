@@ -28,12 +28,13 @@ public:
      * 
      * @param minAngle The minimum angle for the hinge.
      * @param maxAngle The maximum angle for the hinge.
-     * @param softness The softness of the hinge (defaults to 0.9).
-     * @param biasFactor The bias factor for the hinge (defaults to 0.3).
-     * @param relaxationFactor The relaxation factor for the hinge (defaults to 1.0).
+     * @param bounciness The bounciness of the hinge (this is applied as
+     *      a factor to the incoming velocity when a hinge limit is met in
+     *      order to calculate the outgoing velocity-for example, 0.0 corresponds
+     *      to no bounce and 1.0 corresponds to an outgoing velocity that is equal
+     *      in magnitude to the incoming velocity).
      */
-    void setLimits(float minAngle, float maxAngle, float softness = 0.9f, 
-        float biasFactor = 0.3f, float relaxationFactor = 1.0f);
+    void setLimits(float minAngle, float maxAngle, float bounciness = 1.0f);
 
 private:
     /**

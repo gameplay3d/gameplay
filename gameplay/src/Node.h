@@ -365,11 +365,12 @@ public:
     PhysicsRigidBody* getPhysicsRigidBody() const;
 
     /**
-     * Assigns a physics rigid body to this node.
+     * Sets (or disables) the physics rigid body for this node.
      * 
      * Note: This is only allowed for nodes that have a model attached to them.
      *
-     * @param type The type of rigid body to set.
+     * @param type The type of rigid body to set; to disable the physics rigid
+     *      body, pass PhysicsRigidBody#SHAPE_NONE.
      * @param mass The mass of the rigid body, in kilograms.
      * @param friction The friction of the rigid body (between 0.0 and 1.0, where 0.0 is
      *      minimal friction and 1.0 is maximal friction).
@@ -378,8 +379,8 @@ public:
      * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
      * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
      */
-    void setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float friction = 0.5,
-        float restitution = 0.0, float linearDamping = 0.0, float angularDamping = 0.0);
+    void setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass = 0.0f, float friction = 0.5f,
+        float restitution = 0.0f, float linearDamping = 0.0f, float angularDamping = 0.0f);
 
     /**
      * Returns the bounding box for the Node, in world space.

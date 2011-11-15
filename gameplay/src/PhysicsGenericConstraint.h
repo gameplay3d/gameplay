@@ -52,18 +52,18 @@ public:
     inline const Vector3& getTranslationOffsetB() const;
 
     /**
-     * Sets the lower angular limits along the constraint's local
+     * Sets the lower angular limits (as Euler angle limits) along the constraint's local
      * X, Y, and Z axes using the values in the given vector.
      * 
-     * @param limits The lower angular limits along the local X, Y, and Z axes.
+     * @param limits The lower angular limits (as Euler angle limits) along the local X, Y, and Z axes.
      */
     inline void setAngularLowerLimit(const Vector3& limits);
 
     /**
-     * Sets the upper angular limits along the constraint's local
+     * Sets the upper angular limits (as Euler angle limits) along the constraint's local
      * X, Y, and Z axes using the values in the given vector.
      * 
-     * @param limits The upper angular limits along the local X, Y, and Z axes.
+     * @param limits The upper angular limits (as Euler angle limits) along the local X, Y, and Z axes.
      */
     inline void setAngularUpperLimit(const Vector3& limits);
     

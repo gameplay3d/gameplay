@@ -42,6 +42,32 @@ public:
         SHAPE_NONE
     };
 
+    /** 
+     * Defines a pair of rigid bodies that collided (or may collide).
+     */
+    class CollisionPair
+    {
+    public:
+        /**
+         * Constructor.
+         */
+        CollisionPair(PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+
+        /**
+         * Less than operator (needed for use as a key in std::map).
+         * 
+         * @param cp The collision pair to compare.
+         * @return True if this pair is "less than" the given pair; false otherwise.
+         */
+        bool operator<(const CollisionPair& cp) const;
+
+        /** The first rigid body in the collision. */
+        PhysicsRigidBody* _rbA;
+
+        /** The second rigid body in the collision. */
+        PhysicsRigidBody* _rbB;
+    };
+
     /**
      * Collision listener interface.
      */
@@ -52,17 +78,17 @@ public:
 
     public:
         /**
-         * Constructor.
+         * Destructor.
          */
-        Listener();
+        virtual ~Listener();
 
         /**
          * Handles when a collision occurs for the rigid body where this listener is registered.
          * 
-         * @param body The other rigid body in the collision.
+         * @param collisionPair The two rigid bodies involved in the collision.
          * @param contactPoint The point (in world space) where the collision occurred.
          */
-        virtual void collisionEvent(PhysicsRigidBody* body, const Vector3& contactPoint) = 0;
+        virtual void collisionEvent(const CollisionPair& collisionPair, const Vector3& contactPoint) = 0;
 
         /**
          * Internal function used for Bullet integration (do not use or override).
@@ -71,8 +97,16 @@ public:
             int indexA, const btCollisionObject* b, int partIdB, int indexB);
         
     protected:
-        PhysicsRigidBody* _rbA;
-        PhysicsRigidBody* _rbB;
+        /** Holds the collision status for each pair of rigid bodies. */
+        std::map<CollisionPair, int> _collisionStatus;
+
+    private:
+        // Internal constant.
+        static const int DIRTY;
+        // Internal constant.
+        static const int COLLISION;
+        // Internal constant.
+        static const int REGISTERED;
     };
 
     /**
@@ -113,6 +147,14 @@ public:
      */
     void applyTorqueImpulse(const Vector3& torque);
     
+    /**
+     * Checks if this rigid body collides with the given rigid body.
+     * 
+     * @param body The rigid body to test collision with.
+     * @return True if this rigid body collides with the given rigid body; false otherwise.
+     */
+    bool collidesWith(PhysicsRigidBody* body);
+
     /**
      * Gets the rigid body's angular damping.
      * 
@@ -279,6 +321,15 @@ private:
 
     // Removes a constraint from this rigid body (used by the constraint destructor).
     void removeConstraint(PhysicsConstraint* constraint);
+
+    // Internal class used to implement the collidesWith(PhysicsRigidBody*) function.
+    struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
+    {
+        btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA,
+            int indexA, const btCollisionObject* b, int partIdB, int indexB);
+
+        bool result;
+    };
 
     btCollisionShape* _shape;
     btRigidBody* _body;
