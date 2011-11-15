@@ -395,7 +395,7 @@ RenderState::Blend parseBlend(const char* value)
 {
     // Conver the string to uppercase for comparison
     std::string upper(value);
-    std::transform(upper.begin(), upper.end(), upper.begin(), std::toupper);
+    transform(upper.begin(), upper.end(), upper.begin(), toupper);
     if (upper == "ZERO")
         return RenderState::BLEND_ZERO;
     if (upper == "ONE")
