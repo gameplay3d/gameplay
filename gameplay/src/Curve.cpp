@@ -31,6 +31,7 @@ Curve::Curve(unsigned int pointCount, unsigned int componentCount)
 Curve::~Curve()
 {
     SAFE_DELETE_ARRAY(_points);
+    SAFE_DELETE_ARRAY(_quaternionOffsets);
 }
 
 Curve::Point::Point()

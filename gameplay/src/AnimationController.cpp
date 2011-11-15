@@ -112,11 +112,11 @@ void AnimationController::stopAllAnimations()
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = *clipIter;
-        clipIter = _runningClips.erase(clipIter);
         clip->_isPlaying = false;
         SAFE_RELEASE(clip);
         clipIter++;
     }
+    _runningClips.clear();
 
     _state = IDLE;
 }
@@ -228,6 +228,8 @@ void AnimationController::destroyAnimation(Animation* animation)
 
 void AnimationController::destroyAllAnimations()
 {
+    stopAllAnimations();
+
     std::vector<Animation*>::iterator itr = _animations.begin();
     
     while (itr != _animations.end())

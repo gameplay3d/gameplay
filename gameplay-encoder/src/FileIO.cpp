@@ -1,10 +1,10 @@
 #include "FileIO.h"
-#include <assert.h>
 
 namespace gameplay
 {
 
-// Writing ot a binary file //
+
+// Writing out a binary file //
 
 void write(unsigned char value, FILE* file)
 {
@@ -102,7 +102,7 @@ void fprintfElement(FILE* file, const char* elementName, unsigned int value)
 }
 void fprintfElement(FILE* file, const char* elementName, unsigned char value)
 {
-    fprintf(file, "<%s>%u</%s>\n", elementName, value, (unsigned int)elementName);
+    fprintf(file, "<%s>%u</%s>\n", elementName, value, elementName);
 }
 
 void fprintfMatrix4f(FILE* file, const float* m)

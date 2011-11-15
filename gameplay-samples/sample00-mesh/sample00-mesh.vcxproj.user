@@ -5,7 +5,11 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-   <LocalDebuggerEnvironment>PATH=%PATH%;../../external-deps/zlib/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/openal/lib/win32;</LocalDebuggerEnvironment>
+	<LocalDebuggerEnvironment>PATH=%PATH%;../../external-deps/zlib/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/openal/lib/win32;</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
+    <LocalDebuggerEnvironment>PATH=%PATH%;../../external-deps/zlib/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/openal/lib/win32;</LocalDebuggerEnvironment>
+	<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

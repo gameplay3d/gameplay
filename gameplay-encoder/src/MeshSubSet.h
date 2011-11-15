@@ -1,11 +1,12 @@
-#ifndef MESHSUBSET_H_
+#ifndef MESHSUBSET_H_
 #define MESHSUBSET_H_
 
-#include <vector>
-
-#include "Common.h"
+#include "Base.h"
 #include "Object.h"
 #include "Vertex.h"
+
+namespace gameplay 
+{
 
 class MeshSubSet : public Object
 {
@@ -13,7 +14,7 @@ public:
     MeshSubSet(void);
     virtual ~MeshSubSet(void);
 
-    virtual byte getTypeId(void);
+    virtual unsigned int getTypeId(void);
     virtual const char* getElementName(void);
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
@@ -24,5 +25,7 @@ public:
     std::map<Vertex, int> vertexLookupTable;
 };
 
-
-#endif
+}
+
+#endif
+

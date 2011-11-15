@@ -148,7 +148,7 @@ const domName_arrayRef getSourceNameArray(const domSourceRef& source)
     {
         return nameArray;
     }
-    daeTArray<daeSmartRef<daeElement>> children;
+    daeTArray<daeSmartRef<daeElement> > children;
     source->getChildren(children);
     size_t childCount = children.getCount();
     for (size_t i = 0; i < childCount; i++)
