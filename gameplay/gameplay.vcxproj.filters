@@ -406,5 +406,32 @@
     <None Include="src\gameplay-main-macosx.mm">
       <Filter>src</Filter>
     </None>
+    <None Include="src\BoundingBox.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\BoundingSphere.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Matrix.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Plane.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Quaternion.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Ray.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Vector2.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Vector3.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Vector4.inl">
+      <Filter>src</Filter>
+    </None>
   </ItemGroup>
 </Project>

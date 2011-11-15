@@ -7,6 +7,7 @@
 
 #include "Base.h"
 #include "Matrix.h"
+#include "Vector2.h"
 
 namespace gameplay
 {
