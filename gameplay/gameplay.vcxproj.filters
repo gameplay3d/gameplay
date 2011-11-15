@@ -168,8 +168,14 @@
     <ClCompile Include="src\RenderState.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\DebugNew.cpp">
+    <ClCompile Include="src\gameplay-main-qnx.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameplay-main-win32.cpp">
+		<Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DebugNew.cpp">
+		<Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -219,15 +225,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\gameplay.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gameplay-main.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gameplay-main-qnx.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gameplay-main-win32.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Input.h">
@@ -405,6 +402,9 @@
     </None>
     <None Include="res\shaders\bumped-specular.fsh">
       <Filter>res\shaders</Filter>
+    </None>
+    <None Include="src\gameplay-main-macosx.mm">
+      <Filter>src</Filter>
     </None>
   </ItemGroup>
 </Project>
