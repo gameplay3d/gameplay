@@ -488,6 +488,7 @@ Node* Package::readNode(Scene* sceneContext, Node* nodeContext)
     if (camera)
     {
         node->setCamera(camera);
+        SAFE_RELEASE(camera);
     }
 
     // Read light
@@ -495,6 +496,7 @@ Node* Package::readNode(Scene* sceneContext, Node* nodeContext)
     if (light)
     {
         node->setLight(light);
+        SAFE_RELEASE(light);
     }
 
     // Read model
@@ -502,6 +504,7 @@ Node* Package::readNode(Scene* sceneContext, Node* nodeContext)
     if (model)
     {
         node->setModel(model);
+        SAFE_RELEASE(model);
     }
 
     return node;
@@ -639,6 +642,7 @@ Model* Package::readModel(Scene* sceneContext, Node* nodeContext)
         if (mesh)
         {
             Model* model = Model::create(mesh);
+            SAFE_RELEASE(mesh);
 
             // Read skin
             unsigned char hasSkin;
@@ -1075,10 +1079,12 @@ Mesh* Package::loadMesh(const char* id)
         if (part == NULL)
         {
             LOG_ERROR_VARG("Failed to create mesh part (i=%d): %s", i, id);
+            SAFE_DELETE_ARRAY(indexData);
             SAFE_RELEASE(mesh);
             return NULL;
         }
         part->setIndexData(indexData, 0, indexCount);
+        SAFE_DELETE_ARRAY(indexData);
     }
 
     fseek(_file, position, SEEK_SET);

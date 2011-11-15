@@ -197,17 +197,7 @@ Node* Model::getNode() const
 
 void Model::setNode(Node* node)
 {
-    if (_node != node)
-    {
-        SAFE_RELEASE(_node);
-
-        _node = node;
-
-        if (_node)
-        {
-            node->addRef();
-        }
-    }
+    _node = node;
 
     // Re-bind node related material parameters
     if (node)

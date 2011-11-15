@@ -40,6 +40,13 @@ public:
      */
     void release();
 
+    /**
+     * Returns the current reference count of this object.
+     *
+     * @return This object's reference count.
+     */
+    unsigned int getRefCount() const;
+
 protected:
 
     /**
@@ -55,6 +62,13 @@ protected:
 private:
 
     unsigned int _refCount;
+
+    // Memory leak diagnostic data (only included when GAMEPLAY_MEM_LEAK_DETECTION is defined)
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+    friend class Game;
+    static void printLeaks();
+    void* __record;
+#endif
 };
 
 }
