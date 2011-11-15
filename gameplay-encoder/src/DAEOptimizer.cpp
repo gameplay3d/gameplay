@@ -81,7 +81,7 @@ void DAEOptimizer::getAnimationChannels(const domNodeRef& node, std::list<domCha
     }
 
     // Recursively do the same for all nodes
-    daeTArray<daeSmartRef<daeElement>> children;
+    daeTArray< daeSmartRef<daeElement> > children;
     node->getChildren(children);
     size_t childCount = children.getCount();
     for (size_t i = 0; i < childCount; i++)

@@ -70,19 +70,8 @@ Node* Light::getNode() const
 
 void Light::setNode(Node* node)
 {
-    if (_node != node)
-    {
-        // Disconnect our current node.
-        SAFE_RELEASE(_node);
-
-        // Connect the new node.
-        _node = node;
-
-        if (_node)
-        {
-            _node->addRef();
-        }
-    }
+    // Connect the new node.
+    _node = node;
 }
 
 const Vector3& Light::getColor() const

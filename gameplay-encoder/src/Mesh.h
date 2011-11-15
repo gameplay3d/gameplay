@@ -1,6 +1,7 @@
 #ifndef MESH_H_
 #define MESH_H_
 
+#include "Base.h"
 #include "Object.h"
 #include "MeshPart.h"
 #include "VertexElement.h"
