@@ -269,6 +269,7 @@ void MaterialParameter::bindValue(ClassType* classInstance, ParameterType (Class
     clearValue();
 
     _value.method = new MethodValueBinding<ClassType, ParameterType>(this, classInstance, valueMethod);
+    _dynamic = true;
     _type = MaterialParameter::METHOD;
 }
 
@@ -278,6 +279,7 @@ void MaterialParameter::bindValue(ClassType* classInstance, ParameterType (Class
     clearValue();
 
     _value.method = new MethodArrayBinding<ClassType, ParameterType>(this, classInstance, valueMethod, countMethod);
+    _dynamic = true;
     _type = MaterialParameter::METHOD;
 }
 

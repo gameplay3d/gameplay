@@ -44,14 +44,14 @@ Quaternion::~Quaternion()
 
 const Quaternion& Quaternion::identity()
 {
-    static Quaternion* value = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
-    return *value;
+    static Quaternion value(0.0f, 0.0f, 0.0f, 1.0f);
+    return value;
 }
 
 const Quaternion& Quaternion::zero()
 {
-    static Quaternion* value = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
-    return *value;
+    static Quaternion value(0.0f, 0.0f, 0.0f, 0.0f);
+    return value;
 }
 
 bool Quaternion::isIdentity() const
