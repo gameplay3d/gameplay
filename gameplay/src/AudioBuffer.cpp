@@ -191,8 +191,8 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     // Read how much data is remaining and buffer it up.
     unsigned int dataSize;
     fread(&dataSize, sizeof(int), 1, file);
-    char* data = new char[dataSize];
-    if (fread(data, sizeof(char), dataSize, file) != dataSize)
+    unsigned char* data = new unsigned char[dataSize];
+    if (fread(data, sizeof(unsigned char), dataSize, file) != dataSize)
     {
         LOG_ERROR("WAV file missing data.");
         SAFE_DELETE_ARRAY(data);
