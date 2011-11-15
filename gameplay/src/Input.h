@@ -1,6 +1,8 @@
 #ifndef INPUT_H_
 #define INPUT_H_
 
+#include "Gamepad.h"
+
 namespace gameplay
 {
 
@@ -206,6 +208,21 @@ public:
      * @param roll The roll angle returned (in degrees). If NULL then not returned.
      */
     static void getAccelerometerPitchAndRoll(float* pitch, float* roll);
+
+    /**
+     * Indicates if the game device supports a gamepad.
+     * 
+     * @return true if the gamepad is supported; false otherwise.
+     */
+    static bool isGamepadSupported();
+
+    /**
+     * Gets a gamepad associaed with the specified integer Id.
+     *
+     * @ returns an instance of gamepad if Id is valid; NULL otherwise.
+     */
+    static Gamepad* getGamepad(unsigned int index);
+
 
 private:
 
