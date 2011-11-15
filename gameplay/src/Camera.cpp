@@ -36,7 +36,6 @@ Camera::Camera(float zoomX, float zoomY, float aspectRatio, float nearPlane, flo
 
 Camera::~Camera()
 {
-    SAFE_RELEASE(_node);
 }
 
 Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
@@ -144,17 +143,13 @@ void Camera::setNode(Node* node)
         if (_node)
         {
             _node->removeListener(this);
-
-            // Disconnect our current node.
-            SAFE_RELEASE(_node);
         }
 
         // Connect the new node.
         _node = node;
+
         if (_node)
         {
-            _node->addRef();
-
             _node->addListener(this);
         }
 

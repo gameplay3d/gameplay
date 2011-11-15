@@ -34,11 +34,12 @@ ParticleEmitter::ParticleEmitter(SpriteBatch* batch, unsigned int particleCountM
     _timePerEmission(EMISSION_RATE_TIME_INTERVAL), _timeLast(0L), _timeRunning(0L)
 {
     _particles = new Particle[particleCountMax];
+
+    _spriteBatch->getStateBlock()->setDepthWrite(false);
 }
 
 ParticleEmitter::~ParticleEmitter()
 {
-    SAFE_RELEASE(_node);
     SAFE_DELETE(_spriteBatch);
     SAFE_DELETE_ARRAY(_particles);
     SAFE_DELETE_ARRAY(_spriteTextureCoords);
@@ -60,6 +61,7 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
 
     // Use default SpriteBatch material.
     SpriteBatch* batch =  SpriteBatch::create(texture, NULL, particleCountMax);
+    texture->release(); // batch owns the texture
     assert(batch);
 
     ParticleEmitter* emitter = new ParticleEmitter(batch, particleCountMax);
@@ -71,7 +73,9 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
     emitter->_spriteTextureHeight = texture->getHeight();
     emitter->_spriteTextureWidthRatio = 1.0f / (float)texture->getWidth();
     emitter->_spriteTextureHeightRatio = 1.0f / (float)texture->getHeight();
-    emitter->setSpriteFrameCoords(1, new Rectangle((float)texture->getWidth(), (float)texture->getHeight()));
+
+    Rectangle texCoord((float)texture->getWidth(), (float)texture->getHeight());
+    emitter->setSpriteFrameCoords(1, &texCoord);
 
     return emitter;
 }
@@ -618,6 +622,8 @@ void ParticleEmitter::setSpriteFrameCoords(unsigned int frameCount, int width, i
     }
 
     setSpriteFrameCoords(frameCount, frameCoords);
+
+    SAFE_DELETE_ARRAY(frameCoords);
 }
 
 Node* ParticleEmitter::getNode() const
@@ -627,19 +633,8 @@ Node* ParticleEmitter::getNode() const
 
 void ParticleEmitter::setNode(Node* node)
 {
-    if (_node != node)
-    {
-        // Disconnect our current node.
-        SAFE_RELEASE(_node);
-
-        // Connect the new node.
-        _node = node;
-
-        if (_node)
-        {
-            _node->addRef();
-        }
-    }
+    // Connect the new node.
+    _node = node;
 }
 
 void ParticleEmitter::setOrbit(bool orbitPosition, bool orbitVelocity, bool orbitAcceleration)
@@ -889,16 +884,8 @@ void ParticleEmitter::draw()
             }
         }
 
-        // Disable writing to the depth buffer.
-        GLboolean depthMask;
-        glGetBooleanv(GL_DEPTH_WRITEMASK, &depthMask);
-        glDepthMask(GL_FALSE);
-
         // Render.
         _spriteBatch->end();
-
-        // Turn the depth mask back on if it was on before.
-        glDepthMask(depthMask);
     }
 }
 
