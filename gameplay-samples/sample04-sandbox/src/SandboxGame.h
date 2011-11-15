@@ -38,7 +38,7 @@ public:
     /**
      * Collision event handler.
      */
-    void collisionEvent(PhysicsRigidBody* body, const Vector3& point);
+    void collisionEvent(const PhysicsRigidBody::CollisionPair& pair, const Vector3& point);
 
 protected:
     /**
@@ -67,6 +67,7 @@ private:
     Scene* _scene;
     Font* _font;
     Node* _volleyball;
+    Node* _door;
 };
 
 #endif

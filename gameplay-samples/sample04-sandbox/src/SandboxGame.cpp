@@ -81,6 +81,9 @@ void SandboxGame::keyPress(int key, int keyEvent)
                 else
                     Game::getInstance()->pause();
                 break;
+            case Input::KEY_T:
+                WARN_VARG("Volleyball collides with door: %d\n", _volleyball->getPhysicsRigidBody()->collidesWith(_door->getPhysicsRigidBody()));
+                break;
             case Input::KEY_Q:
             case Input::KEY_ESCAPE:
                 Game::getInstance()->exit();
@@ -190,7 +193,7 @@ void SandboxGame::initialize()
     Quaternion doorRot;
     Quaternion::createFromAxisAngle(Vector3::unitY(), MATH_DEG_TO_RAD(90.0f), &doorRot);
     PhysicsHingeConstraint* hinge = Game::getInstance()->getPhysicsController()->createHingeConstraint(door->getPhysicsRigidBody(), doorRot, Vector3(0.0f, 0.0f, x));
-    hinge->setLimits(0.0f, MATH_DEG_TO_RAD(90.0f));
+    hinge->setLimits(0.0f, MATH_DEG_TO_RAD(90.0f), 0.5f);
     hinge->setBreakingImpulse(80.0f);    
 
     // Add the joint rigid body meshes to the scene under each corresponding joint node.
@@ -302,7 +305,9 @@ void SandboxGame::initialize()
     // Register the game as a listener for physics status events
     // and for collisions between the volleyball and the door.
     Game::getInstance()->getPhysicsController()->addStatusListener((SandboxGame*)Game::getInstance());
-    _volleyball->getPhysicsRigidBody()->addCollisionListener((SandboxGame*)Game::getInstance(), door->getPhysicsRigidBody());
+    _volleyball->getPhysicsRigidBody()->addCollisionListener((SandboxGame*)Game::getInstance());
+
+    _door = door;
 
     SAFE_RELEASE(fontPackage);
     SAFE_RELEASE(meshPackage);
@@ -376,8 +381,8 @@ void SandboxGame::statusEvent(PhysicsController::Listener::EventType type)
     }
 }
 
-void SandboxGame::collisionEvent(PhysicsRigidBody* body, const Vector3& point)
+void SandboxGame::collisionEvent(const PhysicsRigidBody::CollisionPair& pair, const Vector3& point)
 {
     WARN_VARG("Collision between rigid bodies %s and %s at point (%f, %f, %f).",
-        _rbA->getNode()->getId(), body->getNode()->getId(), point.x, point.y, point.z);
+        pair._rbA->getNode()->getId(), pair._rbB->getNode()->getId(), point.x, point.y, point.z);
 }

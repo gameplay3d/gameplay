@@ -195,6 +195,27 @@ void PhysicsController::update(long elapsedTime)
         }
     }
 
+    // All statuses are set with the DIRTY bit before collision processing occurs.
+    // During collision processing, if a collision occurs, the status is 
+    // set to COLLISION and the DIRTY bit is cleared. Then, after collision processing 
+    // is finished, if a given status is still dirty, the COLLISION bit is cleared.
+
+    // Dirty all the collision listeners' collision status caches.
+    for (unsigned int i = 0; i < _bodies.size(); i++)
+    {
+        if (_bodies[i]->_listeners)
+        {
+            for (unsigned int k = 0; k < _bodies[i]->_listeners->size(); k++)
+            {
+                std::map<PhysicsRigidBody::CollisionPair, int>::iterator iter = (*_bodies[i]->_listeners)[k]->_collisionStatus.begin();
+                for (; iter != (*_bodies[i]->_listeners)[k]->_collisionStatus.end(); iter++)
+                {
+                    iter->second |= PhysicsRigidBody::Listener::DIRTY;
+                }
+            }
+        }
+    }
+
     // Go through the physics rigid bodies and update the collision listeners.
     for (unsigned int i = 0; i < _bodies.size(); i++)
     {
@@ -202,10 +223,39 @@ void PhysicsController::update(long elapsedTime)
         {
             for (unsigned int k = 0; k < _bodies[i]->_listeners->size(); k++)
             {
-                if ((*_bodies[i]->_listeners)[k]->_rbB)
-                    Game::getInstance()->getPhysicsController()->_world->contactPairTest((*_bodies[i]->_listeners)[k]->_rbA->_body, (*_bodies[i]->_listeners)[k]->_rbB->_body, *(*_bodies[i]->_listeners)[k]);
-                else
-                    Game::getInstance()->getPhysicsController()->_world->contactTest((*_bodies[i]->_listeners)[k]->_rbA->_body, *(*_bodies[i]->_listeners)[k]);
+                std::map<PhysicsRigidBody::CollisionPair, int>::iterator iter = (*_bodies[i]->_listeners)[k]->_collisionStatus.begin();
+                for (; iter != (*_bodies[i]->_listeners)[k]->_collisionStatus.end(); iter++)
+                {
+                    // If this collision pair was one that was registered for listening, then perform the collision test.
+                    // (In the case where we register for all collisions with a rigid body, there will be a lot
+                    // of collision pairs in the status cache that we did not explicitly register for.)
+                    if ((iter->second & PhysicsRigidBody::Listener::REGISTERED) != 0)
+                    {
+                        if (iter->first._rbB)
+                            Game::getInstance()->getPhysicsController()->_world->contactPairTest(iter->first._rbA->_body, iter->first._rbB->_body, *(*_bodies[i]->_listeners)[k]);
+                        else
+                            Game::getInstance()->getPhysicsController()->_world->contactTest(iter->first._rbA->_body, *(*_bodies[i]->_listeners)[k]);
+                    }
+                }   
+            }
+        }
+    }
+
+    // Go through all the collision listeners and update their collision status caches.
+    for (unsigned int i = 0; i < _bodies.size(); i++)
+    {
+        if (_bodies[i]->_listeners)
+        {
+            for (unsigned int k = 0; k < _bodies[i]->_listeners->size(); k++)
+            {
+                std::map<PhysicsRigidBody::CollisionPair, int>::iterator iter = (*_bodies[i]->_listeners)[k]->_collisionStatus.begin();
+                for (; iter != (*_bodies[i]->_listeners)[k]->_collisionStatus.end(); iter++)
+                {
+                    if ((iter->second & PhysicsRigidBody::Listener::DIRTY) != 0)
+                    {
+                        iter->second &= ~PhysicsRigidBody::Listener::COLLISION;
+                    }
+                }
             }
         }
     }

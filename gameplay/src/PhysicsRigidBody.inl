@@ -7,9 +7,6 @@
 namespace gameplay
 {
 
-// TODO: We can't cache these Vector3 values, but should we have member variables
-// that are set each time instead of creating a new Vector3 every time?
-
 inline float PhysicsRigidBody::getAngularDamping() const
 {
     return _body->getAngularDamping();
@@ -127,6 +124,23 @@ inline void PhysicsRigidBody::setLinearVelocity(const Vector3& velocity)
 inline void PhysicsRigidBody::setRestitution(float restitution)
 {
     _body->setRestitution(restitution);
+}
+
+inline bool PhysicsRigidBody::CollisionPair::operator<(const CollisionPair& cp) const
+{
+    // If the pairs are equal, then return false.
+    if ((_rbA == cp._rbA && _rbB == cp._rbB) || (_rbA == cp._rbB && _rbB == cp._rbA))
+        return false;
+    else
+    {
+        // We choose to compare based on _rbA arbitrarily.
+        if (_rbA < cp._rbA)
+            return true;
+        else if (_rbA == cp._rbA)
+            return _rbB < cp._rbB;
+        else
+            return false;
+    }
 }
 
 }
