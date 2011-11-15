@@ -5,6 +5,8 @@
 #define BASE_H_
 
 // C/C++
+#include <new>
+#include <cstdio>
 #include <cassert>
 #include <memory>
 #include <iostream>
@@ -19,7 +21,6 @@
 #include <map>
 #include <algorithm>
 #include <ctime>
-#include <cstdio>
 #include <limits>
 #include <functional>
 #include <assert.h>
@@ -61,6 +62,11 @@ extern void printError(const char* format, ...);
 #endif
 #define WARN(x) printError(x)
 #define WARN_VARG(x, ...) printError(x, __VA_ARGS__)
+
+// Debug new for memory leak detection
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#include "DebugNew.h"
+#endif
 
 // Object deletion macro
 #define SAFE_DELETE(x) \
@@ -250,4 +256,4 @@ extern GLenum __gl_error_code;
     #pragma warning( disable : 4996 )
 #endif
 
-#endif 
+#endif

@@ -18,6 +18,11 @@ class Platform
 public:
 
     /**
+     * Destructor.
+     */
+    ~Platform();
+
+    /**
      * Creates a platform for the specified game which is will interacte with.
      *
      * @param game The game to create a platform for.
@@ -97,11 +102,6 @@ private:
      * Constructor.
      */
     Platform(const Platform& copy);
-
-    /**
-     * Destructor.
-     */
-    ~Platform();
 
     Game* _game;
 
