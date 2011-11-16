@@ -218,6 +218,8 @@ void SpaceshipGame::initializeMaterial(Material* material, bool lighting, bool s
 
 void SpaceshipGame::finalize()
 {
+    SAFE_RELEASE(_spaceshipSound);
+    SAFE_RELEASE(_font);
     SAFE_RELEASE(_stateBlock);
     SAFE_RELEASE(_scene);
 }

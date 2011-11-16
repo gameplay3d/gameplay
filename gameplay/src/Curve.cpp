@@ -31,6 +31,7 @@ Curve::Curve(unsigned int pointCount, unsigned int componentCount)
 Curve::~Curve()
 {
     SAFE_DELETE_ARRAY(_points);
+    SAFE_DELETE_ARRAY(_quaternionOffsets);
 }
 
 Curve::Point::Point()
@@ -233,7 +234,7 @@ void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst) const
                 i++;
             }
             // Handle quaternion component.
-            float interpTime = from->time * eq1 + from->outValue[i] * eq2 + to->inValue[i] * eq3 + to->time * eq4;
+            //float interpTime = from->time * eq1 + from->outValue[i] * eq2 + to->inValue[i] * eq3 + to->time * eq4;
             interpolateQuaternion(s, (from->value + i), (to->value + i), (dst + i));
             i += 4;
             quaternionOffsetIndex++;

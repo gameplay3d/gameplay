@@ -1,4 +1,6 @@
+#ifdef OPENGL_ES
 precision highp float;
+#endif
 
 // Uniforms
 uniform vec3 u_lightColor;                      // Light color
@@ -53,10 +55,11 @@ void applyLight()
 
 #elif defined(SPOT_LIGHT)
 
-uniform vec3 u_spotLightDirection;          // Direction of the spot light.
-uniform float u_spotLightInnerAngleCos;     // The bright spot [0.0 - 1.0]
-uniform float u_spotLightOuterAngleCos;     // The soft outer part [0.0 - 1.0]
-varying vec3 v_vertexToSpotLightDirection;  // Light direction w.r.t current vertex.
+uniform vec3 u_spotLightDirection;              // Direction of the spot light.
+uniform float u_spotLightInnerAngleCos;         // The bright spot [0.0 - 1.0]
+uniform float u_spotLightOuterAngleCos;         // The soft outer part [0.0 - 1.0]
+varying vec3 v_vertexToSpotLightDirection;      // Light direction w.r.t current vertex.
+varying float v_spotLightAttenuation;           // Attenuation of spot light.
 
 float lerpstep( float lower, float upper, float s)
 {
@@ -76,15 +79,17 @@ void applyLight()
     // Calculate spot light effect.
     float spotCurrentAngleCos = max(0.0, dot(spotLightDirection, -vertexToSpotLightDirection));
     
-    // Intensity of spot depends on the part of the cone the light direction points to (inner or outer).
-    float spotLightAttenuation = lerpstep(u_spotLightOuterAngleCos, u_spotLightInnerAngleCos, spotCurrentAngleCos);
+    // Intensity of spot depends on the spot light attenuation and the 
+    // part of the cone vertexToSpotLightDirection points to (inner or outer).
+    float spotLightAttenuation = clamp(v_spotLightAttenuation, 0.0, 1.0);
+    spotLightAttenuation *= lerpstep(u_spotLightOuterAngleCos, u_spotLightInnerAngleCos, spotCurrentAngleCos);
 
     lighting(normalVector, cameraDirection, vertexToSpotLightDirection, spotLightAttenuation);
 }
 
 #else
 
-uniform vec3 u_lightDirection;       // Light direction
+uniform vec3 u_lightDirection;                  // Light direction
 
 void applyLight()
 {

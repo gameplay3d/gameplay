@@ -165,6 +165,14 @@ public:
      */
     void transform(const Matrix& matrix);
 
+    /**
+     * Transforms this bounding sphere by the given matrix.
+     * 
+     * @param matrix The matrix to transform by.
+     * @return This bounding sphere, after the transformation occurs.
+     */
+    inline BoundingSphere& operator*=(const Matrix& matrix);
+
 private:
 
     float distance(const BoundingSphere& sphere, const Vector3&);
@@ -172,6 +180,17 @@ private:
     bool contains(const BoundingSphere& sphere, Vector3* points, unsigned int count);
 };
 
+/**
+ * Transforms the given bounding sphere by the given matrix.
+ * 
+ * @param matrix The matrix to transform by.
+ * @param sphere The bounding sphere to transform.
+ * @return The resulting transformed bounding sphere.
+ */
+inline BoundingSphere operator*(const Matrix& matrix, const BoundingSphere& sphere);
+
 }
+
+#include "BoundingSphere.inl"
 
 #endif
