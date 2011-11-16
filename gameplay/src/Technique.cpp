@@ -10,7 +10,7 @@ namespace gameplay
 {
 
 Technique::Technique(const char* id, Material* material)
-	: _id(id ? id : ""), _material(material)
+    : _id(id ? id : ""), _material(material)
 {
     assert(material);
 
@@ -23,7 +23,7 @@ Technique::Technique(const Technique& m)
 
 Technique::~Technique()
 {
-	// Destroy all the passes.
+    // Destroy all the passes.
     for (unsigned int i = 0, count = _passes.size(); i < count; ++i)
     {
         SAFE_RELEASE(_passes[i]);
