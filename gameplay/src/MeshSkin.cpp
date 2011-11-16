@@ -80,15 +80,8 @@ void MeshSkin::setJoint(Joint* joint, unsigned int index)
 {
     assert(index < _joints.size());
 
-    if (_joints[index])
-    {
-        _joints[index]->_skin = NULL;
-        SAFE_RELEASE(_joints[index]);
-    }
-
     _joints[index] = joint;
     _joints[index]->_skin = this;
-    joint->addRef();
 }
 
 Vector4* MeshSkin::getMatrixPalette() const
@@ -114,11 +107,6 @@ Joint* MeshSkin::getJoint(unsigned int index) const
 
 void MeshSkin::clearJoints()
 {
-    unsigned int prevCount = _joints.size();
-    for (unsigned int i = 0; i < prevCount; i++)
-    {
-        SAFE_RELEASE(_joints[i]);
-    }
     _joints.clear();
 }
 

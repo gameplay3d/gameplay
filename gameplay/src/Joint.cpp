@@ -31,13 +31,13 @@ void Joint::transformChanged()
 {
     Node::transformChanged();
 
-    const char* id = _id.c_str();
+    //const char* id = _id.c_str();
     _jointMatrixDirty = true;
 }
 
 void Joint::updateJointMatrix(const Matrix& bindShape, Vector4* matrixPalette)
 {
-    const char* id = _id.c_str();
+    //const char* id = _id.c_str();
 
     if (_jointMatrixDirty)
     {

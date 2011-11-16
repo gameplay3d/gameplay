@@ -198,10 +198,7 @@ Node* Model::getNode() const
 
 void Model::setNode(Node* node)
 {
-    if (_node != node)
-    {
-        _node = node;
-    }
+    _node = node;
 
     // Re-bind node related material parameters
     if (node)

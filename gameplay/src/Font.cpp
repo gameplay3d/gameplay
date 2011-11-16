@@ -10,29 +10,31 @@
 
 // Default font vertex shader
 #define FONT_VSH \
-    "uniform mat4 sb_projection_matrix;" \
-    "attribute vec3 a_position;" \
-    "attribute vec2 a_texcoord;" \
-    "attribute vec4 a_color;" \
-    "varying vec2 vtexcoord;" \
-    "varying vec4 vcolor;" \
-    "void main()" \
-    "{" \
-        "gl_Position = sb_projection_matrix * vec4(a_position, 1);" \
-        "vtexcoord = a_texcoord;" \
-        "vcolor = a_color;" \
-    "}"
+    "uniform mat4 u_projectionMatrix;\n" \
+    "attribute vec3 a_position;\n" \
+    "attribute vec2 a_texcoord;\n" \
+    "attribute vec4 a_color;\n" \
+    "varying vec2 v_texcoord;\n" \
+    "varying vec4 v_color;\n" \
+    "void main()\n" \
+    "{\n" \
+        "gl_Position = u_projectionMatrix * vec4(a_position, 1);\n" \
+        "v_texcoord = a_texcoord;\n" \
+        "v_color = a_color;\n" \
+    "}\n"
 
 // Default font fragment shader
 #define FONT_FSH \
-    "precision mediump float;" \
-    "varying vec2 vtexcoord;" \
-    "varying vec4 vcolor;" \
-    "uniform sampler2D texture;" \
-    "void main()" \
-    "{" \
-        "gl_FragColor = vcolor;" \
-        "gl_FragColor.a = texture2D(texture, vtexcoord).a;" \
+    "#ifdef OPENGL_ES\n" \
+    "precision highp float;\n" \
+    "#endif\n" \
+    "varying vec2 v_texcoord;\n" \
+    "varying vec4 v_color;\n" \
+    "uniform sampler2D u_texture;\n" \
+    "void main()\n" \
+    "{\n" \
+        "gl_FragColor = v_color;\n" \
+        "gl_FragColor.a = texture2D(u_texture, v_texcoord).a;\n" \
     "}"
 
 namespace gameplay

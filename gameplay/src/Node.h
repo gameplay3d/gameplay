@@ -440,27 +440,6 @@ protected:
      */
     void remove();
 
-    /**
-     * Called when a child is added to this item in the tree.
-     * 
-     * @param child The child that was added.
-     */
-    virtual void childAdded(Node* child);
-
-    /**
-     * Called when a child is removed from this item in the tree.
-     *
-     * @param child The child that was removed.
-     */
-    virtual void childRemoved(Node* child);
-
-    /**
-     * Called when the parent of this node changes.
-     *
-     * @param oldParent The previous parent for this node.
-     */
-    virtual void parentChanged(Node* oldParent);
-
     void transformChanged();
 
     void hierarchyChanged();

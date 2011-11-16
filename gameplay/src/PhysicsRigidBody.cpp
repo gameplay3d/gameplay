@@ -84,10 +84,10 @@ PhysicsRigidBody::~PhysicsRigidBody()
             delete _body->getMotionState();
 
         if (_shape)
-            SAFE_DELETE(_shape);
+            BULLET_DELETE(_shape);
 
         Game::getInstance()->getPhysicsController()->removeRigidBody(this);
-        SAFE_DELETE(_body);
+        BULLET_DELETE(_body);
     }
 
     SAFE_DELETE(_listeners);
@@ -186,7 +186,7 @@ btRigidBody* PhysicsRigidBody::createBulletRigidBody(btCollisionShape* shape, fl
     rbInfo.m_restitution = restitution;
     rbInfo.m_linearDamping = linearDamping;
     rbInfo.m_angularDamping = angularDamping;
-    btRigidBody* body = new btRigidBody(rbInfo);
+    BULLET_NEW(btRigidBody, body, rbInfo);
 
     return body;
 }

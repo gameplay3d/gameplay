@@ -113,6 +113,13 @@ public:
     void setRange(float range);
 
     /**
+     * Returns the inverse of the range of point or spot light.
+     *
+     * @return The range of the point or spot light.
+     */
+    float getRangeInverse() const;
+
+    /**
      * Returns the inner angle the spot light (in radians).
      *
      * @return The inner angle of the spot light (in radians).
@@ -176,6 +183,7 @@ private:
     public:
         Vector3 color;
         float range;
+        float rangeInverse;
 
         Point(const Vector3& color, float range);
     };
@@ -188,6 +196,7 @@ private:
     public:
         Vector3 color;
         float range;
+        float rangeInverse;
         float innerAngle;
         float innerAngleCos;
         float outerAngle;

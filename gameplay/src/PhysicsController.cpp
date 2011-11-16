@@ -270,7 +270,7 @@ void PhysicsController::addRigidBody(PhysicsRigidBody* body)
 btCollisionShape* PhysicsController::getBox(const Vector3& min, const Vector3& max, const btVector3& scale)
 {
     btVector3 halfExtents(scale.x() * 0.5 * abs(max.x - min.x), scale.y() * 0.5 * abs(max.y - min.y), scale.z() * 0.5 * abs(max.z - min.z));
-    btBoxShape* box = new btBoxShape(halfExtents);
+    BULLET_NEW(btBoxShape, box, halfExtents);
     _shapes.push_back(box);
 
     return box;
@@ -286,7 +286,7 @@ btCollisionShape* PhysicsController::getSphere(float radius, const btVector3& sc
     if (uniformScale < scale.z())
         uniformScale = scale.z();
 
-    btSphereShape* sphere = new btSphereShape(uniformScale * radius);
+    BULLET_NEW(btSphereShape, sphere, uniformScale * radius);
     _shapes.push_back(sphere);
 
     return sphere;

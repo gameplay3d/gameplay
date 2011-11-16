@@ -2,10 +2,9 @@
  * Properties.cpp
  */
 
+#include "Base.h"
 #include "Properties.h"
 #include "FileSystem.h"
-#include <xtree>
-#include <sstream>
 
 namespace gameplay
 {
@@ -363,7 +362,7 @@ Properties::Type Properties::getType(const char* name) const
 
     // Parse the value to determine the format
     unsigned int commaCount = 0;
-    unsigned int length = strlen(value);
+    //unsigned int length = strlen(value);
     char* valuePtr = const_cast<char*>(value);
     while (valuePtr = strchr(valuePtr, ','))
     {
