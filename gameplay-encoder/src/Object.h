@@ -1,11 +1,6 @@
 #ifndef OBJ_H_
 #define OBJ_H_
 
-#include <iostream>
-#include <string>
-#include <list>
-#include <vector>
-
 #include "Base.h"
 #include "FileIO.h"
 
@@ -118,7 +113,7 @@ public:
         // First write the size of the list
         write(list.size(), file);
         // Then write each element
-        std::list<T>::const_iterator i;
+        typename std::list<T>::const_iterator i;
         for (i = list.begin(); i != list.end(); i++)
         {
             (*i)->writeBinary(file);
@@ -134,7 +129,7 @@ public:
         // First write the size of the vector
         write(vector.size(), file);
         // Then write each element
-        std::vector<T>::const_iterator i;
+        typename std::vector<T>::const_iterator i;
         for (i = vector.begin(); i != vector.end(); i++)
         {
             (*i)->writeBinary(file);

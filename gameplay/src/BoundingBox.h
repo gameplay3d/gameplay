@@ -178,8 +178,27 @@ public:
      * @param matrix The transformation matrix to transform by.
      */
     void transform(const Matrix& matrix);
+
+    /**
+     * Transforms this bounding box by the given matrix.
+     * 
+     * @param matrix The matrix to transform by.
+     * @return This bounding box, after the transformation occurs.
+     */
+    inline BoundingBox& operator*=(const Matrix& matrix);
 };
 
+/**
+ * Transforms the given bounding box by the given matrix.
+ * 
+ * @param matrix The matrix to transform by.
+ * @param box The bounding box to transform.
+ * @return The resulting transformed bounding box.
+ */
+inline BoundingBox operator*(const Matrix& matrix, const BoundingBox& box);
+
 }
+
+#include "BoundingBox.inl"
 
 #endif
