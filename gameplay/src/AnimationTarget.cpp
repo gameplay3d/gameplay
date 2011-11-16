@@ -13,7 +13,7 @@ namespace gameplay
 {
 
 AnimationTarget::AnimationTarget()
-    : _targetType(SCALAR), _animations(NULL)
+    : _targetType(SCALAR), _activeAnimationCount(0), _animations(NULL)
 {
 }
 
@@ -76,6 +76,21 @@ Animation* AnimationTarget::getAnimation(const char* id) const
     }
     
     return NULL;
+}
+
+void AnimationTarget::increaseActiveAnimationCount()
+{
+    _activeAnimationCount++;
+}
+
+void AnimationTarget::decreaseActiveAnimationCount()
+{
+    _activeAnimationCount--;
+}
+
+unsigned int AnimationTarget::getActiveAnimationCount() const
+{
+    return _activeAnimationCount;
 }
 
 }

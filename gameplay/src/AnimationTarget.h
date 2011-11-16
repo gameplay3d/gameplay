@@ -21,6 +21,7 @@ class AnimationValue;
 class AnimationTarget : public Ref
 {
     friend class Animation;
+    friend class AnimationClip;
     friend class AnimationController;
 
 public:
@@ -104,6 +105,13 @@ private:
      */
     AnimationTarget(const AnimationTarget& copy);
 
+    void increaseActiveAnimationCount();
+
+    void decreaseActiveAnimationCount();
+
+    unsigned int getActiveAnimationCount() const;
+
+    unsigned int _activeAnimationCount;
     std::vector<Animation*>* _animations;
 
 };

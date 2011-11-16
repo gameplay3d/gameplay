@@ -113,10 +113,10 @@ void AnimationController::stopAllAnimations()
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = *clipIter;
-        clipIter = _runningClips.erase(clipIter);
         clip->_isPlaying = false;
+        clip->onEnd();
+        clipIter = _runningClips.erase(clipIter);
         SAFE_RELEASE(clip);
-        clipIter++;
     }
 
     _state = IDLE;
@@ -161,6 +161,7 @@ void AnimationController::schedule(AnimationClip* clip)
     {
         _runningClips.remove(clip);
         clip->_isPlaying = false;
+        clip->onEnd();
     }
     else
     {

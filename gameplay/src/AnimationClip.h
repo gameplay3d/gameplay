@@ -158,6 +158,8 @@ public:
      */
     void stop();
 
+    void crossFade(AnimationClip* clip, unsigned long duration);
+
     /**
      * Adds a animation begin listener.
      *
@@ -213,15 +215,24 @@ private:
     Animation* _animation;                    // Animations that this clip plays in parallel.
     unsigned long _startTime;                 // Start time of the clip.
     unsigned long _endTime;                   // End time of the clip.
+    unsigned long _duration;                  // The total duration.
+    float _repeatCount;                       // The clip's repeat count.
+    unsigned long _activeDuration;            // The active duration of the clip.
+    float _speed;                             // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.
+    bool _isPlaying;                          // A flag to indicate whether the clip is playing.
+    unsigned long _timeStarted;               // The game time when this clip was actually started.
     unsigned long _elapsedTime;               // Time elapsed while the clip is running.
     long _runningTime;                        // Keeps track of the Animation's relative time in respect to the active duration.
-    unsigned int _channelCount;               // The number of channels in the clip.
+    unsigned int* _channelPriority;
+    AnimationClip* _crossFadeClip;
+    AnimationClip* _crossFadeFrom;
+    unsigned long _crossFadeStart;
+    unsigned long _crossFadeInDuration;
+    unsigned long _crossFadeOutDuration;
+    float _blendWeight;
+    bool _isFadingOut;
+    bool _isFadingIn;
     std::vector<AnimationValue*> _values;     // AnimationValue holder.
-    float _repeatCount;                       // The clip's repeat count.
-    float _speed;                             // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.
-    unsigned long _duration;                  // The total duration.
-    unsigned long _activeDuration;            // The active duration of the clip.
-    bool _isPlaying;                          // A flag to indicate whether the clip is playing.
     std::vector<Listener*>* _beginListeners;
     std::vector<Listener*>* _endListeners;
 };
