@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugMem|Win32">
+      <Configuration>DebugMem</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
@@ -24,11 +28,14 @@
     <ClCompile Include="src\BoundingSphere.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Curve.cpp" />
+    <ClCompile Include="src\DebugNew.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\gameplay-main-qnx.cpp" />
+    <ClCompile Include="src\gameplay-main-win32.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Light.cpp" />
@@ -79,14 +86,12 @@
     <ClInclude Include="src\BoundingSphere.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Curve.h" />
+    <ClInclude Include="src\DebugNew.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FileSystem.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\gameplay-main-qnx.h" />
-    <ClInclude Include="src\gameplay-main-win32.h" />
-    <ClInclude Include="src\gameplay-main.h" />
     <ClInclude Include="src\gameplay.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Joint.h" />
@@ -143,6 +148,16 @@
     <None Include="res\shaders\solid.vsh" />
     <None Include="res\shaders\textured.fsh" />
     <None Include="res\shaders\textured.vsh" />
+    <None Include="src\gameplay-main-macosx.mm" />
+    <None Include="src\BoundingBox.inl" />
+    <None Include="src\BoundingSphere.inl" />
+    <None Include="src\Matrix.inl" />
+    <None Include="src\Plane.inl" />
+    <None Include="src\Quaternion.inl" />
+    <None Include="src\Ray.inl" />
+    <None Include="src\Vector2.inl" />
+    <None Include="src\Vector3.inl" />
+    <None Include="src\Vector4.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1032BA4B-57EB-4348-9E03-29DD63E80E4A}</ProjectGuid>
@@ -151,6 +166,11 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
@@ -167,6 +187,9 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -174,7 +197,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(Configuration)\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
     <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -191,11 +220,32 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <Verbose>
+      </Verbose>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

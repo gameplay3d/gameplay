@@ -70,19 +70,8 @@ Node* Light::getNode() const
 
 void Light::setNode(Node* node)
 {
-    if (_node != node)
-    {
-        // Disconnect our current node.
-        SAFE_RELEASE(_node);
-
-        // Connect the new node.
-        _node = node;
-
-        if (_node)
-        {
-            _node->addRef();
-        }
-    }
+    // Connect the new node.
+    _node = node;
 }
 
 const Vector3& Light::getColor() const
@@ -142,10 +131,28 @@ void Light::setRange(float range)
     {
     case POINT:
         _point->range = range;
+        _point->rangeInverse = 1.0f / range;
         break;
     case SPOT:
         _spot->range = range;
+        _spot->rangeInverse = 1.0f / range;
         break;
+    }
+}
+
+float Light::getRangeInverse() const
+{
+    assert(_type != DIRECTIONAL);
+
+    switch (_type)
+    {
+    case POINT:
+        return _point->rangeInverse;
+    case SPOT:
+        return _spot->rangeInverse;
+    default:
+        assert(0);
+        return 0.0f;
     }
 }
     
@@ -201,11 +208,13 @@ Light::Directional::Directional(const Vector3& color)
 Light::Point::Point(const Vector3& color, float range)
     : color(color), range(range)
 {
+    rangeInverse = 1.0f / range;
 }
 
 Light::Spot::Spot(const Vector3& color, float range, float innerAngle, float outerAngle)
     : color(color), range(range), innerAngle(innerAngle), outerAngle(outerAngle)
 {
+    rangeInverse = 1.0f / range;
     innerAngleCos = cos(innerAngle);
     outerAngleCos = cos(outerAngle);
 }

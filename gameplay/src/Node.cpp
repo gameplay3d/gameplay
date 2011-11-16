@@ -80,11 +80,22 @@ void Node::addChild(Node* child)
 {
     assert(child);
 
-    // If the item belongs to another hierarchy, remove it first.
-    Node* parent = child->_parent;
-    if (parent)
+    if (child->_parent == this)
     {
-        parent->removeChild(child);
+        // This node is already present in our hierarchy
+        return;
+    }
+
+    child->addRef();
+
+    // If the item belongs to another hierarchy, remove it first.
+    if (child->_parent)
+    {
+        child->_parent->removeChild(child);
+    }
+    else if (child->_scene)
+    {
+        child->_scene->removeNode(child);
     }
 
     // Order is irrelevant, so add to the beginning of the list.
@@ -103,9 +114,10 @@ void Node::addChild(Node* child)
 
     ++_childCount;
 
-    // Fire events.
-    child->parentChanged(parent);
-    childAdded(child);
+    if (_notifyHierarchyChanged)
+    {
+        hierarchyChanged();
+    }
 }
 
 void Node::removeChild(Node* child)
@@ -118,6 +130,8 @@ void Node::removeChild(Node* child)
 
     // Call remove on the child.
     child->remove();
+
+    SAFE_RELEASE(child);
 }
 
 void Node::removeAllChildren()
@@ -133,7 +147,7 @@ void Node::removeAllChildren()
     hierarchyChanged();
 }
 
-void Node   ::remove()
+void Node::remove()
 {
     // Re-link our neighbours.
     if (_prevSibling)
@@ -161,11 +175,9 @@ void Node   ::remove()
     _prevSibling = NULL;
     _parent = NULL;
 
-    // Fire events.
-    if (parent)
+    if (parent && parent->_notifyHierarchyChanged)
     {
-        parentChanged(parent);
-        parent->childRemoved(this);
+        parent->hierarchyChanged();
     }
 }
 
@@ -786,30 +798,6 @@ void Node::setParticleEmitter(ParticleEmitter* emitter)
             _particleEmitter->setNode(this);
         }
     }
-}
-
-void Node::childAdded(Node* child)
-{
-    child->addRef();
-
-    if (_notifyHierarchyChanged)
-    {
-        hierarchyChanged();
-    }
-}
-
-void Node::childRemoved(Node* child)
-{
-    SAFE_RELEASE(child);
-
-    if (_notifyHierarchyChanged)
-    {
-        hierarchyChanged();
-    }
-}
-
-void Node::parentChanged(Node* oldParent)
-{
 }
 
 }

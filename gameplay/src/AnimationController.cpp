@@ -57,7 +57,6 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
 
 Animation* AnimationController::createAnimationFromTo(const char* id, AnimationTarget* target, int propertyId, float* from, float* to, Curve::InterpolationType type, unsigned long duration)
 {
-    const unsigned int keyCount = 2;
     const unsigned int propertyComponentCount = target->getAnimationPropertyComponentCount(propertyId);
     float* keyValues = new float[2 * propertyComponentCount];
 
@@ -118,6 +117,7 @@ void AnimationController::stopAllAnimations()
         clipIter = _runningClips.erase(clipIter);
         SAFE_RELEASE(clip);
     }
+    _runningClips.clear();
 
     _state = IDLE;
 }
@@ -230,6 +230,8 @@ void AnimationController::destroyAnimation(Animation* animation)
 
 void AnimationController::destroyAllAnimations()
 {
+    stopAllAnimations();
+
     std::vector<Animation*>::iterator itr = _animations.begin();
     
     while (itr != _animations.end())
