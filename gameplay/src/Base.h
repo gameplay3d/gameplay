@@ -5,6 +5,8 @@
 #define BASE_H_
 
 // C/C++
+#include <new>
+#include <cstdio>
 #include <cassert>
 #include <memory>
 #include <iostream>
@@ -17,12 +19,11 @@
 #include <list>
 #include <stack>
 #include <map>
-#include <hash_map>
 #include <algorithm>
 #include <ctime>
-#include <cstdio>
 #include <limits>
 #include <functional>
+#include <assert.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdint.h>
@@ -61,6 +62,37 @@ extern void printError(const char* format, ...);
 #endif
 #define WARN(x) printError(x)
 #define WARN_VARG(x, ...) printError(x, __VA_ARGS__)
+
+// Bullet Physics
+#include <btBulletDynamicsCommon.h>
+
+// Since Bullet overrides new, we have to allocate objects manually using its
+// aligned allocation function when we turn on memory leak detection in GamePlay.
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#define BULLET_NEW(type, name, ...) \
+    type* name = (type*)btAlignedAlloc(sizeof(type), 16); \
+    type __##name##_tmp (__VA_ARGS__); \
+    memcpy(name, &__##name##_tmp, sizeof(type))
+
+#define BULLET_DELETE(name) \
+    if (name) \
+    { \
+        btAlignedFree(name); \
+        name = NULL; \
+    }
+
+#else
+#define BULLET_NEW(type, name, ...) \
+    type* name = new type(__VA_ARGS__)
+
+#define BULLET_DELETE(name) SAFE_DELETE(name)
+#endif
+
+
+// Debug new for memory leak detection
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#include "DebugNew.h"
+#endif
 
 // Object deletion macro
 #define SAFE_DELETE(x) \
@@ -105,26 +137,28 @@ extern void printError(const char* format, ...);
 #define M_1_PI                      0.31830988618379067154
 #endif
 
-// Audio (OpenAL/alut)
+// Audio (OpenAL)
 #ifdef __QNX__
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <AL/alut.h>
 #elif WIN32
 #include <al.h>
 #include <alc.h>
-#include <alut.h>
+#elif __APPLE__
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
 #endif
 
-// Bullet Physics
-#include <btBulletDynamicsCommon.h>
-
-// Graphics (OpenGLES/OpenGL/png)
-#define WINDOW_VSYNC        1
-#define WINDOW_FULLSCREEN   0
+// Screen/Window
 #define WINDOW_WIDTH        1024
 #define WINDOW_HEIGHT       600
+#define WINDOW_VSYNC        1
+#define WINDOW_FULLSCREEN   0
 
+// Image
+#include <png.h>
+
+// Graphics (OpenGL)
 #ifdef __QNX__
     #include <EGL/egl.h>
     #include <GLES2/gl2.h>
@@ -134,14 +168,21 @@ extern void printError(const char* format, ...);
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
     #define glClearDepth glClearDepthf
+   #define OPENGL_ES
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
     #include <GL/wglew.h>
+#elif __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#define glBindVertexArray glBindVertexArrayAPPLE
+#define glDeleteVertexArrays glDeleteVertexArraysAPPLE
+#define glGenVertexArrays glGenVertexArraysAPPLE
+#define glIsVertexArray glIsVertexArrayAPPLE
 #endif
-#include <png.h>
 
-// Attributes
+// Graphics (GLSL)
 #define VERTEX_ATTRIBUTE_POSITION_NAME              "a_position"
 #define VERTEX_ATTRIBUTE_NORMAL_NAME                "a_normal"
 #define VERTEX_ATTRIBUTE_COLOR_NAME                 "a_color"
@@ -214,8 +255,7 @@ extern GLenum __gl_error_code;
 #define GL_LAST_ERROR() __gl_error_code
 
 
-// Missing platform functionality and warnings.
-#ifdef WIN32
+#if defined(WIN32) || defined(__APPLE__)
 
     inline float fminf(float a, float b)
     {
@@ -242,4 +282,4 @@ extern GLenum __gl_error_code;
     #pragma warning( disable : 4996 )
 #endif
 
-#endif 
+#endif

@@ -12,7 +12,8 @@ namespace gameplay
 {
 
 AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long startTime, unsigned long endTime)
-    : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _elapsedTime(0), _runningTime(0), _channelCount(animation->_channels.size()), _repeatCount(1.0f), _speed(1.0f), _isPlaying(false), _beginListeners(NULL), _endListeners(NULL)
+    : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _elapsedTime(0), _runningTime(0), 
+       _channelCount(animation->_channels.size()), _repeatCount(1.0f), _speed(1.0f), _isPlaying(false), _beginListeners(NULL), _endListeners(NULL)
 {
     assert(0 <= startTime && startTime <= animation->_duration && 0 <= endTime && endTime <= animation->_duration);
 
@@ -27,37 +28,21 @@ AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long
 
 AnimationClip::~AnimationClip()
 {
+    // Explicitly stop this clip if it's currently playing so it gets removed from the controller
+    if (_isPlaying)
+    {
+        stop();
+    }
+
     std::vector<AnimationValue*>::iterator valueIter = _values.begin();
     while (valueIter != _values.end())
     {
         SAFE_DELETE(*valueIter);
         valueIter++;
     }
-    _values.clear();
 
-    if (_beginListeners)
-    {
-        std::vector<Listener*>::iterator bIter = _beginListeners->begin();
-        while (bIter != _beginListeners->end())
-        {
-            SAFE_DELETE(*bIter);
-            bIter++;
-        }
-        _beginListeners->clear();
-        SAFE_DELETE(_beginListeners);
-    }
-
-    if (_endListeners)
-    {
-        std::vector<Listener*>::iterator eIter = _endListeners->begin();
-        while (eIter != _endListeners->end())
-        {
-            SAFE_DELETE(*eIter);
-            eIter++;
-        }
-        _endListeners->clear();
-        SAFE_DELETE(_endListeners);
-    }
+    SAFE_DELETE(_beginListeners);
+    SAFE_DELETE(_endListeners);
 }
 
 const char* AnimationClip::getID() const

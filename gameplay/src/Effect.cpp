@@ -6,6 +6,8 @@
 #include "Effect.h"
 #include "FileSystem.h"
 
+#define OPENGL_ES_DEFINE  "#define OPENGL_ES"
+
 namespace gameplay
 {
 
@@ -110,7 +112,13 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
     GLint success;
 
     // Compile vertex shader.
-    shaderSource[0] = defines == NULL ? "" : defines;
+    std::string definesStr = (defines == NULL) ? "" : defines;
+#ifdef OPENGL_ES
+    if (defines && strlen(defines) != 0)
+        definesStr += "\n";
+    definesStr+= OPENGL_ES_DEFINE;
+#endif
+    shaderSource[0] = definesStr.c_str();
     shaderSource[1] = "\n";
     shaderSource[2] = vshSource;
     GL_ASSERT( vertexShader = glCreateShader(GL_VERTEX_SHADER) );
@@ -135,8 +143,14 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
         return NULL;
     }
 
-    // Compile fragment shader.
-    shaderSource[0] = defines == NULL ? "" : defines;
+    // Compile the fragment shader.
+    definesStr = (defines == NULL) ? "" : defines;
+#ifdef OPENGL_ES
+    if (defines && strlen(defines) != 0)
+        definesStr += "\n";
+    definesStr+= OPENGL_ES_DEFINE;
+#endif
+    shaderSource[0] = definesStr.c_str();
     shaderSource[1] = "\n";
     shaderSource[2] = fshSource;
     GL_ASSERT( fragmentShader = glCreateShader(GL_FRAGMENT_SHADER) );

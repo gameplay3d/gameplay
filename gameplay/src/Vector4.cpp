@@ -54,38 +54,38 @@ Vector4::~Vector4()
 
 const Vector4& Vector4::zero()
 {
-    static Vector4* value = new Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector4 value(0.0f, 0.0f, 0.0f, 0.0f);
+    return value;
 }
 
 const Vector4& Vector4::one()
 {
-    static Vector4* value = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-    return *value;
+    static Vector4 value(1.0f, 1.0f, 1.0f, 1.0f);
+    return value;
 }
 
 const Vector4& Vector4::unitX()
 {
-    static Vector4* value = new Vector4(1.0f, 0.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector4 value(1.0f, 0.0f, 0.0f, 0.0f);
+    return value;
 }
 
 const Vector4& Vector4::unitY()
 {
-    static Vector4* value = new Vector4(0.0f, 1.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector4 value(0.0f, 1.0f, 0.0f, 0.0f);
+    return value;
 }
 
 const Vector4& Vector4::unitZ()
 {
-    static Vector4* value = new Vector4(0.0f, 0.0f, 1.0f, 0.0f);
-    return *value;
+    static Vector4 value(0.0f, 0.0f, 1.0f, 0.0f);
+    return value;
 }
 
 const Vector4& Vector4::unitW()
 {
-    static Vector4* value = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
-    return *value;
+    static Vector4 value(0.0f, 0.0f, 0.0f, 1.0f);
+    return value;
 }
 
 bool Vector4::isZero() const

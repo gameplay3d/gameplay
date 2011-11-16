@@ -316,6 +316,7 @@ void SandboxGame::initialize()
 void SandboxGame::finalize()
 {
     SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_font);
 }
 
 void SandboxGame::update(long elapsedTime)

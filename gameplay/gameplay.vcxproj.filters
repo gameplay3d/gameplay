@@ -168,6 +168,15 @@
     <ClCompile Include="src\RenderState.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\gameplay-main-qnx.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameplay-main-win32.cpp">
+		<Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DebugNew.cpp">
+		<Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\PhysicsController.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -243,15 +252,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\gameplay.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gameplay-main.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gameplay-main-qnx.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gameplay-main-win32.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Input.h">
@@ -365,6 +365,9 @@
     <ClInclude Include="src\RenderState.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\DebugNew.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\PhysicsController.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -456,16 +459,46 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\gameplay-main-macosx.mm">
+      <Filter>src</Filter>
+    </None>
     <None Include="src\PhysicsFixedConstraint.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\BoundingBox.inl">
       <Filter>src</Filter>
     </None>
     <None Include="src\PhysicsGenericConstraint.inl">
       <Filter>src</Filter>
     </None>
+    <None Include="src\BoundingSphere.inl">
+      <Filter>src</Filter>
+    </None>
     <None Include="src\PhysicsSpringConstraint.inl">
       <Filter>src</Filter>
     </None>
+    <None Include="src\Matrix.inl">
+      <Filter>src</Filter>
+    </None>
     <None Include="src\PhysicsRigidBody.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Plane.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Quaternion.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Ray.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Vector2.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Vector3.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Vector4.inl">
       <Filter>src</Filter>
     </None>
     <None Include="src\PhysicsConstraint.inl">

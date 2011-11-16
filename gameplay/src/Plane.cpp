@@ -245,7 +245,7 @@ void Plane::set(const Plane& plane)
     _distance = plane._distance;
 }
 
-void Plane::transform(Matrix& matrix)
+void Plane::transform(const Matrix& matrix)
 {
     Matrix inverted;
     if (matrix.invert(&inverted))

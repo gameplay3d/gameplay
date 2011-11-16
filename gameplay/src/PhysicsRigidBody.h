@@ -7,7 +7,6 @@
 
 #include "Mesh.h"
 #include "PhysicsConstraint.h"
-#include "Ref.h"
 #include "Transform.h"
 #include "Vector3.h"
 
@@ -20,7 +19,7 @@ class PhysicsConstraint;
 /**
  * Defines a class for physics rigid bodies.
  */
-class PhysicsRigidBody : public Ref
+class PhysicsRigidBody
 {
     friend class Node;
     friend class PhysicsConstraint;
