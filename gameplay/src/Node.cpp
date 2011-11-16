@@ -15,8 +15,8 @@ namespace gameplay
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
-    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _dirtyBits(NODE_DIRTY_ALL),
-    _notifyHierarchyChanged(true), _boundsType(NONE)
+    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL), 
+    _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _boundsType(NONE)
 {
     if (id)
     {
@@ -51,6 +51,7 @@ Node::~Node()
     SAFE_RELEASE(_model);
     SAFE_RELEASE(_audioSource);
     SAFE_RELEASE(_particleEmitter);
+    SAFE_DELETE(_physicsRigidBody);
 }
 
 Node* Node::create(const char* id)
@@ -300,7 +301,7 @@ const Matrix& Node::getWorldMatrix() const
         // If we have a parent, multiply our parent world transform by our local
         // transform to obtain our final resolved world transform.
         Node* parent = getParent();
-        if (parent)
+        if (parent && !_physicsRigidBody)
         {
             Matrix::multiply(parent->getWorldMatrix(), getMatrix(), &_world);
         }
@@ -798,6 +799,20 @@ void Node::setParticleEmitter(ParticleEmitter* emitter)
             _particleEmitter->setNode(this);
         }
     }
+}
+
+PhysicsRigidBody* Node::getPhysicsRigidBody() const
+{
+    return _physicsRigidBody;
+}
+
+void Node::setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float friction,
+        float restitution, float linearDamping, float angularDamping)
+{
+    SAFE_DELETE(_physicsRigidBody);
+    
+    if (type != PhysicsRigidBody::SHAPE_NONE)
+        _physicsRigidBody = new PhysicsRigidBody(this, type, mass, friction, restitution, linearDamping, angularDamping);
 }
 
 }

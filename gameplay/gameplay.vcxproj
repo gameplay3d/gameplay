@@ -50,6 +50,15 @@
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\Package.cpp" />
     <ClCompile Include="src\ParticleEmitter.cpp" />
+    <ClCompile Include="src\PhysicsConstraint.cpp" />
+    <ClCompile Include="src\PhysicsController.cpp" />
+    <ClCompile Include="src\PhysicsFixedConstraint.cpp" />
+    <ClCompile Include="src\PhysicsGenericConstraint.cpp" />
+    <ClCompile Include="src\PhysicsHingeConstraint.cpp" />
+    <ClCompile Include="src\PhysicsMotionState.cpp" />
+    <ClCompile Include="src\PhysicsRigidBody.cpp" />
+    <ClCompile Include="src\PhysicsSocketConstraint.cpp" />
+    <ClCompile Include="src\PhysicsSpringConstraint.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\PlatformQNX.cpp" />
     <ClCompile Include="src\PlatformWin32.cpp" />
@@ -107,6 +116,15 @@
     <ClInclude Include="src\Node.h" />
     <ClInclude Include="src\Package.h" />
     <ClInclude Include="src\ParticleEmitter.h" />
+    <ClInclude Include="src\PhysicsConstraint.h" />
+    <ClInclude Include="src\PhysicsController.h" />
+    <ClInclude Include="src\PhysicsFixedConstraint.h" />
+    <ClInclude Include="src\PhysicsGenericConstraint.h" />
+    <ClInclude Include="src\PhysicsHingeConstraint.h" />
+    <ClInclude Include="src\PhysicsMotionState.h" />
+    <ClInclude Include="src\PhysicsRigidBody.h" />
+    <ClInclude Include="src\PhysicsSocketConstraint.h" />
+    <ClInclude Include="src\PhysicsSpringConstraint.h" />
     <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Platform.h" />
     <ClInclude Include="src\Properties.h" />
@@ -158,6 +176,13 @@
     <None Include="src\Vector2.inl" />
     <None Include="src\Vector3.inl" />
     <None Include="src\Vector4.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\PhysicsConstraint.inl" />
+    <None Include="src\PhysicsFixedConstraint.inl" />
+    <None Include="src\PhysicsGenericConstraint.inl" />
+    <None Include="src\PhysicsRigidBody.inl" />
+    <None Include="src\PhysicsSpringConstraint.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1032BA4B-57EB-4348-9E03-29DD63E80E4A}</ProjectGuid>
@@ -219,7 +244,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>
     </ClCompile>
@@ -235,7 +260,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
@@ -256,7 +281,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -527,6 +527,10 @@ int Platform::enterMessagePump()
             _game->frame();
             SwapBuffers(__hdc);
         }
+
+        // If we are done, then exit.
+        if (_game->getState() == Game::UNINITIALIZED)
+            break;
     }
 
     return msg.wParam;
