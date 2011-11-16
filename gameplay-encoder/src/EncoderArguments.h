@@ -1,12 +1,6 @@
 #ifndef ENCODERARGUMENTS_H_
 #define ENCODERARGUMENTS_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
-#include <string>
-#include <sys/stat.h>
-#include <vector>
 
 #include "Base.h"
 
@@ -48,12 +42,12 @@ public:
     /**
      * Returns the char pointer to the file path string.
      */
-    const char* EncoderArguments::getFilePathPointer() const;
+    const char* getFilePathPointer() const;
 
     /**
      * Returns the path to where the DAE output should be written to.
      */
-    const std::string& EncoderArguments::getDAEOutputPath() const;
+    const std::string& getDAEOutputPath() const;
 
     const std::vector<std::string>& getGroupAnimationNodeId() const;
     const std::vector<std::string>& getGroupAnimationAnimationId() const;

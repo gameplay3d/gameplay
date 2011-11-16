@@ -31,41 +31,21 @@ AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long
 
 AnimationClip::~AnimationClip()
 {
+    // Explicitly stop this clip if it's currently playing so it gets removed from the controller
+    if (_isPlaying)
+    {
+        stop();
+    }
+
     std::vector<AnimationValue*>::iterator valueIter = _values.begin();
     while (valueIter != _values.end())
     {
         SAFE_DELETE(*valueIter);
         valueIter++;
     }
-    _values.clear();
 
-    if (_beginListeners)
-    {
-        std::vector<Listener*>::iterator bIter = _beginListeners->begin();
-        while (bIter != _beginListeners->end())
-        {
-            SAFE_DELETE(*bIter);
-            bIter++;
-        }
-        _beginListeners->clear();
-        SAFE_DELETE(_beginListeners);
-    }
-
-    if (_endListeners)
-    {
-        std::vector<Listener*>::iterator eIter = _endListeners->begin();
-        while (eIter != _endListeners->end())
-        {
-            SAFE_DELETE(*eIter);
-            eIter++;
-        }
-        _endListeners->clear();
-        SAFE_DELETE(_endListeners);
-    }
-
-    SAFE_DELETE_ARRAY(_channelPriority);
-
-    SAFE_RELEASE(_crossFadeClip);
+    SAFE_DELETE(_beginListeners);
+    SAFE_DELETE(_endListeners);
 }
 
 const char* AnimationClip::getID() const

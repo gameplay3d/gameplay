@@ -197,7 +197,16 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     GLuint textureId;
     GL_ASSERT( glGenTextures(1, &textureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
-    GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
+
+    if (format == DEPTH)
+    {
+        // <type> must be UNSIGNED_SHORT or UNSIGNED_INT for a format of DEPTH_COMPONENT.
+        GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_INT, data) );
+    }
+    else
+    {
+        GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
+    }
 
     // Set initial minification filter based on whether or not mipmaping was enabled
     GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, generateMipmaps ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR) );

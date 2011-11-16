@@ -1,5 +1,5 @@
 #ifndef GAMEPLAYMAINWIN32_H_
-#define GAMEPLAYMAINMWIN32_H_
+#define GAMEPLAYMAINWIN32_H_
 
 #ifdef WIN32
 
@@ -22,7 +22,9 @@ extern "C" int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LP
     Game* game = Game::getInstance();
     assert(game != NULL);
     Platform* platform = Platform::create(game);
-    return platform->enterMessagePump();
+    int result = platform->enterMessagePump();
+    delete platform;
+    return result;
 }
 
 

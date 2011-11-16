@@ -1,6 +1,8 @@
-precision mediump float;
+#ifdef OPENGL_ES
+precision highp float;
+#endif
 
-// Diffuse color
+// Uniforms
 uniform vec4 u_diffuseColor;        // Diffuse color
 
 void main()
