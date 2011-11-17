@@ -63,6 +63,32 @@ extern void printError(const char* format, ...);
 #define WARN(x) printError(x)
 #define WARN_VARG(x, ...) printError(x, __VA_ARGS__)
 
+// Bullet Physics
+#include <btBulletDynamicsCommon.h>
+
+// Since Bullet overrides new, we have to allocate objects manually using its
+// aligned allocation function when we turn on memory leak detection in GamePlay.
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#define BULLET_NEW(type, name, ...) \
+    type* name = (type*)btAlignedAlloc(sizeof(type), 16); \
+    type __##name##_tmp (__VA_ARGS__); \
+    memcpy(name, &__##name##_tmp, sizeof(type))
+
+#define BULLET_DELETE(name) \
+    if (name) \
+    { \
+        btAlignedFree(name); \
+        name = NULL; \
+    }
+
+#else
+#define BULLET_NEW(type, name, ...) \
+    type* name = new type(__VA_ARGS__)
+
+#define BULLET_DELETE(name) SAFE_DELETE(name)
+#endif
+
+
 // Debug new for memory leak detection
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
 #include "DebugNew.h"
