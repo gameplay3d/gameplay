@@ -51,25 +51,25 @@ void SandboxGame::keyPress(int key, int keyEvent)
     {
         switch (key)
         {
-            case Input::KEY_LEFT:
+            case Input::KEY_LEFT_ARROW:
                 force.set(-FORCE_VALUE, 0.0f, 0.0f);
                 torque.set(0.0f, -TORQUE_VALUE, 0.0f);
                 _volleyball->getPhysicsRigidBody()->applyForce(force);
                 _volleyball->getPhysicsRigidBody()->applyTorque(torque);
                 break;
-            case Input::KEY_RIGHT:
+            case Input::KEY_RIGHT_ARROW:
                 force.set(FORCE_VALUE, 0.0f, 0.0f);
                 torque.set(0.0f, TORQUE_VALUE, 0.0f);
                 _volleyball->getPhysicsRigidBody()->applyForce(force);
                 _volleyball->getPhysicsRigidBody()->applyTorque(torque);
                 break;
-            case Input::KEY_UP:
+            case Input::KEY_UP_ARROW:
                 force.set(0.0f, FORCE_VALUE, 0.0f);
                 torque.set(-TORQUE_VALUE, 0.0f, 0.0f);
                 _volleyball->getPhysicsRigidBody()->applyForce(force);
                 _volleyball->getPhysicsRigidBody()->applyTorque(torque);
                 break;
-            case Input::KEY_DOWN:
+            case Input::KEY_DOWN_ARROW:
                 force.set(0.0f, -FORCE_VALUE, 0.0f);
                 torque.set(TORQUE_VALUE, 0.0f, 0.0f);
                 _volleyball->getPhysicsRigidBody()->applyForce(force);
