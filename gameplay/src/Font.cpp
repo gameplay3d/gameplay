@@ -564,18 +564,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             unsigned int tokenLength = strcspn(token, "\n");
 
             if (tokenLength > 0)
-            {
-                // Move x position to that of the next line.
-                /*
-                if (xPositionsIt != xPositions.end())
-                {
-                    xPos = *xPositionsIt++;
-                }
-                else
-                {
-                    xPos = area.x;
-                }*/
-                
+            {                
                 // Get first token of next line.
                 token += tokenLength;
             }
@@ -591,65 +580,56 @@ void Font::end()
 void Font::measureText(const char* text, unsigned int* width, unsigned int* height)
 {
     const int length = strlen(text);
-    int index = 0;
-    char* token;
-    char* textCopy = new char[length+1];
-    strncpy(textCopy, text, length);
-    textCopy[length] = 0;
-
-    // Measure each line.
-    // if (lineWidth > maxWidth) maxWidth = lineWidth;
-    // height += lineHeight
+    char* token = const_cast<char*>(text);
 
     *width = 0;
     *height = 0;
 
-    token = strtok(textCopy, "\n");
-    while (token != NULL)
+    // Measure a line at a time.
+    while (token[0] != 0)
     {
-        while (text[index] == '\n')
+        while (token[0] == '\n')
         {
             *height += _size;
-            ++index;
+            ++token;
         }
 
-        int tokenLength = strlen(token);
+        unsigned int tokenLength = strcspn(token, "\n");
         unsigned int tokenWidth = getTokenWidth(token, tokenLength);
         if (tokenWidth > *width)
         {
             *width = tokenWidth;
         }
 
-        *height += _size;
-        token = strtok(NULL, "\n");
-        index += tokenLength + 1;
+        token += tokenLength;
     }
 }
 
 void Font::measureText(const char* text, const Rectangle& viewport, Justify justify, bool wrap, bool clipped, Rectangle* out)
 {
     Justify vAlign = static_cast<Justify>(justify & 0xF0);
+    if (vAlign == 0)
+    {
+        vAlign = ALIGN_TOP;
+    }
+
     Justify hAlign = static_cast<Justify>(justify & 0x0F);
+    if (hAlign == 0)
+    {
+        hAlign = ALIGN_LEFT;
+    }
 
     int fontSize = (int)_size;
-
-    const int length = strlen(text);
-    int index = 0;
     char* token = const_cast<char*>(text);
-
-    unsigned int lineWidth = 0;
-    unsigned int delimWidth = 0;
-    int emptyLinesCount = 0;
     std::vector<bool> emptyLines;
     std::vector<Vector2> lines;
 
-    int x = INT_MAX;
-    int y = viewport.y;
-    unsigned int width = 0;
+    unsigned int lineWidth = 0;
     int yPos = viewport.y;
 
     if (wrap)
     {
+        unsigned int delimWidth = 0;
         bool reachedEOF = false;
         while (token[0] != 0)
         {
@@ -659,7 +639,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
                     delimiter == '\t' ||
                     delimiter == '\r' ||
                     delimiter == '\n' ||
-                    delimiter == '-' ||
+                    //delimiter == '-' ||
                     delimiter == 0)
             {
                 switch (delimiter)
@@ -669,35 +649,30 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
                         break;
                     case '\r':
                     case '\n':
+                        // Add line-height to vertical cursor.
                         yPos += fontSize;
 
                         if (lineWidth > 0)
                         {
-                            emptyLines.push_back(false);
-
+                            // Determine horizontal position and width.
                             int hWhitespace = viewport.width - lineWidth;
                             int xPos = viewport.x;
                             if (hAlign == ALIGN_HCENTER)
                             {
-                                xPos = viewport.x + hWhitespace / 2;
+                                xPos += hWhitespace / 2;
                             }
                             else if (hAlign == ALIGN_RIGHT)
                             {
-                                xPos = viewport.x + hWhitespace;
+                                xPos += hWhitespace;
                             }
 
+                            // Record this line's size.
+                            emptyLines.push_back(false);
                             lines.push_back(Vector2(xPos, lineWidth));
-                            if (xPos < x)
-                            {
-                                x = xPos;
-                            }
-                            if (lineWidth > width)
-                            {
-                                width = lineWidth;
-                            }
                         }
                         else
                         {
+                            // Record the existence of an empty line.
                             emptyLines.push_back(true);
                             lines.push_back(Vector2(FLT_MAX, 0));
                         }
@@ -711,11 +686,13 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
                     case 0:
                         reachedEOF = true;
                         break;
+                        /*
                     case '-':
                         unsigned int glyphIndex = delimiter - 32;
                         Glyph& g = _glyphs[glyphIndex];
                         lineWidth += g.width + (fontSize>>3);
                         break;
+                        */
                 }
 
                 if (reachedEOF)
@@ -727,42 +704,36 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
                 delimiter = token[0];
             }
 
-            if (reachedEOF || token == NULL)
+            if (reachedEOF)
             {
                 break;
             }
 
-            unsigned int tokenLength = strcspn(token, " -\r\n\t");
+            // Measure the next token.
+            unsigned int tokenLength = strcspn(token, " \r\n\t");
             unsigned int tokenWidth = getTokenWidth(token, tokenLength);
 
             // Wrap if necessary.
             if (lineWidth + tokenWidth + delimWidth > viewport.width)
             {
-                emptyLines.push_back(false);
-
+                // Add line-height to vertical cursor.
                 yPos += fontSize;
 
+                // Determine horizontal position and width.
                 int hWhitespace = viewport.width - lineWidth;
                 int xPos = viewport.x;
                 if (hAlign == ALIGN_HCENTER)
                 {
-                    xPos = viewport.x + hWhitespace / 2;
+                    xPos += hWhitespace / 2;
                 }
                 else if (hAlign == ALIGN_RIGHT)
                 {
-                    xPos = viewport.x + hWhitespace;
+                    xPos += hWhitespace;
                 }
 
+                // Record this line's size.
+                emptyLines.push_back(false);
                 lines.push_back(Vector2(xPos, lineWidth));
-                if (xPos < x)
-                {
-                    x = xPos;
-                }
-                if (lineWidth > width)
-                {
-                    width = lineWidth;
-                }
-
                 lineWidth = 0;
             }
             else
@@ -777,14 +748,17 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
     }
     else
     {
-        unsigned int lineWidth = 0;
+        // Measure a whole line at a time.
+        int emptyLinesCount = 0;
         while (token[0] != 0)
         {
+            // Handle any number of consecutive newlines.
             bool nextLine = true;
             while (token[0] == '\n')
             {
                 if (nextLine)
                 {
+                    // Add line-height to vertical cursor.
                     yPos += fontSize * (emptyLinesCount+1);
                     nextLine = false;
                     emptyLinesCount = 0;
@@ -792,6 +766,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
                 }
                 else
                 {
+                    // Record the existence of an empty line.
                     ++emptyLinesCount;
                     emptyLines.push_back(true);
                     lines.push_back(Vector2(FLT_MAX, 0));
@@ -800,29 +775,24 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
                 token++;
             }
 
+            // Measure the next line.
             unsigned int tokenLength = strcspn(token, "\n");
             lineWidth = getTokenWidth(token, tokenLength);
             
+            // Determine horizontal position and width.
             int xPos = viewport.x;
             int hWhitespace = viewport.width - lineWidth;
             if (hAlign == ALIGN_HCENTER)
             {
-                xPos = viewport.x + hWhitespace / 2;
+                xPos += hWhitespace / 2;
             }
             else if (hAlign == ALIGN_RIGHT)
             {
-                xPos = viewport.x + hWhitespace;
+                xPos += hWhitespace;
             }
 
+            // Record this line's size.
             lines.push_back(Vector2(xPos, lineWidth));
-            if (xPos < x)
-            {
-                x = xPos;
-            }
-            if (lineWidth > width)
-            {
-                width = lineWidth;
-            }
 
             token += tokenLength;
         }
@@ -830,132 +800,136 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
         yPos += fontSize;
     }
 
-    int hWhitespace = viewport.width - lineWidth;
-    int xPos = viewport.x;
-    if (hAlign == ALIGN_HCENTER)
-    {
-        xPos = viewport.x + hWhitespace / 2;
-    }
-    else if (hAlign == ALIGN_RIGHT)
-    {
-        xPos = viewport.x + hWhitespace;
-    }
-
     if (wrap)
     {
+        // Record the size of the last line.
+        int hWhitespace = viewport.width - lineWidth;
+        int xPos = viewport.x;
+        if (hAlign == ALIGN_HCENTER)
+        {
+            xPos += hWhitespace / 2;
+        }
+        else if (hAlign == ALIGN_RIGHT)
+        {
+            xPos += hWhitespace;
+        }
+
         lines.push_back(Vector2(xPos, lineWidth));
     }
 
-    if (xPos < x)
-    {
-        x = xPos;
-    }
-    if (lineWidth > width)
-    {
-        width = lineWidth;
-    }
+    int x = INT_MAX;
+    int y = viewport.y;
+    unsigned int width = 0;
+    int height = yPos - viewport.y;
 
-    int textHeight = yPos - viewport.y;
-    int vWhitespace = viewport.height - textHeight;
+    // Calculate top of text without clipping.
+    int vWhitespace = viewport.height - height;
     if (vAlign == ALIGN_VCENTER)
     {
-        y = viewport.y + vWhitespace / 2;
+        y += vWhitespace / 2;
     }
     else if (vAlign == ALIGN_BOTTOM)
     {
-        y = viewport.y + vWhitespace;
+        y += vWhitespace;
     }
-    else
+
+    int clippedTop = 0;
+    int clippedBottom = 0;
+    if (clipped)
     {
-        y = viewport.y;
+        // Trim rect to fit text that would actually be drawn within the given viewport.
+        if (y >= viewport.y)
+        {
+            // Text goes off the bottom of the viewport.
+            clippedBottom = (height - viewport.height) / fontSize + 1;
+            if (clippedBottom > 0)
+            {
+                // Also need to crop empty lines above non-empty lines that have been clipped.
+                unsigned int emptyIndex = emptyLines.size() - clippedBottom;
+                while (emptyIndex < emptyLines.size() && emptyLines[emptyIndex] == true)
+                {
+                    height -= fontSize;
+                    emptyIndex++;
+                }
+
+                height -= fontSize * clippedBottom;
+            }
+            else
+            {
+                clippedBottom = 0;
+            }
+        }
+        else
+        {
+            // Text goes above the top of the viewport.
+            clippedTop = (viewport.y - y) / fontSize + 1;
+            if (clippedTop < 0)
+            {
+                clippedTop = 0;
+            }
+
+            // Also need to crop empty lines below non-empty lines that have been clipped.
+            unsigned int emptyIndex = clippedTop;
+            while (emptyIndex < emptyLines.size() && emptyLines[emptyIndex] == true)
+            {
+                y += fontSize;
+                height -= fontSize;
+                emptyIndex++;
+            }
+
+            if (vAlign == ALIGN_VCENTER)
+            {
+                // In this case lines may be clipped off the bottom as well.
+                clippedBottom = (height - viewport.height + vWhitespace/2 + 0.01) / fontSize + 1;
+                if (clippedBottom > 0)
+                {
+                    emptyIndex = emptyLines.size() - clippedBottom;
+                    while (emptyIndex < emptyLines.size() && emptyLines[emptyIndex] == true)
+                    {
+                        height -= fontSize;
+                        emptyIndex++;
+                    }
+
+                    height -= fontSize * clippedBottom;
+                }
+                else
+                {
+                    clippedBottom = 0;
+                }
+            }
+
+            y = y + fontSize * clippedTop;
+            height = height - fontSize * clippedTop;
+        }
+    }
+
+    // Determine left-most x coordinate and largest width out of lines that have not been clipped.
+    for (unsigned int i = clippedTop; i < lines.size() - clippedBottom; ++i)
+    {
+        if (lines[i].x < x)
+        {
+            x = lines[i].x;
+        }
+        if (lines[i].y > width)
+        {
+            width = lines[i].y;
+        }
     }
 
     if (clipped)
     {
-        if (y >= viewport.y)
-        {
-            out->y = y;
-
-            int croppedLinesCount = (textHeight - viewport.height) / fontSize + 1;
-            if (croppedLinesCount > 0)
-            {
-                unsigned int emptyIndex = emptyLines.size() - croppedLinesCount;
-                while (emptyIndex < emptyLines.size() && emptyLines[emptyIndex] == true)
-                {
-                    y += fontSize;
-                    textHeight -= fontSize;
-                    emptyIndex++;
-                }
-
-                textHeight -= fontSize * croppedLinesCount;
-
-                for (unsigned int i = croppedLinesCount; i < lines.size(); ++i)
-                {
-                    if (lines[i].x < x)
-                    {
-                        x = lines[i].x;
-                        width = lines[i].y;
-                    }
-                }
-            }
-
-            out->height = textHeight;
-        }
-        else
-        {
-            int croppedLinesCount = (viewport.y - y) / fontSize + 1;
-            unsigned int emptyIndex = croppedLinesCount;
-            while (emptyIndex < emptyLines.size() && emptyLines[emptyIndex] == true)
-            {
-                y += fontSize;
-                textHeight -= fontSize;
-                emptyIndex++;
-            }
-
-            int croppedV = 0;
-            if (vAlign == ALIGN_VCENTER)
-            {
-                croppedV = (textHeight - viewport.height + vWhitespace/2 + 0.01) / fontSize + 1;
-                if (croppedV > 0)
-                {
-                    emptyIndex = emptyLines.size() - croppedV;
-                    while (emptyIndex < emptyLines.size() && emptyLines[emptyIndex] == true)
-                    {
-                        textHeight -= fontSize;
-                        emptyIndex++;
-                    }
-
-                    textHeight -= fontSize * croppedV;
-                }
-            }
-
-            x = INT_MAX;
-            width = 0;
-            for (unsigned int i = croppedLinesCount; i < lines.size() - croppedV; ++i)
-            {
-                if (lines[i].x < x)
-                {
-                    x = lines[i].x;
-                }
-                if (lines[i].y > width)
-                {
-                    width = lines[i].y;
-                }
-            }
-
-            out->y = y + fontSize * croppedLinesCount;
-            out->height = textHeight - fontSize * croppedLinesCount;
-        }
-
+        // Guarantee that the output rect will fit within the viewport.
         out->x = (x >= viewport.x)? x : viewport.x;
+        out->y = (y >= viewport.y)? y : viewport.y;
         out->width = (width <= viewport.width)? width : viewport.width;
+        out->height = (height <= viewport.height)? height : viewport.height;
     }
     else
     {
         out->x = x;
         out->y = y;
         out->width = width;
-        out->height = textHeight;
+        out->height = height;
     }
 }
 
