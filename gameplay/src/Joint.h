@@ -35,6 +35,20 @@ public:
      */
     const Matrix& getInverseBindPose() const;
 
+    /**
+     * Gets the world matrix corresponding to this node.
+     *
+     * @return The world matrix of this node.
+     */
+    const Matrix& getWorldMatrix() const;
+
+    /**
+     * Gets the matrix corresponding to this joint.
+     *
+     * @return The matrix of this joint.
+     */
+    const Matrix& getJointMatrix() const;
+
 protected:
 
     /**
@@ -69,6 +83,8 @@ protected:
 
     Matrix _bindPose;
     bool _jointMatrixDirty;
+    MeshSkin* _skin;
+    mutable Matrix _jointWorld;
 };
 
 }
