@@ -78,13 +78,13 @@ static gameplay::Input::Key getGameplayInputKey(WPARAM win32KeyCode, bool shiftD
     case VK_NEXT:
         return gameplay::Input::KEY_PG_DOWN;
     case VK_LEFT:
-        return gameplay::Input::KEY_LEFT;
+        return gameplay::Input::KEY_LEFT_ARROW;
     case VK_RIGHT:
-        return gameplay::Input::KEY_RIGHT;
+        return gameplay::Input::KEY_RIGHT_ARROW;
     case VK_UP:
-        return gameplay::Input::KEY_UP;
+        return gameplay::Input::KEY_UP_ARROW;
     case VK_DOWN:
-        return gameplay::Input::KEY_DOWN;
+        return gameplay::Input::KEY_DOWN_ARROW;
     case VK_NUMLOCK:
         return gameplay::Input::KEY_NUM_LOCK;
     case VK_ADD:
