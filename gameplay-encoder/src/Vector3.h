@@ -337,8 +337,6 @@ public:
      */
     static void subtract(const Vector3& v1, const Vector3& v2, Vector3* dst);
 
-
-
     inline bool operator<(const Vector3& v) const
     {
         if (x == v.x)

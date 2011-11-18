@@ -211,6 +211,8 @@ Reference
                 bindShape               float[16]
                 joints                  xref:Node[]
                 jointsBindPoses         float[] // 16 * joints.length
+                boundingBox             BoundingBox { float[3] min, float[3] max }
+                boundingSphere          BoundingSphere { float[3] center, float radius }
 ------------------------------------------------------------------------------------------------------
 128->Font
                 family                  string

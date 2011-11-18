@@ -82,6 +82,11 @@ public:
     static void createScale(float x, float y, float z, float* dst);
 
     /**
+     * Creates a rotation matrix from the given quaternion.
+     */
+    static void Matrix::createRotation(const Quaternion& q, float* dst);
+
+    /**
      * Creates a rotation matrix from the given axis and angle in degrees.
      */
     static void createRotation(float x, float y, float z, float angle, float* dst);
@@ -122,6 +127,11 @@ public:
     void scale(float x, float y, float z);
 
     /**
+     * Rotates the matrix by the given Quaternion.
+     */
+    void rotate(const Quaternion& q);
+
+    /**
      * Rotates the matrix by the axies specified and angle.
      */
     void rotate(float x, float y, float z, float angle);
@@ -140,6 +150,13 @@ public:
      * Rotates the matrix on the z-axis by the specified angle in degrees.
      */
     void rotateZ(float angle);
+
+    /**
+     * Transforms the specified point by this matrix.
+     *
+     * Note that the input vector is treated as a point and NOT a vector.
+     */
+    void transformPoint(const Vector3& p, Vector3* dst);
 
     float m[16];
 };

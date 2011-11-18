@@ -49,8 +49,11 @@ void Model::writeBinary(FILE* file)
     writeBinaryObjects(_materials, file);
 
 }
+
 void Model::writeText(FILE* file)
 {
+    // Compute mesh bounds before writing
+
     fprintElementStart(file);
     if (_ref != NULL)
     {
@@ -71,11 +74,26 @@ MeshSkin* Model::getSkin()
 void Model::setMesh(Mesh* mesh)
 {
     _ref = mesh;
+
+    if (mesh)
+    {
+        mesh->model = this;
+    }
+
+    if (_ref && _meshSkin)
+    {
+        _meshSkin->_mesh = _ref;
+    }
 }
 
 void Model::setSkin(MeshSkin* skin)
 {
     _meshSkin = skin;
+
+    if (_meshSkin)
+    {
+        _meshSkin->_mesh = _ref;
+    }
 }
 
 }

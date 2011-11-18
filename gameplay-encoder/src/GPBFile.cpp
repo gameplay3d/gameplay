@@ -3,13 +3,21 @@
 namespace gameplay
 {
 
+static GPBFile* __instance = NULL;
+
 GPBFile::GPBFile(void)
     : _file(NULL), _animationsAdded(false)
 {
+    __instance = this;
 }
 
 GPBFile::~GPBFile(void)
 {
+}
+
+GPBFile* GPBFile::getInstance()
+{
+    return __instance;
 }
 
 void GPBFile::saveBinary(const std::string& filepath)
@@ -198,6 +206,11 @@ Node* GPBFile::getNode(const char* id)
         }
     }
     return NULL;
+}
+
+Animations* GPBFile::getAnimations()
+{
+    return &_animations;
 }
 
 void GPBFile::adjust()

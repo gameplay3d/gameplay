@@ -96,6 +96,7 @@
     <ClCompile Include="src\Animations.cpp">
       <Filter>Objects\Animation</Filter>
     </ClCompile>
+    <ClCompile Include="..\gameplay\src\Curve.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\DAESceneEncoder.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="src\Animations.h">
       <Filter>Objects\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="..\gameplay\src\Curve.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Objects">

@@ -9,8 +9,12 @@
 namespace gameplay
 {
 
+class Model;
+
 class Mesh : public Object
 {
+    friend class Model;
+
 public:
 
     /**
@@ -38,6 +42,10 @@ public:
     void addVetexAttribute(unsigned int usage, unsigned int count);
 
     size_t getVertexCount() const;
+    const Vertex& getVertex(unsigned int index) const;
+
+    size_t getVertexElementCount() const;
+    const VertexElement& getVertexElement(unsigned int index) const;
 
     /**
      * Returns true if this MeshPart contains the given Vertex.
@@ -51,6 +59,7 @@ public:
 
     unsigned int getVertexIndex(const Vertex& vertex);
 
+    Model* model;
     std::vector<Vertex> vertices;
     std::vector<MeshPart*> parts;
     struct
@@ -67,7 +76,7 @@ private:
     void computeBounds();
 
 private:
-    std::vector<VertexElement> _vertexFormats;
+    std::vector<VertexElement> _vertexFormat;
 
 };
 

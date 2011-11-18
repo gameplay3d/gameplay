@@ -5,8 +5,6 @@
 #ifndef CURVE_H_
 #define CURVE_H_
 
-#include "AnimationClip.h"
-
 namespace gameplay
 {
 
@@ -90,6 +88,20 @@ public:
      * @return The number of float component values per point.
      */
     unsigned int getComponentCount() const;
+
+    /**
+     * Returns the start time for the curve.
+     *
+     * @return The curve's start time.
+     */
+    float getStartTime() const;
+
+    /**
+     * Returns the end time for the curve.
+     *
+     * @return The curve's end time.
+     */
+    float getEndTime() const;
 
     /**
      * Sets the given point values on the curve the curve.

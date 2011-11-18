@@ -10,6 +10,7 @@ namespace gameplay
 {
 
 BoundingSphere::BoundingSphere()
+    : radius(0)
 {
 }
 

@@ -118,9 +118,17 @@ void RenderState::setParameterAutoBinding(const char* name, const char* autoBind
     {
         value = VIEW_MATRIX;
     }
+    else if (strcmp(autoBinding, "PROJECTION_MATRIX") == 0)
+    {
+        value = PROJECTION_MATRIX;
+    }
     else if (strcmp(autoBinding, "WORLD_VIEW_MATRIX") == 0)
     {
         value = WORLD_VIEW_MATRIX;
+    }
+    else if (strcmp(autoBinding, "VIEW_PROJECTION_MATRIX") == 0)
+    {
+        value = VIEW_PROJECTION_MATRIX;
     }
     else if (strcmp(autoBinding, "WORLD_VIEW_PROJECTION_MATRIX") == 0)
     {
@@ -198,8 +206,16 @@ void RenderState::applyAutoBinding(const char* uniformName, AutoBinding autoBind
         getParameter(uniformName)->bindValue(_nodeBinding, &Node::getViewMatrix);
         break;
 
+    case PROJECTION_MATRIX:
+        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getProjectionMatrix);
+        break;
+
     case WORLD_VIEW_MATRIX:
         getParameter(uniformName)->bindValue(_nodeBinding, &Node::getWorldViewMatrix);
+        break;
+
+    case VIEW_PROJECTION_MATRIX:
+        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getViewProjectionMatrix);
         break;
 
     case WORLD_VIEW_PROJECTION_MATRIX:
