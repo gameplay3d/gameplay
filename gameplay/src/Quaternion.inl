@@ -7,7 +7,7 @@
 namespace gameplay
 {
 
-inline Quaternion Quaternion::operator*(const Quaternion& q)
+inline Quaternion Quaternion::operator*(const Quaternion& q) const
 {
     Quaternion result(*this);
     result.multiply(q);

@@ -342,7 +342,7 @@ public:
      * @param q The quaternion to multiply.
      * @return The quaternion product.
      */
-    inline Quaternion operator*(const Quaternion& q);
+    inline Quaternion operator*(const Quaternion& q) const;
 
     /**
      * Multiplies this quaternion with the given quaternion.
