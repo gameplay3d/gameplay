@@ -50,7 +50,7 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bullet}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.1520188877" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -127,7 +127,7 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bullet}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.1885454133" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -208,7 +208,7 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bullet}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.1951328742" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -289,7 +289,7 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bullet}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.1120159379" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -366,7 +366,7 @@
 								<option id="com.qnx.qcc.option.linker.libraryPaths.82267253" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bullet}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/x86&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.1298897295" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -445,7 +445,7 @@
 								<option id="com.qnx.qcc.option.linker.libraryPaths.864428227" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bullet}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/x86&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.484583857" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -524,7 +524,7 @@
 								<option id="com.qnx.qcc.option.linker.libraryPaths.1962241266" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bullet}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/x86&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.1686381141" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
