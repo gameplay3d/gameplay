@@ -12,9 +12,12 @@ namespace gameplay
 {
 
 class Node;
+class Mesh;
 
 class MeshSkin : public Object
 {
+    friend class Model;
+
 public:
 
     /**
@@ -53,14 +56,15 @@ public:
      */
     bool hasJoint(const char* id);
 
+    void computeBounds();
+
 private:
 
+    Mesh* _mesh;
     float _bindShape[16];
     std::list<Node*> _joints;
-    std::list<float> _bindPoses;
-
+    std::list<Matrix> _bindPoses;
     std::list<std::string> _jointNames;
-
     unsigned int _vertexInfluenceCount;
 };
 

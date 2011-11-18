@@ -916,7 +916,7 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
         SAFE_DELETE_ARRAY(interpolation);
         return NULL;
     }
-    
+
     Game* game = Game::getInstance();
     AnimationController* controller = game->getAnimationController();
 
@@ -1000,7 +1000,7 @@ Mesh* Package::loadMesh(const char* id)
 
     // Read mesh bounds (bounding box and bounding sphere)
     Vector3 boundsMin, boundsMax, boundsCenter;
-    float boundsRadius;
+    float boundsRadius = 0.0f;
     if (fread(&boundsMin.x, 4, 3, _file) != 3 || fread(&boundsMax.x, 4, 3, _file) != 3)
     {
         LOG_ERROR_VARG("Failed to read bounding box for mesh: %s", id);

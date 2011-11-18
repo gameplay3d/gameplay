@@ -375,6 +375,20 @@ const Matrix& Node::getInverseViewMatrix() const
     }
 }
 
+const Matrix& Node::getProjectionMatrix() const
+{
+    Scene* scene = getScene();
+    Camera* camera = scene ? scene->getActiveCamera() : NULL;
+    if (camera)
+    {
+        return camera->getProjectionMatrix();
+    }
+    else
+    {
+        return Matrix::identity();
+    }
+}
+
 const Matrix& Node::getViewProjectionMatrix() const
 {
     Scene* scene = getScene();
@@ -569,11 +583,10 @@ const BoundingBox& Node::getBoundingBox() const
     {
         _dirtyBits &= ~NODE_DIRTY_BOUNDS;
 
+        // Get the local bounding box
         if (_model && _model->getMesh())
         {
-            // Use the bounding volume of our model's mesh.
-            Mesh* mesh = _model->getMesh();
-            _bounds.box->set(mesh->getBoundingBox());
+            _bounds.box->set(_model->getMesh()->getBoundingBox());
         }
         else
         {
@@ -644,11 +657,10 @@ const BoundingSphere& Node::getBoundingSphere() const
     {
         _dirtyBits &= ~NODE_DIRTY_BOUNDS;
 
+        // Get the local bounding sphere
         if (_model && _model->getMesh())
         {
-            // Use the bounding volume of our model's mesh.
-            Mesh* mesh = _model->getMesh();
-            _bounds.sphere->set(mesh->getBoundingSphere());
+            _bounds.sphere->set(_model->getMesh()->getBoundingSphere());
         }
         else
         {

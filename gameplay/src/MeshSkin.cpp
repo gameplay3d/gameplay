@@ -99,6 +99,26 @@ unsigned int MeshSkin::getMatrixPaletteSize() const
     return _joints.size() * PALETTE_ROWS;
 }
 
+const BoundingBox& MeshSkin::getBoundingBox() const
+{
+    return _boundingBox;
+}
+
+void MeshSkin::setBoundingBox(const BoundingBox& box)
+{
+    _boundingBox = box;
+}
+
+const BoundingSphere& MeshSkin::getBoundingSphere() const
+{
+    return _boundingSphere;
+}
+
+void MeshSkin::setBoundingSphere(const BoundingSphere& sphere)
+{
+    _boundingSphere = sphere;
+}
+
 Joint* MeshSkin::getJoint(unsigned int index) const
 {
     assert(index < _joints.size());

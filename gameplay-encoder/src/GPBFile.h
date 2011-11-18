@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <list>
+#include <algorithm>
 
 #include "FileIO.h"
 #include "Object.h"
@@ -45,6 +46,11 @@ public:
      * Destructor.
      */
     ~GPBFile(void);
+
+    /**
+     * Returns the GPBFile instance.
+     */
+    static GPBFile* getInstance();
 
     /**
      * Saves the GPBFile as a binary file at filepath.
@@ -87,6 +93,8 @@ public:
     Light* getLight(const char* id);
     Mesh* getMesh(const char* id);
     Node* getNode(const char* id);
+
+    Animations* getAnimations();
 
     /**
      * Adjusts the game play binary file before it is written.

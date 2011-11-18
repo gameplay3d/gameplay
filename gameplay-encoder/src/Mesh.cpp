@@ -1,9 +1,10 @@
 #include "Mesh.h"
+#include "Model.h"
 
 namespace gameplay
 {
 
-Mesh::Mesh(void)
+Mesh::Mesh(void) : model(NULL)
 {
 }
 
@@ -25,8 +26,8 @@ void Mesh::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
     // vertex formats
-    write(_vertexFormats.size(), file);
-    for (std::vector<VertexElement>::iterator i = _vertexFormats.begin(); i != _vertexFormats.end(); i++)
+    write(_vertexFormat.size(), file);
+    for (std::vector<VertexElement>::iterator i = _vertexFormat.begin(); i != _vertexFormat.end(); i++)
     {
         i->writeBinary(file);
     }
@@ -73,7 +74,7 @@ void Mesh::writeText(FILE* file)
     // for each VertexFormat
     if (vertices.size() > 0 )
     {
-        for (std::vector<VertexElement>::iterator i = _vertexFormats.begin(); i != _vertexFormats.end(); i++)
+        for (std::vector<VertexElement>::iterator i = _vertexFormat.begin(); i != _vertexFormat.end(); i++)
         {
             i->writeText(file);
         }
@@ -123,12 +124,27 @@ void Mesh::addMeshPart(Vertex* vertex)
 
 void Mesh::addVetexAttribute(unsigned int usage, unsigned int count)
 {
-    _vertexFormats.push_back(VertexElement(usage, count));
+    _vertexFormat.push_back(VertexElement(usage, count));
 }
 
 size_t Mesh::getVertexCount() const
 {
     return vertices.size();
+}
+
+const Vertex& Mesh::getVertex(unsigned int index) const
+{
+    return vertices[index];
+}
+
+size_t Mesh::getVertexElementCount() const
+{
+    return _vertexFormat.size();
+}
+
+const VertexElement& Mesh::getVertexElement(unsigned int index) const
+{
+    return _vertexFormat[index];
 }
 
 bool Mesh::contains(const Vertex& vertex) const
@@ -154,6 +170,15 @@ unsigned int Mesh::getVertexIndex(const Vertex& vertex)
 
 void Mesh::computeBounds()
 {
+    // If we have a Model with a MeshSkin associated with it,
+    // compute the bounds from the skin - otherwise compute
+    // it from the local mesh data.
+    if (model && model->getSkin())
+    {
+        model->getSkin()->computeBounds();
+        return;
+    }
+
     bounds.min.x = bounds.min.y = bounds.min.z = FLT_MAX;
     bounds.max.x = bounds.max.y = bounds.max.z = FLT_MIN;
     bounds.center.x = bounds.center.y = bounds.center.z = 0.0f;
