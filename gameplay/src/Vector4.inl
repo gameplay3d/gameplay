@@ -8,7 +8,7 @@
 namespace gameplay
 {
 
-inline Vector4 Vector4::operator+(const Vector4& v)
+inline Vector4 Vector4::operator+(const Vector4& v) const
 {
     Vector4 result(*this);
     result.add(v);
@@ -21,7 +21,7 @@ inline Vector4& Vector4::operator+=(const Vector4& v)
     return *this;
 }
 
-inline Vector4 Vector4::operator-(const Vector4& v)
+inline Vector4 Vector4::operator-(const Vector4& v) const
 {
     Vector4 result(*this);
     result.subtract(v);
@@ -34,14 +34,14 @@ inline Vector4& Vector4::operator-=(const Vector4& v)
     return *this;
 }
 
-inline Vector4 Vector4::operator-()
+inline Vector4 Vector4::operator-() const
 {
     Vector4 result(*this);
     result.negate();
     return result;
 }
 
-inline Vector4 Vector4::operator*(float x)
+inline Vector4 Vector4::operator*(float x) const
 {
     Vector4 result(*this);
     result.scale(x);
