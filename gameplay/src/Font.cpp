@@ -175,10 +175,12 @@ void Font::begin()
 
 void Font::drawText(const char* text, int x, int y, const Vector4& color, float scale, bool rightToLeft)
 {
+    char* rightToLeftText = NULL;
     if (rightToLeft)
     {
-        char* textCursor = const_cast<char*>(text);
-        reverseLines(textCursor);
+        rightToLeftText = new char[strlen(text) + 1];
+        strcpy(rightToLeftText, text);
+        reverseLines(rightToLeftText);
     }
 
     const int length = strlen(text);
@@ -186,7 +188,15 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, float 
     int xPos = x, yPos = y;
     for (int i = 0; i < length; ++i)
     {
-        char c = text[i];
+        char c = 0;
+        if (rightToLeft)
+        {
+            c = rightToLeftText[i];
+        }
+        else
+        {
+            c = text[i];
+        }
 
         // Draw this character.
         switch (c)
@@ -213,6 +223,8 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, float 
             }
         }
     }
+
+    SAFE_DELETE(rightToLeftText);
 }
 
 void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, float scale, Justify justify, bool wrap, bool rightToLeft)
@@ -234,17 +246,24 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         hAlign = ALIGN_LEFT;
     }
 
+    char* rightToLeftText = NULL;
     if (rightToLeft)
     {
-        reverseLines(token);
+        rightToLeftText = new char[strlen(text) + 1];
+        strcpy(rightToLeftText, text);
+        token = rightToLeftText;
+    }
+    else
+    {
+        token = const_cast<char*>(text);
     }
 
     // For alignments other than top-left, need to calculate the y position to begin drawing from
-    // and the starting x position of each line.
+    // and the starting x position of each line.  For right-to-left text that wraps, need to insert
+    // newlines where lines wrap even for top-left alignment.
     std::vector<int> xPositions;
-    if (vAlign != ALIGN_TOP || hAlign != ALIGN_LEFT)
+    if (vAlign != ALIGN_TOP || hAlign != ALIGN_LEFT || (rightToLeft && wrap))
     {
-        token = const_cast<char*>(text);
         int lineWidth = 0;
         int delimWidth = 0;
 
@@ -329,6 +348,12 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                     else if (hAlign == ALIGN_RIGHT)
                     {
                         xPositions.push_back(area.x + hWhitespace);
+                    }
+
+                    if (rightToLeft)
+                    {
+                        // Is this sane?
+                        token[-1] = '\n';
                     }
 
                     // Move token to the next line.
@@ -427,7 +452,16 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         xPos = *xPositionsIt++;
     }
 
-    token = const_cast<char*>(text);
+    if (rightToLeft)
+    {
+        reverseLines(rightToLeftText);
+        token = rightToLeftText;
+    }
+    else
+    {
+        token = const_cast<char*>(text);
+    }
+
     while (token[0] != 0)
     {
         // Handle delimiters until next token.
@@ -562,6 +596,8 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             }
         }
     }
+
+    SAFE_DELETE(rightToLeftText);
 }
 
 void Font::end()
