@@ -173,9 +173,16 @@ void Font::begin()
     _batch->begin();
 }
 
-void Font::drawText(const char* text, int x, int y, const Vector4& color)
+void Font::drawText(const char* text, int x, int y, const Vector4& color, float scale, bool rightToLeft)
 {
+    if (rightToLeft)
+    {
+        char* textCursor = const_cast<char*>(text);
+        reverseLines(textCursor);
+    }
+
     const int length = strlen(text);
+    const int size = (int)_size * scale;
     int xPos = x, yPos = y;
     for (int i = 0; i < length; ++i)
     {
@@ -185,34 +192,35 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color)
         switch (c)
         {
         case ' ':
-            xPos += _size>>1;
+            xPos += size>>1;
             break;
         case '\r':
         case '\n':
-            yPos += _size;
+            yPos += size;
             xPos = x;
             break;
         case '\t':
-            xPos += (_size>>1)+4;
+            xPos += (size>>1)*4;
             break;
         default:
             unsigned int index = c - 32; // HACK for ASCII
             if (index >= 0 && index < _glyphCount)
             {
                 Glyph& g = _glyphs[index];
-                _batch->draw(xPos, yPos, g.width, _size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
-                xPos += g.width + (_size>>3);
+                _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
+                xPos += g.width * scale + (size>>3);
                 break;
             }
         }
     }
 }
 
-void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, Justify justify, bool wrap)
+void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, float scale, Justify justify, bool wrap, bool rightToLeft)
 {
+    char* token = const_cast<char*>(text);
     const int length = strlen(text);
+    const int fontSize = (int)(_size * scale);
     int yPos = area.y;
-    int fontSize = (int)_size;
 
     Justify vAlign = static_cast<Justify>(justify & 0xF0);
     if (vAlign == 0)
@@ -226,16 +234,20 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         hAlign = ALIGN_LEFT;
     }
 
+    if (rightToLeft)
+    {
+        reverseLines(token);
+    }
+
     // For alignments other than top-left, need to calculate the y position to begin drawing from
     // and the starting x position of each line.
     std::vector<int> xPositions;
     if (vAlign != ALIGN_TOP || hAlign != ALIGN_LEFT)
     {
+        token = const_cast<char*>(text);
         int lineWidth = 0;
         int delimWidth = 0;
-        char* token;
 
-        token = const_cast<char*>(text);
         if (wrap)
         {
             // Go a word at a time.
@@ -250,7 +262,6 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                        delimiter == '\t' ||
                        delimiter == '\r' ||
                        delimiter == '\n' ||
-                       //delimiter == '-' ||
                        delimiter == 0)
                 {
                     switch (delimiter)
@@ -279,19 +290,11 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                             delimWidth = 0;
                             break;
                         case '\t':
-                            delimWidth += (fontSize>>1)+4;
+                            delimWidth += (fontSize>>1)*4;
                             break;
                         case 0:
                             reachedEOF = true;
                             break;
-                            /*
-                        case '-':
-                            unsigned int glyphIndex = delimiter - 32;
-                            Glyph& g = _glyphs[glyphIndex];
-                            tokenWidth += g.width + (_size>>3);
-                            //lineWidth += g.width + (_size>>3);
-                            //delimWidth += g.width + (_size>>3);
-                            break;*/
                     }
 
                     if (reachedEOF)
@@ -309,7 +312,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                 }
 
                 unsigned int tokenLength = strcspn(token, " \r\n\t");
-                tokenWidth += getTokenWidth(token, tokenLength);
+                tokenWidth += getTokenWidth(token, tokenLength, scale);
 
                 // Wrap if necessary.
                 if (lineWidth + tokenWidth + delimWidth > area.width)
@@ -384,7 +387,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                     tokenLength = strlen(token);
                 }
 
-                int lineWidth = getTokenWidth(token, tokenLength);
+                int lineWidth = getTokenWidth(token, tokenLength, scale);
                 int whitespace = area.width - lineWidth;
                 if (hAlign == ALIGN_HCENTER)
                 {
@@ -424,7 +427,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         xPos = *xPositionsIt++;
     }
 
-    char* token = const_cast<char*>(text);
+    token = const_cast<char*>(text);
     while (token[0] != 0)
     {
         // Handle delimiters until next token.
@@ -435,7 +438,6 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                delimiter == '\t' ||
                delimiter == '\r' ||
                delimiter == '\n' ||
-               //delimiter == '-' ||
                delimiter == 0)
         {
             switch (delimiter)
@@ -462,21 +464,11 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                     }
                     break;
                 case '\t':
-                    xPos += (fontSize>>1)+4;
+                    xPos += (fontSize>>1)*4;
                     break;
                 case 0:
                     reachedEOF = true;
                     break;
-                /*case '-':
-                    // Dash is special -- a delimiter that isn't whitespace.
-                    unsigned int glyphIndex = delimiter - 32;
-                    Glyph& g = _glyphs[glyphIndex];
-                    _batch->draw(xPos, yPos, g.width, _size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
-                    xPos += g.width + (_size>>3);
-
-                    // Get next xPos again (in case of a substring such as "\n-\n").
-                    nextLine = true;
-                    break;*/
             }
 
             if (reachedEOF)
@@ -496,7 +488,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         unsigned int tokenLength = strcspn(token, " \r\n\t");
         delimiter = token[tokenLength];
         bool truncated = false;
-        unsigned int tokenWidth = getTokenWidth(token, tokenLength);
+        unsigned int tokenWidth = getTokenWidth(token, tokenLength, scale);
 
         // Wrap if necessary.
         if (wrap &&
@@ -535,7 +527,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             {
                 Glyph& g = _glyphs[glyphIndex];
 
-                if (xPos + (int)g.width >= area.x + area.width)
+                if (xPos + (int)(g.width*scale) >= area.x + area.width)
                 {
                     // Truncate this line and go on to the next one.
                     truncated = true;
@@ -546,10 +538,10 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                     // Draw this character.
                     if (draw)
                     {
-                        _batch->draw(xPos, yPos, g.width, _size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
+                        _batch->draw(xPos, yPos, g.width * scale, fontSize, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
                     }
                 }
-                xPos += g.width + (fontSize>>3);
+                xPos += g.width*scale + (fontSize>>3);
             }
         }
 
@@ -577,10 +569,11 @@ void Font::end()
     _batch->end();
 }
 
-void Font::measureText(const char* text, unsigned int* width, unsigned int* height)
+void Font::measureText(const char* text, unsigned int* width, unsigned int* height, float scale)
 {
     const int length = strlen(text);
     char* token = const_cast<char*>(text);
+    unsigned int fontSize = _size * scale;
 
     *width = 0;
     *height = 0;
@@ -590,12 +583,12 @@ void Font::measureText(const char* text, unsigned int* width, unsigned int* heig
     {
         while (token[0] == '\n')
         {
-            *height += _size;
+            *height += fontSize;
             ++token;
         }
 
         unsigned int tokenLength = strcspn(token, "\n");
-        unsigned int tokenWidth = getTokenWidth(token, tokenLength);
+        unsigned int tokenWidth = getTokenWidth(token, tokenLength, scale);
         if (tokenWidth > *width)
         {
             *width = tokenWidth;
@@ -605,7 +598,7 @@ void Font::measureText(const char* text, unsigned int* width, unsigned int* heig
     }
 }
 
-void Font::measureText(const char* text, const Rectangle& viewport, Justify justify, bool wrap, bool clipped, Rectangle* out)
+void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewport, float scale, Justify justify, bool wrap, bool clipped)
 {
     Justify vAlign = static_cast<Justify>(justify & 0xF0);
     if (vAlign == 0)
@@ -619,7 +612,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
         hAlign = ALIGN_LEFT;
     }
 
-    int fontSize = (int)_size;
+    int fontSize = (int)(_size * scale);
     char* token = const_cast<char*>(text);
     std::vector<bool> emptyLines;
     std::vector<Vector2> lines;
@@ -639,7 +632,6 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
                     delimiter == '\t' ||
                     delimiter == '\r' ||
                     delimiter == '\n' ||
-                    //delimiter == '-' ||
                     delimiter == 0)
             {
                 switch (delimiter)
@@ -681,18 +673,11 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
                         delimWidth = 0;
                         break;
                     case '\t':
-                        delimWidth += (fontSize>>1)+4;
+                        delimWidth += (fontSize>>1)*4;
                         break;
                     case 0:
                         reachedEOF = true;
                         break;
-                        /*
-                    case '-':
-                        unsigned int glyphIndex = delimiter - 32;
-                        Glyph& g = _glyphs[glyphIndex];
-                        lineWidth += g.width + (fontSize>>3);
-                        break;
-                        */
                 }
 
                 if (reachedEOF)
@@ -711,7 +696,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
 
             // Measure the next token.
             unsigned int tokenLength = strcspn(token, " \r\n\t");
-            unsigned int tokenWidth = getTokenWidth(token, tokenLength);
+            unsigned int tokenWidth = getTokenWidth(token, tokenLength, scale);
 
             // Wrap if necessary.
             if (lineWidth + tokenWidth + delimWidth > viewport.width)
@@ -777,7 +762,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
 
             // Measure the next line.
             unsigned int tokenLength = strcspn(token, "\n");
-            lineWidth = getTokenWidth(token, tokenLength);
+            lineWidth = getTokenWidth(token, tokenLength, scale);
             
             // Determine horizontal position and width.
             int xPos = viewport.x;
@@ -933,33 +918,54 @@ void Font::measureText(const char* text, const Rectangle& viewport, Justify just
     }
 }
 
-unsigned int Font::getTokenWidth(const char* token, unsigned int length)
+unsigned int Font::getTokenWidth(const char* token, unsigned int length, float scale)
 {
     // Calculate width of word or line.
     unsigned int tokenWidth = 0;
+    const int size = (int)(_size * scale);
     for (unsigned int i = 0; i < length; ++i)
     {
         char c = token[i];
         switch (c)
         {
         case ' ':
-            tokenWidth += _size>>1;
+            tokenWidth += size>>1;
             break;
         case '\t':
-            tokenWidth += (_size>>1)+4;
+            tokenWidth += (size>>1)*4;
             break;
         default:
             unsigned int glyphIndex = c - 32;
             if (glyphIndex >= 0 && glyphIndex < _glyphCount)
             {
                 Glyph& g = _glyphs[glyphIndex];
-                tokenWidth += g.width + (_size>>3);
+                tokenWidth += g.width * scale + (size>>3);
             }
             break;
         }
     }
 
     return tokenWidth;
+}
+
+void Font::reverseLines(char* text)
+{
+    // Naive approach: reverse each line, then render left-to-right as usual.
+    while (text[0] != 0)
+    {
+        while (text[0] == '\n')
+        {
+            ++text;
+        }
+
+        unsigned int textLength = strcspn(text, "\n");
+
+        std::string line = std::string(text, textLength);
+        std::string reversedLine = std::string(line.rbegin(), line.rend());
+        memcpy(text, reversedLine.c_str(), textLength);
+
+        text += textLength;
+    }
 }
 
 }

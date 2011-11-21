@@ -119,26 +119,29 @@ public:
     void begin();
 
     /**
-     * Draws the specified text.
+     * Draws the specified text in a solid color, with a scaling factor.
      *
      * @param text The text to draw.
      * @param x The viewport x position to draw text at.
      * @param y The viewport y position to draw text at.
      * @param color The color of text.
+     * @param scale The scaling factor.
      */
-    void drawText(const char* text, int x, int y, const Vector4& color);
+    void drawText(const char* text, int x, int y, const Vector4& color, float scale = 1.0f, bool rightToLeft = false);
 
     /**
-     * Draws the specified text within a rectangular area, with a specified alignment.
+     * Draws the specified text within a rectangular area, with a specified alignment and scale.
      * Clips text outside the viewport.  Optionally wraps text to fit within the width of the viewport.
      *
      * @param text The text to draw.
      * @param viewport The viewport area to draw within.  Text starts from the top-left of this rectangle.
      * @param color The color of text.
+     * @param scale The text's scaling factor.
      * @param justify Justification of text within the viewport.
      * @param wrap Wraps text to fit within the width of the viewport if true.
      */
-    void drawText(const char* text, const Rectangle& viewport, const Vector4& color, Justify justify = ALIGN_TOP_LEFT, bool wrap = true);
+    void drawText(const char* text, const Rectangle& viewport, const Vector4& color, float scale = 1.0f,
+                  Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
 
     /**
      * Ends text drawing for this font.
@@ -152,20 +155,22 @@ public:
      * @param width Destination for the text's width.
      * @param height Destination for the text's height.
      */
-    void measureText(const char* text, unsigned int* width, unsigned int* height);
+    void measureText(const char* text, unsigned int* width, unsigned int* height, float scale = 1.0f);
 
     /**
      * Measures a string's bounding box after alignment, wrapping and clipping within a viewport.
      *
      * @param text The text to measure.
+     * @param out Destination rectangle to store the bounds in.
      * @param viewport The viewport area to align, wrap and clip text within while measuring.
+     * @param scale The scaling factor to apply.
      * @param justify Justification of text within the viewport.
      * @param wrap Whether to measure text with wrapping applied.
      * @param clipped Whether to clip 'out' to the viewport.  Set true for the bounds of what would actually be drawn
      *                within the given viewport; false for bounds that are guaranteed to fit the entire string of text.
-     * @param out Destination rectangle to store the bounds in.
      */
-    void measureText(const char* text, const Rectangle& viewport, Justify justify, bool wrap, bool clipped, Rectangle* out);
+    void measureText(const char* text, Rectangle* out, const Rectangle& viewport,
+                     float scale = 1.0f, Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool clipped = true);
 
 
 private:
@@ -186,7 +191,8 @@ private:
     ~Font();
 
     // Utilities
-    unsigned int getTokenWidth(const char* token, unsigned int length);
+    unsigned int getTokenWidth(const char* token, unsigned int length, float scale);
+    void reverseLines(char* text);
 
     std::string _path;
     std::string _id;
