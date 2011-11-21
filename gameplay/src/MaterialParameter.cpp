@@ -294,16 +294,22 @@ void MaterialParameter::bind(Effect* effect)
 
 unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyId) const
 {
-    switch (MATERIALPARAMETER_ANIMATE_UNIFORM)
+    switch (propertyId)
     {
-        // These types don't support animation.
-        case NONE:
-        case MATRIX:
-        case SAMPLER:
-        case METHOD:
-            return 0;
-        default:
-            return _count;
+        case ANIMATE_UNIFORM:
+        {
+            switch(_type)
+            {
+                // These types don't support animation.
+                case NONE:
+                case MATRIX:
+                case SAMPLER:
+                case METHOD:
+                    return 0;
+                default:
+                    return _count;
+            }
+        }
     }
 
     return 0;
@@ -313,7 +319,7 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
 {
     switch (propertyId)
     {
-        case MATERIALPARAMETER_ANIMATE_UNIFORM:
+        case ANIMATE_UNIFORM:
         {
             switch (_type)
             {
@@ -342,7 +348,7 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
 {
     switch (propertyId)
     {
-        case MATERIALPARAMETER_ANIMATE_UNIFORM:
+        case ANIMATE_UNIFORM:
         {
             switch (_type)
             {

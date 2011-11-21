@@ -42,6 +42,324 @@ PFNGLISVERTEXARRAYOESPROC glIsVertexArray = NULL;
 namespace gameplay
 {
 
+// Gets the Input::Key enumeration constant that corresponds to the given QNX key code.
+static Input::Key getGameplayInputKey(int qnxKeycode)
+{
+    switch (qnxKeycode)
+    {
+    case KEYCODE_SYSREQ:
+        return Input::KEY_SYSREQ;
+    case KEYCODE_BREAK:
+        return Input::KEY_BREAK;
+    case KEYCODE_MENU:
+        return Input::KEY_MENU;
+    case KEYCODE_KP_ENTER:
+        return Input::KEY_KP_ENTER;
+    case KEYCODE_PAUSE:
+        return Input::KEY_PAUSE;
+    case KEYCODE_SCROLL_LOCK:
+        return Input::KEY_SCROLL_LOCK;
+    case KEYCODE_PRINT:
+        return Input::KEY_PRINT;
+    case KEYCODE_ESCAPE:
+        return Input::KEY_ESCAPE;
+    case KEYCODE_BACKSPACE:
+        return Input::KEY_BACKSPACE;
+    case KEYCODE_BACK_TAB:
+        return Input::KEY_BACK_TAB;
+    case KEYCODE_TAB:
+        return Input::KEY_TAB;
+    case KEYCODE_RETURN:
+        return Input::KEY_RETURN;
+    case KEYCODE_CAPS_LOCK:
+        return Input::KEY_CAPS_LOCK;
+    case KEYCODE_LEFT_SHIFT:
+        return Input::KEY_LEFT_SHIFT;
+    case KEYCODE_RIGHT_SHIFT:
+        return Input::KEY_RIGHT_SHIFT;
+    case KEYCODE_LEFT_CTRL:
+        return Input::KEY_LEFT_CTRL;
+    case KEYCODE_RIGHT_CTRL:
+        return Input::KEY_RIGHT_CTRL;
+    case KEYCODE_LEFT_ALT:
+        return Input::KEY_LEFT_ALT;
+    case KEYCODE_RIGHT_ALT:
+        return Input::KEY_RIGHT_ALT;
+    case KEYCODE_LEFT_HYPER:
+        return Input::KEY_LEFT_HYPER;
+    case KEYCODE_RIGHT_HYPER:
+        return Input::KEY_RIGHT_HYPER;
+    case KEYCODE_INSERT:
+        return Input::KEY_INSERT;
+    case KEYCODE_HOME:
+        return Input::KEY_HOME;
+    case KEYCODE_PG_UP:
+        return Input::KEY_PG_UP;
+    case KEYCODE_DELETE:
+        return Input::KEY_DELETE;
+    case KEYCODE_END:
+        return Input::KEY_END;
+    case KEYCODE_PG_DOWN:
+        return Input::KEY_PG_DOWN;
+    case KEYCODE_LEFT:
+        return Input::KEY_LEFT_ARROW;
+    case KEYCODE_RIGHT:
+        return Input::KEY_RIGHT_ARROW;
+    case KEYCODE_UP:
+        return Input::KEY_UP_ARROW;
+    case KEYCODE_DOWN:
+        return Input::KEY_DOWN_ARROW;
+    case KEYCODE_NUM_LOCK:
+        return Input::KEY_NUM_LOCK;
+    case KEYCODE_KP_PLUS:
+        return Input::KEY_KP_PLUS;
+    case KEYCODE_KP_MINUS:
+        return Input::KEY_KP_MINUS;
+    case KEYCODE_KP_MULTIPLY:
+        return Input::KEY_KP_MULTIPLY;
+    case KEYCODE_KP_DIVIDE:
+        return Input::KEY_KP_DIVIDE;
+    case KEYCODE_KP_HOME:
+        return Input::KEY_KP_HOME;
+    case KEYCODE_KP_UP:
+        return Input::KEY_KP_UP;
+    case KEYCODE_KP_PG_UP:
+        return Input::KEY_KP_PG_UP;
+    case KEYCODE_KP_LEFT:
+        return Input::KEY_KP_LEFT;
+    case KEYCODE_KP_FIVE:
+        return Input::KEY_KP_FIVE;
+    case KEYCODE_KP_RIGHT:
+        return Input::KEY_KP_RIGHT;
+    case KEYCODE_KP_END:
+        return Input::KEY_KP_END;
+    case KEYCODE_KP_DOWN:
+        return Input::KEY_KP_DOWN;
+    case KEYCODE_KP_PG_DOWN:
+        return Input::KEY_KP_PG_DOWN;
+    case KEYCODE_KP_INSERT:
+        return Input::KEY_KP_INSERT;
+    case KEYCODE_KP_DELETE:
+        return Input::KEY_KP_DELETE;
+    case KEYCODE_F1:
+        return Input::KEY_F1;
+    case KEYCODE_F2:
+        return Input::KEY_F2;
+    case KEYCODE_F3:
+        return Input::KEY_F3;
+    case KEYCODE_F4:
+        return Input::KEY_F4;
+    case KEYCODE_F5:
+        return Input::KEY_F5;
+    case KEYCODE_F6:
+        return Input::KEY_F6;
+    case KEYCODE_F7:
+        return Input::KEY_F7;
+    case KEYCODE_F8:
+        return Input::KEY_F8;
+    case KEYCODE_F9:
+        return Input::KEY_F9;
+    case KEYCODE_F10:
+        return Input::KEY_F10;
+    case KEYCODE_F11:
+        return Input::KEY_F11;
+    case KEYCODE_F12:
+        return Input::KEY_F12;
+    case KEYCODE_SPACE:
+        return Input::KEY_SPACE;
+    case KEYCODE_RIGHT_PAREN:
+        return Input::KEY_RIGHT_PARENTHESIS;
+    case KEYCODE_ZERO:
+        return Input::KEY_ZERO;
+    case KEYCODE_EXCLAM:
+        return Input::KEY_EXCLAM;
+    case KEYCODE_ONE:
+        return Input::KEY_ONE;
+    case KEYCODE_AT:
+        return Input::KEY_AT;
+    case KEYCODE_TWO:
+        return Input::KEY_TWO;
+    case KEYCODE_NUMBER:
+        return Input::KEY_NUMBER;
+    case KEYCODE_THREE:
+        return Input::KEY_THREE;
+    case KEYCODE_DOLLAR:
+        return Input::KEY_DOLLAR;
+    case KEYCODE_FOUR:
+        return Input::KEY_FOUR;
+    case KEYCODE_PERCENT:
+        return Input::KEY_PERCENT;
+    case KEYCODE_FIVE:
+        return Input::KEY_FIVE;
+    case KEYCODE_CIRCUMFLEX:
+        return Input::KEY_CIRCUMFLEX;
+    case KEYCODE_SIX:
+        return Input::KEY_SIX;
+    case KEYCODE_AMPERSAND:
+        return Input::KEY_AMPERSAND;
+    case KEYCODE_SEVEN:
+        return Input::KEY_SEVEN;
+    case KEYCODE_ASTERISK:
+        return Input::KEY_ASTERISK;
+    case KEYCODE_EIGHT:
+        return Input::KEY_EIGHT;
+    case KEYCODE_LEFT_PAREN:
+        return Input::KEY_LEFT_PARENTHESIS;
+    case KEYCODE_NINE:
+        return Input::KEY_NINE;
+    case KEYCODE_EQUAL:
+        return Input::KEY_EQUAL;
+    case KEYCODE_PLUS:
+        return Input::KEY_PLUS;
+    case KEYCODE_LESS_THAN:
+        return Input::KEY_LESS_THAN;
+    case KEYCODE_COMMA:
+        return Input::KEY_COMMA;
+    case KEYCODE_UNDERSCORE:
+        return Input::KEY_UNDERSCORE;
+    case KEYCODE_MINUS:
+        return Input::KEY_MINUS;
+    case KEYCODE_GREATER_THAN:
+        return Input::KEY_GREATER_THAN;
+    case KEYCODE_PERIOD:
+        return Input::KEY_PERIOD;
+    case KEYCODE_COLON:
+        return Input::KEY_COLON;
+    case KEYCODE_SEMICOLON:
+        return Input::KEY_SEMICOLON;
+    case KEYCODE_QUESTION:
+        return Input::KEY_QUESTION;
+    case KEYCODE_SLASH:
+        return Input::KEY_SLASH;
+    case KEYCODE_GRAVE:
+        return Input::KEY_GRAVE;
+    case KEYCODE_TILDE:
+        return Input::KEY_TILDE;
+    case KEYCODE_LEFT_BRACE:
+        return Input::KEY_LEFT_BRACE;
+    case KEYCODE_LEFT_BRACKET:
+        return Input::KEY_LEFT_BRACKET;
+    case KEYCODE_BAR:
+        return Input::KEY_BAR;
+    case KEYCODE_BACK_SLASH:
+        return Input::KEY_BACK_SLASH;
+    case KEYCODE_RIGHT_BRACE:
+        return Input::KEY_RIGHT_BRACE;
+    case KEYCODE_RIGHT_BRACKET:
+        return Input::KEY_RIGHT_BRACKET;
+    case KEYCODE_QUOTE:
+        return Input::KEY_QUOTE;
+    case KEYCODE_APOSTROPHE:
+        return Input::KEY_APOSTROPHE;
+    case KEYCODE_CAPITAL_A:
+        return Input::KEY_CAPITAL_A;
+    case KEYCODE_A:
+        return Input::KEY_A;
+    case KEYCODE_CAPITAL_B:
+        return Input::KEY_CAPITAL_B;
+    case KEYCODE_B:
+        return Input::KEY_B;
+    case KEYCODE_CAPITAL_C:
+        return Input::KEY_CAPITAL_C;
+    case KEYCODE_C:
+        return Input::KEY_C;
+    case KEYCODE_CAPITAL_D:
+        return Input::KEY_CAPITAL_D;
+    case KEYCODE_D:
+        return Input::KEY_D;
+    case KEYCODE_CAPITAL_E:
+        return Input::KEY_CAPITAL_E;
+    case KEYCODE_E:
+        return Input::KEY_E;
+    case KEYCODE_CAPITAL_F:
+        return Input::KEY_CAPITAL_F;
+    case KEYCODE_F:
+        return Input::KEY_F;
+    case KEYCODE_CAPITAL_G:
+        return Input::KEY_CAPITAL_G;
+    case KEYCODE_G:
+        return Input::KEY_G;
+    case KEYCODE_CAPITAL_H:
+        return Input::KEY_CAPITAL_H;
+    case KEYCODE_H:
+        return Input::KEY_H;
+    case KEYCODE_CAPITAL_I:
+        return Input::KEY_CAPITAL_I;
+    case KEYCODE_I:
+        return Input::KEY_I;
+    case KEYCODE_CAPITAL_J:
+        return Input::KEY_CAPITAL_J;
+    case KEYCODE_J:
+        return Input::KEY_J;
+    case KEYCODE_CAPITAL_K:
+        return Input::KEY_CAPITAL_K;
+    case KEYCODE_K:
+        return Input::KEY_K;
+    case KEYCODE_CAPITAL_L:
+        return Input::KEY_CAPITAL_L;
+    case KEYCODE_L:
+        return Input::KEY_L;
+    case KEYCODE_CAPITAL_M:
+        return Input::KEY_CAPITAL_M;
+    case KEYCODE_M:
+        return Input::KEY_M;
+    case KEYCODE_CAPITAL_N:
+        return Input::KEY_CAPITAL_N;
+    case KEYCODE_N:
+        return Input::KEY_N;
+    case KEYCODE_CAPITAL_O:
+        return Input::KEY_CAPITAL_O;
+    case KEYCODE_O:
+        return Input::KEY_O;
+    case KEYCODE_CAPITAL_P:
+        return Input::KEY_CAPITAL_P;
+    case KEYCODE_P:
+        return Input::KEY_P;
+    case KEYCODE_CAPITAL_Q:
+        return Input::KEY_CAPITAL_Q;
+    case KEYCODE_Q:
+        return Input::KEY_Q;
+    case KEYCODE_CAPITAL_R:
+        return Input::KEY_CAPITAL_R;
+    case KEYCODE_R:
+        return Input::KEY_R;
+    case KEYCODE_CAPITAL_S:
+        return Input::KEY_CAPITAL_S;
+    case KEYCODE_S:
+        return Input::KEY_S;
+    case KEYCODE_CAPITAL_T:
+        return Input::KEY_CAPITAL_T;
+    case KEYCODE_T:
+        return Input::KEY_T;
+    case KEYCODE_CAPITAL_U:
+        return Input::KEY_CAPITAL_U;
+    case KEYCODE_U:
+        return Input::KEY_U;
+    case KEYCODE_CAPITAL_V:
+        return Input::KEY_CAPITAL_V;
+    case KEYCODE_V:
+        return Input::KEY_V;
+    case KEYCODE_CAPITAL_W:
+        return Input::KEY_CAPITAL_W;
+    case KEYCODE_W:
+        return Input::KEY_W;
+    case KEYCODE_CAPITAL_X:
+        return Input::KEY_CAPITAL_X;
+    case KEYCODE_X:
+        return Input::KEY_X;
+    case KEYCODE_CAPITAL_Y:
+        return Input::KEY_CAPITAL_Y;
+    case KEYCODE_Y:
+        return Input::KEY_Y;
+    case KEYCODE_CAPITAL_Z:
+        return Input::KEY_CAPITAL_Z;
+    case KEYCODE_Z:
+        return Input::KEY_Z;
+    default:
+        return Input::KEY_NONE;
+    }
+}
+
 extern void printError(const char* format, ...)
 {
     va_list argptr;
@@ -324,7 +642,7 @@ Platform* Platform::create(Game* game)
     {
         // Disable VAO extension for now.
         glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
-        glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glBindVertexArrayOES");
+        glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArrays");
         glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
         glIsVertexArray = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress("glIsVertexArrayOES");
     }
@@ -404,18 +722,8 @@ int Platform::enterMessagePump()
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_KEY_FLAGS, &flags);
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_KEY_SYM, &value);
                         int keyEvent = flags & KEY_DOWN ? Input::KEYEVENT_DOWN : Input::KEYEVENT_UP;
-                        switch (value)
-                        {
-                            case KEYCODE_A:
-                                Game::getInstance()->keyPress(Input::KEY_A, keyEvent);
-                                break;
-                            case KEYCODE_B:
-                                Game::getInstance()->keyPress(Input::KEY_B, keyEvent);
-                                break;
-                            case KEYCODE_P:
-                                Game::getInstance()->keyPress(Input::KEY_P, keyEvent);
-                                break;
-                        }
+                        Game::getInstance()->keyPress(getGameplayInputKey(value), keyEvent);
+                        break;
                     }
                 }
             }
@@ -432,6 +740,10 @@ int Platform::enterMessagePump()
                 }
             }
         }
+
+        // If we are done, then exit.
+        if (_game->getState() == Game::UNINITIALIZED)
+            break;
 
         // Idle time (no events left to process) is spent rendering.
         // We skip rendering when the window is not visible or the app is paused.
@@ -455,13 +767,12 @@ int Platform::enterMessagePump()
             rc = eglSwapBuffers(__eglDisplay, __eglSurface);
             if (rc != EGL_TRUE)
             {
+                _game->exit();
                 perror("eglSwapBuffers");
                 break;
             }
         }
     }
-
-    _game->exit();
 
     screen_stop_events(__screenContext);
     bps_shutdown();

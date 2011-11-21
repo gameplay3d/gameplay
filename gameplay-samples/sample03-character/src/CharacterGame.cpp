@@ -37,14 +37,15 @@ void CharacterGame::initialize()
 
     // Get spot light position and direction.
     Node* spotLightNode = _scene->findNode("spotLight1");
-
+    
     // Load character's material from a .material file
     Material* meshMaterial = model->setMaterial("res/materials/character.material");
     meshMaterial->getParameter("u_spotLightPosition")->bindValue(spotLightNode, &Node::getTranslationView);
     meshMaterial->getParameter("u_spotLightDirection")->bindValue(spotLightNode, &Node::getForwardVectorView);
+    meshMaterial->getParameter("u_spotLightRangeInverse")->bindValue(spotLightNode->getLight(), &Light::getRangeInverse);
     meshMaterial->getParameter("u_spotLightInnerAngleCos")->bindValue(spotLightNode->getLight(), &Light::getInnerAngleCos);
     meshMaterial->getParameter("u_spotLightOuterAngleCos")->bindValue(spotLightNode->getLight(), &Light::getOuterAngleCos);
-
+    
     // Load character animations.
     loadCharacterAnimations();
 
@@ -58,6 +59,7 @@ void CharacterGame::initialize()
     Material* planeMaterial = planeModel->setMaterial("res/materials/plane.material");
     planeMaterial->getParameter("u_spotLightPosition")->bindValue(spotLightNode, &Node::getTranslationView);
     planeMaterial->getParameter("u_spotLightDirection")->bindValue(spotLightNode, &Node::getForwardVectorView);
+    planeMaterial->getParameter("u_spotLightRangeInverse")->bindValue(spotLightNode->getLight(), &Light::getRangeInverse);
     planeMaterial->getParameter("u_spotLightInnerAngleCos")->bindValue(spotLightNode->getLight(), &Light::getInnerAngleCos);
     planeMaterial->getParameter("u_spotLightOuterAngleCos")->bindValue(spotLightNode->getLight(), &Light::getOuterAngleCos);
 
@@ -67,6 +69,8 @@ void CharacterGame::initialize()
 
 void CharacterGame::finalize()
 {
+    SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_font);
 }
 
 void CharacterGame::update(long elapsedTime)
@@ -111,6 +115,7 @@ void CharacterGame::createDefaultCamera(Scene* scene)
     node->setCamera(camera);
     node->translate(0, 5.0f, 20.0f);
     scene->setActiveCamera(camera);
+    SAFE_RELEASE(camera);
 }
 
 void CharacterGame::touch(int x, int y, int touchEvent)

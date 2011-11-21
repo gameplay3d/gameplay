@@ -33,44 +33,59 @@ Vector4::Vector4(const Vector4& copy)
     set(copy);
 }
 
+Vector4 Vector4::fromColor(unsigned int color)
+{
+    float components[4];
+    int componentIndex = 0;
+    for (int i = 3; i >= 0; --i)
+    {
+        int component = (color >> i*8) & 0x000000ff;
+
+        components[componentIndex++] = static_cast<float>(component) / 255.0f;
+    }
+
+    Vector4 value(components);
+    return value;
+}
+
 Vector4::~Vector4()
 {
 }
 
 const Vector4& Vector4::zero()
 {
-    static Vector4* value = new Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector4 value(0.0f, 0.0f, 0.0f, 0.0f);
+    return value;
 }
 
 const Vector4& Vector4::one()
 {
-    static Vector4* value = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-    return *value;
+    static Vector4 value(1.0f, 1.0f, 1.0f, 1.0f);
+    return value;
 }
 
 const Vector4& Vector4::unitX()
 {
-    static Vector4* value = new Vector4(1.0f, 0.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector4 value(1.0f, 0.0f, 0.0f, 0.0f);
+    return value;
 }
 
 const Vector4& Vector4::unitY()
 {
-    static Vector4* value = new Vector4(0.0f, 1.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector4 value(0.0f, 1.0f, 0.0f, 0.0f);
+    return value;
 }
 
 const Vector4& Vector4::unitZ()
 {
-    static Vector4* value = new Vector4(0.0f, 0.0f, 1.0f, 0.0f);
-    return *value;
+    static Vector4 value(0.0f, 0.0f, 1.0f, 0.0f);
+    return value;
 }
 
 const Vector4& Vector4::unitW()
 {
-    static Vector4* value = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
-    return *value;
+    static Vector4 value(0.0f, 0.0f, 0.0f, 1.0f);
+    return value;
 }
 
 bool Vector4::isZero() const

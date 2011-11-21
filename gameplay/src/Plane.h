@@ -196,7 +196,15 @@ public:
      *
      * @param matrix The transformation matrix to transform by.
      */
-    void transform(Matrix& matrix);
+    void transform(const Matrix& matrix);
+
+    /**
+     * Transforms this plane by the given matrix.
+     * 
+     * @param matrix The matrix to transform by.
+     * @return This plane, after the transformation occurs.
+     */
+    inline Plane& operator*=(const Matrix& matrix);
 
 private:
 
@@ -209,6 +217,17 @@ private:
     float _distance;    // The distance of the Plane along its normal from the origin.
 };
 
+/**
+ * Transforms the given plane by the given matrix.
+ * 
+ * @param matrix The matrix to transform by.
+ * @param plane The plane to transform.
+ * @return The resulting transformed plane.
+ */
+inline Plane operator*(const Matrix& matrix, const Plane& plane);
+
 }
+
+#include "Plane.inl"
 
 #endif

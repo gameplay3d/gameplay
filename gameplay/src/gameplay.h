@@ -45,6 +45,9 @@
 #include "Font.h"
 #include "SpriteBatch.h"
 #include "ParticleEmitter.h"
+#include "FrameBuffer.h"
+#include "RenderTarget.h"
+#include "DepthStencilTarget.h"
 
 // Audio
 #include "AudioController.h"
@@ -58,3 +61,14 @@
 #include "AnimationValue.h"
 #include "Animation.h"
 #include "AnimationClip.h"
+
+// Physics
+#include "PhysicsConstraint.h"
+#include "PhysicsController.h"
+#include "PhysicsFixedConstraint.h"
+#include "PhysicsGenericConstraint.h"
+#include "PhysicsHingeConstraint.h"
+#include "PhysicsMotionState.h"
+#include "PhysicsRigidBody.h"
+#include "PhysicsSocketConstraint.h"
+#include "PhysicsSpringConstraint.h"

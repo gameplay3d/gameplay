@@ -3,34 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameplay", "gameplay\gameplay.vcxproj", "{1032BA4B-57EB-4348-9E03-29DD63E80E4A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gameplay-resources", "gameplay-resources", "{366E7E40-BED1-458F-B21E-265FCA8F1D10}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "res", "res", "{923056FA-5AFB-4DB5-9984-C2D72DB5FE6F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{A2CB369B-1D5B-4A0D-BA9E-96D61A2EAB4C}"
-	ProjectSection(SolutionItems) = preProject
-		gameplay-resources\res\shaders\bumped-specular.fsh = gameplay-resources\res\shaders\bumped-specular.fsh
-		gameplay-resources\res\shaders\bumped-specular.vsh = gameplay-resources\res\shaders\bumped-specular.vsh
-		gameplay-resources\res\shaders\bumped.fsh = gameplay-resources\res\shaders\bumped.fsh
-		gameplay-resources\res\shaders\bumped.vsh = gameplay-resources\res\shaders\bumped.vsh
-		gameplay-resources\res\shaders\colored-specular.fsh = gameplay-resources\res\shaders\colored-specular.fsh
-		gameplay-resources\res\shaders\colored-specular.vsh = gameplay-resources\res\shaders\colored-specular.vsh
-		gameplay-resources\res\shaders\colored.fsh = gameplay-resources\res\shaders\colored.fsh
-		gameplay-resources\res\shaders\colored.vsh = gameplay-resources\res\shaders\colored.vsh
-		gameplay-resources\res\shaders\diffuse-specular.fsh = gameplay-resources\res\shaders\diffuse-specular.fsh
-		gameplay-resources\res\shaders\diffuse-specular.vsh = gameplay-resources\res\shaders\diffuse-specular.vsh
-		gameplay-resources\res\shaders\diffuse.fsh = gameplay-resources\res\shaders\diffuse.fsh
-		gameplay-resources\res\shaders\diffuse.vsh = gameplay-resources\res\shaders\diffuse.vsh
-		gameplay-resources\res\shaders\parallax-specular.fsh = gameplay-resources\res\shaders\parallax-specular.fsh
-		gameplay-resources\res\shaders\parallax-specular.vsh = gameplay-resources\res\shaders\parallax-specular.vsh
-		gameplay-resources\res\shaders\parallax.fsh = gameplay-resources\res\shaders\parallax.fsh
-		gameplay-resources\res\shaders\parallax.vsh = gameplay-resources\res\shaders\parallax.vsh
-		gameplay-resources\res\shaders\solid.fsh = gameplay-resources\res\shaders\solid.fsh
-		gameplay-resources\res\shaders\solid.vsh = gameplay-resources\res\shaders\solid.vsh
-		gameplay-resources\res\shaders\textured.fsh = gameplay-resources\res\shaders\textured.fsh
-		gameplay-resources\res\shaders\textured.vsh = gameplay-resources\res\shaders\textured.vsh
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample00-mesh", "gameplay-samples\sample00-mesh\sample00-mesh.vcxproj", "{D672DC66-3CE0-4878-B0D2-813CA731012F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
@@ -53,42 +25,64 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample03-character", "gamep
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameplay-encoder", "gameplay-encoder\gameplay-encoder.vcxproj", "{9D69B743-4872-4DD1-8E30-0087C64298D7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D3CA8AE2-3ED6-458B-963A-EDA671E6F51C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample04-sandbox", "gameplay-samples\sample04-sandbox\sample04-sandbox.vcxproj", "{FA260001-5B2E-41B7-86DD-C7F26DF3A485}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		DebugMem|Win32 = DebugMem|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A}.Debug|Win32.ActiveCfg = Debug|Win32
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A}.Debug|Win32.Build.0 = Debug|Win32
+		{1032BA4B-57EB-4348-9E03-29DD63E80E4A}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
+		{1032BA4B-57EB-4348-9E03-29DD63E80E4A}.DebugMem|Win32.Build.0 = DebugMem|Win32
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A}.Release|Win32.ActiveCfg = Release|Win32
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A}.Release|Win32.Build.0 = Release|Win32
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Debug|Win32.Build.0 = Debug|Win32
+		{D672DC66-3CE0-4878-B0D2-813CA731012F}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
+		{D672DC66-3CE0-4878-B0D2-813CA731012F}.DebugMem|Win32.Build.0 = DebugMem|Win32
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Release|Win32.ActiveCfg = Release|Win32
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Release|Win32.Build.0 = Release|Win32
 		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Debug|Win32.ActiveCfg = Debug|Win32
 		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Debug|Win32.Build.0 = Debug|Win32
+		{9A515C8B-3320-4C5C-9754-211E91206C9D}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
+		{9A515C8B-3320-4C5C-9754-211E91206C9D}.DebugMem|Win32.Build.0 = DebugMem|Win32
 		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Release|Win32.ActiveCfg = Release|Win32
 		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Release|Win32.Build.0 = Release|Win32
 		{CC37B8E9-6402-4841-8D6A-5D908A5909B3}.Debug|Win32.ActiveCfg = Debug|Win32
 		{CC37B8E9-6402-4841-8D6A-5D908A5909B3}.Debug|Win32.Build.0 = Debug|Win32
+		{CC37B8E9-6402-4841-8D6A-5D908A5909B3}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
+		{CC37B8E9-6402-4841-8D6A-5D908A5909B3}.DebugMem|Win32.Build.0 = DebugMem|Win32
 		{CC37B8E9-6402-4841-8D6A-5D908A5909B3}.Release|Win32.ActiveCfg = Release|Win32
 		{CC37B8E9-6402-4841-8D6A-5D908A5909B3}.Release|Win32.Build.0 = Release|Win32
 		{87388E8B-F3CF-428F-BC2C-C1886248C111}.Debug|Win32.ActiveCfg = Debug|Win32
 		{87388E8B-F3CF-428F-BC2C-C1886248C111}.Debug|Win32.Build.0 = Debug|Win32
+		{87388E8B-F3CF-428F-BC2C-C1886248C111}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
+		{87388E8B-F3CF-428F-BC2C-C1886248C111}.DebugMem|Win32.Build.0 = DebugMem|Win32
 		{87388E8B-F3CF-428F-BC2C-C1886248C111}.Release|Win32.ActiveCfg = Release|Win32
 		{87388E8B-F3CF-428F-BC2C-C1886248C111}.Release|Win32.Build.0 = Release|Win32
 		{9D69B743-4872-4DD1-8E30-0087C64298D7}.Debug|Win32.ActiveCfg = Debug|Win32
 		{9D69B743-4872-4DD1-8E30-0087C64298D7}.Debug|Win32.Build.0 = Debug|Win32
+		{9D69B743-4872-4DD1-8E30-0087C64298D7}.DebugMem|Win32.ActiveCfg = Debug|Win32
+		{9D69B743-4872-4DD1-8E30-0087C64298D7}.DebugMem|Win32.Build.0 = Debug|Win32
 		{9D69B743-4872-4DD1-8E30-0087C64298D7}.Release|Win32.ActiveCfg = Release|Win32
 		{9D69B743-4872-4DD1-8E30-0087C64298D7}.Release|Win32.Build.0 = Release|Win32
+		{FA260001-5B2E-41B7-86DD-C7F26DF3A485}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FA260001-5B2E-41B7-86DD-C7F26DF3A485}.Debug|Win32.Build.0 = Debug|Win32
+		{FA260001-5B2E-41B7-86DD-C7F26DF3A485}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
+		{FA260001-5B2E-41B7-86DD-C7F26DF3A485}.DebugMem|Win32.Build.0 = DebugMem|Win32
+		{FA260001-5B2E-41B7-86DD-C7F26DF3A485}.Release|Win32.ActiveCfg = Release|Win32
+		{FA260001-5B2E-41B7-86DD-C7F26DF3A485}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{923056FA-5AFB-4DB5-9984-C2D72DB5FE6F} = {366E7E40-BED1-458F-B21E-265FCA8F1D10}
-		{A2CB369B-1D5B-4A0D-BA9E-96D61A2EAB4C} = {923056FA-5AFB-4DB5-9984-C2D72DB5FE6F}
 	EndGlobalSection
 EndGlobal

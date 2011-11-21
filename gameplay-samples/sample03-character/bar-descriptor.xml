@@ -58,10 +58,10 @@
     <asset path="res/fonts">res/fonts</asset>
     <asset path="res/models/Seymour.gpb">res/models/Seymour.gpb</asset>
     <asset path="res/textures">res/textures</asset>
-    <asset path="${workspace_loc:/gameplay-resources/res/shaders/colored-specular.fsh}">res/shaders/colored-specular.fsh</asset>
-    <asset path="${workspace_loc:/gameplay-resources/res/shaders/colored-specular.vsh}">res/shaders/colored-specular.vsh</asset>
-    <asset path="${workspace_loc:/gameplay-resources/res/shaders/diffuse-specular.fsh}">res/shaders/diffuse-specular.fsh</asset>
-    <asset path="${workspace_loc:/gameplay-resources/res/shaders/diffuse-specular.vsh}">res/shaders/diffuse-specular.vsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.fsh}">res/shaders/colored-specular.fsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.vsh}">res/shaders/colored-specular.vsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.fsh}">res/shaders/diffuse-specular.fsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.vsh}">res/shaders/diffuse-specular.vsh</asset>
     <configuration id="com.qnx.qcc.configuration.exe.debug.417937691" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Debug/sample03-character" entry="true" type="Qnx/Elf">sample03-character</asset>

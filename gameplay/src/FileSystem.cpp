@@ -34,14 +34,15 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
     fullPath += path;
 
     FILE* fp = fopen(fullPath.c_str(), mode);
-
+    
+// Win32 doesnt support a asset or bundle definitions.
 #ifdef WIN32
-    // HACK: For testing purposes, search the gameplay-resources folder as well.
     if (fp == NULL)
     {
         fullPath = __resourcePath;
-        fullPath += "../../gameplay-resources/";
+        fullPath += "../../gameplay/";
         fullPath += path;
+        
         fp = fopen(fullPath.c_str(), mode);
     }
 #endif

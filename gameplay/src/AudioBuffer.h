@@ -41,6 +41,10 @@ private:
      * @return The buffer from a file.
      */
     static AudioBuffer* create(const char* path);
+    
+    static bool loadWav(FILE* file, ALuint buffer);
+    
+    static bool loadOgg(FILE* file, ALuint buffer);
 
     std::string _filePath;
     ALuint _alBuffer;

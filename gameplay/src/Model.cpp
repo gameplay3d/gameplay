@@ -42,7 +42,7 @@ Model* Model::create(Mesh* mesh)
     return new Model(mesh);
 }
 
-Mesh* Model::getMesh()
+Mesh* Model::getMesh() const
 {
     return _mesh;
 }
@@ -187,6 +187,7 @@ void Model::setSkin(MeshSkin* skin)
 
         // Assign the new skin
         _skin = skin;
+        _skin->_model = this;
     }
 }
 
@@ -197,17 +198,7 @@ Node* Model::getNode() const
 
 void Model::setNode(Node* node)
 {
-    if (_node != node)
-    {
-        SAFE_RELEASE(_node);
-
-        _node = node;
-
-        if (_node)
-        {
-            node->addRef();
-        }
-    }
+    _node = node;
 
     // Re-bind node related material parameters
     if (node)

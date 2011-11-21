@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "AudioController.h"
 #include "AnimationController.h"
+#include "PhysicsController.h"
 #include "Vector4.h"
 
 namespace gameplay
@@ -18,7 +19,6 @@ namespace gameplay
  */
 class Game
 {
-
 public:
 
     /**
@@ -34,8 +34,7 @@ public:
     /**
      * Flags used when clearing the active frame buffer targets.
      */
-
-     enum ClearFlags
+    enum ClearFlags
     {
         CLEAR_COLOR = GL_COLOR_BUFFER_BIT,
         CLEAR_DEPTH = GL_DEPTH_BUFFER_BIT,
@@ -45,8 +44,6 @@ public:
         CLEAR_DEPTH_STENCIL = CLEAR_DEPTH | CLEAR_STENCIL,
         CLEAR_COLOR_DEPTH_STENCIL = CLEAR_COLOR | CLEAR_DEPTH | CLEAR_STENCIL
     };
-
-
 
     /**
      * Destructor.
@@ -168,7 +165,7 @@ public:
      *
      * @return The audio controller for this game.
      */
-    const AudioController& getAudioController() const;
+    const AudioController* getAudioController() const;
 
     /**
      * Gets the animation controller for managing control of animations
@@ -177,6 +174,14 @@ public:
      * @return The animation controller for this game.
      */
     AnimationController* getAnimationController();
+
+    /**
+     * Gets the physics controller for managing control of physics
+     * associated with the game.
+     * 
+     * @return The physics controller for this game.
+     */
+    PhysicsController* getPhysicsController();
 
     /**
      * Menu callback on menu events.
@@ -279,8 +284,9 @@ private:
     Vector4 _clearColor;                        // The clear color value last used for clearing the color buffer.
     float _clearDepth;                          // The clear depth value last used for clearing the depth buffer.
     int _clearStencil;                          // The clear stencil value last used for clearing the stencil buffer.
-    AnimationController _animationController;   // Controls the scheduling and running of animations.
-    AudioController _audioController;           // Controls audio sources that are playing in the game.
+    AnimationController* _animationController;  // Controls the scheduling and running of animations.
+    AudioController* _audioController;          // Controls audio sources that are playing in the game.
+    PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
 };
 
 }

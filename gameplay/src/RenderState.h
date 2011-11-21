@@ -1,7 +1,3 @@
-/**
- * RenderState.h
- */
-
 #ifndef RENDERSTATE_H_
 #define RENDERSTATE_H_
 
@@ -16,6 +12,7 @@ class Pass;
 
 class RenderState : public Ref
 {
+    friend class Game;
     friend class Material;
     friend class Technique;
     friend class Pass;
@@ -198,7 +195,7 @@ public:
         // State bits
         long _bits;
 
-        static StateBlock _defaultState;
+        static StateBlock* _defaultState;
     };
 
     /**
@@ -280,6 +277,16 @@ protected:
     virtual ~RenderState();
 
     /**
+     * Static initializer that is called during game startup.
+     */
+    static void initialize();
+
+    /**
+     * Static finalizer that is called during game shutdown.
+     */
+    static void finalize();
+
+    /**
      * Sets the node that this render state is bound to.
      *
      * The specified node is used to apply auto-bindings for the render state.
@@ -311,8 +318,6 @@ protected:
     Node* _nodeBinding;
     mutable StateBlock* _state;
     RenderState* _parent;
-   
-    static StateBlock* _restoreState;
 };
 
 }

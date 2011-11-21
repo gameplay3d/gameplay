@@ -77,6 +77,16 @@ public:
     Vector4(const Vector4& copy);
 
     /**
+     * Creates a new vector from an integer interpreted as an RGBA value.
+     * E.g. 0xff0000ff represents opaque red or the vector (1, 0, 0, 1).
+     *
+     * @param color The integer to interpret as an RGBA value.
+     *
+     * @return A vector corresponding to the interpreted RGBA color.
+     */
+    static Vector4 fromColor(unsigned int color);
+
+    /**
      * Destructor.
      */
     ~Vector4();
@@ -333,8 +343,82 @@ public:
      * @param dst The destination vector.
      */
     static void subtract(const Vector4& v1, const Vector4& v2, Vector4* dst);
+
+    /**
+     * Calculates the sum of this vector with the given vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param v The vector to add.
+     * @return The vector sum.
+     */
+    inline Vector4 operator+(const Vector4& v) const;
+
+    /**
+     * Adds the given vector to this vector.
+     * 
+     * @param v The vector to add.
+     * @return This vector, after the addition occurs.
+     */
+    inline Vector4& operator+=(const Vector4& v);
+
+    /**
+     * Calculates the sum of this vector with the given vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param v The vector to add.
+     * @return The vector sum.
+     */
+    inline Vector4 operator-(const Vector4& v) const;
+
+    /**
+     * Subtracts the given vector from this vector.
+     * 
+     * @param v The vector to subtract.
+     * @return This vector, after the subtraction occurs.
+     */
+    inline Vector4& operator-=(const Vector4& v);
+
+    /**
+     * Calculates the negation of this vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @return The negation of this vector.
+     */
+    inline Vector4 operator-() const;
+
+    /**
+     * Calculates the scalar product of this vector with the given value.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param x The value to scale by.
+     * @return The scaled vector.
+     */
+    inline Vector4 operator*(float x) const;
+
+    /**
+     * Scales this vector by the given value.
+     * 
+     * @param x The value to scale by.
+     * @return This vector, after the scale occurs.
+     */
+    inline Vector4& operator*=(float x);
 };
 
+/**
+ * Calculates the scalar product of the given vector with the given value.
+ * 
+ * @param x The value to scale by.
+ * @param v The vector to scale.
+ * @return The scaled vector.
+ */
+inline Vector4 operator*(float x, const Vector4& v);
+
 }
+
+#include "Vector4.inl"
 
 #endif

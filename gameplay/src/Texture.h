@@ -27,8 +27,7 @@ public:
         ALPHA = GL_ALPHA,
         RGB888 = GL_RGB,
         RGBA8888 = GL_RGBA,
-        LUMINANCE = GL_LUMINANCE,
-        LUMINANCE_ALPHA = GL_LUMINANCE_ALPHA
+        DEPTH = GL_DEPTH_COMPONENT
     };
 
     /**
