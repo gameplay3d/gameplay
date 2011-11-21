@@ -68,15 +68,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/alut/include/AL;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/oggvorbis/include;../../external-deps/alut/include/AL;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;BulletDynamics_debug.lib;BulletCollision_debug.lib;LinearMath_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg_debug.lib;libvorbis_debug.lib;libvorbisfile_debug.lib;BulletDynamics_debug.lib;BulletCollision_debug.lib;LinearMath_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -98,14 +98,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/oggvorbis/include;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;BulletDynamics_debug.lib;BulletCollision_debug.lib;LinearMath_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg_debug.lib;libvorbis_debug.lib;libvorbisfile_debug.lib;BulletDynamics_debug.lib;BulletCollision_debug.lib;LinearMath_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -129,15 +129,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/oggvorbis/include;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/Release</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

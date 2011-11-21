@@ -28,6 +28,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.2133604142" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\bullet\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\oggvorbis\include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.997142816" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -80,6 +81,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1670164593" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\bullet\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\oggvorbis\include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1380846613" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -131,6 +133,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1503059677" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\bullet\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\oggvorbis\include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.81809638" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -185,6 +188,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1769677874" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\bullet\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\oggvorbis\include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.2007171407" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -237,6 +241,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.847642559" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\bullet\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\oggvorbis\include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1038720310" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -289,6 +294,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.513622172" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\bullet\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\oggvorbis\include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1961855927" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -342,6 +348,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1685994750" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\bullet\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\external-deps\oggvorbis\include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1658185881" superClass="com.qnx.qcc.inputType.compiler"/>
