@@ -180,8 +180,8 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color)
     for (int i = 0; i < length; ++i)
     {
         char c = text[i];
-        unsigned int index = c - 32; // HACK for ASCII
-        if (index >= 0 && index < _glyphCount)
+        int index = c - 32; // HACK for ASCII
+        if (index >= 0 && index < (int)_glyphCount)
         {
             Glyph& g = _glyphs[index];
 
