@@ -49,8 +49,7 @@
 								<option id="com.qnx.qcc.option.linker.langcpp.1333293495" name="C++ (-lang-c++)" superClass="com.qnx.qcc.option.linker.langcpp" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.linker.security.1795548052" name="Enhanced Security (-Wl,-z,relro -Wl,-z,now)" superClass="com.qnx.qcc.option.linker.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.linker.libraryPaths.767645138" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${QNX_TARGET}/../target-override/armle-v7/lib&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${QNX_TARGET}/../target-override/armle-v7/usr/lib&quot;"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.710440947" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
@@ -65,11 +64,7 @@
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 								</option>
-								<option id="com.qnx.qcc.option.linker.defLibraryPaths.1608242687" superClass="com.qnx.qcc.option.linker.defLibraryPaths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
-								</option>
+								<option id="com.qnx.qcc.option.linker.defLibraryPaths.1608242687" superClass="com.qnx.qcc.option.linker.defLibraryPaths" valueType="libPaths"/>
 								<inputType id="com.qnx.qcc.inputType.linker.38460229" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

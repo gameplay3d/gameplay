@@ -24,13 +24,13 @@
 		4217006214697FF100A45C02 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4220A6E4146B121000CAEB3A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42A3C5DD146C96640091C1E4 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
-		42A3C5E3146CB7420091C1E4 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		42A3C5E3146CB7420091C1E4 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
 		42A3C5E5146CB7690091C1E4 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		42BBCD32146C89F900D2A5F8 /* MeshGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshGame.cpp; path = src/MeshGame.cpp; sourceTree = SOURCE_ROOT; };
 		42BBCD33146C89F900D2A5F8 /* MeshGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeshGame.h; path = src/MeshGame.h; sourceTree = SOURCE_ROOT; };
 		42CCD4B3146D914B00353661 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		42F68AA11469CBEE00E0E3C4 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-dlmrkofumohcdicgwoccmyysfdmq/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
-		42F68AA31469CC3000E0E3C4 /* sample00-mesh-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample00-mesh-Info.plist"; sourceTree = SOURCE_ROOT; };
+		42F68AA31469CC3000E0E3C4 /* sample00-mesh-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample00-mesh-macos.plist"; sourceTree = SOURCE_ROOT; };
 		42F68AA51469CDE100E0E3C4 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		42F68AA61469CDE100E0E3C4 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -78,7 +78,7 @@
 		4217006814697FF100A45C02 /* sample00-mesh */ = {
 			isa = PBXGroup;
 			children = (
-				42F68AA31469CC3000E0E3C4 /* sample00-mesh-Info.plist */,
+				42F68AA31469CC3000E0E3C4 /* sample00-mesh-macos.plist */,
 				42BBCD32146C89F900D2A5F8 /* MeshGame.cpp */,
 				42BBCD33146C89F900D2A5F8 /* MeshGame.h */,
 			);
@@ -243,11 +243,10 @@
 					../../gameplay/src,
 					"../../external-deps/libpng/include",
 				);
-				INFOPLIST_FILE = "sample00-mesh-Info.plist";
+				INFOPLIST_FILE = "sample00-mesh-macos.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-dlmrkofumohcdicgwoccmyysfdmq/Build/Products/Debug\"",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SHARED_PRECOMPS_DIR = "";
@@ -268,11 +267,10 @@
 					../../gameplay/src,
 					"../../external-deps/libpng/include",
 				);
-				INFOPLIST_FILE = "sample00-mesh-Info.plist";
+				INFOPLIST_FILE = "sample00-mesh-macos.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-dlmrkofumohcdicgwoccmyysfdmq/Build/Products/Debug\"",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SHARED_PRECOMPS_DIR = "";

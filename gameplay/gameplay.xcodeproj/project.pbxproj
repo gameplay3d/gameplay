@@ -52,7 +52,7 @@
 		42BBCCE4146C89DF00D2A5F8 /* Frustum.h in Headers */ = {isa = PBXBuildFile; fileRef = 42BBCC71146C89DF00D2A5F8 /* Frustum.h */; };
 		42BBCCE5146C89DF00D2A5F8 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCC72146C89DF00D2A5F8 /* Game.cpp */; };
 		42BBCCE6146C89DF00D2A5F8 /* Game.h in Headers */ = {isa = PBXBuildFile; fileRef = 42BBCC73146C89DF00D2A5F8 /* Game.h */; };
-		42BBCCE7146C89DF00D2A5F8 /* gameplay-main-macosx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCC74146C89DF00D2A5F8 /* gameplay-main-macosx.mm */; };
+		42BBCCE7146C89DF00D2A5F8 /* gameplay-main-macos.mm in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCC74146C89DF00D2A5F8 /* gameplay-main-macos.mm */; };
 		42BBCCE8146C89DF00D2A5F8 /* gameplay-main-qnx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCC75146C89DF00D2A5F8 /* gameplay-main-qnx.cpp */; };
 		42BBCCE9146C89DF00D2A5F8 /* gameplay-main-win32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCC76146C89DF00D2A5F8 /* gameplay-main-win32.cpp */; };
 		42BBCCEA146C89DF00D2A5F8 /* gameplay.h in Headers */ = {isa = PBXBuildFile; fileRef = 42BBCC77146C89DF00D2A5F8 /* gameplay.h */; };
@@ -87,7 +87,7 @@
 		42BBCD07146C89DF00D2A5F8 /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCC94146C89DF00D2A5F8 /* Plane.cpp */; };
 		42BBCD08146C89DF00D2A5F8 /* Plane.h in Headers */ = {isa = PBXBuildFile; fileRef = 42BBCC95146C89DF00D2A5F8 /* Plane.h */; };
 		42BBCD09146C89DF00D2A5F8 /* Platform.h in Headers */ = {isa = PBXBuildFile; fileRef = 42BBCC96146C89DF00D2A5F8 /* Platform.h */; };
-		42BBCD0A146C89DF00D2A5F8 /* PlatformMacOSX.mm in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCC97146C89DF00D2A5F8 /* PlatformMacOSX.mm */; };
+		42BBCD0A146C89DF00D2A5F8 /* PlatformMacOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCC97146C89DF00D2A5F8 /* PlatformMacOS.mm */; };
 		42BBCD0B146C89DF00D2A5F8 /* PlatformQNX.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCC98146C89DF00D2A5F8 /* PlatformQNX.cpp */; };
 		42BBCD0C146C89DF00D2A5F8 /* PlatformWin32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCC99146C89DF00D2A5F8 /* PlatformWin32.cpp */; };
 		42BBCD0D146C89DF00D2A5F8 /* Properties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCC9A146C89DF00D2A5F8 /* Properties.cpp */; };
@@ -177,7 +177,7 @@
 		42BBCC71146C89DF00D2A5F8 /* Frustum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Frustum.h; path = src/Frustum.h; sourceTree = SOURCE_ROOT; };
 		42BBCC72146C89DF00D2A5F8 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = src/Game.cpp; sourceTree = SOURCE_ROOT; };
 		42BBCC73146C89DF00D2A5F8 /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Game.h; path = src/Game.h; sourceTree = SOURCE_ROOT; };
-		42BBCC74146C89DF00D2A5F8 /* gameplay-main-macosx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-macosx.mm"; path = "src/gameplay-main-macosx.mm"; sourceTree = SOURCE_ROOT; };
+		42BBCC74146C89DF00D2A5F8 /* gameplay-main-macos.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-macos.mm"; path = "src/gameplay-main-macos.mm"; sourceTree = SOURCE_ROOT; };
 		42BBCC75146C89DF00D2A5F8 /* gameplay-main-qnx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-qnx.cpp"; path = "src/gameplay-main-qnx.cpp"; sourceTree = SOURCE_ROOT; };
 		42BBCC76146C89DF00D2A5F8 /* gameplay-main-win32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-win32.cpp"; path = "src/gameplay-main-win32.cpp"; sourceTree = SOURCE_ROOT; };
 		42BBCC77146C89DF00D2A5F8 /* gameplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gameplay.h; path = src/gameplay.h; sourceTree = SOURCE_ROOT; };
@@ -212,7 +212,7 @@
 		42BBCC94146C89DF00D2A5F8 /* Plane.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Plane.cpp; path = src/Plane.cpp; sourceTree = SOURCE_ROOT; };
 		42BBCC95146C89DF00D2A5F8 /* Plane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Plane.h; path = src/Plane.h; sourceTree = SOURCE_ROOT; };
 		42BBCC96146C89DF00D2A5F8 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Platform.h; path = src/Platform.h; sourceTree = SOURCE_ROOT; };
-		42BBCC97146C89DF00D2A5F8 /* PlatformMacOSX.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformMacOSX.mm; path = src/PlatformMacOSX.mm; sourceTree = SOURCE_ROOT; };
+		42BBCC97146C89DF00D2A5F8 /* PlatformMacOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformMacOS.mm; path = src/PlatformMacOS.mm; sourceTree = SOURCE_ROOT; };
 		42BBCC98146C89DF00D2A5F8 /* PlatformQNX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformQNX.cpp; path = src/PlatformQNX.cpp; sourceTree = SOURCE_ROOT; };
 		42BBCC99146C89DF00D2A5F8 /* PlatformWin32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformWin32.cpp; path = src/PlatformWin32.cpp; sourceTree = SOURCE_ROOT; };
 		42BBCC9A146C89DF00D2A5F8 /* Properties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Properties.cpp; path = src/Properties.cpp; sourceTree = SOURCE_ROOT; };
@@ -252,7 +252,7 @@
 		42BBCCBC146C89DF00D2A5F8 /* Viewport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Viewport.cpp; path = src/Viewport.cpp; sourceTree = SOURCE_ROOT; };
 		42BBCCBD146C89DF00D2A5F8 /* Viewport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Viewport.h; path = src/Viewport.h; sourceTree = SOURCE_ROOT; };
 		42CCD553146EC1DD00353661 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = SDKs/MacOSX10.7.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
-		42CCD555146EC1EB00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		42CCD555146EC1EB00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -335,7 +335,7 @@
 				42BBCC71146C89DF00D2A5F8 /* Frustum.h */,
 				42BBCC72146C89DF00D2A5F8 /* Game.cpp */,
 				42BBCC73146C89DF00D2A5F8 /* Game.h */,
-				42BBCC74146C89DF00D2A5F8 /* gameplay-main-macosx.mm */,
+				42BBCC74146C89DF00D2A5F8 /* gameplay-main-macos.mm */,
 				42BBCC75146C89DF00D2A5F8 /* gameplay-main-qnx.cpp */,
 				42BBCC76146C89DF00D2A5F8 /* gameplay-main-win32.cpp */,
 				42BBCC77146C89DF00D2A5F8 /* gameplay.h */,
@@ -370,7 +370,7 @@
 				42BBCC94146C89DF00D2A5F8 /* Plane.cpp */,
 				42BBCC95146C89DF00D2A5F8 /* Plane.h */,
 				42BBCC96146C89DF00D2A5F8 /* Platform.h */,
-				42BBCC97146C89DF00D2A5F8 /* PlatformMacOSX.mm */,
+				42BBCC97146C89DF00D2A5F8 /* PlatformMacOS.mm */,
 				42BBCC98146C89DF00D2A5F8 /* PlatformQNX.cpp */,
 				42BBCC99146C89DF00D2A5F8 /* PlatformWin32.cpp */,
 				42BBCC9A146C89DF00D2A5F8 /* Properties.cpp */,
@@ -560,7 +560,7 @@
 				42BBCCE1146C89DF00D2A5F8 /* FrameBuffer.cpp in Sources */,
 				42BBCCE3146C89DF00D2A5F8 /* Frustum.cpp in Sources */,
 				42BBCCE5146C89DF00D2A5F8 /* Game.cpp in Sources */,
-				42BBCCE7146C89DF00D2A5F8 /* gameplay-main-macosx.mm in Sources */,
+				42BBCCE7146C89DF00D2A5F8 /* gameplay-main-macos.mm in Sources */,
 				42BBCCE8146C89DF00D2A5F8 /* gameplay-main-qnx.cpp in Sources */,
 				42BBCCE9146C89DF00D2A5F8 /* gameplay-main-win32.cpp in Sources */,
 				42BBCCEB146C89DF00D2A5F8 /* Input.cpp in Sources */,
@@ -578,7 +578,7 @@
 				42BBCD03146C89DF00D2A5F8 /* ParticleEmitter.cpp in Sources */,
 				42BBCD05146C89DF00D2A5F8 /* Pass.cpp in Sources */,
 				42BBCD07146C89DF00D2A5F8 /* Plane.cpp in Sources */,
-				42BBCD0A146C89DF00D2A5F8 /* PlatformMacOSX.mm in Sources */,
+				42BBCD0A146C89DF00D2A5F8 /* PlatformMacOS.mm in Sources */,
 				42BBCD0B146C89DF00D2A5F8 /* PlatformQNX.cpp in Sources */,
 				42BBCD0C146C89DF00D2A5F8 /* PlatformWin32.cpp in Sources */,
 				42BBCD0D146C89DF00D2A5F8 /* Properties.cpp in Sources */,
@@ -645,7 +645,7 @@
 				HEADER_SEARCH_PATHS = "../external-deps/libpng/include";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/libpng/lib/macos\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
@@ -679,7 +679,7 @@
 				HEADER_SEARCH_PATHS = "../external-deps/libpng/include";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/libpng/lib/macos\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;

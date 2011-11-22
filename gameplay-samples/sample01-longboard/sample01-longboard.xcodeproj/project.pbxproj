@@ -22,7 +22,7 @@
 /* Begin PBXFileReference section */
 		42CCD48E146D80DA00353661 /* sample01-longboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample01-longboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD492146D80DA00353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		42CCD49A146D80DA00353661 /* sample01-longboard-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "sample01-longboard-Info.plist"; sourceTree = "<group>"; };
+		42CCD49A146D80DA00353661 /* sample01-longboard-macos.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "sample01-longboard-macos.plist"; sourceTree = "<group>"; };
 		42CCD4BD146D91D700353661 /* LongboardGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LongboardGame.cpp; path = src/LongboardGame.cpp; sourceTree = SOURCE_ROOT; };
 		42CCD4BE146D91D700353661 /* LongboardGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LongboardGame.h; path = src/LongboardGame.h; sourceTree = SOURCE_ROOT; };
 		42CCD4C1146D91E800353661 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
@@ -31,7 +31,7 @@
 		42CCD4D4146D941A00353661 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		42CCD4D6146D949200353661 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		42CCD4D8146D949800353661 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-dlmrkofumohcdicgwoccmyysfdmq/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
-		42CCD4DA146D94AA00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		42CCD4DA146D94AA00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
 		42CCD4DC146D950400353661 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -89,7 +89,7 @@
 		42CCD498146D80DA00353661 /* sample01-longboard */ = {
 			isa = PBXGroup;
 			children = (
-				42CCD49A146D80DA00353661 /* sample01-longboard-Info.plist */,
+				42CCD49A146D80DA00353661 /* sample01-longboard-macos.plist */,
 				42CCD4BD146D91D700353661 /* LongboardGame.cpp */,
 				42CCD4BE146D91D700353661 /* LongboardGame.h */,
 			);
@@ -237,11 +237,10 @@
 					../../gameplay/src,
 					"../../external-deps/libpng/include",
 				);
-				INFOPLIST_FILE = "sample01-longboard-Info.plist";
+				INFOPLIST_FILE = "sample01-longboard-macos.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-dlmrkofumohcdicgwoccmyysfdmq/Build/Products/Debug\"",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -259,11 +258,10 @@
 					../../gameplay/src,
 					"../../external-deps/libpng/include",
 				);
-				INFOPLIST_FILE = "sample01-longboard-Info.plist";
+				INFOPLIST_FILE = "sample01-longboard-macos`.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-dlmrkofumohcdicgwoccmyysfdmq/Build/Products/Debug\"",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
