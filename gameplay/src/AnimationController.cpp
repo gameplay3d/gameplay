@@ -189,12 +189,11 @@ void AnimationController::update(long elapsedTime)
         return;
 
     std::list<AnimationClip*>::iterator clipIter = _runningClips.begin();
-
     while (clipIter != _runningClips.end())
     {
-        if ((*clipIter)->update(elapsedTime))
+        AnimationClip* clip = (*clipIter);
+        if (clip->update(elapsedTime))
         {
-            AnimationClip* clip = *clipIter;
             clipIter = _runningClips.erase(clipIter);
             SAFE_RELEASE(clip);
         }
@@ -203,7 +202,7 @@ void AnimationController::update(long elapsedTime)
             clipIter++;
         }
     }
-
+    
     if (_runningClips.empty())
         _state = IDLE;
 }

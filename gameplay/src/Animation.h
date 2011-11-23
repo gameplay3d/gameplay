@@ -172,6 +172,7 @@ private:
     std::vector<Channel*> _channels;        // The channels within this Animation.
     AnimationClip* _defaultClip;
     std::vector<AnimationClip*>* _clips;     // All the clips created from this Animation.
+
 };
 
 }
