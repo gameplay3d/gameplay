@@ -189,6 +189,7 @@ void AnimationController::update(long elapsedTime)
         return;
 
     std::list<AnimationClip*>::iterator clipIter = _runningClips.begin();
+    unsigned int clipCount = 0;
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = (*clipIter);
@@ -201,6 +202,7 @@ void AnimationController::update(long elapsedTime)
         {
             clipIter++;
         }
+        clipCount++;
     }
     
     if (_runningClips.empty())

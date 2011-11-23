@@ -46,6 +46,8 @@ AnimationClip::~AnimationClip()
         valueIter++;
     }
 
+    SAFE_DELETE(_crossFadeToClip);
+    SAFE_DELETE(_channelPriority);
     SAFE_DELETE(_beginListeners);
     SAFE_DELETE(_endListeners);
 }
@@ -161,36 +163,37 @@ void AnimationClip::stop()
 
 void AnimationClip::crossFade(AnimationClip* clip, unsigned long duration)
 {
-    if (_isPlaying)
+    assert(clip);
+
+    if (clip->_isPlaying && clip->_isFadingOut)
     {
-        if (clip->_isPlaying && clip->_isFadingOut)
-        {
-            clip->_crossFadeToClip->_isFadingIn = false;
-            SAFE_RELEASE(clip->_crossFadeToClip);
-        }
-
-        // If I already have a clip I'm fading too.. release it.
-        // What about if it's currently playing? Should I stop it?
-        if (_crossFadeToClip)
-            SAFE_RELEASE(_crossFadeToClip);
-
-        // Assign the clip we're fading to, and increase its ref count.
-        _crossFadeToClip = clip;
-        _crossFadeToClip->addRef();
-        
-        // Set the fade in clip to fading in, and set the duration of the fade in.
-        _crossFadeToClip->_isFadingIn = true;
-    
-        // Set this clip to fade out, and reset the elapsed time for the fade out.
-        _isFadingOut = true;
-        _crossFadeOutElapsed = 0;
-        _crossFadeOutDuration = duration;
-        _crossFadeStart = (Game::getGameTime() - _timeStarted);
-        _isFadingOutStarted = true;
+        clip->_isFadingOut = false;
+        clip->_crossFadeToClip->_isFadingIn = false;
+        SAFE_RELEASE(clip->_crossFadeToClip);
     }
+
+    // If I already have a clip I'm fading too.. release it.
+    if (_crossFadeToClip)
+        SAFE_RELEASE(_crossFadeToClip);
+
+    // Assign the clip we're fading to, and increase its ref count.
+    _crossFadeToClip = clip;
+    _crossFadeToClip->addRef();
+        
+    // Set the fade in clip to fading in, and set the duration of the fade in.
+    _crossFadeToClip->_isFadingIn = true;
     
-    _crossFadeToClip->_blendWeight = 1.0f;
-    _crossFadeToClip->play(); // This is going to re-start animations anyways..
+    // Set this clip to fade out, and reset the elapsed time for the fade out.
+    _isFadingOut = true;
+    _crossFadeOutElapsed = 0;
+    _crossFadeOutDuration = duration;
+    _crossFadeStart = (Game::getGameTime() - _timeStarted);
+    _isFadingOutStarted = true;
+    
+    if (!_isPlaying)
+        play();
+
+    _crossFadeToClip->play(); 
 }
 
 void AnimationClip::addBeginListener(AnimationClip::Listener* listener)
@@ -253,14 +256,14 @@ bool AnimationClip::update(unsigned long elapsedTime)
     
     if (_isFadingOut)
     {
-    
-        if (_isFadingOutStarted) // might be a bug later since this var could go up and down in value.
+        if (_isFadingOutStarted) // Calculate elapsed time since the fade out begin.
         {
             _crossFadeOutElapsed = (_elapsedTime - _crossFadeStart) * speed;
             _isFadingOutStarted = false;
         }
         else
         {
+            // continue tracking elapsed time.
             _crossFadeOutElapsed += elapsedTime * speed;
         }
 
@@ -268,7 +271,8 @@ bool AnimationClip::update(unsigned long elapsedTime)
         {
             float tempBlendWeight = (float) (_crossFadeOutDuration - _crossFadeOutElapsed) / (float) _crossFadeOutDuration;
             _crossFadeToClip->_blendWeight = (1.0f - tempBlendWeight);
-                
+            
+            // adjust the clip your blending to's weight to be a percentage of your current blend weight
             if (_isFadingIn)
             {
                 _crossFadeToClip->_blendWeight *= _blendWeight;
@@ -280,7 +284,7 @@ bool AnimationClip::update(unsigned long elapsedTime)
             }
         }
         else
-        {
+        {   // Fade done.
             _crossFadeToClip->_blendWeight = 1.0f;
                 
             if (_isFadingIn)
@@ -312,9 +316,6 @@ bool AnimationClip::update(unsigned long elapsedTime)
         if (target->_reassignPriorities)
         {
             _channelPriority[i] = target->getPriority();
-
-            if (target->_nextPriority == target->getActiveAnimationCount())
-                target->_reassignPriorities = false;
         }
 
         if (_blendWeight != 0.0f)
@@ -460,7 +461,7 @@ bool AnimationClip::update(unsigned long elapsedTime)
                     // We are at the index for a quaternion component. Handle the next for components as a whole quaternion.
                     Quaternion* currentQuaternion = (Quaternion*) (value->_currentValue + j);
 
-                    // Add in contribution.
+                    // Set it to identity.
                     currentQuaternion->setIdentity();
                     
                     // Increase by 4.
@@ -497,10 +498,6 @@ void AnimationClip::onBegin()
     _isPlaying = true;
     _elapsedTime = 0;
 
-    //_blendWeight = 1.0f;
-
-    _isFadingOut = false;
-
     if (_speed > 0)
     {
         _runningTime = 0;
@@ -518,7 +515,7 @@ void AnimationClip::onBegin()
         target = _animation->_channels[i]->_target;
 
         target->increaseActiveAnimationCount();
-        _channelPriority[i] = target->getActiveAnimationCount();
+        _channelPriority[i] = target->getPriority();
     }
 
     // Notify begin listeners.. if any.
@@ -541,12 +538,9 @@ void AnimationClip::onEnd()
     {
         target = _animation->_channels[i]->_target;
         
-        // Reset the channel priority
-        _channelPriority[i] = 0;
-
+        // Decrease active animation count on target and reset the channel priority
         target->decreaseActiveAnimationCount();
-        target->_reassignPriorities = true;
-        target->_nextPriority = 0;
+        _channelPriority[i] = 0;
     }
 
     _blendWeight = 1.0f;

@@ -116,19 +116,14 @@ private:
     void decreaseActiveAnimationCount();
 
     /**
-     * Gets the active animation count on target.
-     */
-    unsigned int getActiveAnimationCount() const;
-
-    /**
      * Gets the priority to assign to the channel when reassigning priorities.
      */
     unsigned int getPriority();
 
-    unsigned int _activeAnimationCount;
-    bool _reassignPriorities;
-    unsigned int _nextPriority;
-    std::vector<Animation*>* _animations;
+    unsigned int _activeAnimationCount;        // The number of active animations targeting this AnimationTarget.
+    bool _reassignPriorities;                  // A flag to indicate that channel priorities for this AnimationTarget need to be reassigned
+    unsigned int _currentPriority;             // Used to keep track of the current priority when reassigning channel priorities
+    std::vector<Animation*>* _animations;      // Collection of all animations on that target the AnimationTarget
 
 };
 }
