@@ -31,6 +31,8 @@ public:
      */
     static const unsigned int REPEAT_INDEFINITE = 0;
 
+    static int _crazyCounter;
+
     /**
      * Defines an animation event listener.
      */
@@ -142,6 +144,20 @@ public:
     float getSpeed() const;
 
     /**
+     * Sets the blend weight of the AnimationClip.
+     *
+     * @param blendWeight The blend weight to apply to the clip.
+     */
+    void setBlendWeight(float blendWeight);
+
+    /** 
+     * Gets the blend weight of the AnimationClip.
+     *
+     * @return The blendweight of the AnimationClip.
+     */
+    float getBlendWeight() const;
+
+    /**
      * Checks if the AnimationClip is playing.
      *
      * @return true if the AnimationClip is playing; false if the AnimationClip is not playing.
@@ -158,6 +174,12 @@ public:
      */
     void stop();
 
+    /**
+     * Fades this clip out, and the specified clip in over the given duration.
+     *
+     * @param clip The clip to fade into.
+     * @param duration The duration of the fade.
+     */
     void crossFade(AnimationClip* clip, unsigned long duration);
 
     /**
@@ -173,6 +195,8 @@ public:
      * @param listener The listener to be called when an animation clip ends.
      */
     void addEndListener(AnimationClip::Listener* listener);
+
+    void applyBlendWeight(float weight);
 
 private:
 
@@ -224,17 +248,18 @@ private:
     unsigned long _elapsedTime;               // Time elapsed while the clip is running.
     long _runningTime;                        // Keeps track of the Animation's relative time in respect to the active duration.
     unsigned int* _channelPriority;
-    AnimationClip* _crossFadeClip;
-    AnimationClip* _crossFadeFrom;
+    AnimationClip* _crossFadeToClip;
     unsigned long _crossFadeStart;
-    unsigned long _crossFadeInDuration;
+    unsigned long _crossFadeOutElapsed;
     unsigned long _crossFadeOutDuration;
     float _blendWeight;
+    bool _isFadingOutStarted;
     bool _isFadingOut;
     bool _isFadingIn;
     std::vector<AnimationValue*> _values;     // AnimationValue holder.
     std::vector<Listener*>* _beginListeners;
     std::vector<Listener*>* _endListeners;
+
 };
 
 }

@@ -13,7 +13,7 @@ namespace gameplay
 {
 
 AnimationTarget::AnimationTarget()
-    : _targetType(SCALAR), _activeAnimationCount(0), _animations(NULL)
+    : _targetType(SCALAR), _activeAnimationCount(0), _nextPriority(0), _animations(NULL), _reassignPriorities(false)
 {
 }
 
@@ -91,6 +91,11 @@ void AnimationTarget::decreaseActiveAnimationCount()
 unsigned int AnimationTarget::getActiveAnimationCount() const
 {
     return _activeAnimationCount;
+}
+
+unsigned int AnimationTarget::getPriority() 
+{
+    return ++_nextPriority;
 }
 
 }

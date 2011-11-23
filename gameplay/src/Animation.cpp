@@ -327,10 +327,12 @@ void Animation::addClip(AnimationClip* clip)
 
 AnimationClip* Animation::findClip(const char* id) const
 {
+    AnimationClip* clip = NULL;
     unsigned int clipCount = _clips->size();
     for (unsigned int i = 0; i < clipCount; i++)
     {
-        if (_clips->at(i)->_id.compare(id) == 0)
+        clip = _clips->at(i);
+        if (clip->_id.compare(id) == 0)
         {
             return _clips->at(i);
         }

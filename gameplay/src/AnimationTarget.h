@@ -105,13 +105,29 @@ private:
      */
     AnimationTarget(const AnimationTarget& copy);
 
+    /**
+     * Increases the active animation count on the target by one.
+     */
     void increaseActiveAnimationCount();
 
+    /**
+     * Decreases the active animation count on the target by one.
+     */
     void decreaseActiveAnimationCount();
 
+    /**
+     * Gets the active animation count on target.
+     */
     unsigned int getActiveAnimationCount() const;
 
+    /**
+     * Gets the priority to assign to the channel when reassigning priorities.
+     */
+    unsigned int getPriority();
+
     unsigned int _activeAnimationCount;
+    bool _reassignPriorities;
+    unsigned int _nextPriority;
     std::vector<Animation*>* _animations;
 
 };
