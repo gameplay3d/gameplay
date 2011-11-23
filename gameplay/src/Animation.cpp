@@ -56,6 +56,10 @@ Animation::~Animation()
         }
         _clips->clear();
     }
+
+    SAFE_DELETE(_clips);
+
+    SAFE_DELETE(_defaultClip);
 }
 
 Animation::Channel::Channel(AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration)
