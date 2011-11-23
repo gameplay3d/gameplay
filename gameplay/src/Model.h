@@ -38,7 +38,7 @@ public:
      * 
      * @return The Mesh for this Model.
      */
-    Mesh* getMesh();
+    Mesh* getMesh() const;
 
     /**
      * Returns the number of parts in the Mesh for this Model.

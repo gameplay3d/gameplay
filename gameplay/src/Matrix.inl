@@ -7,7 +7,7 @@
 namespace gameplay
 {
 
-inline Matrix Matrix::operator+(const Matrix& m)
+inline Matrix Matrix::operator+(const Matrix& m) const
 {
     Matrix result(*this);
     result.add(m);
@@ -20,7 +20,7 @@ inline Matrix& Matrix::operator+=(const Matrix& m)
     return *this;
 }
 
-inline Matrix Matrix::operator-(const Matrix& m)
+inline Matrix Matrix::operator-(const Matrix& m) const
 {
     Matrix result(*this);
     result.subtract(m);
@@ -33,14 +33,14 @@ inline Matrix& Matrix::operator-=(const Matrix& m)
     return *this;
 }
 
-inline Matrix Matrix::operator-()
+inline Matrix Matrix::operator-() const
 {
     Matrix m(*this);
     m.negate();
     return m;
 }
 
-inline Matrix Matrix::operator*(const Matrix& m)
+inline Matrix Matrix::operator*(const Matrix& m) const
 {
     Matrix result(*this);
     result.multiply(m);
