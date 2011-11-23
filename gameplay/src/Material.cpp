@@ -24,7 +24,7 @@ Material::Material(const Material& m)
 
 Material::~Material()
 {
-	// Destroy all the techniques.
+    // Destroy all the techniques.
     for (unsigned int i = 0, count = _techniques.size(); i < count; ++i)
     {
         Technique* technique = _techniques[i];
@@ -59,7 +59,7 @@ Material* Material::create(const char* materialPath)
     // Create new material from the file passed in.
     Material* material = new Material();
 
-	// Go through all the material properties and create techniques under this material.
+    // Go through all the material properties and create techniques under this material.
     Properties* techniqueProperties = NULL;
     while ((techniqueProperties = materialProperties->getNextNamespace()))
     {
@@ -195,7 +195,7 @@ bool Material::loadTechnique(Material* material, Properties* techniqueProperties
     // Create a new technique
     Technique* technique = new Technique(techniqueProperties->getId(), material);
 
-	// Go through all the properties and create passes under this technique.
+    // Go through all the properties and create passes under this technique.
     techniqueProperties->rewind();
     Properties* passProperties = NULL;
     while ((passProperties = techniqueProperties->getNextNamespace()))
@@ -203,7 +203,7 @@ bool Material::loadTechnique(Material* material, Properties* techniqueProperties
         if (strcmp(passProperties->getNamespace(), "pass") == 0)
         {
             // Create and load passes.
-		    if (!loadPass(technique, passProperties))
+            if (!loadPass(technique, passProperties))
             {
                 SAFE_RELEASE(technique);
                 return false;

@@ -235,7 +235,7 @@ public:
 //     * @param plane The Plane about which to create a reflection.
 //     * @param dst A matrix to store the result in.
 //     */
-//    static void createRefelction(const Plane& plane, Matrix* dst);
+//    static void createReflection(const Plane& plane, Matrix* dst);
 
     /**
      * Creates a scale matrix.
@@ -835,7 +835,7 @@ public:
      * @param m The matrix to add.
      * @return The matrix sum.
      */
-    inline Matrix operator+(const Matrix& m);
+    inline Matrix operator+(const Matrix& m) const;
     
     /**
      * Adds the given matrix to this matrix.
@@ -853,7 +853,7 @@ public:
      * @param m The matrix to add.
      * @return The matrix sum.
      */
-    inline Matrix operator-(const Matrix& m);
+    inline Matrix operator-(const Matrix& m) const;
 
     /**
      * Subtracts the given matrix from this matrix.
@@ -870,7 +870,7 @@ public:
      * 
      * @return The negation of this matrix.
      */
-    inline Matrix operator-();
+    inline Matrix operator-() const;
 
     /**
      * Calculates the matrix product of this matrix with the given matrix.
@@ -880,7 +880,7 @@ public:
      * @param m The matrix to multiply by.
      * @return The matrix product.
      */
-    inline Matrix operator*(const Matrix& m);
+    inline Matrix operator*(const Matrix& m) const;
 
     /**
      * Right-multiplies this matrix by the given matrix.

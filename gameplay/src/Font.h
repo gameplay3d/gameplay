@@ -31,6 +31,33 @@ public:
     };
 
     /**
+     * Defines the set of allowable alignments when drawing text.
+     */
+    enum Justify
+    {
+        // Specify horizontal alignment, use default vertical alignment (ALIGN_TOP).
+        ALIGN_LEFT = 0x01,
+        ALIGN_HCENTER = 0x02,
+        ALIGN_RIGHT = 0x04,
+    
+        // Specify vertical alignment, use default horizontal alignment (ALIGN_LEFT).
+        ALIGN_TOP = 0x10,
+        ALIGN_VCENTER = 0x20,
+        ALIGN_BOTTOM = 0x40,
+
+        // Specify both vertical and horizontal alignment.
+        ALIGN_TOP_LEFT = ALIGN_TOP | ALIGN_LEFT,
+        ALIGN_VCENTER_LEFT = ALIGN_VCENTER | ALIGN_LEFT,
+        ALIGN_BOTTOM_LEFT = ALIGN_BOTTOM | ALIGN_LEFT,
+        ALIGN_TOP_HCENTER = ALIGN_TOP | ALIGN_HCENTER,
+        ALIGN_VCENTER_HCENTER = ALIGN_VCENTER | ALIGN_HCENTER,
+        ALIGN_BOTTOM_HCENTER = ALIGN_BOTTOM | ALIGN_HCENTER,
+        ALIGN_TOP_RIGHT = ALIGN_TOP | ALIGN_RIGHT,
+        ALIGN_VCENTER_RIGHT = ALIGN_VCENTER | ALIGN_RIGHT,
+        ALIGN_BOTTOM_RIGHT = ALIGN_BOTTOM | ALIGN_RIGHT
+    };
+
+    /**
      * Defines a font glyph within the texture map for a font.
      */
     class Glyph
@@ -92,19 +119,59 @@ public:
     void begin();
 
     /**
-     * Draws the specified text.
+     * Draws the specified text in a solid color, with a scaling factor.
      *
      * @param text The text to draw.
      * @param x The viewport x position to draw text at.
      * @param y The viewport y position to draw text at.
      * @param color The color of text.
+     * @param scale The scaling factor.
      */
-    void drawText(const char* text, int x, int y, const Vector4& color);
+    void drawText(const char* text, int x, int y, const Vector4& color, float scale = 1.0f, bool rightToLeft = false);
+
+    /**
+     * Draws the specified text within a rectangular area, with a specified alignment and scale.
+     * Clips text outside the viewport.  Optionally wraps text to fit within the width of the viewport.
+     *
+     * @param text The text to draw.
+     * @param viewport The viewport area to draw within.  Text starts from the top-left of this rectangle.
+     * @param color The color of text.
+     * @param scale The text's scaling factor.
+     * @param justify Justification of text within the viewport.
+     * @param wrap Wraps text to fit within the width of the viewport if true.
+     */
+    void drawText(const char* text, const Rectangle& viewport, const Vector4& color, float scale = 1.0f,
+                  Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
 
     /**
      * Ends text drawing for this font.
      */
     void end();
+
+    /**
+     * Measures a string's width and height without alignment, wrapping or clipping.
+     *
+     * @param text The text to measure.
+     * @param width Destination for the text's width.
+     * @param height Destination for the text's height.
+     */
+    void measureText(const char* text, unsigned int* width, unsigned int* height, float scale = 1.0f);
+
+    /**
+     * Measures a string's bounding box after alignment, wrapping and clipping within a viewport.
+     *
+     * @param text The text to measure.
+     * @param out Destination rectangle to store the bounds in.
+     * @param viewport The viewport area to align, wrap and clip text within while measuring.
+     * @param scale The scaling factor to apply.
+     * @param justify Justification of text within the viewport.
+     * @param wrap Whether to measure text with wrapping applied.
+     * @param clipped Whether to clip 'out' to the viewport.  Set true for the bounds of what would actually be drawn
+     *                within the given viewport; false for bounds that are guaranteed to fit the entire string of text.
+     */
+    void measureText(const char* text, Rectangle* out, const Rectangle& viewport,
+                     float scale = 1.0f, Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool clipped = true);
+
 
 private:
 
@@ -122,6 +189,10 @@ private:
      * Destructor.
      */
     ~Font();
+
+    // Utilities
+    unsigned int getTokenWidth(const char* token, unsigned int length, float scale);
+    void reverseLines(char* text);
 
     std::string _path;
     std::string _id;
