@@ -1,10 +1,10 @@
 #ifndef INPUT_H_
 #define INPUT_H_
 
-#include "Gamepad.h"
-
 namespace gameplay
 {
+
+class Gamepad;
 
 /**
  * Defines an input class for requesting input.
@@ -217,11 +217,11 @@ public:
     static bool isGamepadSupported();
 
     /**
-     * Gets a gamepad associaed with the specified integer Id.
+     * Gets the gamepad
      *
      * @ returns an instance of gamepad if Id is valid; NULL otherwise.
      */
-    static Gamepad* getGamepad(unsigned int index);
+    static Gamepad* getGamepad();
 
 
 private:
