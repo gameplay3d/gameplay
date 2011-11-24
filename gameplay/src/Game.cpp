@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Platform.h"
 #include "RenderState.h"
+#include "Gamepad.h"
 
 // Extern global variables
 GLenum __gl_error_code = GL_NO_ERROR;
@@ -270,10 +271,20 @@ void Game::keyChar(char key)
 
 void Game::keyPress(int key, int keyEvent)
 {
+    Gamepad* gamepad = Gamepad::getCurrentGamepad();
+    if (gamepad)
+    {
+        gamepad->keyPress(key, keyEvent);
+    }
 }
 
 void Game::touch(int x, int y, int touchEvent)
 {
+    Gamepad* gamepad = Gamepad::getCurrentGamepad();
+    if (gamepad)
+    {
+        gamepad->touch(x, y, touchEvent);
+    }
 }
 
 }
