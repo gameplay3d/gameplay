@@ -1,19 +1,22 @@
-## GamePlay v1.0.1
+## GamePlay v1.1.0
 GamePlay is a open-source, cross-platform 3D native gaming framework making it easy to learn and write mobile and desktop games. 
 
 ## Supported Platforms
+- BlackBerry PlayBook 1.0,2.0 (using BlackBerry Native SDK 1.0,2.0)
+- Apple MacOS X (using Apple XCode 4.0)
 - Microsoft Windows 7 (using Microsoft Visual Studio 2010)
- * Requires OpenAL 1.1 (http://connect.creativelabs.com/openal/Downloads/Forms/AllItems.aspx)
-- BlackBerry PlayBook 1.0/2.0 (using BlackBerry Native SDK 1.0)
+	* Requires OpenAL 1.1 (http://connect.creativelabs.com/openal/Downloads/Forms/AllItems.aspx)
 
-## Roadmap
-- Apple Mac OS X support (using XCode 4.0)
-- Physics support with Bullet Physics
-- Encoded audio support with Ogg Vorbis
-- FrameBuffer's (RenderTarget + DepthStencilTarget)
-- Shadow and Light map generation.
-- Spatial Partitioning with Octree (Visibility Testing and Light Determination)
-- UI Forms
+## Roadmap for 'next' branch
+- VisibilityController for node culling.
+- Materials/Shaders supporting multi-texturing for light maps.
+- Billboard and MeshBatch classes.
+- UI Forms with Themed Overlays.
+- Gamepad with Touch Themed Overlays.
+- Physics Sample and Tutorial.
+- New Project Setup Scripts for each platform.
+- Developer Users Guide.
+- Apple iOS 5 Support.
 
 ## Bug Reporting and Feature Requests
 If you find a bug in a Sample, or have an enhancement request, simply file an 
