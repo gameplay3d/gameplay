@@ -1,7 +1,3 @@
-/**
- * RenderTarget.cpp
- */
-
 #include "Base.h"
 #include "RenderTarget.h"
 
