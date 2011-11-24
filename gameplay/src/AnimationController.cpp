@@ -113,8 +113,9 @@ void AnimationController::stopAllAnimations()
     {
         AnimationClip* clip = *clipIter;
         clip->_isPlaying = false;
+        clip->onEnd();
+        clipIter = _runningClips.erase(clipIter);
         SAFE_RELEASE(clip);
-        clipIter++;
     }
     _runningClips.clear();
 
@@ -160,6 +161,7 @@ void AnimationController::schedule(AnimationClip* clip)
     {
         _runningClips.remove(clip);
         clip->_isPlaying = false;
+        clip->onEnd();
     }
     else
     {
@@ -187,12 +189,12 @@ void AnimationController::update(long elapsedTime)
         return;
 
     std::list<AnimationClip*>::iterator clipIter = _runningClips.begin();
-
+    unsigned int clipCount = 0;
     while (clipIter != _runningClips.end())
     {
-        if ((*clipIter)->update(elapsedTime))
+        AnimationClip* clip = (*clipIter);
+        if (clip->update(elapsedTime))
         {
-            AnimationClip* clip = *clipIter;
             clipIter = _runningClips.erase(clipIter);
             SAFE_RELEASE(clip);
         }
@@ -200,8 +202,9 @@ void AnimationController::update(long elapsedTime)
         {
             clipIter++;
         }
+        clipCount++;
     }
-
+    
     if (_runningClips.empty())
         _state = IDLE;
 }
