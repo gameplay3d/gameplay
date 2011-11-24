@@ -31,8 +31,8 @@
 								<option id="com.qnx.qcc.option.compiler.includePath.1113462040" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\bullet\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\oggvorbis\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.967563036" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -63,7 +63,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 									<listOptionValue builtIn="false" value="bullet"/>
@@ -113,8 +112,8 @@
 								<option id="com.qnx.qcc.option.compiler.includePath.1457668497" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\bullet\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\oggvorbis\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1742187302" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -143,7 +142,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 									<listOptionValue builtIn="false" value="bullet"/>
@@ -194,8 +192,8 @@
 								<option id="com.qnx.qcc.option.compiler.includePath.1982670755" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\bullet\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\oggvorbis\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1673634467" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -227,7 +225,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 									<listOptionValue builtIn="false" value="bullet"/>
@@ -278,8 +275,8 @@
 								<option id="com.qnx.qcc.option.compiler.includePath.1727233379" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\bullet\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\oggvorbis\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.33839640" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -311,7 +308,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 									<listOptionValue builtIn="false" value="bullet"/>
@@ -360,8 +356,8 @@
 								<option id="com.qnx.qcc.option.compiler.includePath.1766553412" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\bullet\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\oggvorbis\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1590162890" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -392,7 +388,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 									<listOptionValue builtIn="false" value="bullet"/>
@@ -442,8 +437,8 @@
 								<option id="com.qnx.qcc.option.compiler.includePath.1468484662" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\bullet\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\oggvorbis\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.2090983018" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -475,7 +470,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 									<listOptionValue builtIn="false" value="bullet"/>
@@ -525,8 +519,8 @@
 								<option id="com.qnx.qcc.option.compiler.includePath.1597382393" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\bullet\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}\..\..\external-deps\oggvorbis\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1551856660" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -558,7 +552,6 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
 									<listOptionValue builtIn="false" value="bullet"/>

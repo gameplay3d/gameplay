@@ -187,14 +187,14 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, float 
     const int size = (int)_size * scale;
     int xPos = x, yPos = y;
     for (int i = 0; i < length; ++i)
-    {
-        char c = 0;
+    {       
+	    char c = 0;
         if (rightToLeft)
         {
             c = rightToLeftText[i];
         }
         else
-        {
+		{
             c = text[i];
         }
 
