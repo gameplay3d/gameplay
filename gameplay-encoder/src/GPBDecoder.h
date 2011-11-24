@@ -1,7 +1,3 @@
-/*
- * GamePlayFile.h
- */
-
 #ifndef GPBDECODER_H_
 #define GPBDECODER_H_
 

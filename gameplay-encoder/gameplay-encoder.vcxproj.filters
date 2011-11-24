@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\DAESceneEncoder.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ReferenceTable.cpp" />
     <ClCompile Include="src\TTFFontEncoder.cpp" />
@@ -61,10 +60,6 @@
       <Filter>Objects\Animation</Filter>
     </ClCompile>
     <ClCompile Include="src\GPBFile.cpp" />
-    <ClCompile Include="src\DAEChannelTarget.cpp" />
-    <ClCompile Include="src\Base.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="src\FileIO.cpp" />
     <ClCompile Include="src\StringUtil.cpp" />
     <ClCompile Include="src\Effect.cpp">
@@ -90,15 +85,28 @@
     <ClCompile Include="src\Matrix.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\DAEOptimizer.cpp" />
-    <ClCompile Include="src\DAEUtil.cpp" />
     <ClCompile Include="src\EncoderArguments.cpp" />
     <ClCompile Include="src\Animations.cpp">
       <Filter>Objects\Animation</Filter>
     </ClCompile>
+    <ClCompile Include="src\Base.cpp" />
+    <ClCompile Include="src\FBXSceneEncoder.cpp">
+      <Filter>FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DAEChannelTarget.cpp">
+      <Filter>DAE</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DAEOptimizer.cpp">
+      <Filter>DAE</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DAESceneEncoder.cpp">
+      <Filter>DAE</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DAEUtil.cpp">
+      <Filter>DAE</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\DAESceneEncoder.h" />
     <ClInclude Include="src\ReferenceTable.h" />
     <ClInclude Include="src\TTFFontEncoder.h" />
     <ClInclude Include="src\CameraInstance.h">
@@ -157,10 +165,6 @@
       <Filter>Objects\Animation</Filter>
     </ClInclude>
     <ClInclude Include="src\GPBFile.h" />
-    <ClInclude Include="src\DAEChannelTarget.h" />
-    <ClInclude Include="src\Base.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="src\FileIO.h" />
     <ClInclude Include="src\StringUtil.h" />
     <ClInclude Include="src\Effect.h">
@@ -186,11 +190,25 @@
     <ClInclude Include="src\Matrix.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\DAEOptimizer.h" />
-    <ClInclude Include="src\DAEUtil.h" />
     <ClInclude Include="src\EncoderArguments.h" />
     <ClInclude Include="src\Animations.h">
       <Filter>Objects\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Base.h" />
+    <ClInclude Include="src\FBXSceneEncoder.h">
+      <Filter>FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DAEUtil.h">
+      <Filter>DAE</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DAEChannelTarget.h">
+      <Filter>DAE</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DAEOptimizer.h">
+      <Filter>DAE</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DAESceneEncoder.h">
+      <Filter>DAE</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -221,5 +239,22 @@
     <Filter Include="Math">
       <UniqueIdentifier>{4368ed2b-7fce-423a-a9cb-76a0fdc42858}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FBX">
+      <UniqueIdentifier>{5ee87ce4-f055-46e4-a70f-f1619bae1e09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DAE">
+      <UniqueIdentifier>{d3b0fd39-8efe-4978-8d2d-3a74bb6a1deb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Vector2.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="src\Vector3.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="src\Vector4.inl">
+      <Filter>Math</Filter>
+    </None>
   </ItemGroup>
 </Project>

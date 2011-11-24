@@ -1,6 +1,7 @@
 #include <string>
 
 #include "DAESceneEncoder.h"
+#include "FBXSceneEncoder.h"
 #include "TTFFontEncoder.h"
 #include "GPBDecoder.h"
 #include "EncoderArguments.h"
@@ -59,6 +60,18 @@ int main(int argc, const char** argv)
             DAESceneEncoder daeEncoder;
             daeEncoder.write(realpath, arguments);
             break;
+        }
+    case EncoderArguments::FILEFORMAT_FBX:
+        {
+#ifdef USE_FBX
+            std::string realpath = arguments.getFilePath();
+            FBXSceneEncoder fbxEncoder;
+            fbxEncoder.write(realpath, arguments);
+            break;
+#else
+            fprintf(stderr, "Error: FBX not enabled. Install the FBX SDK and use the preprocessor definition USE_FBX.\n");
+            return -1;
+#endif
         }
     case EncoderArguments::FILEFORMAT_TTF:
         {

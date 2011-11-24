@@ -32,13 +32,13 @@ public:
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
 
+    const std::list<std::string>& getJointNames();
+
     void setBindShape(const float data[]);
 
     void setVertexInfluenceCount(unsigned int count);
 
     void setJointNames(const std::list<std::string>& list);
-
-    const std::list<std::string>& getJointNames();
 
     void setJoints(const std::list<Node*>& list);
 

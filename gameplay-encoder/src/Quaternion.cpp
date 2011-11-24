@@ -1,7 +1,3 @@
-/*
- * Quaternion.cpp
- */
-
 #include "Base.h"
 #include "Quaternion.h"
 

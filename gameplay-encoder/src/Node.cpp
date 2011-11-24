@@ -1,4 +1,5 @@
 #include "Node.h"
+#include "Matrix.h"
 
 #define NODE 1
 #define JOINT 2
@@ -12,7 +13,7 @@ Node::Node(void) :
     _firstChild(NULL), _lastChild(NULL), _parent(NULL),
     _camera(NULL), _light(NULL), _model(NULL), _joint(false)
 {
-    setIdentityMatrix(_transform);
+    Matrix::setIdentity(_transform);
 }
 
 Node::~Node(void)
@@ -234,10 +235,15 @@ void Node::setModel(Model* model)
 
 void Node::setTransformMatrix(float matrix[])
 {
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 16; ++i)
     {
         _transform[i] = matrix[i];
     }
+}
+
+void Node::resetTransformMatrix()
+{
+    Matrix::setIdentity(_transform);
 }
 
 void Node::setIsJoint(bool value)

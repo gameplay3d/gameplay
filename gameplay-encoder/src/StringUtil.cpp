@@ -90,7 +90,7 @@ bool equalsIgnoreCase(const std::string& a, const char* b)
     {
         return false;
     }
-    for (size_t i = 0; i < bLength; i++)
+    for (size_t i = 0; i < bLength; ++i)
     {
         if (lowercase(a[i]) != lowercase(b[i]))
         {
@@ -98,6 +98,25 @@ bool equalsIgnoreCase(const std::string& a, const char* b)
         }
     }
     return true;
+}
+
+std::string getFilenameFromFilePath(const std::string& filepath)
+{
+    if (filepath.find_last_of("/") != std::string::npos)
+    {
+        return filepath.substr(filepath.find_last_of("/")+1);
+    }
+    return "";
+}
+
+
+std::string getFilenameNoExt(const std::string& filename)
+{
+    if (filename.find_last_of(".") != std::string::npos)
+    {
+        return filename.substr(0, filename.find_last_of("."));
+    }
+    return filename;
 }
 
 }

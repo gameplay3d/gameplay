@@ -30,7 +30,7 @@ Object* ReferenceTable::get(const std::string& xref)
 void ReferenceTable::writeBinary(FILE* file)
 {
     write(_table.size(), file);
-    for ( std::map<std::string, Reference>::iterator i=_table.begin() ; i != _table.end(); i++ )
+    for ( std::map<std::string, Reference>::iterator i=_table.begin() ; i != _table.end(); ++i)
     {
         i->second.writeBinary(file);
     }
@@ -39,7 +39,7 @@ void ReferenceTable::writeBinary(FILE* file)
 void ReferenceTable::writeText(FILE* file)
 {
     fprintf(file, "<RefTable>\n");
-    for ( std::map<std::string, Reference>::iterator i=_table.begin() ; i != _table.end(); i++ )
+    for ( std::map<std::string, Reference>::iterator i=_table.begin() ; i != _table.end(); ++i)
     {
         i->second.writeText(file);
     }
@@ -48,7 +48,7 @@ void ReferenceTable::writeText(FILE* file)
 
 void ReferenceTable::updateOffsets(FILE* file)
 {
-    for (std::map<std::string, Reference>::iterator i = _table.begin(); i != _table.end(); i++)
+    for (std::map<std::string, Reference>::iterator i = _table.begin(); i != _table.end(); ++i)
     {
         Reference& ref = i->second;
         ref.updateOffset(file);

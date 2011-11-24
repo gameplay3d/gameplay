@@ -164,7 +164,7 @@ const Matrix& Camera::getViewMatrix() const
         if (_node)
         {
             // The view matrix is the inverse of our transform matrix.
-            _node->getMatrix().invert(&_view);
+            _node->getWorldMatrix().invert(&_view);
         }
         else
         {

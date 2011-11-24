@@ -26,7 +26,7 @@ void Animation::writeBinary(FILE* file)
     // Animation writes its ID because it is not listed in the ref table.
     write(getId(), file);
     write(_channels.size(), file);
-    for (std::vector<AnimationChannel*>::iterator i = _channels.begin(); i != _channels.end(); i++)
+    for (std::vector<AnimationChannel*>::iterator i = _channels.begin(); i != _channels.end(); ++i)
     {
         (*i)->writeBinary(file);
     }
@@ -37,7 +37,7 @@ void Animation::writeText(FILE* file)
     fprintElementStart(file);
     if (_channels.size() > 0 )
     {
-        for (std::vector<AnimationChannel*>::iterator i = _channels.begin(); i != _channels.end(); i++)
+        for (std::vector<AnimationChannel*>::iterator i = _channels.begin(); i != _channels.end(); ++i)
         {
             (*i)->writeText(file);
         }

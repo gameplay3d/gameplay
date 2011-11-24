@@ -411,6 +411,24 @@ public:
      * @return This vector, after the scale occurs.
      */
     inline Vector3& operator*=(float x);
+
+    /**
+     * Determines if this vector is less than the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is less than the given vector, false otherwise.
+     */
+    inline bool operator<(const Vector3& v) const;
+
+    /**
+     * Determines if this vector is equal to the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is equal to the given vector, false otherwise.
+     */
+    inline bool operator==(const Vector3& v) const;
 };
 
 /**
