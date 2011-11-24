@@ -23,6 +23,15 @@ Quaternion::Quaternion(float* array)
     set(array);
 }
 
+Quaternion::Quaternion(const Matrix& m)
+{
+    set(m);
+}
+
+Quaternion::Quaternion(const Vector3& axis, float angle)
+{
+    set(axis, angle);
+}
 
 Quaternion::Quaternion(const Quaternion& copy)
 {
@@ -192,15 +201,14 @@ void Quaternion::set(float* array)
     w = array[3];
 }
 
+void Quaternion::set(const Matrix& m)
+{
+    Quaternion::createFromRotationMatrix(m, this);
+}
+
 void Quaternion::set(const Vector3& axis, float angle)
 {
-    Quaternion rotationQuat;
-    Quaternion::createFromAxisAngle(axis, angle, &rotationQuat);
-
-    this->x = rotationQuat.x;
-    this->y = rotationQuat.y;
-    this->z = rotationQuat.z;
-    this->w = rotationQuat.w;
+    Quaternion::createFromAxisAngle(axis, angle, this);
 }
 
 void Quaternion::set(const Quaternion& q)

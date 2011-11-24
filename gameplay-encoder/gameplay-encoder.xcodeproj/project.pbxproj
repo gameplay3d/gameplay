@@ -185,14 +185,8 @@
 		42475CDB147208A000610A6A = {
 			isa = PBXGroup;
 			children = (
-				42D277571472EFA700D867A4 /* libpcre.a */,
-				42D277581472EFA700D867A4 /* libpcrecpp.a */,
-				42C8EE3A1472DAAE00E43619 /* libbz2.dylib */,
-				42C8EE381472DAA300E43619 /* libz.dylib */,
-				42C8EE361472D7E700E43619 /* libxml2.dylib */,
-				42C8EE341472B60100E43619 /* libfreetype.a */,
-				42475D7B14720ECE00610A6A /* libdom.a */,
 				42475CE9147208A000610A6A /* gameplay-encoder */,
+				427D4F44147DC9080076760E /* Libraries */,
 				42475CE7147208A000610A6A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -293,6 +287,20 @@
 				42C8EE0914724CD700E43619 /* VertexElement.h */,
 			);
 			path = "gameplay-encoder";
+			sourceTree = "<group>";
+		};
+		427D4F44147DC9080076760E /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				42D277571472EFA700D867A4 /* libpcre.a */,
+				42D277581472EFA700D867A4 /* libpcrecpp.a */,
+				42C8EE3A1472DAAE00E43619 /* libbz2.dylib */,
+				42C8EE381472DAA300E43619 /* libz.dylib */,
+				42C8EE361472D7E700E43619 /* libxml2.dylib */,
+				42C8EE341472B60100E43619 /* libfreetype.a */,
+				42475D7B14720ECE00610A6A /* libdom.a */,
+			);
+			name = Libraries;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -483,6 +491,7 @@
 					"\"$(SRCROOT)/../external-deps/freetype2/lib/macos\"",
 					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macos\"",
 					"\"$(SRCROOT)/../external-deps/pcre/lib/macos\"",
+					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -509,6 +518,7 @@
 					"\"$(SRCROOT)/../external-deps/freetype2/lib/macos\"",
 					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macos\"",
 					"\"$(SRCROOT)/../external-deps/pcre/lib/macos\"",
+					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";

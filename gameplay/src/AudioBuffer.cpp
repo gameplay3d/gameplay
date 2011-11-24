@@ -9,6 +9,7 @@
 namespace gameplay
 {
 
+
 // Audio buffer cache
 static std::vector<AudioBuffer*> __buffers;
 
@@ -81,7 +82,7 @@ AudioBuffer* AudioBuffer::create(const char* path)
             goto cleanup;
         }
     }
-    else if(memcmp(header, "OGG", 3) == 0)
+    else if (memcmp(header, "OggS", 4) == 0)
     {
         if (!AudioBuffer::loadOgg(file, alBuffer))
         {
@@ -93,7 +94,6 @@ AudioBuffer* AudioBuffer::create(const char* path)
     {
         LOG_ERROR_VARG("Unsupported audio file: %s", path);
     }
-    
     
     fclose(file);
 
@@ -123,7 +123,7 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
         return false;
     
     // Check for a valid pcm format.
-    if(fread(stream, 1, 2, file) != 2 || stream[1] != 0 || stream[0] != 1)
+    if (fread(stream, 1, 2, file) != 2 || stream[1] != 0 || stream[0] != 1)
     {
         LOG_ERROR("Unsupported audio file, not PCM format.");
         return false;
@@ -140,6 +140,7 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     ALuint frequency;
     if (fread(stream, 1, 4, file) != 4)
         return false;
+
     frequency  = stream[3]<<24;
     frequency |= stream[2]<<16;
     frequency |= stream[1]<<8;
@@ -158,21 +159,21 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     bits  = stream[1]<<8;
     bits |= stream[0];
     
-    
+
     // Now convert the given channel count and bit depth into an OpenAL format. 
     ALuint format = 0;
-    if(bits == 8)
+    if (bits == 8)
     {
-        if(channels == 1)
+        if (channels == 1)
             format = AL_FORMAT_MONO8;
-        else if(channels == 2)
+        else if (channels == 2)
             format = AL_FORMAT_STEREO8;
     }
-    else if(bits == 16)
+    else if (bits == 16)
     {
-        if(channels == 1)
+        if (channels == 1)
             format = AL_FORMAT_MONO16;
-        else if(channels == 2)
+        else if (channels == 2)
             format = AL_FORMAT_STEREO16;
     }
     else
@@ -191,24 +192,84 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     // Read how much data is remaining and buffer it up.
     unsigned int dataSize;
     fread(&dataSize, sizeof(int), 1, file);
-    unsigned char* data = new unsigned char[dataSize];
-    if (fread(data, sizeof(unsigned char), dataSize, file) != dataSize)
+
+    char* data = new char[dataSize];
+    if (fread(data, sizeof(char), dataSize, file) != dataSize)
     {
         LOG_ERROR("WAV file missing data.");
         SAFE_DELETE_ARRAY(data);
         return false;
     }
+
     alBufferData(buffer, format, data, dataSize, frequency);
     SAFE_DELETE_ARRAY(data);
     return true;
 }
     
-// TODO:
 bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
 {
-    LOG_ERROR("Ogg Vorbis not supported yet");
+    OggVorbis_File ogg_file;
+    vorbis_info* info;
+    ALenum format;
+    int result;
+    int section;
+    unsigned int size = 0;
+
+    rewind(file);
+
+    if ((result = ov_open(file, &ogg_file, NULL, 0)) < 0)
+    {
+        fclose(file);
+        LOG_ERROR("Could not open Ogg stream.");
+        return false;
+    }
+
+    info = ov_info(&ogg_file, -1);
+
+    if (info->channels == 1)
+        format = AL_FORMAT_MONO16;
+    else
+        format = AL_FORMAT_STEREO16;
+
+	// size = #samples * #channels * 2 (for 16 bit)
+    unsigned int data_size = ov_pcm_total(&ogg_file, -1) * info->channels * 2;
+    char* data = new char[data_size];
+
+    while (size < data_size)
+    {
+    	result = ov_read(&ogg_file, data + size, data_size - size, 0, 2, 1, &section);
+    	if (result > 0)
+    	{
+    		size += result;
+    	}
+    	else if (result < 0)
+    	{
+    		SAFE_DELETE_ARRAY(data);
+    		LOG_ERROR("OGG file missing data.");
+    		return false;
+    	}
+    	else
+    	{
+    		break;
+    	}
+    }
     
-    return false;
+    if (size == 0)
+    {
+    	SAFE_DELETE_ARRAY(data);
+    	LOG_ERROR("Unable to read OGG data.");
+    	return false;
+    }
+
+    alBufferData(buffer, format, data, data_size, info->rate);
+
+    SAFE_DELETE_ARRAY(data);
+    ov_clear(&ogg_file);
+
+    // ov_clear actually closes the file pointer as well
+    file = 0;
+
+    return true;
 }
 
 }
