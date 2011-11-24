@@ -47,11 +47,13 @@ long getMachTimeInMilliseconds()
     return (long)((mach_absolute_time() * s_timebase_info.numer) / (kOneMillion * s_timebase_info.denom));
 }
 
+
 @class View;
 
 @interface View : NSOpenGLView <NSWindowDelegate> 
 {
     CVDisplayLinkRef displayLink;
+    NSRecursiveLock* lock;
     
     Game* _game;
 }
@@ -63,25 +65,37 @@ long getMachTimeInMilliseconds()
 
 -(void)windowWillClose:(NSNotification*)note 
 {
+    [lock lock];
     _game->exit();
+    [lock unlock];
     [[NSApplication sharedApplication] terminate:self];
 }
+
 
 - (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    [self performSelectorOnMainThread:@selector(update) withObject:nil waitUntilDone:NO];
+    
+    [self update];
+    
     [pool release];
+    
     return kCVReturnSuccess;
 }
 
 -(void) update
-{
+{       
+    [lock lock];
+
     [[self openGLContext] makeCurrentContext];
+    
     CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
-    _game->frame();
+    if (_game && _game->getState() == Game::RUNNING)       
+        _game->frame();
     CGLFlushDrawable((CGLContextObj)[[self openGLContext] CGLContextObj]);
     CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);  
+    
+    [lock unlock];
 }
 
 static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, 
@@ -93,6 +107,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (id) initWithFrame: (NSRect) frame
 {    
+    lock = [[NSRecursiveLock alloc] init];
     _game = Game::getInstance();
     __timeStart = getMachTimeInMilliseconds();
     NSOpenGLPixelFormatAttribute attrs[] = 
@@ -149,53 +164,59 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 }
 
 - (void) dealloc
-{       
-    _game->exit();
+{   
+    [lock lock];
     
     // Release the display link
+    CVDisplayLinkStop(displayLink);
     CVDisplayLinkRelease(displayLink);
+    
+    _game->exit();
+    
+    [lock unlock];
+
     [super dealloc];
 }
 
-- (void) mouseDown: (NSEvent*) theEvent
+- (void) mouseDown: (NSEvent*) event
 {
-    NSPoint point = [theEvent locationInWindow];
+    NSPoint point = [event locationInWindow];
     __leftMouseDown = true;
     _game->touch(point.x, WINDOW_HEIGHT - point.y, Input::TOUCHEVENT_PRESS);
 }
 
-- (void) mouseUp: (NSEvent*) theEvent
+- (void) mouseUp: (NSEvent*) event
 {
-    NSPoint point = [theEvent locationInWindow];
+    NSPoint point = [event locationInWindow];
     __leftMouseDown = false;
     _game->touch(point.x, WINDOW_HEIGHT - point.y, Input::TOUCHEVENT_RELEASE);
 }
 
-- (void) mouseDragged: (NSEvent*) theEvent
+- (void) mouseDragged: (NSEvent*) event
 {
-    NSPoint point = [theEvent locationInWindow];
+    NSPoint point = [event locationInWindow];
     if (__leftMouseDown)
     {
         _game->touch(point.x, WINDOW_HEIGHT - point.y, Input::TOUCHEVENT_MOVE);
     }
 }
 
-- (void) rightMouseDown: (NSEvent*) theEvent
+- (void) rightMouseDown: (NSEvent*) event
 {
     __rightMouseDown = true;
-     NSPoint point = [theEvent locationInWindow];
+     NSPoint point = [event locationInWindow];
     __lx = point.x;
     __ly = WINDOW_HEIGHT - point.y;
 }
 
-- (void) rightMouseUp: (NSEvent*) theEvent
+- (void) rightMouseUp: (NSEvent*) event
 {
    __rightMouseDown = false;
 }
 
-- (void) rightMouseDragged: (NSEvent*) theEvent
+- (void) rightMouseDragged: (NSEvent*) event
 {
-    NSPoint point = [theEvent locationInWindow];
+    NSPoint point = [event locationInWindow];
     if (__rightMouseDown)
     {
         // Update the pitch and roll by adding the scaled deltas.
@@ -212,12 +233,12 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     }
 }
 
-- (void) mouseEntered:(NSEvent *)theEvent
+- (void) mouseEntered: (NSEvent*)event
 {
     __hasMouse = true;
 }
 
-- (void) mouseExited:(NSEvent *)theEvent
+- (void) mouseExited: (NSEvent*)event
 {
     __leftMouseDown = false;
     __rightMouseDown = false;
@@ -257,13 +278,13 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
         case 0x77:
             return Input::KEY_END;
         case 0x7B:
-            return Input::KEY_LEFT;
+            return Input::KEY_LEFT_ARROW;
         case 0x7C:
-            return Input::KEY_RIGHT;
+            return Input::KEY_RIGHT_ARROW;
         case 0x7E:
-            return Input::KEY_UP;
+            return Input::KEY_UP_ARROW;
         case 0x7D:
-            return Input::KEY_DOWN;
+            return Input::KEY_DOWN_ARROW;
         case 0x47:
             return Input::KEY_NUM_LOCK;
         case 0x45:
@@ -426,7 +447,7 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
     }
 }
 
-- (void)flagsChanged:(NSEvent*)event
+- (void)flagsChanged: (NSEvent*)event
 {
     unsigned int keyCode = [event keyCode];
     unsigned int flags = [event modifierFlags];
@@ -463,12 +484,12 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
     }
 }
 
-- (void) keyDown: (NSEvent *) event
+- (void) keyDown: (NSEvent*) event
 {    
     _game->keyPress(getKey([event keyCode], [event modifierFlags]), Input::KEYEVENT_DOWN);
 }
 
-- (void) keyUp: (NSEvent *) event
+- (void) keyUp: (NSEvent*) event
 {    
     _game->keyPress(getKey([event keyCode], [event modifierFlags]), Input::KEYEVENT_UP);
 }
@@ -512,10 +533,10 @@ Platform* Platform::create(Game* game)
 
 int Platform::enterMessagePump()
 {
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    NSAutoreleasePool* pool = [NSAutoreleasePool new];
     NSApplication* NSApp = [NSApplication sharedApplication];
     NSRect screenBounds = [[NSScreen mainScreen] frame];
-    NSRect viewBounds = NSMakeRect(0, 0, 1024, 600);
+    NSRect viewBounds = NSMakeRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     
     View* view = [[View alloc] initWithFrame:viewBounds];
     
@@ -524,7 +545,7 @@ int Platform::enterMessagePump()
                                  viewBounds.size.width, 
                                  viewBounds.size.height);
     
-    NSWindow *window = [[NSWindow alloc]
+    NSWindow* window = [[NSWindow alloc]
                         initWithContentRect:centered
                         styleMask:NSTitledWindowMask | NSClosableWindowMask
                         backing:NSBackingStoreBuffered
