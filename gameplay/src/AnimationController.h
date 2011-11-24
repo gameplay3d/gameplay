@@ -161,7 +161,7 @@ private:
      * Unschedules an AnimationClip.
      */
     void unschedule(AnimationClip* clip);
-
+    
     /**
      * Callback for when the controller receives a frame update event.
      */
@@ -181,11 +181,10 @@ private:
      * Removes all animations from the AnimationTarget.
      */ 
     void destroyAllAnimations();
-
+    
     State _state;                               // The current state of the AnimationController.
     std::list<AnimationClip*> _runningClips;    // A list of currently running AnimationClips.
     std::vector<Animation*> _animations;
-    //Animation** _animations;                    // A list of animations on this target.
 };
 
 }
