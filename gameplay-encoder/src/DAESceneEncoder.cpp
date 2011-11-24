@@ -1,7 +1,3 @@
-/*
- * DAESceneEncoder.h
- */
-
 #include <algorithm>
 
 #include "DAESceneEncoder.h"
@@ -20,28 +16,10 @@ DAESceneEncoder::~DAESceneEncoder()
 {
 }
 
-std::string getFilenameFromFilePath(const std::string& filepath)
-{
-    if (filepath.find_last_of("/") != std::string::npos)
-    {
-        return filepath.substr(filepath.find_last_of("/")+1);
-    }
-    return "";
-}
-
-std::string getFilenameNoExt(const std::string& filename)
-{
-    if (filename.find_last_of(".") != std::string::npos)
-    {
-        return filename.substr(0, filename.find_last_of("."));
-    }
-    return filename;
-}
-
 unsigned int getMaxOffset(domInputLocalOffset_Array& inputArray)
 {
     unsigned int maxOffset = 0;
-    for (unsigned int i = 0; i < (int)inputArray.getCount(); i++ )
+    for (unsigned int i = 0; i < (int)inputArray.getCount(); ++i)
     {
         if ( inputArray[i]->getOffset() > maxOffset )
         {
@@ -62,7 +40,7 @@ void DAESceneEncoder::optimizeCOLLADA(const EncoderArguments& arguments, domCOLL
     if (size > 0)
     {
         begin();
-        for (size_t i = 0; i < size; i++)
+        for (size_t i = 0; i < size; ++i)
         {
             optimizer.combineAnimations(groupAnimatioNodeIds[i], groupAnimatioIds[i]);
         }
@@ -82,7 +60,7 @@ void DAESceneEncoder::triangulate(DAE* dae)
     daeDatabase* dataBase = dae->getDatabase();
 
     int geometryCount = (int)(dataBase->getElementCount(0, "geometry"));
-    for (int i = 0; i < geometryCount; i++)
+    for (int i = 0; i < geometryCount; ++i)
     {
         // Find the next geometry element.
         domGeometry* domGeometry;
@@ -97,14 +75,14 @@ void DAESceneEncoder::triangulate(DAE* dae)
 
         // Loop over all the polygons elements.
         int polygonsCount = (int)(domMesh->getPolygons_array().getCount());
-        for (int j = 0; j < polygonsCount; j++)
+        for (int j = 0; j < polygonsCount; ++j)
         {
             // Get the polygons out of the mesh.
             domPolygons* domPolygons = domMesh->getPolygons_array()[j];
             // Create the triangles from the polygons
             createTrianglesFromPolygons(domMesh, domPolygons);
         }
-        while(domMesh->getPolygons_array().getCount() > 0)
+        while (domMesh->getPolygons_array().getCount() > 0)
         {
             domPolygons* domPolygons = domMesh->getPolygons_array().get(0);
             // Remove the polygons from the mesh.
@@ -113,14 +91,14 @@ void DAESceneEncoder::triangulate(DAE* dae)
 
         // Loop over all the polylist elements.
         int polylistCount = (int)(domMesh->getPolylist_array().getCount());
-        for (int j = 0; j < polylistCount; j++)
+        for (int j = 0; j < polylistCount; ++j)
         {
             // Get the polylist out of the mesh.
             domPolylist* domPolylist = domMesh->getPolylist_array()[j];
             // Create the triangles from the polygon list
             createTrianglesFromPolylist(domMesh, domPolylist);
         }
-        while(domMesh->getPolylist_array().getCount() > 0)
+        while (domMesh->getPolylist_array().getCount() > 0)
         {
             domPolylist* domPolylist = domMesh->getPolylist_array().get(0);
             // Remove the polylist from the mesh.
@@ -138,7 +116,7 @@ void DAESceneEncoder::createTrianglesFromPolygons(domMesh* domMesh, domPolygons*
     domP* domTrianglesP = (domP*)triangles->createAndPlace("p");
     
     // Give the new <triangles> the same <_dae> and <parameters> as the old  <polygons>.
-    for (unsigned int i = 0; i < domPolygons->getInput_array().getCount(); i++)
+    for (unsigned int i = 0; i < domPolygons->getInput_array().getCount(); ++i)
     {
         triangles->placeElement(domPolygons->getInput_array()[i]->clone());
     }
@@ -148,7 +126,7 @@ void DAESceneEncoder::createTrianglesFromPolygons(domMesh* domMesh, domPolygons*
     unsigned int primitiveCount = domPolygons->getP_array().getCount();
     
     // Triangulate all the primitives, this generates all the triangles in a single <p> element.
-    for (unsigned int j = 0; j < primitiveCount; j++)
+    for (unsigned int j = 0; j < primitiveCount; ++j)
     {
         // Check the polygons for consistancy (some exported files have had the wrong number of indices).
         domP* domCurrentP = domPolygons->getP_array()[j];
@@ -163,21 +141,21 @@ void DAESceneEncoder::createTrianglesFromPolygons(domMesh* domMesh, domPolygons*
             
             // Write out the primitives as triangles, just fan using the first element as the base.
             unsigned int index = inputCount;
-            for (unsigned int k = 0; k < triangleCount; k++)
+            for (unsigned int k = 0; k < triangleCount; ++k)
             {
                 // First vertex.
-                for (unsigned int l = 0; l < inputCount; l++)
+                for (unsigned int l = 0; l < inputCount; ++l)
                 {
                     domTrianglesP->getValue().append(domCurrentP->getValue()[l]);
                 }
                 // Second vertex.
-                for (unsigned int l = 0; l < inputCount; l++)
+                for (unsigned int l = 0; l < inputCount; ++l)
                 {
                     domTrianglesP->getValue().append(domCurrentP->getValue()[index + l]);
                 }
                 // Third vertex.
                 index += inputCount;
-                for (unsigned int l = 0; l < inputCount; l++)
+                for (unsigned int l = 0; l < inputCount; ++l)
                 {
                     domTrianglesP->getValue().append(domCurrentP->getValue()[index + l]);
                 }
@@ -195,7 +173,7 @@ void DAESceneEncoder::createTrianglesFromPolylist(domMesh* domMesh, domPolylist*
     domP* domTrianglesP = (domP*)triangles->createAndPlace("p");
     
     // Give the new <triangles> the same <_dae> and <parameters> as the old <polylist>.
-    for (int i = 0; i < (int)(domPolylist->getInput_array().getCount()); i++)
+    for (int i = 0; i < (int)(domPolylist->getInput_array().getCount()); ++i)
     {
         triangles->placeElement(domPolylist->getInput_array()[i]->clone());
     }
@@ -208,27 +186,27 @@ void DAESceneEncoder::createTrianglesFromPolylist(domMesh* domMesh, domPolylist*
     unsigned int trianglesProcessed = 0;
     
     // Triangulate all the primitives, this generates all the triangles in a single <p> element.
-    for (unsigned int j = 0; j < primitiveCount; j++)
+    for (unsigned int j = 0; j < primitiveCount; ++j)
     {
         unsigned int triangleCount = (unsigned int)domPolylist->getVcount()->getValue()[j] - 2;
         
         // Write out the primitives as triangles, just fan using the first element as the base.
         int index = inputCount;
-        for (unsigned int k = 0; k < triangleCount; k++)
+        for (unsigned int k = 0; k < triangleCount; ++k)
         {
             // First vertex.
-            for (unsigned int l = 0; l < inputCount; l++)
+            for (unsigned int l = 0; l < inputCount; ++l)
             {
                 domTrianglesP->getValue().append(domPolylist->getP()->getValue()[offset + l]);
             }
             // Second vertex.
-            for (unsigned int l = 0; l < inputCount; l++)
+            for (unsigned int l = 0; l < inputCount; ++l)
             {
                 domTrianglesP->getValue().append(domPolylist->getP()->getValue()[offset + index + l]);
             }
             // Third vertex.
             index += inputCount;
-            for (unsigned int l = 0; l < inputCount; l++)
+            for (unsigned int l = 0; l < inputCount; ++l)
             {
                 domTrianglesP->getValue().append(domPolylist->getP()->getValue()[offset + index + l]);
             }
@@ -363,12 +341,12 @@ void DAESceneEncoder::loadAnimations(const domCOLLADA* dom)
     // Call loadAnimation on all <animation> elements in all <library_animations>
     const domLibrary_animations_Array& animationLibrarys = dom->getLibrary_animations_array();
     size_t animationLibrarysCount = animationLibrarys.getCount();
-    for (size_t i = 0; i < animationLibrarysCount; i++)
+    for (size_t i = 0; i < animationLibrarysCount; ++i)
     {
         const domLibrary_animationsRef& libraryAnimation = animationLibrarys.get(i);
         const domAnimation_Array& animationArray = libraryAnimation->getAnimation_array();
         size_t animationCount = animationArray.getCount();
-        for (size_t j = 0; j < animationCount; j++)
+        for (size_t j = 0; j < animationCount; ++j)
         {
             const domAnimationRef& animationRef = animationArray.get(j);
             loadAnimation(animationRef);
@@ -391,7 +369,7 @@ void DAESceneEncoder::loadAnimation(const domAnimationRef animationRef)
     // <channel>
     const domChannel_Array& channelArray = animationRef->getChannel_array();
     size_t channelArrayCount = channelArray.getCount();
-    for (size_t i = 0; i < channelArrayCount; i++)
+    for (size_t i = 0; i < channelArrayCount; ++i)
     {
         AnimationChannel* animationChannel = new AnimationChannel();
 
@@ -404,7 +382,7 @@ void DAESceneEncoder::loadAnimation(const domAnimationRef animationRef)
         // <input>
         const domInputLocal_Array& inputArray = sampler->getInput_array();
         size_t inputArrayCount = inputArray.getCount();
-        for (size_t j = 0; j < inputArrayCount; j++)
+        for (size_t j = 0; j < inputArrayCount; ++j)
         {
             const domInputLocalRef& inputLocal = inputArray.get(j);
 
@@ -425,7 +403,7 @@ void DAESceneEncoder::loadAnimation(const domAnimationRef animationRef)
                 if (equals(semantic, "INPUT"))
                 {
                     // TODO: Ensure param name is TIME?
-                    for (std::vector<float>::iterator k = floats.begin(); k != floats.end(); k++)
+                    for (std::vector<float>::iterator k = floats.begin(); k != floats.end(); ++k)
                     {
                         // Convert seconds to milliseconds
                         *k = *k * 1000.0f;
@@ -473,7 +451,7 @@ void DAESceneEncoder::loadInterpolation(const domSourceRef source, AnimationChan
     values.resize(count);
     if (count > 0)
     {
-        for (size_t i = 0; i < count; i++)
+        for (size_t i = 0; i < count; ++i)
         {
             values[i] = AnimationChannel::getInterpolationType(names.get(i));
         }
@@ -482,7 +460,7 @@ void DAESceneEncoder::loadInterpolation(const domSourceRef source, AnimationChan
         // instead of storing the same type for each key frame.
         unsigned int firstType = values[0];
         bool allEqual = true;
-        for (size_t i = 1; i < count; i++)
+        for (size_t i = 1; i < count; ++i)
         {
             if (firstType != values[i])
             {
@@ -512,7 +490,7 @@ bool DAESceneEncoder::loadTarget(const domChannelRef& channelRef, AnimationChann
     const char* targetId = channelTarget.getTargetId().c_str();
 
     // TODO: Do we want to support more than one? If yes then this needs to be fixed.
-    for (size_t i = 0; i < channelTarget.getTargetAttributeCount(); i++)
+    for (size_t i = 0; i < channelTarget.getTargetAttributeCount(); ++i)
     {
         std::string prop;
         channelTarget.getPropertyName(i, &prop);
@@ -548,7 +526,7 @@ bool DAESceneEncoder::loadTarget(const domChannelRef& channelRef, AnimationChann
                         // Convert (ANGLE ANGLE ANGLE) to (X Y Z ANGLE X Y Z ANGLE X Y Z ANGLE)
                         std::vector<float> floats(size * 4);
                         // Duplicate rotation axis. We will replace only the angle that COLLADA is targeting.
-                        for (size_t j = 0; j < size; j++)
+                        for (size_t j = 0; j < size; ++j)
                         {
                             size_t k = j * 4;
                             floats[k+0] = x;
@@ -624,7 +602,7 @@ bool DAESceneEncoder::loadTarget(const domChannelRef& channelRef, AnimationChann
                 std::vector<float> floats(newSize);
 
                 size_t matrixCount = keyValues.size() / 16;
-                for (size_t i = 0; i < matrixCount; i++)
+                for (size_t i = 0; i < matrixCount; ++i)
                 {
                     size_t j = i * 16;
                     // COLLADA used row-major but the Matrix class uses column-major
@@ -682,7 +660,7 @@ void DAESceneEncoder::copyFloats(const domFloat_array* source, std::vector<float
     size_t count = (size_t)source->getCount();
     t.resize(count);
     const domListOfFloats& listOfFloats = source->getValue();
-    for (size_t i = 0; i < count; i++)
+    for (size_t i = 0; i < count; ++i)
     {
         t[i] = (float)listOfFloats.get(i);
     }
@@ -695,7 +673,7 @@ void DAESceneEncoder::loadScene(const domVisual_scene* visualScene)
     const domNode_Array& nodes = visualScene->getNode_array();
     scene->setId(visualScene->getId());
     size_t childCount = nodes.getCount();
-    for (size_t i = 0; i < childCount; i++)
+    for (size_t i = 0; i < childCount; ++i)
     {
         scene->add(loadNode(nodes[i], NULL));
     }
@@ -717,11 +695,11 @@ Node* DAESceneEncoder::findSceneActiveCameraNode(const domVisual_scene* visualSc
     // Find the active camera
     const domVisual_scene::domEvaluate_scene_Array& evaluateScenes = visualScene->getEvaluate_scene_array();
     size_t evaluateSceneCount = evaluateScenes.getCount();
-    for (size_t i = 0; i < evaluateSceneCount; i++)
+    for (size_t i = 0; i < evaluateSceneCount; ++i)
     {
         const domVisual_scene::domEvaluate_scene::domRender_Array& renders = evaluateScenes[i]->getRender_array();
         size_t renderCount = renders.getCount();
-        for (size_t j = 0; j < renderCount; j++)
+        for (size_t j = 0; j < renderCount; ++j)
         {
             xsAnyURI cameraNodeURI = renders[i]->getCamera_node();
             domNode* nodeRef = daeSafeCast<domNode>(cameraNodeURI.getElement());
@@ -783,7 +761,7 @@ Node* DAESceneEncoder::loadNode(domNode* n, Node* parent)
     // Load child nodes
     const domNode_Array& childNodes = n->getNode_array();
     size_t childCount = childNodes.getCount();
-    for (size_t i = 0; i < childCount; i++)
+    for (size_t i = 0; i < childCount; ++i)
     {
         loadNode(childNodes.get(i), node);
     }
@@ -834,7 +812,7 @@ void DAESceneEncoder::calcTransform(domNode* domNode, Matrix& dstTransform)
     daeTArray<daeSmartRef<daeElement> > children;
     domNode->getChildren(children);
     size_t childCount = children.getCount();
-    for (size_t i = 0; i < childCount; i++)
+    for (size_t i = 0; i < childCount; ++i)
     {
         daeElementRef childElement = children[i];
         switch (childElement->getElementType())
@@ -899,7 +877,7 @@ void DAESceneEncoder::loadCameraInstance(const domNode* n, Node* node)
     // Does this node have any camera instances?
     const domInstance_camera_Array& instanceCameras = n->getInstance_camera_array();
     size_t instanceCameraCount = instanceCameras.getCount();
-    for (size_t i = 0; i < instanceCameraCount; i++)
+    for (size_t i = 0; i < instanceCameraCount; ++i)
     {
         // Get the camrea object
         const domInstance_camera* cameraInstanceRef = instanceCameras.get(i);
@@ -926,7 +904,7 @@ void DAESceneEncoder::loadLightInstance(const domNode* n, Node* node)
     // Does this node have any light instances?
     const domInstance_light_Array& instanceLights = n->getInstance_light_array();
     size_t instanceLightCount = instanceLights.getCount();
-    for (size_t i = 0; i < instanceLightCount; i++)
+    for (size_t i = 0; i < instanceLightCount; ++i)
     {
         // Get the camrea object
         const domInstance_light* lightInstanceRef = instanceLights.get(i);
@@ -953,7 +931,7 @@ void DAESceneEncoder::loadGeometryInstance(const domNode* n, Node* node)
     // Does this node have any geometry instances?
     const domInstance_geometry_Array& instanceGeometries = n->getInstance_geometry_array();
     size_t instanceGeometryCount = instanceGeometries.getCount();
-    for (size_t i = 0; i < instanceGeometryCount; i++)
+    for (size_t i = 0; i < instanceGeometryCount; ++i)
     {
         // Get the geometry object
         const domInstance_geometryRef geometryInstanceRef = instanceGeometries.get(i);
@@ -981,7 +959,7 @@ void DAESceneEncoder::loadControllerInstance(const domNode* n, Node* node)
     // Does this node have any controller instances?
     const domInstance_controller_Array& instanceControllers = n->getInstance_controller_array();
     size_t instanceControllerCount = instanceControllers.getCount();
-    for (size_t i = 0; i < instanceControllerCount; i++)
+    for (size_t i = 0; i < instanceControllerCount; ++i)
     {
         const domInstance_controllerRef instanceControllerRef = instanceControllers.get(i);
         xsAnyURI controllerURI = instanceControllerRef->getUrl();
@@ -1043,6 +1021,7 @@ CameraInstance* DAESceneEncoder::loadCamera(const domCamera* cameraRef)
             if (orthographicRef.cast())
             {
                 camera->setOrthographic();
+                camera->setAspectRatio((float)orthographicRef->getAspect_ratio()->getValue());
                 camera->setNearPlane((float)orthographicRef->getZnear()->getValue());
                 camera->setFarPlane((float)orthographicRef->getZfar()->getValue());
 
@@ -1268,7 +1247,7 @@ void DAESceneEncoder::loadSkeleton(domInstance_controller::domSkeleton* skeleton
     // Resolve and set joints array for skin
     std::list<Node*> _joints;
     const std::list<std::string>& jointNames = skin->getJointNames();
-    for (std::list<std::string>::const_iterator i = jointNames.begin(); i != jointNames.end(); i++)
+    for (std::list<std::string>::const_iterator i = jointNames.begin(); i != jointNames.end(); ++i)
     {
         Object* obj = _gamePlayFile.getFromRefTable(*i);
         if (obj)
@@ -1305,7 +1284,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
 
     // Process "JOINT" input semantic first (we need to do this to set the joint count)
     unsigned int jointCount = 0;
-    for (unsigned int i = 0; i < jointInputs.getCount(); i++)
+    for (unsigned int i = 0; i < jointInputs.getCount(); ++i)
     {
         domInputLocalRef input = jointInputs.get(i);
         std::string inputSemantic = std::string(input->getSemantic());
@@ -1321,7 +1300,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
 
             // Go through the joint list and conver them from sid to id because the sid information is
             // lost when converting to the gameplay binary format.
-            for (std::list<std::string>::iterator i = list.begin(); i != list.end(); i++)
+            for (std::list<std::string>::iterator i = list.begin(); i != list.end(); ++i)
             {
                 daeSIDResolver resolver(source->getDocument()->getDomRoot(), i->c_str());
                 daeElement* element = resolver.getElement();
@@ -1340,7 +1319,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
             jointCount = list.size();
             _jointInverseBindPoseMatrices.reserve(jointCount);
             unsigned int j = 0;
-            for (std::list<std::string>::const_iterator i = list.begin(); i != list.end(); i++)
+            for (std::list<std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
             {
                 _jointLookupTable[*i] = j++;
             }
@@ -1356,7 +1335,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
     }
 
     // Process "INV_BIND_MATRIX" next
-    for (unsigned int i = 0; i < jointInputs.getCount(); i++)
+    for (unsigned int i = 0; i < jointInputs.getCount(); ++i)
     {
         domInputLocalRef input = jointInputs.get(i);
         std::string inputSemantic = std::string(input->getSemantic());
@@ -1370,7 +1349,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
             //unsigned int matrixFloatsCount = (unsigned int)source->getFloat_array()->getCount();
             unsigned int jointIndex = 0;
 
-            for (unsigned int j = 0; j < jointCount; j++)
+            for (unsigned int j = 0; j < jointCount; ++j)
             {
                 Matrix matrix((float)matrixFloats.get(jointIndex + 0), (float)matrixFloats.get(jointIndex + 4), (float)matrixFloats.get(jointIndex + 8), (float)matrixFloats.get(jointIndex + 12),
                               (float)matrixFloats.get(jointIndex + 1), (float)matrixFloats.get(jointIndex + 5), (float)matrixFloats.get(jointIndex + 9), (float)matrixFloats.get(jointIndex + 13),
@@ -1391,7 +1370,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
     unsigned int vertexWeightsCount = (unsigned int)vertexWeights->getCount();
     domListOfFloats jointWeights;
 
-    for (unsigned int i = 0; i < jointInputs.getCount(); i++)
+    for (unsigned int i = 0; i < jointInputs.getCount(); ++i)
     {
         domInputLocalOffsetRef input = vertexWeightsInputs.get(i);
         std::string inputSemantic = std::string(input->getSemantic());
@@ -1437,7 +1416,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
     int weightOffset = 0;
 
     // Go through all the skin vertex influence weights from the indexed data.
-    for (int i = 0; i < skinVertexInfluenceCountTotal; i++)
+    for (int i = 0; i < skinVertexInfluenceCountTotal; ++i)
     {
         // Get the influence count and directly get the vertext blend weights and indices.
         unsigned int vertexInfluenceCount = (unsigned int)skinVertexInfluenceCounts.get(i);
@@ -1446,7 +1425,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
         //vertexInfluences.SetCapacity(vertexInfluenceCount);
 
         // Get the index/weight pairs and some the weight totals while at it.
-        for (unsigned int j = 0; j < vertexInfluenceCount; j++)
+        for (unsigned int j = 0; j < vertexInfluenceCount; ++j)
         {
             float weight = (float)jointWeights.get((unsigned int)skinVertexJointWeightPairIndices[vOffset + 1]);
             int index = (int)skinVertexJointWeightPairIndices[vOffset];
@@ -1466,7 +1445,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
         }
 
         // Get up the the maximum vertex weight influence count.
-         for (unsigned int j = 0; j < maxVertexInfluencesCount; j++)
+         for (unsigned int j = 0; j < maxVertexInfluencesCount; ++j)
         {
             if (j < vertexInfluenceCount)
             {
@@ -1574,7 +1553,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
     unsigned int inputCount = (unsigned int)-1;
 
     // Loop through our set of triangle lists (each list of triangles corresponds to a single MeshPart)
-    for (unsigned int i = 0; i < trianglesArrayCount; i++)
+    for (unsigned int i = 0; i < trianglesArrayCount; ++i)
     {
         const domTrianglesRef& triangles = trianglesArray.get(i);
         const domInputLocalOffset_Array& inputArray = triangles->getInput_array();
@@ -1584,7 +1563,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
         {
             inputCount = (unsigned int)inputArray.getCount();
 
-            for (unsigned int j = 0; j < inputCount; j++)
+            for (unsigned int j = 0; j < inputCount; ++j)
             {
                 const domInputLocalOffsetRef& input = inputArray.get(j);
                 std::string inputSemantic = input->getSemantic();
@@ -1593,7 +1572,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
                 if (equals(inputSemantic, "VERTEX"))
                 {
                     unsigned int vertexArrayCount = (unsigned int)vertexArray.getCount();
-                    for (unsigned int k = 0; k < vertexArrayCount; k++)
+                    for (unsigned int k = 0; k < vertexArrayCount; ++k)
                     {
                         const domInputLocalRef& vertexInput = vertexArray.get(k);
                         
@@ -1648,7 +1627,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
             // If there is a triangle array with a different number of inputs, this is not supported.
             if (inputCount != (unsigned int)inputArray.getCount())
             {
-                for (size_t j = 0; j < polygonInputs.size(); j++)
+                for (size_t j = 0; j < polygonInputs.size(); ++j)
                 {
                     delete polygonInputs[j];
                 }
@@ -1664,7 +1643,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
     
     // Now we have validated that all input in all triangles are the same and in the same input layout.
     // Lets start to read them and build our subsets.
-    for (unsigned int i = 0; i < trianglesArrayCount; i++)
+    for (unsigned int i = 0; i < trianglesArrayCount; ++i)
     {
         // Subset to be built.
         MeshPart* subset = new MeshPart();

@@ -1,7 +1,3 @@
-/*
- * DAESceneEncoder.h
- */
-
 #ifndef DAESCENEEENCODER_H_
 #define DAESCENEEENCODER_H_
 

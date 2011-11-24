@@ -1,6 +1,7 @@
 #include "MeshSkin.h"
 #include "Node.h"
 #include "StringUtil.h"
+#include "Matrix.h"
 
 namespace gameplay
 {
@@ -8,7 +9,7 @@ namespace gameplay
 MeshSkin::MeshSkin(void) :
     _vertexInfluenceCount(0)
 {
-    setIdentityMatrix(_bindShape);
+    Matrix::setIdentity(_bindShape);
 }
 
 MeshSkin::~MeshSkin(void)
@@ -30,7 +31,7 @@ void MeshSkin::writeBinary(FILE* file)
     Object::writeBinary(file);
     write(_bindShape, 16, file);
     write(_joints.size(), file);
-    for (std::list<Node*>::const_iterator i = _joints.begin(); i != _joints.end(); i++)
+    for (std::list<Node*>::const_iterator i = _joints.begin(); i != _joints.end(); ++i)
     {
         (*i)->writeBinaryXref(file);
     }
@@ -44,13 +45,13 @@ void MeshSkin::writeText(FILE* file)
     fprintfMatrix4f(file, _bindShape);
     fprintf(file, "</bindShape>");
     fprintf(file, "<joints>");
-    for (std::list<std::string>::const_iterator i = _jointNames.begin(); i != _jointNames.end(); i++)
+    for (std::list<std::string>::const_iterator i = _jointNames.begin(); i != _jointNames.end(); ++i)
     {
         fprintf(file, "%s ", i->c_str());
     }
     fprintf(file, "</joints>\n");
     fprintf(file, "<bindPoses count=\"%lu\">", _bindPoses.size());
-    for (std::list<float>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); i++)
+    for (std::list<float>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); ++i)
     {
         fprintf(file, "%f ", *i);
     }
@@ -60,7 +61,7 @@ void MeshSkin::writeText(FILE* file)
 
 void MeshSkin::setBindShape(const float data[])
 {
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 16; ++i)
     {
         _bindShape[i] = data[i];
     }
@@ -88,10 +89,10 @@ void MeshSkin::setJoints(const std::list<Node*>& list)
 
 void MeshSkin::setBindPoses(std::vector<Matrix>& list)
 {
-    for (std::vector<Matrix>::iterator i = list.begin(); i != list.end(); i++)
+    for (std::vector<Matrix>::iterator i = list.begin(); i != list.end(); ++i)
     {
         float* a = i->m;
-        for (int j = 0; j < 16; j++)
+        for (int j = 0; j < 16; ++j)
         {
             _bindPoses.push_back(a[j]);
         }
@@ -100,7 +101,7 @@ void MeshSkin::setBindPoses(std::vector<Matrix>& list)
 
 bool MeshSkin::hasJoint(const char* id)
 {
-    for (std::list<std::string>::iterator i = _jointNames.begin(); i != _jointNames.end(); i++)
+    for (std::list<std::string>::iterator i = _jointNames.begin(); i != _jointNames.end(); ++i)
     {
         if (equals(*i, id))
         {

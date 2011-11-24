@@ -28,14 +28,14 @@ void GPBFile::saveBinary(const std::string& filepath)
 
     // meshes
     write(_geometry.size(), _file);
-    for (std::list<Mesh*>::const_iterator i = _geometry.begin(); i != _geometry.end(); i++)
+    for (std::list<Mesh*>::const_iterator i = _geometry.begin(); i != _geometry.end(); ++i)
     {
         (*i)->writeBinary(_file);
     }
 
     // Objects
     write(_objects.size(), _file);
-    for (std::list<Object*>::const_iterator i = _objects.begin(); i != _objects.end(); i++)
+    for (std::list<Object*>::const_iterator i = _objects.begin(); i != _objects.end(); ++i)
     {
         (*i)->writeBinary(_file);
     }
@@ -55,13 +55,13 @@ void GPBFile::saveText(const std::string& filepath)
     _refTable.writeText(_file);
 
     // meshes
-    for (std::list<Mesh*>::const_iterator i = _geometry.begin(); i != _geometry.end(); i++)
+    for (std::list<Mesh*>::const_iterator i = _geometry.begin(); i != _geometry.end(); ++i)
     {
         (*i)->writeText(_file);
     }
 
     // Objects
-    for (std::list<Object*>::const_iterator i = _objects.begin(); i != _objects.end(); i++)
+    for (std::list<Object*>::const_iterator i = _objects.begin(); i != _objects.end(); ++i)
     {
         (*i)->writeText(_file);
     }
@@ -146,8 +146,10 @@ bool GPBFile::idExists(const std::string& id)
 
 Camera* GPBFile::getCamera(const char* id)
 {
+    if (!id)
+        return NULL;
     // TODO: O(n) search is not ideal
-    for (std::list<Camera*>::const_iterator i = _cameras.begin(); i != _cameras.end(); i++)
+    for (std::list<Camera*>::const_iterator i = _cameras.begin(); i != _cameras.end(); ++i)
     {
         const std::string& _id = (*i)->getId();
         if (_id.length() > 0 && strncmp(id, _id.c_str(), 255) == 0)
@@ -160,8 +162,10 @@ Camera* GPBFile::getCamera(const char* id)
 
 Light* GPBFile::getLight(const char* id)
 {
+    if (!id)
+        return NULL;
     // TODO: O(n) search is not ideal
-    for (std::list<Light*>::const_iterator i = _lights.begin(); i != _lights.end(); i++)
+    for (std::list<Light*>::const_iterator i = _lights.begin(); i != _lights.end(); ++i)
     {
         const std::string& _id = (*i)->getId();
         if (_id.length() > 0 && strncmp(id, _id.c_str(), 255) == 0)
@@ -174,8 +178,10 @@ Light* GPBFile::getLight(const char* id)
 
 Mesh* GPBFile::getMesh(const char* id)
 {
+    if (!id)
+        return NULL;
     // TODO: O(n) search is not ideal
-    for (std::list<Mesh*>::const_iterator i = _geometry.begin(); i != _geometry.end(); i++)
+    for (std::list<Mesh*>::const_iterator i = _geometry.begin(); i != _geometry.end(); ++i)
     {
         const std::string& _id = (*i)->getId();
         if (_id.length() > 0 && strncmp(id, _id.c_str(), 255) == 0)
@@ -188,8 +194,10 @@ Mesh* GPBFile::getMesh(const char* id)
 
 Node* GPBFile::getNode(const char* id)
 {
+    if (!id)
+        return NULL;
     // TODO: O(n) search is not ideal
-    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); i++)
+    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
     {
         const std::string& _id = (*i)->getId();
         if (_id.length() > 0 && strncmp(id, _id.c_str(), 255) == 0)
@@ -203,7 +211,7 @@ Node* GPBFile::getNode(const char* id)
 void GPBFile::adjust()
 {
     // calculate the ambient color for each scene
-    for (std::list<Object*>::iterator i = _objects.begin(); i != _objects.end(); i++)
+    for (std::list<Object*>::iterator i = _objects.begin(); i != _objects.end(); ++i)
     {
         Object* obj = *i;
         if (obj->getTypeId() == Object::SCENE_ID)
@@ -226,6 +234,5 @@ void GPBFile::adjust()
     //   Blender will output a simple translation animation to 3 separate animations with the same key times but targetting X, Y and Z.
     //   This can be merged into one animation. Same for scale animations.
 }
-
 
 }

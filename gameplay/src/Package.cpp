@@ -858,7 +858,7 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
     float* values = NULL;
     float* tangentsIn = NULL;
     float* tangentsOut = NULL;
-    float* interpolation = NULL;
+    unsigned int* interpolation = NULL;
 
     // length of the arrays
     unsigned int keyTimesCount;

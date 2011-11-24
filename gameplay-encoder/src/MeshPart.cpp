@@ -31,7 +31,7 @@ void MeshPart::writeBinary(FILE* file)
     // write the number of bytes
     write(indicesByteSize(), file);
     // for each index
-    for (std::vector<unsigned int>::const_iterator i = _indices.begin(); i != _indices.end(); i++)
+    for (std::vector<unsigned int>::const_iterator i = _indices.begin(); i != _indices.end(); ++i)
     {
         writeBinaryIndex(*i, file);
     }

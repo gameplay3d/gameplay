@@ -1,7 +1,3 @@
-/*
- * DAEUtil.h
- */
-
 #ifndef DAEUTIL_H_
 #define DAEUTIL_H_
 
@@ -56,7 +52,7 @@ domSource* getInputSource(const domChannelRef& channel);
 const domSamplerRef getSampler(const domChannelRef& channel);
 
 /**
- * Returns the source from the given sampler input. 
+ * Returns the source from the given sampler input.
  * Searchs within the given animation.
  * 
  * @param inputLocal The input element within a sampler.

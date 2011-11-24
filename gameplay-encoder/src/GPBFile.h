@@ -1,7 +1,3 @@
-/*
- * GPBFile.h
- */
-
 #ifndef GPBFILE_H_
 #define GPBFILE_H_
 

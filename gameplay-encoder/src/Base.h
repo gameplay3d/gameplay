@@ -61,7 +61,6 @@ enum VertexUsage
 
 
 void fillArray(float values[], float value, size_t length);
-void setIdentityMatrix(float values[]);
 
 }
 #endif
