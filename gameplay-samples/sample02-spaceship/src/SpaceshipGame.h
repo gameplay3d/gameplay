@@ -128,7 +128,8 @@ private:
     MaterialParameter* _glowDiffuseParameter;
     MaterialParameter* _shipSpecularParameter;
 
-    // Space ship sound
+    // Sounds
+    AudioSource* _backgroundSound;
     AudioSource* _spaceshipSound;
 
 };
