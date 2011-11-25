@@ -95,6 +95,11 @@ void SpaceshipGame::initialize()
     initializeSpaceship();
     initializeEnvironment();
 
+    // Create a background audio track
+    _backgroundSound = AudioSource::create("res/sounds/background.ogg");
+    if (_backgroundSound)
+        _backgroundSound->setLooped(true);
+
     // Create font
     _font = Font::create("res/fonts/airstrip28.gpb");
 
@@ -148,7 +153,10 @@ void SpaceshipGame::initializeSpaceship()
     // Setup the sound
     _spaceshipSound = AudioSource::create("res/sounds/spaceship.wav");
     if (_spaceshipSound)
+    {
+        _spaceshipSound->setGain(0.5f);
         _spaceshipSound->setLooped(true);
+    }
 }
 
 void SpaceshipGame::initializeEnvironment()
@@ -218,6 +226,7 @@ void SpaceshipGame::initializeMaterial(Material* material, bool lighting, bool s
 
 void SpaceshipGame::finalize()
 {
+    SAFE_RELEASE(_backgroundSound);
     SAFE_RELEASE(_spaceshipSound);
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_stateBlock);
@@ -231,6 +240,15 @@ void SpaceshipGame::update(long elapsedTime)
     if (!_finished)
     {
         _time += t;
+        // Play the background track
+        if (_backgroundSound->getState() != AudioSource::PLAYING)
+            _backgroundSound->play();
+    }
+    else
+    {
+        // Stop the background track
+        if (_backgroundSound->getState() != AudioSource::STOPPED)
+            _backgroundSound->stop();
     }
 
     // Set initial force due to gravity

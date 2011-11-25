@@ -44,6 +44,9 @@
     </None>
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
+    <None Include="res\sounds\background.ogg">
+      <Filter>res\sounds</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SpaceshipGame.h">

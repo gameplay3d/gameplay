@@ -159,6 +159,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="res\models\spaceship.gpb" />
+    <None Include="res\sounds\background.ogg" />
     <None Include="res\sounds\spaceship.wav" />
     <None Include="res\textures\background.png" />
     <None Include="res\textures\propulsion_glow.png" />
