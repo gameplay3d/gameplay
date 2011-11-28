@@ -1,7 +1,3 @@
-/*
- * Properties.cpp
- */
-
 #include "Base.h"
 #include "Properties.h"
 #include "FileSystem.h"

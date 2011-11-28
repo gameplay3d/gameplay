@@ -1,7 +1,3 @@
-/*
- * PhysicsConstraint.cpp
- */
-
 #include "PhysicsConstraint.h"
 
 #include "Game.h"

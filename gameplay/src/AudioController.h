@@ -1,7 +1,3 @@
-/*
- * AudioController.h
- */
-
 #ifndef AUDIOCONTROLLER_H_
 #define AUDIOCONTROLLER_H_
 

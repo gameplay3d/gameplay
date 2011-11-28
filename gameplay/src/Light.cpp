@@ -1,7 +1,3 @@
-/*
- * Light.cpp
- */
-
 #include "Base.h"
 #include "Light.h"
 #include "Node.h"

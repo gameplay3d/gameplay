@@ -1,7 +1,3 @@
-/**
- * PhysicsRigidBody.inl
- */
-
 #include "PhysicsRigidBody.h"
 
 namespace gameplay

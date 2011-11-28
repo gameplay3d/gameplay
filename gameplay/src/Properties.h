@@ -1,7 +1,3 @@
-/*
- * Properties.h
- */
-
 #ifndef PROPERTIES_H_
 #define PROPERTIES_H_
 
