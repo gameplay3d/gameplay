@@ -92,9 +92,16 @@ void Vertex::writeText(FILE* file) const
     }
 }
 
-float Vertex::getTotalWeight() const
+void Vertex::normalizeBlendWeight()
 {
-    return blendWeights.x + blendWeights.y + blendWeights.z + blendWeights.w;
+    float total = blendWeights.x + blendWeights.y + blendWeights.z + blendWeights.w;
+    if (total > 0.0f)
+    {
+        blendWeights.x = blendWeights.x / total;
+        blendWeights.y = blendWeights.y / total;
+        blendWeights.z = blendWeights.z / total;
+        blendWeights.w = blendWeights.w / total;
+    }   
 }
 
 }

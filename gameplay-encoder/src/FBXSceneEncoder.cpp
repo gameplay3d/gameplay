@@ -190,15 +190,14 @@ void FBXSceneEncoder::write(const std::string& filepath, const EncoderArguments&
     std::string dstFilename = filepath.substr(0, filepath.find_last_of('/'));
     dstFilename.append(1, '/');
     dstFilename.append(getFilenameNoExt(filenameOnly));
-
-    // TODO remove comments before submitting
-    //if (arguments.textOutputEnabled())
+    
+    if (arguments.textOutputEnabled())
     {
         std::string outFile = dstFilename + ".xml";
         fprintf(stderr, "Saving debug file: %s\n", outFile.c_str());
         _gamePlayFile.saveText(outFile);
     }
-    //else
+    else
     {
         std::string outFile = dstFilename + ".gpb";
         fprintf(stderr, "Saving binary file: %s\n", outFile.c_str());
@@ -219,8 +218,10 @@ void FBXSceneEncoder::loadScene(KFbxScene* fbxScene)
     KFbxNode* rootNode = fbxScene->GetRootNode();
     if (rootNode)
     {
+        print("Triangulate.");
         triangulateRecursive(rootNode);
 
+        print("Load nodes.");
         // Don't include the FBX root node in the GPB.
         const int childCount = rootNode->GetChildCount();
         for (int i = 0; i < childCount; ++i)
@@ -635,22 +636,20 @@ void FBXSceneEncoder::loadLight(KFbxNode* fbxNode, Node* node)
     fbxDouble3 color = fbxLight->Color.Get();
     light->setColor((float)color[0], (float)color[1], (float)color[2]);
     
-    if (fbxLight->LightType.Get() == KFbxLight::ePOINT)
+    switch (fbxLight->LightType.Get())
     {
+    case KFbxLight::ePOINT:
         light->setPointLight();
         // TODO: range
-    }
-    else if (fbxLight->LightType.Get() == KFbxLight::eDIRECTIONAL)
-    {
+        break;
+    case KFbxLight::eDIRECTIONAL:
         light->setDirectionalLight();
-    }
-    else if (fbxLight->LightType.Get() == KFbxLight::eSPOT)
-    {
+        break;
+    case KFbxLight::eSPOT:
         light->setSpotLight();
         // TODO: range and angles
-    }
-    else
-    {
+        break;
+    default:
         warning("Unknown light type in node.");
         return;
     }
@@ -739,7 +738,6 @@ Mesh* FBXSceneEncoder::loadMesh(KFbxMesh* fbxMesh)
     {
         return mesh;
     }
-    print("Loading mesh.");
     mesh = new Mesh();
     // GamePlay requires that a mesh have a unique ID but KFbxMesh doesn't have a string ID.
     const char* name = fbxMesh->GetNode()->GetName();
@@ -1158,6 +1156,7 @@ void loadBlendData(const std::vector<Vector2>& vertexWeights, Vertex* vertex)
         vertex->blendIndices.w = vertexWeights[3].x;
         vertex->blendWeights.w = vertexWeights[3].y;
     }
+    //vertex->normalizeBlendWeight();
 }
 
 bool loadBlendWeights(KFbxMesh* fbxMesh, std::vector<std::vector<Vector2>>& weights)

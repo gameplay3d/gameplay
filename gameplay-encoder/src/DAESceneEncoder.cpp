@@ -1563,6 +1563,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
         {
             inputCount = (unsigned int)inputArray.getCount();
 
+            int texCoordCount = 0;
             for (unsigned int j = 0; j < inputCount; ++j)
             {
                 const domInputLocalOffsetRef& input = inputArray.get(j);
@@ -1600,6 +1601,14 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
                     if (type == -1)
                     {
                         warning(std::string("Semantic (") + semantic + ") is invalid/unsupported for geometry mesh: " + geometryId);
+                        break;
+                    }
+                    if (type == TEXCOORD0)
+                    {
+                        // Some meshes have multiple texture coordinates
+                        assert(texCoordCount <= 7);
+                        type += texCoordCount;
+                        ++texCoordCount;
                     }
 
                     DAEPolygonInput* polygonInput = new DAEPolygonInput();
@@ -1749,6 +1758,11 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
                     vertex.texCoord.y = (float)source.get(polyIndex * 2 + 1);
                 }
                 break;
+
+            case TEXCOORD1:
+                // TODO
+                break;
+
             default:
                 break;
             }
