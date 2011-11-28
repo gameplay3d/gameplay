@@ -1,7 +1,3 @@
-/*
- * Effect.h
- */
-
 #ifndef EFFECT_H_
 #define EFFECT_H_
 

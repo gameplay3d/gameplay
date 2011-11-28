@@ -1,7 +1,3 @@
-/*
- * Viewport.h
- */
-
 #ifndef VIEWPORT_H_
 #define VIEWPORT_H_
 

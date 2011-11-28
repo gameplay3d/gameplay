@@ -166,11 +166,12 @@
     <None Include="res\shaders\solid.vsh" />
     <None Include="res\shaders\textured.fsh" />
     <None Include="res\shaders\textured.vsh" />
-    <None Include="src\gameplay-main-macosx.mm" />
     <None Include="src\BoundingBox.inl" />
     <None Include="src\BoundingSphere.inl" />
+    <None Include="src\gameplay-main-macos.mm" />
     <None Include="src\Matrix.inl" />
     <None Include="src\Plane.inl" />
+    <None Include="src\PlatformMacOS.mm" />
     <None Include="src\Quaternion.inl" />
     <None Include="src\Ray.inl" />
     <None Include="src\Vector2.inl" />

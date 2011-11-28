@@ -1,7 +1,3 @@
-/** 
- * Vector2.inl
- */
-
 #include "Vector2.h"
 
 namespace gameplay

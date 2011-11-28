@@ -1,7 +1,3 @@
-/*
- * Font.h
- */
-
 #ifndef FONT_H_
 #define FONT_H_
 

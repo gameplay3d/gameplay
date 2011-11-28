@@ -1,7 +1,3 @@
-/*
- * Ray.cpp
- */
-
 #include "Base.h"
 #include "Ray.h"
 #include "Plane.h"

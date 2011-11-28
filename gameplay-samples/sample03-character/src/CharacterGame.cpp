@@ -1,7 +1,3 @@
-/*
- * CharacterGame
- */
-
 #include "CharacterGame.h"
 
 // Declare our game instance

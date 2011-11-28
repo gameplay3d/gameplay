@@ -1,7 +1,3 @@
-/*
- * AnimationController.cpp
- */
-
 #include "Base.h"
 #include "AnimationController.h"
 #include "Game.h"

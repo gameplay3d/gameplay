@@ -1,6 +1,3 @@
-/*
- * PlatformQNX.cpp
- */
 #ifdef __QNX__
 
 #include "Base.h"

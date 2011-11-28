@@ -1,9 +1,6 @@
-/*
- * SpaceshipGame.cpp
- */
-
 #include "SpaceshipGame.h"
 
+// Declare our game instance
 SpaceshipGame game;
 
 // Collision constants

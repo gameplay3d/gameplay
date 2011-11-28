@@ -1,7 +1,3 @@
-/*
- * Vector4.cpp
- */
-
 #include "Base.h"
 #include "Vector4.h"
 

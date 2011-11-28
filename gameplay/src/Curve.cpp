@@ -1,7 +1,3 @@
-/*
- * Curve.cpp
- */
-
 #include "Base.h"
 #include "Curve.h"
 #include "Transform.h"

@@ -1,7 +1,3 @@
-/*
- * VertexFormat.cpp
- */
-
 #include "Base.h"
 #include "VertexFormat.h"
 

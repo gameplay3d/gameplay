@@ -1,7 +1,3 @@
-/*
- * CharacterGame.h
- */
-
 #ifndef CHARACTERGAME_H_
 #define CHARACTERGAME_H_
 

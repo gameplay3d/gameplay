@@ -1,7 +1,3 @@
-/*
- * Package.h
- */
-
 #ifndef PACKAGE_H_
 #define PACKAGE_H_
 

@@ -1,7 +1,3 @@
-/*
- * VertexAttributeBinding.cpp
- */
-
 #include "Base.h"
 #include "VertexAttributeBinding.h"
 #include "Mesh.h"

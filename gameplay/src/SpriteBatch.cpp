@@ -1,7 +1,3 @@
-/*
- * SpriteBatch.cpp
- */
-
 #include "Base.h"
 #include "SpriteBatch.h"
 #include "Game.h"

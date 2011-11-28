@@ -1,7 +1,3 @@
-/*
- * MeshGame
- */
-
 #include "MeshGame.h"
 
 // Declare our game instance

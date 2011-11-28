@@ -1,7 +1,3 @@
-/*
- * MeshGame.h
- */
-
 #ifndef MESHGAME_H_
 #define MESHGAME_H_
 

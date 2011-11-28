@@ -1,7 +1,3 @@
-/*
- * LongboardGame.cpp
- */
-
 #include "LongboardGame.h"
 
 // Declare our game instance

@@ -1,7 +1,3 @@
-/*
- * Game.h
- */
-
 #ifndef GAME_H_
 #define GAME_H_
 
