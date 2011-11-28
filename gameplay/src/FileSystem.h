@@ -1,7 +1,3 @@
-/*
- * FileSystem.h
- */
-
 #ifndef FILESYSTEM_H_
 #define FILESYSTEM_H_
 

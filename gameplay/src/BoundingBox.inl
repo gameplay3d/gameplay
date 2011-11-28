@@ -1,7 +1,3 @@
-/** 
- * BoundingBox.inl
- */
-
 #include "BoundingBox.h"
 
 namespace gameplay

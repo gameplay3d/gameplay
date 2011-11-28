@@ -1,7 +1,3 @@
-/*
- * MeshSkin.h
- */
-
 #ifndef MESHSKIN_H_
 #define MESHSKIN_H_
 

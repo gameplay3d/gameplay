@@ -1,9 +1,3 @@
-/**
- * gameplay.h
- *
- * Includes all neccessary header files for gameplay library.
- */
-
 // Core
 #include "Base.h"
 #include "Platform.h"

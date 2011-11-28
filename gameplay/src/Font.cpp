@@ -1,7 +1,3 @@
-/*
- * Font.cpp
- */
-
 #include "Base.h"
 #include "Font.h"
 #include "Game.h"

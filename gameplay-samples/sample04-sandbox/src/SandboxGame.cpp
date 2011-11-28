@@ -1,12 +1,9 @@
-/*
- * SandboxGame
- */
-
 #include "SandboxGame.h"
 
 // Define this to 1 to draw the rope's individual rigid bodies.
 #define DRAW_ROPE_RIGID_BODIES 0
 
+// Declare our game instance
 SandboxGame game;
 
 static float f = 0.5f, l = 0.1f, a = 0.5f;

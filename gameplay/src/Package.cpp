@@ -1,7 +1,3 @@
-/*
- * Package.cpp
- */
-
 #include "Base.h"
 #include "Package.h"
 #include "FileSystem.h"

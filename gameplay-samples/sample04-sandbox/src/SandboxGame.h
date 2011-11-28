@@ -1,11 +1,8 @@
-/*
- * SandboxGame.h
- */
-
 #ifndef SANDBOXGAME_H_
 #define SANDBOXGAME_H_
 
 #include "gameplay.h"
+
 using namespace gameplay;
 
 /**

@@ -1,7 +1,3 @@
-/*
- * BoundingBox.cpp
- */
-
 #include "Base.h"
 #include "BoundingBox.h"
 #include "BoundingSphere.h"

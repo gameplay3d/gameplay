@@ -1,7 +1,3 @@
-/*
- * LongboardGame.h
- */
-
 #ifndef LONGBOARDGAME_H_
 #define LONGBOARDGAME_H_
 

@@ -1,7 +1,3 @@
-/**
- * PhysicsSocketConstraint.cpp
- */
-
 #include "PhysicsSocketConstraint.h"
 
 #include "Node.h"
@@ -27,7 +23,7 @@ PhysicsSocketConstraint::PhysicsSocketConstraint(PhysicsRigidBody* a, PhysicsRig
 }
 
 PhysicsSocketConstraint::PhysicsSocketConstraint(PhysicsRigidBody* a, const Vector3& translationOffsetA, 
-    PhysicsRigidBody* b, const Vector3& translationOffsetB)
+                                                 PhysicsRigidBody* b, const Vector3& translationOffsetB)
     : PhysicsConstraint(a, b)
 {
     // Take scale into account for the first node's translation offset.
@@ -52,7 +48,7 @@ PhysicsSocketConstraint::PhysicsSocketConstraint(PhysicsRigidBody* a, const Vect
 
 PhysicsSocketConstraint::~PhysicsSocketConstraint()
 {
-    // DUMMY FUNCTION
+    // Used
 }
 
 }

@@ -1,7 +1,3 @@
-/*
- * PhysicsHingeConstraint.h
- */
-
 #ifndef PHYSICSHINGECONSTRAINT_H_
 #define PHYSICSHINGECONSTRAINT_H_
 
@@ -23,6 +19,7 @@ class PhysicsHingeConstraint : public PhysicsConstraint
     friend class PhysicsController;
 
 public:
+
     /**
      * Sets the limits (and optionally, some properties) for the hinge.
      * 
@@ -53,7 +50,7 @@ private:
      *      (in its local space) with respect to the constraint joint (optional).
      */
     PhysicsHingeConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
-        PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
+                           PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
 
     /**
      * Destructor.

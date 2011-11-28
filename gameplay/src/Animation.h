@@ -1,7 +1,3 @@
-/*
- * Animation.h
- */
-
 #ifndef ANIMATION_H_
 #define ANIMATION_H_
 

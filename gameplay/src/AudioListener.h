@@ -1,7 +1,3 @@
-/*
- * AudioListener.h
- */
-
 #ifndef AUDIOLISTENER_H_
 #define AUDIOLISTENER_H_
 
