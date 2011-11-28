@@ -26,7 +26,7 @@ void fprintfElement(FILE* file, const char* elementName, const float values[], i
 template <class T>
 void fprintfElement(FILE* file, const char* format, const char* elementName, std::vector<T> list)
 {
-    fprintf(file, "<%s>", elementName);
+    fprintf(file, "<%s count=\"%d\">", elementName, list.size());
     typename std::vector<T>::const_iterator i;
     for (i = list.begin(); i != list.end(); ++i)
     {
@@ -38,7 +38,7 @@ void fprintfElement(FILE* file, const char* format, const char* elementName, std
 template <class T>
 void fprintfElement(FILE* file, const char* format, const char* elementName, std::list<T> list)
 {
-    fprintf(file, "<%s>", elementName);
+    fprintf(file, "<%s count=\"%d\">", elementName, list.size());
     typename std::list<T>::const_iterator i;
     for (i = list.begin(); i != list.end(); ++i)
     {

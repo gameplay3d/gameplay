@@ -148,7 +148,6 @@ unsigned int Mesh::getVertexIndex(const Vertex& vertex)
 {
     std::map<Vertex,unsigned int>::iterator it;
     it = vertexLookupTable.find(vertex);
-    // TODO: Remove it from the map because we are going to delete it
     return it->second;
 }
 

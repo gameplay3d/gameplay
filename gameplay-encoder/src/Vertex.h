@@ -88,7 +88,10 @@ public:
      */
     void writeText(FILE* file) const;
 
-    float getTotalWeight() const;
+    /**
+     * Normalizes the blend weights of this vertex so that they add up to 1.0.
+     */
+    void normalizeBlendWeight();
 };
 }
 #endif

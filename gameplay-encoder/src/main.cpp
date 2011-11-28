@@ -56,7 +56,7 @@ int main(int argc, const char** argv)
     {
     case EncoderArguments::FILEFORMAT_DAE:
         {
-            std::string realpath = arguments.getFilePath();
+            std::string realpath(arguments.getFilePath());
             DAESceneEncoder daeEncoder;
             daeEncoder.write(realpath, arguments);
             break;
@@ -64,7 +64,7 @@ int main(int argc, const char** argv)
     case EncoderArguments::FILEFORMAT_FBX:
         {
 #ifdef USE_FBX
-            std::string realpath = arguments.getFilePath();
+            std::string realpath(arguments.getFilePath());
             FBXSceneEncoder fbxEncoder;
             fbxEncoder.write(realpath, arguments);
             break;
@@ -75,14 +75,14 @@ int main(int argc, const char** argv)
         }
     case EncoderArguments::FILEFORMAT_TTF:
         {
-            std::string realpath = arguments.getFilePath();
+            std::string realpath(arguments.getFilePath());
             std::string id = getFileName(realpath);
             writeFont(realpath.c_str(), arguments.getFontSize(), id.c_str(), arguments.fontPreviewEnabled());
             break;
         }
     case EncoderArguments::FILEFORMAT_GPB:
         {
-            std::string realpath = arguments.getFilePath();
+            std::string realpath(arguments.getFilePath());
             GPBDecoder decoder;
             decoder.readBinary(realpath);
             break;

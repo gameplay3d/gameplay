@@ -77,7 +77,7 @@ void writeZero(FILE* file)
 
 void fprintfElement(FILE* file, const char* elementName, const float values[], int length)
 {
-    fprintf(file, "<%s>", elementName);
+    fprintf(file, "<%s count=\"%d\">", elementName, length);
     for (int i = 0; i < length; ++i)
     {
         fprintf(file, "%f ", values[i]);
