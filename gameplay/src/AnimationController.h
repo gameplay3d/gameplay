@@ -1,7 +1,3 @@
-/*
- * AnimationController.h
- */
-
 #ifndef ANIMATIONCONTROLLER_H_
 #define ANIMATIONCONTROLLER_H_
 

@@ -1,7 +1,3 @@
-/*
- * AudioSource.cpp
- */
-
 #include "Base.h"
 #include "Node.h"
 #include "AudioBuffer.h"

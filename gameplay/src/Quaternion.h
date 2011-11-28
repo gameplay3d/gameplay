@@ -1,7 +1,3 @@
-/*
- * Quaternion.h
- */
-
 #ifndef QUATERNION_H_
 #define QUATERNION_H_
 

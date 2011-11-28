@@ -1,7 +1,3 @@
-/*
- * PropertyListener
- */
-
 #ifndef ANIMATIONTARGET_H_
 #define ANIMATIONTARGET_H_
 

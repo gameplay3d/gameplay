@@ -1,7 +1,3 @@
-/*
- * Plane.h
- */
-
 #ifndef PLANE_H_
 #define PLANE_H_
 

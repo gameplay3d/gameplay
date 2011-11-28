@@ -1,7 +1,3 @@
-/** 
- * Ray.inl
- */
-
 #include "Ray.h"
 
 namespace gameplay

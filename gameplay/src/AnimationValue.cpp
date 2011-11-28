@@ -1,7 +1,3 @@
-/*
- * AnimationValue.cpp
- */
-
 #include "Base.h"
 #include "AnimationValue.h"
 

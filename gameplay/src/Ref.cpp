@@ -1,7 +1,3 @@
-/*
- * Ref.cpp
- */
-
 #include "Base.h"
 #include "Ref.h"
 #include "Game.h"

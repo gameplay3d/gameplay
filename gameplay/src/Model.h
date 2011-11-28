@@ -1,7 +1,3 @@
-/*
- * Model.h
- */
-
 #ifndef MODEL_H_
 #define MODEL_H_
 

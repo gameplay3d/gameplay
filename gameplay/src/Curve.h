@@ -1,7 +1,3 @@
-/*
- * Curve.h
- */
-
 #ifndef CURVE_H_
 #define CURVE_H_
 

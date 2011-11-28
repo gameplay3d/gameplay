@@ -1,7 +1,3 @@
-/*
- * PhysicsSpringConstraint.h
- */
-
 #ifndef PHYSICSSPRINGCONSTRAINT_H_
 #define PHYSICSSPRINGCONSTRAINT_H_
 
@@ -21,6 +17,7 @@ class PhysicsSpringConstraint : public PhysicsGenericConstraint
     friend class PhysicsController;
 
 public:
+
     /**
      * Sets the angular damping along the constraint's local X axis.
      * 
@@ -124,6 +121,7 @@ public:
     inline void setLinearStrengthZ(float strength);
 
 private:
+
     // Represents the different properties that
     // can be set on the spring constraint.
     // 
@@ -167,7 +165,7 @@ private:
      *      (in its local space) with respect to the constraint joint (optional).
      */
     PhysicsSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
-        PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
+                            PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
 
     /**
      * Destructor.
