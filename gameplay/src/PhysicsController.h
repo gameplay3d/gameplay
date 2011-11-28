@@ -1,7 +1,3 @@
-/*
- * PhysicsController.h
- */
-
 #ifndef PHYSICSCONTROLLER_H_
 #define PHYSICSCONTROLLER_H_
 
@@ -26,6 +22,7 @@ class PhysicsController
     friend class PhysicsRigidBody;
 
 public:
+
     /**
      * Status listener interface.
      */
@@ -97,8 +94,9 @@ public:
      *      (in its local space) with respect to the constraint joint (optional).
      */
     PhysicsGenericConstraint* createGenericConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, 
-        const Vector3& translationOffsetA, PhysicsRigidBody* b = NULL, 
-        const Quaternion& rotationOffsetB = Quaternion(), const Vector3& translationOffsetB = Vector3());
+                                                     const Vector3& translationOffsetA, PhysicsRigidBody* b = NULL, 
+                                                     const Quaternion& rotationOffsetB = Quaternion(), 
+                                                     const Vector3& translationOffsetB = Vector3());
 
     /**
      * Creates a hinge constraint.
@@ -116,8 +114,9 @@ public:
      *      (in its local space) with respect to the constraint joint (optional).
      */
     PhysicsHingeConstraint* createHingeConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, 
-        const Vector3& translationOffsetA, PhysicsRigidBody* b = NULL, 
-        const Quaternion& rotationOffsetB = Quaternion(), const Vector3& translationOffsetB = Vector3());
+                                                  const Vector3& translationOffsetA, PhysicsRigidBody* b = NULL, 
+                                                  const Quaternion& rotationOffsetB = Quaternion(), 
+                                                  const Vector3& translationOffsetB = Vector3());
 
     /**
      * Creates a socket constraint so that the rigid body (or bodies) is
@@ -142,7 +141,7 @@ public:
      *      (in its local space) with respect to the constraint joint (optional).
      */
     PhysicsSocketConstraint* createSocketConstraint(PhysicsRigidBody* a, const Vector3& translationOffsetA,
-        PhysicsRigidBody* b = NULL, const Vector3& translationOffsetB = Vector3());
+                                                    PhysicsRigidBody* b = NULL, const Vector3& translationOffsetB = Vector3());
 
     /**
      * Creates a spring constraint so that the rigid body (or bodies) is
@@ -171,7 +170,8 @@ public:
      *      (in its local space) with respect to the constraint joint (optional).
      */
     PhysicsSpringConstraint* createSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, 
-        const Vector3& translationOffsetA, PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
+                                                    const Vector3& translationOffsetA, PhysicsRigidBody* b, 
+                                                    const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
 
     /**
      * Gets the gravity vector for the simulated physics world.
@@ -188,6 +188,7 @@ public:
     void setGravity(const Vector3& gravity);
 
 private:
+
     /**
      * Constructor.
      */

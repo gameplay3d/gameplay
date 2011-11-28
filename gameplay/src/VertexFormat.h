@@ -1,7 +1,3 @@
-/*
- * VertexFormat.h
- */
-
 #ifndef VERTEXFORMAT_H_
 #define VERTEXFORMAT_H_
 

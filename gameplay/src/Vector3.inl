@@ -1,7 +1,3 @@
-/** 
- * Vector3.inl
- */
-
 #include "Vector3.h"
 #include "Matrix.h"
 

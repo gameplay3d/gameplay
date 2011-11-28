@@ -1,7 +1,3 @@
-/*
- * Ref.h
- */
-
 #ifndef REF_H_
 #define REF_H_
 

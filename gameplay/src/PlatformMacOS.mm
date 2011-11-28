@@ -1,7 +1,3 @@
-/*
- * PlatformMacOSX.cpp
- */
-
 #ifdef __APPLE__
 
 #include "Base.h"
@@ -18,7 +14,6 @@
 using namespace std;
 using namespace gameplay;
 
-
 static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
 static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
 
@@ -33,7 +28,6 @@ static bool __hasMouse = false;
 static bool __leftMouseDown = false;
 static bool __rightMouseDown = false;
 static bool __shiftDown = false;
-
 
 long getMachTimeInMilliseconds()
 {
@@ -54,7 +48,6 @@ long getMachTimeInMilliseconds()
 {
     CVDisplayLinkRef displayLink;
     NSRecursiveLock* lock;
-    
     Game* _game;
 }
 

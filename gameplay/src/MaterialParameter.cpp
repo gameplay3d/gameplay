@@ -1,7 +1,3 @@
-/*
- * MaterialParameter.cpp
- */
-
 #include "Base.h"
 #include "MaterialParameter.h"
 

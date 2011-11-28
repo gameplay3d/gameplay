@@ -1,7 +1,3 @@
-/*
- * Game.cpp
- */
-
 #include "Base.h"
 #include "Game.h"
 #include "Platform.h"

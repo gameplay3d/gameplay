@@ -1,7 +1,3 @@
-/*
- * Camera.cpp
- */
-
 #include "Base.h"
 #include "Camera.h"
 #include "Game.h"

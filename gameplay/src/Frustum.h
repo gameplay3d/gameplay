@@ -1,7 +1,3 @@
-/*
- * Frustum.h
- */
-
 #ifndef FRUSTUM_H_
 #define FRUSTUM_H_
 

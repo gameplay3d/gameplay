@@ -1,7 +1,3 @@
-/*
- * SpaceshipGame.h
- */
-
 #ifndef SPACESHIPGAME_H_
 #define SPACESHIPGAME_H_
 

@@ -1,14 +1,9 @@
-/*
- * AudioBuffer.cpp
- */
-
 #include "Base.h"
 #include "AudioBuffer.h"
 #include "FileSystem.h"
 
 namespace gameplay
 {
-
 
 // Audio buffer cache
 static std::vector<AudioBuffer*> __buffers;
@@ -112,7 +107,6 @@ cleanup:
         alDeleteBuffers(1, &alBuffer);
     return NULL;
 }
-    
     
 bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
 {

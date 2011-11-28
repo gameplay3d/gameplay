@@ -1,7 +1,3 @@
-/*
- * PhysicsGenericConstraint.h
- */
-
 #ifndef PHYSICSGENERICCONSTRAINT_H_
 #define PHYSICSGENERICCONSTRAINT_H_
 
@@ -23,6 +19,7 @@ class PhysicsGenericConstraint : public PhysicsConstraint
     friend class PhysicsController;
 
 public:
+
     /**
      * Gets the rotation offset for the first rigid body in the constraint.
      * 
@@ -112,6 +109,7 @@ public:
     inline void setTranslationOffsetB(const Vector3& translationOffset);
 
 protected:
+
     /**
      * Constructor.
      *
@@ -146,7 +144,7 @@ protected:
      *      (in its local space) with respect to the constraint joint (optional).
      */
     PhysicsGenericConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
-        PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
+                             PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
 
     /**
      * Destructor.
@@ -154,6 +152,7 @@ protected:
     virtual ~PhysicsGenericConstraint();
 
 private:
+
     mutable Quaternion* _rotationOffsetA;
     mutable Quaternion* _rotationOffsetB;
     mutable Vector3* _translationOffsetA;

@@ -1,7 +1,3 @@
-/*
- * VertexAttributeBinding.h
- */
-
 #ifndef VERTEXATTRIBUTEBINDING_H_
 #define VERTEXATTRIBUTEBINDING_H_
 
