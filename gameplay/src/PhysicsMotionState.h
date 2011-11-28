@@ -1,7 +1,3 @@
-/*
- * PhysicsMotionState.h
- */
-
 #ifndef PHYSICSMOTIONSTATE_H_
 #define PHYSICSMOTIONSTATE_H_
 
@@ -22,6 +18,7 @@ class PhysicsMotionState : public btMotionState
     friend class PhysicsConstraint;
 
 protected:
+
     /**
      * Creates a physics motion state for a rigid body.
      * 
@@ -46,6 +43,7 @@ protected:
     virtual void setWorldTransform(const btTransform &transform);
 
 private:
+
     // Updates the motion state's world transform from the GamePlay Node object's world transform.
     void updateTransformFromNode() const;
 

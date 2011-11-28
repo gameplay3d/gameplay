@@ -1,7 +1,3 @@
-/*
- * AnimationClip.h
- */
-
 #ifndef ANIMATIONCLIP_H_
 #define ANIMATIONCLIP_H_
 

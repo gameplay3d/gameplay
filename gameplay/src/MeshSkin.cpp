@@ -1,7 +1,3 @@
-/*
- * MeshSkin.cpp
- */
-
 #include "Base.h"
 #include "MeshSkin.h"
 #include "Joint.h"

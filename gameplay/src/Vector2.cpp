@@ -1,7 +1,3 @@
-/*
- * Vector2.cpp
- */
-
 #include "Base.h"
 #include "Vector2.h"
 

@@ -1,7 +1,3 @@
-/*
- * PhysicsSocketConstraint.h
- */
-
 #ifndef PHYSICSSOCKETCONSTRAINT_H_
 #define PHYSICSSOCKETCONSTRAINT_H_
 
@@ -22,6 +18,7 @@ class PhysicsSocketConstraint : public PhysicsConstraint
     friend class PhysicsController;
 
 private:
+
     /**
      * Creates a socket constraint so that the rigid body (or bodies) is
      * (are) constrained using its (their) current world position(s) for
@@ -45,7 +42,7 @@ private:
      *      (in its local space) with respect to the constraint joint (optional).
      */
     PhysicsSocketConstraint(PhysicsRigidBody* a, const Vector3& translationOffsetA, 
-        PhysicsRigidBody* b, const Vector3& translationOffsetB);
+                            PhysicsRigidBody* b, const Vector3& translationOffsetB);
 
     /**
      * Destructor.

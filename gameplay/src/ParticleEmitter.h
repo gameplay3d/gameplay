@@ -1,7 +1,3 @@
-/*
- * ParticleEmitter.h
- */
-
 #ifndef PARTICLEEMITTER_H_
 #define PARTICLEEMITTER_H_
 

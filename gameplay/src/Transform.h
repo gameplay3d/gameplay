@@ -1,7 +1,3 @@
-/*
- * Transform.h
- */
-
 #ifndef TRANSFORM_H_
 #define TRANSFORM_H_
 

@@ -1,7 +1,3 @@
-/*
- * PhysicsHingeConstraint.cpp
- */
-
 #include "PhysicsHingeConstraint.h"
 
 #include "Node.h"

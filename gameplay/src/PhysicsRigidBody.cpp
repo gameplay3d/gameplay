@@ -1,7 +1,3 @@
-/*
- * PhysicsRigidBody.cpp
- */
-
 #include "Base.h"
 #include "Game.h"
 #include "PhysicsController.h"
@@ -211,12 +207,12 @@ void PhysicsRigidBody::removeConstraint(PhysicsConstraint* constraint)
 PhysicsRigidBody::CollisionPair::CollisionPair(PhysicsRigidBody* rbA, PhysicsRigidBody* rbB)
     : _rbA(rbA), _rbB(rbB)
 {
-    // DUMMY FUNCTION
+    // Unsued
 }
 
 PhysicsRigidBody::Listener::~Listener()
 {
-    // DUMMY FUNCTION
+    // Unsued
 }
 
 btScalar PhysicsRigidBody::Listener::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a,

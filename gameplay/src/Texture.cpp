@@ -1,7 +1,3 @@
-/*
- * Texture.cpp
- */
-
 #include "Base.h"
 #include "Texture.h"
 #include "FileSystem.h"
