@@ -122,7 +122,7 @@ private:
     /**
     * @see Transform::Listener::transformChanged
     */
-    void transformChanged(Transform* transform);
+    void transformChanged(Transform* transform, long cookie);
 
     float _gain;
     Vector3 _position;

@@ -14,6 +14,27 @@ namespace gameplay
 class Node;
 class Mesh;
 
+struct BoundingSphere
+{
+    Vector3 center;
+    float radius;
+
+    BoundingSphere() : radius(0)
+    {
+    }
+
+    BoundingSphere(const BoundingSphere& copy)
+    {
+        set(copy);
+    }
+
+    void set(const BoundingSphere& copy)
+    {
+        center = copy.center;
+        radius = copy.radius;
+    }
+};
+
 class MeshSkin : public Object
 {
     friend class Model;
@@ -39,11 +60,11 @@ public:
 
     void setVertexInfluenceCount(unsigned int count);
 
-    void setJointNames(const std::list<std::string>& list);
+    void setJointNames(const std::vector<std::string>& list);
 
-    const std::list<std::string>& getJointNames();
+    const std::vector<std::string>& getJointNames();
 
-    void setJoints(const std::list<Node*>& list);
+    void setJoints(const std::vector<Node*>& list);
 
     void setBindPoses(std::vector<Matrix>& list);
 
@@ -62,11 +83,13 @@ private:
 
     Mesh* _mesh;
     float _bindShape[16];
-    std::list<Node*> _joints;
-    std::list<Matrix> _bindPoses;
-    std::list<std::string> _jointNames;
+    std::vector<Node*> _joints;
+    std::vector<Matrix> _bindPoses;
+    std::vector<std::string> _jointNames;
     unsigned int _vertexInfluenceCount;
+    std::vector<BoundingSphere> _jointBounds;
 };
 
 }
+
 #endif

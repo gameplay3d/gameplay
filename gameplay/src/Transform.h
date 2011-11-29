@@ -130,8 +130,11 @@ public:
 
         /**
          * Handles when an transform has changed.
+         *
+         * @param transform The Transform object that was changed.
+         * @param cookie Cookie value that was specified when the listener was registered.
          */
-        virtual void transformChanged(Transform* transform) = 0;
+        virtual void transformChanged(Transform* transform, long cookie) = 0;
     };
 
     /**
@@ -717,8 +720,11 @@ public:
 
     /**
      * Adds a transform listener.
+     *
+     * @param listener The listener to add.
+     * @param cookie An optional long value that is passed to the specified listener when it is called..
      */
-    void addListener(Transform::Listener* listener);
+    void addListener(Transform::Listener* listener, long cookie = 0);
 
     /**
      * Removes a transform listener.
@@ -742,6 +748,12 @@ public:
 
 protected:
 
+    struct TransformListener
+    {
+        Listener* listener;
+        long cookie;
+    };
+
     void dirty();
     virtual void transformChanged();
 
@@ -750,7 +762,7 @@ protected:
     Vector3 _translation;
     mutable Matrix _matrix;
     mutable bool _matrixDirty;
-    std::vector<Transform::Listener*>* _listeners;
+    std::list<TransformListener>* _listeners;
 
 };
 

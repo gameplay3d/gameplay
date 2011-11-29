@@ -160,7 +160,7 @@ private:
     /**
      * @see Transform::Listener::transformChanged
      */
-    void transformChanged(Transform* transform);
+    void transformChanged(Transform* transform, long cookie);
 
     ALuint _alSource;
     AudioBuffer* _buffer;

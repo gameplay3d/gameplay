@@ -79,6 +79,7 @@
     <ClInclude Include="src\MaterialParameter.h" />
     <ClInclude Include="src\Matrix.h" />
     <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\Miniball.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\MeshPart.h" />
     <ClInclude Include="src\MeshSkin.h" />

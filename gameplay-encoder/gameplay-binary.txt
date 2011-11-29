@@ -16,7 +16,7 @@ Section      Name            Type
 ------------------------------------------------------------------------------------------------------
 Header
              Identifier      byte[9]     = { '«', 'G', 'P', 'B', '»', '\r', '\n', '\x1A', '\n' } 
-             Version         byte[2]     = { 1, 0 }
+             Version         byte[2]     = { 1, 1 }
              References      Reference[]
 Data
              Objects         Object[]

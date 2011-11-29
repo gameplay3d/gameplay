@@ -10,7 +10,7 @@
 #include "Joint.h"
 
 #define GPB_PACKAGE_VERSION_MAJOR 1
-#define GPB_PACKAGE_VERSION_MINOR 0
+#define GPB_PACKAGE_VERSION_MINOR 1
 
 #define PACKAGE_TYPE_SCENE 1
 #define PACKAGE_TYPE_NODE 2
@@ -774,6 +774,23 @@ void Package::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
                     skinData->skin->setJoint(joint, j);
                 }
             }
+        }
+
+        // Set the root joint
+        if (jointCount > 0)
+        {
+            Joint* rootJoint = skinData->skin->getJoint((unsigned int)0);
+            Node* parent = rootJoint->getParent();
+            while (parent)
+            {
+                if (skinData->skin->getJointIndex(static_cast<Joint*>(parent)) != -1)
+                {
+                    // Parent is a joint in the MeshSkin, so treat it as the new root
+                    rootJoint = static_cast<Joint*>(parent);
+                }
+                parent = parent->getParent();
+            }
+            skinData->skin->setRootJoint(rootJoint);
         }
 
         // Done with this MeshSkinData entry

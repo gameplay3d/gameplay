@@ -1,5 +1,5 @@
 #include "TTFFontEncoder.h"
-
+#include "GPBFile.h"
 
 void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, unsigned char* srcBitmap, int srcWidth, int srcHeight)
 {
@@ -263,9 +263,8 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
     
     // File header and version.
     char fileHeader[9]     = {'«', 'G', 'P', 'B', '»', '\r', '\n', '\x1A', '\n'};
-    char fileVersion[2]    = {1, 0};
     fwrite(fileHeader, sizeof(char), 9, gpbFp);
-    fwrite(fileVersion, sizeof(char), 2, gpbFp);
+    fwrite(gameplay::VERSION, sizeof(char), 2, gpbFp);
 
     // Write Ref table (for a single font)
     writeUint(gpbFp, 1);                // Ref[] count

@@ -28,7 +28,7 @@ namespace gameplay
      * Increment the version number when making a change that break binary compatibility.
      * [0] is major, [1] is minor.
      */
-    const unsigned char VERSION[2] = {1, 0};
+    const unsigned char VERSION[2] = {1, 1};
 
 /**
  * The GamePlay Binary file class handles writing the GamePlay Binary file.
