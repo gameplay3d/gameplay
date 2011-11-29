@@ -35,15 +35,28 @@ void MeshSkin::writeBinary(FILE* file)
     Object::writeBinary(file);
     write(_bindShape, 16, file);
     write(_joints.size(), file);
-    for (std::list<Node*>::const_iterator i = _joints.begin(); i != _joints.end(); i++)
+    for (std::vector<Node*>::const_iterator i = _joints.begin(); i != _joints.end(); i++)
     {
         (*i)->writeBinaryXref(file);
     }
     write(_bindPoses.size() * 16, file);
-    for (std::list<Matrix>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); i++)
+    for (std::vector<Matrix>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); i++)
     {
         write(i->m, 16, file);
     }
+
+    /*
+    // Write joint bounds
+    write((unsigned int)_jointBounds.size(), file);
+    for (unsigned int i = 0; i < _jointBounds.size(); ++i)
+    {
+        BoundingSphere& s = _jointBounds[i];
+        write(s.center.x, file);
+        write(s.center.y, file);
+        write(s.center.z, file);
+        write(s.radius, file);
+    }
+    */
 }
 
 void MeshSkin::writeText(FILE* file)
@@ -53,13 +66,13 @@ void MeshSkin::writeText(FILE* file)
     fprintfMatrix4f(file, _bindShape);
     fprintf(file, "</bindShape>");
     fprintf(file, "<joints>");
-    for (std::list<std::string>::const_iterator i = _jointNames.begin(); i != _jointNames.end(); i++)
+    for (std::vector<std::string>::const_iterator i = _jointNames.begin(); i != _jointNames.end(); i++)
     {
         fprintf(file, "%s ", i->c_str());
     }
     fprintf(file, "</joints>\n");
     fprintf(file, "<bindPoses count=\"%lu\">", _bindPoses.size() * 16);
-    for (std::list<Matrix>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); i++)
+    for (std::vector<Matrix>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); i++)
     {
         for (unsigned int j = 0; j < 16; ++j)
         {
@@ -69,6 +82,118 @@ void MeshSkin::writeText(FILE* file)
     fprintf(file, "</bindPoses>\n");
 
     fprintElementEnd(file);
+}
+
+void MeshSkin::setBindShape(const float data[])
+{
+    for (int i = 0; i < 16; i++)
+    {
+        _bindShape[i] = data[i];
+    }
+}
+
+void MeshSkin::setVertexInfluenceCount(unsigned int count)
+{
+    _vertexInfluenceCount = count;
+}
+
+void MeshSkin::setJointNames(const std::vector<std::string>& list)
+{
+    _jointNames = list;
+}
+
+const std::vector<std::string>& MeshSkin::getJointNames()
+{
+    return _jointNames;
+}
+
+void MeshSkin::setJoints(const std::vector<Node*>& list)
+{
+    _joints = list;
+}
+
+void MeshSkin::setBindPoses(std::vector<Matrix>& list)
+{
+    for (std::vector<Matrix>::iterator i = list.begin(); i != list.end(); i++)
+    {
+        _bindPoses.push_back(*i);
+    }
+}
+
+bool MeshSkin::hasJoint(const char* id)
+{
+    for (std::vector<std::string>::iterator i = _jointNames.begin(); i != _jointNames.end(); i++)
+    {
+        if (equals(*i, id))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+BoundingSphere mergeSpheres(const BoundingSphere& sphere1, const BoundingSphere& sphere2)
+{
+    BoundingSphere result;
+
+    // Calculate the distance between the two centers.
+    float vx = sphere1.center.x - sphere2.center.x;
+    float vy = sphere1.center.y - sphere2.center.y;
+    float vz = sphere1.center.z - sphere2.center.z;
+    float d = sqrtf(vx * vx + vy * vy + vz * vz);
+
+    // If one sphere is contained inside the other, set to the larger sphere.
+    if (d <= (sphere2.radius - sphere1.radius))
+    {
+        result = sphere2;
+        return result;
+    }
+    else if (d <= (sphere1.radius - sphere2.radius))
+    {
+        result = sphere1;
+        return result;
+    }
+
+    // Calculate the unit vector between the two centers.
+    float dI = 1.0f / d;
+    vx *= dI;
+    vy *= dI;
+    vz *= dI;
+
+    // Calculate the new radius.
+    float r = (sphere1.radius + sphere2.radius + d) * 0.5f;
+
+    // Calculate the new center.
+    float scaleFactor = (r - sphere2.radius);
+    vx = vx * scaleFactor + sphere2.center.x;
+    vy = vy * scaleFactor + sphere2.center.y;
+    vz = vz * scaleFactor + sphere2.center.z;
+
+    // Set the new center and radius.
+    result.center.x = vx;
+    result.center.y = vy;
+    result.center.z = vz;
+    result.radius = r;
+    return result;
+}
+
+BoundingSphere transformBoundingSphere(const BoundingSphere& sphere, Matrix& matrix)
+{
+    BoundingSphere result = sphere;
+
+    // Translate the center point.
+    Vector3 translate;
+    matrix.transformPoint(sphere.center, &translate);
+    result.center = translate;
+
+    // Calculate the sphere's new radius from the radii in each direction (take the largest).
+    matrix.decompose(&translate, NULL, NULL);
+    float r = sphere.radius * translate.x;
+    r = std::max(sphere.radius, sphere.radius * translate.y);
+    r = std::max(sphere.radius, sphere.radius * translate.z);
+    result.radius = r;
+
+    return result;
 }
 
 void MeshSkin::computeBounds()
@@ -89,312 +214,273 @@ void MeshSkin::computeBounds()
             break;
         }
     }
-    if (blendIndexOffset != -1 && blendWeightOffset != -1)
+    if (blendIndexOffset == -1 || blendWeightOffset == -1)
     {
-        // Construct a new list of joints which contains all the joints in this mesh skin,
-        // as WELL as any nodes that are direct parents of the root joint.
-        // We need to do this since animations that affect parent nodes of our joints will
-        // ultimately affect the final position of transformed vertices.
-        std::vector<Node*> joints;
-        for (std::list<Node*>::const_iterator itr = _joints.begin(); itr != _joints.end(); itr++)
+        // Need blend indices and blend weights to calculate skinned bounding volume
+        return;
+    }
+
+    DEBUGPRINT("\nComputing bounds for skin of mesh: %s\n", _mesh->getId().c_str());
+
+    Node* joint;
+
+    // Get the root joint
+    Node* rootJoint = _joints[0];
+    Node* parent = rootJoint->getParent();
+    while (parent)
+    {
+        // Is this parent in the list of joints that form the skeleton?
+        // If not, then it's simply a parent node to the root joint
+        if (std::find(_joints.begin(), _joints.end(), parent) != _joints.end())
         {
-            joints.push_back(*itr);
+            rootJoint = parent;
         }
+        parent = parent->getParent();
+    }
 
-        // Add parent joints that are not yet in the list
-        Node* joint = joints[0];
-        while (joint->getParent())
+    // If the root joint has a parent node, temporarily detach it so that its transform is
+    // not included in the bounding volume calculation below
+    Node* rootJointParent = rootJoint->getParent();
+    if (rootJointParent)
+    {
+        rootJointParent->removeChild(rootJoint);
+    }
+
+    unsigned int jointCount = _joints.size();
+    unsigned int vertexCount = _mesh->getVertexCount();
+
+    DEBUGPRINT("> %d joints found.\n", jointCount);
+
+    std::vector<AnimationChannel*> channels;
+    std::vector<Node*> channelTargets;
+    std::vector<Curve*> curves;
+    std::vector<Vector3> vertices;
+    _jointBounds.resize(jointCount);
+
+    // Construct a list of all animation channels that target the joints affecting this mesh skin
+    DEBUGPRINT("> Collecting animations...\n");
+    DEBUGPRINT("> 0%%\r");
+    for (unsigned int i = 0; i < jointCount; ++i)
+    {
+        joint = _joints[i];
+
+        // Find all animations that target this joint
+        Animations* animations = GPBFile::getInstance()->getAnimations();
+        for (unsigned int j = 0, animationCount = animations->getAnimationCount(); j < animationCount; ++j)
         {
-            joint = joint->getParent();
-            if (std::find(joints.begin(), joints.end(), joint) == joints.end())
-                joints.push_back(joint);
-        }
-
-        unsigned int jointCount = joints.size();
-        unsigned int boneCount = _joints.size();
-
-        std::vector<AnimationChannel*> channels;
-        std::vector<Node*> channelTargets;
-        std::vector<Curve*> curves;
-
-        // Construct a list of all animation channels that target the joints affecting this mesh skin
-        for (unsigned int i = 0; i < jointCount; ++i)
-        {
-            joint = joints[i];
-
-            // Find all animations that target this joint
-            Animations* animations = GPBFile::getInstance()->getAnimations();
-            for (unsigned int j = 0, animationCount = animations->getAnimationCount(); j < animationCount; ++j)
+            Animation* animation = animations->getAnimation(j);
+            for (unsigned int k = 0, channelCount = animation->getAnimationChannelCount(); k < channelCount; ++k)
             {
-                Animation* animation = animations->getAnimation(j);
-                for (unsigned int k = 0, channelCount = animation->getAnimationChannelCount(); k < channelCount; ++k)
+                AnimationChannel* channel = animation->getAnimationChannel(k);
+                if (channel->getTargetId() == joint->getId())
                 {
-                    AnimationChannel* channel = animation->getAnimationChannel(k);
-                    if (channel->getTargetId() == joint->getId())
+                    if (std::find(channels.begin(), channels.end(), channel) == channels.end())
                     {
-                        if (std::find(channels.begin(), channels.end(), channel) == channels.end())
-                        {
-                            channels.push_back(channel);
-                            channelTargets.push_back(joint);
-                        }
+                        channels.push_back(channel);
+                        channelTargets.push_back(joint);
                     }
                 }
             }
-
-            // TODO: Calculate local (non-transformed/non-animated) bounding volumes for each joint that can be used to 
-            // do more precise bounds checking for skinned meshes at runtime.
-            // Find all vertices that this joint influences
-            /*vertices.clear();
-            for (unsigned int j = 0, count = _mesh->getVertexCount(); j < count; ++j)
-            {
-                const Vertex& v = _mesh->getVertex(j);
-                if (v.blendIndices.x == i || v.blendIndices.y == i || v.blendIndices.z == i || v.blendIndices.w == i)
-                {
-                    vertices.push_back(const_cast<Vertex*>(&v));
-                }
-            }*/
         }
 
-        // Create a Curve for each animation channel
-        float maxDuration = 0.0f;
-        for (unsigned int i = 0, channelCount = channels.size(); i < channelCount; ++i)
+        // Calculate the local bounding volume for this joint
+        vertices.clear();
+        BoundingSphere jointSphere;
+        for (unsigned int j = 0; j < vertexCount; ++j)
         {
-            AnimationChannel* channel = channels[i];
+            const Vertex& v = _mesh->getVertex(j);
 
-            const std::vector<float>& keyTimes = channel->getKeyTimes();
-            unsigned int keyCount = keyTimes.size();
-            if (keyCount == 0)
-                continue;
-
-            // Create a curve for this animation channel
-            Curve* curve = NULL;
-            switch (channel->getTargetAttribute())
+            if ((v.blendIndices.x == i && !ISZERO(v.blendWeights.x)) ||
+                (v.blendIndices.y == i && !ISZERO(v.blendWeights.y)) ||
+                (v.blendIndices.z == i && !ISZERO(v.blendWeights.z)) ||
+                (v.blendIndices.w == i && !ISZERO(v.blendWeights.w)))
             {
-            case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
-                curve = new Curve(keyCount, 10);
-                curve->addQuaternionOffset(3);
-                break;
+                vertices.push_back(v.position);
+                jointSphere.center.add(v.position);
             }
-            if (curve == NULL)
-            {
-                // Unsupported/not implemented curve type 
-                continue;
-            }
-
-            // Copy key values into a temporary array
-            unsigned int keyValuesCount = channel->getKeyValues().size();
-            float* keyValues = new float[keyValuesCount];
-            for (unsigned int j = 0; j < keyValuesCount; ++j)
-                keyValues[j] = channel->getKeyValues()[j];
-
-            // Determine animation duration
-            float startTime = keyTimes[0];
-            float duration = keyTimes[keyCount-1] - startTime;
-            if (duration > maxDuration)
-                maxDuration = duration;
-
-            // Set curve points
-            float* keyValuesPtr = keyValues;
-            for (unsigned int j = 0; j < keyCount; ++j)
-            {
-                // Store time normalized, between 0-1
-                float t = (keyTimes[j] - startTime) / duration;
-
-                // Set the curve point
-                // TODO: Handle other interpolation types
-                curve->setPoint(j, t, keyValuesPtr, gameplay::Curve::LINEAR);
-
-                // Move to the next point on the curve
-                keyValuesPtr += curve->getComponentCount();
-            }
-
-            delete[] keyValues;
-            keyValues = NULL;
-
-            curves.push_back(curve);
         }
-
-        // Compute an all-encompassing bounding volume for the MeshSkin that contains all possible vertex
-        // positions for all animations targetting the skin.
-        //
-        // This is accomplished through the following steps:
-        //
-        //  - Step over time in small increments (60 fps ~= 17 ms)
-        //  - For each time interval:
-        //     - For each animation channel:
-        //        - Evalulate the curve at the current time
-        //        - store the result in a local transform for the target joint (SRT)
-        //     - Calculate final matrix pallette of resolved world joint transforms (multplying by parent joints)
-        //     - For each vertex in the mesh:
-        //        - Calculate final vertex position using skinning w/ blendindices and blendweights and the matrix pallette
-        //        - Update the bounding volume of the MeshSkin based on the calculated vertex position
-        //
-        // First backup existing node transforms so we can restore them when we are finished
-        Matrix* oldTransforms = new Matrix[boneCount];
-        for (unsigned int i = 0; i < boneCount; ++i)
+        if (vertices.size() > 0)
         {
-            memcpy(oldTransforms[i].m, joints[i]->getTransformMatrix().m, 16 * sizeof(float));
+            jointSphere.center.scale(1.0f / (float)vertices.size());
+            for (unsigned int j = 0, jointVertexCount = vertices.size(); j < jointVertexCount; ++j)
+            {
+                float d = jointSphere.center.distanceSquared(vertices[j]);
+                if (d > jointSphere.radius)
+                    jointSphere.radius = d;
+            }
+            jointSphere.radius = sqrtf(jointSphere.radius);
         }
+        _jointBounds[i] = jointSphere;
 
-        float srt[10];
-        Matrix temp;
-        Matrix* jointTransforms = new Matrix[boneCount];
-        _mesh->bounds.min.set(FLT_MAX, FLT_MAX, FLT_MAX);
-        _mesh->bounds.max.set(FLT_MIN, FLT_MIN, FLT_MIN);
-        float time = 0.0f;
-        while (time < maxDuration)
+        DEBUGPRINT("> %d%%\r", (int)((float)(i+1) / (float)jointCount * 100.0f));
+    }
+    DEBUGPRINT("\n");
+
+    unsigned int channelCount = channels.size();
+
+    // Create a Curve for each animation channel
+    float maxDuration = 0.0f;
+    DEBUGPRINT("> Populating animation curve data...\n");
+    DEBUGPRINT("> 0%%\r");
+    for (unsigned int i = 0; i < channelCount; ++i)
+    {
+        AnimationChannel* channel = channels[i];
+
+        const std::vector<float>& keyTimes = channel->getKeyTimes();
+        unsigned int keyCount = keyTimes.size();
+        if (keyCount == 0)
+            continue;
+
+        // Create a curve for this animation channel
+        Curve* curve = NULL;
+        switch (channel->getTargetAttribute())
         {
-            // Evaluate joint transforms at this time interval
-            for (unsigned int i = 0, curveCount = curves.size(); i < curveCount; ++i)
-            {
-                Node* joint = channelTargets[i];
-                Curve* curve = curves[i];
-
-                // Evalulate the curve at this time to get the new value
-                float tn = time / maxDuration;
-                if (tn > 1.0f)
-                    tn = 1.0f;
-                curve->evaluate(tn, srt);
-
-                // Update the joint's local transform
-                Matrix::createTranslation(srt[7], srt[8], srt[9], temp.m);
-                temp.rotate(*((Quaternion*)&srt[3]));
-                temp.scale(srt[0], srt[1], srt[2]);
-                joint->setTransformMatrix(temp.m);
-            }
-
-            // Store the final matrix pallette of resovled world space joint matrices
-            std::list<Matrix>::const_iterator bindPoseItr = _bindPoses.begin();
-            for (unsigned int i = 0; i < boneCount; ++i, bindPoseItr++)
-            {
-                Matrix& m = jointTransforms[i];
-                Matrix::multiply(joints[i]->getWorldMatrix().m, bindPoseItr->m, m.m);
-                Matrix::multiply(m.m, _bindShape, m.m);
-            }
-
-            // Loop through all vertices in the mesh and calculate the final animated position
-            // at this time interval using the matrix pallette and blend indices/weights information.
-            Vector3 skinnedPos;
-            Vector3 tempPos;
-            int blendIndices[4];
-            float blendWeights[4];
-            for (unsigned int i = 0, vertexCount = _mesh->getVertexCount(); i < vertexCount; ++i)
-            {
-                const Vertex& v = _mesh->getVertex(i);
-
-                // Get blend indices
-                blendIndices[0] = (int)v.blendIndices.x;
-                blendIndices[1] = (int)v.blendIndices.y;
-                blendIndices[2] = (int)v.blendIndices.z;
-                blendIndices[3] = (int)v.blendIndices.w;
-
-                // Get blend weights
-                blendWeights[0] = v.blendWeights.x;
-                blendWeights[1] = v.blendWeights.y;
-                blendWeights[2] = v.blendWeights.z;
-                blendWeights[3] = v.blendWeights.w;
-
-                // Skin this vertex using the standard vertex skinning algorithm
-                skinnedPos.set(0, 0, 0);
-                for (unsigned int j = 0; j < 4; ++j)
-                {
-                    if (blendIndices[j] >= 0 && blendIndices[j] < (int)boneCount)
-                    {
-                        jointTransforms[blendIndices[j]].transformPoint(v.position, &tempPos);
-                        tempPos.scale(blendWeights[j]);
-                        skinnedPos.add(tempPos);
-                    }
-                }
-
-                // Update the bounding box information for this MeshSkin
-                if (skinnedPos.x < _mesh->bounds.min.x)
-                    _mesh->bounds.min.x = skinnedPos.x;
-                if (skinnedPos.y < _mesh->bounds.min.y)
-                    _mesh->bounds.min.y = skinnedPos.y;
-                if (skinnedPos.z < _mesh->bounds.min.z)
-                    _mesh->bounds.min.z = skinnedPos.z;
-                if (skinnedPos.x > _mesh->bounds.max.x)
-                    _mesh->bounds.max.x = skinnedPos.x;
-                if (skinnedPos.y > _mesh->bounds.max.y)
-                    _mesh->bounds.max.y = skinnedPos.y;
-                if (skinnedPos.z > _mesh->bounds.max.z)
-                    _mesh->bounds.max.z = skinnedPos.z;
-            }
-
-            // Increment time by 1/60th of second (~ 17 ms)
-            time += 170.0f;
+        case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
+            curve = new Curve(keyCount, 10);
+            curve->addQuaternionOffset(3);
+            break;
         }
-
-        // Compute bounding sphere info for the skin. This computation is not very accurate since it
-        // creates the bounding sphere from the bounding box info - so it will not normally provide a
-        // tight fit. However, bounding volumes for mesh skins are very approximate anyway and only
-        // useful as a very broad/high level first test
-        Vector3::add(_mesh->bounds.min, _mesh->bounds.max, &_mesh->bounds.center);
-        _mesh->bounds.center.scale(0.5f);
-        _mesh->bounds.radius = _mesh->bounds.center.distance(_mesh->bounds.max);
-
-        // Restore original joint transforms
-        for (unsigned int i = 0; i < boneCount; ++i)
+        if (curve == NULL)
         {
-            joints[i]->setTransformMatrix(oldTransforms[i].m);
+            // Unsupported/not implemented curve type 
+            continue;
         }
 
-        // Cleanup
+        // Copy key values into a temporary array
+        unsigned int keyValuesCount = channel->getKeyValues().size();
+        float* keyValues = new float[keyValuesCount];
+        for (unsigned int j = 0; j < keyValuesCount; ++j)
+            keyValues[j] = channel->getKeyValues()[j];
+
+        // Determine animation duration
+        float startTime = keyTimes[0];
+        float duration = keyTimes[keyCount-1] - startTime;
+        if (duration > maxDuration)
+            maxDuration = duration;
+
+        // Set curve points
+        float* keyValuesPtr = keyValues;
+        for (unsigned int j = 0; j < keyCount; ++j)
+        {
+            // Store time normalized, between 0-1
+            float t = (keyTimes[j] - startTime) / duration;
+
+            // Set the curve point
+            // TODO: Handle other interpolation types
+            curve->setPoint(j, t, keyValuesPtr, gameplay::Curve::LINEAR);
+
+            // Move to the next point on the curve
+            keyValuesPtr += curve->getComponentCount();
+        }
+
+        delete[] keyValues;
+        keyValues = NULL;
+
+        curves.push_back(curve);
+
+        DEBUGPRINT("> %d%%\r", (int)((float)(i+1) / (float)channelCount * 100.0f));
+    }
+    DEBUGPRINT("\n");
+
+    // Compute a total combined bounding volume for the MeshSkin that contains all possible
+    // vertex positions for all animations targetting the skin. This rough approximation allows
+    // us to store a volume that can be used for rough intersection tests (such as for visibility
+    // determination) efficiently at runtime.
+
+    // Backup existing node transforms so we can restore them when we are finished
+    Matrix* oldTransforms = new Matrix[jointCount];
+    for (unsigned int i = 0; i < jointCount; ++i)
+    {
+        memcpy(oldTransforms[i].m, _joints[i]->getTransformMatrix().m, 16 * sizeof(float));
+    }
+
+    float time = 0.0f;
+    float srt[10];
+    Matrix temp;
+    Matrix* jointTransforms = new Matrix[jointCount];
+    _mesh->bounds.min.set(FLT_MAX, FLT_MAX, FLT_MAX);
+    _mesh->bounds.max.set(FLT_MIN, FLT_MIN, FLT_MIN);
+    _mesh->bounds.center.set(0, 0, 0);
+    _mesh->bounds.radius = 0;
+    Vector3 skinnedPos;
+    Vector3 tempPos;
+    DEBUGPRINT("> Animating joints...\n");
+    DEBUGPRINT("> 0%%\r");
+    BoundingSphere finalSphere;
+    while (time <= maxDuration)
+    {
+        // Evaluate joint transforms at this time interval
         for (unsigned int i = 0, curveCount = curves.size(); i < curveCount; ++i)
         {
-            delete curves[i];
+            Node* joint = channelTargets[i];
+            Curve* curve = curves[i];
+
+            // Evalulate the curve at this time to get the new value
+            float tn = time / maxDuration;
+            if (tn > 1.0f)
+                tn = 1.0f;
+            curve->evaluate(tn, srt);
+
+            // Update the joint's local transform
+            Matrix::createTranslation(srt[7], srt[8], srt[9], temp.m);
+            temp.rotate(*((Quaternion*)&srt[3]));
+            temp.scale(srt[0], srt[1], srt[2]);
+            joint->setTransformMatrix(temp.m);
         }
-        delete[] oldTransforms;
-        delete[] jointTransforms;
-    }
-}
 
-void MeshSkin::setBindShape(const float data[])
-{
-    for (int i = 0; i < 16; i++)
-    {
-        _bindShape[i] = data[i];
-    }
-}
-
-void MeshSkin::setVertexInfluenceCount(unsigned int count)
-{
-    _vertexInfluenceCount = count;
-}
-
-void MeshSkin::setJointNames(const std::list<std::string>& list)
-{
-    _jointNames = list;
-}
-
-const std::list<std::string>& MeshSkin::getJointNames()
-{
-    return _jointNames;
-}
-
-void MeshSkin::setJoints(const std::list<Node*>& list)
-{
-    _joints = list;
-}
-
-void MeshSkin::setBindPoses(std::vector<Matrix>& list)
-{
-    for (std::vector<Matrix>::iterator i = list.begin(); i != list.end(); i++)
-    {
-        _bindPoses.push_back(*i);
-    }
-}
-
-bool MeshSkin::hasJoint(const char* id)
-{
-    for (std::list<std::string>::iterator i = _jointNames.begin(); i != _jointNames.end(); i++)
-    {
-        if (equals(*i, id))
+        // Store the final matrix pallette of resovled world space joint matrices
+        std::vector<Matrix>::const_iterator bindPoseItr = _bindPoses.begin();
+        for (unsigned int i = 0; i < jointCount; ++i, bindPoseItr++)
         {
-            return true;
+            BoundingSphere sphere = _jointBounds[i];
+            if (ISZERO(sphere.radius))
+                continue;
+
+            Matrix& m = jointTransforms[i];
+            Matrix::multiply(_joints[i]->getWorldMatrix().m, bindPoseItr->m, m.m);
+            Matrix::multiply(m.m, _bindShape, m.m);
+
+            // Get a world-space bounding sphere for this joint
+            sphere = transformBoundingSphere(sphere, m);
+            if (ISZERO(finalSphere.radius))
+                finalSphere = sphere;
+            else
+                finalSphere = mergeSpheres(finalSphere, sphere);
         }
+
+        // Increment time by 1/30th of second (~ 33 ms)
+        if (time < maxDuration && (time + 33.0f) > maxDuration)
+            time = maxDuration;
+        else
+            time += 33.0f;
+
+        DEBUGPRINT("> %d%%\r", (int)(time / maxDuration * 100.0f));
     }
-    return false;
+    DEBUGPRINT("\n");
+
+    // Update the bounding sphere for the mesh
+    _mesh->bounds.center = finalSphere.center;
+    _mesh->bounds.radius = finalSphere.radius;
+
+    // Restore original joint transforms
+    for (unsigned int i = 0; i < jointCount; ++i)
+    {
+        _joints[i]->setTransformMatrix(oldTransforms[i].m);
+    }
+
+    // Cleanup
+    for (unsigned int i = 0, curveCount = curves.size(); i < curveCount; ++i)
+    {
+        delete curves[i];
+    }
+    delete[] oldTransforms;
+    delete[] jointTransforms;
+
+    // Restore removed joints
+    if (rootJointParent)
+    {
+        rootJointParent->addChild(rootJoint);
+    }
 }
 
 }

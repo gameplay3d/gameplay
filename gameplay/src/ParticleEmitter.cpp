@@ -36,6 +36,7 @@ ParticleEmitter::ParticleEmitter(SpriteBatch* batch, unsigned int particleCountM
     _particles = new Particle[particleCountMax];
 
     _spriteBatch->getStateBlock()->setDepthWrite(false);
+    _spriteBatch->getStateBlock()->setDepthTest(true);
 }
 
 ParticleEmitter::~ParticleEmitter()

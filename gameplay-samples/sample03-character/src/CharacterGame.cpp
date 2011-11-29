@@ -84,20 +84,6 @@ void CharacterGame::render(long elapsedTime)
 
     // Draw our scene
     _scene->visit(this, &CharacterGame::drawModel);
-
-    // Draw bounding volume
-    _modelNode->setBoundsType(Node::BOX);
-    Mesh* mesh = Mesh::createBoundingBox(_modelNode->getBoundingBox());
-    Model* model = Model::create(mesh);
-    model->setMaterial("res/shaders/solid.vsh", "res/shaders/solid.fsh");
-    model->getMaterial()->getParameter("u_worldViewProjectionMatrix")->setValue(_scene->getActiveCamera()->getViewProjectionMatrix());
-    model->getMaterial()->getParameter("u_diffuseColor")->setValue(Vector4(1, 1, 1, 1));
-    model->getMaterial()->getStateBlock()->setCullFace(false);
-    model->getMaterial()->getStateBlock()->setDepthTest(true);
-    model->getMaterial()->getStateBlock()->setDepthWrite(true);
-    model->draw();
-    SAFE_RELEASE(model);
-    SAFE_RELEASE(mesh);
 }
 
 void CharacterGame::drawModel(Node* node, long cookie)

@@ -8,7 +8,7 @@ SpaceshipGame game;
 
 // Collision constants
 #define ROOF_HEIGHT 11.6f
-#define FLOOR_HEIGHT 0.5f
+#define FLOOR_HEIGHT 0.8f
 #define MAP_LENGTH 1450.0f
 #define CAMERA_RANGE_FRONT -1
 #define CAMERA_RANGE_BACK 8
@@ -112,12 +112,10 @@ void SpaceshipGame::initializeSpaceship()
     Material* material;
 
     _shipGroupNode = _scene->findNode("gSpaceShip");
-    _shipGroupNode->setBoundsType(Node::SPHERE);
 
     // Setup spaceship model
     // Part 0
     _shipNode = _scene->findNode("pSpaceShip");
-    _shipNode->setBoundsType(Node::SPHERE);
     material = _shipNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh", NULL, 0);
     material->getParameter("u_diffuseColor")->setValue(Vector4(0.53544f, 0.53544f, 0.53544f, 1.0f));
     initializeMaterial(material, true, true);
@@ -133,7 +131,6 @@ void SpaceshipGame::initializeSpaceship()
 
     // Setup spaceship propulsion model
     _propulsionNode = _scene->findNode("pPropulsion");
-    _propulsionNode->setBoundsType(Node::BOX);
     material = _propulsionNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh");
     material->getParameter("u_diffuseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
     initializeMaterial(material, true, true);
@@ -344,12 +341,12 @@ void SpaceshipGame::handleCollisions(float t)
 
     // Detect collisions
     const BoundingSphere& shipBounds = _shipNode->getBoundingSphere();
-    const BoundingBox& propulsionBounds = _propulsionNode->getBoundingBox();
-    if (propulsionBounds.min.y <= FLOOR_HEIGHT)
+    const BoundingSphere& propulsionBounds = _propulsionNode->getBoundingSphere();
+    if (propulsionBounds.center.y <= FLOOR_HEIGHT)
     {
         // Floor collision
         friction = FLOOR_FRICTION;
-        _shipGroupNode->translateY(FLOOR_HEIGHT - propulsionBounds.min.y);
+        _shipGroupNode->translateY(FLOOR_HEIGHT - propulsionBounds.center.y);
         if (_velocity.y < 0.0f)
         {
             // Cancel vertical velocity

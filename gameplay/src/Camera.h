@@ -252,7 +252,7 @@ private:
     /**
      * @see Transform::Listener::transformChanged
      */
-    void transformChanged(Transform* transform);
+    void transformChanged(Transform* transform, long cookie);
 
     /**
      * Sets the node associated with this camera.

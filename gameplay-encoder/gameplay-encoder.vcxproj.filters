@@ -194,6 +194,7 @@
       <Filter>Objects\Animation</Filter>
     </ClInclude>
     <ClInclude Include="..\gameplay\src\Curve.h" />
+    <ClInclude Include="src\Miniball.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Objects">

@@ -5,6 +5,7 @@
 #include "Base.h"
 #include "Node.h"
 #include "Scene.h"
+#include "Joint.h"
 
 #define NODE_DIRTY_WORLD 1
 #define NODE_DIRTY_BOUNDS 2
@@ -16,14 +17,12 @@ namespace gameplay
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
     _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL), 
-    _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _boundsType(NONE)
+    _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true)
 {
     if (id)
     {
         _id = id;
     }
-
-    memset(&_bounds, 0, sizeof(_bounds));
 }
 
 Node::Node(const Node& node)
@@ -34,17 +33,6 @@ Node::Node(const Node& node)
 Node::~Node()
 {
     removeAllChildren();
-
-    // Free bounding volume.
-    switch (_boundsType)
-    {
-    case BOX:
-        SAFE_DELETE(_bounds.box);
-        break;
-    case SPHERE:
-        SAFE_DELETE(_bounds.sphere);
-        break;
-    }
 
     SAFE_RELEASE(_camera);
     SAFE_RELEASE(_light);
@@ -487,6 +475,7 @@ void Node::transformChanged()
     _dirtyBits |= NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS;
 
     // Notify our children that their transform has also changed (since transforms are inherited).
+    Joint* rootJoint = NULL;
     Node* n = getFirstChild();
     while (n)
     {
@@ -495,6 +484,16 @@ void Node::transformChanged()
     }
 
     Transform::transformChanged();
+}
+
+void Node::setBoundsDirty()
+{
+    // Mark ourself and our parent nodes as dirty
+    _dirtyBits |= NODE_DIRTY_BOUNDS;
+
+    // Mark our parent bounds as dirty as well
+    if (_parent)
+        _parent->setBoundsDirty();
 }
 
 Camera* Node::getCamera() const
@@ -536,7 +535,7 @@ void Node::setLight(Light* light)
             _light->setNode(NULL);
             SAFE_RELEASE(_light);
         }
-        
+
         _light = light;
 
         if (_light)
@@ -572,195 +571,80 @@ Model* Node::getModel() const
     return _model;
 }
 
-const BoundingBox& Node::getBoundingBox() const
-{
-    if (_boundsType != BOX)
-    {
-        return BoundingBox::empty();
-    }
-
-    if (_dirtyBits & NODE_DIRTY_BOUNDS)
-    {
-        _dirtyBits &= ~NODE_DIRTY_BOUNDS;
-
-        // Get the local bounding box
-        if (_model && _model->getMesh())
-        {
-            _bounds.box->set(_model->getMesh()->getBoundingBox());
-        }
-        else
-        {
-            _bounds.box->set(Vector3::zero(), Vector3::zero());
-        }
-
-        bool empty = _bounds.box->isEmpty();
-        if (!empty)
-        {
-            // Transform the box into world space.
-            _bounds.box->transform(getWorldMatrix());
-        }
-
-        // Merge this world-space bounding box with our childrens' bounding volumes.
-        for (Node* n = getFirstChild(); n != NULL; n = n->getNextSibling())
-        {
-            switch (n->_boundsType)
-            {
-            case BOX:
-                {
-                    const BoundingBox& childBox = n->getBoundingBox();
-                    if (!childBox.isEmpty())
-                    {
-                        if (empty)
-                        {
-                            _bounds.box->set(childBox);
-                            empty = false;
-                        }
-                        else
-                        {
-                            _bounds.box->merge(childBox);
-                        }
-                    }
-                }
-                break;
-            case SPHERE:
-                {
-                    const BoundingSphere& childSphere = n->getBoundingSphere();
-                    if (!childSphere.isEmpty())
-                    {
-                        if (empty)
-                        {
-                            _bounds.box->set(childSphere);
-                            empty = false;
-                        }
-                        else
-                        {
-                            _bounds.box->merge(childSphere);
-                        }
-                    }
-                }
-                break;
-            }
-        }
-    }
-
-    return *_bounds.box;
-}
-
 const BoundingSphere& Node::getBoundingSphere() const
 {
-    if (_boundsType != SPHERE)
-    {
-        return BoundingSphere::empty();
-    }
-
     if (_dirtyBits & NODE_DIRTY_BOUNDS)
     {
         _dirtyBits &= ~NODE_DIRTY_BOUNDS;
 
-        // Get the local bounding sphere
+        const Matrix& worldMatrix = getWorldMatrix();
+
+        // Start with our local bounding sphere
+        // TODO: Incorporate bounds from entities other than mesh (i.e. emitters, audiosource, etc)
+        bool empty = true;
         if (_model && _model->getMesh())
         {
-            _bounds.sphere->set(_model->getMesh()->getBoundingSphere());
+            _bounds.set(_model->getMesh()->getBoundingSphere());
+            empty = false;
         }
         else
         {
-            _bounds.sphere->set(Vector3::zero(), 0);
+            // Empty bounding sphere, set the world translation with zero radius
+            worldMatrix.getTranslation(&_bounds.center);
+            _bounds.radius = 0;
         }
 
-        bool empty = _bounds.sphere->isEmpty();
+        // Transform the sphere (if not empty) into world space.
         if (!empty)
         {
-            // Transform the sphere into world space.
-            _bounds.sphere->transform(getWorldMatrix());
+            bool applyWorldTransform = true;
+            if (_model && _model->getSkin())
+            {
+                // Special case: If the root joint of our mesh skin is parented by any nodes, 
+                // multiply the world matrix of the root joint's parent by this node's
+                // world matrix. This computes a final world matrix used for transforming this
+                // node's bounding volume. This allows us to store a much smaller bounding
+                // volume approximation than would otherwise be possible for skinned meshes,
+                // since joint parent nodes that are not in the matrix pallette do not need to
+                // be considered as directly transforming vertices on the GPU (they can instead
+                // be applied directly to the bounding volume transformation below).
+                Node* jointParent = _model->getSkin()->getRootJoint()->getParent();
+                if (jointParent)
+                {
+                    // TODO: Should we protect against the case where joints are nested directly
+                    // in the node hierachy of the model (this is normally not the case)?
+                    Matrix boundsMatrix;
+                    Matrix::multiply(getWorldMatrix(), jointParent->getWorldMatrix(), &boundsMatrix);
+                    _bounds.transform(boundsMatrix);
+                    applyWorldTransform = false;
+                }
+            }
+            if (applyWorldTransform)
+            {
+                _bounds.transform(getWorldMatrix());
+            }
         }
 
         // Merge this world-space bounding sphere with our childrens' bounding volumes.
         for (Node* n = getFirstChild(); n != NULL; n = n->getNextSibling())
         {
-            switch (n->getBoundsType())
+            const BoundingSphere& childSphere = n->getBoundingSphere();
+            if (!childSphere.isEmpty())
             {
-            case BOX:
+                if (empty)
                 {
-                    const BoundingBox& childBox = n->getBoundingBox();
-                    if (!childBox.isEmpty())
-                    {
-                        if (empty)
-                        {
-                            _bounds.sphere->set(childBox);
-                            empty = false;
-                        }
-                        else
-                        {
-                            _bounds.sphere->merge(childBox);
-                        }
-                    }
+                    _bounds.set(childSphere);
+                    empty = false;
                 }
-                break;
-            case SPHERE:
+                else
                 {
-                    const BoundingSphere& childSphere = n->getBoundingSphere();
-                    if (!childSphere.isEmpty())
-                    {
-                        if (empty)
-                        {
-                            _bounds.sphere->set(childSphere);
-                            empty = false;
-                        }
-                        else
-                        {
-                            _bounds.sphere->merge(childSphere);
-                        }
-                    }
+                    _bounds.merge(childSphere);
                 }
-                break;
             }
         }
     }
 
-    return *_bounds.sphere;
-}
-
-Node::BoundsType Node::getBoundsType() const
-{
-    return _boundsType;
-}
-
-void Node::setBoundsType(Node::BoundsType type)
-{
-    if (type != _boundsType)
-    {
-        switch (_boundsType)
-        {
-        case BOX:
-            SAFE_DELETE(_bounds.box);
-            break;
-        case SPHERE:
-            SAFE_DELETE(_bounds.sphere);
-            break;
-        }
-        memset(&_bounds, 0, sizeof(_bounds));
-
-        _boundsType = type;
-
-        switch (_boundsType)
-        {
-        case BOX:
-            _bounds.box = new BoundingBox();
-            break;
-        case SPHERE:
-            _bounds.sphere = new BoundingSphere();
-            break;
-        }
-
-        // We need to dirty the bounds for the parents in our hierarchy when
-        // our bounding volume type changes.
-        Node* parent = getParent();
-        while (parent)
-        {
-            parent->_dirtyBits |= NODE_DIRTY_BOUNDS;
-            parent = parent->getParent();
-        }
-    }
+    return _bounds;
 }
 
 AudioSource* Node::getAudioSource() const
