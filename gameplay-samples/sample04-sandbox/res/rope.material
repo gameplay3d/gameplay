@@ -1,32 +1,29 @@
-material plane
+material rope
 {
     technique
     {
         pass 0
         {
             // shaders
-            vertexShader = res/shaders/diffuse-specular.vsh
-            fragmentShader = res/shaders/diffuse-specular.fsh
-            defines = SPOT_LIGHT
-
+            vertexShader = res/shaders/diffuse.vsh
+            fragmentShader = res/shaders/diffuse.fsh
+            defines = SKINNING;SKINNING_JOINT_COUNT 11
+            
             // uniforms
-            u_worldMatrix = WORLD_MATRIX
-            u_worldViewMatrix = WORLD_VIEW_MATRIX
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_cameraPosition = CAMERA_WORLD_POSITION
-            u_lightColor = 0.75, 0.75, 0.75
+            u_matrixPalette = MATRIX_PALETTE
             u_ambientColor = 0.2, 0.2, 0.2
-            u_specularExponent = 50
+            u_lightColor = 0.75, 0.75, 0.75
 
             // samplers
             sampler u_diffuseTexture
             {
-                path = res/textures/floor.png
+                path = res/rope.png
                 mipmap = true
                 wrapS = CLAMP
                 wrapT = CLAMP
-                minFilter = LINEAR_MIPMAP_LINEAR
+                minFilter = NEAREST_MIPMAP_LINEAR
                 magFilter = LINEAR
             }
 

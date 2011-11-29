@@ -51,11 +51,13 @@
     <category>core.games</category>
     
     <asset path="icon.png">icon.png</asset>
-    <asset path="res/materials">res/materials</asset>
-    <asset path="res/animations">res/animations</asset>
-    <asset path="res/fonts">res/fonts</asset>
-    <asset path="res/models/Seymour.gpb">res/models/Seymour.gpb</asset>
-    <asset path="res/textures">res/textures</asset>
+    <asset path="res/arial40.gpb">res/arial40.gpb</asset>
+    <asset path="res/floor.material">res/floor.material</asset>
+    <asset path="res/floor.png">res/floor.png</asset>
+    <asset path="res/seymour.gpb">res/seymour.gpb</asset>
+    <asset path="res/seymour.material">res/seymour.material</asset>
+    <asset path="res/seymour-clips.animation">res/seymour-clips.animation</asset>
+    <asset path="res/seymour-diffuse.png">res/seymour-diffuse.png</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.fsh}">res/shaders/colored-specular.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.vsh}">res/shaders/colored-specular.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.fsh}">res/shaders/diffuse-specular.fsh</asset>

@@ -3,82 +3,79 @@
   <ItemGroup>
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
-    <None Include="res\fonts\arial16.gpb">
-      <Filter>res\fonts</Filter>
+    <None Include="res\arial.ttf">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\textures\basketball.png">
-      <Filter>res\textures</Filter>
+    <None Include="res\arial40.gpb">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\textures\wall_w_e.png">
-      <Filter>res\textures</Filter>
+    <None Include="res\basketball.material">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\textures\die.png">
-      <Filter>res\textures</Filter>
+    <None Include="res\basketball.png">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\textures\ground.png">
-      <Filter>res\textures</Filter>
+    <None Include="res\die.material">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\textures\wall_n_s.png">
-      <Filter>res\textures</Filter>
+    <None Include="res\die.png">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\textures\volleyball.png">
-      <Filter>res\textures</Filter>
+    <None Include="res\door.material">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\textures\rope_texture.png">
-      <Filter>res\textures</Filter>
+    <None Include="res\ground.material">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\textures\rigidbodydebug.png">
-      <Filter>res\textures</Filter>
+    <None Include="res\ground.png">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\materials\rigidbodydebug.material">
-      <Filter>res\materials</Filter>
+    <None Include="res\rigidbodydebug.material">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\materials\ground.material">
-      <Filter>res\materials</Filter>
+    <None Include="res\rigidbodydebug.png">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\materials\wall_n_s.material">
-      <Filter>res\materials</Filter>
+    <None Include="res\rope.material">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\materials\wall_w_e.material">
-      <Filter>res\materials</Filter>
+    <None Include="res\rope.png">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\materials\basketball.material">
-      <Filter>res\materials</Filter>
+    <None Include="res\volleyball.material">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\materials\die.material">
-      <Filter>res\materials</Filter>
+    <None Include="res\volleyball.png">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\materials\rope.material">
-      <Filter>res\materials</Filter>
+    <None Include="res\wall_n_s.material">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\materials\volleyball.material">
-      <Filter>res\materials</Filter>
+    <None Include="res\wall_n_s.png">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\materials\door.material">
-      <Filter>res\materials</Filter>
+    <None Include="res\wall_w_e.material">
+      <Filter>res</Filter>
     </None>
-    <None Include="res\models\physics_sandbox.gpb">
-      <Filter>res\meshes</Filter>
+    <None Include="res\wall_w_e.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\sandbox.dae">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\sandbox.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\sandbox.mb">
+      <Filter>res</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="res">
       <UniqueIdentifier>{c2557b40-cf38-4f3a-b686-fd48f1df4f6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="res\fonts">
-      <UniqueIdentifier>{89044d17-bb15-4124-8202-d75db6ea3f89}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{0bf8ef8a-4555-4ca5-87fa-187a3474697a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\meshes">
-      <UniqueIdentifier>{f241e0c9-3ff5-462f-848a-9fbc4732fd4b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\textures">
-      <UniqueIdentifier>{08c3358f-cc40-45ab-a855-2a0e0097844c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\materials">
-      <UniqueIdentifier>{7b1ff74b-2fea-44bf-836e-2651a22a3911}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -163,12 +163,12 @@
   <ItemGroup>
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
-    <None Include="res\fonts\arial.ttf" />
-    <None Include="res\fonts\arial16.gpb" />
-    <None Include="res\materials\duck.material" />
-    <None Include="res\models\duck.dae" />
-    <None Include="res\models\duck.gpb" />
-    <None Include="res\textures\duck-diffuse.png" />
+    <None Include="res\arial.ttf" />
+    <None Include="res\arial40.gpb" />
+    <None Include="res\duck-diffuse.png" />
+    <None Include="res\duck.dae" />
+    <None Include="res\duck.gpb" />
+    <None Include="res\duck.material" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshGame.cpp" />
