@@ -9,19 +9,10 @@
     <None Include="res\arial40.gpb">
       <Filter>res</Filter>
     </None>
-    <None Include="res\basketball.material">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\basketball.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\die.material">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\die.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\door.material">
       <Filter>res</Filter>
     </None>
     <None Include="res\ground.material">
@@ -30,31 +21,13 @@
     <None Include="res\ground.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\rigidbodydebug.material">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\rigidbodydebug.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\rope.material">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\rope.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\volleyball.material">
       <Filter>res</Filter>
     </None>
     <None Include="res\volleyball.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\wall_n_s.material">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\wall_n_s.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\wall_w_e.material">
       <Filter>res</Filter>
     </None>
     <None Include="res\wall_w_e.png">
@@ -67,6 +40,18 @@
       <Filter>res</Filter>
     </None>
     <None Include="res\sandbox.mb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\objects.material">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\walls.material">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\physics.rigidbody">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\sandbox.scene">
       <Filter>res</Filter>
     </None>
   </ItemGroup>

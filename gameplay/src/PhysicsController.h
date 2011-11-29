@@ -2,6 +2,7 @@
 #define PHYSICSCONTROLLER_H_
 
 #include "PhysicsConstraint.h"
+#include "PhysicsDebugDrawer.h"
 #include "PhysicsFixedConstraint.h"
 #include "PhysicsGenericConstraint.h"
 #include "PhysicsHingeConstraint.h"
@@ -174,6 +175,13 @@ public:
                                                     const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
 
     /**
+     * Draws debugging information (rigid body outlines, etc.) using the given view projection matrix.
+     * 
+     * @param viewProjection The view projection matrix to use when drawing.
+     */
+    void drawDebug(const Matrix& viewProjection);
+
+    /**
      * Gets the gravity vector for the simulated physics world.
      * 
      * @return The gravity vector.
@@ -230,6 +238,9 @@ private:
     // Creates a box collision shape to be used in the creation of a rigid body.
     btCollisionShape* getBox(const Vector3& min, const Vector3& max, const btVector3& scale);
 
+    // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
+    btCollisionShape* getMesh(PhysicsRigidBody* body);
+
     // Gets the corresponding GamePlay object for the given Bullet object.
     PhysicsRigidBody* getPhysicsRigidBody(const btCollisionObject* collisionObject);
 
@@ -252,6 +263,7 @@ private:
     btSequentialImpulseConstraintSolver* _solver;
     btDynamicsWorld* _world;
     btAlignedObjectArray<btCollisionShape*> _shapes;
+    PhysicsDebugDrawer* _drawer;
     Listener::EventType _status;
     std::vector<PhysicsRigidBody*> _bodies;
     std::vector<Listener*>* _listeners;
