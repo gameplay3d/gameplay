@@ -51,14 +51,11 @@
     <category>core.games</category>
     
     <asset path="icon.png">icon.png</asset>
+    <asset path="res">res</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored.fsh}">res/shaders/colored.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored.vsh}">res/shaders/colored.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.fsh}">res/shaders/diffuse.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.vsh}">res/shaders/diffuse.vsh</asset>
-    <asset path="res/fonts/arial16.gpb">res/fonts/arial16.gpb</asset>
-    <asset path="res/models/physics_sandbox.gpb">res/models/physics_sandbox.gpb</asset>
-    <asset path="res/materials">res/materials</asset>
-    <asset path="res/textures">res/textures</asset>
     
     <!-- PlayBook 1.0 support
     <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>

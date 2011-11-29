@@ -12,7 +12,7 @@ void MeshGame::initialize()
     _touched = false;
 
     // Load mesh/scene from file
-    Package* pkg = Package::create("res/models/duck.gpb");
+    Package* pkg = Package::create("res/duck.gpb");
     _scene = pkg->loadScene();
     SAFE_RELEASE(pkg);
     assert(_scene);
@@ -26,13 +26,13 @@ void MeshGame::initialize()
     _scene->visit(this, &MeshGame::getModelNode);
     assert(_modelNode);
 
-    _modelNode->getModel()->setMaterial("res/materials/duck.material");
+    _modelNode->getModel()->setMaterial("res/duck.material");
     Vector3 lightDirection(0.0f, 0.0f, -1.0f);
     _scene->getActiveCamera()->getViewMatrix().transformVector(&lightDirection);
     _modelNode->getModel()->getMaterial()->getParameter("u_lightDirection")->setValue(lightDirection);
 
     // Load font
-    _font = Font::create("res/fonts/arial16.gpb");
+    _font = Font::create("res/arial40.gpb");
     assert(_font);
 }
 
@@ -87,7 +87,6 @@ void MeshGame::touch(int x, int y, int touchEvent)
     case Input::TOUCHEVENT_MOVE:
         {
             int deltaX = x - _prevX;
-            //int deltaY = y - _prevY;
             _prevX = x;
             _prevY = y;
             _modelNode->rotateY(MATH_DEG_TO_RAD(deltaX * 0.5f));

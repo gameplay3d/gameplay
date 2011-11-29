@@ -153,16 +153,15 @@
   <ItemGroup>
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
-    <None Include="res\fonts\airstrip.ttf" />
-    <None Include="res\fonts\airstrip28.gpb" />
-    <None Include="res\models\spaceship.dae">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="res\models\spaceship.gpb" />
-    <None Include="res\sounds\background.ogg" />
-    <None Include="res\sounds\spaceship.wav" />
-    <None Include="res\textures\background.png" />
-    <None Include="res\textures\propulsion_glow.png" />
+    <None Include="res\airstrip.ttf" />
+    <None Include="res\airstrip28.gpb" />
+    <None Include="res\background.ogg" />
+    <None Include="res\background.png" />
+    <None Include="res\propulsion_glow.png" />
+    <None Include="res\spaceship.dae" />
+    <None Include="res\spaceship.gpb" />
+    <None Include="res\spaceship.mb" />
+    <None Include="res\spaceship.wav" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SpaceshipGame.h" />

@@ -117,16 +117,15 @@
   <ItemGroup>
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
-    <None Include="res\fonts\arial16.gpb" />
-    <None Include="res\shaders\quad.fsh" />
-    <None Include="res\shaders\quad.vsh" />
-    <None Include="res\shaders\textured.fsh" />
-    <None Include="res\shaders\textured.vsh" />
-    <None Include="res\sounds\longboard2.wav" />
-    <None Include="res\textures\longboard.png" />
-    <None Include="res\textures\nice_gradient.png" />
-    <None Include="res\textures\tileable_asphalt.png" />
-    <None Include="res\textures\wheels.png" />
+    <None Include="res\asphalt.png" />
+    <None Include="res\longboard.png" />
+    <None Include="res\longboard.wav" />
+    <None Include="res\longboard_wheels.png" />
+    <None Include="res\overlay_gradient.png" />
+    <None Include="res\quad.fsh" />
+    <None Include="res\quad.vsh" />
+    <None Include="res\textured.fsh" />
+    <None Include="res\textured.vsh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LongboardGame.cpp" />

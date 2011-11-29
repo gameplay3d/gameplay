@@ -1,4 +1,4 @@
-material rigidbodydebug
+material die
 {
     technique
     {
@@ -17,7 +17,7 @@ material rigidbodydebug
             // samplers
             sampler u_diffuseTexture
             {
-                path = res/textures/rigidbodydebug.png
+                path = res/die.png
                 mipmap = true
                 wrapS = CLAMP
                 wrapT = CLAMP

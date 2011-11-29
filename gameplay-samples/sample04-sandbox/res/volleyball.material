@@ -17,7 +17,7 @@ material volleyball
             // samplers
             sampler u_diffuseTexture
             {
-                path = res/textures/volleyball.png
+                path = res/volleyball.png
                 mipmap = true
                 wrapS = CLAMP
                 wrapT = CLAMP

@@ -1,4 +1,4 @@
-material wall_w_e
+material wall_n_s
 {
     technique
     {
@@ -17,7 +17,7 @@ material wall_w_e
             // samplers
             sampler u_diffuseTexture
             {
-                path = res/textures/wall_w_e.png
+                path = res/wall_n_s.png
                 mipmap = true
                 wrapS = CLAMP
                 wrapT = CLAMP

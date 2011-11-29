@@ -17,7 +17,7 @@ material ground
             // samplers
             sampler u_diffuseTexture
             {
-                path = res/textures/ground.png
+                path = res/ground.png
                 mipmap = true
                 wrapS = CLAMP
                 wrapT = CLAMP

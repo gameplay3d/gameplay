@@ -19,7 +19,7 @@ material duck
             // samplers
             sampler u_diffuseTexture
             {
-                path = res/textures/duck-diffuse.png
+                path = res/duck-diffuse.png
                 mipmap = true
                 wrapS = CLAMP
                 wrapT = CLAMP
