@@ -312,6 +312,26 @@ private:
      */
     PhysicsRigidBody(const PhysicsRigidBody& body);
 
+    /**
+     * Creates a rigid body from the rigid body file at the given path.
+     * 
+     * @param node The node to create a rigid body for; note that the node must have
+     *      a model attached to it prior to creating a rigid body for it.
+     * @param filePath The path to the rigid body file.
+     * @return The rigid body or <code>NULL</code> if the rigid body could not be loaded.
+     */
+    static PhysicsRigidBody* create(Node* node, const char* filePath);
+
+    /**
+     * Creates a rigid body from the specified properties object.
+     * 
+     * @param node The node to create a rigid body for; note that the node must have
+     *      a model attached to it prior to creating a rigid body for it.
+     * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidbody').
+     * @return The newly created rigid body, or <code>NULL</code> if the rigid body failed to load.
+     */
+    static PhysicsRigidBody* create(Node* node, Properties* properties);
+
     // Creates the underlying Bullet Physics rigid body object
     // for a PhysicsRigidBody object using the given parameters.
     static btRigidBody* createBulletRigidBody(btCollisionShape* shape, float mass, Node* node,
@@ -343,6 +363,8 @@ private:
     mutable Vector3* _anisotropicFriction;
     mutable Vector3* _gravity;
     mutable Vector3* _linearVelocity;
+    float* _vertexData;
+    std::vector<unsigned char*> _indexData;
 };
 
 }

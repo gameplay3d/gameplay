@@ -42,6 +42,14 @@ public:
     static AudioSource* create(const char* path);
 
     /**
+     * Create an audio source from the given properties object.
+     * 
+     * @param properties The properties object defining the audio source (must have namespace equal to 'audio').
+     * @return The newly created audio source, or <code>NULL</code> if the audio source failed to load.
+     */
+    static AudioSource* create(Properties* properties);
+
+    /**
      * Plays the audio source.
      */
     void play();

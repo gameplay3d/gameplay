@@ -285,7 +285,7 @@ const Matrix& Node::getWorldMatrix() const
         // If we have a parent, multiply our parent world transform by our local
         // transform to obtain our final resolved world transform.
         Node* parent = getParent();
-        if (parent && !_physicsRigidBody)
+        if (parent && (!_physicsRigidBody || _physicsRigidBody->isKinematic()) )
         {
             Matrix::multiply(parent->getWorldMatrix(), getMatrix(), &_world);
         }
@@ -705,6 +705,20 @@ void Node::setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float fr
     
     if (type != PhysicsRigidBody::SHAPE_NONE)
         _physicsRigidBody = new PhysicsRigidBody(this, type, mass, friction, restitution, linearDamping, angularDamping);
+}
+
+void Node::setPhysicsRigidBody(const char* filePath)
+{
+    SAFE_DELETE(_physicsRigidBody);
+
+    _physicsRigidBody = PhysicsRigidBody::create(this, filePath);
+}
+
+void Node::setPhysicsRigidBody(Properties* properties)
+{
+    SAFE_DELETE(_physicsRigidBody);
+
+    _physicsRigidBody = PhysicsRigidBody::create(this, properties);
 }
 
 }
