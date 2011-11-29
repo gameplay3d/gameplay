@@ -51,10 +51,12 @@
     <category>core.games</category>
     
     <asset path="icon.png">icon.png</asset>
-    <asset path="res/models/spaceship.gpb">res/models/spaceship.gpb</asset>
-    <asset path="res/sounds">res/sounds</asset>
-    <asset path="res/fonts">res/fonts</asset>
-    <asset path="res/textures">res/textures</asset>
+    <asset path="res/airstrip28.gpb">res/airstrip28.gpb</asset>
+    <asset path="res/spaceship.gpb">res/spaceship.gpb</asset>
+    <asset path="res/spaceship.wav">res/spaceship.wav</asset>
+    <asset path="res//background.ogg">res/background.ogg</asset>
+    <asset path="res/background.png">res/background.png</asset>
+    <asset path="res/propulsion_glow.png">res/propulsion_glow.png</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.fsh}">res/shaders/colored-specular.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.vsh}">res/shaders/colored-specular.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.fsh}">res/shaders/diffuse.fsh</asset>

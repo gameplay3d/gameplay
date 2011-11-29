@@ -70,7 +70,7 @@ private:
     /**
      * Loads the characters animations.
      */
-    void loadCharacterAnimations();
+    void loadAnimations();
 
     Scene* _scene;
     Font* _font;

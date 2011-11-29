@@ -1,4 +1,4 @@
-material rope
+material wall_w_e
 {
     technique
     {
@@ -7,19 +7,17 @@ material rope
             // shaders
             vertexShader = res/shaders/diffuse.vsh
             fragmentShader = res/shaders/diffuse.fsh
-            defines = SKINNING;SKINNING_JOINT_COUNT 11
             
             // uniforms
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_matrixPalette = MATRIX_PALETTE
             u_ambientColor = 0.2, 0.2, 0.2
             u_lightColor = 0.75, 0.75, 0.75
 
             // samplers
             sampler u_diffuseTexture
             {
-                path = res/textures/rope_texture.png
+                path = res/wall_w_e.png
                 mipmap = true
                 wrapS = CLAMP
                 wrapT = CLAMP

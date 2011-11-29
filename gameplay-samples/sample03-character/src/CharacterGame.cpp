@@ -15,7 +15,7 @@ CharacterGame::~CharacterGame()
 void CharacterGame::initialize()
 {
     // Load mesh from file
-    Package* pkg = Package::create("res/models/Seymour.gpb");
+    Package* pkg = Package::create("res/seymour.gpb");
     _scene = pkg->loadScene();
     SAFE_RELEASE(pkg);
 
@@ -35,7 +35,7 @@ void CharacterGame::initialize()
     Node* spotLightNode = _scene->findNode("spotLight1");
     
     // Load character's material from a .material file
-    Material* meshMaterial = model->setMaterial("res/materials/character.material");
+    Material* meshMaterial = model->setMaterial("res/seymour.material");
     meshMaterial->getParameter("u_spotLightPosition")->bindValue(spotLightNode, &Node::getTranslationView);
     meshMaterial->getParameter("u_spotLightDirection")->bindValue(spotLightNode, &Node::getForwardVectorView);
     meshMaterial->getParameter("u_spotLightRangeInverse")->bindValue(spotLightNode->getLight(), &Light::getRangeInverse);
@@ -43,7 +43,7 @@ void CharacterGame::initialize()
     meshMaterial->getParameter("u_spotLightOuterAngleCos")->bindValue(spotLightNode->getLight(), &Light::getOuterAngleCos);
     
     // Load character animations.
-    loadCharacterAnimations();
+    loadAnimations();
 
     // Load plane.
     Node* planeNode = _scene->findNode("pPlane1");
@@ -52,7 +52,7 @@ void CharacterGame::initialize()
     assert(planeModel);
 
     // Load material from a .material file.
-    Material* planeMaterial = planeModel->setMaterial("res/materials/plane.material");
+    Material* planeMaterial = planeModel->setMaterial("res/floor.material");
     planeMaterial->getParameter("u_spotLightPosition")->bindValue(spotLightNode, &Node::getTranslationView);
     planeMaterial->getParameter("u_spotLightDirection")->bindValue(spotLightNode, &Node::getForwardVectorView);
     planeMaterial->getParameter("u_spotLightRangeInverse")->bindValue(spotLightNode->getLight(), &Light::getRangeInverse);
@@ -60,7 +60,7 @@ void CharacterGame::initialize()
     planeMaterial->getParameter("u_spotLightOuterAngleCos")->bindValue(spotLightNode->getLight(), &Light::getOuterAngleCos);
 
     // Load the font
-    _font = Font::create("res/fonts/arial16.gpb");
+    _font = Font::create("res/arial40.gpb");
 }
 
 void CharacterGame::finalize()
@@ -164,11 +164,10 @@ void CharacterGame::touch(int x, int y, int touchEvent)
     };
 }
 
-void CharacterGame::loadCharacterAnimations()
+void CharacterGame::loadAnimations()
 {
     _animation = Game::getInstance()->getAnimationController()->getAnimation("movements");
-    _animation->createClips("res/animations/seymour.animation");
-
+    _animation->createClips("res/seymour-clips.animation");
     AnimationClip* clip = _animation->getClip("right_arm");
     clip->setActiveDuration(AnimationClip::REPEAT_INDEFINITE);
 }

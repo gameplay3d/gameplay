@@ -96,7 +96,7 @@ void SandboxGame::initialize()
         ACCELEROMETER_SCALE *= -1.0f;
 
     // Load mesh from file.
-    Package* meshPackage = Package::create("res/models/physics_sandbox.gpb");
+    Package* meshPackage = Package::create("res/sandbox.gpb");
 
     _scene = meshPackage->loadScene();
 
@@ -146,17 +146,17 @@ void SandboxGame::initialize()
 
     Game::getPhysicsController()->setGravity(Vector3(0.0f, 0.0f, -9.8f));
     
-    setMaterialHelper(ground, "res/materials/ground.material", lightDirection);
-    setMaterialHelper(wallWest, "res/materials/wall_w_e.material", lightDirection);
-    setMaterialHelper(wallEast, "res/materials/wall_w_e.material", lightDirection);
-    setMaterialHelper(wallSouth, "res/materials/wall_n_s.material", lightDirection);
-    setMaterialHelper(wallNorth, "res/materials/wall_n_s.material", lightDirection);
-    setMaterialHelper(dieBottom, "res/materials/die.material", lightDirection);
-    setMaterialHelper(dieTop, "res/materials/die.material", lightDirection);
-    setMaterialHelper(rope, "res/materials/rope.material", lightDirection);
-    setMaterialHelper(door, "res/materials/door.material", lightDirection);
-    setMaterialHelper(basketball, "res/materials/basketball.material", lightDirection);
-    setMaterialHelper(_volleyball, "res/materials/volleyball.material", lightDirection);
+    setMaterialHelper(ground, "res/ground.material", lightDirection);
+    setMaterialHelper(wallWest, "res/wall_w_e.material", lightDirection);
+    setMaterialHelper(wallEast, "res/wall_w_e.material", lightDirection);
+    setMaterialHelper(wallSouth, "res/wall_n_s.material", lightDirection);
+    setMaterialHelper(wallNorth, "res/wall_n_s.material", lightDirection);
+    setMaterialHelper(dieBottom, "res/die.material", lightDirection);
+    setMaterialHelper(dieTop, "res/die.material", lightDirection);
+    setMaterialHelper(rope, "res/rope.material", lightDirection);
+    setMaterialHelper(door, "res/door.material", lightDirection);
+    setMaterialHelper(basketball, "res/basketball.material", lightDirection);
+    setMaterialHelper(_volleyball, "res/volleyball.material", lightDirection);
     
     // Set up the static physics objects.
     ground->setPhysicsRigidBody(PhysicsRigidBody::SHAPE_BOX, 0.0, 0.5, 0.0, 0.025f, 0.16f);
@@ -250,16 +250,16 @@ void SandboxGame::initialize()
     joint10->setModel(joint10_body->getModel());
     
 #if DRAW_ROPE_RIGID_BODIES
-    setMaterialHelper(joint1, "res/materials/rigidbodydebug.material", lightDirection);
-    setMaterialHelper(joint2, "res/materials/rigidbodydebug.material", lightDirection);
-    setMaterialHelper(joint3, "res/materials/rigidbodydebug.material", lightDirection);
-    setMaterialHelper(joint4, "res/materials/rigidbodydebug.material", lightDirection);
-    setMaterialHelper(joint5, "res/materials/rigidbodydebug.material", lightDirection);
-    setMaterialHelper(joint6, "res/materials/rigidbodydebug.material", lightDirection);
-    setMaterialHelper(joint7, "res/materials/rigidbodydebug.material", lightDirection);
-    setMaterialHelper(joint8, "res/materials/rigidbodydebug.material", lightDirection);
-    setMaterialHelper(joint9, "res/materials/rigidbodydebug.material", lightDirection);
-    setMaterialHelper(joint10, "res/materials/rigidbodydebug.material", lightDirection);
+    setMaterialHelper(joint1, "res/rigidbodydebug.material", lightDirection);
+    setMaterialHelper(joint2, "res/rigidbodydebug.material", lightDirection);
+    setMaterialHelper(joint3, "res/rigidbodydebug.material", lightDirection);
+    setMaterialHelper(joint4, "res/rigidbodydebug.material", lightDirection);
+    setMaterialHelper(joint5, "res/rigidbodydebug.material", lightDirection);
+    setMaterialHelper(joint6, "res/rigidbodydebug.material", lightDirection);
+    setMaterialHelper(joint7, "res/rigidbodydebug.material", lightDirection);
+    setMaterialHelper(joint8, "res/rigidbodydebug.material", lightDirection);
+    setMaterialHelper(joint9, "res/rigidbodydebug.material", lightDirection);
+    setMaterialHelper(joint10, "res/rigidbodydebug.material", lightDirection);
 #endif
 
     joint1->setPhysicsRigidBody(PhysicsRigidBody::SHAPE_BOX, 0.1f, f, 0.0, l, a);
@@ -293,11 +293,10 @@ void SandboxGame::initialize()
     BoundingBox b = joint10->getModel()->getMesh()->getBoundingBox();
     BoundingSphere s = basketball->getModel()->getMesh()->getBoundingSphere();
     Game::getInstance()->getPhysicsController()->createSocketConstraint(joint10->getPhysicsRigidBody(), Vector3(0.5f * (b.max.x - b.min.x), 0.0f, 0.0f),
-        basketball->getPhysicsRigidBody(), Vector3(0.0f, -s.radius, 0.0f));
+                                                                        basketball->getPhysicsRigidBody(), Vector3(0.0f, -s.radius, 0.0f));
     
     // Load the font.
-    Package* fontPackage = Package::create("res/fonts/arial16.gpb");
-    _font = fontPackage->loadFont("arial16");
+    _font = Font::create("res/arial40.gpb");
 
     // Register the game as a listener for physics status events
     // and for collisions between the volleyball and the door.
@@ -306,7 +305,6 @@ void SandboxGame::initialize()
 
     _door = door;
 
-    SAFE_RELEASE(fontPackage);
     SAFE_RELEASE(meshPackage);
 }
 

@@ -81,7 +81,7 @@ void SpaceshipGame::initialize()
     _stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 
     // Load our scene from file
-    Package* pkg = Package::create("res/models/spaceship.gpb");
+    Package* pkg = Package::create("res/spaceship.gpb");
     _scene = pkg->loadScene();
     SAFE_RELEASE(pkg);
 
@@ -93,12 +93,12 @@ void SpaceshipGame::initialize()
     initializeEnvironment();
 
     // Create a background audio track
-    _backgroundSound = AudioSource::create("res/sounds/background.ogg");
+    _backgroundSound = AudioSource::create("res/background.ogg");
     if (_backgroundSound)
         _backgroundSound->setLooped(true);
 
     // Create font
-    _font = Font::create("res/fonts/airstrip28.gpb");
+    _font = Font::create("res/airstrip28.gpb");
 
     // Store camera node
     _cameraNode = _scene->findNode("camera1");
@@ -143,12 +143,12 @@ void SpaceshipGame::initializeSpaceship()
     // Glow effect node
     _glowNode = _scene->findNode("pGlow");
     material = _glowNode->getModel()->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
-    material->getParameter("u_diffuseTexture")->setValue("res/textures/propulsion_glow.png", true);
+    material->getParameter("u_diffuseTexture")->setValue("res/propulsion_glow.png", true);
     _glowDiffuseParameter = material->getParameter("u_diffuseColor");
     initializeMaterial(material, false, false);
 
     // Setup the sound
-    _spaceshipSound = AudioSource::create("res/sounds/spaceship.wav");
+    _spaceshipSound = AudioSource::create("res/spaceship.wav");
     if (_spaceshipSound)
     {
         _spaceshipSound->setGain(0.5f);
@@ -186,7 +186,7 @@ void SpaceshipGame::initializeEnvironment()
     nodes.clear();
     Node* pBackground = _scene->findNode("pBackground");
     material = pBackground->getModel()->setMaterial("res/shaders/diffuse.vsh", "res/shaders/diffuse.fsh");
-    material->getParameter("u_diffuseTexture")->setValue("res/textures/background.png", true);
+    material->getParameter("u_diffuseTexture")->setValue("res/background.png", true);
     initializeMaterial(material, true, false);
 }
 
