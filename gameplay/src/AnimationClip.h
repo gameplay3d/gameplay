@@ -27,8 +27,6 @@ public:
      */
     static const unsigned int REPEAT_INDEFINITE = 0;
 
-    static int _crazyCounter;
-
     /**
      * Defines an animation event listener.
      */

@@ -7,7 +7,6 @@
 
 namespace gameplay
 {
-    int AnimationClip::_crazyCounter = 0;
 
 AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long startTime, unsigned long endTime)
     : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _duration(_endTime - _startTime), _repeatCount(1.0f), 
