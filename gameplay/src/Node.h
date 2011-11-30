@@ -19,7 +19,7 @@ class Scene;
 /**
  * Defines a basic hierachial structure of transformation spaces.
  */
-class Node : public Transform
+class Node : public Transform, public Ref
 {
     friend class Scene;
     friend class Package;
