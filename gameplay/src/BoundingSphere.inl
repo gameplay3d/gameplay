@@ -1,7 +1,3 @@
-/** 
- * BoundingSphere.inl
- */
-
 #include "BoundingSphere.h"
 
 namespace gameplay

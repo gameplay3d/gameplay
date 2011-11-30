@@ -1,7 +1,3 @@
-/*
- * AnimationClip.h
- */
-
 #ifndef ANIMATIONCLIP_H_
 #define ANIMATIONCLIP_H_
 
@@ -30,6 +26,8 @@ public:
      * Defines a constant for indefinitely repeating an AnimationClip.
      */
     static const unsigned int REPEAT_INDEFINITE = 0;
+
+    static int _crazyCounter;
 
     /**
      * Defines an animation event listener.
@@ -142,6 +140,20 @@ public:
     float getSpeed() const;
 
     /**
+     * Sets the blend weight of the AnimationClip.
+     *
+     * @param blendWeight The blend weight to apply to the clip.
+     */
+    void setBlendWeight(float blendWeight);
+
+    /** 
+     * Gets the blend weight of the AnimationClip.
+     *
+     * @return The blendweight of the AnimationClip.
+     */
+    float getBlendWeight() const;
+
+    /**
      * Checks if the AnimationClip is playing.
      *
      * @return true if the AnimationClip is playing; false if the AnimationClip is not playing.
@@ -157,6 +169,14 @@ public:
      * Stops the AnimationClip.
      */
     void stop();
+
+    /**
+     * Fades this clip out, and the specified clip in over the given duration.
+     *
+     * @param clip The clip to fade into.
+     * @param duration The duration of the fade.
+     */
+    void crossFade(AnimationClip* clip, unsigned long duration);
 
     /**
      * Adds a animation begin listener.
@@ -213,17 +233,27 @@ private:
     Animation* _animation;                    // Animations that this clip plays in parallel.
     unsigned long _startTime;                 // Start time of the clip.
     unsigned long _endTime;                   // End time of the clip.
+    unsigned long _duration;                  // The total duration.
+    float _repeatCount;                       // The clip's repeat count.
+    unsigned long _activeDuration;            // The active duration of the clip.
+    float _speed;                             // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.
+    bool _isPlaying;                          // A flag to indicate whether the clip is playing.
+    unsigned long _timeStarted;               // The game time when this clip was actually started.
     unsigned long _elapsedTime;               // Time elapsed while the clip is running.
     long _runningTime;                        // Keeps track of the Animation's relative time in respect to the active duration.
-    unsigned int _channelCount;               // The number of channels in the clip.
+    unsigned int* _channelPriority;           // Keeps track of each channel's priority.
+    AnimationClip* _crossFadeToClip;          // The clip to cross fade to
+    unsigned long _crossFadeStart;            // The time at which the cross fade started.
+    unsigned long _crossFadeOutElapsed;       // The amount of time that has elapsed for the crossfade.
+    unsigned long _crossFadeOutDuration;      // The duration of the cross fade.
+    float _blendWeight;                       // The clip's blendweight
+    bool _isFadingOutStarted;                 // Flag to indicate if the cross fade started
+    bool _isFadingOut;                        // Flag to indicate if the clip is fading out
+    bool _isFadingIn;                         // Flag to indicate if the clip is fading in.
     std::vector<AnimationValue*> _values;     // AnimationValue holder.
-    float _repeatCount;                       // The clip's repeat count.
-    float _speed;                             // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.
-    unsigned long _duration;                  // The total duration.
-    unsigned long _activeDuration;            // The active duration of the clip.
-    bool _isPlaying;                          // A flag to indicate whether the clip is playing.
-    std::vector<Listener*>* _beginListeners;
-    std::vector<Listener*>* _endListeners;
+    std::vector<Listener*>* _beginListeners;  // Collection of begin listeners on the clip
+    std::vector<Listener*>* _endListeners;    // Collection of end listeners on the clip
+
 };
 
 }

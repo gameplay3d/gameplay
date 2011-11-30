@@ -1,7 +1,3 @@
-/*
- * AnimationValue.h
- */
-
 #ifndef ANIMATIONVALUE_H_
 #define ANIMATIONVALUE_H_
 
@@ -77,7 +73,9 @@ private:
     ~AnimationValue();
 
     unsigned int _componentCount;   // The number of float values for the property.
+    unsigned int _componentSize;
     float* _currentValue;           // The current value of the property.
+    float* _interpolatedValue;
 };
 
 }

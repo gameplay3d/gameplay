@@ -1,7 +1,3 @@
-/*
- * Animation.h
- */
-
 #ifndef ANIMATION_H_
 #define ANIMATION_H_
 
@@ -170,7 +166,9 @@ private:
     std::string _id;                        // The Animation's ID.
     unsigned long _duration;                // the length of the animation (in milliseconds).
     std::vector<Channel*> _channels;        // The channels within this Animation.
-    std::vector<AnimationClip*> _clips;     // All the clips created from this Animation.
+    AnimationClip* _defaultClip;            // The Animation's default clip.
+    std::vector<AnimationClip*>* _clips;    // All the clips created from this Animation.
+
 };
 
 }

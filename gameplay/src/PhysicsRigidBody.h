@@ -1,7 +1,3 @@
-/*
- * PhysicsRigidBody.h
- */
-
 #ifndef PHYSICSRIGIDBODY_H_
 #define PHYSICSRIGIDBODY_H_
 
@@ -31,6 +27,7 @@ class PhysicsRigidBody
     friend class PhysicsSpringConstraint;
 
 public:
+
     /**
      * Represents the different types of rigid bodies.
      */
@@ -47,6 +44,7 @@ public:
     class CollisionPair
     {
     public:
+
         /**
          * Constructor.
          */
@@ -96,10 +94,14 @@ public:
             int indexA, const btCollisionObject* b, int partIdB, int indexB);
         
     protected:
-        /** Holds the collision status for each pair of rigid bodies. */
+
+        /** 
+         * Holds the collision status for each pair of rigid bodies. 
+         */
         std::map<CollisionPair, int> _collisionStatus;
 
     private:
+
         // Internal constant.
         static const int DIRTY;
         // Internal constant.
@@ -283,6 +285,7 @@ public:
     inline void setRestitution(float restitution);
 
 private:
+
     /**
      * Creates a rigid body.
      * 
@@ -312,8 +315,8 @@ private:
     // Creates the underlying Bullet Physics rigid body object
     // for a PhysicsRigidBody object using the given parameters.
     static btRigidBody* createBulletRigidBody(btCollisionShape* shape, float mass, Node* node,
-        float friction, float restitution, float linearDamping, float angularDamping,
-        const Vector3* centerOfMassOffset = NULL);
+                                              float friction, float restitution, float linearDamping, float angularDamping,
+                                              const Vector3* centerOfMassOffset = NULL);
 
     // Adds a constraint to this rigid body.
     void addConstraint(PhysicsConstraint* constraint);
@@ -324,8 +327,9 @@ private:
     // Internal class used to implement the collidesWith(PhysicsRigidBody*) function.
     struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
     {
-        btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA,
-            int indexA, const btCollisionObject* b, int partIdB, int indexB);
+        btScalar addSingleResult(btManifoldPoint& cp, 
+                                 const btCollisionObject* a, int partIdA, int indexA, 
+                                 const btCollisionObject* b, int partIdB, int indexB);
 
         bool result;
     };

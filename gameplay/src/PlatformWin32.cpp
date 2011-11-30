@@ -1,6 +1,3 @@
-/*
- * PlatformWin32.cpp
- */
 #ifdef WIN32
 
 #include "Base.h"
@@ -400,7 +397,7 @@ Platform* Platform::create(Game* game)
     __hinstance = ::GetModuleHandle(NULL);
 
     LPCTSTR windowClass = L"gameplay";
-    LPCTSTR windowName = L"gameplay Window";
+    LPCTSTR windowName = L"";
 
     RECT rect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 

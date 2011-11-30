@@ -172,10 +172,10 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\gameplay-main-win32.cpp">
-		<Filter>src</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DebugNew.cpp">
-		<Filter>src</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PhysicsController.cpp">
       <Filter>src</Filter>
@@ -457,11 +457,14 @@
     <None Include="res\shaders\bumped-specular.fsh">
       <Filter>res\shaders</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\gameplay-main-macosx.mm">
+    <None Include="src\gameplay-main-macos.mm">
       <Filter>src</Filter>
     </None>
+    <None Include="src\PlatformMacOS.mm">
+      <Filter>src</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="src\PhysicsFixedConstraint.inl">
       <Filter>src</Filter>
     </None>

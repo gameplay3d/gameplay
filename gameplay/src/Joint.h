@@ -1,7 +1,3 @@
-/*
- * Joint.h
- */
-
 #ifndef JOINT_H_
 #define JOINT_H_
 

@@ -49,6 +49,15 @@
     
     <!--  The category where the application appears. Either core.games or core.media. -->
     <category>core.games</category>
+ 
+    <asset path="icon.png">icon.png</asset>
+    <asset path="res">res</asset>
+    
+    <!-- PlayBook 1.0 support
+    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
+    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
+    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
+    -->
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Debug/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
@@ -77,11 +86,6 @@
         <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator-Coverage/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
     </configuration>
-    <asset path="icon.png">icon.png</asset>
-    <asset path="res">res</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
     
     <!--  The icon for the application, which should be 86x86. -->
     <icon>

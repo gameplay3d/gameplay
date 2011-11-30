@@ -1,7 +1,3 @@
-/*
- * PropertyListener
- */
-
 #ifndef ANIMATIONTARGET_H_
 #define ANIMATIONTARGET_H_
 
@@ -21,6 +17,7 @@ class AnimationValue;
 class AnimationTarget : public Ref
 {
     friend class Animation;
+    friend class AnimationClip;
     friend class AnimationController;
 
 public:
@@ -104,7 +101,25 @@ private:
      */
     AnimationTarget(const AnimationTarget& copy);
 
-    std::vector<Animation*>* _animations;
+    /**
+     * Increases the active animation count on the target by one.
+     */
+    void increaseActiveAnimationCount();
+
+    /**
+     * Decreases the active animation count on the target by one.
+     */
+    void decreaseActiveAnimationCount();
+
+    /**
+     * Gets the priority to assign to the channel when reassigning priorities.
+     */
+    unsigned int getPriority();
+
+    unsigned int _activeAnimationCount;        // The number of active animations targeting this AnimationTarget.
+    bool _reassignPriorities;                  // A flag to indicate that channel priorities for this AnimationTarget need to be reassigned
+    unsigned int _currentPriority;             // Used to keep track of the current priority when reassigning channel priorities
+    std::vector<Animation*>* _animations;      // Collection of all animations on that target the AnimationTarget
 
 };
 }

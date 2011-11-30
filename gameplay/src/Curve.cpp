@@ -1,7 +1,3 @@
-/*
- * Curve.cpp
- */
-
 #include "Curve.h"
 #include <cassert>
 #include <memory>

@@ -1,7 +1,3 @@
-/**
- * DepthStencilTarget.cpp
- */
-
 #include "Base.h"
 #include "DepthStencilTarget.h"
 

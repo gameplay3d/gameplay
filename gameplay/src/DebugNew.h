@@ -1,13 +1,11 @@
+#ifndef DEBUGNEW_H_
+#define DEBUGNEW_H_
+
 /**
- * DebugNew.h
- *
  * Global overrides of the new and delete operators for memory tracking.
  * This file is only included when memory leak detection is explicitly
  * request via the pre-processor defintion GAMEPLAY_MEM_LEAK_DETECTION.
  */
-
-#ifndef DEBUGNEW_H_
-#define DEBUGNEW_H_
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
 
 #include <new>

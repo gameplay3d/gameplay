@@ -7,52 +7,37 @@
     <Filter Include="res">
       <UniqueIdentifier>{78A0DA59-44AA-4905-A75B-6545F58A9570}</UniqueIdentifier>
     </Filter>
-    <Filter Include="res\fonts">
-      <UniqueIdentifier>{A989C6F3-BBE1-40ca-98FD-36FD40318F28}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\shaders">
-      <UniqueIdentifier>{0343E4EF-77F3-4789-9795-0E7C0DAAC01A}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\textures">
-      <UniqueIdentifier>{0551207e-628e-48c9-af7a-acb63f1ec44b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\sounds">
-      <UniqueIdentifier>{ec07215c-1661-465e-ac22-0d9582b611b1}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png" />
-    <None Include="res\fonts\arial16.gpb">
-      <Filter>res\fonts</Filter>
-    </None>
-    <None Include="res\shaders\textured.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\textured.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\quad.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\quad.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\textures\longboard.png">
-      <Filter>res\textures</Filter>
-    </None>
-    <None Include="res\textures\nice_gradient.png">
-      <Filter>res\textures</Filter>
-    </None>
-    <None Include="res\textures\tileable_asphalt.png">
-      <Filter>res\textures</Filter>
-    </None>
-    <None Include="res\textures\wheels.png">
-      <Filter>res\textures</Filter>
-    </None>
-    <None Include="res\sounds\longboard2.wav">
-      <Filter>res\sounds</Filter>
-    </None>
     <None Include="bar-descriptor.xml" />
+    <None Include="res\asphalt.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\longboard.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\longboard.wav">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\longboard_wheels.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\overlay_gradient.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\quad.fsh">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\quad.vsh">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\textured.fsh">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\textured.vsh">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LongboardGame.cpp">

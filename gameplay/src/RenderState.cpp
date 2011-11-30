@@ -1,7 +1,3 @@
-/**
- * RenderState.cpp
- */
-
 #include "Base.h"
 #include "RenderState.h"
 #include "Node.h"

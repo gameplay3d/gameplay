@@ -1,7 +1,3 @@
-/** 
- * Quaternion.inl
- */
-
 #include "Quaternion.h"
 
 namespace gameplay

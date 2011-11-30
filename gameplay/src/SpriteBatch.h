@@ -1,7 +1,3 @@
-/*
- * SpriteBatch.h
- */
-
 #ifndef SPRITEBATCH_H_
 #define SPRITEBATCH_H_
 

@@ -1,7 +1,3 @@
-/*
- * BoundingSphere.h
- */
-
 #ifndef BOUNDINGSPHERE_H_
 #define BOUNDINGSPHERE_H_
 

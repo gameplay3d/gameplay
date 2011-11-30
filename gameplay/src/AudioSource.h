@@ -1,7 +1,3 @@
-/*
- * AudioSource.h
- */
-
 #ifndef AUDIOSOURCE_H_
 #define AUDIOSOURCE_H_
 

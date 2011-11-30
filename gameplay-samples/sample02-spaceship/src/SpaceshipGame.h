@@ -1,7 +1,3 @@
-/*
- * SpaceshipGame.h
- */
-
 #ifndef SPACESHIPGAME_H_
 #define SPACESHIPGAME_H_
 
@@ -128,7 +124,8 @@ private:
     MaterialParameter* _glowDiffuseParameter;
     MaterialParameter* _shipSpecularParameter;
 
-    // Space ship sound
+    // Sounds
+    AudioSource* _backgroundSound;
     AudioSource* _spaceshipSound;
 
 };

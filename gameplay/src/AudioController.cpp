@@ -1,7 +1,3 @@
-/*
- * AudioController.cpp
- */
-
 #include "Base.h"
 #include "AudioController.h"
 #include "AudioListener.h"

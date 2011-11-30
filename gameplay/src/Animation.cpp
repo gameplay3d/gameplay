@@ -1,7 +1,3 @@
-/*
- * Animation.cpp
- */
-
 #include "Base.h"
 #include "Animation.h"
 #include "AnimationController.h"
@@ -22,17 +18,15 @@ namespace gameplay
 {
 
 Animation::Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type)
-    : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0)
+    : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0), _defaultClip(NULL), _clips(NULL)
 {
     createChannel(target, propertyId, keyCount, keyTimes, keyValues, type);
-    createDefaultClip();
 }
 
 Animation::Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type)
-    : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0)
+    : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0), _defaultClip(NULL), _clips(NULL)
 {
     createChannel(target, propertyId, keyCount, keyTimes, keyValues, keyInValue, keyOutValue, type);
-    createDefaultClip();
 }
 
 Animation::~Animation()
@@ -46,15 +40,22 @@ Animation::~Animation()
     }
     _channels.clear();
     
-    std::vector<AnimationClip*>::iterator clipIter = _clips.begin();
-    
-    while (clipIter != _clips.end())
+    if (_clips != NULL)
     {
-        AnimationClip* clip = *clipIter;
-        SAFE_RELEASE(clip);
-        clipIter++;
+        std::vector<AnimationClip*>::iterator clipIter = _clips->begin();
+    
+        while (clipIter != _clips->end())
+        {   
+            AnimationClip* clip = *clipIter;
+            SAFE_RELEASE(clip);
+            clipIter++;
+        }
+        _clips->clear();
     }
-    _clips.clear();
+
+    SAFE_DELETE(_clips);
+
+    SAFE_DELETE(_defaultClip);
 }
 
 Animation::Channel::Channel(AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration)
@@ -133,7 +134,7 @@ void Animation::createClips(const char* animationFile)
 
 AnimationClip* Animation::createClip(const char* id, unsigned long start, unsigned long end)
 {
-    if (findClip(id) != NULL)
+    if (_clips != NULL && findClip(id) != NULL)
     {
         return NULL;
     }
@@ -150,7 +151,10 @@ AnimationClip* Animation::getClip(const char* id)
     // If id is NULL return the default clip.
     if (id == NULL)
     {
-        return _clips[ANIMATION_DEFAULT_CLIP];
+        if (_defaultClip == NULL)
+            createDefaultClip();
+
+        return _defaultClip;
     }
     else
     {
@@ -163,7 +167,10 @@ void Animation::play(const char* id)
     // If id is NULL, play the default clip.
     if (id == NULL)
     {
-        _clips[ANIMATION_DEFAULT_CLIP]->play();
+        if (_defaultClip == NULL)
+            createDefaultClip();
+        
+        _defaultClip->play();
     }
     else
     {
@@ -181,7 +188,10 @@ void Animation::stop(const char* id)
     // If id is NULL, play the default clip.
     if (id == NULL)
     {
-        _clips[ANIMATION_DEFAULT_CLIP]->stop();
+        if (_defaultClip == NULL)
+            createDefaultClip();
+
+        _defaultClip->stop();
     }
     else
     {
@@ -303,22 +313,31 @@ void Animation::addChannel(Channel* channel)
 void Animation::createDefaultClip()
 {
     std::string clipId = _id + ANIMATION_DEFAULT_CLIP_SUFFIX;
-    _clips.push_back(new AnimationClip(clipId.c_str(), this, 0.0f, _duration));
+
+    _defaultClip = new AnimationClip(clipId.c_str(), this, 0.0f, _duration);
 }
 
 void Animation::addClip(AnimationClip* clip)
 {
-    _clips.push_back(clip);
+    if (_clips == NULL)
+        _clips = new std::vector<AnimationClip*>;
+
+    _clips->push_back(clip);
 }
 
 AnimationClip* Animation::findClip(const char* id) const
 {
-    unsigned int clipCount = _clips.size();
-    for (unsigned int i = 0; i < clipCount; i++)
+    if (_clips)
     {
-        if (_clips.at(i)->_id.compare(id) == 0)
+        AnimationClip* clip = NULL;
+        unsigned int clipCount = _clips->size();
+        for (unsigned int i = 0; i < clipCount; i++)
         {
-            return _clips.at(i);
+            clip = _clips->at(i);
+            if (clip->_id.compare(id) == 0)
+            {
+                return _clips->at(i);
+            }
         }
     }
     return NULL;

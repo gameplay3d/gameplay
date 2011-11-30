@@ -1,7 +1,3 @@
-/*
- * Frustum.cpp
- */
-
 #include "Base.h"
 #include "Frustum.h"
 #include "BoundingSphere.h"

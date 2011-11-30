@@ -72,7 +72,7 @@
 
 /* Begin PBXFileReference section */
 		42475CE6147208A000610A6A /* gameplay-encoder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "gameplay-encoder"; sourceTree = BUILT_PRODUCTS_DIR; };
-		42475D7B14720ECE00610A6A /* libdom.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdom.a; path = "../external-deps/collada-dom/lib/macosx/libdom.a"; sourceTree = "<group>"; };
+		42475D7B14720ECE00610A6A /* libdom.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdom.a; path = "../external-deps/collada-dom/lib/macos/libdom.a"; sourceTree = "<group>"; };
 		42C8EDB714724CD700E43619 /* Animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Animation.cpp; path = src/Animation.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDB814724CD700E43619 /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Animation.h; path = src/Animation.h; sourceTree = SOURCE_ROOT; };
 		42C8EDB914724CD700E43619 /* AnimationChannel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AnimationChannel.cpp; path = src/AnimationChannel.cpp; sourceTree = SOURCE_ROOT; };
@@ -156,12 +156,12 @@
 		42C8EE0714724CD700E43619 /* Vertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vertex.h; path = src/Vertex.h; sourceTree = SOURCE_ROOT; };
 		42C8EE0814724CD700E43619 /* VertexElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexElement.cpp; path = src/VertexElement.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EE0914724CD700E43619 /* VertexElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexElement.h; path = src/VertexElement.h; sourceTree = SOURCE_ROOT; };
-		42C8EE341472B60100E43619 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = "../external-deps/freetype2/lib/macosx/libfreetype.a"; sourceTree = "<group>"; };
+		42C8EE341472B60100E43619 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = "../external-deps/freetype2/lib/macos/libfreetype.a"; sourceTree = "<group>"; };
 		42C8EE361472D7E700E43619 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		42C8EE381472DAA300E43619 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		42C8EE3A1472DAAE00E43619 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
-		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macosx/libpcre.a"; sourceTree = "<group>"; };
-		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macosx/libpcrecpp.a"; sourceTree = "<group>"; };
+		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macos/libpcre.a"; sourceTree = "<group>"; };
+		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macos/libpcrecpp.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,14 +185,8 @@
 		42475CDB147208A000610A6A = {
 			isa = PBXGroup;
 			children = (
-				42D277571472EFA700D867A4 /* libpcre.a */,
-				42D277581472EFA700D867A4 /* libpcrecpp.a */,
-				42C8EE3A1472DAAE00E43619 /* libbz2.dylib */,
-				42C8EE381472DAA300E43619 /* libz.dylib */,
-				42C8EE361472D7E700E43619 /* libxml2.dylib */,
-				42C8EE341472B60100E43619 /* libfreetype.a */,
-				42475D7B14720ECE00610A6A /* libdom.a */,
 				42475CE9147208A000610A6A /* gameplay-encoder */,
+				427D4F44147DC9080076760E /* Libraries */,
 				42475CE7147208A000610A6A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -293,6 +287,20 @@
 				42C8EE0914724CD700E43619 /* VertexElement.h */,
 			);
 			path = "gameplay-encoder";
+			sourceTree = "<group>";
+		};
+		427D4F44147DC9080076760E /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				42D277571472EFA700D867A4 /* libpcre.a */,
+				42D277581472EFA700D867A4 /* libpcrecpp.a */,
+				42C8EE3A1472DAAE00E43619 /* libbz2.dylib */,
+				42C8EE381472DAA300E43619 /* libz.dylib */,
+				42C8EE361472D7E700E43619 /* libxml2.dylib */,
+				42C8EE341472B60100E43619 /* libfreetype.a */,
+				42475D7B14720ECE00610A6A /* libdom.a */,
+			);
+			name = Libraries;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -480,11 +488,10 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/freetype2/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macosx\"",
-					"\"$(SRCROOT)/../../../collada-dom/dom/external-libs/minizip/mac\"",
-					"\"$(SRCROOT)/../../../collada-dom/dom/external-libs/pcre/lib/mac\"",
-					"\"$(SRCROOT)/../external-deps/pcre/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/freetype2/lib/macos\"",
+					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macos\"",
+					"\"$(SRCROOT)/../external-deps/pcre/lib/macos\"",
+					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -508,11 +515,10 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/freetype2/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macosx\"",
-					"\"$(SRCROOT)/../../../collada-dom/dom/external-libs/minizip/mac\"",
-					"\"$(SRCROOT)/../../../collada-dom/dom/external-libs/pcre/lib/mac\"",
-					"\"$(SRCROOT)/../external-deps/pcre/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/freetype2/lib/macos\"",
+					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macos\"",
+					"\"$(SRCROOT)/../external-deps/pcre/lib/macos\"",
+					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";

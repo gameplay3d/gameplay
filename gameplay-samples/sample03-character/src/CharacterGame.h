@@ -1,7 +1,3 @@
-/*
- * CharacterGame.h
- */
-
 #ifndef CHARACTERGAME_H_
 #define CHARACTERGAME_H_
 
@@ -74,7 +70,7 @@ private:
     /**
      * Loads the characters animations.
      */
-    void loadCharacterAnimations();
+    void loadAnimations();
 
     Scene* _scene;
     Font* _font;

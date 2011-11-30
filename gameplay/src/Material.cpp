@@ -1,7 +1,3 @@
-/**
- * Material.cpp
- */
-
 #include "Base.h"
 #include "Material.h"
 #include "FileSystem.h"

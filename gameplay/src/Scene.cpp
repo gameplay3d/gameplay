@@ -1,9 +1,3 @@
-/*
- * Scene.cpp
- */
-
-#include <algorithm>
-
 #include "Base.h"
 #include "AudioListener.h"
 #include "Scene.h"

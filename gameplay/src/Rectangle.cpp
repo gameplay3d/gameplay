@@ -1,7 +1,3 @@
-/*
- * Rectangle.cpp
- */
-
 #include "Base.h"
 #include "Rectangle.h"
 

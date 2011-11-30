@@ -1,7 +1,3 @@
-/*
- * PhysicsConstraint.inl
- */
-
 #include "PhysicsConstraint.h"
 
 namespace gameplay
