@@ -226,7 +226,7 @@ void FBXSceneEncoder::loadScene(KFbxScene* fbxScene)
         const int childCount = rootNode->GetChildCount();
         for (int i = 0; i < childCount; ++i)
         {
-            Node* node = loadNode(rootNode->GetChild(i), NULL);
+            Node* node = loadNode(rootNode->GetChild(i));
             if (node)
             {
                 scene->add(node);
@@ -448,7 +448,7 @@ void FBXSceneEncoder::loadAnimations(KFbxScene* fbxScene, const EncoderArguments
     }
 }
 
-Node* FBXSceneEncoder::loadNode(KFbxNode* fbxNode, Node* parent)
+Node* FBXSceneEncoder::loadNode(KFbxNode* fbxNode)
 {
     Node* node = NULL;
 
@@ -466,10 +466,6 @@ Node* FBXSceneEncoder::loadNode(KFbxNode* fbxNode, Node* parent)
     if (id)
     {
         node->setId(id);
-    }
-    if (parent)
-    {
-        parent->addChild(node);
     }
     _gamePlayFile.addNode(node);
 
@@ -490,7 +486,11 @@ Node* FBXSceneEncoder::loadNode(KFbxNode* fbxNode, Node* parent)
     const int childCount = fbxNode->GetChildCount();
     for (int i = 0; i < childCount; ++i)
     {
-        loadNode(fbxNode->GetChild(i), node);
+        Node* child = loadNode(fbxNode->GetChild(i));
+        if (child)
+        {
+            node->addChild(child);
+        }
     }
     return node;
 }
@@ -710,7 +710,7 @@ void FBXSceneEncoder::loadSkin(KFbxMesh* fbxMesh, Model* model)
                     const char* jointName = linkedNode->GetName();
                     assert(jointName);
                     jointNames.push_back(jointName);
-                    Node* joint = _gamePlayFile.getNode(jointName);
+                    Node* joint = loadNode(linkedNode);
                     assert(joint);
                     joints.push_back(joint);
 

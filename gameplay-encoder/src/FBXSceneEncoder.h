@@ -138,11 +138,10 @@ private:
      * Loads the FBX Node and creates a GamePlay Node.
      * 
      * @param fbxNode The FBX Node to load.
-     * @param parent The parent node that the newly created node should be added to. May be NULL.
      * 
      * @return The newly created Node or NULL if the node could not be loaded.
      */
-    Node* loadNode(KFbxNode* fbxNode, Node* parent);
+    Node* loadNode(KFbxNode* fbxNode);
     
     /**
      * Loads the FbxMesh and returns a GamePlay mesh.
