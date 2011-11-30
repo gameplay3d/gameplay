@@ -47,31 +47,6 @@ public:
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value) = 0;
 
-    /**
-     * Gets the number of Animations on this target.
-     * 
-     * @return The number of Animations targeting this object.
-     */
-    //unsigned int getAnimationCount() const;
-
-    /**
-     * Gets the Animation with the given index.
-     * 
-     * @param index The index of the Animation to return.
-     *
-     * @return The Animation at the given index.
-     */
-    //Animation* getAnimation(unsigned int index) const;
-
-    /**
-     * Finds the Animation with the given ID.
-     * 
-     * @param id The ID of the Animation to get.
-     * 
-     * @return The Animation with the given ID. NULL if the Animation is not found.
-     */
-    //Animation* getAnimation(const char* id) const;
-
 protected:
     
     enum TargetType
