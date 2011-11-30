@@ -1,7 +1,3 @@
-/*
- * Transform.cpp
- */
-
 #include "Base.h"
 #include "Transform.h"
 #include "Game.h"

@@ -1,7 +1,3 @@
-/*
- * AnimationValue.cpp
- */
-
 #include "Base.h"
 #include "AnimationValue.h"
 
@@ -9,14 +5,16 @@ namespace gameplay
 {
 
 AnimationValue::AnimationValue(unsigned int componentCount)
-  : _componentCount(componentCount)
+  : _componentCount(componentCount), _componentSize(componentCount * sizeof(float))
 {
     _currentValue = new float[_componentCount];
+    _interpolatedValue = new float[_componentCount];
 }
 
 AnimationValue::~AnimationValue()
 {
     SAFE_DELETE_ARRAY(_currentValue);
+    SAFE_DELETE_ARRAY(_interpolatedValue);
 }
 
 float AnimationValue::getFloat(unsigned int index) const

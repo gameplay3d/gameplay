@@ -1,7 +1,3 @@
-/*
- * Node.cpp
- */
-
 #include "Base.h"
 #include "Node.h"
 #include "Scene.h"

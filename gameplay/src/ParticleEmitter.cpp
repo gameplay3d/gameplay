@@ -1,7 +1,3 @@
-/*
- * ParticleEmitter.cpp
- */
-
 #include "Base.h"
 #include "ParticleEmitter.h"
 #include "Game.h"
@@ -9,16 +5,16 @@
 #include "Quaternion.h"
 #include "Properties.h"
 
-#define PARTICLE_COUNT_MAX              100
-#define EMISSION_RATE                   10
-#define EMISSION_RATE_TIME_INTERVAL     1000.0f / (float)EMISSION_RATE
+#define PARTICLE_COUNT_MAX                       100
+#define PARTICLE_EMISSION_RATE                   10
+#define PARTICLE_EMISSION_RATE_TIME_INTERVAL     1000.0f / (float)PARTICLE_EMISSION_RATE
 
 namespace gameplay
 {
 
 ParticleEmitter::ParticleEmitter(SpriteBatch* batch, unsigned int particleCountMax) :
     _particleCountMax(particleCountMax), _particleCount(0), _particles(NULL),
-    _emissionRate(EMISSION_RATE), _started(false), _ellipsoid(false),
+    _emissionRate(PARTICLE_EMISSION_RATE), _started(false), _ellipsoid(false),
     _sizeStartMin(1.0f), _sizeStartMax(1.0f), _sizeEndMin(1.0f), _sizeEndMax(1.0f),
     _energyMin(1000L), _energyMax(1000L),
     _colorStart(Vector4::zero()), _colorStartVar(Vector4::zero()), _colorEnd(Vector4::one()), _colorEndVar(Vector4::zero()),
@@ -31,7 +27,7 @@ ParticleEmitter::ParticleEmitter(SpriteBatch* batch, unsigned int particleCountM
     _spriteBatch(batch), _spriteTextureBlending(BLEND_TRANSPARENT),  _spriteTextureWidth(0), _spriteTextureHeight(0), _spriteTextureWidthRatio(0), _spriteTextureHeightRatio(0), _spriteTextureCoords(NULL),
     _spriteAnimated(false),  _spriteLooped(false), _spriteFrameCount(1), _spriteFrameRandomOffset(0),_spriteFrameDuration(0L), _spriteFrameDurationSecs(0.0f), _spritePercentPerFrame(0.0f),
     _node(NULL), _orbitPosition(false), _orbitVelocity(false), _orbitAcceleration(false),
-    _timePerEmission(EMISSION_RATE_TIME_INTERVAL), _timeLast(0L), _timeRunning(0L)
+    _timePerEmission(PARTICLE_EMISSION_RATE_TIME_INTERVAL), _timeLast(0L), _timeRunning(0L)
 {
     _particles = new Particle[particleCountMax];
 
@@ -137,7 +133,7 @@ ParticleEmitter* ParticleEmitter::create(const char* particleFile)
     unsigned int emissionRate = (unsigned int)particle->getInt("emissionRate");
     if (emissionRate == 0)
     {
-        emissionRate = EMISSION_RATE;
+        emissionRate = PARTICLE_EMISSION_RATE;
     }
 
     bool ellipsoid = particle->getBool("ellipsoid");

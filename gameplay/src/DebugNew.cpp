@@ -1,7 +1,3 @@
-/**
- * DebugNew.cpp
- */
-
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
 
 #include <new>

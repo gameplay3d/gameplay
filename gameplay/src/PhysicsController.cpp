@@ -1,7 +1,3 @@
-/*
- * PhysicsController.cpp
- */
-
 #include "Base.h"
 #include "Game.h"
 #include "PhysicsController.h"

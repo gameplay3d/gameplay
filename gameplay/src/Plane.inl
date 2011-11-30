@@ -1,7 +1,3 @@
-/** 
- * Plane.inl
- */
-
 #include "Plane.h"
 
 namespace gameplay

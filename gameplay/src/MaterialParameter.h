@@ -1,7 +1,3 @@
-/*
- * MaterialParameter.h
- */
-
 #ifndef MATERIALPARAMETER_H_
 #define MATERIALPARAMETER_H_
 

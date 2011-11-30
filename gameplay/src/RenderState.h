@@ -1,7 +1,3 @@
-/**
- * RenderState.h
- */
-
 #ifndef RENDERSTATE_H_
 #define RENDERSTATE_H_
 

@@ -1,7 +1,3 @@
-/** 
- * Matrix.inl
- */
-
 #include "Matrix.h"
 
 namespace gameplay

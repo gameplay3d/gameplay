@@ -1,7 +1,3 @@
-/*
- * Plane.cpp
- */
-
 #include "Base.h"
 #include "Plane.h"
 #include "Frustum.h"

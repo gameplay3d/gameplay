@@ -1,7 +1,3 @@
-/*
- * Mesh.cpp
- */
-
 #include "Base.h"
 #include "Mesh.h"
 #include "MeshPart.h"

@@ -1,7 +1,3 @@
-/*
- * AnimationTarget.cpp
- */
-
 #include "Base.h"
 #include "AnimationTarget.h"
 #include "Animation.h"
@@ -13,7 +9,7 @@ namespace gameplay
 {
 
 AnimationTarget::AnimationTarget()
-    : _targetType(SCALAR), _animations(NULL)
+    : _targetType(SCALAR), _activeAnimationCount(0), _currentPriority(0), _animations(NULL), _reassignPriorities(false)
 {
 }
 
@@ -76,6 +72,34 @@ Animation* AnimationTarget::getAnimation(const char* id) const
     }
     
     return NULL;
+}
+
+void AnimationTarget::increaseActiveAnimationCount()
+{
+    ++_activeAnimationCount;
+}
+
+void AnimationTarget::decreaseActiveAnimationCount()
+{
+    --_activeAnimationCount;
+
+    _reassignPriorities = true;
+    _currentPriority = 0;
+}
+
+unsigned int AnimationTarget::getPriority() 
+{
+    if (_reassignPriorities)
+    {
+        ++_currentPriority;
+
+        if (_currentPriority == _activeAnimationCount)
+            _reassignPriorities = false;
+
+        return _currentPriority;
+    }
+
+    return _activeAnimationCount;
 }
 
 }

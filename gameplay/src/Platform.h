@@ -1,7 +1,3 @@
-/*
- * Platform.h
- */
-
 #ifndef PLATFORM_H_
 #define PLATFORM_H_
 

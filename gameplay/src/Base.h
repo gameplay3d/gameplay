@@ -1,6 +1,3 @@
-/*
- * Base.h
- */
 #ifndef BASE_H_
 #define BASE_H_
 
@@ -148,6 +145,7 @@ extern void printError(const char* format, ...);
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #endif
+#include <vorbis/vorbisfile.h>
 
 // Screen/Window
 #define WINDOW_WIDTH        1024

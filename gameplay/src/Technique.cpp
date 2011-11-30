@@ -1,7 +1,3 @@
-/**
- * Technique.cpp
- */
-
 #include "Base.h"
 #include "Technique.h"
 #include "Material.h"
