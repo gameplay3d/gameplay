@@ -48,14 +48,12 @@ private:
 
     void visitNode(Node* node, long cookie);
 
-    void getModelNode(Node* node, long cookie);
-
-    void createDefaultCamera(Scene* scene);
+    void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 
     Font* _font;
     Scene* _scene;
     Node* _modelNode;
-    int _prevX, _prevY;
+    int _touchX;
     bool _touched;
 };
 
