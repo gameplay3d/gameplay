@@ -29,20 +29,15 @@ AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long
 
 AnimationClip::~AnimationClip()
 {
-    // Explicitly stop this clip if it's currently playing so it gets removed from the controller
-    if (_isPlaying)
-    {
-        stop();
-    }
-
     std::vector<AnimationValue*>::iterator valueIter = _values.begin();
     while (valueIter != _values.end())
     {
         SAFE_DELETE(*valueIter);
         valueIter++;
     }
+    _values.clear();
 
-    SAFE_DELETE(_crossFadeToClip);
+    SAFE_RELEASE(_crossFadeToClip);
     SAFE_DELETE(_channelPriority);
     SAFE_DELETE(_beginListeners);
     SAFE_DELETE(_endListeners);
@@ -308,10 +303,12 @@ bool AnimationClip::update(unsigned long elapsedTime)
         // Get the current value.
         target->getAnimationPropertyValue(channel->_propertyId, value);
 
+        bool isHighest = false;
         // My channel priority has changed if my priority is greater than the active animation count.
-        if (target->_reassignPriorities)
+        if (!target->_highestPriority)
         {
-            _channelPriority[i] = target->getPriority();
+            target->_highestPriority = channel;
+            value->_isFirstActing = true;
         }
 
         if (_blendWeight != 0.0f)
@@ -321,7 +318,7 @@ bool AnimationClip::update(unsigned long elapsedTime)
 
             if (channel->_curve->_quaternionOffsetsCount == 0)
             {
-                if (_channelPriority[i] == 1)
+                if (value->_isFirstActing)
                 {
                     unsigned int componentCount = value->_componentCount;
                     for (unsigned int j = 0; j < componentCount; j++)
@@ -350,7 +347,7 @@ bool AnimationClip::update(unsigned long elapsedTime)
                 unsigned int quaternionOffsetIndex = 0;
                 unsigned int quaternionOffset = 0;
 
-                if (_channelPriority[i] == 1)
+                if (value->_isFirstActing)
                 {
                     do {
                         quaternionOffset = channel->_curve->_quaternionOffsets[quaternionOffsetIndex];
@@ -434,7 +431,7 @@ bool AnimationClip::update(unsigned long elapsedTime)
                 }
             }
         }
-        else if (_channelPriority[i] == 1)
+        else if (value->_isFirstActing)
         {
             if (channel->_curve->_quaternionOffsetsCount == 0)
             {
@@ -503,17 +500,6 @@ void AnimationClip::onBegin()
         _runningTime = _activeDuration;
     }
 
-    AnimationTarget* target = NULL;
-    unsigned int channelCount = _animation->_channels.size();
-    // Sets the starting value.
-    for (unsigned int i = 0; i < channelCount; i++)
-    {
-        target = _animation->_channels[i]->_target;
-
-        target->increaseActiveAnimationCount();
-        _channelPriority[i] = target->getPriority();
-    }
-
     // Notify begin listeners.. if any.
     if (_beginListeners)
     {
@@ -528,15 +514,21 @@ void AnimationClip::onBegin()
 
 void AnimationClip::onEnd()
 {
+    AnimationValue* value;
+    Animation::Channel* channel = NULL;
     AnimationTarget* target = NULL;
     unsigned int channelCount = _animation->_channels.size();
     for (unsigned int i = 0; i < channelCount; i++)
     {
-        target = _animation->_channels[i]->_target;
-        
-        // Decrease active animation count on target and reset the channel priority
-        target->decreaseActiveAnimationCount();
-        _channelPriority[i] = 0;
+        value = _values[i];
+
+        if (value->_isFirstActing)
+        {
+            channel = _animation->_channels[i];
+            target = channel->_target;
+            target->_highestPriority = NULL;
+            value->_isFirstActing = false;
+        }
     }
 
     _blendWeight = 1.0f;
