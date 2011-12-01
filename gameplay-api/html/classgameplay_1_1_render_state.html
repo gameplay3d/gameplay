@@ -100,8 +100,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
-<a href="#pro-static-attribs">Static Protected Attributes</a> &#124;
 <a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::RenderState Class Reference</div>  </div>
@@ -174,6 +174,10 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state.html#a0f4eaa5ff2fca086901602634cc7a0da">applyAutoBinding</a> (const char *uniformName, <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017">AutoBinding</a> binding)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state.html#ad3a158e8cc808d7405296002e1e164c0">bind</a> (<a class="el" href="classgameplay_1_1_pass.html">Pass</a> *pass)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_render_state.html">RenderState</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state.html#a6959806e6d5f138c1a84740e774d37db">getTopmost</a> (<a class="el" href="classgameplay_1_1_render_state.html">RenderState</a> *below)</td></tr>
+<tr><td colspan="2"><h2><a name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state.html#ad9317437606ed99b70963ca8d8744853">initialize</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state.html#a737de7f4aa463efd8618e9ed9c9d6c40">finalize</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acd7bc70363d6640dbd24533d6136d7a2"></a><!-- doxytag: member="gameplay::RenderState::_parameters" ref="acd7bc70363d6640dbd24533d6136d7a2" args="" -->
@@ -187,12 +191,10 @@ std::map&lt; std::string, <br class="typebreak"/>
 <a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html">StateBlock</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_state</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8351f27bf62f28cf497c9231b9d69dda"></a><!-- doxytag: member="gameplay::RenderState::_parent" ref="a8351f27bf62f28cf497c9231b9d69dda" args="" -->
 <a class="el" href="classgameplay_1_1_render_state.html">RenderState</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_parent</b></td></tr>
-<tr><td colspan="2"><h2><a name="pro-static-attribs"></a>
-Static Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c8a10bb6b3ddd2cd146a0894ea32c76"></a><!-- doxytag: member="gameplay::RenderState::_restoreState" ref="a7c8a10bb6b3ddd2cd146a0894ea32c76" args="" -->
-static <a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html">StateBlock</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_restoreState</b></td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa2fab026580d6f14280c2ffb8063a314"></a><!-- doxytag: member="gameplay::RenderState::Game" ref="aa2fab026580d6f14280c2ffb8063a314" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Game</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa1212b6e372a0f45d2c01f3cd203af77"></a><!-- doxytag: member="gameplay::RenderState::Material" ref="aa1212b6e372a0f45d2c01f3cd203af77" args="" -->
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Material</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a807f0a09f6d88f6738f32cadeae4a3cd"></a><!-- doxytag: member="gameplay::RenderState::Technique" ref="a807f0a09f6d88f6738f32cadeae4a3cd" args="" -->
@@ -356,6 +358,23 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Model</b></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a737de7f4aa463efd8618e9ed9c9d6c40"></a><!-- doxytag: member="gameplay::RenderState::finalize" ref="a737de7f4aa463efd8618e9ed9c9d6c40" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::RenderState::finalize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Static finalizer that is called during game shutdown. </p>
+
+</div>
+</div>
 <a class="anchor" id="a2627c31c1ad9e79fad636df1b3fe7da9"></a><!-- doxytag: member="gameplay::RenderState::getParameter" ref="a2627c31c1ad9e79fad636df1b3fe7da9" args="(const char *name) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -417,6 +436,23 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Model</b></td></tr>
 </div>
 <div class="memdoc">
 <p>Returns the topmost <a class="el" href="classgameplay_1_1_render_state.html">RenderState</a> in the hierarchy below the given <a class="el" href="classgameplay_1_1_render_state.html">RenderState</a>. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad9317437606ed99b70963ca8d8744853"></a><!-- doxytag: member="gameplay::RenderState::initialize" ref="ad9317437606ed99b70963ca8d8744853" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::RenderState::initialize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Static initializer that is called during game startup. </p>
 
 </div>
 </div>
@@ -566,7 +602,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Model</b></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:36 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:06 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

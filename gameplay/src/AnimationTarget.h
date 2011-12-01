@@ -14,7 +14,7 @@ class AnimationValue;
  * Defines an interface allowing animation to target
  * an object for changing its animation properties.
  */
-class AnimationTarget : public Ref
+class AnimationTarget
 {
     friend class Animation;
     friend class AnimationClip;
@@ -47,31 +47,6 @@ public:
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value) = 0;
 
-    /**
-     * Gets the number of Animations on this target.
-     * 
-     * @return The number of Animations targeting this object.
-     */
-    unsigned int getAnimationCount() const;
-
-    /**
-     * Gets the Animation with the given index.
-     * 
-     * @param index The index of the Animation to return.
-     *
-     * @return The Animation at the given index.
-     */
-    Animation* getAnimation(unsigned int index) const;
-
-    /**
-     * Finds the Animation with the given ID.
-     * 
-     * @param id The ID of the Animation to get.
-     * 
-     * @return The Animation with the given ID. NULL if the Animation is not found.
-     */
-    Animation* getAnimation(const char* id) const;
-
 protected:
     
     enum TargetType
@@ -90,7 +65,7 @@ protected:
      */
     virtual ~AnimationTarget();
 
-    void addAnimation(Animation* animation);
+    void addChannel(Animation::Channel* animation);
 
     TargetType _targetType;             // The type of target this is.
 
@@ -101,25 +76,8 @@ private:
      */
     AnimationTarget(const AnimationTarget& copy);
 
-    /**
-     * Increases the active animation count on the target by one.
-     */
-    void increaseActiveAnimationCount();
-
-    /**
-     * Decreases the active animation count on the target by one.
-     */
-    void decreaseActiveAnimationCount();
-
-    /**
-     * Gets the priority to assign to the channel when reassigning priorities.
-     */
-    unsigned int getPriority();
-
-    unsigned int _activeAnimationCount;        // The number of active animations targeting this AnimationTarget.
-    bool _reassignPriorities;                  // A flag to indicate that channel priorities for this AnimationTarget need to be reassigned
-    unsigned int _currentPriority;             // Used to keep track of the current priority when reassigning channel priorities
-    std::vector<Animation*>* _animations;      // Collection of all animations on that target the AnimationTarget
+    Animation::Channel* _highestPriority;
+    std::vector<Animation::Channel*>* _animationChannels;   // Collection of all animation channels that target the AnimationTarget
 
 };
 }

@@ -127,7 +127,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_plane.html#a904dd3e31c1ab707d76067d7a82db7c4">isParallel</a> (const <a class="el" href="classgameplay_1_1_plane.html">Plane</a> &amp;plane) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_plane.html#ac0bc0f8d224b18971d785a145c10e18d">set</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;normal, float distance)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_plane.html#a2f02a94e908039e16d66c97956981df7">set</a> (const <a class="el" href="classgameplay_1_1_plane.html">Plane</a> &amp;plane)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_plane.html#acb465cdd4536ca649586e00f2c20c971">transform</a> (<a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;matrix)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_plane.html#a53ce7af0b39a2a8cf9bb1321071b91d9">transform</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;matrix)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_plane.html">Plane</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_plane.html#addce52d475252a2fc2d40dbddd25d7ed">operator*=</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;matrix)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_plane.html#a8fe4ac8f3468caf8009789d8a3f008ae">intersection</a> (const <a class="el" href="classgameplay_1_1_plane.html">Plane</a> &amp;p1, const <a class="el" href="classgameplay_1_1_plane.html">Plane</a> &amp;p2, const <a class="el" href="classgameplay_1_1_plane.html">Plane</a> &amp;p3, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *point)</td></tr>
@@ -494,6 +495,31 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="addce52d475252a2fc2d40dbddd25d7ed"></a><!-- doxytag: member="gameplay::Plane::operator*=" ref="addce52d475252a2fc2d40dbddd25d7ed" args="(const Matrix &amp;matrix)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_plane.html">Plane</a> &amp; gameplay::Plane::operator*= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Transforms this plane by the given matrix.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">matrix</td><td>The matrix to transform by. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>This plane, after the transformation occurs. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ac0bc0f8d224b18971d785a145c10e18d"></a><!-- doxytag: member="gameplay::Plane::set" ref="ac0bc0f8d224b18971d785a145c10e18d" args="(const Vector3 &amp;normal, float distance)" -->
 <div class="memitem">
 <div class="memproto">
@@ -601,14 +627,14 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="acb465cdd4536ca649586e00f2c20c971"></a><!-- doxytag: member="gameplay::Plane::transform" ref="acb465cdd4536ca649586e00f2c20c971" args="(Matrix &amp;matrix)" -->
+<a class="anchor" id="a53ce7af0b39a2a8cf9bb1321071b91d9"></a><!-- doxytag: member="gameplay::Plane::transform" ref="a53ce7af0b39a2a8cf9bb1321071b91d9" args="(const Matrix &amp;matrix)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void gameplay::Plane::transform </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td>
           <td class="paramname"><em>matrix</em></td><td>)</td>
           <td></td>
         </tr>
@@ -671,6 +697,7 @@ Static Public Attributes</h2></td></tr>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_plane_8h_source.html">Plane.h</a></li>
 <li>gameplay/src/Plane.cpp</li>
+<li>gameplay/src/Plane.inl</li>
 </ul>
 </div>
 </div>
@@ -693,7 +720,7 @@ Static Public Attributes</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:35 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

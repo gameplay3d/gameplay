@@ -6,11 +6,16 @@
 using namespace gameplay;
 
 /**
- * This is a mesh demo game for rendering Mesh.
+ * Sample game for rendering a scene with a model/mesh.
  */
 class MeshGame: public Game
 {
 public:
+
+    /**
+     * Constructror.
+     */
+    MeshGame();
 
     /**
      * Destructor.
@@ -46,17 +51,15 @@ protected:
 
 private:
 
-    void visitNode(Node* node, long cookie);
+    void drawScene(Node* node, long cookie);
 
-    void getModelNode(Node* node, long cookie);
-
-    void createDefaultCamera(Scene* scene);
+    void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 
     Font* _font;
     Scene* _scene;
     Node* _modelNode;
-    int _prevX, _prevY;
     bool _touched;
+    int _touchX;
 };
 
 #endif

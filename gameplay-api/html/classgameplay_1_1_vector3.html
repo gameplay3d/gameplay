@@ -135,6 +135,13 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector3.html#afa6afd04f8824a52168a61fee0f739f6">set</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;v)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector3.html#a363d235bf34411e54d7c87349f901cc0">set</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;p1, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;p2)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector3.html#a9a41ddc76f20516b1fa98361bafaf285">subtract</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;v)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector3.html#a55715985d33b930e4d2b667b4cec296f">operator+</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;v) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector3.html#ae5e5fe8382ee8d25a69c1ec5a6442237">operator+=</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;v)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector3.html#a621c701b6263d29beffe0f46f4357302">operator-</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;v) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector3.html#ae9c17dd3dddd44f0e207b2781ac19417">operator-=</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;v)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector3.html#ac9a2ba309e893660e4fbf56c1ea45f05">operator-</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector3.html#ae56db4112515e017eb370437b678c919">operator*</a> (float <a class="el" href="classgameplay_1_1_vector3.html#a7d5d9a5319ce33a23248adb4754b60f8">x</a>) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector3.html#a168ceffe8c4c5152a50d7c1d03c9e53a">operator*=</a> (float <a class="el" href="classgameplay_1_1_vector3.html#a7d5d9a5319ce33a23248adb4754b60f8">x</a>)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector3.html#af0468bc4551d55bc536988db6c43afc3">fromColor</a> (unsigned int color)</td></tr>
@@ -863,6 +870,178 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae56db4112515e017eb370437b678c919"></a><!-- doxytag: member="gameplay::Vector3::operator*" ref="ae56db4112515e017eb370437b678c919" args="(float x) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> gameplay::Vector3::operator* </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Calculates the scalar product of this vector with the given value.</p>
+<p>Note: this does not modify this vector.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The value to scale by. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The scaled vector. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a168ceffe8c4c5152a50d7c1d03c9e53a"></a><!-- doxytag: member="gameplay::Vector3::operator*=" ref="a168ceffe8c4c5152a50d7c1d03c9e53a" args="(float x)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp; gameplay::Vector3::operator*= </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Scales this vector by the given value.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The value to scale by. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>This vector, after the scale occurs. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a55715985d33b930e4d2b667b4cec296f"></a><!-- doxytag: member="gameplay::Vector3::operator+" ref="a55715985d33b930e4d2b667b4cec296f" args="(const Vector3 &amp;v) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> gameplay::Vector3::operator+ </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Calculates the sum of this vector with the given vector.</p>
+<p>Note: this does not modify this vector.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>The vector to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The vector sum. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae5e5fe8382ee8d25a69c1ec5a6442237"></a><!-- doxytag: member="gameplay::Vector3::operator+=" ref="ae5e5fe8382ee8d25a69c1ec5a6442237" args="(const Vector3 &amp;v)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp; gameplay::Vector3::operator+= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Adds the given vector to this vector.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>The vector to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>This vector, after the addition occurs. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a621c701b6263d29beffe0f46f4357302"></a><!-- doxytag: member="gameplay::Vector3::operator&#45;" ref="a621c701b6263d29beffe0f46f4357302" args="(const Vector3 &amp;v) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> gameplay::Vector3::operator- </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Calculates the sum of this vector with the given vector.</p>
+<p>Note: this does not modify this vector.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>The vector to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The vector sum. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac9a2ba309e893660e4fbf56c1ea45f05"></a><!-- doxytag: member="gameplay::Vector3::operator&#45;" ref="ac9a2ba309e893660e4fbf56c1ea45f05" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> gameplay::Vector3::operator- </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Calculates the negation of this vector.</p>
+<p>Note: this does not modify this vector.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The negation of this vector. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae9c17dd3dddd44f0e207b2781ac19417"></a><!-- doxytag: member="gameplay::Vector3::operator&#45;=" ref="ae9c17dd3dddd44f0e207b2781ac19417" args="(const Vector3 &amp;v)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp; gameplay::Vector3::operator-= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Subtracts the given vector from this vector.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>The vector to subtract. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>This vector, after the subtraction occurs. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ad741f8b6fa709aa839f98cf6ec8c2869"></a><!-- doxytag: member="gameplay::Vector3::scale" ref="ad741f8b6fa709aa839f98cf6ec8c2869" args="(float scalar)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1189,6 +1368,7 @@ Public Attributes</h2></td></tr>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_vector3_8h_source.html">Vector3.h</a></li>
 <li>gameplay/src/Vector3.cpp</li>
+<li>gameplay/src/Vector3.inl</li>
 </ul>
 </div>
 </div>
@@ -1211,7 +1391,7 @@ Public Attributes</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:36 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:06 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

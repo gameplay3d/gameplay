@@ -3,37 +3,36 @@
 // Declare our game instance
 MeshGame game;
 
+MeshGame::MeshGame()
+    : _font(NULL), _scene(NULL),_modelNode(NULL), _touched(false), _touchX(0)
+{
+}
+
 MeshGame::~MeshGame()
 {
 }
 
 void MeshGame::initialize()
 {
-    _touched = false;
+    // Load font
+    _font = Font::create("res/arial40.gpb");
 
     // Load mesh/scene from file
     Package* pkg = Package::create("res/duck.gpb");
     _scene = pkg->loadScene();
     SAFE_RELEASE(pkg);
-    assert(_scene);
 
-    Camera* camera = _scene->getActiveCamera();
-    if (!camera)
-    {
-        createDefaultCamera(_scene);
-    }
-    
-    _scene->visit(this, &MeshGame::getModelNode);
-    assert(_modelNode);
+    // Get the duck node
+    _modelNode = _scene->findNode("duck");
 
+    // Bind the material to the model
     _modelNode->getModel()->setMaterial("res/duck.material");
-    Vector3 lightDirection(0.0f, 0.0f, -1.0f);
-    _scene->getActiveCamera()->getViewMatrix().transformVector(&lightDirection);
-    _modelNode->getModel()->getMaterial()->getParameter("u_lightDirection")->setValue(lightDirection);
 
-    // Load font
-    _font = Font::create("res/arial40.gpb");
-    assert(_font);
+    // Find the light node
+    Node* lightNode = _scene->findNode("directionalLight1");
+
+    // Bind the light node's direction into duck's material.
+    _modelNode->getModel()->getMaterial()->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
 }
 
 void MeshGame::finalize()
@@ -44,10 +43,9 @@ void MeshGame::finalize()
 
 void MeshGame::update(long elapsedTime)
 {
+    // Rotate model
     if (!_touched)
-    {
         _modelNode->rotateY(MATH_DEG_TO_RAD(0.5f));
-    }
 }
 
 void MeshGame::render(long elapsedTime)
@@ -55,15 +53,11 @@ void MeshGame::render(long elapsedTime)
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
-    // Draw our scene
-    _scene->visit(this, &MeshGame::visitNode);
+    // Visit all the nodes in the scene, drawing the models/mesh.
+    _scene->visit(this, &MeshGame::drawScene);
 
-    // Draw the fps (nice blue)
-    char fps[10];
-    sprintf(fps, "%u", Game::getFrameRate());
-    _font->begin();
-    _font->drawText(fps, 5, 5, Vector4(0, 0.5f, 1, 1));
-    _font->end();
+    // Draw the fps
+    drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 5, getFrameRate());
 }
 
 void MeshGame::touch(int x, int y, int touchEvent)
@@ -73,22 +67,19 @@ void MeshGame::touch(int x, int y, int touchEvent)
     case Input::TOUCHEVENT_PRESS:
         {
             _touched = true;
-            _prevX = x;
-            _prevY = y;
+            _touchX = x;
         }
         break;
     case Input::TOUCHEVENT_RELEASE:
         {
             _touched = false;
-            _prevX = 0;
-            _prevY = 0;
+            _touchX = 0;
         }
         break;
     case Input::TOUCHEVENT_MOVE:
         {
-            int deltaX = x - _prevX;
-            _prevX = x;
-            _prevY = y;
+            int deltaX = x - _touchX;
+            _touchX = x;
             _modelNode->rotateY(MATH_DEG_TO_RAD(deltaX * 0.5f));
         }
         break;
@@ -97,34 +88,19 @@ void MeshGame::touch(int x, int y, int touchEvent)
     };
 }
 
-void MeshGame::visitNode(Node* node, long cookie)
+void MeshGame::drawScene(Node* node, long cookie)
 {
     Model* model = node->getModel(); 
     if (model)
-    {
         model->draw();
-    }
 }
 
-void MeshGame::getModelNode(Node* node, long cookie)
+void MeshGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
 {
-    if (!_modelNode)
-    {
-        Model* model = node->getModel();
-        if (model)
-        {
-            _modelNode = node;
-        }
-    }
+    char buffer[10];
+    sprintf(buffer, "%u", fps);
+    font->begin();
+    font->drawText(buffer, x, y, color);
+    font->end();
 }
 
-void MeshGame::createDefaultCamera(Scene* scene)
-{
-    // create the camera and node for it
-    Node* node = scene->addNode("camera");
-    Camera* camera = Camera::createPerspective(45.0f, (float)getWidth() / (float)getHeight(), 1.0f, 100.0f);
-    node->setCamera(camera);
-    node->translate(0, 5.0f, 20.0f);
-    scene->setActiveCamera(camera);
-    SAFE_RELEASE(camera);
-}

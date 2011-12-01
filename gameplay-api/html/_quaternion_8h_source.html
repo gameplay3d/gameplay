@@ -96,95 +96,103 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">gameplay/src/Quaternion.h</div>  </div>
 </div>
 <div class="contents">
-<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
-<a name="l00002"></a>00002 <span class="comment"> * Quaternion.h</span>
-<a name="l00003"></a>00003 <span class="comment"> */</span>
-<a name="l00004"></a>00004 
-<a name="l00005"></a>00005 <span class="preprocessor">#ifndef QUATERNION_H_</span>
-<a name="l00006"></a>00006 <span class="preprocessor"></span><span class="preprocessor">#define QUATERNION_H_</span>
-<a name="l00007"></a>00007 <span class="preprocessor"></span>
-<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;Vector3.h&quot;</span>
-<a name="l00009"></a>00009 <span class="preprocessor">#include &quot;Matrix.h&quot;</span>
-<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;Plane.h&quot;</span>
-<a name="l00011"></a>00011 
-<a name="l00012"></a>00012 <span class="keyword">namespace </span>gameplay
-<a name="l00013"></a>00013 {
-<a name="l00014"></a>00014 
-<a name="l00015"></a>00015 <span class="keyword">class </span>Matrix;
-<a name="l00016"></a>00016 
-<a name="l00045"></a><a class="code" href="classgameplay_1_1_quaternion.html">00045</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>
-<a name="l00046"></a>00046 {
-<a name="l00047"></a>00047 <span class="keyword">public</span>:
-<a name="l00048"></a>00048 
-<a name="l00052"></a><a class="code" href="classgameplay_1_1_quaternion.html#a7d459b3a8d299c0041537ae833616984">00052</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a7d459b3a8d299c0041537ae833616984">x</a>;
-<a name="l00056"></a><a class="code" href="classgameplay_1_1_quaternion.html#a1474289ed4a64d618cb7442cd1de8e8e">00056</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a1474289ed4a64d618cb7442cd1de8e8e">y</a>;
-<a name="l00060"></a><a class="code" href="classgameplay_1_1_quaternion.html#a22b3cb659769e4968fc9c5805f467e25">00060</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a22b3cb659769e4968fc9c5805f467e25">z</a>;
-<a name="l00064"></a><a class="code" href="classgameplay_1_1_quaternion.html#a2282df4dee3cdf7ecf8512004d16331c">00064</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a2282df4dee3cdf7ecf8512004d16331c">w</a>;
-<a name="l00065"></a>00065 
-<a name="l00069"></a>00069     <a class="code" href="classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3">Quaternion</a>();
-<a name="l00070"></a>00070 
-<a name="l00079"></a>00079     <a class="code" href="classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3">Quaternion</a>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a7d459b3a8d299c0041537ae833616984">x</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a1474289ed4a64d618cb7442cd1de8e8e">y</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a22b3cb659769e4968fc9c5805f467e25">z</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a2282df4dee3cdf7ecf8512004d16331c">w</a>);
-<a name="l00080"></a>00080 
-<a name="l00086"></a>00086     <a class="code" href="classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3">Quaternion</a>(<span class="keywordtype">float</span>* array);
-<a name="l00087"></a>00087 
-<a name="l00093"></a>00093     <a class="code" href="classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3">Quaternion</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; copy);
-<a name="l00094"></a>00094 
-<a name="l00098"></a>00098     <a class="code" href="classgameplay_1_1_quaternion.html#a5447fe636088979e73faaf7236b70d37">~Quaternion</a>();
-<a name="l00099"></a>00099 
-<a name="l00105"></a>00105     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; <a class="code" href="classgameplay_1_1_quaternion.html#a709ce9e0c6b55d2dad70b1edf056a457">identity</a>();
-<a name="l00106"></a>00106 
-<a name="l00112"></a>00112     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; <a class="code" href="classgameplay_1_1_quaternion.html#add5129c1bef9dfbc0cdd7eb41b478b62">zero</a>();
-<a name="l00113"></a>00113 
-<a name="l00119"></a>00119     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_quaternion.html#aedc78813aaea55344c8e54518de96c22">isIdentity</a>() <span class="keyword">const</span>;
-<a name="l00120"></a>00120 
-<a name="l00126"></a>00126     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_quaternion.html#a707ca5b194e8c7b00251776d62fa6369">isZero</a>() <span class="keyword">const</span>;
-<a name="l00127"></a>00127 
-<a name="l00135"></a>00135     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#af38d41369162a3feab7166a21d6feb39">createFromRotationMatrix</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; m, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
-<a name="l00136"></a>00136 
-<a name="l00145"></a>00145     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#add08922efc17496fc62a478f054e6b5a">createFromAxisAngle</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keywordtype">float</span> angle, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
-<a name="l00146"></a>00146 
-<a name="l00150"></a>00150     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a5b61786a141017b46a436636383a4462">conjugate</a>();
-<a name="l00151"></a>00151 
-<a name="l00157"></a>00157     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a5b61786a141017b46a436636383a4462">conjugate</a>(<a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst) <span class="keyword">const</span>;
-<a name="l00158"></a>00158 
-<a name="l00169"></a>00169     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_quaternion.html#a03045f81981d9cef37d67e7b6b0a98a7">inverse</a>();
-<a name="l00170"></a>00170 
-<a name="l00183"></a>00183     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_quaternion.html#a03045f81981d9cef37d67e7b6b0a98a7">inverse</a>(<a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst) <span class="keyword">const</span>;
-<a name="l00184"></a>00184 
-<a name="l00190"></a>00190     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a5834543671af9cb9ed12aaed5cc93016">multiply</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q);
-<a name="l00191"></a>00191 
-<a name="l00199"></a>00199     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a5834543671af9cb9ed12aaed5cc93016">multiply</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q2, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
-<a name="l00200"></a>00200 
-<a name="l00207"></a>00207     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a79396fda9e9fadd7984f9e2ceef546cb">normalize</a>();
-<a name="l00208"></a>00208 
-<a name="l00218"></a>00218     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a79396fda9e9fadd7984f9e2ceef546cb">normalize</a>(<a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst) <span class="keyword">const</span>;
+<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef QUATERNION_H_</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define QUATERNION_H_</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span>
+<a name="l00004"></a>00004 <span class="preprocessor">#include &quot;Vector3.h&quot;</span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &quot;Matrix.h&quot;</span>
+<a name="l00006"></a>00006 <span class="preprocessor">#include &quot;Plane.h&quot;</span>
+<a name="l00007"></a>00007 
+<a name="l00008"></a>00008 <span class="keyword">namespace </span>gameplay
+<a name="l00009"></a>00009 {
+<a name="l00010"></a>00010 
+<a name="l00011"></a>00011 <span class="keyword">class </span>Matrix;
+<a name="l00012"></a>00012 
+<a name="l00041"></a><a class="code" href="classgameplay_1_1_quaternion.html">00041</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>
+<a name="l00042"></a>00042 {
+<a name="l00043"></a>00043 <span class="keyword">public</span>:
+<a name="l00044"></a>00044 
+<a name="l00048"></a><a class="code" href="classgameplay_1_1_quaternion.html#a7d459b3a8d299c0041537ae833616984">00048</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a7d459b3a8d299c0041537ae833616984">x</a>;
+<a name="l00052"></a><a class="code" href="classgameplay_1_1_quaternion.html#a1474289ed4a64d618cb7442cd1de8e8e">00052</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a1474289ed4a64d618cb7442cd1de8e8e">y</a>;
+<a name="l00056"></a><a class="code" href="classgameplay_1_1_quaternion.html#a22b3cb659769e4968fc9c5805f467e25">00056</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a22b3cb659769e4968fc9c5805f467e25">z</a>;
+<a name="l00060"></a><a class="code" href="classgameplay_1_1_quaternion.html#a2282df4dee3cdf7ecf8512004d16331c">00060</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a2282df4dee3cdf7ecf8512004d16331c">w</a>;
+<a name="l00061"></a>00061 
+<a name="l00065"></a>00065     <a class="code" href="classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3">Quaternion</a>();
+<a name="l00066"></a>00066 
+<a name="l00075"></a>00075     <a class="code" href="classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3">Quaternion</a>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a7d459b3a8d299c0041537ae833616984">x</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a1474289ed4a64d618cb7442cd1de8e8e">y</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a22b3cb659769e4968fc9c5805f467e25">z</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a2282df4dee3cdf7ecf8512004d16331c">w</a>);
+<a name="l00076"></a>00076 
+<a name="l00082"></a>00082     <a class="code" href="classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3">Quaternion</a>(<span class="keywordtype">float</span>* array);
+<a name="l00083"></a>00083 
+<a name="l00089"></a>00089     <a class="code" href="classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3">Quaternion</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; m);
+<a name="l00090"></a>00090 
+<a name="l00097"></a>00097     <a class="code" href="classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3">Quaternion</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keywordtype">float</span> angle);
+<a name="l00098"></a>00098 
+<a name="l00104"></a>00104     <a class="code" href="classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3">Quaternion</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; copy);
+<a name="l00105"></a>00105 
+<a name="l00109"></a>00109     <a class="code" href="classgameplay_1_1_quaternion.html#a5447fe636088979e73faaf7236b70d37">~Quaternion</a>();
+<a name="l00110"></a>00110 
+<a name="l00116"></a>00116     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; <a class="code" href="classgameplay_1_1_quaternion.html#a709ce9e0c6b55d2dad70b1edf056a457">identity</a>();
+<a name="l00117"></a>00117 
+<a name="l00123"></a>00123     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; <a class="code" href="classgameplay_1_1_quaternion.html#add5129c1bef9dfbc0cdd7eb41b478b62">zero</a>();
+<a name="l00124"></a>00124 
+<a name="l00130"></a>00130     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_quaternion.html#aedc78813aaea55344c8e54518de96c22">isIdentity</a>() <span class="keyword">const</span>;
+<a name="l00131"></a>00131 
+<a name="l00137"></a>00137     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_quaternion.html#a707ca5b194e8c7b00251776d62fa6369">isZero</a>() <span class="keyword">const</span>;
+<a name="l00138"></a>00138 
+<a name="l00146"></a>00146     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#af38d41369162a3feab7166a21d6feb39">createFromRotationMatrix</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; m, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
+<a name="l00147"></a>00147 
+<a name="l00156"></a>00156     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#add08922efc17496fc62a478f054e6b5a">createFromAxisAngle</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keywordtype">float</span> angle, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
+<a name="l00157"></a>00157 
+<a name="l00161"></a>00161     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a5b61786a141017b46a436636383a4462">conjugate</a>();
+<a name="l00162"></a>00162 
+<a name="l00168"></a>00168     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a5b61786a141017b46a436636383a4462">conjugate</a>(<a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst) <span class="keyword">const</span>;
+<a name="l00169"></a>00169 
+<a name="l00180"></a>00180     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_quaternion.html#a03045f81981d9cef37d67e7b6b0a98a7">inverse</a>();
+<a name="l00181"></a>00181 
+<a name="l00194"></a>00194     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_quaternion.html#a03045f81981d9cef37d67e7b6b0a98a7">inverse</a>(<a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst) <span class="keyword">const</span>;
+<a name="l00195"></a>00195 
+<a name="l00201"></a>00201     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a5834543671af9cb9ed12aaed5cc93016">multiply</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q);
+<a name="l00202"></a>00202 
+<a name="l00210"></a>00210     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a5834543671af9cb9ed12aaed5cc93016">multiply</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q2, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
+<a name="l00211"></a>00211 
+<a name="l00218"></a>00218     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a79396fda9e9fadd7984f9e2ceef546cb">normalize</a>();
 <a name="l00219"></a>00219 
-<a name="l00228"></a>00228     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a7d459b3a8d299c0041537ae833616984">x</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a1474289ed4a64d618cb7442cd1de8e8e">y</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a22b3cb659769e4968fc9c5805f467e25">z</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a2282df4dee3cdf7ecf8512004d16331c">w</a>);
-<a name="l00229"></a>00229 
-<a name="l00235"></a>00235     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keywordtype">float</span>* array);
-<a name="l00236"></a>00236 
-<a name="l00243"></a>00243     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keywordtype">float</span> angle);
-<a name="l00244"></a>00244 
-<a name="l00250"></a>00250     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q);
-<a name="l00251"></a>00251 
-<a name="l00255"></a>00255     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#ad6966c6dd1babf2a8b8f53868a50707d">setIdentity</a>();
-<a name="l00256"></a>00256 
-<a name="l00264"></a>00264     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a349dee878455cce0363ab88840fccbd4">toAxisAngle</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* e) <span class="keyword">const</span>;
-<a name="l00265"></a>00265 
-<a name="l00277"></a>00277     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#aa324114ff6a6afbc52bc9efddf8398cd">lerp</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q2, <span class="keywordtype">float</span> t, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
-<a name="l00278"></a>00278 
-<a name="l00294"></a>00294     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a07315337d2b264ff10f3642ccb9b5d44">slerp</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q2, <span class="keywordtype">float</span> t, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
-<a name="l00295"></a>00295 
-<a name="l00313"></a>00313     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a81191c48d0ce52a1d66550da7af4bc64">squad</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q2, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; s1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; s2, <span class="keywordtype">float</span> t, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
-<a name="l00314"></a>00314 
-<a name="l00315"></a>00315 <span class="keyword">private</span>:
-<a name="l00316"></a>00316 
-<a name="l00317"></a>00317     <span class="keyword">static</span> <span class="keywordtype">void</span> slerpForSquad(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q2, <span class="keywordtype">float</span> t, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
-<a name="l00318"></a>00318 };
-<a name="l00319"></a>00319 
-<a name="l00320"></a>00320 }
-<a name="l00321"></a>00321 
-<a name="l00322"></a>00322 <span class="preprocessor">#endif</span>
+<a name="l00229"></a>00229     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a79396fda9e9fadd7984f9e2ceef546cb">normalize</a>(<a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst) <span class="keyword">const</span>;
+<a name="l00230"></a>00230 
+<a name="l00239"></a>00239     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a7d459b3a8d299c0041537ae833616984">x</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a1474289ed4a64d618cb7442cd1de8e8e">y</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a22b3cb659769e4968fc9c5805f467e25">z</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a2282df4dee3cdf7ecf8512004d16331c">w</a>);
+<a name="l00240"></a>00240 
+<a name="l00246"></a>00246     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keywordtype">float</span>* array);
+<a name="l00247"></a>00247 
+<a name="l00253"></a>00253     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; m);
+<a name="l00254"></a>00254 
+<a name="l00261"></a>00261     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keywordtype">float</span> angle);
+<a name="l00262"></a>00262 
+<a name="l00268"></a>00268     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q);
+<a name="l00269"></a>00269 
+<a name="l00273"></a>00273     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#ad6966c6dd1babf2a8b8f53868a50707d">setIdentity</a>();
+<a name="l00274"></a>00274 
+<a name="l00282"></a>00282     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_quaternion.html#a349dee878455cce0363ab88840fccbd4">toAxisAngle</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* e) <span class="keyword">const</span>;
+<a name="l00283"></a>00283 
+<a name="l00295"></a>00295     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#aa324114ff6a6afbc52bc9efddf8398cd">lerp</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q2, <span class="keywordtype">float</span> t, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
+<a name="l00296"></a>00296 
+<a name="l00312"></a>00312     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a07315337d2b264ff10f3642ccb9b5d44">slerp</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q2, <span class="keywordtype">float</span> t, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
+<a name="l00313"></a>00313 
+<a name="l00331"></a>00331     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_quaternion.html#a81191c48d0ce52a1d66550da7af4bc64">squad</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q2, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; s1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; s2, <span class="keywordtype">float</span> t, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
+<a name="l00332"></a>00332 
+<a name="l00341"></a>00341     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a> <a class="code" href="classgameplay_1_1_quaternion.html#a8db33d59aa2e61d1b679d9dbf2dea5ab">operator*</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q) <span class="keyword">const</span>;
+<a name="l00342"></a>00342 
+<a name="l00349"></a>00349     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; <a class="code" href="classgameplay_1_1_quaternion.html#a91d3fc9bed01b84bd90642f38535e923">operator*=</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q);
+<a name="l00350"></a>00350 
+<a name="l00351"></a>00351 <span class="keyword">private</span>:
+<a name="l00352"></a>00352 
+<a name="l00353"></a>00353     <span class="keyword">static</span> <span class="keywordtype">void</span> slerpForSquad(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; q2, <span class="keywordtype">float</span> t, <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* dst);
+<a name="l00354"></a>00354 };
+<a name="l00355"></a>00355 
+<a name="l00356"></a>00356 }
+<a name="l00357"></a>00357 
+<a name="l00358"></a>00358 <span class="preprocessor">#include &quot;Quaternion.inl&quot;</span>
+<a name="l00359"></a>00359 
+<a name="l00360"></a>00360 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -205,7 +213,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:34 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
