@@ -28,9 +28,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, type);
 
     addAnimation(animation);
-
-    target->addAnimation(animation);
-
+    
     return animation;
 }
 
@@ -45,8 +43,6 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, keyInValue, keyOutValue, type);
 
     addAnimation(animation);
-
-    target->addAnimation(animation);
 
     return animation;
 }
@@ -130,6 +126,7 @@ void AnimationController::initialize()
 
 void AnimationController::finalize()
 {
+    stopAllAnimations();
     _state = PAUSED;
 }
 
@@ -218,6 +215,8 @@ void AnimationController::destroyAnimation(Animation* animation)
     {
         if (animation == *itr)
         {
+            Animation* animation = *itr;
+            SAFE_RELEASE(animation);
             _animations.erase(itr);
             return;
         }
@@ -227,8 +226,6 @@ void AnimationController::destroyAnimation(Animation* animation)
 
 void AnimationController::destroyAllAnimations()
 {
-    stopAllAnimations();
-
     std::vector<Animation*>::iterator itr = _animations.begin();
     
     while (itr != _animations.end())
