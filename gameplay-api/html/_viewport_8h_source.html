@@ -96,63 +96,59 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">gameplay/src/Viewport.h</div>  </div>
 </div>
 <div class="contents">
-<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
-<a name="l00002"></a>00002 <span class="comment"> * Viewport.h</span>
-<a name="l00003"></a>00003 <span class="comment"> */</span>
-<a name="l00004"></a>00004 
-<a name="l00005"></a>00005 <span class="preprocessor">#ifndef VIEWPORT_H_</span>
-<a name="l00006"></a>00006 <span class="preprocessor"></span><span class="preprocessor">#define VIEWPORT_H_</span>
-<a name="l00007"></a>00007 <span class="preprocessor"></span>
-<a name="l00008"></a>00008 <span class="keyword">namespace </span>gameplay
-<a name="l00009"></a>00009 {
-<a name="l00010"></a>00010 
-<a name="l00011"></a>00011 <span class="keyword">class </span>Camera;
-<a name="l00012"></a>00012 
-<a name="l00017"></a><a class="code" href="classgameplay_1_1_viewport.html">00017</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_viewport.html">Viewport</a>
-<a name="l00018"></a>00018 {
-<a name="l00019"></a>00019 <span class="keyword">public</span>:
-<a name="l00020"></a>00020 
-<a name="l00024"></a>00024     <a class="code" href="classgameplay_1_1_viewport.html#acd53aa2f49d58a31b4af56e062ee58b6">Viewport</a>();
-<a name="l00025"></a>00025 
-<a name="l00034"></a>00034     <a class="code" href="classgameplay_1_1_viewport.html#acd53aa2f49d58a31b4af56e062ee58b6">Viewport</a>(<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
-<a name="l00035"></a>00035 
-<a name="l00041"></a>00041     <a class="code" href="classgameplay_1_1_viewport.html#acd53aa2f49d58a31b4af56e062ee58b6">Viewport</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_viewport.html">Viewport</a>&amp; copy);
-<a name="l00042"></a>00042 
-<a name="l00046"></a>00046     <a class="code" href="classgameplay_1_1_viewport.html#a1b0ddf83405c68c6329fb410ec0eb640">~Viewport</a>();
-<a name="l00047"></a>00047 
-<a name="l00056"></a>00056     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
-<a name="l00057"></a>00057 
-<a name="l00063"></a>00063     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_viewport.html">Viewport</a>&amp; viewport);
-<a name="l00064"></a>00064 
-<a name="l00070"></a>00070     <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_viewport.html#a9b0556c6f11d8055733c30f1d874a37b">getX</a>() <span class="keyword">const</span>;
-<a name="l00071"></a>00071 
-<a name="l00077"></a>00077     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_viewport.html#ae8b60029b524c20374675cc94f485340">setX</a>(<span class="keywordtype">int</span> x);
-<a name="l00078"></a>00078 
-<a name="l00084"></a>00084     <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_viewport.html#ad3699a058ffde2ce76ad758752ee116a">getY</a>() <span class="keyword">const</span>;
-<a name="l00085"></a>00085 
-<a name="l00091"></a>00091     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_viewport.html#a4288dd597b96cfd12ca7ea1c89b4f60e">setY</a>(<span class="keywordtype">int</span> y);
-<a name="l00092"></a>00092 
-<a name="l00098"></a>00098     <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_viewport.html#a69b50fb1e479d0b96eb04290775ab466">getWidth</a>() <span class="keyword">const</span>;
-<a name="l00099"></a>00099 
-<a name="l00105"></a>00105     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_viewport.html#af525fbada9466d4e07be2697f4e1921d">setWidth</a>(<span class="keywordtype">int</span> width);
-<a name="l00106"></a>00106 
-<a name="l00112"></a>00112     <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_viewport.html#a374f515a74ed74ed19dd21e49f5f6405">getHeight</a>() <span class="keyword">const</span>;
-<a name="l00113"></a>00113 
-<a name="l00119"></a>00119     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_viewport.html#a908660ba10589e81846291a064037548">setHeight</a>(<span class="keywordtype">int</span> height);
-<a name="l00120"></a>00120 
-<a name="l00124"></a>00124     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_viewport.html#a1a458bcf99d551de28e962404b62d8ed">bind</a>();
-<a name="l00125"></a>00125 
-<a name="l00126"></a>00126 <span class="keyword">private</span>:
-<a name="l00127"></a>00127 
-<a name="l00128"></a>00128     <span class="keywordtype">int</span> _x;
-<a name="l00129"></a>00129     <span class="keywordtype">int</span> _y;
-<a name="l00130"></a>00130     <span class="keywordtype">int</span> _width;
-<a name="l00131"></a>00131     <span class="keywordtype">int</span> _height;
-<a name="l00132"></a>00132 };
-<a name="l00133"></a>00133 
-<a name="l00134"></a>00134 }
-<a name="l00135"></a>00135 
-<a name="l00136"></a>00136 <span class="preprocessor">#endif</span>
+<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef VIEWPORT_H_</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define VIEWPORT_H_</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span>
+<a name="l00004"></a>00004 <span class="keyword">namespace </span>gameplay
+<a name="l00005"></a>00005 {
+<a name="l00006"></a>00006 
+<a name="l00007"></a>00007 <span class="keyword">class </span>Camera;
+<a name="l00008"></a>00008 
+<a name="l00013"></a><a class="code" href="classgameplay_1_1_viewport.html">00013</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_viewport.html">Viewport</a>
+<a name="l00014"></a>00014 {
+<a name="l00015"></a>00015 <span class="keyword">public</span>:
+<a name="l00016"></a>00016 
+<a name="l00020"></a>00020     <a class="code" href="classgameplay_1_1_viewport.html#acd53aa2f49d58a31b4af56e062ee58b6">Viewport</a>();
+<a name="l00021"></a>00021 
+<a name="l00030"></a>00030     <a class="code" href="classgameplay_1_1_viewport.html#acd53aa2f49d58a31b4af56e062ee58b6">Viewport</a>(<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
+<a name="l00031"></a>00031 
+<a name="l00037"></a>00037     <a class="code" href="classgameplay_1_1_viewport.html#acd53aa2f49d58a31b4af56e062ee58b6">Viewport</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_viewport.html">Viewport</a>&amp; copy);
+<a name="l00038"></a>00038 
+<a name="l00042"></a>00042     <a class="code" href="classgameplay_1_1_viewport.html#a1b0ddf83405c68c6329fb410ec0eb640">~Viewport</a>();
+<a name="l00043"></a>00043 
+<a name="l00052"></a>00052     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
+<a name="l00053"></a>00053 
+<a name="l00059"></a>00059     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_viewport.html">Viewport</a>&amp; viewport);
+<a name="l00060"></a>00060 
+<a name="l00066"></a>00066     <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_viewport.html#a9b0556c6f11d8055733c30f1d874a37b">getX</a>() <span class="keyword">const</span>;
+<a name="l00067"></a>00067 
+<a name="l00073"></a>00073     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_viewport.html#ae8b60029b524c20374675cc94f485340">setX</a>(<span class="keywordtype">int</span> x);
+<a name="l00074"></a>00074 
+<a name="l00080"></a>00080     <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_viewport.html#ad3699a058ffde2ce76ad758752ee116a">getY</a>() <span class="keyword">const</span>;
+<a name="l00081"></a>00081 
+<a name="l00087"></a>00087     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_viewport.html#a4288dd597b96cfd12ca7ea1c89b4f60e">setY</a>(<span class="keywordtype">int</span> y);
+<a name="l00088"></a>00088 
+<a name="l00094"></a>00094     <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_viewport.html#a69b50fb1e479d0b96eb04290775ab466">getWidth</a>() <span class="keyword">const</span>;
+<a name="l00095"></a>00095 
+<a name="l00101"></a>00101     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_viewport.html#af525fbada9466d4e07be2697f4e1921d">setWidth</a>(<span class="keywordtype">int</span> width);
+<a name="l00102"></a>00102 
+<a name="l00108"></a>00108     <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_viewport.html#a374f515a74ed74ed19dd21e49f5f6405">getHeight</a>() <span class="keyword">const</span>;
+<a name="l00109"></a>00109 
+<a name="l00115"></a>00115     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_viewport.html#a908660ba10589e81846291a064037548">setHeight</a>(<span class="keywordtype">int</span> height);
+<a name="l00116"></a>00116 
+<a name="l00120"></a>00120     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_viewport.html#a1a458bcf99d551de28e962404b62d8ed">bind</a>();
+<a name="l00121"></a>00121 
+<a name="l00122"></a>00122 <span class="keyword">private</span>:
+<a name="l00123"></a>00123 
+<a name="l00124"></a>00124     <span class="keywordtype">int</span> _x;
+<a name="l00125"></a>00125     <span class="keywordtype">int</span> _y;
+<a name="l00126"></a>00126     <span class="keywordtype">int</span> _width;
+<a name="l00127"></a>00127     <span class="keywordtype">int</span> _height;
+<a name="l00128"></a>00128 };
+<a name="l00129"></a>00129 
+<a name="l00130"></a>00130 }
+<a name="l00131"></a>00131 
+<a name="l00132"></a>00132 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -173,7 +169,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:34 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

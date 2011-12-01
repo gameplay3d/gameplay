@@ -96,251 +96,247 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">gameplay/src/Transform.h</div>  </div>
 </div>
 <div class="contents">
-<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
-<a name="l00002"></a>00002 <span class="comment"> * Transform.h</span>
-<a name="l00003"></a>00003 <span class="comment"> */</span>
-<a name="l00004"></a>00004 
-<a name="l00005"></a>00005 <span class="preprocessor">#ifndef TRANSFORM_H_</span>
-<a name="l00006"></a>00006 <span class="preprocessor"></span><span class="preprocessor">#define TRANSFORM_H_</span>
-<a name="l00007"></a>00007 <span class="preprocessor"></span>
-<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;Ref.h&quot;</span>
-<a name="l00009"></a>00009 <span class="preprocessor">#include &quot;Vector3.h&quot;</span>
-<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;Quaternion.h&quot;</span>
-<a name="l00011"></a>00011 <span class="preprocessor">#include &quot;Matrix.h&quot;</span>
-<a name="l00012"></a>00012 <span class="preprocessor">#include &quot;AnimationTarget.h&quot;</span>
-<a name="l00013"></a>00013 
-<a name="l00014"></a>00014 <span class="keyword">namespace </span>gameplay
-<a name="l00015"></a>00015 {
-<a name="l00016"></a>00016 
-<a name="l00017"></a>00017 <span class="keyword">class </span>BoundingBox;
-<a name="l00018"></a>00018 <span class="keyword">class </span>BoundingSphere;
-<a name="l00019"></a>00019 
-<a name="l00033"></a><a class="code" href="classgameplay_1_1_transform.html">00033</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_transform.html">Transform</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_animation_target.html">AnimationTarget</a>
-<a name="l00034"></a>00034 {
-<a name="l00035"></a>00035 <span class="keyword">public</span>:
-<a name="l00036"></a>00036 
-<a name="l00040"></a><a class="code" href="classgameplay_1_1_transform.html#a7ba5172e68aaf77a6efa2e5b3e59bf6a">00040</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a7ba5172e68aaf77a6efa2e5b3e59bf6a">ANIMATE_SCALE</a> = 1;
-<a name="l00041"></a>00041 
-<a name="l00045"></a><a class="code" href="classgameplay_1_1_transform.html#a315f0674a4b6c006afcc6abfc3e135d1">00045</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a315f0674a4b6c006afcc6abfc3e135d1">ANIMATE_SCALE_X</a> = 2;
-<a name="l00046"></a>00046 
-<a name="l00050"></a><a class="code" href="classgameplay_1_1_transform.html#a4664ed966d22b30fa58f105e057f2e19">00050</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a4664ed966d22b30fa58f105e057f2e19">ANIMATE_SCALE_Y</a> = 3;
-<a name="l00051"></a>00051 
-<a name="l00055"></a><a class="code" href="classgameplay_1_1_transform.html#a9183689549da0021ee5842bb5dd76d65">00055</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a9183689549da0021ee5842bb5dd76d65">ANIMATE_SCALE_Z</a> = 4;
-<a name="l00056"></a>00056 
-<a name="l00060"></a><a class="code" href="classgameplay_1_1_transform.html#a56e1f894e2ecdcbbaf2cc635d76fe41c">00060</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a56e1f894e2ecdcbbaf2cc635d76fe41c">ANIMATE_SCALE_XY</a> = 5;
-<a name="l00061"></a>00061 
-<a name="l00065"></a><a class="code" href="classgameplay_1_1_transform.html#afaec5c68b3cbfe7837cd5cb3374ee703">00065</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#afaec5c68b3cbfe7837cd5cb3374ee703">ANIMATE_SCALE_XZ</a> = 6;
-<a name="l00066"></a>00066 
-<a name="l00070"></a><a class="code" href="classgameplay_1_1_transform.html#a804aabc5d92158defa8bae995f3674dd">00070</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a804aabc5d92158defa8bae995f3674dd">ANIMATE_SCALE_YZ</a> = 7;
-<a name="l00071"></a>00071 
-<a name="l00075"></a><a class="code" href="classgameplay_1_1_transform.html#a2d4eee62b1ae04f50740ad1f78f71c2b">00075</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a2d4eee62b1ae04f50740ad1f78f71c2b">ANIMATE_ROTATE</a> = 8;
-<a name="l00076"></a>00076 
-<a name="l00080"></a><a class="code" href="classgameplay_1_1_transform.html#a255f7485828555dfa707dc8c2d486b28">00080</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a255f7485828555dfa707dc8c2d486b28">ANIMATE_TRANSLATE</a> = 9;
-<a name="l00081"></a>00081 
-<a name="l00085"></a><a class="code" href="classgameplay_1_1_transform.html#af6816429889b99b2c8baf98753e9ce0b">00085</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#af6816429889b99b2c8baf98753e9ce0b">ANIMATE_TRANSLATE_X</a> = 10;
-<a name="l00086"></a>00086 
-<a name="l00090"></a><a class="code" href="classgameplay_1_1_transform.html#ab643c0641a5d9489858d274770e35c8d">00090</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#ab643c0641a5d9489858d274770e35c8d">ANIMATE_TRANSLATE_Y</a> = 11;
-<a name="l00091"></a>00091 
-<a name="l00095"></a><a class="code" href="classgameplay_1_1_transform.html#aa129fc2df5e41f17d2ddad45dea2724a">00095</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#aa129fc2df5e41f17d2ddad45dea2724a">ANIMATE_TRANSLATE_Z</a> = 12;
-<a name="l00096"></a>00096 
-<a name="l00100"></a><a class="code" href="classgameplay_1_1_transform.html#a73bf5557e77528781a25081ef1025118">00100</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a73bf5557e77528781a25081ef1025118">ANIMATE_TRANSLATE_XY</a> = 13;
-<a name="l00101"></a>00101 
-<a name="l00105"></a><a class="code" href="classgameplay_1_1_transform.html#a408e501577415dae479fabc81a6885c9">00105</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a408e501577415dae479fabc81a6885c9">ANIMATE_TRANSLATE_XZ</a> = 14;
-<a name="l00106"></a>00106 
-<a name="l00110"></a><a class="code" href="classgameplay_1_1_transform.html#aac402db341720294dc13e33a98389ff5">00110</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#aac402db341720294dc13e33a98389ff5">ANIMATE_TRANSLATE_YZ</a> = 15;
-<a name="l00111"></a>00111 
-<a name="l00115"></a><a class="code" href="classgameplay_1_1_transform.html#a64374775dcf7197d9e946b5dd2438b3e">00115</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a64374775dcf7197d9e946b5dd2438b3e">ANIMATE_ROTATE_TRANSLATE</a> = 16;
-<a name="l00116"></a>00116 
-<a name="l00120"></a><a class="code" href="classgameplay_1_1_transform.html#a261529193110fa83fb8abb30a81bdb85">00120</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a261529193110fa83fb8abb30a81bdb85">ANIMATE_SCALE_ROTATE_TRANSLATE</a> = 17;
-<a name="l00121"></a>00121 
-<a name="l00125"></a><a class="code" href="classgameplay_1_1_transform_1_1_listener.html">00125</a>     <span class="keyword">class </span><a class="code" href="classgameplay_1_1_transform_1_1_listener.html">Listener</a>
-<a name="l00126"></a>00126     {
-<a name="l00127"></a>00127     <span class="keyword">public</span>:
-<a name="l00128"></a>00128 
-<a name="l00129"></a>00129         <span class="keyword">virtual</span> ~<a class="code" href="classgameplay_1_1_transform_1_1_listener.html">Listener</a>() { }
-<a name="l00130"></a>00130 
-<a name="l00134"></a>00134         <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform_1_1_listener.html#a328ca9675b84bb23b2a5d61632cded5c">transformChanged</a>(<a class="code" href="classgameplay_1_1_transform.html">Transform</a>* transform) = 0;
-<a name="l00135"></a>00135     };
-<a name="l00136"></a>00136 
-<a name="l00140"></a>00140     <a class="code" href="classgameplay_1_1_transform.html#adadaab71b46aa28a497f4a224f871f2c">Transform</a>();
-<a name="l00141"></a>00141 
-<a name="l00149"></a>00149     <a class="code" href="classgameplay_1_1_transform.html#adadaab71b46aa28a497f4a224f871f2c">Transform</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; rotation, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
-<a name="l00150"></a>00150 
-<a name="l00158"></a>00158     <a class="code" href="classgameplay_1_1_transform.html#adadaab71b46aa28a497f4a224f871f2c">Transform</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; rotation, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
-<a name="l00159"></a>00159 
-<a name="l00165"></a>00165     <a class="code" href="classgameplay_1_1_transform.html#adadaab71b46aa28a497f4a224f871f2c">Transform</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_transform.html">Transform</a>&amp; copy);
-<a name="l00166"></a>00166 
-<a name="l00170"></a>00170     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_transform.html#a28a07847871b540977d44f4ed1deb15f">~Transform</a>();
-<a name="l00171"></a>00171 
-<a name="l00184"></a>00184     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#affeadedd558ad9117992231492d8aada">getMatrix</a>() <span class="keyword">const</span>;
-<a name="l00185"></a>00185 
-<a name="l00189"></a>00189     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a94c3507d0b37529c50dfa42a7bf20515">getScale</a>() <span class="keyword">const</span>;
-<a name="l00190"></a>00190 
-<a name="l00196"></a>00196     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a94c3507d0b37529c50dfa42a7bf20515">getScale</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>) <span class="keyword">const</span>;
-<a name="l00197"></a>00197 
-<a name="l00203"></a>00203     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#ab01561fabeb57b9d8e737e8fa058c20c">getScaleX</a>() <span class="keyword">const</span>;
-<a name="l00204"></a>00204 
-<a name="l00210"></a>00210     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#aa0160c3d5dd5983ce4cf1810c6e110b4">getScaleY</a>() <span class="keyword">const</span>;
-<a name="l00211"></a>00211 
-<a name="l00217"></a>00217     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#a445060becaf1378bb6d64e1afc18c1ca">getScaleZ</a>() <span class="keyword">const</span>;
-<a name="l00218"></a>00218 
-<a name="l00222"></a>00222     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a99546e3443700bf6e8fffa4a3079e9c1">getRotation</a>() <span class="keyword">const</span>;
-<a name="l00223"></a>00223 
-<a name="l00229"></a>00229     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a99546e3443700bf6e8fffa4a3079e9c1">getRotation</a>(<a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* rotation) <span class="keyword">const</span>;
-<a name="l00230"></a>00230 
-<a name="l00236"></a>00236     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a99546e3443700bf6e8fffa4a3079e9c1">getRotation</a>(<a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>* rotation) <span class="keyword">const</span>;
-<a name="l00237"></a>00237 
-<a name="l00246"></a>00246     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#a99546e3443700bf6e8fffa4a3079e9c1">getRotation</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* axis) <span class="keyword">const</span>;
-<a name="l00247"></a>00247 
-<a name="l00251"></a>00251     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#aa294de74db9cf78687c87aad9b5c15b4">getTranslation</a>() <span class="keyword">const</span>;
-<a name="l00252"></a>00252 
-<a name="l00258"></a>00258     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aa294de74db9cf78687c87aad9b5c15b4">getTranslation</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* translation) <span class="keyword">const</span>;
-<a name="l00259"></a>00259 
-<a name="l00265"></a>00265     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#a1fa33ebdaa5a54cf493c298c218ca7b8">getTranslationX</a>() <span class="keyword">const</span>;
-<a name="l00266"></a>00266 
-<a name="l00272"></a>00272     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#abff3d5648c4870ae9a6ee535efd78c69">getTranslationY</a>() <span class="keyword">const</span>;
-<a name="l00273"></a>00273 
-<a name="l00279"></a>00279     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#ab602baa162c212ceb5fa1ada2fdc07d7">getTranslationZ</a>() <span class="keyword">const</span>;
-<a name="l00280"></a>00280     
-<a name="l00284"></a>00284     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_transform.html#ac4d4b05f107390b33490fbea5e3f0d67">getForwardVector</a>() <span class="keyword">const</span>;
-<a name="l00285"></a>00285 
-<a name="l00291"></a>00291     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ac4d4b05f107390b33490fbea5e3f0d67">getForwardVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst) <span class="keyword">const</span>;
-<a name="l00292"></a>00292 
-<a name="l00296"></a>00296     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_transform.html#aa8ce31a6e4a9b1a7e94255d673fd69b3">getBackVector</a>() <span class="keyword">const</span>;
-<a name="l00297"></a>00297 
-<a name="l00303"></a>00303     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aa8ce31a6e4a9b1a7e94255d673fd69b3">getBackVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst) <span class="keyword">const</span>;
-<a name="l00304"></a>00304 
-<a name="l00308"></a>00308     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_transform.html#a6276ca6f625390046dd499518d1a49ba">getUpVector</a>() <span class="keyword">const</span>;
-<a name="l00309"></a>00309 
-<a name="l00315"></a>00315     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a6276ca6f625390046dd499518d1a49ba">getUpVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst) <span class="keyword">const</span>;
-<a name="l00316"></a>00316 
-<a name="l00320"></a>00320     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_transform.html#a358ec577ae13c8e19b84810769e15e4b">getDownVector</a>() <span class="keyword">const</span>;
-<a name="l00321"></a>00321 
-<a name="l00327"></a>00327     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a358ec577ae13c8e19b84810769e15e4b">getDownVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst) <span class="keyword">const</span>;
-<a name="l00328"></a>00328 
-<a name="l00332"></a>00332     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_transform.html#a7b9c4baaeb8b50869d6c7b6201f53fed">getLeftVector</a>() <span class="keyword">const</span>;
-<a name="l00333"></a>00333 
-<a name="l00339"></a>00339     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7b9c4baaeb8b50869d6c7b6201f53fed">getLeftVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst) <span class="keyword">const</span>;
-<a name="l00340"></a>00340 
-<a name="l00344"></a>00344     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_transform.html#aaffcfc63bb2e090c379e53a2c48bdfa3">getRightVector</a>() <span class="keyword">const</span>;
-<a name="l00345"></a>00345 
-<a name="l00351"></a>00351     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aaffcfc63bb2e090c379e53a2c48bdfa3">getRightVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst) <span class="keyword">const</span>;
-<a name="l00352"></a>00352 
-<a name="l00358"></a>00358     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5be09c000db9f322169e6ce69b08c438">rotate</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; rotation);
-<a name="l00359"></a>00359 
-<a name="l00367"></a>00367     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5be09c000db9f322169e6ce69b08c438">rotate</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keywordtype">float</span> angle);
-<a name="l00368"></a>00368 
-<a name="l00374"></a>00374     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5be09c000db9f322169e6ce69b08c438">rotate</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; rotation);
-<a name="l00375"></a>00375 
-<a name="l00382"></a>00382     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a403968ed9fec4a9ceebd26d3ef5de768">rotateX</a>(<span class="keywordtype">float</span> angle);
-<a name="l00383"></a>00383 
-<a name="l00390"></a>00390     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aba6d6e746c8b6bba97c5d74021344149">rotateY</a>(<span class="keywordtype">float</span> angle);
-<a name="l00391"></a>00391 
-<a name="l00398"></a>00398     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ad164b7bb8a430067c29c9392f1ace3fb">rotateZ</a>(<span class="keywordtype">float</span> angle);
-<a name="l00399"></a>00399 
-<a name="l00405"></a>00405     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>);
-<a name="l00406"></a>00406 
-<a name="l00414"></a>00414     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>(<span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <span class="keywordtype">float</span> sz);
-<a name="l00415"></a>00415 
-<a name="l00421"></a>00421     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>);
-<a name="l00422"></a>00422 
-<a name="l00429"></a>00429     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5dc586d5c8c6d6b8c131ba60098c2111">scaleX</a>(<span class="keywordtype">float</span> sx);
-<a name="l00430"></a>00430 
-<a name="l00437"></a>00437     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ae23b5714fe260d63a8186cc662ffbbce">scaleY</a>(<span class="keywordtype">float</span> sy);
-<a name="l00438"></a>00438 
-<a name="l00445"></a>00445     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5e71b674a2c4f544efcb98c4734fbec1">scaleZ</a>(<span class="keywordtype">float</span> sz);
-<a name="l00446"></a>00446 
-<a name="l00454"></a>00454     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; rotation, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
-<a name="l00455"></a>00455 
-<a name="l00463"></a>00463     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; rotation, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
-<a name="l00464"></a>00464 
-<a name="l00473"></a>00473     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keywordtype">float</span> angle, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
-<a name="l00474"></a>00474 
-<a name="l00480"></a>00480     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_transform.html">Transform</a>&amp; transform);
-<a name="l00481"></a>00481 
-<a name="l00488"></a>00488     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a62ed140eed43e71fc56acfc11df9d606">setScale</a>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>);
-<a name="l00489"></a>00489 
-<a name="l00498"></a>00498     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a62ed140eed43e71fc56acfc11df9d606">setScale</a>(<span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <span class="keywordtype">float</span> sz);
-<a name="l00499"></a>00499 
-<a name="l00506"></a>00506     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a62ed140eed43e71fc56acfc11df9d606">setScale</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>);
-<a name="l00507"></a>00507 
-<a name="l00514"></a>00514     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7e47f10619eddf11422d56e57d518154">setScaleX</a>(<span class="keywordtype">float</span> sx);
-<a name="l00515"></a>00515 
-<a name="l00522"></a>00522     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a666bb5a909de4491079c3721a36f4865">setScaleY</a>(<span class="keywordtype">float</span> sy);
-<a name="l00523"></a>00523 
-<a name="l00530"></a>00530     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#acf01193bbc7c3436b4a3996fb180eb65">setScaleZ</a>(<span class="keywordtype">float</span> sz);
-<a name="l00531"></a>00531 
-<a name="l00541"></a>00541     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7f00cbb086e2323d3fb920e69bbdbeb7">setRotation</a>(<span class="keywordtype">float</span> qx, <span class="keywordtype">float</span> qy, <span class="keywordtype">float</span> qz, <span class="keywordtype">float</span> qw);
-<a name="l00542"></a>00542 
-<a name="l00549"></a>00549     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7f00cbb086e2323d3fb920e69bbdbeb7">setRotation</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; rotation);
-<a name="l00550"></a>00550 
-<a name="l00557"></a>00557     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7f00cbb086e2323d3fb920e69bbdbeb7">setRotation</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; rotation);
-<a name="l00558"></a>00558 
-<a name="l00565"></a>00565     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7f00cbb086e2323d3fb920e69bbdbeb7">setRotation</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keywordtype">float</span> angle);
-<a name="l00566"></a>00566 
-<a name="l00573"></a>00573     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5c579cac275c83ed0ab5926f87797ce0">setTranslation</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
-<a name="l00574"></a>00574 
-<a name="l00583"></a>00583     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5c579cac275c83ed0ab5926f87797ce0">setTranslation</a>(<span class="keywordtype">float</span> tx, <span class="keywordtype">float</span> ty, <span class="keywordtype">float</span> tz);
-<a name="l00584"></a>00584 
-<a name="l00591"></a>00591     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a33f0546a7951ca78a5bdb630144e66b3">setTranslationX</a>(<span class="keywordtype">float</span> tx);
-<a name="l00592"></a>00592 
-<a name="l00599"></a>00599     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#af73db060e39b2d539d1b0084f7fc42e2">setTranslationY</a>(<span class="keywordtype">float</span> ty);
-<a name="l00600"></a>00600 
-<a name="l00607"></a>00607     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a2a6e188c33ad030d97391b7fc3b1fc2c">setTranslationZ</a>(<span class="keywordtype">float</span> tz);
-<a name="l00608"></a>00608 
-<a name="l00617"></a>00617     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ad93fd9b554bda19b5687ffd3514ce8ac">translate</a>(<span class="keywordtype">float</span> tx, <span class="keywordtype">float</span> ty, <span class="keywordtype">float</span> tz);
-<a name="l00618"></a>00618 
-<a name="l00625"></a>00625     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ad93fd9b554bda19b5687ffd3514ce8ac">translate</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
-<a name="l00626"></a>00626 
-<a name="l00633"></a>00633     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a89140ea7eeab31437a7d04000fd81845">translateX</a>(<span class="keywordtype">float</span> tx);
-<a name="l00634"></a>00634 
-<a name="l00641"></a>00641     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aa75a9ef16e419439df1b88fe31ac1d94">translateY</a>(<span class="keywordtype">float</span> ty);
-<a name="l00642"></a>00642 
-<a name="l00649"></a>00649     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a2bc17bb02407e2d368ddf5e18aa03be4">translateZ</a>(<span class="keywordtype">float</span> tz);
-<a name="l00650"></a>00650 
-<a name="l00656"></a>00656     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ac891c29a04d56dfe0debfe7cfb8241fd">translateLeft</a>(<span class="keywordtype">float</span> amount);
-<a name="l00657"></a>00657 
-<a name="l00663"></a>00663     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7f30069e0296f4171188057bb5f11e66">translateUp</a>(<span class="keywordtype">float</span> amount);
-<a name="l00664"></a>00664 
-<a name="l00670"></a>00670     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a8ca10de44224e1b71dca0d01dae45880">translateForward</a>(<span class="keywordtype">float</span> amount);
-<a name="l00671"></a>00671 
-<a name="l00678"></a>00678     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a4667c774f027b6e650ed88deabb5428b">transformPoint</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* point);
-<a name="l00679"></a>00679 
-<a name="l00687"></a>00687     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a4667c774f027b6e650ed88deabb5428b">transformPoint</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; point, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst);
-<a name="l00688"></a>00688 
-<a name="l00695"></a>00695     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a783ebcd198aff74ba2296834952624c0">transformVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* vector);
-<a name="l00696"></a>00696 
-<a name="l00704"></a>00704     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a783ebcd198aff74ba2296834952624c0">transformVector</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a783ebcd198aff74ba2296834952624c0">transformVector</a>, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst);
-<a name="l00705"></a>00705 
-<a name="l00716"></a>00716     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a783ebcd198aff74ba2296834952624c0">transformVector</a>(<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z, <span class="keywordtype">float</span> w, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst);
-<a name="l00717"></a>00717 
-<a name="l00721"></a>00721     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aef8cf7096d05395f568a255416fcb05a">addListener</a>(<a class="code" href="classgameplay_1_1_transform_1_1_listener.html">Transform::Listener</a>* listener);
-<a name="l00722"></a>00722 
-<a name="l00726"></a>00726     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5458202ad2700c3106d0af7663046a04">removeListener</a>(<a class="code" href="classgameplay_1_1_transform_1_1_listener.html">Transform::Listener</a>* listener);
-<a name="l00727"></a>00727     
-<a name="l00731"></a>00731     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a842ce88c27aaedb5b43e0ac675ba7b1f">getAnimationPropertyComponentCount</a>(<span class="keywordtype">int</span> propertyId) <span class="keyword">const</span>;
-<a name="l00732"></a>00732 
-<a name="l00736"></a>00736     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aa511e1efa7282723e0bfbe38742ec410">getAnimationPropertyValue</a>(<span class="keywordtype">int</span> propertyId, <a class="code" href="classgameplay_1_1_animation_value.html">AnimationValue</a>* value);
-<a name="l00737"></a>00737 
-<a name="l00741"></a>00741     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ad288e7b072321f80f19a9bf9b033775d">setAnimationPropertyValue</a>(<span class="keywordtype">int</span> propertyId, <a class="code" href="classgameplay_1_1_animation_value.html">AnimationValue</a>* value);
-<a name="l00742"></a>00742 
-<a name="l00743"></a>00743 <span class="keyword">protected</span>:
-<a name="l00744"></a>00744 
-<a name="l00745"></a>00745     <span class="keywordtype">void</span> dirty();
-<a name="l00746"></a>00746     <span class="keyword">virtual</span> <span class="keywordtype">void</span> transformChanged();
-<a name="l00747"></a>00747 
-<a name="l00748"></a>00748     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _scale;
-<a name="l00749"></a>00749     <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a> _rotation;
-<a name="l00750"></a>00750     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _translation;
-<a name="l00751"></a>00751     <span class="keyword">mutable</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a> _matrix;
-<a name="l00752"></a>00752     <span class="keyword">mutable</span> <span class="keywordtype">bool</span> _matrixDirty;
-<a name="l00753"></a>00753     std::vector&lt;Transform::Listener*&gt;* _listeners;
+<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef TRANSFORM_H_</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define TRANSFORM_H_</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span>
+<a name="l00004"></a>00004 <span class="preprocessor">#include &quot;Ref.h&quot;</span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &quot;Vector3.h&quot;</span>
+<a name="l00006"></a>00006 <span class="preprocessor">#include &quot;Quaternion.h&quot;</span>
+<a name="l00007"></a>00007 <span class="preprocessor">#include &quot;Matrix.h&quot;</span>
+<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;AnimationTarget.h&quot;</span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="keyword">namespace </span>gameplay
+<a name="l00011"></a>00011 {
+<a name="l00012"></a>00012 
+<a name="l00013"></a>00013 <span class="keyword">class </span>BoundingBox;
+<a name="l00014"></a>00014 <span class="keyword">class </span>BoundingSphere;
+<a name="l00015"></a>00015 
+<a name="l00029"></a><a class="code" href="classgameplay_1_1_transform.html">00029</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_transform.html">Transform</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_animation_target.html">AnimationTarget</a>
+<a name="l00030"></a>00030 {
+<a name="l00031"></a>00031 <span class="keyword">public</span>:
+<a name="l00032"></a>00032 
+<a name="l00036"></a><a class="code" href="classgameplay_1_1_transform.html#a7ba5172e68aaf77a6efa2e5b3e59bf6a">00036</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a7ba5172e68aaf77a6efa2e5b3e59bf6a">ANIMATE_SCALE</a> = 1;
+<a name="l00037"></a>00037 
+<a name="l00041"></a><a class="code" href="classgameplay_1_1_transform.html#a315f0674a4b6c006afcc6abfc3e135d1">00041</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a315f0674a4b6c006afcc6abfc3e135d1">ANIMATE_SCALE_X</a> = 2;
+<a name="l00042"></a>00042 
+<a name="l00046"></a><a class="code" href="classgameplay_1_1_transform.html#a4664ed966d22b30fa58f105e057f2e19">00046</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a4664ed966d22b30fa58f105e057f2e19">ANIMATE_SCALE_Y</a> = 3;
+<a name="l00047"></a>00047 
+<a name="l00051"></a><a class="code" href="classgameplay_1_1_transform.html#a9183689549da0021ee5842bb5dd76d65">00051</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a9183689549da0021ee5842bb5dd76d65">ANIMATE_SCALE_Z</a> = 4;
+<a name="l00052"></a>00052 
+<a name="l00056"></a><a class="code" href="classgameplay_1_1_transform.html#a56e1f894e2ecdcbbaf2cc635d76fe41c">00056</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a56e1f894e2ecdcbbaf2cc635d76fe41c">ANIMATE_SCALE_XY</a> = 5;
+<a name="l00057"></a>00057 
+<a name="l00061"></a><a class="code" href="classgameplay_1_1_transform.html#afaec5c68b3cbfe7837cd5cb3374ee703">00061</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#afaec5c68b3cbfe7837cd5cb3374ee703">ANIMATE_SCALE_XZ</a> = 6;
+<a name="l00062"></a>00062 
+<a name="l00066"></a><a class="code" href="classgameplay_1_1_transform.html#a804aabc5d92158defa8bae995f3674dd">00066</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a804aabc5d92158defa8bae995f3674dd">ANIMATE_SCALE_YZ</a> = 7;
+<a name="l00067"></a>00067 
+<a name="l00071"></a><a class="code" href="classgameplay_1_1_transform.html#a2d4eee62b1ae04f50740ad1f78f71c2b">00071</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a2d4eee62b1ae04f50740ad1f78f71c2b">ANIMATE_ROTATE</a> = 8;
+<a name="l00072"></a>00072 
+<a name="l00076"></a><a class="code" href="classgameplay_1_1_transform.html#a255f7485828555dfa707dc8c2d486b28">00076</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a255f7485828555dfa707dc8c2d486b28">ANIMATE_TRANSLATE</a> = 9;
+<a name="l00077"></a>00077 
+<a name="l00081"></a><a class="code" href="classgameplay_1_1_transform.html#af6816429889b99b2c8baf98753e9ce0b">00081</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#af6816429889b99b2c8baf98753e9ce0b">ANIMATE_TRANSLATE_X</a> = 10;
+<a name="l00082"></a>00082 
+<a name="l00086"></a><a class="code" href="classgameplay_1_1_transform.html#ab643c0641a5d9489858d274770e35c8d">00086</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#ab643c0641a5d9489858d274770e35c8d">ANIMATE_TRANSLATE_Y</a> = 11;
+<a name="l00087"></a>00087 
+<a name="l00091"></a><a class="code" href="classgameplay_1_1_transform.html#aa129fc2df5e41f17d2ddad45dea2724a">00091</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#aa129fc2df5e41f17d2ddad45dea2724a">ANIMATE_TRANSLATE_Z</a> = 12;
+<a name="l00092"></a>00092 
+<a name="l00096"></a><a class="code" href="classgameplay_1_1_transform.html#a73bf5557e77528781a25081ef1025118">00096</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a73bf5557e77528781a25081ef1025118">ANIMATE_TRANSLATE_XY</a> = 13;
+<a name="l00097"></a>00097 
+<a name="l00101"></a><a class="code" href="classgameplay_1_1_transform.html#a408e501577415dae479fabc81a6885c9">00101</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a408e501577415dae479fabc81a6885c9">ANIMATE_TRANSLATE_XZ</a> = 14;
+<a name="l00102"></a>00102 
+<a name="l00106"></a><a class="code" href="classgameplay_1_1_transform.html#aac402db341720294dc13e33a98389ff5">00106</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#aac402db341720294dc13e33a98389ff5">ANIMATE_TRANSLATE_YZ</a> = 15;
+<a name="l00107"></a>00107 
+<a name="l00111"></a><a class="code" href="classgameplay_1_1_transform.html#a64374775dcf7197d9e946b5dd2438b3e">00111</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a64374775dcf7197d9e946b5dd2438b3e">ANIMATE_ROTATE_TRANSLATE</a> = 16;
+<a name="l00112"></a>00112 
+<a name="l00116"></a><a class="code" href="classgameplay_1_1_transform.html#a261529193110fa83fb8abb30a81bdb85">00116</a>     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a261529193110fa83fb8abb30a81bdb85">ANIMATE_SCALE_ROTATE_TRANSLATE</a> = 17;
+<a name="l00117"></a>00117 
+<a name="l00121"></a><a class="code" href="classgameplay_1_1_transform_1_1_listener.html">00121</a>     <span class="keyword">class </span><a class="code" href="classgameplay_1_1_transform_1_1_listener.html">Listener</a>
+<a name="l00122"></a>00122     {
+<a name="l00123"></a>00123     <span class="keyword">public</span>:
+<a name="l00124"></a>00124 
+<a name="l00125"></a>00125         <span class="keyword">virtual</span> ~<a class="code" href="classgameplay_1_1_transform_1_1_listener.html">Listener</a>() { }
+<a name="l00126"></a>00126 
+<a name="l00130"></a>00130         <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform_1_1_listener.html#a328ca9675b84bb23b2a5d61632cded5c">transformChanged</a>(<a class="code" href="classgameplay_1_1_transform.html">Transform</a>* transform) = 0;
+<a name="l00131"></a>00131     };
+<a name="l00132"></a>00132 
+<a name="l00136"></a>00136     <a class="code" href="classgameplay_1_1_transform.html#adadaab71b46aa28a497f4a224f871f2c">Transform</a>();
+<a name="l00137"></a>00137 
+<a name="l00145"></a>00145     <a class="code" href="classgameplay_1_1_transform.html#adadaab71b46aa28a497f4a224f871f2c">Transform</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; rotation, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
+<a name="l00146"></a>00146 
+<a name="l00154"></a>00154     <a class="code" href="classgameplay_1_1_transform.html#adadaab71b46aa28a497f4a224f871f2c">Transform</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; rotation, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
+<a name="l00155"></a>00155 
+<a name="l00161"></a>00161     <a class="code" href="classgameplay_1_1_transform.html#adadaab71b46aa28a497f4a224f871f2c">Transform</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_transform.html">Transform</a>&amp; copy);
+<a name="l00162"></a>00162 
+<a name="l00166"></a>00166     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_transform.html#a28a07847871b540977d44f4ed1deb15f">~Transform</a>();
+<a name="l00167"></a>00167 
+<a name="l00180"></a>00180     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#affeadedd558ad9117992231492d8aada">getMatrix</a>() <span class="keyword">const</span>;
+<a name="l00181"></a>00181 
+<a name="l00185"></a>00185     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a94c3507d0b37529c50dfa42a7bf20515">getScale</a>() <span class="keyword">const</span>;
+<a name="l00186"></a>00186 
+<a name="l00192"></a>00192     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a94c3507d0b37529c50dfa42a7bf20515">getScale</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>) <span class="keyword">const</span>;
+<a name="l00193"></a>00193 
+<a name="l00199"></a>00199     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#ab01561fabeb57b9d8e737e8fa058c20c">getScaleX</a>() <span class="keyword">const</span>;
+<a name="l00200"></a>00200 
+<a name="l00206"></a>00206     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#aa0160c3d5dd5983ce4cf1810c6e110b4">getScaleY</a>() <span class="keyword">const</span>;
+<a name="l00207"></a>00207 
+<a name="l00213"></a>00213     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#a445060becaf1378bb6d64e1afc18c1ca">getScaleZ</a>() <span class="keyword">const</span>;
+<a name="l00214"></a>00214 
+<a name="l00218"></a>00218     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a99546e3443700bf6e8fffa4a3079e9c1">getRotation</a>() <span class="keyword">const</span>;
+<a name="l00219"></a>00219 
+<a name="l00225"></a>00225     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a99546e3443700bf6e8fffa4a3079e9c1">getRotation</a>(<a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>* rotation) <span class="keyword">const</span>;
+<a name="l00226"></a>00226 
+<a name="l00232"></a>00232     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a99546e3443700bf6e8fffa4a3079e9c1">getRotation</a>(<a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>* rotation) <span class="keyword">const</span>;
+<a name="l00233"></a>00233 
+<a name="l00242"></a>00242     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#a99546e3443700bf6e8fffa4a3079e9c1">getRotation</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* axis) <span class="keyword">const</span>;
+<a name="l00243"></a>00243 
+<a name="l00247"></a>00247     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#aa294de74db9cf78687c87aad9b5c15b4">getTranslation</a>() <span class="keyword">const</span>;
+<a name="l00248"></a>00248 
+<a name="l00254"></a>00254     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aa294de74db9cf78687c87aad9b5c15b4">getTranslation</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* translation) <span class="keyword">const</span>;
+<a name="l00255"></a>00255 
+<a name="l00261"></a>00261     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#a1fa33ebdaa5a54cf493c298c218ca7b8">getTranslationX</a>() <span class="keyword">const</span>;
+<a name="l00262"></a>00262 
+<a name="l00268"></a>00268     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#abff3d5648c4870ae9a6ee535efd78c69">getTranslationY</a>() <span class="keyword">const</span>;
+<a name="l00269"></a>00269 
+<a name="l00275"></a>00275     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#ab602baa162c212ceb5fa1ada2fdc07d7">getTranslationZ</a>() <span class="keyword">const</span>;
+<a name="l00276"></a>00276     
+<a name="l00280"></a>00280     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_transform.html#ac4d4b05f107390b33490fbea5e3f0d67">getForwardVector</a>() <span class="keyword">const</span>;
+<a name="l00281"></a>00281 
+<a name="l00287"></a>00287     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ac4d4b05f107390b33490fbea5e3f0d67">getForwardVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst) <span class="keyword">const</span>;
+<a name="l00288"></a>00288 
+<a name="l00292"></a>00292     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_transform.html#aa8ce31a6e4a9b1a7e94255d673fd69b3">getBackVector</a>() <span class="keyword">const</span>;
+<a name="l00293"></a>00293 
+<a name="l00299"></a>00299     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aa8ce31a6e4a9b1a7e94255d673fd69b3">getBackVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst) <span class="keyword">const</span>;
+<a name="l00300"></a>00300 
+<a name="l00304"></a>00304     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_transform.html#a6276ca6f625390046dd499518d1a49ba">getUpVector</a>() <span class="keyword">const</span>;
+<a name="l00305"></a>00305 
+<a name="l00311"></a>00311     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a6276ca6f625390046dd499518d1a49ba">getUpVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst) <span class="keyword">const</span>;
+<a name="l00312"></a>00312 
+<a name="l00316"></a>00316     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_transform.html#a358ec577ae13c8e19b84810769e15e4b">getDownVector</a>() <span class="keyword">const</span>;
+<a name="l00317"></a>00317 
+<a name="l00323"></a>00323     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a358ec577ae13c8e19b84810769e15e4b">getDownVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst) <span class="keyword">const</span>;
+<a name="l00324"></a>00324 
+<a name="l00328"></a>00328     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_transform.html#a7b9c4baaeb8b50869d6c7b6201f53fed">getLeftVector</a>() <span class="keyword">const</span>;
+<a name="l00329"></a>00329 
+<a name="l00335"></a>00335     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7b9c4baaeb8b50869d6c7b6201f53fed">getLeftVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst) <span class="keyword">const</span>;
+<a name="l00336"></a>00336 
+<a name="l00340"></a>00340     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_transform.html#aaffcfc63bb2e090c379e53a2c48bdfa3">getRightVector</a>() <span class="keyword">const</span>;
+<a name="l00341"></a>00341 
+<a name="l00347"></a>00347     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aaffcfc63bb2e090c379e53a2c48bdfa3">getRightVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst) <span class="keyword">const</span>;
+<a name="l00348"></a>00348 
+<a name="l00354"></a>00354     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5be09c000db9f322169e6ce69b08c438">rotate</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; rotation);
+<a name="l00355"></a>00355 
+<a name="l00363"></a>00363     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5be09c000db9f322169e6ce69b08c438">rotate</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keywordtype">float</span> angle);
+<a name="l00364"></a>00364 
+<a name="l00370"></a>00370     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5be09c000db9f322169e6ce69b08c438">rotate</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; rotation);
+<a name="l00371"></a>00371 
+<a name="l00378"></a>00378     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a403968ed9fec4a9ceebd26d3ef5de768">rotateX</a>(<span class="keywordtype">float</span> angle);
+<a name="l00379"></a>00379 
+<a name="l00386"></a>00386     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aba6d6e746c8b6bba97c5d74021344149">rotateY</a>(<span class="keywordtype">float</span> angle);
+<a name="l00387"></a>00387 
+<a name="l00394"></a>00394     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ad164b7bb8a430067c29c9392f1ace3fb">rotateZ</a>(<span class="keywordtype">float</span> angle);
+<a name="l00395"></a>00395 
+<a name="l00401"></a>00401     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>);
+<a name="l00402"></a>00402 
+<a name="l00410"></a>00410     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>(<span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <span class="keywordtype">float</span> sz);
+<a name="l00411"></a>00411 
+<a name="l00417"></a>00417     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>);
+<a name="l00418"></a>00418 
+<a name="l00425"></a>00425     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5dc586d5c8c6d6b8c131ba60098c2111">scaleX</a>(<span class="keywordtype">float</span> sx);
+<a name="l00426"></a>00426 
+<a name="l00433"></a>00433     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ae23b5714fe260d63a8186cc662ffbbce">scaleY</a>(<span class="keywordtype">float</span> sy);
+<a name="l00434"></a>00434 
+<a name="l00441"></a>00441     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5e71b674a2c4f544efcb98c4734fbec1">scaleZ</a>(<span class="keywordtype">float</span> sz);
+<a name="l00442"></a>00442 
+<a name="l00450"></a>00450     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; rotation, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
+<a name="l00451"></a>00451 
+<a name="l00459"></a>00459     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; rotation, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
+<a name="l00460"></a>00460 
+<a name="l00469"></a>00469     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keywordtype">float</span> angle, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
+<a name="l00470"></a>00470 
+<a name="l00476"></a>00476     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_transform.html">Transform</a>&amp; transform);
+<a name="l00477"></a>00477 
+<a name="l00484"></a>00484     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a62ed140eed43e71fc56acfc11df9d606">setScale</a>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>);
+<a name="l00485"></a>00485 
+<a name="l00494"></a>00494     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a62ed140eed43e71fc56acfc11df9d606">setScale</a>(<span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <span class="keywordtype">float</span> sz);
+<a name="l00495"></a>00495 
+<a name="l00502"></a>00502     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a62ed140eed43e71fc56acfc11df9d606">setScale</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>);
+<a name="l00503"></a>00503 
+<a name="l00510"></a>00510     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7e47f10619eddf11422d56e57d518154">setScaleX</a>(<span class="keywordtype">float</span> sx);
+<a name="l00511"></a>00511 
+<a name="l00518"></a>00518     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a666bb5a909de4491079c3721a36f4865">setScaleY</a>(<span class="keywordtype">float</span> sy);
+<a name="l00519"></a>00519 
+<a name="l00526"></a>00526     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#acf01193bbc7c3436b4a3996fb180eb65">setScaleZ</a>(<span class="keywordtype">float</span> sz);
+<a name="l00527"></a>00527 
+<a name="l00537"></a>00537     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7f00cbb086e2323d3fb920e69bbdbeb7">setRotation</a>(<span class="keywordtype">float</span> qx, <span class="keywordtype">float</span> qy, <span class="keywordtype">float</span> qz, <span class="keywordtype">float</span> qw);
+<a name="l00538"></a>00538 
+<a name="l00545"></a>00545     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7f00cbb086e2323d3fb920e69bbdbeb7">setRotation</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a>&amp; rotation);
+<a name="l00546"></a>00546 
+<a name="l00553"></a>00553     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7f00cbb086e2323d3fb920e69bbdbeb7">setRotation</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; rotation);
+<a name="l00554"></a>00554 
+<a name="l00561"></a>00561     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7f00cbb086e2323d3fb920e69bbdbeb7">setRotation</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keywordtype">float</span> angle);
+<a name="l00562"></a>00562 
+<a name="l00569"></a>00569     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5c579cac275c83ed0ab5926f87797ce0">setTranslation</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
+<a name="l00570"></a>00570 
+<a name="l00579"></a>00579     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5c579cac275c83ed0ab5926f87797ce0">setTranslation</a>(<span class="keywordtype">float</span> tx, <span class="keywordtype">float</span> ty, <span class="keywordtype">float</span> tz);
+<a name="l00580"></a>00580 
+<a name="l00587"></a>00587     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a33f0546a7951ca78a5bdb630144e66b3">setTranslationX</a>(<span class="keywordtype">float</span> tx);
+<a name="l00588"></a>00588 
+<a name="l00595"></a>00595     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#af73db060e39b2d539d1b0084f7fc42e2">setTranslationY</a>(<span class="keywordtype">float</span> ty);
+<a name="l00596"></a>00596 
+<a name="l00603"></a>00603     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a2a6e188c33ad030d97391b7fc3b1fc2c">setTranslationZ</a>(<span class="keywordtype">float</span> tz);
+<a name="l00604"></a>00604 
+<a name="l00613"></a>00613     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ad93fd9b554bda19b5687ffd3514ce8ac">translate</a>(<span class="keywordtype">float</span> tx, <span class="keywordtype">float</span> ty, <span class="keywordtype">float</span> tz);
+<a name="l00614"></a>00614 
+<a name="l00621"></a>00621     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ad93fd9b554bda19b5687ffd3514ce8ac">translate</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; translation);
+<a name="l00622"></a>00622 
+<a name="l00629"></a>00629     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a89140ea7eeab31437a7d04000fd81845">translateX</a>(<span class="keywordtype">float</span> tx);
+<a name="l00630"></a>00630 
+<a name="l00637"></a>00637     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aa75a9ef16e419439df1b88fe31ac1d94">translateY</a>(<span class="keywordtype">float</span> ty);
+<a name="l00638"></a>00638 
+<a name="l00645"></a>00645     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a2bc17bb02407e2d368ddf5e18aa03be4">translateZ</a>(<span class="keywordtype">float</span> tz);
+<a name="l00646"></a>00646 
+<a name="l00652"></a>00652     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ac891c29a04d56dfe0debfe7cfb8241fd">translateLeft</a>(<span class="keywordtype">float</span> amount);
+<a name="l00653"></a>00653 
+<a name="l00659"></a>00659     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a7f30069e0296f4171188057bb5f11e66">translateUp</a>(<span class="keywordtype">float</span> amount);
+<a name="l00660"></a>00660 
+<a name="l00666"></a>00666     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a8ca10de44224e1b71dca0d01dae45880">translateForward</a>(<span class="keywordtype">float</span> amount);
+<a name="l00667"></a>00667 
+<a name="l00674"></a>00674     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a4667c774f027b6e650ed88deabb5428b">transformPoint</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* point);
+<a name="l00675"></a>00675 
+<a name="l00683"></a>00683     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a4667c774f027b6e650ed88deabb5428b">transformPoint</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; point, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst);
+<a name="l00684"></a>00684 
+<a name="l00691"></a>00691     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a783ebcd198aff74ba2296834952624c0">transformVector</a>(<a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* vector);
+<a name="l00692"></a>00692 
+<a name="l00700"></a>00700     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a783ebcd198aff74ba2296834952624c0">transformVector</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_transform.html#a783ebcd198aff74ba2296834952624c0">transformVector</a>, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst);
+<a name="l00701"></a>00701 
+<a name="l00712"></a>00712     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a783ebcd198aff74ba2296834952624c0">transformVector</a>(<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z, <span class="keywordtype">float</span> w, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst);
+<a name="l00713"></a>00713 
+<a name="l00717"></a>00717     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aef8cf7096d05395f568a255416fcb05a">addListener</a>(<a class="code" href="classgameplay_1_1_transform_1_1_listener.html">Transform::Listener</a>* listener);
+<a name="l00718"></a>00718 
+<a name="l00722"></a>00722     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#a5458202ad2700c3106d0af7663046a04">removeListener</a>(<a class="code" href="classgameplay_1_1_transform_1_1_listener.html">Transform::Listener</a>* listener);
+<a name="l00723"></a>00723     
+<a name="l00727"></a>00727     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_transform.html#a842ce88c27aaedb5b43e0ac675ba7b1f">getAnimationPropertyComponentCount</a>(<span class="keywordtype">int</span> propertyId) <span class="keyword">const</span>;
+<a name="l00728"></a>00728 
+<a name="l00732"></a>00732     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#aa511e1efa7282723e0bfbe38742ec410">getAnimationPropertyValue</a>(<span class="keywordtype">int</span> propertyId, <a class="code" href="classgameplay_1_1_animation_value.html">AnimationValue</a>* value);
+<a name="l00733"></a>00733 
+<a name="l00737"></a>00737     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_transform.html#ad288e7b072321f80f19a9bf9b033775d">setAnimationPropertyValue</a>(<span class="keywordtype">int</span> propertyId, <a class="code" href="classgameplay_1_1_animation_value.html">AnimationValue</a>* value);
+<a name="l00738"></a>00738 
+<a name="l00739"></a>00739 <span class="keyword">protected</span>:
+<a name="l00740"></a>00740 
+<a name="l00741"></a>00741     <span class="keywordtype">void</span> dirty();
+<a name="l00742"></a>00742     <span class="keyword">virtual</span> <span class="keywordtype">void</span> transformChanged();
+<a name="l00743"></a>00743 
+<a name="l00744"></a>00744     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _scale;
+<a name="l00745"></a>00745     <a class="code" href="classgameplay_1_1_quaternion.html">Quaternion</a> _rotation;
+<a name="l00746"></a>00746     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _translation;
+<a name="l00747"></a>00747     <span class="keyword">mutable</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a> _matrix;
+<a name="l00748"></a>00748     <span class="keyword">mutable</span> <span class="keywordtype">bool</span> _matrixDirty;
+<a name="l00749"></a>00749     std::vector&lt;Transform::Listener*&gt;* _listeners;
+<a name="l00750"></a>00750 
+<a name="l00751"></a>00751 };
+<a name="l00752"></a>00752 
+<a name="l00753"></a>00753 }
 <a name="l00754"></a>00754 
-<a name="l00755"></a>00755 };
-<a name="l00756"></a>00756 
-<a name="l00757"></a>00757 }
-<a name="l00758"></a>00758 
-<a name="l00759"></a>00759 <span class="preprocessor">#endif</span>
+<a name="l00755"></a>00755 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -361,7 +357,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:34 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
