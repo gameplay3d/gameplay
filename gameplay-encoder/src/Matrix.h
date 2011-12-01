@@ -32,6 +32,11 @@ class Matrix
 public:
 
     /**
+     * Matrix colums.
+     */
+    float m[16];
+
+    /**
      * Constructor.
      */
     Matrix(void);
@@ -156,9 +161,8 @@ public:
      *
      * Note that the input vector is treated as a point and NOT a vector.
      */
-    void transformPoint(const Vector3& p, Vector3* dst);
+    void transformPoint(const Vector3& p, Vector3* dst) const;
 
-    float m[16];
 };
 
 }

@@ -7,33 +7,13 @@
 #include "Object.h"
 #include "Matrix.h"
 #include "Animation.h"
+#include "BoundingVolume.h"
 
 namespace gameplay
 {
 
 class Node;
 class Mesh;
-
-struct BoundingSphere
-{
-    Vector3 center;
-    float radius;
-
-    BoundingSphere() : radius(0)
-    {
-    }
-
-    BoundingSphere(const BoundingSphere& copy)
-    {
-        set(copy);
-    }
-
-    void set(const BoundingSphere& copy)
-    {
-        center = copy.center;
-        radius = copy.radius;
-    }
-};
 
 class MeshSkin : public Object
 {
@@ -87,7 +67,7 @@ private:
     std::vector<Matrix> _bindPoses;
     std::vector<std::string> _jointNames;
     unsigned int _vertexInfluenceCount;
-    std::vector<BoundingSphere> _jointBounds;
+    std::vector<BoundingVolume> _jointBounds;
 };
 
 }

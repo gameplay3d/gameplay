@@ -46,15 +46,15 @@ void MeshSkin::writeBinary(FILE* file)
     }
 
     /*
-    // Write joint bounds
+    // Write joint bounding spheres
     write((unsigned int)_jointBounds.size(), file);
     for (unsigned int i = 0; i < _jointBounds.size(); ++i)
     {
-        BoundingSphere& s = _jointBounds[i];
-        write(s.center.x, file);
-        write(s.center.y, file);
-        write(s.center.z, file);
-        write(s.radius, file);
+        BoundingVolume& v = _jointBounds[i];
+        write(v.center.x, file);
+        write(v.center.y, file);
+        write(v.center.z, file);
+        write(v.radius, file);
     }
     */
 }
@@ -130,70 +130,6 @@ bool MeshSkin::hasJoint(const char* id)
         }
     }
     return false;
-}
-
-BoundingSphere mergeSpheres(const BoundingSphere& sphere1, const BoundingSphere& sphere2)
-{
-    BoundingSphere result;
-
-    // Calculate the distance between the two centers.
-    float vx = sphere1.center.x - sphere2.center.x;
-    float vy = sphere1.center.y - sphere2.center.y;
-    float vz = sphere1.center.z - sphere2.center.z;
-    float d = sqrtf(vx * vx + vy * vy + vz * vz);
-
-    // If one sphere is contained inside the other, set to the larger sphere.
-    if (d <= (sphere2.radius - sphere1.radius))
-    {
-        result = sphere2;
-        return result;
-    }
-    else if (d <= (sphere1.radius - sphere2.radius))
-    {
-        result = sphere1;
-        return result;
-    }
-
-    // Calculate the unit vector between the two centers.
-    float dI = 1.0f / d;
-    vx *= dI;
-    vy *= dI;
-    vz *= dI;
-
-    // Calculate the new radius.
-    float r = (sphere1.radius + sphere2.radius + d) * 0.5f;
-
-    // Calculate the new center.
-    float scaleFactor = (r - sphere2.radius);
-    vx = vx * scaleFactor + sphere2.center.x;
-    vy = vy * scaleFactor + sphere2.center.y;
-    vz = vz * scaleFactor + sphere2.center.z;
-
-    // Set the new center and radius.
-    result.center.x = vx;
-    result.center.y = vy;
-    result.center.z = vz;
-    result.radius = r;
-    return result;
-}
-
-BoundingSphere transformBoundingSphere(const BoundingSphere& sphere, Matrix& matrix)
-{
-    BoundingSphere result = sphere;
-
-    // Translate the center point.
-    Vector3 translate;
-    matrix.transformPoint(sphere.center, &translate);
-    result.center = translate;
-
-    // Calculate the sphere's new radius from the radii in each direction (take the largest).
-    matrix.decompose(&translate, NULL, NULL);
-    float r = sphere.radius * translate.x;
-    r = std::max(sphere.radius, sphere.radius * translate.y);
-    r = std::max(sphere.radius, sphere.radius * translate.z);
-    result.radius = r;
-
-    return result;
 }
 
 void MeshSkin::computeBounds()
@@ -285,7 +221,9 @@ void MeshSkin::computeBounds()
 
         // Calculate the local bounding volume for this joint
         vertices.clear();
-        BoundingSphere jointSphere;
+        BoundingVolume jointBounds;
+        jointBounds.min.set(FLT_MAX, FLT_MAX, FLT_MAX);
+        jointBounds.max.set(FLT_MIN, FLT_MIN, FLT_MIN);
         for (unsigned int j = 0; j < vertexCount; ++j)
         {
             const Vertex& v = _mesh->getVertex(j);
@@ -296,21 +234,36 @@ void MeshSkin::computeBounds()
                 (v.blendIndices.w == i && !ISZERO(v.blendWeights.w)))
             {
                 vertices.push_back(v.position);
-                jointSphere.center.add(v.position);
+                // Update box min/max
+                if (v.position.x < jointBounds.min.x)
+                    jointBounds.min.x = v.position.x;
+                if (v.position.y < jointBounds.min.y)
+                    jointBounds.min.y = v.position.y;
+                if (v.position.z < jointBounds.min.z)
+                    jointBounds.min.z = v.position.z;
+                if (v.position.x > jointBounds.max.x)
+                    jointBounds.max.x = v.position.x;
+                if (v.position.y > jointBounds.max.y)
+                    jointBounds.max.y = v.position.y;
+                if (v.position.z > jointBounds.max.z)
+                    jointBounds.max.z = v.position.z;
             }
         }
         if (vertices.size() > 0)
         {
-            jointSphere.center.scale(1.0f / (float)vertices.size());
+            // Compute center point
+            Vector3::add(jointBounds.min, jointBounds.max, &jointBounds.center);
+            jointBounds.center.scale(0.5f);
+            // Compute radius
             for (unsigned int j = 0, jointVertexCount = vertices.size(); j < jointVertexCount; ++j)
             {
-                float d = jointSphere.center.distanceSquared(vertices[j]);
-                if (d > jointSphere.radius)
-                    jointSphere.radius = d;
+                float d = jointBounds.center.distanceSquared(vertices[j]);
+                if (d > jointBounds.radius)
+                    jointBounds.radius = d;
             }
-            jointSphere.radius = sqrtf(jointSphere.radius);
+            jointBounds.radius = sqrtf(jointBounds.radius);
         }
-        _jointBounds[i] = jointSphere;
+        _jointBounds[i] = jointBounds;
 
         DEBUGPRINT("> %d%%\r", (int)((float)(i+1) / (float)jointCount * 100.0f));
     }
@@ -320,7 +273,7 @@ void MeshSkin::computeBounds()
 
     // Create a Curve for each animation channel
     float maxDuration = 0.0f;
-    DEBUGPRINT("> Populating animation curve data...\n");
+    DEBUGPRINT("> Building animation curves...\n");
     DEBUGPRINT("> 0%%\r");
     for (unsigned int i = 0; i < channelCount; ++i)
     {
@@ -404,9 +357,9 @@ void MeshSkin::computeBounds()
     _mesh->bounds.radius = 0;
     Vector3 skinnedPos;
     Vector3 tempPos;
-    DEBUGPRINT("> Animating joints...\n");
+    DEBUGPRINT("> Evaluating joints...\n");
     DEBUGPRINT("> 0%%\r");
-    BoundingSphere finalSphere;
+    BoundingVolume finalBounds;
     while (time <= maxDuration)
     {
         // Evaluate joint transforms at this time interval
@@ -432,20 +385,20 @@ void MeshSkin::computeBounds()
         std::vector<Matrix>::const_iterator bindPoseItr = _bindPoses.begin();
         for (unsigned int i = 0; i < jointCount; ++i, bindPoseItr++)
         {
-            BoundingSphere sphere = _jointBounds[i];
-            if (ISZERO(sphere.radius))
+            BoundingVolume bounds = _jointBounds[i];
+            if (ISZERO(bounds.radius))
                 continue;
 
             Matrix& m = jointTransforms[i];
             Matrix::multiply(_joints[i]->getWorldMatrix().m, bindPoseItr->m, m.m);
             Matrix::multiply(m.m, _bindShape, m.m);
 
-            // Get a world-space bounding sphere for this joint
-            sphere = transformBoundingSphere(sphere, m);
-            if (ISZERO(finalSphere.radius))
-                finalSphere = sphere;
+            // Get a world-space bounding volume for this joint
+            bounds.transform(m);
+            if (ISZERO(finalBounds.radius))
+                finalBounds = bounds;
             else
-                finalSphere = mergeSpheres(finalSphere, sphere);
+                finalBounds.merge(bounds);
         }
 
         // Increment time by 1/30th of second (~ 33 ms)
@@ -459,8 +412,7 @@ void MeshSkin::computeBounds()
     DEBUGPRINT("\n");
 
     // Update the bounding sphere for the mesh
-    _mesh->bounds.center = finalSphere.center;
-    _mesh->bounds.radius = finalSphere.radius;
+    _mesh->bounds = finalBounds;
 
     // Restore original joint transforms
     for (unsigned int i = 0; i < jointCount; ++i)

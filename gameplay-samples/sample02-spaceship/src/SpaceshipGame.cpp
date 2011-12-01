@@ -5,8 +5,8 @@ SpaceshipGame game;
 
 // Collision constants
 #define ROOF_HEIGHT 11.6f
-#define FLOOR_HEIGHT 0.8f
-#define MAP_LENGTH 1450.0f
+#define FLOOR_HEIGHT 0.6f
+#define MAP_LENGTH 1000.0f
 #define CAMERA_RANGE_FRONT -1
 #define CAMERA_RANGE_BACK 8
 
@@ -354,14 +354,18 @@ void SpaceshipGame::handleCollisions(float t)
 {
     float friction = 0.0f;
 
-    // Detect collisions
+    // Use the ship's bounding sphere for roof collisions
     const BoundingSphere& shipBounds = _shipNode->getBoundingSphere();
-    const BoundingSphere& propulsionBounds = _propulsionNode->getBoundingSphere();
-    if (propulsionBounds.center.y <= FLOOR_HEIGHT)
+
+    // Compute a bounding box for floor collisions
+    BoundingBox propulsionBounds = _propulsionNode->getModel()->getMesh()->getBoundingBox();
+    propulsionBounds.transform(_propulsionNode->getWorldMatrix());
+
+    if (propulsionBounds.min.y <= FLOOR_HEIGHT)
     {
         // Floor collision
         friction = FLOOR_FRICTION;
-        _shipGroupNode->translateY(FLOOR_HEIGHT - propulsionBounds.center.y);
+        _shipGroupNode->translateY(FLOOR_HEIGHT - propulsionBounds.min.y);
         if (_velocity.y < 0.0f)
         {
             // Cancel vertical velocity

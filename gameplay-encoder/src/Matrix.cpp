@@ -396,7 +396,7 @@ float Matrix::determinant() const
     return (a0 * b5 - a1 * b4 + a2 * b3 + a3 * b2 - a4 * b1 + a5 * b0);
 }
 
-void Matrix::transformPoint(const Vector3& p, Vector3* dst)
+void Matrix::transformPoint(const Vector3& p, Vector3* dst) const
 {
     dst->set(
         p.x * m[0] + p.y * m[4] + p.z * m[8] +  m[12],

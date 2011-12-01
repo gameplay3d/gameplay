@@ -10,7 +10,6 @@ using namespace gameplay;
  */
 class CharacterGame: public Game
 {
-
 public:
 
     /**
@@ -52,28 +51,12 @@ protected:
 
 private:
 
-    /**
-     * Draws the model if the node contains a model.
-     */
-    void drawModel(Node* node, long cookie);
+    void drawScene(Node* node, long cookie);
 
-    /**
-     * Gets the first model node. This is intended to be used with visit.
-     */
-    void getModelNode(Node* node, long cookie);
+    void loadAnimationClips();
 
-    /**
-     * Creates the default camera.
-     */
-    void createDefaultCamera(Scene* scene);
-
-    /**
-     * Loads the characters animations.
-     */
-    void loadAnimations();
-
-    Scene* _scene;
     Font* _font;
+    Scene* _scene;
     Node* _modelNode;
     Animation* _animation;
     unsigned int _animationState;

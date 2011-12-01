@@ -5,6 +5,7 @@
 #include "Object.h"
 #include "MeshPart.h"
 #include "VertexElement.h"
+#include "BoundingVolume.h"
 
 namespace gameplay
 {
@@ -62,13 +63,7 @@ public:
     Model* model;
     std::vector<Vertex> vertices;
     std::vector<MeshPart*> parts;
-    struct
-    {
-        Vector3 min;
-        Vector3 max;
-        Vector3 center;
-        float radius;
-    } bounds;
+    BoundingVolume bounds;
     std::map<Vertex, unsigned int> vertexLookupTable;
 
 private:
