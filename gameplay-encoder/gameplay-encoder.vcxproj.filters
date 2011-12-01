@@ -96,6 +96,10 @@
     <ClCompile Include="src\Animations.cpp">
       <Filter>Objects\Animation</Filter>
     </ClCompile>
+    <ClCompile Include="..\gameplay\src\Curve.cpp" />
+    <ClCompile Include="src\BoundingVolume.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\DAESceneEncoder.h" />
@@ -191,6 +195,11 @@
     <ClInclude Include="src\EncoderArguments.h" />
     <ClInclude Include="src\Animations.h">
       <Filter>Objects\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gameplay\src\Curve.h" />
+    <ClInclude Include="src\Miniball.h" />
+    <ClInclude Include="src\BoundingVolume.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

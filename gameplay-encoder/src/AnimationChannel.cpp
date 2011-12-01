@@ -51,6 +51,41 @@ void AnimationChannel::writeText(FILE* file)
     fprintElementEnd(file);
 }
 
+const std::string& AnimationChannel::getTargetId() const
+{
+    return _targetId;
+}
+
+unsigned int AnimationChannel::getTargetAttribute() const
+{
+    return _targetAttrib;
+}
+
+const std::vector<float>& AnimationChannel::getKeyValues() const
+{
+    return _keyValues;
+}
+
+const std::vector<float>& AnimationChannel::getKeyTimes() const
+{
+    return _keytimes;
+}
+
+const std::vector<float>& AnimationChannel::getTangentsIn() const
+{
+    return _tangentsIn;
+}
+
+const std::vector<float>& AnimationChannel::getTangentsOut() const
+{
+    return _tangentsOut;
+}
+
+const std::vector<unsigned int>& AnimationChannel::getInterpolationTypes() const
+{
+    return _interpolations;
+}
+
 void AnimationChannel::setTargetId(const std::string str)
 {
     _targetId = str;
@@ -84,11 +119,6 @@ void AnimationChannel::setTangentsOut(const std::vector<float>& values)
 void AnimationChannel::setInterpolations(const std::vector<unsigned int>& values)
 {
     _interpolations = values;
-}
-
-const std::vector<float>& AnimationChannel::getKeyValues() const
-{
-    return _keyValues;
 }
 
 unsigned int AnimationChannel::getInterpolationType(const char* str)

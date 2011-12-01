@@ -17,7 +17,6 @@
 #include <math.h>
 #include <float.h>
 
-
 #ifndef M_1_PI        
 #define M_1_PI                      0.31830988618379067154
 #endif
@@ -59,10 +58,16 @@ enum VertexUsage
     TEXCOORD7 = 15
 };
 
-
 void fillArray(float values[], float value, size_t length);
 void setIdentityMatrix(float values[]);
 
-}
+#define ISZERO(x) (fabs(x) < 0.000001f)
+
+#ifdef NDEBUG
+#define DEBUGPRINT (x, ...)
+#else
+#define DEBUGPRINT(x, ...) printf(x, __VA_ARGS__)
 #endif
 
+}
+#endif

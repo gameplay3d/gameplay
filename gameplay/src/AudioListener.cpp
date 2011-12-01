@@ -102,7 +102,7 @@ void AudioListener::setCamera(Camera* c)
     }
 }
 
-void AudioListener::transformChanged(Transform* transform)
+void AudioListener::transformChanged(Transform* transform, long cookie)
 {
     if (transform)
     {

@@ -736,22 +736,28 @@ void Transform::dirty()
     transformChanged();
 }
 
-void Transform::addListener(Transform::Listener* listener)
+void Transform::addListener(Transform::Listener* listener, long cookie)
 {
     if (_listeners == NULL)
-        _listeners = new std::vector<Transform::Listener*>();
+        _listeners = new std::list<TransformListener>();
 
-    _listeners->push_back(listener);
+    TransformListener l;
+    l.listener = listener;
+    l.cookie = cookie;
+    _listeners->push_back(l);
 }
 
 void Transform::removeListener(Transform::Listener* listener)
 {
     if (_listeners)
     {
-        std::vector<Transform::Listener*>::iterator itr = std::find(_listeners->begin(), _listeners->end(), listener);
-        if (itr != _listeners->end())
+        for (std::list<TransformListener>::iterator itr = _listeners->begin(); itr != _listeners->end(); itr++)
         {
-            _listeners->erase(itr);
+            if ((*itr).listener == listener)
+            {
+                _listeners->erase(itr);
+                break;
+            }
         }
     }
 }
@@ -760,9 +766,10 @@ void Transform::transformChanged()
 {
     if (_listeners)
     {
-        for (unsigned int i = 0, count = _listeners->size(); i < count; ++i)
+        for (std::list<TransformListener>::iterator itr = _listeners->begin(); itr != _listeners->end(); itr++)
         {
-            (*_listeners)[i]->transformChanged(this);
+            TransformListener& l = *itr;
+            l.listener->transformChanged(this, l.cookie);
         }
     }
 }

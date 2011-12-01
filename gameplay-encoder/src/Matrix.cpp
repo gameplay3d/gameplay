@@ -41,6 +41,45 @@ void Matrix::setIdentity(float* matrix)
     memcpy(matrix, MATRIX4F_IDENTITY, MATRIX4F_SIZE);
 }
 
+void Matrix::createRotation(const Quaternion& q, float* dst)
+{
+    assert(dst);
+
+    float x2 = q.x + q.x;
+    float y2 = q.y + q.y;
+    float z2 = q.z + q.z;
+
+    float xx2 = q.x * x2;
+    float yy2 = q.y * y2;
+    float zz2 = q.z * z2;
+    float xy2 = q.x * y2;
+    float xz2 = q.x * z2;
+    float yz2 = q.y * z2;
+    float wx2 = q.w * x2;
+    float wy2 = q.w * y2;
+    float wz2 = q.w * z2;
+
+    dst[0] = 1.0f - yy2 - zz2;
+    dst[1] = xy2 + wz2;
+    dst[2] = xz2 - wy2;
+    dst[3] = 0.0f;
+
+    dst[4] = xy2 - wz2;
+    dst[5] = 1.0f - xx2 - zz2;
+    dst[6] = yz2 + wx2;
+    dst[7] = 0.0f;
+
+    dst[8] = xz2 + wy2;
+    dst[9] = yz2 - wx2;
+    dst[10] = 1.0f - xx2 - yy2;
+    dst[11] = 0.0f;
+
+    dst[12] = 0.0f;
+    dst[13] = 0.0f;
+    dst[14] = 0.0f;
+    dst[15] = 1.0f;
+}
+
 void Matrix::createRotation(float x, float y, float z, float angle, float* dst)
 {
     // Make sure the input axis is normalized
@@ -165,6 +204,13 @@ void Matrix::scale(float x, float y, float z)
     float s[16];
     createScale(x, y, z, s);
     multiply(m, s, m);
+}
+
+void Matrix::rotate(const Quaternion& q)
+{
+    float r[16];
+    createRotation(q, r);
+    multiply(m, r, m);
 }
 
 void Matrix::rotate(float x, float y, float z, float angle)
@@ -348,6 +394,14 @@ float Matrix::determinant() const
 
     // Calculate the determinant
     return (a0 * b5 - a1 * b4 + a2 * b3 + a3 * b2 - a4 * b1 + a5 * b0);
+}
+
+void Matrix::transformPoint(const Vector3& p, Vector3* dst) const
+{
+    dst->set(
+        p.x * m[0] + p.y * m[4] + p.z * m[8] +  m[12],
+        p.x * m[1] + p.y * m[5] + p.z * m[9] +  m[13],
+        p.x * m[2] + p.y * m[6] + p.z * m[10] + m[14] );
 }
 
 }

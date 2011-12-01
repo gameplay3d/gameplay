@@ -11,9 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\gameplay\src\Curve.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\AnimationChannel.cpp" />
     <ClCompile Include="src\Base.cpp" />
+    <ClCompile Include="src\BoundingVolume.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CameraInstance.cpp" />
     <ClCompile Include="src\EncoderArguments.cpp" />
@@ -54,9 +56,11 @@
     <ClCompile Include="src\VertexElement.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\gameplay\src\Curve.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\AnimationChannel.h" />
     <ClInclude Include="src\Base.h" />
+    <ClInclude Include="src\BoundingVolume.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\CameraInstance.h" />
     <ClInclude Include="src\EncoderArguments.h" />
@@ -77,6 +81,7 @@
     <ClInclude Include="src\MaterialParameter.h" />
     <ClInclude Include="src\Matrix.h" />
     <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\Miniball.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\MeshPart.h" />
     <ClInclude Include="src\MeshSkin.h" />
@@ -144,8 +149,9 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../external-deps/freetype2/lib/win32;../external-deps/collada-dom/lib/win32</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>;../external-deps/freetype2/lib/win32;../external-deps/collada-dom/lib/win32</AdditionalLibraryDirectories>
       <AdditionalDependencies>freetype245.lib;libcollada14dom22-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)..\external-deps\collada-dom\lib\win32\*.dll" "$(TargetDir)"</Command>
@@ -168,7 +174,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>freetype245.lib;libcollada14dom22-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../external-deps/freetype2/lib/win32;../external-deps/collada-dom/lib/win32</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>;../external-deps/freetype2/lib/win32;../external-deps/collada-dom/lib/win32</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)..\external-deps\collada-dom\lib\win32\*.dll" "$(TargetDir)"</Command>

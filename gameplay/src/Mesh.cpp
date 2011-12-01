@@ -4,7 +4,6 @@
 #include "Effect.h"
 #include "Model.h"
 #include "Material.h"
-#include "BoundingBox.h"
 
 namespace gameplay
 {

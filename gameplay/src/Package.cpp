@@ -6,7 +6,7 @@
 #include "Joint.h"
 
 #define GPB_PACKAGE_VERSION_MAJOR 1
-#define GPB_PACKAGE_VERSION_MINOR 0
+#define GPB_PACKAGE_VERSION_MINOR 1
 
 #define PACKAGE_TYPE_SCENE 1
 #define PACKAGE_TYPE_NODE 2
@@ -772,6 +772,23 @@ void Package::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
             }
         }
 
+        // Set the root joint
+        if (jointCount > 0)
+        {
+            Joint* rootJoint = skinData->skin->getJoint((unsigned int)0);
+            Node* parent = rootJoint->getParent();
+            while (parent)
+            {
+                if (skinData->skin->getJointIndex(static_cast<Joint*>(parent)) != -1)
+                {
+                    // Parent is a joint in the MeshSkin, so treat it as the new root
+                    rootJoint = static_cast<Joint*>(parent);
+                }
+                parent = parent->getParent();
+            }
+            skinData->skin->setRootJoint(rootJoint);
+        }
+
         // Done with this MeshSkinData entry
         SAFE_DELETE(_meshSkins[i]);
     }
@@ -912,7 +929,7 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
         SAFE_DELETE_ARRAY(interpolation);
         return NULL;
     }
-    
+
     Game* game = Game::getInstance();
     AnimationController* controller = game->getAnimationController();
 
@@ -996,7 +1013,7 @@ Mesh* Package::loadMesh(const char* id)
 
     // Read mesh bounds (bounding box and bounding sphere)
     Vector3 boundsMin, boundsMax, boundsCenter;
-    float boundsRadius;
+    float boundsRadius = 0.0f;
     if (fread(&boundsMin.x, 4, 3, _file) != 3 || fread(&boundsMax.x, 4, 3, _file) != 3)
     {
         LOG_ERROR_VARG("Failed to read bounding box for mesh: %s", id);

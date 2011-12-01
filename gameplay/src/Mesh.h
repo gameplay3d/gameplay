@@ -226,6 +226,15 @@ public:
      * setBoundingSphere methods are called to specify the mesh's
      * local bounds.
      *
+     * Meshes that are attached to a Model with a MeshSkin will have
+     * a bounding volume that is not neccessarily tight fighting on the
+     * Mesh vertices. Instead, the bounding volume will be an approximation
+     * that contains all possible vertex positions in all possible poses after
+     * skinning is applied. This is neccessary since skinning vertices 
+     * result in vertex positions that lie outside the original mesh bounds
+     * and could otherwise result in a bounding volume that does not fully
+     * contain an animated/skinned mesh.
+     *
      * @return The bounding box for the mesh.
      */
     const BoundingBox& getBoundingBox() const;
@@ -245,6 +254,15 @@ public:
      * empty bounding volumes until the setBoundingBox and/or
      * setBoundingSphere methods are called to specify the mesh's
      * local bounds.
+     *
+     * Meshes that are attached to a Model with a MeshSkin will have
+     * a bounding volume that is not neccessarily tight fighting on the
+     * Mesh vertices. Instead, the bounding volume will be an approximation
+     * that contains all possible vertex positions in all possible poses after
+     * skinning is applied. This is neccessary since skinning vertices 
+     * result in vertex positions that lie outside the original mesh bounds
+     * and could otherwise result in a bounding volume that does not fully
+     * contain an animated/skinned mesh.
      *
      * @return The bounding sphere for the mesh.
      */
