@@ -3,14 +3,17 @@
 // Declare our game instance
 MeshGame game;
 
+MeshGame::MeshGame()
+    : _font(NULL), _scene(NULL),_modelNode(NULL), _touched(false), _touchX(0)
+{
+}
+
 MeshGame::~MeshGame()
 {
 }
 
 void MeshGame::initialize()
 {
-    _touched = false;
-
     // Load font
     _font = Font::create("res/arial40.gpb");
     assert(_font);
@@ -54,7 +57,7 @@ void MeshGame::render(long elapsedTime)
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
-    // Draw our scene
+    // Visit all the nodes in the scene, drawing the models/mesh.
     _scene->visit(this, &MeshGame::visitNode);
 
     // Draw the fps
