@@ -27,7 +27,7 @@ namespace gameplay
  * to the Matrix will automatically be reflected in the technique the
  * next time the parameter is applied to the render state.
  */
-class MaterialParameter : public AnimationTarget
+class MaterialParameter : public AnimationTarget, public Ref
 {
     friend class RenderState;
 
