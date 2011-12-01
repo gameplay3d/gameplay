@@ -51,7 +51,7 @@ protected:
 
 private:
 
-    void visitNode(Node* node, long cookie);
+    void drawScene(Node* node, long cookie);
 
     void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 
