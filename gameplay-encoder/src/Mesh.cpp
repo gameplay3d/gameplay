@@ -183,9 +183,7 @@ void Mesh::computeBounds()
     bounds.max.x = bounds.max.y = bounds.max.z = FLT_MIN;
     bounds.center.x = bounds.center.y = bounds.center.z = 0.0f;
     bounds.radius = 0.0f;
-    
-    // for each vertex
-    Vector3 avgPos;
+
     for (std::vector<Vertex>::const_iterator i = vertices.begin(); i != vertices.end(); i++)
     {
         // Update min/max for this vertex
@@ -201,16 +199,11 @@ void Mesh::computeBounds()
             bounds.max.y = i->position.y;
         if (i->position.z > bounds.max.z)
             bounds.max.z = i->position.z;
-
-        avgPos.x += i->position.x;
-        avgPos.y += i->position.y;
-        avgPos.z += i->position.z;
     }
 
     // Compute center point
-    bounds.center.x = avgPos.x / (float)vertices.size();
-    bounds.center.y = avgPos.y / (float)vertices.size();
-    bounds.center.z = avgPos.z / (float)vertices.size();
+    Vector3::add(bounds.min, bounds.max, &bounds.center);
+    bounds.center.scale(0.5f);
 
     // Compute radius by looping through all points again and finding the max
     // distance between the center point and each vertex position
