@@ -31,15 +31,6 @@ Animation::Animation(const char* id, AnimationTarget* target, int propertyId, un
 
 Animation::~Animation()
 {
-    std::vector<Channel*>::iterator channelIter = _channels.begin();
-    
-    while (channelIter != _channels.end())
-    {
-        SAFE_DELETE(*channelIter);
-        channelIter++;
-    }
-    _channels.clear();
-    
     if (_clips != NULL)
     {
         std::vector<AnimationClip*>::iterator clipIter = _clips->begin();
@@ -47,31 +38,42 @@ Animation::~Animation()
         while (clipIter != _clips->end())
         {   
             AnimationClip* clip = *clipIter;
+            clip->stop();
             SAFE_RELEASE(clip);
             clipIter++;
         }
         _clips->clear();
     }
-
     SAFE_DELETE(_clips);
 
     SAFE_DELETE(_defaultClip);
+
+    /*std::vector<Channel*>::iterator channelIter = _channels.begin();
+    while (channelIter != _channels.end())
+    {
+        Animation::Channel* channel = *channelIter;
+        channel->_target->removeChannel(channel);
+        SAFE_RELEASE(channel);
+        channelIter++;
+    }*/
+    _channels.clear();
 }
 
-Animation::Channel::Channel(AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration)
-    : _isRelative(false)
+Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration)
+    : _animation(animation), _target(target), _propertyId(propertyId), _curve(curve), _duration(duration)
 {
     // get property component count, and ensure the property exists on the AnimationTarget by getting the property component count.
-    assert(target->getAnimationPropertyComponentCount(propertyId));
+    assert(_target->getAnimationPropertyComponentCount(propertyId));
 
-    _target = target;
-    _propertyId = propertyId;
-    _curve = curve;
-    _duration = duration;
+    _animation->addRef();
+
+    _target->addChannel(this);
 }
 
 Animation::Channel::~Channel()
 {
+    _animation->removeChannel(this);
+    SAFE_RELEASE(_animation);
     SAFE_DELETE(_curve);
 }
 
@@ -246,10 +248,8 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
 
     SAFE_DELETE(normalizedKeyTimes);
 
-    Channel* channel = new Channel(target, propertyId, curve, duration);
-
+    Channel* channel = new Channel(this, target, propertyId, curve, duration);
     addChannel(channel);
-
     return channel;
 }
 
@@ -295,10 +295,8 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
 
     SAFE_DELETE(normalizedKeyTimes);
 
-    Channel* channel = new Channel(target, propertyId, curve, duration);
-
+    Channel* channel = new Channel(this, target, propertyId, curve, duration);
     addChannel(channel);
-
     return channel;
 }
 
@@ -308,6 +306,27 @@ void Animation::addChannel(Channel* channel)
     
     if (channel->_duration > _duration)
         _duration = channel->_duration;
+}
+
+void Animation::removeChannel(Channel* channel)
+{
+    std::vector<Animation::Channel*>::iterator itr = _channels.begin();
+    while (itr != _channels.end())
+    {
+        Animation::Channel* chan = *itr;
+        if (channel == chan) 
+        {
+            _channels.erase(itr);
+            itr = _channels.end();
+        }
+        else
+        {
+            itr++;
+        }
+    }
+
+    if (_channels.empty())
+        _controller->destroyAnimation(this);
 }
 
 void Animation::createDefaultClip()
