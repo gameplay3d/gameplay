@@ -96,65 +96,64 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">gameplay/src/MeshSkin.h</div>  </div>
 </div>
 <div class="contents">
-<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
-<a name="l00002"></a>00002 <span class="comment"> * MeshSkin.h</span>
-<a name="l00003"></a>00003 <span class="comment"> */</span>
-<a name="l00004"></a>00004 
-<a name="l00005"></a>00005 <span class="preprocessor">#ifndef MESHSKIN_H_</span>
-<a name="l00006"></a>00006 <span class="preprocessor"></span><span class="preprocessor">#define MESHSKIN_H_</span>
-<a name="l00007"></a>00007 <span class="preprocessor"></span>
-<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;Matrix.h&quot;</span>
-<a name="l00009"></a>00009 
-<a name="l00010"></a>00010 <span class="keyword">namespace </span>gameplay
-<a name="l00011"></a>00011 {
+<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef MESHSKIN_H_</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define MESHSKIN_H_</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span>
+<a name="l00004"></a>00004 <span class="preprocessor">#include &quot;Matrix.h&quot;</span>
+<a name="l00005"></a>00005 
+<a name="l00006"></a>00006 <span class="keyword">namespace </span>gameplay
+<a name="l00007"></a>00007 {
+<a name="l00008"></a>00008 
+<a name="l00009"></a>00009 <span class="keyword">class </span>Package;
+<a name="l00010"></a>00010 <span class="keyword">class </span>Model;
+<a name="l00011"></a>00011 <span class="keyword">class </span>Joint;
 <a name="l00012"></a>00012 
-<a name="l00013"></a>00013 <span class="keyword">class </span>Package;
-<a name="l00014"></a>00014 <span class="keyword">class </span>Joint;
-<a name="l00015"></a>00015 
-<a name="l00019"></a><a class="code" href="classgameplay_1_1_mesh_skin.html">00019</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>
-<a name="l00020"></a>00020 {
-<a name="l00021"></a>00021     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_package.html">Package</a>;
-<a name="l00022"></a>00022     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_model.html">Model</a>;
+<a name="l00016"></a><a class="code" href="classgameplay_1_1_mesh_skin.html">00016</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>
+<a name="l00017"></a>00017 {
+<a name="l00018"></a>00018     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_package.html">Package</a>;
+<a name="l00019"></a>00019     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_model.html">Model</a>;
+<a name="l00020"></a>00020     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_joint.html">Joint</a>;
+<a name="l00021"></a>00021 
+<a name="l00022"></a>00022 <span class="keyword">public</span>:
 <a name="l00023"></a>00023 
-<a name="l00024"></a>00024 <span class="keyword">public</span>:
-<a name="l00025"></a>00025 
-<a name="l00031"></a>00031     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_mesh_skin.html#a8091e4655939e3da96943965173df771">getBindShape</a>() <span class="keyword">const</span>;
-<a name="l00032"></a>00032 
-<a name="l00038"></a>00038     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_mesh_skin.html#a85df936b1fa0c3168d2ac151f5679c40">setBindShape</a>(<span class="keyword">const</span> <span class="keywordtype">float</span>* matrix);
-<a name="l00039"></a>00039 
-<a name="l00047"></a>00047     <a class="code" href="classgameplay_1_1_joint.html">Joint</a>* <a class="code" href="classgameplay_1_1_mesh_skin.html#a6b33d2fc8c3c310db2e43382ca63bc8a">getJoint</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>) <span class="keyword">const</span>;
-<a name="l00048"></a>00048 
-<a name="l00054"></a>00054     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* <a class="code" href="classgameplay_1_1_mesh_skin.html#a8d2c9631d7e3d388ae49eb92108a23ef">getMatrixPalette</a>() <span class="keyword">const</span>;
-<a name="l00055"></a>00055 
-<a name="l00063"></a>00063     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_mesh_skin.html#a149f83114d83a13fe39907a680e2fb74">getMatrixPaletteSize</a>() <span class="keyword">const</span>;
+<a name="l00029"></a>00029     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_mesh_skin.html#a8091e4655939e3da96943965173df771">getBindShape</a>() <span class="keyword">const</span>;
+<a name="l00030"></a>00030 
+<a name="l00036"></a>00036     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_mesh_skin.html#a85df936b1fa0c3168d2ac151f5679c40">setBindShape</a>(<span class="keyword">const</span> <span class="keywordtype">float</span>* matrix);
+<a name="l00037"></a>00037 
+<a name="l00045"></a>00045     <a class="code" href="classgameplay_1_1_joint.html">Joint</a>* <a class="code" href="classgameplay_1_1_mesh_skin.html#a6b33d2fc8c3c310db2e43382ca63bc8a">getJoint</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>) <span class="keyword">const</span>;
+<a name="l00046"></a>00046 
+<a name="l00052"></a>00052     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* <a class="code" href="classgameplay_1_1_mesh_skin.html#a8d2c9631d7e3d388ae49eb92108a23ef">getMatrixPalette</a>() <span class="keyword">const</span>;
+<a name="l00053"></a>00053 
+<a name="l00061"></a>00061     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_mesh_skin.html#a149f83114d83a13fe39907a680e2fb74">getMatrixPaletteSize</a>() <span class="keyword">const</span>;
+<a name="l00062"></a>00062 
+<a name="l00063"></a>00063 <span class="keyword">private</span>:
 <a name="l00064"></a>00064 
-<a name="l00065"></a>00065 <span class="keyword">private</span>:
-<a name="l00066"></a>00066 
-<a name="l00070"></a>00070     <a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>();
-<a name="l00071"></a>00071 
-<a name="l00075"></a>00075     ~<a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>();
-<a name="l00076"></a>00076 
-<a name="l00083"></a>00083     <span class="keywordtype">void</span> setJointCount(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> jointCount);
-<a name="l00084"></a>00084 
-<a name="l00091"></a>00091     <span class="keywordtype">void</span> setJoint(<a class="code" href="classgameplay_1_1_joint.html">Joint</a>* joint, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
-<a name="l00092"></a>00092 
-<a name="l00096"></a>00096     <span class="keywordtype">void</span> clearJoints();
-<a name="l00097"></a>00097 
-<a name="l00105"></a>00105     <a class="code" href="classgameplay_1_1_joint.html">Joint</a>* <a class="code" href="classgameplay_1_1_mesh_skin.html#a6b33d2fc8c3c310db2e43382ca63bc8a">getJoint</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index) <span class="keyword">const</span>;
-<a name="l00106"></a>00106 
-<a name="l00107"></a>00107     <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a> _bindShape;
-<a name="l00108"></a>00108     std::vector&lt;Joint*&gt; _joints;
-<a name="l00109"></a>00109 
-<a name="l00110"></a>00110     <span class="comment">// Pointer to the array of palette matrices.</span>
-<a name="l00111"></a>00111     <span class="comment">// This array is passed to the vertex shader as a uniform.</span>
-<a name="l00112"></a>00112     <span class="comment">// Each 4x3 row-wise matrix is represented as 3 Vector4&#39;s.</span>
-<a name="l00113"></a>00113     <span class="comment">// The number of Vector4&#39;s is (_joints.size() * 3).</span>
-<a name="l00114"></a>00114     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* _matrixPalette;
-<a name="l00115"></a>00115 };
-<a name="l00116"></a>00116 
-<a name="l00117"></a>00117 }
-<a name="l00118"></a>00118 
-<a name="l00119"></a>00119 <span class="preprocessor">#endif</span>
+<a name="l00068"></a>00068     <a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>();
+<a name="l00069"></a>00069 
+<a name="l00073"></a>00073     ~<a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>();
+<a name="l00074"></a>00074 
+<a name="l00081"></a>00081     <span class="keywordtype">void</span> setJointCount(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> jointCount);
+<a name="l00082"></a>00082 
+<a name="l00089"></a>00089     <span class="keywordtype">void</span> setJoint(<a class="code" href="classgameplay_1_1_joint.html">Joint</a>* joint, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
+<a name="l00090"></a>00090 
+<a name="l00094"></a>00094     <span class="keywordtype">void</span> clearJoints();
+<a name="l00095"></a>00095 
+<a name="l00103"></a>00103     <a class="code" href="classgameplay_1_1_joint.html">Joint</a>* <a class="code" href="classgameplay_1_1_mesh_skin.html#a6b33d2fc8c3c310db2e43382ca63bc8a">getJoint</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index) <span class="keyword">const</span>;
+<a name="l00104"></a>00104 
+<a name="l00105"></a>00105     <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a> _bindShape;
+<a name="l00106"></a>00106     std::vector&lt;Joint*&gt; _joints;
+<a name="l00107"></a>00107 
+<a name="l00108"></a>00108     <span class="comment">// Pointer to the array of palette matrices.</span>
+<a name="l00109"></a>00109     <span class="comment">// This array is passed to the vertex shader as a uniform.</span>
+<a name="l00110"></a>00110     <span class="comment">// Each 4x3 row-wise matrix is represented as 3 Vector4&#39;s.</span>
+<a name="l00111"></a>00111     <span class="comment">// The number of Vector4&#39;s is (_joints.size() * 3).</span>
+<a name="l00112"></a>00112     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* _matrixPalette;
+<a name="l00113"></a>00113     <a class="code" href="classgameplay_1_1_model.html">Model</a>* _model;
+<a name="l00114"></a>00114 };
+<a name="l00115"></a>00115 
+<a name="l00116"></a>00116 }
+<a name="l00117"></a>00117 
+<a name="l00118"></a>00118 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -175,7 +174,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:34 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

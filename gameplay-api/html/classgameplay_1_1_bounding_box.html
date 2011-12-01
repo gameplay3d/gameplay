@@ -128,6 +128,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_bounding_box.html#acdfb197b1a7efb7ae8a9603859ac468a">set</a> (const <a class="el" href="classgameplay_1_1_bounding_box.html">BoundingBox</a> &amp;box)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_bounding_box.html#a58694d5964bdcd962c07f7a390b0ec9d">set</a> (const <a class="el" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> &amp;sphere)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_bounding_box.html#aec180b1ddc8832afb131124bf7d286f2">transform</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;matrix)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_bounding_box.html">BoundingBox</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_bounding_box.html#a7333df0ccad40819d0c5641141a31afa">operator*=</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;matrix)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="classgameplay_1_1_bounding_box.html">BoundingBox</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_bounding_box.html#a973ecbccb843b42d6644f5a1ce445191">empty</a> ()</td></tr>
@@ -491,6 +492,31 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a7333df0ccad40819d0c5641141a31afa"></a><!-- doxytag: member="gameplay::BoundingBox::operator*=" ref="a7333df0ccad40819d0c5641141a31afa" args="(const Matrix &amp;matrix)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_bounding_box.html">BoundingBox</a> &amp; gameplay::BoundingBox::operator*= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Transforms this bounding box by the given matrix.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">matrix</td><td>The matrix to transform by. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>This bounding box, after the transformation occurs. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="aa8938b25160afc04b4abeb65e33da8bd"></a><!-- doxytag: member="gameplay::BoundingBox::set" ref="aa8938b25160afc04b4abeb65e33da8bd" args="(const Vector3 &amp;min, const Vector3 &amp;max)" -->
 <div class="memitem">
 <div class="memproto">
@@ -630,6 +656,7 @@ Public Attributes</h2></td></tr>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_bounding_box_8h_source.html">BoundingBox.h</a></li>
 <li>gameplay/src/BoundingBox.cpp</li>
+<li>gameplay/src/BoundingBox.inl</li>
 </ul>
 </div>
 </div>
@@ -652,7 +679,7 @@ Public Attributes</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:34 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:04 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

@@ -113,6 +113,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3">Quaternion</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#a7384c6a014a4687ad770f5043b1107d7">Quaternion</a> (float <a class="el" href="classgameplay_1_1_quaternion.html#a7d459b3a8d299c0041537ae833616984">x</a>, float <a class="el" href="classgameplay_1_1_quaternion.html#a1474289ed4a64d618cb7442cd1de8e8e">y</a>, float <a class="el" href="classgameplay_1_1_quaternion.html#a22b3cb659769e4968fc9c5805f467e25">z</a>, float <a class="el" href="classgameplay_1_1_quaternion.html#a2282df4dee3cdf7ecf8512004d16331c">w</a>)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#a952f7977bec7d3f020cb4f3cf0fdf7ce">Quaternion</a> (float *array)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#ac20f805362106410accdbd294a3785fe">Quaternion</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;m)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#afcae9ff45daf216c769303492bcaaa3d">Quaternion</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;axis, float angle)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#a98e360bf934f6a3a40a557d047b635cc">Quaternion</a> (const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;copy)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#a5447fe636088979e73faaf7236b70d37">~Quaternion</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#aedc78813aaea55344c8e54518de96c22">isIdentity</a> () const </td></tr>
@@ -126,10 +128,13 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#abe3886ea1ef763798e990c290822e7c0">normalize</a> (<a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> *dst) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#a9125d9957aa6a114fad7063fdd89d9d7">set</a> (float <a class="el" href="classgameplay_1_1_quaternion.html#a7d459b3a8d299c0041537ae833616984">x</a>, float <a class="el" href="classgameplay_1_1_quaternion.html#a1474289ed4a64d618cb7442cd1de8e8e">y</a>, float <a class="el" href="classgameplay_1_1_quaternion.html#a22b3cb659769e4968fc9c5805f467e25">z</a>, float <a class="el" href="classgameplay_1_1_quaternion.html#a2282df4dee3cdf7ecf8512004d16331c">w</a>)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#ae32a7699d460d715853300b29edf4524">set</a> (float *array)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#a9f428c44a877a8d09035cd95afc08d31">set</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;m)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#a2e581250445a02381cdec95435656da3">set</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;axis, float angle)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#ab30fe334e4a214a6095e7c8590ed345a">set</a> (const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;q)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#ad6966c6dd1babf2a8b8f53868a50707d">setIdentity</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#a349dee878455cce0363ab88840fccbd4">toAxisAngle</a> (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *e) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#a8db33d59aa2e61d1b679d9dbf2dea5ab">operator*</a> (const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;q) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#a91d3fc9bed01b84bd90642f38535e923">operator*=</a> (const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;q)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_quaternion.html#a709ce9e0c6b55d2dad70b1edf056a457">identity</a> ()</td></tr>
@@ -246,6 +251,65 @@ Public Attributes</h2></td></tr>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">array</td><td>The values for the new quaternion. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ac20f805362106410accdbd294a3785fe"></a><!-- doxytag: member="gameplay::Quaternion::Quaternion" ref="ac20f805362106410accdbd294a3785fe" args="(const Matrix &amp;m)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gameplay::Quaternion::Quaternion </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Constructs a quaternion equal to the rotational part of the specified matrix.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>The matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="afcae9ff45daf216c769303492bcaaa3d"></a><!-- doxytag: member="gameplay::Quaternion::Quaternion" ref="afcae9ff45daf216c769303492bcaaa3d" args="(const Vector3 &amp;axis, float angle)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gameplay::Quaternion::Quaternion </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>axis</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>angle</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Constructs a quaternion equal to the rotation from the specified axis and angle.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">axis</td><td>A vector describing the axis of rotation. </td></tr>
+    <tr><td class="paramname">angle</td><td>The angle of rotation (in radians). </td></tr>
   </table>
   </dd>
 </dl>
@@ -670,6 +734,57 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8db33d59aa2e61d1b679d9dbf2dea5ab"></a><!-- doxytag: member="gameplay::Quaternion::operator*" ref="a8db33d59aa2e61d1b679d9dbf2dea5ab" args="(const Quaternion &amp;q) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> gameplay::Quaternion::operator* </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Calculates the quaternion product of this quaternion with the given quaternion.</p>
+<p>Note: this does not modify this quaternion.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">q</td><td>The quaternion to multiply. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The quaternion product. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a91d3fc9bed01b84bd90642f38535e923"></a><!-- doxytag: member="gameplay::Quaternion::operator*=" ref="a91d3fc9bed01b84bd90642f38535e923" args="(const Quaternion &amp;q)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp; gameplay::Quaternion::operator*= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Multiplies this quaternion with the given quaternion.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">q</td><td>The quaternion to multiply. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>This quaternion, after the multiplication occurs. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a9125d9957aa6a114fad7063fdd89d9d7"></a><!-- doxytag: member="gameplay::Quaternion::set" ref="a9125d9957aa6a114fad7063fdd89d9d7" args="(float x, float y, float z, float w)" -->
 <div class="memitem">
 <div class="memproto">
@@ -737,6 +852,30 @@ Public Attributes</h2></td></tr>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">array</td><td>An array containing the elements of the quaternion in the order x, y, z, w. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a9f428c44a877a8d09035cd95afc08d31"></a><!-- doxytag: member="gameplay::Quaternion::set" ref="a9f428c44a877a8d09035cd95afc08d31" args="(const Matrix &amp;m)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Quaternion::set </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the quaternion equal to the rotational part of the specified matrix.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>The matrix. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1038,6 +1177,7 @@ Public Attributes</h2></td></tr>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_quaternion_8h_source.html">Quaternion.h</a></li>
 <li>gameplay/src/Quaternion.cpp</li>
+<li>gameplay/src/Quaternion.inl</li>
 </ul>
 </div>
 </div>
@@ -1060,7 +1200,7 @@ Public Attributes</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:35 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

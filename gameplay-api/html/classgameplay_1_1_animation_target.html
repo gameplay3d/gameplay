@@ -105,7 +105,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">gameplay::AnimationTarget Class Reference</div>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="gameplay::AnimationTarget" --><!-- doxytag: inherits="gameplay::Ref" -->
+<!-- doxytag: class="gameplay::AnimationTarget" -->
 <p><code>#include &lt;<a class="el" href="_animation_target_8h_source.html">AnimationTarget.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for gameplay::AnimationTarget:</div>
@@ -113,11 +113,10 @@ Inheritance diagram for gameplay::AnimationTarget:</div>
  <div class="center">
   <img src="classgameplay_1_1_animation_target.png" usemap="#gameplay::AnimationTarget_map" alt=""/>
   <map id="gameplay::AnimationTarget_map" name="gameplay::AnimationTarget_map">
-<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="93,0,269,24"/>
-<area href="classgameplay_1_1_material_parameter.html" alt="gameplay::MaterialParameter" shape="rect" coords="0,112,176,136"/>
-<area href="classgameplay_1_1_transform.html" alt="gameplay::Transform" shape="rect" coords="186,112,362,136"/>
-<area href="classgameplay_1_1_node.html" alt="gameplay::Node" shape="rect" coords="186,168,362,192"/>
-<area href="classgameplay_1_1_joint.html" alt="gameplay::Joint" shape="rect" coords="186,224,362,248"/>
+<area href="classgameplay_1_1_material_parameter.html" alt="gameplay::MaterialParameter" shape="rect" coords="0,56,176,80"/>
+<area href="classgameplay_1_1_transform.html" alt="gameplay::Transform" shape="rect" coords="186,56,362,80"/>
+<area href="classgameplay_1_1_node.html" alt="gameplay::Node" shape="rect" coords="186,112,362,136"/>
+<area href="classgameplay_1_1_joint.html" alt="gameplay::Joint" shape="rect" coords="186,168,362,192"/>
 </map>
  </div></div>
 
@@ -128,9 +127,6 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#a963d6a3f8e77c59cfb9ac2284d961c31">getAnimationPropertyComponentCount</a> (int propertyId) const =0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#a9e29517739e99d940e119dc2ee5a4aae">getAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value)=0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#a7aa3d929d61f6df9128b56a27f293a21">setAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value)=0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#aa60959a088e80e433eff0b304ef4513c">getAnimationCount</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#a0faf9476caa018d4889f42938ea04a54">getAnimation</a> (unsigned int index) const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#a5c19ce0479702628d28cd67caad56c46">getAnimation</a> (const char *id) const </td></tr>
 <tr><td colspan="2"><h2><a name="pro-types"></a>
 Protected Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>TargetType</b> { <b>SCALAR</b>, 
@@ -140,8 +136,8 @@ Protected Types</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#a03d383afb9045efee09ec661bceedf80">AnimationTarget</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#a70be0e33d381eff6ae118c6f3866c50b">~AnimationTarget</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6734f646b18515751be980f5dcd46f07"></a><!-- doxytag: member="gameplay::AnimationTarget::addAnimation" ref="a6734f646b18515751be980f5dcd46f07" args="(Animation *animation)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addAnimation</b> (<a class="el" href="classgameplay_1_1_animation.html">Animation</a> *animation)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a354a8a9e290140a15529657c6593e9fb"></a><!-- doxytag: member="gameplay::AnimationTarget::addChannel" ref="a354a8a9e290140a15529657c6593e9fb" args="(Animation::Channel *animation)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addChannel</b> (Animation::Channel *animation)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3427f0e388bbfed7b5ee9fdda24b60a8"></a><!-- doxytag: member="gameplay::AnimationTarget::_targetType" ref="a3427f0e388bbfed7b5ee9fdda24b60a8" args="" -->
@@ -150,6 +146,8 @@ TargetType&#160;</td><td class="memItemRight" valign="bottom"><b>_targetType</b>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af47625f50036c466946f960db7320bcf"></a><!-- doxytag: member="gameplay::AnimationTarget::Animation" ref="af47625f50036c466946f960db7320bcf" args="" -->
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad47388abe0372b9b407ebabb3379a976"></a><!-- doxytag: member="gameplay::AnimationTarget::AnimationClip" ref="ad47388abe0372b9b407ebabb3379a976" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationClip</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7899599edce4988a894c8e7431e7bb85"></a><!-- doxytag: member="gameplay::AnimationTarget::AnimationController" ref="a7899599edce4988a894c8e7431e7bb85" args="" -->
 class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController</b></td></tr>
 </table>
@@ -191,74 +189,6 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a0faf9476caa018d4889f42938ea04a54"></a><!-- doxytag: member="gameplay::AnimationTarget::getAnimation" ref="a0faf9476caa018d4889f42938ea04a54" args="(unsigned int index) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> * gameplay::AnimationTarget::getAnimation </td>
-          <td>(</td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>index</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Gets the <a class="el" href="classgameplay_1_1_animation.html">Animation</a> with the given index.</p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">index</td><td>The index of the <a class="el" href="classgameplay_1_1_animation.html">Animation</a> to return.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The <a class="el" href="classgameplay_1_1_animation.html">Animation</a> at the given index. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a5c19ce0479702628d28cd67caad56c46"></a><!-- doxytag: member="gameplay::AnimationTarget::getAnimation" ref="a5c19ce0479702628d28cd67caad56c46" args="(const char *id) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> * gameplay::AnimationTarget::getAnimation </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Finds the <a class="el" href="classgameplay_1_1_animation.html">Animation</a> with the given ID.</p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">id</td><td>The ID of the <a class="el" href="classgameplay_1_1_animation.html">Animation</a> to get.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The <a class="el" href="classgameplay_1_1_animation.html">Animation</a> with the given ID. NULL if the <a class="el" href="classgameplay_1_1_animation.html">Animation</a> is not found. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aa60959a088e80e433eff0b304ef4513c"></a><!-- doxytag: member="gameplay::AnimationTarget::getAnimationCount" ref="aa60959a088e80e433eff0b304ef4513c" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int gameplay::AnimationTarget::getAnimationCount </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Gets the number of Animations on this target.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The number of Animations targeting this object. </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a963d6a3f8e77c59cfb9ac2284d961c31"></a><!-- doxytag: member="gameplay::AnimationTarget::getAnimationPropertyComponentCount" ref="a963d6a3f8e77c59cfb9ac2284d961c31" args="(int propertyId) const =0" -->
 <div class="memitem">
 <div class="memproto">
@@ -385,7 +315,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:34 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:04 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

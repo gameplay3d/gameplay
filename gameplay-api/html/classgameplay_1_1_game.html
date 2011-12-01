@@ -139,8 +139,9 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a6a0ab2f3c261627aaf03068a2d43c36e">getWidth</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a03206e4c2b39564fbae3b7cef5c2bdb0">getHeight</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aed3bfa9c1cfcdd4eb0729284d5e10a8d">clear</a> (<a class="el" href="classgameplay_1_1_game.html#a7866ef6e9e0ee3b812b408a75cc13cdb">ClearFlags</a> flags, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;clearColor, float clearDepth, int clearStencil)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_audio_controller.html">AudioController</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a9428ec0d2e451e77008cd9fe1fec306a">getAudioController</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_audio_controller.html">AudioController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a342d7bb280fe269880f116304c6319a2">getAudioController</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation_controller.html">AnimationController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a82c41575f4d5b6c43b6346d8ede83048">getAnimationController</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_controller.html">PhysicsController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#adf4cf2bb1f2e0a2f1ce093605d228389">getPhysicsController</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ac54e0ed0d3157f770198207757ce21a8">menu</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ae72780b41a76a9743f4cf464815366f4">keyChar</a> (char key)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3c9a257bdb68dbcf0ccd06ac218b91bb">keyPress</a> (int key, int keyEvent)</td></tr>
@@ -364,12 +365,12 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9428ec0d2e451e77008cd9fe1fec306a"></a><!-- doxytag: member="gameplay::Game::getAudioController" ref="a9428ec0d2e451e77008cd9fe1fec306a" args="() const " -->
+<a class="anchor" id="a342d7bb280fe269880f116304c6319a2"></a><!-- doxytag: member="gameplay::Game::getAudioController" ref="a342d7bb280fe269880f116304c6319a2" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classgameplay_1_1_audio_controller.html">AudioController</a> &amp; gameplay::Game::getAudioController </td>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_audio_controller.html">AudioController</a> * gameplay::Game::getAudioController </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -452,6 +453,24 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Gets the single instance of the game.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The single instance of the game. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="adf4cf2bb1f2e0a2f1ce093605d228389"></a><!-- doxytag: member="gameplay::Game::getPhysicsController" ref="adf4cf2bb1f2e0a2f1ce093605d228389" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_physics_controller.html">PhysicsController</a> * gameplay::Game::getPhysicsController </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the physics controller for managing control of physics associated with the game.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The physics controller for this game. </dd></dl>
 
 </div>
 </div>
@@ -817,7 +836,7 @@ Protected Member Functions</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:35 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:04 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
