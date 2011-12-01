@@ -6,6 +6,7 @@ namespace gameplay
 {
 
 BoundingSphere::BoundingSphere()
+    : radius(0)
 {
 }
 
@@ -158,17 +159,15 @@ bool BoundingSphere::isEmpty() const
 void BoundingSphere::merge(const BoundingSphere& sphere)
 {
     // Calculate the distance between the two centers.
-    float vx = sphere.center.x - center.x;
-    float vy = sphere.center.y - center.y;
-    float vz = sphere.center.z - center.z;
+    float vx = center.x - sphere.center.x;
+    float vy = center.y - sphere.center.y;
+    float vz = center.z - sphere.center.z;
     float d = sqrtf(vx * vx + vy * vy + vz * vz);
 
     // If one sphere is contained inside the other, set to the larger sphere.
     if (d <= (sphere.radius - radius))
     {
-        center.x = sphere.center.x;
-        center.y = sphere.center.y;
-        center.z = sphere.center.z;
+        center = sphere.center;
         radius = sphere.radius;
         return;
     }
@@ -184,7 +183,7 @@ void BoundingSphere::merge(const BoundingSphere& sphere)
     vz *= dI;
 
     // Calculate the new radius.
-    float r = (radius + radius + d) * 0.5f;
+    float r = (radius + sphere.radius + d) * 0.5f;
 
     // Calculate the new center.
     float scaleFactor = (r - sphere.radius);

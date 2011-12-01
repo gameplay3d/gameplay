@@ -35,11 +35,12 @@ public:
     void setSkin(MeshSkin* skin);
 
 private:
+
     Mesh* _ref;
     MeshSkin* _meshSkin;
     std::list<Material*> _materials;
 };
 
 }
-#endif
 
+#endif

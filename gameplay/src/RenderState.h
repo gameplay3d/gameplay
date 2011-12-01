@@ -38,9 +38,19 @@ public:
         VIEW_MATRIX,
 
         /**
+         * Binds the Projection matrix of the active camera for the node's scene.
+         */
+        PROJECTION_MATRIX,
+
+        /**
          * Binds a node's WorldView matrix.
          */
         WORLD_VIEW_MATRIX,
+
+        /**
+         * Binds the ViewProjection matrix of the active camera for the node's scene.
+         */
+        VIEW_PROJECTION_MATRIX,
 
         /**
          * Binds a node's WorldViewProjection matrix.

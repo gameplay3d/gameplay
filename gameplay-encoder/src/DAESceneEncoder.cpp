@@ -1266,9 +1266,9 @@ void DAESceneEncoder::loadSkeleton(domInstance_controller::domSkeleton* skeleton
     }
 
     // Resolve and set joints array for skin
-    std::list<Node*> _joints;
-    const std::list<std::string>& jointNames = skin->getJointNames();
-    for (std::list<std::string>::const_iterator i = jointNames.begin(); i != jointNames.end(); i++)
+    std::vector<Node*> _joints;
+    const std::vector<std::string>& jointNames = skin->getJointNames();
+    for (std::vector<std::string>::const_iterator i = jointNames.begin(); i != jointNames.end(); i++)
     {
         Object* obj = _gamePlayFile.getFromRefTable(*i);
         if (obj)
@@ -1302,7 +1302,6 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
     domSkin::domJointsRef _joints = skinElement->getJoints();
     domInputLocal_Array& jointInputs = _joints->getInput_array();
 
-
     // Process "JOINT" input semantic first (we need to do this to set the joint count)
     unsigned int jointCount = 0;
     for (unsigned int i = 0; i < jointInputs.getCount(); i++)
@@ -1316,12 +1315,12 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
         if (equals(inputSemantic, "JOINT"))
         {
             // Get the joint Ids's
-            std::list<std::string> list;
+            std::vector<std::string> list;
             getJointNames(source, list);
 
             // Go through the joint list and conver them from sid to id because the sid information is
             // lost when converting to the gameplay binary format.
-            for (std::list<std::string>::iterator i = list.begin(); i != list.end(); i++)
+            for (std::vector<std::string>::iterator i = list.begin(); i != list.end(); i++)
             {
                 daeSIDResolver resolver(source->getDocument()->getDomRoot(), i->c_str());
                 daeElement* element = resolver.getElement();
@@ -1340,7 +1339,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
             jointCount = list.size();
             _jointInverseBindPoseMatrices.reserve(jointCount);
             unsigned int j = 0;
-            for (std::list<std::string>::const_iterator i = list.begin(); i != list.end(); i++)
+            for (std::vector<std::string>::const_iterator i = list.begin(); i != list.end(); i++)
             {
                 _jointLookupTable[*i] = j++;
             }

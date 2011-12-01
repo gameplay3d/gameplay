@@ -175,7 +175,7 @@ void AudioSource::setNode(Node* node)
     }
 }
 
-void AudioSource::transformChanged(Transform* transform)
+void AudioSource::transformChanged(Transform* transform, long cookie)
 {
     alSourcefv(_alSource, AL_POSITION, (const ALfloat*)&transform->getTranslation());
 }

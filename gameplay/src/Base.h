@@ -45,12 +45,12 @@ extern void printError(const char* format, ...);
 #define LOG_ERROR(x) \
     { \
         printError(x); \
-        assert(0); \
+        assert(#x == 0); \
     }
 #define LOG_ERROR_VARG(x, ...) \
     { \
         printError(x, __VA_ARGS__); \
-        assert(0); \
+        assert(#x == 0); \
     }
 
 // Warning macro

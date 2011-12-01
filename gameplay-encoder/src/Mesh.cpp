@@ -1,9 +1,10 @@
 #include "Mesh.h"
+#include "Model.h"
 
 namespace gameplay
 {
 
-Mesh::Mesh(void)
+Mesh::Mesh(void) : model(NULL)
 {
 }
 
@@ -25,8 +26,8 @@ void Mesh::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
     // vertex formats
-    write(_vertexFormats.size(), file);
-    for (std::vector<VertexElement>::iterator i = _vertexFormats.begin(); i != _vertexFormats.end(); i++)
+    write(_vertexFormat.size(), file);
+    for (std::vector<VertexElement>::iterator i = _vertexFormat.begin(); i != _vertexFormat.end(); i++)
     {
         i->writeBinary(file);
     }
@@ -73,7 +74,7 @@ void Mesh::writeText(FILE* file)
     // for each VertexFormat
     if (vertices.size() > 0 )
     {
-        for (std::vector<VertexElement>::iterator i = _vertexFormats.begin(); i != _vertexFormats.end(); i++)
+        for (std::vector<VertexElement>::iterator i = _vertexFormat.begin(); i != _vertexFormat.end(); i++)
         {
             i->writeText(file);
         }
@@ -123,12 +124,27 @@ void Mesh::addMeshPart(Vertex* vertex)
 
 void Mesh::addVetexAttribute(unsigned int usage, unsigned int count)
 {
-    _vertexFormats.push_back(VertexElement(usage, count));
+    _vertexFormat.push_back(VertexElement(usage, count));
 }
 
 size_t Mesh::getVertexCount() const
 {
     return vertices.size();
+}
+
+const Vertex& Mesh::getVertex(unsigned int index) const
+{
+    return vertices[index];
+}
+
+size_t Mesh::getVertexElementCount() const
+{
+    return _vertexFormat.size();
+}
+
+const VertexElement& Mesh::getVertexElement(unsigned int index) const
+{
+    return _vertexFormat[index];
 }
 
 bool Mesh::contains(const Vertex& vertex) const
@@ -154,13 +170,20 @@ unsigned int Mesh::getVertexIndex(const Vertex& vertex)
 
 void Mesh::computeBounds()
 {
+    // If we have a Model with a MeshSkin associated with it,
+    // compute the bounds from the skin - otherwise compute
+    // it from the local mesh data.
+    if (model && model->getSkin())
+    {
+        model->getSkin()->computeBounds();
+        return;
+    }
+
     bounds.min.x = bounds.min.y = bounds.min.z = FLT_MAX;
     bounds.max.x = bounds.max.y = bounds.max.z = FLT_MIN;
     bounds.center.x = bounds.center.y = bounds.center.z = 0.0f;
     bounds.radius = 0.0f;
-    
-    // for each vertex
-    Vector3 avgPos;
+
     for (std::vector<Vertex>::const_iterator i = vertices.begin(); i != vertices.end(); i++)
     {
         // Update min/max for this vertex
@@ -176,16 +199,11 @@ void Mesh::computeBounds()
             bounds.max.y = i->position.y;
         if (i->position.z > bounds.max.z)
             bounds.max.z = i->position.z;
-
-        avgPos.x += i->position.x;
-        avgPos.y += i->position.y;
-        avgPos.z += i->position.z;
     }
 
     // Compute center point
-    bounds.center.x = avgPos.x / (float)vertices.size();
-    bounds.center.y = avgPos.y / (float)vertices.size();
-    bounds.center.z = avgPos.z / (float)vertices.size();
+    Vector3::add(bounds.min, bounds.max, &bounds.center);
+    bounds.center.scale(0.5f);
 
     // Compute radius by looping through all points again and finding the max
     // distance between the center point and each vertex position

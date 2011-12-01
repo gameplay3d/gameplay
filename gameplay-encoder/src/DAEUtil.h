@@ -27,7 +27,7 @@ using namespace gameplay;
  * @param source The source element to search in.
  * @param list The list to append the joint names to.
  */
-void getJointNames(const domSourceRef source, std::list<std::string>& list);
+void getJointNames(const domSourceRef source, std::vector<std::string>& list);
 
 /**
  * Gets the joint names for the given skin and appends them to the given list.
@@ -35,7 +35,7 @@ void getJointNames(const domSourceRef source, std::list<std::string>& list);
  * @param skin The skin element to search in.
  * @param list The list to append the joint names to.
  */
-void getJointNames(const domSkin* skin, std::list<std::string>& list);
+void getJointNames(const domSkin* skin, std::vector<std::string>& list);
 
 /**
  * Gets the input source from the given channel.
