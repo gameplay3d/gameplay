@@ -185,7 +185,7 @@
 		42475CDB147208A000610A6A = {
 			isa = PBXGroup;
 			children = (
-				42475CE9147208A000610A6A /* gameplay-encoder */,
+				42475CE9147208A000610A6A /* src */,
 				427D4F44147DC9080076760E /* Libraries */,
 				42475CE7147208A000610A6A /* Products */,
 			);
@@ -199,7 +199,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		42475CE9147208A000610A6A /* gameplay-encoder */ = {
+		42475CE9147208A000610A6A /* src */ = {
 			isa = PBXGroup;
 			children = (
 				42C8EDB714724CD700E43619 /* Animation.cpp */,
@@ -286,6 +286,7 @@
 				42C8EE0814724CD700E43619 /* VertexElement.cpp */,
 				42C8EE0914724CD700E43619 /* VertexElement.h */,
 			);
+			name = src;
 			path = "gameplay-encoder";
 			sourceTree = "<group>";
 		};
