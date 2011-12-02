@@ -1,8 +1,9 @@
+#include "Base.h"
 #include "DAEOptimizer.h"
-
-#include <algorithm>
-
 #include "StringUtil.h"
+
+namespace gameplay
+{
 
 DAEOptimizer::DAEOptimizer(domCOLLADA* dom)
 {
@@ -122,4 +123,6 @@ void DAEOptimizer::deleteEmptyAnimations()
     {
         daeElement::removeFromParent(*i);
     }
+}
+
 }

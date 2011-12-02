@@ -1,8 +1,8 @@
 #ifndef ENCODERARGUMENTS_H_
 #define ENCODERARGUMENTS_H_
 
-
-#include "Base.h"
+namespace gameplay
+{
 
 /**
  * EncoderArguments handles parsing the command line arguments for the GamePlay Encoder.
@@ -115,5 +115,7 @@ private:
     std::vector<std::string> _groupAnimationNodeId;
     std::vector<std::string> _groupAnimationAnimationId;
 };
+
+}
 
 #endif

@@ -1,20 +1,22 @@
 #ifndef MESHSKIN_H_
 #define MESHSKIN_H_
 
-#include <vector>
-
 #include "Base.h"
 #include "Object.h"
 #include "Matrix.h"
 #include "Animation.h"
+#include "BoundingVolume.h"
 
 namespace gameplay
 {
 
 class Node;
+class Mesh;
 
 class MeshSkin : public Object
 {
+    friend class Model;
+
 public:
 
     /**
@@ -32,15 +34,15 @@ public:
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
 
-    const std::list<std::string>& getJointNames();
-
     void setBindShape(const float data[]);
 
     void setVertexInfluenceCount(unsigned int count);
 
-    void setJointNames(const std::list<std::string>& list);
+    void setJointNames(const std::vector<std::string>& list);
 
-    void setJoints(const std::list<Node*>& list);
+    const std::vector<std::string>& getJointNames();
+
+    void setJoints(const std::vector<Node*>& list);
 
     void setBindPoses(std::vector<Matrix>& list);
 
@@ -53,16 +55,19 @@ public:
      */
     bool hasJoint(const char* id);
 
+    void computeBounds();
+
 private:
 
+    Mesh* _mesh;
     float _bindShape[16];
-    std::list<Node*> _joints;
-    std::list<float> _bindPoses;
-
-    std::list<std::string> _jointNames;
-
+    std::vector<Node*> _joints;
+    std::vector<Matrix> _bindPoses;
+    std::vector<std::string> _jointNames;
     unsigned int _vertexInfluenceCount;
+    std::vector<BoundingVolume> _jointBounds;
 };
 
 }
+
 #endif

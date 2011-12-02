@@ -1,3 +1,5 @@
+
+#include "Base.h"
 #include "DAEChannelTarget.h"
 
 namespace gameplay

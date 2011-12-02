@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 AnimationValue::AnimationValue(unsigned int componentCount)
-  : _componentCount(componentCount), _componentSize(componentCount * sizeof(float))
+  : _isFirstActing(false), _componentCount(componentCount), _componentSize(componentCount * sizeof(float))
 {
     _currentValue = new float[_componentCount];
     _interpolatedValue = new float[_componentCount];

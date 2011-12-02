@@ -1,21 +1,8 @@
 #ifndef DAEUTIL_H_
 #define DAEUTIL_H_
 
-#include <iostream>
-#include <list>
-#include <vector>
-
-#include <dae.h>
-#include <dae/daeSIDResolver.h>
-#include <dae/domAny.h>
-#include <dom/domCOLLADA.h>
-#include <dom/domConstants.h>
-#include <dom/domElements.h>
-#include <dom/domProfile_COMMON.h>
-
-#include "Base.h"
-
-using namespace gameplay;
+namespace gameplay
+{
 
 /**
  * Gets the joint names for the given source and appends them to the given list.
@@ -23,7 +10,7 @@ using namespace gameplay;
  * @param source The source element to search in.
  * @param list The list to append the joint names to.
  */
-void getJointNames(const domSourceRef source, std::list<std::string>& list);
+void getJointNames(const domSourceRef source, std::vector<std::string>& list);
 
 /**
  * Gets the joint names for the given skin and appends them to the given list.
@@ -31,7 +18,7 @@ void getJointNames(const domSourceRef source, std::list<std::string>& list);
  * @param skin The skin element to search in.
  * @param list The list to append the joint names to.
  */
-void getJointNames(const domSkin* skin, std::list<std::string>& list);
+void getJointNames(const domSkin* skin, std::vector<std::string>& list);
 
 /**
  * Gets the input source from the given channel.
@@ -118,5 +105,7 @@ void moveChannelAndSouresToAnimation(domChannelRef& channel, domAnimationRef& an
  * @return True if the animation has no children, false otherwise.
  */
 bool isEmptyAnimation(domAnimationRef& animation);
+
+}
 
 #endif

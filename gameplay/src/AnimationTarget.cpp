@@ -2,104 +2,36 @@
 #include "AnimationTarget.h"
 #include "Animation.h"
 #include "Game.h"
-#include <string.h>
 #include "Transform.h"
 
 namespace gameplay
 {
 
 AnimationTarget::AnimationTarget()
-    : _targetType(SCALAR), _activeAnimationCount(0), _currentPriority(0), _animations(NULL), _reassignPriorities(false)
+    : _targetType(SCALAR), _highestPriority(NULL), _animationChannels(NULL)
 {
 }
 
 AnimationTarget::~AnimationTarget()
 {
-    if (_animations)
+    if (_animationChannels)
     {
-        std::vector<Animation*>::iterator animationIter = _animations->begin();
-        while (animationIter != _animations->end())
+        std::vector<Animation::Channel*>::iterator itr = _animationChannels->begin();
+        while (itr != _animationChannels->end())
         {
-            SAFE_RELEASE((*animationIter));
-            animationIter++;
+            SAFE_DELETE((*itr));
+            itr++;
         }
-        SAFE_DELETE(_animations);
+        SAFE_DELETE(_animationChannels);
     }
 }
 
-void AnimationTarget::addAnimation(Animation* animation)
+void AnimationTarget::addChannel(Animation::Channel* channel)
 {
-    if (_animations == NULL)
-    {
-        _animations = new std::vector<Animation*>;
-    }
+    if (_animationChannels == NULL)
+        _animationChannels = new std::vector<Animation::Channel*>;
 
-    _animations->push_back(animation);
-
-    animation->addRef();
-}
-
-unsigned int AnimationTarget::getAnimationCount() const
-{
-    if (_animations)
-        return _animations->size();
-
-    return 0;
-}
-
-Animation* AnimationTarget::getAnimation(unsigned int index) const
-{
-    if (_animations)
-        return _animations->at(index);
-    else
-        return 0;
-}
-
-Animation* AnimationTarget::getAnimation(const char* id) const
-{
-    if (_animations)
-    {
-        std::vector<Animation*>::iterator animationIter = _animations->begin();
-        while(animationIter != _animations->end())
-        {
-            if ((*animationIter)->_id.compare(id) == 0)
-            {
-                return *animationIter;
-            }
-
-            animationIter++;
-        }
-    }
-    
-    return NULL;
-}
-
-void AnimationTarget::increaseActiveAnimationCount()
-{
-    ++_activeAnimationCount;
-}
-
-void AnimationTarget::decreaseActiveAnimationCount()
-{
-    --_activeAnimationCount;
-
-    _reassignPriorities = true;
-    _currentPriority = 0;
-}
-
-unsigned int AnimationTarget::getPriority() 
-{
-    if (_reassignPriorities)
-    {
-        ++_currentPriority;
-
-        if (_currentPriority == _activeAnimationCount)
-            _reassignPriorities = false;
-
-        return _currentPriority;
-    }
-
-    return _activeAnimationCount;
+    _animationChannels->push_back(channel);
 }
 
 }

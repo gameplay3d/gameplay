@@ -1,8 +1,6 @@
 #ifndef MODEL_H_
 #define MODEL_H_
 
-#include <list>
-
 #include "Object.h"
 #include "Mesh.h"
 #include "MeshSkin.h"
@@ -35,11 +33,12 @@ public:
     void setSkin(MeshSkin* skin);
 
 private:
+
     Mesh* _ref;
     MeshSkin* _meshSkin;
     std::list<Material*> _materials;
 };
 
 }
-#endif
 
+#endif

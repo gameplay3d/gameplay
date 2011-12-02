@@ -167,7 +167,7 @@ void Quaternion::normalize(Quaternion* dst) const
     if (n == 1.0f)
         return;
 
-    n = sqrtf(n);
+    n = sqrt(n);
     // Too close to zero.
     if (n < 0.000001f)
         return;

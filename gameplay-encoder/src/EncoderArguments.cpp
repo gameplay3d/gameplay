@@ -1,4 +1,5 @@
-#include <algorithm>
+#include "Base.h"
+
 #include "EncoderArguments.h"
 #include "StringUtil.h"
 
@@ -6,6 +7,9 @@
     #define PATH_MAX    _MAX_PATH
     #define realpath(A,B)    _fullpath(B,A,PATH_MAX)
 #endif
+
+namespace gameplay
+{
 
 EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _fontSize(0),
@@ -294,4 +298,6 @@ void EncoderArguments::replace_char(char* str, char oldChar, char newChar)
             *str = newChar;
         }
     }
+}
+
 }

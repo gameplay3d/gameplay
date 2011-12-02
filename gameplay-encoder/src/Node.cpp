@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Node.h"
 #include "Matrix.h"
 
@@ -13,7 +14,6 @@ Node::Node(void) :
     _firstChild(NULL), _lastChild(NULL), _parent(NULL),
     _camera(NULL), _light(NULL), _model(NULL), _joint(false)
 {
-    Matrix::setIdentity(_transform);
 }
 
 Node::~Node(void)
@@ -38,7 +38,7 @@ void Node::writeBinary(FILE* file)
     unsigned int type = _joint ? JOINT : NODE;
     write(type, file);
 
-    write(_transform, 16, file);
+    write(_transform.m, 16, file);
     // children
     write(getChildCount(), file); // write number of children
     for (Node* node = getFirstChild(); node != NULL; node = node->getNextSibling())
@@ -85,7 +85,7 @@ void Node::writeText(FILE* file)
         fprintElementStart(file);
     }
     fprintf(file, "<transform>");
-    fprintfMatrix4f(file, _transform);
+    fprintfMatrix4f(file, _transform.m);
     fprintf(file, "</transform>\n");
 
     // children
@@ -233,17 +233,33 @@ void Node::setModel(Model* model)
     _model = model;
 }
 
+const Matrix& Node::getTransformMatrix() const
+{
+    return _transform;
+}
+
 void Node::setTransformMatrix(float matrix[])
 {
-    for (int i = 0; i < 16; ++i)
+    memcpy(_transform.m, matrix, 16 * sizeof(float));
+}
+
+const Matrix& Node::getWorldMatrix() const
+{
+    if (_parent)
     {
-        _transform[i] = matrix[i];
+        Matrix::multiply(_parent->getWorldMatrix().m, _transform.m, _worldTransform.m);
     }
+    else
+    {
+        memcpy(_worldTransform.m, _transform.m, 16 * sizeof(float));
+    }
+
+    return _worldTransform;
 }
 
 void Node::resetTransformMatrix()
 {
-    Matrix::setIdentity(_transform);
+    Matrix::setIdentity(_transform.m);
 }
 
 void Node::setIsJoint(bool value)

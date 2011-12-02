@@ -94,4 +94,5 @@ public:
     void normalizeBlendWeight();
 };
 }
+
 #endif

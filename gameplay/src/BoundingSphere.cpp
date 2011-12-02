@@ -6,6 +6,7 @@ namespace gameplay
 {
 
 BoundingSphere::BoundingSphere()
+    : radius(0)
 {
 }
 
@@ -37,7 +38,7 @@ bool BoundingSphere::intersects(const BoundingSphere& sphere) const
     float vy = sphere.center.y - center.y;
     float vz = sphere.center.z - center.z;
 
-    return sqrtf(vx * vx + vy * vy + vz * vz) <= (radius + sphere.radius);
+    return sqrt(vx * vx + vy * vy + vz * vz) <= (radius + sphere.radius);
 }
 
 bool BoundingSphere::intersects(const BoundingBox& box) const
@@ -85,7 +86,7 @@ bool BoundingSphere::intersects(const BoundingBox& box) const
     cpY -= center.y;
     cpZ -= center.z;
 
-    return sqrtf(cpX * cpX + cpY * cpY + cpZ * cpZ) <= radius;
+    return sqrt(cpX * cpX + cpY * cpY + cpZ * cpZ) <= radius;
 }
 
 bool BoundingSphere::intersects(const Frustum& frustum) const
@@ -143,7 +144,7 @@ float BoundingSphere::intersects(const Ray& ray) const
     else
     {
         // The intersection is at the smaller positive root.
-        float sqrtDisc = sqrtf(discriminant);
+        float sqrtDisc = sqrt(discriminant);
         float t0 = (-B - sqrtDisc) * 0.5f;
         float t1 = (-B + sqrtDisc) * 0.5f;
         return (t0 > 0.0f && t0 < t1) ? t0 : t1;
@@ -158,17 +159,15 @@ bool BoundingSphere::isEmpty() const
 void BoundingSphere::merge(const BoundingSphere& sphere)
 {
     // Calculate the distance between the two centers.
-    float vx = sphere.center.x - center.x;
-    float vy = sphere.center.y - center.y;
-    float vz = sphere.center.z - center.z;
-    float d = sqrtf(vx * vx + vy * vy + vz * vz);
+    float vx = center.x - sphere.center.x;
+    float vy = center.y - sphere.center.y;
+    float vz = center.z - sphere.center.z;
+    float d = sqrt(vx * vx + vy * vy + vz * vz);
 
     // If one sphere is contained inside the other, set to the larger sphere.
     if (d <= (sphere.radius - radius))
     {
-        center.x = sphere.center.x;
-        center.y = sphere.center.y;
-        center.z = sphere.center.z;
+        center = sphere.center;
         radius = sphere.radius;
         return;
     }
@@ -184,7 +183,7 @@ void BoundingSphere::merge(const BoundingSphere& sphere)
     vz *= dI;
 
     // Calculate the new radius.
-    float r = (radius + radius + d) * 0.5f;
+    float r = (radius + sphere.radius + d) * 0.5f;
 
     // Calculate the new center.
     float scaleFactor = (r - sphere.radius);
@@ -232,7 +231,7 @@ void BoundingSphere::merge(const BoundingBox& box)
     v1x = center.x - fx;
     v1y = center.y - fy;
     v1z = center.z - fz;
-    float distance = sqrtf(v1x * v1x + v1y * v1y + v1z * v1z);
+    float distance = sqrt(v1x * v1x + v1y * v1y + v1z * v1z);
 
     // If the box is inside the sphere, we are done.
     if (distance <= radius)
@@ -298,7 +297,7 @@ void BoundingSphere::transform(const Matrix& matrix)
 
 float BoundingSphere::distance(const BoundingSphere& sphere, const Vector3& point)
 {
-    return sqrtf((point.x - sphere.center.x) * (point.x - sphere.center.x) +
+    return sqrt((point.x - sphere.center.x) * (point.x - sphere.center.x) +
                  (point.y - sphere.center.y) * (point.y - sphere.center.x) +
                  (point.z - sphere.center.z) * (point.z - sphere.center.x));
 }

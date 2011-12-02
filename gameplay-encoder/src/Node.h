@@ -1,8 +1,6 @@
 #ifndef NODE_H_
 #define NODE_H_
 
-#include <list>
-
 #include "Object.h"
 #include "CameraInstance.h"
 #include "LightInstance.h"
@@ -126,11 +124,21 @@ public:
     Model* getModel() const;
 
     /**
+     * Returns the transform matrix for the node.
+     */
+    const Matrix& getTransformMatrix() const;
+
+    /**
      * Sets the transform for this node.
      */
     void setTransformMatrix(float matrix[]);
 
     /**
+     * Returns the resolved world matrix for the node.
+     */
+    const Matrix& getWorldMatrix() const;
+
+    /*
      * Resets the node's transform matrix to the identity matrix.
      */
     void resetTransformMatrix();
@@ -162,7 +170,9 @@ public:
     bool hasLight() const;
     
 private:
-    float _transform[16];
+
+    Matrix _transform;
+    mutable Matrix _worldTransform;
 
     int _childCount;
     Node* _nextSibling;
@@ -178,7 +188,6 @@ private:
     bool _joint;
 };
 
-
 }
-#endif
 
+#endif

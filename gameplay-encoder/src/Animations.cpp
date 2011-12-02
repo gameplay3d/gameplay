@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Animations.h"
 
 namespace gameplay
@@ -49,6 +50,16 @@ void Animations::writeText(FILE* file)
 void Animations::add(Animation* animation)
 {
     _animations.push_back(animation);
+}
+
+unsigned int Animations::getAnimationCount() const
+{
+    return _animations.size();
+}
+
+Animation* Animations::getAnimation(unsigned int index) const
+{
+    return _animations[index];
 }
 
 }

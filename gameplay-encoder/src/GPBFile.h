@@ -1,9 +1,6 @@
 #ifndef GPBFILE_H_
 #define GPBFILE_H_
 
-#include <iostream>
-#include <list>
-
 #include "FileIO.h"
 #include "Object.h"
 #include "Scene.h"
@@ -19,11 +16,12 @@
 
 namespace gameplay
 {
-    /**
-     * Increment the version number when making a change that break binary compatibility.
-     * [0] is major, [1] is minor.
-     */
-    const unsigned char VERSION[2] = {1, 0};
+
+/**
+ * Increment the version number when making a change that break binary compatibility.
+ * [0] is major, [1] is minor.
+ */
+const unsigned char VERSION[2] = {1, 1};
 
 /**
  * The GamePlay Binary file class handles writing the GamePlay Binary file.
@@ -41,6 +39,11 @@ public:
      * Destructor.
      */
     ~GPBFile(void);
+
+    /**
+     * Returns the GPBFile instance.
+     */
+    static GPBFile* getInstance();
 
     /**
      * Saves the GPBFile as a binary file at filepath.
@@ -84,6 +87,8 @@ public:
     Mesh* getMesh(const char* id);
     Node* getNode(const char* id);
 
+    Animations* getAnimations();
+
     /**
      * Adjusts the game play binary file before it is written.
      */
@@ -104,4 +109,5 @@ private:
 };
 
 }
+
 #endif

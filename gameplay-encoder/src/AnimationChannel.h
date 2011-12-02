@@ -35,6 +35,8 @@ public:
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
 
+    const std::string& getTargetId() const;
+
     /**
      * Sets the interpolation type of the entire animation channel.
      * 
@@ -42,7 +44,7 @@ public:
      */
     void setInterpolation(unsigned int interpolation);
 
-    void setTargetId(const std::string str);
+    void setTargetId(const std::string& str);
     void setTargetAttribute(unsigned int attrib);
 
     void setKeyTimes(const std::vector<float>& values);
@@ -51,7 +53,12 @@ public:
     void setTangentsOut(const std::vector<float>& values);
     void setInterpolations(const std::vector<unsigned int>& values);
 
+    unsigned int getTargetAttribute() const;
     const std::vector<float>& getKeyValues() const;
+    const std::vector<float>& getKeyTimes() const;
+    const std::vector<float>& getTangentsIn() const;
+    const std::vector<float>& getTangentsOut() const;
+    const std::vector<unsigned int>& getInterpolationTypes() const;
 
     void removeDuplicates();
 
@@ -71,7 +78,6 @@ public:
 private:
 
     void deleteRange(size_t begin, size_t end);
-
 private:
 
     std::string _targetId;
@@ -83,7 +89,6 @@ private:
     std::vector<unsigned int> _interpolations;
 };
 
-
 }
-#endif
 
+#endif
