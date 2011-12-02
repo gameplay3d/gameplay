@@ -26,7 +26,7 @@ Texture::~Texture()
     // Remove ourself from the texture cache.
     if (_cached)
     {
-        std::vector<Texture*>::iterator itr = std::find(__textureCache.begin(), __textureCache.end(), this);
+        std::vector<Texture*>::iterator itr = find(__textureCache.begin(), __textureCache.end(), this);
         if (itr != __textureCache.end())
         {
             __textureCache.erase(itr);

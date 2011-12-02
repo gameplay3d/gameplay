@@ -1,18 +1,10 @@
 #ifndef DAEOPTIMIZER_H_
 #define DAEOPTIMIZER_H_
 
-#include <dae.h>
-#include <dae/daeSIDResolver.h>
-#include <dae/domAny.h>
-#include <dom/domCOLLADA.h>
-#include <dom/domConstants.h>
-#include <dom/domElements.h>
-#include <dom/domProfile_COMMON.h>
-
-#include <vector>
-
-#include "Base.h"
 #include "DAEUtil.h"
+
+namespace gameplay
+{
 
 /**
  * The DAEOptimizer optimizes a COLLADA dom.
@@ -59,5 +51,7 @@ private:
     domCOLLADA* _dom;
     std::string _inputPath;
 };
+
+}
 
 #endif

@@ -1,8 +1,6 @@
 #ifndef MESHSKIN_H_
 #define MESHSKIN_H_
 
-#include <vector>
-
 #include "Base.h"
 #include "Object.h"
 #include "Matrix.h"

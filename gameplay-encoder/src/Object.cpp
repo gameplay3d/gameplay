@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Object.h"
 
 namespace gameplay

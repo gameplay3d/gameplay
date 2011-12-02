@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Node.h"
 
 #define NODE 1
