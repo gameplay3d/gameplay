@@ -53,7 +53,7 @@
     <asset path="icon.png">icon.png</asset>
     <asset path="res">res</asset>
     
-    <!-- PlayBook 1.0 support
+    <!-- BlackBerry NDK 1.0
     <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
     <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
     <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>

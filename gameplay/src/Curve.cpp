@@ -1,6 +1,17 @@
-#include "Base.h"
+// Purposely not including Base.h here, or any other gameplay dependencies
+// so this class can be reused between gameplay and gameplay-encoder.
 #include "Curve.h"
-#include "Transform.h"
+#include <cassert>
+#include <cmath>
+#include <memory>
+
+using std::memcpy;
+using std::fabs;
+using std::sqrt;
+
+#ifndef NULL
+#define NULL 0
+#endif
 
 namespace gameplay
 {
@@ -26,8 +37,8 @@ Curve::Curve(unsigned int pointCount, unsigned int componentCount)
 
 Curve::~Curve()
 {
-    SAFE_DELETE_ARRAY(_points);
-    SAFE_DELETE_ARRAY(_quaternionOffsets);
+    delete[] _points;
+    delete[] _quaternionOffsets;
 }
 
 Curve::Point::Point()
@@ -37,9 +48,9 @@ Curve::Point::Point()
 
 Curve::Point::~Point()
 {
-    SAFE_DELETE_ARRAY(value);
-    SAFE_DELETE_ARRAY(inValue);
-    SAFE_DELETE_ARRAY(outValue);
+    delete[] value;
+    delete[] inValue;
+    delete[] outValue;
 }
 
 unsigned int Curve::getPointCount() const
@@ -50,6 +61,16 @@ unsigned int Curve::getPointCount() const
 unsigned int Curve::getComponentCount() const
 {
     return _componentCount;
+}
+
+float Curve::getStartTime() const
+{
+    return _points[0].time;
+}
+
+float Curve::getEndTime() const
+{
+    return _points[_pointCount-1].time;
 }
 
 void Curve::setPoint(unsigned int index, float time, float* value, InterpolationType type)
@@ -230,7 +251,6 @@ void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst) const
                 i++;
             }
             // Handle quaternion component.
-            //float interpTime = from->time * eq1 + from->outValue[i] * eq2 + to->inValue[i] * eq3 + to->time * eq4;
             interpolateQuaternion(s, (from->value + i), (to->value + i), (dst + i));
             i += 4;
             quaternionOffsetIndex++;
@@ -554,27 +574,119 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
     }
 }
 
+void slerpQuat(float* q1, float* q2, float t, float* dst)
+{
+    // Fast slerp implementation by kwhatmough:
+    // It contains no division operations, no trig, no inverse trig
+    // and no sqrt. Not only does this code tolerate small constraint
+    // errors in the input quaternions, it actually corrects for them.
+    assert(dst);
+    assert(!(t < 0.0f || t > 1.0f));
+
+    if (t == 0.0f)
+    {
+        memcpy(dst, q1, sizeof(float) * 4);
+        return;
+    }
+    else if (t == 1.0f)
+    {
+        memcpy(dst, q2, sizeof(float) * 4);
+        return;
+    }
+
+    float halfY, alpha, beta;
+    float u, f1, f2a, f2b;
+    float ratio1, ratio2;
+    float halfSecHalfTheta, versHalfTheta;
+    float sqNotU, sqU;
+
+    float cosTheta = q1[3] * q2[3] + q1[0] * q2[0] + q1[1] * q2[1] + q1[2] * q2[2];
+
+    // As usual in all slerp implementations, we fold theta.
+    alpha = cosTheta >= 0 ? 1.0f : -1.0f;
+    halfY = 1.0f + alpha * cosTheta;
+
+    // Here we bisect the interval, so we need to fold t as well.
+    f2b = t - 0.5f;
+    u = f2b >= 0 ? f2b : -f2b;
+    f2a = u - f2b;
+    f2b += u;
+    u += u;
+    f1 = 1.0f - u;
+
+    // One iteration of Newton to get 1-cos(theta / 2) to good accuracy.
+    halfSecHalfTheta = 1.09f - (0.476537f - 0.0903321f * halfY) * halfY;
+    halfSecHalfTheta *= 1.5f - halfY * halfSecHalfTheta * halfSecHalfTheta;
+    versHalfTheta = 1.0f - halfY * halfSecHalfTheta;
+
+    // Evaluate series expansions of the coefficients.
+    sqNotU = f1 * f1;
+    ratio2 = 0.0000440917108f * versHalfTheta;
+    ratio1 = -0.00158730159f + (sqNotU - 16.0f) * ratio2;
+    ratio1 = 0.0333333333f + ratio1 * (sqNotU - 9.0f) * versHalfTheta;
+    ratio1 = -0.333333333f + ratio1 * (sqNotU - 4.0f) * versHalfTheta;
+    ratio1 = 1.0f + ratio1 * (sqNotU - 1.0f) * versHalfTheta;
+
+    sqU = u * u;
+    ratio2 = -0.00158730159f + (sqU - 16.0f) * ratio2;
+    ratio2 = 0.0333333333f + ratio2 * (sqU - 9.0f) * versHalfTheta;
+    ratio2 = -0.333333333f + ratio2 * (sqU - 4.0f) * versHalfTheta;
+    ratio2 = 1.0f + ratio2 * (sqU - 1.0f) * versHalfTheta;
+
+    // Perform the bisection and resolve the folding done earlier.
+    f1 *= ratio1 * halfSecHalfTheta;
+    f2a *= ratio2;
+    f2b *= ratio2;
+    alpha *= f1 + f2a;
+    beta = f1 + f2b;
+
+    // Apply final coefficients to a and b as usual.
+    float w = alpha * q1[3] + beta * q2[3];
+    float x = alpha * q1[0] + beta * q2[0];
+    float y = alpha * q1[1] + beta * q2[1];
+    float z = alpha * q1[2] + beta * q2[2];
+
+    // This final adjustment to the quaternion's length corrects for
+    // any small constraint error in the inputs q1 and q2. But as you
+    // can see, it comes at the cost of 9 additional multiplication
+    // operations. If this error-correcting feature is not required,
+    // the following code may be removed.
+    f1 = 1.5f - 0.5f * (w * w + x * x + y * y + z * z);
+    dst[3] = w * f1;
+    dst[0] = x * f1;
+    dst[1] = y * f1;
+    dst[2] = z * f1;
+}
+
+void normalizeQuat(float* q)
+{
+    float n = q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3];
+
+    // Do we need to normalize?
+    if (fabs(n) > 0.00001f && fabs(n - 1.0f) > 0.00001f)
+    {
+        n = sqrt(n);
+        q[0] /= n;
+        q[1] /= n;
+        q[2] /= n;
+        q[3] /= n;
+    }
+}
+
 void Curve::interpolateQuaternion(float s, float* from, float* to, float* dst) const
 {
-    Quaternion quatFrom(from);
-    Quaternion quatTo(to);
-    Quaternion result;
+    float quatFrom[4] = { from[0], from[1], from[2], from[3] };
+    float quatTo[4] = { to[0], to[1], to[2], to[3] };
 
     // Normalize the quaternions.
-    quatFrom.normalize();
-    quatTo.normalize();
+    normalizeQuat(quatFrom);
+    normalizeQuat(quatTo);
         
     // Evaluate.
     if (s >= 0)
-        Quaternion::slerp(quatFrom, quatTo, s, &result);
+        slerpQuat(quatFrom, quatTo, s, dst);
     else
-        Quaternion::slerp(quatTo, quatFrom, -s, &result);
-
-    // Place in destination.
-    dst[0] = result.x;
-    dst[1] = result.y;
-    dst[2] = result.z;
-    dst[3] = result.w;
+        slerpQuat(quatTo, quatFrom, -s, dst);
 }
 
 int Curve::determineIndex(float time) const

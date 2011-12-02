@@ -96,108 +96,104 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">gameplay/src/Curve.h</div>  </div>
 </div>
 <div class="contents">
-<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
-<a name="l00002"></a>00002 <span class="comment"> * Curve.h</span>
-<a name="l00003"></a>00003 <span class="comment"> */</span>
-<a name="l00004"></a>00004 
-<a name="l00005"></a>00005 <span class="preprocessor">#ifndef CURVE_H_</span>
-<a name="l00006"></a>00006 <span class="preprocessor"></span><span class="preprocessor">#define CURVE_H_</span>
-<a name="l00007"></a>00007 <span class="preprocessor"></span>
-<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;AnimationClip.h&quot;</span>
-<a name="l00009"></a>00009 
-<a name="l00010"></a>00010 <span class="keyword">namespace </span>gameplay
-<a name="l00011"></a>00011 {
-<a name="l00012"></a>00012 
-<a name="l00016"></a><a class="code" href="classgameplay_1_1_curve.html">00016</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_curve.html">Curve</a>
-<a name="l00017"></a>00017 {
-<a name="l00018"></a>00018     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_animation.html">Animation</a>;
-<a name="l00019"></a>00019     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>;
-<a name="l00020"></a>00020 
-<a name="l00021"></a>00021 <span class="keyword">public</span>:
-<a name="l00022"></a>00022 
-<a name="l00028"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">00028</a>     <span class="keyword">enum</span> <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a>
-<a name="l00029"></a>00029     {
-<a name="l00033"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1ae5849e3d75739ad09dacee0d92fd8c29">00033</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1ae5849e3d75739ad09dacee0d92fd8c29">BEZIER</a>,
-<a name="l00034"></a>00034 
-<a name="l00039"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1aa0a6c81fc1c7787082c2a4529d838533">00039</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1aa0a6c81fc1c7787082c2a4529d838533">BSPLINE</a>,
-<a name="l00040"></a>00040 
-<a name="l00044"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1aa2eaab5a3ca9fd0d8eacbc1b5c7d1071">00044</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1aa2eaab5a3ca9fd0d8eacbc1b5c7d1071">FLAT</a>,
-<a name="l00045"></a>00045 
-<a name="l00049"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a43018aae421b937870d71245b83810b0">00049</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a43018aae421b937870d71245b83810b0">HERMITE</a>,
-<a name="l00050"></a>00050 
-<a name="l00054"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a0ced1d773b53a41225cc834d5521ccb1">00054</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a0ced1d773b53a41225cc834d5521ccb1">LINEAR</a>,
-<a name="l00055"></a>00055 
-<a name="l00059"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a794f5f497fd5d58375e70e9b12849caa">00059</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a794f5f497fd5d58375e70e9b12849caa">SMOOTH</a>,
-<a name="l00060"></a>00060 
-<a name="l00064"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a319f7a9d4f172437c5d912ac66ee401f">00064</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a319f7a9d4f172437c5d912ac66ee401f">STEP</a>
-<a name="l00065"></a>00065     };
-<a name="l00066"></a>00066 
-<a name="l00073"></a>00073     <a class="code" href="classgameplay_1_1_curve.html">Curve</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> pointCount, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> componentCount);
-<a name="l00074"></a>00074 
-<a name="l00078"></a>00078     <a class="code" href="classgameplay_1_1_curve.html#a7a9794ce50aaba679eb1c11abd50cf61">~Curve</a>();
-<a name="l00079"></a>00079 
-<a name="l00085"></a>00085     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_curve.html#a3c1a9771e88f94d6d47268b5d75657f4">getPointCount</a>() <span class="keyword">const</span>;
-<a name="l00086"></a>00086 
-<a name="l00092"></a>00092     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_curve.html#a88cb908bf32c2166519b9b3e7feb11c9">getComponentCount</a>() <span class="keyword">const</span>;
-<a name="l00093"></a>00093 
-<a name="l00102"></a>00102     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_curve.html#a9fcd66f3465b64fc6880556142b0b283">setPoint</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index, <span class="keywordtype">float</span> time, <span class="keywordtype">float</span>* value, <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type);
-<a name="l00103"></a>00103 
-<a name="l00114"></a>00114     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_curve.html#a9fcd66f3465b64fc6880556142b0b283">setPoint</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index, <span class="keywordtype">float</span> time, <span class="keywordtype">float</span>* value, <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type, <span class="keywordtype">float</span>* inValue, <span class="keywordtype">float</span>* outValue);
-<a name="l00115"></a>00115 
-<a name="l00124"></a>00124     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_curve.html#a5e1507314653f0962d0f5c827b11e070">setTangent</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index, <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type, <span class="keywordtype">float</span>* inValue, <span class="keywordtype">float</span>* outValue);
-<a name="l00125"></a>00125     
-<a name="l00132"></a>00132     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_curve.html#ac8e72bf270f5ac3e93c7137bb3e05823">evaluate</a>(<span class="keywordtype">float</span> time, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
-<a name="l00133"></a>00133 
-<a name="l00144"></a>00144     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_curve.html#a42e37e77f8f14d944cd0431f91da00fe">addQuaternionOffset</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
-<a name="l00145"></a>00145 
-<a name="l00146"></a>00146 <span class="keyword">private</span>:
-<a name="l00147"></a>00147 
-<a name="l00151"></a>00151     <span class="keyword">class </span>Point
-<a name="l00152"></a>00152     {
-<a name="l00153"></a>00153     <span class="keyword">public</span>:
-<a name="l00154"></a>00154 
-<a name="l00156"></a>00156         <span class="keywordtype">float</span> time;
-<a name="l00158"></a>00158         <span class="keywordtype">float</span>* value;
-<a name="l00160"></a>00160         <span class="keywordtype">float</span>* inValue;
-<a name="l00162"></a>00162         <span class="keywordtype">float</span>* outValue;
-<a name="l00164"></a>00164         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type;
-<a name="l00165"></a>00165 
-<a name="l00169"></a>00169         Point();
-<a name="l00170"></a>00170 
-<a name="l00174"></a>00174         ~Point();
-<a name="l00175"></a>00175     };
-<a name="l00176"></a>00176 
-<a name="l00180"></a>00180     Curve();
-<a name="l00181"></a>00181 
-<a name="l00185"></a>00185     Curve(<span class="keyword">const</span> Curve&amp; copy);
-<a name="l00186"></a>00186 
-<a name="l00190"></a>00190     <span class="keywordtype">void</span> interpolateBezier(<span class="keywordtype">float</span> s, Point* from, Point* to, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
-<a name="l00191"></a>00191 
-<a name="l00195"></a>00195     <span class="keywordtype">void</span> interpolateBSpline(<span class="keywordtype">float</span> s, Point* c0, Point* c1, Point* c2, Point* c3, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
-<a name="l00196"></a>00196 
-<a name="l00200"></a>00200     <span class="keywordtype">void</span> interpolateHermite(<span class="keywordtype">float</span> s, Point* from, Point* to, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
-<a name="l00201"></a>00201 
-<a name="l00205"></a>00205     <span class="keywordtype">void</span> interpolateHermiteFlat(<span class="keywordtype">float</span> s, Point* from, Point* to, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
-<a name="l00206"></a>00206 
-<a name="l00210"></a>00210     <span class="keywordtype">void</span> interpolateHermiteSmooth(<span class="keywordtype">float</span> s, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index, Point* from, Point* to, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
-<a name="l00211"></a>00211 
-<a name="l00215"></a>00215     <span class="keywordtype">void</span> interpolateLinear(<span class="keywordtype">float</span> s, Point* from, Point* to, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
-<a name="l00216"></a>00216 
-<a name="l00220"></a>00220     <span class="keywordtype">void</span> interpolateQuaternion(<span class="keywordtype">float</span> s, <span class="keywordtype">float</span>* from, <span class="keywordtype">float</span>* to, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
-<a name="l00221"></a>00221 
-<a name="l00225"></a>00225     <span class="keywordtype">int</span> determineIndex(<span class="keywordtype">float</span> time) <span class="keyword">const</span>;
-<a name="l00226"></a>00226 
-<a name="l00227"></a>00227     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _pointCount;           <span class="comment">// Number of points on the curve.</span>
-<a name="l00228"></a>00228     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _componentCount;       <span class="comment">// Number of components on the curve.</span>
-<a name="l00229"></a>00229     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _componentSize;        <span class="comment">// The component size (in bytes).</span>
-<a name="l00230"></a>00230     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* _quaternionOffsets;   <span class="comment">// Offset for the rotation component.</span>
-<a name="l00231"></a>00231     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _quaternionOffsetsCount;
-<a name="l00232"></a>00232     Point* _points;                     <span class="comment">// The points on the curve.</span>
-<a name="l00233"></a>00233 };
-<a name="l00234"></a>00234 
-<a name="l00235"></a>00235 }
-<a name="l00236"></a>00236 
-<a name="l00237"></a>00237 <span class="preprocessor">#endif</span>
+<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef CURVE_H_</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define CURVE_H_</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span>
+<a name="l00004"></a>00004 <span class="preprocessor">#include &quot;AnimationClip.h&quot;</span>
+<a name="l00005"></a>00005 
+<a name="l00006"></a>00006 <span class="keyword">namespace </span>gameplay
+<a name="l00007"></a>00007 {
+<a name="l00008"></a>00008 
+<a name="l00012"></a><a class="code" href="classgameplay_1_1_curve.html">00012</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_curve.html">Curve</a>
+<a name="l00013"></a>00013 {
+<a name="l00014"></a>00014     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_animation.html">Animation</a>;
+<a name="l00015"></a>00015     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>;
+<a name="l00016"></a>00016 
+<a name="l00017"></a>00017 <span class="keyword">public</span>:
+<a name="l00018"></a>00018 
+<a name="l00024"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">00024</a>     <span class="keyword">enum</span> <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a>
+<a name="l00025"></a>00025     {
+<a name="l00029"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1ae5849e3d75739ad09dacee0d92fd8c29">00029</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1ae5849e3d75739ad09dacee0d92fd8c29">BEZIER</a>,
+<a name="l00030"></a>00030 
+<a name="l00035"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1aa0a6c81fc1c7787082c2a4529d838533">00035</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1aa0a6c81fc1c7787082c2a4529d838533">BSPLINE</a>,
+<a name="l00036"></a>00036 
+<a name="l00040"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1aa2eaab5a3ca9fd0d8eacbc1b5c7d1071">00040</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1aa2eaab5a3ca9fd0d8eacbc1b5c7d1071">FLAT</a>,
+<a name="l00041"></a>00041 
+<a name="l00045"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a43018aae421b937870d71245b83810b0">00045</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a43018aae421b937870d71245b83810b0">HERMITE</a>,
+<a name="l00046"></a>00046 
+<a name="l00050"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a0ced1d773b53a41225cc834d5521ccb1">00050</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a0ced1d773b53a41225cc834d5521ccb1">LINEAR</a>,
+<a name="l00051"></a>00051 
+<a name="l00055"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a794f5f497fd5d58375e70e9b12849caa">00055</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a794f5f497fd5d58375e70e9b12849caa">SMOOTH</a>,
+<a name="l00056"></a>00056 
+<a name="l00060"></a><a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a319f7a9d4f172437c5d912ac66ee401f">00060</a>         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a319f7a9d4f172437c5d912ac66ee401f">STEP</a>
+<a name="l00061"></a>00061     };
+<a name="l00062"></a>00062 
+<a name="l00069"></a>00069     <a class="code" href="classgameplay_1_1_curve.html">Curve</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> pointCount, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> componentCount);
+<a name="l00070"></a>00070 
+<a name="l00074"></a>00074     <a class="code" href="classgameplay_1_1_curve.html#a7a9794ce50aaba679eb1c11abd50cf61">~Curve</a>();
+<a name="l00075"></a>00075 
+<a name="l00081"></a>00081     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_curve.html#a3c1a9771e88f94d6d47268b5d75657f4">getPointCount</a>() <span class="keyword">const</span>;
+<a name="l00082"></a>00082 
+<a name="l00088"></a>00088     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_curve.html#a88cb908bf32c2166519b9b3e7feb11c9">getComponentCount</a>() <span class="keyword">const</span>;
+<a name="l00089"></a>00089 
+<a name="l00098"></a>00098     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_curve.html#a9fcd66f3465b64fc6880556142b0b283">setPoint</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index, <span class="keywordtype">float</span> time, <span class="keywordtype">float</span>* value, <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type);
+<a name="l00099"></a>00099 
+<a name="l00110"></a>00110     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_curve.html#a9fcd66f3465b64fc6880556142b0b283">setPoint</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index, <span class="keywordtype">float</span> time, <span class="keywordtype">float</span>* value, <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type, <span class="keywordtype">float</span>* inValue, <span class="keywordtype">float</span>* outValue);
+<a name="l00111"></a>00111 
+<a name="l00120"></a>00120     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_curve.html#a5e1507314653f0962d0f5c827b11e070">setTangent</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index, <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type, <span class="keywordtype">float</span>* inValue, <span class="keywordtype">float</span>* outValue);
+<a name="l00121"></a>00121     
+<a name="l00128"></a>00128     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_curve.html#ac8e72bf270f5ac3e93c7137bb3e05823">evaluate</a>(<span class="keywordtype">float</span> time, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
+<a name="l00129"></a>00129 
+<a name="l00140"></a>00140     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_curve.html#a42e37e77f8f14d944cd0431f91da00fe">addQuaternionOffset</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
+<a name="l00141"></a>00141 
+<a name="l00142"></a>00142 <span class="keyword">private</span>:
+<a name="l00143"></a>00143 
+<a name="l00147"></a>00147     <span class="keyword">class </span>Point
+<a name="l00148"></a>00148     {
+<a name="l00149"></a>00149     <span class="keyword">public</span>:
+<a name="l00150"></a>00150 
+<a name="l00152"></a>00152         <span class="keywordtype">float</span> time;
+<a name="l00154"></a>00154         <span class="keywordtype">float</span>* value;
+<a name="l00156"></a>00156         <span class="keywordtype">float</span>* inValue;
+<a name="l00158"></a>00158         <span class="keywordtype">float</span>* outValue;
+<a name="l00160"></a>00160         <a class="code" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type;
+<a name="l00161"></a>00161 
+<a name="l00165"></a>00165         Point();
+<a name="l00166"></a>00166 
+<a name="l00170"></a>00170         ~Point();
+<a name="l00171"></a>00171     };
+<a name="l00172"></a>00172 
+<a name="l00176"></a>00176     Curve();
+<a name="l00177"></a>00177 
+<a name="l00181"></a>00181     Curve(<span class="keyword">const</span> Curve&amp; copy);
+<a name="l00182"></a>00182 
+<a name="l00186"></a>00186     <span class="keywordtype">void</span> interpolateBezier(<span class="keywordtype">float</span> s, Point* from, Point* to, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
+<a name="l00187"></a>00187 
+<a name="l00191"></a>00191     <span class="keywordtype">void</span> interpolateBSpline(<span class="keywordtype">float</span> s, Point* c0, Point* c1, Point* c2, Point* c3, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
+<a name="l00192"></a>00192 
+<a name="l00196"></a>00196     <span class="keywordtype">void</span> interpolateHermite(<span class="keywordtype">float</span> s, Point* from, Point* to, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
+<a name="l00197"></a>00197 
+<a name="l00201"></a>00201     <span class="keywordtype">void</span> interpolateHermiteFlat(<span class="keywordtype">float</span> s, Point* from, Point* to, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
+<a name="l00202"></a>00202 
+<a name="l00206"></a>00206     <span class="keywordtype">void</span> interpolateHermiteSmooth(<span class="keywordtype">float</span> s, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index, Point* from, Point* to, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
+<a name="l00207"></a>00207 
+<a name="l00211"></a>00211     <span class="keywordtype">void</span> interpolateLinear(<span class="keywordtype">float</span> s, Point* from, Point* to, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
+<a name="l00212"></a>00212 
+<a name="l00216"></a>00216     <span class="keywordtype">void</span> interpolateQuaternion(<span class="keywordtype">float</span> s, <span class="keywordtype">float</span>* from, <span class="keywordtype">float</span>* to, <span class="keywordtype">float</span>* dst) <span class="keyword">const</span>;
+<a name="l00217"></a>00217 
+<a name="l00221"></a>00221     <span class="keywordtype">int</span> determineIndex(<span class="keywordtype">float</span> time) <span class="keyword">const</span>;
+<a name="l00222"></a>00222 
+<a name="l00223"></a>00223     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _pointCount;           <span class="comment">// Number of points on the curve.</span>
+<a name="l00224"></a>00224     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _componentCount;       <span class="comment">// Number of components on the curve.</span>
+<a name="l00225"></a>00225     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _componentSize;        <span class="comment">// The component size (in bytes).</span>
+<a name="l00226"></a>00226     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* _quaternionOffsets;   <span class="comment">// Offset for the rotation component.</span>
+<a name="l00227"></a>00227     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _quaternionOffsetsCount;
+<a name="l00228"></a>00228     Point* _points;                     <span class="comment">// The points on the curve.</span>
+<a name="l00229"></a>00229 };
+<a name="l00230"></a>00230 
+<a name="l00231"></a>00231 }
+<a name="l00232"></a>00232 
+<a name="l00233"></a>00233 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -218,7 +214,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:33 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

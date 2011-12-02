@@ -1,10 +1,6 @@
 #ifndef GPBDECODER_H_
 #define GPBDECODER_H_
 
-#include <iostream>
-#include <list>
-#include <assert.h>
-
 #include "FileIO.h"
 
 namespace gameplay
@@ -36,6 +32,7 @@ public:
     std::string readString(FILE* fp);
 
 private:
+
     FILE* _file;
     FILE* _outFile;
 };

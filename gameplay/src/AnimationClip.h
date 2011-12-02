@@ -27,8 +27,6 @@ public:
      */
     static const unsigned int REPEAT_INDEFINITE = 0;
 
-    static int _crazyCounter;
-
     /**
      * Defines an animation event listener.
      */
@@ -230,7 +228,7 @@ private:
     void onEnd();
 
     std::string _id;                          // AnimationClip ID.
-    Animation* _animation;                    // Animations that this clip plays in parallel.
+    Animation* _animation;                    // The Animation this clip is created from.
     unsigned long _startTime;                 // Start time of the clip.
     unsigned long _endTime;                   // End time of the clip.
     unsigned long _duration;                  // The total duration.

@@ -113,10 +113,10 @@ Inheritance diagram for gameplay::Joint:</div>
  <div class="center">
   <img src="classgameplay_1_1_joint.png" usemap="#gameplay::Joint_map" alt=""/>
   <map id="gameplay::Joint_map" name="gameplay::Joint_map">
-<area href="classgameplay_1_1_node.html" alt="gameplay::Node" shape="rect" coords="0,168,163,192"/>
-<area href="classgameplay_1_1_transform.html" alt="gameplay::Transform" shape="rect" coords="0,112,163,136"/>
-<area href="classgameplay_1_1_animation_target.html" alt="gameplay::AnimationTarget" shape="rect" coords="0,56,163,80"/>
-<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="0,0,163,24"/>
+<area href="classgameplay_1_1_node.html" alt="gameplay::Node" shape="rect" coords="86,112,249,136"/>
+<area href="classgameplay_1_1_transform.html" alt="gameplay::Transform" shape="rect" coords="0,56,163,80"/>
+<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="173,56,336,80"/>
+<area href="classgameplay_1_1_animation_target.html" alt="gameplay::AnimationTarget" shape="rect" coords="0,0,163,24"/>
 </map>
  </div></div>
 
@@ -126,6 +126,8 @@ Inheritance diagram for gameplay::Joint:</div>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html#aeda54e8fa43853b7795b53d99aab08b4">Node::Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#a0b125d5f1dcee6b9207afa752fe0462a">getType</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#a16a59456c74ddb86f6b33fb63cdd133b">getInverseBindPose</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#a04b4a91a6b979e592eee3b17e69f211b">getWorldMatrix</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#aa17a9ed039173ccf880b8b827302f2ac">getJointMatrix</a> () const </td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#a4b361449525c29d95d148a350e51dd19">Joint</a> (const char *id)</td></tr>
@@ -144,6 +146,10 @@ Protected Attributes</h2></td></tr>
 <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_bindPose</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0718be3b1425ceb2a5ee14690462c99d"></a><!-- doxytag: member="gameplay::Joint::_jointMatrixDirty" ref="a0718be3b1425ceb2a5ee14690462c99d" args="" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>_jointMatrixDirty</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f04f2875392224e22ef2041787fd1b9"></a><!-- doxytag: member="gameplay::Joint::_skin" ref="a3f04f2875392224e22ef2041787fd1b9" args="" -->
+<a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_skin</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4c40e650f6685b6c1dd3b12d0f2d714d"></a><!-- doxytag: member="gameplay::Joint::_jointWorld" ref="a4c40e650f6685b6c1dd3b12d0f2d714d" args="" -->
+<a class="el" href="classgameplay_1_1_matrix.html">Matrix</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_jointWorld</b></td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe0a64f7e3808b1762846efaf311bd94"></a><!-- doxytag: member="gameplay::Joint::MeshSkin" ref="afe0a64f7e3808b1762846efaf311bd94" args="" -->
@@ -235,6 +241,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 
 </div>
 </div>
+<a class="anchor" id="aa17a9ed039173ccf880b8b827302f2ac"></a><!-- doxytag: member="gameplay::Joint::getJointMatrix" ref="aa17a9ed039173ccf880b8b827302f2ac" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp; gameplay::Joint::getJointMatrix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the matrix corresponding to this joint.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The matrix of this joint. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a0b125d5f1dcee6b9207afa752fe0462a"></a><!-- doxytag: member="gameplay::Joint::getType" ref="a0b125d5f1dcee6b9207afa752fe0462a" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -251,6 +275,26 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_node.html#a87f2240f4a949e0ddf686f491c05c91d">Node::getType()</a> </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_node.html#a87f2240f4a949e0ddf686f491c05c91d">gameplay::Node</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a04b4a91a6b979e592eee3b17e69f211b"></a><!-- doxytag: member="gameplay::Joint::getWorldMatrix" ref="a04b4a91a6b979e592eee3b17e69f211b" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp; gameplay::Joint::getWorldMatrix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the world matrix corresponding to this node.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The world matrix of this node. </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_node.html#ac5a80241a7ead3f80a3184c683cc644a">gameplay::Node</a>.</p>
 
 </div>
 </div>
@@ -303,7 +347,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:35 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:04 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

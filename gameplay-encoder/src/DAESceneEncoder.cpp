@@ -1,11 +1,15 @@
-#include <algorithm>
+/*
+ * DAESceneEncoder.h
+ */
+#include "Base.h"
 
 #include "DAESceneEncoder.h"
 #include "DAEOptimizer.h"
 
 //#define ENCODER_PRINT_TIME 1
 
-using namespace gameplay;
+namespace gameplay
+{
 
 DAESceneEncoder::DAESceneEncoder()
     : _collada(NULL), _dom(NULL), file(NULL), _vertexBlendWeights(NULL), _vertexBlendIndices(NULL)
@@ -221,7 +225,7 @@ void DAESceneEncoder::createTrianglesFromPolylist(domMesh* domMesh, domPolylist*
 
 void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments& arguments)
 {
-    _begin = std::clock();
+    _begin = clock();
     const char* nodeId = arguments.getNodeId();
     bool text = arguments.textOutputEnabled();
 
@@ -641,14 +645,14 @@ bool DAESceneEncoder::loadTarget(const domChannelRef& channelRef, AnimationChann
 void DAESceneEncoder::begin()
 {
     #ifdef ENCODER_PRINT_TIME
-    _begin = std::clock();
+    _begin = clock();
     #endif
 }
 
 void DAESceneEncoder::end(const char* str)
 {
     #ifdef ENCODER_PRINT_TIME
-    clock_t time = std::clock() - _begin;
+    clock_t time = clock() - _begin;
     fprintf(stderr,"%5d %s\n", time, str);
     #endif
 }
@@ -1245,9 +1249,9 @@ void DAESceneEncoder::loadSkeleton(domInstance_controller::domSkeleton* skeleton
     }
 
     // Resolve and set joints array for skin
-    std::list<Node*> _joints;
-    const std::list<std::string>& jointNames = skin->getJointNames();
-    for (std::list<std::string>::const_iterator i = jointNames.begin(); i != jointNames.end(); ++i)
+    std::vector<Node*> _joints;
+    const std::vector<std::string>& jointNames = skin->getJointNames();
+    for (std::vector<std::string>::const_iterator i = jointNames.begin(); i != jointNames.end(); i++)
     {
         Object* obj = _gamePlayFile.getFromRefTable(*i);
         if (obj)
@@ -1281,7 +1285,6 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
     domSkin::domJointsRef _joints = skinElement->getJoints();
     domInputLocal_Array& jointInputs = _joints->getInput_array();
 
-
     // Process "JOINT" input semantic first (we need to do this to set the joint count)
     unsigned int jointCount = 0;
     for (unsigned int i = 0; i < jointInputs.getCount(); ++i)
@@ -1295,12 +1298,12 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
         if (equals(inputSemantic, "JOINT"))
         {
             // Get the joint Ids's
-            std::list<std::string> list;
+            std::vector<std::string> list;
             getJointNames(source, list);
 
             // Go through the joint list and conver them from sid to id because the sid information is
             // lost when converting to the gameplay binary format.
-            for (std::list<std::string>::iterator i = list.begin(); i != list.end(); ++i)
+            for (std::vector<std::string>::iterator i = list.begin(); i != list.end(); i++)
             {
                 daeSIDResolver resolver(source->getDocument()->getDomRoot(), i->c_str());
                 daeElement* element = resolver.getElement();
@@ -1319,7 +1322,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
             jointCount = list.size();
             _jointInverseBindPoseMatrices.reserve(jointCount);
             unsigned int j = 0;
-            for (std::list<std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+            for (std::vector<std::string>::const_iterator i = list.begin(); i != list.end(); i++)
             {
                 _jointLookupTable[*i] = j++;
             }
@@ -1661,7 +1664,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
         domTriangles* triangles = daeSafeCast<domTriangles>(trianglesArray.get(i));
 
         // Parse the material for this subset
-        //std::string materialName = triangles->getMaterial() == NULL ? _T("") : triangles->getMaterial();
+        //string materialName = triangles->getMaterial() == NULL ? _T("") : triangles->getMaterial();
         //if (materialName.size() > 0)
         ///    subset->material = ParseMaterial(bindMaterial, materialName);
 
@@ -1918,4 +1921,6 @@ DAESceneEncoder::DAEPolygonInput::DAEPolygonInput(void) :
 
 DAESceneEncoder::DAEPolygonInput::~DAEPolygonInput(void)
 {
+}
+
 }

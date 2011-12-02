@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "MeshPart.h"
 
 namespace gameplay

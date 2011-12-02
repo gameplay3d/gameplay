@@ -14,6 +14,7 @@ namespace gameplay
 class AnimationController
 {
     friend class Game;
+    friend class Animation;
     friend class AnimationClip;
 
 public:
@@ -180,7 +181,7 @@ private:
     
     State _state;                               // The current state of the AnimationController.
     std::list<AnimationClip*> _runningClips;    // A list of currently running AnimationClips.
-    std::vector<Animation*> _animations;
+    std::vector<Animation*> _animations;        // A list of animations registered with the AnimationController
 };
 
 }

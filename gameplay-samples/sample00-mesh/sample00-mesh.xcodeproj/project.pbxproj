@@ -73,7 +73,7 @@
 			children = (
 				42CCD4B3146D914B00353661 /* icon.png */,
 				42A3C5DD146C96640091C1E4 /* res */,
-				4217006814697FF100A45C02 /* sample00-mesh */,
+				4217006814697FF100A45C02 /* src */,
 				427D4F46147DC9460076760E /* Libraries */,
 				42CCD4B1146D814F00353661 /* Frameworks */,
 				4217005F14697FF100A45C02 /* Products */,
@@ -88,13 +88,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4217006814697FF100A45C02 /* sample00-mesh */ = {
+		4217006814697FF100A45C02 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				42F68AA31469CC3000E0E3C4 /* sample00-mesh-macos.plist */,
 				42BBCD32146C89F900D2A5F8 /* MeshGame.cpp */,
 				42BBCD33146C89F900D2A5F8 /* MeshGame.h */,
 			);
+			name = src;
 			path = "sample00-mesh";
 			sourceTree = "<group>";
 		};

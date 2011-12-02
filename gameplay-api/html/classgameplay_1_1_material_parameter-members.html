@@ -101,7 +101,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 This is the complete list of members for <a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a>, including all inherited members.<table>
   <tr bgcolor="#f0f0f0"><td><b>_targetType</b> (defined in <a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a>)</td><td><a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td><td><code> [protected]</code></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>addAnimation</b>(Animation *animation) (defined in <a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a>)</td><td><a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td><td><code> [protected]</code></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>addChannel</b>(Animation::Channel *animation) (defined in <a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a>)</td><td><a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a66e39f63477efb32cc190f6605ef0c74">addRef</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_material_parameter.html#a0846a7aabb77f4efbb3b7038b8479948">ANIMATE_UNIFORM</a></td><td><a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_target.html#a03d383afb9045efee09ec661bceedf80">AnimationTarget</a>()</td><td><a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td><td><code> [protected]</code></td></tr>
@@ -109,12 +109,10 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_m
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_material_parameter.html#a702904543343dcdd3936acaaada48c73">bindValue</a>(ClassType *classInstance, ParameterType(ClassType::*valueMethod)() const, unsigned int(ClassType::*countMethod)() const)</td><td><a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>floatPtrValue</b> (defined in <a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a>)</td><td><a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>floatValue</b> (defined in <a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a>)</td><td><a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_target.html#a0faf9476caa018d4889f42938ea04a54">getAnimation</a>(unsigned int index) const </td><td><a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_target.html#a5c19ce0479702628d28cd67caad56c46">getAnimation</a>(const char *id) const </td><td><a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_target.html#aa60959a088e80e433eff0b304ef4513c">getAnimationCount</a>() const </td><td><a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_material_parameter.html#a6f898406a1e9390d7a26dba04e3b71e0">getAnimationPropertyComponentCount</a>(int propertyId) const </td><td><a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_material_parameter.html#a4128baa81318a61cd6791b0cff9a5ea3">getAnimationPropertyValue</a>(int propertyId, AnimationValue *value)</td><td><a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_material_parameter.html#a3c8512ef7b40dbd975fb4f06184cf4e6">getName</a>() const </td><td><a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a6f58fd4c48dd9ed3ad2019d88fd1196d">getRefCount</a>() const </td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>intPtrValue</b> (defined in <a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a>)</td><td><a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>intValue</b> (defined in <a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a>)</td><td><a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>method</b> (defined in <a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a>)</td><td><a class="el" href="classgameplay_1_1_material_parameter.html">gameplay::MaterialParameter</a></td><td></td></tr>
@@ -161,7 +159,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_m
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:35 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:04 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

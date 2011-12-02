@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Vertex.h"
 
 namespace gameplay

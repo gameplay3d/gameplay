@@ -1,5 +1,4 @@
-#include <algorithm>
-
+#include "Base.h"
 #include "Scene.h"
 
 namespace gameplay
@@ -40,6 +39,7 @@ void Scene::writeBinary(FILE* file)
     }
     write(_ambientColor, Light::COLOR_SIZE, file);
 }
+
 void Scene::writeText(FILE* file)
 {
     fprintElementStart(file);

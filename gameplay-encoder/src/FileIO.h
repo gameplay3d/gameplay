@@ -1,7 +1,7 @@
 #ifndef FILEIO_H_
 #define FILEIO_H_
 
-#include "Base.h"
+
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -134,5 +134,5 @@ void writeVectorBinary(const Vector4& v, FILE* file);
 void writeVectorText(const Vector4& v, FILE* file);
 
 }
-#endif
 
+#endif

@@ -1,5 +1,8 @@
-
+#include "Base.h"
 #include "DAEUtil.h"
+
+namespace gameplay
+{
 
 /**
  * Returns the index of the skeleton in skeletonArray that points to the given node.
@@ -11,7 +14,7 @@
  */
 int getIndex(const domInstance_controller::domSkeleton_Array& skeletonArray, const domNodeRef& node);
 
-void getJointNames(const domSourceRef source, std::list<std::string>& list)
+void getJointNames(const domSourceRef source, std::vector<std::string>& list)
 {
     // BLENDER used name_array
     const domName_arrayRef& nameArray = source->getName_array();
@@ -40,7 +43,7 @@ void getJointNames(const domSourceRef source, std::list<std::string>& list)
     }
 }
 
-void getJointNames(const domSkin* skin, std::list<std::string>& list)
+void getJointNames(const domSkin* skin, std::vector<std::string>& list)
 {
     const domSkin::domJointsRef& joints = skin->getJoints();
     const domInputLocal_Array& inputArray = joints->getInput_array();
@@ -300,4 +303,6 @@ int getIndex(const domInstance_controller::domSkeleton_Array& skeletonArray, con
         }
     }
     return -1;
+}
+
 }

@@ -134,9 +134,12 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ac336294bfed721fecbe9520d103e993f">getActiveDuration</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a0881be549f9b6d833fc055bdd1af57d2">setSpeed</a> (float speed)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a53442765a6241c12aedce275f7cf2248">getSpeed</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a128747035d2e8797a7364494a597c77f">setBlendWeight</a> (float blendWeight)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a87e1eb6ea8944308b8c3c6326565323f">getBlendWeight</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a5c94a21f0850ea1c91b5612571510027">isPlaying</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ae3f523b557ddfdb3ef8b05bee79d090c">play</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a60b8be3ef809c7001a870daf460267ba">stop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a1a804917d2545152cb1885463fb53a0d">crossFade</a> (<a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> *clip, unsigned long duration)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#abf7d596e7960b8dfa7c79ace78aeaf71">addBeginListener</a> (<a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">AnimationClip::Listener</a> *listener)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#af1e38797873c3fa5a8921e6b43e40719">addEndListener</a> (<a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">AnimationClip::Listener</a> *listener)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
@@ -200,6 +203,41 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 
 </div>
 </div>
+<a class="anchor" id="a1a804917d2545152cb1885463fb53a0d"></a><!-- doxytag: member="gameplay::AnimationClip::crossFade" ref="a1a804917d2545152cb1885463fb53a0d" args="(AnimationClip *clip, unsigned long duration)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::AnimationClip::crossFade </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> *&#160;</td>
+          <td class="paramname"><em>clip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>duration</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Fades this clip out, and the specified clip in over the given duration.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clip</td><td>The clip to fade into. </td></tr>
+    <tr><td class="paramname">duration</td><td>The duration of the fade. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ac336294bfed721fecbe9520d103e993f"></a><!-- doxytag: member="gameplay::AnimationClip::getActiveDuration" ref="ac336294bfed721fecbe9520d103e993f" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -233,6 +271,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 <div class="memdoc">
 <p>Gets the <a class="el" href="classgameplay_1_1_animation.html">Animation</a> that this <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> was created from.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The <a class="el" href="classgameplay_1_1_animation.html">Animation</a> that this clip was created from. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a87e1eb6ea8944308b8c3c6326565323f"></a><!-- doxytag: member="gameplay::AnimationClip::getBlendWeight" ref="a87e1eb6ea8944308b8c3c6326565323f" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float gameplay::AnimationClip::getBlendWeight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the blend weight of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The blendweight of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. </dd></dl>
 
 </div>
 </div>
@@ -404,6 +460,30 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 
 </div>
 </div>
+<a class="anchor" id="a128747035d2e8797a7364494a597c77f"></a><!-- doxytag: member="gameplay::AnimationClip::setBlendWeight" ref="a128747035d2e8797a7364494a597c77f" args="(float blendWeight)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::AnimationClip::setBlendWeight </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>blendWeight</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the blend weight of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">blendWeight</td><td>The blend weight to apply to the clip. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ab29326cd02dd538d28900b127896ab01"></a><!-- doxytag: member="gameplay::AnimationClip::setRepeatCount" ref="ab29326cd02dd538d28900b127896ab01" args="(float repeatCount)" -->
 <div class="memitem">
 <div class="memproto">
@@ -510,7 +590,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:34 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:04 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

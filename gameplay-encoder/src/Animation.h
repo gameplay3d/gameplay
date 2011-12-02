@@ -27,6 +27,7 @@ public:
     virtual void writeText(FILE* file);
 
     void add(AnimationChannel* animationChannel);
+
     /**
      * Returns the number of animation channels contained in this animation.
      * 
@@ -34,9 +35,16 @@ public:
      */
     unsigned int getAnimationChannelCount() const;
 
+    /**
+     * Returns the specified animation channel.
+     */
+    AnimationChannel* getAnimationChannel(unsigned int index) const;
+
 private:
+
     std::vector<AnimationChannel*> _channels;
 };
 
 }
+
 #endif

@@ -3,32 +3,37 @@
 
 // C/C++
 #include <new>
-#include <cstdio>
-#include <cassert>
 #include <memory>
-#include <iostream>
-#include <string>
+#include <cstdio>
+#include <cstdlib>
+#include <cassert>
 #include <cwchar>
 #include <cwctype>
 #include <cctype>
 #include <cmath>
+#include <cstdarg>
+#include <ctime>
+#include <iostream>
+#include <string>
 #include <vector>
 #include <list>
 #include <stack>
 #include <map>
 #include <algorithm>
-#include <ctime>
 #include <limits>
 #include <functional>
-#include <assert.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <math.h>
-#include <cstdarg>
+
+// Bring common functions from C into global namespace
+using std::memcpy;
+using std::fabs;
+using std::sqrt;
+using std::cos;
+using std::sin;
+using std::tan;
+using std::isspace;
+using std::isdigit;
+using std::toupper;
+using std::tolower;
 
 // Common
 #ifndef NULL
@@ -45,12 +50,12 @@ extern void printError(const char* format, ...);
 #define LOG_ERROR(x) \
     { \
         printError(x); \
-        assert(0); \
+        assert(#x == 0); \
     }
 #define LOG_ERROR_VARG(x, ...) \
     { \
         printError(x, __VA_ARGS__); \
-        assert(0); \
+        assert(#x == 0); \
     }
 
 // Warning macro

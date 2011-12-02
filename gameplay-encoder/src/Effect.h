@@ -33,7 +33,6 @@ private:
     std::string _fragmentShader;
 };
 
-
 }
-#endif
 
+#endif

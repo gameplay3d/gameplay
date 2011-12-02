@@ -1,8 +1,6 @@
 #ifndef STRINGUTIL_H_
 #define STRINGUTIL_H_
 
-#include <string>
-
 namespace gameplay
 {
 
@@ -24,4 +22,5 @@ std::string getFilenameFromFilePath(const std::string& filepath);
 std::string getFilenameNoExt(const std::string& filename);
 
 }
+
 #endif

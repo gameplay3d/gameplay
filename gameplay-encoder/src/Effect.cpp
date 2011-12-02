@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Effect.h"
 
 namespace gameplay
@@ -15,6 +16,7 @@ unsigned int Effect::getTypeId(void) const
 {
     return EFFECT_ID;
 }
+
 const char* Effect::getElementName(void) const
 {
     return "Effect";
@@ -26,6 +28,7 @@ void Effect::writeBinary(FILE* file)
     write(_vertexShader, file);
     write(_fragmentShader, file);
 }
+
 void Effect::writeText(FILE* file)
 {
     fprintElementStart(file);

@@ -218,7 +218,7 @@ void Model::setNode(Node* node)
 
 void Model::draw(bool wireframe)
 {
-    wireframe &= _mesh->getPrimitiveType() == Mesh::TRIANGLES | _mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP;
+    wireframe &= (_mesh->getPrimitiveType() == Mesh::TRIANGLES | _mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP);
     unsigned int count = _mesh->getPartCount();
     if (count == 0)
     {

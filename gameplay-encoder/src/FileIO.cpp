@@ -1,8 +1,8 @@
+#include "Base.h"
 #include "FileIO.h"
 
 namespace gameplay
 {
-
 
 // Writing out a binary file //
 

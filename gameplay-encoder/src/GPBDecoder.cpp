@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "GPBDecoder.h"
 
 namespace gameplay
@@ -113,4 +114,4 @@ std::string GPBDecoder::readString(FILE* fp)
     return result;
 }
 
-};
+}

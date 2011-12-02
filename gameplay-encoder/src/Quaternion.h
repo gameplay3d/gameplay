@@ -304,4 +304,5 @@ private:
 };
 
 }
-#endif /* QUATERNION_H_ */
+
+#endif

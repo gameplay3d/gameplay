@@ -88,7 +88,7 @@
 			children = (
 				42CCD5B0146EC62A00353661 /* icon.png */,
 				42CCD5B3146EC65F00353661 /* res */,
-				42CCD576146EC4B300353661 /* sample03-character */,
+				42CCD576146EC4B300353661 /* src */,
 				427D4F4C147DC98E0076760E /* Libraries */,
 				42CCD56F146EC4B300353661 /* Frameworks */,
 				42CCD56D146EC4B300353661 /* Products */,
@@ -114,13 +114,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		42CCD576146EC4B300353661 /* sample03-character */ = {
+		42CCD576146EC4B300353661 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				42CCD578146EC4B300353661 /* sample03-character-macos.plist */,
 				42CCD5AD146EC62000353661 /* CharacterGame.cpp */,
 				42CCD5AE146EC62000353661 /* CharacterGame.h */,
 			);
+			name = src;
 			path = "sample03-character";
 			sourceTree = "<group>";
 		};
@@ -261,6 +262,8 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
 					"../../external-deps/libpng/include",
@@ -287,6 +290,8 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
 					"../../external-deps/libpng/include",

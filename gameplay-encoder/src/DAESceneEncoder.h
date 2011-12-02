@@ -1,21 +1,6 @@
 #ifndef DAESCENEEENCODER_H_
 #define DAESCENEEENCODER_H_
 
-#include <iostream>
-#include <list>
-#include <vector>
-#include <ctime>
-
-#include <dae.h>
-#include <dae/daeSIDResolver.h>
-#include <dae/domAny.h>
-#include <dom/domCOLLADA.h>
-#include <dom/domConstants.h>
-#include <dom/domElements.h>
-#include <dom/domProfile_COMMON.h>
-#include <dom/domCamera.h>
-
-#include "Base.h"
 #include "StringUtil.h"
 #include "Object.h"
 #include "Node.h"
@@ -38,7 +23,8 @@
 #include "DAEUtil.h"
 #include "EncoderArguments.h"
 
-using namespace gameplay;
+namespace gameplay
+{
 
 /**
  * Class for binary encoding a Collada (DAE) file.
@@ -218,5 +204,7 @@ private:
 
     clock_t _begin;
 };
+
+}
 
 #endif

@@ -96,106 +96,120 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">gameplay/src/Vector4.h</div>  </div>
 </div>
 <div class="contents">
-<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
-<a name="l00002"></a>00002 <span class="comment"> * Vector4.h</span>
-<a name="l00003"></a>00003 <span class="comment"> */</span>
-<a name="l00004"></a>00004 
-<a name="l00005"></a>00005 <span class="preprocessor">#ifndef VECTOR4_H_</span>
-<a name="l00006"></a>00006 <span class="preprocessor"></span><span class="preprocessor">#define VECTOR4_H_</span>
-<a name="l00007"></a>00007 <span class="preprocessor"></span>
-<a name="l00008"></a>00008 <span class="keyword">namespace </span>gameplay
-<a name="l00009"></a>00009 {
-<a name="l00010"></a>00010 
-<a name="l00011"></a>00011 <span class="keyword">class </span>Matrix;
-<a name="l00012"></a>00012 
-<a name="l00016"></a><a class="code" href="classgameplay_1_1_vector4.html">00016</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>
-<a name="l00017"></a>00017 {
-<a name="l00018"></a>00018 <span class="keyword">public</span>:
-<a name="l00019"></a>00019 
-<a name="l00023"></a><a class="code" href="classgameplay_1_1_vector4.html#a9986e2587916499d7e4b2bb24ac69a84">00023</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9986e2587916499d7e4b2bb24ac69a84">x</a>;
-<a name="l00024"></a>00024 
-<a name="l00028"></a><a class="code" href="classgameplay_1_1_vector4.html#aadbe139b1d59cecb97c2f15b13dd7cbb">00028</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#aadbe139b1d59cecb97c2f15b13dd7cbb">y</a>;
-<a name="l00029"></a>00029 
-<a name="l00033"></a><a class="code" href="classgameplay_1_1_vector4.html#a9375064d851d5cb3ee8ae0e97a92f169">00033</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9375064d851d5cb3ee8ae0e97a92f169">z</a>;
-<a name="l00034"></a>00034 
-<a name="l00038"></a><a class="code" href="classgameplay_1_1_vector4.html#a7da93c597285ebfa1f404e4fd2a9889d">00038</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a7da93c597285ebfa1f404e4fd2a9889d">w</a>;
-<a name="l00039"></a>00039 
-<a name="l00043"></a>00043     <a class="code" href="classgameplay_1_1_vector4.html#a256bc8bd5687c58e0af76431a1a7b4f2">Vector4</a>();
-<a name="l00044"></a>00044 
-<a name="l00053"></a>00053     <a class="code" href="classgameplay_1_1_vector4.html#a256bc8bd5687c58e0af76431a1a7b4f2">Vector4</a>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9986e2587916499d7e4b2bb24ac69a84">x</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#aadbe139b1d59cecb97c2f15b13dd7cbb">y</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9375064d851d5cb3ee8ae0e97a92f169">z</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a7da93c597285ebfa1f404e4fd2a9889d">w</a>);
-<a name="l00054"></a>00054 
-<a name="l00060"></a>00060     <a class="code" href="classgameplay_1_1_vector4.html#a256bc8bd5687c58e0af76431a1a7b4f2">Vector4</a>(<span class="keywordtype">float</span>* array);
-<a name="l00061"></a>00061 
-<a name="l00068"></a>00068     <a class="code" href="classgameplay_1_1_vector4.html#a256bc8bd5687c58e0af76431a1a7b4f2">Vector4</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; p2);
-<a name="l00069"></a>00069 
-<a name="l00077"></a>00077     <a class="code" href="classgameplay_1_1_vector4.html#a256bc8bd5687c58e0af76431a1a7b4f2">Vector4</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; copy);
-<a name="l00078"></a>00078 
-<a name="l00087"></a>00087     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> <a class="code" href="classgameplay_1_1_vector4.html#a06c9e95ffeacec13ecff4363dae95153">fromColor</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> color);
-<a name="l00088"></a>00088 
-<a name="l00092"></a>00092     <a class="code" href="classgameplay_1_1_vector4.html#a04ce177074e7c37f5d14329ba9b16883">~Vector4</a>();
-<a name="l00093"></a>00093 
-<a name="l00099"></a>00099     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#abf15697e6688b46cc08b178dc6a98687">zero</a>();
-<a name="l00100"></a>00100 
-<a name="l00106"></a>00106     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#a3c2feb9e978d4c0f86339b83b5cdbaed">one</a>();
-<a name="l00107"></a>00107 
-<a name="l00113"></a>00113     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#ae29c05d32b5c9f80f36d1ee89e22f0da">unitX</a>();
-<a name="l00114"></a>00114 
-<a name="l00120"></a>00120     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#a0764a82d19f07123f0af0aba9e1386f4">unitY</a>();
-<a name="l00121"></a>00121 
-<a name="l00127"></a>00127     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#a6f968ebc243d3e2fcc916fb20cdde354">unitZ</a>();
-<a name="l00128"></a>00128 
-<a name="l00134"></a>00134     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#ac2a619bd24ab18c6d90207d7b6d221f6">unitW</a>();
-<a name="l00135"></a>00135 
-<a name="l00141"></a>00141     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_vector4.html#a0147dbb731e8c1543717f659755ccb3d">isZero</a>() <span class="keyword">const</span>;
-<a name="l00142"></a>00142 
-<a name="l00148"></a>00148     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_vector4.html#a79b97bcd0442943429b8c15f109863fa">isOne</a>() <span class="keyword">const</span>;
-<a name="l00149"></a>00149 
-<a name="l00158"></a>00158     <span class="keyword">static</span> <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a5248acf0bca66c6223576f03ead6cfe6">angle</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v2);
-<a name="l00159"></a>00159 
-<a name="l00165"></a>00165     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#a54cb3c08057ef90adfb91e59a0ab87ee">add</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v);
-<a name="l00166"></a>00166 
-<a name="l00174"></a>00174     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#a54cb3c08057ef90adfb91e59a0ab87ee">add</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v2, <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* dst);
-<a name="l00175"></a>00175 
-<a name="l00182"></a>00182     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#acde0338682f894f07baeedb9a014a40e">clamp</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; min, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; max);
-<a name="l00183"></a>00183 
-<a name="l00192"></a>00192     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#acde0338682f894f07baeedb9a014a40e">clamp</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; min, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; max, <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* dst);
-<a name="l00193"></a>00193 
-<a name="l00203"></a>00203     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#afcc7362fb98aed6341b1c52e941b4699">distance</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v) <span class="keyword">const</span>;
-<a name="l00204"></a>00204 
-<a name="l00219"></a>00219     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#acaf1bdf03a27b75ae1fcca57765694e4">distanceSquared</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v) <span class="keyword">const</span>;
-<a name="l00220"></a>00220 
-<a name="l00228"></a>00228     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a279eb2f9927ec641ac38d28681e1c398">dot</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v);
-<a name="l00229"></a>00229 
-<a name="l00238"></a>00238     <span class="keyword">static</span> <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a279eb2f9927ec641ac38d28681e1c398">dot</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v2);
-<a name="l00239"></a>00239 
-<a name="l00247"></a>00247     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#ae74f2ecc7963dcfceead1b45b15f9ca2">length</a>() <span class="keyword">const</span>;
-<a name="l00248"></a>00248 
-<a name="l00261"></a>00261     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a21fd1df96c7b580c6dfd37db4b4c31f0">lengthSquared</a>() <span class="keyword">const</span>;
-<a name="l00262"></a>00262 
-<a name="l00266"></a>00266     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#afa23b3e94c3aa32f4549342d234d04bb">negate</a>();
-<a name="l00267"></a>00267 
-<a name="l00277"></a>00277     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#ad41cac9160f3b2d22c199e3e8f395ca8">normalize</a>();
-<a name="l00278"></a>00278 
-<a name="l00288"></a>00288     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#ad41cac9160f3b2d22c199e3e8f395ca8">normalize</a>(<a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* dst);
-<a name="l00289"></a>00289 
-<a name="l00295"></a>00295     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#a62b9251b54e88d21ca696232a1d07eca">scale</a>(<span class="keywordtype">float</span> scalar);
-<a name="l00296"></a>00296 
-<a name="l00305"></a>00305     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9986e2587916499d7e4b2bb24ac69a84">x</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#aadbe139b1d59cecb97c2f15b13dd7cbb">y</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9375064d851d5cb3ee8ae0e97a92f169">z</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a7da93c597285ebfa1f404e4fd2a9889d">w</a>);
-<a name="l00306"></a>00306 
-<a name="l00312"></a>00312     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keywordtype">float</span>* array);
-<a name="l00313"></a>00313 
-<a name="l00319"></a>00319     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v);
-<a name="l00320"></a>00320 
-<a name="l00327"></a>00327     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; p2);
-<a name="l00328"></a>00328 
-<a name="l00335"></a>00335     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#a51780d8f498061b5d118f3be38421706">subtract</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v);
-<a name="l00336"></a>00336 
-<a name="l00345"></a>00345     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#a51780d8f498061b5d118f3be38421706">subtract</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v2, <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* dst);
-<a name="l00346"></a>00346 };
-<a name="l00347"></a>00347 
-<a name="l00348"></a>00348 }
-<a name="l00349"></a>00349 
-<a name="l00350"></a>00350 <span class="preprocessor">#endif</span>
+<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef VECTOR4_H_</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define VECTOR4_H_</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span>
+<a name="l00004"></a>00004 <span class="keyword">namespace </span>gameplay
+<a name="l00005"></a>00005 {
+<a name="l00006"></a>00006 
+<a name="l00007"></a>00007 <span class="keyword">class </span>Matrix;
+<a name="l00008"></a>00008 
+<a name="l00012"></a><a class="code" href="classgameplay_1_1_vector4.html">00012</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>
+<a name="l00013"></a>00013 {
+<a name="l00014"></a>00014 <span class="keyword">public</span>:
+<a name="l00015"></a>00015 
+<a name="l00019"></a><a class="code" href="classgameplay_1_1_vector4.html#a9986e2587916499d7e4b2bb24ac69a84">00019</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9986e2587916499d7e4b2bb24ac69a84">x</a>;
+<a name="l00020"></a>00020 
+<a name="l00024"></a><a class="code" href="classgameplay_1_1_vector4.html#aadbe139b1d59cecb97c2f15b13dd7cbb">00024</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#aadbe139b1d59cecb97c2f15b13dd7cbb">y</a>;
+<a name="l00025"></a>00025 
+<a name="l00029"></a><a class="code" href="classgameplay_1_1_vector4.html#a9375064d851d5cb3ee8ae0e97a92f169">00029</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9375064d851d5cb3ee8ae0e97a92f169">z</a>;
+<a name="l00030"></a>00030 
+<a name="l00034"></a><a class="code" href="classgameplay_1_1_vector4.html#a7da93c597285ebfa1f404e4fd2a9889d">00034</a>     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a7da93c597285ebfa1f404e4fd2a9889d">w</a>;
+<a name="l00035"></a>00035 
+<a name="l00039"></a>00039     <a class="code" href="classgameplay_1_1_vector4.html#a256bc8bd5687c58e0af76431a1a7b4f2">Vector4</a>();
+<a name="l00040"></a>00040 
+<a name="l00049"></a>00049     <a class="code" href="classgameplay_1_1_vector4.html#a256bc8bd5687c58e0af76431a1a7b4f2">Vector4</a>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9986e2587916499d7e4b2bb24ac69a84">x</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#aadbe139b1d59cecb97c2f15b13dd7cbb">y</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9375064d851d5cb3ee8ae0e97a92f169">z</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a7da93c597285ebfa1f404e4fd2a9889d">w</a>);
+<a name="l00050"></a>00050 
+<a name="l00056"></a>00056     <a class="code" href="classgameplay_1_1_vector4.html#a256bc8bd5687c58e0af76431a1a7b4f2">Vector4</a>(<span class="keywordtype">float</span>* array);
+<a name="l00057"></a>00057 
+<a name="l00064"></a>00064     <a class="code" href="classgameplay_1_1_vector4.html#a256bc8bd5687c58e0af76431a1a7b4f2">Vector4</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; p2);
+<a name="l00065"></a>00065 
+<a name="l00073"></a>00073     <a class="code" href="classgameplay_1_1_vector4.html#a256bc8bd5687c58e0af76431a1a7b4f2">Vector4</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; copy);
+<a name="l00074"></a>00074 
+<a name="l00083"></a>00083     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> <a class="code" href="classgameplay_1_1_vector4.html#a06c9e95ffeacec13ecff4363dae95153">fromColor</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> color);
+<a name="l00084"></a>00084 
+<a name="l00088"></a>00088     <a class="code" href="classgameplay_1_1_vector4.html#a04ce177074e7c37f5d14329ba9b16883">~Vector4</a>();
+<a name="l00089"></a>00089 
+<a name="l00095"></a>00095     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#abf15697e6688b46cc08b178dc6a98687">zero</a>();
+<a name="l00096"></a>00096 
+<a name="l00102"></a>00102     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#a3c2feb9e978d4c0f86339b83b5cdbaed">one</a>();
+<a name="l00103"></a>00103 
+<a name="l00109"></a>00109     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#ae29c05d32b5c9f80f36d1ee89e22f0da">unitX</a>();
+<a name="l00110"></a>00110 
+<a name="l00116"></a>00116     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#a0764a82d19f07123f0af0aba9e1386f4">unitY</a>();
+<a name="l00117"></a>00117 
+<a name="l00123"></a>00123     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#a6f968ebc243d3e2fcc916fb20cdde354">unitZ</a>();
+<a name="l00124"></a>00124 
+<a name="l00130"></a>00130     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#ac2a619bd24ab18c6d90207d7b6d221f6">unitW</a>();
+<a name="l00131"></a>00131 
+<a name="l00137"></a>00137     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_vector4.html#a0147dbb731e8c1543717f659755ccb3d">isZero</a>() <span class="keyword">const</span>;
+<a name="l00138"></a>00138 
+<a name="l00144"></a>00144     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_vector4.html#a79b97bcd0442943429b8c15f109863fa">isOne</a>() <span class="keyword">const</span>;
+<a name="l00145"></a>00145 
+<a name="l00154"></a>00154     <span class="keyword">static</span> <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a5248acf0bca66c6223576f03ead6cfe6">angle</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v2);
+<a name="l00155"></a>00155 
+<a name="l00161"></a>00161     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#a54cb3c08057ef90adfb91e59a0ab87ee">add</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v);
+<a name="l00162"></a>00162 
+<a name="l00170"></a>00170     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#a54cb3c08057ef90adfb91e59a0ab87ee">add</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v2, <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* dst);
+<a name="l00171"></a>00171 
+<a name="l00178"></a>00178     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#acde0338682f894f07baeedb9a014a40e">clamp</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; min, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; max);
+<a name="l00179"></a>00179 
+<a name="l00188"></a>00188     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#acde0338682f894f07baeedb9a014a40e">clamp</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; min, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; max, <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* dst);
+<a name="l00189"></a>00189 
+<a name="l00199"></a>00199     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#afcc7362fb98aed6341b1c52e941b4699">distance</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v) <span class="keyword">const</span>;
+<a name="l00200"></a>00200 
+<a name="l00215"></a>00215     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#acaf1bdf03a27b75ae1fcca57765694e4">distanceSquared</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v) <span class="keyword">const</span>;
+<a name="l00216"></a>00216 
+<a name="l00224"></a>00224     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a279eb2f9927ec641ac38d28681e1c398">dot</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v);
+<a name="l00225"></a>00225 
+<a name="l00234"></a>00234     <span class="keyword">static</span> <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a279eb2f9927ec641ac38d28681e1c398">dot</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v2);
+<a name="l00235"></a>00235 
+<a name="l00243"></a>00243     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#ae74f2ecc7963dcfceead1b45b15f9ca2">length</a>() <span class="keyword">const</span>;
+<a name="l00244"></a>00244 
+<a name="l00257"></a>00257     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a21fd1df96c7b580c6dfd37db4b4c31f0">lengthSquared</a>() <span class="keyword">const</span>;
+<a name="l00258"></a>00258 
+<a name="l00262"></a>00262     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#afa23b3e94c3aa32f4549342d234d04bb">negate</a>();
+<a name="l00263"></a>00263 
+<a name="l00273"></a>00273     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#ad41cac9160f3b2d22c199e3e8f395ca8">normalize</a>();
+<a name="l00274"></a>00274 
+<a name="l00284"></a>00284     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#ad41cac9160f3b2d22c199e3e8f395ca8">normalize</a>(<a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* dst);
+<a name="l00285"></a>00285 
+<a name="l00291"></a>00291     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#a62b9251b54e88d21ca696232a1d07eca">scale</a>(<span class="keywordtype">float</span> scalar);
+<a name="l00292"></a>00292 
+<a name="l00301"></a>00301     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9986e2587916499d7e4b2bb24ac69a84">x</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#aadbe139b1d59cecb97c2f15b13dd7cbb">y</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9375064d851d5cb3ee8ae0e97a92f169">z</a>, <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a7da93c597285ebfa1f404e4fd2a9889d">w</a>);
+<a name="l00302"></a>00302 
+<a name="l00308"></a>00308     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keywordtype">float</span>* array);
+<a name="l00309"></a>00309 
+<a name="l00315"></a>00315     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v);
+<a name="l00316"></a>00316 
+<a name="l00323"></a>00323     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; p2);
+<a name="l00324"></a>00324 
+<a name="l00331"></a>00331     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#a51780d8f498061b5d118f3be38421706">subtract</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v);
+<a name="l00332"></a>00332 
+<a name="l00341"></a>00341     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vector4.html#a51780d8f498061b5d118f3be38421706">subtract</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v2, <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* dst);
+<a name="l00342"></a>00342 
+<a name="l00351"></a>00351     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> <a class="code" href="classgameplay_1_1_vector4.html#a6f60ef2363d90f7b1b15921523cb8e34">operator+</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v) <span class="keyword">const</span>;
+<a name="l00352"></a>00352 
+<a name="l00359"></a>00359     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#a74d1da7795f5b75865204f5cfc413452">operator+=</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v);
+<a name="l00360"></a>00360 
+<a name="l00369"></a>00369     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> <a class="code" href="classgameplay_1_1_vector4.html#a94ed182820e76ebf41c21c2bd7990718">operator-</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v) <span class="keyword">const</span>;
+<a name="l00370"></a>00370 
+<a name="l00377"></a>00377     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#a43324dfaa71a3aca9aee53e6cb53e6be">operator-=</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v);
+<a name="l00378"></a>00378 
+<a name="l00386"></a>00386     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> <a class="code" href="classgameplay_1_1_vector4.html#a94ed182820e76ebf41c21c2bd7990718">operator-</a>() <span class="keyword">const</span>;
+<a name="l00387"></a>00387 
+<a name="l00396"></a>00396     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> <a class="code" href="classgameplay_1_1_vector4.html#aa8ab9f1e6709c5ba07c783fe30e5d621">operator*</a>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9986e2587916499d7e4b2bb24ac69a84">x</a>) <span class="keyword">const</span>;
+<a name="l00397"></a>00397 
+<a name="l00404"></a>00404     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_vector4.html#a37c1fc25324e80410ab965f006545985">operator*=</a>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector4.html#a9986e2587916499d7e4b2bb24ac69a84">x</a>);
+<a name="l00405"></a>00405 };
+<a name="l00406"></a>00406 
+<a name="l00414"></a>00414 <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> <a class="code" href="namespacegameplay.html#a30e8f726bc44ff2a8e04fe622c1e0ed5">operator*</a>(<span class="keywordtype">float</span> x, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; v);
+<a name="l00415"></a>00415 
+<a name="l00416"></a>00416 }
+<a name="l00417"></a>00417 
+<a name="l00418"></a>00418 <span class="preprocessor">#include &quot;Vector4.inl&quot;</span>
+<a name="l00419"></a>00419 
+<a name="l00420"></a>00420 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -216,7 +230,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:34 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

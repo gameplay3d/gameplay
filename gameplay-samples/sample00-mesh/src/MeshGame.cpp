@@ -3,34 +3,33 @@
 // Declare our game instance
 MeshGame game;
 
+MeshGame::MeshGame()
+    : _font(NULL), _scene(NULL),_modelNode(NULL), _touched(false), _touchX(0)
+{
+}
+
 MeshGame::~MeshGame()
 {
 }
 
 void MeshGame::initialize()
 {
-    _touched = false;
-
     // Load font
     _font = Font::create("res/arial40.gpb");
-    assert(_font);
 
     // Load mesh/scene from file
     Package* pkg = Package::create("res/duck.gpb");
     _scene = pkg->loadScene();
     SAFE_RELEASE(pkg);
-    assert(_scene);
 
     // Get the duck node
     _modelNode = _scene->findNode("duck");
-    assert(_modelNode);
 
     // Bind the material to the model
     _modelNode->getModel()->setMaterial("res/duck.material");
 
     // Find the light node
     Node* lightNode = _scene->findNode("directionalLight1");
-    assert(lightNode);
 
     // Bind the light node's direction into duck's material.
     _modelNode->getModel()->getMaterial()->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
@@ -54,8 +53,8 @@ void MeshGame::render(long elapsedTime)
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
-    // Draw our scene
-    _scene->visit(this, &MeshGame::visitNode);
+    // Visit all the nodes in the scene, drawing the models/mesh.
+    _scene->visit(this, &MeshGame::drawScene);
 
     // Draw the fps
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 5, getFrameRate());
@@ -89,7 +88,7 @@ void MeshGame::touch(int x, int y, int touchEvent)
     };
 }
 
-void MeshGame::visitNode(Node* node, long cookie)
+void MeshGame::drawScene(Node* node, long cookie)
 {
     Model* model = node->getModel(); 
     if (model)
