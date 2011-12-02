@@ -7,7 +7,7 @@
 
 using std::memcpy;
 using std::fabs;
-using std::sqrtf;
+using std::sqrt;
 
 #ifndef NULL
 #define NULL 0
@@ -665,7 +665,7 @@ void normalizeQuat(float* q)
     // Do we need to normalize?
     if (fabs(n) > 0.00001f && fabs(n - 1.0f) > 0.00001f)
     {
-        n = sqrtf(n);
+        n = sqrt(n);
         q[0] /= n;
         q[1] /= n;
         q[2] /= n;

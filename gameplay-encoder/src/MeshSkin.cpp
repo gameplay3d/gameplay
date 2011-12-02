@@ -157,7 +157,7 @@ void MeshSkin::computeBounds()
         return;
     }
 
-    DEBUGPRINT("\nComputing bounds for skin of mesh: %s\n", _mesh->getId().c_str());
+    DEBUGPRINT_VARG("\nComputing bounds for skin of mesh: %s\n", _mesh->getId().c_str());
 
     Node* joint;
 
@@ -186,7 +186,7 @@ void MeshSkin::computeBounds()
     unsigned int jointCount = _joints.size();
     unsigned int vertexCount = _mesh->getVertexCount();
 
-    DEBUGPRINT("> %d joints found.\n", jointCount);
+    DEBUGPRINT_VARG("> %d joints found.\n", jointCount);
 
     std::vector<AnimationChannel*> channels;
     std::vector<Node*> channelTargets;
@@ -262,11 +262,11 @@ void MeshSkin::computeBounds()
                 if (d > jointBounds.radius)
                     jointBounds.radius = d;
             }
-            jointBounds.radius = sqrtf(jointBounds.radius);
+            jointBounds.radius = sqrt(jointBounds.radius);
         }
         _jointBounds[i] = jointBounds;
 
-        DEBUGPRINT("> %d%%\r", (int)((float)(i+1) / (float)jointCount * 100.0f));
+        DEBUGPRINT_VARG("> %d%%\r", (int)((float)(i+1) / (float)jointCount * 100.0f));
     }
     DEBUGPRINT("\n");
 
@@ -332,7 +332,7 @@ void MeshSkin::computeBounds()
 
         curves.push_back(curve);
 
-        DEBUGPRINT("> %d%%\r", (int)((float)(i+1) / (float)channelCount * 100.0f));
+        DEBUGPRINT_VARG("> %d%%\r", (int)((float)(i+1) / (float)channelCount * 100.0f));
     }
     DEBUGPRINT("\n");
 
@@ -408,7 +408,7 @@ void MeshSkin::computeBounds()
         else
             time += 33.0f;
 
-        DEBUGPRINT("> %d%%\r", (int)(time / maxDuration * 100.0f));
+        DEBUGPRINT_VARG("> %d%%\r", (int)(time / maxDuration * 100.0f));
     }
     DEBUGPRINT("\n");
 

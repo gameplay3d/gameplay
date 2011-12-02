@@ -5,6 +5,7 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include <cstdarg>
 #include <cassert>
 #include <cmath>
 #include <cfloat>
@@ -76,9 +77,11 @@ void setIdentityMatrix(float values[]);
 #define ISZERO(x) (fabs(x) < 0.000001f)
 
 #ifdef NDEBUG
-#define DEBUGPRINT (x, ...)
+#define DEBUGPRINT(x)
+#define DEBUGPRINT_VARG(x, ...)
 #else
-#define DEBUGPRINT(x, ...) printf(x, __VA_ARGS__)
+#define DEBUGPRINT(x)  printf(x)
+#define DEBUGPRINT_VARG(x, ...) printf(x, __VA_ARGS__)
 #endif
 
 }

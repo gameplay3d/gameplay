@@ -252,7 +252,7 @@ void Plane::transform(const Matrix& matrix)
         float ny = _normal.x * inverted.m[4] + _normal.y * inverted.m[5] + _normal.z * inverted.m[6] + _distance * inverted.m[7];
         float nz = _normal.x * inverted.m[8] + _normal.y * inverted.m[9] + _normal.z * inverted.m[10] + _distance * inverted.m[11];
         float d = _normal.x * inverted.m[12]+ _normal.y * inverted.m[13] + _normal.z * inverted.m[14]+ _distance * inverted.m[15];
-        float factor = 1.0f / sqrtf(nx * nx + ny * ny + nz * nz);
+        float factor = 1.0f / sqrt(nx * nx + ny * ny + nz * nz);
 
         _normal.x = nx * factor;
         _normal.y = ny * factor;
@@ -267,7 +267,7 @@ void Plane::normalize()
         return;
 
     // Normalize the plane's normal.
-    float normalizeFactor = 1.0f / sqrtf(_normal.x * _normal.x + _normal.y * _normal.y + _normal.z * _normal.z);
+    float normalizeFactor = 1.0f / sqrt(_normal.x * _normal.x + _normal.y * _normal.y + _normal.z * _normal.z);
 
     if (normalizeFactor != 1.0f)
     {
