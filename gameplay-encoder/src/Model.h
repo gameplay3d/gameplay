@@ -1,8 +1,6 @@
 #ifndef MODEL_H_
 #define MODEL_H_
 
-#include <list>
-
 #include "Object.h"
 #include "Mesh.h"
 #include "MeshSkin.h"

@@ -1,5 +1,9 @@
+#include "Base.h"
 #include "TTFFontEncoder.h"
 #include "GPBFile.h"
+
+namespace gameplay
+{
 
 void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, unsigned char* srcBitmap, int srcWidth, int srcHeight)
 {
@@ -325,4 +329,6 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
     FT_Done_Face(face);
     FT_Done_FreeType(library);
     return 0;
+}
+
 }

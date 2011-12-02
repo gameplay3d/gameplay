@@ -1,5 +1,5 @@
+#include "Base.h"
 #include "LightInstance.h"
-#include "assert.h"
 
 namespace gameplay
 {

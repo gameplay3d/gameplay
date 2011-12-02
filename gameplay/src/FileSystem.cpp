@@ -30,7 +30,7 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
     fullPath += path;
 
     FILE* fp = fopen(fullPath.c_str(), mode);
-    
+
 // Win32 doesnt support a asset or bundle definitions.
 #ifdef WIN32
     if (fp == NULL)

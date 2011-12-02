@@ -1,11 +1,11 @@
 #ifndef OBJ_H_
 #define OBJ_H_
 
-#include "Base.h"
 #include "FileIO.h"
 
 namespace gameplay
 {
+
 /**
  * Object is the abstract base class of all the objects that can be written in the GamePlay Binary file.
  */
@@ -34,7 +34,6 @@ public:
         MESHSKIN_ID = 36,
         FONT_ID = 128,
     };
-
 
     /**
      * Constructor.
@@ -137,6 +136,7 @@ public:
     }
 
 private:
+
     /**
      * Saves where this object was written to in the binary file.
      */

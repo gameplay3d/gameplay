@@ -1,13 +1,9 @@
-/*
- * Vector2.h
- */
-
 #ifndef VECTOR2_H_
 #define VECTOR2_H_
 
-
 namespace gameplay
 {
+
 // Forward declare
 class Matrix;
 

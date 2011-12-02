@@ -62,9 +62,6 @@
     </ClCompile>
     <ClCompile Include="src\GPBFile.cpp" />
     <ClCompile Include="src\DAEChannelTarget.cpp" />
-    <ClCompile Include="src\Base.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="src\FileIO.cpp" />
     <ClCompile Include="src\StringUtil.cpp" />
     <ClCompile Include="src\Effect.cpp">
@@ -100,6 +97,7 @@
     <ClCompile Include="src\BoundingVolume.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\Base.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\DAESceneEncoder.h" />
@@ -162,9 +160,6 @@
     </ClInclude>
     <ClInclude Include="src\GPBFile.h" />
     <ClInclude Include="src\DAEChannelTarget.h" />
-    <ClInclude Include="src\Base.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="src\FileIO.h" />
     <ClInclude Include="src\StringUtil.h" />
     <ClInclude Include="src\Effect.h">
@@ -197,10 +192,10 @@
       <Filter>Objects\Animation</Filter>
     </ClInclude>
     <ClInclude Include="..\gameplay\src\Curve.h" />
-    <ClInclude Include="src\Miniball.h" />
     <ClInclude Include="src\BoundingVolume.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="src\Base.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Objects">

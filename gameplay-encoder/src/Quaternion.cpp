@@ -1,7 +1,3 @@
-/*
- * Quaternion.cpp
- */
-
 #include "Base.h"
 #include "Quaternion.h"
 
@@ -162,7 +158,7 @@ void Quaternion::normalize(Quaternion* dst) const
     if (n == 1.0f)
         return;
 
-    n = sqrtf(n);
+    n = sqrt(n);
     // too close to zero
     if (n < 0.000001f)
         return;

@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "AnimationChannel.h"
 
 namespace gameplay
@@ -86,7 +87,7 @@ const std::vector<unsigned int>& AnimationChannel::getInterpolationTypes() const
     return _interpolations;
 }
 
-void AnimationChannel::setTargetId(const std::string str)
+void AnimationChannel::setTargetId(const std::string& str)
 {
     _targetId = str;
 }
