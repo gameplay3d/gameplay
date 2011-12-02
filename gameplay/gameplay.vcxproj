@@ -52,6 +52,7 @@
     <ClCompile Include="src\ParticleEmitter.cpp" />
     <ClCompile Include="src\PhysicsConstraint.cpp" />
     <ClCompile Include="src\PhysicsController.cpp" />
+    <ClCompile Include="src\PhysicsDebugDrawer.cpp" />
     <ClCompile Include="src\PhysicsFixedConstraint.cpp" />
     <ClCompile Include="src\PhysicsGenericConstraint.cpp" />
     <ClCompile Include="src\PhysicsHingeConstraint.cpp" />
@@ -69,6 +70,7 @@
     <ClCompile Include="src\Ref.cpp" />
     <ClCompile Include="src\RenderState.cpp" />
     <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\SceneLoader.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
     <ClCompile Include="src\Texture.cpp" />
@@ -118,6 +120,7 @@
     <ClInclude Include="src\ParticleEmitter.h" />
     <ClInclude Include="src\PhysicsConstraint.h" />
     <ClInclude Include="src\PhysicsController.h" />
+    <ClInclude Include="src\PhysicsDebugDrawer.h" />
     <ClInclude Include="src\PhysicsFixedConstraint.h" />
     <ClInclude Include="src\PhysicsGenericConstraint.h" />
     <ClInclude Include="src\PhysicsHingeConstraint.h" />
@@ -134,6 +137,7 @@
     <ClInclude Include="src\Ref.h" />
     <ClInclude Include="src\RenderState.h" />
     <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\SceneLoader.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />
     <ClInclude Include="src\Texture.h" />
@@ -244,10 +248,11 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -260,9 +265,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

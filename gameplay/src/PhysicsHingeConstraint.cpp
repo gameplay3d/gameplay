@@ -41,7 +41,7 @@ PhysicsHingeConstraint::PhysicsHingeConstraint(PhysicsRigidBody* a, const Quater
     
 PhysicsHingeConstraint::~PhysicsHingeConstraint()
 {
-    // DUMMY FUNCTION
+    // Unused
 }
 
 }

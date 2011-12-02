@@ -4,6 +4,7 @@
 #include "AnimationClip.h"
 #include "Animation.h"
 #include "AnimationTarget.h"
+#include "Properties.h"
 
 namespace gameplay
 {
@@ -51,6 +52,17 @@ public:
      * @return The newly created animation, or NULL if an animation with the given ID already exists.
      */
     Animation* createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type);
+
+    /**
+     * Creates an animation on this target using the data from the given properties object. 
+     * 
+     * @param id The ID of the animation.
+     * @param target The animation target.
+     * @param properties The properties object defining the animation data.
+     *
+     * @return The newly created animation, or NULL if an animation with the given ID already exists.
+     */
+    Animation* createAnimation(const char* id, AnimationTarget* target, Properties* p);
 
     /**
      * Creates a simple two keyframe from-to animation.

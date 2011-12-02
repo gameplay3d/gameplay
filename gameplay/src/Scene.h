@@ -21,6 +21,15 @@ public:
     static Scene* createScene();
 
     /**
+     * Loads a scene from the given '.scene' file.
+     * 
+     * @param filePath The path to the '.scene' file to load from.
+     * @return The loaded scene or <code>NULL</code> if the scene
+     *      could not be loaded from the given file.
+     */
+    static Scene* load(const char* filePath);
+
+    /**
      * Gets the identifier for the scene.
      *
      * @return The scene identifier.
