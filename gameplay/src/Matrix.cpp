@@ -226,7 +226,7 @@ void Matrix::createRotation(const Vector3& axis, float angle, Matrix* dst)
     if (n != 1.0f)
     {
         // Not normalized.
-        n = sqrtf(n);
+        n = sqrt(n);
         // Prevent divide too close to zero.
         if (n > 0.000001f)
         {

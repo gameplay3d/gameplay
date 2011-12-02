@@ -28,9 +28,12 @@ public:
 
     Camera* getCamera();
     void setCamera(Camera* camera);
+
 private:
+
     Camera* _ref;
 };
 
 }
+
 #endif

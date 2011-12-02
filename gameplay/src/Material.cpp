@@ -230,7 +230,9 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
         char* token = strtok((char*)defines, ";");
         while (token)
         {
-            define += "#define " + std::string(token) + "\n";
+            define += "#define ";
+            define += token;
+            define += "\n";
             token = strtok(NULL, ";");
         }
     }

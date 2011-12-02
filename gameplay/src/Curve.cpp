@@ -1,9 +1,13 @@
 // Purposely not including Base.h here, or any other gameplay dependencies
 // so this class can be reused between gameplay and gameplay-encoder.
 #include "Curve.h"
-#include <assert.h>
-#include <math.h>
-#include <memory.h>
+#include <cassert>
+#include <cmath>
+#include <memory>
+
+using std::memcpy;
+using std::fabs;
+using std::sqrt;
 
 #ifndef NULL
 #define NULL 0
@@ -661,7 +665,7 @@ void normalizeQuat(float* q)
     // Do we need to normalize?
     if (fabs(n) > 0.00001f && fabs(n - 1.0f) > 0.00001f)
     {
-        n = sqrtf(n);
+        n = sqrt(n);
         q[0] /= n;
         q[1] /= n;
         q[2] /= n;

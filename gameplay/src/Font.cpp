@@ -992,8 +992,8 @@ void Font::reverseLines(char* text)
 
         unsigned int textLength = strcspn(text, "\n");
 
-        std::string line = std::string(text, textLength);
-        std::string reversedLine = std::string(line.rbegin(), line.rend());
+        std::string line(text, textLength);
+        std::string reversedLine(line.rbegin(), line.rend());
         memcpy(text, reversedLine.c_str(), textLength);
 
         text += textLength;

@@ -1,8 +1,6 @@
 #ifndef FILEIO_H_
 #define FILEIO_H_
 
-#include "Base.h"
-
 namespace gameplay
 {
 
@@ -114,5 +112,5 @@ void skipString(FILE* file);
 void skipUint(FILE* file);
 
 }
-#endif
 
+#endif

@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "GPBFile.h"
 
 namespace gameplay
@@ -239,6 +240,5 @@ void GPBFile::adjust()
     //   Blender will output a simple translation animation to 3 separate animations with the same key times but targetting X, Y and Z.
     //   This can be merged into one animation. Same for scale animations.
 }
-
 
 }

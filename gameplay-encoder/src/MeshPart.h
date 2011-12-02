@@ -1,8 +1,6 @@
 #ifndef MESHPART_H_
 #define MESHPART_H_
 
-#include <vector>
-
 #include "Base.h"
 #include "Object.h"
 #include "Vertex.h"
@@ -85,8 +83,6 @@ private:
     std::vector<unsigned int> _indices;
 };
 
-
-
 }
-#endif
 
+#endif
