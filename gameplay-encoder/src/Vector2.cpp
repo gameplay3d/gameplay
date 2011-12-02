@@ -1,7 +1,3 @@
-/*
- * Vector2.cpp
- */
-
 #include "Base.h"
 #include "Vector2.h"
 #include "FileIO.h"
@@ -319,5 +315,3 @@ void Vector2::writeText(FILE* file) const
 }
 
 }
-
-

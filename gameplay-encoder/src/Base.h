@@ -1,22 +1,34 @@
 #ifndef BASE_H_
 #define BASE_H_
 
+// C++ includes
 #include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cassert>
+#include <cmath>
+#include <cfloat>
+#include <ctime>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <list>
 #include <map>
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
-#include <string>
+#include <algorithm>
 #include <sys/stat.h>
-#include <vector>
-#include <assert.h>
-#include <math.h>
-#include <float.h>
 
+// Collada includes
+#include <dae.h>
+#include <dae/daeSIDResolver.h>
+#include <dae/domAny.h>
+#include <dom/domCOLLADA.h>
+#include <dom/domConstants.h>
+#include <dom/domElements.h>
+#include <dom/domCamera.h>
+#include <dom/domProfile_COMMON.h>
+
+// Defines
 #ifndef M_1_PI        
 #define M_1_PI                      0.31830988618379067154
 #endif
@@ -70,4 +82,5 @@ void setIdentityMatrix(float values[]);
 #endif
 
 }
+
 #endif

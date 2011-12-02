@@ -1,8 +1,6 @@
 #ifndef NODE_H_
 #define NODE_H_
 
-#include <list>
-
 #include "Object.h"
 #include "CameraInstance.h"
 #include "LightInstance.h"
@@ -185,7 +183,6 @@ private:
     bool _joint;
 };
 
-
 }
-#endif
 
+#endif

@@ -18,39 +18,39 @@ struct MemoryAllocationRecord
 MemoryAllocationRecord* __memoryAllocations = 0;
 int __memoryAllocationCount = 0;
 
-void* debugAlloc(std::size_t size, const char* file, int line);
+void* debugAlloc(size_t size, const char* file, int line);
 void debugFree(void* p);
 
 #ifdef _MSC_VER
 #pragma warning( disable : 4290 )
 #endif
 
-void* operator new (std::size_t size, const char* file, int line)
+void* operator new (size_t size, const char* file, int line)
 {
     return debugAlloc(size, file, line);
 }
 
-void* operator new[] (std::size_t size, const char* file, int line)
+void* operator new[] (size_t size, const char* file, int line)
 {
     return operator new (size, file, line);
 }
 
-void* operator new (std::size_t size) throw(std::bad_alloc)
+void* operator new (size_t size) throw(bad_alloc)
 {
     return operator new (size, "", 0);
 }
 
-void* operator new[] (std::size_t size) throw(std::bad_alloc)
+void* operator new[] (size_t size) throw(bad_alloc)
 {
     return operator new (size, "", 0);
 }
 
-void* operator new (std::size_t size, const std::nothrow_t&) throw()
+void* operator new (size_t size, const nothrow_t&) throw()
 {
     return operator new (size, "", 0);
 }
 
-void* operator new[] (std::size_t size, const std::nothrow_t&) throw()
+void* operator new[] (size_t size, const nothrow_t&) throw()
 {
     return operator new (size, "", 0);
 }

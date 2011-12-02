@@ -1,9 +1,13 @@
 // Purposely not including Base.h here, or any other gameplay dependencies
 // so this class can be reused between gameplay and gameplay-encoder.
 #include "Curve.h"
-#include <assert.h>
-#include <math.h>
-#include <memory.h>
+#include <cassert>
+#include <cmath>
+#include <memory>
+
+using std::memcpy;
+using std::fabs;
+using std::sqrtf;
 
 #ifndef NULL
 #define NULL 0

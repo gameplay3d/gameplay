@@ -1,7 +1,3 @@
-/*
- * Vector3.cpp
- */
-
 #include "Base.h"
 #include "Vector3.h"
 #include "FileIO.h"

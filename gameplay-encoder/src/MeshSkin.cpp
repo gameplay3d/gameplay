@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "MeshSkin.h"
 #include "Node.h"
 #include "StringUtil.h"
@@ -167,7 +168,7 @@ void MeshSkin::computeBounds()
     {
         // Is this parent in the list of joints that form the skeleton?
         // If not, then it's simply a parent node to the root joint
-        if (std::find(_joints.begin(), _joints.end(), parent) != _joints.end())
+        if (find(_joints.begin(), _joints.end(), parent) != _joints.end())
         {
             rootJoint = parent;
         }
@@ -210,7 +211,7 @@ void MeshSkin::computeBounds()
                 AnimationChannel* channel = animation->getAnimationChannel(k);
                 if (channel->getTargetId() == joint->getId())
                 {
-                    if (std::find(channels.begin(), channels.end(), channel) == channels.end())
+                    if (find(channels.begin(), channels.end(), channel) == channels.end())
                     {
                         channels.push_back(channel);
                         channelTargets.push_back(joint);

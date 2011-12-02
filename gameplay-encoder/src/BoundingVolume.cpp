@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "BoundingVolume.h"
 
 namespace gameplay

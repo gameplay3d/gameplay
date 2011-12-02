@@ -1,7 +1,3 @@
-/*
- * Quaternion.h
- */
-
 #ifndef QUATERNION_H_
 #define QUATERNION_H_
 
@@ -308,4 +304,5 @@ private:
 };
 
 }
-#endif /* QUATERNION_H_ */
+
+#endif

@@ -1,4 +1,4 @@
-#include <assert.h>
+#include "Base.h"
 #include "Camera.h"
 
 namespace gameplay
