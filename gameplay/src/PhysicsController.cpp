@@ -1,7 +1,10 @@
 #include "Base.h"
 #include "Game.h"
+#include "MeshPart.h"
 #include "PhysicsController.h"
+#include "PhysicsDebugDrawer.h"
 #include "PhysicsMotionState.h"
+#include "SceneLoader.h"
 
 namespace gameplay
 {
@@ -9,7 +12,7 @@ namespace gameplay
 // Default gravity is 9.8 along the negative Y axis.
 PhysicsController::PhysicsController()
     : _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionConfiguration(NULL), _dispatcher(NULL),
-    _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _status(Listener::DEACTIVATED), _listeners(NULL)
+    _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _drawer(NULL), _status(Listener::DEACTIVATED), _listeners(NULL)
 {
 }
 
@@ -23,6 +26,7 @@ void PhysicsController::addStatusListener(Listener* listener)
 
 PhysicsController::~PhysicsController()
 {
+    SAFE_DELETE(_drawer);
     SAFE_DELETE(_listeners);
 }
 
@@ -93,6 +97,13 @@ PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidB
     return constraint;
 }
 
+void PhysicsController::drawDebug(const Matrix& viewProjection)
+{
+    _drawer->begin(viewProjection);
+    _world->debugDrawWorld();
+    _drawer->end();
+}
+
 const Vector3& PhysicsController::getGravity(const Vector3& gravity) const
 {
     return _gravity;
@@ -118,6 +129,10 @@ void PhysicsController::initialize()
     // Create the world.
     _world = new btDiscreteDynamicsWorld(_dispatcher, _overlappingPairCache, _solver, _collisionConfiguration);
     _world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
+
+    // Set up debug drawing.
+    _drawer = new PhysicsDebugDrawer();
+    _world->setDebugDrawer(_drawer);
 }
 
 void PhysicsController::finalize()
@@ -132,12 +147,12 @@ void PhysicsController::finalize()
 
 void PhysicsController::pause()
 {
-    // DUMMY FUNCTION
+    // Unused
 }
 
 void PhysicsController::resume()
 {
-    // DUMMY FUNCTION
+    // Unused
 }
 
 void PhysicsController::update(long elapsedTime)
@@ -266,26 +281,110 @@ void PhysicsController::addRigidBody(PhysicsRigidBody* body)
 btCollisionShape* PhysicsController::getBox(const Vector3& min, const Vector3& max, const btVector3& scale)
 {
     btVector3 halfExtents(scale.x() * 0.5 * abs(max.x - min.x), scale.y() * 0.5 * abs(max.y - min.y), scale.z() * 0.5 * abs(max.z - min.z));
-    BULLET_NEW(btBoxShape, box, halfExtents);
+    BULLET_NEW_VARG(btBoxShape, box, halfExtents);
     _shapes.push_back(box);
 
     return box;
 }
 
-btCollisionShape* PhysicsController::getSphere(float radius, const btVector3& scale)
+btCollisionShape* PhysicsController::getMesh(PhysicsRigidBody* body)
 {
-    // Since sphere shapes depend only on the radius, the best we can do is take
-    // the largest dimension and apply that as the uniform scale to the rigid body.
-    float uniformScale = scale.x();
-    if (uniformScale < scale.y())
-        uniformScale = scale.y();
-    if (uniformScale < scale.z())
-        uniformScale = scale.z();
+    // Retrieve the mesh rigid body data from the loaded scene.
+    const SceneLoader::MeshRigidBodyData* data = SceneLoader::getMeshRigidBodyData(body->_node->getId());
 
-    BULLET_NEW(btSphereShape, sphere, uniformScale * radius);
-    _shapes.push_back(sphere);
+    // Copy the scaled vertex position data to the rigid body's local buffer.
+    Matrix m;
+    Matrix::createScale(body->_node->getScaleX(), body->_node->getScaleY(), body->_node->getScaleZ(), &m);
+    unsigned int vertexCount = data->mesh->getVertexCount();
+    body->_vertexData = new float[vertexCount * 3];
+    Vector3 v;
+    int vertexStride = data->mesh->getVertexFormat()->getVertexSize();
+    for (unsigned int i = 0; i < vertexCount; i++)
+    {
+        v.set(*((float*)&data->vertexData[i * vertexStride + 0 * sizeof(float)]),
+            *((float*)&data->vertexData[i * vertexStride + 1 * sizeof(float)]),
+            *((float*)&data->vertexData[i * vertexStride + 2 * sizeof(float)]));
+        v *= m;
+        memcpy(&(body->_vertexData[i * 3]), &v, sizeof(float) * 3);
+    }
+    
+    BULLET_NEW(btTriangleIndexVertexArray, meshInterface);
 
-    return sphere;
+    if (data->mesh->getPartCount() > 0)
+    {
+        PHY_ScalarType indexType = PHY_UCHAR;
+        int indexStride = 0;
+        MeshPart* meshPart = NULL;
+        for (unsigned int i = 0; i < data->mesh->getPartCount(); i++)
+        {
+            meshPart = data->mesh->getPart(i);
+
+            switch (meshPart->getIndexFormat())
+            {
+            case Mesh::INDEX8:
+                indexType = PHY_UCHAR;
+                indexStride = 1;
+                break;
+            case Mesh::INDEX16:
+                indexType = PHY_SHORT;
+                indexStride = 2;
+                break;
+            case Mesh::INDEX32:
+                indexType = PHY_INTEGER;
+                indexStride = 4;
+                break;
+            }
+
+            // Copy the index data to the rigid body's local buffer.
+            unsigned int indexDataSize = meshPart->getIndexCount() * indexStride;
+            unsigned char* indexData = new unsigned char[indexDataSize];
+            memcpy(indexData, data->indexData[i], indexDataSize);
+            body->_indexData.push_back(indexData);
+
+            // Create a btIndexedMesh object for the current mesh part.
+            btIndexedMesh indexedMesh;
+            indexedMesh.m_indexType = indexType;
+            indexedMesh.m_numTriangles = meshPart->getIndexCount() / 3;
+            indexedMesh.m_numVertices = meshPart->getIndexCount();
+            indexedMesh.m_triangleIndexBase = (const unsigned char*)body->_indexData[i];
+            indexedMesh.m_triangleIndexStride = indexStride;
+            indexedMesh.m_vertexBase = (const unsigned char*)body->_vertexData;
+            indexedMesh.m_vertexStride = sizeof(float)*3;
+            indexedMesh.m_vertexType = PHY_FLOAT;
+
+            // Add the indexed mesh data to the mesh interface.
+            meshInterface->addIndexedMesh(indexedMesh, indexType);
+        }
+    }
+    else
+    {
+        // Generate index data for the mesh locally in the rigid body.
+        unsigned int* indexData = new unsigned int[data->mesh->getVertexCount()];
+        for (unsigned int i = 0; i < data->mesh->getVertexCount(); i++)
+        {
+            indexData[i] = i;
+        }
+        body->_indexData.push_back((unsigned char*)indexData);
+
+        // Create a single btIndexedMesh object for the mesh interface.
+        btIndexedMesh indexedMesh;
+        indexedMesh.m_indexType = PHY_INTEGER;
+        indexedMesh.m_numTriangles = data->mesh->getVertexCount() / 3;
+        indexedMesh.m_numVertices = data->mesh->getVertexCount();
+        indexedMesh.m_triangleIndexBase = body->_indexData[0];
+        indexedMesh.m_triangleIndexStride = sizeof(unsigned int);
+        indexedMesh.m_vertexBase = (const unsigned char*)body->_vertexData;
+        indexedMesh.m_vertexStride = sizeof(float)*3;
+        indexedMesh.m_vertexType = PHY_FLOAT;
+
+        // Set the data in the mesh interface.
+        meshInterface->addIndexedMesh(indexedMesh, indexedMesh.m_indexType);
+    }
+
+    BULLET_NEW_VARG(btBvhTriangleMeshShape, shape, meshInterface, true);
+    _shapes.push_back(shape);
+
+    return shape;
 }
 
 PhysicsRigidBody* PhysicsController::getPhysicsRigidBody(const btCollisionObject* collisionObject)
@@ -298,6 +397,22 @@ PhysicsRigidBody* PhysicsController::getPhysicsRigidBody(const btCollisionObject
     }
 
     return NULL;
+}
+
+btCollisionShape* PhysicsController::getSphere(float radius, const btVector3& scale)
+{
+    // Since sphere shapes depend only on the radius, the best we can do is take
+    // the largest dimension and apply that as the uniform scale to the rigid body.
+    float uniformScale = scale.x();
+    if (uniformScale < scale.y())
+        uniformScale = scale.y();
+    if (uniformScale < scale.z())
+        uniformScale = scale.z();
+
+    BULLET_NEW_VARG(btSphereShape, sphere, uniformScale * radius);
+    _shapes.push_back(sphere);
+
+    return sphere;
 }
 
 void PhysicsController::removeConstraint(PhysicsConstraint* constraint)

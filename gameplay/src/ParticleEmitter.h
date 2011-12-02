@@ -8,6 +8,7 @@
 #include "Texture.h"
 #include "Rectangle.h"
 #include "SpriteBatch.h"
+#include "Properties.h"
 
 namespace gameplay
 {
@@ -157,6 +158,15 @@ public:
      * @return An initialized ParticleEmitter.
      */
     static ParticleEmitter* create(const char* particleFile);
+
+    /**
+     * Creates a particle emitter from the specified properties object.
+     * 
+     * @param properties The properties object defining the 
+     *      particle emitter (must have namespace equal to 'particle').
+     * @return The newly created particle emitter, or <code>NULL</code> if the particle emitter failed to load.
+     */
+    static ParticleEmitter* create(Properties* properties);
 
     /**
      * Creates an uninitialized ParticleEmitter.
