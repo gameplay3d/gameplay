@@ -88,7 +88,7 @@ public:
     /**
      * Creates a rotation matrix from the given quaternion.
      */
-    static void Matrix::createRotation(const Quaternion& q, float* dst);
+    static void createRotation(const Quaternion& q, float* dst);
 
     /**
      * Creates a rotation matrix from the given axis and angle in degrees.

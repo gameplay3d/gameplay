@@ -96,7 +96,7 @@ void BoundingVolume::merge(const BoundingVolume& v)
     float vx = center.x - v.center.x;
     float vy = center.y - v.center.y;
     float vz = center.z - v.center.z;
-    float d = sqrtf(vx * vx + vy * vy + vz * vz);
+    float d = sqrt(vx * vx + vy * vy + vz * vz);
 
     // If one sphere is contained inside the other, set to the larger sphere.
     if (d <= (v.radius - radius))

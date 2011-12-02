@@ -6,7 +6,6 @@
 #include <memory>
 #include <cstdio>
 #include <cstdlib>
-#include <cstdint>
 #include <cassert>
 #include <cwchar>
 #include <cwctype>
@@ -28,13 +27,9 @@
 using std::memcpy;
 using std::fabs;
 using std::sqrt;
-using std::sqrtf;
 using std::cos;
-using std::cosf;
 using std::sin;
-using std::sinf;
 using std::tan;
-using std::tanf;
 using std::isspace;
 using std::isdigit;
 using std::toupper;

@@ -218,7 +218,7 @@ void Mesh::computeBounds()
     }
 
     // Convert squared distance to distance for radius
-    bounds.radius = sqrtf(bounds.radius);
+    bounds.radius = sqrt(bounds.radius);
 }
 
 }
