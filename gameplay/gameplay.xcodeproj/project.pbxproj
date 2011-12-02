@@ -344,7 +344,7 @@
 		4234D98A14686BB6003031B3 = {
 			isa = PBXGroup;
 			children = (
-				4234D9A314686C52003031B3 /* gameplay */,
+				4234D9A314686C52003031B3 /* src */,
 				427D4F42147DC8DE0076760E /* Libraries */,
 				42CCD4AF146D811D00353661 /* Frameworks */,
 				4234D99B14686C52003031B3 /* Products */,
@@ -359,7 +359,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4234D9A314686C52003031B3 /* gameplay */ = {
+		4234D9A314686C52003031B3 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				42CD0DB1147D8FF50000361E /* Animation.cpp */,
@@ -512,6 +512,7 @@
 				42CD0E44147D8FF50000361E /* Viewport.cpp */,
 				42CD0E45147D8FF50000361E /* Viewport.h */,
 			);
+			name = src;
 			path = gameplay;
 			sourceTree = "<group>";
 		};

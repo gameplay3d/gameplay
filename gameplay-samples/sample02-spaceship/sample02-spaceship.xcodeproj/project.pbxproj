@@ -88,7 +88,7 @@
 			children = (
 				42CCD55D146EC24F00353661 /* icon.png */,
 				42CCD55F146EC27A00353661 /* res */,
-				42CCD520146EBF3600353661 /* sample02-spaceship */,
+				42CCD520146EBF3600353661 /* src */,
 				427D4F4A147DC9770076760E /* Libraries */,
 				42CCD519146EBF3600353661 /* Frameworks */,
 				42CCD517146EBF3600353661 /* Products */,
@@ -114,13 +114,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		42CCD520146EBF3600353661 /* sample02-spaceship */ = {
+		42CCD520146EBF3600353661 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				42CCD547146EC0AE00353661 /* SpaceshipGame.cpp */,
 				42CCD548146EC0AE00353661 /* SpaceshipGame.h */,
 				42CCD522146EBF3600353661 /* sample02-spaceship-macos.plist */,
 			);
+			name = src;
 			path = "sample02-spaceship";
 			sourceTree = "<group>";
 		};

@@ -88,7 +88,7 @@
 			children = (
 				42CCD4C1146D91E800353661 /* icon.png */,
 				42CCD4DC146D950400353661 /* res */,
-				42CCD498146D80DA00353661 /* sample01-longboard */,
+				42CCD498146D80DA00353661 /* src */,
 				427D4F48147DC9610076760E /* Libraries */,
 				42CCD491146D80DA00353661 /* Frameworks */,
 				42CCD48F146D80DA00353661 /* Products */,
@@ -114,13 +114,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		42CCD498146D80DA00353661 /* sample01-longboard */ = {
+		42CCD498146D80DA00353661 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				42CCD49A146D80DA00353661 /* sample01-longboard-macos.plist */,
 				42CCD4BD146D91D700353661 /* LongboardGame.cpp */,
 				42CCD4BE146D91D700353661 /* LongboardGame.h */,
 			);
+			name = src;
 			path = "sample01-longboard";
 			sourceTree = "<group>";
 		};
