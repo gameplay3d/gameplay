@@ -41,8 +41,10 @@ public:
     AnimationChannel* getAnimationChannel(unsigned int index) const;
 
 private:
+
     std::vector<AnimationChannel*> _channels;
 };
 
 }
+
 #endif

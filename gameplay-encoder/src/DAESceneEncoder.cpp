@@ -1,15 +1,11 @@
-/*
- * DAESceneEncoder.h
- */
-
-#include <algorithm>
-
+#include "Base.h"
 #include "DAESceneEncoder.h"
 #include "DAEOptimizer.h"
 
 //#define ENCODER_PRINT_TIME 1
 
-using namespace gameplay;
+namespace gameplay
+{
 
 DAESceneEncoder::DAESceneEncoder()
     : _collada(NULL), _dom(NULL), file(NULL), _vertexBlendWeights(NULL), _vertexBlendIndices(NULL)
@@ -243,7 +239,7 @@ void DAESceneEncoder::createTrianglesFromPolylist(domMesh* domMesh, domPolylist*
 
 void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments& arguments)
 {
-    _begin = std::clock();
+    _begin = clock();
     const char* nodeId = arguments.getNodeId();
     bool text = arguments.textOutputEnabled();
 
@@ -663,14 +659,14 @@ bool DAESceneEncoder::loadTarget(const domChannelRef& channelRef, AnimationChann
 void DAESceneEncoder::begin()
 {
     #ifdef ENCODER_PRINT_TIME
-    _begin = std::clock();
+    _begin = clock();
     #endif
 }
 
 void DAESceneEncoder::end(const char* str)
 {
     #ifdef ENCODER_PRINT_TIME
-    clock_t time = std::clock() - _begin;
+    clock_t time = clock() - _begin;
     fprintf(stderr,"%5d %s\n", time, str);
     #endif
 }
@@ -1672,7 +1668,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
         domTriangles* triangles = daeSafeCast<domTriangles>(trianglesArray.get(i));
 
         // Parse the material for this subset
-        //std::string materialName = triangles->getMaterial() == NULL ? _T("") : triangles->getMaterial();
+        //string materialName = triangles->getMaterial() == NULL ? _T("") : triangles->getMaterial();
         //if (materialName.size() > 0)
         ///    subset->material = ParseMaterial(bindMaterial, materialName);
 
@@ -1924,4 +1920,6 @@ DAESceneEncoder::DAEPolygonInput::DAEPolygonInput(void) :
 
 DAESceneEncoder::DAEPolygonInput::~DAEPolygonInput(void)
 {
+}
+
 }

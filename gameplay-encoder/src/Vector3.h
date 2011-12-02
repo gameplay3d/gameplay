@@ -1,11 +1,5 @@
-/*
- * Vector3.h
- */
-
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
-
-#include <cstdio>
 
 namespace gameplay
 {

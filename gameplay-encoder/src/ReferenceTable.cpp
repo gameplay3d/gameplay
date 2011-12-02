@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "ReferenceTable.h"
 
 namespace gameplay

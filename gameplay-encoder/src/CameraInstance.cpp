@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "CameraInstance.h"
 
 namespace gameplay

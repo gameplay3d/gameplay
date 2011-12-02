@@ -12,7 +12,6 @@
 #define TORADIANS(degrees) (degrees * (PI / 180.0f))
 #define TODEGREES(radians) (radians * (180.0f / PI))
 
-
 namespace gameplay
 {
 
@@ -166,4 +165,5 @@ public:
 };
 
 }
+
 #endif

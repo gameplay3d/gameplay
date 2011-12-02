@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Glyph.h"
 
 namespace gameplay
@@ -10,10 +11,10 @@ Glyph::Glyph(void) :
     fillArray(uvCoords, 0.0f, 4);
 }
 
-
-Glyph::~Glyph(void)
+    Glyph::~Glyph(void)
 {
 }
+
 const char* Glyph::getElementName(void) const
 {
     return "Glyph";
@@ -28,6 +29,7 @@ void Glyph::writeBinary(FILE* file)
     write(uvCoords, 4, file);
 
 }
+
 void Glyph::writeText(FILE* file)
 {
     fprintElementStart(file);

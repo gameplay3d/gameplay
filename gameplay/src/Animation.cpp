@@ -5,7 +5,6 @@
 #include "AnimationTarget.h"
 #include "Game.h"
 #include "Transform.h"
-#include <string.h>
 #include "Properties.h"
 
 #define ANIMATION_DEFAULT_CLIP_SUFFIX "__default__clip"
@@ -48,7 +47,7 @@ Animation::~Animation()
 
     SAFE_DELETE(_defaultClip);
 
-    /*std::vector<Channel*>::iterator channelIter = _channels.begin();
+    /*vector<Channel*>::iterator channelIter = _channels.begin();
     while (channelIter != _channels.end())
     {
         Animation::Channel* channel = *channelIter;
@@ -108,7 +107,7 @@ void Animation::createClips(const char* animationFile)
         const char* repeat = pClip->getString("repeatCount");
         if (repeat)
         {
-            if (((std::string)repeat).compare(ANIMATION_INDEFINITE_STR) == 0)
+            if (strcmp(repeat, ANIMATION_INDEFINITE_STR) == 0)
             {
                 clip->setRepeatCount(AnimationClip::REPEAT_INDEFINITE);
             }

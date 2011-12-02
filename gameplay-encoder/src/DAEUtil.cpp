@@ -1,5 +1,8 @@
-
+#include "Base.h"
 #include "DAEUtil.h"
+
+namespace gameplay
+{
 
 /**
  * Returns the index of the skeleton in skeletonArray that points to the given node.
@@ -300,4 +303,6 @@ int getIndex(const domInstance_controller::domSkeleton_Array& skeletonArray, con
         }
     }
     return -1;
+}
+
 }
