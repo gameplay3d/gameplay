@@ -1,25 +1,8 @@
-/*
- * DAEUtil.h
- */
-
 #ifndef DAEUTIL_H_
 #define DAEUTIL_H_
 
-#include <iostream>
-#include <list>
-#include <vector>
-
-#include <dae.h>
-#include <dae/daeSIDResolver.h>
-#include <dae/domAny.h>
-#include <dom/domCOLLADA.h>
-#include <dom/domConstants.h>
-#include <dom/domElements.h>
-#include <dom/domProfile_COMMON.h>
-
-#include "Base.h"
-
-using namespace gameplay;
+namespace gameplay
+{
 
 /**
  * Gets the joint names for the given source and appends them to the given list.
@@ -122,5 +105,7 @@ void moveChannelAndSouresToAnimation(domChannelRef& channel, domAnimationRef& an
  * @return True if the animation has no children, false otherwise.
  */
 bool isEmptyAnimation(domAnimationRef& animation);
+
+}
 
 #endif

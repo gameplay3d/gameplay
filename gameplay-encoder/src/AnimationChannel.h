@@ -36,7 +36,7 @@ public:
     virtual void writeText(FILE* file);
 
     const std::string& getTargetId() const;
-    void setTargetId(const std::string str);
+    void setTargetId(const std::string& str);
     void setTargetAttribute(unsigned int attrib);
 
     void setKeyTimes(const std::vector<float>& values);
@@ -73,7 +73,6 @@ private:
     std::vector<unsigned int> _interpolations;
 };
 
-
 }
-#endif
 
+#endif

@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Light.h"
 #include "DAESceneEncoder.h"
 

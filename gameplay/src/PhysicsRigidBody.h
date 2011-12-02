@@ -51,7 +51,7 @@ public:
         CollisionPair(PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
 
         /**
-         * Less than operator (needed for use as a key in std::map).
+         * Less than operator (needed for use as a key in map).
          * 
          * @param cp The collision pair to compare.
          * @return True if this pair is "less than" the given pair; false otherwise.

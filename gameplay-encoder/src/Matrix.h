@@ -12,7 +12,6 @@
 #define TORADIANS(degrees) (degrees * (PI / 180.0f))
 #define TODEGREES(radians) (radians * (180.0f / PI))
 
-
 namespace gameplay
 {
 
@@ -89,7 +88,7 @@ public:
     /**
      * Creates a rotation matrix from the given quaternion.
      */
-    static void Matrix::createRotation(const Quaternion& q, float* dst);
+    static void createRotation(const Quaternion& q, float* dst);
 
     /**
      * Creates a rotation matrix from the given axis and angle in degrees.
@@ -166,4 +165,5 @@ public:
 };
 
 }
+
 #endif

@@ -1,8 +1,8 @@
+#include "Base.h"
 #include "Matrix.h"
 
 namespace gameplay
 {
-
 
 Matrix::Matrix(void)
 {
@@ -87,7 +87,7 @@ void Matrix::createRotation(float x, float y, float z, float angle, float* dst)
     if (n != 1.0f)
     {
         // Not normalized
-        n = sqrtf(n);
+        n = sqrt(n);
         if (n > 0.000001f) // prevent divide too close to zero
         {
             n = 1.0f / n;
