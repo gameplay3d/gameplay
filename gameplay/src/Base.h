@@ -34,6 +34,7 @@ using std::isspace;
 using std::isdigit;
 using std::toupper;
 using std::tolower;
+using std::size_t;
 
 // Common
 #ifndef NULL
