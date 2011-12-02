@@ -4,8 +4,6 @@
 namespace gameplay
 {
 
-class Gamepad;
-
 /**
  * Defines an input class for requesting input.
  */
@@ -208,21 +206,6 @@ public:
      * @param roll The roll angle returned (in degrees). If NULL then not returned.
      */
     static void getAccelerometerPitchAndRoll(float* pitch, float* roll);
-
-    /**
-     * Indicates if the game device supports a gamepad.
-     * 
-     * @return true if the gamepad is supported; false otherwise.
-     */
-    static bool isGamepadSupported();
-
-    /**
-     * Gets the gamepad
-     *
-     * @ returns an instance of gamepad if Id is valid; NULL otherwise.
-     */
-    static Gamepad* getGamepad();
-
 
 private:
 

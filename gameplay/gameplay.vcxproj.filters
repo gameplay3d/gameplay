@@ -204,6 +204,10 @@
     <ClCompile Include="src\PhysicsMotionState.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Gamepad.cpp" />
+    <ClCompile Include="src\Theme.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -393,6 +397,10 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PhysicsSocketConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gamepad.h" />
+    <ClInclude Include="src\Theme.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -72,6 +72,7 @@
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\Theme.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\Vector2.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\Theme.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\Vector2.h" />
     <ClInclude Include="src\Vector3.h" />

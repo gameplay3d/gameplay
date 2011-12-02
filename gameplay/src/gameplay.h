@@ -5,7 +5,7 @@
 #include "Input.h"
 #include "FileSystem.h"
 #include "Package.h"
-#include "Gamepad.h"
+#include "Theme.h"
 
 // Math
 #include "Rectangle.h"
