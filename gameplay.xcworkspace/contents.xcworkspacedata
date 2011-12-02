@@ -19,7 +19,4 @@
    <FileRef
       location = "group:gameplay-samples/sample03-character/sample03-character.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:gameplay-samples/sample04-sandbox/sample04-sandbox.xcodeproj">
-   </FileRef>
 </Workspace>
