@@ -52,7 +52,6 @@
     <ClCompile Include="src\ParticleEmitter.cpp" />
     <ClCompile Include="src\PhysicsConstraint.cpp" />
     <ClCompile Include="src\PhysicsController.cpp" />
-    <ClCompile Include="src\PhysicsDebugDrawer.cpp" />
     <ClCompile Include="src\PhysicsFixedConstraint.cpp" />
     <ClCompile Include="src\PhysicsGenericConstraint.cpp" />
     <ClCompile Include="src\PhysicsHingeConstraint.cpp" />
@@ -120,7 +119,6 @@
     <ClInclude Include="src\ParticleEmitter.h" />
     <ClInclude Include="src\PhysicsConstraint.h" />
     <ClInclude Include="src\PhysicsController.h" />
-    <ClInclude Include="src\PhysicsDebugDrawer.h" />
     <ClInclude Include="src\PhysicsFixedConstraint.h" />
     <ClInclude Include="src\PhysicsGenericConstraint.h" />
     <ClInclude Include="src\PhysicsHingeConstraint.h" />

@@ -7,12 +7,12 @@
 namespace gameplay
 {
 
-const int PhysicsRigidBody::Listener::DIRTY = 0x01;
-const int PhysicsRigidBody::Listener::COLLISION = 0x02;
-const int PhysicsRigidBody::Listener::REGISTERED = 0x04;
+const int PhysicsRigidBody::Listener::DIRTY         = 0x01;
+const int PhysicsRigidBody::Listener::COLLISION     = 0x02;
+const int PhysicsRigidBody::Listener::REGISTERED    = 0x04;
 
 // Internal value used for creating mesh rigid bodies.
-#define SHAPE_MESH ((gameplay::PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 1))
+#define SHAPE_MESH ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 1))
 
 PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, float mass, 
         float friction, float restitution, float linearDamping, float angularDamping)
@@ -25,18 +25,18 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
         case SHAPE_BOX:
         {
             const BoundingBox& box = node->getModel()->getMesh()->getBoundingBox();
-            _shape = Game::getInstance()->getPhysicsController()->getBox(box.min, box.max, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
+            _shape = Game::getInstance()->getPhysicsController()->createBox(box.min, box.max, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
             break;
         }
         case SHAPE_SPHERE:
         {
             const BoundingSphere& sphere = node->getModel()->getMesh()->getBoundingSphere();
-            _shape = Game::getInstance()->getPhysicsController()->getSphere(sphere.radius, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
+            _shape = Game::getInstance()->getPhysicsController()->createSphere(sphere.radius, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
             break;
         }
         case SHAPE_MESH:
         {
-            _shape = Game::getInstance()->getPhysicsController()->getMesh(this);
+            _shape = Game::getInstance()->getPhysicsController()->createMesh(this);
             break;
         }
     }
@@ -47,9 +47,9 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
 
     // Create the Bullet rigid body.
     if (c.lengthSquared() > MATH_EPSILON)
-        _body = createBulletRigidBody(_shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
+        _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
     else
-        _body = createBulletRigidBody(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
+        _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
 
     // Add the rigid body to the physics world.
     Game::getInstance()->getPhysicsController()->addRigidBody(this);
@@ -299,8 +299,9 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     return body;
 }
 
-btRigidBody* PhysicsRigidBody::createBulletRigidBody(btCollisionShape* shape, float mass, Node* node,
-    float friction, float restitution, float linearDamping, float angularDamping, const Vector3* centerOfMassOffset)
+btRigidBody* PhysicsRigidBody::createRigidBodyInternal(btCollisionShape* shape, float mass, Node* node,
+                                                       float friction, float restitution, float linearDamping, float angularDamping, 
+                                                       const Vector3* centerOfMassOffset)
 {
     // If the mass is non-zero, then the object is dynamic so we calculate the local 
     // inertia. However, if the collision shape is a triangle mesh, we don't calculate 
@@ -349,12 +350,13 @@ PhysicsRigidBody::Listener::~Listener()
     // Unused
 }
 
-btScalar PhysicsRigidBody::Listener::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a,
-    int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB)
+btScalar PhysicsRigidBody::Listener::addSingleResult(btManifoldPoint& cp, 
+                                                     const btCollisionObject* a, int partIdA, int indexA, 
+                                                     const btCollisionObject* b, int partIdB, int indexB)
 {
     // Get pointers to the PhysicsRigidBody objects.
-    PhysicsRigidBody* rbA = Game::getInstance()->getPhysicsController()->getPhysicsRigidBody(a);
-    PhysicsRigidBody* rbB = Game::getInstance()->getPhysicsController()->getPhysicsRigidBody(b);
+    PhysicsRigidBody* rbA = Game::getInstance()->getPhysicsController()->getRigidBody(a);
+    PhysicsRigidBody* rbB = Game::getInstance()->getPhysicsController()->getRigidBody(b);
     
     // If the given rigid body pair has collided in the past, then
     // we notify the listener only if the pair was not colliding
@@ -378,8 +380,9 @@ btScalar PhysicsRigidBody::Listener::addSingleResult(btManifoldPoint& cp, const 
     return 0.0f;
 }
 
-btScalar PhysicsRigidBody::CollidesWithCallback::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA,
-            int indexA, const btCollisionObject* b, int partIdB, int indexB)
+btScalar PhysicsRigidBody::CollidesWithCallback::addSingleResult(btManifoldPoint& cp, 
+                                                                 const btCollisionObject* a, int partIdA, int indexA, 
+                                                                 const btCollisionObject* b, int partIdB, int indexB)
 {
     result = true;
     return 0.0f;

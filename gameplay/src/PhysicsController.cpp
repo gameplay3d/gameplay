@@ -2,18 +2,22 @@
 #include "Game.h"
 #include "MeshPart.h"
 #include "PhysicsController.h"
-#include "PhysicsDebugDrawer.h"
 #include "PhysicsMotionState.h"
 #include "SceneLoader.h"
+
+// The initial capacity of the bullet debug draw's vertex batch.
+#define INITIAL_CAPACITY 280
 
 namespace gameplay
 {
 
-// Default gravity is 9.8 along the negative Y axis.
 PhysicsController::PhysicsController()
-    : _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionConfiguration(NULL), _dispatcher(NULL),
-    _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _drawer(NULL), _status(Listener::DEACTIVATED), _listeners(NULL)
+  : _collisionConfiguration(NULL), _dispatcher(NULL),
+    _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _debugDrawer(NULL), 
+    _status(PhysicsController::Listener::DEACTIVATED), _listeners(NULL),
+    _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0))
 {
+    // Default gravity is 9.8 along the negative Y axis.
 }
 
 void PhysicsController::addStatusListener(Listener* listener)
@@ -23,24 +27,24 @@ void PhysicsController::addStatusListener(Listener* listener)
 
     _listeners->push_back(listener);
 }
-
+    
 PhysicsController::~PhysicsController()
 {
-    SAFE_DELETE(_drawer);
+    SAFE_DELETE(_debugDrawer);
     SAFE_DELETE(_listeners);
 }
 
 PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
     PhysicsFixedConstraint* constraint = new PhysicsFixedConstraint(a, b);
-    setupConstraint(a, b, constraint);
+    addConstraint(a, b, constraint);
     return constraint;
 }
 
 PhysicsGenericConstraint* PhysicsController::createGenericConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
     PhysicsGenericConstraint* constraint = new PhysicsGenericConstraint(a, b);
-    setupConstraint(a, b, constraint);
+    addConstraint(a, b, constraint);
     return constraint;
 }
 
@@ -48,9 +52,9 @@ PhysicsGenericConstraint* PhysicsController::createGenericConstraint(PhysicsRigi
     const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, PhysicsRigidBody* b,
     const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
 {
-    PhysicsGenericConstraint* constraint = new PhysicsGenericConstraint(a, rotationOffsetA, 
-        translationOffsetA, b, rotationOffsetB, translationOffsetB);
-    setupConstraint(a, b, constraint);
+    PhysicsGenericConstraint* constraint = new PhysicsGenericConstraint(a, rotationOffsetA, translationOffsetA, 
+                                                                        b, rotationOffsetB, translationOffsetB);
+    addConstraint(a, b, constraint);
     return constraint;
 }
 
@@ -58,50 +62,49 @@ PhysicsHingeConstraint* PhysicsController::createHingeConstraint(PhysicsRigidBod
     const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, PhysicsRigidBody* b, 
     const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
 {
-    PhysicsHingeConstraint* constraint = new PhysicsHingeConstraint(a, rotationOffsetA, 
-        translationOffsetA, b, rotationOffsetB, translationOffsetB);
-    setupConstraint(a, b, constraint);
+    PhysicsHingeConstraint* constraint = new PhysicsHingeConstraint(a, rotationOffsetA, translationOffsetA, 
+                                                                    b, rotationOffsetB, translationOffsetB);
+    addConstraint(a, b, constraint);
     return constraint;
 }
 
 PhysicsSocketConstraint* PhysicsController::createSocketConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
     PhysicsSocketConstraint* constraint = new PhysicsSocketConstraint(a, b);
-    setupConstraint(a, b, constraint);
+    addConstraint(a, b, constraint);
     return constraint;
 }
 
 PhysicsSocketConstraint* PhysicsController::createSocketConstraint(PhysicsRigidBody* a,
     const Vector3& translationOffsetA, PhysicsRigidBody* b, const Vector3& translationOffsetB)
 {
-    PhysicsSocketConstraint* constraint = new PhysicsSocketConstraint(a,
-        translationOffsetA, b, translationOffsetB);
-    setupConstraint(a, b, constraint);
+    PhysicsSocketConstraint* constraint = new PhysicsSocketConstraint(a,translationOffsetA, 
+                                                                      b, translationOffsetB);
+    addConstraint(a, b, constraint);
     return constraint;
 }
 
 PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
     PhysicsSpringConstraint* constraint = new PhysicsSpringConstraint(a, b);
-    setupConstraint(a, b, constraint);
+    addConstraint(a, b, constraint);
     return constraint;
 }
 
-PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidBody* a,
-    const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, PhysicsRigidBody* b, 
-    const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
+PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,           
+                                                                   PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
 {
-    PhysicsSpringConstraint* constraint = new PhysicsSpringConstraint(a, rotationOffsetA, 
-        translationOffsetA, b, rotationOffsetB, translationOffsetB);
-    setupConstraint(a, b, constraint);
+    PhysicsSpringConstraint* constraint = new PhysicsSpringConstraint(a, rotationOffsetA, translationOffsetA, 
+                                                                      b, rotationOffsetB, translationOffsetB);
+    addConstraint(a, b, constraint);
     return constraint;
 }
 
 void PhysicsController::drawDebug(const Matrix& viewProjection)
 {
-    _drawer->begin(viewProjection);
+    _debugDrawer->begin(viewProjection);
     _world->debugDrawWorld();
-    _drawer->end();
+    _debugDrawer->end();
 }
 
 const Vector3& PhysicsController::getGravity(const Vector3& gravity) const
@@ -114,9 +117,7 @@ void PhysicsController::setGravity(const Vector3& gravity)
     _gravity = gravity;
 
     if (_world)
-    {
         _world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
-    }
 }
 
 void PhysicsController::initialize()
@@ -131,8 +132,8 @@ void PhysicsController::initialize()
     _world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
 
     // Set up debug drawing.
-    _drawer = new PhysicsDebugDrawer();
-    _world->setDebugDrawer(_drawer);
+    _debugDrawer = new DebugDrawer();
+    _world->setDebugDrawer(_debugDrawer);
 }
 
 void PhysicsController::finalize()
@@ -204,6 +205,7 @@ void PhysicsController::update(long elapsedTime)
                 (*_listeners)[k]->statusEvent(_status);
             }
         }
+        
     }
 
     // All statuses are set with the DIRTY bit before collision processing occurs.
@@ -271,14 +273,41 @@ void PhysicsController::update(long elapsedTime)
         }
     }
 }
+    
 
 void PhysicsController::addRigidBody(PhysicsRigidBody* body)
 {
     _world->addRigidBody(body->_body);
     _bodies.push_back(body);
 }
+    
+void PhysicsController::removeRigidBody(PhysicsRigidBody* rigidBody)
+{
+    // Find the rigid body and remove it from the world.
+    for (int i = _world->getNumCollisionObjects() - 1; i >= 0 ; i--)
+    {
+        btCollisionObject* obj = _world->getCollisionObjectArray()[i];
+        if (rigidBody->_body == obj)
+        {
+            _world->removeCollisionObject(obj);
+            break;
+        }
+    }
+}
 
-btCollisionShape* PhysicsController::getBox(const Vector3& min, const Vector3& max, const btVector3& scale)
+PhysicsRigidBody* PhysicsController::getRigidBody(const btCollisionObject* collisionObject)
+{
+    // Find the rigid body and remove it from the world.
+    for (unsigned int i = 0; i < _bodies.size(); i++)
+    {
+        if (_bodies[i]->_body == collisionObject)
+            return _bodies[i];
+    }
+    
+    return NULL;
+}
+
+btCollisionShape* PhysicsController::createBox(const Vector3& min, const Vector3& max, const btVector3& scale)
 {
     btVector3 halfExtents(scale.x() * 0.5 * abs(max.x - min.x), scale.y() * 0.5 * abs(max.y - min.y), scale.z() * 0.5 * abs(max.z - min.z));
     BULLET_NEW_VARG(btBoxShape, box, halfExtents);
@@ -287,7 +316,23 @@ btCollisionShape* PhysicsController::getBox(const Vector3& min, const Vector3& m
     return box;
 }
 
-btCollisionShape* PhysicsController::getMesh(PhysicsRigidBody* body)
+btCollisionShape* PhysicsController::createSphere(float radius, const btVector3& scale)
+{
+    // Since sphere shapes depend only on the radius, the best we can do is take
+    // the largest dimension and apply that as the uniform scale to the rigid body.
+    float uniformScale = scale.x();
+    if (uniformScale < scale.y())
+        uniformScale = scale.y();
+    if (uniformScale < scale.z())
+        uniformScale = scale.z();
+    
+    BULLET_NEW_VARG(btSphereShape, sphere, uniformScale * radius);
+    _shapes.push_back(sphere);
+    
+    return sphere;
+}
+
+btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
 {
     // Retrieve the mesh rigid body data from the loaded scene.
     const SceneLoader::MeshRigidBodyData* data = SceneLoader::getMeshRigidBodyData(body->_node->getId());
@@ -302,8 +347,8 @@ btCollisionShape* PhysicsController::getMesh(PhysicsRigidBody* body)
     for (unsigned int i = 0; i < vertexCount; i++)
     {
         v.set(*((float*)&data->vertexData[i * vertexStride + 0 * sizeof(float)]),
-            *((float*)&data->vertexData[i * vertexStride + 1 * sizeof(float)]),
-            *((float*)&data->vertexData[i * vertexStride + 2 * sizeof(float)]));
+              *((float*)&data->vertexData[i * vertexStride + 1 * sizeof(float)]),
+              *((float*)&data->vertexData[i * vertexStride + 2 * sizeof(float)]));
         v *= m;
         memcpy(&(body->_vertexData[i * 3]), &v, sizeof(float) * 3);
     }
@@ -387,34 +432,17 @@ btCollisionShape* PhysicsController::getMesh(PhysicsRigidBody* body)
     return shape;
 }
 
-PhysicsRigidBody* PhysicsController::getPhysicsRigidBody(const btCollisionObject* collisionObject)
+void PhysicsController::addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint)
 {
-    // Find the rigid body and remove it from the world.
-    for (unsigned int i = 0; i < _bodies.size(); i++)
+    a->addConstraint(constraint);
+    if (b)
     {
-        if (_bodies[i]->_body == collisionObject)
-            return _bodies[i];
+        b->addConstraint(constraint);
     }
-
-    return NULL;
+    
+    _world->addConstraint(constraint->_constraint);
 }
-
-btCollisionShape* PhysicsController::getSphere(float radius, const btVector3& scale)
-{
-    // Since sphere shapes depend only on the radius, the best we can do is take
-    // the largest dimension and apply that as the uniform scale to the rigid body.
-    float uniformScale = scale.x();
-    if (uniformScale < scale.y())
-        uniformScale = scale.y();
-    if (uniformScale < scale.z())
-        uniformScale = scale.z();
-
-    BULLET_NEW_VARG(btSphereShape, sphere, uniformScale * radius);
-    _shapes.push_back(sphere);
-
-    return sphere;
-}
-
+    
 void PhysicsController::removeConstraint(PhysicsConstraint* constraint)
 {
     // Find the constraint and remove it from the physics world.
@@ -428,30 +456,186 @@ void PhysicsController::removeConstraint(PhysicsConstraint* constraint)
         }
     }
 }
-
-void PhysicsController::removeRigidBody(PhysicsRigidBody* rigidBody)
+    
+PhysicsController::DebugDrawer::DebugDrawer()
+    : _mode(btIDebugDraw::DBG_DrawAabb | btIDebugDraw::DBG_DrawConstraintLimits | btIDebugDraw::DBG_DrawConstraints | 
+       btIDebugDraw::DBG_DrawContactPoints | btIDebugDraw::DBG_DrawWireframe), _program(0), _positionAttrib(0),
+       _colorAttrib(0), _viewProjectionMatrixUniform(0), _viewProjection(NULL), _vertexData(NULL), _vertexCount(0), _vertexDataSize(0)
 {
-    // Find the rigid body and remove it from the world.
-    for (int i = _world->getNumCollisionObjects() - 1; i >= 0 ; i--)
-    {
-        btCollisionObject* obj = _world->getCollisionObjectArray()[i];
-        if (rigidBody->_body == obj)
-        {
-            _world->removeCollisionObject(obj);
-            break;
-        }
-    }
+    // Unused
 }
 
-void PhysicsController::setupConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint)
+PhysicsController::DebugDrawer::~DebugDrawer()
 {
-    a->addConstraint(constraint);
-    if (b)
-    {
-        b->addConstraint(constraint);
-    }
+    SAFE_DELETE_ARRAY(_vertexData);
+}
 
-    _world->addConstraint(constraint->_constraint);
+void PhysicsController::DebugDrawer::begin(const Matrix& viewProjection)
+{
+    _viewProjection = &viewProjection;
+    _vertexCount = 0;
+}
+
+void PhysicsController::DebugDrawer::end()
+{
+    // Lazy load the shader program for drawing.
+    if (!_program)
+    {
+        // Vertex shader for drawing colored lines.
+        const char* vs_str = 
+        {
+            "uniform mat4 u_viewProjectionMatrix;\n"
+            "attribute vec4 a_position;\n"
+            "attribute vec4 a_color;\n"
+            "varying vec4 v_color;\n"
+            "void main(void) {\n"
+            "    v_color = a_color;\n"
+            "    gl_Position = u_viewProjectionMatrix * a_position;\n"
+            "}"
+        };
+        
+        // Fragment shader for drawing colored lines.
+        const char* fs_str = 
+        {
+        #ifdef OPENGL_ES
+            "precision highp float;\n"
+        #endif
+            "varying vec4 v_color;\n"
+            "void main(void) {\n"
+            "   gl_FragColor = v_color;\n"
+            "}"
+        };
+        
+        // Load the vertex shader.
+        GLuint vs;
+        GL_ASSERT( vs = glCreateShader(GL_VERTEX_SHADER) );
+        GLint shader_str_len = strlen(vs_str);
+        GL_ASSERT( glShaderSource(vs, 1, &vs_str, &shader_str_len) );
+        GL_ASSERT( glCompileShader(vs) );
+        GLint status;
+        GL_ASSERT( glGetShaderiv(vs, GL_COMPILE_STATUS, &status) );
+        if (status == GL_FALSE)
+        {
+            GLchar errorMessage[512];
+            GL_ASSERT( glGetShaderInfoLog(vs, sizeof(errorMessage), 0, errorMessage) );
+            WARN_VARG("Physics debug drawing will not work; vertex shader failed to compile with error: '%s'", errorMessage);
+            return;
+        }
+        
+        // Load the fragment shader.
+        GLuint fs;
+        GL_ASSERT( fs = glCreateShader(GL_FRAGMENT_SHADER) );
+        shader_str_len = strlen(fs_str);
+        GL_ASSERT( glShaderSource(fs, 1, &fs_str, &shader_str_len) );
+        GL_ASSERT( glCompileShader(fs) );
+        GL_ASSERT( glGetShaderiv(fs, GL_COMPILE_STATUS, &status) );
+        if (status == GL_FALSE)
+        {
+            GLchar errorMessage[512];
+            GL_ASSERT( glGetShaderInfoLog(fs, sizeof(errorMessage), 0, errorMessage) );
+            WARN_VARG("Physics debug drawing will not work; fragment shader failed to compile with error: '%s'", errorMessage);
+            return;
+        }
+        
+        // Create the shader program and link it.
+        GL_ASSERT( _program = glCreateProgram() );
+        GL_ASSERT( glAttachShader(_program, vs) );
+        GL_ASSERT( glAttachShader(_program, fs) );
+        GL_ASSERT( glLinkProgram(_program) );
+        GL_ASSERT( glGetProgramiv(_program, GL_LINK_STATUS, &status) );
+        if (status == GL_FALSE)
+        {
+            GLchar errorMessage[512];
+            GL_ASSERT( glGetProgramInfoLog(_program, sizeof(errorMessage), 0, errorMessage) );
+            WARN_VARG("Physics debug drawing will not work; shader program failed to link with error: '%s'", errorMessage);
+            return;
+        }
+        
+        // Get the attribute and uniform locations.
+        GL_ASSERT( glUseProgram(_program) );
+        GL_ASSERT( _positionAttrib = glGetAttribLocation(_program, "a_position") );
+        GL_ASSERT( _colorAttrib = glGetAttribLocation(_program, "a_color") );
+        GL_ASSERT( _viewProjectionMatrixUniform = glGetUniformLocation(_program, "u_viewProjectionMatrix") );
+    }
+    
+    // Set the shader program and vertex attributes.
+    GL_ASSERT( glUseProgram(_program) );
+    GL_ASSERT( glEnableVertexAttribArray(_positionAttrib) );
+    GL_ASSERT( glEnableVertexAttribArray(_colorAttrib) );
+    GL_ASSERT( glVertexAttribPointer(_positionAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 7, _vertexData) );
+    GL_ASSERT( glVertexAttribPointer(_colorAttrib, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 7, &_vertexData[3]) );
+    
+    // Set the camera's view projection matrix and draw.
+    GL_ASSERT( glUniformMatrix4fv(_viewProjectionMatrixUniform, 1, GL_FALSE, _viewProjection->m) );
+    GL_ASSERT( glDrawArrays(GL_LINES, 0, _vertexCount / 7) );
+    
+    // Reset shader state.
+    GL_ASSERT( glDisableVertexAttribArray(_positionAttrib) );
+    GL_ASSERT( glDisableVertexAttribArray(_colorAttrib) );
+    GL_ASSERT( glUseProgram(0) );
+}
+
+void PhysicsController::DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor)
+{
+    // Allocate extra space in the vertex data batch if it is needed.
+    if (_vertexDataSize - _vertexCount < 14)
+    {
+        if (_vertexDataSize > 0)
+        {
+            unsigned int newVertexDataSize = _vertexDataSize * 2;
+            float* newVertexData = new float[newVertexDataSize];
+            memcpy(newVertexData, _vertexData, _vertexDataSize * sizeof(float));
+            SAFE_DELETE_ARRAY(_vertexData);
+            _vertexData = newVertexData;
+            _vertexDataSize = newVertexDataSize;
+        }
+        else
+        {
+            _vertexDataSize = INITIAL_CAPACITY;
+            _vertexData = new float[_vertexDataSize];
+        }
+    }
+    
+    // Create the vertex data for the line and copy it into the batch.
+    float vertexData[] = 
+    {
+        from.getX(), from.getY(), from.getZ(), 
+        fromColor.getX(), fromColor.getY(), fromColor.getZ(), 1.0f,
+        to.getX(), to.getY(), to.getZ(),
+        toColor.getX(), toColor.getY(), toColor.getZ(), 1.0f
+    };
+    memcpy(&_vertexData[_vertexCount], vertexData, sizeof(float) * 14);
+    _vertexCount += 14;
+}
+
+void PhysicsController::DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+{
+    drawLine(from, to, color, color);
+}
+
+void PhysicsController::DebugDrawer::drawContactPoint(const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color)
+{
+    drawLine(pointOnB, pointOnB + normalOnB, color);
+}
+
+void PhysicsController::DebugDrawer::reportErrorWarning(const char* warningString)
+{
+    WARN(warningString);
+}
+
+void PhysicsController::DebugDrawer::draw3dText(const btVector3& location, const char* textString)
+{
+    WARN("Physics debug drawing: 3D text is not supported.");
+}
+
+void PhysicsController::DebugDrawer::setDebugMode(int mode)
+{
+    _mode = mode;
+}
+
+int	PhysicsController::DebugDrawer::getDebugMode() const
+{
+    return _mode;
 }
 
 }
