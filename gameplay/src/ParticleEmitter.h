@@ -172,9 +172,10 @@ public:
      * Creates an uninitialized ParticleEmitter.
      *
      * @param texturePath A path to the image to use as this ParticleEmitter's texture.
+     * @param textureBlending The type of texture blending to be used for the particles emitted.
      * @param particleCountMax The maximum number of particles that can be alive at one time in this ParticleEmitter's system.
      */
-    static ParticleEmitter* create(const char* texturePath, TextureBlending blending,  unsigned int particleCountMax);
+    static ParticleEmitter* create(const char* texturePath, TextureBlending textureBlending,  unsigned int particleCountMax);
 
     /**
      * Sets the emission rate, measured in particles per second.
