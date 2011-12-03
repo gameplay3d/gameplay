@@ -2,7 +2,6 @@
 #define PHYSICSCONTROLLER_H_
 
 #include "PhysicsConstraint.h"
-#include "PhysicsDebugDrawer.h"
 #include "PhysicsFixedConstraint.h"
 #include "PhysicsGenericConstraint.h"
 #include "PhysicsHingeConstraint.h"
@@ -48,17 +47,17 @@ public:
         };
 
         /**
-         * Handles when the physics world status changes.
+         * Handles when the physics world status event occurs.
          */
         virtual void statusEvent(EventType type) = 0;
     };
 
     /**
-     * Adds a status listener.
+     * Adds a listener to the physics controller.
      * 
      * @param listener The listener to add.
      */
-    void addStatusListener(Listener* listener);
+    void addStatusListener(PhysicsController::Listener* listener);
 
     /**
      * Creates a fixed constraint.
@@ -94,10 +93,8 @@ public:
      * @param translationOffsetB The translation offset for the second rigid body
      *      (in its local space) with respect to the constraint joint (optional).
      */
-    PhysicsGenericConstraint* createGenericConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, 
-                                                     const Vector3& translationOffsetA, PhysicsRigidBody* b = NULL, 
-                                                     const Quaternion& rotationOffsetB = Quaternion(), 
-                                                     const Vector3& translationOffsetB = Vector3());
+    PhysicsGenericConstraint* createGenericConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, 
+                                                      PhysicsRigidBody* b = NULL, const Quaternion& rotationOffsetB = Quaternion(), const Vector3& translationOffsetB = Vector3());
 
     /**
      * Creates a hinge constraint.
@@ -114,10 +111,8 @@ public:
      * @param translationOffsetB The translation offset for the second rigid body
      *      (in its local space) with respect to the constraint joint (optional).
      */
-    PhysicsHingeConstraint* createHingeConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, 
-                                                  const Vector3& translationOffsetA, PhysicsRigidBody* b = NULL, 
-                                                  const Quaternion& rotationOffsetB = Quaternion(), 
-                                                  const Vector3& translationOffsetB = Vector3());
+    PhysicsHingeConstraint* createHingeConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
+                                                  PhysicsRigidBody* b = NULL, const Quaternion& rotationOffsetB = Quaternion(), const Vector3& translationOffsetB = Vector3());
 
     /**
      * Creates a socket constraint so that the rigid body (or bodies) is
@@ -170,16 +165,8 @@ public:
      * @param translationOffsetB The translation offset for the second rigid body
      *      (in its local space) with respect to the constraint joint (optional).
      */
-    PhysicsSpringConstraint* createSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, 
-                                                    const Vector3& translationOffsetA, PhysicsRigidBody* b, 
-                                                    const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
-
-    /**
-     * Draws debugging information (rigid body outlines, etc.) using the given view projection matrix.
-     * 
-     * @param viewProjection The view projection matrix to use when drawing.
-     */
-    void drawDebug(const Matrix& viewProjection);
+    PhysicsSpringConstraint* createSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,          
+                                                    PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
 
     /**
      * Gets the gravity vector for the simulated physics world.
@@ -194,6 +181,13 @@ public:
      * @param gravity The gravity vector.
      */
     void setGravity(const Vector3& gravity);
+    
+    /**
+     * Draws debugging information (rigid body outlines, etc.) using the given view projection matrix.
+     * 
+     * @param viewProjection The view projection matrix to use when drawing.
+     */
+    void drawDebug(const Matrix& viewProjection);
 
 private:
 
@@ -234,39 +228,79 @@ private:
 
     // Adds the given rigid body to the world.
     void addRigidBody(PhysicsRigidBody* body);
-
-    // Creates a box collision shape to be used in the creation of a rigid body.
-    btCollisionShape* getBox(const Vector3& min, const Vector3& max, const btVector3& scale);
-
-    // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
-    btCollisionShape* getMesh(PhysicsRigidBody* body);
-
-    // Gets the corresponding GamePlay object for the given Bullet object.
-    PhysicsRigidBody* getPhysicsRigidBody(const btCollisionObject* collisionObject);
-
-    // Creates a sphere collision shape to be used in the creation of a rigid body.
-    btCollisionShape* getSphere(float radius, const btVector3& scale);
-
-    // Removes the given constraint from the simulated physics world.
-    void removeConstraint(PhysicsConstraint* constraint);
-
+    
     // Removes the given rigid body from the simulated physics world.
     void removeRigidBody(PhysicsRigidBody* rigidBody);
+    
+    // Gets the corresponding GamePlay object for the given Bullet object.
+    PhysicsRigidBody* getRigidBody(const btCollisionObject* collisionObject);
+    
+    // Creates a box collision shape to be used in the creation of a rigid body.
+    btCollisionShape* createBox(const Vector3& min, const Vector3& max, const btVector3& scale);
+
+    // Creates a sphere collision shape to be used in the creation of a rigid body.
+    btCollisionShape* createSphere(float radius, const btVector3& scale);
+
+    // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
+    btCollisionShape* createMesh(PhysicsRigidBody* body);
 
     // Sets up the given constraint for the given two rigid bodies.
-    void setupConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
+    void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
     
-    Vector3 _gravity;
+    // Removes the given constraint from the simulated physics world.
+    void removeConstraint(PhysicsConstraint* constraint);
+    
+    // Draws bullet debug information
+    class DebugDrawer : public btIDebugDraw
+    {
+    public:
+
+        DebugDrawer();
+        
+        ~DebugDrawer();
+        
+        void begin(const Matrix& viewProjection);
+        
+        void end();
+
+        void drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor);
+        
+        void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);
+        
+        void drawContactPoint(const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color);
+        
+        void reportErrorWarning(const char* warningString);
+        
+        void draw3dText(const btVector3& location, const char* textString);
+        
+        void setDebugMode(int mode);
+        
+        int	getDebugMode() const;
+        
+    private:
+        
+        int _mode;
+        GLuint _program;
+        GLuint _positionAttrib;
+        GLuint _colorAttrib;
+        GLuint _viewProjectionMatrixUniform;
+        const Matrix* _viewProjection;
+        float* _vertexData;
+        unsigned int _vertexCount;
+        unsigned int _vertexDataSize;
+    };
+    
     btDefaultCollisionConfiguration* _collisionConfiguration;
     btCollisionDispatcher* _dispatcher;
     btBroadphaseInterface* _overlappingPairCache;
     btSequentialImpulseConstraintSolver* _solver;
     btDynamicsWorld* _world;
     btAlignedObjectArray<btCollisionShape*> _shapes;
-    PhysicsDebugDrawer* _drawer;
+    DebugDrawer* _debugDrawer;
     Listener::EventType _status;
-    std::vector<PhysicsRigidBody*> _bodies;
     std::vector<Listener*>* _listeners;
+    std::vector<PhysicsRigidBody*> _bodies;
+    Vector3 _gravity;
 };
 
 }

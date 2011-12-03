@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4220A6E8146B122B00CAEB3A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4220A6E7146B122B00CAEB3A /* QuartzCore.framework */; };
 		4234D99E14686C52003031B3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4234D99D14686C52003031B3 /* Cocoa.framework */; };
+		428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 428390971489D6E800E2B2F5 /* SceneLoader.cpp */; };
+		4283909A1489D6E800E2B2F5 /* SceneLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 428390981489D6E800E2B2F5 /* SceneLoader.h */; };
 		4299EFA9146AC94300FF4A73 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4299EFA8146AC94300FF4A73 /* OpenGL.framework */; };
 		4299EFAB146AC94B00FF4A73 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4299EFAA146AC94B00FF4A73 /* OpenAL.framework */; };
 		42CCD554146EC1DD00353661 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD553146EC1DD00353661 /* libz.dylib */; };
@@ -159,6 +161,8 @@
 		4220A6E7146B122B00CAEB3A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		4234D99A14686C52003031B3 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4234D99D14686C52003031B3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		428390971489D6E800E2B2F5 /* SceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLoader.cpp; path = src/SceneLoader.cpp; sourceTree = SOURCE_ROOT; };
+		428390981489D6E800E2B2F5 /* SceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneLoader.h; path = src/SceneLoader.h; sourceTree = SOURCE_ROOT; };
 		4299EFA8146AC94300FF4A73 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
 		4299EFAA146AC94B00FF4A73 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
 		42CCD553146EC1DD00353661 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = SDKs/MacOSX10.7.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
@@ -488,6 +492,8 @@
 				42CD0E2C147D8FF50000361E /* RenderTarget.h */,
 				42CD0E2D147D8FF50000361E /* Scene.cpp */,
 				42CD0E2E147D8FF50000361E /* Scene.h */,
+				428390971489D6E800E2B2F5 /* SceneLoader.cpp */,
+				428390981489D6E800E2B2F5 /* SceneLoader.h */,
 				42CD0E2F147D8FF50000361E /* SpriteBatch.cpp */,
 				42CD0E30147D8FF50000361E /* SpriteBatch.h */,
 				42CD0E31147D8FF50000361E /* Technique.cpp */,
@@ -614,6 +620,7 @@
 				42CD0EC8147D8FF60000361E /* VertexAttributeBinding.h in Headers */,
 				42CD0ECA147D8FF60000361E /* VertexFormat.h in Headers */,
 				42CD0ECC147D8FF60000361E /* Viewport.h in Headers */,
+				4283909A1489D6E800E2B2F5 /* SceneLoader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -736,6 +743,7 @@
 				42CD0EC7147D8FF60000361E /* VertexAttributeBinding.cpp in Sources */,
 				42CD0EC9147D8FF60000361E /* VertexFormat.cpp in Sources */,
 				42CD0ECB147D8FF60000361E /* Viewport.cpp in Sources */,
+				428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
