@@ -86,20 +86,18 @@ public:
          * @param contactPoint The point (in world space) where the collision occurred.
          */
         virtual void collisionEvent(const CollisionPair& collisionPair, const Vector3& contactPoint) = 0;
-
+        
+    protected:
+        
         /**
          * Internal function used for Bullet integration (do not use or override).
          */
-        btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA,
-            int indexA, const btCollisionObject* b, int partIdB, int indexB);
+        btScalar addSingleResult(btManifoldPoint& cp, 
+                                 const btCollisionObject* a, int partIdA, int indexA, 
+                                 const btCollisionObject* b, int partIdB, int indexB);
+
+        std::map<CollisionPair, int> _collisionStatus;  // Holds the collision status for each pair of rigid bodies. 
         
-    protected:
-
-        /** 
-         * Holds the collision status for each pair of rigid bodies. 
-         */
-        std::map<CollisionPair, int> _collisionStatus;
-
     private:
 
         // Internal constant.
@@ -334,9 +332,9 @@ private:
 
     // Creates the underlying Bullet Physics rigid body object
     // for a PhysicsRigidBody object using the given parameters.
-    static btRigidBody* createBulletRigidBody(btCollisionShape* shape, float mass, Node* node,
-                                              float friction, float restitution, float linearDamping, float angularDamping,
-                                              const Vector3* centerOfMassOffset = NULL);
+    static btRigidBody* createRigidBodyInternal(btCollisionShape* shape, float mass, Node* node,
+                                                float friction, float restitution, float linearDamping, float angularDamping,
+                                                const Vector3* centerOfMassOffset = NULL);
 
     // Adds a constraint to this rigid body.
     void addConstraint(PhysicsConstraint* constraint);
