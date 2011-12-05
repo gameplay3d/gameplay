@@ -1,8 +1,6 @@
 #ifndef REFTABLE_H_
 #define REFTABLE_H_
 
-#include <map>
-
 #include "FileIO.h"
 #include "Reference.h"
 #include "Object.h"
@@ -56,5 +54,5 @@ private:
 };
 
 }
-#endif
 
+#endif

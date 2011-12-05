@@ -1,7 +1,3 @@
-/*
- * Vector2.cpp
- */
-
 #include "Base.h"
 #include "Vector2.h"
 #include "FileIO.h"
@@ -151,7 +147,7 @@ float Vector2::distance(const Vector2& v)
     float dx = v.x - x;
     float dy = v.y - y;
 
-    return sqrtf(dx * dx + dy * dy);
+    return sqrt(dx * dx + dy * dy);
 }
 
 
@@ -177,7 +173,7 @@ float Vector2::dot(const Vector2& v1, const Vector2& v2)
 
 float Vector2::length()
 {
-    return sqrtf(x * x + y * y);
+    return sqrt(x * x + y * y);
 }
 
 
@@ -215,7 +211,7 @@ void Vector2::normalize(Vector2* dst)
     if (n == 1.0f)
         return;
 
-    n = sqrtf(n);
+    n = sqrt(n);
     // too close to zero
     if (n < MATH_TOLERANCE)
         return;
@@ -319,5 +315,3 @@ void Vector2::writeText(FILE* file) const
 }
 
 }
-
-

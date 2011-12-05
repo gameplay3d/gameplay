@@ -1,7 +1,3 @@
-/*
- * Technique.h
- */
-
 #ifndef TECHNIQUE_H_
 #define TECHNIQUE_H_
 

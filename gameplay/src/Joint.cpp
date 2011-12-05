@@ -1,15 +1,12 @@
-/*
- * Joint.cpp
- */
-
 #include "Base.h"
 #include "Joint.h"
+#include "MeshSkin.h"
 
 namespace gameplay
 {
 
 Joint::Joint(const char* id)
-    : Node(id), _jointMatrixDirty(true), _skin(NULL)
+    : Node(id), _jointMatrixDirty(true), _skinCount(0)
 {
 }
 
@@ -31,20 +28,21 @@ void Joint::transformChanged()
 {
     Node::transformChanged();
 
-    //const char* id = _id.c_str();
     _jointMatrixDirty = true;
 }
 
 void Joint::updateJointMatrix(const Matrix& bindShape, Vector4* matrixPalette)
 {
-    //const char* id = _id.c_str();
-
-    if (_jointMatrixDirty)
+    // Note: If more than one MeshSkin influences this Joint, we need to skip
+    // the _jointMatrixDirty optimization since updateJointMatrix() may be
+    // called multiple times a frame with different bindShape matrices (and
+    // different matrixPallete pointers).
+    if (_skinCount > 1 || _jointMatrixDirty)
     {
         _jointMatrixDirty = false;
 
-        Matrix t;
-        Matrix::multiply(getJointMatrix(), getInverseBindPose(), &t);
+        static Matrix t;
+        Matrix::multiply(Node::getWorldMatrix(), getInverseBindPose(), &t);
         Matrix::multiply(t, bindShape, &t);
 
         matrixPalette[0].set(t.m[0], t.m[4], t.m[8], t.m[12]);
@@ -62,29 +60,6 @@ void Joint::setInverseBindPose(const Matrix& m)
 {
     _bindPose = m;
     _jointMatrixDirty = true;
-}
-
-const Matrix& Joint::getWorldMatrix() const
-{
-    // If this is the root joint, then we 
-    // also apply the transform of the model
-    // that the skin is attached to to get the
-    // actual world matrix.
-    if (_parent == NULL && _skin != NULL)
-    {
-        Matrix::multiply(_skin->_model->getNode()->getWorldMatrix(), Node::getWorldMatrix(), &_jointWorld);
-    }
-    else
-    {
-        memcpy((void*)_jointWorld.m, Node::getWorldMatrix().m, sizeof(float) * 16);
-    }
-
-    return _jointWorld;
-}
-
-const Matrix& Joint::getJointMatrix() const
-{
-    return Node::getWorldMatrix();
 }
 
 }

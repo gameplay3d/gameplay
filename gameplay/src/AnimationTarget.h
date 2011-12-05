@@ -1,7 +1,3 @@
-/*
- * PropertyListener
- */
-
 #ifndef ANIMATIONTARGET_H_
 #define ANIMATIONTARGET_H_
 
@@ -18,9 +14,10 @@ class AnimationValue;
  * Defines an interface allowing animation to target
  * an object for changing its animation properties.
  */
-class AnimationTarget : public Ref
+class AnimationTarget
 {
     friend class Animation;
+    friend class AnimationClip;
     friend class AnimationController;
 
 public:
@@ -50,31 +47,6 @@ public:
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value) = 0;
 
-    /**
-     * Gets the number of Animations on this target.
-     * 
-     * @return The number of Animations targeting this object.
-     */
-    unsigned int getAnimationCount() const;
-
-    /**
-     * Gets the Animation with the given index.
-     * 
-     * @param index The index of the Animation to return.
-     *
-     * @return The Animation at the given index.
-     */
-    Animation* getAnimation(unsigned int index) const;
-
-    /**
-     * Finds the Animation with the given ID.
-     * 
-     * @param id The ID of the Animation to get.
-     * 
-     * @return The Animation with the given ID. NULL if the Animation is not found.
-     */
-    Animation* getAnimation(const char* id) const;
-
 protected:
     
     enum TargetType
@@ -93,7 +65,7 @@ protected:
      */
     virtual ~AnimationTarget();
 
-    void addAnimation(Animation* animation);
+    void addChannel(Animation::Channel* animation);
 
     TargetType _targetType;             // The type of target this is.
 
@@ -104,7 +76,8 @@ private:
      */
     AnimationTarget(const AnimationTarget& copy);
 
-    std::vector<Animation*>* _animations;
+    Animation::Channel* _highestPriority;
+    std::vector<Animation::Channel*>* _animationChannels;   // Collection of all animation channels that target the AnimationTarget
 
 };
 }

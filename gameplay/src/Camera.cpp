@@ -1,7 +1,3 @@
-/*
- * Camera.cpp
- */
-
 #include "Base.h"
 #include "Camera.h"
 #include "Game.h"
@@ -346,7 +342,7 @@ void Camera::pickRay(const Viewport* viewport, float x, float y, Ray* dst)
 }
 
 
-void Camera::transformChanged(Transform* transform)
+void Camera::transformChanged(Transform* transform, long cookie)
 {
     _dirtyBits |= CAMERA_DIRTY_VIEW | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }

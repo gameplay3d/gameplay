@@ -1,7 +1,3 @@
-/*
- * MaterialParameter.cpp
- */
-
 #include "Base.h"
 #include "MaterialParameter.h"
 
@@ -306,8 +302,17 @@ unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyI
                 case SAMPLER:
                 case METHOD:
                     return 0;
+                case FLOAT:
+                case INT:
+                    return 1;
+                case VECTOR2:
+                    return 2 * _count;
+                case VECTOR3:
+                    return 3 * _count;
+                case VECTOR4:
+                    return 4 * _count;
                 default:
-                    return _count;
+                    return 0;
             }
         }
     }
@@ -330,11 +335,21 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
                     value->setFloat(0, _value.intValue);
                     break;
                 case VECTOR2:
+                    for (unsigned int i = 0; i < _count; i++)
+                    {
+                        value->setFloat(_value.floatPtrValue, i * 2, 2);
+                    }
+                    break;
                 case VECTOR3:
+                    for (unsigned int i = 0; i < _count; i++)
+                    {
+                        value->setFloat(_value.floatPtrValue, i * 3, 3);
+                    }
+                    break;
                 case VECTOR4:
                     for (unsigned int i = 0; i < _count; i++)
                     {
-                        value->setFloat(i, _value.floatPtrValue[i]);
+                        value->setFloat(_value.floatPtrValue, i * 4, 4);
                     }
                     break;
 
@@ -359,12 +374,21 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
                     _value.intValue = value->getFloat(0);
                     break;
                 case VECTOR2:
-                case VECTOR3:
-                case VECTOR4:
-                case MATRIX:
                     for (unsigned int i = 0; i < _count; i++)
                     {
-                        _value.floatPtrValue[i] = value->getFloat(i);
+                        value->getFloat(_value.floatPtrValue, i * 2, 2);
+                    }
+                    break;
+                case VECTOR3:
+                    for (unsigned int i = 0; i < _count; i++)
+                    {
+                        value->getFloat(_value.floatPtrValue, i * 3, 3);
+                    }
+                    break;
+                case VECTOR4:
+                    for (unsigned int i = 0; i < _count; i++)
+                    {
+                        value->getFloat(_value.floatPtrValue, i * 4, 4);
                     }
                     break;
 

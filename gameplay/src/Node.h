@@ -1,7 +1,3 @@
-/*
- * Node.h
- */
-
 #ifndef NODE_H_
 #define NODE_H_
 
@@ -23,10 +19,11 @@ class Scene;
 /**
  * Defines a basic hierachial structure of transformation spaces.
  */
-class Node : public Transform
+class Node : public Transform, public Ref
 {
     friend class Scene;
     friend class Package;
+    friend class MeshSkin;
 
 public:
 
@@ -37,16 +34,6 @@ public:
     {
         NODE = 1,
         JOINT = 2
-    };
-
-    /**
-     * Defines types of bounding volumes for nodes.
-     */
-    enum BoundsType
-    {
-        NONE,
-        BOX,
-        SPHERE
     };
 
     /**
@@ -383,40 +370,39 @@ public:
         float restitution = 0.0f, float linearDamping = 0.0f, float angularDamping = 0.0f);
 
     /**
-     * Returns the bounding box for the Node, in world space.
-     *
-     * The returned box is only meaningful for nodes who have a
-     * bounds type of BOUNDS_TYPE_BOX, which can be specified
-     * via the setBoundsType method. Additionally, bounding volumes
-     * are only meaningful for nodes that contain data which itself
-     * contains a bounding volume, such as Model/Mesh.
-     *
-     * @return The world-space bounding box for the node.
+     * Sets the physics rigid body for this node using the rigid body definition in the given file.
+     * 
+     * @param filePath The path to the file that contains the rigid body definition.
      */
-    const BoundingBox& getBoundingBox() const;
+    void setPhysicsRigidBody(const char* url);
+
+    /**
+     * Sets the physics rigid body for this node from the given properties object.
+     * 
+     * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidbody').
+     */
+    void setPhysicsRigidBody(Properties* properties);
 
     /**
      * Returns the bounding sphere for the Node, in world space.
      *
-     * The returned sphere is only meaningful for nodes who have a
-     * bounds type of BOUNDS_TYPE_SPHERE, which can be specified
-     * via the setBoundsType method. Additionally, bounding volumes
-     * are only meaningful for nodes that contain data which itself
-     * contains a bounding volume, such as Model/Mesh.
+     * The bounding sphere for a node represents the area, in world
+     * space, that the node contains. This includes the space occupied 
+     * by any child nodes as well as the space occupied by any data
+     * inside the node (such as models).
+     *
+     * Bounding spheres for nodes are rough approximations of the data
+     * contained within a node and they are intended for visibility
+     * testing or first-pass intersection testing only. They are not
+     * appropriate for accurate collision detection since they most often
+     * do not tightly contain a node's content.
+     *
+     * A node that does not occupy any space will return a bounding sphere
+     * with a center point equal to the node translation and a radius of zero.
      *
      * @return The world-space bounding sphere for the node.
      */
     const BoundingSphere& getBoundingSphere() const;
-
-    /**
-     * Returns the current bounding volume type of the node.
-     */
-    Node::BoundsType getBoundsType() const;
-
-    /**
-     * Sets the bounding volume type of the node.
-     */
-    void setBoundsType(Node::BoundsType type);
 
 protected:
 
@@ -440,9 +426,17 @@ protected:
      */
     void remove();
 
+    /**
+     * Called when this Node's transform changes.
+     */
     void transformChanged();
 
     void hierarchyChanged();
+
+    /**
+     * Marks the bounding volume of the node as dirty.
+     */
+    void setBoundsDirty();
 
     Scene* _scene;
     std::string _id;
@@ -460,12 +454,7 @@ protected:
     mutable Matrix _world;
     mutable int _dirtyBits;
     bool _notifyHierarchyChanged;
-    mutable union
-    {
-        BoundingBox* box;
-        BoundingSphere* sphere;
-    } _bounds;
-    BoundsType _boundsType;
+    mutable BoundingSphere _bounds;
 };
 
 }

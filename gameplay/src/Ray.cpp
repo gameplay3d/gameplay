@@ -1,7 +1,3 @@
-/*
- * Ray.cpp
- */
-
 #include "Base.h"
 #include "Ray.h"
 #include "Plane.h"
@@ -139,7 +135,7 @@ void Ray::normalize()
         return;
 
     // Normalize the ray's direction vector.
-    float normalizeFactor = 1.0f / sqrtf(_direction.x * _direction.x + _direction.y * _direction.y + _direction.z * _direction.z);
+    float normalizeFactor = 1.0f / sqrt(_direction.x * _direction.x + _direction.y * _direction.y + _direction.z * _direction.z);
 
     if ( normalizeFactor != 1.0f )
     {

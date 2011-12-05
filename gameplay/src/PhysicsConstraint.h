@@ -1,7 +1,3 @@
-/*
- * PhysicsConstraint.h
- */
-
 #ifndef PHYSICSCONSTRAINT_H_
 #define PHYSICSCONSTRAINT_H_
 
@@ -79,6 +75,7 @@ public:
     static Vector3 getTranslationOffset(const Node* node, const Vector3& point);
 
 protected:
+
     /**
      * Constructor.
      */

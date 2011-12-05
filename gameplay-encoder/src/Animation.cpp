@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Animation.h"
 
 namespace gameplay
@@ -53,6 +54,11 @@ void Animation::add(AnimationChannel* animationChannel)
 unsigned int Animation::getAnimationChannelCount() const
 {
     return _channels.size();
+}
+
+AnimationChannel* Animation::getAnimationChannel(unsigned int index) const
+{
+    return _channels[index];
 }
 
 }

@@ -1,7 +1,3 @@
-/**
- * Effect.cpp
- */
-
 #include "Base.h"
 #include "Effect.h"
 #include "FileSystem.h"

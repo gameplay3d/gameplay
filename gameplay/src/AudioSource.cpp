@@ -1,7 +1,3 @@
-/*
- * AudioSource.cpp
- */
-
 #include "Base.h"
 #include "Node.h"
 #include "AudioBuffer.h"
@@ -51,6 +47,12 @@ AudioSource* AudioSource::create(const char* path)
     }
 
     return new AudioSource(buffer, alSource);
+}
+
+AudioSource* AudioSource::create(Properties* properties)
+{
+    // TODO: Implement this!
+    return NULL;
 }
 
 AudioSource::State AudioSource::getState() const
@@ -179,7 +181,7 @@ void AudioSource::setNode(Node* node)
     }
 }
 
-void AudioSource::transformChanged(Transform* transform)
+void AudioSource::transformChanged(Transform* transform, long cookie)
 {
     alSourcefv(_alSource, AL_POSITION, (const ALfloat*)&transform->getTranslation());
 }

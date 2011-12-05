@@ -1,6 +1,5 @@
+#include "Base.h"
 #include "StringUtil.h"
-
-#include <string>
 
 namespace gameplay
 {

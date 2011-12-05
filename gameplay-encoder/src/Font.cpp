@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Font.h"
 
 namespace gameplay

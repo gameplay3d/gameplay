@@ -1,7 +1,3 @@
-/*
- * Matrix.h
- */
-
 #ifndef MATRIX_H_
 #define MATRIX_H_
 
@@ -937,6 +933,6 @@ inline Vector4 operator*(const Matrix& m, const Vector4& v);
 
 }
 
-//#include "Matrix.inl"
+#include "Matrix.inl"
 
 #endif

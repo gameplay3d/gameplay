@@ -1,7 +1,3 @@
-/*
- * PhysicsHingeConstraint.cpp
- */
-
 #include "PhysicsHingeConstraint.h"
 
 #include "Node.h"
@@ -45,7 +41,7 @@ PhysicsHingeConstraint::PhysicsHingeConstraint(PhysicsRigidBody* a, const Quater
     
 PhysicsHingeConstraint::~PhysicsHingeConstraint()
 {
-    // DUMMY FUNCTION
+    // Unused
 }
 
 }

@@ -1,7 +1,3 @@
-/**
- * DebugNew.cpp
- */
-
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
 
 #include <new>
@@ -86,7 +82,7 @@ void operator delete[] (void* p, const char* file, int line) throw()
 // Include Base.h (needed for logging macros) AFTER new operator impls
 #include "Base.h"
 
-void* debugAlloc(size_t size, const char* file, int line)
+void* debugAlloc(std::size_t size, const char* file, int line)
 {
     // Allocate memory + size for a MemoryAlloctionRecord
     unsigned char* mem = (unsigned char*)malloc(size + sizeof(MemoryAllocationRecord));

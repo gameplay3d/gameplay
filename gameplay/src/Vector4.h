@@ -1,7 +1,3 @@
-/*
- * Vector4.h
- */
-
 #ifndef VECTOR4_H_
 #define VECTOR4_H_
 

@@ -1,7 +1,3 @@
-/*
- * VertexFormat.cpp
- */
-
 #include "Base.h"
 #include "VertexFormat.h"
 
@@ -18,7 +14,7 @@ VertexFormat::VertexFormat() :
 VertexFormat::~VertexFormat()
 {
     // Remove from the vertex format cache.
-    std::vector<VertexFormat*>::iterator itr = std::find(__vertexFormatCache.begin(), __vertexFormatCache.end(), this);
+    std::vector<VertexFormat*>::iterator itr = find(__vertexFormatCache.begin(), __vertexFormatCache.end(), this);
     if (itr != __vertexFormatCache.end())
     {
         __vertexFormatCache.erase(itr);

@@ -1,7 +1,3 @@
-/**
- * PhysicsFixedConstraint.cpp
- */
-
 #include "PhysicsFixedConstraint.h"
 
 namespace gameplay
@@ -18,7 +14,7 @@ PhysicsFixedConstraint::PhysicsFixedConstraint(PhysicsRigidBody* a, PhysicsRigid
 
 PhysicsFixedConstraint::~PhysicsFixedConstraint()
 {
-    // DUMMY FUNCTION
+    // Not used.
 }
 
 }
