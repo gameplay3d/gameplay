@@ -290,8 +290,8 @@ void BoundingSphere::transform(const Matrix& matrix)
     // Calculate the sphere's new radius from the radii in each direction (take the largest).
     matrix.decompose(&translate, NULL, NULL);
     float r = radius * translate.x;
-    r = fmaxf(radius, radius * translate.y);
-    r = fmaxf(radius, radius * translate.z);
+    r = max(radius, radius * translate.y);
+    r = max(radius, radius * translate.z);
     radius = r;
 }
 

@@ -694,8 +694,8 @@ void FBXSceneEncoder::loadSkin(KFbxMesh* fbxMesh, Model* model)
 
             MeshSkin* skin = new MeshSkin();
 
-            std::list<std::string> jointNames;
-            std::list<Node*> joints;
+            std::vector<std::string> jointNames;
+            std::vector<Node*> joints;
             std::vector<Matrix> bindPoses;
 
             const int clusterCount = fbxSkin->GetClusterCount();
