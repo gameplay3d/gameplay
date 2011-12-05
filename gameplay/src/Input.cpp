@@ -1,7 +1,3 @@
-/*
- * Input.cpp
- */
-
 #include "Base.h"
 #include "Input.h"
 #include "Platform.h"

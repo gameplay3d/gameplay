@@ -1,13 +1,10 @@
-/*
- * AnimationController.h
- */
-
 #ifndef ANIMATIONCONTROLLER_H_
 #define ANIMATIONCONTROLLER_H_
 
 #include "AnimationClip.h"
 #include "Animation.h"
 #include "AnimationTarget.h"
+#include "Properties.h"
 
 namespace gameplay
 {
@@ -18,6 +15,7 @@ namespace gameplay
 class AnimationController
 {
     friend class Game;
+    friend class Animation;
     friend class AnimationClip;
 
 public:
@@ -54,6 +52,17 @@ public:
      * @return The newly created animation, or NULL if an animation with the given ID already exists.
      */
     Animation* createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type);
+
+    /**
+     * Creates an animation on this target using the data from the given properties object. 
+     * 
+     * @param id The ID of the animation.
+     * @param target The animation target.
+     * @param properties The properties object defining the animation data.
+     *
+     * @return The newly created animation, or NULL if an animation with the given ID already exists.
+     */
+    Animation* createAnimation(const char* id, AnimationTarget* target, Properties* p);
 
     /**
      * Creates a simple two keyframe from-to animation.
@@ -161,7 +170,7 @@ private:
      * Unschedules an AnimationClip.
      */
     void unschedule(AnimationClip* clip);
-
+    
     /**
      * Callback for when the controller receives a frame update event.
      */
@@ -181,11 +190,10 @@ private:
      * Removes all animations from the AnimationTarget.
      */ 
     void destroyAllAnimations();
-
+    
     State _state;                               // The current state of the AnimationController.
     std::list<AnimationClip*> _runningClips;    // A list of currently running AnimationClips.
-    std::vector<Animation*> _animations;
-    //Animation** _animations;                    // A list of animations on this target.
+    std::vector<Animation*> _animations;        // A list of animations registered with the AnimationController
 };
 
 }

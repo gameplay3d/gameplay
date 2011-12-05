@@ -1,7 +1,3 @@
-/*
- * MeshPart.h
- */
-
 #ifndef MESHPART_H_
 #define MESHPART_H_
 

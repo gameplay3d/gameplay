@@ -1,37 +1,40 @@
-/*
- * Base.h
- */
 #ifndef BASE_H_
 #define BASE_H_
 
 // C/C++
 #include <new>
-#include <cstdio>
-#include <cassert>
 #include <memory>
-#include <iostream>
-#include <string>
+#include <cstdio>
+#include <cstdlib>
+#include <cassert>
 #include <cwchar>
 #include <cwctype>
 #include <cctype>
 #include <cmath>
+#include <cstdarg>
+#include <ctime>
+#include <iostream>
+#include <string>
 #include <vector>
 #include <list>
 #include <stack>
 #include <map>
 #include <algorithm>
-#include <ctime>
 #include <limits>
 #include <functional>
-#include <assert.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <math.h>
-#include <cstdarg>
+
+// Bring common functions from C into global namespace
+using std::memcpy;
+using std::fabs;
+using std::sqrt;
+using std::cos;
+using std::sin;
+using std::tan;
+using std::isspace;
+using std::isdigit;
+using std::toupper;
+using std::tolower;
+using std::size_t;
 
 // Common
 #ifndef NULL
@@ -48,12 +51,12 @@ extern void printError(const char* format, ...);
 #define LOG_ERROR(x) \
     { \
         printError(x); \
-        assert(0); \
+        assert(#x == 0); \
     }
 #define LOG_ERROR_VARG(x, ...) \
     { \
         printError(x, __VA_ARGS__); \
-        assert(0); \
+        assert(#x == 0); \
     }
 
 // Warning macro
@@ -69,7 +72,12 @@ extern void printError(const char* format, ...);
 // Since Bullet overrides new, we have to allocate objects manually using its
 // aligned allocation function when we turn on memory leak detection in GamePlay.
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
-#define BULLET_NEW(type, name, ...) \
+#define BULLET_NEW(type, name) \
+    type* name = (type*)btAlignedAlloc(sizeof(type), 16); \
+    type __##name##_tmp; \
+    memcpy(name, &__##name##_tmp, sizeof(type))
+
+#define BULLET_NEW_VARG(type, name, ...) \
     type* name = (type*)btAlignedAlloc(sizeof(type), 16); \
     type __##name##_tmp (__VA_ARGS__); \
     memcpy(name, &__##name##_tmp, sizeof(type))
@@ -82,7 +90,10 @@ extern void printError(const char* format, ...);
     }
 
 #else
-#define BULLET_NEW(type, name, ...) \
+#define BULLET_NEW(type, name) \
+    type* name = new type()
+
+#define BULLET_NEW_VARG(type, name, ...) \
     type* name = new type(__VA_ARGS__)
 
 #define BULLET_DELETE(name) SAFE_DELETE(name)
@@ -148,6 +159,7 @@ extern void printError(const char* format, ...);
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #endif
+#include <vorbis/vorbisfile.h>
 
 // Screen/Window
 #define WINDOW_WIDTH        1024

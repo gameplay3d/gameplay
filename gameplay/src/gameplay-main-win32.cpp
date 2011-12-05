@@ -27,7 +27,6 @@ extern "C" int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LP
     return result;
 }
 
-
 #endif
 
 #endif

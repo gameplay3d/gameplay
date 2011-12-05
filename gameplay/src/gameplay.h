@@ -1,9 +1,3 @@
-/**
- * gameplay.h
- *
- * Includes all neccessary header files for gameplay library.
- */
-
 // Core
 #include "Base.h"
 #include "Platform.h"
@@ -63,12 +57,14 @@
 #include "AnimationClip.h"
 
 // Physics
-#include "PhysicsConstraint.h"
 #include "PhysicsController.h"
+#include "PhysicsConstraint.h"
 #include "PhysicsFixedConstraint.h"
 #include "PhysicsGenericConstraint.h"
 #include "PhysicsHingeConstraint.h"
-#include "PhysicsMotionState.h"
-#include "PhysicsRigidBody.h"
 #include "PhysicsSocketConstraint.h"
 #include "PhysicsSpringConstraint.h"
+#include "PhysicsRigidBody.h"
+#include "PhysicsMotionState.h"
+
+

@@ -1,7 +1,3 @@
-/*
- * Animation.h
- */
-
 #ifndef ANIMATION_H_
 #define ANIMATION_H_
 
@@ -97,18 +93,19 @@ private:
     {
         friend class AnimationClip;
         friend class Animation;
+        friend class AnimationTarget;
 
     private:
 
-        Channel(AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration);
+        Channel(Animation* animation, AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration);
         Channel(const Channel& copy);
         ~Channel();
 
+        Animation* _animation;                // Reference to the animation this channel belongs to.
         AnimationTarget* _target;             // The target of this channel.
         int _propertyId;                      // The target property this channel targets.
         Curve* _curve;                        // The curve used to represent the animation data.
         unsigned long _duration;              // The length of the animation (in milliseconds).
-        bool _isRelative;                     // Whether the data should be treated relatively or not. 
     };
 
     /**
@@ -165,12 +162,19 @@ private:
      * Adds a channel to the animation.
      */
     void addChannel(Channel* channel);
+
+    /**
+     * Removes a channel from the animation.
+     */
+    void removeChannel(Channel* channel);
     
     AnimationController* _controller;       // The AnimationController that this Animation will run on.
     std::string _id;                        // The Animation's ID.
     unsigned long _duration;                // the length of the animation (in milliseconds).
     std::vector<Channel*> _channels;        // The channels within this Animation.
-    std::vector<AnimationClip*> _clips;     // All the clips created from this Animation.
+    AnimationClip* _defaultClip;            // The Animation's default clip.
+    std::vector<AnimationClip*>* _clips;    // All the clips created from this Animation.
+
 };
 
 }

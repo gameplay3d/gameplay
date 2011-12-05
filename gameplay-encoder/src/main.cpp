@@ -1,5 +1,4 @@
-#include <string>
-
+#include "Base.h"
 #include "DAESceneEncoder.h"
 #include "TTFFontEncoder.h"
 #include "GPBDecoder.h"
@@ -83,4 +82,3 @@ int main(int argc, const char** argv)
 
     return 0;
 }
-

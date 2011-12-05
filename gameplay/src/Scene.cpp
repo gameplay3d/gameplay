@@ -1,12 +1,7 @@
-/*
- * Scene.cpp
- */
-
-#include <algorithm>
-
 #include "Base.h"
 #include "AudioListener.h"
 #include "Scene.h"
+#include "SceneLoader.h"
 
 namespace gameplay
 {
@@ -40,6 +35,11 @@ Scene::~Scene()
 Scene* Scene::createScene()
 {
     return new Scene();
+}
+
+Scene* Scene::load(const char* filePath)
+{
+    return SceneLoader::load(filePath);
 }
 
 const char* Scene::getId() const

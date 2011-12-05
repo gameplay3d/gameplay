@@ -1,15 +1,12 @@
-/*
- * SpaceshipGame.cpp
- */
-
 #include "SpaceshipGame.h"
 
+// Declare our game instance
 SpaceshipGame game;
 
 // Collision constants
 #define ROOF_HEIGHT 11.6f
-#define FLOOR_HEIGHT 0.5f
-#define MAP_LENGTH 1450.0f
+#define FLOOR_HEIGHT 0.6f
+#define MAP_LENGTH 1000.0f
 #define CAMERA_RANGE_FRONT -1
 #define CAMERA_RANGE_BACK 8
 
@@ -84,7 +81,7 @@ void SpaceshipGame::initialize()
     _stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 
     // Load our scene from file
-    Package* pkg = Package::create("res/models/spaceship.gpb");
+    Package* pkg = Package::create("res/spaceship.gpb");
     _scene = pkg->loadScene();
     SAFE_RELEASE(pkg);
 
@@ -95,8 +92,13 @@ void SpaceshipGame::initialize()
     initializeSpaceship();
     initializeEnvironment();
 
+    // Create a background audio track
+    _backgroundSound = AudioSource::create("res/background.ogg");
+    if (_backgroundSound)
+        _backgroundSound->setLooped(true);
+
     // Create font
-    _font = Font::create("res/fonts/airstrip28.gpb");
+    _font = Font::create("res/airstrip28.gpb");
 
     // Store camera node
     _cameraNode = _scene->findNode("camera1");
@@ -112,12 +114,10 @@ void SpaceshipGame::initializeSpaceship()
     Material* material;
 
     _shipGroupNode = _scene->findNode("gSpaceShip");
-    _shipGroupNode->setBoundsType(Node::SPHERE);
 
     // Setup spaceship model
     // Part 0
     _shipNode = _scene->findNode("pSpaceShip");
-    _shipNode->setBoundsType(Node::SPHERE);
     material = _shipNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh", NULL, 0);
     material->getParameter("u_diffuseColor")->setValue(Vector4(0.53544f, 0.53544f, 0.53544f, 1.0f));
     initializeMaterial(material, true, true);
@@ -133,7 +133,6 @@ void SpaceshipGame::initializeSpaceship()
 
     // Setup spaceship propulsion model
     _propulsionNode = _scene->findNode("pPropulsion");
-    _propulsionNode->setBoundsType(Node::BOX);
     material = _propulsionNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh");
     material->getParameter("u_diffuseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
     initializeMaterial(material, true, true);
@@ -141,14 +140,17 @@ void SpaceshipGame::initializeSpaceship()
     // Glow effect node
     _glowNode = _scene->findNode("pGlow");
     material = _glowNode->getModel()->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
-    material->getParameter("u_diffuseTexture")->setValue("res/textures/propulsion_glow.png", true);
+    material->getParameter("u_diffuseTexture")->setValue("res/propulsion_glow.png", true);
     _glowDiffuseParameter = material->getParameter("u_diffuseColor");
     initializeMaterial(material, false, false);
 
     // Setup the sound
-    _spaceshipSound = AudioSource::create("res/sounds/spaceship.wav");
+    _spaceshipSound = AudioSource::create("res/spaceship.wav");
     if (_spaceshipSound)
+    {
+        _spaceshipSound->setGain(0.5f);
         _spaceshipSound->setLooped(true);
+    }
 }
 
 void SpaceshipGame::initializeEnvironment()
@@ -181,7 +183,7 @@ void SpaceshipGame::initializeEnvironment()
     nodes.clear();
     Node* pBackground = _scene->findNode("pBackground");
     material = pBackground->getModel()->setMaterial("res/shaders/diffuse.vsh", "res/shaders/diffuse.fsh");
-    material->getParameter("u_diffuseTexture")->setValue("res/textures/background.png", true);
+    material->getParameter("u_diffuseTexture")->setValue("res/background.png", true);
     initializeMaterial(material, true, false);
 }
 
@@ -218,6 +220,7 @@ void SpaceshipGame::initializeMaterial(Material* material, bool lighting, bool s
 
 void SpaceshipGame::finalize()
 {
+    SAFE_RELEASE(_backgroundSound);
     SAFE_RELEASE(_spaceshipSound);
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_stateBlock);
@@ -231,6 +234,15 @@ void SpaceshipGame::update(long elapsedTime)
     if (!_finished)
     {
         _time += t;
+        // Play the background track
+        if (_backgroundSound->getState() != AudioSource::PLAYING)
+            _backgroundSound->play();
+    }
+    else
+    {
+        // Stop the background track
+        if (_backgroundSound->getState() != AudioSource::STOPPED)
+            _backgroundSound->stop();
     }
 
     // Set initial force due to gravity
@@ -342,9 +354,13 @@ void SpaceshipGame::handleCollisions(float t)
 {
     float friction = 0.0f;
 
-    // Detect collisions
+    // Use the ship's bounding sphere for roof collisions
     const BoundingSphere& shipBounds = _shipNode->getBoundingSphere();
-    const BoundingBox& propulsionBounds = _propulsionNode->getBoundingBox();
+
+    // Compute a bounding box for floor collisions
+    BoundingBox propulsionBounds = _propulsionNode->getModel()->getMesh()->getBoundingBox();
+    propulsionBounds.transform(_propulsionNode->getWorldMatrix());
+
     if (propulsionBounds.min.y <= FLOOR_HEIGHT)
     {
         // Floor collision

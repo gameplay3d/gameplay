@@ -1,7 +1,3 @@
-/*
- * Joint.h
- */
-
 #ifndef JOINT_H_
 #define JOINT_H_
 
@@ -18,6 +14,7 @@ class Package;
  */
 class Joint : public Node
 {
+    friend class Node;
     friend class MeshSkin;
     friend class Package;
 
@@ -34,20 +31,6 @@ public:
      * @return Inverse bind pose matrix.
      */
     const Matrix& getInverseBindPose() const;
-
-    /**
-     * Gets the world matrix corresponding to this node.
-     *
-     * @return The world matrix of this node.
-     */
-    const Matrix& getWorldMatrix() const;
-
-    /**
-     * Gets the matrix corresponding to this joint.
-     *
-     * @return The matrix of this joint.
-     */
-    const Matrix& getJointMatrix() const;
 
 protected:
 
@@ -83,8 +66,7 @@ protected:
 
     Matrix _bindPose;
     bool _jointMatrixDirty;
-    MeshSkin* _skin;
-    mutable Matrix _jointWorld;
+    unsigned int _skinCount;
 };
 
 }

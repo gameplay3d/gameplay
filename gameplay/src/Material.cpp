@@ -1,7 +1,3 @@
-/**
- * Material.cpp
- */
-
 #include "Base.h"
 #include "Material.h"
 #include "FileSystem.h"
@@ -47,12 +43,18 @@ Material* Material::create(const char* materialPath)
         return NULL;
     }
 
+    Material* material = create(properties->getNextNamespace());
+    SAFE_DELETE(properties);
+
+    return material;
+}
+
+Material* Material::create(Properties* materialProperties)
+{
     // Check if the Properties is valid and has a valid namespace.
-    Properties* materialProperties = properties->getNextNamespace();
     assert(materialProperties);
     if (!materialProperties || !(strcmp(materialProperties->getNamespace(), "material") == 0))
     {
-        SAFE_DELETE(properties);
         return NULL;
     }
 
@@ -68,7 +70,6 @@ Material* Material::create(const char* materialPath)
             if (!loadTechnique(material, techniqueProperties))
             {
                 SAFE_RELEASE(material);
-                SAFE_DELETE(properties);
                 return NULL;
             }
         }
@@ -76,9 +77,6 @@ Material* Material::create(const char* materialPath)
 
     // Load uniform value parameters for this material
     loadRenderState(material, materialProperties);
-
-    // Material properties no longer required
-    SAFE_DELETE(properties);
 
     // Set the current technique to the first found technique
     if (material->getTechniqueCount() > 0)
@@ -234,7 +232,9 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
         char* token = strtok((char*)defines, ";");
         while (token)
         {
-            define += "#define " + std::string(token) + "\n";
+            define += "#define ";
+            define += token;
+            define += "\n";
             token = strtok(NULL, ";");
         }
     }

@@ -1,7 +1,3 @@
-/**
- * PhysicsGenericConstraint.cpp
- */
-
 #include "PhysicsGenericConstraint.h"
 
 #include "Node.h"
@@ -15,7 +11,7 @@ PhysicsGenericConstraint::PhysicsGenericConstraint()
     : PhysicsConstraint(NULL, NULL), _rotationOffsetA(NULL), _rotationOffsetB(NULL),
     _translationOffsetA(NULL), _translationOffsetB(NULL)
 {
-    // DUMMY FUNCTION
+    // Not used.
 }
 
 PhysicsGenericConstraint::PhysicsGenericConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)

@@ -1,7 +1,3 @@
-/*
- * Material.h
- */
-
 # ifndef MATERIAL_H_
 # define MATERIAL_H_
 
@@ -37,6 +33,15 @@ public:
      * @return A new Material.
      */
     static Material* create(const char* materialPath);
+
+    /**
+     * Creates a material from the specified properties object.
+     * 
+     * @param materialProperties The properties object defining the 
+     *      material (must have namespace equal to 'material').
+     * @return A new Material.
+     */
+    static Material* create(Properties* materialProperties);
 
     /**
      * Creates a material from the specified effect.

@@ -25,13 +25,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample03-character", "gamep
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameplay-encoder", "gameplay-encoder\gameplay-encoder.vcxproj", "{9D69B743-4872-4DD1-8E30-0087C64298D7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D3CA8AE2-3ED6-458B-963A-EDA671E6F51C}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample04-sandbox", "gameplay-samples\sample04-sandbox\sample04-sandbox.vcxproj", "{FA260001-5B2E-41B7-86DD-C7F26DF3A485}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -75,12 +68,6 @@ Global
 		{9D69B743-4872-4DD1-8E30-0087C64298D7}.DebugMem|Win32.Build.0 = Debug|Win32
 		{9D69B743-4872-4DD1-8E30-0087C64298D7}.Release|Win32.ActiveCfg = Release|Win32
 		{9D69B743-4872-4DD1-8E30-0087C64298D7}.Release|Win32.Build.0 = Release|Win32
-		{FA260001-5B2E-41B7-86DD-C7F26DF3A485}.Debug|Win32.ActiveCfg = Debug|Win32
-		{FA260001-5B2E-41B7-86DD-C7F26DF3A485}.Debug|Win32.Build.0 = Debug|Win32
-		{FA260001-5B2E-41B7-86DD-C7F26DF3A485}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
-		{FA260001-5B2E-41B7-86DD-C7F26DF3A485}.DebugMem|Win32.Build.0 = DebugMem|Win32
-		{FA260001-5B2E-41B7-86DD-C7F26DF3A485}.Release|Win32.ActiveCfg = Release|Win32
-		{FA260001-5B2E-41B7-86DD-C7F26DF3A485}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

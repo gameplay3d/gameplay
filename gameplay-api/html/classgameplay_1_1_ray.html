@@ -124,6 +124,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_ray.html#a03f42c6fc5ab39fd0cb9dfeaf50f131d">set</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;origin, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;direction)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_ray.html#a39eb672cb28dcd947155af6f382810bb">set</a> (const <a class="el" href="classgameplay_1_1_ray.html">Ray</a> &amp;ray)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_ray.html#aad256bab9d2f0877e407cfec0d35e24c">transform</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;matrix)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_ray.html">Ray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_ray.html#a77f796ed70caaedece251780cc57d436">operator*=</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;matrix)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_ray.html#a1ad6497ac0df03155a74734ed0e6429a">INTERSECTS_NONE</a> = -1</td></tr>
@@ -362,6 +363,31 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a77f796ed70caaedece251780cc57d436"></a><!-- doxytag: member="gameplay::Ray::operator*=" ref="a77f796ed70caaedece251780cc57d436" args="(const Matrix &amp;matrix)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_ray.html">Ray</a> &amp; gameplay::Ray::operator*= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Transforms this ray by the given matrix.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">matrix</td><td>The matrix to transform by. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>This ray, after the transformation occurs. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a03f42c6fc5ab39fd0cb9dfeaf50f131d"></a><!-- doxytag: member="gameplay::Ray::set" ref="a03f42c6fc5ab39fd0cb9dfeaf50f131d" args="(const Vector3 &amp;origin, const Vector3 &amp;direction)" -->
 <div class="memitem">
 <div class="memproto">
@@ -511,6 +537,7 @@ Static Public Attributes</h2></td></tr>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_ray_8h_source.html">Ray.h</a></li>
 <li>gameplay/src/Ray.cpp</li>
+<li>gameplay/src/Ray.inl</li>
 </ul>
 </div>
 </div>
@@ -533,7 +560,7 @@ Static Public Attributes</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:35 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

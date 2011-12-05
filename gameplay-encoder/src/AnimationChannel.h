@@ -35,7 +35,8 @@ public:
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
 
-    void setTargetId(const std::string str);
+    const std::string& getTargetId() const;
+    void setTargetId(const std::string& str);
     void setTargetAttribute(unsigned int attrib);
 
     void setKeyTimes(const std::vector<float>& values);
@@ -44,7 +45,12 @@ public:
     void setTangentsOut(const std::vector<float>& values);
     void setInterpolations(const std::vector<unsigned int>& values);
 
+    unsigned int getTargetAttribute() const;
     const std::vector<float>& getKeyValues() const;
+    const std::vector<float>& getKeyTimes() const;
+    const std::vector<float>& getTangentsIn() const;
+    const std::vector<float>& getTangentsOut() const;
+    const std::vector<unsigned int>& getInterpolationTypes() const;
 
     /**
      * Returns the interpolation type value for the given string or zero if not valid.
@@ -55,7 +61,6 @@ public:
      * @return A value from InterpolationTypes enum or zero if not valid.
      */
     static unsigned int getInterpolationType(const char* str);
-
 
 private:
 
@@ -68,7 +73,6 @@ private:
     std::vector<unsigned int> _interpolations;
 };
 
-
 }
-#endif
 
+#endif

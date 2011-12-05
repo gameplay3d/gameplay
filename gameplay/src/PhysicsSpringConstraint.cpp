@@ -1,7 +1,3 @@
-/**
- * PhysicsSpringConstraint.cpp
- */
-
 #include "PhysicsSpringConstraint.h"
 
 #include "Node.h"
@@ -21,7 +17,7 @@ PhysicsSpringConstraint::PhysicsSpringConstraint(PhysicsRigidBody* a, PhysicsRig
 }
 
 PhysicsSpringConstraint::PhysicsSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
-    PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
+                                                 PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
 {
     // Initialize the physics rigid body references since we don't call the PhysicsConstraint constructor that does it properly automatically.
     _a = a;
@@ -43,7 +39,7 @@ PhysicsSpringConstraint::PhysicsSpringConstraint(PhysicsRigidBody* a, const Quat
 
 PhysicsSpringConstraint::~PhysicsSpringConstraint()
 {
-    // DUMMY FUNCTION
+    // Used
 }
 
 void PhysicsSpringConstraint::setStrength(SpringProperty property, float strength)

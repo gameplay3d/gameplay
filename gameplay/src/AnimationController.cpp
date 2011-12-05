@@ -1,7 +1,3 @@
-/*
- * AnimationController.cpp
- */
-
 #include "Base.h"
 #include "AnimationController.h"
 #include "Game.h"
@@ -32,9 +28,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, type);
 
     addAnimation(animation);
-
-    target->addAnimation(animation);
-
+    
     return animation;
 }
 
@@ -50,7 +44,24 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
 
     addAnimation(animation);
 
+    return animation;
+}
+
+Animation* AnimationController::createAnimation(const char* id, AnimationTarget* target, Properties* p)
+{
+    Animation* animation = getAnimation(id);
+
+    if (animation != NULL)
+        return NULL;
+    
+    // TODO: Implement loading from a properties object here.
+    /*
+    animation = new Animation(id, target, p);
+
+    addAnimation(animation);
+
     target->addAnimation(animation);
+    */
 
     return animation;
 }
@@ -113,8 +124,9 @@ void AnimationController::stopAllAnimations()
     {
         AnimationClip* clip = *clipIter;
         clip->_isPlaying = false;
+        clip->onEnd();
+        clipIter = _runningClips.erase(clipIter);
         SAFE_RELEASE(clip);
-        clipIter++;
     }
     _runningClips.clear();
 
@@ -133,6 +145,7 @@ void AnimationController::initialize()
 
 void AnimationController::finalize()
 {
+    stopAllAnimations();
     _state = PAUSED;
 }
 
@@ -160,6 +173,7 @@ void AnimationController::schedule(AnimationClip* clip)
     {
         _runningClips.remove(clip);
         clip->_isPlaying = false;
+        clip->onEnd();
     }
     else
     {
@@ -187,12 +201,12 @@ void AnimationController::update(long elapsedTime)
         return;
 
     std::list<AnimationClip*>::iterator clipIter = _runningClips.begin();
-
+    unsigned int clipCount = 0;
     while (clipIter != _runningClips.end())
     {
-        if ((*clipIter)->update(elapsedTime))
+        AnimationClip* clip = (*clipIter);
+        if (clip->update(elapsedTime))
         {
-            AnimationClip* clip = *clipIter;
             clipIter = _runningClips.erase(clipIter);
             SAFE_RELEASE(clip);
         }
@@ -200,8 +214,9 @@ void AnimationController::update(long elapsedTime)
         {
             clipIter++;
         }
+        clipCount++;
     }
-
+    
     if (_runningClips.empty())
         _state = IDLE;
 }
@@ -219,6 +234,8 @@ void AnimationController::destroyAnimation(Animation* animation)
     {
         if (animation == *itr)
         {
+            Animation* animation = *itr;
+            SAFE_RELEASE(animation);
             _animations.erase(itr);
             return;
         }
@@ -228,8 +245,6 @@ void AnimationController::destroyAnimation(Animation* animation)
 
 void AnimationController::destroyAllAnimations()
 {
-    stopAllAnimations();
-
     std::vector<Animation*>::iterator itr = _animations.begin();
     
     while (itr != _animations.end())

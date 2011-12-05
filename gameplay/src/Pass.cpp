@@ -1,7 +1,3 @@
-/**
- * Pass.cpp
- */
-
 #include "Base.h"
 #include "Pass.h"
 #include "Technique.h"

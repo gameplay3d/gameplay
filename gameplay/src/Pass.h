@@ -1,7 +1,3 @@
-/*
- * Pass.h
- */
-
 #ifndef PASS_H_
 #define PASS_H_
 

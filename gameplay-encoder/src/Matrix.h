@@ -12,7 +12,6 @@
 #define TORADIANS(degrees) (degrees * (PI / 180.0f))
 #define TODEGREES(radians) (radians * (180.0f / PI))
 
-
 namespace gameplay
 {
 
@@ -30,6 +29,11 @@ static const float MATRIX4F_IDENTITY[16] =
 class Matrix
 {
 public:
+
+    /**
+     * Matrix colums.
+     */
+    float m[16];
 
     /**
      * Constructor.
@@ -82,6 +86,11 @@ public:
     static void createScale(float x, float y, float z, float* dst);
 
     /**
+     * Creates a rotation matrix from the given quaternion.
+     */
+    static void createRotation(const Quaternion& q, float* dst);
+
+    /**
      * Creates a rotation matrix from the given axis and angle in degrees.
      */
     static void createRotation(float x, float y, float z, float angle, float* dst);
@@ -122,6 +131,11 @@ public:
     void scale(float x, float y, float z);
 
     /**
+     * Rotates the matrix by the given Quaternion.
+     */
+    void rotate(const Quaternion& q);
+
+    /**
      * Rotates the matrix by the axies specified and angle.
      */
     void rotate(float x, float y, float z, float angle);
@@ -141,8 +155,15 @@ public:
      */
     void rotateZ(float angle);
 
-    float m[16];
+    /**
+     * Transforms the specified point by this matrix.
+     *
+     * Note that the input vector is treated as a point and NOT a vector.
+     */
+    void transformPoint(const Vector3& p, Vector3* dst) const;
+
 };
 
 }
+
 #endif

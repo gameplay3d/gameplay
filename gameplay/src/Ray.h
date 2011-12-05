@@ -1,7 +1,3 @@
-/*
- * Ray.h
- */
-
 #ifndef RAY_H_
 #define RAY_H_
 

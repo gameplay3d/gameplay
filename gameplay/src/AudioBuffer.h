@@ -1,7 +1,3 @@
-/*
- * AudioBuffer.h
- */
-
 #ifndef AUDIOBUFFER_H_
 #define AUDIOBUFFER_H_
 

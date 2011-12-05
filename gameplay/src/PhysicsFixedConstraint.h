@@ -1,7 +1,3 @@
-/*
- * PhysicsFixedConstraint.h
- */
-
 #ifndef PHYSICSFIXEDCONSTRAINT_H_
 #define PHYSICSFIXEDCONSTRAINT_H_
 
@@ -23,6 +19,7 @@ class PhysicsFixedConstraint : public PhysicsGenericConstraint
     friend class PhysicsController;
 
 protected:
+
     /**
      * @see PhysicsGenericConstraint
      */

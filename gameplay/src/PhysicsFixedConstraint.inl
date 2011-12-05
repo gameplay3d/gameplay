@@ -1,7 +1,3 @@
-/**
- * PhysicsFixedConstraint.inl
- */
-
 #include "PhysicsFixedConstraint.h"
 
 namespace gameplay

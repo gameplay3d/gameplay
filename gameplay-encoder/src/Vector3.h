@@ -1,10 +1,5 @@
-/*
- * Vector3.h
- */
-
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
-
 
 namespace gameplay
 {
@@ -336,8 +331,6 @@ public:
      * @param dst The destination vector.
      */
     static void subtract(const Vector3& v1, const Vector3& v2, Vector3* dst);
-
-
 
     inline bool operator<(const Vector3& v) const
     {

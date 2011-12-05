@@ -114,12 +114,17 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_q
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#a1390cf0e730d792a5452af191ee89cbc">multiply</a>(const Quaternion &amp;q1, const Quaternion &amp;q2, Quaternion *dst)</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#a79396fda9e9fadd7984f9e2ceef546cb">normalize</a>()</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#abe3886ea1ef763798e990c290822e7c0">normalize</a>(Quaternion *dst) const </td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#a8db33d59aa2e61d1b679d9dbf2dea5ab">operator*</a>(const Quaternion &amp;q) const </td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td><code> [inline]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#a91d3fc9bed01b84bd90642f38535e923">operator*=</a>(const Quaternion &amp;q)</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3">Quaternion</a>()</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#a7384c6a014a4687ad770f5043b1107d7">Quaternion</a>(float x, float y, float z, float w)</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#a952f7977bec7d3f020cb4f3cf0fdf7ce">Quaternion</a>(float *array)</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#ac20f805362106410accdbd294a3785fe">Quaternion</a>(const Matrix &amp;m)</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#afcae9ff45daf216c769303492bcaaa3d">Quaternion</a>(const Vector3 &amp;axis, float angle)</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#a98e360bf934f6a3a40a557d047b635cc">Quaternion</a>(const Quaternion &amp;copy)</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#a9125d9957aa6a114fad7063fdd89d9d7">set</a>(float x, float y, float z, float w)</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#ae32a7699d460d715853300b29edf4524">set</a>(float *array)</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#a9f428c44a877a8d09035cd95afc08d31">set</a>(const Matrix &amp;m)</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#a2e581250445a02381cdec95435656da3">set</a>(const Vector3 &amp;axis, float angle)</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#ab30fe334e4a214a6095e7c8590ed345a">set</a>(const Quaternion &amp;q)</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_quaternion.html#ad6966c6dd1babf2a8b8f53868a50707d">setIdentity</a>()</td><td><a class="el" href="classgameplay_1_1_quaternion.html">gameplay::Quaternion</a></td><td></td></tr>
@@ -151,7 +156,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_q
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:35 for GamePlay by
+    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
