@@ -3,6 +3,7 @@
 #include "FileSystem.h"
 #include "MeshPart.h"
 #include "Scene.h"
+#include "SceneLoader.h"
 #include "Joint.h"
 
 #define GPB_PACKAGE_VERSION_MAJOR 1
@@ -118,6 +119,11 @@ Package* Package::create(const char* path)
 
     // Open the package
     FILE* fp = FileSystem::openFile(path, "rb");
+    if (!fp)
+    {
+        WARN_VARG("Failed to open file: '%s'.", path);
+        return NULL;
+    }
 
     // Read the GPG header info
     char sig[9];
@@ -280,6 +286,11 @@ bool Package::readMatrix(float* m)
 
 Scene* Package::loadScene(const char* id)
 {
+    return loadScene(id, NULL);
+}
+
+Scene* Package::loadScene(const char* id, const std::vector<std::string>* nodesWithMeshRB)
+{
     clearLoadSession();
 
     Reference* ref = NULL;
@@ -310,7 +321,7 @@ Scene* Package::loadScene(const char* id)
         // Read each child directly into the scene
         for (unsigned int i = 0; i < childrenCount; i++)
         {
-            Node* node = readNode(scene, NULL);
+            Node* node = readNode(scene, NULL, nodesWithMeshRB);
             if (node)
             {
                 scene->addNode(node);
@@ -373,11 +384,16 @@ Scene* Package::loadScene(const char* id)
 
 Node* Package::loadNode(const char* id)
 {
+    return loadNode(id, false);
+}
+
+Node* Package::loadNode(const char* id, bool loadWithMeshRBSupport)
+{
     assert(id);
 
     clearLoadSession();
 
-    Node* node = loadNode(id, NULL, NULL);
+    Node* node = loadNode(id, NULL, NULL, loadWithMeshRBSupport);
    
     if (node)
     {
@@ -387,7 +403,7 @@ Node* Package::loadNode(const char* id)
     return node;
 }
 
-Node* Package::loadNode(const char* id, Scene* sceneContext, Node* nodeContext)
+Node* Package::loadNode(const char* id, Scene* sceneContext, Node* nodeContext, bool loadWithMeshRBSupport)
 {
     assert(id);
 
@@ -413,13 +429,22 @@ Node* Package::loadNode(const char* id, Scene* sceneContext, Node* nodeContext)
             return NULL;
         }
 
-        node = readNode(sceneContext, nodeContext);
+        if (loadWithMeshRBSupport)
+        {
+            std::vector<std::string> nodesWithMeshRBSupport;
+            nodesWithMeshRBSupport.push_back(id);
+            node = readNode(sceneContext, nodeContext, &nodesWithMeshRBSupport);
+        }
+        else
+        {
+            node = readNode(sceneContext, nodeContext, NULL);
+        }
     }
 
     return node;
 }
 
-Node* Package::readNode(Scene* sceneContext, Node* nodeContext)
+Node* Package::readNode(Scene* sceneContext, Node* nodeContext, const std::vector<std::string>* nodesWithMeshRB)
 {
     const char* id = getIdFromOffset();
 
@@ -470,7 +495,7 @@ Node* Package::readNode(Scene* sceneContext, Node* nodeContext)
         // Read each child
         for (unsigned int i = 0; i < childrenCount; i++)
         {
-            Node* child = readNode(sceneContext, nodeContext);
+            Node* child = readNode(sceneContext, nodeContext, nodesWithMeshRB);
             if (child)
             {
                 node->addChild(child);
@@ -495,8 +520,23 @@ Node* Package::readNode(Scene* sceneContext, Node* nodeContext)
         SAFE_RELEASE(light);
     }
 
+    // Check if this node's id is in the list of nodes to be loaded with
+    // mesh rigid body support so that when we load the model we keep the proper data.
+    bool loadWithMeshRBSupport = false;
+    if (nodesWithMeshRB)
+    {
+        for (unsigned int i = 0; i < nodesWithMeshRB->size(); i++)
+        {
+            if (strcmp((*nodesWithMeshRB)[i].c_str(), id) == 0)
+            {
+                loadWithMeshRBSupport = true;
+                break;
+            }
+        }
+    }
+
     // Read model
-    Model* model = readModel(sceneContext, nodeContext);
+    Model* model = readModel(sceneContext, nodeContext, loadWithMeshRBSupport, node->getId());
     if (model)
     {
         node->setModel(model);
@@ -627,14 +667,14 @@ Light* Package::readLight()
     return light;
 }
 
-Model* Package::readModel(Scene* sceneContext, Node* nodeContext)
+Model* Package::readModel(Scene* sceneContext, Node* nodeContext, bool loadWithMeshRBSupport, const char* nodeId)
 {
     // Read mesh
     Mesh* mesh = NULL;
     std::string xref = readString(_file);
     if (xref.length() > 1 && xref[0] == '#') // TODO: Handle full xrefs
     {
-        mesh = loadMesh(xref.c_str() + 1);
+        mesh = loadMesh(xref.c_str() + 1, loadWithMeshRBSupport, nodeId);
         if (mesh)
         {
             Model* model = Model::create(mesh);
@@ -762,7 +802,7 @@ void Package::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
             {
                 jointId = jointId.substr(1, jointId.length() - 1);
 
-                Node* n = loadNode(jointId.c_str(), sceneContext, nodeContext);
+                Node* n = loadNode(jointId.c_str(), sceneContext, nodeContext, false);
                 if (n && n->getType() == Node::JOINT)
                 {
                     Joint* joint = static_cast<Joint*>(n);
@@ -956,7 +996,7 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
     return animation;
 }
 
-Mesh* Package::loadMesh(const char* id)
+Mesh* Package::loadMesh(const char* id, bool loadWithMeshRBSupport, const char* nodeId)
 {
     // save the file position
     long position = ftell(_file);
@@ -1038,6 +1078,8 @@ Mesh* Package::loadMesh(const char* id)
         return NULL;
     }
     mesh->setVertexData(vertexData, 0, vertexCount);
+    if (loadWithMeshRBSupport)
+        SceneLoader::addMeshRigidBodyData(nodeId, mesh, vertexData, vertexByteCount);
     SAFE_DELETE_ARRAY(vertexData);
 
     // Set mesh bounding volumes
@@ -1074,7 +1116,7 @@ Mesh* Package::loadMesh(const char* id)
         }
 
         Mesh::IndexFormat indexFormat = (Mesh::IndexFormat)iFormat;
-        unsigned int indexSize;
+        unsigned int indexSize = 0;
         switch (indexFormat)
         {
         case Mesh::INDEX8:
@@ -1097,6 +1139,8 @@ Mesh* Package::loadMesh(const char* id)
             return NULL;
         }
         part->setIndexData(indexData, 0, indexCount);
+        if (loadWithMeshRBSupport)
+            SceneLoader::addMeshRigidBodyData(nodeId, indexData, iByteCount);
         SAFE_DELETE_ARRAY(indexData);
     }
 
