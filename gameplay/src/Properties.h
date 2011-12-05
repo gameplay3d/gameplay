@@ -327,6 +327,19 @@ public:
     bool getVector4(const char* name, Vector4* out) const;
 
     /**
+     * Interpret the value of the given property as a Quaternion specified as an axis angle.
+     * If the property does not exist, out will be set to Quaternion().
+     * If the property exists but could not be scanned, an error will be logged and out will be set
+     * to Quaternion().
+     *
+     * @param name The name of the property to interpret, or NULL to return the current property's value.
+     * @param out The quaternion to set to this property's interpreted value.
+     * 
+     * @return True on success, false if the property does not exist or could not be scanned.
+     */
+    bool getQuaternionFromAxisAngle(const char* name, Quaternion* out) const;
+
+    /**
      * Interpret the value of the given property as an RGB color in hex and write this color to a Vector3.
      * E.g. 0xff0000 represents red and sets the vector to (1, 0, 0).
      * If the property does not exist, out will be set to Vector3(0.0f, 0.0f, 0.0f).

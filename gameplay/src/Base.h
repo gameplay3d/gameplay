@@ -34,6 +34,7 @@ using std::isspace;
 using std::isdigit;
 using std::toupper;
 using std::tolower;
+using std::size_t;
 
 // Common
 #ifndef NULL
@@ -71,7 +72,12 @@ extern void printError(const char* format, ...);
 // Since Bullet overrides new, we have to allocate objects manually using its
 // aligned allocation function when we turn on memory leak detection in GamePlay.
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
-#define BULLET_NEW(type, name, ...) \
+#define BULLET_NEW(type, name) \
+    type* name = (type*)btAlignedAlloc(sizeof(type), 16); \
+    type __##name##_tmp; \
+    memcpy(name, &__##name##_tmp, sizeof(type))
+
+#define BULLET_NEW_VARG(type, name, ...) \
     type* name = (type*)btAlignedAlloc(sizeof(type), 16); \
     type __##name##_tmp (__VA_ARGS__); \
     memcpy(name, &__##name##_tmp, sizeof(type))
@@ -84,7 +90,10 @@ extern void printError(const char* format, ...);
     }
 
 #else
-#define BULLET_NEW(type, name, ...) \
+#define BULLET_NEW(type, name) \
+    type* name = new type()
+
+#define BULLET_NEW_VARG(type, name, ...) \
     type* name = new type(__VA_ARGS__)
 
 #define BULLET_DELETE(name) SAFE_DELETE(name)

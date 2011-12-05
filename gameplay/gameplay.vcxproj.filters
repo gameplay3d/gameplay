@@ -204,6 +204,9 @@
     <ClCompile Include="src\PhysicsMotionState.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\SceneLoader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -393,6 +396,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PhysicsSocketConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneLoader.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

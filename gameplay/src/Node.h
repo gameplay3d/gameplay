@@ -370,6 +370,20 @@ public:
         float restitution = 0.0f, float linearDamping = 0.0f, float angularDamping = 0.0f);
 
     /**
+     * Sets the physics rigid body for this node using the rigid body definition in the given file.
+     * 
+     * @param filePath The path to the file that contains the rigid body definition.
+     */
+    void setPhysicsRigidBody(const char* url);
+
+    /**
+     * Sets the physics rigid body for this node from the given properties object.
+     * 
+     * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidbody').
+     */
+    void setPhysicsRigidBody(Properties* properties);
+
+    /**
      * Returns the bounding sphere for the Node, in world space.
      *
      * The bounding sphere for a node represents the area, in world

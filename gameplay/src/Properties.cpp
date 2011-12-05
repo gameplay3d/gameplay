@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "Properties.h"
 #include "FileSystem.h"
+#include "Quaternion.h"
 
 namespace gameplay
 {
@@ -48,9 +49,13 @@ void Properties::readProperties(FILE* file)
     char* value;
     char* rc;
 
-    while (!feof(file))
+    while (true)
     {
         skipWhiteSpace(file);
+
+        // Stop when we have reached the end of the file.
+        if (feof(file))
+            break;
 
         // Read the next line.
         rc = fgets(line, 2048, file);
@@ -187,8 +192,10 @@ void Properties::skipWhiteSpace(FILE* file)
         c = fgetc(file);
     } while (isspace(c));
 
-    // We found a non-whitespace character; put the cursor back in front of it.
-    fseek(file, -1, SEEK_CUR);
+    // If we are not at the end of the file, then since we found a
+    // non-whitespace character, we put the cursor back in front of it.
+    if (c != EOF)
+        fseek(file, -1, SEEK_CUR);
 }
 
 char* Properties::trimWhiteSpace(char *str)
@@ -574,6 +581,31 @@ bool Properties::getVector4(const char* name, Vector4* out) const
     }
     
     out->set(0.0f, 0.0f, 0.0f, 0.0f);
+    return false;
+}
+
+bool Properties::getQuaternionFromAxisAngle(const char* name, Quaternion* out) const
+{
+    assert(out);
+
+    const char* valueString = getString(name);
+    if (valueString)
+    {
+        float x, y, z, theta;
+        int scanned;
+        scanned = sscanf(valueString, "%f,%f,%f,%f", &x, &y, &z, &theta);
+        if (scanned != 4)
+        {
+            LOG_ERROR_VARG("Error parsing property: %s", name);
+            out->set(0.0f, 0.0f, 0.0f, 1.0f);
+            return false;
+        }
+
+        out->set(Vector3(x, y, z), MATH_DEG_TO_RAD(theta));
+        return true;
+    }
+    
+    out->set(0.0f, 0.0f, 0.0f, 1.0f);
     return false;
 }
 
