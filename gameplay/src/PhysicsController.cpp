@@ -5,7 +5,7 @@
 #include "PhysicsMotionState.h"
 #include "SceneLoader.h"
 
-// The initial capacity of the bullet debug draw's vertex batch.
+// The initial capacity of the Bullet debug drawer's vertex batch.
 #define INITIAL_CAPACITY 280
 
 namespace gameplay
@@ -20,18 +20,18 @@ PhysicsController::PhysicsController()
     // Default gravity is 9.8 along the negative Y axis.
 }
 
+PhysicsController::~PhysicsController()
+{
+    SAFE_DELETE(_debugDrawer);
+    SAFE_DELETE(_listeners);
+}
+
 void PhysicsController::addStatusListener(Listener* listener)
 {
     if (!_listeners)
         _listeners = new std::vector<Listener*>();
 
     _listeners->push_back(listener);
-}
-    
-PhysicsController::~PhysicsController()
-{
-    SAFE_DELETE(_debugDrawer);
-    SAFE_DELETE(_listeners);
 }
 
 PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
@@ -100,13 +100,6 @@ PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidB
     return constraint;
 }
 
-void PhysicsController::drawDebug(const Matrix& viewProjection)
-{
-    _debugDrawer->begin(viewProjection);
-    _world->debugDrawWorld();
-    _debugDrawer->end();
-}
-
 const Vector3& PhysicsController::getGravity(const Vector3& gravity) const
 {
     return _gravity;
@@ -118,6 +111,13 @@ void PhysicsController::setGravity(const Vector3& gravity)
 
     if (_world)
         _world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
+}
+
+void PhysicsController::drawDebug(const Matrix& viewProjection)
+{
+    _debugDrawer->begin(viewProjection);
+    _world->debugDrawWorld();
+    _debugDrawer->end();
 }
 
 void PhysicsController::initialize()
@@ -459,8 +459,8 @@ void PhysicsController::removeConstraint(PhysicsConstraint* constraint)
     
 PhysicsController::DebugDrawer::DebugDrawer()
     : _mode(btIDebugDraw::DBG_DrawAabb | btIDebugDraw::DBG_DrawConstraintLimits | btIDebugDraw::DBG_DrawConstraints | 
-       btIDebugDraw::DBG_DrawContactPoints | btIDebugDraw::DBG_DrawWireframe), _program(0), _positionAttrib(0),
-       _colorAttrib(0), _viewProjectionMatrixUniform(0), _viewProjection(NULL), _vertexData(NULL), _vertexCount(0), _vertexDataSize(0)
+       btIDebugDraw::DBG_DrawContactPoints | btIDebugDraw::DBG_DrawWireframe), _effect(NULL), _positionAttrib(0), _colorAttrib(0),
+       _viewProjectionMatrixUniform(NULL), _viewProjection(NULL), _vertexData(NULL), _vertexCount(0), _vertexDataSize(0)
 {
     // Unused
 }
@@ -478,8 +478,8 @@ void PhysicsController::DebugDrawer::begin(const Matrix& viewProjection)
 
 void PhysicsController::DebugDrawer::end()
 {
-    // Lazy load the shader program for drawing.
-    if (!_program)
+    // Lazy load the effect for drawing.
+    if (!_effect)
     {
         // Vertex shader for drawing colored lines.
         const char* vs_str = 
@@ -506,73 +506,22 @@ void PhysicsController::DebugDrawer::end()
             "}"
         };
         
-        // Load the vertex shader.
-        GLuint vs;
-        GL_ASSERT( vs = glCreateShader(GL_VERTEX_SHADER) );
-        GLint shader_str_len = strlen(vs_str);
-        GL_ASSERT( glShaderSource(vs, 1, &vs_str, &shader_str_len) );
-        GL_ASSERT( glCompileShader(vs) );
-        GLint status;
-        GL_ASSERT( glGetShaderiv(vs, GL_COMPILE_STATUS, &status) );
-        if (status == GL_FALSE)
-        {
-            GLchar errorMessage[512];
-            GL_ASSERT( glGetShaderInfoLog(vs, sizeof(errorMessage), 0, errorMessage) );
-            WARN_VARG("Physics debug drawing will not work; vertex shader failed to compile with error: '%s'", errorMessage);
-            return;
-        }
-        
-        // Load the fragment shader.
-        GLuint fs;
-        GL_ASSERT( fs = glCreateShader(GL_FRAGMENT_SHADER) );
-        shader_str_len = strlen(fs_str);
-        GL_ASSERT( glShaderSource(fs, 1, &fs_str, &shader_str_len) );
-        GL_ASSERT( glCompileShader(fs) );
-        GL_ASSERT( glGetShaderiv(fs, GL_COMPILE_STATUS, &status) );
-        if (status == GL_FALSE)
-        {
-            GLchar errorMessage[512];
-            GL_ASSERT( glGetShaderInfoLog(fs, sizeof(errorMessage), 0, errorMessage) );
-            WARN_VARG("Physics debug drawing will not work; fragment shader failed to compile with error: '%s'", errorMessage);
-            return;
-        }
-        
-        // Create the shader program and link it.
-        GL_ASSERT( _program = glCreateProgram() );
-        GL_ASSERT( glAttachShader(_program, vs) );
-        GL_ASSERT( glAttachShader(_program, fs) );
-        GL_ASSERT( glLinkProgram(_program) );
-        GL_ASSERT( glGetProgramiv(_program, GL_LINK_STATUS, &status) );
-        if (status == GL_FALSE)
-        {
-            GLchar errorMessage[512];
-            GL_ASSERT( glGetProgramInfoLog(_program, sizeof(errorMessage), 0, errorMessage) );
-            WARN_VARG("Physics debug drawing will not work; shader program failed to link with error: '%s'", errorMessage);
-            return;
-        }
-        
-        // Get the attribute and uniform locations.
-        GL_ASSERT( glUseProgram(_program) );
-        GL_ASSERT( _positionAttrib = glGetAttribLocation(_program, "a_position") );
-        GL_ASSERT( _colorAttrib = glGetAttribLocation(_program, "a_color") );
-        GL_ASSERT( _viewProjectionMatrixUniform = glGetUniformLocation(_program, "u_viewProjectionMatrix") );
+        _effect = Effect::createFromSource(vs_str, fs_str);
+        _positionAttrib = _effect->getVertexAttribute("a_position");
+        _colorAttrib = _effect->getVertexAttribute("a_color");
+        _viewProjectionMatrixUniform = _effect->getUniform("u_viewProjectionMatrix");
     }
     
-    // Set the shader program and vertex attributes.
-    GL_ASSERT( glUseProgram(_program) );
+    // Bind the effect and set the vertex attributes.
+    _effect->bind();
     GL_ASSERT( glEnableVertexAttribArray(_positionAttrib) );
     GL_ASSERT( glEnableVertexAttribArray(_colorAttrib) );
     GL_ASSERT( glVertexAttribPointer(_positionAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 7, _vertexData) );
     GL_ASSERT( glVertexAttribPointer(_colorAttrib, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 7, &_vertexData[3]) );
     
     // Set the camera's view projection matrix and draw.
-    GL_ASSERT( glUniformMatrix4fv(_viewProjectionMatrixUniform, 1, GL_FALSE, _viewProjection->m) );
+    _effect->setValue( _viewProjectionMatrixUniform, _viewProjection);
     GL_ASSERT( glDrawArrays(GL_LINES, 0, _vertexCount / 7) );
-    
-    // Reset shader state.
-    GL_ASSERT( glDisableVertexAttribArray(_positionAttrib) );
-    GL_ASSERT( glDisableVertexAttribArray(_colorAttrib) );
-    GL_ASSERT( glUseProgram(0) );
 }
 
 void PhysicsController::DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor)

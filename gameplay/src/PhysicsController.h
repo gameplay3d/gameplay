@@ -47,7 +47,7 @@ public:
         };
 
         /**
-         * Handles when the physics world status event occurs.
+         * Handles when a physics world status event occurs.
          */
         virtual void statusEvent(EventType type) = 0;
     };
@@ -250,40 +250,33 @@ private:
     // Removes the given constraint from the simulated physics world.
     void removeConstraint(PhysicsConstraint* constraint);
     
-    // Draws bullet debug information
+    // Draws Bullet debug information.
     class DebugDrawer : public btIDebugDraw
     {
     public:
 
-        DebugDrawer();
-        
+        DebugDrawer();        
         ~DebugDrawer();
         
         void begin(const Matrix& viewProjection);
-        
         void end();
 
-        void drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor);
-        
-        void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);
-        
-        void drawContactPoint(const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color);
-        
-        void reportErrorWarning(const char* warningString);
-        
-        void draw3dText(const btVector3& location, const char* textString);
-        
-        void setDebugMode(int mode);
-        
+        // Overridden Bullet functions from btIDebugDraw.
+        void drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor);        
+        void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);        
+        void drawContactPoint(const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color);        
+        void reportErrorWarning(const char* warningString);        
+        void draw3dText(const btVector3& location, const char* textString);        
+        void setDebugMode(int mode);        
         int	getDebugMode() const;
         
     private:
         
         int _mode;
-        GLuint _program;
-        GLuint _positionAttrib;
-        GLuint _colorAttrib;
-        GLuint _viewProjectionMatrixUniform;
+        Effect* _effect;
+        VertexAttribute _positionAttrib;
+        VertexAttribute _colorAttrib;
+        Uniform* _viewProjectionMatrixUniform;
         const Matrix* _viewProjection;
         float* _vertexData;
         unsigned int _vertexCount;
