@@ -49,6 +49,12 @@ AudioSource* AudioSource::create(const char* path)
     return new AudioSource(buffer, alSource);
 }
 
+AudioSource* AudioSource::create(Properties* properties)
+{
+    // TODO: Implement this!
+    return NULL;
+}
+
 AudioSource::State AudioSource::getState() const
 {
     ALint state;

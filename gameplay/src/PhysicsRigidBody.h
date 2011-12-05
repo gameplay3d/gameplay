@@ -86,20 +86,18 @@ public:
          * @param contactPoint The point (in world space) where the collision occurred.
          */
         virtual void collisionEvent(const CollisionPair& collisionPair, const Vector3& contactPoint) = 0;
-
+        
+    protected:
+        
         /**
          * Internal function used for Bullet integration (do not use or override).
          */
-        btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA,
-            int indexA, const btCollisionObject* b, int partIdB, int indexB);
+        btScalar addSingleResult(btManifoldPoint& cp, 
+                                 const btCollisionObject* a, int partIdA, int indexA, 
+                                 const btCollisionObject* b, int partIdB, int indexB);
+
+        std::map<CollisionPair, int> _collisionStatus;  // Holds the collision status for each pair of rigid bodies. 
         
-    protected:
-
-        /** 
-         * Holds the collision status for each pair of rigid bodies. 
-         */
-        std::map<CollisionPair, int> _collisionStatus;
-
     private:
 
         // Internal constant.
@@ -312,11 +310,31 @@ private:
      */
     PhysicsRigidBody(const PhysicsRigidBody& body);
 
+    /**
+     * Creates a rigid body from the rigid body file at the given path.
+     * 
+     * @param node The node to create a rigid body for; note that the node must have
+     *      a model attached to it prior to creating a rigid body for it.
+     * @param filePath The path to the rigid body file.
+     * @return The rigid body or <code>NULL</code> if the rigid body could not be loaded.
+     */
+    static PhysicsRigidBody* create(Node* node, const char* filePath);
+
+    /**
+     * Creates a rigid body from the specified properties object.
+     * 
+     * @param node The node to create a rigid body for; note that the node must have
+     *      a model attached to it prior to creating a rigid body for it.
+     * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidbody').
+     * @return The newly created rigid body, or <code>NULL</code> if the rigid body failed to load.
+     */
+    static PhysicsRigidBody* create(Node* node, Properties* properties);
+
     // Creates the underlying Bullet Physics rigid body object
     // for a PhysicsRigidBody object using the given parameters.
-    static btRigidBody* createBulletRigidBody(btCollisionShape* shape, float mass, Node* node,
-                                              float friction, float restitution, float linearDamping, float angularDamping,
-                                              const Vector3* centerOfMassOffset = NULL);
+    static btRigidBody* createRigidBodyInternal(btCollisionShape* shape, float mass, Node* node,
+                                                float friction, float restitution, float linearDamping, float angularDamping,
+                                                const Vector3* centerOfMassOffset = NULL);
 
     // Adds a constraint to this rigid body.
     void addConstraint(PhysicsConstraint* constraint);
@@ -343,6 +361,8 @@ private:
     mutable Vector3* _anisotropicFriction;
     mutable Vector3* _gravity;
     mutable Vector3* _linearVelocity;
+    float* _vertexData;
+    std::vector<unsigned char*> _indexData;
 };
 
 }

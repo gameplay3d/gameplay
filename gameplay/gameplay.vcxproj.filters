@@ -204,8 +204,12 @@
     <ClCompile Include="src\PhysicsMotionState.cpp">
       <Filter>src</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="src\Gamepad.cpp" />
     <ClCompile Include="src\Theme.cpp">
+=======
+    <ClCompile Include="src\SceneLoader.cpp">
+>>>>>>> 187027bc8c14ffd1c894cee0793284c5a5238090
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -399,8 +403,12 @@
     <ClInclude Include="src\PhysicsSocketConstraint.h">
       <Filter>src</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="src\Gamepad.h" />
     <ClInclude Include="src\Theme.h">
+=======
+    <ClInclude Include="src\SceneLoader.h">
+>>>>>>> 187027bc8c14ffd1c894cee0793284c5a5238090
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
