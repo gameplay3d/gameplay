@@ -47,6 +47,25 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     return animation;
 }
 
+Animation* AnimationController::createAnimation(const char* id, AnimationTarget* target, Properties* p)
+{
+    Animation* animation = getAnimation(id);
+
+    if (animation != NULL)
+        return NULL;
+    
+    // TODO: Implement loading from a properties object here.
+    /*
+    animation = new Animation(id, target, p);
+
+    addAnimation(animation);
+
+    target->addAnimation(animation);
+    */
+
+    return animation;
+}
+
 Animation* AnimationController::createAnimationFromTo(const char* id, AnimationTarget* target, int propertyId, float* from, float* to, Curve::InterpolationType type, unsigned long duration)
 {
     const unsigned int propertyComponentCount = target->getAnimationPropertyComponentCount(propertyId);
