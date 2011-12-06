@@ -98,6 +98,7 @@
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Base.cpp" />
+    <ClCompile Include="src\FBXSceneEncoder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\DAESceneEncoder.h" />
@@ -196,6 +197,7 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="src\Base.h" />
+    <ClInclude Include="src\FBXSceneEncoder.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Objects">
@@ -225,5 +227,16 @@
     <Filter Include="Math">
       <UniqueIdentifier>{4368ed2b-7fce-423a-a9cb-76a0fdc42858}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Vector2.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="src\Vector3.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="src\Vector4.inl">
+      <Filter>Math</Filter>
+    </None>
   </ItemGroup>
 </Project>

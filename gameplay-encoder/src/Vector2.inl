@@ -1,9 +1,13 @@
+/** 
+ * Vector2.inl
+ */
+
 #include "Vector2.h"
 
 namespace gameplay
 {
 
-inline Vector2 Vector2::operator+(const Vector2& v) const
+inline Vector2 Vector2::operator+(const Vector2& v)
 {
     Vector2 result(*this);
     result.add(v);
@@ -16,7 +20,7 @@ inline Vector2& Vector2::operator+=(const Vector2& v)
     return *this;
 }
 
-inline Vector2 Vector2::operator-(const Vector2& v) const
+inline Vector2 Vector2::operator-(const Vector2& v)
 {
     Vector2 result(*this);
     result.subtract(v);
@@ -29,14 +33,14 @@ inline Vector2& Vector2::operator-=(const Vector2& v)
     return *this;
 }
 
-inline Vector2 Vector2::operator-() const
+inline Vector2 Vector2::operator-()
 {
     Vector2 result(*this);
     result.negate();
     return result;
 }
 
-inline Vector2 Vector2::operator*(float x) const
+inline Vector2 Vector2::operator*(float x)
 {
     Vector2 result(*this);
     result.scale(x);

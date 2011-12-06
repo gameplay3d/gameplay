@@ -38,7 +38,7 @@ void DAEOptimizer::combineAnimations(const std::string& nodeId, const std::strin
     // TODO: Make sure that there doesn't already exist an animation with this ID.
 
     // Move each of the channels to this animation
-    for (std::list<domChannelRef>::iterator i = channels.begin(); i != channels.end(); i++)
+    for (std::list<domChannelRef>::iterator i = channels.begin(); i != channels.end(); ++i)
     {
         moveChannelAndSouresToAnimation(*i, animation);
     }
@@ -57,17 +57,17 @@ void DAEOptimizer::getAnimationChannels(const domNodeRef& node, std::list<domCha
 
     domLibrary_animations_Array& animationLibrary = root->getLibrary_animations_array();
     size_t animationLibraryCount = animationLibrary.getCount();
-    for (size_t i = 0; i < animationLibraryCount; i++)
+    for (size_t i = 0; i < animationLibraryCount; ++i)
     {
         domLibrary_animationsRef& animationsRef = animationLibrary.get(i);
         domAnimation_Array& animationArray = animationsRef->getAnimation_array();
         size_t animationCount = animationArray.getCount();
-        for (size_t j = 0; j < animationCount; j++)
+        for (size_t j = 0; j < animationCount; ++j)
         {
             domAnimationRef& animationRef = animationArray.get(j);
             domChannel_Array& channelArray = animationRef->getChannel_array();
             size_t channelArrayCount = channelArray.getCount();
-            for (size_t k = 0; k < channelArrayCount; k++)
+            for (size_t k = 0; k < channelArrayCount; ++k)
             {
                 domChannelRef& channel = channelArray.get(k);
                 const char* target = channel->getTarget();
@@ -85,7 +85,7 @@ void DAEOptimizer::getAnimationChannels(const domNodeRef& node, std::list<domCha
     daeTArray< daeSmartRef<daeElement> > children;
     node->getChildren(children);
     size_t childCount = children.getCount();
-    for (size_t i = 0; i < childCount; i++)
+    for (size_t i = 0; i < childCount; ++i)
     {
         daeElementRef childElement = children[i];
         if (childElement->getElementType() == COLLADA_TYPE::NODE)
@@ -103,12 +103,12 @@ void DAEOptimizer::deleteEmptyAnimations()
     // Get the list of empty animations
     domLibrary_animations_Array& animationLibrary = _dom->getLibrary_animations_array();
     size_t animationLibraryCount = animationLibrary.getCount();
-    for (size_t i = 0; i < animationLibraryCount; i++)
+    for (size_t i = 0; i < animationLibraryCount; ++i)
     {
         domLibrary_animationsRef& animationsRef = animationLibrary.get(i);
         domAnimation_Array& animationArray = animationsRef->getAnimation_array();
         size_t animationCount = animationArray.getCount();
-        for (size_t j = 0; j < animationCount; j++)
+        for (size_t j = 0; j < animationCount; ++j)
         {
             domAnimationRef& animation = animationArray.get(j);
             if (isEmptyAnimation(animation))
@@ -119,7 +119,7 @@ void DAEOptimizer::deleteEmptyAnimations()
     }
 
     // Delete all of the empty animations
-    for (std::list<domAnimationRef>::iterator i = animations.begin(); i != animations.end(); i++)
+    for (std::list<domAnimationRef>::iterator i = animations.begin(); i != animations.end(); ++i)
     {
         daeElement::removeFromParent(*i);
     }

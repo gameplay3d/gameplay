@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "Node.h"
+#include "Matrix.h"
 
 #define NODE 1
 #define JOINT 2
@@ -13,7 +14,6 @@ Node::Node(void) :
     _firstChild(NULL), _lastChild(NULL), _parent(NULL),
     _camera(NULL), _light(NULL), _model(NULL), _joint(false)
 {
-    setIdentityMatrix(_transform.m);
 }
 
 Node::~Node(void)
@@ -255,6 +255,11 @@ const Matrix& Node::getWorldMatrix() const
     }
 
     return _worldTransform;
+}
+
+void Node::resetTransformMatrix()
+{
+    Matrix::setIdentity(_transform.m);
 }
 
 void Node::setIsJoint(bool value)

@@ -35,6 +35,8 @@ using std::isdigit;
 using std::toupper;
 using std::tolower;
 using std::size_t;
+using std::min;
+using std::max;
 
 // Common
 #ifndef NULL
@@ -146,6 +148,11 @@ extern void printError(const char* format, ...);
 #define MATH_EPSILON                0.000001f
 #ifndef M_1_PI
 #define M_1_PI                      0.31830988618379067154
+#endif
+
+// NOMINMAX makes sure that windef.h doesn't add macros min and max
+#ifdef WIN32
+    #define NOMINMAX
 #endif
 
 // Audio (OpenAL)
@@ -267,25 +274,7 @@ extern GLenum __gl_error_code;
 #define GL_LAST_ERROR() __gl_error_code
 
 
-#if defined(WIN32) || defined(__APPLE__)
-
-    inline float fminf(float a, float b)
-    {
-      return a < b ? a : b;
-    }
-    inline float fmin(float a, float b)
-    {
-      return a < b ? a : b;
-    }
-    inline float fmaxf(float a, float b)
-    {
-      return a > b ? a : b;
-    }
-    inline float fmax(float a, float b)
-    {
-      return a > b ? a : b;
-    }
-        
+#if defined(WIN32)
     #pragma warning( disable : 4172 )
     #pragma warning( disable : 4244 )
     #pragma warning( disable : 4311 )

@@ -50,6 +50,11 @@ public:
      */
     void calcAmbientColor();
 
+    /**
+     * Sets the scene's ambient color.
+     */
+    void setAmbientColor(float red, float green, float blue);
+
 private:
 
     /**
