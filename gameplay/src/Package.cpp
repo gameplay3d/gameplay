@@ -1218,7 +1218,7 @@ Font* Package::loadFont(const char* id)
     }
 
     // Load the texture for the font
-    Texture* texture = Texture::create(Texture::ALPHA, width, height, textureData);
+    Texture* texture = Texture::create(Texture::ALPHA, width, height, textureData, true);
 
     // Free the texture data (no longer needed)
     SAFE_DELETE_ARRAY(textureData);
