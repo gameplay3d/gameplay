@@ -168,6 +168,7 @@
     <None Include="res\shaders\solid.vsh" />
     <None Include="res\shaders\textured.fsh" />
     <None Include="res\shaders\textured.vsh" />
+    <None Include="res\textures\particle-default.png" />
     <None Include="src\BoundingBox.inl" />
     <None Include="src\BoundingSphere.inl" />
     <None Include="src\gameplay-main-macos.mm" />
