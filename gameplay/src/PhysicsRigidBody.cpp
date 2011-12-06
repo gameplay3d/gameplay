@@ -72,11 +72,10 @@ PhysicsRigidBody::~PhysicsRigidBody()
         if (_body->getMotionState())
             delete _body->getMotionState();
 
-        if (_shape)
-            BULLET_DELETE(_shape);
+        SAFE_DELETE(_shape);
 
         Game::getInstance()->getPhysicsController()->removeRigidBody(this);
-        BULLET_DELETE(_body);
+        SAFE_DELETE(_body);
     }
 
     SAFE_DELETE(_listeners);
@@ -317,7 +316,7 @@ btRigidBody* PhysicsRigidBody::createRigidBodyInternal(btCollisionShape* shape, 
     rbInfo.m_restitution = restitution;
     rbInfo.m_linearDamping = linearDamping;
     rbInfo.m_angularDamping = angularDamping;
-    BULLET_NEW_VARG(btRigidBody, body, rbInfo);
+    btRigidBody* body = bullet_new<btRigidBody>(rbInfo);
 
     return body;
 }
@@ -337,6 +336,11 @@ void PhysicsRigidBody::removeConstraint(PhysicsConstraint* constraint)
             break;
         }
     }
+}
+
+bool PhysicsRigidBody::supportsConstraints()
+{
+    return _shape->getShapeType() != TRIANGLE_MESH_SHAPE_PROXYTYPE;
 }
 
 PhysicsRigidBody::CollisionPair::CollisionPair(PhysicsRigidBody* rbA, PhysicsRigidBody* rbB)
