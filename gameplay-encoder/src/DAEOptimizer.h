@@ -34,14 +34,6 @@ public:
 private:
 
     /**
-     * Gets all of the animation channels that target the given node and appends them to the list.
-     * 
-     * @param node The node that the animation channels target.
-     * @param channels The list of channels to append to.
-     */
-    void getAnimationChannels(const domNodeRef& node, std::list<domChannelRef>& channels);
-
-    /**
      * Deletes all of the empty animations in the dom.
      */
     void deleteEmptyAnimations();
