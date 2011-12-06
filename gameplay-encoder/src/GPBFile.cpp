@@ -30,7 +30,7 @@ void GPBFile::saveBinary(const std::string& filepath)
     fwrite(identifier, 1, sizeof(identifier), _file);
 
     // version
-    fwrite(VERSION, 1, sizeof(VERSION), _file);
+    fwrite(GPB_VERSION, 1, sizeof(GPB_VERSION), _file);
 
     // write refs
     _refTable.writeBinary(_file);
