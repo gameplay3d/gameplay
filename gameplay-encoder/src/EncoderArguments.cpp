@@ -1,4 +1,5 @@
 #include "Base.h"
+
 #include "EncoderArguments.h"
 #include "StringUtil.h"
 
@@ -27,12 +28,12 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
         
         // read the options
         std::vector<std::string> options;
-        for (size_t i = 1; i < filePathIndex; i++)
+        for (size_t i = 1; i < filePathIndex; ++i)
         {
             options.push_back(argv[i]);
         }
         
-        for (size_t i = 0; i < options.size(); i++)
+        for (size_t i = 0; i < options.size(); ++i)
         {
             if (options[i][0] == '-')
             {
@@ -73,6 +74,24 @@ const std::vector<std::string>& EncoderArguments::getGroupAnimationNodeId() cons
 const std::vector<std::string>& EncoderArguments::getGroupAnimationAnimationId() const
 {
     return _groupAnimationAnimationId;
+}
+
+bool EncoderArguments::containsGroupNodeId(const std::string& nodeId) const
+{
+    return find(_groupAnimationNodeId.begin(), _groupAnimationNodeId.end(), nodeId) != _groupAnimationNodeId.end();
+}
+
+const std::string EncoderArguments::getAnimationId(const std::string& nodeId) const
+{
+    std::vector<std::string>::const_iterator it = find(_groupAnimationNodeId.begin(), _groupAnimationNodeId.end(), nodeId);
+    for (size_t i = 0, size = _groupAnimationNodeId.size(); i < size; ++i)
+    {
+        if (_groupAnimationNodeId[i].compare(nodeId) == 0)
+        {
+            return _groupAnimationAnimationId[i];
+        }
+    }
+    return "";
 }
 
 bool EncoderArguments::parseErrorOccured() const
@@ -153,6 +172,10 @@ EncoderArguments::FileFormat EncoderArguments::getFileFormat() const
     if (ext.compare("dae") == 0 || ext.compare("DAE") == 0)
     {
         return FILEFORMAT_DAE;
+    }
+    if (ext.compare("fbx") == 0 || ext.compare("FBX") == 0)
+    {
+        return FILEFORMAT_FBX;
     }
     if (ext.compare("ttf") == 0 || ext.compare("TTF") == 0)
     {
@@ -268,7 +291,7 @@ std::string EncoderArguments::getRealPath(const std::string& filepath)
 
 void EncoderArguments::replace_char(char* str, char oldChar, char newChar)
 {
-    for (; *str != '\0'; str++)
+    for (; *str != '\0'; ++str)
     {
         if (*str == oldChar)
         {

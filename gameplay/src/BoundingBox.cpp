@@ -206,14 +206,14 @@ bool BoundingBox::isEmpty() const
 void BoundingBox::merge(const BoundingBox& box)
 {
     // Calculate the new minimum point.
-    min.x = fminf(min.x, box.min.x);
-    min.y = fminf(min.y, box.min.y);
-    min.z = fminf(min.z, box.min.z);
+    min.x = std::min(min.x, box.min.x);
+    min.y = std::min(min.y, box.min.y);
+    min.z = std::min(min.z, box.min.z);
 
     // Calculate the new maximum point.
-    max.x = fmaxf(max.x, box.max.x);
-    max.y = fmaxf(max.y, box.max.y);
-    max.z = fmaxf(max.z, box.max.z);
+    max.x = std::max(max.x, box.max.x);
+    max.y = std::max(max.y, box.max.y);
+    max.z = std::max(max.z, box.max.z);
 }
 
 void BoundingBox::merge(const BoundingSphere& sphere)
@@ -222,14 +222,14 @@ void BoundingBox::merge(const BoundingSphere& sphere)
     float radius = sphere.radius;
 
     // Calculate the new minimum point for the merged bounding box.
-    min.x = fminf(min.x, center.x - radius);
-    min.y = fminf(min.y, center.y - radius);
-    min.z = fminf(min.z, center.z - radius);
+    min.x = std::min(min.x, center.x - radius);
+    min.y = std::min(min.y, center.y - radius);
+    min.z = std::min(min.z, center.z - radius);
 
     // Calculate the new maximum point for the merged bounding box.
-    max.x = fmaxf(max.x, center.x + radius);
-    max.y = fmaxf(max.y, center.y + radius);
-    max.z = fmaxf(max.z, center.z + radius);
+    max.x = std::max(max.x, center.x + radius);
+    max.y = std::max(max.y, center.y + radius);
+    max.z = std::max(max.z, center.z + radius);
 }
 
 void BoundingBox::set(const Vector3& min, const Vector3& max)

@@ -15,6 +15,7 @@ public:
     {
         FILEFORMAT_UNKNOWN,
         FILEFORMAT_DAE,
+        FILEFORMAT_FBX,
         FILEFORMAT_TTF,
         FILEFORMAT_GPB
     };
@@ -49,8 +50,12 @@ public:
      */
     const std::string& getDAEOutputPath() const;
 
+
     const std::vector<std::string>& getGroupAnimationNodeId() const;
     const std::vector<std::string>& getGroupAnimationAnimationId() const;
+
+    bool containsGroupNodeId(const std::string& nodeId) const;
+    const std::string getAnimationId(const std::string& nodeId) const;
 
     /**
      * Returns true if an error occured while parsing the command line arguments.

@@ -7,6 +7,7 @@
 #include "Animations.h"
 #include "Transform.h"
 #include "../../gameplay/src/Curve.h"
+#include "Matrix.h"
 
 namespace gameplay
 {
@@ -14,7 +15,7 @@ namespace gameplay
 MeshSkin::MeshSkin(void) :
     _vertexInfluenceCount(0)
 {
-    setIdentityMatrix(_bindShape);
+    Matrix::setIdentity(_bindShape);
 }
 
 MeshSkin::~MeshSkin(void)
@@ -87,7 +88,7 @@ void MeshSkin::writeText(FILE* file)
 
 void MeshSkin::setBindShape(const float data[])
 {
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 16; ++i)
     {
         _bindShape[i] = data[i];
     }
@@ -115,7 +116,7 @@ void MeshSkin::setJoints(const std::vector<Node*>& list)
 
 void MeshSkin::setBindPoses(std::vector<Matrix>& list)
 {
-    for (std::vector<Matrix>::iterator i = list.begin(); i != list.end(); i++)
+    for (std::vector<Matrix>::iterator i = list.begin(); i != list.end(); ++i)
     {
         _bindPoses.push_back(*i);
     }

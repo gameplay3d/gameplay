@@ -36,6 +36,14 @@ public:
     virtual void writeText(FILE* file);
 
     const std::string& getTargetId() const;
+
+    /**
+     * Sets the interpolation type of the entire animation channel.
+     * 
+     * @param interpolation The interpolation type from InterpolationTypes enum.
+     */
+    void setInterpolation(unsigned int interpolation);
+
     void setTargetId(const std::string& str);
     void setTargetAttribute(unsigned int attrib);
 
@@ -52,6 +60,11 @@ public:
     const std::vector<float>& getTangentsOut() const;
     const std::vector<unsigned int>& getInterpolationTypes() const;
 
+    void removeDuplicates();
+
+    void convertToQuaternion();
+    void convertToTransform();
+
     /**
      * Returns the interpolation type value for the given string or zero if not valid.
      * Example: "LINEAR" returns AnimationChannel::LINEAR
@@ -62,6 +75,9 @@ public:
      */
     static unsigned int getInterpolationType(const char* str);
 
+private:
+
+    void deleteRange(size_t begin, size_t end);
 private:
 
     std::string _targetId;

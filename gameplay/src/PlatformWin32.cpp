@@ -5,8 +5,6 @@
 #include "FileSystem.h"
 #include "Game.h"
 
-using namespace std;
-
 static long __timeTicksPerMillis;
 static long __timeStart;
 static long __timeAbsolute;
@@ -307,8 +305,8 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             __pitch += (float)(HIWORD(lParam) - ly) * ACCELEROMETER_Y_FACTOR;
 
             // Clamp the values to the valid range.
-            __roll = max(min(__roll, 90.0), -90.0);
-            __pitch = max(min(__pitch, 90.0), -90.0);
+            __roll = max(min(__roll, 90.0f), -90.0f);
+            __pitch = max(min(__pitch, 90.0f), -90.0f);
 
             // Update the last X/Y values.
             lx = LOWORD(lParam);

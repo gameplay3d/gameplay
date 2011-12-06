@@ -48,7 +48,7 @@ void Mesh::writeBinaryVertices(FILE* file)
         write(vertices.size() * vertex.byteSize(), file); // (vertex count) * (vertex size)
 
         // for each vertex
-        for (std::vector<Vertex>::const_iterator i = vertices.begin(); i != vertices.end(); i++)
+        for (std::vector<Vertex>::const_iterator i = vertices.begin(); i != vertices.end(); ++i)
         {
             // Write this vertex
             i->writeBinary(file);
@@ -83,7 +83,7 @@ void Mesh::writeText(FILE* file)
 
     // for each Vertex
     fprintf(file, "<vertices count=\"%lu\">\n", vertices.size());
-    for (std::vector<Vertex>::iterator i = vertices.begin(); i != vertices.end(); i++)
+    for (std::vector<Vertex>::iterator i = vertices.begin(); i != vertices.end(); ++i)
     {
         i->writeText(file);
     }
@@ -93,19 +93,19 @@ void Mesh::writeText(FILE* file)
     computeBounds();
     fprintf(file, "<bounds>\n");
     fprintf(file, "<min>\n");
-    bounds.min.writeText(file);
+    writeVectorText(bounds.min, file);
     fprintf(file, "</min>\n");
     fprintf(file, "<max>\n");
-    bounds.max.writeText(file);
+    writeVectorText(bounds.max, file);
     fprintf(file, "</max>\n");
     fprintf(file, "<center>\n");
-    bounds.center.writeText(file);
+    writeVectorText(bounds.center, file);
     fprintf(file, "</center>\n");
     fprintf(file, "<radius>%f</radius>\n", bounds.radius);
     fprintf(file, "</bounds>\n");
 
     // for each MeshPart
-    for (std::vector<MeshPart*>::iterator i = parts.begin(); i != parts.end(); i++)
+    for (std::vector<MeshPart*>::iterator i = parts.begin(); i != parts.end(); ++i)
     {
         (*i)->writeText(file);
     }
@@ -165,7 +165,6 @@ unsigned int Mesh::getVertexIndex(const Vertex& vertex)
 {
     std::map<Vertex,unsigned int>::iterator it;
     it = vertexLookupTable.find(vertex);
-    // TODO: Remove it from the map because we are going to delete it
     return it->second;
 }
 
@@ -185,7 +184,7 @@ void Mesh::computeBounds()
     bounds.center.x = bounds.center.y = bounds.center.z = 0.0f;
     bounds.radius = 0.0f;
 
-    for (std::vector<Vertex>::const_iterator i = vertices.begin(); i != vertices.end(); i++)
+    for (std::vector<Vertex>::const_iterator i = vertices.begin(); i != vertices.end(); ++i)
     {
         // Update min/max for this vertex
         if (i->position.x < bounds.min.x)
@@ -208,9 +207,9 @@ void Mesh::computeBounds()
 
     // Compute radius by looping through all points again and finding the max
     // distance between the center point and each vertex position
-    for (std::vector<Vertex>::const_iterator i = vertices.begin(); i != vertices.end(); i++)
+    for (std::vector<Vertex>::const_iterator i = vertices.begin(); i != vertices.end(); ++i)
     {
-        float d = Vector3::distanceSquared(bounds.center, i->position);
+        float d = bounds.center.distanceSquared(i->position);
         if (d > bounds.radius)
         {
             bounds.radius = d;

@@ -138,6 +138,11 @@ public:
      */
     const Matrix& getWorldMatrix() const;
 
+    /*
+     * Resets the node's transform matrix to the identity matrix.
+     */
+    void resetTransformMatrix();
+
     void setCameraInstance(CameraInstance* cameraInstance);
     void setLightInstance(LightInstance* lightInstance);
     void setModel(Model* model);

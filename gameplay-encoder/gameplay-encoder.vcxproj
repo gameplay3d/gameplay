@@ -24,6 +24,7 @@
     <ClCompile Include="src\DAESceneEncoder.cpp" />
     <ClCompile Include="src\DAEUtil.cpp" />
     <ClCompile Include="src\Effect.cpp" />
+    <ClCompile Include="src\FBXSceneEncoder.cpp" />
     <ClCompile Include="src\FileIO.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\GPBFile.cpp" />
@@ -69,6 +70,7 @@
     <ClInclude Include="src\DAESceneEncoder.h" />
     <ClInclude Include="src\DAEUtil.h" />
     <ClInclude Include="src\Effect.h" />
+    <ClInclude Include="src\FBXSceneEncoder.h" />
     <ClInclude Include="src\FileIO.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\GPBFile.h" />
@@ -98,6 +100,11 @@
     <ClInclude Include="src\Vector4.h" />
     <ClInclude Include="src\Vertex.h" />
     <ClInclude Include="src\VertexElement.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Vector2.inl" />
+    <None Include="src\Vector3.inl" />
+    <None Include="src\Vector4.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9D69B743-4872-4DD1-8E30-0087C64298D7}</ProjectGuid>

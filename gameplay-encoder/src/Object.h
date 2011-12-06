@@ -113,7 +113,7 @@ public:
         write(list.size(), file);
         // Then write each element
         typename std::list<T>::const_iterator i;
-        for (i = list.begin(); i != list.end(); i++)
+        for (i = list.begin(); i != list.end(); ++i)
         {
             (*i)->writeBinary(file);
         }
@@ -129,7 +129,7 @@ public:
         write(vector.size(), file);
         // Then write each element
         typename std::vector<T>::const_iterator i;
-        for (i = vector.begin(); i != vector.end(); i++)
+        for (i = vector.begin(); i != vector.end(); ++i)
         {
             (*i)->writeBinary(file);
         }

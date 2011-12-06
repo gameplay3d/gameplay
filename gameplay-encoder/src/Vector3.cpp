@@ -1,6 +1,5 @@
 #include "Base.h"
 #include "Vector3.h"
-#include "FileIO.h"
 
 namespace gameplay
 {
@@ -10,76 +9,79 @@ Vector3::Vector3()
 {
 }
 
-
 Vector3::Vector3(float x, float y, float z)
 {
     set(x, y, z);
 }
-
 
 Vector3::Vector3(float* array)
 {
     set(array);
 }
 
-
 Vector3::Vector3(const Vector3& p1, const Vector3& p2)
 {
     set(p1, p2);
 }
-
 
 Vector3::Vector3(const Vector3& copy)
 {
     set(copy);
 }
 
+Vector3 Vector3::fromColor(unsigned int color)
+{
+    float components[3];
+    int componentIndex = 0;
+    for (int i = 2; i >= 0; --i)
+    {
+        int component = (color >> i*8) & 0x0000ff;
+
+        components[componentIndex++] = static_cast<float>(component) / 255.0f;
+    }
+
+    Vector3 value(components);
+    return value;
+}
 
 Vector3::~Vector3()
 {
 }
 
-
 const Vector3& Vector3::zero()
 {
-    static Vector3* value = new Vector3(0.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector3 value(0.0f, 0.0f, 0.0f);
+    return value;
 }
-
 
 const Vector3& Vector3::one()
 {
-    static Vector3* value = new Vector3(1.0f, 1.0f, 1.0f);
-    return *value;
+    static Vector3 value(1.0f, 1.0f, 1.0f);
+    return value;
 }
-
 
 const Vector3& Vector3::unitX()
 {
-    static Vector3* value = new Vector3(1.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector3 value(1.0f, 0.0f, 0.0f);
+    return value;
 }
-
 
 const Vector3& Vector3::unitY()
 {
-    static Vector3* value = new Vector3(0.0f, 1.0f, 0.0f);
-    return *value;
+    static Vector3 value(0.0f, 1.0f, 0.0f);
+    return value;
 }
-
 
 const Vector3& Vector3::unitZ()
 {
-    static Vector3* value = new Vector3(0.0f, 0.0f, 1.0f);
-    return *value;
+    static Vector3 value(0.0f, 0.0f, 1.0f);
+    return value;
 }
-
 
 bool Vector3::isZero() const
 {
     return x == 0.0f && y == 0.0f && z == 0.0f;
 }
-
 
 bool Vector3::isOne() const
 {
@@ -95,14 +97,12 @@ float Vector3::angle(const Vector3& v1, const Vector3& v2)
     return atan2f(sqrt(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
 }
 
-
 void Vector3::add(const Vector3& v)
 {
     x += v.x;
     y += v.y;
     z += v.z;
 }
-
 
 void Vector3::add(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
@@ -112,7 +112,6 @@ void Vector3::add(const Vector3& v1, const Vector3& v2, Vector3* dst)
     dst->y = v1.y + v2.y;
     dst->z = v1.z + v2.z;
 }
-
 
 void Vector3::clamp(const Vector3& min, const Vector3& max)
 {
@@ -137,13 +136,12 @@ void Vector3::clamp(const Vector3& min, const Vector3& max)
         z = max.z;
 }
 
-
 void Vector3::clamp(const Vector3& v, const Vector3& min, const Vector3& max, Vector3* dst)
 {
     assert(dst);
     assert(!( min.x > max.x || min.y > max.y || min.z > max.z));
 
-    // Clamp the y value.
+    // Clamp the x value.
     dst->x = v.x;
     if ( dst->x < min.x )
         dst->x = min.x;
@@ -165,7 +163,6 @@ void Vector3::clamp(const Vector3& v, const Vector3& min, const Vector3& max, Ve
         dst->z = max.z;
 }
 
-
 void Vector3::cross(const Vector3& v)
 {
     float tx = (y * v.z) - (z * v.y);
@@ -175,7 +172,6 @@ void Vector3::cross(const Vector3& v)
     y = ty;
     z = tz;
 }
-
 
 void Vector3::cross(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
@@ -189,8 +185,7 @@ void Vector3::cross(const Vector3& v1, const Vector3& v2, Vector3* dst)
     dst->z = z;
 }
 
-
-float Vector3::distance(const Vector3& v)
+float Vector3::distance(const Vector3& v) const
 {
     float dx = v.x - x;
     float dy = v.y - y;
@@ -199,8 +194,7 @@ float Vector3::distance(const Vector3& v)
     return sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-
-float Vector3::distanceSquared(const Vector3& v)
+float Vector3::distanceSquared(const Vector3& v) const
 {
     float dx = v.x - x;
     float dy = v.y - y;
@@ -209,30 +203,25 @@ float Vector3::distanceSquared(const Vector3& v)
     return (dx * dx + dy * dy + dz * dz);
 }
 
-
 float Vector3::dot(const Vector3& v)
 {
     return (x * v.x + y * v.y + z * v.z);
 }
-
 
 float Vector3::dot(const Vector3& v1, const Vector3& v2)
 {
     return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
 
-
-float Vector3::length()
+float Vector3::length() const
 {
     return sqrt(x * x + y * y + z * z);
 }
 
-
-float Vector3::lengthSquared()
+float Vector3::lengthSquared() const
 {
     return (x * x + y * y + z * z);
 }
-
 
 void Vector3::negate()
 {
@@ -241,12 +230,10 @@ void Vector3::negate()
     z = -z;
 }
 
-
 void Vector3::normalize()
 {
     normalize(this);
 }
-
 
 void Vector3::normalize(Vector3* dst) const
 {
@@ -260,12 +247,12 @@ void Vector3::normalize(Vector3* dst) const
     }
 
     float n = x * x + y * y + z * z;
-    // already normalized
+    // Already normalized.
     if (n == 1.0f)
         return;
 
     n = sqrt(n);
-    // too close to zero
+    // Too close to zero.
     if (n < MATH_TOLERANCE)
         return;
 
@@ -275,7 +262,6 @@ void Vector3::normalize(Vector3* dst) const
     dst->z *= n;
 }
 
-
 void Vector3::scale(float scalar)
 {
     x *= scalar;
@@ -283,14 +269,12 @@ void Vector3::scale(float scalar)
     z *= scalar;
 }
 
-
 void Vector3::set(float x, float y, float z)
 {
     this->x = x;
     this->y = y;
     this->z = z;
 }
-
 
 void Vector3::set(float* array)
 {
@@ -301,14 +285,12 @@ void Vector3::set(float* array)
     z = array[2];
 }
 
-
 void Vector3::set(const Vector3& v)
 {
     this->x = v.x;
     this->y = v.y;
     this->z = v.z;
 }
-
 
 void Vector3::set(const Vector3& p1, const Vector3& p2)
 {
@@ -317,14 +299,12 @@ void Vector3::set(const Vector3& p1, const Vector3& p2)
     z = p2.z - p1.z;
 }
 
-
 void Vector3::subtract(const Vector3& v)
 {
     x -= v.x;
     y -= v.y;
     z -= v.z;
 }
-
 
 void Vector3::subtract(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
@@ -333,27 +313,6 @@ void Vector3::subtract(const Vector3& v1, const Vector3& v2, Vector3* dst)
     dst->x = v1.x - v2.x;
     dst->y = v1.y - v2.y;
     dst->z = v1.z - v2.z;
-}
-
-float Vector3::distanceSquared(const Vector3& v1, const Vector3& v2)
-{
-    float dx = v2.x - v1.x;
-    float dy = v2.y - v1.y;
-    float dz = v2.z - v1.z;
-
-    return (dx * dx + dy * dy + dz * dz);
-}
-
-void Vector3::writeBinary(FILE* file) const
-{
-    write(x, file);
-    write(y, file);
-    write(z, file);
-}
-
-void Vector3::writeText(FILE* file) const
-{
-    fprintf(file, "%f %f %f\n", x, y, z);
 }
 
 }
