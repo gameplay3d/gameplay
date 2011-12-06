@@ -246,6 +246,9 @@ private:
 
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
+
+    // Checks whether constraints are supported for the given rigid bodies and emits a warning if they are not.
+    bool checkConstraintRigidBodies(PhysicsRigidBody* a, PhysicsRigidBody* b);
     
     // Removes the given constraint from the simulated physics world.
     void removeConstraint(PhysicsConstraint* constraint);

@@ -36,6 +36,7 @@ void PhysicsController::addStatusListener(Listener* listener)
 
 PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
+    checkConstraintRigidBodies(a, b);
     PhysicsFixedConstraint* constraint = new PhysicsFixedConstraint(a, b);
     addConstraint(a, b, constraint);
     return constraint;
@@ -43,6 +44,7 @@ PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBod
 
 PhysicsGenericConstraint* PhysicsController::createGenericConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
+    checkConstraintRigidBodies(a, b);
     PhysicsGenericConstraint* constraint = new PhysicsGenericConstraint(a, b);
     addConstraint(a, b, constraint);
     return constraint;
@@ -52,8 +54,8 @@ PhysicsGenericConstraint* PhysicsController::createGenericConstraint(PhysicsRigi
     const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, PhysicsRigidBody* b,
     const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
 {
-    PhysicsGenericConstraint* constraint = new PhysicsGenericConstraint(a, rotationOffsetA, translationOffsetA, 
-                                                                        b, rotationOffsetB, translationOffsetB);
+    checkConstraintRigidBodies(a, b);
+    PhysicsGenericConstraint* constraint = new PhysicsGenericConstraint(a, rotationOffsetA, translationOffsetA, b, rotationOffsetB, translationOffsetB);
     addConstraint(a, b, constraint);
     return constraint;
 }
@@ -62,14 +64,15 @@ PhysicsHingeConstraint* PhysicsController::createHingeConstraint(PhysicsRigidBod
     const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, PhysicsRigidBody* b, 
     const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
 {
-    PhysicsHingeConstraint* constraint = new PhysicsHingeConstraint(a, rotationOffsetA, translationOffsetA, 
-                                                                    b, rotationOffsetB, translationOffsetB);
+    checkConstraintRigidBodies(a, b);
+    PhysicsHingeConstraint* constraint = new PhysicsHingeConstraint(a, rotationOffsetA, translationOffsetA, b, rotationOffsetB, translationOffsetB);
     addConstraint(a, b, constraint);
     return constraint;
 }
 
 PhysicsSocketConstraint* PhysicsController::createSocketConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
+    checkConstraintRigidBodies(a, b);
     PhysicsSocketConstraint* constraint = new PhysicsSocketConstraint(a, b);
     addConstraint(a, b, constraint);
     return constraint;
@@ -78,14 +81,15 @@ PhysicsSocketConstraint* PhysicsController::createSocketConstraint(PhysicsRigidB
 PhysicsSocketConstraint* PhysicsController::createSocketConstraint(PhysicsRigidBody* a,
     const Vector3& translationOffsetA, PhysicsRigidBody* b, const Vector3& translationOffsetB)
 {
-    PhysicsSocketConstraint* constraint = new PhysicsSocketConstraint(a,translationOffsetA, 
-                                                                      b, translationOffsetB);
+    checkConstraintRigidBodies(a, b);
+    PhysicsSocketConstraint* constraint = new PhysicsSocketConstraint(a,translationOffsetA, b, translationOffsetB);
     addConstraint(a, b, constraint);
     return constraint;
 }
 
 PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
+    checkConstraintRigidBodies(a, b);
     PhysicsSpringConstraint* constraint = new PhysicsSpringConstraint(a, b);
     addConstraint(a, b, constraint);
     return constraint;
@@ -94,8 +98,8 @@ PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidB
 PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,           
                                                                    PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
 {
-    PhysicsSpringConstraint* constraint = new PhysicsSpringConstraint(a, rotationOffsetA, translationOffsetA, 
-                                                                      b, rotationOffsetB, translationOffsetB);
+    checkConstraintRigidBodies(a, b);
+    PhysicsSpringConstraint* constraint = new PhysicsSpringConstraint(a, rotationOffsetA, translationOffsetA, b, rotationOffsetB, translationOffsetB);
     addConstraint(a, b, constraint);
     return constraint;
 }
@@ -310,7 +314,7 @@ PhysicsRigidBody* PhysicsController::getRigidBody(const btCollisionObject* colli
 btCollisionShape* PhysicsController::createBox(const Vector3& min, const Vector3& max, const btVector3& scale)
 {
     btVector3 halfExtents(scale.x() * 0.5 * abs(max.x - min.x), scale.y() * 0.5 * abs(max.y - min.y), scale.z() * 0.5 * abs(max.z - min.z));
-    BULLET_NEW_VARG(btBoxShape, box, halfExtents);
+    btBoxShape* box = bullet_new<btBoxShape>(halfExtents);
     _shapes.push_back(box);
 
     return box;
@@ -326,7 +330,7 @@ btCollisionShape* PhysicsController::createSphere(float radius, const btVector3&
     if (uniformScale < scale.z())
         uniformScale = scale.z();
     
-    BULLET_NEW_VARG(btSphereShape, sphere, uniformScale * radius);
+    btSphereShape* sphere = bullet_new<btSphereShape>(uniformScale * radius);
     _shapes.push_back(sphere);
     
     return sphere;
@@ -353,7 +357,7 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
         memcpy(&(body->_vertexData[i * 3]), &v, sizeof(float) * 3);
     }
     
-    BULLET_NEW(btTriangleIndexVertexArray, meshInterface);
+    btTriangleIndexVertexArray* meshInterface = bullet_new<btTriangleIndexVertexArray>();
 
     if (data->mesh->getPartCount() > 0)
     {
@@ -426,7 +430,7 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
         meshInterface->addIndexedMesh(indexedMesh, indexedMesh.m_indexType);
     }
 
-    BULLET_NEW_VARG(btBvhTriangleMeshShape, shape, meshInterface, true);
+    btBvhTriangleMeshShape* shape = bullet_new<btBvhTriangleMeshShape>(meshInterface, true);
     _shapes.push_back(shape);
 
     return shape;
@@ -442,7 +446,24 @@ void PhysicsController::addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, 
     
     _world->addConstraint(constraint->_constraint);
 }
+
+bool PhysicsController::checkConstraintRigidBodies(PhysicsRigidBody* a, PhysicsRigidBody* b)
+{
+    if (!a->supportsConstraints())
+    {
+        WARN_VARG("Rigid body '%s' does not support constraints; unexpected behavior may occur.", a->_node->getId());
+        return false;
+    }
     
+    if (b && !b->supportsConstraints())
+    {
+        WARN_VARG("Rigid body '%s' does not support constraints; unexpected behavior may occur.", b->_node->getId());
+        return false;
+    }
+
+    return true;
+}
+
 void PhysicsController::removeConstraint(PhysicsConstraint* constraint)
 {
     // Find the constraint and remove it from the physics world.
@@ -467,6 +488,7 @@ PhysicsController::DebugDrawer::DebugDrawer()
 
 PhysicsController::DebugDrawer::~DebugDrawer()
 {
+    SAFE_RELEASE(_effect);
     SAFE_DELETE_ARRAY(_vertexData);
 }
 
