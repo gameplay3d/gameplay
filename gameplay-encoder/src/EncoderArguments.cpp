@@ -114,14 +114,23 @@ bool EncoderArguments::fileExists() const
 
 void EncoderArguments::printUsage() const
 {
-    fprintf(stderr,"Usage: gameplay-encoder [options] <filepath>\n");
-    fprintf(stderr,".dae file options:\n");
-    fprintf(stderr," -i <id>\tFilter by node ID\n");
-    fprintf(stderr," -t\tWrite text/xml\n");
-    fprintf(stderr," -groupAnimations <nodeID> <animationID>\tGroup all animation channels targetting the nodes into a new animation\n");
-    fprintf(stderr," -dae <filepath>\tOutput optimized DAE\n");
-    fprintf(stderr,".ttf file options:\n");
-    fprintf(stderr," -s <size of font> -p \n");
+    fprintf(stderr,"Usage: gameplay-encoder [options] <filepath>\n\n");
+    fprintf(stderr,"Supported file extensions:\n");
+    fprintf(stderr,"  .dae\t(COLLADA)\n");
+    fprintf(stderr,"  .fbx\t(FBX)\n");
+    fprintf(stderr,"  .ttf\t(TrueType Font)\n");
+    fprintf(stderr,"\n");
+    fprintf(stderr,"COLLADA and FBX file options:\n");
+    fprintf(stderr,"  -i<id>\t\tFilter by node ID.\n");
+    fprintf(stderr,"  -t\t\t\tWrite text/xml.\n");
+    fprintf(stderr,"  -groupAnimations <node id> <animation id>\n\t\t\tGroup all animation channels targetting the nodes into a new animation.\n");
+    fprintf(stderr,"\n");
+    fprintf(stderr,"COLLADA file options:\n");
+    fprintf(stderr,"  -dae <filepath>\tOutput optimized DAE.\n");
+    fprintf(stderr,"\n");
+    fprintf(stderr,"TTF file options:\n");
+    fprintf(stderr,"  -s <size of font>\tSize of the font.\n");
+    fprintf(stderr,"  -p\t\t\tOutput font preview.\n");
     exit(8);
 }
 
