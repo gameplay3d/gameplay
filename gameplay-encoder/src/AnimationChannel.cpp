@@ -273,7 +273,7 @@ unsigned int AnimationChannel::getInterpolationType(const char* str)
 void AnimationChannel::deleteRange(size_t begin, size_t end)
 {
     // delete range
-    printf("delete %d to %d\n", begin, end - 1);
+    printf("delete %lu to %lu\n", begin, end - 1);
 
     std::vector<float>::iterator a = _keyValues.begin() + begin * 10;
     std::vector<float>::iterator b = _keyValues.begin() + end * 10;

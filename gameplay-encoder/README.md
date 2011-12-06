@@ -1,10 +1,23 @@
 ## GamePlay Encoder
+GamePlay Encoder is a command-line tool for encoding/packaging games assets like fonts and 3D scene files
+into a binary package file format for the GamePlay runtime framework. 
 
-GamePlay Encoder is a command line tool for converting COLLADA and FBX scene files into a binary file format for GamePlay.
+## TrueType Font Support
+TrueType Fonts conversion is enabled/built-in by default into gameplay-encoder via freetype 2 library.
 
-## How to Enable FBX in Visual Studio
+## COLLADA Scene Support
+COLLADA is enabled/built-in by default into gameplay-encoder via COLLADA-DOM library.
+Most major 3D DCC tools support the export of COLLADA 1.4.
+We also recommend you download and use OpenCOLADA (http://opencollada.org/)
+for Autodesk Maya and 3DS Max.
 
-- Download and install the FBX SDK (http://www.autodesk.com/fbx)
+## FBX Scene Support
+FBX support can easily be enabled in gameplay-encoder but requires an 
+additional installation of Autodesk FBX SDK. (http://www.autodesk.com/fbx).
+You must then rebuild gameplay-encoder with the follow platform/tooling instructions:
+
+### Building FBX Support on Windows 7 using Visual Studio 2010
+- Download and install the FBX SDK for Window VS2010. (http://www.autodesk.com/fbx)
 - Edit the project properties of "gameplay-encoder"
 - Add Preprocessor Definition "USE_FBX" (C++/Preprocessor)
 - Add the FBX SDK include directory to Additional Include Directories (C++/General)
@@ -14,11 +27,28 @@ GamePlay Encoder is a command line tool for converting COLLADA and FBX scene fil
 - Add "fbxsdk-2012.2-mdd.lib" and "wininet.lib" to the Additional Dependencies (Linker/Input)
   * Example: fbxsdk-2012.2-mdd.lib;wininet.lib
 - Add a post build event to copy the DLL (Build Events/Post-Build Event)
-  * Example: copy /Y "C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\lib\vs2010\x86\fbxsdk-2012.2d.dll" "$(TargetDir)"
+  * Example: copy /Y "C:/Program Files/Autodesk/FBX/FbxSdk/2012.2/lib/vs2010/x86/fbxsdk-2012.2d.dll" "$(TargetDir)"
 - Build gameplay-encoder
 
-## Disclaimer
+### Building FBX Support on Mac OS X using XCode 4
+- Download and install the FBX SDK for Mac OS X (http://www.autodesk.com/fbx)
+- Edit the project properties of target "gameplay-encoder".
+- Add Preprocessor Macro "USE_FBX" to both Debug/Release sections. (Build Settings)
+- Add the FBX include directory to Header Search Paths: (Build Settings)
+  * Example: /Applications/Autodesk/FBXSDK20122/include
+- Add the FBX library and dependency Library/Frameworks: (Build Phases -> Link Binary with Libraries)
+  * Example: /Applications/Autodesk/FBXSDK20122/lib/gcc4/ub/libfbxsdk-2012.2-static.a  (Add Other)
+  * Example: libiconv.dylib, Cocoa.framework, SystemConfiguration.framework
+- Build gameplay-encoder
 
+## Binary Format
+The GamePlay binary package format is well defined in the gameplay-encoder/gameplay-binary.txt file.
+
+## Binary Loading
+GamePlay binary package files can easily be loaded using the gameplay/Package.h which is part
+of the GamePlay runtime framework.
+
+## Disclaimer
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
 INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
 PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 

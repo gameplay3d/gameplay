@@ -264,8 +264,8 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                 xPos += (size>>1)*4;
                 break;
             default:
-                unsigned int index = c - 32; // HACK for ASCII
-                if (index >= 0 && index < _glyphCount)
+                int index = c - 32; // HACK for ASCII
+                if (index >= 0 && index < (int)_glyphCount)
                 {
                     Glyph& g = _glyphs[index];
                     _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
@@ -542,7 +542,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         bool draw = true;
         if (yPos < area.y)
         {
-            // Skip drawing until linebreak or wrap.
+            // Skip drawing until line break or wrap.
             draw = false;
         }
         else if (yPos > area.y + area.height)
@@ -551,12 +551,12 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             break;
         }
 
-        for (unsigned int i = startIndex; i < tokenLength && i >= 0; i += iteration)
+        for (int i = startIndex; i < (int)tokenLength && i >= 0; i += iteration)
         {
             char c = token[i];
-            unsigned int glyphIndex = c - 32; // HACK for ASCII
+            int glyphIndex = c - 32; // HACK for ASCII
         
-            if (glyphIndex >= 0 && glyphIndex < _glyphCount)
+            if (glyphIndex >= 0 && glyphIndex < (int)_glyphCount)
             {
                 Glyph& g = _glyphs[glyphIndex];
 
@@ -1012,8 +1012,8 @@ unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigne
             tokenWidth += (size>>1)*4;
             break;
         default:
-            unsigned int glyphIndex = c - 32;
-            if (glyphIndex >= 0 && glyphIndex < _glyphCount)
+            int glyphIndex = c - 32;
+            if (glyphIndex >= 0 && glyphIndex < (int)_glyphCount)
             {
                 Glyph& g = _glyphs[glyphIndex];
                 tokenWidth += g.width * scale + (size>>3);
