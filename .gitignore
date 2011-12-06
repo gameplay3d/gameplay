@@ -13,6 +13,7 @@
 /Device-Coverage
 /Device-Profile
 /Device-Release
+/gameplay.xcworkspace/xcuserdata
 /gameplay/Debug
 /gameplay/DebugMem
 /gameplay/Release
@@ -23,8 +24,10 @@
 /gameplay/Device-Coverage
 /gameplay/Device-Profile
 /gameplay/Device-Release
+/gameplay/gameplay.xcodeproj/xcuserdata
 /gameplay-encoder/Debug
 /gameplay-encoder/Release
+/gameplay-encoder/gameplay-encoder.xcodeproj/xcuserdata
 /gameplay-internal
 /gameplay-samples/sample00-mesh/Debug
 /gameplay-samples/sample00-mesh/DebugMem
@@ -36,6 +39,8 @@
 /gameplay-samples/sample00-mesh/Device-Coverage
 /gameplay-samples/sample00-mesh/Device-Profile
 /gameplay-samples/sample00-mesh/Device-Release
+/gameplay-samples/sample00-mesh/res/shaders
+/gameplay-samples/sample00-mesh/sample00-mesh.xcodeproj/xcuserdata
 /gameplay-samples/sample01-longboard/Debug
 /gameplay-samples/sample01-longboard/DebugMem
 /gameplay-samples/sample01-longboard/Release
@@ -46,6 +51,8 @@
 /gameplay-samples/sample01-longboard/Device-Coverage
 /gameplay-samples/sample01-longboard/Device-Profile
 /gameplay-samples/sample01-longboard/Device-Release
+/gameplay-samples/sample01-longboard/res/shaders
+/gameplay-samples/sample01-longboard/sample01-longboard.xcodeproj/xcuserdata
 /gameplay-samples/sample02-spaceship/Debug
 /gameplay-samples/sample02-spaceship/DebugMem
 /gameplay-samples/sample02-spaceship/Release
@@ -56,6 +63,8 @@
 /gameplay-samples/sample02-spaceship/Device-Coverage
 /gameplay-samples/sample02-spaceship/Device-Profile
 /gameplay-samples/sample02-spaceship/Device-Release
+/gameplay-samples/sample02-spaceship/res/shaders
+/gameplay-samples/sample02-spaceship/sample02-spaceship.xcodeproj/xcuserdata
 /gameplay-samples/sample03-character/Debug
 /gameplay-samples/sample03-character/DebugMem
 /gameplay-samples/sample03-character/Release
@@ -66,13 +75,5 @@
 /gameplay-samples/sample03-character/Device-Coverage
 /gameplay-samples/sample03-character/Device-Profile
 /gameplay-samples/sample03-character/Device-Release
-/gameplay-samples/sample04-sandbox/Debug
-/gameplay-samples/sample04-sandbox/DebugMem
-/gameplay-samples/sample04-sandbox/Release
-/gameplay-samples/sample04-sandbox/Simulator
-/gameplay-samples/sample04-sandbox/Simulator-Coverage
-/gameplay-samples/sample04-sandbox/Simulator-Profile
-/gameplay-samples/sample04-sandbox/Device-Debug
-/gameplay-samples/sample04-sandbox/Device-Coverage
-/gameplay-samples/sample04-sandbox/Device-Profile
-/gameplay-samples/sample04-sandbox/Device-Release
+/gameplay-samples/sample03-character/res/shaders
+/gameplay-samples/sample03-character/sample03-character.xcodeproj/xcuserdata
