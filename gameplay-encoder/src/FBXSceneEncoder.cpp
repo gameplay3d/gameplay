@@ -81,7 +81,7 @@ void loadBlendData(const std::vector<Vector2>& vertexWeights, Vertex* vertex);
  * 
  * @return True if this mesh has a mesh skin, false otherwise.
  */
-bool loadBlendWeights(KFbxMesh* fbxMesh, std::vector<std::vector<Vector2>>& weights);
+bool loadBlendWeights(KFbxMesh* fbxMesh, std::vector<std::vector<Vector2> >& weights);
 
 /**
  * Copies from an FBX matrix to a float[16] array.
@@ -759,7 +759,7 @@ Mesh* FBXSceneEncoder::loadMesh(KFbxMesh* fbxMesh)
     }
 
     // Find the blend weights and blend indices if this mesh is skinned.
-    std::vector<std::vector<Vector2>> weights;
+    std::vector<std::vector<Vector2> > weights;
     bool hasSkin = loadBlendWeights(fbxMesh, weights);
     
     int vertexIndex = 0;
@@ -1159,7 +1159,7 @@ void loadBlendData(const std::vector<Vector2>& vertexWeights, Vertex* vertex)
     //vertex->normalizeBlendWeight();
 }
 
-bool loadBlendWeights(KFbxMesh* fbxMesh, std::vector<std::vector<Vector2>>& weights)
+bool loadBlendWeights(KFbxMesh* fbxMesh, std::vector<std::vector<Vector2> >& weights)
 {
     assert(fbxMesh);
     const int vertexCount = fbxMesh->GetControlPointsCount();
