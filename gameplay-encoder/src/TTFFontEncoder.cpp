@@ -268,7 +268,7 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
     // File header and version.
     char fileHeader[9]     = {'«', 'G', 'P', 'B', '»', '\r', '\n', '\x1A', '\n'};
     fwrite(fileHeader, sizeof(char), 9, gpbFp);
-    fwrite(gameplay::VERSION, sizeof(char), 2, gpbFp);
+    fwrite(gameplay::GPB_VERSION, sizeof(char), 2, gpbFp);
 
     // Write Ref table (for a single font)
     writeUint(gpbFp, 1);                // Ref[] count
