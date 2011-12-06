@@ -19,9 +19,6 @@
     <ClCompile Include="src\Camera.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\CameraInstance.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\gameplay\src\Curve.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -62,9 +59,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Light.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LightInstance.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
@@ -156,9 +150,6 @@
     <ClInclude Include="src\Camera.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\CameraInstance.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\gameplay\src\Curve.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -199,9 +190,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Light.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LightInstance.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Material.h">
