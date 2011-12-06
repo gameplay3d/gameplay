@@ -458,10 +458,10 @@ void SpaceshipGame::render(long elapsedTime)
     _font->begin();
     char text[1024];
     sprintf(text, "%dsec.", (int)_time);
-    _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1));
+    _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1), _font->getSize());
     if (_finished)
     {
-        _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one());
+        _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one(), _font->getSize());
     }
     _font->end();
 }
