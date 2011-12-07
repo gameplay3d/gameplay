@@ -4,7 +4,7 @@
 /**
  * Global overrides of the new and delete operators for memory tracking.
  * This file is only included when memory leak detection is explicitly
- * request via the pre-processor defintion GAMEPLAY_MEM_LEAK_DETECTION.
+ * request via the pre-processor definition GAMEPLAY_MEM_LEAK_DETECTION.
  */
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
 
@@ -37,4 +37,43 @@ void operator delete[] (void* p, const char* file, int line) throw();
 #define new DEBUG_NEW
 
 #endif
+
+// Since Bullet overrides new, we define custom functions to allocate Bullet objects that undef
+// 'new' before allocation and redefine it to our custom version afterwards (we support 0-2 parameter constructors).
+template<typename T> T* bullet_new()
+{
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#undef new
+    T* t = new T();
+#define new DEBUG_NEW
+    return t;
+#else
+    return new T();
+#endif
+}
+
+template<typename T, typename T1> T* bullet_new(T1 t1)
+{
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION 
+#undef new 
+    T* t = new T(t1);
+#define new DEBUG_NEW
+    return t;
+#else
+    return new T(t1);
+#endif
+}
+
+template<typename T, typename T1, typename T2> T* bullet_new(T1 t1, T2 t2)
+{
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#undef new
+    T* t = new T(t1, t2);
+#define new DEBUG_NEW
+    return t;
+#else
+    return new T(t1, t2);
+#endif
+}
+
 #endif
