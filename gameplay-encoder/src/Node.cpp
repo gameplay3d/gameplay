@@ -220,14 +220,16 @@ Node* Node::getParent() const
     return _parent;
 }
 
-void Node::setCameraInstance(CameraInstance* cameraInstance)
+void Node::setCamera(Camera* camera)
 {
-    _camera = cameraInstance;
+    _camera = camera;
 }
-void Node::setLightInstance(LightInstance* lightInstance)
+
+void Node::setLight(Light* light)
 {
-    _light = lightInstance;
+    _light = light;
 }
+
 void Node::setModel(Model* model)
 {
     _model = model;
@@ -274,20 +276,12 @@ bool Node::isJoint()
 
 Camera* Node::getCamera() const
 {
-    if (_camera)
-    {
-        return _camera->getCamera();
-    }
-    return NULL;
+    return _camera;
 }
 
 Light* Node::getLight() const
 {
-    if (_light)
-    {
-        return _light->getLight();
-    }
-    return NULL;
+    return _light;
 }
 
 Model* Node::getModel() const

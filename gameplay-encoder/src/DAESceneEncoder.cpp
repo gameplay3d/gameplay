@@ -890,10 +890,10 @@ void DAESceneEncoder::loadCameraInstance(const domNode* n, Node* node)
 
         if (cameraRef)
         {
-            CameraInstance* cameraInstance = loadCamera(cameraRef);
-            if (cameraInstance)
+            Camera* camera = loadCamera(cameraRef);
+            if (camera)
             {
-                node->setCameraInstance(cameraInstance);
+                node->setCamera(camera);
             }
         }
         else
@@ -917,10 +917,10 @@ void DAESceneEncoder::loadLightInstance(const domNode* n, Node* node)
 
         if (lightRef)
         {
-            LightInstance* lightInstance = loadLight(lightRef);
-            if (lightInstance)
+            Light* light = loadLight(lightRef);
+            if (light)
             {
-                node->setLightInstance(lightInstance);
+                node->setLight(light);
             }
         }
         else
@@ -1002,203 +1002,181 @@ void DAESceneEncoder::loadControllerInstance(const domNode* n, Node* node)
     }
 }
 
-CameraInstance* DAESceneEncoder::loadCamera(const domCamera* cameraRef)
+Camera* DAESceneEncoder::loadCamera(const domCamera* cameraRef)
 {
-    ///////////////////////////// CAMERA
+    Camera* camera = new Camera();
+    camera->setId(cameraRef->getId());
 
-    // check if camera is already added to gamePlayFile
-    const char* id = cameraRef->getId();
-    Camera* camera = _gamePlayFile.getCamera(id);
-    if (camera == NULL)
+    // Optics
+    const domCamera::domOpticsRef opticsRef = cameraRef->getOptics();
+    if (opticsRef.cast())
     {
-        camera = new Camera();
-        camera->setId(id);
+        const domCamera::domOptics::domTechnique_commonRef techRef = opticsRef->getTechnique_common();
 
-        // Optics
-        const domCamera::domOpticsRef opticsRef = cameraRef->getOptics();
-        if (opticsRef.cast())
+        // Orthographics
+        const domCamera::domOptics::domTechnique_common::domOrthographicRef orthographicRef = techRef->getOrthographic();
+        if (orthographicRef.cast())
         {
-            const domCamera::domOptics::domTechnique_commonRef techRef = opticsRef->getTechnique_common();
+            camera->setOrthographic();
+            camera->setAspectRatio((float)orthographicRef->getAspect_ratio()->getValue());
+            camera->setNearPlane((float)orthographicRef->getZnear()->getValue());
+            camera->setFarPlane((float)orthographicRef->getZfar()->getValue());
 
-            // Orthographics
-            const domCamera::domOptics::domTechnique_common::domOrthographicRef orthographicRef = techRef->getOrthographic();
-            if (orthographicRef.cast())
+            const domTargetableFloatRef xmag = orthographicRef->getXmag();
+            const domTargetableFloatRef ymag = orthographicRef->getYmag();
+            // Viewport width
+            if (xmag.cast())
             {
-                camera->setOrthographic();
-                camera->setAspectRatio((float)orthographicRef->getAspect_ratio()->getValue());
-                camera->setNearPlane((float)orthographicRef->getZnear()->getValue());
-                camera->setFarPlane((float)orthographicRef->getZfar()->getValue());
-
-                const domTargetableFloatRef xmag = orthographicRef->getXmag();
-                const domTargetableFloatRef ymag = orthographicRef->getYmag();
-                // Viewport width
-                if (xmag.cast())
-                {
-                    camera->setViewportWidth((float)xmag->getValue());
-                }
-                // Viewport height
-                if (ymag.cast())
-                {
-                    camera->setViewportHeight((float)ymag->getValue());
-                }
-                // TODO: Viewport x and y?
+                camera->setViewportWidth((float)xmag->getValue());
             }
-
-            // Perspective
-            const domCamera::domOptics::domTechnique_common::domPerspectiveRef perspectiveRef = techRef->getPerspective();
-            if (perspectiveRef.cast())
+            // Viewport height
+            if (ymag.cast())
             {
-                camera->setPerspective();
-                camera->setNearPlane((float)perspectiveRef->getZnear()->getValue());
-                camera->setFarPlane((float)perspectiveRef->getZfar()->getValue());
+                camera->setViewportHeight((float)ymag->getValue());
+            }
+            // TODO: Viewport x and y?
+        }
 
-                float aspectRatio = -1.0f;
-                if (perspectiveRef->getAspect_ratio().cast())
-                {
-                    aspectRatio = (float)perspectiveRef->getAspect_ratio()->getValue();
-                    camera->setAspectRatio(aspectRatio);
-                }
-                if (perspectiveRef->getYfov().cast())
-                {
-                    camera->setFieldOfView((float)perspectiveRef->getYfov()->getValue());
-                }
-                else if (perspectiveRef->getXfov().cast() && aspectRatio > 0.0f)
-                {
-                    // The gameplaybinary stores the yfov but collada might have specified
-                    // an xfov and an aspect ratio. So use those to calculate the yfov.
-                    float xfov = (float)perspectiveRef->getXfov()->getValue();
-                    float yfov = xfov / aspectRatio;
-                    camera->setFieldOfView(yfov);
-                }
+        // Perspective
+        const domCamera::domOptics::domTechnique_common::domPerspectiveRef perspectiveRef = techRef->getPerspective();
+        if (perspectiveRef.cast())
+        {
+            camera->setPerspective();
+            camera->setNearPlane((float)perspectiveRef->getZnear()->getValue());
+            camera->setFarPlane((float)perspectiveRef->getZfar()->getValue());
+
+            float aspectRatio = -1.0f;
+            if (perspectiveRef->getAspect_ratio().cast())
+            {
+                aspectRatio = (float)perspectiveRef->getAspect_ratio()->getValue();
+                camera->setAspectRatio(aspectRatio);
+            }
+            if (perspectiveRef->getYfov().cast())
+            {
+                camera->setFieldOfView((float)perspectiveRef->getYfov()->getValue());
+            }
+            else if (perspectiveRef->getXfov().cast() && aspectRatio > 0.0f)
+            {
+                // The gameplaybinary stores the yfov but collada might have specified
+                // an xfov and an aspect ratio. So use those to calculate the yfov.
+                float xfov = (float)perspectiveRef->getXfov()->getValue();
+                float yfov = xfov / aspectRatio;
+                camera->setFieldOfView(yfov);
             }
         }
-        _gamePlayFile.addCamera(camera);
     }
-    CameraInstance* cameraInstance = new CameraInstance();
-    cameraInstance->setCamera(camera);
-    return cameraInstance;
+    _gamePlayFile.addCamera(camera);
+    return camera;
 }
 
-LightInstance* DAESceneEncoder::loadLight(const domLight* lightRef)
+Light* DAESceneEncoder::loadLight(const domLight* lightRef)
 {
-    ///////////////////////////// LIGHT
+    Light* light = new Light();
+    light->setId(lightRef->getId());
 
-    // check if light is already added to gamePlayFile
-    const char* id = lightRef->getId();
-    Light* light = _gamePlayFile.getLight(id);
-    if (light == NULL)
+    const domLight::domTechnique_commonRef techRef = lightRef->getTechnique_common();
+
+    // Ambient light
     {
-        light = new Light();
-        light->setId(lightRef->getId());
-
-        const domLight::domTechnique_commonRef techRef = lightRef->getTechnique_common();
-
-        // Ambient light
+        const domLight::domTechnique_common::domAmbientRef ambientRef = techRef->getAmbient();
+        if (ambientRef.cast())
         {
-            const domLight::domTechnique_common::domAmbientRef ambientRef = techRef->getAmbient();
-            if (ambientRef.cast())
-            {
-                light->setAmbientLight();
-                // color
-                const domTargetableFloat3Ref float3Ref = ambientRef->getColor();
-                const domFloat3& color3 = float3Ref->getValue();
-                light->setColor((float)color3.get(0), (float)color3.get(1), (float)color3.get(2));
-            }
+            light->setAmbientLight();
+            // color
+            const domTargetableFloat3Ref float3Ref = ambientRef->getColor();
+            const domFloat3& color3 = float3Ref->getValue();
+            light->setColor((float)color3.get(0), (float)color3.get(1), (float)color3.get(2));
         }
-
-        // Directional light
-        {
-            const domLight::domTechnique_common::domDirectionalRef direcitonalRef = techRef->getDirectional();
-            if (direcitonalRef.cast())
-            {
-                light->setDirectionalLight();
-                // color
-                const domTargetableFloat3Ref float3Ref = direcitonalRef->getColor();
-                const domFloat3& color3 = float3Ref->getValue();
-                light->setColor((float)color3.get(0), (float)color3.get(1), (float)color3.get(2));
-            }
-        }
-
-        // Spot light
-        {
-            const domLight::domTechnique_common::domSpotRef spotRef = techRef->getSpot();
-            if (spotRef.cast())
-            {
-                light->setSpotLight();
-                // color
-                const domTargetableFloat3Ref float3Ref = spotRef->getColor();
-                const domFloat3& color3 = float3Ref->getValue();
-                light->setColor((float)color3.get(0), (float)color3.get(1), (float)color3.get(2));
-                
-                const domTargetableFloatRef& constAtt = spotRef->getConstant_attenuation();
-                if (constAtt.cast())
-                {
-                    light->setConstantAttenuation((float)constAtt->getValue());
-                }
-
-                const domTargetableFloatRef& linearAtt = spotRef->getLinear_attenuation();
-                if (linearAtt.cast())
-                {
-                    light->setLinearAttenuation((float)linearAtt->getValue());
-                }
-
-                const domTargetableFloatRef& quadAtt = spotRef->getQuadratic_attenuation();
-                if (quadAtt.cast())
-                {
-                    light->setQuadraticAttenuation((float)quadAtt->getValue());
-                }
-
-                const domTargetableFloatRef& falloffAngle = spotRef->getFalloff_angle();
-                if (falloffAngle.cast())
-                {
-                    light->setFalloffAngle((float)falloffAngle->getValue());
-                }
-
-                const domTargetableFloatRef& falloffExp = spotRef->getFalloff_exponent();
-                if (falloffExp.cast())
-                {
-                    light->setFalloffExponent((float)falloffExp->getValue());
-                }
-
-            }
-        }
-
-        // Point light
-        {
-            const domLight::domTechnique_common::domPointRef pointRef = techRef->getPoint();
-            if (pointRef.cast())
-            {
-                light->setPointLight();
-                // color
-                const domTargetableFloat3Ref float3Ref = pointRef->getColor();
-                const domFloat3& color3 = float3Ref->getValue();
-                light->setColor((float)color3.get(0), (float)color3.get(1), (float)color3.get(2));
-
-                const domTargetableFloatRef& constAtt = pointRef->getConstant_attenuation();
-                if (constAtt.cast())
-                {
-                    light->setConstantAttenuation((float)constAtt->getValue());
-                }
-
-                const domTargetableFloatRef& linearAtt = pointRef->getLinear_attenuation();
-                if (linearAtt.cast())
-                {
-                    light->setLinearAttenuation((float)linearAtt->getValue());
-                }
-
-                const domTargetableFloatRef& quadAtt = pointRef->getQuadratic_attenuation();
-                if (quadAtt.cast())
-                {
-                    light->setQuadraticAttenuation((float)quadAtt->getValue());
-                }
-            }
-        }
-
-        _gamePlayFile.addLight(light);
     }
-    LightInstance* lightInstance = new LightInstance();
-    lightInstance->setLight(light);
-    return lightInstance;
+
+    // Directional light
+    {
+        const domLight::domTechnique_common::domDirectionalRef direcitonalRef = techRef->getDirectional();
+        if (direcitonalRef.cast())
+        {
+            light->setDirectionalLight();
+            // color
+            const domTargetableFloat3Ref float3Ref = direcitonalRef->getColor();
+            const domFloat3& color3 = float3Ref->getValue();
+            light->setColor((float)color3.get(0), (float)color3.get(1), (float)color3.get(2));
+        }
+    }
+
+    // Spot light
+    {
+        const domLight::domTechnique_common::domSpotRef spotRef = techRef->getSpot();
+        if (spotRef.cast())
+        {
+            light->setSpotLight();
+            // color
+            const domTargetableFloat3Ref float3Ref = spotRef->getColor();
+            const domFloat3& color3 = float3Ref->getValue();
+            light->setColor((float)color3.get(0), (float)color3.get(1), (float)color3.get(2));
+                
+            const domTargetableFloatRef& constAtt = spotRef->getConstant_attenuation();
+            if (constAtt.cast())
+            {
+                light->setConstantAttenuation((float)constAtt->getValue());
+            }
+
+            const domTargetableFloatRef& linearAtt = spotRef->getLinear_attenuation();
+            if (linearAtt.cast())
+            {
+                light->setLinearAttenuation((float)linearAtt->getValue());
+            }
+
+            const domTargetableFloatRef& quadAtt = spotRef->getQuadratic_attenuation();
+            if (quadAtt.cast())
+            {
+                light->setQuadraticAttenuation((float)quadAtt->getValue());
+            }
+
+            const domTargetableFloatRef& falloffAngle = spotRef->getFalloff_angle();
+            if (falloffAngle.cast())
+            {
+                light->setFalloffAngle((float)falloffAngle->getValue());
+            }
+
+            const domTargetableFloatRef& falloffExp = spotRef->getFalloff_exponent();
+            if (falloffExp.cast())
+            {
+                light->setFalloffExponent((float)falloffExp->getValue());
+            }
+        }
+    }
+
+    // Point light
+    {
+        const domLight::domTechnique_common::domPointRef pointRef = techRef->getPoint();
+        if (pointRef.cast())
+        {
+            light->setPointLight();
+            // color
+            const domTargetableFloat3Ref float3Ref = pointRef->getColor();
+            const domFloat3& color3 = float3Ref->getValue();
+            light->setColor((float)color3.get(0), (float)color3.get(1), (float)color3.get(2));
+
+            const domTargetableFloatRef& constAtt = pointRef->getConstant_attenuation();
+            if (constAtt.cast())
+            {
+                light->setConstantAttenuation((float)constAtt->getValue());
+            }
+
+            const domTargetableFloatRef& linearAtt = pointRef->getLinear_attenuation();
+            if (linearAtt.cast())
+            {
+                light->setLinearAttenuation((float)linearAtt->getValue());
+            }
+
+            const domTargetableFloatRef& quadAtt = pointRef->getQuadratic_attenuation();
+            if (quadAtt.cast())
+            {
+                light->setQuadraticAttenuation((float)quadAtt->getValue());
+            }
+        }
+    }
+    _gamePlayFile.addLight(light);
+    return light;
 }
 
 void DAESceneEncoder::loadSkeleton(domInstance_controller::domSkeleton* skeletonElement, MeshSkin* skin)

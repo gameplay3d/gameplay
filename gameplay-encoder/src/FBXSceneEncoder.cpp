@@ -612,9 +612,7 @@ void FBXSceneEncoder::loadCamera(KFbxNode* fbxNode, Node* node)
         return;
     }
     _gamePlayFile.addCamera(camera);
-    CameraInstance* cameraInstance = new CameraInstance();
-    cameraInstance->setCamera(camera);
-    node->setCameraInstance(cameraInstance);
+    node->setCamera(camera);
 }
 
 void FBXSceneEncoder::loadLight(KFbxNode* fbxNode, Node* node)
@@ -655,9 +653,7 @@ void FBXSceneEncoder::loadLight(KFbxNode* fbxNode, Node* node)
     }
 
     _gamePlayFile.addLight(light);
-    LightInstance* lightInstance = new LightInstance();
-    lightInstance->setLight(light);
-    node->setLightInstance(lightInstance);
+    node->setLight(light);
 }
 
 void FBXSceneEncoder::loadModel(KFbxNode* fbxNode, Node* node)
