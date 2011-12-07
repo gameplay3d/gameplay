@@ -15,48 +15,261 @@ class Curve
 public:
 
     /**
-     * Defines the type of interpolation.
+     * Types of interpolation.
+     *
+     * Defines how the points in the curve are connected.
      *
      * Note: InterpolationType::BEZIER requires control points and InterpolationType::HERMITE requires tangents.
      */
     enum InterpolationType
     {
         /**
-         * Bezier interpolation. Requires that two control points are set for each segment.
+         * Bezier Interpolation. 
+         *
+         * Requires that two control points are set for each segment.
          */
         BEZIER,
 
         /**
-         * B-Spline interpolation. Uses the points as control points, and the curve is guaranteed to only pass through the
+         * B-Spline Interpolation. 
+         *
+         * Uses the points as control points, and the curve is guaranteed to only pass through the
          * first and last point.
          */
         BSPLINE,
 
         /**
-         * Flat. A form of Hermite interpolation that generates flat tangents for you. The tangents have a value equal to 0.
+         * Flat Interpolation. 
+         * 
+         * A form of Hermite interpolation that generates flat tangents for you. The tangents have a value equal to 0.
          */
         FLAT,
 
         /**
-         * Hermite interpolation. Requires that two tangents for each segment.
+         * Hermite Interpolation. 
+         *
+         * Requires that two tangents for each segment.
          */
         HERMITE,
 
         /**
-         * Linear interpolation.
+         * Linear Interpolation.
          */
         LINEAR,
 
         /** 
-         * Smooth. A form of Hermite interpolation that generates tangents for each segment based on the points prior to and after the segment.
+         * Smooth Interpolation. 
+         *
+         * A form of Hermite interpolation that generates tangents for each segment based on the points prior to and after the segment.
          */
         SMOOTH,
 
         /**
-         * Discrete interpolation.
+         * Discrete Interpolation.
          */ 
-        STEP
+        STEP,
+
+        /**
+         * Quadratic-In Interpolation.
+         */
+        QUADRATIC_IN, 
+        
+        /**
+         * Quadratic-Out Interpolation.
+         */
+        QUADRATIC_OUT,
+
+        /**
+         * Quadratic-In-Out Interpolation.
+         */
+        QUADRATIC_IN_OUT,
+
+        /**
+         * Quadratic-Out-In Interpolation.
+         */
+        QUADRATIC_OUT_IN,
+
+        /**
+         * Cubic-In Interpolation.
+         */
+        CUBIC_IN,
+        
+        /**
+         * Cubic-Out Interpolation.
+         */
+        CUBIC_OUT,
+        
+        /**
+         * Cubic-In-Out Interpolation.
+         */
+        CUBIC_IN_OUT,
+        
+        /**
+         * Cubic-Out-In Interpolation.
+         */
+        CUBIC_OUT_IN,
+
+        /**
+         * Quartic-In Interpolation.
+         */
+        QUARTIC_IN,
+
+        /**
+         * Quartic-Out Interpolation.
+         */
+        QUARTIC_OUT,
+
+        /**
+         * Quartic-In-Out Interpolation.
+         */
+        QUARTIC_IN_OUT,
+
+        /**
+         * Quartic-Out-In Interpolation.
+         */
+        QUARTIC_OUT_IN,
+
+        /**
+         * Quintic-In Interpolation.
+         */
+        QUINTIC_IN,
+        
+        /**
+         * Quintic-Out Interpolation.
+         */
+        QUINTIC_OUT,
+        
+        /**
+         * Quintic-In-Out Interpolation.
+         */
+        QUINTIC_IN_OUT,
+        
+        /**
+         * Quintic-Out-In Interpolation.
+         */
+        QUINTIC_OUT_IN,
+        
+        /**
+         * Sine-In Interpolation.
+         */
+        SINE_IN,
+        
+        /**
+         * Sine-Out Interpolation.
+         */
+        SINE_OUT,
+        
+        /**
+         * Sine-In-Out Interpolation.
+         */
+        SINE_IN_OUT,
+        
+        /**
+         * Sine-Out-In Interpolation.
+         */
+        SINE_OUT_IN,
+
+        /**
+         * Exponential-In Interpolation.
+         */
+        EXPONENTIAL_IN,
+
+        /**
+         * Exponential-Out Interpolation.
+         */
+        EXPONENTIAL_OUT,
+
+        /**
+         * Exponential-In-Out Interpolation.
+         */
+        EXPONENTIAL_IN_OUT,
+
+        /**
+         * Exponential-Out-In Interpolation.
+         */
+        EXPONENTIAL_OUT_IN,
+
+        /**
+         * Circular-In Interpolation.
+         */
+        CIRCULAR_IN,
+
+        /**
+         * Circular-Out Interpolation.
+         */
+        CIRCULAR_OUT,
+
+        /**
+         * Circular-In-Out Interpolation.
+         */
+        CIRCULAR_IN_OUT,
+
+        /**
+         * Circular-Out-In Interpolation.
+         */
+        CIRCULAR_OUT_IN,
+
+        /**
+         * Elastic-In Interpolation.
+         */
+        ELASTIC_IN,
+
+        /**
+         * Elastic-Out Interpolation.
+         */
+        ELASTIC_OUT,
+
+        /**
+         * Elastic-In-Out Interpolation.
+         */
+        ELASTIC_IN_OUT,
+
+        /**
+         * Elastic-Out-In Interpolation.
+         */
+        ELASTIC_OUT_IN,
+
+        /**
+         * Overshoot-In Interpolation.
+         */
+        OVERSHOOT_IN,
+
+        /**
+         * Overshoot-Out Interpolation.
+         */
+        OVERSHOOT_OUT,
+
+        /**
+         * Overshoot-In-Out Interpolation.
+         */
+        OVERSHOOT_IN_OUT,
+
+        /**
+         * Overshoot-Out-In Interpolation.
+         */
+        OVERSHOOT_OUT_IN,
+
+        /**
+         * Bounce-In Interpolation.
+         */
+        BOUNCE_IN,
+
+        /**
+         * Bounce-Out Interpolation.
+         */
+        BOUNCE_OUT,
+
+        /**
+         * Bounce-In-Out Interpolation.
+         */
+        BOUNCE_IN_OUT,
+
+        /**
+         * Bounce-Out-In Interpolation.
+         */
+        BOUNCE_OUT_IN
     };
+
 
     /**
      * Constructs a new curve and the specified parameters.
@@ -226,7 +439,7 @@ private:
      * Quaternion interpolation function.
      */
     void interpolateQuaternion(float s, float* from, float* to, float* dst) const;
-
+    
     /**
      * Determines the current keyframe to interpolate from based on the specified time.
      */ 
@@ -240,6 +453,20 @@ private:
     Point* _points;                     // The points on the curve.
 };
 
+inline float bezier(float eq0, float eq1, float eq2, float eq3, float from, float out, float to, float in);
+
+inline float bspline(float eq0, float eq1, float eq2, float eq3, float c0, float c1, float c2, float c3);
+
+inline float hermite(float h00, float h01, float h10, float h11, float from, float out, float to, float in);
+
+inline float hermiteFlat(float h00, float h01, float from, float to);
+
+inline float hermiteSmooth(float h00, float h01, float h10, float h11, float from, float out, float to, float in);
+
+inline float lerp(float s, float from, float to);
+
 }
+
+#include "Curve.inl"
 
 #endif

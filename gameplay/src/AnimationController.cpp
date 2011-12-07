@@ -20,12 +20,8 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
 {
     assert(type != Curve::BEZIER && type != Curve::HERMITE);
     assert(id && keyCount >= 2 && keyTimes && keyValues);
-    Animation* animation = getAnimation(id);
-
-    if (animation != NULL)
-        return NULL;
-
-    animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, type);
+    
+    Animation* animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, type);
 
     addAnimation(animation);
     
@@ -35,12 +31,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
 Animation* AnimationController::createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type)
 {
     assert(id && keyCount >= 2 && keyTimes && keyValues && keyInValue && keyOutValue);
-    Animation* animation = getAnimation(id);
-
-    if (animation != NULL)
-        return NULL;
-    
-    animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, keyInValue, keyOutValue, type);
+    Animation* animation = new Animation(id, target, propertyId, keyCount, keyTimes, keyValues, keyInValue, keyOutValue, type);
 
     addAnimation(animation);
 

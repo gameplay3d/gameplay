@@ -47,14 +47,6 @@ Animation::~Animation()
 
     SAFE_DELETE(_defaultClip);
 
-    /*vector<Channel*>::iterator channelIter = _channels.begin();
-    while (channelIter != _channels.end())
-    {
-        Animation::Channel* channel = *channelIter;
-        channel->_target->removeChannel(channel);
-        SAFE_RELEASE(channel);
-        channelIter++;
-    }*/
     _channels.clear();
 }
 
@@ -71,9 +63,9 @@ Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int p
 
 Animation::Channel::~Channel()
 {
+    SAFE_DELETE(_curve);
     _animation->removeChannel(this);
     SAFE_RELEASE(_animation);
-    SAFE_DELETE(_curve);
 }
 
 const char* Animation::getId() const
@@ -135,15 +127,8 @@ void Animation::createClips(const char* animationFile)
 
 AnimationClip* Animation::createClip(const char* id, unsigned long start, unsigned long end)
 {
-    if (_clips != NULL && findClip(id) != NULL)
-    {
-        return NULL;
-    }
-    
     AnimationClip* clip = new AnimationClip(id, this, start, end);
-
     addClip(clip);
-
     return clip;
 }
 
