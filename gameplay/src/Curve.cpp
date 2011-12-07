@@ -29,7 +29,7 @@ using std::exp;
 #endif
 
 // Object deletion macro
-#ifndef SAFE_DELETE(x)
+#ifndef SAFE_DELETE
 #define SAFE_DELETE(x) \
     if (x) \
     { \
@@ -39,7 +39,7 @@ using std::exp;
 #endif
 
 // Array deletion macro
-#ifndef SAFE_DELETE_ARRAY(x)
+#ifndef SAFE_DELETE_ARRAY
 #define SAFE_DELETE_ARRAY(x) \
     if (x) \
     { \
