@@ -374,7 +374,7 @@ public:
      * 
      * @param filePath The path to the file that contains the rigid body definition.
      */
-    void setPhysicsRigidBody(const char* url);
+    void setPhysicsRigidBody(const char* filePath);
 
     /**
      * Sets the physics rigid body for this node from the given properties object.

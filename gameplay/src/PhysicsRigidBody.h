@@ -341,6 +341,9 @@ private:
 
     // Removes a constraint from this rigid body (used by the constraint destructor).
     void removeConstraint(PhysicsConstraint* constraint);
+    
+    // Whether or not the rigid body supports constraints fully.
+    bool supportsConstraints();
 
     // Internal class used to implement the collidesWith(PhysicsRigidBody*) function.
     struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
