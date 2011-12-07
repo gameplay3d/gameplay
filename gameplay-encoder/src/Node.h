@@ -2,8 +2,8 @@
 #define NODE_H_
 
 #include "Object.h"
-#include "CameraInstance.h"
-#include "LightInstance.h"
+#include "Camera.h"
+#include "Light.h"
 #include "Model.h"
 
 namespace gameplay
@@ -143,8 +143,8 @@ public:
      */
     void resetTransformMatrix();
 
-    void setCameraInstance(CameraInstance* cameraInstance);
-    void setLightInstance(LightInstance* lightInstance);
+    void setCamera(Camera* camera);
+    void setLight(Light* light);
     void setModel(Model* model);
 
     /**
@@ -181,8 +181,8 @@ private:
     Node* _lastChild;
     Node* _parent;
 
-    CameraInstance* _camera;
-    LightInstance* _light;
+    Camera* _camera;
+    Light* _light;
     Model* _model;
 
     bool _joint;

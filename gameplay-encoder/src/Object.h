@@ -22,8 +22,6 @@ public:
         ANIMATION_ID = 4,
         ANIMATIONCHANNEL_ID = 5,
         NODEINSTANCE_ID = 8,
-        CAMERAINSTANCE_ID = 9,
-        LIGHTINSTANCE_ID = 10,
         MODEL_ID = 11,
         MATERIAL_ID = 16,
         EFFECT_ID = 17,

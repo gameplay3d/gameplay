@@ -17,7 +17,6 @@
     <ClCompile Include="src\Base.cpp" />
     <ClCompile Include="src\BoundingVolume.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\CameraInstance.cpp" />
     <ClCompile Include="src\EncoderArguments.cpp" />
     <ClCompile Include="src\DAEChannelTarget.cpp" />
     <ClCompile Include="src\DAEOptimizer.cpp" />
@@ -32,7 +31,6 @@
     <ClCompile Include="src\GPBDecoder.cpp" />
     <ClCompile Include="src\Animations.cpp" />
     <ClCompile Include="src\Light.cpp" />
-    <ClCompile Include="src\LightInstance.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MaterialParameter.cpp" />
@@ -63,7 +61,6 @@
     <ClInclude Include="src\Base.h" />
     <ClInclude Include="src\BoundingVolume.h" />
     <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\CameraInstance.h" />
     <ClInclude Include="src\EncoderArguments.h" />
     <ClInclude Include="src\DAEChannelTarget.h" />
     <ClInclude Include="src\DAEOptimizer.h" />
@@ -78,7 +75,6 @@
     <ClInclude Include="src\GPBDecoder.h" />
     <ClInclude Include="src\Animations.h" />
     <ClInclude Include="src\Light.h" />
-    <ClInclude Include="src\LightInstance.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\MaterialParameter.h" />
     <ClInclude Include="src\Matrix.h" />
