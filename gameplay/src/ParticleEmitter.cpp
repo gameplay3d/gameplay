@@ -815,7 +815,6 @@ void ParticleEmitter::update(long elapsedTime)
                     {
                         ++p->_frame;
                     }
-                    break;
                 }
                 else
                 {
@@ -831,7 +830,6 @@ void ParticleEmitter::update(long elapsedTime)
                             p->_frame = 0;
                         }
                     }
-                    break;
                 }
             }
         }
