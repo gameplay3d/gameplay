@@ -155,7 +155,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>;../external-deps/freetype2/lib/win32;../external-deps/collada-dom/lib/win32</AdditionalLibraryDirectories>
       <AdditionalDependencies>freetype245.lib;libcollada14dom22-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)..\external-deps\collada-dom\lib\win32\*.dll" "$(TargetDir)"</Command>
@@ -179,7 +178,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>freetype245.lib;libcollada14dom22-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>;../external-deps/freetype2/lib/win32;../external-deps/collada-dom/lib/win32</AdditionalLibraryDirectories>
-      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)..\external-deps\collada-dom\lib\win32\*.dll" "$(TargetDir)"</Command>
