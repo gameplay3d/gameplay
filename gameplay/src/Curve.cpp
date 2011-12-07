@@ -8,10 +8,46 @@
 using std::memcpy;
 using std::fabs;
 using std::sqrt;
+using std::cos;
+using std::sin;
+using std::exp;
 
 #ifndef NULL
 #define NULL 0
 #endif
+
+#ifndef MATH_PI
+#define MATH_PI 3.14159265358979323846f
+#endif
+
+#ifndef MATH_PIOVER2 
+#define MATH_PIOVER2 1.57079632679489661923f
+#endif
+
+#ifndef MATH_PIX2
+#define MATH_PIX2 6.28318530717958647693f
+#endif
+
+// Object deletion macro
+#ifndef SAFE_DELETE(x)
+#define SAFE_DELETE(x) \
+    if (x) \
+    { \
+        delete x; \
+        x = NULL; \
+    }
+#endif
+
+// Array deletion macro
+#ifndef SAFE_DELETE_ARRAY(x)
+#define SAFE_DELETE_ARRAY(x) \
+    if (x) \
+    { \
+        delete[] x; \
+        x = NULL; \
+    }
+#endif
+
 
 namespace gameplay
 {
@@ -37,8 +73,8 @@ Curve::Curve(unsigned int pointCount, unsigned int componentCount)
 
 Curve::~Curve()
 {
-    delete[] _points;
-    delete[] _quaternionOffsets;
+    SAFE_DELETE_ARRAY(_points);
+    SAFE_DELETE_ARRAY(_quaternionOffsets);
 }
 
 Curve::Point::Point()
@@ -48,9 +84,9 @@ Curve::Point::Point()
 
 Curve::Point::~Point()
 {
-    delete[] value;
-    delete[] inValue;
-    delete[] outValue;
+    SAFE_DELETE_ARRAY(value);
+    SAFE_DELETE_ARRAY(inValue);
+    SAFE_DELETE_ARRAY(outValue);
 }
 
 unsigned int Curve::getPointCount() const
@@ -140,7 +176,7 @@ void Curve::evaluate(float time, float* dst) const
         case BEZIER:
         {
             interpolateBezier(t, from, to, dst);
-            break;
+            return;
         }
         case BSPLINE:
         {
@@ -164,17 +200,17 @@ void Curve::evaluate(float time, float* dst) const
                 c1 = (_points + index + 2);
             }
             interpolateBSpline(t, c0, from, to, c1, dst);
-            break;
+            return;
         }
         case FLAT:
         {
             interpolateHermiteFlat(t, from, to, dst);
-            break;
+            return;
         }
         case HERMITE:
         {
             interpolateHermite(t, from, to, dst);
-            break;
+            return;
         }
         case LINEAR:
         {
@@ -190,6 +226,517 @@ void Curve::evaluate(float time, float* dst) const
         {
             memcpy(dst, from->value, _componentSize);
             break;
+        }
+        case QUADRATIC_IN:
+        {
+            t *= t;
+            break;
+        }
+        case QUADRATIC_OUT:
+        {
+            t *= (t - 2.0f);
+            break;
+        }
+        case QUADRATIC_IN_OUT:
+        {
+            if (t *= 2.0f < 1.0f)
+            {
+                t *= t * 0.5f;
+            }
+            else
+            {
+                t -= 1.0f;
+                t = (-(t * (t - 2.0f)) + 1.0f) * 0.5f;
+            }
+            break;
+        }
+        case QUADRATIC_OUT_IN:
+        {
+            if (t < 0.5f)
+            {
+                t = 2.0f * t * (1.0f - t);
+            }
+            else
+            {
+                t = 1.0f + 2.0f * t * (t - 1.0f);
+            }
+            break;
+        }
+        case CUBIC_IN:
+        {
+            t *= t * t;
+            break;
+        }
+        case CUBIC_OUT:
+        {
+            t--;
+            t = t * t * t + 1;
+            break;
+        }
+        case CUBIC_IN_OUT:
+        {
+            if ((t *= 2.0f) < 1.0f)
+            {
+                t = t * t * t * 0.5f;
+            }
+            else
+            {
+                t -= 2.0f;
+                t = (t * t * t + 2.0f) * 0.5f;
+            }
+            break;
+        }
+        case CUBIC_OUT_IN:
+        {
+            t = (2.0f * t - 1.0f);
+            t = (t * t * t + 1) * 0.5f;
+            break;
+        }
+        case QUARTIC_IN:
+        {
+            t *= t * t * t;
+            break;
+        }
+        case QUARTIC_OUT:
+        {
+            t--;
+            t = -(t * t * t * t) + 1.0f;
+            break;
+        }
+        case QUARTIC_IN_OUT:
+        {
+            t *= 2.0f;
+            if (t < 1.0f)
+            {
+                t = 0.5f * t * t * t * t;
+            }
+            else
+            {
+                t -= 2.0f;
+                t = -0.5f * (t * t * t * t - 2.0f);
+            }
+            break;
+        }
+        case QUARTIC_OUT_IN:
+        {
+            t = 2.0f * t - 1.0f;
+            if (t < 0.0f)
+            {
+                t = 0.5f * (-(t * t) * t * t + 1.0f);
+            }
+            else
+            {
+                t = 0.5f * (t * t * t * t + 1.0f);
+            }
+            break;
+        }
+        case QUINTIC_IN:
+        {
+            t *= t * t * t * t;
+            break;
+        }
+        case QUINTIC_OUT:
+        {
+            t--;
+            t = t * t * t * t * t + 1.0f;
+            break;
+        }
+        case QUINTIC_IN_OUT:
+        {
+            t *= 2.0f;
+            if (t < 1.0f)
+            {
+                t = 0.5f * t * t * t * t * t;
+            }
+            else
+            {
+                t -= 2.0f;
+                t = 0.5f * (t * t * t * t * t + 2.0f);
+            }
+            break;
+        }
+        case QUINTIC_OUT_IN:
+        {
+            t = 2.0f * t - 1.0f;
+            t = 0.5f * (t * t * t * t * t + 1.0f);
+            break;
+        }
+        case SINE_IN:
+        {
+            t = -(cos(t * MATH_PIOVER2) - 1.0f);
+            break;
+        }
+        case SINE_OUT:
+        {
+            t = sin(t * MATH_PIOVER2);
+            break;
+        }
+        case SINE_IN_OUT:
+        {
+            t = -0.5f * (cos(MATH_PI * t) - 1.0f);
+            break;
+        }
+        case SINE_OUT_IN:
+        {
+            if (t < 0.5f)
+            {
+                t = 0.5f * sin(MATH_PI * t);
+            }
+            else
+            {
+                t = -0.5f * cos(MATH_PIOVER2 * (2.0f * t - 1.0f)) + 1.0f;
+            }
+            break;
+        }
+        case EXPONENTIAL_IN:
+        {
+            if (t != 0.0f)
+            {
+                t = exp(10.0f * (t - 1.0f));
+            }
+            break;
+        }
+        case EXPONENTIAL_OUT:
+        {
+            if (t != 1.0f)
+            {
+                t = -exp(-10.0f * t) + 1.0f;
+            }
+            break;
+        }
+        case EXPONENTIAL_IN_OUT:
+        {
+            if (t != 0.0f && t != 1.0f)
+            {
+                if (t < 0.5f)
+                {
+                    t = 0.5f * exp(10.0f * (2.0f * t - 1.0f));
+                }
+                else
+                {
+                    t = -0.5f * exp(10.0f * (2.0f * t + 1.0f)) + 1.0f;
+                }
+            }
+            break;
+        }
+        case EXPONENTIAL_OUT_IN:
+        {
+            if (t != 0.0f && t != 1.0f)
+            {
+                if (t < 0.5f)
+                {
+                    t = -0.5f * exp(-20.0f * t) + 0.5f;
+                }
+                else
+                {
+                    t = 0.5f * exp(20.0f * (t - 1.0f)) + 0.5f;
+                }
+            }
+            break;
+        }
+        case CIRCULAR_IN:
+        {
+            t = -(sqrt(1.0f - t * t) - 1.0f);
+            break;
+        }
+        case CIRCULAR_OUT:
+        {
+            t--;
+            t = sqrt(1.0f - t * t);
+            break;
+        }
+        case CIRCULAR_IN_OUT:
+        {
+            t *= 2.0f;
+            if (t < 1.0f)
+            {
+                t = 0.5f * -(sqrt(1.0f - t * t) + 1.0f);
+            }
+            else
+            {
+                t -= 2.0f;
+                t = 0.5f * (sqrt(1.0f - t * t) + 1.0f);
+            }
+            break;
+        }
+        case CIRCULAR_OUT_IN:
+        {
+            t = 2.0f * t - 1.0f;
+            if (t < 0.0f)
+            {
+                t = 0.5f * sqrt(1.0f - t * t);
+            }
+            else
+            {
+                t = 0.5f * (2.0f - sqrt(1.0f - t * t));
+            }
+            break;
+        }
+        case ELASTIC_IN:
+        {
+            if (t != 0.0f && t != 1.0f)
+            {
+                t--;
+                t = -exp(10.0f * t) * sin(t - 0.075f) * (MATH_PIX2 / 0.3f);
+            }
+            break;
+        }
+        case ELASTIC_OUT:
+        {
+            if (t != 0.0f && t != 1.0f)
+            {
+                t = exp(-10.0f * t) * sin((t - 0.075f) * MATH_PIX2 / 0.3f) + 1.0f;
+            }
+            break;
+        }
+        case ELASTIC_IN_OUT:
+        {
+            if (t != 0.0f && t != 1.0f)
+            {
+                t = 2.0f * t - 1.0f;
+                if (t < 0.0f)
+                {
+                    t = -0.5f * (exp((10 * time)) * sin(((time - 0.1125f) * MATH_PIX2 / 0.45f)));
+                }
+                else
+                {
+                    t = 0.5f * exp((-10 * time)) * sin(((time - 0.1125f) * MATH_PIX2 / 0.45f)) + 1.0f;
+                }
+            }
+            break;
+        }
+        case ELASTIC_OUT_IN:
+        {
+            if (t != 0.0f && t != 1.0f)
+            {
+                t *= 2.0f;
+                if (time < 1.0f)
+                {
+                    t = 0.5f * (exp(-10.0f * t) * sin((t - 0.1125f) * MATH_PIX2 / 0.45f)) + 0.5f;
+                }
+                else
+                {
+                    t = 0.5f * exp(10.0f * (t - 2.0f)) * sin((t - 0.1125f) * MATH_PIX2 / 0.45f) + 0.5f;
+                }
+            }
+            break;
+        }
+        case OVERSHOOT_IN:
+        {
+            t = t * t * 2.70158f * t - 1.70158f;
+            break;
+        }
+        case OVERSHOOT_OUT:
+        {
+            t--;
+            t = t * t * 2.70158f * t + 1.70158f;
+            break;
+        }
+        case OVERSHOOT_IN_OUT:
+        {
+            t *= 2.0f;
+            if (t < 1.0f)
+            {
+                t = 0.5f * t * t * (3.5949095f * t - 2.5949095f);
+            }
+            else
+            {
+                t -= 2.0f;
+                t = 0.5f * t * t * (3.5949095f * t + 2.5949095f) + 2.0f;
+            }
+            break;
+        }
+        case OVERSHOOT_OUT_IN:
+        {
+            t = 2.0f * t - 1.0f;
+            if (t < 0.0f)
+            {
+                t = 0.5f * t * t * (3.5949095f * t + 2.5949095f) + 1.0f;
+            }
+            else
+            {
+                t = 0.5f * t * t * (3.5949095f * t - 2.5949095f) + 1.0f;
+            }
+            break;
+        }
+        case BOUNCE_IN:
+        {
+            t = 1.0f - t;
+
+            if (t < 0.36363636363636365f)
+            {
+                t = 7.5625f * t * t;
+            }
+            else if (t < 0.7272727272727273f)
+            {
+                t -= 0.5454545454545454f;
+                t = 7.5625f * t * t + 0.75f;
+            }
+            else if (t < 0.9090909090909091f)
+            {
+                t -= 0.8181818181818182f;
+                t = 7.5625f * t * t + 0.9375f;
+            }
+            else
+            {
+                t -= 0.9545454545454546f;
+                t = 7.5625f * t * t + 0.984375f;
+            }
+
+            t = 1.0f - t;
+            break;
+        }
+        case BOUNCE_OUT:
+        {
+            if (t < 0.36363636363636365f)
+            {
+                t = 7.5625f * t * t;
+            }
+            else if (t < 0.7272727272727273f)
+            {
+                t -= 0.5454545454545454f;
+                t = 7.5625f * t * t + 0.75f;
+            }
+            else if (t < 0.9090909090909091f)
+            {
+                t -= 0.8181818181818182f;
+                t = 7.5625f * t * t + 0.9375f;
+            }
+            else
+            {
+                t -= 0.9545454545454546f;
+                t = 7.5625f * t * t + 0.984375f;
+            }
+            break;
+        }
+        case BOUNCE_IN_OUT:
+        {
+            if (t < 0.5f)
+            {
+                t = 1.0f - t * 2.0f;
+
+                if (t < 0.36363636363636365f)
+                {
+                    t = 7.5625f * t * t;
+                }
+                else if (t < 0.7272727272727273f)
+                {
+                    t -= 0.5454545454545454f;
+                    t = 7.5625f * t * t + 0.75f;
+                }
+                else if (t < 0.9090909090909091f)
+                {
+                    t -= 0.8181818181818182f;
+                    t = 7.5625f * t * t + 0.9375f;
+                }
+                else
+                {
+                    t -= 0.9545454545454546f;
+                    t = 7.5625f * t * t + 0.984375f;
+                }
+
+                t = (1.0f - t) * 0.5f;
+            }
+            else
+            {
+                t = t * 2.0f - 1.0f;
+                if (t < 0.36363636363636365f)
+                {
+                    t = 7.5625f * t * t;
+                }
+                else if (t < 0.7272727272727273f)
+                {
+                    t -= 0.5454545454545454f;
+                    t = 7.5625f * t * t + 0.75f;
+                }
+                else if (t < 0.9090909090909091f)
+                {
+                    t -= 0.8181818181818182f;
+                    t = 7.5625f * t * t + 0.9375f;
+                }
+                else
+                {
+                    t -= 0.9545454545454546f;
+                    t = 7.5625f * t * t + 0.984375f;
+                }
+
+                t = (t + 0.5f) * 0.5f;
+            }
+            break;
+        }
+        case BOUNCE_OUT_IN:
+        {
+            if (t < 0.1818181818f)
+            {
+                t = 15.125f * t * t;
+            }
+            else if (t < 0.3636363636f)
+            {
+                t = 1.5f + (-8.250000001f + 15.125f * t) * t;
+            }
+            else if (t < 0.4545454546f)
+            {
+                t = 3.0f + (-12.375f + 15.125f * t) * t;
+            }
+            else if (t < 0.5f)
+            {
+                t = 3.9375f + (-14.4375f + 15.125f * t) * t;
+            }
+            else if (t <= 0.5454545455f)
+            {
+                t = -3.625000004f + (15.81250001f - 15.125f * t) * t;
+            }
+            else if (t <= 0.6363636365f)
+            {
+                t = -4.75f + (17.875f - 15.125f * t) * t;
+            }
+            else if (t <= 0.8181818180f)
+            {
+                t = -7.374999995f + (21.99999999f - 15.125f * t) * t;
+            }
+            else
+            {
+                t = -14.125f + (30.25f - 15.125f * t) * t;
+            }
+            break;
+        }
+    }
+
+    float* fromValue = from->value;
+    float* toValue = to->value;
+
+    if (!_quaternionOffsets)
+    {
+        for (unsigned int i = 0; i < _componentCount; i++)
+        {
+            dst[i] = lerp(t, fromValue[i], toValue[i]);
+        }
+    }
+    else
+    {
+        // Interpolate values as scalars up to first quaternion offset.
+        unsigned int quaternionOffsetIndex = 0;
+        unsigned int quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+        unsigned int i = 0;
+        
+        do {
+            while (i < quaternionOffset)
+            {
+                dst[i] = lerp(t, fromValue[i], toValue[i]);
+                i++;
+            }
+            // Handle quaternion component.
+            float interpTime = lerp(t, fromValue[i], toValue[i]);
+            interpolateQuaternion(interpTime, (fromValue + i), (toValue + i), (dst + i));
+            i += 4;
+            quaternionOffsetIndex++;
+            quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
+        } while (quaternionOffsetIndex < _quaternionOffsetsCount);
+
+        while (i < _componentCount)
+        {
+            dst[i] = lerp(t, fromValue[i], toValue[i]);
+            i++;
         }
     }
 }
@@ -215,7 +762,7 @@ void Curve::addQuaternionOffset(unsigned int offset)
         // set new offset.
         newArray[oldSize] = offset;
 
-        delete[] _quaternionOffsets;    // delete old array
+        SAFE_DELETE_ARRAY(_quaternionOffsets);    // delete old array
         _quaternionOffsets = newArray;  // point to new array.
     }
 }
@@ -230,11 +777,17 @@ void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst) const
     float eq3 = 3 * s_2 * eq0;
     float eq4 = s_2 * s;
 
+    float* fromValue = from->value;
+    float* toValue = to->value;
+    float* outValue = from->outValue;
+    float* inValue = to->inValue;
+
+
     if (!_quaternionOffsets)
     {
         for (unsigned int i = 0; i < _componentCount; i++)
         {
-            dst[i] = from->value[i] * eq1 + from->outValue[i] * eq2 + to->inValue[i] * eq3 + to->value[i] * eq4;
+            dst[i] = bezier(eq1, eq2, eq3, eq4, fromValue[i], outValue[i], toValue[i], inValue[i]);
         }
     }
     else
@@ -247,11 +800,12 @@ void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst) const
         do {
             while (i < quaternionOffset)
             {
-                dst[i] = from->value[i] * eq1 + from->outValue[i] * eq2 + to->inValue[i] * eq3 + to->value[i] * eq4;
+                dst[i] = bezier(eq1, eq2, eq3, eq4, fromValue[i], outValue[i], toValue[i], inValue[i]);
                 i++;
             }
             // Handle quaternion component.
-            interpolateQuaternion(s, (from->value + i), (to->value + i), (dst + i));
+            float interpTime = bezier(eq1, eq2, eq3, eq4, from->time, outValue[i], to->time, inValue[i]);
+            interpolateQuaternion(interpTime, (fromValue + i), (toValue + i), (dst + i));
             i += 4;
             quaternionOffsetIndex++;
             quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
@@ -259,7 +813,7 @@ void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst) const
 
         while (i < _componentCount)
         {
-            dst[i] = from->value[i] * eq1 + from->outValue[i] * eq2 + to->inValue[i] * eq3 + to->value[i] * eq4;
+            dst[i] = bezier(eq1, eq2, eq3, eq4, fromValue[i], outValue[i], toValue[i], inValue[i]);
             i++;
         }
     }
@@ -274,11 +828,16 @@ void Curve::interpolateBSpline(float s, Point* c0, Point* c1, Point* c2, Point* 
     float eq2 = (-3 * s_3 + 3 * s_2 + 3 * s + 1) / 6.0f;
     float eq3 = s_3 / 6.0f;
 
+    float* c0Value = c0->value;
+    float* c1Value = c1->value;
+    float* c2Value = c2->value;
+    float* c3Value = c3->value;
+
     if (!_quaternionOffsets)
     {
         for (unsigned int i = 0; i < _componentCount; i++)
         {
-            dst[i] = c0->value[i] * eq0 + c1->value[i] * eq1 + c2->value[i] * eq2 + c3->value[i] * eq3;
+            dst[i] = bspline(eq0, eq1, eq2, eq3, c0Value[i], c1Value[i], c2Value[i], c3Value[i]);
         }
     }
     else
@@ -290,19 +849,19 @@ void Curve::interpolateBSpline(float s, Point* c0, Point* c1, Point* c2, Point* 
         do {
             while (i < quaternionOffset)
             {
-                dst[i] = c0->value[i] * eq0 + c1->value[i] * eq1 + c2->value[i] * eq2 + c3->value[i] * eq3;
+                dst[i] = bspline(eq0, eq1, eq2, eq3, c0Value[i], c1Value[i], c2Value[i], c3Value[i]);
                 i++;
             }
             // Handle quaternion component.
             float interpTime;
             if (c0->time == c1->time)
-                interpTime = -c0->time * eq0 + c1->time * eq1 + c2->time * eq2 + c3->time * eq3;
+                interpTime = bspline(eq0, eq1, eq2, eq3, -c0->time, c1->time, c2->time, c3->time);
             else if (c2->time == c3->time)
-                interpTime = c0->time * eq0 + c1->time * eq1 + c2->time * eq2  - c3->time * eq3;
+                interpTime = bspline(eq0, eq1, eq2, eq3, c0->time, c1->time, c2->time, -c3->time); 
             else
-                interpTime = c0->time * eq0 + c1->time * eq1 + c2->time * eq2 + c3->time * eq3;
+                interpTime = bspline(eq0, eq1, eq2, eq3, c0->time, c1->time, c2->time, c3->time);
             
-            interpolateQuaternion(s, (c1->value + quaternionOffset) , (c2->value + quaternionOffset), (dst + quaternionOffset));
+            interpolateQuaternion(s, (c1Value + i) , (c2Value + i), (dst + i));
             i += 4;
             quaternionOffsetIndex++;
             quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
@@ -311,7 +870,7 @@ void Curve::interpolateBSpline(float s, Point* c0, Point* c1, Point* c2, Point* 
         // Handle remaining scalar values.
         while (i < _componentCount)
         {
-            dst[i] = c0->value[i] * eq0 + c1->value[i] * eq1 + c2->value[i] * eq2 + c3->value[i] * eq3;
+            dst[i] = bspline(eq0, eq1, eq2, eq3, c0Value[i], c1Value[i], c2Value[i], c3Value[i]);
             i++;
         }
     }
@@ -327,11 +886,16 @@ void Curve::interpolateHermite(float s, Point* from, Point* to, float* dst) cons
     float h10 = s_3 - 2 * s_2 + s;       // basis function 2
     float h11 = s_3 - s_2;               // basis function 3
 
+    float* fromValue = from->value;
+    float* toValue = to->value;
+    float* outValue = from->outValue;
+    float* inValue = to->inValue;
+
     if (!_quaternionOffsets)
     {
         for (unsigned int i = 0; i < _componentCount; i++)
         {
-            dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * from->outValue[i] + h11 * to->inValue[i];
+            dst[i] = hermite(h00, h01, h10, h11, fromValue[i], outValue[i], toValue[i], inValue[i]);
         }
     }
     else
@@ -344,12 +908,12 @@ void Curve::interpolateHermite(float s, Point* from, Point* to, float* dst) cons
         do {
             while (i < quaternionOffset)
             {
-                dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * from->outValue[i] + h11 * to->inValue[i];
+                dst[i] = hermite(h00, h01, h10, h11, fromValue[i], outValue[i], toValue[i], inValue[i]);
                 i++;
             }
             // Handle quaternion component.
-            float interpTime = h01 * 1.0f + h10 * from->outValue[quaternionOffset] + h11 * to->inValue[quaternionOffset];
-            interpolateQuaternion(interpTime, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+            float interpTime = hermite(h00, h01, h10, h11, from->time, outValue[i], to->time, inValue[i]);
+            interpolateQuaternion(interpTime, (from->value + i), (to->value + i), (dst + i));
             i += 4;
             quaternionOffsetIndex++;
             quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
@@ -359,7 +923,7 @@ void Curve::interpolateHermite(float s, Point* from, Point* to, float* dst) cons
         // Handle remaining scalar values.
         while (i < _componentCount)
         {
-            dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * from->outValue[i] + h11 * to->inValue[i];
+            dst[i] = hermite(h00, h01, h10, h11, fromValue[i], outValue[i], toValue[i], inValue[i]);
             i++;
         }
     }
@@ -373,11 +937,14 @@ void Curve::interpolateHermiteFlat(float s, Point* from, Point* to, float* dst) 
     float h00 = 2 * s_3 - 3 * s_2 + 1;   // basis function 0
     float h01 = -2 * s_3 + 3 * s_2;      // basis function 1
 
+    float* fromValue = from->value;
+    float* toValue = to->value;
+
     if (!_quaternionOffsets)
     {
         for (unsigned int i = 0; i < _componentCount; i++)
         {
-            dst[i] = h00 * from->value[i] + h01 * to->value[i];
+            dst[i] = hermiteFlat(h00, h01, fromValue[i], toValue[i]);
         }
     }
     else
@@ -386,15 +953,15 @@ void Curve::interpolateHermiteFlat(float s, Point* from, Point* to, float* dst) 
         unsigned int quaternionOffsetIndex = 0;
         unsigned int quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
         unsigned int i = 0;
-        float interpTime = h01 * 1.0f; // Can drop all other terms because they will compute to 0. Only need to compute once.
+        float interpTime = hermiteFlat(h00, h01, from->time, to->time);
         do {
             while (i < quaternionOffset)
             {
-                dst[i] = h00 * from->value[i] + h01 * to->value[i];
+                dst[i] = hermiteFlat(h00, h01, fromValue[i], toValue[i]);
                 i++;
             }
             // We've hit a quaternion component, so handle it. increase the component counter by 4, and increase quaternionOffsetIndex
-            interpolateQuaternion(interpTime, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+            interpolateQuaternion(interpTime, (fromValue + i), (toValue + i), (dst + i));
             i += 4;
             quaternionOffsetIndex++;
             quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
@@ -403,7 +970,7 @@ void Curve::interpolateHermiteFlat(float s, Point* from, Point* to, float* dst) 
         // Handle remaining scalar values.
         while (i < _componentCount)
         {
-            dst[i] = h00 * from->value[i] + h01 * to->value[i];
+            dst[i] = hermiteFlat(h00, h01, fromValue[i], toValue[i]);
             i++;
         }
     }
@@ -422,52 +989,36 @@ void Curve::interpolateHermiteSmooth(float s, unsigned int index, Point* from, P
     float inValue;
     float outValue;
 
+    float* fromValue = from->value;
+    float* toValue = to->value;
+
     if (!_quaternionOffsets)
     {
         for (unsigned int i = 0; i < _componentCount; i++)
         {
             if (index == 0)
             {
-                outValue = to->value[i] - from->value[i];
+                outValue = toValue[i] - fromValue[i];
             }
             else
             {
-                outValue = (to->value[i] - (from - 1)->value[i]) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
+                outValue = (toValue[i] - (from - 1)->value[i]) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
             }
 
             if (index == _pointCount - 2)
             {
-                inValue = to->value[i] - from->value[i];
+                inValue = toValue[i] - fromValue[i];
             }
             else
             {
-                inValue = ((to + 1)->value[i] - from->value[i]) * ((to->time - from->time) / ((to + 1)->time - from->time));
+                inValue = ((to + 1)->value[i] - fromValue[i]) * ((to->time - from->time) / ((to + 1)->time - from->time));
             }
 
-            dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * outValue + h11 * inValue;
+            dst[i] = hermiteSmooth(h00, h01, h10, h11, fromValue[i], outValue, toValue[i], inValue);
         }
     }
     else
     {
-        // Calculates in/out values for interpolating the time for the quaternion component.
-        // Only need to calculate this once.
-        if (index == 0)
-        {
-            outValue = to->time - from->time;
-        }
-        else
-        {
-            outValue = (to->time - (from - 1)->time) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
-        }
-
-        if (index == _pointCount - 2)
-        {
-            inValue = to->time - from->time;
-        }
-        else
-        {
-            inValue = ((to + 1)->time - from->time) * ((to->time - from->time) / ((to + 1)->time - from->time));
-        }
         // Interpolate values as scalars up to first quaternion offset.
         unsigned int quaternionOffsetIndex = 0;
         unsigned int quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
@@ -480,28 +1031,46 @@ void Curve::interpolateHermiteSmooth(float s, unsigned int index, Point* from, P
                 // Interpolate as scalar.
                 if (index == 0)
                 {
-                    outValue = to->value[i] - from->value[i];
+                    outValue = toValue[i] - fromValue[i];
                 }
                 else
                 {
-                    outValue = (to->value[i] - (from - 1)->value[i]) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
+                    outValue = (toValue[i] - (from - 1)->value[i]) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
                 }
 
                 if (index == _pointCount - 2)
                 {
-                    inValue = to->value[i] - from->value[i];
+                    inValue = toValue[i] - fromValue[i];
                 }
                 else
                 {
-                    inValue = ((to + 1)->value[i] - from->value[i]) * ((to->time - from->time) / ((to + 1)->time - from->time));
+                    inValue = ((to + 1)->value[i] - fromValue[i]) * ((to->time - from->time) / ((to + 1)->time - from->time));
                 }
 
-                dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * outValue + h11 * inValue;
+                dst[i] = hermiteSmooth(h00, h01, h10, h11, fromValue[i], outValue, toValue[i], inValue);
                 i++;
             }
             
-            float interpTime = h01 * 1.0f + h10 * outValue + h11 * inValue;
-            interpolateQuaternion(interpTime, (from->value + quaternionOffset), (to->value + quaternionOffset), (dst + quaternionOffset));
+            if (index == 0)
+            {
+                outValue = to->time - from->time;
+            }
+            else
+            {
+                outValue = (to->time - (from - 1)->time) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
+            }
+
+            if (index == _pointCount - 2)
+            {
+                inValue = to->time - from->time;
+            }
+            else
+            {
+                inValue = ((to + 1)->time - from->time) * ((to->time - from->time) / ((to + 1)->time - from->time));
+            }
+
+            float interpTime = hermiteSmooth(h00, h01, h10, h11, from->time, outValue, to->time, inValue);
+            interpolateQuaternion(interpTime, (from->value + i), (to->value + i), (dst + i));
             i+=4;
             quaternionOffsetIndex++;
             quaternionOffset = _quaternionOffsets[quaternionOffsetIndex];
@@ -514,23 +1083,23 @@ void Curve::interpolateHermiteSmooth(float s, unsigned int index, Point* from, P
             // Interpolate as scalar.
             if (index == 0)
             {
-                outValue = to->value[i] - from->value[i];
+                outValue = toValue[i] - fromValue[i];
             }
             else
             {
-                outValue = (to->value[i] - (from - 1)->value[i]) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
+                outValue = (toValue[i] - (from - 1)->value[i]) * ((from->time - (from - 1)->time) / (to->time - (from - 1)->time));
             }
 
             if (index == _pointCount - 2)
             {
-                inValue = to->value[i] - from->value[i];
+                inValue = toValue[i] - fromValue[i];
             }
             else
             {
-                inValue = ((to + 1)->value[i] - from->value[i]) * ((to->time - from->time) / ((to + 1)->time - from->time));
+                inValue = ((to + 1)->value[i] - fromValue[i]) * ((to->time - from->time) / ((to + 1)->time - from->time));
             }
 
-            dst[i] = h00 * from->value[i] + h01 * to->value[i] + h10 * outValue + h11 * inValue;
+            dst[i] = hermiteSmooth(h00, h01, h10, h11, fromValue[i], outValue, toValue[i], inValue);
             i++;
         }
     }
@@ -538,11 +1107,14 @@ void Curve::interpolateHermiteSmooth(float s, unsigned int index, Point* from, P
 
 void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
 {
+    float* fromValue = from->value;
+    float* toValue = to->value;
+
     if (!_quaternionOffsets)
     {
         for (unsigned int i = 0; i < _componentCount; i++)
         {
-            dst[i] = from->value[i] + (to->value[i] - from->value[i]) * s; 
+            dst[i] = lerp(s, fromValue[i], toValue[i]);
         }
     }
     else
@@ -555,7 +1127,7 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
             // Loop through values until you hit the next quaternion offset.
             while (i < quaternionOffset)
             {
-                dst[i] = from->value[i] + (to->value[i] - from->value[i]) * s; 
+                dst[i] = lerp(s, fromValue[i], toValue[i]);
                 i++;
             }
             // Handle quaternion component.
@@ -568,7 +1140,7 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
         // Loop through the last remaining values, if any.
         while (i < _componentCount)
         {
-            dst[i] = from->value[i] + (to->value[i] - from->value[i]) * s; 
+            dst[i] = lerp(s, fromValue[i], toValue[i]);
             i++;
         }
     }
