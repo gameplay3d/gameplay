@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "Node.h"
+#include "Matrix.h"
 
 #define NODE 1
 #define JOINT 2
@@ -13,7 +14,6 @@ Node::Node(void) :
     _firstChild(NULL), _lastChild(NULL), _parent(NULL),
     _camera(NULL), _light(NULL), _model(NULL), _joint(false)
 {
-    setIdentityMatrix(_transform.m);
 }
 
 Node::~Node(void)
@@ -220,14 +220,16 @@ Node* Node::getParent() const
     return _parent;
 }
 
-void Node::setCameraInstance(CameraInstance* cameraInstance)
+void Node::setCamera(Camera* camera)
 {
-    _camera = cameraInstance;
+    _camera = camera;
 }
-void Node::setLightInstance(LightInstance* lightInstance)
+
+void Node::setLight(Light* light)
 {
-    _light = lightInstance;
+    _light = light;
 }
+
 void Node::setModel(Model* model)
 {
     _model = model;
@@ -257,6 +259,11 @@ const Matrix& Node::getWorldMatrix() const
     return _worldTransform;
 }
 
+void Node::resetTransformMatrix()
+{
+    Matrix::setIdentity(_transform.m);
+}
+
 void Node::setIsJoint(bool value)
 {
     _joint = value;
@@ -269,20 +276,12 @@ bool Node::isJoint()
 
 Camera* Node::getCamera() const
 {
-    if (_camera)
-    {
-        return _camera->getCamera();
-    }
-    return NULL;
+    return _camera;
 }
 
 Light* Node::getLight() const
 {
-    if (_light)
-    {
-        return _light->getLight();
-    }
-    return NULL;
+    return _light;
 }
 
 Model* Node::getModel() const

@@ -1,6 +1,6 @@
+
 #include "Base.h"
 #include "DAEChannelTarget.h"
-
 
 namespace gameplay
 {
@@ -40,7 +40,7 @@ DAEChannelTarget::DAEChannelTarget(const domChannelRef channelRef) : _channel(ch
                 index = end + 1;
             }
             _attributeIds.push_back(sub);
-        } while(end != std::string::npos);
+        } while (end != std::string::npos);
     }
 
 }

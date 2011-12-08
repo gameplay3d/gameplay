@@ -51,7 +51,7 @@ public:
         };
 
         /**
-         * Handles when a transform has changed.
+         * Handles when animation event occurs.
          */
         virtual void animationEvent(AnimationClip* clip, EventType type) = 0;
     };

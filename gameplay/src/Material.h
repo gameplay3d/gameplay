@@ -35,6 +35,15 @@ public:
     static Material* create(const char* materialPath);
 
     /**
+     * Creates a material from the specified properties object.
+     * 
+     * @param materialProperties The properties object defining the 
+     *      material (must have namespace equal to 'material').
+     * @return A new Material.
+     */
+    static Material* create(Properties* materialProperties);
+
+    /**
      * Creates a material from the specified effect.
      *
      * The returned material has a single technique and a single pass for the

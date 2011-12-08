@@ -27,7 +27,6 @@ Node::Type Joint::getType() const
 void Joint::transformChanged()
 {
     Node::transformChanged();
-
     _jointMatrixDirty = true;
 }
 

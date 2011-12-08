@@ -17,13 +17,13 @@
     <ClCompile Include="src\Base.cpp" />
     <ClCompile Include="src\BoundingVolume.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\CameraInstance.cpp" />
     <ClCompile Include="src\EncoderArguments.cpp" />
     <ClCompile Include="src\DAEChannelTarget.cpp" />
     <ClCompile Include="src\DAEOptimizer.cpp" />
     <ClCompile Include="src\DAESceneEncoder.cpp" />
     <ClCompile Include="src\DAEUtil.cpp" />
     <ClCompile Include="src\Effect.cpp" />
+    <ClCompile Include="src\FBXSceneEncoder.cpp" />
     <ClCompile Include="src\FileIO.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\GPBFile.cpp" />
@@ -31,7 +31,6 @@
     <ClCompile Include="src\GPBDecoder.cpp" />
     <ClCompile Include="src\Animations.cpp" />
     <ClCompile Include="src\Light.cpp" />
-    <ClCompile Include="src\LightInstance.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MaterialParameter.cpp" />
@@ -62,13 +61,13 @@
     <ClInclude Include="src\Base.h" />
     <ClInclude Include="src\BoundingVolume.h" />
     <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\CameraInstance.h" />
     <ClInclude Include="src\EncoderArguments.h" />
     <ClInclude Include="src\DAEChannelTarget.h" />
     <ClInclude Include="src\DAEOptimizer.h" />
     <ClInclude Include="src\DAESceneEncoder.h" />
     <ClInclude Include="src\DAEUtil.h" />
     <ClInclude Include="src\Effect.h" />
+    <ClInclude Include="src\FBXSceneEncoder.h" />
     <ClInclude Include="src\FileIO.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\GPBFile.h" />
@@ -76,7 +75,6 @@
     <ClInclude Include="src\GPBDecoder.h" />
     <ClInclude Include="src\Animations.h" />
     <ClInclude Include="src\Light.h" />
-    <ClInclude Include="src\LightInstance.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\MaterialParameter.h" />
     <ClInclude Include="src\Matrix.h" />
@@ -98,6 +96,11 @@
     <ClInclude Include="src\Vector4.h" />
     <ClInclude Include="src\Vertex.h" />
     <ClInclude Include="src\VertexElement.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Vector2.inl" />
+    <None Include="src\Vector3.inl" />
+    <None Include="src\Vector4.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9D69B743-4872-4DD1-8E30-0087C64298D7}</ProjectGuid>
@@ -176,7 +179,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>freetype245.lib;libcollada14dom22-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>;../external-deps/freetype2/lib/win32;../external-deps/collada-dom/lib/win32</AdditionalLibraryDirectories>
-      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)..\external-deps\collada-dom\lib\win32\*.dll" "$(TargetDir)"</Command>

@@ -1,6 +1,5 @@
 #include "Base.h"
 #include "Vector4.h"
-#include "FileIO.h"
 
 namespace gameplay
 {
@@ -10,89 +9,90 @@ Vector4::Vector4()
 {
 }
 
-
 Vector4::Vector4(float x, float y, float z, float w)
 {
     set(x, y, z, w);
 }
-
 
 Vector4::Vector4(float* src)
 {
     set(src);
 }
 
-
 Vector4::Vector4(const Vector4& p1, const Vector4& p2)
 {
     set(p1, p2);
 }
-
 
 Vector4::Vector4(const Vector4& copy)
 {
     set(copy);
 }
 
+Vector4 Vector4::fromColor(unsigned int color)
+{
+    float components[4];
+    int componentIndex = 0;
+    for (int i = 3; i >= 0; --i)
+    {
+        int component = (color >> i*8) & 0x000000ff;
+
+        components[componentIndex++] = static_cast<float>(component) / 255.0f;
+    }
+
+    Vector4 value(components);
+    return value;
+}
 
 Vector4::~Vector4()
 {
 }
 
-
 const Vector4& Vector4::zero()
 {
-    static Vector4* value = new Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector4 value(0.0f, 0.0f, 0.0f, 0.0f);
+    return value;
 }
-
 
 const Vector4& Vector4::one()
 {
-    static Vector4* value = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-    return *value;
+    static Vector4 value(1.0f, 1.0f, 1.0f, 1.0f);
+    return value;
 }
-
 
 const Vector4& Vector4::unitX()
 {
-    static Vector4* value = new Vector4(1.0f, 0.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector4 value(1.0f, 0.0f, 0.0f, 0.0f);
+    return value;
 }
-
 
 const Vector4& Vector4::unitY()
 {
-    static Vector4* value = new Vector4(0.0f, 1.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector4 value(0.0f, 1.0f, 0.0f, 0.0f);
+    return value;
 }
-
 
 const Vector4& Vector4::unitZ()
 {
-    static Vector4* value = new Vector4(0.0f, 0.0f, 1.0f, 0.0f);
-    return *value;
+    static Vector4 value(0.0f, 0.0f, 1.0f, 0.0f);
+    return value;
 }
-
 
 const Vector4& Vector4::unitW()
 {
-    static Vector4* value = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
-    return *value;
+    static Vector4 value(0.0f, 0.0f, 0.0f, 1.0f);
+    return value;
 }
-
 
 bool Vector4::isZero() const
 {
     return x == 0.0f && y == 0.0f && z == 0.0f && w == 0.0f;
 }
 
-
 bool Vector4::isOne() const
 {
     return x == 1.0f && y == 1.0f && z == 1.0f && z == 1.0f;
 }
-
 
 float Vector4::angle(const Vector4& v1, const Vector4& v2)
 {
@@ -103,7 +103,6 @@ float Vector4::angle(const Vector4& v1, const Vector4& v2)
     return atan2f(sqrt(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
 }
 
-
 void Vector4::add(const Vector4& v)
 {
     x += v.x;
@@ -111,7 +110,6 @@ void Vector4::add(const Vector4& v)
     z += v.z;
     w += v.w;
 }
-
 
 void Vector4::add(const Vector4& v1, const Vector4& v2, Vector4* dst)
 {
@@ -122,7 +120,6 @@ void Vector4::add(const Vector4& v1, const Vector4& v2, Vector4* dst)
     dst->z = v1.z + v2.z;
     dst->w = v1.w + v2.w;
 }
-
 
 void Vector4::clamp(const Vector4& min, const Vector4& max)
 {
@@ -153,13 +150,12 @@ void Vector4::clamp(const Vector4& min, const Vector4& max)
         w = max.w;
 }
 
-
 void Vector4::clamp(const Vector4& v, const Vector4& min, const Vector4& max, Vector4* dst)
 {
     assert(dst);
     assert(!( min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
 
-    // Clamp the y value.
+    // Clamp the x value.
     dst->x = v.x;
     if ( dst->x < min.x )
         dst->x = min.x;
@@ -188,8 +184,7 @@ void Vector4::clamp(const Vector4& v, const Vector4& min, const Vector4& max, Ve
         dst->w = max.w;
 }
 
-
-float Vector4::distance(const Vector4& v)
+float Vector4::distance(const Vector4& v) const
 {
     float dx = v.x - x;
     float dy = v.y - y;
@@ -199,8 +194,7 @@ float Vector4::distance(const Vector4& v)
     return sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
 }
 
-
-float Vector4::distanceSquared(const Vector4& v)
+float Vector4::distanceSquared(const Vector4& v) const
 {
     float dx = v.x - x;
     float dy = v.y - y;
@@ -210,30 +204,26 @@ float Vector4::distanceSquared(const Vector4& v)
     return (dx * dx + dy * dy + dz * dz + dw * dw);
 }
 
-
 float Vector4::dot(const Vector4& v)
 {
     return (x * v.x + y * v.y + z * v.z + w * v.w);
 }
-
 
 float Vector4::dot(const Vector4& v1, const Vector4& v2)
 {
     return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w);
 }
 
-
-float Vector4::length()
+float Vector4::length() const
 {
     return sqrt(x * x + y * y + z * z + w * w);
 }
 
 
-float Vector4::lengthSquared()
+float Vector4::lengthSquared() const
 {
     return (x * x + y * y + z * z + w * w);
 }
-
 
 void Vector4::negate()
 {
@@ -243,12 +233,10 @@ void Vector4::negate()
     w = -w;
 }
 
-
 void Vector4::normalize()
 {
     normalize(this);
 }
-
 
 void Vector4::normalize(Vector4* dst)
 {
@@ -263,12 +251,12 @@ void Vector4::normalize(Vector4* dst)
     }
 
     float n = x * x + y * y + z * z + w * w;
-    // already normalized
+    // Already normalized.
     if (n == 1.0f)
         return;
 
     n = sqrt(n);
-    // too close to zero
+    // Too close to zero.
     if (n < MATH_TOLERANCE)
         return;
 
@@ -279,7 +267,6 @@ void Vector4::normalize(Vector4* dst)
     dst->w *= n;
 }
 
-
 void Vector4::scale(float scalar)
 {
     x *= scalar;
@@ -288,7 +275,6 @@ void Vector4::scale(float scalar)
     w *= scalar;
 }
 
-
 void Vector4::set(float x, float y, float z, float w)
 {
     this->x = x;
@@ -296,7 +282,6 @@ void Vector4::set(float x, float y, float z, float w)
     this->z = z;
     this->w = w;
 }
-
 
 void Vector4::set(float* array)
 {
@@ -308,7 +293,6 @@ void Vector4::set(float* array)
     w = array[3];
 }
 
-
 void Vector4::set(const Vector4& v)
 {
     this->x = v.x;
@@ -316,7 +300,6 @@ void Vector4::set(const Vector4& v)
     this->z = v.z;
     this->w = v.w;
 }
-
 
 void Vector4::set(const Vector4& p1, const Vector4& p2)
 {
@@ -326,7 +309,6 @@ void Vector4::set(const Vector4& p1, const Vector4& p2)
     w = p2.w - p1.w;
 }
 
-
 void Vector4::subtract(const Vector4& v)
 {
     x -= v.x;
@@ -334,7 +316,6 @@ void Vector4::subtract(const Vector4& v)
     z -= v.z;
     w -= v.w;
 }
-
 
 void Vector4::subtract(const Vector4& v1, const Vector4& v2, Vector4* dst)
 {
@@ -344,19 +325,6 @@ void Vector4::subtract(const Vector4& v1, const Vector4& v2, Vector4* dst)
     dst->y = v1.y - v2.y;
     dst->z = v1.z - v2.z;
     dst->w = v1.w - v2.w;
-}
-
-void Vector4::writeBinary(FILE* file) const
-{
-    write(x, file);
-    write(y, file);
-    write(z, file);
-    write(w, file);
-}
-
-void Vector4::writeText(FILE* file) const
-{
-    fprintf(file, "%f %f %f %f\n", x, y, z, w);
 }
 
 }

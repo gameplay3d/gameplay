@@ -933,6 +933,6 @@ inline Vector4 operator*(const Matrix& m, const Vector4& v);
 
 }
 
-//#include "Matrix.inl"
+#include "Matrix.inl"
 
 #endif
