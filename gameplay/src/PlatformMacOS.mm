@@ -217,8 +217,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         __pitch -= (float)(point.y - (WINDOW_HEIGHT - __ly)) * ACCELEROMETER_Y_FACTOR;
     
         // Clamp the values to the valid range.
-        __roll = fmaxf(fminf(__roll, 90.0), -90.0);
-        __pitch = fmaxf(fminf(__pitch, 90.0), -90.0);
+        __roll = max(min(__roll, 90.0f), -90.0f);
+        __pitch = max(min(__pitch, 90.0f), -90.0f);
     
         // Update the last X/Y values.
         __lx = point.x;

@@ -5,9 +5,7 @@
 #include "Object.h"
 #include "Node.h"
 #include "Camera.h"
-#include "CameraInstance.h"
 #include "Light.h"
-#include "LightInstance.h"
 #include "Mesh.h"
 #include "MeshPart.h"
 #include "MeshSkin.h"
@@ -116,8 +114,8 @@ private:
      */
     void loadAnimation(const domAnimationRef animationRef);
 
-    CameraInstance* loadCamera(const domCamera* cameraRef);
-    LightInstance* loadLight(const domLight* lightRef);
+    Camera* loadCamera(const domCamera* cameraRef);
+    Light* loadLight(const domLight* lightRef);
     Model* loadSkin(const domSkin* skinElement);
     Model* loadGeometry(const domGeometry* geometry, const domBind_materialRef bindMaterial);
 

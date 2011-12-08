@@ -4,7 +4,6 @@
 namespace gameplay
 {
 
-// Forward declare
 class Matrix;
 
 /**
@@ -65,44 +64,44 @@ public:
     ~Vector2();
 
     /**
-     * The zero vector
+     * Returns the zero vector.
      *
      * @return The 2-element vector of 0s.
      */
     static const Vector2& zero();
 
     /**
-     * The one vector.
+     * Returns the one vector.
      *
      * @return The 2-element vector of 1s.
      */
     static const Vector2& one();
 
     /**
-     * The unit x vector.
+     * Returns the unit x vector.
      *
      * @return The 2-element unit vector along the x axis.
      */
     static const Vector2& unitX();
 
     /**
-     * The unit y vector.
+     * Returns the unit y vector.
      *
      * @return The 2-element unit vector along the y axis.
      */
     static const Vector2& unitY();
 
     /**
-     * Is this vector the all zeros.
+     * Indicates whether this vector contains all zeros.
      *
-     * @return true if all zeros, false if otherwise.
+     * @return true if this vector contains all zeros, false otherwise.
      */
     bool isZero() const;
 
     /**
-     * Is this vector all ones.
+     * Indicates whether this vector contains all ones.
      *
-     * @return true if all ones, false if otherwise.
+     * @return true if this vector contains all ones, false otherwise.
      */
     bool isOne() const;
 
@@ -112,7 +111,7 @@ public:
      * @param v1 The first vector.
      * @param v2 The second vector.
      * 
-     * @return The angle between the two vectors, in radians.
+     * @return The angle between the two vectors (in radians).
      */
     static float angle(const Vector2& v1, const Vector2& v2);
 
@@ -156,9 +155,10 @@ public:
      * @param v The other vector.
      * 
      * @return The distance between this vector and v.
+     * 
      * @see distanceSquared
      */
-    float distance(const Vector2& v);
+    float distance(const Vector2& v) const;
 
     /**
      * Returns the squared distance between this vector and v.
@@ -171,9 +171,10 @@ public:
      * @param v The other vector.
      * 
      * @return The squared distance between this vector and v.
+     * 
      * @see distance
      */
-    float distanceSquared(const Vector2& v);
+    float distanceSquared(const Vector2& v) const;
 
     /**
      * Returns the dot product of this vector and the specified vector.
@@ -198,9 +199,10 @@ public:
      * Computes the length of this vector.
      *
      * @return The length of the vector.
+     * 
      * @see lengthSquared
      */
-    float length();
+    float length() const;
 
     /**
      * Returns the squared length of this vector.
@@ -211,9 +213,10 @@ public:
      * instead of length.
      *
      * @return The squared length of the vector.
+     * 
      * @see length
      */
-    float lengthSquared();
+    float lengthSquared() const;
 
     /**
      * Negates this vector.
@@ -238,7 +241,7 @@ public:
      * of the vector is zero, this method simply copies the
      * current vector into dst.
      *
-     * @param dst the destination vector
+     * @param dst The destination vector.
      */
     void normalize(Vector2* dst);
 
@@ -260,7 +263,7 @@ public:
      * Rotates this vector by angle (specified in radians) around the given point.
      *
      * @param point The point to rotate around.
-     * @param angle The angle to rotate by, in radians.
+     * @param angle The angle to rotate by (in radians).
      */
     void rotate(const Vector2& point, float angle);
 
@@ -288,12 +291,15 @@ public:
 
     /**
      * Sets this vector to the directional vector between the specified points.
+     * 
+     * @param p1 The first point.
+     * @param p2 The second point.
      */
     void set(const Vector2& p1, const Vector2& p2);
 
     /**
      * Subtracts this vector and the specified vector as (this - v)
-     * and stores the result in this.
+     * and stores the result in this vector.
      *
      * @param v The vector to subtract.
      */
@@ -309,30 +315,99 @@ public:
      */
     static void subtract(const Vector2& v1, const Vector2& v2, Vector2* dst);
 
-    inline bool operator<(const Vector2& v) const
-    {
-        if (x == v.x)
-        {
-            return y < v.y;
-        }
-        return x < v.x;
-    }
-    inline bool operator==(const Vector2& v) const
-    {
-        return x==v.x && y==v.y;
-    }
+    /**
+     * Calculates the sum of this vector with the given vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param v The vector to add.
+     * @return The vector sum.
+     */
+    inline Vector2 operator+(const Vector2& v);
 
     /**
-     * Writes this vector to the binary file stream.
+     * Adds the given vector to this vector.
+     * 
+     * @param v The vector to add.
+     * @return This vector, after the addition occurs.
      */
-    void writeBinary(FILE* file) const;
+    inline Vector2& operator+=(const Vector2& v);
 
     /**
-     * Writes this vector to a text file stream.
+     * Calculates the sum of this vector with the given vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param v The vector to add.
+     * @return The vector sum.
      */
-    void writeText(FILE* file) const;
+    inline Vector2 operator-(const Vector2& v);
+
+    /**
+     * Subtracts the given vector from this vector.
+     * 
+     * @param v The vector to subtract.
+     * @return This vector, after the subtraction occurs.
+     */
+    inline Vector2& operator-=(const Vector2& v);
+
+    /**
+     * Calculates the negation of this vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @return The negation of this vector.
+     */
+    inline Vector2 operator-();
+
+    /**
+     * Calculates the scalar product of this vector with the given value.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param x The value to scale by.
+     * @return The scaled vector.
+     */
+    inline Vector2 operator*(float x);
+
+    /**
+     * Scales this vector by the given value.
+     * 
+     * @param x The value to scale by.
+     * @return This vector, after the scale occurs.
+     */
+    inline Vector2& operator*=(float x);
+
+    /**
+     * Determines if this vector is less than the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is less than the given vector, false otherwise.
+     */
+    inline bool operator<(const Vector2& v) const;
+
+    /**
+     * Determines if this vector is equal to the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is equal to the given vector, false otherwise.
+     */
+    inline bool operator==(const Vector2& v) const;
 };
 
+/**
+ * Calculates the scalar product of the given vector with the given value.
+ * 
+ * @param x The value to scale by.
+ * @param v The vector to scale.
+ * @return The scaled vector.
+ */
+inline Vector2 operator*(float x, const Vector2& v);
+
 }
+
+#include "Vector2.inl"
 
 #endif

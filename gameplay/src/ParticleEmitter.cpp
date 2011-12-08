@@ -52,7 +52,7 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
     if (!texture)
     {
         // Use default texture.
-        texture = Texture::create("../gameplay-resources/res/textures/particle-default.png", true);
+        texture = Texture::create("../gameplay/res/textures/particle-default.png", true);
     }
     assert(texture);
 
@@ -88,18 +88,24 @@ ParticleEmitter* ParticleEmitter::create(const char* particleFile)
         return NULL;
     }
 
-    // Top level namespace is "particle <particleName>"
-    Properties* particle = properties->getNextNamespace();
-    if (!particle || strcmp(particle->getNamespace(), "particle") != 0)
+    ParticleEmitter* particle = create(properties->getNextNamespace());
+    SAFE_DELETE(properties);
+
+    return particle;
+}
+
+ParticleEmitter* ParticleEmitter::create(Properties* properties)
+{
+    if (!properties || strcmp(properties->getNamespace(), "particle") != 0)
     {
-        LOG_ERROR_VARG("Error loading ParticleEmitter: No 'particle' namespace found: %s", particleFile);
+        LOG_ERROR("Error loading ParticleEmitter: No 'particle' namespace found");
         return NULL;
     }
 
-    Properties* sprite = particle->getNextNamespace();
+    Properties* sprite = properties->getNextNamespace();
     if (!sprite || strcmp(sprite->getNamespace(), "sprite") != 0)
     {
-        LOG_ERROR_VARG("Error loading ParticleEmitter: No 'sprite' namespace found: %s", particleFile);
+        LOG_ERROR("Error loading ParticleEmitter: No 'sprite' namespace found");
         return NULL;
     }
 
@@ -108,7 +114,7 @@ ParticleEmitter* ParticleEmitter::create(const char* particleFile)
     const char* texturePath = sprite->getString("path");
     if (strlen(texturePath) == 0)
     {
-        LOG_ERROR_VARG("Error loading ParticleEmitter: No texture path specified: %s, in %s", texturePath, particleFile);
+        LOG_ERROR_VARG("Error loading ParticleEmitter: No texture path specified: %s", texturePath);
         return NULL;
     }
 
@@ -123,36 +129,36 @@ ParticleEmitter* ParticleEmitter::create(const char* particleFile)
     float spriteFrameDuration = sprite->getFloat("frameDuration");
 
     // Emitter properties.
-    unsigned int particleCountMax = (unsigned int)particle->getInt("particleCountMax");
+    unsigned int particleCountMax = (unsigned int)properties->getInt("particleCountMax");
     if (particleCountMax == 0)
     {
         // Set sensible default.
         particleCountMax = PARTICLE_COUNT_MAX;
     }
 
-    unsigned int emissionRate = (unsigned int)particle->getInt("emissionRate");
+    unsigned int emissionRate = (unsigned int)properties->getInt("emissionRate");
     if (emissionRate == 0)
     {
         emissionRate = PARTICLE_EMISSION_RATE;
     }
 
-    bool ellipsoid = particle->getBool("ellipsoid");
+    bool ellipsoid = properties->getBool("ellipsoid");
 
-    float sizeStartMin = particle->getFloat("sizeStartMin");
-    float sizeStartMax = particle->getFloat("sizeStartMax");
-    float sizeEndMin = particle->getFloat("sizeEndMin");
-    float sizeEndMax = particle->getFloat("sizeEndMax");
-    long energyMin = particle->getLong("energyMin");
-    long energyMax = particle->getLong("energyMax");
+    float sizeStartMin = properties->getFloat("sizeStartMin");
+    float sizeStartMax = properties->getFloat("sizeStartMax");
+    float sizeEndMin = properties->getFloat("sizeEndMin");
+    float sizeEndMax = properties->getFloat("sizeEndMax");
+    long energyMin = properties->getLong("energyMin");
+    long energyMax = properties->getLong("energyMax");
 
     Vector4 colorStart;
     Vector4 colorStartVar;
     Vector4 colorEnd;
     Vector4 colorEndVar;
-    particle->getVector4("colorStart", &colorStart);
-    particle->getVector4("colorStartVar", &colorStartVar);
-    particle->getVector4("colorEnd", &colorEnd);
-    particle->getVector4("colorEndVar", &colorEndVar);
+    properties->getVector4("colorStart", &colorStart);
+    properties->getVector4("colorStartVar", &colorStartVar);
+    properties->getVector4("colorEnd", &colorEnd);
+    properties->getVector4("colorEndVar", &colorEndVar);
 
     Vector3 position;
     Vector3 positionVar;
@@ -162,21 +168,21 @@ ParticleEmitter* ParticleEmitter::create(const char* particleFile)
     Vector3 accelerationVar;
     Vector3 rotationAxis;
     Vector3 rotationAxisVar;
-    particle->getVector3("position", &position);
-    particle->getVector3("positionVar", &positionVar);
-    particle->getVector3("velocity", &velocity);
-    particle->getVector3("velocityVar", &velocityVar);
-    particle->getVector3("acceleration", &acceleration);
-    particle->getVector3("accelerationVar", &accelerationVar);
-    float rotationPerParticleSpeedMin = particle->getFloat("rotationPerParticleSpeedMin");
-    float rotationPerParticleSpeedMax = particle->getFloat("rotationPerParticleSpeedMax");
-    float rotationSpeedMin = particle->getFloat("rotationSpeedMin");
-    float rotationSpeedMax = particle->getFloat("rotationSpeedMax");
-    particle->getVector3("rotationAxis", &rotationAxis);
-    particle->getVector3("rotationAxisVar", &rotationAxisVar);
-    bool orbitPosition = particle->getBool("orbitPosition");
-    bool orbitVelocity = particle->getBool("orbitVelocity");
-    bool orbitAcceleration = particle->getBool("orbitAcceleration");
+    properties->getVector3("position", &position);
+    properties->getVector3("positionVar", &positionVar);
+    properties->getVector3("velocity", &velocity);
+    properties->getVector3("velocityVar", &velocityVar);
+    properties->getVector3("acceleration", &acceleration);
+    properties->getVector3("accelerationVar", &accelerationVar);
+    float rotationPerParticleSpeedMin = properties->getFloat("rotationPerParticleSpeedMin");
+    float rotationPerParticleSpeedMax = properties->getFloat("rotationPerParticleSpeedMax");
+    float rotationSpeedMin = properties->getFloat("rotationSpeedMin");
+    float rotationSpeedMax = properties->getFloat("rotationSpeedMax");
+    properties->getVector3("rotationAxis", &rotationAxis);
+    properties->getVector3("rotationAxisVar", &rotationAxisVar);
+    bool orbitPosition = properties->getBool("orbitPosition");
+    bool orbitVelocity = properties->getBool("orbitVelocity");
+    bool orbitAcceleration = properties->getBool("orbitAcceleration");
 
     // Apply all properties to a newly created ParticleEmitter.
     ParticleEmitter* emitter = ParticleEmitter::create(texturePath, textureBlending, particleCountMax);
@@ -198,8 +204,6 @@ ParticleEmitter* ParticleEmitter::create(const char* particleFile)
     emitter->setSpriteFrameCoords(spriteFrameCount, spriteWidth, spriteHeight);
 
     emitter->setOrbit(orbitPosition, orbitVelocity, orbitAcceleration);
-
-    SAFE_DELETE(properties);
 
     return emitter;
 }
@@ -811,7 +815,6 @@ void ParticleEmitter::update(long elapsedTime)
                     {
                         ++p->_frame;
                     }
-                    break;
                 }
                 else
                 {
@@ -827,7 +830,6 @@ void ParticleEmitter::update(long elapsedTime)
                             p->_frame = 0;
                         }
                     }
-                    break;
                 }
             }
         }

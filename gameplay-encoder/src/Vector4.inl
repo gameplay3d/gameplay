@@ -1,10 +1,14 @@
+/** 
+ * Vector4.inl
+ */
+
 #include "Matrix.h"
 #include "Vector4.h"
 
 namespace gameplay
 {
 
-inline Vector4 Vector4::operator+(const Vector4& v) const
+inline Vector4 Vector4::operator+(const Vector4& v)
 {
     Vector4 result(*this);
     result.add(v);
@@ -17,7 +21,7 @@ inline Vector4& Vector4::operator+=(const Vector4& v)
     return *this;
 }
 
-inline Vector4 Vector4::operator-(const Vector4& v) const
+inline Vector4 Vector4::operator-(const Vector4& v)
 {
     Vector4 result(*this);
     result.subtract(v);
@@ -30,14 +34,14 @@ inline Vector4& Vector4::operator-=(const Vector4& v)
     return *this;
 }
 
-inline Vector4 Vector4::operator-() const
+inline Vector4 Vector4::operator-()
 {
     Vector4 result(*this);
     result.negate();
     return result;
 }
 
-inline Vector4 Vector4::operator*(float x) const
+inline Vector4 Vector4::operator*(float x)
 {
     Vector4 result(*this);
     result.scale(x);

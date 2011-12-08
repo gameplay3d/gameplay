@@ -72,7 +72,6 @@ enum VertexUsage
 };
 
 void fillArray(float values[], float value, size_t length);
-void setIdentityMatrix(float values[]);
 
 #define ISZERO(x) (fabs(x) < 0.000001f)
 

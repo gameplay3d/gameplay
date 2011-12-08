@@ -164,70 +164,133 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
     return font;
 }
 
+unsigned int Font::getSize()
+{
+    return _size;
+}
+
 void Font::begin()
 {
     _batch->begin();
 }
 
-void Font::drawText(const char* text, int x, int y, const Vector4& color, float scale, bool rightToLeft)
+void Font::drawText(const char* text, int x, int y, const Vector4& color, unsigned int size, bool rightToLeft)
 {
-    char* rightToLeftText = NULL;
+    float scale = (float)size / _size;
+    char* cursor = NULL;
     if (rightToLeft)
     {
-        rightToLeftText = new char[strlen(text) + 1];
-        strcpy(rightToLeftText, text);
-        reverseLines(rightToLeftText);
+        cursor = const_cast<char*>(text);
     }
 
-    const int length = strlen(text);
-    const int size = (int)_size * scale;
     int xPos = x, yPos = y;
-    for (int i = 0; i < length; ++i)
-    {       
-	    char c = 0;
+    bool done = false;
+
+    while (!done)
+    {
+        int length;
+        int startIndex;
+        int iteration;
         if (rightToLeft)
         {
-            c = rightToLeftText[i];
+            char delimiter = cursor[0];
+            while (!done &&
+                   (delimiter == ' ' ||
+                   delimiter == '\t' ||
+                   delimiter == '\r' ||
+                   delimiter == '\n' ||
+                   delimiter == 0))
+            {
+                switch (delimiter)
+                {
+                case ' ':
+                    xPos += size>>1;
+                    break;
+                case '\r':
+                case '\n':
+                    yPos += size;
+                    xPos = x;
+                    break;
+                case '\t':
+                    xPos += (size>>1)*4;
+                    break;
+                case 0:
+                    done = true;
+                    break;
+                }
+
+                if (!done)
+                {
+                    ++cursor;
+                    delimiter = cursor[0];
+                }
+            }
+
+            length = strcspn(cursor, "\r\n");
+            startIndex = length - 1;
+            iteration = -1;
         }
         else
-		{
-            c = text[i];
+        {
+            length = strlen(text);
+            startIndex = 0;
+            iteration = 1;
         }
 
-        // Draw this character.
-        switch (c)
+        for (int i = startIndex; i < length && i >= 0; i += iteration)
         {
-        case ' ':
-            xPos += size>>1;
-            break;
-        case '\r':
-        case '\n':
-            yPos += size;
-            xPos = x;
-            break;
-        case '\t':
-            xPos += (size>>1)*4;
-            break;
-        default:
-            int index = c - 32; // HACK for ASCII
-            if (index >= 0 && index < (int)_glyphCount)
+            char c = 0;
+            if (rightToLeft)
             {
-                Glyph& g = _glyphs[index];
-                _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
-                xPos += g.width * scale + (size>>3);
+                c = cursor[i];
+            }
+            else
+            {
+                c = text[i];
+            }
+
+            // Draw this character.
+            switch (c)
+            {
+            case ' ':
+                xPos += size>>1;
                 break;
+            case '\r':
+            case '\n':
+                yPos += size;
+                xPos = x;
+                break;
+            case '\t':
+                xPos += (size>>1)*4;
+                break;
+            default:
+                int index = c - 32; // HACK for ASCII
+                if (index >= 0 && index < (int)_glyphCount)
+                {
+                    Glyph& g = _glyphs[index];
+                    _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
+                    xPos += g.width * scale + (size>>3);
+                    break;
+                }
             }
         }
-    }
 
-    SAFE_DELETE(rightToLeftText);
+        if (rightToLeft)
+        {
+            cursor += length;   
+        }
+        else
+        {
+            done = true;
+        }
+    }
 }
 
-void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, float scale, Justify justify, bool wrap, bool rightToLeft)
+void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify, bool wrap, bool rightToLeft)
 {
+    float scale = (float)size / _size;
     char* token = const_cast<char*>(text);
     const int length = strlen(text);
-    const int fontSize = (int)(_size * scale);
     int yPos = area.y;
 
     Justify vAlign = static_cast<Justify>(justify & 0xF0);
@@ -242,23 +305,14 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         hAlign = ALIGN_LEFT;
     }
 
-    char* rightToLeftText = NULL;
-    if (rightToLeft)
-    {
-        rightToLeftText = new char[strlen(text) + 1];
-        strcpy(rightToLeftText, text);
-        token = rightToLeftText;
-    }
-    else
-    {
-        token = const_cast<char*>(text);
-    }
+    token = const_cast<char*>(text);
 
     // For alignments other than top-left, need to calculate the y position to begin drawing from
-    // and the starting x position of each line.  For right-to-left text that wraps, need to insert
-    // newlines where lines wrap even for top-left alignment.
+    // and the starting x position of each line.  For right-to-left text, need to determine
+    // the number of characters on each line.
     std::vector<int> xPositions;
-    if (vAlign != ALIGN_TOP || hAlign != ALIGN_LEFT || (rightToLeft && wrap))
+    std::vector<unsigned int> lineLengths;
+    if (vAlign != ALIGN_TOP || hAlign != ALIGN_LEFT || rightToLeft)
     {
         int lineWidth = 0;
         int delimWidth = 0;
@@ -267,6 +321,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         {
             // Go a word at a time.
             bool reachedEOF = false;
+            unsigned int lineLength = 0;
             while (token[0] != 0)
             {
                 unsigned int tokenWidth = 0;
@@ -282,30 +337,25 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                     switch (delimiter)
                     {
                         case ' ':
-                            delimWidth += fontSize>>1;
+                            delimWidth += size>>1;
+                            lineLength++;
                             break;
                         case '\r':
                         case '\n':
-                            yPos += fontSize;
+                            yPos += size;
 
                             if (lineWidth > 0)
                             {
-                                int hWhitespace = area.width - lineWidth;
-                                if (hAlign == ALIGN_HCENTER)
-                                {
-                                    xPositions.push_back(area.x + hWhitespace / 2);
-                                }
-                                else if (hAlign == ALIGN_RIGHT)
-                                {
-                                    xPositions.push_back(area.x + hWhitespace);
-                                }
+                                addLineInfo(area, lineWidth, lineLength, hAlign, &xPositions, &lineLengths, rightToLeft);
                             }
 
                             lineWidth = 0;
+                            lineLength = 0;
                             delimWidth = 0;
                             break;
                         case '\t':
-                            delimWidth += (fontSize>>1)*4;
+                            delimWidth += (size>>1)*4;
+                            lineLength++;
                             break;
                         case 0:
                             reachedEOF = true;
@@ -327,33 +377,26 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                 }
 
                 unsigned int tokenLength = strcspn(token, " \r\n\t");
-                tokenWidth += getTokenWidth(token, tokenLength, scale);
+                tokenWidth += getTokenWidth(token, tokenLength, size, scale);
 
                 // Wrap if necessary.
                 if (lineWidth + tokenWidth + delimWidth > area.width)
                 {
-                    yPos += fontSize;
+                    yPos += size;
 
                     // Push position of current line.
-                    int hWhitespace = area.width - lineWidth;
-
-                    if (hAlign == ALIGN_HCENTER)
+                    if (lineLength)
                     {
-                        xPositions.push_back(area.x + hWhitespace / 2);
+                        addLineInfo(area, lineWidth, lineLength-1, hAlign, &xPositions, &lineLengths, rightToLeft);
                     }
-                    else if (hAlign == ALIGN_RIGHT)
+                    else
                     {
-                        xPositions.push_back(area.x + hWhitespace);
-                    }
-
-                    if (rightToLeft)
-                    {
-                        // Is this sane?
-                        token[-1] = '\n';
+                        addLineInfo(area, lineWidth, tokenLength, hAlign, &xPositions, &lineLengths, rightToLeft);
                     }
 
                     // Move token to the next line.
                     lineWidth = 0;
+                    lineLength = 0;
                     delimWidth = 0;
                 }
                 else
@@ -363,6 +406,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                 }
 
                 lineWidth += tokenWidth;
+                lineLength += tokenLength;
                 token += tokenLength;
             }
 
@@ -379,15 +423,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             }
 
             // Calculation of final horizontal position.
-            int hWhitespace = area.width - lineWidth;
-            if (hAlign == ALIGN_HCENTER)
-            {
-                xPositions.push_back(area.x + hWhitespace / 2);
-            }
-            else if (hAlign == ALIGN_RIGHT)
-            {
-                xPositions.push_back(area.x + hWhitespace);
-            }
+            addLineInfo(area, lineWidth, lineLength, hAlign, &xPositions, &lineLengths, rightToLeft);
         }
         else
         {
@@ -397,7 +433,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                 char delimiter = token[0];
                 while (delimiter == '\n')
                 {
-                    yPos += fontSize;
+                    yPos += size;
                     ++token;
                     delimiter = token[0];
                 }
@@ -408,16 +444,8 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                     tokenLength = strlen(token);
                 }
 
-                int lineWidth = getTokenWidth(token, tokenLength, scale);
-                int whitespace = area.width - lineWidth;
-                if (hAlign == ALIGN_HCENTER)
-                {
-                    xPositions.push_back(area.x + whitespace / 2);
-                }
-                else if (hAlign == ALIGN_RIGHT)
-                {
-                    xPositions.push_back(area.x + whitespace);
-                }
+                int lineWidth = getTokenWidth(token, tokenLength, size, scale);
+                addLineInfo(area, lineWidth, tokenLength, hAlign, &xPositions, &lineLengths, rightToLeft);
 
                 token += tokenLength;
             }
@@ -448,83 +476,58 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         xPos = *xPositionsIt++;
     }
 
+    token = const_cast<char*>(text);
+    
+    int iteration = 1;
+    unsigned int lineLength;
+    unsigned int currentLineLength = 0;
+    char* lineStart;
+    std::vector<unsigned int>::const_iterator lineLengthsIt;
     if (rightToLeft)
     {
-        reverseLines(rightToLeftText);
-        token = rightToLeftText;
-    }
-    else
-    {
-        token = const_cast<char*>(text);
+        lineStart = token;
+        lineLengthsIt = lineLengths.begin();
+        lineLength = *lineLengthsIt++;
+        token += lineLength - 1;
+        iteration = -1;
     }
 
     while (token[0] != 0)
     {
         // Handle delimiters until next token.
-        char delimiter = token[0];
-        bool nextLine = true;
-        bool reachedEOF = false;
-        while (delimiter == ' ' ||
-               delimiter == '\t' ||
-               delimiter == '\r' ||
-               delimiter == '\n' ||
-               delimiter == 0)
-        {
-            switch (delimiter)
-            {
-                case ' ':
-                    xPos += fontSize>>1;
-                    break;
-                case '\r':
-                case '\n':
-                    yPos += fontSize;
-
-                    // Only use next xPos for first newline character (in case of multiple consecutive newlines).
-                    if (nextLine)
-                    {
-                        if (xPositionsIt != xPositions.end())
-                        {
-                            xPos = *xPositionsIt++;
-                        }
-                        else
-                        {
-                            xPos = area.x;
-                        }
-                        nextLine = false;
-                    }
-                    break;
-                case '\t':
-                    xPos += (fontSize>>1)*4;
-                    break;
-                case 0:
-                    reachedEOF = true;
-                    break;
-            }
-
-            if (reachedEOF)
-            {
-                break;
-            }
-
-            token++;
-            delimiter = token[0];
-        }
-
-        if (reachedEOF || token == NULL)
+        if (!handleDelimiters(&token, size, iteration, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
         {
             break;
         }
 
-        unsigned int tokenLength = strcspn(token, " \r\n\t");
-        delimiter = token[tokenLength];
         bool truncated = false;
-        unsigned int tokenWidth = getTokenWidth(token, tokenLength, scale);
+        unsigned int tokenLength;
+        unsigned int tokenWidth;
+        unsigned int startIndex;
+        if (rightToLeft)
+        {
+            tokenLength = getReversedTokenLength(token, text);
+            currentLineLength += tokenLength;
+            token -= (tokenLength - 1);
+            tokenWidth = getTokenWidth(token, tokenLength, size, scale);
+            iteration = -1;
+            startIndex = tokenLength - 1;
+        }
+        else
+        {
+            tokenLength = strcspn(token, " \r\n\t");
+            tokenWidth = getTokenWidth(token, tokenLength, size, scale);
+            iteration = 1;
+            startIndex = 0;
+        }
 
         // Wrap if necessary.
         if (wrap &&
-            xPos + tokenWidth > area.x + area.width)
+            xPos + tokenWidth > area.x + area.width ||
+            (rightToLeft && currentLineLength > lineLength))
         {
-            yPos += fontSize;
+            yPos += size;
+            currentLineLength = tokenLength;
 
             if (xPositionsIt != xPositions.end())
             {
@@ -539,7 +542,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         bool draw = true;
         if (yPos < area.y)
         {
-            // Skip drawing until linebreak or wrap.
+            // Skip drawing until line break or wrap.
             draw = false;
         }
         else if (yPos > area.y + area.height)
@@ -548,7 +551,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             break;
         }
 
-        for (unsigned int i = 0; i < tokenLength; ++i)
+        for (int i = startIndex; i < (int)tokenLength && i >= 0; i += iteration)
         {
             char c = token[i];
             int glyphIndex = c - 32; // HACK for ASCII
@@ -557,7 +560,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             {
                 Glyph& g = _glyphs[glyphIndex];
 
-                if (xPos + (int)(g.width*scale) >= area.x + area.width)
+                if (xPos + (int)(g.width*scale) > area.x + area.width)
                 {
                     // Truncate this line and go on to the next one.
                     truncated = true;
@@ -568,32 +571,75 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                     // Draw this character.
                     if (draw)
                     {
-                        _batch->draw(xPos, yPos, g.width * scale, fontSize, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
+                        _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
                     }
                 }
-                xPos += g.width*scale + (fontSize>>3);
+                xPos += g.width*scale + (size>>3);
             }
         }
 
         if (!truncated)
         {
-            // Get next token.
-            token += tokenLength;
-        }
-        else
-        {
-            // Skip the rest of this line.
-            unsigned int tokenLength = strcspn(token, "\n");
+            if (rightToLeft)
+            {
+                if (token == lineStart)
+                {
+                    token += lineLength;
+                    
+                    // Now handle delimiters going forwards.
+                    if (!handleDelimiters(&token, size, 1, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
+                    {
+                        break;
+                    }
 
-            if (tokenLength > 0)
-            {                
-                // Get first token of next line.
+                    if (lineLengthsIt != lineLengths.end())
+                    {
+                        lineLength = *lineLengthsIt++;
+                    }
+                    lineStart = token;
+                    token += lineLength-1;
+                }
+                else
+                {
+                    token--;
+                }
+            }
+            else
+            {
                 token += tokenLength;
             }
         }
-    }
+        else
+        {
+            if (rightToLeft)
+            {
+                token = lineStart + lineLength;
+                
+                if (!handleDelimiters(&token, size, 1, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
+                {
+                    break;
+                }
 
-    SAFE_DELETE(rightToLeftText);
+                if (lineLengthsIt != lineLengths.end())
+                {
+                    lineLength = *lineLengthsIt++;
+                }
+                lineStart = token;
+                token += lineLength-1;
+            }
+            else
+            {
+                // Skip the rest of this line.
+                unsigned int tokenLength = strcspn(token, "\n");
+
+                if (tokenLength > 0)
+                {                
+                    // Get first token of next line.
+                    token += tokenLength;
+                }
+            }
+        }
+    }
 }
 
 void Font::end()
@@ -601,11 +647,11 @@ void Font::end()
     _batch->end();
 }
 
-void Font::measureText(const char* text, unsigned int* width, unsigned int* height, float scale)
+void Font::measureText(const char* text, unsigned int size, unsigned int* width, unsigned int* height)
 {
+    float scale = (float)size / _size;
     const int length = strlen(text);
     char* token = const_cast<char*>(text);
-    unsigned int fontSize = _size * scale;
 
     *width = 0;
     *height = 0;
@@ -615,12 +661,12 @@ void Font::measureText(const char* text, unsigned int* width, unsigned int* heig
     {
         while (token[0] == '\n')
         {
-            *height += fontSize;
+            *height += size;
             ++token;
         }
 
         unsigned int tokenLength = strcspn(token, "\n");
-        unsigned int tokenWidth = getTokenWidth(token, tokenLength, scale);
+        unsigned int tokenWidth = getTokenWidth(token, tokenLength, size, scale);
         if (tokenWidth > *width)
         {
             *width = tokenWidth;
@@ -630,8 +676,9 @@ void Font::measureText(const char* text, unsigned int* width, unsigned int* heig
     }
 }
 
-void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewport, float scale, Justify justify, bool wrap, bool clipped)
+void Font::measureText(const char* text, const Rectangle& viewport, unsigned int size, Rectangle* out, Justify justify, bool wrap, bool ignoreClip)
 {
+    float scale = (float)size / _size;
     Justify vAlign = static_cast<Justify>(justify & 0xF0);
     if (vAlign == 0)
     {
@@ -644,7 +691,6 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
         hAlign = ALIGN_LEFT;
     }
 
-    int fontSize = (int)(_size * scale);
     char* token = const_cast<char*>(text);
     std::vector<bool> emptyLines;
     std::vector<Vector2> lines;
@@ -669,12 +715,12 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
                 switch (delimiter)
                 {
                     case ' ':
-                        delimWidth += fontSize>>1;
+                        delimWidth += size>>1;
                         break;
                     case '\r':
                     case '\n':
                         // Add line-height to vertical cursor.
-                        yPos += fontSize;
+                        yPos += size;
 
                         if (lineWidth > 0)
                         {
@@ -705,7 +751,7 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
                         delimWidth = 0;
                         break;
                     case '\t':
-                        delimWidth += (fontSize>>1)*4;
+                        delimWidth += (size>>1)*4;
                         break;
                     case 0:
                         reachedEOF = true;
@@ -728,13 +774,13 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
 
             // Measure the next token.
             unsigned int tokenLength = strcspn(token, " \r\n\t");
-            unsigned int tokenWidth = getTokenWidth(token, tokenLength, scale);
+            unsigned int tokenWidth = getTokenWidth(token, tokenLength, size, scale);
 
             // Wrap if necessary.
             if (lineWidth + tokenWidth + delimWidth > viewport.width)
             {
                 // Add line-height to vertical cursor.
-                yPos += fontSize;
+                yPos += size;
 
                 // Determine horizontal position and width.
                 int hWhitespace = viewport.width - lineWidth;
@@ -776,7 +822,7 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
                 if (nextLine)
                 {
                     // Add line-height to vertical cursor.
-                    yPos += fontSize * (emptyLinesCount+1);
+                    yPos += size * (emptyLinesCount+1);
                     nextLine = false;
                     emptyLinesCount = 0;
                     emptyLines.push_back(false);
@@ -794,7 +840,7 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
 
             // Measure the next line.
             unsigned int tokenLength = strcspn(token, "\n");
-            lineWidth = getTokenWidth(token, tokenLength, scale);
+            lineWidth = getTokenWidth(token, tokenLength, size, scale);
             
             // Determine horizontal position and width.
             int xPos = viewport.x;
@@ -814,7 +860,7 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
             token += tokenLength;
         }
 
-        yPos += fontSize;
+        yPos += size;
     }
 
     if (wrap)
@@ -852,24 +898,24 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
 
     int clippedTop = 0;
     int clippedBottom = 0;
-    if (clipped)
+    if (!ignoreClip)
     {
         // Trim rect to fit text that would actually be drawn within the given viewport.
         if (y >= viewport.y)
         {
             // Text goes off the bottom of the viewport.
-            clippedBottom = (height - viewport.height) / fontSize + 1;
+            clippedBottom = (height - viewport.height) / size + 1;
             if (clippedBottom > 0)
             {
                 // Also need to crop empty lines above non-empty lines that have been clipped.
                 unsigned int emptyIndex = emptyLines.size() - clippedBottom;
                 while (emptyIndex < emptyLines.size() && emptyLines[emptyIndex] == true)
                 {
-                    height -= fontSize;
+                    height -= size;
                     emptyIndex++;
                 }
 
-                height -= fontSize * clippedBottom;
+                height -= size * clippedBottom;
             }
             else
             {
@@ -879,7 +925,7 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
         else
         {
             // Text goes above the top of the viewport.
-            clippedTop = (viewport.y - y) / fontSize + 1;
+            clippedTop = (viewport.y - y) / size + 1;
             if (clippedTop < 0)
             {
                 clippedTop = 0;
@@ -889,25 +935,25 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
             unsigned int emptyIndex = clippedTop;
             while (emptyIndex < emptyLines.size() && emptyLines[emptyIndex] == true)
             {
-                y += fontSize;
-                height -= fontSize;
+                y += size;
+                height -= size;
                 emptyIndex++;
             }
 
             if (vAlign == ALIGN_VCENTER)
             {
                 // In this case lines may be clipped off the bottom as well.
-                clippedBottom = (height - viewport.height + vWhitespace/2 + 0.01) / fontSize + 1;
+                clippedBottom = (height - viewport.height + vWhitespace/2 + 0.01) / size + 1;
                 if (clippedBottom > 0)
                 {
                     emptyIndex = emptyLines.size() - clippedBottom;
                     while (emptyIndex < emptyLines.size() && emptyLines[emptyIndex] == true)
                     {
-                        height -= fontSize;
+                        height -= size;
                         emptyIndex++;
                     }
 
-                    height -= fontSize * clippedBottom;
+                    height -= size * clippedBottom;
                 }
                 else
                 {
@@ -915,13 +961,13 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
                 }
             }
 
-            y = y + fontSize * clippedTop;
-            height = height - fontSize * clippedTop;
+            y = y + size * clippedTop;
+            height = height - size * clippedTop;
         }
     }
 
     // Determine left-most x coordinate and largest width out of lines that have not been clipped.
-    for (unsigned int i = clippedTop; i < lines.size() - clippedBottom; ++i)
+    for (int i = clippedTop; i < (int)lines.size() - clippedBottom; ++i)
     {
         if (lines[i].x < x)
         {
@@ -933,7 +979,7 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
         }
     }
 
-    if (clipped)
+    if (!ignoreClip)
     {
         // Guarantee that the output rect will fit within the viewport.
         out->x = (x >= viewport.x)? x : viewport.x;
@@ -950,11 +996,10 @@ void Font::measureText(const char* text, Rectangle* out, const Rectangle& viewpo
     }
 }
 
-unsigned int Font::getTokenWidth(const char* token, unsigned int length, float scale)
+unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigned int size, float scale)
 {
     // Calculate width of word or line.
     unsigned int tokenWidth = 0;
-    const int size = (int)(_size * scale);
     for (unsigned int i = 0; i < length; ++i)
     {
         char c = token[i];
@@ -980,23 +1025,95 @@ unsigned int Font::getTokenWidth(const char* token, unsigned int length, float s
     return tokenWidth;
 }
 
-void Font::reverseLines(char* text)
+unsigned int Font::getReversedTokenLength(const char* token, const char* bufStart)
 {
-    // Naive approach: reverse each line, then render left-to-right as usual.
-    while (text[0] != 0)
+    char* cursor = const_cast<char*>(token);
+    char c = cursor[0];
+    unsigned int length = 0;
+
+    while (cursor != bufStart && c != ' ' && c != '\r' && c != '\n' && c != '\t')
     {
-        while (text[0] == '\n')
+        length++;
+        cursor--;
+        c = cursor[0];
+    }
+
+    if (cursor == bufStart)
+    {
+        length++;
+    }
+
+    return length;
+}
+
+bool Font::handleDelimiters(char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
+                      std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd)
+{
+    char delimiter = *token[0];
+    bool nextLine = true;
+    while (delimiter == ' ' ||
+            delimiter == '\t' ||
+            delimiter == '\r' ||
+            delimiter == '\n' ||
+            delimiter == 0)
+    {
+        switch (delimiter)
         {
-            ++text;
+            case ' ':
+                *xPos += size>>1;
+                (*lineLength)++;
+                break;
+            case '\r':
+            case '\n':
+                *yPos += size;
+
+                // Only use next xPos for first newline character (in case of multiple consecutive newlines).
+                if (nextLine)
+                {
+                    if (*xPositionsIt != xPositionsEnd)
+                    {
+                        *xPos = **xPositionsIt;
+                        (*xPositionsIt)++;
+                    }
+                    else
+                    {
+                        *xPos = areaX;
+                    }
+                    nextLine = false;
+                    *lineLength = 0;
+                }
+                break;
+            case '\t':
+                *xPos += (size>>1)*4;
+                (*lineLength)++;
+                break;
+            case 0:
+                return false;
         }
 
-        unsigned int textLength = strcspn(text, "\n");
+        *token += iteration;
+        delimiter = *token[0];
+    }
 
-        std::string line(text, textLength);
-        std::string reversedLine(line.rbegin(), line.rend());
-        memcpy(text, reversedLine.c_str(), textLength);
+    return true;
+}
 
-        text += textLength;
+void Font::addLineInfo(const Rectangle& area, int lineWidth, int lineLength, Justify hAlign,
+                       std::vector<int>* xPositions, std::vector<unsigned int>* lineLengths, bool rightToLeft)
+{
+    int hWhitespace = area.width - lineWidth;
+    if (hAlign == ALIGN_HCENTER)
+    {
+        (*xPositions).push_back(area.x + hWhitespace / 2);
+    }
+    else if (hAlign == ALIGN_RIGHT)
+    {
+        (*xPositions).push_back(area.x + hWhitespace);
+    }
+
+    if (rightToLeft)
+    {
+        (*lineLengths).push_back(lineLength);
     }
 }
 
