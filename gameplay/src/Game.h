@@ -54,13 +54,6 @@ public:
     static Game* getInstance();
 
     /**
-     * Gets the total absolute running time (in milliseconds) since Game::run().
-     * 
-     * @return The total absolute running time (in milliseconds).
-     */
-    static long getAbsoluteTime();
-
-    /**
      * Gets whether vertical sync is enabled for the game display.
      * 
      * @return true if vsync is enabled; false if not.
@@ -73,6 +66,13 @@ public:
      * @param enable true if vsync is enabled; false if not.
      */
     static void setVsync(bool enable);
+
+    /**
+     * Gets the total absolute running time (in milliseconds) since Game::run().
+     * 
+     * @return The total absolute running time (in milliseconds).
+     */
+    static long getAbsoluteTime();
 
     /**
      * Gets the total game time (in milliseconds). This is the total accumulated game time (unpaused).
@@ -89,7 +89,7 @@ public:
      *
      * @return The current game state.
      */
-    State getState() const;
+    inline State getState() const;
 
     /**
      * Call this method to initialize the game, and begin running the game.
@@ -129,21 +129,21 @@ public:
      * 
      * @return The current frame rate.
      */
-    unsigned int getFrameRate() const;
+    inline unsigned int getFrameRate() const;
 
     /**
      * Gets the game window width.
      * 
      * @return The game window width.
      */
-    unsigned int getWidth() const;
+    inline unsigned int getWidth() const;
 
     /**
      * Gets the game window height.
      * 
      * @return The game window height.
      */
-    unsigned int getHeight() const;
+    inline unsigned int getHeight() const;
 
     /**
      * Clears the specified resource buffers to the specified clear values. 
@@ -161,7 +161,7 @@ public:
      *
      * @return The audio controller for this game.
      */
-    const AudioController* getAudioController() const;
+    inline AudioController* getAudioController() const;
 
     /**
      * Gets the animation controller for managing control of animations
@@ -169,7 +169,7 @@ public:
      * 
      * @return The animation controller for this game.
      */
-    AnimationController* getAnimationController();
+    inline AnimationController* getAnimationController() const;
 
     /**
      * Gets the physics controller for managing control of physics
@@ -177,7 +177,7 @@ public:
      * 
      * @return The physics controller for this game.
      */
-    PhysicsController* getPhysicsController();
+    inline PhysicsController* getPhysicsController() const;
 
     /**
      * Menu callback on menu events.
@@ -250,6 +250,12 @@ protected:
      */
     virtual void render(long elapsedTime) = 0;
 
+    /**
+     * Renders a single frame once and then swaps it to the display.
+     */
+    template <class T>
+    void renderOnce(T* instance, void (T::*method)(long), long cookie);
+
 private:
 
     /**
@@ -286,5 +292,7 @@ private:
 };
 
 }
+
+#include "Game.inl"
 
 #endif

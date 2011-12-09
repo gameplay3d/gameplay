@@ -590,6 +590,13 @@ void Platform::getAccelerometerPitchAndRoll(float* pitch, float* roll)
     *pitch = __pitch;
     *roll = __roll;
 }
+
+
+void Platform::swapBuffers()
+{
+    if (__hdc)
+        SwapBuffers(__hdc);
+}
     
 }
 

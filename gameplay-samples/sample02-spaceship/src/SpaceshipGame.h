@@ -85,9 +85,19 @@ private:
     void resetGame();
 
     /**
-     * Visits nodes in a scene.
+     * Draw the splash screen
      */
-    void visitNode(Node* node, long cookie);
+    void drawSplash(long cookie);
+
+    /**
+     * Draws the scene
+     */
+    void drawScene(Node* node, long cookie);
+
+    /**
+     * Draws the text.
+     */
+    void drawText();
 
     // Scene variables
     Scene* _scene;
