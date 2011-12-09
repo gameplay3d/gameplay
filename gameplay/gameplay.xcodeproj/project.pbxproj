@@ -165,6 +165,7 @@
 		428390981489D6E800E2B2F5 /* SceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneLoader.h; path = src/SceneLoader.h; sourceTree = SOURCE_ROOT; };
 		4299EFA8146AC94300FF4A73 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
 		4299EFAA146AC94B00FF4A73 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		42C932AF14919FD10098216A /* Game.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Game.inl; path = src/Game.inl; sourceTree = SOURCE_ROOT; };
 		42CCD553146EC1DD00353661 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = SDKs/MacOSX10.7.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		42CCD555146EC1EB00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
 		42CD0DA6147D8EA80000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../external-deps/bullet/lib/macos/libbullet.a"; sourceTree = "<group>"; };
@@ -411,6 +412,7 @@
 				42CD0DDB147D8FF50000361E /* Frustum.h */,
 				42CD0DDC147D8FF50000361E /* Game.cpp */,
 				42CD0DDD147D8FF50000361E /* Game.h */,
+				42C932AF14919FD10098216A /* Game.inl */,
 				42CD0DDE147D8FF50000361E /* gameplay-main-macos.mm */,
 				42CD0DDF147D8FF50000361E /* gameplay-main-qnx.cpp */,
 				42CD0DE0147D8FF50000361E /* gameplay-main-win32.cpp */,
