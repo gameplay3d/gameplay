@@ -16,7 +16,6 @@
 		42C8EE0C14724CD700E43619 /* Animations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDBB14724CD700E43619 /* Animations.cpp */; };
 		42C8EE0D14724CD700E43619 /* Base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDBD14724CD700E43619 /* Base.cpp */; };
 		42C8EE0E14724CD700E43619 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDBF14724CD700E43619 /* Camera.cpp */; };
-		42C8EE0F14724CD700E43619 /* CameraInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDC114724CD700E43619 /* CameraInstance.cpp */; };
 		42C8EE1014724CD700E43619 /* DAEChannelTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDC314724CD700E43619 /* DAEChannelTarget.cpp */; };
 		42C8EE1114724CD700E43619 /* DAEOptimizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDC514724CD700E43619 /* DAEOptimizer.cpp */; };
 		42C8EE1214724CD700E43619 /* DAESceneEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDC714724CD700E43619 /* DAESceneEncoder.cpp */; };
@@ -29,7 +28,6 @@
 		42C8EE1914724CD700E43619 /* GPBDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDD514724CD700E43619 /* GPBDecoder.cpp */; };
 		42C8EE1A14724CD700E43619 /* GPBFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDD714724CD700E43619 /* GPBFile.cpp */; };
 		42C8EE1B14724CD700E43619 /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDD914724CD700E43619 /* Light.cpp */; };
-		42C8EE1C14724CD700E43619 /* LightInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDDB14724CD700E43619 /* LightInstance.cpp */; };
 		42C8EE1D14724CD700E43619 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDDD14724CD700E43619 /* main.cpp */; };
 		42C8EE1E14724CD700E43619 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDDE14724CD700E43619 /* Material.cpp */; };
 		42C8EE1F14724CD700E43619 /* MaterialParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDE014724CD700E43619 /* MaterialParameter.cpp */; };
@@ -95,8 +93,6 @@
 		42C8EDBE14724CD700E43619 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base.h; path = src/Base.h; sourceTree = SOURCE_ROOT; };
 		42C8EDBF14724CD700E43619 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Camera.cpp; path = src/Camera.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDC014724CD700E43619 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = src/Camera.h; sourceTree = SOURCE_ROOT; };
-		42C8EDC114724CD700E43619 /* CameraInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraInstance.cpp; path = src/CameraInstance.cpp; sourceTree = SOURCE_ROOT; };
-		42C8EDC214724CD700E43619 /* CameraInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraInstance.h; path = src/CameraInstance.h; sourceTree = SOURCE_ROOT; };
 		42C8EDC314724CD700E43619 /* DAEChannelTarget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DAEChannelTarget.cpp; path = src/DAEChannelTarget.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDC414724CD700E43619 /* DAEChannelTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DAEChannelTarget.h; path = src/DAEChannelTarget.h; sourceTree = SOURCE_ROOT; };
 		42C8EDC514724CD700E43619 /* DAEOptimizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DAEOptimizer.cpp; path = src/DAEOptimizer.cpp; sourceTree = SOURCE_ROOT; };
@@ -121,8 +117,6 @@
 		42C8EDD814724CD700E43619 /* GPBFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPBFile.h; path = src/GPBFile.h; sourceTree = SOURCE_ROOT; };
 		42C8EDD914724CD700E43619 /* Light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Light.cpp; path = src/Light.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDDA14724CD700E43619 /* Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Light.h; path = src/Light.h; sourceTree = SOURCE_ROOT; };
-		42C8EDDB14724CD700E43619 /* LightInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LightInstance.cpp; path = src/LightInstance.cpp; sourceTree = SOURCE_ROOT; };
-		42C8EDDC14724CD700E43619 /* LightInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightInstance.h; path = src/LightInstance.h; sourceTree = SOURCE_ROOT; };
 		42C8EDDD14724CD700E43619 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDDE14724CD700E43619 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Material.cpp; path = src/Material.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDDF14724CD700E43619 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Material.h; path = src/Material.h; sourceTree = SOURCE_ROOT; };
@@ -227,8 +221,6 @@
 				4283905814896E6C00E2B2F5 /* BoundingVolume.h */,
 				42C8EDBF14724CD700E43619 /* Camera.cpp */,
 				42C8EDC014724CD700E43619 /* Camera.h */,
-				42C8EDC114724CD700E43619 /* CameraInstance.cpp */,
-				42C8EDC214724CD700E43619 /* CameraInstance.h */,
 				42C8EDC314724CD700E43619 /* DAEChannelTarget.cpp */,
 				42C8EDC414724CD700E43619 /* DAEChannelTarget.h */,
 				42C8EDC514724CD700E43619 /* DAEOptimizer.cpp */,
@@ -255,8 +247,6 @@
 				42C8EDD814724CD700E43619 /* GPBFile.h */,
 				42C8EDD914724CD700E43619 /* Light.cpp */,
 				42C8EDDA14724CD700E43619 /* Light.h */,
-				42C8EDDB14724CD700E43619 /* LightInstance.cpp */,
-				42C8EDDC14724CD700E43619 /* LightInstance.h */,
 				42C8EDDD14724CD700E43619 /* main.cpp */,
 				42C8EDDE14724CD700E43619 /* Material.cpp */,
 				42C8EDDF14724CD700E43619 /* Material.h */,
@@ -388,7 +378,6 @@
 				42C8EE0C14724CD700E43619 /* Animations.cpp in Sources */,
 				42C8EE0D14724CD700E43619 /* Base.cpp in Sources */,
 				42C8EE0E14724CD700E43619 /* Camera.cpp in Sources */,
-				42C8EE0F14724CD700E43619 /* CameraInstance.cpp in Sources */,
 				42C8EE1014724CD700E43619 /* DAEChannelTarget.cpp in Sources */,
 				42C8EE1114724CD700E43619 /* DAEOptimizer.cpp in Sources */,
 				42C8EE1214724CD700E43619 /* DAESceneEncoder.cpp in Sources */,
@@ -401,7 +390,6 @@
 				42C8EE1914724CD700E43619 /* GPBDecoder.cpp in Sources */,
 				42C8EE1A14724CD700E43619 /* GPBFile.cpp in Sources */,
 				42C8EE1B14724CD700E43619 /* Light.cpp in Sources */,
-				42C8EE1C14724CD700E43619 /* LightInstance.cpp in Sources */,
 				42C8EE1D14724CD700E43619 /* main.cpp in Sources */,
 				42C8EE1E14724CD700E43619 /* Material.cpp in Sources */,
 				42C8EE1F14724CD700E43619 /* MaterialParameter.cpp in Sources */,

@@ -50,12 +50,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42CD0ED5147D928E0000361E /* libgameplay.a in Frameworks */,
 				42CD0EE7147D92E60000361E /* libbullet.a in Frameworks */,
 				42CD0EE8147D92E60000361E /* libogg.a in Frameworks */,
 				42CD0EE9147D92E60000361E /* libvorbis.a in Frameworks */,
 				42CD0EEA147D92E60000361E /* libvorbisenc.a in Frameworks */,
 				42CD0EEB147D92E60000361E /* libvorbisfile.a in Frameworks */,
-				42CD0ED5147D928E0000361E /* libgameplay.a in Frameworks */,
 				42A3C5E4146CB7420091C1E4 /* libpng.a in Frameworks */,
 				42A3C5E6146CB7690091C1E4 /* libz.dylib in Frameworks */,
 				4217006314697FF100A45C02 /* Cocoa.framework in Frameworks */,
@@ -71,6 +71,7 @@
 		4217005314697FF100A45C02 = {
 			isa = PBXGroup;
 			children = (
+				42F68AA31469CC3000E0E3C4 /* sample00-mesh-macos.plist */,
 				42CCD4B3146D914B00353661 /* icon.png */,
 				42A3C5DD146C96640091C1E4 /* res */,
 				4217006814697FF100A45C02 /* src */,
@@ -91,7 +92,6 @@
 		4217006814697FF100A45C02 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				42F68AA31469CC3000E0E3C4 /* sample00-mesh-macos.plist */,
 				42BBCD32146C89F900D2A5F8 /* MeshGame.cpp */,
 				42BBCD33146C89F900D2A5F8 /* MeshGame.h */,
 			);

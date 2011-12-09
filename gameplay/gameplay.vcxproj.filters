@@ -475,6 +475,9 @@
     <None Include="res\textures\particle-default.png">
       <Filter>res\textures</Filter>
     </None>
+    <None Include="src\Game.inl">
+      <Filter>src</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\PhysicsFixedConstraint.inl">
