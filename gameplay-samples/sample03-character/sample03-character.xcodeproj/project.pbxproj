@@ -25,9 +25,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		42C932E61491A1AC0098216A /* sample03-character-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-macos.plist"; sourceTree = "<group>"; };
 		42CCD56C146EC4B300353661 /* sample03-character.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD570146EC4B300353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		42CCD578146EC4B300353661 /* sample03-character-macos.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "sample03-character-macos.plist"; sourceTree = "<group>"; };
 		42CCD5A1146EC5BF00353661 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		42CCD5A3146EC5C600353661 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		42CCD5A5146EC5CE00353661 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -50,12 +50,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42CD0EF9147D934D0000361E /* libgameplay.a in Frameworks */,
 				42CD0EFF147D93560000361E /* libbullet.a in Frameworks */,
 				42CD0F00147D93560000361E /* libogg.a in Frameworks */,
 				42CD0F01147D93560000361E /* libvorbis.a in Frameworks */,
 				42CD0F02147D93560000361E /* libvorbisenc.a in Frameworks */,
 				42CD0F03147D93560000361E /* libvorbisfile.a in Frameworks */,
-				42CD0EF9147D934D0000361E /* libgameplay.a in Frameworks */,
 				42CCD5AA146EC5F000353661 /* libpng.a in Frameworks */,
 				42CCD5A8146EC5DE00353661 /* libz.dylib in Frameworks */,
 				42CCD571146EC4B300353661 /* Cocoa.framework in Frameworks */,
@@ -86,6 +86,7 @@
 		42CCD561146EC4B300353661 = {
 			isa = PBXGroup;
 			children = (
+				42C932E61491A1AC0098216A /* sample03-character-macos.plist */,
 				42CCD5B0146EC62A00353661 /* icon.png */,
 				42CCD5B3146EC65F00353661 /* res */,
 				42CCD576146EC4B300353661 /* src */,
@@ -117,7 +118,6 @@
 		42CCD576146EC4B300353661 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				42CCD578146EC4B300353661 /* sample03-character-macos.plist */,
 				42CCD5AD146EC62000353661 /* CharacterGame.cpp */,
 				42CCD5AE146EC62000353661 /* CharacterGame.h */,
 			);
