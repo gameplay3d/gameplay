@@ -262,7 +262,7 @@ unsigned int Mesh::getVertexSize() const
     return _vertexFormat->getVertexSize();
 }
 
-VertexBuffer Mesh::getVertexBuffer() const
+VertexBufferHandle Mesh::getVertexBuffer() const
 {
     return _vertexBuffer;
 }

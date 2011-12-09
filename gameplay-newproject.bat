@@ -158,7 +158,7 @@ mkdir %projPath%
 mkdir %projPath%\src
 mkdir %projPath%\res
 
-REM Copy project files
+REM Copy Microsoft Visual Studio project files
 copy gameplay-template\gameplay-template.vcxproj %projPath%\%projName%.vcxproj
 call:replace %projPath%\%projName%.vcxproj TEMPLATE_PROJECT "%projName%"
 call:replace %projPath%\%projName%.vcxproj TemplateGame "%className%"
@@ -170,6 +170,18 @@ call:replace %projPath%\%projName%.vcxproj.filters TemplateGame "%className%"
 copy gameplay-template\gameplay-template.vcxproj.user %projPath%\%projName%.vcxproj.user
 call:replace %projPath%\%projName%.vcxproj.user GAMEPLAY_PATH "%gpPath%"
 
+REM Copy Apple XCode project files
+mkdir %projPath%\%projName%.xcodeproj
+copy gameplay-template\gameplay-template.xcodeproj\project.pbxproj %projPath%\%projName%.xcodeproj\project.pbxproj
+call:replace %projPath%\%projName%.xcodeproj\project.pbxproj GAMEPLAY_PATH "%gpPath%"
+call:replace %projPath%\%projName%.xcodeproj\project.pbxproj TemplateGame "%className%"
+call:replace %projPath%\%projName%.xcodeproj\project.pbxproj TEMPLATE_PROJECT "%projName%"
+
+copy gameplay-template\gameplay-template-macos.plist %projPath%\%projName%-macos.plist
+call:replace %projPath%\%projName%-macos.plist TEMPLATE_UUID "%uuid%"
+call:replace %projPath%\%projName%-macos.plist TEMPLATE_AUTHOR "%author%"
+
+REM Copy BlackBerry NDK project files
 copy gameplay-template\template.cproject %projPath%\.cproject
 call:replace %projPath%\.cproject TEMPLATE_PROJECT "%projName%"
 call:replace %projPath%\.cproject TEMPLATE_UUID "%uuid%"
@@ -195,7 +207,7 @@ REM Copy resource files
 copy gameplay-template\res\* %projPath%\res\
 copy gameplay\res\shaders\colored.* %projPath%\res\
 
-RIM Copy icon
+REM Copy icon
 copy gameplay-template\icon.png %projPath%\icon.png
 
 REM Open new project folder
