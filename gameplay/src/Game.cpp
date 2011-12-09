@@ -48,9 +48,9 @@ long Game::getAbsoluteTime()
     return Platform::getAbsoluteTime();
 }
 
-bool Game::isVsync()
+long Game::getGameTime()
 {
-    return Platform::isVsync();
+    return Platform::getAbsoluteTime() - _pausedTimeTotal;
 }
 
 void Game::setVsync(bool enable)
@@ -58,20 +58,11 @@ void Game::setVsync(bool enable)
     Platform::setVsync(enable);
 }
 
-long Game::getGameTime()
+bool Game::isVsync()
 {
-    return (Platform::getAbsoluteTime() - _pausedTimeTotal);
+    return Platform::isVsync();
 }
 
-Game::State Game::getState() const
-{
-    return _state;
-}
-
-unsigned int Game::getFrameRate() const
-{
-    return _frameRate;
-}
 
 int Game::run(int width, int height)
 {
@@ -197,16 +188,6 @@ void Game::frame()
     }
 }
 
-unsigned int Game::getWidth() const
-{
-    return _width;
-}
-
-unsigned int Game::getHeight() const
-{
-    return _height;
-}
-
 void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil)
 {
     GLbitfield bits = 0;
@@ -243,21 +224,6 @@ void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, 
         bits |= GL_STENCIL_BUFFER_BIT;
     }
     glClear(bits);
-}
-
-AnimationController* Game::getAnimationController()
-{
-    return _animationController;
-}
-
-const AudioController* Game::getAudioController() const
-{
-    return _audioController;
-}
-
-PhysicsController* Game::getPhysicsController()
-{
-    return _physicsController;
 }
 
 void Game::menu()

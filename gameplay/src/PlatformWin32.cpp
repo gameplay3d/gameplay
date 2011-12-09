@@ -4,6 +4,7 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include <GL/wglew.h>
 
 static long __timeTicksPerMillis;
 static long __timeStart;
@@ -11,8 +12,8 @@ static long __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static float __roll;
 static float __pitch;
-static HWND __hwnd = 0;
 static HINSTANCE __hinstance = 0;
+static HWND __hwnd = 0;
 static HDC __hdc = 0;
 static HGLRC __hrc = 0;
 
@@ -472,6 +473,7 @@ Platform* Platform::create(Game* game)
     // Vertical sync.
     wglSwapIntervalEXT(__vsync ? 1 : 0);
 
+    // Show the window
     ShowWindow(__hwnd, SW_SHOW);
 
     return platform;
@@ -499,7 +501,10 @@ int Platform::enterMessagePump()
     __pitch = 0.0;
     __roll = 0.0;
 
-    _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);
+    SwapBuffers(__hdc);
+
+    if (_game->getState() != Game::RUNNING)
+        _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     // Enter event dispatch loop.
     MSG msg;
@@ -570,6 +575,12 @@ void Platform::getAccelerometerPitchAndRoll(float* pitch, float* roll)
 {
     *pitch = __pitch;
     *roll = __roll;
+}
+
+void Platform::swapBuffers()
+{
+    if (__hdc)
+        SwapBuffers(__hdc);
 }
 
 }

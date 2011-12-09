@@ -1,14 +1,9 @@
-#ifndef GAMEPLAYMAINWIN32_H_
-#define GAMEPLAYMAINWIN32_H_
-
 #ifdef WIN32
 
 #include "gameplay.h"
+
 using namespace gameplay;
 
-#define GL_VERSION3
-#include <GL/glew.h>
-#include <GL/wglew.h>
 #ifndef _WINDOWS_
     #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
@@ -26,7 +21,5 @@ extern "C" int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LP
     delete platform;
     return result;
 }
-
-#endif
 
 #endif
