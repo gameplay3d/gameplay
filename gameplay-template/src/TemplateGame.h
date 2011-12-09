@@ -2,6 +2,7 @@
 #define TEMPLATEGAME_H_
 
 #include "gameplay.h"
+
 using namespace gameplay;
 
 /**
