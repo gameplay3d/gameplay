@@ -14,7 +14,7 @@ long Game::_pausedTimeLast = 0L;
 long Game::_pausedTimeTotal = 0L;
 
 Game::Game() 
-    : _state(UNINITIALIZED), 
+    : _initialized(false), _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
       _clearDepth(1.0f), _clearStencil(0),
       _animationController(NULL), _audioController(NULL)
@@ -63,7 +63,6 @@ bool Game::isVsync()
     return Platform::isVsync();
 }
 
-
 int Game::run(int width, int height)
 {
     if (_state != UNINITIALIZED)
@@ -97,8 +96,6 @@ bool Game::startup()
     _physicsController = new PhysicsController();
     _physicsController->initialize();
 
-    // Call user initialization.
-    initialize();
     _state = RUNNING;
 
     return true;
@@ -158,7 +155,15 @@ void Game::exit()
 void Game::frame()
 {
     if (_state != RUNNING)
+    {
         return;
+    }
+    else
+    {
+        if (!_initialized)
+            initialize();
+        _initialized = true;
+    }
 
     // Update Time.
     static long lastFrameTime = Game::getGameTime();
