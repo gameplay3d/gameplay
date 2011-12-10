@@ -221,12 +221,12 @@ protected:
     Game();
 
     /**
-     * Initializes the game on startup.
+     * Initialize callback that is called just before the first frame when the game starts.
      */
     virtual void initialize() = 0;
 
     /**
-     * Finalizes the game on exit.
+     * Finalize callback that is called when the game on exits.
      */
     virtual void finalize() = 0;
 
@@ -252,6 +252,8 @@ protected:
 
     /**
      * Renders a single frame once and then swaps it to the display.
+     *
+     * This is useful for rendering splash screens.
      */
     template <class T>
     void renderOnce(T* instance, void (T::*method)(long), long cookie);
@@ -275,9 +277,10 @@ private:
      */
     void shutdown();
 
+    bool _initialized;                          // If game has initialized yet.
+    State _state;                               // The game state.
     static long _pausedTimeLast;                // The last time paused.
     static long _pausedTimeTotal;               // The total time paused.
-    State _state;                               // The game state.
     long _frameLastFPS;                         // The last time the frame count was updated.
     unsigned int _frameCount;                   // The current frame count.
     unsigned int _frameRate;                    // The current frame rate.
