@@ -28,13 +28,14 @@ public:
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
 
+    Mesh* getMesh();
     void setMesh(Mesh* mesh);
     MeshSkin* getSkin();
     void setSkin(MeshSkin* skin);
 
 private:
 
-    Mesh* _ref;
+    Mesh* _mesh;
     MeshSkin* _meshSkin;
     std::list<Material*> _materials;
 };
