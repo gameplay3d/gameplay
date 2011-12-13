@@ -48,7 +48,7 @@ namespace gameplay
 static Effect* __spriteEffect = NULL;
 
 SpriteBatch::SpriteBatch() :
-    _effect(NULL), _stateBlock(NULL), _sampler(NULL), _samplerUniform(NULL), _projectionUniform(NULL), _vaPosition(-1), _vaTexCoord(-1), _vaColor(-1),
+    _texture(NULL), _effect(NULL), _stateBlock(NULL), _sampler(NULL), _samplerUniform(NULL), _projectionUniform(NULL), _vaPosition(-1), _vaTexCoord(-1), _vaColor(-1),
     _textureWidthRatio(0.0f), _textureHeightRatio(0.0f), _capacity(0), _count(0),
     _vertices(NULL), _verticesPtr(NULL), _indices(NULL), _indicesPtr(NULL), _index(0),
     _drawing(false), _projectionMatrix(NULL), _customProjectionMatrix(false)
@@ -72,6 +72,15 @@ SpriteBatch::~SpriteBatch()
     SAFE_DELETE(_projectionMatrix);
     SAFE_RELEASE(_sampler);
     SAFE_RELEASE(_effect);
+    SAFE_RELEASE(_texture);
+}
+
+SpriteBatch* SpriteBatch::create(const char* texturePath, Effect* effect, unsigned int initialCapacity)
+{
+    Texture* texture = Texture::create(texturePath);
+    SpriteBatch* batch = SpriteBatch::create(texture);
+    batch->_texture = texture;
+    return batch;
 }
 
 SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int initialCapacity)

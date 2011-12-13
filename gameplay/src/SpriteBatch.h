@@ -45,6 +45,32 @@ public:
      * <li>The fragment shader must define at least a single sampler/texture uniform.
      * </ol>
      *
+     * @param texturePath The path of the texture for this sprite batch.
+     * @param effect An optional effect to use with the SpriteBatch.
+     * @param initialCapacity An optional initial capacity of the batch (number of sprites).
+     * 
+     * @return A new SpriteBatch for drawing sprites using the given texture.
+     */
+    static SpriteBatch* create(const char* texturePath, Effect* effect = NULL, unsigned int initialCapacity = 0);
+
+    /**
+     * Creates a new SpriteBatch for drawing sprites with the given texture.
+     *
+     * If the effect parameter is NULL, a default effect is used which
+     * applies an orthographic projection for the currently bound viewport.
+     * A custom projection matrix can be used with the default effect by passing
+     * a new projection matrix into the SpriteBatch via the setProjectionMatrix
+     * method.
+     *
+     * If a custom effect is specified, it must meet the following requirements:
+     * <ol>
+     * <li>The vertex shader inputs must include a vec3 position, a vec2 tex coord
+     * and a vec4 color.
+     * <li>The names of the the vertex shader inputs must match the names defined
+     * by the VERTEX_ATTRIBUTE_XXX constants.
+     * <li>The fragment shader must define at least a single sampler/texture uniform.
+     * </ol>
+     *
      * @param texture The texture for this sprite batch.
      * @param effect An optional effect to use with the SpriteBatch.
      * @param initialCapacity An optional initial capacity of the batch (number of sprites).
@@ -204,6 +230,7 @@ private:
 
     void resizeBatch(unsigned int capacity);
 
+    Texture* _texture;
     Effect* _effect;
     RenderState::StateBlock* _stateBlock;
     Texture::Sampler* _sampler;

@@ -148,7 +148,7 @@ public:
      *
      * @return The vertex buffer object handle.
      */
-    VertexBuffer getVertexBuffer() const;
+    VertexBufferHandle getVertexBuffer() const;
 
     /**
      * Determines if the mesh is dynamic.
@@ -296,7 +296,7 @@ private:
 
     VertexFormat* _vertexFormat;
     unsigned int _vertexCount;
-    VertexBuffer _vertexBuffer;
+    VertexBufferHandle _vertexBuffer;
     PrimitiveType _primitiveType;
     unsigned int _partCount;
     MeshPart** _parts;
