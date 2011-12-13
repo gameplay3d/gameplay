@@ -72,6 +72,8 @@ SpaceshipGame::~SpaceshipGame()
 
 void SpaceshipGame::initialize()
 {
+    renderOnce(this, &SpaceshipGame::drawSplash, 0);
+
     // Create our render state block that will be reused across all materials
     _stateBlock = RenderState::StateBlock::create();
     _stateBlock->setDepthTest(true);
@@ -449,24 +451,26 @@ void SpaceshipGame::render(long elapsedTime)
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
     // Visit scene nodes for opaque drawing
-    _scene->visit(this, &SpaceshipGame::visitNode, 0);
+    _scene->visit(this, &SpaceshipGame::drawScene, 0);
 
     // Visit scene nodes for transparent drawing
-    _scene->visit(this, &SpaceshipGame::visitNode, 1);
+    _scene->visit(this, &SpaceshipGame::drawScene, 1);
 
     // Draw game text (yellow)
-    _font->begin();
-    char text[1024];
-    sprintf(text, "%dsec.", (int)_time);
-    _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1), _font->getSize());
-    if (_finished)
-    {
-        _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one(), _font->getSize());
-    }
-    _font->end();
+    drawText();
 }
 
-void SpaceshipGame::visitNode(Node* node, long cookie)
+void SpaceshipGame::drawSplash(long coookie)
+{
+    clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
+    SpriteBatch* batch = SpriteBatch::create("res/splash.png");
+    batch->begin();
+    batch->draw(Rectangle(0, 0, 1024, 600), Rectangle(0, 0, 1024, 600), Vector4::one());
+    batch->end();
+    SAFE_DELETE(batch);
+}
+
+void SpaceshipGame::drawScene(Node* node, long cookie)
 {
     Model* model = node->getModel();
     if (model == NULL)
@@ -483,6 +487,19 @@ void SpaceshipGame::visitNode(Node* node, long cookie)
         return;
 
     model->draw();
+}
+
+void SpaceshipGame::drawText()
+{
+    _font->begin();
+    char text[1024];
+    sprintf(text, "%dsec.", (int)_time);
+    _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1), _font->getSize());
+    if (_finished)
+    {
+        _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one(), _font->getSize());
+    }
+    _font->end();
 }
 
 void SpaceshipGame::touch(int x, int y, int touchEvent)

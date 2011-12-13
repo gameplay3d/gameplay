@@ -164,6 +164,7 @@
     <None Include="res\spaceship.gpb" />
     <None Include="res\spaceship.mb" />
     <None Include="res\spaceship.wav" />
+    <None Include="res\splash.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SpaceshipGame.h" />

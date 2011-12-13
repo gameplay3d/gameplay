@@ -158,7 +158,6 @@ extern void printError(const char* format, ...);
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
-    #include <GL/wglew.h>
 #elif __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
@@ -182,8 +181,8 @@ extern void printError(const char* format, ...);
 namespace gameplay
 {
 typedef GLint VertexAttribute;
-typedef GLuint VertexBuffer;
-typedef GLuint IndexBuffer;
+typedef GLuint VertexBufferHandle;
+typedef GLuint IndexBufferHandle;
 typedef GLuint TextureHandle;
 typedef GLuint FrameBufferHandle;
 typedef GLuint RenderBufferHandle;
@@ -249,5 +248,6 @@ extern GLenum __gl_error_code;
     #pragma warning( disable : 4800 )
     #pragma warning( disable : 4996 )
 #endif
+
 
 #endif
