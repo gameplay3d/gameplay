@@ -54,6 +54,8 @@ long getMachTimeInMilliseconds()
 @end
 
 
+static View* __view = NULL;
+
 @implementation View
 
 -(void)windowWillClose:(NSNotification*)note 
@@ -83,8 +85,10 @@ long getMachTimeInMilliseconds()
     [[self openGLContext] makeCurrentContext];
     
     CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+    
     if (_game && _game->getState() == Game::RUNNING)       
         _game->frame();
+    
     CGLFlushDrawable((CGLContextObj)[[self openGLContext] CGLContextObj]);
     CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);  
     
@@ -531,7 +535,7 @@ int Platform::enterMessagePump()
     NSRect screenBounds = [[NSScreen mainScreen] frame];
     NSRect viewBounds = NSMakeRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     
-    View* view = [[View alloc] initWithFrame:viewBounds];
+    __view = [[View alloc] initWithFrame:viewBounds];
     
     NSRect centered = NSMakeRect(NSMidX(screenBounds) - NSMidX(viewBounds),
                                  NSMidY(screenBounds) - NSMidY(viewBounds),
@@ -544,9 +548,9 @@ int Platform::enterMessagePump()
                         backing:NSBackingStoreBuffered
                         defer:NO];
     
-    [window setContentView:view];
-    [window setDelegate:view];
-    [view release];
+    [window setContentView:__view];
+    [window setDelegate:__view];
+    [__view release];
     
     [NSApp run];
     
@@ -589,6 +593,12 @@ void Platform::getAccelerometerPitchAndRoll(float* pitch, float* roll)
 {
     *pitch = __pitch;
     *roll = __roll;
+}
+
+void Platform::swapBuffers()
+{
+    if (__view)
+        CGLFlushDrawable((CGLContextObj)[[__view openGLContext] CGLContextObj]);
 }
     
 }

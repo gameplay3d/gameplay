@@ -87,6 +87,11 @@ public:
      */
     static void getAccelerometerPitchAndRoll(float* pitch, float* roll);
 
+    /**
+     * Swaps the 
+     */
+    static void swapBuffers();
+
 private:
 
     /**
