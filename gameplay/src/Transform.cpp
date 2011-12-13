@@ -402,6 +402,12 @@ void Transform::setRotation(const Matrix& rotation)
     dirty();
 }
 
+void Transform::setRotation(const Vector3& axis, float angle)
+{
+    _rotation.set(axis, angle);
+    dirty();
+}
+
 void Transform::setTranslation(const Vector3& translation)
 {
     _translation.set(translation);
