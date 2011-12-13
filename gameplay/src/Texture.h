@@ -120,6 +120,67 @@ public:
     };
 
     /**
+     * Loads image data (currently only supports PNG files).
+     */
+    class Image : public Ref
+    {
+        friend class Texture;
+
+    public:
+        /**
+         * Creates an image from the image file at the given path.
+         * 
+         * @param path The path to the image file.
+         * @return The newly created image.
+         */
+        static Image* create(const char* path);
+
+        /**
+         * Gets the image's raw pixel data.
+         * 
+         * @return The image's pixel data.
+         */
+        inline unsigned char* getData() { return _data; }
+
+        /**
+         * Gets the image's format.
+         * 
+         * @return The image's format.
+         */
+        inline Format getFormat() { return _format; }
+
+        /**
+         * Gets the height of the image.
+         * 
+         * @return The height of the image.
+         */
+        inline unsigned int getHeight() { return _height; }
+        
+        /**
+         * Gets the width of the image.
+         * 
+         * @return The width of the image.
+         */
+        inline unsigned int getWidth() { return _width; }
+
+    private:
+        /**
+         * Constructor.
+         */
+        Image();
+        
+        /**
+         * Destructor.
+         */
+        ~Image();
+
+        unsigned char* _data;
+        Format _format;
+        unsigned int _height;
+        unsigned int _width;
+    };
+
+    /**
      * Creates a texture from the given image resource.
      *
      * @param path The image resource path.
@@ -128,6 +189,11 @@ public:
      * @return The new texture, or NULL if the texture could not be loaded/created.
      */
     static Texture* create(const char* path, bool generateMipmaps = false);
+
+    /**
+     * Creates a texture from the given image.
+     */
+    static Texture* create(Image* image, bool generateMipmaps = false);
 
     /**
      * Creates a texture from the given texture data.
@@ -195,8 +261,6 @@ private:
      * Destructor.
      */
     virtual ~Texture();
-
-    static Texture* loadPNG(const char* path, bool generateMipmaps);
 
     std::string _path;
     TextureHandle _handle;
