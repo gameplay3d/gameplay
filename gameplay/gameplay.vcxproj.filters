@@ -475,7 +475,11 @@
     <None Include="res\textures\particle-default.png">
       <Filter>res\textures</Filter>
     </None>
+<<<<<<< HEAD
     <None Include="src\Curve.inl">
+=======
+    <None Include="src\Game.inl">
+>>>>>>> 1e19bf6c4a08f8d9f44ef8c341b712ee50f83df9
       <Filter>src</Filter>
     </None>
   </ItemGroup>

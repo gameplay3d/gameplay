@@ -171,6 +171,12 @@ public:
     
 private:
 
+    /**
+     * Internal method to generate heightmap for a node's mesh data
+     * if the node was flagged as a heightmap via encoder arguments.
+     */
+    void generateHeightmap();
+
     Matrix _transform;
     mutable Matrix _worldTransform;
 

@@ -24,9 +24,9 @@ static screen_context_t __screenContext;
 static screen_window_t __screenWindow;
 static screen_event_t __screenEvent;
 static int __screenWindowSize[2];
-static EGLDisplay __eglDisplay;
-static EGLContext __eglContext;
-static EGLSurface __eglSurface;
+static EGLDisplay __eglDisplay = EGL_NO_DISPLAY;
+static EGLContext __eglContext = EGL_NO_CONTEXT;
+static EGLSurface __eglSurface = EGL_NO_SURFACE;
 static EGLConfig __eglConfig = 0;
 static int __orientationAngle;
 
@@ -830,6 +830,12 @@ void Platform::getAccelerometerPitchAndRoll(float* pitch, float* roll)
         *pitch = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
     if (roll != NULL)
         *roll = atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;
+}
+
+void Platform::swapBuffers()
+{
+    if (__eglDisplay && __eglSurface)
+        eglSwapBuffers(__eglDisplay, __eglSurface);
 }
 
 }

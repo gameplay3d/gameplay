@@ -14,7 +14,7 @@ long Game::_pausedTimeLast = 0L;
 long Game::_pausedTimeTotal = 0L;
 
 Game::Game() 
-    : _state(UNINITIALIZED), 
+    : _initialized(false), _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
       _clearDepth(1.0f), _clearStencil(0),
       _animationController(NULL), _audioController(NULL)
@@ -48,9 +48,9 @@ long Game::getAbsoluteTime()
     return Platform::getAbsoluteTime();
 }
 
-bool Game::isVsync()
+long Game::getGameTime()
 {
-    return Platform::isVsync();
+    return Platform::getAbsoluteTime() - _pausedTimeTotal;
 }
 
 void Game::setVsync(bool enable)
@@ -58,19 +58,9 @@ void Game::setVsync(bool enable)
     Platform::setVsync(enable);
 }
 
-long Game::getGameTime()
+bool Game::isVsync()
 {
-    return (Platform::getAbsoluteTime() - _pausedTimeTotal);
-}
-
-Game::State Game::getState() const
-{
-    return _state;
-}
-
-unsigned int Game::getFrameRate() const
-{
-    return _frameRate;
+    return Platform::isVsync();
 }
 
 int Game::run(int width, int height)
@@ -106,8 +96,6 @@ bool Game::startup()
     _physicsController = new PhysicsController();
     _physicsController->initialize();
 
-    // Call user initialization.
-    initialize();
     _state = RUNNING;
 
     return true;
@@ -167,7 +155,15 @@ void Game::exit()
 void Game::frame()
 {
     if (_state != RUNNING)
+    {
         return;
+    }
+    else
+    {
+        if (!_initialized)
+            initialize();
+        _initialized = true;
+    }
 
     // Update Time.
     static long lastFrameTime = Game::getGameTime();
@@ -195,16 +191,6 @@ void Game::frame()
         _frameCount = 0;
         _frameLastFPS = Game::getGameTime();
     }
-}
-
-unsigned int Game::getWidth() const
-{
-    return _width;
-}
-
-unsigned int Game::getHeight() const
-{
-    return _height;
 }
 
 void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil)
@@ -243,21 +229,6 @@ void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, 
         bits |= GL_STENCIL_BUFFER_BIT;
     }
     glClear(bits);
-}
-
-AnimationController* Game::getAnimationController()
-{
-    return _animationController;
-}
-
-const AudioController* Game::getAudioController() const
-{
-    return _audioController;
-}
-
-PhysicsController* Game::getPhysicsController()
-{
-    return _physicsController;
 }
 
 void Game::menu()

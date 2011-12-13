@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "DAEUtil.h"
+#include "StringUtil.h"
 
 namespace gameplay
 {
@@ -13,6 +14,55 @@ namespace gameplay
  * @return The index in skeletonArray or -1 if not found.
  */
 int getIndex(const domInstance_controller::domSkeleton_Array& skeletonArray, const domNodeRef& node);
+
+void getAnimationChannels(const domNodeRef& node, std::list<domChannelRef>& channels)
+{
+    assert(node->getId());
+    std::string nodeIdSlash (node->getId());
+    nodeIdSlash.append("/");
+
+    domCOLLADA* root = (domCOLLADA*)node->getDocument()->getDomRoot();
+
+    domLibrary_animations_Array& animationLibrary = root->getLibrary_animations_array();
+    size_t animationLibraryCount = animationLibrary.getCount();
+    for (size_t i = 0; i < animationLibraryCount; ++i)
+    {
+        domLibrary_animationsRef& animationsRef = animationLibrary.get(i);
+        domAnimation_Array& animationArray = animationsRef->getAnimation_array();
+        size_t animationCount = animationArray.getCount();
+        for (size_t j = 0; j < animationCount; ++j)
+        {
+            domAnimationRef& animationRef = animationArray.get(j);
+            domChannel_Array& channelArray = animationRef->getChannel_array();
+            size_t channelArrayCount = channelArray.getCount();
+            for (size_t k = 0; k < channelArrayCount; ++k)
+            {
+                domChannelRef& channel = channelArray.get(k);
+                const char* target = channel->getTarget();
+
+                // TODO: Assumes only one target per channel?
+                if (startsWith(target, nodeIdSlash.c_str()))
+                {
+                    channels.push_back(channel);
+                }
+            }
+        }
+    }
+
+    // Recursively do the same for all nodes
+    daeTArray< daeSmartRef<daeElement> > children;
+    node->getChildren(children);
+    size_t childCount = children.getCount();
+    for (size_t i = 0; i < childCount; ++i)
+    {
+        daeElementRef childElement = children[i];
+        if (childElement->getElementType() == COLLADA_TYPE::NODE)
+        {
+            domNodeRef childNode = daeSafeCast<domNode>(childElement);
+            getAnimationChannels(childNode, channels);
+        }
+    }
+}
 
 void getJointNames(const domSourceRef source, std::vector<std::string>& list)
 {

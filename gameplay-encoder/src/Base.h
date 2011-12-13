@@ -19,6 +19,9 @@
 #include <algorithm>
 #include <sys/stat.h>
 
+// PNG
+#include <png.h>
+
 // Collada includes
 #include <dae.h>
 #include <dae/daeSIDResolver.h>
