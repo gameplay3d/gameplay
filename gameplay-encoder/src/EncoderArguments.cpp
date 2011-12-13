@@ -11,6 +11,8 @@
 namespace gameplay
 {
 
+static EncoderArguments* __instance;
+
 EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _fontSize(0),
     _parseError(false),
@@ -18,6 +20,8 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _textOutput(false),
     _daeOutput(false)
 {
+    __instance = this;
+
     if (argc > 1)
     {
         size_t filePathIndex = argc - 1;
@@ -51,6 +55,11 @@ EncoderArguments::~EncoderArguments(void)
 {
 }
 
+EncoderArguments* EncoderArguments::getInstance()
+{
+    return __instance;
+}
+
 const std::string& EncoderArguments::getFilePath() const
 {
     return _filePath;
@@ -59,6 +68,12 @@ const std::string& EncoderArguments::getFilePath() const
 const char* EncoderArguments::getFilePathPointer() const
 {
     return _filePath.c_str();
+}
+
+std::string EncoderArguments::getOutputPath() const
+{
+    int pos = _filePath.find_last_of('/');
+    return (pos == -1 ? _filePath : _filePath.substr(0, pos));
 }
 
 const std::string& EncoderArguments::getDAEOutputPath() const
@@ -94,6 +109,11 @@ const std::string EncoderArguments::getAnimationId(const std::string& nodeId) co
     return "";
 }
 
+const std::vector<std::string>& EncoderArguments::getHeightmapNodeIds() const
+{
+    return _heightmapNodeIds;
+}
+
 bool EncoderArguments::parseErrorOccured() const
 {
     return _parseError;
@@ -123,7 +143,12 @@ void EncoderArguments::printUsage() const
     fprintf(stderr,"COLLADA and FBX file options:\n");
     fprintf(stderr,"  -i<id>\t\tFilter by node ID.\n");
     fprintf(stderr,"  -t\t\t\tWrite text/xml.\n");
-    fprintf(stderr,"  -groupAnimations <node id> <animation id>\n\t\t\tGroup all animation channels targetting the nodes into a new animation.\n");
+    fprintf(stderr,"  -groupAnimations <node id> <animation id>\n" \
+        "\t\t\tGroup all animation channels targetting the nodes into a new animation.\n");
+    fprintf(stderr,"  -heightmaps \"<node ids>\"\n" \
+        "\t\t\tList of nodes to generate heightmaps for.\n" \
+        "\t\t\tNode id list should be in quotes with a space between each id.\n" \
+        "\t\t\tHeightmaps will be saved in files named <nodeid>.png.\n");
     fprintf(stderr,"\n");
     fprintf(stderr,"COLLADA file options:\n");
     fprintf(stderr,"  -dae <filepath>\tOutput optimized DAE.\n");
@@ -198,7 +223,7 @@ EncoderArguments::FileFormat EncoderArguments::getFileFormat() const
     return FILEFORMAT_UNKNOWN;
 }
 
-void EncoderArguments::readOption(const std::vector<std::string>& options, size_t *index)
+void EncoderArguments::readOption(const std::vector<std::string>& options, size_t* index)
 {
     const std::string& str = options[*index];
     if (str.length() == 0 && str[0] != '-')
@@ -252,6 +277,34 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             _parseError = true;
             return;
         }
+        break;
+    case 'h':
+        {
+            if (str.compare("-heightmaps") == 0)
+            {
+                (*index)++;
+                if (*index < options.size())
+                {
+                    // Split node id list into tokens
+                    unsigned int length = options[*index].size() + 1;
+                    char* nodeIds = new char[length];
+                    strcpy(nodeIds, options[*index].c_str());
+                    nodeIds[length-1] = 0;
+                    char* id = strtok(nodeIds, " ");
+                    while (id)
+                    {
+                        _heightmapNodeIds.push_back(id);
+                        id = strtok(NULL, " ");
+                    }
+                    delete[] nodeIds;
+                }
+                else
+                {
+                    fprintf(stderr, "Error: missing argument for -heightmaps.\n");
+                }
+            }
+        }
+        break;
     case 'p':
         _fontPreview = true;
         break;

@@ -23,11 +23,9 @@ public:
 
     enum IndexFormat
     {
-        INDEX8  = 0x1401, // GL_UNSIGNED_BYTE
         INDEX16 = 0x1403, // GL_UNSIGNED_SHORT
         INDEX32 = 0x1405  // GL_UNSIGNED_INT
     };
-
 
     /**
      * Constructor.
@@ -54,6 +52,16 @@ public:
      */
     size_t getIndicesCount() const;
 
+    /**
+     * Returns the index format.
+     */
+    IndexFormat getIndexFormat() const;
+
+    /**
+     * Gets the value of the index at the specificied location.
+     */
+    unsigned int getIndex(unsigned int i) const;
+
 private:
 
     /**
@@ -78,8 +86,9 @@ private:
     void writeBinaryIndex(unsigned int index, FILE* file);
 
 private:
+
     unsigned int _primitiveType;
-    unsigned int _indexFormat;
+    IndexFormat _indexFormat;
     std::vector<unsigned int> _indices;
 };
 

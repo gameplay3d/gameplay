@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "Node.h"
 #include "Matrix.h"
+#include "EncoderArguments.h"
 
 #define NODE 1
 #define JOINT 2
@@ -73,7 +74,10 @@ void Node::writeBinary(FILE* file)
     {
         writeZero(file);
     }
+
+    generateHeightmap();
 }
+
 void Node::writeText(FILE* file)
 {
     if (isJoint())
@@ -109,6 +113,29 @@ void Node::writeText(FILE* file)
         _model->writeText(file);
     }
     fprintElementEnd(file);
+
+    generateHeightmap();
+}
+
+void Node::generateHeightmap()
+{
+    // Is this node flagged to have a heightmap generated for it?
+    const std::vector<std::string>& heightmapNodes = EncoderArguments::getInstance()->getHeightmapNodeIds();
+    if (std::find(heightmapNodes.begin(), heightmapNodes.end(), getId()) != heightmapNodes.end())
+    {
+        Mesh* mesh = _model ? _model->getMesh() : NULL;
+        if (mesh)
+        {
+            DEBUGPRINT_VARG("> Generating heightmap for node: %s\n", getId().c_str());
+
+            std::string heightmapFilename(EncoderArguments::getInstance()->getOutputPath());
+            heightmapFilename += "/heightmap_";
+            heightmapFilename += getId();
+            heightmapFilename += ".png";
+
+            mesh->generateHeightmap(heightmapFilename.c_str());
+        }
+    }
 }
 
 void Node::addChild(Node* child)
