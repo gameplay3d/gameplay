@@ -80,10 +80,10 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, Image* image, float mass,
     unsigned int pixelSize = 0;
     switch (image->getFormat())
     {
-        case Image::RGB888:
+        case Image::RGB:
             pixelSize = 3;
             break;
-        case Image::RGBA8888:
+        case Image::RGBA:
             pixelSize = 4;
             break;
     }
@@ -394,8 +394,8 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
         // Ensure that the image's pixel format is supported.
         switch (image->getFormat())
         {
-            case Texture::RGB888:
-            case Texture::RGBA8888:
+            case Image::RGB:
+            case Image::RGBA:
                 break;
             default:
                 WARN_VARG("Heightmap: pixel format is not supported: %d", image->getFormat());
