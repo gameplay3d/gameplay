@@ -36,6 +36,7 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\gameplay-main-qnx.cpp" />
     <ClCompile Include="src\gameplay-main-win32.cpp" />
+    <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Light.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\gameplay.h" />
+    <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Joint.h" />
     <ClInclude Include="src\Light.h" />
@@ -173,6 +175,7 @@
     <None Include="src\BoundingSphere.inl" />
     <None Include="src\Game.inl" />
     <None Include="src\gameplay-main-macos.mm" />
+    <None Include="src\Image.inl" />
     <None Include="src\Matrix.inl" />
     <None Include="src\Plane.inl" />
     <None Include="src\PlatformMacOS.mm" />
