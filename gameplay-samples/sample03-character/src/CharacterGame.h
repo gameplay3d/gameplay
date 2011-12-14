@@ -51,7 +51,7 @@ protected:
 
 private:
 
-    void drawScene(Node* node, long cookie);
+    bool drawScene(Node* node, void* cookie);
 
     void loadAnimationClips();
 

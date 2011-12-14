@@ -61,13 +61,14 @@ void CharacterGame::render(long elapsedTime)
     _scene->visit(this, &CharacterGame::drawScene);
 }
 
-void CharacterGame::drawScene(Node* node, long cookie)
+bool CharacterGame::drawScene(Node* node, void* cookie)
 {
     Model* model = node->getModel();
     if (model)
     {
         model->draw();
     }
+    return true;
 }
 
 void CharacterGame::touch(int x, int y, int touchEvent)

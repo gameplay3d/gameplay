@@ -88,11 +88,12 @@ void MeshGame::touch(int x, int y, int touchEvent)
     };
 }
 
-void MeshGame::drawScene(Node* node, long cookie)
+bool MeshGame::drawScene(Node* node, void* cookie)
 {
     Model* model = node->getModel(); 
     if (model)
         model->draw();
+    return true;
 }
 
 void MeshGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
