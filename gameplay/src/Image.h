@@ -2,7 +2,6 @@
 #define IMAGE_H__
 
 #include "Ref.h"
-#include "Texture.h"
 
 namespace gameplay
 {
@@ -19,8 +18,8 @@ public:
      */
     enum Format
     {
-        RGB888 = Texture::RGB888,
-        RGBA8888 = Texture::RGBA8888
+        RGB,
+        RGBA
     };
 
     /**

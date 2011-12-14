@@ -65,11 +65,11 @@ Image* Image::create(const char* path)
     switch (colorType)
     {
     case PNG_COLOR_TYPE_RGBA:
-        image->_format = RGBA8888;
+        image->_format = RGBA;
         break;
 
     case PNG_COLOR_TYPE_RGB:
-        image->_format = RGB888;
+        image->_format = RGB;
         break;
 
     default:
