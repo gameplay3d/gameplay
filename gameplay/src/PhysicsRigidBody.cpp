@@ -1,8 +1,11 @@
 #include "Base.h"
 #include "Game.h"
+#include "Image.h"
 #include "PhysicsController.h"
 #include "PhysicsMotionState.h"
 #include "PhysicsRigidBody.h"
+
+#include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 
 namespace gameplay
 {
@@ -11,14 +14,18 @@ const int PhysicsRigidBody::Listener::DIRTY         = 0x01;
 const int PhysicsRigidBody::Listener::COLLISION     = 0x02;
 const int PhysicsRigidBody::Listener::REGISTERED    = 0x04;
 
-// Internal value used for creating mesh rigid bodies.
+// Internal values used for creating mesh and heightfield rigid bodies.
 #define SHAPE_MESH ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 1))
+#define SHAPE_HEIGHTFIELD ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 2))
+
+// Helper function for calculating heights from heightmap (image) or heightfield data.
+static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
 
 PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, float mass, 
         float friction, float restitution, float linearDamping, float angularDamping)
         : _shape(NULL), _body(NULL), _node(node), _listeners(NULL), _angularVelocity(NULL),
         _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL), _vertexData(NULL),
-        _indexData(NULL)
+        _indexData(NULL), _heightfieldData(NULL), _inverse(NULL), _inverseIsDirty(true)
 {
     switch (type)
     {
@@ -55,6 +62,88 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
     Game::getInstance()->getPhysicsController()->addRigidBody(this);
 }
 
+PhysicsRigidBody::PhysicsRigidBody(Node* node, Image* image, float mass,
+    float friction, float restitution, float linearDamping, float angularDamping)
+        : _shape(NULL), _body(NULL), _node(node), _listeners(NULL), _angularVelocity(NULL),
+        _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL), _vertexData(NULL),
+        _indexData(NULL), _heightfieldData(NULL), _inverse(NULL), _inverseIsDirty(true)
+{
+    // Get the width, length and minimum and maximum height of the heightfield.
+    const BoundingBox& box = node->getModel()->getMesh()->getBoundingBox();
+    float width = box.max.x - box.min.x;
+    float minHeight = box.min.y;
+    float maxHeight = box.max.y;
+    float length = box.max.z - box.min.z;
+
+    // Get the size in bytes of a pixel (we ensure that the image's
+    // pixel format is actually supported before calling this constructor).
+    unsigned int pixelSize = 0;
+    switch (image->getFormat())
+    {
+        case Image::RGB:
+            pixelSize = 3;
+            break;
+        case Image::RGBA:
+            pixelSize = 4;
+            break;
+    }
+
+    // Calculate the heights for each pixel.
+    float* data = new float[image->getWidth() * image->getHeight()];
+    for (unsigned int x = 0; x < image->getWidth(); x++)
+    {
+        for (unsigned int y = 0; y < image->getHeight(); y++)
+        {
+            data[x + y * image->getWidth()] = ((((float)image->getData()[(x + y * image->getHeight()) * pixelSize + 0]) +
+                ((float)image->getData()[(x + y * image->getHeight()) * pixelSize + 1]) +
+                ((float)image->getData()[(x + y * image->getHeight()) * pixelSize + 2])) / 768.0f) * (maxHeight - minHeight) + minHeight;
+        }
+    }
+
+    // Generate the heightmap data needed for physics (one height per world unit).
+    unsigned int sizeWidth = width;
+    unsigned int sizeHeight = length;
+    _width = sizeWidth + 1;
+    _height = sizeHeight + 1;
+    _heightfieldData = new float[_width * _height];
+    unsigned int heightIndex = 0;
+    float widthImageFactor = (float)(image->getWidth() - 1) / sizeWidth;
+    float heightImageFactor = (float)(image->getHeight() - 1) / sizeHeight;
+    float x = 0.0f;
+    float z = 0.0f;
+    for (unsigned int row = 0, z = 0.0f; row <= sizeHeight; row++, z += 1.0f)
+    {
+        for (unsigned int col = 0, x = 0.0f; col <= sizeWidth; col++, x += 1.0f)
+        {
+            heightIndex = row * _width + col;
+            _heightfieldData[heightIndex] = calculateHeight(data, image->getWidth(), image->getHeight(), x * widthImageFactor, (sizeHeight - z) * heightImageFactor);
+        }
+    }
+    SAFE_DELETE_ARRAY(data);
+
+    // Create the heightfield collision shape.
+    _shape = bullet_new<btHeightfieldTerrainShape>(_width, _height, _heightfieldData,
+        1.0f, minHeight, maxHeight, 1, PHY_FLOAT, false);
+
+    // Offset the heightmap's center of mass according to the way that Bullet calculates the origin 
+    // of its heightfield collision shape; see documentation for the btHeightfieldTerrainShape for more info.
+    Vector3 s;
+    node->getWorldMatrix().getScale(&s);
+    Vector3 c (0.0f, -(maxHeight - (0.5f * (maxHeight - minHeight))) / s.y, 0.0f);
+
+    // Create the Bullet rigid body.
+    if (c.lengthSquared() > MATH_EPSILON)
+        _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
+    else
+        _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
+
+    // Add the rigid body to the physics world.
+    Game::getInstance()->getPhysicsController()->addRigidBody(this);
+
+    // Add the rigid body as a listener on the node's transform.
+    _node->addListener(this);
+}
+
 PhysicsRigidBody::~PhysicsRigidBody()
 {
     // Clean up all constraints linked to this rigid body.
@@ -88,6 +177,8 @@ PhysicsRigidBody::~PhysicsRigidBody()
     {
         SAFE_DELETE_ARRAY(_indexData[i]);
     }
+    SAFE_DELETE_ARRAY(_heightfieldData);
+    SAFE_DELETE(_inverse);
 }
 
 void PhysicsRigidBody::addCollisionListener(Listener* listener, PhysicsRigidBody* body)
@@ -202,6 +293,7 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     bool kinematic = false;
     Vector3* gravity = NULL;
     Vector3* anisotropicFriction = NULL;
+    const char* imagePath = NULL;
 
     // Load the defined properties.
     properties->rewind();
@@ -217,6 +309,8 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
                 type = SHAPE_SPHERE;
             else if (typeStr == "MESH")
                 type = SHAPE_MESH;
+            else if (typeStr == "HEIGHTFIELD")
+                type = SHAPE_HEIGHTFIELD;
             else
             {
                 WARN_VARG("Could not create rigid body; unsupported value for rigid body type: '%s'.", typeStr.c_str());
@@ -257,6 +351,10 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
             anisotropicFriction = new Vector3();
             properties->getVector3(NULL, anisotropicFriction);
         }
+        else if (strcmp(name, "image") == 0)
+        {
+            imagePath = properties->getString();
+        }
     }
 
     // If the rigid body type is equal to mesh, check that the node's mesh's primitive type is supported.
@@ -281,7 +379,32 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     }
 
     // Create the rigid body.
-    PhysicsRigidBody* body = new PhysicsRigidBody(node, type, mass, friction, restitution, linearDamping, angularDamping);
+    PhysicsRigidBody* body = NULL;
+    if (imagePath == NULL)
+    {
+        body = new PhysicsRigidBody(node, type, mass, friction, restitution, linearDamping, angularDamping);
+    }
+    else
+    {
+        // Load the image data from the given file path.
+        Image* image = Image::create(imagePath);
+        if (!image)
+            return NULL;
+
+        // Ensure that the image's pixel format is supported.
+        switch (image->getFormat())
+        {
+            case Image::RGB:
+            case Image::RGBA:
+                break;
+            default:
+                WARN_VARG("Heightmap: pixel format is not supported: %d", image->getFormat());
+                return NULL;
+        }
+
+        body = new PhysicsRigidBody(node, image, mass, friction, restitution, linearDamping, angularDamping);
+        SAFE_RELEASE(image);
+    }
 
     // Set any initially defined properties.
     if (kinematic)
@@ -296,6 +419,40 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     SAFE_DELETE(anisotropicFriction);
 
     return body;
+}
+
+
+float PhysicsRigidBody::getHeight(float x, float y) const
+{
+    // This function is only supported for heightfield rigid bodies.
+    if (_shape->getShapeType() != TERRAIN_SHAPE_PROXYTYPE)
+    {
+        WARN("Attempting to get the height of a non-heightfield rigid body.");
+        return 0.0f;
+    }
+
+    // Calculate the correct x, y position relative to the heightfield data.
+    if (_inverseIsDirty)
+    {
+        if (_inverse == NULL)
+            _inverse = new Matrix();
+
+        _node->getWorldMatrix().invert(_inverse);
+        _inverseIsDirty = false;
+    }
+
+    Vector3 v = (*_inverse) * Vector3(x, 0.0f, y);
+    x = (v.x + (0.5f * (_width - 1))) * _width / (_width - 1);
+    y = (v.z + (0.5f * (_height - 1))) * _height / (_height - 1);
+
+    // Check that the x, y position is within the bounds.
+    if (x < 0.0f || x > _width || y < 0.0f || y > _height)
+    {
+        WARN_VARG("Attempting to get height at point '%f, %f', which is outside the range of the heightfield with width %d and height %d.", x, y, _width, _height);
+        return 0.0f;
+    }
+
+    return calculateHeight(_heightfieldData, _width, _height, x, y);
 }
 
 btRigidBody* PhysicsRigidBody::createRigidBodyInternal(btCollisionShape* shape, float mass, Node* node,
@@ -340,7 +497,12 @@ void PhysicsRigidBody::removeConstraint(PhysicsConstraint* constraint)
 
 bool PhysicsRigidBody::supportsConstraints()
 {
-    return _shape->getShapeType() != TRIANGLE_MESH_SHAPE_PROXYTYPE;
+    return _shape->getShapeType() != TRIANGLE_MESH_SHAPE_PROXYTYPE && _shape->getShapeType() != TERRAIN_SHAPE_PROXYTYPE;
+}
+
+void PhysicsRigidBody::transformChanged(Transform* transform, long cookie)
+{
+    _inverseIsDirty = true;
 }
 
 PhysicsRigidBody::CollisionPair::CollisionPair(PhysicsRigidBody* rbA, PhysicsRigidBody* rbB)
@@ -390,6 +552,37 @@ btScalar PhysicsRigidBody::CollidesWithCallback::addSingleResult(btManifoldPoint
 {
     result = true;
     return 0.0f;
+}
+
+float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y)
+{
+    unsigned int x1 = x;
+    unsigned int y1 = y;
+    unsigned int x2 = x1 + 1;
+    unsigned int y2 = y1 + 1;
+    float tmp;
+    float xFactor = modf(x, &tmp);
+    float yFactor = modf(y, &tmp);
+    float xFactorI = 1.0f - xFactor;
+    float yFactorI = 1.0f - yFactor;
+
+    if (x2 >= width && y2 >= height)
+    {
+        return data[x1 + y1 * width];
+    }
+    else if (x2 >= width)
+    {
+        return data[x1 + y1 * width] * yFactorI + data[x1 + y2 * width] * yFactor;
+    }
+    else if (y2 >= height)
+    {
+        return data[x1 + y1 * width] * xFactorI + data[x2 + y1 * width] * xFactor;
+    }
+    else
+    {
+        return data[x1 + y1 * width] * xFactorI * yFactorI + data[x1 + y2 * width] * xFactorI * yFactor + 
+            data[x2 + y2 * width] * xFactor * yFactor + data[x2 + y1 * width] * xFactor * yFactorI;
+    }
 }
 
 }

@@ -87,12 +87,12 @@ private:
     /**
      * Draw the splash screen
      */
-    void drawSplash(long cookie);
+    void drawSplash(void* cookie);
 
     /**
      * Draws the scene
      */
-    void drawScene(Node* node, long cookie);
+    bool drawScene(Node* node, void* cookie);
 
     /**
      * Draws the text.

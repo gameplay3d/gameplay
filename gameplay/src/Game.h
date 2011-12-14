@@ -256,7 +256,7 @@ protected:
      * This is useful for rendering splash screens.
      */
     template <class T>
-    void renderOnce(T* instance, void (T::*method)(long), long cookie);
+    void renderOnce(T* instance, void (T::*method)(void*), void* cookie);
 
 private:
 
