@@ -47,7 +47,7 @@ void TemplateGame::render(long elapsedTime)
     _scene->visit(this, &TemplateGame::drawScene);
 }
 
-void TemplateGame::drawScene(Node* node, long cookie)
+bool TemplateGame::drawScene(Node* node, void* cookie)
 {
     // If the node visited contains a model, draw it
     Model* model = node->getModel(); 
@@ -55,6 +55,7 @@ void TemplateGame::drawScene(Node* node, long cookie)
     {
         model->draw();
     }
+    return true;
 }
 
 void TemplateGame::touch(int x, int y, int touchEvent)

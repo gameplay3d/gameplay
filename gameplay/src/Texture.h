@@ -6,6 +6,8 @@
 namespace gameplay
 {
 
+class Image;
+
 /**
  * Represents a texture.
  */
@@ -130,6 +132,11 @@ public:
     static Texture* create(const char* path, bool generateMipmaps = false);
 
     /**
+     * Creates a texture from the given image.
+     */
+    static Texture* create(Image* image, bool generateMipmaps = false);
+
+    /**
      * Creates a texture from the given texture data.
      */
     static Texture* create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps = false);
@@ -195,8 +202,6 @@ private:
      * Destructor.
      */
     virtual ~Texture();
-
-    static Texture* loadPNG(const char* path, bool generateMipmaps);
 
     std::string _path;
     TextureHandle _handle;
