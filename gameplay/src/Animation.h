@@ -2,6 +2,7 @@
 #define ANIMATION_H_
 
 #include "Ref.h"
+#include "Properties.h"
 
 namespace gameplay
 {
@@ -134,6 +135,16 @@ private:
     ~Animation();
 
     /**
+     * Creates the default clip.
+     */
+    void createDefaultClip();
+
+    /**
+     * Creates AnimationClip's for this Animation from the specified Property object.
+     */
+    void createClips(Properties* animationProperties, unsigned int frameCount);
+
+    /**
      * Adds a clip to this Animation.
      */
     void addClip(AnimationClip* clip);
@@ -142,11 +153,6 @@ private:
      * Finds the clip with the given ID.
      */
     AnimationClip* findClip(const char* id) const;
-
-    /**
-     * Creates the default clip.
-     */
-    void createDefaultClip();
 
     /**
      * Creates a channel within this animation.

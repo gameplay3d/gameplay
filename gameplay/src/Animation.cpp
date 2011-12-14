@@ -7,7 +7,6 @@
 #include "Transform.h"
 #include "Properties.h"
 
-#define ANIMATION_DEFAULT_CLIP_SUFFIX "__default__clip"
 #define ANIMATION_INDEFINITE_STR "INDEFINITE"
 #define ANIMATION_DEFAULT_CLIP 0
 #define ANIMATION_ROTATE_OFFSET 0
@@ -30,7 +29,13 @@ Animation::Animation(const char* id, AnimationTarget* target, int propertyId, un
 
 Animation::~Animation()
 {
-    if (_clips != NULL)
+    if (_defaultClip)
+    {
+        _defaultClip->stop();
+        SAFE_RELEASE(_defaultClip);
+    }
+
+    if (_clips)
     {
         std::vector<AnimationClip*>::iterator clipIter = _clips->begin();
     
@@ -44,10 +49,6 @@ Animation::~Animation()
         _clips->clear();
     }
     SAFE_DELETE(_clips);
-
-    SAFE_DELETE(_defaultClip);
-
-    _channels.clear();
 }
 
 Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration)
@@ -82,47 +83,18 @@ void Animation::createClips(const char* animationFile)
 {
     assert(animationFile);
 
-    Properties* pAnim = Properties::create(animationFile);
-    assert(pAnim);
+    Properties* properties = Properties::create(animationFile);
+    assert(properties);
 
-    Properties* animation = pAnim->getNextNamespace();
-    int frameCount = animation->getInt("frameCount");
+    Properties* pAnimation = properties->getNextNamespace();
+    assert(pAnimation);
+    
+    int frameCount = pAnimation->getInt("frameCount");
+    assert(frameCount > 0);
 
-    const Properties* pClip = animation->getNextNamespace();
-    while (pClip != NULL)
-    {
-        int begin = pClip->getInt("begin");
-        int end = pClip->getInt("end");
+    createClips(pAnimation, (unsigned int)frameCount);
 
-        AnimationClip* clip = createClip(pClip->getId(), ((float) begin / frameCount) * _duration, ((float) end / frameCount) * _duration);
-
-        const char* repeat = pClip->getString("repeatCount");
-        if (repeat)
-        {
-            if (strcmp(repeat, ANIMATION_INDEFINITE_STR) == 0)
-            {
-                clip->setRepeatCount(AnimationClip::REPEAT_INDEFINITE);
-            }
-            else
-            {
-                float value;
-                sscanf(repeat, "%f", &value);
-                clip->setRepeatCount(value);
-            }
-        }
-
-        const char* speed = pClip->getString("speed");
-        if (speed)
-        {
-            float value;
-            sscanf(speed, "%f", &value);
-            clip->setSpeed(value);
-        }
-
-        pClip = animation->getNextNamespace();
-    }
-
-    SAFE_DELETE(pAnim);
+    SAFE_DELETE(properties);
 }
 
 AnimationClip* Animation::createClip(const char* id, unsigned long start, unsigned long end)
@@ -188,6 +160,77 @@ void Animation::stop(const char* id)
             clip->stop();
         }
     }
+}
+
+void Animation::createDefaultClip()
+{
+    _defaultClip = new AnimationClip("default_clip", this, 0.0f, _duration);
+}
+
+void Animation::createClips(Properties* animationProperties, unsigned int frameCount)
+{   
+    assert(animationProperties);
+    
+    Properties* pClip = animationProperties->getNextNamespace();
+    
+    while (pClip != NULL && std::strcmp(pClip->getNamespace(), "clip") == 0)
+    {
+        int begin = pClip->getInt("begin");
+        int end = pClip->getInt("end");
+
+        AnimationClip* clip = createClip(pClip->getId(), ((float) begin / frameCount) * _duration, ((float) end / frameCount) * _duration);
+
+        const char* repeat = pClip->getString("repeatCount");
+        if (repeat)
+        {
+            if (strcmp(repeat, ANIMATION_INDEFINITE_STR) == 0)
+            {
+                clip->setRepeatCount(AnimationClip::REPEAT_INDEFINITE);
+            }
+            else
+            {
+                float value;
+                sscanf(repeat, "%f", &value);
+                clip->setRepeatCount(value);
+            }
+        }
+
+        const char* speed = pClip->getString("speed");
+        if (speed)
+        {
+            float value;
+            sscanf(speed, "%f", &value);
+            clip->setSpeed(value);
+        }
+
+        pClip = animationProperties->getNextNamespace();
+    }
+}
+
+void Animation::addClip(AnimationClip* clip)
+{
+    if (_clips == NULL)
+        _clips = new std::vector<AnimationClip*>;
+
+    _clips->push_back(clip);
+}
+
+AnimationClip* Animation::findClip(const char* id) const
+{
+    if (_clips)
+    {
+        AnimationClip* clip = NULL;
+        unsigned int clipCount = _clips->size();
+        for (unsigned int i = 0; i < clipCount; i++)
+        {
+            clip = _clips->at(i);
+            if (clip->_id.compare(id) == 0)
+            {
+                return _clips->at(i);
+            }
+        }
+    }
+    return NULL;
 }
 
 Animation::Channel* Animation::createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type)
@@ -311,39 +354,6 @@ void Animation::removeChannel(Channel* channel)
 
     if (_channels.empty())
         _controller->destroyAnimation(this);
-}
-
-void Animation::createDefaultClip()
-{
-    std::string clipId = _id + ANIMATION_DEFAULT_CLIP_SUFFIX;
-
-    _defaultClip = new AnimationClip(clipId.c_str(), this, 0.0f, _duration);
-}
-
-void Animation::addClip(AnimationClip* clip)
-{
-    if (_clips == NULL)
-        _clips = new std::vector<AnimationClip*>;
-
-    _clips->push_back(clip);
-}
-
-AnimationClip* Animation::findClip(const char* id) const
-{
-    if (_clips)
-    {
-        AnimationClip* clip = NULL;
-        unsigned int clipCount = _clips->size();
-        for (unsigned int i = 0; i < clipCount; i++)
-        {
-            clip = _clips->at(i);
-            if (clip->_id.compare(id) == 0)
-            {
-                return _clips->at(i);
-            }
-        }
-    }
-    return NULL;
 }
 
 }

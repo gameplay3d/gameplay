@@ -11,6 +11,7 @@ class Curve
 {
     friend class Animation;
     friend class AnimationClip;
+    friend class AnimationController;
 
 public:
 
@@ -444,6 +445,14 @@ private:
      * Determines the current keyframe to interpolate from based on the specified time.
      */ 
     int determineIndex(float time) const;
+
+    /**
+     * Gets the InterpolationType value for the given string ID
+     *
+     * @param interpolationId The string representation of the InterpolationType
+     * @return the InterpolationType value; -1 if the string does not represent an InterpolationType.
+     */
+    static int getInterpolationType(const char* interpolationId);
 
     unsigned int _pointCount;           // Number of points on the curve.
     unsigned int _componentCount;       // Number of components on the curve.

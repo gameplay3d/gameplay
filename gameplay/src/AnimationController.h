@@ -17,6 +17,7 @@ class AnimationController
     friend class Game;
     friend class Animation;
     friend class AnimationClip;
+    friend class SceneLoader;
 
 public:
 
@@ -58,11 +59,11 @@ public:
      * 
      * @param id The ID of the animation.
      * @param target The animation target.
-     * @param properties The properties object defining the animation data.
+     * @param animationFile The animation file defining the animation data.
      *
      * @return The newly created animation.
      */
-    Animation* createAnimation(const char* id, AnimationTarget* target, Properties* p);
+    Animation* createAnimation(const char* id, AnimationTarget* target, const char* animationFile);
 
     /**
      * Creates a simple two keyframe from-to animation.
@@ -135,6 +136,17 @@ private:
     ~AnimationController();
     
     /**
+     * Creates an animation on this target using the data from the given properties object. 
+     * 
+     * @param id The ID of the animation.
+     * @param target The animation target.
+     * @param properties The properties object defining the animation data.
+     *
+     * @return The newly created animation.
+     */
+    Animation* createAnimation(const char* id, AnimationTarget* target, Properties* animationProperties);
+
+    /**
      * Gets the controller's state.
      *
      * @return The current state.
@@ -175,7 +187,7 @@ private:
      * Callback for when the controller receives a frame update event.
      */
     void update(long elapsedTime);
-    
+
     /**
      * Adds an animation on this AnimationTarget.
      */ 
