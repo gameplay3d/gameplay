@@ -1,6 +1,7 @@
 // Purposely not including Base.h here, or any other gameplay dependencies
 // so this class can be reused between gameplay and gameplay-encoder.
 #include "Curve.h"
+#include "Quaternion.h"
 #include <cassert>
 #include <cmath>
 #include <memory>
@@ -11,6 +12,7 @@ using std::sqrt;
 using std::cos;
 using std::sin;
 using std::exp;
+using std::strcmp;
 
 #ifndef NULL
 #define NULL 0
@@ -234,19 +236,19 @@ void Curve::evaluate(float time, float* dst) const
         }
         case QUADRATIC_OUT:
         {
-            t *= (t - 2.0f);
+            t *= -(t - 2.0f);
             break;
         }
         case QUADRATIC_IN_OUT:
         {
-            if (t *= 2.0f < 1.0f)
-            {
-                t *= t * 0.5f;
-            }
+            float tx2 = t * 2.0f;
+
+            if (tx2 < 1.0f)
+                t = 0.5f * (tx2 * tx2);
             else
             {
-                t -= 1.0f;
-                t = (-(t * (t - 2.0f)) + 1.0f) * 0.5f;
+                float temp = tx2 - 1.0f;
+                t = 0.5f * (-( temp * (temp - 2.0f)) + 1.0f);
             }
             break;
         }
@@ -414,7 +416,7 @@ void Curve::evaluate(float time, float* dst) const
                 }
                 else
                 {
-                    t = -0.5f * exp(10.0f * (2.0f * t + 1.0f)) + 1.0f;
+                    t = -0.5f * exp(10.0f * (-2.0f * t + 1.0f)) + 1.0f;
                 }
             }
             break;
@@ -450,12 +452,12 @@ void Curve::evaluate(float time, float* dst) const
             t *= 2.0f;
             if (t < 1.0f)
             {
-                t = 0.5f * -(sqrt(1.0f - t * t) + 1.0f);
+                t = 0.5f * (-sqrt((1.0f - t * t)) + 1.0f);
             }
             else
             {
                 t -= 2.0f;
-                t = 0.5f * (sqrt(1.0f - t * t) + 1.0f);
+                t = 0.5f * (sqrt((1.0f - t * t)) + 1.0f);
             }
             break;
         }
@@ -476,8 +478,8 @@ void Curve::evaluate(float time, float* dst) const
         {
             if (t != 0.0f && t != 1.0f)
             {
-                t--;
-                t = -exp(10.0f * t) * sin(t - 0.075f) * (MATH_PIX2 / 0.3f);
+                t = t - 1.0f;
+                t = -1.0f * ( exp(10.0f * t) * sin( (t - 0.075f) * MATH_PIX2 / 0.3f ) );
             }
             break;
         }
@@ -496,11 +498,11 @@ void Curve::evaluate(float time, float* dst) const
                 t = 2.0f * t - 1.0f;
                 if (t < 0.0f)
                 {
-                    t = -0.5f * (exp((10 * time)) * sin(((time - 0.1125f) * MATH_PIX2 / 0.45f)));
+                    t = -0.5f * (exp((10 * t)) * sin(((t - 0.1125f) * MATH_PIX2 / 0.45f)));
                 }
                 else
                 {
-                    t = 0.5f * exp((-10 * time)) * sin(((time - 0.1125f) * MATH_PIX2 / 0.45f)) + 1.0f;
+                    t = 0.5f * exp((-10 * t)) * sin(((t - 0.1125f) * MATH_PIX2 / 0.45f)) + 1.0f;
                 }
             }
             break;
@@ -510,26 +512,26 @@ void Curve::evaluate(float time, float* dst) const
             if (t != 0.0f && t != 1.0f)
             {
                 t *= 2.0f;
-                if (time < 1.0f)
+                if (t < 1.0f)
                 {
-                    t = 0.5f * (exp(-10.0f * t) * sin((t - 0.1125f) * MATH_PIX2 / 0.45f)) + 0.5f;
+                    t = 0.5f * (exp((-10 * t)) * sin(((t - 0.1125f) * (MATH_PIX2) / 0.45f))) + 0.5f;
                 }
                 else
                 {
-                    t = 0.5f * exp(10.0f * (t - 2.0f)) * sin((t - 0.1125f) * MATH_PIX2 / 0.45f) + 0.5f;
+                    t = 0.5f * (exp((10 *(t - 2))) * sin(((t - 0.1125f) * (MATH_PIX2) / 0.45f))) + 0.5f;
                 }
             }
             break;
         }
         case OVERSHOOT_IN:
         {
-            t = t * t * 2.70158f * t - 1.70158f;
+            t = t * t * (2.70158f * t - 1.70158f);
             break;
         }
         case OVERSHOOT_OUT:
         {
             t--;
-            t = t * t * 2.70158f * t + 1.70158f;
+            t = t * t * (2.70158f * t + 1.70158f) + 1;
             break;
         }
         case OVERSHOOT_IN_OUT:
@@ -542,7 +544,7 @@ void Curve::evaluate(float time, float* dst) const
             else
             {
                 t -= 2.0f;
-                t = 0.5f * t * t * (3.5949095f * t + 2.5949095f) + 2.0f;
+                t = 0.5f * (t * t * (3.5949095f * t + 2.5949095f) + 2.0f);
             }
             break;
         }
@@ -551,11 +553,11 @@ void Curve::evaluate(float time, float* dst) const
             t = 2.0f * t - 1.0f;
             if (t < 0.0f)
             {
-                t = 0.5f * t * t * (3.5949095f * t + 2.5949095f) + 1.0f;
+                t = 0.5f * (t * t * (3.5949095f * t + 2.5949095f) + 1.0f);
             }
             else
             {
-                t = 0.5f * t * t * (3.5949095f * t - 2.5949095f) + 1.0f;
+                t = 0.5f * (t * t * (3.5949095f * t - 2.5949095f) + 1.0f);
             }
             break;
         }
@@ -660,7 +662,7 @@ void Curve::evaluate(float time, float* dst) const
                     t = 7.5625f * t * t + 0.984375f;
                 }
 
-                t = (t + 0.5f) * 0.5f;
+                t = 0.5f * t + 0.5f;
             }
             break;
         }
@@ -1146,119 +1148,20 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
     }
 }
 
-void slerpQuat(float* q1, float* q2, float t, float* dst)
-{
-    // Fast slerp implementation by kwhatmough:
-    // It contains no division operations, no trig, no inverse trig
-    // and no sqrt. Not only does this code tolerate small constraint
-    // errors in the input quaternions, it actually corrects for them.
-    assert(dst);
-    assert(!(t < 0.0f || t > 1.0f));
-
-    if (t == 0.0f)
-    {
-        memcpy(dst, q1, sizeof(float) * 4);
-        return;
-    }
-    else if (t == 1.0f)
-    {
-        memcpy(dst, q2, sizeof(float) * 4);
-        return;
-    }
-
-    float halfY, alpha, beta;
-    float u, f1, f2a, f2b;
-    float ratio1, ratio2;
-    float halfSecHalfTheta, versHalfTheta;
-    float sqNotU, sqU;
-
-    float cosTheta = q1[3] * q2[3] + q1[0] * q2[0] + q1[1] * q2[1] + q1[2] * q2[2];
-
-    // As usual in all slerp implementations, we fold theta.
-    alpha = cosTheta >= 0 ? 1.0f : -1.0f;
-    halfY = 1.0f + alpha * cosTheta;
-
-    // Here we bisect the interval, so we need to fold t as well.
-    f2b = t - 0.5f;
-    u = f2b >= 0 ? f2b : -f2b;
-    f2a = u - f2b;
-    f2b += u;
-    u += u;
-    f1 = 1.0f - u;
-
-    // One iteration of Newton to get 1-cos(theta / 2) to good accuracy.
-    halfSecHalfTheta = 1.09f - (0.476537f - 0.0903321f * halfY) * halfY;
-    halfSecHalfTheta *= 1.5f - halfY * halfSecHalfTheta * halfSecHalfTheta;
-    versHalfTheta = 1.0f - halfY * halfSecHalfTheta;
-
-    // Evaluate series expansions of the coefficients.
-    sqNotU = f1 * f1;
-    ratio2 = 0.0000440917108f * versHalfTheta;
-    ratio1 = -0.00158730159f + (sqNotU - 16.0f) * ratio2;
-    ratio1 = 0.0333333333f + ratio1 * (sqNotU - 9.0f) * versHalfTheta;
-    ratio1 = -0.333333333f + ratio1 * (sqNotU - 4.0f) * versHalfTheta;
-    ratio1 = 1.0f + ratio1 * (sqNotU - 1.0f) * versHalfTheta;
-
-    sqU = u * u;
-    ratio2 = -0.00158730159f + (sqU - 16.0f) * ratio2;
-    ratio2 = 0.0333333333f + ratio2 * (sqU - 9.0f) * versHalfTheta;
-    ratio2 = -0.333333333f + ratio2 * (sqU - 4.0f) * versHalfTheta;
-    ratio2 = 1.0f + ratio2 * (sqU - 1.0f) * versHalfTheta;
-
-    // Perform the bisection and resolve the folding done earlier.
-    f1 *= ratio1 * halfSecHalfTheta;
-    f2a *= ratio2;
-    f2b *= ratio2;
-    alpha *= f1 + f2a;
-    beta = f1 + f2b;
-
-    // Apply final coefficients to a and b as usual.
-    float w = alpha * q1[3] + beta * q2[3];
-    float x = alpha * q1[0] + beta * q2[0];
-    float y = alpha * q1[1] + beta * q2[1];
-    float z = alpha * q1[2] + beta * q2[2];
-
-    // This final adjustment to the quaternion's length corrects for
-    // any small constraint error in the inputs q1 and q2. But as you
-    // can see, it comes at the cost of 9 additional multiplication
-    // operations. If this error-correcting feature is not required,
-    // the following code may be removed.
-    f1 = 1.5f - 0.5f * (w * w + x * x + y * y + z * z);
-    dst[3] = w * f1;
-    dst[0] = x * f1;
-    dst[1] = y * f1;
-    dst[2] = z * f1;
-}
-
-void normalizeQuat(float* q)
-{
-    float n = q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3];
-
-    // Do we need to normalize?
-    if (fabs(n) > 0.00001f && fabs(n - 1.0f) > 0.00001f)
-    {
-        n = sqrt(n);
-        q[0] /= n;
-        q[1] /= n;
-        q[2] /= n;
-        q[3] /= n;
-    }
-}
-
 void Curve::interpolateQuaternion(float s, float* from, float* to, float* dst) const
 {
-    float quatFrom[4] = { from[0], from[1], from[2], from[3] };
-    float quatTo[4] = { to[0], to[1], to[2], to[3] };
+    Quaternion quatFrom(from);
+    Quaternion quatTo(to);
 
     // Normalize the quaternions.
-    normalizeQuat(quatFrom);
-    normalizeQuat(quatTo);
+    quatFrom.normalize();
+    quatTo.normalize();
         
     // Evaluate.
     if (s >= 0)
-        slerpQuat(quatFrom, quatTo, s, dst);
+        Quaternion::slerp(quatFrom, quatTo, s, (Quaternion*)dst);
     else
-        slerpQuat(quatTo, quatFrom, -s, dst);
+        Quaternion::slerp(quatTo, quatFrom, -s, (Quaternion*)dst);
 }
 
 int Curve::determineIndex(float time) const
@@ -1281,6 +1184,200 @@ int Curve::determineIndex(float time) const
     } while (min <= max);
     
     // We should never hit this!
+    return -1;
+}
+
+int Curve::getInterpolationType(const char* curveId)
+{
+    if (strcmp(curveId, "BEZIER") == 0)
+    {
+        return Curve::BEZIER;
+    }
+    else if (strcmp(curveId, "BSPLINE") == 0)
+    {
+        return Curve::BSPLINE;
+    }
+    else if (strcmp(curveId, "FLAT") == 0)
+    {
+        return Curve::FLAT;
+    }
+    else if (strcmp(curveId, "HERMITE") == 0)
+    {
+        return Curve::HERMITE;
+    }
+    else if (strcmp(curveId, "LINEAR") == 0)
+    {
+        return Curve::LINEAR;
+    }
+    else if (strcmp(curveId, "SMOOTH") == 0)
+    {
+        return Curve::SMOOTH;
+    }
+    else if (strcmp(curveId, "STEP") == 0)
+    {
+        return Curve::STEP;
+    }
+    else if (strcmp(curveId, "QUADRATIC_IN") == 0)
+    {
+        return Curve::QUADRATIC_IN;
+    }
+    else if (strcmp(curveId, "QUADRATIC_OUT") == 0)
+    {
+        return Curve::QUADRATIC_OUT;
+    }
+    else if (strcmp(curveId, "QUADRATIC_IN_OUT") == 0)
+    {
+        return Curve::QUADRATIC_IN_OUT;
+    }
+    else if (strcmp(curveId, "QUADRATIC_OUT_IN") == 0)
+    {
+        return Curve::QUADRATIC_OUT_IN;
+    }
+    else if (strcmp(curveId, "CUBIC_IN") == 0)
+    {
+        return Curve::CUBIC_IN;
+    }
+    else if (strcmp(curveId, "CUBIC_OUT") == 0)
+    {
+        return Curve::CUBIC_OUT;
+    }
+    else if (strcmp(curveId, "CUBIC_IN_OUT") == 0)
+    {
+        return Curve::CUBIC_IN_OUT;
+    }
+    else if (strcmp(curveId, "CUBIC_OUT_IN") == 0)
+    {
+        return Curve::CUBIC_OUT_IN;
+    }
+    else if (strcmp(curveId, "QUARTIC_IN") == 0)
+    {
+        return Curve::QUARTIC_IN;
+    }
+    else if (strcmp(curveId, "QUARTIC_OUT") == 0)
+    {
+        return Curve::QUARTIC_OUT;
+    }
+    else if (strcmp(curveId, "QUARTIC_IN_OUT") == 0)
+    {
+        return Curve::QUARTIC_IN_OUT;
+    }
+    else if (strcmp(curveId, "QUARTIC_OUT_IN") == 0)
+    {
+        return Curve::QUARTIC_OUT_IN;
+    }
+    else if (strcmp(curveId, "QUINTIC_IN") == 0)
+    {
+        return Curve::QUINTIC_IN;
+    }
+    else if (strcmp(curveId, "QUINTIC_OUT") == 0)
+    {
+        return Curve::QUINTIC_OUT;
+    }
+    else if (strcmp(curveId, "QUINTIC_IN_OUT") == 0)
+    {
+        return Curve::QUINTIC_IN_OUT;
+    }
+    else if (strcmp(curveId, "QUINTIC_OUT_IN") == 0)
+    {
+        return Curve::QUINTIC_OUT_IN;
+    }
+    else if (strcmp(curveId, "SINE_IN") == 0)
+    {
+        return Curve::SINE_IN;
+    }
+    else if (strcmp(curveId, "SINE_OUT") == 0)
+    {
+        return Curve::SINE_OUT;
+    }
+    else if (strcmp(curveId, "SINE_IN_OUT") == 0)
+    {
+        return Curve::SINE_IN_OUT;
+    }
+    else if (strcmp(curveId, "SINE_OUT_IN") == 0)
+    {
+        return Curve::SINE_OUT_IN;
+    }
+    else if (strcmp(curveId, "EXPONENTIAL_IN") == 0)
+    {
+        return Curve::EXPONENTIAL_IN;
+    }
+    else if (strcmp(curveId, "EXPONENTIAL_OUT") == 0)
+    {
+        return Curve::EXPONENTIAL_OUT;
+    }
+    else if (strcmp(curveId, "EXPONENTIAL_IN_OUT") == 0)
+    {
+        return Curve::EXPONENTIAL_IN_OUT;
+    }
+    else if (strcmp(curveId, "EXPONENTIAL_OUT_IN") == 0)
+    {
+        return Curve::EXPONENTIAL_OUT_IN;
+    }
+    else if (strcmp(curveId, "CIRCULAR_IN") == 0)
+    {
+        return Curve::CIRCULAR_IN;
+    }
+    else if (strcmp(curveId, "CIRCULAR_OUT") == 0)
+    {
+        return Curve::CIRCULAR_OUT;
+    }
+    else if (strcmp(curveId, "CIRCULAR_IN_OUT") == 0)
+    {
+        return Curve::CIRCULAR_IN_OUT;
+    }
+    else if (strcmp(curveId, "CIRCULAR_OUT_IN") == 0)
+    {
+        return Curve::CIRCULAR_OUT_IN;
+    }
+    else if (strcmp(curveId, "ELASTIC_IN") == 0)
+    {
+        return Curve::ELASTIC_IN;
+    }
+    else if (strcmp(curveId, "ELASTIC_OUT") == 0)
+    {
+        return Curve::ELASTIC_OUT;
+    }
+    else if (strcmp(curveId, "ELASTIC_IN_OUT") == 0)
+    {
+        return Curve::ELASTIC_IN_OUT;
+    }
+    else if (strcmp(curveId, "ELASTIC_OUT_IN") == 0)
+    {
+        return Curve::ELASTIC_OUT_IN;
+    }
+    else if (strcmp(curveId, "OVERSHOOT_IN") == 0)
+    {
+        return Curve::OVERSHOOT_IN;
+    }
+    else if (strcmp(curveId, "OVERSHOOT_OUT") == 0)
+    {
+        return Curve::OVERSHOOT_OUT;
+    }
+    else if (strcmp(curveId, "OVERSHOOT_IN_OUT") == 0)
+    {
+        return Curve::OVERSHOOT_IN_OUT;
+    }
+    else if (strcmp(curveId, "OVERSHOOT_OUT_IN") == 0)
+    {
+        return Curve::OVERSHOOT_OUT_IN;
+    }
+    else if (strcmp(curveId, "BOUNCE_IN") == 0)
+    {
+        return Curve::BOUNCE_IN;
+    }
+    else if (strcmp(curveId, "BOUNCE_OUT") == 0)
+    {
+        return Curve::BOUNCE_OUT;
+    }
+    else if (strcmp(curveId, "BOUNCE_IN_OUT") == 0)
+    {
+        return Curve::BOUNCE_IN_OUT;
+    }
+    else if (strcmp(curveId, "BOUNCE_OUT_IN") == 0)
+    {
+        return Curve::BOUNCE_OUT_IN;
+    }
+
     return -1;
 }
 

@@ -11,18 +11,15 @@ namespace gameplay
 AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long startTime, unsigned long endTime)
     : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _duration(_endTime - _startTime), _repeatCount(1.0f), 
       _activeDuration(_duration * _repeatCount), _speed(1.0f), _isPlaying(false), _timeStarted(0), _elapsedTime(0), _runningTime(0), 
-      _channelPriority(NULL), _crossFadeToClip(NULL), _crossFadeStart(0), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), 
+      _crossFadeToClip(NULL), _crossFadeStart(0), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), 
       _isFadingOutStarted(false), _isFadingOut(false), _isFadingIn(false), _beginListeners(NULL), _endListeners(NULL)
 {
     assert(0 <= startTime && startTime <= animation->_duration && 0 <= endTime && endTime <= animation->_duration);
     
-    unsigned int channelCount = _animation->_channels.size();
-    _channelPriority = new unsigned int[channelCount];
-    
+    unsigned int channelCount = _animation->_channels.size();    
     for (unsigned int i = 0; i < channelCount; i++)
     {
         _values.push_back(new AnimationValue(_animation->_channels[i]->_curve->getComponentCount()));
-        _channelPriority[i] = 0;
     }
 }
 
@@ -37,7 +34,6 @@ AnimationClip::~AnimationClip()
     _values.clear();
 
     SAFE_RELEASE(_crossFadeToClip);
-    SAFE_DELETE(_channelPriority);
     SAFE_DELETE(_beginListeners);
     SAFE_DELETE(_endListeners);
 }
