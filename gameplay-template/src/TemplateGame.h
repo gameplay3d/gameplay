@@ -49,7 +49,7 @@ private:
     /**
      * Draws the scene each frame.
      */
-    void drawScene(Node* node, long cookie);
+    bool drawScene(Node* node, void* cookie);
 
     Scene* _scene;
 };
