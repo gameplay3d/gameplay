@@ -322,7 +322,7 @@ private:
      * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
      * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
      */
-    PhysicsRigidBody(Node* node, Texture::Image* image, float mass, float friction = 0.5,
+    PhysicsRigidBody(Node* node, Image* image, float mass, float friction = 0.5,
         float restitution = 0.0, float linearDamping = 0.0, float angularDamping = 0.0);
 
     /**

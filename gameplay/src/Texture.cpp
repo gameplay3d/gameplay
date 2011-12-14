@@ -1,6 +1,6 @@
 #include "Base.h"
+#include "Image.h"
 #include "Texture.h"
-#include "FileSystem.h"
 
 namespace gameplay
 {
@@ -92,7 +92,15 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
 
 Texture* Texture::create(Image* image, bool generateMipmaps)
 {
-    return create(image->_format, image->_width, image->_height, image->_data, generateMipmaps);
+    switch (image->getFormat())
+    {
+    case Image::RGB:
+        return create(RGB888, image->getWidth(), image->getHeight(), image->getData(), generateMipmaps);
+    case Image::RGBA:
+        return create(RGBA8888, image->getWidth(), image->getHeight(), image->getData(), generateMipmaps);
+    }
+    
+    return NULL;
 }
 
 Texture* Texture::create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps)
@@ -231,109 +239,6 @@ void Texture::Sampler::bind()
     GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLenum)_wrapT) );
     GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLenum)_minFilter) );
     GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLenum)_magFilter) );
-}
-
-Texture::Image* Texture::Image::create(const char* path)
-{
-    // Open the file.
-    FILE* fp = FileSystem::openFile(path, "rb");
-    if (fp == NULL)
-    {
-        return NULL;
-    }
-
-    // Verify PNG signature.
-    unsigned char sig[8];
-    if (fread(sig, 1, 8, fp) != 8 || png_sig_cmp(sig, 0, 8) != 0)
-    {
-        LOG_ERROR_VARG("Texture is not a valid PNG: %s", path);
-        fclose(fp);
-        return NULL;
-    }
-
-    // Initialize png read struct (last three parameters use stderr+longjump if NULL).
-    png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (png == NULL)
-    {
-        fclose(fp);
-        return NULL;
-    }
-
-    // Initialize info struct.
-    png_infop info = png_create_info_struct(png);
-    if (info == NULL)
-    {
-        fclose(fp);
-        png_destroy_read_struct(&png, NULL, NULL);
-        return NULL;
-    }
-
-    // Set up error handling (required without using custom error handlers above).
-    if (setjmp(png_jmpbuf(png)))
-    {
-        fclose(fp);
-        png_destroy_read_struct(&png, &info, NULL);
-        return NULL;
-    }
-
-    // Initialize file io.
-    png_init_io(png, fp);
-
-    // Indicate that we already read the first 8 bytes (signature).
-    png_set_sig_bytes(png, 8);
-
-    // Read the entire image into memory.
-    png_read_png(png, info, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND, NULL);
-
-    Image* image = new Image();
-    image->_width = png_get_image_width(png, info);
-    image->_height = png_get_image_height(png, info);
-
-    png_byte colorType = png_get_color_type(png, info);
-    switch (colorType)
-    {
-    case PNG_COLOR_TYPE_RGBA:
-        image->_format = RGBA8888;
-        break;
-
-    case PNG_COLOR_TYPE_RGB:
-        image->_format = RGB888;
-        break;
-
-    default:
-        LOG_ERROR_VARG("Unsupported PNG color type (%d) for texture: %s", (int)colorType, path);
-        fclose(fp);
-        png_destroy_read_struct(&png, &info, NULL);
-        return NULL;
-    }
-
-    unsigned int stride = png_get_rowbytes(png, info);
-
-    // Allocate image data.
-    image->_data = new unsigned char[stride * image->_height];
-
-    // Read rows into image data.
-    png_bytepp rows = png_get_rows(png, info);
-    for (unsigned int i = 0; i < image->_height; ++i)
-    {
-        memcpy(image->_data+(stride * (image->_height-1-i)), rows[i], stride);
-    }
-
-    // Clean up.
-    png_destroy_read_struct(&png, &info, NULL);
-    fclose(fp);
-
-    return image;
-}
-
-Texture::Image::Image()
-{
-    // Unused
-}
-
-Texture::Image::~Image()
-{
-    SAFE_DELETE_ARRAY(_data);
 }
 
 }

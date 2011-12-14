@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "Game.h"
+#include "Image.h"
 #include "PhysicsController.h"
 #include "PhysicsMotionState.h"
 #include "PhysicsRigidBody.h"
@@ -61,7 +62,7 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
     Game::getInstance()->getPhysicsController()->addRigidBody(this);
 }
 
-PhysicsRigidBody::PhysicsRigidBody(Node* node, Texture::Image* image, float mass,
+PhysicsRigidBody::PhysicsRigidBody(Node* node, Image* image, float mass,
     float friction, float restitution, float linearDamping, float angularDamping)
         : _shape(NULL), _body(NULL), _node(node), _listeners(NULL), _angularVelocity(NULL),
         _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL), _vertexData(NULL),
@@ -79,10 +80,10 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, Texture::Image* image, float mass
     unsigned int pixelSize = 0;
     switch (image->getFormat())
     {
-        case Texture::RGB888:
+        case Image::RGB:
             pixelSize = 3;
             break;
-        case Texture::RGBA8888:
+        case Image::RGBA:
             pixelSize = 4;
             break;
     }
@@ -386,15 +387,15 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     else
     {
         // Load the image data from the given file path.
-        Texture::Image* image = Texture::Image::create(imagePath);
+        Image* image = Image::create(imagePath);
         if (!image)
             return NULL;
 
         // Ensure that the image's pixel format is supported.
         switch (image->getFormat())
         {
-            case Texture::RGB888:
-            case Texture::RGBA8888:
+            case Image::RGB:
+            case Image::RGBA:
                 break;
             default:
                 WARN_VARG("Heightmap: pixel format is not supported: %d", image->getFormat());
