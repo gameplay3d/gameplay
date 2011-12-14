@@ -451,16 +451,16 @@ void SpaceshipGame::render(long elapsedTime)
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
     // Visit scene nodes for opaque drawing
-    _scene->visit(this, &SpaceshipGame::drawScene, 0);
+    _scene->visit(this, &SpaceshipGame::drawScene, (void*)0);
 
     // Visit scene nodes for transparent drawing
-    _scene->visit(this, &SpaceshipGame::drawScene, 1);
+    _scene->visit(this, &SpaceshipGame::drawScene, (void*)1);
 
     // Draw game text (yellow)
     drawText();
 }
 
-void SpaceshipGame::drawSplash(long coookie)
+void SpaceshipGame::drawSplash(void* coookie)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
     SpriteBatch* batch = SpriteBatch::create("res/splash.png");
@@ -470,23 +470,20 @@ void SpaceshipGame::drawSplash(long coookie)
     SAFE_DELETE(batch);
 }
 
-void SpaceshipGame::drawScene(Node* node, long cookie)
+bool SpaceshipGame::drawScene(Node* node, void* cookie)
 {
     Model* model = node->getModel();
-    if (model == NULL)
-        return;
+    if (model)
+    {
+        // Transparent nodes must be drawn last (stage 1)
+        bool isTransparent = (node == _glowNode);
 
-    // Transparent nodes must be drawn last (stage 1)
-    bool isTransparent = (node == _glowNode);
+        // Skip transparent objects for stage 0
+        if ((!isTransparent && (int)cookie == 0) || (isTransparent && (int)cookie == 1))
+            model->draw();
+    }
 
-    // Skip transparent objects for stage 0
-    if (cookie == 0 && isTransparent)
-        return;
-    // Skip opaque objects for stage 1
-    if (cookie == 1 && !isTransparent)
-        return;
-
-    model->draw();
+    return true;
 }
 
 void SpaceshipGame::drawText()
