@@ -996,6 +996,11 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
     return animation;
 }
 
+Mesh* Package::loadMesh(const char* id)
+{
+    return loadMesh(id, false, NULL);
+}
+
 Mesh* Package::loadMesh(const char* id, bool loadWithMeshRBSupport, const char* nodeId)
 {
     // save the file position
