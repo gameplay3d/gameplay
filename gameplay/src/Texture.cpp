@@ -92,7 +92,15 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
 
 Texture* Texture::create(Image* image, bool generateMipmaps)
 {
-    return create((Texture::Format)image->getFormat(), image->getWidth(), image->getHeight(), image->getData(), generateMipmaps);
+    switch (image->getFormat())
+    {
+    case Image::RGB:
+        return create(RGB888, image->getWidth(), image->getHeight(), image->getData(), generateMipmaps);
+    case Image::RGBA:
+        return create(RGBA8888, image->getWidth(), image->getHeight(), image->getData(), generateMipmaps);
+    }
+    
+    return NULL;
 }
 
 Texture* Texture::create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps)
