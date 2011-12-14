@@ -233,6 +233,7 @@ void Mesh::generateHeightmap(const char* filename)
         png_write_row(png_ptr, row);
     }
 
+    png_write_end(png_ptr, NULL);
     DEBUGPRINT_VARG("> Saved heightmap: %s\n", filename);
 
 error:
