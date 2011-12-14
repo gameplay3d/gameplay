@@ -234,19 +234,19 @@ void Curve::evaluate(float time, float* dst) const
         }
         case QUADRATIC_OUT:
         {
-            t *= (t - 2.0f);
+            t *= -(t - 2.0f);
             break;
         }
         case QUADRATIC_IN_OUT:
         {
-            if (t *= 2.0f < 1.0f)
-            {
-                t *= t * 0.5f;
-            }
+            float tx2 = t * 2.0f;
+
+            if (tx2 < 1.0f)
+                t = 0.5f * (tx2 * tx2);
             else
             {
-                t -= 1.0f;
-                t = (-(t * (t - 2.0f)) + 1.0f) * 0.5f;
+                float temp = tx2 - 1.0f;
+                t = 0.5f * (-( temp * (temp - 2.0f)) + 1.0f);
             }
             break;
         }
@@ -414,7 +414,7 @@ void Curve::evaluate(float time, float* dst) const
                 }
                 else
                 {
-                    t = -0.5f * exp(10.0f * (2.0f * t + 1.0f)) + 1.0f;
+                    t = -0.5f * exp(10.0f * (-2.0f * t + 1.0f)) + 1.0f;
                 }
             }
             break;
@@ -450,12 +450,12 @@ void Curve::evaluate(float time, float* dst) const
             t *= 2.0f;
             if (t < 1.0f)
             {
-                t = 0.5f * -(sqrt(1.0f - t * t) + 1.0f);
+                t = 0.5f * (-sqrt((1.0f - t * t)) + 1.0f);
             }
             else
             {
                 t -= 2.0f;
-                t = 0.5f * (sqrt(1.0f - t * t) + 1.0f);
+                t = 0.5f * (sqrt((1.0f - t * t)) + 1.0f);
             }
             break;
         }
@@ -476,8 +476,8 @@ void Curve::evaluate(float time, float* dst) const
         {
             if (t != 0.0f && t != 1.0f)
             {
-                t--;
-                t = -exp(10.0f * t) * sin(t - 0.075f) * (MATH_PIX2 / 0.3f);
+                t = t - 1.0f;
+                t = -1.0f * ( exp(10.0f * t) * sin( (t - 0.075f) * MATH_PIX2 / 0.3f ) );
             }
             break;
         }
@@ -496,11 +496,11 @@ void Curve::evaluate(float time, float* dst) const
                 t = 2.0f * t - 1.0f;
                 if (t < 0.0f)
                 {
-                    t = -0.5f * (exp((10 * time)) * sin(((time - 0.1125f) * MATH_PIX2 / 0.45f)));
+                    t = -0.5f * (exp((10 * t)) * sin(((t - 0.1125f) * MATH_PIX2 / 0.45f)));
                 }
                 else
                 {
-                    t = 0.5f * exp((-10 * time)) * sin(((time - 0.1125f) * MATH_PIX2 / 0.45f)) + 1.0f;
+                    t = 0.5f * exp((-10 * t)) * sin(((t - 0.1125f) * MATH_PIX2 / 0.45f)) + 1.0f;
                 }
             }
             break;
@@ -510,26 +510,26 @@ void Curve::evaluate(float time, float* dst) const
             if (t != 0.0f && t != 1.0f)
             {
                 t *= 2.0f;
-                if (time < 1.0f)
+                if (t < 1.0f)
                 {
-                    t = 0.5f * (exp(-10.0f * t) * sin((t - 0.1125f) * MATH_PIX2 / 0.45f)) + 0.5f;
+                    t = 0.5f * (exp((-10 * t)) * sin(((t - 0.1125f) * (MATH_PIX2) / 0.45f))) + 0.5f;
                 }
                 else
                 {
-                    t = 0.5f * exp(10.0f * (t - 2.0f)) * sin((t - 0.1125f) * MATH_PIX2 / 0.45f) + 0.5f;
+                    t = 0.5f * (exp((10 *(t - 2))) * sin(((t - 0.1125f) * (MATH_PIX2) / 0.45f))) + 0.5f;
                 }
             }
             break;
         }
         case OVERSHOOT_IN:
         {
-            t = t * t * 2.70158f * t - 1.70158f;
+            t = t * t * (2.70158f * t - 1.70158f);
             break;
         }
         case OVERSHOOT_OUT:
         {
             t--;
-            t = t * t * 2.70158f * t + 1.70158f;
+            t = t * t * (2.70158f * t + 1.70158f) + 1;
             break;
         }
         case OVERSHOOT_IN_OUT:
@@ -542,7 +542,7 @@ void Curve::evaluate(float time, float* dst) const
             else
             {
                 t -= 2.0f;
-                t = 0.5f * t * t * (3.5949095f * t + 2.5949095f) + 2.0f;
+                t = 0.5f * (t * t * (3.5949095f * t + 2.5949095f) + 2.0f);
             }
             break;
         }
@@ -551,11 +551,11 @@ void Curve::evaluate(float time, float* dst) const
             t = 2.0f * t - 1.0f;
             if (t < 0.0f)
             {
-                t = 0.5f * t * t * (3.5949095f * t + 2.5949095f) + 1.0f;
+                t = 0.5f * (t * t * (3.5949095f * t + 2.5949095f) + 1.0f);
             }
             else
             {
-                t = 0.5f * t * t * (3.5949095f * t - 2.5949095f) + 1.0f;
+                t = 0.5f * (t * t * (3.5949095f * t - 2.5949095f) + 1.0f);
             }
             break;
         }
@@ -660,7 +660,7 @@ void Curve::evaluate(float time, float* dst) const
                     t = 7.5625f * t * t + 0.984375f;
                 }
 
-                t = (t + 0.5f) * 0.5f;
+                t = 0.5f * t + 0.5f;
             }
             break;
         }
