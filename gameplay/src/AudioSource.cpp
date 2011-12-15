@@ -31,6 +31,22 @@ AudioSource* AudioSource::create(const char* path)
 {
     assert(path);
 
+    // Load from a .audio file.
+    std::string pathStr = path;
+    if (pathStr.find(".audio") != pathStr.npos)
+    {
+        Properties* properties = Properties::create(path);
+        assert(properties);
+        if (properties == NULL)
+        {
+            return NULL;
+        }
+
+        AudioSource* audioSource = create(properties->getNextNamespace());
+        SAFE_DELETE(properties);
+        return audioSource;
+    }
+
     // Create an audio buffer from this path.
     AudioBuffer* buffer = AudioBuffer::create(path);
     if (buffer == NULL)
@@ -51,8 +67,49 @@ AudioSource* AudioSource::create(const char* path)
 
 AudioSource* AudioSource::create(Properties* properties)
 {
-    // TODO: Implement this!
-    return NULL;
+    // Check if the properties is valid and has a valid namespace.
+    assert(properties);
+    if (!properties || !(strcmp(properties->getNamespace(), "audio") == 0))
+    {
+        WARN("Failed to load audio source from properties object: must be non-null object and have namespace equal to \'audio\'.");
+        return NULL;
+    }
+
+    const char* path = properties->getString("path");
+    if (path == NULL)
+    {
+        WARN("Audio file failed to load; the file path was not specified.");
+        return NULL;
+    }
+
+    // Create the audio source.
+    AudioSource* audio = AudioSource::create(path);
+    if (audio == NULL)
+    {
+        WARN_VARG("Audio file '%s' failed to load properly.", path);
+        return NULL;
+    }
+
+    // Set any properties that the user specified in the .audio file.
+    if (properties->getString("looped") != NULL)
+    {
+        audio->setLooped(properties->getBool("looped"));
+    }
+    if (properties->getString("gain") != NULL)
+    {
+        audio->setGain(properties->getFloat("gain"));
+    }
+    if (properties->getString("pitch") != NULL)
+    {
+        audio->setPitch(properties->getFloat("pitch"));
+    }
+    Vector3 v;
+    if (properties->getVector3("velocity", &v))
+    {
+        audio->setVelocity(v);
+    }
+
+    return audio;
 }
 
 AudioSource::State AudioSource::getState() const
