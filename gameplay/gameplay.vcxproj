@@ -173,6 +173,7 @@
     <None Include="res\textures\particle-default.png" />
     <None Include="src\BoundingBox.inl" />
     <None Include="src\BoundingSphere.inl" />
+    <None Include="src\Curve.inl" />
     <None Include="src\Game.inl" />
     <None Include="src\gameplay-main-macos.mm" />
     <None Include="src\Image.inl" />

@@ -161,8 +161,10 @@ void Game::frame()
     else
     {
         if (!_initialized)
+        {
             initialize();
-        _initialized = true;
+            _initialized = true;
+        }
     }
 
     // Update Time.
