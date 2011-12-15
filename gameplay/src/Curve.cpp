@@ -216,18 +216,18 @@ void Curve::evaluate(float time, float* dst) const
         }
         case LINEAR:
         {
-            interpolateLinear(t, from, to, dst);
+            // Can just break here because linear formula follows switch
             break;
         }
         case SMOOTH:
         {
             interpolateHermiteSmooth(t, index, from, to, dst);
-            break;
+            return;
         }
         case STEP:
         {
             memcpy(dst, from->value, _componentSize);
-            break;
+            return;
         }
         case QUADRATIC_IN:
         {
