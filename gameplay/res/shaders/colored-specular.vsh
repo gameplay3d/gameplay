@@ -57,7 +57,7 @@ vec4 getPosition()
     skinPosition(blendWeight, matrixIndex);
 
     blendWeight = a_blendWeights[3];
-    matrixIndex = int(a_blendIndices[2]) * 3;
+    matrixIndex = int(a_blendIndices[3]) * 3;
     skinPosition(blendWeight, matrixIndex);
 
     return _skinnedPosition;    
@@ -94,7 +94,7 @@ vec3 getNormal()
     skinNormal(blendWeight, matrixIndex);
 
     blendWeight = a_blendWeights[3];
-    matrixIndex = int(a_blendIndices[2]) * 3;
+    matrixIndex = int(a_blendIndices[3]) * 3;
     skinNormal(blendWeight, matrixIndex);
 
     return _skinnedNormal;
