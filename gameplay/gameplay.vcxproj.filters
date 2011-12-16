@@ -213,6 +213,15 @@
     <ClCompile Include="src\Image.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\RenderTarget.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FrameBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DepthStencilTarget.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -410,6 +419,15 @@
     <ClInclude Include="src\Image.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\RenderTarget.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FrameBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DepthStencilTarget.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\bumped-specular.vsh">
@@ -482,7 +500,7 @@
       <Filter>res\textures</Filter>
     </None>
     <None Include="src\Curve.inl">
-        <Filter>src</Filter>
+      <Filter>src</Filter>
     </None>
     <None Include="src\Game.inl">
       <Filter>src</Filter>
