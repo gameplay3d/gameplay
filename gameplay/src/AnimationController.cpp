@@ -268,7 +268,7 @@ void AnimationController::initialize()
 
 void AnimationController::finalize()
 {
-    stopAllAnimations();
+    //stopAllAnimations();
     _state = PAUSED;
 }
 
