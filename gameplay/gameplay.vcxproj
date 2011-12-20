@@ -41,6 +41,7 @@
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\MeshBatch.cpp" />
     <ClCompile Include="src\Pass.cpp" />
     <ClCompile Include="src\MaterialParameter.cpp" />
     <ClCompile Include="src\Matrix.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="src\Joint.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Material.h" />
+    <ClInclude Include="src\MeshBatch.h" />
     <ClInclude Include="src\Pass.h" />
     <ClInclude Include="src\MaterialParameter.h" />
     <ClInclude Include="src\Matrix.h" />
@@ -177,6 +179,7 @@
     <None Include="src\gameplay-main-macos.mm" />
     <None Include="src\Image.inl" />
     <None Include="src\Matrix.inl" />
+    <None Include="src\MeshBatch.inl" />
     <None Include="src\Plane.inl" />
     <None Include="src\PlatformMacOS.mm" />
     <None Include="src\Quaternion.inl" />

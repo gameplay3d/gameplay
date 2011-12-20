@@ -40,17 +40,14 @@ public:
     const std::vector<std::string>* getAutoBindProperties() const;
 
     /**
-     * Stores a binding for this pass onto the specified mesh.
+     * Stores a vertex attribute binding for this pass.
      *
-     * This method creates and stores a VertexAttributeBinding for this pass onto the 
-     * specified Mesh. When a mesh binding is set, the VertexAttributeBinding
-     * will be automatically bound when the bind() method is called for the pass.
+     * When a mesh binding is set, the VertexAttributeBinding will be automatically
+     * bound when the bind() method is called for the pass.
      *
-     * @param mesh The Mesh to create and store a VertexAttributeBinding for (or NULL to remove an existing mesh binding).
-     *
-     * @return The newly created VertexAttributeBinding between this pass and the specified mesh.
+     * @param binding The VertexAttributeBinding to set (or NULL to remove an existing binding).
      */
-    VertexAttributeBinding* setMeshBinding(Mesh* mesh);
+    void setVertexAttributeBinding(VertexAttributeBinding* binding);
 
     /**
      * Binds the render state for this pass.

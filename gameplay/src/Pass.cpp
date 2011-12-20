@@ -48,16 +48,15 @@ Effect* Pass::getEffect() const
     return _effect;
 }
 
-VertexAttributeBinding* Pass::setMeshBinding(Mesh* mesh)
+void Pass::setVertexAttributeBinding(VertexAttributeBinding* binding)
 {
     SAFE_RELEASE(_vaBinding);
 
-    if (mesh)
+    if (binding)
     {
-        _vaBinding = VertexAttributeBinding::create(mesh, _effect);
+        _vaBinding = binding;
+        binding->addRef();
     }
-
-    return _vaBinding;
 }
 
 void Pass::bind()
