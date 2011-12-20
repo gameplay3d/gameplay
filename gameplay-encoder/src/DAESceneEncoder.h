@@ -81,6 +81,9 @@ private:
         }
     };
 
+    void bakeAnimations();
+    void bakeAnimations(domNodeRef& node);
+
     /**
      * Optimizes the COLLADA dom based on the arguments passed to the encoder.
      * 

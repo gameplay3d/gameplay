@@ -34,6 +34,217 @@ unsigned int getMaxOffset(domInputLocalOffset_Array& inputArray)
     return maxOffset;
 }
 
+void DAESceneEncoder::bakeAnimations()
+{
+    // Determine the animation frame rate to bake to. (Command line argument? Default 1/24 seconds?)
+
+
+    // Visit all nodes in the scene
+    const domCOLLADA::domSceneRef& domScene = _dom->getScene();
+    daeElement* element = domScene->getInstance_visual_scene()->getUrl().getElement();
+    if (element && element->getElementType() == COLLADA_TYPE::VISUAL_SCENE)
+    {
+        const domVisual_sceneRef visualScene = daeSafeCast<domVisual_scene>(element);
+        const domNode_Array& nodeArray = visualScene->getNode_array();
+        const size_t childCount = nodeArray.getCount();
+        for (size_t i = 0; i < childCount; ++i)
+        {
+            domNodeRef node = nodeArray[i];
+            bakeAnimations(node);
+        }
+    }
+}
+
+static std::string concat(const char* a, const char* b)
+{
+    std::string str;
+    str.reserve(strlen(a) + strlen(b) + 1);
+    str.append(a);
+    str.append(b);
+    return str;
+}
+
+domSource* createInputSource(domAnimationRef& animation, std::vector<float>& keyTimes)
+{
+    domSourceRef inputSource = daeSafeCast<domSource>(animation->createAndPlace("source"));
+    inputSource->setId(concat(animation->getId(), ".matrix-input").c_str());
+
+    domFloat_arrayRef floatArray = daeSafeCast<domFloat_array>(inputSource->createAndPlace("float_array"));
+    floatArray->setId(concat(inputSource->getId(), "-array").c_str());
+    
+    domListOfFloats floats;
+    const size_t count = keyTimes.size();
+    floats.setCount(count);
+    for (size_t i = 0; i < count; ++i)
+    {
+        floats.set(i, keyTimes[i]);
+    }
+    floatArray->setValue(floats);
+    floatArray->setCount(count);
+
+    domSource::domTechnique_commonRef technique = daeSafeCast<domSource::domTechnique_common>(inputSource->createAndPlace("technique_common"));
+    domAccessorRef accessor = daeSafeCast<domAccessor>(technique->createAndPlace("accessor"));
+    accessor->setSource(concat("#", floatArray->getId()).c_str());
+    accessor->setCount(count);
+    accessor->setStride(1);
+    domParamRef param = daeSafeCast<domParam>(accessor->createAndPlace("param"));
+    param->setName("TIME");
+    param->setType("float");
+
+    return inputSource.cast();
+}
+
+domSource* createOutputSource(domAnimationRef& animation, std::vector<Matrix>& matrices)
+{
+    domSourceRef outputSource = daeSafeCast<domSource>(animation->createAndPlace("source"));
+    outputSource->setId(concat(animation->getId(), ".matrix-output").c_str());
+
+    domFloat_arrayRef floatArray = daeSafeCast<domFloat_array>(outputSource->createAndPlace("float_array"));
+    floatArray->setId(concat(outputSource->getId(), "-array").c_str());
+
+    const size_t MATRIX_SIZE = 16;
+    domListOfFloats floats;
+    const size_t floatCount = matrices.size() * MATRIX_SIZE;
+    floats.setCount(floatCount);
+    const size_t matricesCount = matrices.size();
+    for (size_t i = 0; i < matricesCount; ++i)
+    {
+        const Matrix& matrix = matrices[i];
+        size_t index = i * MATRIX_SIZE;
+        floats.set(index, matrix.m[0]);
+        for (size_t j = 0; j < MATRIX_SIZE; ++j)
+        {
+            floats.set(index + j, matrix.m[j]);
+        }
+    }
+    floatArray->setValue(floats);
+    floatArray->setCount(floatCount);
+
+    domSource::domTechnique_commonRef technique = daeSafeCast<domSource::domTechnique_common>(outputSource->createAndPlace("technique_common"));
+    domAccessorRef accessor = daeSafeCast<domAccessor>(technique->createAndPlace("accessor"));
+    accessor->setSource(concat("#", floatArray->getId()).c_str());
+    accessor->setCount(matricesCount);
+    accessor->setStride(MATRIX_SIZE);
+    domParamRef param = daeSafeCast<domParam>(accessor->createAndPlace("param"));
+    param->setName("TRANSFORM");
+    param->setType("float4x4");
+
+    return outputSource.cast();
+}
+
+domSource* createInterpolationSource(domAnimationRef& animation, size_t count)
+{
+    domSourceRef interpolationSource = daeSafeCast<domSource>(animation->createAndPlace("source"));
+    interpolationSource->setId(concat(animation->getId(), ".matrix-interpolation").c_str());
+    
+    domName_arrayRef nameArray = daeSafeCast<domName_array>(interpolationSource->createAndPlace("Name_array"));
+    nameArray->setId(concat(interpolationSource->getId(), "-array").c_str());
+    
+    domListOfNames names;
+    names.setCount(count);
+    for (size_t i = 0; i < count; ++i)
+    {
+        names.set(i, "LINEAR");
+    }
+    nameArray->setValue(names);
+    nameArray->setCount(count);
+
+    domSource::domTechnique_commonRef technique = daeSafeCast<domSource::domTechnique_common>(interpolationSource->createAndPlace("technique_common"));
+    domAccessorRef accessor = daeSafeCast<domAccessor>(technique->createAndPlace("accessor"));
+    accessor->setSource(concat("#", nameArray->getId()).c_str());
+    accessor->setCount(count);
+    accessor->setStride(1);
+    domParamRef param = daeSafeCast<domParam>(accessor->createAndPlace("param"));
+    param->setName("INTERPOLATION");
+    param->setType("name");
+
+    return interpolationSource.cast();
+}
+
+void DAESceneEncoder::bakeAnimations(domNodeRef& node)
+{
+    // find all animation channels that target this node // (getAnimationChannels() in DAEUtil.h?)
+    std::list<domChannelRef> channels;
+    getAnimationChannels(node, channels, false);
+    
+    float bake_frame_rate = 0.04166666667f; // TODO: don't hard code
+    if (!channels.empty())
+    {
+        // find min start time of these channels
+        // find max end time of these channels
+        float startTime = 0, endTime = 0;
+        getStartAndEndTime(channels, &startTime, &endTime);
+        
+        std::vector<float> keyTimes;
+        std::vector<Matrix> matrices;
+        // TODO reserve?
+
+        // create temp container to store key times and key values?
+        for (float t = startTime; t < endTime; t += bake_frame_rate)
+        {
+            Matrix matrix;
+            getNodeTransform(node, channels, t, matrix);
+            //  determine the node's transform at time t from the channels // (will probably have to use Curve.h)
+            //  append(time t, transform)
+            keyTimes.push_back(t);
+            matrices.push_back(matrix);
+        }
+        // determine the node's transform at time end_time
+        // append(time end_time, transform)
+        // 
+
+        // create <animation>
+        domLibrary_animations_Array& animationsLibraryArray = _dom->getLibrary_animations_array();
+        assert(animationsLibraryArray.getCount() > 0);
+        domLibrary_animationsRef& animationsLibrary = animationsLibraryArray.get(0);
+        domAnimationRef animation = daeSafeCast<domAnimation>(animationsLibrary->createAndPlace("animation"));
+        // OpenCOLLADA sets the id equal to the node's ID
+        animation->setId(node->getId());
+
+        // create <source> for key times (INPUT)
+        domSourceRef inputSource = createInputSource(animation, keyTimes);
+
+        // create <source> for key values (OUTPUT)
+        domSourceRef outputSource = createOutputSource(animation, matrices);
+
+        // create <source> for interpolations (INTERPOLATION) (<Name_array>)
+        domSourceRef interpolationSource = createInterpolationSource(animation, keyTimes.size());
+        
+        // create <sampler>
+        domSamplerRef sampler = daeSafeCast<domSampler>(animation->createAndPlace("sampler"));
+        sampler->setId(concat(animation->getId(), "-sampler").c_str());
+        // create <input semantic="INPUT" source="id_of_source">
+        domInputLocalRef inputInput = daeSafeCast<domInputLocal>(sampler->createAndPlace("input"));
+        inputInput->setSemantic("INPUT");
+        inputInput->setSource(concat("#", inputSource->getId()).c_str());
+        // create <input semantic="OUTPUT" source="id_of_source">
+        domInputLocalRef outputInput = daeSafeCast<domInputLocal>(sampler->createAndPlace("input"));
+        outputInput->setSemantic("OUTPUT");
+        outputInput->setSource(concat("#", outputSource->getId()).c_str());
+        // create <input semantic="INTERPOLATION" source="id_of_source">
+        domInputLocalRef interpolationInput = daeSafeCast<domInputLocal>(sampler->createAndPlace("input"));
+        interpolationInput->setSemantic("INTERPOLATION");
+        interpolationInput->setSource(concat("#", interpolationSource->getId()).c_str());
+
+        // create <channel source="source_id" target="node_id/transform" />
+        domChannelRef channel = daeSafeCast<domChannel>(animation->createAndPlace("channel"));
+        channel->setSource(concat("#", sampler->getId()).c_str());
+        channel->setTarget(concat(node->getId(), "/transform").c_str());
+    }
+    // Calculate the baked transform of the Node from <rotate> <scale> <translate> and delete those elements.
+    // Add <matrix> element to the node with the calculated transform matrix. Make sure sid="transform". // Matches <channel target="node_id/transform">
+    bakeNodeTransform(node);
+
+    // visit all child nodes
+    const domNode_Array& nodeArray = node->getNode_array();
+    const size_t childCount = nodeArray.getCount();
+    for (size_t i = 0; i < childCount; ++i)
+    {
+        domNodeRef node = nodeArray[i];
+        bakeAnimations(node);
+    }
+}
+
 void DAESceneEncoder::optimizeCOLLADA(const EncoderArguments& arguments, domCOLLADA* dom)
 {
     DAEOptimizer optimizer(dom);
@@ -50,6 +261,9 @@ void DAESceneEncoder::optimizeCOLLADA(const EncoderArguments& arguments, domCOLL
         }
         end("groupAnimation");
     }
+
+    bakeAnimations();
+
     if (arguments.DAEOutputEnabled())
     {
         if (!_collada->writeTo(arguments.getFilePath(), arguments.getDAEOutputPath()))
@@ -813,9 +1027,9 @@ void DAESceneEncoder::transformNode(domNode* domNode, Node* node)
 
 void DAESceneEncoder::calcTransform(domNode* domNode, Matrix& dstTransform)
 {
-    daeTArray<daeSmartRef<daeElement> > children;
+    daeTArray<daeSmartRef<daeElement>> children;
     domNode->getChildren(children);
-    size_t childCount = children.getCount();
+    const size_t childCount = children.getCount();
     for (size_t i = 0; i < childCount; ++i)
     {
         daeElementRef childElement = children[i];
