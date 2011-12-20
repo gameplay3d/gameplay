@@ -8,14 +8,14 @@
 #define FONT_VSH \
     "uniform mat4 u_projectionMatrix;\n" \
     "attribute vec3 a_position;\n" \
-    "attribute vec2 a_texcoord;\n" \
+    "attribute vec2 a_texCoord;\n" \
     "attribute vec4 a_color;\n" \
-    "varying vec2 v_texcoord;\n" \
+    "varying vec2 v_texCoord;\n" \
     "varying vec4 v_color;\n" \
     "void main()\n" \
     "{\n" \
         "gl_Position = u_projectionMatrix * vec4(a_position, 1);\n" \
-        "v_texcoord = a_texcoord;\n" \
+        "v_texCoord = a_texCoord;\n" \
         "v_color = a_color;\n" \
     "}\n"
 
@@ -24,13 +24,13 @@
     "#ifdef OPENGL_ES\n" \
     "precision highp float;\n" \
     "#endif\n" \
-    "varying vec2 v_texcoord;\n" \
+    "varying vec2 v_texCoord;\n" \
     "varying vec4 v_color;\n" \
     "uniform sampler2D u_texture;\n" \
     "void main()\n" \
     "{\n" \
         "gl_FragColor = v_color;\n" \
-        "gl_FragColor.a = texture2D(u_texture, v_texcoord).a;\n" \
+        "gl_FragColor.a = texture2D(u_texture, v_texCoord).a;\n" \
     "}"
 
 namespace gameplay

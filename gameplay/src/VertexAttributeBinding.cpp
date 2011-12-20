@@ -38,6 +38,37 @@ VertexAttributeBinding::~VertexAttributeBinding()
 
 VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, Effect* effect)
 {
+    // Search for an existing vertex attribute binding that can be used.
+    VertexAttributeBinding* b;
+    for (unsigned int i = 0, count = __vertexAttributeBindingCache.size(); i < count; ++i)
+    {
+        b = __vertexAttributeBindingCache[i];
+        if (b->_mesh == mesh && b->_effect == effect)
+        {
+            // Found a match!
+            b->addRef();
+            return b;
+        }
+    }
+
+    b = create(mesh, mesh->getVertexFormat(), 0, effect);
+
+    // Add the new vertex attribute binding to the cache.
+    if (b)
+    {
+        __vertexAttributeBindingCache.push_back(b);
+    }
+
+    return b;
+}
+
+VertexAttributeBinding* VertexAttributeBinding::create(const VertexFormat& vertexFormat, void* vertexPointer, Effect* effect)
+{
+    return create(NULL, vertexFormat, vertexPointer, effect);
+}
+
+VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexFormat& vertexFormat, void* vertexPointer, Effect* effect)
+{
     // One-time initialization.
     if (__maxVertexAttribs == 0)
     {
@@ -52,25 +83,11 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, Effect* effec
         }
     }
 
-    VertexAttributeBinding* b;
-
-    // Search for an existing vertex attribute binding that can be used.
-    for (unsigned int i = 0, count = __vertexAttributeBindingCache.size(); i < count; ++i)
-    {
-        b = __vertexAttributeBindingCache[i];
-        if (b->_mesh == mesh && b->_effect == effect)
-        {
-            // Found a match!
-            b->addRef();
-            return b;
-        }
-    }
-
     // Create a new VertexAttributeBinding.
-    b = new VertexAttributeBinding();
+    VertexAttributeBinding* b = new VertexAttributeBinding();
 
 #ifdef USE_GL_VAOS
-    if (glGenVertexArrays)
+    if (mesh && glGenVertexArrays)
     {
         GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, 0) );
         GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0) );
@@ -97,29 +114,32 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, Effect* effec
         VertexAttribute* attribs = new VertexAttribute[__maxVertexAttribs];
         for (unsigned int i = 0; i < __maxVertexAttribs; ++i)
         {
+            // Set GL defaults
             attribs[i].enabled = GL_FALSE;
             attribs[i].size = 4;
             attribs[i].stride = 0;
             attribs[i].type = GL_FLOAT;
             attribs[i].normalized = GL_FALSE;
-            attribs[i].offset = 0;
+            attribs[i].pointer = 0;
         }
         b->_attributes = attribs;
     }
 
-    b->_mesh = mesh;
-    mesh->addRef();
-
+    if (mesh)
+    {
+        b->_mesh = mesh;
+        mesh->addRef();
+    }
+    
     b->_effect = effect;
     effect->addRef();
 
-    // Call setVertexAttribPointer for each vertex element in our mesh vertex format.
+    // Call setVertexAttribPointer for each vertex element.
     std::string name;
     unsigned int offset = 0;
-    const VertexFormat* vertexFormat = mesh->getVertexFormat();
-    for (unsigned int i = 0, count = vertexFormat->getElementCount(); i < count; ++i)
+    for (unsigned int i = 0, count = vertexFormat.getElementCount(); i < count; ++i)
     {
-        const VertexFormat::Element& e = vertexFormat->getElement(i);
+        const VertexFormat::Element& e = vertexFormat.getElement(i);
 
         gameplay::VertexAttribute attrib;
 
@@ -156,7 +176,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, Effect* effec
                 name += "0";
                 attrib = effect->getVertexAttribute(name.c_str());
             }
-            break;
+            break; 
         case VertexFormat::TEXCOORD1:
         case VertexFormat::TEXCOORD2:
         case VertexFormat::TEXCOORD3:
@@ -179,24 +199,22 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, Effect* effec
         }
         else
         {
-            b->setVertexAttribPointer(attrib, (GLint)e.size, GL_FLOAT, GL_FALSE, (GLsizei)vertexFormat->getVertexSize(), offset);
+            void* pointer = vertexPointer ? (void*)(((unsigned char*)vertexPointer) + offset) : (void*)offset;
+            b->setVertexAttribPointer(attrib, (GLint)e.size, GL_FLOAT, GL_FALSE, (GLsizei)vertexFormat.getVertexSize(), pointer);
         }
 
         offset += e.size * sizeof(float);
     }
 
-    if (glBindVertexArray)
+    if (b->_handle)
     {
         GL_ASSERT( glBindVertexArray(0) );
     }
 
-    // Add the new vertex attribute binding to the cache
-    __vertexAttributeBindingCache.push_back(b);
-
     return b;
 }
 
-void VertexAttributeBinding::setVertexAttribPointer(GLuint indx, GLint size, GLenum type, GLboolean normalize, GLsizei stride, unsigned int offset)
+void VertexAttributeBinding::setVertexAttribPointer(GLuint indx, GLint size, GLenum type, GLboolean normalize, GLsizei stride, void* pointer)
 {
     assert(indx < (GLuint)__maxVertexAttribs);
 
@@ -204,7 +222,7 @@ void VertexAttributeBinding::setVertexAttribPointer(GLuint indx, GLint size, GLe
     {
         // Hardware mode
         GL_ASSERT( glEnableVertexAttribArray(indx) );
-        GL_ASSERT( glVertexAttribPointer(indx, size, type, normalize, stride, (const GLvoid*)offset) );
+        GL_ASSERT( glVertexAttribPointer(indx, size, type, normalize, stride, pointer) );
     }
     else
     {
@@ -214,7 +232,7 @@ void VertexAttributeBinding::setVertexAttribPointer(GLuint indx, GLint size, GLe
         _attributes[indx].type = type;
         _attributes[indx].normalized = normalize;
         _attributes[indx].stride = stride;
-        _attributes[indx].offset = offset;
+        _attributes[indx].pointer = pointer;
     }
 }
 
@@ -228,7 +246,14 @@ void VertexAttributeBinding::bind()
     else
     {
         // Software mode
-        GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, _mesh->getVertexBuffer()) );
+        if (_mesh)
+        {
+            GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, _mesh->getVertexBuffer()) );
+        }
+        else
+        {
+            GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, 0) );
+        }
 
         for (unsigned int i = 0; i < __maxVertexAttribs; ++i)
         {
@@ -236,7 +261,7 @@ void VertexAttributeBinding::bind()
             if (a.enabled)
             {
                 GL_ASSERT( glEnableVertexAttribArray(i) );
-                GL_ASSERT( glVertexAttribPointer(i, a.size, a.type, a.normalized, a.stride, (const GLvoid*)a.offset) );
+                GL_ASSERT( glVertexAttribPointer(i, a.size, a.type, a.normalized, a.stride, a.pointer) );
             }
         }
     }
@@ -252,7 +277,10 @@ void VertexAttributeBinding::unbind()
     else
     {
         // Software mode
-        GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, 0) );
+        if (_mesh)
+        {
+            GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, 0) );
+        }
 
         for (unsigned int i = 0; i < __maxVertexAttribs; ++i)
         {
