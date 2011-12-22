@@ -1,8 +1,6 @@
 #ifndef DAEUTIL_H_
 #define DAEUTIL_H_
 
-#include "Matrix.h"
-
 namespace gameplay
 {
 
@@ -11,9 +9,8 @@ namespace gameplay
  * 
  * @param node The node that the animation channels target.
  * @param channels The list of channels to append to.
- * @param recursive True if channels that target child nodes should also be included.
  */
-void getAnimationChannels(const domNodeRef& node, std::list<domChannelRef>& channels, bool recursive = true);
+void getAnimationChannels(const domNodeRef& node, std::list<domChannelRef>& channels);
 
 /**
  * Gets the joint names for the given source and appends them to the given list.
@@ -69,13 +66,6 @@ const domSourceRef getSource(const domInputLocalRef& inputLocal, const domAnimat
  */
 const domName_arrayRef getSourceNameArray(const domSourceRef& source);
 
-void bakeNodeTransform(domNodeRef& node);
-
-/**
- * Gets the node's transform at the given time.
- */
-void getNodeTransform(const domNodeRef& node, std::list<domChannelRef>& channels, float time, Matrix& dstTransform);
-
 /**
  * Returns one skeleton from the given instance controller.
  * The COLLADA spec says that instance_controller can have multiple skeletons but we only need one.
@@ -86,17 +76,6 @@ void getNodeTransform(const domNodeRef& node, std::list<domChannelRef>& channels
  * @return The skeleton or NULL if not found.
  */
 const domInstance_controller::domSkeletonRef getSkeleton(const domInstance_controllerRef& instanceController);
-
-/**
- * Gets the start and end time for the given animation channel.
- * 
- * @param channel The channel.
- * @param startTime The start time returned.
- * @param endTime The end time returned.
- */
-void getStartAndEndTime(const domChannelRef& channel, float* startTime, float* endTime);
-
-void getStartAndEndTime(const std::list<domChannelRef>& channels, float* startTime, float* endTime);
 
 /**
  * Returns true if the two given animation channels have equal key time input source.
