@@ -237,15 +237,11 @@ void Game::menu()
 {
 }
 
-void Game::keyChar(char key)
+void Game::keyEvent(Keyboard::KeyEvent evt, int key)
 {
 }
 
-void Game::keyPress(int key, int keyEvent)
-{
-}
-
-void Game::touch(int x, int y, int touchEvent)
+void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
 }
 
