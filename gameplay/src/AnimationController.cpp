@@ -308,10 +308,17 @@ void AnimationController::schedule(AnimationClip* clip)
 
 void AnimationController::unschedule(AnimationClip* clip)
 {
-    if (clip->_isPlaying)
+    std::list<AnimationClip*>::iterator clipItr = _runningClips.begin();
+    while (clipItr != _runningClips.end())
     {
-        _runningClips.remove(clip);
-        SAFE_RELEASE(clip);
+        AnimationClip* rClip = (*clipItr);
+        if (rClip == clip)
+        {
+            _runningClips.erase(clipItr);
+            SAFE_RELEASE(clip);
+            break;
+        }
+        clipItr++;
     }
 
     if (_runningClips.empty())
