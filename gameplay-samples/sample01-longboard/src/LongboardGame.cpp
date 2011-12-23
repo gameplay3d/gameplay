@@ -1,7 +1,3 @@
-/*
- * LongboardGame.cpp
- */
-
 #include "LongboardGame.h"
 
 // Declare our game instance
@@ -83,13 +79,13 @@ void LongboardGame::buildGround()
     _ground = Model::create(groundMesh);
 
     // Create the ground material
-    Material* groundMaterial = _ground->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+    Material* groundMaterial = _ground->setMaterial("res/textured.vsh", "res/textured.fsh");
 
     // Set render state block
     groundMaterial->setStateBlock(_stateBlock);
 
     // Bind ground material parameters
-    Texture::Sampler* groundSampler = groundMaterial->getParameter("u_texture")->setValue("res/textures/tileable_asphalt.png", true);
+    Texture::Sampler* groundSampler = groundMaterial->getParameter("u_texture")->setValue("res/asphalt.png", true);
     groundSampler->setWrapMode(Texture::REPEAT, Texture::REPEAT);
     groundMaterial->getParameter("u_worldViewProjectionMatrix")->setValue(&_groundWorldViewProjectionMatrix);
     groundMaterial->getParameter("u_textureRepeat")->setValue(Vector2(WORLD_SIZE/2, WORLD_SIZE/2));
@@ -110,13 +106,13 @@ void LongboardGame::buildBoard()
     _board = Model::create(boardMesh);
 
     // Create the board material
-    Material* boardMaterial = _board->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+    Material* boardMaterial = _board->setMaterial("res/textured.vsh", "res/textured.fsh");
 
     // Set render state block
     boardMaterial->setStateBlock(_stateBlock);
 
     // Bind board material parameters
-    Texture::Sampler* boardSampler = boardMaterial->getParameter("u_texture")->setValue("res/textures/longboard.png", true);
+    Texture::Sampler* boardSampler = boardMaterial->getParameter("u_texture")->setValue("res/longboard.png", true);
     boardSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
     boardMaterial->getParameter("u_worldViewProjectionMatrix")->setValue(&_boardWorldViewProjectionMatrix);
     boardMaterial->getParameter("u_textureRepeat")->setValue(Vector2::one());
@@ -137,20 +133,20 @@ void LongboardGame::buildWheels()
     _wheels = Model::create(wheelsMesh);
 
     // Create the wheels material
-    Material* wheelsMaterial = _wheels->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+    Material* wheelsMaterial = _wheels->setMaterial("res/textured.vsh", "res/textured.fsh");
 
     // Set render state block
     wheelsMaterial->setStateBlock(_stateBlock);
 
     // Bind wheels material parameters
-    Texture::Sampler* wheelsSampler = wheelsMaterial->getParameter("u_texture")->setValue("res/textures/wheels.png", true);
+    Texture::Sampler* wheelsSampler = wheelsMaterial->getParameter("u_texture")->setValue("res/longboard_wheels.png", true);
     wheelsSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
     wheelsMaterial->getParameter("u_worldViewProjectionMatrix")->setValue(&_wheelsWorldViewProjectionMatrix);
     wheelsMaterial->getParameter("u_textureRepeat")->setValue(Vector2::one());
     wheelsMaterial->getParameter("u_textureTransform")->setValue(Vector2::zero());
 
     // Load audio sound
-    _wheelsSound = AudioSource::create("res/sounds/longboard2.wav");
+    _wheelsSound = AudioSource::create("res/longboard.wav");
     if (_wheelsSound)
         _wheelsSound->setLooped(true);
 
@@ -167,13 +163,13 @@ void LongboardGame::buildGradient()
     _gradient = Model::create(gradientMesh);
 
     // Create the gradient material
-    Material* gradientMaterial = _gradient->setMaterial("res/shaders/quad.vsh", "res/shaders/quad.fsh");
+    Material* gradientMaterial = _gradient->setMaterial("res/quad.vsh", "res/quad.fsh");
 
     // Set render state block
     gradientMaterial->setStateBlock(_stateBlock);
 
     // Bind material parameters
-    Texture::Sampler* gradientSampler = gradientMaterial->getParameter("u_texture")->setValue("res/textures/nice_gradient.png", false);
+    Texture::Sampler* gradientSampler = gradientMaterial->getParameter("u_texture")->setValue("res/overlay_gradient.png", false);
     gradientSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
 
     // Release objects that are owned by mesh instances
@@ -182,13 +178,13 @@ void LongboardGame::buildGradient()
 
 void LongboardGame::update(long elapsedTime)
 {
-    // Query the accelerometer
+    // Query the accelerometer values.
     float pitch, roll;
-    Input::getAccelerometerPitchAndRoll(&pitch, &roll);
+    getAccelerometerValues(&pitch, &roll);
 
     // Clamp angles
-    pitch = fmax(fmin(pitch, PITCH_MAX), PITCH_MIN);
-    roll = fmax(fmin(roll, ROLL_MAX), -ROLL_MAX);
+    pitch = max(min(pitch, PITCH_MAX), PITCH_MIN);
+    roll = max(min(roll, ROLL_MAX), -ROLL_MAX);
 
     // Calculate the 'throttle' (which is the % controlling change in acceleration, similar to a car's gas pedal)
     float throttle = 1.0f - ((pitch - PITCH_MIN) / PITCH_RANGE);

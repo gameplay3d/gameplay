@@ -13,10 +13,11 @@ MeshSubSet::~MeshSubSet(void)
 {
 }
 
-byte MeshSubSet::getTypeId(void)
+unsigned int MeshSubSet::getTypeId(void)
 {
     return MESHPART_ID;
 }
+    
 const char* MeshSubSet::getElementName(void)
 {
     return "MeshSubSet";

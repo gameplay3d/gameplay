@@ -1,7 +1,3 @@
-/*
- * AudioController.h
- */
-
 #ifndef AUDIOCONTROLLER_H_
 #define AUDIOCONTROLLER_H_
 
@@ -58,7 +54,8 @@ private:
      */
     void update(long elapsedTime);
 
-
+    ALCdevice* _alcDevice;
+    ALCcontext* _alcContext;
     static std::list<AudioSource*> _playingSources;     // List of currently running sources.
 };
 

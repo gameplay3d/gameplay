@@ -1,18 +1,10 @@
 #ifndef DAEOPTIMIZER_H_
 #define DAEOPTIMIZER_H_
 
-#include <dae.h>
-#include <dae/daeSIDResolver.h>
-#include <dae/domAny.h>
-#include <dom/domCOLLADA.h>
-#include <dom/domConstants.h>
-#include <dom/domElements.h>
-#include <dom/domProfile_COMMON.h>
-
-#include <vector>
-
-#include "Base.h"
 #include "DAEUtil.h"
+
+namespace gameplay
+{
 
 /**
  * The DAEOptimizer optimizes a COLLADA dom.
@@ -42,14 +34,6 @@ public:
 private:
 
     /**
-     * Gets all of the animation channels that target the given node and appends them to the list.
-     * 
-     * @param node The node that the animation channels target.
-     * @param channels The list of channels to append to.
-     */
-    void getAnimationChannels(const domNodeRef& node, std::list<domChannelRef>& channels);
-
-    /**
      * Deletes all of the empty animations in the dom.
      */
     void deleteEmptyAnimations();
@@ -59,5 +43,7 @@ private:
     domCOLLADA* _dom;
     std::string _inputPath;
 };
+
+}
 
 #endif

@@ -1,15 +1,12 @@
-/*
- * Joint.cpp
- */
-
 #include "Base.h"
 #include "Joint.h"
+#include "MeshSkin.h"
 
 namespace gameplay
 {
 
 Joint::Joint(const char* id)
-    : Node(id), _jointMatrixDirty(true)
+    : Node(id), _jointMatrixDirty(true), _skinCount(0)
 {
 }
 
@@ -30,25 +27,21 @@ Node::Type Joint::getType() const
 void Joint::transformChanged()
 {
     Node::transformChanged();
-
-    const char* id = _id.c_str();
     _jointMatrixDirty = true;
 }
 
 void Joint::updateJointMatrix(const Matrix& bindShape, Vector4* matrixPalette)
 {
-    const char* id = _id.c_str();
-
-    if (_jointMatrixDirty)
+    // Note: If more than one MeshSkin influences this Joint, we need to skip
+    // the _jointMatrixDirty optimization since updateJointMatrix() may be
+    // called multiple times a frame with different bindShape matrices (and
+    // different matrixPallete pointers).
+    if (_skinCount > 1 || _jointMatrixDirty)
     {
         _jointMatrixDirty = false;
 
-        float r = (float)rand( ) / (float)RAND_MAX;
-        Matrix w = getWorldMatrix();
-        w.translate(r, r, r);
-
-        Matrix t;
-        Matrix::multiply(getWorldMatrix(), getInverseBindPose(), &t);
+        static Matrix t;
+        Matrix::multiply(Node::getWorldMatrix(), getInverseBindPose(), &t);
         Matrix::multiply(t, bindShape, &t);
 
         matrixPalette[0].set(t.m[0], t.m[4], t.m[8], t.m[12]);

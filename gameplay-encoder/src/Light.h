@@ -77,8 +77,6 @@ private:
     float _outerAngle;
 };
 
-
-
 }
-#endif
 
+#endif

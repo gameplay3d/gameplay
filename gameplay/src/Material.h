@@ -1,14 +1,9 @@
-/*
- * Material.h
- */
-
 # ifndef MATERIAL_H_
 # define MATERIAL_H_
 
 #include "RenderState.h"
 #include "Technique.h"
 #include "Properties.h"
-#include "Mesh.h"
 
 namespace gameplay
 {
@@ -37,6 +32,15 @@ public:
      * @return A new Material.
      */
     static Material* create(const char* materialPath);
+
+    /**
+     * Creates a material from the specified properties object.
+     * 
+     * @param materialProperties The properties object defining the 
+     *      material (must have namespace equal to 'material').
+     * @return A new Material.
+     */
+    static Material* create(Properties* materialProperties);
 
     /**
      * Creates a material from the specified effect.
@@ -109,17 +113,6 @@ public:
      * @param id ID of the technique to set.
      */
     void setTechnique(const char* id);
-
-    /**
-     * Stores a binding for the specified mesh onto all techniques and passes in this material.
-     *
-     * This method creates and stores a VertexAttributeBinding for all techniques and passes
-     * onto the  specified Mesh. When a mesh binding is set, the VertexAttributeBinding
-     * will be automatically bound when the bind() method is called for a pass.
-     *
-     * @param mesh The Mesh to create and store a VertexAttributeBinding for (or NULL to remove an existing mesh bindings).
-     */
-    void setMeshBinding(Mesh* mesh);
 
 private:
 

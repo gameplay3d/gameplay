@@ -1,7 +1,3 @@
-/*
- * Viewport.cpp
- */
-
 #include "Base.h"
 #include "Viewport.h"
 
