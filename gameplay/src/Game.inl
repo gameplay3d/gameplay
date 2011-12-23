@@ -42,6 +42,8 @@ inline PhysicsController* Game::getPhysicsController() const
 template <class T>
 void  Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
 {
+    (instance->*method)(cookie);
+    Platform::swapBuffers();
 }
 
 inline void Game::setMultiTouch(bool enabled)
