@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4208DEE914A4079F00D3C511 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4208DEE614A4079F00D3C511 /* Image.cpp */; };
+		4208DEEA14A4079F00D3C511 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEE714A4079F00D3C511 /* Image.h */; };
+		4208DEEC14A407B900D3C511 /* Keyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEEB14A407B900D3C511 /* Keyboard.h */; };
+		4208DEEE14A407D500D3C511 /* Touch.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEED14A407D500D3C511 /* Touch.h */; };
 		4220A6E8146B122B00CAEB3A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4220A6E7146B122B00CAEB3A /* QuartzCore.framework */; };
 		4234D99E14686C52003031B3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4234D99D14686C52003031B3 /* Cocoa.framework */; };
 		428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 428390971489D6E800E2B2F5 /* SceneLoader.cpp */; };
@@ -67,8 +71,6 @@
 		42CD0E72147D8FF60000361E /* gameplay-main-qnx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DDF147D8FF50000361E /* gameplay-main-qnx.cpp */; };
 		42CD0E73147D8FF60000361E /* gameplay-main-win32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DE0147D8FF50000361E /* gameplay-main-win32.cpp */; };
 		42CD0E74147D8FF60000361E /* gameplay.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DE1147D8FF50000361E /* gameplay.h */; };
-		42CD0E75147D8FF60000361E /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DE2147D8FF50000361E /* Input.cpp */; };
-		42CD0E76147D8FF60000361E /* Input.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DE3147D8FF50000361E /* Input.h */; };
 		42CD0E77147D8FF60000361E /* Joint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DE4147D8FF50000361E /* Joint.cpp */; };
 		42CD0E78147D8FF60000361E /* Joint.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DE5147D8FF50000361E /* Joint.h */; };
 		42CD0E79147D8FF60000361E /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DE6147D8FF50000361E /* Light.cpp */; };
@@ -158,6 +160,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4208DEE514A4078100D3C511 /* Curve.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Curve.inl; path = src/Curve.inl; sourceTree = SOURCE_ROOT; };
+		4208DEE614A4079F00D3C511 /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Image.cpp; path = src/Image.cpp; sourceTree = SOURCE_ROOT; };
+		4208DEE714A4079F00D3C511 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = src/Image.h; sourceTree = SOURCE_ROOT; };
+		4208DEE814A4079F00D3C511 /* Image.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Image.inl; path = src/Image.inl; sourceTree = SOURCE_ROOT; };
+		4208DEEB14A407B900D3C511 /* Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Keyboard.h; path = src/Keyboard.h; sourceTree = SOURCE_ROOT; };
+		4208DEED14A407D500D3C511 /* Touch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Touch.h; path = src/Touch.h; sourceTree = SOURCE_ROOT; };
 		4220A6E7146B122B00CAEB3A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		4234D99A14686C52003031B3 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4234D99D14686C52003031B3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -222,8 +230,6 @@
 		42CD0DDF147D8FF50000361E /* gameplay-main-qnx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-qnx.cpp"; path = "src/gameplay-main-qnx.cpp"; sourceTree = SOURCE_ROOT; };
 		42CD0DE0147D8FF50000361E /* gameplay-main-win32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-win32.cpp"; path = "src/gameplay-main-win32.cpp"; sourceTree = SOURCE_ROOT; };
 		42CD0DE1147D8FF50000361E /* gameplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gameplay.h; path = src/gameplay.h; sourceTree = SOURCE_ROOT; };
-		42CD0DE2147D8FF50000361E /* Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Input.cpp; path = src/Input.cpp; sourceTree = SOURCE_ROOT; };
-		42CD0DE3147D8FF50000361E /* Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Input.h; path = src/Input.h; sourceTree = SOURCE_ROOT; };
 		42CD0DE4147D8FF50000361E /* Joint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Joint.cpp; path = src/Joint.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0DE5147D8FF50000361E /* Joint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Joint.h; path = src/Joint.h; sourceTree = SOURCE_ROOT; };
 		42CD0DE6147D8FF50000361E /* Light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Light.cpp; path = src/Light.cpp; sourceTree = SOURCE_ROOT; };
@@ -396,6 +402,7 @@
 				42CD0DCB147D8FF50000361E /* Camera.h */,
 				42CD0DCC147D8FF50000361E /* Curve.cpp */,
 				42CD0DCD147D8FF50000361E /* Curve.h */,
+				4208DEE514A4078100D3C511 /* Curve.inl */,
 				42CD0DCE147D8FF50000361E /* DebugNew.cpp */,
 				42CD0DCF147D8FF50000361E /* DebugNew.h */,
 				42CD0DD0147D8FF50000361E /* DepthStencilTarget.cpp */,
@@ -417,10 +424,12 @@
 				42CD0DDF147D8FF50000361E /* gameplay-main-qnx.cpp */,
 				42CD0DE0147D8FF50000361E /* gameplay-main-win32.cpp */,
 				42CD0DE1147D8FF50000361E /* gameplay.h */,
-				42CD0DE2147D8FF50000361E /* Input.cpp */,
-				42CD0DE3147D8FF50000361E /* Input.h */,
+				4208DEE614A4079F00D3C511 /* Image.cpp */,
+				4208DEE714A4079F00D3C511 /* Image.h */,
+				4208DEE814A4079F00D3C511 /* Image.inl */,
 				42CD0DE4147D8FF50000361E /* Joint.cpp */,
 				42CD0DE5147D8FF50000361E /* Joint.h */,
+				4208DEEB14A407B900D3C511 /* Keyboard.h */,
 				42CD0DE6147D8FF50000361E /* Light.cpp */,
 				42CD0DE7147D8FF50000361E /* Light.h */,
 				42CD0DE8147D8FF50000361E /* Material.cpp */,
@@ -502,6 +511,7 @@
 				42CD0E32147D8FF50000361E /* Technique.h */,
 				42CD0E33147D8FF50000361E /* Texture.cpp */,
 				42CD0E34147D8FF50000361E /* Texture.h */,
+				4208DEED14A407D500D3C511 /* Touch.h */,
 				42CD0E35147D8FF50000361E /* Transform.cpp */,
 				42CD0E36147D8FF50000361E /* Transform.h */,
 				42CD0E37147D8FF50000361E /* Vector2.cpp */,
@@ -579,7 +589,6 @@
 				42CD0E6E147D8FF60000361E /* Frustum.h in Headers */,
 				42CD0E70147D8FF60000361E /* Game.h in Headers */,
 				42CD0E74147D8FF60000361E /* gameplay.h in Headers */,
-				42CD0E76147D8FF60000361E /* Input.h in Headers */,
 				42CD0E78147D8FF60000361E /* Joint.h in Headers */,
 				42CD0E7A147D8FF60000361E /* Light.h in Headers */,
 				42CD0E7C147D8FF60000361E /* Material.h in Headers */,
@@ -623,6 +632,9 @@
 				42CD0ECA147D8FF60000361E /* VertexFormat.h in Headers */,
 				42CD0ECC147D8FF60000361E /* Viewport.h in Headers */,
 				4283909A1489D6E800E2B2F5 /* SceneLoader.h in Headers */,
+				4208DEEA14A4079F00D3C511 /* Image.h in Headers */,
+				4208DEEC14A407B900D3C511 /* Keyboard.h in Headers */,
+				4208DEEE14A407D500D3C511 /* Touch.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -700,7 +712,6 @@
 				42CD0E71147D8FF60000361E /* gameplay-main-macos.mm in Sources */,
 				42CD0E72147D8FF60000361E /* gameplay-main-qnx.cpp in Sources */,
 				42CD0E73147D8FF60000361E /* gameplay-main-win32.cpp in Sources */,
-				42CD0E75147D8FF60000361E /* Input.cpp in Sources */,
 				42CD0E77147D8FF60000361E /* Joint.cpp in Sources */,
 				42CD0E79147D8FF60000361E /* Light.cpp in Sources */,
 				42CD0E7B147D8FF60000361E /* Material.cpp in Sources */,
@@ -746,6 +757,7 @@
 				42CD0EC9147D8FF60000361E /* VertexFormat.cpp in Sources */,
 				42CD0ECB147D8FF60000361E /* Viewport.cpp in Sources */,
 				428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */,
+				4208DEE914A4079F00D3C511 /* Image.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

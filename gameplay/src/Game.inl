@@ -46,4 +46,19 @@ void  Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
     Platform::swapBuffers();
 }
 
+inline void Game::setMultiTouch(bool enabled)
+{
+    Platform::setMultiTouch(enabled);
+}
+
+inline bool isMultiTouch()
+{
+    return Platform::isMultiTouch();
+}
+
+inline void Game::getAccelerometerValues(float* pitch, float* roll)
+{
+    Platform::getAccelerometerValues(pitch, roll);
+}
+
 }

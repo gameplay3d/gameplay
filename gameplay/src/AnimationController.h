@@ -17,6 +17,7 @@ class AnimationController
     friend class Game;
     friend class Animation;
     friend class AnimationClip;
+    friend class SceneLoader;
 
 public:
 
@@ -32,7 +33,7 @@ public:
      * @param keyValues The list of key values for the animation.
      * @param type The curve interpolation type.
      *
-     * @return The newly created animation, or NULL if an animation with the given ID already exists.
+     * @return The newly created animation.
      */
     Animation* createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, Curve::InterpolationType type);
 
@@ -49,7 +50,7 @@ public:
      * @param keyOutValue The list of key out values for the animation.
      * @param type The curve interpolation type.
      *
-     * @return The newly created animation, or NULL if an animation with the given ID already exists.
+     * @return The newly created animation.
      */
     Animation* createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type);
 
@@ -58,11 +59,11 @@ public:
      * 
      * @param id The ID of the animation.
      * @param target The animation target.
-     * @param properties The properties object defining the animation data.
+     * @param animationFile The animation file defining the animation data.
      *
-     * @return The newly created animation, or NULL if an animation with the given ID already exists.
+     * @return The newly created animation.
      */
-    Animation* createAnimation(const char* id, AnimationTarget* target, Properties* p);
+    Animation* createAnimation(const char* id, AnimationTarget* target, const char* animationFile);
 
     /**
      * Creates a simple two keyframe from-to animation.
@@ -76,7 +77,7 @@ public:
      * @param type The curve interpolation type.
      * @param duration The duration of the animation (in milliseconds).
      *
-     * @return The newly created animation, or NULL if an animation with the given ID already exists.
+     * @return The newly created animation.
      */
     Animation* createAnimationFromTo(const char* id, AnimationTarget* target, int propertyId, float* from, float* to, Curve::InterpolationType type, unsigned long duration);
 
@@ -92,7 +93,7 @@ public:
      * @param type The curve interpolation type.
      * @param duration The duration of the animation (in milliseconds).
      *
-     * @return The newly created animation, or NULL if an animation with the given ID already exists.
+     * @return The newly created animation.
      */
     Animation* createAnimationFromBy(const char* id, AnimationTarget* target, int propertyId, float* from, float* by, Curve::InterpolationType type, unsigned long duration);
 
@@ -135,6 +136,17 @@ private:
     ~AnimationController();
     
     /**
+     * Creates an animation on this target using the data from the given properties object. 
+     * 
+     * @param id The ID of the animation.
+     * @param target The animation target.
+     * @param properties The properties object defining the animation data.
+     *
+     * @return The newly created animation.
+     */
+    Animation* createAnimation(const char* id, AnimationTarget* target, Properties* animationProperties);
+
+    /**
      * Gets the controller's state.
      *
      * @return The current state.
@@ -175,7 +187,7 @@ private:
      * Callback for when the controller receives a frame update event.
      */
     void update(long elapsedTime);
-    
+
     /**
      * Adds an animation on this AnimationTarget.
      */ 
