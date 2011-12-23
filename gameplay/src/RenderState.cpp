@@ -353,7 +353,7 @@ void RenderState::StateBlock::bindNoRestore()
     }
     if ((_bits & RS_DEPTH_WRITE) && (_depthWriteEnabled != _defaultState->_depthWriteEnabled))
     {
-        glDepthMask(_depthWriteEnabled);
+        glDepthMask(_depthWriteEnabled ? GL_TRUE : GL_FALSE);
         _defaultState->_depthWriteEnabled = _depthWriteEnabled;
     }
 
@@ -395,6 +395,19 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
         _defaultState->_depthTestEnabled = false;
     }
     if (!(stateOverrideBits & RS_DEPTH_WRITE) && (_defaultState->_bits & RS_DEPTH_WRITE))
+    {
+        glDepthMask(GL_TRUE);
+        _defaultState->_bits &= ~RS_DEPTH_WRITE;
+        _defaultState->_depthWriteEnabled = true;
+    }
+}
+
+void RenderState::StateBlock::enableDepthWrite()
+{
+    // Internal method used by Game::clear() to restore depth writing before a
+    // clear operation. This is neccessary if the last code to draw before the
+    // next frame leaves depth writing disabled.
+    if (!_defaultState->_depthWriteEnabled)
     {
         glDepthMask(GL_TRUE);
         _defaultState->_bits &= ~RS_DEPTH_WRITE;
