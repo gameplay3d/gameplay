@@ -39,7 +39,6 @@
     <ClCompile Include="src\gameplay-main-qnx.cpp" />
     <ClCompile Include="src\gameplay-main-win32.cpp" />
     <ClCompile Include="src\Image.cpp" />
-    <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Material.cpp" />
@@ -110,8 +109,8 @@
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\gameplay.h" />
     <ClInclude Include="src\Image.h" />
-    <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Joint.h" />
+    <ClInclude Include="src\Keyboard.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Pass.h" />
@@ -147,6 +146,7 @@
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\Touch.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\Vector2.h" />
     <ClInclude Include="src\Vector3.h" />
