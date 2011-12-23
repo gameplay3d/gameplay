@@ -311,7 +311,7 @@ bool AnimationClip::update(unsigned long elapsedTime)
             // Evaluate point on Curve.
             channel->_curve->evaluate(percentComplete, value->_interpolatedValue);
 
-            if (channel->_curve->_quaternionOffsetsCount == 0)
+            if (!channel->_curve->_quaternionOffset)
             {
                 if (value->_isFirstActing)
                 {
@@ -338,131 +338,97 @@ bool AnimationClip::update(unsigned long elapsedTime)
             }
             else
             {   //We have Quaternions!!!
-                unsigned int j = 0;
-                unsigned int quaternionOffsetIndex = 0;
-                unsigned int quaternionOffset = 0;
-
+                unsigned int quaternionOffset = *(channel->_curve->_quaternionOffset);
+                
                 if (value->_isFirstActing)
                 {
-                    do {
-                        quaternionOffset = channel->_curve->_quaternionOffsets[quaternionOffsetIndex];
-                        while (j < quaternionOffset)
-                        {
-                            if (_blendWeight != 1.0f)
-                                value->_interpolatedValue[j] *= _blendWeight;
-
-                            value->_currentValue[j] = value->_interpolatedValue[j];
-                            j++;
-                        }
-
-                        // We are at the index for a quaternion component. Handle the next for components as a whole quaternion.
-
-                        Quaternion* interpolatedQuaternion = (Quaternion*) (value->_interpolatedValue + j);
-                        Quaternion* currentQuaternion = (Quaternion*) (value->_currentValue + j);
-
-                        // If we have a blend weight, we apply it by slerping from the identity to our interpolated value at the given weight.
-                        if (_blendWeight != 1.0f)
-                            Quaternion::slerp(Quaternion::identity(), *interpolatedQuaternion, _blendWeight, interpolatedQuaternion);
-                    
-                        // Add in contribution.
-                        currentQuaternion->set(*interpolatedQuaternion);
-                    
-                        // Increase by 4.
-                        j += 4;
-                        quaternionOffsetIndex++;
-                    } while (quaternionOffsetIndex < channel->_curve->_quaternionOffsetsCount);
-
-                    unsigned int componentCount = value->_componentCount;
-                    // Handle remaining scalar values.
-                    while (j < componentCount)
+                    unsigned int j = 0;
+                    for (; j < quaternionOffset; j++)
                     {
                         if (_blendWeight != 1.0f)
                             value->_interpolatedValue[j] *= _blendWeight;
 
                         value->_currentValue[j] = value->_interpolatedValue[j];
-                        j++;
+                    }
+
+                    // We are at the index for a quaternion component. Handle the next for components as a whole quaternion.
+                    Quaternion* interpolatedQuaternion = (Quaternion*) (value->_interpolatedValue + j);
+                    Quaternion* currentQuaternion = (Quaternion*) (value->_currentValue + j);
+
+                    // If we have a blend weight, we apply it by slerping from the identity to our interpolated value at the given weight.
+                    if (_blendWeight != 1.0f)
+                        Quaternion::slerp(Quaternion::identity(), *interpolatedQuaternion, _blendWeight, interpolatedQuaternion);
+                    
+                    // Add in contribution.
+                    currentQuaternion->set(*interpolatedQuaternion);
+                    
+                    unsigned int componentCount = value->_componentCount;
+                    for (j += 4; j < componentCount; j++)
+                    {
+                        if (_blendWeight != 1.0f)
+                            value->_interpolatedValue[j] *= _blendWeight;
+
+                        value->_currentValue[j] = value->_interpolatedValue[j];
                     }
                 }
                 else
                 {
-                    do {
-                        quaternionOffset = channel->_curve->_quaternionOffsets[quaternionOffsetIndex];
-                        while (j < quaternionOffset)
-                        {
-                            if (_blendWeight != 1.0f)
-                                value->_interpolatedValue[j] *= _blendWeight;
-
-                            value->_currentValue[j] += value->_interpolatedValue[j];
-                            j++;
-                        }
-
-                        // We are at the index for a quaternion component. Handle the next for components as a whole quaternion.
-
-                        Quaternion* interpolatedQuaternion = (Quaternion*) (value->_interpolatedValue + j);
-                        Quaternion* currentQuaternion = (Quaternion*) (value->_currentValue + j);
-
-                        // If we have a blend weight, we apply it by slerping from the identity to our interpolated value at the given weight.
-                        if (_blendWeight != 1.0f)
-                            Quaternion::slerp(Quaternion::identity(), *interpolatedQuaternion, _blendWeight, interpolatedQuaternion);
-                    
-                        // Add in contribution.
-                        currentQuaternion->multiply(*interpolatedQuaternion);
-                    
-                        // Increase by 4.
-                        j += 4;
-                        quaternionOffsetIndex++;
-                    } while (quaternionOffsetIndex < channel->_curve->_quaternionOffsetsCount);
-
-                    unsigned int componentCount = value->_componentCount;
-                    // Handle remaining scalar values.
-                    while (j < componentCount)
+                    unsigned int j = 0;
+                    for (; j < quaternionOffset; j++)
                     {
                         if (_blendWeight != 1.0f)
                             value->_interpolatedValue[j] *= _blendWeight;
 
                         value->_currentValue[j] += value->_interpolatedValue[j];
-                        j++;
+                    }
+                    // We are at the index for a quaternion component. Handle the next for components as a whole quaternion.
+
+                    Quaternion* interpolatedQuaternion = (Quaternion*) (value->_interpolatedValue + j);
+                    Quaternion* currentQuaternion = (Quaternion*) (value->_currentValue + j);
+
+                    // If we have a blend weight, we apply it by slerping from the identity to our interpolated value at the given weight.
+                    if (_blendWeight != 1.0f)
+                        Quaternion::slerp(Quaternion::identity(), *interpolatedQuaternion, _blendWeight, interpolatedQuaternion);
+                    
+                    // Add in contribution.
+                    currentQuaternion->multiply(*interpolatedQuaternion);
+                    
+                    unsigned int componentCount = value->_componentCount;
+                    for (j += 4; j < componentCount; j++)
+                    {
+                        if (_blendWeight != 1.0f)
+                            value->_interpolatedValue[j] *= _blendWeight;
+
+                        value->_currentValue[j] += value->_interpolatedValue[j];
                     }
                 }
             }
         }
         else if (value->_isFirstActing)
         {
-            if (channel->_curve->_quaternionOffsetsCount == 0)
+            if (!channel->_curve->_quaternionOffset)
             {
                 memset(value->_currentValue, 0.0f, value->_componentCount);
             }
             else
             {
+                unsigned int quaternionOffset = *(channel->_curve->_quaternionOffset);
                 unsigned int j = 0;
-                unsigned int quaternionOffset = 0;
-                unsigned int quaternionOffsetIndex = 0;
-                
-                do {
-                    quaternionOffset = channel->_curve->_quaternionOffsets[quaternionOffsetIndex];
-                    while (j < quaternionOffset)
-                    {
-                        value->_currentValue[j] = 0.0f;
-                        j++;
-                    }
-
-                    // We are at the index for a quaternion component. Handle the next for components as a whole quaternion.
-                    Quaternion* currentQuaternion = (Quaternion*) (value->_currentValue + j);
-
-                    // Set it to identity.
-                    currentQuaternion->setIdentity();
-                    
-                    // Increase by 4.
-                    j += 4;
-                    quaternionOffsetIndex++;
-                } while (quaternionOffsetIndex < channel->_curve->_quaternionOffsetsCount);
-
-                unsigned int componentCount = value->_componentCount;
-                // Handle remaining scalar values.
-                while (j < componentCount)
+                for (; j < quaternionOffset; j++)
                 {
                     value->_currentValue[j] = 0.0f;
-                    j++;
+                }
+
+                // We are at the index for a quaternion component. Handle the next for components as a whole quaternion.
+                Quaternion* currentQuaternion = (Quaternion*) (value->_currentValue + j);
+
+                // Set it to identity.
+                currentQuaternion->setIdentity();
+                
+                unsigned int componentCount = value->_componentCount;
+                for (j += 4; j < componentCount; j++)
+                {
+                    value->_currentValue[j] = 0.0f;
                 }
             }
         }
