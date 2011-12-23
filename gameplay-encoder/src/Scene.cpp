@@ -1,5 +1,4 @@
-#include <algorithm>
-
+#include "Base.h"
 #include "Scene.h"
 
 namespace gameplay
@@ -40,10 +39,11 @@ void Scene::writeBinary(FILE* file)
     }
     write(_ambientColor, Light::COLOR_SIZE, file);
 }
+
 void Scene::writeText(FILE* file)
 {
     fprintElementStart(file);
-    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); i++)
+    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
     {
         (*i)->writeText(file);
     }
@@ -67,7 +67,7 @@ void Scene::setActiveCameraNode(Node* node)
 
 Node* Scene::getFirstCameraNode() const
 {
-    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); i++)
+    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
     {
         Node* n = (*i)->getFirstCameraNode();
         if (n)
@@ -81,7 +81,7 @@ Node* Scene::getFirstCameraNode() const
 void Scene::calcAmbientColor()
 {
     float values[3] = {0.0f, 0.0f, 0.0f};
-    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); i++)
+    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
     {
         calcAmbientColor(*i, values);
     }
@@ -89,6 +89,13 @@ void Scene::calcAmbientColor()
     _ambientColor[0] = std::min(values[0], 1.0f);
     _ambientColor[1] = std::min(values[1], 1.0f);
     _ambientColor[2] = std::min(values[2], 1.0f);
+}
+
+void Scene::setAmbientColor(float red, float green, float blue)
+{
+    _ambientColor[0] = red;
+    _ambientColor[1] = green;
+    _ambientColor[2] = blue;
 }
 
 void Scene::calcAmbientColor(const Node* node, float* values) const

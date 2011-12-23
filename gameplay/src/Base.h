@@ -1,36 +1,43 @@
-/*
- * Base.h
- */
 #ifndef BASE_H_
 #define BASE_H_
 
 // C/C++
-#include <cassert>
+#include <new>
 #include <memory>
-#include <iostream>
-#include <string>
+#include <cstdio>
+#include <cstdlib>
+#include <cassert>
 #include <cwchar>
 #include <cwctype>
 #include <cctype>
 #include <cmath>
+#include <cstdarg>
+#include <ctime>
+#include <iostream>
+#include <string>
 #include <vector>
 #include <list>
 #include <stack>
 #include <map>
-#include <hash_map>
 #include <algorithm>
-#include <ctime>
-#include <cstdio>
 #include <limits>
 #include <functional>
-#include <string.h>
-#include <ctype.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <math.h>
-#include <cstdarg>
+
+// Bring common functions from C into global namespace
+using std::memcpy;
+using std::fabs;
+using std::sqrt;
+using std::cos;
+using std::sin;
+using std::tan;
+using std::isspace;
+using std::isdigit;
+using std::toupper;
+using std::tolower;
+using std::size_t;
+using std::min;
+using std::max;
+using std::modf;
 
 // Common
 #ifndef NULL
@@ -47,12 +54,12 @@ extern void printError(const char* format, ...);
 #define LOG_ERROR(x) \
     { \
         printError(x); \
-        assert(0); \
+        assert(#x == 0); \
     }
 #define LOG_ERROR_VARG(x, ...) \
     { \
         printError(x, __VA_ARGS__); \
-        assert(0); \
+        assert(#x == 0); \
     }
 
 // Warning macro
@@ -61,6 +68,12 @@ extern void printError(const char* format, ...);
 #endif
 #define WARN(x) printError(x)
 #define WARN_VARG(x, ...) printError(x, __VA_ARGS__)
+
+// Bullet Physics
+#include <btBulletDynamicsCommon.h>
+
+// Debug new for memory leak detection
+#include "DebugNew.h"
 
 // Object deletion macro
 #define SAFE_DELETE(x) \
@@ -105,23 +118,34 @@ extern void printError(const char* format, ...);
 #define M_1_PI                      0.31830988618379067154
 #endif
 
-// Audio (OpenAL/alut)
+// NOMINMAX makes sure that windef.h doesn't add macros min and max
+#ifdef WIN32
+    #define NOMINMAX
+#endif
+
+// Audio (OpenAL)
 #ifdef __QNX__
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <AL/alut.h>
 #elif WIN32
 #include <al.h>
 #include <alc.h>
-#include <alut.h>
+#elif __APPLE__
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
 #endif
+#include <vorbis/vorbisfile.h>
 
-// Graphics (OpenGLES/OpenGL/png)
-#define WINDOW_VSYNC        1
-#define WINDOW_FULLSCREEN   0
+// Screen/Window
 #define WINDOW_WIDTH        1024
 #define WINDOW_HEIGHT       600
+#define WINDOW_VSYNC        1
+#define WINDOW_FULLSCREEN   0
 
+// Image
+#include <png.h>
+
+// Graphics (OpenGL)
 #ifdef __QNX__
     #include <EGL/egl.h>
     #include <GLES2/gl2.h>
@@ -131,14 +155,20 @@ extern void printError(const char* format, ...);
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
     #define glClearDepth glClearDepthf
+   #define OPENGL_ES
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
-    #include <GL/wglew.h>
+#elif __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#define glBindVertexArray glBindVertexArrayAPPLE
+#define glDeleteVertexArrays glDeleteVertexArraysAPPLE
+#define glGenVertexArrays glGenVertexArraysAPPLE
+#define glIsVertexArray glIsVertexArrayAPPLE
 #endif
-#include <png.h>
 
-// Attributes
+// Graphics (GLSL)
 #define VERTEX_ATTRIBUTE_POSITION_NAME              "a_position"
 #define VERTEX_ATTRIBUTE_NORMAL_NAME                "a_normal"
 #define VERTEX_ATTRIBUTE_COLOR_NAME                 "a_color"
@@ -152,9 +182,11 @@ extern void printError(const char* format, ...);
 namespace gameplay
 {
 typedef GLint VertexAttribute;
-typedef GLuint VertexBuffer;
-typedef GLuint IndexBuffer;
+typedef GLuint VertexBufferHandle;
+typedef GLuint IndexBufferHandle;
 typedef GLuint TextureHandle;
+typedef GLuint FrameBufferHandle;
+typedef GLuint RenderBufferHandle;
 }
 
 /**
@@ -209,26 +241,7 @@ extern GLenum __gl_error_code;
 #define GL_LAST_ERROR() __gl_error_code
 
 
-// Missing platform functionality and warnings.
-#ifdef WIN32
-
-    inline float fminf(float a, float b)
-    {
-      return a < b ? a : b;
-    }
-    inline float fmin(float a, float b)
-    {
-      return a < b ? a : b;
-    }
-    inline float fmaxf(float a, float b)
-    {
-      return a > b ? a : b;
-    }
-    inline float fmax(float a, float b)
-    {
-      return a > b ? a : b;
-    }
-        
+#if defined(WIN32)
     #pragma warning( disable : 4172 )
     #pragma warning( disable : 4244 )
     #pragma warning( disable : 4311 )
@@ -237,4 +250,5 @@ extern GLenum __gl_error_code;
     #pragma warning( disable : 4996 )
 #endif
 
-#endif 
+
+#endif

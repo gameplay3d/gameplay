@@ -1,0 +1,341 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		42CCD51B146EBF3600353661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD51A146EBF3600353661 /* Cocoa.framework */; };
+		42CCD549146EC0AE00353661 /* SpaceshipGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CCD547146EC0AE00353661 /* SpaceshipGame.cpp */; };
+		42CCD54B146EC10200353661 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD54A146EC10200353661 /* QuartzCore.framework */; };
+		42CCD54D146EC10E00353661 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD54C146EC10E00353661 /* OpenAL.framework */; };
+		42CCD54F146EC11600353661 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD54E146EC11600353661 /* OpenGL.framework */; };
+		42CCD558146EC22900353661 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD557146EC22900353661 /* libz.dylib */; };
+		42CCD55A146EC23C00353661 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD559146EC23C00353661 /* libpng.a */; };
+		42CCD55E146EC24F00353661 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD55D146EC24F00353661 /* icon.png */; };
+		42CCD560146EC27A00353661 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD55F146EC27A00353661 /* res */; };
+		42CD0EED147D931F0000361E /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EEC147D931F0000361E /* libgameplay.a */; };
+		42CD0EF3147D932B0000361E /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EEE147D932B0000361E /* libbullet.a */; };
+		42CD0EF4147D932B0000361E /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EEF147D932B0000361E /* libogg.a */; };
+		42CD0EF5147D932B0000361E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EF0147D932B0000361E /* libvorbis.a */; };
+		42CD0EF6147D932B0000361E /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EF1147D932B0000361E /* libvorbisenc.a */; };
+		42CD0EF7147D932B0000361E /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EF2147D932B0000361E /* libvorbisfile.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		42C932E31491A18F0098216A /* sample02-spaceship-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample02-spaceship-macos.plist"; sourceTree = "<group>"; };
+		42CCD516146EBF3600353661 /* sample02-spaceship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample02-spaceship.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42CCD51A146EBF3600353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		42CCD547146EC0AE00353661 /* SpaceshipGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SpaceshipGame.cpp; path = src/SpaceshipGame.cpp; sourceTree = SOURCE_ROOT; };
+		42CCD548146EC0AE00353661 /* SpaceshipGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpaceshipGame.h; path = src/SpaceshipGame.h; sourceTree = SOURCE_ROOT; };
+		42CCD54A146EC10200353661 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		42CCD54C146EC10E00353661 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		42CCD54E146EC11600353661 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		42CCD557146EC22900353661 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		42CCD559146EC23C00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
+		42CCD55D146EC24F00353661 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		42CCD55F146EC27A00353661 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
+		42CD0EEC147D931F0000361E /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
+		42CD0EEE147D932B0000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macos/libbullet.a"; sourceTree = "<group>"; };
+		42CD0EEF147D932B0000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macos/libogg.a"; sourceTree = "<group>"; };
+		42CD0EF0147D932B0000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbis.a"; sourceTree = "<group>"; };
+		42CD0EF1147D932B0000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisenc.a"; sourceTree = "<group>"; };
+		42CD0EF2147D932B0000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisfile.a"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		42CCD513146EBF3600353661 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42CD0EED147D931F0000361E /* libgameplay.a in Frameworks */,
+				42CD0EF3147D932B0000361E /* libbullet.a in Frameworks */,
+				42CD0EF4147D932B0000361E /* libogg.a in Frameworks */,
+				42CD0EF5147D932B0000361E /* libvorbis.a in Frameworks */,
+				42CD0EF6147D932B0000361E /* libvorbisenc.a in Frameworks */,
+				42CD0EF7147D932B0000361E /* libvorbisfile.a in Frameworks */,
+				42CCD55A146EC23C00353661 /* libpng.a in Frameworks */,
+				42CCD558146EC22900353661 /* libz.dylib in Frameworks */,
+				42CCD51B146EBF3600353661 /* Cocoa.framework in Frameworks */,
+				42CCD54B146EC10200353661 /* QuartzCore.framework in Frameworks */,
+				42CCD54F146EC11600353661 /* OpenGL.framework in Frameworks */,
+				42CCD54D146EC10E00353661 /* OpenAL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		427D4F4A147DC9770076760E /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				42CD0EEC147D931F0000361E /* libgameplay.a */,
+				42CD0EEE147D932B0000361E /* libbullet.a */,
+				42CD0EEF147D932B0000361E /* libogg.a */,
+				42CD0EF0147D932B0000361E /* libvorbis.a */,
+				42CD0EF1147D932B0000361E /* libvorbisenc.a */,
+				42CD0EF2147D932B0000361E /* libvorbisfile.a */,
+				42CCD559146EC23C00353661 /* libpng.a */,
+				42CCD557146EC22900353661 /* libz.dylib */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		42CCD50B146EBF3600353661 = {
+			isa = PBXGroup;
+			children = (
+				42C932E31491A18F0098216A /* sample02-spaceship-macos.plist */,
+				42CCD55D146EC24F00353661 /* icon.png */,
+				42CCD55F146EC27A00353661 /* res */,
+				42CCD520146EBF3600353661 /* src */,
+				427D4F4A147DC9770076760E /* Libraries */,
+				42CCD519146EBF3600353661 /* Frameworks */,
+				42CCD517146EBF3600353661 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		42CCD517146EBF3600353661 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				42CCD516146EBF3600353661 /* sample02-spaceship.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		42CCD519146EBF3600353661 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				42CCD51A146EBF3600353661 /* Cocoa.framework */,
+				42CCD54A146EC10200353661 /* QuartzCore.framework */,
+				42CCD54E146EC11600353661 /* OpenGL.framework */,
+				42CCD54C146EC10E00353661 /* OpenAL.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		42CCD520146EBF3600353661 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				42CCD547146EC0AE00353661 /* SpaceshipGame.cpp */,
+				42CCD548146EC0AE00353661 /* SpaceshipGame.h */,
+			);
+			name = src;
+			path = "sample02-spaceship";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		42CCD515146EBF3600353661 /* sample02-spaceship */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42CCD534146EBF3600353661 /* Build configuration list for PBXNativeTarget "sample02-spaceship" */;
+			buildPhases = (
+				42CCD512146EBF3600353661 /* Sources */,
+				42CCD513146EBF3600353661 /* Frameworks */,
+				4224466C14716A9E0021F131 /* ShellScript */,
+				42CCD514146EBF3600353661 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "sample02-spaceship";
+			productName = "sample02-spaceship";
+			productReference = 42CCD516146EBF3600353661 /* sample02-spaceship.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		42CCD50D146EBF3600353661 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 42CCD510146EBF3600353661 /* Build configuration list for PBXProject "sample02-spaceship" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 42CCD50B146EBF3600353661;
+			productRefGroup = 42CCD517146EBF3600353661 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				42CCD515146EBF3600353661 /* sample02-spaceship */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		42CCD514146EBF3600353661 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42CCD55E146EC24F00353661 /* icon.png in Resources */,
+				42CCD560146EC27A00353661 /* res in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4224466C14716A9E0021F131 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		42CCD512146EBF3600353661 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42CCD549146EC0AE00353661 /* SpaceshipGame.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		42CCD532146EBF3600353661 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		42CCD533146EBF3600353661 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		42CCD535146EBF3600353661 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = "";
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					../../gameplay/src,
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
+				);
+				INFOPLIST_FILE = "sample02-spaceship-macos.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
+				);
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		42CCD536146EBF3600353661 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = "";
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					../../gameplay/src,
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
+				);
+				INFOPLIST_FILE = "sample02-spaceship-macos.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
+				);
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		42CCD510146EBF3600353661 /* Build configuration list for PBXProject "sample02-spaceship" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42CCD532146EBF3600353661 /* Debug */,
+				42CCD533146EBF3600353661 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42CCD534146EBF3600353661 /* Build configuration list for PBXNativeTarget "sample02-spaceship" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42CCD535146EBF3600353661 /* Debug */,
+				42CCD536146EBF3600353661 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 42CCD50D146EBF3600353661 /* Project object */;
+}

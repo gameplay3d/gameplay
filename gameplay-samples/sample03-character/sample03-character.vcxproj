@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugMem|Win32">
+      <Configuration>DebugMem</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
@@ -21,6 +25,11 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -33,11 +42,18 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(Configuration)\</OutDir>
   </PropertyGroup>
@@ -51,14 +67,47 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/alut/include/AL;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/oggvorbis/include;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;OpenAL32.lib;alut.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/openal/lib;../../external-deps/alut/lib;../../external-deps/glew/lib;../../external-deps/libpng/lib;../../external-deps/zlib/lib;../../gameplay/Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
+    </Link>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>
+      </Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>
+      </Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_WINDOWS;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/oggvorbis/include;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -82,29 +131,29 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/alut/include/AL;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/oggvorbis/include;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;OpenAL32.lib;alut.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/openal/lib;../../external-deps/alut/lib;../../external-deps/glew/lib;../../external-deps/libpng/lib;../../external-deps/zlib/lib;../../gameplay/Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
-    <None Include="res\animations\seymour.animation" />
-    <None Include="res\fonts\arial.ttf" />
-    <None Include="res\fonts\arial16.gpb" />
-    <None Include="res\materials\character.material" />
-    <None Include="res\materials\plane.material" />
-    <None Include="res\models\Seymour.dae" />
-    <None Include="res\models\Seymour.gpb" />
-    <None Include="res\textures\floor.png" />
-    <None Include="res\textures\seymour-diffuse.png" />
+    <None Include="res\arial.ttf" />
+    <None Include="res\arial40.gpb" />
+    <None Include="res\floor.material" />
+    <None Include="res\floor.png" />
+    <None Include="res\seymour-clips.animation" />
+    <None Include="res\seymour-diffuse.png" />
+    <None Include="res\seymour.dae" />
+    <None Include="res\seymour.gpb" />
+    <None Include="res\seymour.material" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CharacterGame.cpp" />

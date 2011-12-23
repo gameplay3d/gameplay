@@ -1,7 +1,3 @@
-/*
- * Ray.h
- */
-
 #ifndef RAY_H_
 #define RAY_H_
 
@@ -145,6 +141,14 @@ public:
      */
     void transform(const Matrix& matrix);
 
+    /**
+     * Transforms this ray by the given matrix.
+     * 
+     * @param matrix The matrix to transform by.
+     * @return This ray, after the transformation occurs.
+     */
+    inline Ray& operator*=(const Matrix& matrix);
+
 private:
 
     /**
@@ -156,6 +160,17 @@ private:
     Vector3 _direction;     // The ray direction vector.
 };
 
+/**
+ * Transforms the given ray by the given matrix.
+ * 
+ * @param matrix The matrix to transform by.
+ * @param ray The ray to transform.
+ * @return The resulting transformed ray.
+ */
+inline Ray operator*(const Matrix& matrix, const Ray& ray);
+
 }
+
+#include "Ray.inl"
 
 #endif

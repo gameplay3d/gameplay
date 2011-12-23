@@ -1,13 +1,11 @@
-/*
- * Game.h
- */
-
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "Input.h"
+#include "Keyboard.h"
+#include "Touch.h"
 #include "AudioController.h"
 #include "AnimationController.h"
+#include "PhysicsController.h"
 #include "Vector4.h"
 
 namespace gameplay
@@ -18,7 +16,6 @@ namespace gameplay
  */
 class Game
 {
-
 public:
 
     /**
@@ -34,8 +31,7 @@ public:
     /**
      * Flags used when clearing the active frame buffer targets.
      */
-
-     enum ClearFlags
+    enum ClearFlags
     {
         CLEAR_COLOR = GL_COLOR_BUFFER_BIT,
         CLEAR_DEPTH = GL_DEPTH_BUFFER_BIT,
@@ -45,8 +41,6 @@ public:
         CLEAR_DEPTH_STENCIL = CLEAR_DEPTH | CLEAR_STENCIL,
         CLEAR_COLOR_DEPTH_STENCIL = CLEAR_COLOR | CLEAR_DEPTH | CLEAR_STENCIL
     };
-
-
 
     /**
      * Destructor.
@@ -59,13 +53,6 @@ public:
      * @return The single instance of the game.
      */
     static Game* getInstance();
-
-    /**
-     * Gets the total absolute running time (in milliseconds) since Game::run().
-     * 
-     * @return The total absolute running time (in milliseconds).
-     */
-    static long getAbsoluteTime();
 
     /**
      * Gets whether vertical sync is enabled for the game display.
@@ -82,6 +69,13 @@ public:
     static void setVsync(bool enable);
 
     /**
+     * Gets the total absolute running time (in milliseconds) since Game::run().
+     * 
+     * @return The total absolute running time (in milliseconds).
+     */
+    static long getAbsoluteTime();
+
+    /**
      * Gets the total game time (in milliseconds). This is the total accumulated game time (unpaused).
      *
      * You would typically use things in your game that you want to stop when the game is paused.
@@ -96,7 +90,7 @@ public:
      *
      * @return The current game state.
      */
-    State getState() const;
+    inline State getState() const;
 
     /**
      * Call this method to initialize the game, and begin running the game.
@@ -136,21 +130,21 @@ public:
      * 
      * @return The current frame rate.
      */
-    unsigned int getFrameRate() const;
+    inline unsigned int getFrameRate() const;
 
     /**
      * Gets the game window width.
      * 
      * @return The game window width.
      */
-    unsigned int getWidth() const;
+    inline unsigned int getWidth() const;
 
     /**
      * Gets the game window height.
      * 
      * @return The game window height.
      */
-    unsigned int getHeight() const;
+    inline unsigned int getHeight() const;
 
     /**
      * Clears the specified resource buffers to the specified clear values. 
@@ -168,7 +162,7 @@ public:
      *
      * @return The audio controller for this game.
      */
-    const AudioController& getAudioController() const;
+    inline AudioController* getAudioController() const;
 
     /**
      * Gets the animation controller for managing control of animations
@@ -176,7 +170,15 @@ public:
      * 
      * @return The animation controller for this game.
      */
-    AnimationController* getAnimationController();
+    inline AnimationController* getAnimationController() const;
+
+    /**
+     * Gets the physics controller for managing control of physics
+     * associated with the game.
+     * 
+     * @return The physics controller for this game.
+     */
+    inline PhysicsController* getPhysicsController() const;
 
     /**
      * Menu callback on menu events.
@@ -184,33 +186,45 @@ public:
     virtual void menu();
 
     /**
-     * Input callback on keyChar events.
+     * Keyboard callback on keyPress events.
      *
-     * @param key The key code pressed.
+     * @param evt The key event that occured.
+     * @param key The key code that was pressed, released or repeated.
+     * 
+     * @see Keyboard::Key
      */
-    virtual void keyChar(char key);
+    virtual void keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
-     * Input callback on keyPress events.
+     * Touch callback on touch events.
      *
-     * @param key The key code pressed.
-     * @param keyEvent The key event that occured.
-     * 
-     * @see Input::Key
-     * @see Input::KeyEvent
+     * @param evt The touch event that occurred.
+     *
+     * @see Touch::TouchEvent
      */
-    virtual void keyPress(int key, int keyEvent);
+    virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     /**
-     * Input callback on touch events.
+     * Sets muli-touch is to be enabled/disabled. Default is disabled.
      *
-     * @param x The x position of the touch.
-     * @param y The y position of the touch.
-     * @param touchEvent The touch event that occurred.
-     * 
-     * @see Input::TouchEvent
+     * @param enabled true sets multi-touch is enabled, false to be disabled.
      */
-    virtual void touch(int x, int y, int touchEvent);
+    inline void setMultiTouch(bool enabled);
+
+    /**
+     * Is multi-touch mode enabled.
+     *
+     * @return true is multi-touch is enabled.
+     */
+    inline bool isMultiTouch() const;
+
+    /**
+     * Gets the current accelerometer values.
+     *
+     * @param pitch The pitch angle returned (in degrees). If NULL then not returned.
+     * @param roll The roll angle returned (in degrees). If NULL then not returned.
+     */
+    inline void getAccelerometerValues(float* pitch, float* roll);
 
 protected:
 
@@ -220,12 +234,12 @@ protected:
     Game();
 
     /**
-     * Initializes the game on startup.
+     * Initialize callback that is called just before the first frame when the game starts.
      */
     virtual void initialize() = 0;
 
     /**
-     * Finalizes the game on exit.
+     * Finalize callback that is called when the game on exits.
      */
     virtual void finalize() = 0;
 
@@ -249,6 +263,14 @@ protected:
      */
     virtual void render(long elapsedTime) = 0;
 
+    /**
+     * Renders a single frame once and then swaps it to the display.
+     *
+     * This is useful for rendering splash screens.
+     */
+    template <class T>
+    void renderOnce(T* instance, void (T::*method)(void*), void* cookie);
+
 private:
 
     /**
@@ -268,9 +290,10 @@ private:
      */
     void shutdown();
 
+    bool _initialized;                          // If game has initialized yet.
+    State _state;                               // The game state.
     static long _pausedTimeLast;                // The last time paused.
     static long _pausedTimeTotal;               // The total time paused.
-    State _state;                               // The game state.
     long _frameLastFPS;                         // The last time the frame count was updated.
     unsigned int _frameCount;                   // The current frame count.
     unsigned int _frameRate;                    // The current frame rate.
@@ -279,10 +302,13 @@ private:
     Vector4 _clearColor;                        // The clear color value last used for clearing the color buffer.
     float _clearDepth;                          // The clear depth value last used for clearing the depth buffer.
     int _clearStencil;                          // The clear stencil value last used for clearing the stencil buffer.
-    AnimationController _animationController;   // Controls the scheduling and running of animations.
-    AudioController _audioController;           // Controls audio sources that are playing in the game.
+    AnimationController* _animationController;  // Controls the scheduling and running of animations.
+    AudioController* _audioController;          // Controls audio sources that are playing in the game.
+    PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
 };
 
 }
+
+#include "Game.inl"
 
 #endif

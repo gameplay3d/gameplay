@@ -1,12 +1,8 @@
-/*
- * LongboardGame.h
- */
-
 #ifndef LONGBOARDGAME_H_
 #define LONGBOARDGAME_H_
 
 #include "gameplay.h"
-#include "gameplay-main.h"
+
 using namespace gameplay;
 
 /**

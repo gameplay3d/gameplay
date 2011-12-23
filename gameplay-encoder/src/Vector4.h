@@ -1,16 +1,9 @@
-/*
- * Vector4.h
- */
-
 #ifndef VECTOR4_H_
 #define VECTOR4_H_
-
-#include "FileIO.h"
 
 namespace gameplay
 {
 
-// Forward declare
 class Matrix;
 
 /**
@@ -80,63 +73,73 @@ public:
     Vector4(const Vector4& copy);
 
     /**
+     * Creates a new vector from an integer interpreted as an RGBA value.
+     * E.g. 0xff0000ff represents opaque red or the vector (1, 0, 0, 1).
+     *
+     * @param color The integer to interpret as an RGBA value.
+     *
+     * @return A vector corresponding to the interpreted RGBA color.
+     */
+    static Vector4 fromColor(unsigned int color);
+
+    /**
      * Destructor.
      */
     ~Vector4();
 
     /**
-     * The zero vector
+     * Returns the zero vector.
      *
      * @return The 4-element vector of 0s.
      */
     static const Vector4& zero();
 
     /**
-     * The one vector.
+     * Returns the one vector.
      *
      * @return The 4-element vector of 1s.
      */
     static const Vector4& one();
 
     /**
-     * The unit x vector.
+     * Returns the unit x vector.
      *
      * @return The 4-element unit vector along the x axis.
      */
     static const Vector4& unitX();
 
     /**
-     * The unit y vector.
+     * Returns the unit y vector.
      *
      * @return The 4-element unit vector along the y axis.
      */
     static const Vector4& unitY();
 
     /**
-     * The unit z vector.
+     * Returns the unit z vector.
      *
      * @return The 4-element unit vector along the z axis.
      */
     static const Vector4& unitZ();
 
     /**
-     * The unit w vector.
+     * Returns the unit w vector.
      *
      * @return The 4-element unit vector along the w axis.
      */
     static const Vector4& unitW();
 
     /**
-     * Is this vector the all zeros.
+     * Indicates whether this vector contains all zeros.
      *
-     * @return true if all zeros, false if otherwise.
+     * @return true if this vector contains all zeros, false otherwise.
      */
     bool isZero() const;
 
     /**
-     * Is this vector all ones.
+     * Indicates whether this vector contains all ones.
      *
-     * @return true if all ones, false if otherwise.
+     * @return true if this vector contains all ones, false otherwise.
      */
     bool isOne() const;
 
@@ -146,7 +149,7 @@ public:
      * @param v1 The first vector.
      * @param v2 The second vector.
      * 
-     * @return The angle between the two vectors, in radians.
+     * @return The angle between the two vectors (in radians).
      */
     static float angle(const Vector4& v1, const Vector4& v2);
 
@@ -190,9 +193,10 @@ public:
      * @param v The other vector.
      * 
      * @return The distance between this vector and v.
+     * 
      * @see distanceSquared
      */
-    float distance(const Vector4& v);
+    float distance(const Vector4& v) const;
 
     /**
      * Returns the squared distance between this vector and v.
@@ -205,9 +209,10 @@ public:
      * @param v The other vector.
      * 
      * @return The squared distance between this vector and v.
+     * 
      * @see distance
      */
-    float distanceSquared(const Vector4& v);
+    float distanceSquared(const Vector4& v) const;
 
     /**
      * Returns the dot product of this vector and the specified vector.
@@ -232,9 +237,10 @@ public:
      * Computes the length of this vector.
      *
      * @return The length of the vector.
+     * 
      * @see lengthSquared
      */
-    float length();
+    float length() const;
 
     /**
      * Returns the squared length of this vector.
@@ -245,9 +251,10 @@ public:
      * instead of length.
      *
      * @return The squared length of the vector.
+     * 
      * @see length
      */
-    float lengthSquared();
+    float lengthSquared() const;
 
     /**
      * Negates this vector.
@@ -272,7 +279,7 @@ public:
      * of the vector is zero, this method simply copies the
      * current vector into dst.
      *
-     * @param dst the destination vector
+     * @param dst The destination vector.
      */
     void normalize(Vector4* dst);
 
@@ -309,12 +316,15 @@ public:
 
     /**
      * Sets this vector to the directional vector between the specified points.
+     * 
+     * @param p1 The first point.
+     * @param p2 The second point.
      */
     void set(const Vector4& p1, const Vector4& p2);
 
     /**
      * Subtracts this vector and the specified vector as (this - v)
-     * and stores the result in this.
+     * and stores the result in this vector.
      *
      * @param v The vector to subtract.
      */
@@ -330,41 +340,99 @@ public:
      */
     static void subtract(const Vector4& v1, const Vector4& v2, Vector4* dst);
 
-
-
-    inline bool operator<(const Vector4& v) const
-    {
-        if (x == v.x)
-        {
-            if (y == v.y)
-            {
-                if (z < v.z)
-                {
-                    if (w < v.w)
-                    {
-                        return w < v.w;
-                    }
-                }
-                return z < v.z;
-            }
-            return y < v.y;
-        }
-        return x < v.x;
-    }
-
-    inline bool operator==(const Vector4& v) const
-    {
-        return x==v.x && y==v.y && z==v.z && w==v.w;
-    }
+    /**
+     * Calculates the sum of this vector with the given vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param v The vector to add.
+     * @return The vector sum.
+     */
+    inline Vector4 operator+(const Vector4& v);
 
     /**
-     * Writes this vector to the binary file stream.
+     * Adds the given vector to this vector.
+     * 
+     * @param v The vector to add.
+     * @return This vector, after the addition occurs.
      */
-    void writeBinary(FILE* file) const;
+    inline Vector4& operator+=(const Vector4& v);
 
-    void writeText(FILE* file) const;
+    /**
+     * Calculates the sum of this vector with the given vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param v The vector to add.
+     * @return The vector sum.
+     */
+    inline Vector4 operator-(const Vector4& v);
+
+    /**
+     * Subtracts the given vector from this vector.
+     * 
+     * @param v The vector to subtract.
+     * @return This vector, after the subtraction occurs.
+     */
+    inline Vector4& operator-=(const Vector4& v);
+
+    /**
+     * Calculates the negation of this vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @return The negation of this vector.
+     */
+    inline Vector4 operator-();
+
+    /**
+     * Calculates the scalar product of this vector with the given value.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param x The value to scale by.
+     * @return The scaled vector.
+     */
+    inline Vector4 operator*(float x);
+
+    /**
+     * Scales this vector by the given value.
+     * 
+     * @param x The value to scale by.
+     * @return This vector, after the scale occurs.
+     */
+    inline Vector4& operator*=(float x);
+
+    /**
+     * Determines if this vector is less than the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is less than the given vector, false otherwise.
+     */
+    inline bool operator<(const Vector4& v) const;
+
+    /**
+     * Determines if this vector is equal to the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is equal to the given vector, false otherwise.
+     */
+    inline bool operator==(const Vector4& v) const;
 };
 
+/**
+ * Calculates the scalar product of the given vector with the given value.
+ * 
+ * @param x The value to scale by.
+ * @param v The vector to scale.
+ * @return The scaled vector.
+ */
+inline Vector4 operator*(float x, const Vector4& v);
+
 }
+
+#include "Vector4.inl"
 
 #endif

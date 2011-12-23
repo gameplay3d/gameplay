@@ -1,81 +1,99 @@
-/*
- * AnimationTarget.cpp
- */
-
 #include "Base.h"
 #include "AnimationTarget.h"
 #include "Animation.h"
 #include "Game.h"
-#include <string.h>
 #include "Transform.h"
 
 namespace gameplay
 {
 
 AnimationTarget::AnimationTarget()
-    : _targetType(SCALAR), _animations(NULL)
+    : _targetType(SCALAR), _highestPriority(NULL), _animationChannels(NULL)
 {
 }
 
 AnimationTarget::~AnimationTarget()
 {
-    if (_animations)
+    if (_animationChannels)
     {
-        std::vector<Animation*>::iterator animationIter = _animations->begin();
-        while (animationIter != _animations->end())
+        std::vector<Animation::Channel*>::iterator itr = _animationChannels->begin();
+        while (itr != _animationChannels->end())
         {
-            SAFE_RELEASE((*animationIter));
-            animationIter++;
+            Animation::Channel* channel = (*itr);
+            SAFE_DELETE(channel);
+            itr++;
         }
-        SAFE_DELETE(_animations);
+        _animationChannels->clear();
+        SAFE_DELETE(_animationChannels);
     }
 }
 
-void AnimationTarget::addAnimation(Animation* animation)
+void AnimationTarget::addChannel(Animation::Channel* channel)
 {
-    if (_animations == NULL)
+    if (_animationChannels == NULL)
+        _animationChannels = new std::vector<Animation::Channel*>;
+
+    _animationChannels->push_back(channel);
+}
+
+int AnimationTarget::getPropertyId(TargetType type, const char* propertyIdStr)
+{
+    if (type == AnimationTarget::TRANSFORM)
     {
-        _animations = new std::vector<Animation*>;
+        if (strcmp(propertyIdStr, "ANIMATE_SCALE") == 0)
+        {
+            return Transform::ANIMATE_SCALE;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_SCALE_X") == 0)
+        {
+            return Transform::ANIMATE_SCALE_X;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_SCALE_Y") == 0)
+        {
+            return Transform::ANIMATE_SCALE_Y;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_SCALE_Z") == 0)
+        {
+            return Transform::ANIMATE_SCALE_Z;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_ROTATE") == 0)
+        {
+            return Transform::ANIMATE_ROTATE;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_TRANSLATE") == 0)
+        {
+            return Transform::ANIMATE_TRANSLATE;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_TRANSLATE_X") == 0)
+        {
+            return Transform::ANIMATE_TRANSLATE_X;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_TRANSLATE_Y") == 0)
+        {
+            return Transform::ANIMATE_TRANSLATE_Y;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_TRANSLATE_Z") == 0)
+        {
+            return Transform::ANIMATE_TRANSLATE_Z;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_ROTATE_TRANSLATE") == 0)
+        {
+            return Transform::ANIMATE_ROTATE_TRANSLATE;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_SCALE_ROTATE_TRANSLATE") == 0)
+        {
+            return Transform::ANIMATE_SCALE_ROTATE_TRANSLATE;
+        }
     }
-
-    _animations->push_back(animation);
-
-    animation->addRef();
-}
-
-unsigned int AnimationTarget::getAnimationCount() const
-{
-    if (_animations)
-        return _animations->size();
-
-    return 0;
-}
-
-Animation* AnimationTarget::getAnimation(unsigned int index) const
-{
-    if (_animations)
-        return _animations->at(index);
     else
-        return 0;
-}
-
-Animation* AnimationTarget::getAnimation(const char* id) const
-{
-    if (_animations)
     {
-        std::vector<Animation*>::iterator animationIter = _animations->begin();
-        while(animationIter != _animations->end())
+        if (strcmp(propertyIdStr, "ANIMATE_UNIFORM") == 0)
         {
-            if ((*animationIter)->_id.compare(id) == 0)
-            {
-                return *animationIter;
-            }
-
-            animationIter++;
+            return MaterialParameter::ANIMATE_UNIFORM;
         }
     }
-    
-    return NULL;
+
+    return -1;
 }
 
 }

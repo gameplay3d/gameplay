@@ -21,7 +21,7 @@
 						<toolChain id="com.qnx.qcc.toolChain.exe.debug.2096919997" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.1283176032" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.1406837167" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample02-spaceship/Device-Debug}" id="cdt.managedbuild.target.gnu.builder.base.724166574" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample02-spaceship/Device-Debug}" id="cdt.managedbuild.target.gnu.builder.base.724166574" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.1158303109" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.1544186943" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.security.2012394098" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
@@ -31,6 +31,8 @@
 								<option id="com.qnx.qcc.option.compiler.includePath.1786077513" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.981211207" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -49,6 +51,8 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/oggvorbis/lib/qnx/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.570734469" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -59,9 +63,10 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+									<listOptionValue builtIn="false" value="bullet"/>
+									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.1645280653" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -77,7 +82,9 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="gameplay;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.qnx.qcc.configuration.exe.release.791928190">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.exe.release.791928190" moduleId="org.eclipse.cdt.core.settings" name="Device-Release">
@@ -97,7 +104,7 @@
 						<toolChain id="com.qnx.qcc.toolChain.exe.release.1572330033" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.78317338" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.1102881265" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample02-spaceship/Device-Release}" id="cdt.managedbuild.target.gnu.builder.base.1957807985" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample02-spaceship/Device-Release}" id="cdt.managedbuild.target.gnu.builder.base.1957807985" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.167195532" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.optlevel.1128281721" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.2" valueType="enumerated"/>
 								<option id="com.qnx.qcc.option.compiler.security.1305913768" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
@@ -107,6 +114,8 @@
 								<option id="com.qnx.qcc.option.compiler.includePath.1846473564" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.763591924" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -123,6 +132,8 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/oggvorbis/lib/qnx/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.1996548068" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -133,9 +144,10 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+									<listOptionValue builtIn="false" value="bullet"/>
+									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.534133606" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -151,7 +163,9 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="gameplay;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.qnx.qcc.configuration.exe.profile.1481263776">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.exe.profile.1481263776" moduleId="org.eclipse.cdt.core.settings" name="Device-Profile">
@@ -171,7 +185,7 @@
 						<toolChain id="com.qnx.qcc.toolChain.exe.profile.135672233" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.1612958483" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.406167472" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample02-spaceship/Device-Profile}" id="cdt.managedbuild.target.gnu.builder.base.862685579" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample02-spaceship/Device-Profile}" id="cdt.managedbuild.target.gnu.builder.base.862685579" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.574962040" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.1250601584" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.profile2.1606037560" name="Build for Profiling (Function Instrumentation) (-finstrument-functions)" superClass="com.qnx.qcc.option.compiler.profile2" value="true" valueType="boolean"/>
@@ -182,6 +196,8 @@
 								<option id="com.qnx.qcc.option.compiler.includePath.1625089578" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.571692924" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -201,6 +217,8 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/oggvorbis/lib/qnx/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.503160285" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -211,9 +229,10 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+									<listOptionValue builtIn="false" value="bullet"/>
+									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.769075178" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -229,7 +248,9 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="gameplay;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.qnx.qcc.configuration.exe.profile.coverage.1388065949">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.exe.profile.coverage.1388065949" moduleId="org.eclipse.cdt.core.settings" name="Device-Coverage">
@@ -249,7 +270,7 @@
 						<toolChain id="com.qnx.qcc.toolChain.exe.coverage.1199044336" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.1940311135" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.271335553" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample02-spaceship/Device-Coverage}" id="cdt.managedbuild.target.gnu.builder.base.1209127235" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample02-spaceship/Device-Coverage}" id="cdt.managedbuild.target.gnu.builder.base.1209127235" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.388832463" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.1578152212" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.coverage.1441546138" name="Build for Code Coverage (-Wc,-ftest-coverage -Wc,-fprofile-arcs)" superClass="com.qnx.qcc.option.compiler.coverage" value="true" valueType="boolean"/>
@@ -260,6 +281,8 @@
 								<option id="com.qnx.qcc.option.compiler.includePath.1920151301" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1908315320" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -279,6 +302,8 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/oggvorbis/lib/qnx/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.585378772" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -289,9 +314,10 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+									<listOptionValue builtIn="false" value="bullet"/>
+									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.620380589" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -307,7 +333,9 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="gameplay;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.qnx.qcc.configuration.exe.debug.1233004640">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.exe.debug.1233004640" moduleId="org.eclipse.cdt.core.settings" name="Simulator">
@@ -326,7 +354,7 @@
 					<folderInfo id="com.qnx.qcc.configuration.exe.debug.1233004640." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.exe.debug.775222128" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.32198076" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample02-spaceship/Simulator}" id="cdt.managedbuild.target.gnu.builder.base.1689883881" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample02-spaceship/Simulator}" id="cdt.managedbuild.target.gnu.builder.base.1689883881" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.572962635" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.836165207" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.security.1801893474" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
@@ -336,6 +364,8 @@
 								<option id="com.qnx.qcc.option.compiler.includePath.2118333103" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.346604454" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -351,9 +381,11 @@
 								<option id="com.qnx.qcc.option.linker.langcpp.868409140" name="C++ (-lang-c++)" superClass="com.qnx.qcc.option.linker.langcpp" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.linker.security.1156565203" name="Enhanced Security (-Wl,-z,relro -Wl,-z,now)" superClass="com.qnx.qcc.option.linker.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.linker.libraryPaths.1716299782" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/lib"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/oggvorbis/lib/qnx/x86&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.790894544" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -364,9 +396,10 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+									<listOptionValue builtIn="false" value="bullet"/>
+									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.1805822171" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -382,7 +415,9 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="gameplay;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.qnx.qcc.configuration.exe.profile.1047868168">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.exe.profile.1047868168" moduleId="org.eclipse.cdt.core.settings" name="Simulator-Profile">
@@ -401,7 +436,7 @@
 					<folderInfo id="com.qnx.qcc.configuration.exe.profile.1047868168." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.exe.profile.939668936" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.1558261803" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample02-spaceship/Simulator-Profile}" id="cdt.managedbuild.target.gnu.builder.base.1548244987" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample02-spaceship/Simulator-Profile}" id="cdt.managedbuild.target.gnu.builder.base.1548244987" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.910189967" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.1124604999" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.profile2.1445568492" name="Build for Profiling (Function Instrumentation) (-finstrument-functions)" superClass="com.qnx.qcc.option.compiler.profile2" value="true" valueType="boolean"/>
@@ -410,9 +445,10 @@
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.890123361" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.13646191" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -432,6 +468,8 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/oggvorbis/lib/qnx/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.1068636532" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -442,9 +480,10 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+									<listOptionValue builtIn="false" value="bullet"/>
+									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.355039478" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -460,7 +499,9 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="gameplay;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.qnx.qcc.configuration.exe.profile.coverage.134475205">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.exe.profile.coverage.134475205" moduleId="org.eclipse.cdt.core.settings" name="Simulator-Coverage">
@@ -479,7 +520,7 @@
 					<folderInfo id="com.qnx.qcc.configuration.exe.profile.coverage.134475205." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.exe.coverage.1445694613" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.1028541018" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/sample02-spaceship/Simulator-Coverage}" id="cdt.managedbuild.target.gnu.builder.base.365714115" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<builder buildPath="${workspace_loc:/sample02-spaceship/Simulator-Coverage}" id="cdt.managedbuild.target.gnu.builder.base.365714115" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.269534567" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.617498160" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.coverage.1169219721" name="Build for Code Coverage (-Wc,-ftest-coverage -Wc,-fprofile-arcs)" superClass="com.qnx.qcc.option.compiler.coverage" value="true" valueType="boolean"/>
@@ -488,9 +529,10 @@
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.2112764520" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../../external-deps/oggvorbis/include&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.754119772" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -510,6 +552,8 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/bullet/lib/qnx/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/../external-deps/oggvorbis/lib/qnx/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.605634368" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -520,9 +564,10 @@
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
-									<listOptionValue builtIn="false" value="alut"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+									<listOptionValue builtIn="false" value="bullet"/>
+									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.1474267138" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -538,7 +583,9 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="gameplay;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+			</storageModule>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">

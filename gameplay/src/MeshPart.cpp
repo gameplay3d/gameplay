@@ -1,7 +1,3 @@
-/*
- * MeshPart.cpp
- */
-
 #include "Base.h"
 #include "MeshPart.h"
 
@@ -43,7 +39,7 @@ MeshPart* MeshPart::create(Mesh* mesh, unsigned int meshIndex, Mesh::PrimitiveTy
         return NULL;
     }
 
-    unsigned int indexSize;
+    unsigned int indexSize = 0;
     switch (indexFormat)
     {
     case Mesh::INDEX8:
@@ -95,7 +91,7 @@ Mesh::IndexFormat MeshPart::getIndexFormat() const
     return _indexFormat;
 }
 
-IndexBuffer MeshPart::getIndexBuffer() const
+IndexBufferHandle MeshPart::getIndexBuffer() const
 {
     return _indexBuffer;
 }
@@ -109,7 +105,7 @@ void MeshPart::setIndexData(void* indexData, unsigned int indexStart, unsigned i
 {
     GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer) );
 
-    unsigned int indexSize;
+    unsigned int indexSize = 0;
     switch (_indexFormat)
     {
     case Mesh::INDEX8:

@@ -1,7 +1,3 @@
-/**
- * Material.cpp
- */
-
 #include "Base.h"
 #include "Material.h"
 #include "FileSystem.h"
@@ -24,7 +20,7 @@ Material::Material(const Material& m)
 
 Material::~Material()
 {
-	// Destroy all the techniques.
+    // Destroy all the techniques.
     for (unsigned int i = 0, count = _techniques.size(); i < count; ++i)
     {
         Technique* technique = _techniques[i];
@@ -47,19 +43,25 @@ Material* Material::create(const char* materialPath)
         return NULL;
     }
 
+    Material* material = create(properties->getNextNamespace());
+    SAFE_DELETE(properties);
+
+    return material;
+}
+
+Material* Material::create(Properties* materialProperties)
+{
     // Check if the Properties is valid and has a valid namespace.
-    Properties* materialProperties = properties->getNextNamespace();
     assert(materialProperties);
     if (!materialProperties || !(strcmp(materialProperties->getNamespace(), "material") == 0))
     {
-        SAFE_DELETE(properties);
         return NULL;
     }
 
     // Create new material from the file passed in.
     Material* material = new Material();
 
-	// Go through all the material properties and create techniques under this material.
+    // Go through all the material properties and create techniques under this material.
     Properties* techniqueProperties = NULL;
     while ((techniqueProperties = materialProperties->getNextNamespace()))
     {
@@ -68,7 +70,6 @@ Material* Material::create(const char* materialPath)
             if (!loadTechnique(material, techniqueProperties))
             {
                 SAFE_RELEASE(material);
-                SAFE_DELETE(properties);
                 return NULL;
             }
         }
@@ -76,9 +77,6 @@ Material* Material::create(const char* materialPath)
 
     // Load uniform value parameters for this material
     loadRenderState(material, materialProperties);
-
-    // Material properties no longer required
-    SAFE_DELETE(properties);
 
     // Set the current technique to the first found technique
     if (material->getTechniqueCount() > 0)
@@ -176,26 +174,12 @@ void Material::setTechnique(unsigned int index)
     }
 }
 
-void Material::setMeshBinding(Mesh* mesh)
-{
-    // Call setMeshBinding() on all passes in all techniques
-    for (unsigned int i = 0, tCount = _techniques.size(); i < tCount; ++i)
-    {
-        Technique* t = _techniques[i];
-        for (unsigned int j = 0, pCount = t->getPassCount(); j < pCount; ++j)
-        {
-            Pass* p = t->getPass(j);
-            p->setMeshBinding(mesh);
-        }
-    }
-}
-
 bool Material::loadTechnique(Material* material, Properties* techniqueProperties)
 {
     // Create a new technique
     Technique* technique = new Technique(techniqueProperties->getId(), material);
 
-	// Go through all the properties and create passes under this technique.
+    // Go through all the properties and create passes under this technique.
     techniqueProperties->rewind();
     Properties* passProperties = NULL;
     while ((passProperties = techniqueProperties->getNextNamespace()))
@@ -203,7 +187,7 @@ bool Material::loadTechnique(Material* material, Properties* techniqueProperties
         if (strcmp(passProperties->getNamespace(), "pass") == 0)
         {
             // Create and load passes.
-		    if (!loadPass(technique, passProperties))
+            if (!loadPass(technique, passProperties))
             {
                 SAFE_RELEASE(technique);
                 return false;
@@ -234,7 +218,9 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
         char* token = strtok((char*)defines, ";");
         while (token)
         {
-            define += "#define " + std::string(token) + "\n";
+            define += "#define ";
+            define += token;
+            define += "\n";
             token = strtok(NULL, ";");
         }
     }
