@@ -12,6 +12,7 @@ class Curve
     friend class Animation;
     friend class AnimationClip;
     friend class AnimationController;
+    friend class MeshSkin;
 
 public:
 
@@ -353,18 +354,6 @@ public:
      */
     void evaluate(float time, float* dst) const;
 
-    /**
-     * Adds an offset for the beginning of a Quaternion piece of data within the curve's value span at the specified
-     * index. The next four components of data starting at the given index will be interpolated as a Quaternion.
-     * This function will assert an error if the given index is less than the component size less the four components required
-     * to store a quaternion.
-     * One can set multiple offsets within the value span. However, this function will assert an error if the index
-     * are not ordered, or if the index 
-     * 
-     * @param index The index of the Quaternion rotation data.
-     */
-    void addQuaternionOffset(unsigned int index);
-
 private:
 
     /**
@@ -447,6 +436,16 @@ private:
     int determineIndex(float time) const;
 
     /**
+     * Sets the offset for the beginning of a Quaternion piece of data within the curve's value span at the specified
+     * index. The next four components of data starting at the given index will be interpolated as a Quaternion.
+     * This function will assert an error if the given index is greater than the component size subtracted by the four components required
+     * to store a quaternion.
+     * 
+     * @param index The index of the Quaternion rotation data.
+     */
+    void setQuaternionOffset(unsigned int index);
+
+    /**
      * Gets the InterpolationType value for the given string ID
      *
      * @param interpolationId The string representation of the InterpolationType
@@ -457,8 +456,7 @@ private:
     unsigned int _pointCount;           // Number of points on the curve.
     unsigned int _componentCount;       // Number of components on the curve.
     unsigned int _componentSize;        // The component size (in bytes).
-    unsigned int* _quaternionOffsets;   // Offset for the rotation component.
-    unsigned int _quaternionOffsetsCount;
+    unsigned int* _quaternionOffset;    // Offset for the rotation component.
     Point* _points;                     // The points on the curve.
 };
 

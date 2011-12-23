@@ -240,18 +240,7 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
 
     Curve* curve = new Curve(keyCount, propertyComponentCount);
     if (target->_targetType == AnimationTarget::TRANSFORM)
-    {
-        switch (propertyId)
-        {
-        case Transform::ANIMATE_ROTATE:
-        case Transform::ANIMATE_ROTATE_TRANSLATE:
-            curve->addQuaternionOffset(ANIMATION_ROTATE_OFFSET);
-            break;
-        case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
-            curve->addQuaternionOffset(ANIMATION_SRT_OFFSET);
-            break;
-        }
-    }
+        setTransformRotationOffset(curve, propertyId);
 
     unsigned long lowest = keyTimes[0];
     unsigned long duration = keyTimes[keyCount-1] - lowest;
@@ -287,18 +276,7 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
 
     Curve* curve = new Curve(keyCount, propertyComponentCount);
     if (target->_targetType == AnimationTarget::TRANSFORM)
-    {
-        switch (propertyId)
-        {
-        case Transform::ANIMATE_ROTATE:
-        case Transform::ANIMATE_ROTATE_TRANSLATE:
-            curve->addQuaternionOffset(ANIMATION_ROTATE_OFFSET);
-            break;
-        case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
-            curve->addQuaternionOffset(ANIMATION_SRT_OFFSET);
-            break;
-        }
-    }
+        setTransformRotationOffset(curve, propertyId);
     
     unsigned long lowest = keyTimes[0];
     unsigned long duration = keyTimes[keyCount-1] - lowest;
@@ -354,6 +332,22 @@ void Animation::removeChannel(Channel* channel)
 
     if (_channels.empty())
         _controller->destroyAnimation(this);
+}
+
+void Animation::setTransformRotationOffset(Curve* curve, unsigned int propertyId)
+{
+    switch (propertyId)
+    {
+    case Transform::ANIMATE_ROTATE:
+    case Transform::ANIMATE_ROTATE_TRANSLATE:
+        curve->setQuaternionOffset(ANIMATION_ROTATE_OFFSET);
+        return;
+    case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
+        curve->setQuaternionOffset(ANIMATION_SRT_OFFSET);
+        return;
+    }
+
+    return;
 }
 
 }
