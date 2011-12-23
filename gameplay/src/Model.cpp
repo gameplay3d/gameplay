@@ -76,21 +76,17 @@ void Model::setMaterial(Material* material, int partIndex)
 {
     assert(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
 
+    Material* oldMaterial = NULL;
+
     if (partIndex == -1)
     {
-        // Release existing shared material and binding.
-        if (_material)
-        {
-            _material->setMeshBinding(NULL);
-            SAFE_RELEASE(_material);
-        }
+        oldMaterial = _material;
 
         // Set new shared material.
         if (material)
         {
             _material = material;
             _material->addRef();
-            _material->setMeshBinding(_mesh);
         }
     }
     else if (partIndex >= 0 && partIndex < (int)getMeshPartCount())
@@ -101,11 +97,7 @@ void Model::setMaterial(Material* material, int partIndex)
         // Release existing part material and part binding.
         if (_partMaterials)
         {
-            if (_partMaterials[partIndex])
-            {
-                _partMaterials[partIndex]->setMeshBinding(NULL);
-                SAFE_RELEASE(_partMaterials[partIndex]);
-            }
+            oldMaterial = _partMaterials[partIndex];
         }
         else
         {
@@ -122,14 +114,43 @@ void Model::setMaterial(Material* material, int partIndex)
         {
             _partMaterials[partIndex] = material;
             material->addRef();
-            material->setMeshBinding(_mesh);
         }
     }
 
-    // Apply node binding for the new material.
-    if (material && _node)
+    // Release existing material and binding.
+    if (oldMaterial)
     {
-        setMaterialNodeBinding(material);
+        for (unsigned int i = 0, tCount = material->getTechniqueCount(); i < tCount; ++i)
+        {
+            Technique* t = material->getTechnique(i);
+            for (unsigned int j = 0, pCount = t->getPassCount(); j < pCount; ++j)
+            {
+                t->getPass(j)->setVertexAttributeBinding(NULL);
+            }
+        }
+        SAFE_RELEASE(oldMaterial);
+    }
+
+    if (material)
+    {
+        // Hookup vertex attribute bindings for all passes in the new material.
+        for (unsigned int i = 0, tCount = material->getTechniqueCount(); i < tCount; ++i)
+        {
+            Technique* t = material->getTechnique(i);
+            for (unsigned int j = 0, pCount = t->getPassCount(); j < pCount; ++j)
+            {
+                Pass* p = t->getPass(j);
+                VertexAttributeBinding* b = VertexAttributeBinding::create(_mesh, p->getEffect());
+                p->setVertexAttributeBinding(b);
+                SAFE_RELEASE(b);
+            }
+        }
+
+        // Apply node binding for the new material.
+        if (_node)
+        {
+            setMaterialNodeBinding(material);
+        }
     }
 }
 
@@ -218,20 +239,21 @@ void Model::setNode(Node* node)
 
 void Model::draw(bool wireframe)
 {
-    wireframe &= (_mesh->getPrimitiveType() == Mesh::TRIANGLES) | (_mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP);
     unsigned int partCount = _mesh->getPartCount();
     if (partCount == 0)
     {
         // No mesh parts (index buffers).
         if (_material)
         {
+            GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
+
             Technique* technique = _material->getTechnique();
-            unsigned int techniqueCount = technique->getPassCount();
-            for (unsigned int i = 0; i < techniqueCount; ++i)
+            unsigned int passCount = technique->getPassCount();
+            for (unsigned int i = 0; i < passCount; ++i)
             {
                 Pass* pass = technique->getPass(i);
                 pass->bind();
-                if (wireframe)
+                if (wireframe && (_mesh->getPrimitiveType() == Mesh::TRIANGLES || _mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP))
                 {
                     unsigned int vertexCount = _mesh->getVertexCount();
                     for (unsigned int j = 0; j < vertexCount; j += 3)
@@ -267,13 +289,13 @@ void Model::draw(bool wireframe)
             if (material)
             {
                 Technique* technique = material->getTechnique();
-                unsigned int techniqueCount = technique->getPassCount();
-                for (unsigned int j = 0; j < techniqueCount; ++j)
+                unsigned int passCount = technique->getPassCount();
+                for (unsigned int j = 0; j < passCount; ++j)
                 {
                     Pass* pass = technique->getPass(j);
                     pass->bind();
                     GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, part->_indexBuffer) );
-                    if (wireframe)
+                    if (wireframe && (_mesh->getPrimitiveType() == Mesh::TRIANGLES || _mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP))
                     {
                         unsigned int indexCount = part->getIndexCount();
                         unsigned int indexSize = 0;

@@ -174,20 +174,6 @@ void Material::setTechnique(unsigned int index)
     }
 }
 
-void Material::setMeshBinding(Mesh* mesh)
-{
-    // Call setMeshBinding() on all passes in all techniques
-    for (unsigned int i = 0, tCount = _techniques.size(); i < tCount; ++i)
-    {
-        Technique* t = _techniques[i];
-        for (unsigned int j = 0, pCount = t->getPassCount(); j < pCount; ++j)
-        {
-            Pass* p = t->getPass(j);
-            p->setMeshBinding(mesh);
-        }
-    }
-}
-
 bool Material::loadTechnique(Material* material, Properties* techniqueProperties)
 {
     // Create a new technique

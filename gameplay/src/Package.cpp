@@ -1034,25 +1034,19 @@ Mesh* Package::loadMesh(const char* id, bool loadWithMeshRBSupport, const char* 
     }
 
     // Create VertexFormat
-    VertexFormat* vertexFormat = VertexFormat::create(vertexElements, vertexElementCount);
+    VertexFormat vertexFormat(vertexElements, vertexElementCount);
     SAFE_DELETE_ARRAY(vertexElements);
-    if (vertexFormat == NULL)
-    {
-        return NULL;
-    }
 
     // Read vertex data
     unsigned int vertexByteCount;
     if (fread(&vertexByteCount, 4, 1, _file) != 1 || vertexByteCount == 0)
     {
-        SAFE_RELEASE(vertexFormat);
         return NULL;
     }
     unsigned char* vertexData = new unsigned char[vertexByteCount];
     if (fread(vertexData, 1, vertexByteCount, _file) != vertexByteCount)
     {
         LOG_ERROR_VARG("Failed to read %d vertex data bytes for mesh: %s", vertexByteCount, id);
-        SAFE_RELEASE(vertexFormat);
         return NULL;
     }
 
@@ -1062,20 +1056,17 @@ Mesh* Package::loadMesh(const char* id, bool loadWithMeshRBSupport, const char* 
     if (fread(&boundsMin.x, 4, 3, _file) != 3 || fread(&boundsMax.x, 4, 3, _file) != 3)
     {
         LOG_ERROR_VARG("Failed to read bounding box for mesh: %s", id);
-        SAFE_RELEASE(vertexFormat);
         return NULL;
     }
     if (fread(&boundsCenter.x, 4, 3, _file) != 3 || fread(&boundsRadius, 4, 1, _file) != 1)
     {
         LOG_ERROR_VARG("Failed to read bounding sphere for mesh: %s", id);
-        SAFE_RELEASE(vertexFormat);
         return NULL;
     }
 
     // Create Mesh
-    int vertexCount = vertexByteCount / vertexFormat->getVertexSize();
+    int vertexCount = vertexByteCount / vertexFormat.getVertexSize();
     Mesh* mesh = Mesh::createMesh(vertexFormat, vertexCount, false);
-    SAFE_RELEASE(vertexFormat);
     if (mesh == NULL)
     {
         LOG_ERROR_VARG("Failed to create mesh: %s", id);

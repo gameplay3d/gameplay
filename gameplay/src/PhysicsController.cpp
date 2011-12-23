@@ -347,7 +347,7 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
     unsigned int vertexCount = data->mesh->getVertexCount();
     body->_vertexData = new float[vertexCount * 3];
     Vector3 v;
-    int vertexStride = data->mesh->getVertexFormat()->getVertexSize();
+    int vertexStride = data->mesh->getVertexFormat().getVertexSize();
     for (unsigned int i = 0; i < vertexCount; i++)
     {
         v.set(*((float*)&data->vertexData[i * vertexStride + 0 * sizeof(float)]),

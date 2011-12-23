@@ -7,6 +7,7 @@
 #include "Rectangle.h"
 #include "Matrix.h"
 #include "RenderState.h"
+#include "MeshBatch.h"
 
 namespace gameplay
 {
@@ -194,11 +195,11 @@ public:
     RenderState::StateBlock* getStateBlock() const;
 
     /**
-     * Gets the effect used by this batch.
+     * Gets the material used by this batch.
      * 
-     * @return The effect.
+     * @return The material.
      */
-    Effect* getEffect();
+    Material* getMaterial();
 
     /**
      * Sets a custom projection matrix to use with the sprite batch.
@@ -226,32 +227,13 @@ private:
      */
     SpriteBatch(const SpriteBatch& copy);
 
-    void growBatch();
+    const Matrix& getOrthoMatrix() const;
 
-    void resizeBatch(unsigned int capacity);
-
-    Texture* _texture;
-    Effect* _effect;
-    RenderState::StateBlock* _stateBlock;
-    Texture::Sampler* _sampler;
-    Uniform* _samplerUniform;
-    Uniform* _projectionUniform;
+    MeshBatch* _batch;
     bool _customEffect;
-    VertexAttribute _vaPosition;
-    VertexAttribute _vaTexCoord;
-    VertexAttribute _vaColor;
     float _textureWidthRatio;
     float _textureHeightRatio;
-    unsigned int _capacity;
-    unsigned int _count;
-    float* _vertices;
-    float* _verticesPtr;
-    unsigned short* _indices;
-    unsigned short* _indicesPtr;
-    unsigned short _index;
-    bool _drawing;
-    Matrix* _projectionMatrix;
-    bool _customProjectionMatrix;
+    mutable Matrix _projectionMatrix;
 };
 
 }
