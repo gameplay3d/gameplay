@@ -193,7 +193,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     NSPoint point = [event locationInWindow];
     if (__leftMouseDown)
     {
-        _game->touchEvent(Touch::EVENT_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
+        _game->touchEvent(Touch::TOUCH_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
     }
 }
 
@@ -456,37 +456,37 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
             _game->keyEvent((flags & NSShiftKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_LEFT_SHIFT);
             break;
         case 0x3C:
-            _game->keyEvent((flags & NSShiftKeyMask) ? Keyboard::KEYEVENT_DOWN : Keyboard::KEY_RELEASE, Keyboard::KEY_RIGHT_SHIFT);
+            _game->keyEvent((flags & NSShiftKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_RIGHT_SHIFT);
             break;
         case 0x3A:
-            _game->keyEvent((flags & NSAlternateKeyMask) ? Keyboard::KEYEVENT_DOWN : Keyboard::KEY_RELEASE, Keyboard::KEY_LEFT_ALT);
+            _game->keyEvent((flags & NSAlternateKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_LEFT_ALT);
             break;
         case 0x3D:
-            _game->keyEvent((flags & NSAlternateKeyMask) ? Keyboard::KEYEVENT_DOWN : Keyboard::KEY_RELEASE, Keyboard::KEY_RIGHT_ALT);
+            _game->keyEvent((flags & NSAlternateKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_RIGHT_ALT);
             break;
         case 0x3B:
-            _game->keyEvent((flags & NSControlKeyMask) ? Keyboard::KEYEVENT_DOWN : Keyboard::KEY_RELEASE, Keyboard::KEY_LEFT_CTRL);
+            _game->keyEvent((flags & NSControlKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_LEFT_CTRL);
             break;
         case 0x3E:
-            _game->keyEvent((flags & NSControlKeyMask) ? Keyboard::KEYEVENT_DOWN : Keyboard::KEY_RELEASE, Keyboard::KEY_RIGHT_CTRL);
+            _game->keyEvent((flags & NSControlKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_RIGHT_CTRL);
             break;
         case 0x37:
-            _game->keyEvent((flags & NSCommandKeyMask) ? Keyboard::KEYEVENT_DOWN : Keyboard::KEY_RELEASE, Keyboard::KEY_LEFT_HYPER);
+            _game->keyEvent((flags & NSCommandKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_LEFT_HYPER);
             break;
         case 0x36:
-            _game->keyEvent((flags & NSCommandKeyMask) ? Keyboard::KEYEVENT_DOWN : Keyboard::KEY_RELEASE, Keyboard::KEY_RIGHT_HYPER);
+            _game->keyEvent((flags & NSCommandKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_RIGHT_HYPER);
             break;
     }
 }
 
 - (void) keyDown: (NSEvent*) event
 {    
-    _game->keyEvent(getKey([event keyCode], [event modifierFlags]), Keyboard::KEYEVENT_PRESS);
+    _game->keyEvent(Keyboard::KEY_PRESS, getKey([event keyCode], [event modifierFlags]));
 }
 
 - (void) keyUp: (NSEvent*) event
 {    
-    _game->keyEvent(getKey([event keyCode], [event modifierFlags]), Keyboard::KEY_RELEASE);
+    _game->keyEvent(Keyboard::KEY_RELEASE, getKey([event keyCode], [event modifierFlags]));
 }
 
 @end
