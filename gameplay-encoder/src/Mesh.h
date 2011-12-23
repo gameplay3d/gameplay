@@ -1,15 +1,21 @@
 #ifndef MESH_H_
 #define MESH_H_
 
+#include "Base.h"
 #include "Object.h"
 #include "MeshPart.h"
 #include "VertexElement.h"
+#include "BoundingVolume.h"
 
 namespace gameplay
 {
 
+class Model;
+
 class Mesh : public Object
 {
+    friend class Model;
+
 public:
 
     /**
@@ -37,6 +43,10 @@ public:
     void addVetexAttribute(unsigned int usage, unsigned int count);
 
     size_t getVertexCount() const;
+    const Vertex& getVertex(unsigned int index) const;
+
+    size_t getVertexElementCount() const;
+    const VertexElement& getVertexElement(unsigned int index) const;
 
     /**
      * Returns true if this MeshPart contains the given Vertex.
@@ -50,15 +60,15 @@ public:
 
     unsigned int getVertexIndex(const Vertex& vertex);
 
+    /**
+     * Generates a heightmap with the given filename for this mesh.
+     */
+    void generateHeightmap(const char* filename);
+
+    Model* model;
     std::vector<Vertex> vertices;
     std::vector<MeshPart*> parts;
-    struct
-    {
-        Vector3 min;
-        Vector3 max;
-        Vector3 center;
-        float radius;
-    } bounds;
+    BoundingVolume bounds;
     std::map<Vertex, unsigned int> vertexLookupTable;
 
 private:
@@ -66,9 +76,10 @@ private:
     void computeBounds();
 
 private:
-    std::vector<VertexElement> _vertexFormats;
+    std::vector<VertexElement> _vertexFormat;
 
 };
 
 }
+
 #endif

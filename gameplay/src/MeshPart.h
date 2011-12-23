@@ -1,7 +1,3 @@
-/*
- * MeshPart.h
- */
-
 #ifndef MESHPART_H_
 #define MESHPART_H_
 
@@ -59,7 +55,7 @@ public:
      *
      * @return The index buffer object handle.
      */
-    IndexBuffer getIndexBuffer() const;
+    IndexBufferHandle getIndexBuffer() const;
 
     /**
      * Determines if the indices are dynamic.
@@ -106,7 +102,7 @@ private:
     Mesh::PrimitiveType _primitiveType;
     Mesh::IndexFormat _indexFormat;
     unsigned int _indexCount;
-    IndexBuffer _indexBuffer;
+    IndexBufferHandle _indexBuffer;
     bool _dynamic;
 };
 

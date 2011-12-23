@@ -4,6 +4,15 @@
     <Filter Include="src">
       <UniqueIdentifier>{c4d4da1c-81e2-4944-901c-200e1c4d80e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{4a30ac71-e135-47d3-9f56-baac7cffe64c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\shaders">
+      <UniqueIdentifier>{be0b36f1-49ed-4a06-9f1f-57c654a554fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\textures">
+      <UniqueIdentifier>{7c4ef2fb-63f2-4d5a-b31e-0dc78329abfd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp">
@@ -43,9 +52,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Game.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Input.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Light.cpp">
@@ -162,6 +168,60 @@
     <ClCompile Include="src\RenderState.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\gameplay-main-qnx.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameplay-main-win32.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DebugNew.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsRigidBody.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsConstraint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsHingeConstraint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsFixedConstraint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsGenericConstraint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsSocketConstraint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsSpringConstraint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsMotionState.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneLoader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Image.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderTarget.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FrameBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DepthStencilTarget.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshBatch.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -210,18 +270,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\gameplay.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gameplay-main.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gameplay-main-qnx.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gameplay-main-win32.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Input.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Light.h">
@@ -332,8 +380,186 @@
     <ClInclude Include="src\RenderState.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Tree.h">
+    <ClInclude Include="src\DebugNew.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\PhysicsController.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsMotionState.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsRigidBody.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsSpringConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsFixedConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsGenericConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsHingeConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsSocketConstraint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneLoader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Image.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RenderTarget.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FrameBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DepthStencilTarget.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Keyboard.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Touch.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshBatch.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\bumped-specular.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored-specular.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored-specular.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\diffuse.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\diffuse.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\diffuse-specular.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\diffuse-specular.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\parallax.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\parallax.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\parallax-specular.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\parallax-specular.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\solid.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\solid.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\textured.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\textured.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\bumped.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\bumped.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\bumped-specular.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="src\gameplay-main-macos.mm">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\PlatformMacOS.mm">
+      <Filter>src</Filter>
+    </None>
+    <None Include="res\textures\particle-default.png">
+      <Filter>res\textures</Filter>
+    </None>
+    <None Include="src\Curve.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Game.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Image.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\MeshBatch.inl">
+      <Filter>src</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\PhysicsFixedConstraint.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\BoundingBox.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\PhysicsGenericConstraint.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\BoundingSphere.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\PhysicsSpringConstraint.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Matrix.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\PhysicsRigidBody.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Plane.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Quaternion.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Ray.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Vector2.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Vector3.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Vector4.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\PhysicsConstraint.inl">
+      <Filter>src</Filter>
+    </None>
   </ItemGroup>
 </Project>

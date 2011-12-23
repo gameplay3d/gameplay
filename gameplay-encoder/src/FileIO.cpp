@@ -1,10 +1,10 @@
+#include "Base.h"
 #include "FileIO.h"
-#include <assert.h>
 
 namespace gameplay
 {
 
-// Writing ot a binary file //
+// Writing out a binary file //
 
 void write(unsigned char value, FILE* file)
 {
@@ -55,7 +55,7 @@ void write(float value, FILE* file)
 }
 void write(const float* values, int length, FILE* file)
 {
-    for (int i = 0; i < length; i++)
+    for (int i = 0; i < length; ++i)
     {
         write(values[i], file);
     }
@@ -77,8 +77,8 @@ void writeZero(FILE* file)
 
 void fprintfElement(FILE* file, const char* elementName, const float values[], int length)
 {
-    fprintf(file, "<%s>", elementName);
-    for (int i = 0; i < length; i++)
+    fprintf(file, "<%s count=\"%d\">", elementName, length);
+    for (int i = 0; i < length; ++i)
     {
         fprintf(file, "%f ", values[i]);
     }
@@ -102,7 +102,7 @@ void fprintfElement(FILE* file, const char* elementName, unsigned int value)
 }
 void fprintfElement(FILE* file, const char* elementName, unsigned char value)
 {
-    fprintf(file, "<%s>%u</%s>\n", elementName, value, (unsigned int)elementName);
+    fprintf(file, "<%s>%u</%s>\n", elementName, value, elementName);
 }
 
 void fprintfMatrix4f(FILE* file, const float* m)
@@ -142,6 +142,42 @@ void skipString(FILE* file)
 void skipUint(FILE* file)
 {
     fseek(file, sizeof(unsigned int), SEEK_CUR);
+}
+
+void writeVectorBinary(const Vector2& v, FILE* file)
+{
+    write(v.x, file);
+    write(v.y, file);
+}
+
+void writeVectorText(const Vector2& v, FILE* file)
+{
+    fprintf(file, "%f %f\n", v.x, v.y);
+}
+
+void writeVectorBinary(const Vector3& v, FILE* file)
+{
+    write(v.x, file);
+    write(v.y, file);
+    write(v.z, file);
+}
+
+void writeVectorText(const Vector3& v, FILE* file)
+{
+    fprintf(file, "%f %f %f\n", v.x, v.y, v.z);
+}
+
+void writeVectorBinary(const Vector4& v, FILE* file)
+{
+    write(v.x, file);
+    write(v.y, file);
+    write(v.z, file);
+    write(v.w, file);
+}
+
+void writeVectorText(const Vector4& v, FILE* file)
+{
+    fprintf(file, "%f %f %f %f\n", v.x, v.y, v.z, v.w);
 }
 
 }

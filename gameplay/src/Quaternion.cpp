@@ -1,7 +1,3 @@
-/*
- * Quaternion.cpp
- */
-
 #include "Base.h"
 #include "Quaternion.h"
 
@@ -23,6 +19,15 @@ Quaternion::Quaternion(float* array)
     set(array);
 }
 
+Quaternion::Quaternion(const Matrix& m)
+{
+    set(m);
+}
+
+Quaternion::Quaternion(const Vector3& axis, float angle)
+{
+    set(axis, angle);
+}
 
 Quaternion::Quaternion(const Quaternion& copy)
 {
@@ -35,14 +40,14 @@ Quaternion::~Quaternion()
 
 const Quaternion& Quaternion::identity()
 {
-    static Quaternion* value = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
-    return *value;
+    static Quaternion value(0.0f, 0.0f, 0.0f, 1.0f);
+    return value;
 }
 
 const Quaternion& Quaternion::zero()
 {
-    static Quaternion* value = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
-    return *value;
+    static Quaternion value(0.0f, 0.0f, 0.0f, 0.0f);
+    return value;
 }
 
 bool Quaternion::isIdentity() const
@@ -162,7 +167,7 @@ void Quaternion::normalize(Quaternion* dst) const
     if (n == 1.0f)
         return;
 
-    n = sqrtf(n);
+    n = sqrt(n);
     // Too close to zero.
     if (n < 0.000001f)
         return;
@@ -192,15 +197,14 @@ void Quaternion::set(float* array)
     w = array[3];
 }
 
+void Quaternion::set(const Matrix& m)
+{
+    Quaternion::createFromRotationMatrix(m, this);
+}
+
 void Quaternion::set(const Vector3& axis, float angle)
 {
-    Quaternion rotationQuat;
-    Quaternion::createFromAxisAngle(axis, angle, &rotationQuat);
-
-    this->x = rotationQuat.x;
-    this->y = rotationQuat.y;
-    this->z = rotationQuat.z;
-    this->w = rotationQuat.w;
+    Quaternion::createFromAxisAngle(axis, angle, this);
 }
 
 void Quaternion::set(const Quaternion& q)
@@ -274,6 +278,12 @@ void Quaternion::slerp(const Quaternion& q1, const Quaternion& q2, float t, Quat
     else if (t == 1.0f)
     {
         memcpy(dst, &q2, sizeof(float) * 4);
+        return;
+    }
+
+    if (q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w)
+    {
+        memcpy(dst, &q1, sizeof(float) * 4);
         return;
     }
 

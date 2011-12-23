@@ -1,7 +1,3 @@
-/*
- * Vector3.cpp
- */
-
 #include "Base.h"
 #include "Vector3.h"
 
@@ -31,6 +27,21 @@ Vector3::Vector3(const Vector3& p1, const Vector3& p2)
 Vector3::Vector3(const Vector3& copy)
 {
     set(copy);
+}
+
+Vector3 Vector3::fromColor(unsigned int color)
+{
+    float components[3];
+    int componentIndex = 0;
+    for (int i = 2; i >= 0; --i)
+    {
+        int component = (color >> i*8) & 0x0000ff;
+
+        components[componentIndex++] = static_cast<float>(component) / 255.0f;
+    }
+
+    Vector3 value(components);
+    return value;
 }
 
 Vector3::~Vector3()
@@ -83,7 +94,7 @@ float Vector3::angle(const Vector3& v1, const Vector3& v2)
     float dy = v1.z * v2.x - v1.x * v2.z;
     float dz = v1.x * v2.y - v1.y * v2.x;
 
-    return atan2f(sqrtf(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
+    return atan2f(sqrt(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
 }
 
 void Vector3::add(const Vector3& v)
@@ -180,7 +191,7 @@ float Vector3::distance(const Vector3& v) const
     float dy = v.y - y;
     float dz = v.z - z;
 
-    return sqrtf(dx * dx + dy * dy + dz * dz);
+    return sqrt(dx * dx + dy * dy + dz * dz);
 }
 
 float Vector3::distanceSquared(const Vector3& v) const
@@ -204,7 +215,7 @@ float Vector3::dot(const Vector3& v1, const Vector3& v2)
 
 float Vector3::length() const
 {
-    return sqrtf(x * x + y * y + z * z);
+    return sqrt(x * x + y * y + z * z);
 }
 
 float Vector3::lengthSquared() const

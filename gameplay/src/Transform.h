@@ -1,7 +1,3 @@
-/*
- * Transform.h
- */
-
 #ifndef TRANSFORM_H_
 #define TRANSFORM_H_
 
@@ -55,21 +51,6 @@ public:
     static const int ANIMATE_SCALE_Z = 4;
 
     /**
-     * Scale xy animation property. Data=sx,sy
-     */
-    static const int ANIMATE_SCALE_XY = 5;
-
-    /**
-     * Scale xz animation property. Data=sx,sz
-     */
-    static const int ANIMATE_SCALE_XZ = 6;
-
-    /**
-     * Scale yz animation property. Data=sy,sz
-     */
-    static const int ANIMATE_SCALE_YZ = 7;
-
-    /**
      * Rotation animation property. Data=qx,qy,qz,qw (as quaternion).
      */
     static const int ANIMATE_ROTATE = 8;
@@ -95,21 +76,6 @@ public:
     static const int ANIMATE_TRANSLATE_Z = 12;
 
     /**
-     * Translate xy animation property. Data=tx,ty
-     */
-    static const int ANIMATE_TRANSLATE_XY = 13;
-
-    /**
-     * Translate xz animation property. Data=tx,tz
-     */
-    static const int ANIMATE_TRANSLATE_XZ = 14;
-
-    /**
-     * Translate yz animation property. Data=ty,tz
-     */
-    static const int ANIMATE_TRANSLATE_YZ = 15;
-
-    /**
      * Rotation + Translation animation property (Rigid Body). Data=qx,qy,qz,qw,tx,ty,tz
      */
     static const int ANIMATE_ROTATE_TRANSLATE = 16;
@@ -130,8 +96,11 @@ public:
 
         /**
          * Handles when an transform has changed.
+         *
+         * @param transform The Transform object that was changed.
+         * @param cookie Cookie value that was specified when the listener was registered.
          */
-        virtual void transformChanged(Transform* transform) = 0;
+        virtual void transformChanged(Transform* transform, long cookie) = 0;
     };
 
     /**
@@ -717,8 +686,11 @@ public:
 
     /**
      * Adds a transform listener.
+     *
+     * @param listener The listener to add.
+     * @param cookie An optional long value that is passed to the specified listener when it is called..
      */
-    void addListener(Transform::Listener* listener);
+    void addListener(Transform::Listener* listener, long cookie = 0);
 
     /**
      * Removes a transform listener.
@@ -742,6 +714,12 @@ public:
 
 protected:
 
+    struct TransformListener
+    {
+        Listener* listener;
+        long cookie;
+    };
+
     void dirty();
     virtual void transformChanged();
 
@@ -750,7 +728,7 @@ protected:
     Vector3 _translation;
     mutable Matrix _matrix;
     mutable bool _matrixDirty;
-    std::vector<Transform::Listener*>* _listeners;
+    std::list<TransformListener>* _listeners;
 
 };
 
