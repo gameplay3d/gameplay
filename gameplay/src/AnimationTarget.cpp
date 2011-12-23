@@ -56,18 +56,6 @@ int AnimationTarget::getPropertyId(TargetType type, const char* propertyIdStr)
         {
             return Transform::ANIMATE_SCALE_Z;
         }
-        else if (strcmp(propertyIdStr, "ANIMATE_SCALE_XY") == 0)
-        {
-            return Transform::ANIMATE_SCALE_XY;
-        }
-        else if (strcmp(propertyIdStr, "ANIMATE_SCALE_XZ") == 0)
-        {
-            return Transform::ANIMATE_SCALE_XZ;
-        }
-        else if (strcmp(propertyIdStr, "ANIMATE_SCALE_YZ") == 0)
-        {
-            return Transform::ANIMATE_SCALE_YZ;
-        }
         else if (strcmp(propertyIdStr, "ANIMATE_ROTATE") == 0)
         {
             return Transform::ANIMATE_ROTATE;
@@ -87,18 +75,6 @@ int AnimationTarget::getPropertyId(TargetType type, const char* propertyIdStr)
         else if (strcmp(propertyIdStr, "ANIMATE_TRANSLATE_Z") == 0)
         {
             return Transform::ANIMATE_TRANSLATE_Z;
-        }
-        else if (strcmp(propertyIdStr, "ANIMATE_TRANSLATE_XY") == 0)
-        {
-            return Transform::ANIMATE_TRANSLATE_XY;
-        }
-        else if (strcmp(propertyIdStr, "ANIMATE_TRANSLATE_XZ") == 0)
-        {
-            return Transform::ANIMATE_TRANSLATE_XZ;
-        }
-        else if (strcmp(propertyIdStr, "ANIMATE_TRANSLATE_YZ") == 0)
-        {
-            return Transform::ANIMATE_TRANSLATE_YZ;
         }
         else if (strcmp(propertyIdStr, "ANIMATE_ROTATE_TRANSLATE") == 0)
         {
