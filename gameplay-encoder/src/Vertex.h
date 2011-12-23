@@ -21,7 +21,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~Vertex(void);
+    ~Vertex(void);
 
     Vector3 position;
     Vector3 normal;
@@ -73,8 +73,6 @@ public:
             blendWeights==v.blendWeights && blendIndices==v.blendIndices;
     }
 
-    void reset();
-
     /**
      * Returns the size of this vertex in bytes.
      */
@@ -89,7 +87,12 @@ public:
      * Writes this vertex to a text file stream.
      */
     void writeText(FILE* file) const;
-};
 
+    /**
+     * Normalizes the blend weights of this vertex so that they add up to 1.0.
+     */
+    void normalizeBlendWeight();
+};
 }
+
 #endif

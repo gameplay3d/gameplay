@@ -1,14 +1,10 @@
-/*
- * CharacterGame
- */
-
 #include "CharacterGame.h"
 
 // Declare our game instance
 CharacterGame game; 
 
 CharacterGame::CharacterGame()
-    : _animationState(0)
+    : _font(NULL), _scene(NULL), _modelNode(NULL), _animation(NULL), _animationState(0), _rotateX(0)
 {
 }
 
@@ -18,55 +14,38 @@ CharacterGame::~CharacterGame()
 
 void CharacterGame::initialize()
 {
-    // Load mesh from file
-    Package* pkg = Package::create("res/models/Seymour.gpb");
+    // Load the font.
+    _font = Font::create("res/arial40.gpb");
+    
+    // Load mesh from file.
+    Package* pkg = Package::create("res/seymour.gpb");
     _scene = pkg->loadScene();
     SAFE_RELEASE(pkg);
 
-    Camera* camera = _scene->getActiveCamera();
-    if (!camera)
-    {
-        createDefaultCamera(_scene);
-    }
+    _modelNode = _scene->findNode("boyShape");
 
-    _scene->visit(this, &CharacterGame::getModelNode);
-    assert(_modelNode);
+    // Get directional light node.
+    Node* lightNode = _scene->findNode("directionalLight1");
 
-    Model* model = _modelNode->getModel();
-    assert(model);
+    // Load character's material from a .material file.
+    Material* meshMaterial = _modelNode->getModel()->setMaterial("res/seymour.material");
+    meshMaterial->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
+    
+    // Load character animations clips.
+    loadAnimationClips();
 
-    // Get spot light position and direction.
-    Node* spotLightNode = _scene->findNode("spotLight1");
+    // Get plane.
+    Node* planeNode = _scene->findNode("floor");
 
-    // Load character's material from a .material file
-    Material* meshMaterial = model->setMaterial("res/materials/character.material");
-    meshMaterial->getParameter("u_spotLightPosition")->bindValue(spotLightNode, &Node::getTranslationView);
-    meshMaterial->getParameter("u_spotLightDirection")->bindValue(spotLightNode, &Node::getForwardVectorView);
-    meshMaterial->getParameter("u_spotLightInnerAngleCos")->bindValue(spotLightNode->getLight(), &Light::getInnerAngleCos);
-    meshMaterial->getParameter("u_spotLightOuterAngleCos")->bindValue(spotLightNode->getLight(), &Light::getOuterAngleCos);
-
-    // Load character animations.
-    loadCharacterAnimations();
-
-    // Load plane.
-    Node* planeNode = _scene->findNode("pPlane1");
-    assert(planeNode);
-    Model* planeModel = planeNode->getModel();
-    assert(planeModel);
-
-    // Load material from a .material file.
-    Material* planeMaterial = planeModel->setMaterial("res/materials/plane.material");
-    planeMaterial->getParameter("u_spotLightPosition")->bindValue(spotLightNode, &Node::getTranslationView);
-    planeMaterial->getParameter("u_spotLightDirection")->bindValue(spotLightNode, &Node::getForwardVectorView);
-    planeMaterial->getParameter("u_spotLightInnerAngleCos")->bindValue(spotLightNode->getLight(), &Light::getInnerAngleCos);
-    planeMaterial->getParameter("u_spotLightOuterAngleCos")->bindValue(spotLightNode->getLight(), &Light::getOuterAngleCos);
-
-    // Load the font
-    _font = Font::create("res/fonts/arial16.gpb");
+    // Load planes material from a .material file.
+    Material* planeMaterial = planeNode->getModel()->setMaterial("res/floor.material");
+    planeMaterial->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
 }
 
 void CharacterGame::finalize()
 {
+    SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_font);
 }
 
 void CharacterGame::update(long elapsedTime)
@@ -79,45 +58,25 @@ void CharacterGame::render(long elapsedTime)
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
     // Draw our scene
-    _scene->visit(this, &CharacterGame::drawModel);
+    _scene->visit(this, &CharacterGame::drawScene);
 }
 
-void CharacterGame::drawModel(Node* node, long cookie)
+bool CharacterGame::drawScene(Node* node, void* cookie)
 {
     Model* model = node->getModel();
     if (model)
     {
         model->draw();
     }
+    return true;
 }
 
-void CharacterGame::getModelNode(Node* node, long cookie)
+void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    if (!_modelNode)
+
+    switch (evt)
     {
-        Model* model = node->getModel();
-        if (model)
-        {
-            _modelNode = node;
-        }
-    }
-}
-
-void CharacterGame::createDefaultCamera(Scene* scene)
-{
-    // create the camera and node for it
-    Node* node = scene->addNode("camera");
-    Camera* camera = Camera::createPerspective(45.0f, (float)getWidth() / (float)getHeight(), 1.0f, 100.0f);
-    node->setCamera(camera);
-    node->translate(0, 5.0f, 20.0f);
-    scene->setActiveCamera(camera);
-}
-
-void CharacterGame::touch(int x, int y, int touchEvent)
-{
-    switch (touchEvent)
-    {
-    case Input::TOUCHEVENT_PRESS:
+    case Touch::TOUCH_PRESS:
         {
             _rotateX = x;
             switch (_animationState)
@@ -146,12 +105,12 @@ void CharacterGame::touch(int x, int y, int touchEvent)
             _animationState = (_animationState + 1) % 5;
         }
         break;
-    case Input::TOUCHEVENT_RELEASE:
+    case Touch::TOUCH_RELEASE:
         {
             _rotateX = 0;
         }
         break;
-    case Input::TOUCHEVENT_MOVE:
+    case Touch::TOUCH_MOVE:
         {
             int deltaX = x - _rotateX;
             _rotateX = x;
@@ -163,11 +122,10 @@ void CharacterGame::touch(int x, int y, int touchEvent)
     };
 }
 
-void CharacterGame::loadCharacterAnimations()
+void CharacterGame::loadAnimationClips()
 {
     _animation = Game::getInstance()->getAnimationController()->getAnimation("movements");
-    _animation->createClips("res/animations/seymour.animation");
-
+    _animation->createClips("res/seymour-clips.animation");
     AnimationClip* clip = _animation->getClip("right_arm");
     clip->setActiveDuration(AnimationClip::REPEAT_INDEFINITE);
 }

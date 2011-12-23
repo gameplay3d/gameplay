@@ -1,11 +1,5 @@
-/*
- * VertexFormat.h
- */
-
 #ifndef VERTEXFORMAT_H_
 #define VERTEXFORMAT_H_
-
-#include "Ref.h"
 
 namespace gameplay
 {
@@ -16,7 +10,7 @@ namespace gameplay
  * A VertexFormat is immutable and cannot be changed
  * once created.
  */
-class VertexFormat : public Ref
+class VertexFormat
 {
 public:
 
@@ -75,17 +69,40 @@ public:
          * @param size The number of float values in the vertex element.
          */
         Element(Usage usage, unsigned int size);
+
+        /**
+         * Compares two vertex elements for equality.
+         *
+         * @param e The vertex element to compare.
+         *
+         * @return true if this element matches the specified one, false otherwise.
+         */
+        bool operator == (const Element& e) const;
+
+        /**
+         * Compares to vertex elements for inequality.
+         *
+         * @param e The vertex element to compare.
+         *
+         * @return true if this element does not matche the specified one, false otherwise.
+         */
+        bool operator != (const Element& e) const;
     };
 
     /**
-     * Returns a unique VertexFormat for the request vertex element layout.
+     * Constructs a new vertex format for the requested vertex element layout.
+     *
+     * The passed in element array is copied into the new VertexFormat.
      *
      * @param elements The list of vertex elements defining the vertex format.
      * @param elementCount The number of items in the elements array.
-     * 
-     * @return A unique VertexFormat object.
      */
-    static VertexFormat* create(const Element* elements, unsigned int elementCount);
+    VertexFormat(const Element* elements, unsigned int elementCount);
+
+    /**
+     * Destructor.
+     */
+    ~VertexFormat();
 
     /**
      * Returns the vertex element at the specified index.
@@ -106,20 +123,27 @@ public:
      */
     unsigned int getVertexSize() const;
 
+    /**
+     * Compares two vertex formats for equality.
+     *
+     * @param f The vertex format to compare.
+     *
+     * @return true if the elements in this VertexFormat matches the specified one, false otherwise.
+     */
+    bool operator == (const VertexFormat& f) const;
+
+    /**
+     * Compares to vertex formats for inequality.
+     *
+     * @param f The vertex format to compare.
+     *
+     * @return true if the elements in this VertexFormat are not equal to the specified one, false otherwise.
+     */
+    bool operator != (const VertexFormat& f) const;
+
 private:
 
-    /**
-     * Constructor.
-     */
-    VertexFormat();
-
-    /**
-     * Destructor.
-     */
-    ~VertexFormat();
-
-    Element* _elements;
-    unsigned int _elementCount;
+    std::vector<Element> _elements;
     unsigned int _vertexSize;
 };
 

@@ -1,7 +1,3 @@
-/*
- * Animation.cpp
- */
-
 #include "Base.h"
 #include "Animation.h"
 #include "AnimationController.h"
@@ -9,10 +5,8 @@
 #include "AnimationTarget.h"
 #include "Game.h"
 #include "Transform.h"
-#include <string.h>
 #include "Properties.h"
 
-#define ANIMATION_DEFAULT_CLIP_SUFFIX "__default__clip"
 #define ANIMATION_INDEFINITE_STR "INDEFINITE"
 #define ANIMATION_DEFAULT_CLIP 0
 #define ANIMATION_ROTATE_OFFSET 0
@@ -22,58 +16,57 @@ namespace gameplay
 {
 
 Animation::Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type)
-    : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0)
+    : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0), _defaultClip(NULL), _clips(NULL)
 {
     createChannel(target, propertyId, keyCount, keyTimes, keyValues, type);
-    createDefaultClip();
 }
 
 Animation::Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type)
-    : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0)
+    : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0), _defaultClip(NULL), _clips(NULL)
 {
     createChannel(target, propertyId, keyCount, keyTimes, keyValues, keyInValue, keyOutValue, type);
-    createDefaultClip();
 }
 
 Animation::~Animation()
 {
-    std::vector<Channel*>::iterator channelIter = _channels.begin();
-    
-    while (channelIter != _channels.end())
+    if (_defaultClip)
     {
-        SAFE_DELETE(*channelIter);
-        channelIter++;
+        _defaultClip->stop();
+        SAFE_RELEASE(_defaultClip);
     }
-    _channels.clear();
-    
-    std::vector<AnimationClip*>::iterator clipIter = _clips.begin();
-    
-    while (clipIter != _clips.end())
+
+    if (_clips)
     {
-        AnimationClip* clip = *clipIter;
-        SAFE_RELEASE(clip);
-        clipIter++;
+        std::vector<AnimationClip*>::iterator clipIter = _clips->begin();
+    
+        while (clipIter != _clips->end())
+        {   
+            AnimationClip* clip = *clipIter;
+            clip->stop();
+            SAFE_RELEASE(clip);
+            clipIter++;
+        }
+        _clips->clear();
     }
-    _clips.clear();
+    SAFE_DELETE(_clips);
 }
 
-Animation::Channel::Channel(AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration)
-    : _isRelative(false)
+Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration)
+    : _animation(animation), _target(target), _propertyId(propertyId), _curve(curve), _duration(duration)
 {
     // get property component count, and ensure the property exists on the AnimationTarget by getting the property component count.
-    assert(target->getAnimationPropertyComponentCount(propertyId));
+    assert(_target->getAnimationPropertyComponentCount(propertyId));
 
-    _target = target;
-    _target->addRef();
-    _propertyId = propertyId;
-    _curve = curve;
-    _duration = duration;
+    _animation->addRef();
+
+    _target->addChannel(this);
 }
 
 Animation::Channel::~Channel()
 {
-    SAFE_RELEASE(_target);
     SAFE_DELETE(_curve);
+    _animation->removeChannel(this);
+    SAFE_RELEASE(_animation);
 }
 
 const char* Animation::getId() const
@@ -90,14 +83,97 @@ void Animation::createClips(const char* animationFile)
 {
     assert(animationFile);
 
-    Properties* pAnim = Properties::create(animationFile);
-    assert(pAnim);
+    Properties* properties = Properties::create(animationFile);
+    assert(properties);
 
-    Properties* animation = pAnim->getNextNamespace();
-    int frameCount = animation->getInt("frameCount");
+    Properties* pAnimation = properties->getNextNamespace();
+    assert(pAnimation);
+    
+    int frameCount = pAnimation->getInt("frameCount");
+    assert(frameCount > 0);
 
-    const Properties* pClip = animation->getNextNamespace();
-    while (pClip != NULL)
+    createClips(pAnimation, (unsigned int)frameCount);
+
+    SAFE_DELETE(properties);
+}
+
+AnimationClip* Animation::createClip(const char* id, unsigned long start, unsigned long end)
+{
+    AnimationClip* clip = new AnimationClip(id, this, start, end);
+    addClip(clip);
+    return clip;
+}
+
+AnimationClip* Animation::getClip(const char* id)
+{
+    // If id is NULL return the default clip.
+    if (id == NULL)
+    {
+        if (_defaultClip == NULL)
+            createDefaultClip();
+
+        return _defaultClip;
+    }
+    else
+    {
+        return findClip(id);
+    }
+}
+
+void Animation::play(const char* id)
+{
+    // If id is NULL, play the default clip.
+    if (id == NULL)
+    {
+        if (_defaultClip == NULL)
+            createDefaultClip();
+        
+        _defaultClip->play();
+    }
+    else
+    {
+        // Find animation clip.. and play.
+        AnimationClip* clip = findClip(id);
+        if (clip != NULL)
+        {
+            clip->play();
+        }
+    }
+}
+
+void Animation::stop(const char* id)
+{
+    // If id is NULL, play the default clip.
+    if (id == NULL)
+    {
+        if (_defaultClip == NULL)
+            createDefaultClip();
+
+        _defaultClip->stop();
+    }
+    else
+    {
+        // Find animation clip.. and play.
+        AnimationClip* clip = findClip(id);
+        if (clip != NULL)
+        {
+            clip->stop();
+        }
+    }
+}
+
+void Animation::createDefaultClip()
+{
+    _defaultClip = new AnimationClip("default_clip", this, 0.0f, _duration);
+}
+
+void Animation::createClips(Properties* animationProperties, unsigned int frameCount)
+{   
+    assert(animationProperties);
+    
+    Properties* pClip = animationProperties->getNextNamespace();
+    
+    while (pClip != NULL && std::strcmp(pClip->getNamespace(), "clip") == 0)
     {
         int begin = pClip->getInt("begin");
         int end = pClip->getInt("end");
@@ -107,7 +183,7 @@ void Animation::createClips(const char* animationFile)
         const char* repeat = pClip->getString("repeatCount");
         if (repeat)
         {
-            if (((std::string)repeat).compare(ANIMATION_INDEFINITE_STR) == 0)
+            if (strcmp(repeat, ANIMATION_INDEFINITE_STR) == 0)
             {
                 clip->setRepeatCount(AnimationClip::REPEAT_INDEFINITE);
             }
@@ -127,73 +203,34 @@ void Animation::createClips(const char* animationFile)
             clip->setSpeed(value);
         }
 
-        pClip = animation->getNextNamespace();
-    }
-
-    SAFE_DELETE(pAnim);
-}
-
-AnimationClip* Animation::createClip(const char* id, unsigned long start, unsigned long end)
-{
-    if (findClip(id) != NULL)
-    {
-        return NULL;
-    }
-    
-    AnimationClip* clip = new AnimationClip(id, this, start, end);
-
-    addClip(clip);
-
-    return clip;
-}
-
-AnimationClip* Animation::getClip(const char* id)
-{
-    // If id is NULL return the default clip.
-    if (id == NULL)
-    {
-        return _clips[ANIMATION_DEFAULT_CLIP];
-    }
-    else
-    {
-        return findClip(id);
+        pClip = animationProperties->getNextNamespace();
     }
 }
 
-void Animation::play(const char* id)
+void Animation::addClip(AnimationClip* clip)
 {
-    // If id is NULL, play the default clip.
-    if (id == NULL)
+    if (_clips == NULL)
+        _clips = new std::vector<AnimationClip*>;
+
+    _clips->push_back(clip);
+}
+
+AnimationClip* Animation::findClip(const char* id) const
+{
+    if (_clips)
     {
-        _clips[ANIMATION_DEFAULT_CLIP]->play();
-    }
-    else
-    {
-        // Find animation clip.. and play.
-        AnimationClip* clip = findClip(id);
-        if (clip != NULL)
+        AnimationClip* clip = NULL;
+        unsigned int clipCount = _clips->size();
+        for (unsigned int i = 0; i < clipCount; i++)
         {
-            clip->play();
+            clip = _clips->at(i);
+            if (clip->_id.compare(id) == 0)
+            {
+                return _clips->at(i);
+            }
         }
     }
-}
-
-void Animation::stop(const char* id)
-{
-    // If id is NULL, play the default clip.
-    if (id == NULL)
-    {
-        _clips[ANIMATION_DEFAULT_CLIP]->stop();
-    }
-    else
-    {
-        // Find animation clip.. and play.
-        AnimationClip* clip = findClip(id);
-        if (clip != NULL)
-        {
-            clip->stop();
-        }
-    }
+    return NULL;
 }
 
 Animation::Channel* Animation::createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type)
@@ -203,18 +240,7 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
 
     Curve* curve = new Curve(keyCount, propertyComponentCount);
     if (target->_targetType == AnimationTarget::TRANSFORM)
-    {
-        switch (propertyId)
-        {
-        case Transform::ANIMATE_ROTATE:
-        case Transform::ANIMATE_ROTATE_TRANSLATE:
-            curve->addQuaternionOffset(ANIMATION_ROTATE_OFFSET);
-            break;
-        case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
-            curve->addQuaternionOffset(ANIMATION_SRT_OFFSET);
-            break;
-        }
-    }
+        setTransformRotationOffset(curve, propertyId);
 
     unsigned long lowest = keyTimes[0];
     unsigned long duration = keyTimes[keyCount-1] - lowest;
@@ -238,10 +264,8 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
 
     SAFE_DELETE(normalizedKeyTimes);
 
-    Channel* channel = new Channel(target, propertyId, curve, duration);
-
+    Channel* channel = new Channel(this, target, propertyId, curve, duration);
     addChannel(channel);
-
     return channel;
 }
 
@@ -252,18 +276,7 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
 
     Curve* curve = new Curve(keyCount, propertyComponentCount);
     if (target->_targetType == AnimationTarget::TRANSFORM)
-    {
-        switch (propertyId)
-        {
-        case Transform::ANIMATE_ROTATE:
-        case Transform::ANIMATE_ROTATE_TRANSLATE:
-            curve->addQuaternionOffset(ANIMATION_ROTATE_OFFSET);
-            break;
-        case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
-            curve->addQuaternionOffset(ANIMATION_SRT_OFFSET);
-            break;
-        }
-    }
+        setTransformRotationOffset(curve, propertyId);
     
     unsigned long lowest = keyTimes[0];
     unsigned long duration = keyTimes[keyCount-1] - lowest;
@@ -287,10 +300,8 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
 
     SAFE_DELETE(normalizedKeyTimes);
 
-    Channel* channel = new Channel(target, propertyId, curve, duration);
-
+    Channel* channel = new Channel(this, target, propertyId, curve, duration);
     addChannel(channel);
-
     return channel;
 }
 
@@ -302,28 +313,41 @@ void Animation::addChannel(Channel* channel)
         _duration = channel->_duration;
 }
 
-void Animation::createDefaultClip()
+void Animation::removeChannel(Channel* channel)
 {
-    std::string clipId = _id + ANIMATION_DEFAULT_CLIP_SUFFIX;
-    _clips.push_back(new AnimationClip(clipId.c_str(), this, 0.0f, _duration));
-}
-
-void Animation::addClip(AnimationClip* clip)
-{
-    _clips.push_back(clip);
-}
-
-AnimationClip* Animation::findClip(const char* id) const
-{
-    unsigned int clipCount = _clips.size();
-    for (unsigned int i = 0; i < clipCount; i++)
+    std::vector<Animation::Channel*>::iterator itr = _channels.begin();
+    while (itr != _channels.end())
     {
-        if (_clips.at(i)->_id.compare(id) == 0)
+        Animation::Channel* chan = *itr;
+        if (channel == chan) 
         {
-            return _clips.at(i);
+            _channels.erase(itr);
+            itr = _channels.end();
+        }
+        else
+        {
+            itr++;
         }
     }
-    return NULL;
+
+    if (_channels.empty())
+        _controller->destroyAnimation(this);
+}
+
+void Animation::setTransformRotationOffset(Curve* curve, unsigned int propertyId)
+{
+    switch (propertyId)
+    {
+    case Transform::ANIMATE_ROTATE:
+    case Transform::ANIMATE_ROTATE_TRANSLATE:
+        curve->setQuaternionOffset(ANIMATION_ROTATE_OFFSET);
+        return;
+    case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
+        curve->setQuaternionOffset(ANIMATION_SRT_OFFSET);
+        return;
+    }
+
+    return;
 }
 
 }

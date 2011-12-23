@@ -1,10 +1,7 @@
-/*
- * Mesh.h
- */
-
 #ifndef MESH_H_
 #define MESH_H_
 
+#include "Ref.h"
 #include "VertexFormat.h"
 #include "Vector3.h"
 #include "BoundingBox.h"
@@ -51,7 +48,7 @@ public:
     };
 
     /**
-     * Constructs a basic static mesh with the specified vertex format.
+     * Constructs a new mesh with the specified vertex format.
      *
      * @param vertexFormat The vertex format.
      * @param vertexCount The number of vertices.
@@ -59,7 +56,7 @@ public:
      * 
      * @return The created mesh.
      */
-    static Mesh* createMesh(VertexFormat* vertexFormat, unsigned int vertexCount, bool dynamic = false);
+    static Mesh* createMesh(const VertexFormat& vertexFormat, unsigned int vertexCount, bool dynamic = false);
 
     /**
      * Creates a new textured 3D quad.
@@ -131,7 +128,7 @@ public:
      *
      * @return The vertex format.
      */
-    const VertexFormat* getVertexFormat() const;
+    const VertexFormat& getVertexFormat() const;
 
     /**
      * Gets the number of vertices in the mesh.
@@ -152,7 +149,7 @@ public:
      *
      * @return The vertex buffer object handle.
      */
-    VertexBuffer getVertexBuffer() const;
+    VertexBufferHandle getVertexBuffer() const;
 
     /**
      * Determines if the mesh is dynamic.
@@ -230,6 +227,15 @@ public:
      * setBoundingSphere methods are called to specify the mesh's
      * local bounds.
      *
+     * Meshes that are attached to a Model with a MeshSkin will have
+     * a bounding volume that is not neccessarily tight fighting on the
+     * Mesh vertices. Instead, the bounding volume will be an approximation
+     * that contains all possible vertex positions in all possible poses after
+     * skinning is applied. This is neccessary since skinning vertices 
+     * result in vertex positions that lie outside the original mesh bounds
+     * and could otherwise result in a bounding volume that does not fully
+     * contain an animated/skinned mesh.
+     *
      * @return The bounding box for the mesh.
      */
     const BoundingBox& getBoundingBox() const;
@@ -249,6 +255,15 @@ public:
      * empty bounding volumes until the setBoundingBox and/or
      * setBoundingSphere methods are called to specify the mesh's
      * local bounds.
+     *
+     * Meshes that are attached to a Model with a MeshSkin will have
+     * a bounding volume that is not neccessarily tight fighting on the
+     * Mesh vertices. Instead, the bounding volume will be an approximation
+     * that contains all possible vertex positions in all possible poses after
+     * skinning is applied. This is neccessary since skinning vertices 
+     * result in vertex positions that lie outside the original mesh bounds
+     * and could otherwise result in a bounding volume that does not fully
+     * contain an animated/skinned mesh.
      *
      * @return The bounding sphere for the mesh.
      */
@@ -271,7 +286,7 @@ private:
     /**
      * Constructor.
      */
-    Mesh();
+    Mesh(const VertexFormat& vertexFormat);
 
     /**
      * Constructor.
@@ -280,9 +295,9 @@ private:
      */
     Mesh(const Mesh& copy);
 
-    VertexFormat* _vertexFormat;
+    const VertexFormat _vertexFormat;
     unsigned int _vertexCount;
-    VertexBuffer _vertexBuffer;
+    VertexBufferHandle _vertexBuffer;
     PrimitiveType _primitiveType;
     unsigned int _partCount;
     MeshPart** _parts;

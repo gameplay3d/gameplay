@@ -1,7 +1,3 @@
-/*
- * AudioSource.h
- */
-
 #ifndef AUDIOSOURCE_H_
 #define AUDIOSOURCE_H_
 
@@ -37,13 +33,21 @@ public:
     };
 
     /**
-     * Create an audio source. This is used to instantiate an Audio Source. Currently only wav, au and raw files are supported.
+     * Create an audio source. This is used to instantiate an Audio Source. Currently only wav, au, raw and .audio files are supported.
      *
-     * @param path The relative location on disk of the sound file.
+     * @param path The relative location on disk of the sound file or .audio file.
      * 
-     * @return The newly created audio source, or NULL if an audio source with the given ID already exists.
+     * @return The newly created audio source, or NULL if an audio source cannot be created.
      */
     static AudioSource* create(const char* path);
+
+    /**
+     * Create an audio source from the given properties object.
+     * 
+     * @param properties The properties object defining the audio source (must have namespace equal to 'audio').
+     * @return The newly created audio source, or <code>NULL</code> if the audio source failed to load.
+     */
+    static AudioSource* create(Properties* properties);
 
     /**
      * Plays the audio source.
@@ -160,7 +164,7 @@ private:
     /**
      * @see Transform::Listener::transformChanged
      */
-    void transformChanged(Transform* transform);
+    void transformChanged(Transform* transform, long cookie);
 
     ALuint _alSource;
     AudioBuffer* _buffer;

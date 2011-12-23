@@ -1,7 +1,3 @@
-/*
- * Node.h
- */
-
 #ifndef NODE_H_
 #define NODE_H_
 
@@ -11,6 +7,7 @@
 #include "Model.h"
 #include "AudioSource.h"
 #include "ParticleEmitter.h"
+#include "PhysicsRigidBody.h"
 #include "BoundingBox.h"
 
 namespace gameplay
@@ -22,10 +19,11 @@ class Scene;
 /**
  * Defines a basic hierachial structure of transformation spaces.
  */
-class Node : public Transform
+class Node : public Transform, public Ref
 {
     friend class Scene;
     friend class Package;
+    friend class MeshSkin;
 
 public:
 
@@ -36,16 +34,6 @@ public:
     {
         NODE = 1,
         JOINT = 2
-    };
-
-    /**
-     * Defines types of bounding volumes for nodes.
-     */
-    enum BoundsType
-    {
-        NONE,
-        BOX,
-        SPHERE
     };
 
     /**
@@ -174,7 +162,7 @@ public:
      *
      * @return The world matrix of this node.
      */
-    const Matrix& getWorldMatrix() const;
+    virtual const Matrix& getWorldMatrix() const;
 
     /**
      * Gets the world view matrix corresponding to this node.
@@ -357,40 +345,64 @@ public:
     void setParticleEmitter(ParticleEmitter* emitter);
 
     /**
-     * Returns the bounding box for the Node, in world space.
+     * Returns the pointer to this node's physics rigid body or NULL.
      *
-     * The returned box is only meaningful for nodes who have a
-     * bounds type of BOUNDS_TYPE_BOX, which can be specified
-     * via the setBoundsType method. Additionally, bounding volumes
-     * are only meaningful for nodes that contain data which itself
-     * contains a bounding volume, such as Model/Mesh.
-     *
-     * @return The world-space bounding box for the node.
+     * @return The pointer to this node's physics rigid body or NULL.
      */
-    const BoundingBox& getBoundingBox() const;
+    PhysicsRigidBody* getPhysicsRigidBody() const;
+
+    /**
+     * Sets (or disables) the physics rigid body for this node.
+     * 
+     * Note: This is only allowed for nodes that have a model attached to them.
+     *
+     * @param type The type of rigid body to set; to disable the physics rigid
+     *      body, pass PhysicsRigidBody#SHAPE_NONE.
+     * @param mass The mass of the rigid body, in kilograms.
+     * @param friction The friction of the rigid body (between 0.0 and 1.0, where 0.0 is
+     *      minimal friction and 1.0 is maximal friction).
+     * @param restitution The restitution of the rigid body (this controls the bounciness of
+     *      the rigid body; between 0.0 and 1.0, where 0.0 is minimal bounciness and 1.0 is maximal bounciness).
+     * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
+     * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
+     */
+    void setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass = 0.0f, float friction = 0.5f,
+        float restitution = 0.0f, float linearDamping = 0.0f, float angularDamping = 0.0f);
+
+    /**
+     * Sets the physics rigid body for this node using the rigid body definition in the given file.
+     * 
+     * @param filePath The path to the file that contains the rigid body definition.
+     */
+    void setPhysicsRigidBody(const char* filePath);
+
+    /**
+     * Sets the physics rigid body for this node from the given properties object.
+     * 
+     * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidbody').
+     */
+    void setPhysicsRigidBody(Properties* properties);
 
     /**
      * Returns the bounding sphere for the Node, in world space.
      *
-     * The returned sphere is only meaningful for nodes who have a
-     * bounds type of BOUNDS_TYPE_SPHERE, which can be specified
-     * via the setBoundsType method. Additionally, bounding volumes
-     * are only meaningful for nodes that contain data which itself
-     * contains a bounding volume, such as Model/Mesh.
+     * The bounding sphere for a node represents the area, in world
+     * space, that the node contains. This includes the space occupied 
+     * by any child nodes as well as the space occupied by any data
+     * inside the node (such as models).
+     *
+     * Bounding spheres for nodes are rough approximations of the data
+     * contained within a node and they are intended for visibility
+     * testing or first-pass intersection testing only. They are not
+     * appropriate for accurate collision detection since they most often
+     * do not tightly contain a node's content.
+     *
+     * A node that does not occupy any space will return a bounding sphere
+     * with a center point equal to the node translation and a radius of zero.
      *
      * @return The world-space bounding sphere for the node.
      */
     const BoundingSphere& getBoundingSphere() const;
-
-    /**
-     * Returns the current bounding volume type of the node.
-     */
-    Node::BoundsType getBoundsType() const;
-
-    /**
-     * Sets the bounding volume type of the node.
-     */
-    void setBoundsType(Node::BoundsType type);
 
 protected:
 
@@ -415,29 +427,16 @@ protected:
     void remove();
 
     /**
-     * Called when a child is added to this item in the tree.
-     * 
-     * @param child The child that was added.
+     * Called when this Node's transform changes.
      */
-    virtual void childAdded(Node* child);
-
-    /**
-     * Called when a child is removed from this item in the tree.
-     *
-     * @param child The child that was removed.
-     */
-    virtual void childRemoved(Node* child);
-
-    /**
-     * Called when the parent of this node changes.
-     *
-     * @param oldParent The previous parent for this node.
-     */
-    virtual void parentChanged(Node* oldParent);
-
     void transformChanged();
 
     void hierarchyChanged();
+
+    /**
+     * Marks the bounding volume of the node as dirty.
+     */
+    void setBoundsDirty();
 
     Scene* _scene;
     std::string _id;
@@ -451,15 +450,11 @@ protected:
     Model* _model;
     AudioSource* _audioSource;
     ParticleEmitter* _particleEmitter;
+    PhysicsRigidBody* _physicsRigidBody;
     mutable Matrix _world;
     mutable int _dirtyBits;
     bool _notifyHierarchyChanged;
-    mutable union
-    {
-        BoundingBox* box;
-        BoundingSphere* sphere;
-    } _bounds;
-    BoundsType _boundsType;
+    mutable BoundingSphere _bounds;
 };
 
 }

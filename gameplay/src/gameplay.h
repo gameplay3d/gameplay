@@ -1,14 +1,9 @@
-/**
- * gameplay.h
- *
- * Includes all neccessary header files for gameplay library.
- */
-
 // Core
 #include "Base.h"
 #include "Platform.h"
 #include "Game.h"
-#include "Input.h"
+#include "Keyboard.h"
+#include "Touch.h"
 #include "FileSystem.h"
 #include "Package.h"
 
@@ -45,6 +40,9 @@
 #include "Font.h"
 #include "SpriteBatch.h"
 #include "ParticleEmitter.h"
+#include "FrameBuffer.h"
+#include "RenderTarget.h"
+#include "DepthStencilTarget.h"
 
 // Audio
 #include "AudioController.h"
@@ -58,3 +56,16 @@
 #include "AnimationValue.h"
 #include "Animation.h"
 #include "AnimationClip.h"
+
+// Physics
+#include "PhysicsController.h"
+#include "PhysicsConstraint.h"
+#include "PhysicsFixedConstraint.h"
+#include "PhysicsGenericConstraint.h"
+#include "PhysicsHingeConstraint.h"
+#include "PhysicsSocketConstraint.h"
+#include "PhysicsSpringConstraint.h"
+#include "PhysicsRigidBody.h"
+
+
+

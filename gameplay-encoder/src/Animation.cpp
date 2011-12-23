@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Animation.h"
 
 namespace gameplay
@@ -26,7 +27,7 @@ void Animation::writeBinary(FILE* file)
     // Animation writes its ID because it is not listed in the ref table.
     write(getId(), file);
     write(_channels.size(), file);
-    for (std::vector<AnimationChannel*>::iterator i = _channels.begin(); i != _channels.end(); i++)
+    for (std::vector<AnimationChannel*>::iterator i = _channels.begin(); i != _channels.end(); ++i)
     {
         (*i)->writeBinary(file);
     }
@@ -37,7 +38,7 @@ void Animation::writeText(FILE* file)
     fprintElementStart(file);
     if (_channels.size() > 0 )
     {
-        for (std::vector<AnimationChannel*>::iterator i = _channels.begin(); i != _channels.end(); i++)
+        for (std::vector<AnimationChannel*>::iterator i = _channels.begin(); i != _channels.end(); ++i)
         {
             (*i)->writeText(file);
         }
@@ -53,6 +54,11 @@ void Animation::add(AnimationChannel* animationChannel)
 unsigned int Animation::getAnimationChannelCount() const
 {
     return _channels.size();
+}
+
+AnimationChannel* Animation::getAnimationChannel(unsigned int index) const
+{
+    return _channels[index];
 }
 
 }
