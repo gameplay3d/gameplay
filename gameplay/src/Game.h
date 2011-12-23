@@ -1,7 +1,8 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "Input.h"
+#include "Keyboard.h"
+#include "Touch.h"
 #include "AudioController.h"
 #include "AnimationController.h"
 #include "PhysicsController.h"
@@ -185,33 +186,45 @@ public:
     virtual void menu();
 
     /**
-     * Input callback on keyChar events.
+     * Keyboard callback on keyPress events.
      *
-     * @param key The key code pressed.
+     * @param evt The key event that occured.
+     * @param key The key code that was pressed, released or repeated.
+     * 
+     * @see Keyboard::Key
      */
-    virtual void keyChar(char key);
+    virtual void keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
-     * Input callback on keyPress events.
+     * Touch callback on touch events.
      *
-     * @param key The key code pressed.
-     * @param keyEvent The key event that occured.
-     * 
-     * @see Input::Key
-     * @see Input::KeyEvent
+     * @param evt The touch event that occurred.
+     *
+     * @see Touch::TouchEvent
      */
-    virtual void keyPress(int key, int keyEvent);
+    virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     /**
-     * Input callback on touch events.
+     * Sets muli-touch is to be enabled/disabled. Default is disabled.
      *
-     * @param x The x position of the touch.
-     * @param y The y position of the touch.
-     * @param touchEvent The touch event that occurred.
-     * 
-     * @see Input::TouchEvent
+     * @param enabled true sets multi-touch is enabled, false to be disabled.
      */
-    virtual void touch(int x, int y, int touchEvent);
+    inline void setMultiTouch(bool enabled);
+
+    /**
+     * Is multi-touch mode enabled.
+     *
+     * @return true is multi-touch is enabled.
+     */
+    inline bool isMultiTouch() const;
+
+    /**
+     * Gets the current accelerometer values.
+     *
+     * @param pitch The pitch angle returned (in degrees). If NULL then not returned.
+     * @param roll The roll angle returned (in degrees). If NULL then not returned.
+     */
+    inline void getAccelerometerValues(float* pitch, float* roll);
 
 protected:
 
