@@ -37,6 +37,7 @@ using std::tolower;
 using std::size_t;
 using std::min;
 using std::max;
+using std::modf;
 
 // Common
 #ifndef NULL
