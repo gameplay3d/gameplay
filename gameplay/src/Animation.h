@@ -173,6 +173,11 @@ private:
      * Removes a channel from the animation.
      */
     void removeChannel(Channel* channel);
+
+    /**
+     * Sets the rotation offset in a Curve representing a Transform's animation data.
+     */
+    void setTransformRotationOffset(Curve* curve, unsigned int propertyId);
     
     AnimationController* _controller;       // The AnimationController that this Animation will run on.
     std::string _id;                        // The Animation's ID.

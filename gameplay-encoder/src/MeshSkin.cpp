@@ -292,7 +292,7 @@ void MeshSkin::computeBounds()
         {
         case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
             curve = new Curve(keyCount, 10);
-            curve->addQuaternionOffset(3);
+            curve->setQuaternionOffset(3);
             break;
         }
         if (curve == NULL)
