@@ -1,0 +1,39 @@
+material plane
+{
+    technique
+    {
+        pass 0
+        {
+            // shaders
+            vertexShader = res/shaders/diffuse-specular.vsh
+            fragmentShader = res/shaders/diffuse-specular.fsh
+
+            // uniforms
+            u_worldMatrix = WORLD_MATRIX
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            u_cameraPosition = CAMERA_WORLD_POSITION
+            u_lightColor = 0.75, 0.75, 0.75
+            u_ambientColor = 0.2, 0.2, 0.2
+            u_specularExponent = 50
+
+            // samplers
+            sampler u_diffuseTexture
+            {
+                path = res/floor.png
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            // render state
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}

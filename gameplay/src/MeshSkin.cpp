@@ -1,7 +1,3 @@
-/*
- * MeshSkin.cpp
- */
-
 #include "Base.h"
 #include "MeshSkin.h"
 #include "Joint.h"
@@ -12,7 +8,8 @@
 namespace gameplay
 {
 
-MeshSkin::MeshSkin() : _matrixPalette(NULL)
+MeshSkin::MeshSkin()
+    : _rootJoint(NULL), _matrixPalette(NULL), _model(NULL)
 {
 }
 
@@ -31,6 +28,17 @@ const Matrix& MeshSkin::getBindShape() const
 void MeshSkin::setBindShape(const float* matrix)
 {
     _bindShape.set(matrix);
+}
+
+unsigned int MeshSkin::getJointCount() const
+{
+    return _joints.size();
+}
+
+Joint* MeshSkin::getJoint(unsigned int index) const
+{
+    assert(index < _joints.size());
+    return _joints[index];
 }
 
 Joint* MeshSkin::getJoint(const char* id) const
@@ -82,11 +90,17 @@ void MeshSkin::setJoint(Joint* joint, unsigned int index)
 
     if (_joints[index])
     {
+        _joints[index]->_skinCount--;
         SAFE_RELEASE(_joints[index]);
     }
 
     _joints[index] = joint;
-    joint->addRef();
+
+    if (joint)
+    {
+        joint->addRef();
+        joint->_skinCount++;
+    }
 }
 
 Vector4* MeshSkin::getMatrixPalette() const
@@ -104,16 +118,72 @@ unsigned int MeshSkin::getMatrixPaletteSize() const
     return _joints.size() * PALETTE_ROWS;
 }
 
-Joint* MeshSkin::getJoint(unsigned int index) const
+Model* MeshSkin::getModel() const
 {
-    assert(index < _joints.size());
-    return _joints[index];
+    return _model;
+}
+
+Joint* MeshSkin::getRootJoint() const
+{
+    return _rootJoint;
+}
+
+void MeshSkin::setRootJoint(Joint* joint)
+{
+    if (_rootJoint)
+    {
+        if (_rootJoint->getParent())
+        {
+            _rootJoint->getParent()->removeListener(this);
+        }
+    }
+
+    _rootJoint = joint;
+
+    // If the root joint has a parent node, register for its transformChanged event
+    if (_rootJoint && _rootJoint->getParent())
+    {
+        _rootJoint->getParent()->addListener(this, 1);
+    }
+}
+
+void MeshSkin::transformChanged(Transform* transform, long cookie)
+{
+    switch (cookie)
+    {
+    case 1:
+        // The direct parent of our joint hierarchy has changed.
+        // Dirty the bounding volume for our model's node. This special
+        // case allows us to have much tighter bounding volumes for
+        // skinned meshes by only considering local skin/joint transformations
+        // during bounding volume computation instead of fully resolved
+        // joint transformations.
+        if (_model && _model->getNode())
+        {
+            _model->getNode()->setBoundsDirty();
+        }
+        break;
+    }
+}
+
+int MeshSkin::getJointIndex(Joint* joint) const
+{
+    for (unsigned int i = 0, count = _joints.size(); i < count; ++i)
+    {
+        if (_joints[i] == joint)
+        {
+            return (int)i;
+        }
+    }
+
+    return -1;
 }
 
 void MeshSkin::clearJoints()
 {
-    unsigned int prevCount = _joints.size();
-    for (unsigned int i = 0; i < prevCount; i++)
+    setRootJoint(NULL);
+
+    for (unsigned int i = 0, count = _joints.size(); i < count; ++i)
     {
         SAFE_RELEASE(_joints[i]);
     }

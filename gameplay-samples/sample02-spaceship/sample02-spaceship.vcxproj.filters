@@ -7,43 +7,40 @@
     <Filter Include="src">
       <UniqueIdentifier>{03dcd1a4-e2c1-4dc6-ac81-3e6538d8e747}</UniqueIdentifier>
     </Filter>
-    <Filter Include="res\fonts">
-      <UniqueIdentifier>{35d091e9-2562-43c6-8e75-b2a8f4009d9f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\models">
-      <UniqueIdentifier>{b0e03eac-e2d6-4660-90e9-112f2a0b960b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\textures">
-      <UniqueIdentifier>{cada757f-c1d5-479d-98aa-312129d2fe9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\sounds">
-      <UniqueIdentifier>{b78daafa-d4af-42e5-a010-0edc619a9673}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\textures\background.png">
-      <Filter>res\textures</Filter>
-    </None>
-    <None Include="res\textures\propulsion_glow.png">
-      <Filter>res\textures</Filter>
-    </None>
-    <None Include="res\models\spaceship.gpb">
-      <Filter>res\models</Filter>
-    </None>
-    <None Include="res\models\spaceship.dae">
-      <Filter>res\models</Filter>
-    </None>
-    <None Include="res\fonts\airstrip.ttf">
-      <Filter>res\fonts</Filter>
-    </None>
-    <None Include="res\sounds\spaceship.wav">
-      <Filter>res\sounds</Filter>
-    </None>
-    <None Include="res\fonts\airstrip28.gpb">
-      <Filter>res\fonts</Filter>
-    </None>
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
+    <None Include="res\airstrip.ttf">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\airstrip28.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\background.ogg">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\background.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\propulsion_glow.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\spaceship.dae">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\spaceship.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\spaceship.mb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\spaceship.wav">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\splash.png">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SpaceshipGame.h">

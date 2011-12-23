@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Light.h"
 #include "DAESceneEncoder.h"
 
@@ -47,7 +48,7 @@ float Light::computeRange(float constantAttenuation, float linearAttenuation, fl
     const float step = 0.01f;
     float range = 0.01f;
     float att = 1.0f;
-    while (att < 0.1f)
+    while (att > 0.01f)
     {
         att = 1 / (constantAttenuation + (range * linearAttenuation) + (range * range * quadraticAttenuation));
         range += step;
@@ -111,7 +112,7 @@ void Light::writeBinary(FILE* file)
         // Compute an approximate inner angle of the spot light using Collada's outer angle.
         _outerAngle = _falloffAngle / 2.0f;
         
-        if (_range == -1.0f)
+        if (_innerAngle == -1.0f)
         {
             _innerAngle = computeInnerAngle(_outerAngle);
         }

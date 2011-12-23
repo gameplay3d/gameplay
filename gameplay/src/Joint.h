@@ -1,7 +1,3 @@
-/*
- * Joint.h
- */
-
 #ifndef JOINT_H_
 #define JOINT_H_
 
@@ -18,6 +14,7 @@ class Package;
  */
 class Joint : public Node
 {
+    friend class Node;
     friend class MeshSkin;
     friend class Package;
 
@@ -69,6 +66,7 @@ protected:
 
     Matrix _bindPose;
     bool _jointMatrixDirty;
+    unsigned int _skinCount;
 };
 
 }

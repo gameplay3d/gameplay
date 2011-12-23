@@ -1,18 +1,6 @@
 #ifndef DAECHANNELTARGET_H_
 #define DAECHANNELTARGET_H_
 
-#include <dae.h>
-#include <dae/daeSIDResolver.h>
-#include <dae/domAny.h>
-#include <dom/domCOLLADA.h>
-#include <dom/domConstants.h>
-#include <dom/domElements.h>
-#include <dom/domProfile_COMMON.h>
-
-#include <vector>
-
-#include "Base.h"
-
 namespace gameplay
 {
 

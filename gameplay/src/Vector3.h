@@ -1,7 +1,3 @@
-/*
- * Vector3.h
- */
-
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
 
@@ -74,6 +70,16 @@ public:
      * @param copy The vector to copy.
      */
     Vector3(const Vector3& copy);
+
+    /**
+     * Creates a new vector from an integer interpreted as an RGB value.
+     * E.g. 0xff0000 represents red or the vector (1, 0, 0).
+     *
+     * @param color The integer to interpret as an RGB value.
+     *
+     * @return A vector corresponding to the interpreted RGB color.
+     */
+    static Vector3 fromColor(unsigned int color);
 
     /**
      * Destructor.
@@ -338,8 +344,100 @@ public:
      * @param dst The destination vector.
      */
     static void subtract(const Vector3& v1, const Vector3& v2, Vector3* dst);
+
+    /**
+     * Calculates the sum of this vector with the given vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param v The vector to add.
+     * @return The vector sum.
+     */
+    inline Vector3 operator+(const Vector3& v) const;
+
+    /**
+     * Adds the given vector to this vector.
+     * 
+     * @param v The vector to add.
+     * @return This vector, after the addition occurs.
+     */
+    inline Vector3& operator+=(const Vector3& v);
+
+    /**
+     * Calculates the sum of this vector with the given vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param v The vector to add.
+     * @return The vector sum.
+     */
+    inline Vector3 operator-(const Vector3& v) const;
+
+    /**
+     * Subtracts the given vector from this vector.
+     * 
+     * @param v The vector to subtract.
+     * @return This vector, after the subtraction occurs.
+     */
+    inline Vector3& operator-=(const Vector3& v);
+
+    /**
+     * Calculates the negation of this vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @return The negation of this vector.
+     */
+    inline Vector3 operator-() const;
+
+    /**
+     * Calculates the scalar product of this vector with the given value.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param x The value to scale by.
+     * @return The scaled vector.
+     */
+    inline Vector3 operator*(float x) const;
+
+    /**
+     * Scales this vector by the given value.
+     * 
+     * @param x The value to scale by.
+     * @return This vector, after the scale occurs.
+     */
+    inline Vector3& operator*=(float x);
+
+    /**
+     * Determines if this vector is less than the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is less than the given vector, false otherwise.
+     */
+    inline bool operator<(const Vector3& v) const;
+
+    /**
+     * Determines if this vector is equal to the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is equal to the given vector, false otherwise.
+     */
+    inline bool operator==(const Vector3& v) const;
 };
 
+/**
+ * Calculates the scalar product of the given vector with the given value.
+ * 
+ * @param x The value to scale by.
+ * @param v The vector to scale.
+ * @return The scaled vector.
+ */
+inline Vector3 operator*(float x, const Vector3& v);
+
 }
+
+#include "Vector3.inl"
 
 #endif

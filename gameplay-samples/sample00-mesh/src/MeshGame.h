@@ -1,20 +1,21 @@
-/*
- * MeshGame.h
- */
-
 #ifndef MESHGAME_H_
 #define MESHGAME_H_
 
 #include "gameplay.h"
-#include "gameplay-main.h"
+
 using namespace gameplay;
 
 /**
- * This is a mesh demo game for rendering Mesh.
+ * Sample game for rendering a scene with a model/mesh.
  */
 class MeshGame: public Game
 {
 public:
+
+    /**
+     * Constructror.
+     */
+    MeshGame();
 
     /**
      * Destructor.
@@ -22,9 +23,9 @@ public:
     virtual ~MeshGame();
 
     /**
-     * Touch event handler.
+     * @see Game::touchEvent
      */
-    void touch(int x, int y, int touchEvent);
+    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
 protected:
 
@@ -50,17 +51,15 @@ protected:
 
 private:
 
-    void visitNode(Node* node, long cookie);
+    bool drawScene(Node* node, void* cookie);
 
-    void getModelNode(Node* node, long cookie);
-
-    void createDefaultCamera(Scene* scene);
+    void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 
     Font* _font;
     Scene* _scene;
     Node* _modelNode;
-    int _prevX, _prevY;
     bool _touched;
+    int _touchX;
 };
 
 #endif

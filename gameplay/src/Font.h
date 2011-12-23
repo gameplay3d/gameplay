@@ -1,7 +1,3 @@
-/*
- * Font.h
- */
-
 #ifndef FONT_H_
 #define FONT_H_
 
@@ -28,6 +24,33 @@ public:
         BOLD = 1,
         ITALIC = 2,
         BOLD_ITALIC = 4
+    };
+
+    /**
+     * Defines the set of allowable alignments when drawing text.
+     */
+    enum Justify
+    {
+        // Specify horizontal alignment, use default vertical alignment (ALIGN_TOP).
+        ALIGN_LEFT = 0x01,
+        ALIGN_HCENTER = 0x02,
+        ALIGN_RIGHT = 0x04,
+    
+        // Specify vertical alignment, use default horizontal alignment (ALIGN_LEFT).
+        ALIGN_TOP = 0x10,
+        ALIGN_VCENTER = 0x20,
+        ALIGN_BOTTOM = 0x40,
+
+        // Specify both vertical and horizontal alignment.
+        ALIGN_TOP_LEFT = ALIGN_TOP | ALIGN_LEFT,
+        ALIGN_VCENTER_LEFT = ALIGN_VCENTER | ALIGN_LEFT,
+        ALIGN_BOTTOM_LEFT = ALIGN_BOTTOM | ALIGN_LEFT,
+        ALIGN_TOP_HCENTER = ALIGN_TOP | ALIGN_HCENTER,
+        ALIGN_VCENTER_HCENTER = ALIGN_VCENTER | ALIGN_HCENTER,
+        ALIGN_BOTTOM_HCENTER = ALIGN_BOTTOM | ALIGN_HCENTER,
+        ALIGN_TOP_RIGHT = ALIGN_TOP | ALIGN_RIGHT,
+        ALIGN_VCENTER_RIGHT = ALIGN_VCENTER | ALIGN_RIGHT,
+        ALIGN_BOTTOM_RIGHT = ALIGN_BOTTOM | ALIGN_RIGHT
     };
 
     /**
@@ -87,24 +110,71 @@ public:
     static Font* create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture);
 
     /**
+     * Returns the font size (max height of glyphs) in pixels.
+     */
+    unsigned int getSize();
+
+    /**
      * Begins text drawing for this font.
      */
     void begin();
 
     /**
-     * Draws the specified text.
+     * Ends text batching for this font and renders all drawn text.
+     */
+    void end();
+
+    /**
+     * Draws the specified text in a solid color, with a scaling factor.
      *
      * @param text The text to draw.
      * @param x The viewport x position to draw text at.
      * @param y The viewport y position to draw text at.
      * @param color The color of text.
+     * @param size The size to draw text.
      */
-    void drawText(const char* text, int x, int y, const Vector4& color);
+    void drawText(const char* text, int x, int y, const Vector4& color, unsigned int size, bool rightToLeft = false);
 
     /**
-     * Ends text drawing for this font.
+     * Draws the specified text within a rectangular area, with a specified alignment and scale.
+     * Clips text outside the viewport.  Optionally wraps text to fit within the width of the viewport.
+     *
+     * @param text The text to draw.
+     * @param clip The viewport area to draw within.  Text will be clipped outside this rectangle.
+     * @param color The color of text.
+     * @param size The size to draw text.
+     * @param justify Justification of text within the viewport.
+     * @param wrap Wraps text to fit within the width of the viewport if true.
+     * @param rightToLeft
      */
-    void end();
+    void drawText(const char* text, const Rectangle& clip, const Vector4& color, unsigned int size,
+                  Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
+
+    /**
+     * Measures a string's width and height without alignment, wrapping or clipping.
+     *
+     * @param text The text to measure.
+     * @param size
+     * @param width Destination for the text's width.
+     * @param height Destination for the text's height.
+     */
+    void measureText(const char* text, unsigned int size, unsigned int* widthOut, unsigned int* heightOut);
+
+    /**
+     * Measures a string's bounding box after alignment, wrapping and clipping within a viewport.
+     *
+     * @param text The text to measure.
+     * @param out Destination rectangle to store the bounds in.
+     * @param viewport The viewport area to align, wrap and clip text within while measuring.
+     * @param scale The scaling factor to apply.
+     * @param justify Justification of text within the viewport.
+     * @param wrap Whether to measure text with wrapping applied.
+     * @param ignoreClip Whether to clip 'out' to the viewport.  Set false for the bounds of what would actually be drawn
+     *                within the given viewport; true for bounds that are guaranteed to fit the entire string of text.
+     */
+    void measureText(const char* text, const Rectangle& clip, unsigned int size, Rectangle* out,
+                     Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool ignoreClip = false);
+
 
 private:
 
@@ -122,6 +192,16 @@ private:
      * Destructor.
      */
     ~Font();
+
+    // Utilities
+    unsigned int getTokenWidth(const char* token, unsigned int length, unsigned int size, float scale);
+    unsigned int getReversedTokenLength(const char* token, const char* bufStart);
+
+    // Returns false if EOF was reached, true otherwise.
+    bool handleDelimiters(char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
+                          std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd);
+    void addLineInfo(const Rectangle& area, int lineWidth, int lineLength, Justify hAlign,
+                     std::vector<int>* xPositions, std::vector<unsigned int>* lineLengths, bool rightToLeft);
 
     std::string _path;
     std::string _id;

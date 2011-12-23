@@ -1,16 +1,11 @@
 #ifndef OBJ_H_
 #define OBJ_H_
 
-#include <iostream>
-#include <string>
-#include <list>
-#include <vector>
-
-#include "Base.h"
 #include "FileIO.h"
 
 namespace gameplay
 {
+
 /**
  * Object is the abstract base class of all the objects that can be written in the GamePlay Binary file.
  */
@@ -27,8 +22,6 @@ public:
         ANIMATION_ID = 4,
         ANIMATIONCHANNEL_ID = 5,
         NODEINSTANCE_ID = 8,
-        CAMERAINSTANCE_ID = 9,
-        LIGHTINSTANCE_ID = 10,
         MODEL_ID = 11,
         MATERIAL_ID = 16,
         EFFECT_ID = 17,
@@ -39,7 +32,6 @@ public:
         MESHSKIN_ID = 36,
         FONT_ID = 128,
     };
-
 
     /**
      * Constructor.
@@ -118,8 +110,8 @@ public:
         // First write the size of the list
         write(list.size(), file);
         // Then write each element
-        std::list<T>::const_iterator i;
-        for (i = list.begin(); i != list.end(); i++)
+        typename std::list<T>::const_iterator i;
+        for (i = list.begin(); i != list.end(); ++i)
         {
             (*i)->writeBinary(file);
         }
@@ -134,14 +126,15 @@ public:
         // First write the size of the vector
         write(vector.size(), file);
         // Then write each element
-        std::vector<T>::const_iterator i;
-        for (i = vector.begin(); i != vector.end(); i++)
+        typename std::vector<T>::const_iterator i;
+        for (i = vector.begin(); i != vector.end(); ++i)
         {
             (*i)->writeBinary(file);
         }
     }
 
 private:
+
     /**
      * Saves where this object was written to in the binary file.
      */
