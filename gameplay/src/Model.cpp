@@ -1,7 +1,3 @@
-/*
- * Model.cpp
- */
-
 #include "Base.h"
 #include "Model.h"
 #include "MeshPart.h"
@@ -42,7 +38,7 @@ Model* Model::create(Mesh* mesh)
     return new Model(mesh);
 }
 
-Mesh* Model::getMesh()
+Mesh* Model::getMesh() const
 {
     return _mesh;
 }
@@ -80,21 +76,17 @@ void Model::setMaterial(Material* material, int partIndex)
 {
     assert(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
 
+    Material* oldMaterial = NULL;
+
     if (partIndex == -1)
     {
-        // Release existing shared material and binding.
-        if (_material)
-        {
-            _material->setMeshBinding(NULL);
-            SAFE_RELEASE(_material);
-        }
+        oldMaterial = _material;
 
         // Set new shared material.
         if (material)
         {
             _material = material;
             _material->addRef();
-            _material->setMeshBinding(_mesh);
         }
     }
     else if (partIndex >= 0 && partIndex < (int)getMeshPartCount())
@@ -105,11 +97,7 @@ void Model::setMaterial(Material* material, int partIndex)
         // Release existing part material and part binding.
         if (_partMaterials)
         {
-            if (_partMaterials[partIndex])
-            {
-                _partMaterials[partIndex]->setMeshBinding(NULL);
-                SAFE_RELEASE(_partMaterials[partIndex]);
-            }
+            oldMaterial = _partMaterials[partIndex];
         }
         else
         {
@@ -126,14 +114,43 @@ void Model::setMaterial(Material* material, int partIndex)
         {
             _partMaterials[partIndex] = material;
             material->addRef();
-            material->setMeshBinding(_mesh);
         }
     }
 
-    // Apply node binding for the new material.
-    if (material && _node)
+    // Release existing material and binding.
+    if (oldMaterial)
     {
-        setMaterialNodeBinding(material);
+        for (unsigned int i = 0, tCount = material->getTechniqueCount(); i < tCount; ++i)
+        {
+            Technique* t = material->getTechnique(i);
+            for (unsigned int j = 0, pCount = t->getPassCount(); j < pCount; ++j)
+            {
+                t->getPass(j)->setVertexAttributeBinding(NULL);
+            }
+        }
+        SAFE_RELEASE(oldMaterial);
+    }
+
+    if (material)
+    {
+        // Hookup vertex attribute bindings for all passes in the new material.
+        for (unsigned int i = 0, tCount = material->getTechniqueCount(); i < tCount; ++i)
+        {
+            Technique* t = material->getTechnique(i);
+            for (unsigned int j = 0, pCount = t->getPassCount(); j < pCount; ++j)
+            {
+                Pass* p = t->getPass(j);
+                VertexAttributeBinding* b = VertexAttributeBinding::create(_mesh, p->getEffect());
+                p->setVertexAttributeBinding(b);
+                SAFE_RELEASE(b);
+            }
+        }
+
+        // Apply node binding for the new material.
+        if (_node)
+        {
+            setMaterialNodeBinding(material);
+        }
     }
 }
 
@@ -187,6 +204,7 @@ void Model::setSkin(MeshSkin* skin)
 
         // Assign the new skin
         _skin = skin;
+        _skin->_model = this;
     }
 }
 
@@ -197,17 +215,7 @@ Node* Model::getNode() const
 
 void Model::setNode(Node* node)
 {
-    if (_node != node)
-    {
-        SAFE_RELEASE(_node);
-
-        _node = node;
-
-        if (_node)
-        {
-            node->addRef();
-        }
-    }
+    _node = node;
 
     // Re-bind node related material parameters
     if (node)
@@ -231,22 +239,26 @@ void Model::setNode(Node* node)
 
 void Model::draw(bool wireframe)
 {
-    unsigned int count = _mesh->getPartCount();
-    if (count == 0)
+    unsigned int partCount = _mesh->getPartCount();
+    if (partCount == 0)
     {
         // No mesh parts (index buffers).
         if (_material)
         {
+            GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
+
             Technique* technique = _material->getTechnique();
-            for (unsigned int i = 0, count = technique->getPassCount(); i < count; ++i)
+            unsigned int passCount = technique->getPassCount();
+            for (unsigned int i = 0; i < passCount; ++i)
             {
                 Pass* pass = technique->getPass(i);
                 pass->bind();
-                if (wireframe)
+                if (wireframe && (_mesh->getPrimitiveType() == Mesh::TRIANGLES || _mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP))
                 {
-                    for (unsigned int i = 0, count = _mesh->getVertexCount(); i < count; i += 3)
+                    unsigned int vertexCount = _mesh->getVertexCount();
+                    for (unsigned int j = 0; j < vertexCount; j += 3)
                     {
-                        GL_ASSERT( glDrawArrays(GL_LINE_LOOP, i, 3) );
+                        GL_ASSERT( glDrawArrays(GL_LINE_LOOP, j, 3) );
                     }
                 }
                 else
@@ -259,7 +271,7 @@ void Model::draw(bool wireframe)
     }
     else
     {
-        for (unsigned int i = 0; i < count; ++i)
+        for (unsigned int i = 0; i < partCount; ++i)
         {
             MeshPart* part = _mesh->getPart(i);
 
@@ -277,16 +289,32 @@ void Model::draw(bool wireframe)
             if (material)
             {
                 Technique* technique = material->getTechnique();
-                for (unsigned int i = 0, count = technique->getPassCount(); i < count; ++i)
+                unsigned int passCount = technique->getPassCount();
+                for (unsigned int j = 0; j < passCount; ++j)
                 {
-                    Pass* pass = technique->getPass(i);
+                    Pass* pass = technique->getPass(j);
                     pass->bind();
                     GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, part->_indexBuffer) );
-                    if (wireframe)
+                    if (wireframe && (_mesh->getPrimitiveType() == Mesh::TRIANGLES || _mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP))
                     {
-                        for (unsigned int i = 0, count = part->getIndexCount(); i < count; i += 3)
+                        unsigned int indexCount = part->getIndexCount();
+                        unsigned int indexSize = 0;
+                        switch (part->getIndexFormat())
                         {
-                            GL_ASSERT( glDrawElements(GL_LINE_LOOP, 3, part->getIndexFormat(), (const GLvoid*)i) );
+                        case Mesh::INDEX8:
+                            indexSize = 1;
+                            break;
+                        case Mesh::INDEX16:
+                            indexSize = 2;
+                            break;
+                        case Mesh::INDEX32:
+                            indexSize = 4;
+                            break;
+                        }
+
+                        for (unsigned int k = 0; k < indexCount; k += 3)
+                        {
+                            GL_ASSERT( glDrawElements(GL_LINE_LOOP, 3, part->getIndexFormat(), ((const GLvoid*)(k*indexSize))) );
                         }
                     }
                     else

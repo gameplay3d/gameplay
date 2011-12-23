@@ -1,7 +1,3 @@
-/*
- * Ray.cpp
- */
-
 #include "Base.h"
 #include "Ray.h"
 #include "Plane.h"
@@ -98,11 +94,11 @@ float Ray::intersects(const Frustum& frustum) const
 
     // Otherwise, the intersection distance is the minimum positive intersection distance.
     float d = (nD > 0.0f) ? nD : 0.0f;
-    d = (fD > 0.0f) ? ( (d == 0.0f) ? fD : fminf(fD, d) ) : d;
-    d = (lD > 0.0f) ? ( (d == 0.0f) ? lD : fminf(lD, d) ) : d;
-    d = (rD > 0.0f) ? ( (d == 0.0f) ? rD : fminf(rD, d) ) : d;
-    d = (tD > 0.0f) ? ( (d == 0.0f) ? bD : fminf(bD, d) ) : d;
-    d = (bD > 0.0f) ? ( (d == 0.0f) ? tD : fminf(tD, d) ) : d;
+    d = (fD > 0.0f) ? ( (d == 0.0f) ? fD : min(fD, d) ) : d;
+    d = (lD > 0.0f) ? ( (d == 0.0f) ? lD : min(lD, d) ) : d;
+    d = (rD > 0.0f) ? ( (d == 0.0f) ? rD : min(rD, d) ) : d;
+    d = (tD > 0.0f) ? ( (d == 0.0f) ? bD : min(bD, d) ) : d;
+    d = (bD > 0.0f) ? ( (d == 0.0f) ? tD : min(tD, d) ) : d;
 
     return d;
 }
@@ -139,7 +135,7 @@ void Ray::normalize()
         return;
 
     // Normalize the ray's direction vector.
-    float normalizeFactor = 1.0f / sqrtf(_direction.x * _direction.x + _direction.y * _direction.y + _direction.z * _direction.z);
+    float normalizeFactor = 1.0f / sqrt(_direction.x * _direction.x + _direction.y * _direction.y + _direction.z * _direction.z);
 
     if ( normalizeFactor != 1.0f )
     {

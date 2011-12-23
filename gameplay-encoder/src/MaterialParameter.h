@@ -30,7 +30,6 @@ private:
     unsigned int _type;
 };
 
-
 }
-#endif
 
+#endif

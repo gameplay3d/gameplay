@@ -1,10 +1,6 @@
-/*
- * Texture.cpp
- */
-
 #include "Base.h"
+#include "Image.h"
 #include "Texture.h"
-#include "FileSystem.h"
 
 namespace gameplay
 {
@@ -30,7 +26,7 @@ Texture::~Texture()
     // Remove ourself from the texture cache.
     if (_cached)
     {
-        std::vector<Texture*>::iterator itr = std::find(__textureCache.begin(), __textureCache.end(), this);
+        std::vector<Texture*>::iterator itr = find(__textureCache.begin(), __textureCache.end(), this);
         if (itr != __textureCache.end())
         {
             __textureCache.erase(itr);
@@ -71,7 +67,9 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
         case 4:
             if (tolower(ext[1]) == 'p' && tolower(ext[2]) == 'n' && tolower(ext[3]) == 'g')
             {
-                texture = loadPNG(path, generateMipmaps);
+                Image* image = Image::create(path);
+                texture = create(image, generateMipmaps);
+                SAFE_RELEASE(image);
             }
             break;
         }
@@ -92,103 +90,17 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
     return NULL;
 }
 
-Texture* Texture::loadPNG(const char* path, bool generateMipmaps)
+Texture* Texture::create(Image* image, bool generateMipmaps)
 {
-    // Open the file.
-    FILE* fp = FileSystem::openFile(path, "rb");
-    if (fp == NULL)
+    switch (image->getFormat())
     {
-        return NULL;
+    case Image::RGB:
+        return create(Texture::RGB, image->getWidth(), image->getHeight(), image->getData(), generateMipmaps);
+    case Image::RGBA:
+        return create(Texture::RGBA, image->getWidth(), image->getHeight(), image->getData(), generateMipmaps);
     }
-
-    // Verify PNG signature.
-    unsigned char sig[8];
-    if (fread(sig, 1, 8, fp) != 8 || png_sig_cmp(sig, 0, 8) != 0)
-    {
-        LOG_ERROR_VARG("Texture is not a valid PNG: %s", path);
-        fclose(fp);
-        return NULL;
-    }
-
-    // Initialize png read struct (last three parameters use stderr+longjump if NULL).
-    png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (png == NULL)
-    {
-        fclose(fp);
-        return NULL;
-    }
-
-    // Initialize info struct.
-    png_infop info = png_create_info_struct(png);
-    if (info == NULL)
-    {
-        fclose(fp);
-        png_destroy_read_struct(&png, NULL, NULL);
-        return NULL;
-    }
-
-    // Set up error handling (required without using custom error handlers above).
-    if (setjmp(png_jmpbuf(png)))
-    {
-        fclose(fp);
-        png_destroy_read_struct(&png, &info, NULL);
-        return NULL;
-    }
-
-    // Initialize file io.
-    png_init_io(png, fp);
-
-    // Indicate that we already read the first 8 bytes (signature).
-    png_set_sig_bytes(png, 8);
-
-    // Read the entire image into memory.
-    png_read_png(png, info, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND, NULL);
-
-    unsigned int width = png_get_image_width(png, info);
-    unsigned int height = png_get_image_height(png, info);
-    png_byte colorType = png_get_color_type(png, info);
-    Format format;
-
-    switch (colorType)
-    {
-    case PNG_COLOR_TYPE_RGBA:
-        format = RGBA8888;
-        break;
-
-    case PNG_COLOR_TYPE_RGB:
-        format = RGB888;
-        break;
-
-    default:
-        LOG_ERROR_VARG("Unsupported PNG color type (%d) for texture: %s", (int)colorType, path);
-        fclose(fp);
-        png_destroy_read_struct(&png, &info, NULL);
-        return NULL;
-    }
-
-    unsigned int stride = png_get_rowbytes(png, info);
-
-    // Allocate image data.
-    unsigned char* data = new unsigned char[stride * height];
-
-    // Read rows into image data.
-    png_bytepp rows = png_get_rows(png, info);
-    for (unsigned int i = 0; i < height; ++i)
-    {
-        memcpy(data+(stride * (height-1-i)), rows[i], stride);
-    }
-
-    // Clean up.
-    png_destroy_read_struct(&png, &info, NULL);
-    fclose(fp);
-
-    // Create texture.
-    Texture* texture = create(format, width, height, data, generateMipmaps);
-
-    // Free temporary data.
-    SAFE_DELETE_ARRAY(data);
-
-    return texture;
+    
+    return NULL;
 }
 
 Texture* Texture::create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps)
@@ -197,7 +109,16 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     GLuint textureId;
     GL_ASSERT( glGenTextures(1, &textureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
-    GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
+
+    if (format == DEPTH)
+    {
+        // <type> must be UNSIGNED_SHORT or UNSIGNED_INT for a format of DEPTH_COMPONENT.
+        GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_INT, data) );
+    }
+    else
+    {
+        GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
+    }
 
     // Set initial minification filter based on whether or not mipmaping was enabled
     GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, generateMipmaps ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR) );

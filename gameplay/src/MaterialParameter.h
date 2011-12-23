@@ -1,7 +1,3 @@
-/*
- * MaterialParameter.h
- */
-
 #ifndef MATERIALPARAMETER_H_
 #define MATERIALPARAMETER_H_
 
@@ -12,8 +8,6 @@
 #include "Matrix.h"
 #include "Texture.h"
 #include "Effect.h"
-
-#define MATERIALPARAMETER_ANIMATE_UNIFORM           1
 
 namespace gameplay
 {
@@ -33,13 +27,13 @@ namespace gameplay
  * to the Matrix will automatically be reflected in the technique the
  * next time the parameter is applied to the render state.
  */
-class MaterialParameter : public AnimationTarget
+class MaterialParameter : public AnimationTarget, public Ref
 {
     friend class RenderState;
 
 public:
 
-     /**
+    /**
      * Animates the uniform.
      */
     static const int ANIMATE_UNIFORM = 1;
@@ -271,6 +265,7 @@ void MaterialParameter::bindValue(ClassType* classInstance, ParameterType (Class
     clearValue();
 
     _value.method = new MethodValueBinding<ClassType, ParameterType>(this, classInstance, valueMethod);
+    _dynamic = true;
     _type = MaterialParameter::METHOD;
 }
 
@@ -280,6 +275,7 @@ void MaterialParameter::bindValue(ClassType* classInstance, ParameterType (Class
     clearValue();
 
     _value.method = new MethodArrayBinding<ClassType, ParameterType>(this, classInstance, valueMethod, countMethod);
+    _dynamic = true;
     _type = MaterialParameter::METHOD;
 }
 

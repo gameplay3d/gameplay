@@ -1,7 +1,3 @@
-/*
- * AudioListener.h
- */
-
 #ifndef AUDIOLISTENER_H_
 #define AUDIOLISTENER_H_
 
@@ -122,7 +118,7 @@ private:
     /**
     * @see Transform::Listener::transformChanged
     */
-    void transformChanged(Transform* transform);
+    void transformChanged(Transform* transform, long cookie);
 
     float _gain;
     Vector3 _position;

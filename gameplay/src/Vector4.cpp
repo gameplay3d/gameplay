@@ -1,7 +1,3 @@
-/*
- * Vector4.cpp
- */
-
 #include "Base.h"
 #include "Vector4.h"
 
@@ -33,44 +29,59 @@ Vector4::Vector4(const Vector4& copy)
     set(copy);
 }
 
+Vector4 Vector4::fromColor(unsigned int color)
+{
+    float components[4];
+    int componentIndex = 0;
+    for (int i = 3; i >= 0; --i)
+    {
+        int component = (color >> i*8) & 0x000000ff;
+
+        components[componentIndex++] = static_cast<float>(component) / 255.0f;
+    }
+
+    Vector4 value(components);
+    return value;
+}
+
 Vector4::~Vector4()
 {
 }
 
 const Vector4& Vector4::zero()
 {
-    static Vector4* value = new Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector4 value(0.0f, 0.0f, 0.0f, 0.0f);
+    return value;
 }
 
 const Vector4& Vector4::one()
 {
-    static Vector4* value = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-    return *value;
+    static Vector4 value(1.0f, 1.0f, 1.0f, 1.0f);
+    return value;
 }
 
 const Vector4& Vector4::unitX()
 {
-    static Vector4* value = new Vector4(1.0f, 0.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector4 value(1.0f, 0.0f, 0.0f, 0.0f);
+    return value;
 }
 
 const Vector4& Vector4::unitY()
 {
-    static Vector4* value = new Vector4(0.0f, 1.0f, 0.0f, 0.0f);
-    return *value;
+    static Vector4 value(0.0f, 1.0f, 0.0f, 0.0f);
+    return value;
 }
 
 const Vector4& Vector4::unitZ()
 {
-    static Vector4* value = new Vector4(0.0f, 0.0f, 1.0f, 0.0f);
-    return *value;
+    static Vector4 value(0.0f, 0.0f, 1.0f, 0.0f);
+    return value;
 }
 
 const Vector4& Vector4::unitW()
 {
-    static Vector4* value = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
-    return *value;
+    static Vector4 value(0.0f, 0.0f, 0.0f, 1.0f);
+    return value;
 }
 
 bool Vector4::isZero() const
@@ -89,7 +100,7 @@ float Vector4::angle(const Vector4& v1, const Vector4& v2)
     float dy = v1.w * v2.y - v1.y * v2.w - v1.z * v2.x + v1.x * v2.z;
     float dz = v1.w * v2.z - v1.z * v2.w - v1.x * v2.y + v1.y * v2.x;
 
-    return atan2f(sqrtf(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
+    return atan2f(sqrt(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
 }
 
 void Vector4::add(const Vector4& v)
@@ -180,7 +191,7 @@ float Vector4::distance(const Vector4& v) const
     float dz = v.z - z;
     float dw = v.w - w;
 
-    return sqrtf(dx * dx + dy * dy + dz * dz + dw * dw);
+    return sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
 }
 
 float Vector4::distanceSquared(const Vector4& v) const
@@ -205,7 +216,7 @@ float Vector4::dot(const Vector4& v1, const Vector4& v2)
 
 float Vector4::length() const
 {
-    return sqrtf(x * x + y * y + z * z + w * w);
+    return sqrt(x * x + y * y + z * z + w * w);
 }
 
 
