@@ -29,13 +29,13 @@
 
     <!-- Description, displayed in the BlackBerry Tablet OS application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
-
+    <description>Longboard Sample</description>
+    
     <!-- Copyright information. Optional. -->
     <!-- <copyright></copyright> -->
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
     <author>Research In Motion</author>
-    <description>Longboard Sample</description>
     
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
     <!-- <authorId>ABC1234YjsnUk235h</authorId> -->
@@ -49,37 +49,41 @@
     
     <!--  The category where the application appears. Either core.games or core.media. -->
     <category>core.games</category>
+ 
     <asset path="icon.png">icon.png</asset>
     <asset path="res">res</asset>
+    
+    <!-- BlackBerry NDK 1.0
     <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
     <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
     <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
-    <configuration id="com.qnx.qcc.configuration.exe.debug.347687220" name="Device-Debug">
+    -->
+    <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Debug/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
     </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.release.360010498" name="Device-Release">
+    <configuration id="com.qnx.qcc.configuration.exe.release.693953760" name="Device-Release">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Release/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
     </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.926664736" name="Device-Profile">
+    <configuration id="com.qnx.qcc.configuration.exe.profile.1278883794" name="Device-Profile">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Profile/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
     </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.2008520055" name="Device-Coverage">
+    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.357266346" name="Device-Coverage">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Coverage/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
     </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.debug.1109114603" name="Simulator">
-       <platformArchitecture>x86</platformArchitecture>
+    <configuration id="com.qnx.qcc.configuration.exe.debug.882133523" name="Simulator">
+        <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
     </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.961390645" name="Simulator-Profile">
-       <platformArchitecture>x86</platformArchitecture>
+    <configuration id="com.qnx.qcc.configuration.exe.profile.400335078" name="Simulator-Profile">
+        <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator-Profile/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
     </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.1903530051" name="Simulator-Coverage">
-       <platformArchitecture>x86</platformArchitecture>
+    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.48235134" name="Simulator-Coverage">
+        <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator-Coverage/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
     </configuration>
     

@@ -1,7 +1,3 @@
-/*
- * Package.h
- */
-
 #ifndef PACKAGE_H_
 #define PACKAGE_H_
 
@@ -19,6 +15,8 @@ namespace gameplay
  */
 class Package : public Ref
 {
+    friend class SceneLoader;
+
 public:
 
     /**
@@ -113,9 +111,8 @@ private:
         ~Reference();
     };
 
-    class MeshSkinData
+    struct MeshSkinData
     {
-    public:
         MeshSkin* skin;
         std::vector<std::string> joints;
         std::vector<Matrix> inverseBindPoseMatrices;
@@ -177,11 +174,45 @@ private:
     Reference* seekToFirstType(unsigned int type);
 
     /**
+     * Loads the scene with the specified ID from the package, and loads the specified nodes with mesh rigid body support.
+     * If id is NULL then the first scene found is loaded.
+     * 
+     * @param id The ID of the scene to load (NULL to load the first scene).
+     * @param nodesWithMeshRB A list of the IDs of the nodes within the scene that 
+     *      should be loaded with support for triangle mesh rigid bodies.
+     * 
+     * @return The loaded scene, or NULL if the scene could not be loaded.
+     */
+    Scene* loadScene(const char* id, const std::vector<std::string>* nodesWithMeshRB);
+
+    /**
+     * Loads a node with the specified ID from the package, optionally with mesh rigid body support.
+     *
+     * @param id The ID of the node to load in the package.
+     * @param loadWithMeshRBSupport Whether or not to load the node with mesh rigid body support.
+     * 
+     * @return The loaded node, or NULL if the node could not be loaded.
+     */
+    Node* loadNode(const char* id, bool loadWithMeshRBSupport);
+
+    /**
      * Internal method to load a node.
      *
      * Only one of node or scene should be passed as non-NULL (or neither).
      */
-    Node* loadNode(const char* id, Scene* sceneContext, Node* nodeContext);
+    Node* loadNode(const char* id, Scene* sceneContext, Node* nodeContext, bool loadWithMeshRBSupport);
+
+    /**
+     * Loads a mesh with the specified ID from the package.
+     *
+     * @param id The ID of the mesh to load.
+     * @param loadWithMeshRBSupport Whether to load the mesh with 
+     *      support for triangle mesh rigid bodies or not.
+     * @param nodeId The id of the mesh's model's parent node.
+     * 
+     * @return The loaded mesh, or NULL if the mesh could not be loaded.
+     */
+    Mesh* loadMesh(const char* id, bool loadWithMeshRBSupport, const char* nodeId);
 
     /**
      * Reads an unsigned int from the current file position.
@@ -245,7 +276,7 @@ private:
      * 
      * @return A pointer to new node or NULL if there was an error.
      */
-    Node* readNode(Scene* sceneContext, Node* nodeContext);
+    Node* readNode(Scene* sceneContext, Node* nodeContext, const std::vector<std::string>* nodesWithMeshRB);
 
     /**
      * Reads a camera from the current file position.
@@ -266,7 +297,7 @@ private:
      * 
      * @return A pointer to a new model or NULL if there was an error.
      */
-    Model* readModel(Scene* sceneContext, Node* nodeContext);
+    Model* readModel(Scene* sceneContext, Node* nodeContext, bool loadWithMeshRBSupport, const char* nodeId);
 
     /**
      * Reads a mesh skin from the current file position.

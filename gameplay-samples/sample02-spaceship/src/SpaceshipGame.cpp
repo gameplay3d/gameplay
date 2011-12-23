@@ -1,15 +1,12 @@
-/*
- * SpaceshipGame.cpp
- */
-
 #include "SpaceshipGame.h"
 
+// Declare our game instance
 SpaceshipGame game;
 
 // Collision constants
 #define ROOF_HEIGHT 11.6f
-#define FLOOR_HEIGHT 0.5f
-#define MAP_LENGTH 1450.0f
+#define FLOOR_HEIGHT 0.6f
+#define MAP_LENGTH 1000.0f
 #define CAMERA_RANGE_FRONT -1
 #define CAMERA_RANGE_BACK 8
 
@@ -75,6 +72,8 @@ SpaceshipGame::~SpaceshipGame()
 
 void SpaceshipGame::initialize()
 {
+    renderOnce(this, &SpaceshipGame::drawSplash, 0);
+
     // Create our render state block that will be reused across all materials
     _stateBlock = RenderState::StateBlock::create();
     _stateBlock->setDepthTest(true);
@@ -84,7 +83,7 @@ void SpaceshipGame::initialize()
     _stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 
     // Load our scene from file
-    Package* pkg = Package::create("res/models/spaceship.gpb");
+    Package* pkg = Package::create("res/spaceship.gpb");
     _scene = pkg->loadScene();
     SAFE_RELEASE(pkg);
 
@@ -95,8 +94,13 @@ void SpaceshipGame::initialize()
     initializeSpaceship();
     initializeEnvironment();
 
+    // Create a background audio track
+    _backgroundSound = AudioSource::create("res/background.ogg");
+    if (_backgroundSound)
+        _backgroundSound->setLooped(true);
+
     // Create font
-    _font = Font::create("res/fonts/airstrip28.gpb");
+    _font = Font::create("res/airstrip28.gpb");
 
     // Store camera node
     _cameraNode = _scene->findNode("camera1");
@@ -112,12 +116,10 @@ void SpaceshipGame::initializeSpaceship()
     Material* material;
 
     _shipGroupNode = _scene->findNode("gSpaceShip");
-    _shipGroupNode->setBoundsType(Node::SPHERE);
 
     // Setup spaceship model
     // Part 0
     _shipNode = _scene->findNode("pSpaceShip");
-    _shipNode->setBoundsType(Node::SPHERE);
     material = _shipNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh", NULL, 0);
     material->getParameter("u_diffuseColor")->setValue(Vector4(0.53544f, 0.53544f, 0.53544f, 1.0f));
     initializeMaterial(material, true, true);
@@ -133,7 +135,6 @@ void SpaceshipGame::initializeSpaceship()
 
     // Setup spaceship propulsion model
     _propulsionNode = _scene->findNode("pPropulsion");
-    _propulsionNode->setBoundsType(Node::BOX);
     material = _propulsionNode->getModel()->setMaterial("res/shaders/colored-specular.vsh", "res/shaders/colored-specular.fsh");
     material->getParameter("u_diffuseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
     initializeMaterial(material, true, true);
@@ -141,14 +142,17 @@ void SpaceshipGame::initializeSpaceship()
     // Glow effect node
     _glowNode = _scene->findNode("pGlow");
     material = _glowNode->getModel()->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
-    material->getParameter("u_diffuseTexture")->setValue("res/textures/propulsion_glow.png", true);
+    material->getParameter("u_diffuseTexture")->setValue("res/propulsion_glow.png", true);
     _glowDiffuseParameter = material->getParameter("u_diffuseColor");
     initializeMaterial(material, false, false);
 
     // Setup the sound
-    _spaceshipSound = AudioSource::create("res/sounds/spaceship.wav");
+    _spaceshipSound = AudioSource::create("res/spaceship.wav");
     if (_spaceshipSound)
+    {
+        _spaceshipSound->setGain(0.5f);
         _spaceshipSound->setLooped(true);
+    }
 }
 
 void SpaceshipGame::initializeEnvironment()
@@ -181,7 +185,7 @@ void SpaceshipGame::initializeEnvironment()
     nodes.clear();
     Node* pBackground = _scene->findNode("pBackground");
     material = pBackground->getModel()->setMaterial("res/shaders/diffuse.vsh", "res/shaders/diffuse.fsh");
-    material->getParameter("u_diffuseTexture")->setValue("res/textures/background.png", true);
+    material->getParameter("u_diffuseTexture")->setValue("res/background.png", true);
     initializeMaterial(material, true, false);
 }
 
@@ -218,6 +222,9 @@ void SpaceshipGame::initializeMaterial(Material* material, bool lighting, bool s
 
 void SpaceshipGame::finalize()
 {
+    SAFE_RELEASE(_backgroundSound);
+    SAFE_RELEASE(_spaceshipSound);
+    SAFE_RELEASE(_font);
     SAFE_RELEASE(_stateBlock);
     SAFE_RELEASE(_scene);
 }
@@ -229,6 +236,15 @@ void SpaceshipGame::update(long elapsedTime)
     if (!_finished)
     {
         _time += t;
+        // Play the background track
+        if (_backgroundSound->getState() != AudioSource::PLAYING)
+            _backgroundSound->play();
+    }
+    else
+    {
+        // Stop the background track
+        if (_backgroundSound->getState() != AudioSource::STOPPED)
+            _backgroundSound->stop();
     }
 
     // Set initial force due to gravity
@@ -340,9 +356,13 @@ void SpaceshipGame::handleCollisions(float t)
 {
     float friction = 0.0f;
 
-    // Detect collisions
+    // Use the ship's bounding sphere for roof collisions
     const BoundingSphere& shipBounds = _shipNode->getBoundingSphere();
-    const BoundingBox& propulsionBounds = _propulsionNode->getBoundingBox();
+
+    // Compute a bounding box for floor collisions
+    BoundingBox propulsionBounds = _propulsionNode->getModel()->getMesh()->getBoundingBox();
+    propulsionBounds.transform(_propulsionNode->getWorldMatrix());
+
     if (propulsionBounds.min.y <= FLOOR_HEIGHT)
     {
         // Floor collision
@@ -431,52 +451,64 @@ void SpaceshipGame::render(long elapsedTime)
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
     // Visit scene nodes for opaque drawing
-    _scene->visit(this, &SpaceshipGame::visitNode, 0);
+    _scene->visit(this, &SpaceshipGame::drawScene, (void*)0);
 
     // Visit scene nodes for transparent drawing
-    _scene->visit(this, &SpaceshipGame::visitNode, 1);
+    _scene->visit(this, &SpaceshipGame::drawScene, (void*)1);
 
     // Draw game text (yellow)
+    drawText();
+}
+
+void SpaceshipGame::drawSplash(void* coookie)
+{
+    clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
+    SpriteBatch* batch = SpriteBatch::create("res/splash.png");
+    batch->begin();
+    batch->draw(Rectangle(0, 0, 1024, 600), Rectangle(0, 0, 1024, 600), Vector4::one());
+    batch->end();
+    SAFE_DELETE(batch);
+}
+
+bool SpaceshipGame::drawScene(Node* node, void* cookie)
+{
+    Model* model = node->getModel();
+    if (model)
+    {
+        // Transparent nodes must be drawn last (stage 1)
+        bool isTransparent = (node == _glowNode);
+
+        // Skip transparent objects for stage 0
+        if ((!isTransparent && (int)cookie == 0) || (isTransparent && (int)cookie == 1))
+            model->draw();
+    }
+
+    return true;
+}
+
+void SpaceshipGame::drawText()
+{
     _font->begin();
     char text[1024];
     sprintf(text, "%dsec.", (int)_time);
-    _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1));
+    _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1), _font->getSize());
     if (_finished)
     {
-        _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one());
+        _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one(), _font->getSize());
     }
     _font->end();
 }
 
-void SpaceshipGame::visitNode(Node* node, long cookie)
+void SpaceshipGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    Model* model = node->getModel();
-    if (model == NULL)
-        return;
-
-    // Transparent nodes must be drawn last (stage 1)
-    bool isTransparent = (node == _glowNode);
-
-    // Skip transparent objects for stage 0
-    if (cookie == 0 && isTransparent)
-        return;
-    // Skip opaque objects for stage 1
-    if (cookie == 1 && !isTransparent)
-        return;
-
-    model->draw();
-}
-
-void SpaceshipGame::touch(int x, int y, int touchEvent)
-{
-    switch (touchEvent)
+    switch (evt)
     {
-    case Input::TOUCHEVENT_PRESS:
+    case Touch::TOUCH_PRESS:
         if (_finished && (getAbsoluteTime() - _finishedTime) > 1000L)
         {
             resetGame();
         }
-    case Input::TOUCHEVENT_MOVE:
+    case Touch::TOUCH_MOVE:
         if (!_finished)
         {
             _pushing = true;
@@ -484,7 +516,7 @@ void SpaceshipGame::touch(int x, int y, int touchEvent)
         }
         break;
 
-    case Input::TOUCHEVENT_RELEASE:
+    case Touch::TOUCH_RELEASE:
         _pushing = false;
         break;
     }

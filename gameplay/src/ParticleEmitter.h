@@ -1,7 +1,3 @@
-/*
- * ParticleEmitter.h
- */
-
 #ifndef PARTICLEEMITTER_H_
 #define PARTICLEEMITTER_H_
 
@@ -12,6 +8,7 @@
 #include "Texture.h"
 #include "Rectangle.h"
 #include "SpriteBatch.h"
+#include "Properties.h"
 
 namespace gameplay
 {
@@ -39,52 +36,55 @@ class Node;
  * simply set the minimum to the same value as the maximum for that property or set its
  * variance to the zero vector.
  *
- * Scalar Properties:
+ * <h2>Scalar properties:</h2>
  *
- * Begin-Size: 
+ * Begin-Size: \n
  * The size of a newly emitted particle.
  *
- * End-Size: 
+ * End-Size: \n
  * The size of a particle at the end of its lifetime.  A particle's size will
  * interpolate linearly between its begin-size and end-size over its lifetime.
  *
- * Energy: 
+ * Energy: \n
  * The length of time a particle will remain alive for.
  *
- * Vector properties:
- * 
- * Initial Position: 
- * The position of a new particle at the moment it is emitted, relative
- * to the node its ParticleEmitter is set on.  This property is unique
- * in that the initial positions of new particles can be restricted to
- * fit within an ellipsoidal domain; see setEllipsoid().
- *
- * Initial Velocity: 
- * The velocity of a new particle at the moment it is emitted.  This
- * property is measured in world coordinates per second and modifies
- * a particle's current position each time ParticleEmitter::update()
- * is called.
- *
- * Acceleration:
- * The particle's change in velocity, measured in world coordinates per second.
- * This property modifies a particle's current position each time 
- * ParticleEmitter::update() is called.
- *
- * Color: 
- * The color of a particle at the end of its lifetime.  A particle's color
- * will interpolate linearly between its begin-color and end-color over its lifetime.
- *
- * RotationSpeedPerParticle: 
+ * RotationSpeedPerParticle: \n
  * The speed and direction a particle will spin.  Since particles are
  * rendered as billboards, no axis of rotation can be specified per particle.
  * Each particles rotates around their center points, around the z-axis in
  * screen space.
  *
- * RotationAxis: 
- * The rotation axis at which the emmiter emits particles around.
+ * RotationSpeed:\n
+ * The speed a particle will spin around its RotationAxis in world space.
+ * (See RotationAxis under "Vector properties" below.)
  *
- * RotationSpeed:
- * The speed at which the 
+ *
+ * <h2>Vector properties:</h2>
+ * 
+ * Initial Position: \n
+ * The position of a new particle at the moment it is emitted, relative
+ * to the node its ParticleEmitter is set on.  This property is unique
+ * in that the initial positions of new particles can be restricted to
+ * fit within an ellipsoidal domain; see setEllipsoid().
+ *
+ * Initial Velocity: \n
+ * The velocity of a new particle at the moment it is emitted.  This
+ * property is measured in world coordinates per second and modifies
+ * a particle's current position each time ParticleEmitter::update()
+ * is called.
+ *
+ * Acceleration:\n
+ * The particle's change in velocity, measured in world coordinates per second.
+ * This property modifies a particle's current position each time 
+ * ParticleEmitter::update() is called.
+ *
+ * Color: \n
+ * The color of a particle at the end of its lifetime.  A particle's color
+ * will interpolate linearly between its begin-color and end-color over its lifetime.
+ *
+ * RotationAxis: \n
+ * An axis in world space around which all particles will spin, allowing for tornado and
+ * spiral effects.
  *
  * The vector properties Initial Position, Initial Velocity and Acceleration can be set to
  * orbit around the origin of a node a ParticleEmitter is set on by that node's rotation matrix.
@@ -96,7 +96,7 @@ class Node;
  * order for gravity to continue to act in the same direction on water particles, no matter
  * what direction they were originally aimed.
  * 
- * Rendering properties:
+ * <h2>Rendering properties:</h2>
  *
  * Particles are rendered as screen-facing billboards -- that is, the ParticleEmitter's texture
  * is used to render particles as images that always face the camera.  For the simplest case,
@@ -105,29 +105,35 @@ class Node;
  * for each particle, or to render each particle as a sprite that animates through the frames
  * over the course of its lifetime.
  *
- * Frame Count: The number of individual images / frames contained in the texture.
+ * Frame Count: \n
+ * The number of individual images / frames contained in the texture.
  *
- * Texture Coordinates: The coordinates within the texture used to render a specific frame.
- *                      Using a texture that places the frames together, without padding,
- *                      in left-to-right top-to-bottom order is recommended, as there is a utility
- *                      method for generating the texture coordinates for such a texture atlas /
- *                      sprite-map.  See setSpriteFrameCoords().
+ * Texture Coordinates: \n
+ * The coordinates within the texture used to render a specific frame.
+ * Using a texture that places the frames together, without padding,
+ * in left-to-right top-to-bottom order is recommended, as there is a utility
+ * method for generating the texture coordinates for such a texture atlas /
+ * sprite-map.  See setSpriteFrameCoords().
  *
- * Sprite Animating: Set this to enable sprite animation.
+ * Sprite Animating: \n
+ * Set this to enable sprite animation.
  *
- * Sprite Looped: If sprites are set to loop, each frame will last for the emitter's frameDuration.
- *                If sprites are set not to loop, the animation will be timed so that the last frame
- *                finishes just as a particle dies.  This setting has no effect if the sprite is not
- *                animating.
+ * Sprite Looped: \n
+ * If sprites are set to loop, each frame will last for the emitter's frameDuration.
+ * If sprites are set not to loop, the animation will be timed so that the last frame
+ * finishes just as a particle dies.  This setting has no effect if the sprite is not
+ * animating.
  *
- * Sprite Random Offset: New particles are created with one of the sprite frames in the emitter's texture.
- *                       If a maximum offset is set, a random frame from 0 to maxOffset will be selected.
- *                       If sprite animation is disabled and this offset is set to Frame Count, each
- *                       particle will use one of the sprite frames for its entire lifetime.
+ * Sprite Random Offset: \n
+ * New particles are created with one of the sprite frames in the emitter's texture.
+ * If a maximum offset is set, a random frame from 0 to maxOffset will be selected.
+ * If sprite animation is disabled and this offset is set to Frame Count, each
+ * particle will use one of the sprite frames for its entire lifetime.
  *
- * Blend Mode: Sets the blend mode used by this particle emitter.  The given blend factors will
- *             be set before rendering the particle system and then will be reset to their original
- *             values.  Accepts the same symbolic constants as glBlendFunc().
+ * Blend Mode: \n
+ * Sets the blend mode used by this particle emitter.  The given blend factors will
+ * be set before rendering the particle system and then will be reset to their original
+ * values.  Accepts the same symbolic constants as glBlendFunc().
  *
  */
 class ParticleEmitter : public Ref
@@ -154,12 +160,22 @@ public:
     static ParticleEmitter* create(const char* particleFile);
 
     /**
+     * Creates a particle emitter from the specified properties object.
+     * 
+     * @param properties The properties object defining the 
+     *      particle emitter (must have namespace equal to 'particle').
+     * @return The newly created particle emitter, or <code>NULL</code> if the particle emitter failed to load.
+     */
+    static ParticleEmitter* create(Properties* properties);
+
+    /**
      * Creates an uninitialized ParticleEmitter.
      *
      * @param texturePath A path to the image to use as this ParticleEmitter's texture.
+     * @param textureBlending The type of texture blending to be used for the particles emitted.
      * @param particleCountMax The maximum number of particles that can be alive at one time in this ParticleEmitter's system.
      */
-    static ParticleEmitter* create(const char* texturePath, TextureBlending blending,  unsigned int particleCountMax);
+    static ParticleEmitter* create(const char* texturePath, TextureBlending textureBlending,  unsigned int particleCountMax);
 
     /**
      * Sets the emission rate, measured in particles per second.
@@ -429,15 +445,15 @@ public:
     float getRotationPerParticleSpeedMax() const;
 
     /**
-    * Sets the rotation for the emiiter with a speed and emitter axis at which a particle rotates around its
-    * rotation axis in space at its speed, measured in radians per second. 
-    * This should not be confused with a particle's rotation per particle.
-    *
-    * @param axis The base rotation axis of emitted particles.
-    * @param axisVariance The variance of the rotation axis of emitted particles.
-    * @param speedMin The minimum rotation speed of emitted particles.
-    * @param speedMax The maximum rotation speed of emitted particles.
-    */
+     * Sets a rotation axis in world space around which all particles will spin,
+     * as well as the minimum and maximum rotation speed around this axis.
+     * This should not be confused with rotation speed per particle.
+     *
+     * @param axis The base rotation axis of emitted particles.
+     * @param axisVariance The variance of the rotation axis of emitted particles.
+     * @param speedMin The minimum rotation speed of emitted particles.
+     * @param speedMax The maximum rotation speed of emitted particles.
+     */
    void setRotation(float speedMin, float speedMax, const Vector3& axis, const Vector3& axisVariance);
 
     /**
@@ -597,7 +613,7 @@ private:
     /**
      * Destructor.
      */
-    virtual ~ParticleEmitter();
+    ~ParticleEmitter();
 
     /**
      * Sets the node that this emitter is attached to.

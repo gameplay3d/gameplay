@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "GPBDecoder.h"
 
 namespace gameplay
@@ -42,7 +43,7 @@ bool GPBDecoder::validateHeading()
     const char identifier[] = { '«', 'G', 'P', 'B', '»', '\r', '\n', '\x1A', '\n' };
 
     char heading[HEADING_SIZE];
-    for (size_t i = 0; i < HEADING_SIZE; i++)
+    for (size_t i = 0; i < HEADING_SIZE; ++i)
     {
         if (heading[i] != identifier[i])
         {
@@ -63,7 +64,7 @@ void GPBDecoder::readRefs()
     // read number of refs
     unsigned int refCount;
     assert(read(&refCount));
-    for (size_t i = 0; i < refCount; i++)
+    for (size_t i = 0; i < refCount; ++i)
     {
         readRef();
     }
@@ -113,4 +114,4 @@ std::string GPBDecoder::readString(FILE* fp)
     return result;
 }
 
-};
+}

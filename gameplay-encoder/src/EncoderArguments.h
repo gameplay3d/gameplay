@@ -1,14 +1,8 @@
 #ifndef ENCODERARGUMENTS_H_
 #define ENCODERARGUMENTS_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
-#include <string>
-#include <sys/stat.h>
-#include <vector>
-
-#include "Base.h"
+namespace gameplay
+{
 
 /**
  * EncoderArguments handles parsing the command line arguments for the GamePlay Encoder.
@@ -21,6 +15,7 @@ public:
     {
         FILEFORMAT_UNKNOWN,
         FILEFORMAT_DAE,
+        FILEFORMAT_FBX,
         FILEFORMAT_TTF,
         FILEFORMAT_GPB
     };
@@ -36,6 +31,11 @@ public:
     ~EncoderArguments(void);
 
     /**
+     * Gets the EncoderArguments instance.
+     */
+    static EncoderArguments* getInstance();
+
+    /**
      * Gets the file format from the file path based on the extension.
      */
     FileFormat getFileFormat() const;
@@ -48,15 +48,25 @@ public:
     /**
      * Returns the char pointer to the file path string.
      */
-    const char* EncoderArguments::getFilePathPointer() const;
+    const char* getFilePathPointer() const;
 
     /**
      * Returns the path to where the DAE output should be written to.
      */
-    const std::string& EncoderArguments::getDAEOutputPath() const;
+    const std::string& getDAEOutputPath() const;
+
+    /**
+     * Returns the output path/folder.
+     */
+    std::string getOutputPath() const;
 
     const std::vector<std::string>& getGroupAnimationNodeId() const;
     const std::vector<std::string>& getGroupAnimationAnimationId() const;
+
+    bool containsGroupNodeId(const std::string& nodeId) const;
+    const std::string getAnimationId(const std::string& nodeId) const;
+
+    const std::vector<std::string>& getHeightmapNodeIds() const;
 
     /**
      * Returns true if an error occured while parsing the command line arguments.
@@ -115,6 +125,10 @@ private:
 
     std::vector<std::string> _groupAnimationNodeId;
     std::vector<std::string> _groupAnimationAnimationId;
+    std::vector<std::string> _heightmapNodeIds;
+
 };
+
+}
 
 #endif

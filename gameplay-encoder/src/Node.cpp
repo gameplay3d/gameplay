@@ -1,4 +1,7 @@
+#include "Base.h"
 #include "Node.h"
+#include "Matrix.h"
+#include "EncoderArguments.h"
 
 #define NODE 1
 #define JOINT 2
@@ -12,7 +15,6 @@ Node::Node(void) :
     _firstChild(NULL), _lastChild(NULL), _parent(NULL),
     _camera(NULL), _light(NULL), _model(NULL), _joint(false)
 {
-    setIdentityMatrix(_transform);
 }
 
 Node::~Node(void)
@@ -37,7 +39,7 @@ void Node::writeBinary(FILE* file)
     unsigned int type = _joint ? JOINT : NODE;
     write(type, file);
 
-    write(_transform, 16, file);
+    write(_transform.m, 16, file);
     // children
     write(getChildCount(), file); // write number of children
     for (Node* node = getFirstChild(); node != NULL; node = node->getNextSibling())
@@ -72,7 +74,10 @@ void Node::writeBinary(FILE* file)
     {
         writeZero(file);
     }
+
+    generateHeightmap();
 }
+
 void Node::writeText(FILE* file)
 {
     if (isJoint())
@@ -84,7 +89,7 @@ void Node::writeText(FILE* file)
         fprintElementStart(file);
     }
     fprintf(file, "<transform>");
-    fprintfMatrix4f(file, _transform);
+    fprintfMatrix4f(file, _transform.m);
     fprintf(file, "</transform>\n");
 
     // children
@@ -108,6 +113,29 @@ void Node::writeText(FILE* file)
         _model->writeText(file);
     }
     fprintElementEnd(file);
+
+    generateHeightmap();
+}
+
+void Node::generateHeightmap()
+{
+    // Is this node flagged to have a heightmap generated for it?
+    const std::vector<std::string>& heightmapNodes = EncoderArguments::getInstance()->getHeightmapNodeIds();
+    if (std::find(heightmapNodes.begin(), heightmapNodes.end(), getId()) != heightmapNodes.end())
+    {
+        Mesh* mesh = _model ? _model->getMesh() : NULL;
+        if (mesh)
+        {
+            DEBUGPRINT_VARG("> Generating heightmap for node: %s\n", getId().c_str());
+
+            std::string heightmapFilename(EncoderArguments::getInstance()->getOutputPath());
+            heightmapFilename += "/heightmap_";
+            heightmapFilename += getId();
+            heightmapFilename += ".png";
+
+            mesh->generateHeightmap(heightmapFilename.c_str());
+        }
+    }
 }
 
 void Node::addChild(Node* child)
@@ -219,25 +247,48 @@ Node* Node::getParent() const
     return _parent;
 }
 
-void Node::setCameraInstance(CameraInstance* cameraInstance)
+void Node::setCamera(Camera* camera)
 {
-    _camera = cameraInstance;
+    _camera = camera;
 }
-void Node::setLightInstance(LightInstance* lightInstance)
+
+void Node::setLight(Light* light)
 {
-    _light = lightInstance;
+    _light = light;
 }
+
 void Node::setModel(Model* model)
 {
     _model = model;
 }
 
+const Matrix& Node::getTransformMatrix() const
+{
+    return _transform;
+}
+
 void Node::setTransformMatrix(float matrix[])
 {
-    for (int i = 0; i < 16; i++)
+    memcpy(_transform.m, matrix, 16 * sizeof(float));
+}
+
+const Matrix& Node::getWorldMatrix() const
+{
+    if (_parent)
     {
-        _transform[i] = matrix[i];
+        Matrix::multiply(_parent->getWorldMatrix().m, _transform.m, _worldTransform.m);
     }
+    else
+    {
+        memcpy(_worldTransform.m, _transform.m, 16 * sizeof(float));
+    }
+
+    return _worldTransform;
+}
+
+void Node::resetTransformMatrix()
+{
+    Matrix::setIdentity(_transform.m);
 }
 
 void Node::setIsJoint(bool value)
@@ -252,20 +303,12 @@ bool Node::isJoint()
 
 Camera* Node::getCamera() const
 {
-    if (_camera)
-    {
-        return _camera->getCamera();
-    }
-    return NULL;
+    return _camera;
 }
 
 Light* Node::getLight() const
 {
-    if (_light)
-    {
-        return _light->getLight();
-    }
-    return NULL;
+    return _light;
 }
 
 Model* Node::getModel() const

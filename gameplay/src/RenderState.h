@@ -1,7 +1,3 @@
-/**
- * RenderState.h
- */
-
 #ifndef RENDERSTATE_H_
 #define RENDERSTATE_H_
 
@@ -16,6 +12,7 @@ class Pass;
 
 class RenderState : public Ref
 {
+    friend class Game;
     friend class Material;
     friend class Technique;
     friend class Pass;
@@ -41,9 +38,19 @@ public:
         VIEW_MATRIX,
 
         /**
+         * Binds the Projection matrix of the active camera for the node's scene.
+         */
+        PROJECTION_MATRIX,
+
+        /**
          * Binds a node's WorldView matrix.
          */
         WORLD_VIEW_MATRIX,
+
+        /**
+         * Binds the ViewProjection matrix of the active camera for the node's scene.
+         */
+        VIEW_PROJECTION_MATRIX,
 
         /**
          * Binds a node's WorldViewProjection matrix.
@@ -93,6 +100,7 @@ public:
     class StateBlock : public Ref
     {
         friend class RenderState;
+        friend class Game;
 
     public:
 
@@ -188,6 +196,8 @@ public:
 
         static void restore(long stateOverrideBits);
 
+        static void enableDepthWrite();
+
         // States
         bool _blendEnabled;
         bool _cullFaceEnabled;
@@ -198,7 +208,7 @@ public:
         // State bits
         long _bits;
 
-        static StateBlock _defaultState;
+        static StateBlock* _defaultState;
     };
 
     /**
@@ -280,6 +290,16 @@ protected:
     virtual ~RenderState();
 
     /**
+     * Static initializer that is called during game startup.
+     */
+    static void initialize();
+
+    /**
+     * Static finalizer that is called during game shutdown.
+     */
+    static void finalize();
+
+    /**
      * Sets the node that this render state is bound to.
      *
      * The specified node is used to apply auto-bindings for the render state.
@@ -311,8 +331,6 @@ protected:
     Node* _nodeBinding;
     mutable StateBlock* _state;
     RenderState* _parent;
-   
-    static StateBlock* _restoreState;
 };
 
 }

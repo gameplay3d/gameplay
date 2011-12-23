@@ -1,7 +1,3 @@
-/*
- * Frustum.cpp
- */
-
 #include "Base.h"
 #include "Frustum.h"
 #include "BoundingSphere.h"
@@ -119,7 +115,7 @@ void updatePlane(const Matrix& matrix, Plane* dst)
     Vector3 normal = dst->getNormal();
     if (!normal.isZero())
     {
-        float normalizeFactor = 1.0f / ::sqrtf(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+        float normalizeFactor = 1.0f / sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
         if (normalizeFactor != 1.0f)
         {
             dst->setNormal(Vector3(normal.x * normalizeFactor, normal.y * normalizeFactor, normal.z * normalizeFactor));

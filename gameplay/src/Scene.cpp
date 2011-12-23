@@ -1,12 +1,7 @@
-/*
- * Scene.cpp
- */
-
-#include <algorithm>
-
 #include "Base.h"
 #include "AudioListener.h"
 #include "Scene.h"
+#include "SceneLoader.h"
 
 namespace gameplay
 {
@@ -21,12 +16,30 @@ Scene::Scene(const Scene& copy)
 
 Scene::~Scene()
 {
+    // Unbind our active camera from the audio listener
+    if (_activeCamera)
+    {
+        AudioListener* audioListener = AudioListener::getInstance();
+        if (audioListener && (audioListener->getCamera() == _activeCamera))
+        {
+            audioListener->setCamera(NULL);
+        }
+
+        SAFE_RELEASE(_activeCamera);
+    }
+
+    // Remove all nodes from the scene
     removeAllNodes();
 }
 
 Scene* Scene::createScene()
 {
     return new Scene();
+}
+
+Scene* Scene::load(const char* filePath)
+{
+    return SceneLoader::load(filePath);
 }
 
 const char* Scene::getId() const
@@ -116,6 +129,14 @@ void Scene::addNode(Node* node)
 {
     assert(node);
 
+    if (node->_scene == this)
+    {
+        // The node is already a member of this scene.
+        return;
+    }
+
+    node->addRef();
+
     // If the node is part of another scene, remove it.
     if (node->_scene && node->_scene != this)
     {
@@ -125,7 +146,7 @@ void Scene::addNode(Node* node)
     // If the node is part of another node hierarchy, remove it.
     if (node->getParent())
     {
-        node->remove();
+        node->getParent()->removeChild(node);
     }
 
     // Link the new node into our list.
@@ -141,8 +162,6 @@ void Scene::addNode(Node* node)
     }
 
     node->_scene = this;
-
-    node->addRef();
 
     ++_nodeCount;
 
@@ -164,9 +183,6 @@ void Scene::removeNode(Node* node)
     if (node->_scene != this)
         return;
 
-    node->remove();
-    node->_scene = NULL;
-
     if (node == _firstNode)
     {
         _firstNode = node->_nextSibling;
@@ -175,6 +191,9 @@ void Scene::removeNode(Node* node)
     {
         _lastNode = node->_prevSibling;
     }
+
+    node->remove();
+    node->_scene = NULL;
 
     SAFE_RELEASE(node);
 
@@ -209,16 +228,26 @@ void Scene::setActiveCamera(Camera* camera)
     // Make sure we don't release the camera if the same camera is set twice.
     if (_activeCamera != camera)
     {
+        AudioListener* audioListener = AudioListener::getInstance();
+
         if (_activeCamera)
         {
+            // Unbind the active camera from the audio listener
+            if (audioListener && (audioListener->getCamera() == _activeCamera))
+            {
+                AudioListener::getInstance()->setCamera(NULL);
+            }
+
             SAFE_RELEASE(_activeCamera);
         }
 
         _activeCamera = camera;
+
         if (_activeCamera)
         {
             _activeCamera->addRef();
-            if (_bindAudioListenerToCamera && AudioListener::getInstance())
+
+            if (audioListener && _bindAudioListenerToCamera)
             {
                 AudioListener::getInstance()->setCamera(_activeCamera);
             }
@@ -231,6 +260,7 @@ void Scene::bindAudioListenerToCamera(bool bind)
     if (_bindAudioListenerToCamera != bind)
     {
         _bindAudioListenerToCamera = bind;
+
         if (AudioListener::getInstance())
         {
             AudioListener::getInstance()->setCamera(bind ? _activeCamera : NULL);

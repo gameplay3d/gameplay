@@ -32,7 +32,6 @@ private:
     Effect* _effect;
 };
 
-
 }
-#endif
 
+#endif

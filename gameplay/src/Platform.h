@@ -1,7 +1,3 @@
-/*
- * Platform.h
- */
-
 #ifndef PLATFORM_H_
 #define PLATFORM_H_
 
@@ -16,6 +12,11 @@ class Game;
 class Platform
 {
 public:
+
+    /**
+     * Destructor.
+     */
+    ~Platform();
 
     /**
      * Creates a platform for the specified game which is will interacte with.
@@ -72,19 +73,27 @@ public:
     static int getOrientationAngle();
 
     /**
-     * Indicates whether the platform supports an accelerometer.
-     * 
-     * @return true if the accelerometer is supported, false otherwise.
+     * Set if multi-touch is enabled on the platform
      */
-    static bool isAccelerometerSupported();
+    static void setMultiTouch(bool enabled);
+
+   /**
+    * Is multi-touch mode enabled.
+    */
+    static bool isMultiTouch();
 
     /**
-     * Gets the platform accelerometer pitch and roll.
+     * Gets the platform accelerometer values.
      * 
      * @param pitch The accelerometer pitch.
      * @param roll The accelerometer roll.
      */
-    static void getAccelerometerPitchAndRoll(float* pitch, float* roll);
+    static void getAccelerometerValues(float* pitch, float* roll);
+
+    /**
+     * Swaps the frame buffer on the device.
+     */
+    static void swapBuffers();
 
 private:
 
@@ -98,13 +107,7 @@ private:
      */
     Platform(const Platform& copy);
 
-    /**
-     * Destructor.
-     */
-    ~Platform();
-
-    Game* _game;
-
+    Game* _game;                // The game this platform is interfacing with.
 };
 
 }

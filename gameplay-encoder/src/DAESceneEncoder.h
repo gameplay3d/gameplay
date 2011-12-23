@@ -1,32 +1,11 @@
-/*
- * DAESceneEncoder.h
- */
-
 #ifndef DAESCENEEENCODER_H_
 #define DAESCENEEENCODER_H_
 
-#include <iostream>
-#include <list>
-#include <vector>
-#include <ctime>
-
-#include <dae.h>
-#include <dae/daeSIDResolver.h>
-#include <dae/domAny.h>
-#include <dom/domCOLLADA.h>
-#include <dom/domConstants.h>
-#include <dom/domElements.h>
-#include <dom/domProfile_COMMON.h>
-#include <dom/domCamera.h>
-
-#include "Base.h"
 #include "StringUtil.h"
 #include "Object.h"
 #include "Node.h"
 #include "Camera.h"
-#include "CameraInstance.h"
 #include "Light.h"
-#include "LightInstance.h"
 #include "Mesh.h"
 #include "MeshPart.h"
 #include "MeshSkin.h"
@@ -42,7 +21,8 @@
 #include "DAEUtil.h"
 #include "EncoderArguments.h"
 
-using namespace gameplay;
+namespace gameplay
+{
 
 /**
  * Class for binary encoding a Collada (DAE) file.
@@ -134,8 +114,8 @@ private:
      */
     void loadAnimation(const domAnimationRef animationRef);
 
-    CameraInstance* loadCamera(const domCamera* cameraRef);
-    LightInstance* loadLight(const domLight* lightRef);
+    Camera* loadCamera(const domCamera* cameraRef);
+    Light* loadLight(const domLight* lightRef);
     Model* loadSkin(const domSkin* skinElement);
     Model* loadGeometry(const domGeometry* geometry, const domBind_materialRef bindMaterial);
 
@@ -222,5 +202,7 @@ private:
 
     clock_t _begin;
 };
+
+}
 
 #endif

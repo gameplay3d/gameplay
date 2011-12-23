@@ -1,12 +1,8 @@
-/*
- * CharacterGame.h
- */
-
 #ifndef CHARACTERGAME_H_
 #define CHARACTERGAME_H_
 
 #include "gameplay.h"
-#include "gameplay-main.h"
+
 using namespace gameplay;
 
 /**
@@ -14,7 +10,6 @@ using namespace gameplay;
  */
 class CharacterGame: public Game
 {
-
 public:
 
     /**
@@ -28,9 +23,9 @@ public:
     virtual ~CharacterGame();
 
     /**
-     * @see Game::touch
+     * @see Game::touchEvent
      */
-    void touch(int x, int y, int touchEvent);
+    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
 protected:
 
@@ -56,28 +51,12 @@ protected:
 
 private:
 
-    /**
-     * Draws the model if the node contains a model.
-     */
-    void drawModel(Node* node, long cookie);
+    bool drawScene(Node* node, void* cookie);
 
-    /**
-     * Gets the first model node. This is intended to be used with visit.
-     */
-    void getModelNode(Node* node, long cookie);
+    void loadAnimationClips();
 
-    /**
-     * Creates the default camera.
-     */
-    void createDefaultCamera(Scene* scene);
-
-    /**
-     * Loads the characters animations.
-     */
-    void loadCharacterAnimations();
-
-    Scene* _scene;
     Font* _font;
+    Scene* _scene;
     Node* _modelNode;
     Animation* _animation;
     unsigned int _animationState;
