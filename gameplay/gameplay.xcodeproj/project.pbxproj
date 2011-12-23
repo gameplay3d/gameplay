@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4201819014A41B18008C3F56 /* MeshBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4201818D14A41B18008C3F56 /* MeshBatch.cpp */; };
+		4201819114A41B18008C3F56 /* MeshBatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 4201818E14A41B18008C3F56 /* MeshBatch.h */; };
 		4208DEE914A4079F00D3C511 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4208DEE614A4079F00D3C511 /* Image.cpp */; };
 		4208DEEA14A4079F00D3C511 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEE714A4079F00D3C511 /* Image.h */; };
 		4208DEEC14A407B900D3C511 /* Keyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEEB14A407B900D3C511 /* Keyboard.h */; };
@@ -160,6 +162,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4201818D14A41B18008C3F56 /* MeshBatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshBatch.cpp; path = src/MeshBatch.cpp; sourceTree = SOURCE_ROOT; };
+		4201818E14A41B18008C3F56 /* MeshBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeshBatch.h; path = src/MeshBatch.h; sourceTree = SOURCE_ROOT; };
+		4201818F14A41B18008C3F56 /* MeshBatch.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = MeshBatch.inl; path = src/MeshBatch.inl; sourceTree = SOURCE_ROOT; };
 		4208DEE514A4078100D3C511 /* Curve.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Curve.inl; path = src/Curve.inl; sourceTree = SOURCE_ROOT; };
 		4208DEE614A4079F00D3C511 /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Image.cpp; path = src/Image.cpp; sourceTree = SOURCE_ROOT; };
 		4208DEE714A4079F00D3C511 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = src/Image.h; sourceTree = SOURCE_ROOT; };
@@ -441,6 +446,9 @@
 				42CD0DEE147D8FF50000361E /* Matrix.inl */,
 				42CD0DEF147D8FF50000361E /* Mesh.cpp */,
 				42CD0DF0147D8FF50000361E /* Mesh.h */,
+				4201818D14A41B18008C3F56 /* MeshBatch.cpp */,
+				4201818E14A41B18008C3F56 /* MeshBatch.h */,
+				4201818F14A41B18008C3F56 /* MeshBatch.inl */,
 				42CD0DF1147D8FF50000361E /* MeshPart.cpp */,
 				42CD0DF2147D8FF50000361E /* MeshPart.h */,
 				42CD0DF3147D8FF50000361E /* MeshSkin.cpp */,
@@ -635,6 +643,7 @@
 				4208DEEA14A4079F00D3C511 /* Image.h in Headers */,
 				4208DEEC14A407B900D3C511 /* Keyboard.h in Headers */,
 				4208DEEE14A407D500D3C511 /* Touch.h in Headers */,
+				4201819114A41B18008C3F56 /* MeshBatch.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -758,6 +767,7 @@
 				42CD0ECB147D8FF60000361E /* Viewport.cpp in Sources */,
 				428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */,
 				4208DEE914A4079F00D3C511 /* Image.cpp in Sources */,
+				4201819014A41B18008C3F56 /* MeshBatch.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
