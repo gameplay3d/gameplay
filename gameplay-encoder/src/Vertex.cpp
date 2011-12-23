@@ -1,25 +1,16 @@
+#include "Base.h"
 #include "Vertex.h"
 
 namespace gameplay
 {
 
 Vertex::Vertex(void)
+    : hasNormal(false), hasTangent(false), hasBinormal(false), hasTexCoord(false), hasColor(false), hasWeights(false)
 {
-    reset();
 }
 
 Vertex::~Vertex(void)
 {
-}
-
-void Vertex::reset()
-{
-    hasNormal = false;
-    hasTangent = false;
-    hasBinormal = false;
-    hasTexCoord = false;
-    hasColor = false;
-    hasWeights = false;
 }
 
 unsigned int Vertex::byteSize() const
@@ -40,66 +31,78 @@ unsigned int Vertex::byteSize() const
 
 void Vertex::writeBinary(FILE* file) const
 {
-    position.writeBinary(file);
+    writeVectorBinary(position, file);
     if (hasNormal)
     {
-        normal.writeBinary(file);
+        writeVectorBinary(normal, file);
     }
     if (hasTangent)
     {
-        tangent.writeBinary(file);
+        writeVectorBinary(tangent, file);
     }
     if (hasBinormal)
     {
-        binormal.writeBinary(file);
+        writeVectorBinary(binormal, file);
     }
     if (hasTexCoord)
     {
-        texCoord.writeBinary(file);
+        writeVectorBinary(texCoord, file);
     }
     // TODO add vertex color?
     //if (hasColor)
     //{
-    //    color.writeBinary(file);
+    //    writeVectorBinary(color, file);
     //}
     if (hasWeights)
     {
-        blendWeights.writeBinary(file);
-        blendIndices.writeBinary(file);
+        writeVectorBinary(blendWeights, file);
+        writeVectorBinary(blendIndices, file);
     }
 }
 
 void Vertex::writeText(FILE* file) const
 {
     write("// position\n", file);
-    position.writeText(file);
+    writeVectorText(position, file);
     if (hasNormal)
     {
         write("// normal\n", file);
-        normal.writeText(file);
+        writeVectorText(normal, file);
     }
     if (hasTangent)
     {
         write("// tanget\n", file);
-        tangent.writeText(file);
+        writeVectorText(tangent, file);
     }
     if (hasBinormal)
     {
         write("// binormal\n", file);
-        binormal.writeText(file);
+        writeVectorText(binormal, file);
     }
     if (hasTexCoord)
     {
         write("// texCoord\n", file);
-        texCoord.writeText(file);
+        writeVectorText(texCoord, file);
     }
     if (hasWeights)
     {
         write("// blendWeights\n", file);
-        blendWeights.writeText(file);
+        writeVectorText(blendWeights, file);
         write("// blendIndices\n", file);
-        blendIndices.writeText(file);
+        writeVectorText(blendIndices, file);
     }
+}
+
+void Vertex::normalizeBlendWeight()
+{
+    float total = blendWeights.x + blendWeights.y + blendWeights.z + blendWeights.w;
+    if (total > 0.0f)
+    {
+        blendWeights.x = blendWeights.x / total;
+        blendWeights.y = blendWeights.y / total;
+        blendWeights.z = blendWeights.z / total;
+        blendWeights.w = blendWeights.w / total;
+    }   
 }
 
 }

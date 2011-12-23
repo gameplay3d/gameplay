@@ -35,7 +35,16 @@ public:
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
 
-    void setTargetId(const std::string str);
+    const std::string& getTargetId() const;
+
+    /**
+     * Sets the interpolation type of the entire animation channel.
+     * 
+     * @param interpolation The interpolation type from InterpolationTypes enum.
+     */
+    void setInterpolation(unsigned int interpolation);
+
+    void setTargetId(const std::string& str);
     void setTargetAttribute(unsigned int attrib);
 
     void setKeyTimes(const std::vector<float>& values);
@@ -44,7 +53,17 @@ public:
     void setTangentsOut(const std::vector<float>& values);
     void setInterpolations(const std::vector<unsigned int>& values);
 
+    unsigned int getTargetAttribute() const;
     const std::vector<float>& getKeyValues() const;
+    const std::vector<float>& getKeyTimes() const;
+    const std::vector<float>& getTangentsIn() const;
+    const std::vector<float>& getTangentsOut() const;
+    const std::vector<unsigned int>& getInterpolationTypes() const;
+
+    void removeDuplicates();
+
+    void convertToQuaternion();
+    void convertToTransform();
 
     /**
      * Returns the interpolation type value for the given string or zero if not valid.
@@ -56,7 +75,9 @@ public:
      */
     static unsigned int getInterpolationType(const char* str);
 
+private:
 
+    void deleteRange(size_t begin, size_t end);
 private:
 
     std::string _targetId;
@@ -68,7 +89,6 @@ private:
     std::vector<unsigned int> _interpolations;
 };
 
-
 }
-#endif
 
+#endif

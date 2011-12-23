@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugMem|Win32">
+      <Configuration>DebugMem</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
@@ -24,15 +28,21 @@
     <ClCompile Include="src\BoundingSphere.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Curve.cpp" />
+    <ClCompile Include="src\DebugNew.cpp" />
+    <ClCompile Include="src\DepthStencilTarget.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\Font.cpp" />
+    <ClCompile Include="src\FrameBuffer.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\gameplay-main-qnx.cpp" />
+    <ClCompile Include="src\gameplay-main-win32.cpp" />
+    <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\MeshBatch.cpp" />
     <ClCompile Include="src\Pass.cpp" />
     <ClCompile Include="src\MaterialParameter.cpp" />
     <ClCompile Include="src\Matrix.cpp" />
@@ -43,6 +53,15 @@
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\Package.cpp" />
     <ClCompile Include="src\ParticleEmitter.cpp" />
+    <ClCompile Include="src\PhysicsConstraint.cpp" />
+    <ClCompile Include="src\PhysicsController.cpp" />
+    <ClCompile Include="src\PhysicsFixedConstraint.cpp" />
+    <ClCompile Include="src\PhysicsGenericConstraint.cpp" />
+    <ClCompile Include="src\PhysicsHingeConstraint.cpp" />
+    <ClCompile Include="src\PhysicsMotionState.cpp" />
+    <ClCompile Include="src\PhysicsRigidBody.cpp" />
+    <ClCompile Include="src\PhysicsSocketConstraint.cpp" />
+    <ClCompile Include="src\PhysicsSpringConstraint.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\PlatformQNX.cpp" />
     <ClCompile Include="src\PlatformWin32.cpp" />
@@ -52,7 +71,9 @@
     <ClCompile Include="src\Rectangle.cpp" />
     <ClCompile Include="src\Ref.cpp" />
     <ClCompile Include="src\RenderState.cpp" />
+    <ClCompile Include="src\RenderTarget.cpp" />
     <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\SceneLoader.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
     <ClCompile Include="src\Texture.cpp" />
@@ -79,19 +100,21 @@
     <ClInclude Include="src\BoundingSphere.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Curve.h" />
+    <ClInclude Include="src\DebugNew.h" />
+    <ClInclude Include="src\DepthStencilTarget.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FileSystem.h" />
     <ClInclude Include="src\Font.h" />
+    <ClInclude Include="src\FrameBuffer.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\gameplay-main-qnx.h" />
-    <ClInclude Include="src\gameplay-main-win32.h" />
-    <ClInclude Include="src\gameplay-main.h" />
     <ClInclude Include="src\gameplay.h" />
-    <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Joint.h" />
+    <ClInclude Include="src\Keyboard.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Material.h" />
+    <ClInclude Include="src\MeshBatch.h" />
     <ClInclude Include="src\Pass.h" />
     <ClInclude Include="src\MaterialParameter.h" />
     <ClInclude Include="src\Matrix.h" />
@@ -102,6 +125,15 @@
     <ClInclude Include="src\Node.h" />
     <ClInclude Include="src\Package.h" />
     <ClInclude Include="src\ParticleEmitter.h" />
+    <ClInclude Include="src\PhysicsConstraint.h" />
+    <ClInclude Include="src\PhysicsController.h" />
+    <ClInclude Include="src\PhysicsFixedConstraint.h" />
+    <ClInclude Include="src\PhysicsGenericConstraint.h" />
+    <ClInclude Include="src\PhysicsHingeConstraint.h" />
+    <ClInclude Include="src\PhysicsMotionState.h" />
+    <ClInclude Include="src\PhysicsRigidBody.h" />
+    <ClInclude Include="src\PhysicsSocketConstraint.h" />
+    <ClInclude Include="src\PhysicsSpringConstraint.h" />
     <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Platform.h" />
     <ClInclude Include="src\Properties.h" />
@@ -110,10 +142,13 @@
     <ClInclude Include="src\Rectangle.h" />
     <ClInclude Include="src\Ref.h" />
     <ClInclude Include="src\RenderState.h" />
+    <ClInclude Include="src\RenderTarget.h" />
     <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\SceneLoader.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\Touch.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\Vector2.h" />
     <ClInclude Include="src\Vector3.h" />
@@ -122,6 +157,51 @@
     <ClInclude Include="src\VertexFormat.h" />
     <ClInclude Include="src\Viewport.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\bumped-specular.fsh" />
+    <None Include="res\shaders\bumped-specular.vsh" />
+    <None Include="res\shaders\bumped.fsh" />
+    <None Include="res\shaders\bumped.vsh" />
+    <None Include="res\shaders\colored-specular.fsh" />
+    <None Include="res\shaders\colored-specular.vsh" />
+    <None Include="res\shaders\colored.fsh" />
+    <None Include="res\shaders\colored.vsh" />
+    <None Include="res\shaders\diffuse-specular.fsh" />
+    <None Include="res\shaders\diffuse-specular.vsh" />
+    <None Include="res\shaders\diffuse.fsh" />
+    <None Include="res\shaders\diffuse.vsh" />
+    <None Include="res\shaders\parallax-specular.fsh" />
+    <None Include="res\shaders\parallax-specular.vsh" />
+    <None Include="res\shaders\parallax.fsh" />
+    <None Include="res\shaders\parallax.vsh" />
+    <None Include="res\shaders\solid.fsh" />
+    <None Include="res\shaders\solid.vsh" />
+    <None Include="res\shaders\textured.fsh" />
+    <None Include="res\shaders\textured.vsh" />
+    <None Include="res\textures\particle-default.png" />
+    <None Include="src\BoundingBox.inl" />
+    <None Include="src\BoundingSphere.inl" />
+    <None Include="src\Curve.inl" />
+    <None Include="src\Game.inl" />
+    <None Include="src\gameplay-main-macos.mm" />
+    <None Include="src\Image.inl" />
+    <None Include="src\Matrix.inl" />
+    <None Include="src\MeshBatch.inl" />
+    <None Include="src\Plane.inl" />
+    <None Include="src\PlatformMacOS.mm" />
+    <None Include="src\Quaternion.inl" />
+    <None Include="src\Ray.inl" />
+    <None Include="src\Vector2.inl" />
+    <None Include="src\Vector3.inl" />
+    <None Include="src\Vector4.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\PhysicsConstraint.inl" />
+    <None Include="src\PhysicsFixedConstraint.inl" />
+    <None Include="src\PhysicsGenericConstraint.inl" />
+    <None Include="src\PhysicsRigidBody.inl" />
+    <None Include="src\PhysicsSpringConstraint.inl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1032BA4B-57EB-4348-9E03-29DD63E80E4A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -129,6 +209,11 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
@@ -145,6 +230,9 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -152,7 +240,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(Configuration)\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
     <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -167,13 +261,36 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <Verbose>
+      </Verbose>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -184,7 +301,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -1,10 +1,7 @@
-/*
- * Game.cpp
- */
-
 #include "Base.h"
 #include "Game.h"
 #include "Platform.h"
+#include "RenderState.h"
 
 // Extern global variables
 GLenum __gl_error_code = GL_NO_ERROR;
@@ -17,9 +14,10 @@ long Game::_pausedTimeLast = 0L;
 long Game::_pausedTimeTotal = 0L;
 
 Game::Game() 
-    : _state(UNINITIALIZED), 
+    : _initialized(false), _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
-      _clearColor(Vector4::zero()), _clearDepth(1.0f), _clearStencil(0)
+      _clearDepth(1.0f), _clearStencil(0),
+      _animationController(NULL), _audioController(NULL)
 {
     assert(__gameInstance == NULL);
     __gameInstance = this;
@@ -33,6 +31,11 @@ Game::~Game()
 {
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.
+
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+    Ref::printLeaks();
+    printMemoryLeaks();
+#endif
 }
 
 Game* Game::getInstance()
@@ -45,9 +48,9 @@ long Game::getAbsoluteTime()
     return Platform::getAbsoluteTime();
 }
 
-bool Game::isVsync()
+long Game::getGameTime()
 {
-    return Platform::isVsync();
+    return Platform::getAbsoluteTime() - _pausedTimeTotal;
 }
 
 void Game::setVsync(bool enable)
@@ -55,19 +58,9 @@ void Game::setVsync(bool enable)
     Platform::setVsync(enable);
 }
 
-long Game::getGameTime()
+bool Game::isVsync()
 {
-    return (Platform::getAbsoluteTime() - _pausedTimeTotal);
-}
-
-Game::State Game::getState() const
-{
-    return _state;
-}
-
-unsigned int Game::getFrameRate() const
-{
-    return _frameRate;
+    return Platform::isVsync();
 }
 
 int Game::run(int width, int height)
@@ -92,11 +85,17 @@ bool Game::startup()
     if (_state != UNINITIALIZED)
         return false;
 
-    _animationController.initialize();
-    _audioController.initialize();
+    RenderState::initialize();
 
-    // Call user initialization.
-    initialize();
+    _animationController = new AnimationController();
+    _animationController->initialize();
+
+    _audioController = new AudioController();
+    _audioController->initialize();
+
+    _physicsController = new PhysicsController();
+    _physicsController->initialize();
+
     _state = RUNNING;
 
     return true;
@@ -109,8 +108,16 @@ void Game::shutdown()
     {
         finalize();
 
-        _animationController.finalize();
-        _audioController.finalize();
+        _animationController->finalize();
+        SAFE_DELETE(_animationController);
+
+        _audioController->finalize();
+        SAFE_DELETE(_audioController);
+
+        _physicsController->finalize();
+        SAFE_DELETE(_physicsController);
+
+        RenderState::finalize();
     }
 
     _state = UNINITIALIZED;
@@ -122,8 +129,9 @@ void Game::pause()
     {
         _state = PAUSED;
         _pausedTimeLast = Platform::getAbsoluteTime();
-        _animationController.pause();
-        _audioController.pause();
+        _animationController->pause();
+        _audioController->pause();
+        _physicsController->pause();
     }
 }
 
@@ -133,8 +141,9 @@ void Game::resume()
     {
         _state = RUNNING;
         _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
-        _animationController.resume();
-        _audioController.resume();
+        _animationController->resume();
+        _audioController->resume();
+        _physicsController->resume();
     }
 }
 
@@ -146,7 +155,17 @@ void Game::exit()
 void Game::frame()
 {
     if (_state != RUNNING)
+    {
         return;
+    }
+    else
+    {
+        if (!_initialized)
+        {
+            initialize();
+            _initialized = true;
+        }
+    }
 
     // Update Time.
     static long lastFrameTime = Game::getGameTime();
@@ -154,13 +173,15 @@ void Game::frame()
     long elapsedTime = (frameTime - lastFrameTime);
     lastFrameTime = frameTime;
 
-    // Update the schedule and running animations.
-    _animationController.update(elapsedTime);
+    // Update the scheduled and running animations.
+    _animationController->update(elapsedTime);
+    // Update the physics.
+    _physicsController->update(elapsedTime);
     // Application Update.
     update(elapsedTime);
 
     // Audio Rendering.
-    _audioController.update(elapsedTime);
+    _audioController->update(elapsedTime);
     // Graphics Rendering.
     render(elapsedTime);
 
@@ -172,16 +193,6 @@ void Game::frame()
         _frameCount = 0;
         _frameLastFPS = Game::getGameTime();
     }
-}
-
-unsigned int Game::getWidth() const
-{
-    return _width;
-}
-
-unsigned int Game::getHeight() const
-{
-    return _height;
 }
 
 void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil)
@@ -208,6 +219,11 @@ void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, 
             _clearDepth = clearDepth;
         }
         bits |= GL_DEPTH_BUFFER_BIT;
+
+        // We need to explicitly call the static enableDepthWrite() method on StateBlock
+        // to ensure depth writing is enabled before clearing the depth buffer (and to 
+        // update the global StateBlock render state to reflect this).
+        RenderState::StateBlock::enableDepthWrite();
     }
 
     if (flags & CLEAR_STENCIL)
@@ -222,29 +238,15 @@ void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, 
     glClear(bits);
 }
 
-AnimationController* Game::getAnimationController()
-{
-    return &_animationController;
-}
-
-const AudioController& Game::getAudioController() const
-{
-    return _audioController;
-}
-
 void Game::menu()
 {
 }
 
-void Game::keyChar(char key)
+void Game::keyEvent(Keyboard::KeyEvent evt, int key)
 {
 }
 
-void Game::keyPress(int key, int keyEvent)
-{
-}
-
-void Game::touch(int x, int y, int touchEvent)
+void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
 }
 

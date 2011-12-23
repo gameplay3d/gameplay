@@ -1,7 +1,3 @@
-/*
- * Camera.cpp
- */
-
 #include "Base.h"
 #include "Camera.h"
 #include "Game.h"
@@ -36,7 +32,6 @@ Camera::Camera(float zoomX, float zoomY, float aspectRatio, float nearPlane, flo
 
 Camera::~Camera()
 {
-    SAFE_RELEASE(_node);
 }
 
 Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
@@ -144,17 +139,13 @@ void Camera::setNode(Node* node)
         if (_node)
         {
             _node->removeListener(this);
-
-            // Disconnect our current node.
-            SAFE_RELEASE(_node);
         }
 
         // Connect the new node.
         _node = node;
+
         if (_node)
         {
-            _node->addRef();
-
             _node->addListener(this);
         }
 
@@ -169,7 +160,7 @@ const Matrix& Camera::getViewMatrix() const
         if (_node)
         {
             // The view matrix is the inverse of our transform matrix.
-            _node->getMatrix().invert(&_view);
+            _node->getWorldMatrix().invert(&_view);
         }
         else
         {
@@ -351,7 +342,7 @@ void Camera::pickRay(const Viewport* viewport, float x, float y, Ray* dst)
 }
 
 
-void Camera::transformChanged(Transform* transform)
+void Camera::transformChanged(Transform* transform, long cookie)
 {
     _dirtyBits |= CAMERA_DIRTY_VIEW | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }

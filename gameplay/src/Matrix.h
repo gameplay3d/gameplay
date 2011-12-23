@@ -1,11 +1,6 @@
-/*
- * Matrix.h
- */
-
 #ifndef MATRIX_H_
 #define MATRIX_H_
 
-#include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 
@@ -236,7 +231,7 @@ public:
 //     * @param plane The Plane about which to create a reflection.
 //     * @param dst A matrix to store the result in.
 //     */
-//    static void createRefelction(const Plane& plane, Matrix* dst);
+//    static void createReflection(const Plane& plane, Matrix* dst);
 
     /**
      * Creates a scale matrix.
@@ -713,6 +708,24 @@ public:
     static void subtract(const Matrix& m1, const Matrix& m2, Matrix* dst);
 
     /**
+     * Transforms the specified point by this matrix.
+     *
+     * The result of the transformation is stored directly into point.
+     *
+     * @param point The point to transform and also a vector to hold the result in.
+     */
+    void transformPoint(Vector3* point) const;
+
+    /**
+     * Transforms the specified point by this matrix, and stores
+     * the result in dst.
+     *
+     * @param point The point to transform.
+     * @param dst A vector to store the transformed point in.
+     */
+    void transformPoint(const Vector3& point, Vector3* dst) const;
+
+    /**
      * Transforms the specified vector by this matrix by
      * treating the fourth (w) coordinate as zero.
      *
@@ -733,24 +746,6 @@ public:
     void transformVector(const Vector3& vector, Vector3* dst) const;
 
     /**
-     * Transforms the specified point by this matrix.
-     *
-     * The result of the transformation is stored directly into point.
-     *
-     * @param point The point to transform and also a vector to hold the result in.
-     */
-    void transformPoint(Vector3* point) const;
-
-    /**
-     * Transforms the specified point by this matrix, and stores
-     * the result in dst.
-     *
-     * @param point The point to transform.
-     * @param dst A vector to store the transformed point in.
-     */
-    void transformPoint(const Vector3& point, Vector3* dst) const;
-
-    /**
      * Transforms the specified vector by this matrix.
      *
      * @param x The vector x-coordinate to transform by.
@@ -760,6 +755,15 @@ public:
      * @param dst A vector to store the transformed point in.
      */
     void transformVector(float x, float y, float z, float w, Vector3* dst) const;
+
+    /**
+     * Transforms the specified vector by this matrix.
+     *
+     * The result of the transformation is stored directly into vector.
+     *
+     * @param vector The vector to transform.
+     */
+    void transformVector(Vector4* vector) const;
 
     /**
      * Transforms the specified vector by this matrix.
@@ -818,8 +822,117 @@ public:
      * @param dst A matrix to store the result in.
      */
     void transpose(Matrix* dst) const;
+
+    /**
+     * Calculates the sum of this matrix with the given matrix.
+     * 
+     * Note: this does not modify this matrix.
+     * 
+     * @param m The matrix to add.
+     * @return The matrix sum.
+     */
+    inline Matrix operator+(const Matrix& m) const;
+    
+    /**
+     * Adds the given matrix to this matrix.
+     * 
+     * @param m The matrix to add.
+     * @return This matrix, after the addition occurs.
+     */
+    inline Matrix& operator+=(const Matrix& m);
+
+    /**
+     * Calculates the sum of this matrix with the given matrix.
+     * 
+     * Note: this does not modify this matrix.
+     * 
+     * @param m The matrix to add.
+     * @return The matrix sum.
+     */
+    inline Matrix operator-(const Matrix& m) const;
+
+    /**
+     * Subtracts the given matrix from this matrix.
+     * 
+     * @param m The matrix to subtract.
+     * @return This matrix, after the subtraction occurs.
+     */
+    inline Matrix& operator-=(const Matrix& m);
+
+    /**
+     * Calculates the negation of this matrix.
+     * 
+     * Note: this does not modify this matrix.
+     * 
+     * @return The negation of this matrix.
+     */
+    inline Matrix operator-() const;
+
+    /**
+     * Calculates the matrix product of this matrix with the given matrix.
+     * 
+     * Note: this does not modify this matrix.
+     * 
+     * @param m The matrix to multiply by.
+     * @return The matrix product.
+     */
+    inline Matrix operator*(const Matrix& m) const;
+
+    /**
+     * Right-multiplies this matrix by the given matrix.
+     * 
+     * @param m The matrix to multiply by.
+     * @return This matrix, after the multiplication occurs.
+     */
+    inline Matrix& operator*=(const Matrix& m);
 };
 
+/**
+ * Transforms the given vector by the given matrix.
+ * 
+ * Note: this treats the given vector as a vector and not as a point.
+ * 
+ * @param v The vector to transform.
+ * @param m The matrix to transform by.
+ * @return This vector, after the transformation occurs.
+ */
+inline Vector3& operator*=(Vector3& v, const Matrix& m);
+
+/**
+ * Transforms the given vector by the given matrix.
+ * 
+ * Note: this treats the given vector as a vector and not as a point.
+ * 
+ * @param m The matrix to transform by.
+ * @param v The vector to transform.
+ * @return The resulting transformed vector.
+ */
+inline Vector3 operator*(const Matrix& m, const Vector3& v);
+
+/**
+ * Transforms the given vector by the given matrix.
+ * 
+ * Note: this treats the given vector as a vector and not as a point.
+ * 
+ * @param v The vector to transform.
+ * @param m The matrix to transform by.
+ * @return This vector, after the transformation occurs.
+ */
+inline Vector4& operator*=(Vector4& v, const Matrix& m);
+
+/**
+ * Transforms the given vector by the given matrix.
+ * 
+ * Note: this treats the given vector as a vector and not as a point.
+ * 
+ * @param m The matrix to transform by.
+ * @param v The vector to transform.
+ * @return The resulting transformed vector.
+ */
+inline Vector4 operator*(const Matrix& m, const Vector4& v);
+
 }
+
+#include "Matrix.inl"
 
 #endif

@@ -1,7 +1,3 @@
-/*
- * Vector2.h
- */
-
 #ifndef VECTOR2_H_
 #define VECTOR2_H_
 
@@ -318,8 +314,100 @@ public:
      * @param dst The destination vector.
      */
     static void subtract(const Vector2& v1, const Vector2& v2, Vector2* dst);
+
+    /**
+     * Calculates the sum of this vector with the given vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param v The vector to add.
+     * @return The vector sum.
+     */
+    inline Vector2 operator+(const Vector2& v) const;
+
+    /**
+     * Adds the given vector to this vector.
+     * 
+     * @param v The vector to add.
+     * @return This vector, after the addition occurs.
+     */
+    inline Vector2& operator+=(const Vector2& v);
+
+    /**
+     * Calculates the sum of this vector with the given vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param v The vector to add.
+     * @return The vector sum.
+     */
+    inline Vector2 operator-(const Vector2& v) const;
+
+    /**
+     * Subtracts the given vector from this vector.
+     * 
+     * @param v The vector to subtract.
+     * @return This vector, after the subtraction occurs.
+     */
+    inline Vector2& operator-=(const Vector2& v);
+
+    /**
+     * Calculates the negation of this vector.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @return The negation of this vector.
+     */
+    inline Vector2 operator-() const;
+
+    /**
+     * Calculates the scalar product of this vector with the given value.
+     * 
+     * Note: this does not modify this vector.
+     * 
+     * @param x The value to scale by.
+     * @return The scaled vector.
+     */
+    inline Vector2 operator*(float x) const;
+
+    /**
+     * Scales this vector by the given value.
+     * 
+     * @param x The value to scale by.
+     * @return This vector, after the scale occurs.
+     */
+    inline Vector2& operator*=(float x);
+
+    /**
+     * Determines if this vector is less than the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is less than the given vector, false otherwise.
+     */
+    inline bool operator<(const Vector2& v) const;
+
+    /**
+     * Determines if this vector is equal to the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is equal to the given vector, false otherwise.
+     */
+    inline bool operator==(const Vector2& v) const;
 };
 
+/**
+ * Calculates the scalar product of the given vector with the given value.
+ * 
+ * @param x The value to scale by.
+ * @param v The vector to scale.
+ * @return The scaled vector.
+ */
+inline Vector2 operator*(float x, const Vector2& v);
+
 }
+
+#include "Vector2.inl"
 
 #endif

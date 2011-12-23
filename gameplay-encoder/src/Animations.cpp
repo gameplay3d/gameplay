@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Animations.h"
 
 namespace gameplay
@@ -27,7 +28,7 @@ void Animations::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
     write(_animations.size(), file);
-    for (std::vector<Animation*>::iterator i = _animations.begin(); i != _animations.end(); i++)
+    for (std::vector<Animation*>::iterator i = _animations.begin(); i != _animations.end(); ++i)
     {
         (*i)->writeBinary(file);
     }
@@ -38,7 +39,7 @@ void Animations::writeText(FILE* file)
     fprintElementStart(file);
     if (_animations.size() > 0 )
     {
-        for (std::vector<Animation*>::iterator i = _animations.begin(); i != _animations.end(); i++)
+        for (std::vector<Animation*>::iterator i = _animations.begin(); i != _animations.end(); ++i)
         {
             (*i)->writeText(file);
         }
@@ -49,6 +50,16 @@ void Animations::writeText(FILE* file)
 void Animations::add(Animation* animation)
 {
     _animations.push_back(animation);
+}
+
+unsigned int Animations::getAnimationCount() const
+{
+    return _animations.size();
+}
+
+Animation* Animations::getAnimation(unsigned int index) const
+{
+    return _animations[index];
 }
 
 }

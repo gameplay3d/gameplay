@@ -1,7 +1,3 @@
-/*
- * SpriteBatch.h
- */
-
 #ifndef SPRITEBATCH_H_
 #define SPRITEBATCH_H_
 
@@ -11,6 +7,7 @@
 #include "Rectangle.h"
 #include "Matrix.h"
 #include "RenderState.h"
+#include "MeshBatch.h"
 
 namespace gameplay
 {
@@ -30,6 +27,32 @@ class SpriteBatch
     friend class Package;
 
 public:
+
+    /**
+     * Creates a new SpriteBatch for drawing sprites with the given texture.
+     *
+     * If the effect parameter is NULL, a default effect is used which
+     * applies an orthographic projection for the currently bound viewport.
+     * A custom projection matrix can be used with the default effect by passing
+     * a new projection matrix into the SpriteBatch via the setProjectionMatrix
+     * method.
+     *
+     * If a custom effect is specified, it must meet the following requirements:
+     * <ol>
+     * <li>The vertex shader inputs must include a vec3 position, a vec2 tex coord
+     * and a vec4 color.
+     * <li>The names of the the vertex shader inputs must match the names defined
+     * by the VERTEX_ATTRIBUTE_XXX constants.
+     * <li>The fragment shader must define at least a single sampler/texture uniform.
+     * </ol>
+     *
+     * @param texturePath The path of the texture for this sprite batch.
+     * @param effect An optional effect to use with the SpriteBatch.
+     * @param initialCapacity An optional initial capacity of the batch (number of sprites).
+     * 
+     * @return A new SpriteBatch for drawing sprites using the given texture.
+     */
+    static SpriteBatch* create(const char* texturePath, Effect* effect = NULL, unsigned int initialCapacity = 0);
 
     /**
      * Creates a new SpriteBatch for drawing sprites with the given texture.
@@ -172,11 +195,11 @@ public:
     RenderState::StateBlock* getStateBlock() const;
 
     /**
-     * Gets the effect used by this batch.
+     * Gets the material used by this batch.
      * 
-     * @return The effect.
+     * @return The material.
      */
-    Effect* getEffect();
+    Material* getMaterial();
 
     /**
      * Sets a custom projection matrix to use with the sprite batch.
@@ -204,31 +227,13 @@ private:
      */
     SpriteBatch(const SpriteBatch& copy);
 
-    void growBatch();
+    const Matrix& getOrthoMatrix() const;
 
-    void resizeBatch(unsigned int capacity);
-
-    Effect* _effect;
-    RenderState::StateBlock* _stateBlock;
-    Texture::Sampler* _sampler;
-    Uniform* _samplerUniform;
-    Uniform* _projectionUniform;
+    MeshBatch* _batch;
     bool _customEffect;
-    VertexAttribute _vaPosition;
-    VertexAttribute _vaTexCoord;
-    VertexAttribute _vaColor;
     float _textureWidthRatio;
     float _textureHeightRatio;
-    unsigned int _capacity;
-    unsigned int _count;
-    float* _vertices;
-    float* _verticesPtr;
-    unsigned short* _indices;
-    unsigned short* _indicesPtr;
-    unsigned short _index;
-    bool _drawing;
-    Matrix* _projectionMatrix;
-    bool _customProjectionMatrix;
+    mutable Matrix _projectionMatrix;
 };
 
 }

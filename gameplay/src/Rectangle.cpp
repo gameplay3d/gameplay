@@ -1,7 +1,3 @@
-/*
- * Rectangle.cpp
- */
-
 #include "Base.h"
 #include "Rectangle.h"
 
@@ -93,10 +89,10 @@ bool Rectangle::contains(const Rectangle& r) const
 
 bool Rectangle::intersects(float x, float y, float width, float height) const
 {
-    const float left   = fmaxf(this->x, x);
-    const float top    = fmaxf(this->y, y);
-    const float right  = fminf(x + width, x + width);
-    const float bottom = fminf(y + height, y + height);
+    const float left   = max(this->x, x);
+    const float top    = max(this->y, y);
+    const float right  = min(x + width, x + width);
+    const float bottom = min(y + height, y + height);
 
     return (right > left && bottom > top);
 }
@@ -108,10 +104,10 @@ bool Rectangle::intersects(const Rectangle& r) const
 
 void Rectangle::combine(const Rectangle& r1, const Rectangle& r2, Rectangle* dst)
 {
-    dst->x = fminf(r1.x, r2.x);
-    dst->y = fminf(r1.y, r2.y);
-    dst->width = fmaxf(r1.x + r1.width, r2.x + r2.width) - dst->x;
-    dst->height = fmaxf(r1.y + r1.height, r2.y + r2.height) - dst->y;
+    dst->x = min(r1.x, r2.x);
+    dst->y = min(r1.y, r2.y);
+    dst->width = max(r1.x + r1.width, r2.x + r2.width) - dst->x;
+    dst->height = max(r1.y + r1.height, r2.y + r2.height) - dst->y;
 }
 
 void Rectangle::inflate(float horizontalAmount, float verticalAmount)

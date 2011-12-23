@@ -1,10 +1,7 @@
-/*
- * Node.cpp
- */
-
 #include "Base.h"
 #include "Node.h"
 #include "Scene.h"
+#include "Joint.h"
 
 #define NODE_DIRTY_WORLD 1
 #define NODE_DIRTY_BOUNDS 2
@@ -15,15 +12,13 @@ namespace gameplay
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
-    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _dirtyBits(NODE_DIRTY_ALL),
-    _notifyHierarchyChanged(true), _boundsType(NONE)
+    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL), 
+    _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true)
 {
     if (id)
     {
         _id = id;
     }
-
-    memset(&_bounds, 0, sizeof(_bounds));
 }
 
 Node::Node(const Node& node)
@@ -35,22 +30,12 @@ Node::~Node()
 {
     removeAllChildren();
 
-    // Free bounding volume.
-    switch (_boundsType)
-    {
-    case BOX:
-        SAFE_DELETE(_bounds.box);
-        break;
-    case SPHERE:
-        SAFE_DELETE(_bounds.sphere);
-        break;
-    }
-
     SAFE_RELEASE(_camera);
     SAFE_RELEASE(_light);
     SAFE_RELEASE(_model);
     SAFE_RELEASE(_audioSource);
     SAFE_RELEASE(_particleEmitter);
+    SAFE_DELETE(_physicsRigidBody);
 }
 
 Node* Node::create(const char* id)
@@ -80,11 +65,22 @@ void Node::addChild(Node* child)
 {
     assert(child);
 
-    // If the item belongs to another hierarchy, remove it first.
-    Node* parent = child->_parent;
-    if (parent)
+    if (child->_parent == this)
     {
-        parent->removeChild(child);
+        // This node is already present in our hierarchy
+        return;
+    }
+
+    child->addRef();
+
+    // If the item belongs to another hierarchy, remove it first.
+    if (child->_parent)
+    {
+        child->_parent->removeChild(child);
+    }
+    else if (child->_scene)
+    {
+        child->_scene->removeNode(child);
     }
 
     // Order is irrelevant, so add to the beginning of the list.
@@ -103,9 +99,10 @@ void Node::addChild(Node* child)
 
     ++_childCount;
 
-    // Fire events.
-    child->parentChanged(parent);
-    childAdded(child);
+    if (_notifyHierarchyChanged)
+    {
+        hierarchyChanged();
+    }
 }
 
 void Node::removeChild(Node* child)
@@ -118,6 +115,8 @@ void Node::removeChild(Node* child)
 
     // Call remove on the child.
     child->remove();
+
+    SAFE_RELEASE(child);
 }
 
 void Node::removeAllChildren()
@@ -133,7 +132,7 @@ void Node::removeAllChildren()
     hierarchyChanged();
 }
 
-void Node   ::remove()
+void Node::remove()
 {
     // Re-link our neighbours.
     if (_prevSibling)
@@ -161,11 +160,9 @@ void Node   ::remove()
     _prevSibling = NULL;
     _parent = NULL;
 
-    // Fire events.
-    if (parent)
+    if (parent && parent->_notifyHierarchyChanged)
     {
-        parentChanged(parent);
-        parent->childRemoved(this);
+        parent->hierarchyChanged();
     }
 }
 
@@ -288,7 +285,7 @@ const Matrix& Node::getWorldMatrix() const
         // If we have a parent, multiply our parent world transform by our local
         // transform to obtain our final resolved world transform.
         Node* parent = getParent();
-        if (parent)
+        if (parent && (!_physicsRigidBody || _physicsRigidBody->isKinematic()) )
         {
             Matrix::multiply(parent->getWorldMatrix(), getMatrix(), &_world);
         }
@@ -355,6 +352,20 @@ const Matrix& Node::getInverseViewMatrix() const
     if (camera)
     {
         return camera->getInverseViewMatrix();
+    }
+    else
+    {
+        return Matrix::identity();
+    }
+}
+
+const Matrix& Node::getProjectionMatrix() const
+{
+    Scene* scene = getScene();
+    Camera* camera = scene ? scene->getActiveCamera() : NULL;
+    if (camera)
+    {
+        return camera->getProjectionMatrix();
     }
     else
     {
@@ -460,6 +471,7 @@ void Node::transformChanged()
     _dirtyBits |= NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS;
 
     // Notify our children that their transform has also changed (since transforms are inherited).
+    Joint* rootJoint = NULL;
     Node* n = getFirstChild();
     while (n)
     {
@@ -468,6 +480,16 @@ void Node::transformChanged()
     }
 
     Transform::transformChanged();
+}
+
+void Node::setBoundsDirty()
+{
+    // Mark ourself and our parent nodes as dirty
+    _dirtyBits |= NODE_DIRTY_BOUNDS;
+
+    // Mark our parent bounds as dirty as well
+    if (_parent)
+        _parent->setBoundsDirty();
 }
 
 Camera* Node::getCamera() const
@@ -509,7 +531,7 @@ void Node::setLight(Light* light)
             _light->setNode(NULL);
             SAFE_RELEASE(_light);
         }
-        
+
         _light = light;
 
         if (_light)
@@ -545,197 +567,80 @@ Model* Node::getModel() const
     return _model;
 }
 
-const BoundingBox& Node::getBoundingBox() const
-{
-    if (_boundsType != BOX)
-    {
-        return BoundingBox::empty();
-    }
-
-    if (_dirtyBits & NODE_DIRTY_BOUNDS)
-    {
-        _dirtyBits &= ~NODE_DIRTY_BOUNDS;
-
-        if (_model && _model->getMesh())
-        {
-            // Use the bounding volume of our model's mesh.
-            Mesh* mesh = _model->getMesh();
-            _bounds.box->set(mesh->getBoundingBox());
-        }
-        else
-        {
-            _bounds.box->set(Vector3::zero(), Vector3::zero());
-        }
-
-        bool empty = _bounds.box->isEmpty();
-        if (!empty)
-        {
-            // Transform the box into world space.
-            _bounds.box->transform(getWorldMatrix());
-        }
-
-        // Merge this world-space bounding box with our childrens' bounding volumes.
-        for (Node* n = getFirstChild(); n != NULL; n = n->getNextSibling())
-        {
-            switch (n->_boundsType)
-            {
-            case BOX:
-                {
-                    const BoundingBox& childBox = n->getBoundingBox();
-                    if (!childBox.isEmpty())
-                    {
-                        if (empty)
-                        {
-                            _bounds.box->set(childBox);
-                            empty = false;
-                        }
-                        else
-                        {
-                            _bounds.box->merge(childBox);
-                        }
-                    }
-                }
-                break;
-            case SPHERE:
-                {
-                    const BoundingSphere& childSphere = n->getBoundingSphere();
-                    if (!childSphere.isEmpty())
-                    {
-                        if (empty)
-                        {
-                            _bounds.box->set(childSphere);
-                            empty = false;
-                        }
-                        else
-                        {
-                            _bounds.box->merge(childSphere);
-                        }
-                    }
-                }
-                break;
-            }
-        }
-    }
-
-    return *_bounds.box;
-}
-
 const BoundingSphere& Node::getBoundingSphere() const
 {
-    if (_boundsType != SPHERE)
-    {
-        return BoundingSphere::empty();
-    }
-
     if (_dirtyBits & NODE_DIRTY_BOUNDS)
     {
         _dirtyBits &= ~NODE_DIRTY_BOUNDS;
 
+        const Matrix& worldMatrix = getWorldMatrix();
+
+        // Start with our local bounding sphere
+        // TODO: Incorporate bounds from entities other than mesh (i.e. emitters, audiosource, etc)
+        bool empty = true;
         if (_model && _model->getMesh())
         {
-            // Use the bounding volume of our model's mesh.
-            Mesh* mesh = _model->getMesh();
-            _bounds.sphere->set(mesh->getBoundingSphere());
+            _bounds.set(_model->getMesh()->getBoundingSphere());
+            empty = false;
         }
         else
         {
-            _bounds.sphere->set(Vector3::zero(), 0);
+            // Empty bounding sphere, set the world translation with zero radius
+            worldMatrix.getTranslation(&_bounds.center);
+            _bounds.radius = 0;
         }
 
-        bool empty = _bounds.sphere->isEmpty();
+        // Transform the sphere (if not empty) into world space.
         if (!empty)
         {
-            // Transform the sphere into world space.
-            _bounds.sphere->transform(getWorldMatrix());
+            bool applyWorldTransform = true;
+            if (_model && _model->getSkin())
+            {
+                // Special case: If the root joint of our mesh skin is parented by any nodes, 
+                // multiply the world matrix of the root joint's parent by this node's
+                // world matrix. This computes a final world matrix used for transforming this
+                // node's bounding volume. This allows us to store a much smaller bounding
+                // volume approximation than would otherwise be possible for skinned meshes,
+                // since joint parent nodes that are not in the matrix pallette do not need to
+                // be considered as directly transforming vertices on the GPU (they can instead
+                // be applied directly to the bounding volume transformation below).
+                Node* jointParent = _model->getSkin()->getRootJoint()->getParent();
+                if (jointParent)
+                {
+                    // TODO: Should we protect against the case where joints are nested directly
+                    // in the node hierachy of the model (this is normally not the case)?
+                    Matrix boundsMatrix;
+                    Matrix::multiply(getWorldMatrix(), jointParent->getWorldMatrix(), &boundsMatrix);
+                    _bounds.transform(boundsMatrix);
+                    applyWorldTransform = false;
+                }
+            }
+            if (applyWorldTransform)
+            {
+                _bounds.transform(getWorldMatrix());
+            }
         }
 
         // Merge this world-space bounding sphere with our childrens' bounding volumes.
         for (Node* n = getFirstChild(); n != NULL; n = n->getNextSibling())
         {
-            switch (n->getBoundsType())
+            const BoundingSphere& childSphere = n->getBoundingSphere();
+            if (!childSphere.isEmpty())
             {
-            case BOX:
+                if (empty)
                 {
-                    const BoundingBox& childBox = n->getBoundingBox();
-                    if (!childBox.isEmpty())
-                    {
-                        if (empty)
-                        {
-                            _bounds.sphere->set(childBox);
-                            empty = false;
-                        }
-                        else
-                        {
-                            _bounds.sphere->merge(childBox);
-                        }
-                    }
+                    _bounds.set(childSphere);
+                    empty = false;
                 }
-                break;
-            case SPHERE:
+                else
                 {
-                    const BoundingSphere& childSphere = n->getBoundingSphere();
-                    if (!childSphere.isEmpty())
-                    {
-                        if (empty)
-                        {
-                            _bounds.sphere->set(childSphere);
-                            empty = false;
-                        }
-                        else
-                        {
-                            _bounds.sphere->merge(childSphere);
-                        }
-                    }
+                    _bounds.merge(childSphere);
                 }
-                break;
             }
         }
     }
 
-    return *_bounds.sphere;
-}
-
-Node::BoundsType Node::getBoundsType() const
-{
-    return _boundsType;
-}
-
-void Node::setBoundsType(Node::BoundsType type)
-{
-    if (type != _boundsType)
-    {
-        switch (_boundsType)
-        {
-        case BOX:
-            SAFE_DELETE(_bounds.box);
-            break;
-        case SPHERE:
-            SAFE_DELETE(_bounds.sphere);
-            break;
-        }
-        memset(&_bounds, 0, sizeof(_bounds));
-
-        _boundsType = type;
-
-        switch (_boundsType)
-        {
-        case BOX:
-            _bounds.box = new BoundingBox();
-            break;
-        case SPHERE:
-            _bounds.sphere = new BoundingSphere();
-            break;
-        }
-
-        // We need to dirty the bounds for the parents in our hierarchy when
-        // our bounding volume type changes.
-        Node* parent = getParent();
-        while (parent)
-        {
-            parent->_dirtyBits |= NODE_DIRTY_BOUNDS;
-            parent = parent->getParent();
-        }
-    }
+    return _bounds;
 }
 
 AudioSource* Node::getAudioSource() const
@@ -788,28 +693,32 @@ void Node::setParticleEmitter(ParticleEmitter* emitter)
     }
 }
 
-void Node::childAdded(Node* child)
+PhysicsRigidBody* Node::getPhysicsRigidBody() const
 {
-    child->addRef();
-
-    if (_notifyHierarchyChanged)
-    {
-        hierarchyChanged();
-    }
+    return _physicsRigidBody;
 }
 
-void Node::childRemoved(Node* child)
+void Node::setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float friction,
+        float restitution, float linearDamping, float angularDamping)
 {
-    SAFE_RELEASE(child);
-
-    if (_notifyHierarchyChanged)
-    {
-        hierarchyChanged();
-    }
+    SAFE_DELETE(_physicsRigidBody);
+    
+    if (type != PhysicsRigidBody::SHAPE_NONE)
+        _physicsRigidBody = new PhysicsRigidBody(this, type, mass, friction, restitution, linearDamping, angularDamping);
 }
 
-void Node::parentChanged(Node* oldParent)
+void Node::setPhysicsRigidBody(const char* filePath)
 {
+    SAFE_DELETE(_physicsRigidBody);
+
+    _physicsRigidBody = PhysicsRigidBody::create(this, filePath);
+}
+
+void Node::setPhysicsRigidBody(Properties* properties)
+{
+    SAFE_DELETE(_physicsRigidBody);
+
+    _physicsRigidBody = PhysicsRigidBody::create(this, properties);
 }
 
 }
