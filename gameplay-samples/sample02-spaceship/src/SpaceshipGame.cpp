@@ -499,16 +499,16 @@ void SpaceshipGame::drawText()
     _font->end();
 }
 
-void SpaceshipGame::touch(int x, int y, int touchEvent)
+void SpaceshipGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    switch (touchEvent)
+    switch (evt)
     {
-    case Input::TOUCHEVENT_PRESS:
+    case Touch::TOUCH_PRESS:
         if (_finished && (getAbsoluteTime() - _finishedTime) > 1000L)
         {
             resetGame();
         }
-    case Input::TOUCHEVENT_MOVE:
+    case Touch::TOUCH_MOVE:
         if (!_finished)
         {
             _pushing = true;
@@ -516,7 +516,7 @@ void SpaceshipGame::touch(int x, int y, int touchEvent)
         }
         break;
 
-    case Input::TOUCHEVENT_RELEASE:
+    case Touch::TOUCH_RELEASE:
         _pushing = false;
         break;
     }

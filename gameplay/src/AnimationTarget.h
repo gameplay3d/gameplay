@@ -76,6 +76,16 @@ private:
      */
     AnimationTarget(const AnimationTarget& copy);
 
+    /**
+     * Gets the TargetType's property ID value for the specified property ID string.
+     * 
+     * @param type The TargetType of the AnimationTarget.
+     * @param propertyIdStr The property ID string.
+     * @return The property ID value for teh property ID string; -1 if the propertyIdStr does not exist
+     *    for the TargetType.
+     */
+    static int getPropertyId(TargetType type, const char* propertyIdStr);
+
     Animation::Channel* _highestPriority;
     std::vector<Animation::Channel*>* _animationChannels;   // Collection of all animation channels that target the AnimationTarget
 

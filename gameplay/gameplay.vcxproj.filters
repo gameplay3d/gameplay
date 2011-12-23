@@ -54,9 +54,6 @@
     <ClCompile Include="src\Game.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Input.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Light.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -213,6 +210,15 @@
     <ClCompile Include="src\Image.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\RenderTarget.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FrameBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DepthStencilTarget.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\MeshBatch.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -264,9 +270,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\gameplay.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Input.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Light.h">
@@ -413,6 +416,21 @@
     <ClInclude Include="src\Image.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\RenderTarget.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FrameBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DepthStencilTarget.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Keyboard.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Touch.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\MeshBatch.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -486,6 +504,9 @@
     </None>
     <None Include="res\textures\particle-default.png">
       <Filter>res\textures</Filter>
+    </None>
+    <None Include="src\Curve.inl">
+      <Filter>src</Filter>
     </None>
     <None Include="src\Game.inl">
       <Filter>src</Filter>

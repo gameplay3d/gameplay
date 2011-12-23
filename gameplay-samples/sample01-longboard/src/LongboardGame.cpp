@@ -178,9 +178,9 @@ void LongboardGame::buildGradient()
 
 void LongboardGame::update(long elapsedTime)
 {
-    // Query the accelerometer
+    // Query the accelerometer values.
     float pitch, roll;
-    Input::getAccelerometerPitchAndRoll(&pitch, &roll);
+    getAccelerometerValues(&pitch, &roll);
 
     // Clamp angles
     pitch = max(min(pitch, PITCH_MAX), PITCH_MIN);

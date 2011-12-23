@@ -33,11 +33,11 @@ public:
     };
 
     /**
-     * Create an audio source. This is used to instantiate an Audio Source. Currently only wav, au and raw files are supported.
+     * Create an audio source. This is used to instantiate an Audio Source. Currently only wav, au, raw and .audio files are supported.
      *
-     * @param path The relative location on disk of the sound file.
+     * @param path The relative location on disk of the sound file or .audio file.
      * 
-     * @return The newly created audio source, or NULL if an audio source with the given ID already exists.
+     * @return The newly created audio source, or NULL if an audio source cannot be created.
      */
     static AudioSource* create(const char* path);
 

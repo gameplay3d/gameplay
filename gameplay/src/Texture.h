@@ -22,10 +22,10 @@ public:
      */
     enum Format
     {
-        ALPHA = GL_ALPHA,
-        RGB888 = GL_RGB,
-        RGBA8888 = GL_RGBA,
-        DEPTH = GL_DEPTH_COMPONENT
+        RGB     = GL_RGB,
+        RGBA    = GL_RGBA,
+        ALPHA   = GL_ALPHA,
+        DEPTH   = GL_DEPTH_COMPONENT
     };
 
     /**

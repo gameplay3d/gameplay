@@ -23,9 +23,9 @@ public:
     virtual ~MeshGame();
 
     /**
-     * Touch event handler.
+     * @see Game::touchEvent
      */
-    void touch(int x, int y, int touchEvent);
+    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
 protected:
 

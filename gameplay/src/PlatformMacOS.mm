@@ -4,7 +4,6 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
-#include "Input.h"
 
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
@@ -179,14 +178,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     NSPoint point = [event locationInWindow];
     __leftMouseDown = true;
-    _game->touch(point.x, WINDOW_HEIGHT - point.y, Input::TOUCHEVENT_PRESS);
+    _game->touchEvent(Touch::TOUCH_PRESS, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void) mouseUp: (NSEvent*) event
 {
     NSPoint point = [event locationInWindow];
     __leftMouseDown = false;
-    _game->touch(point.x, WINDOW_HEIGHT - point.y, Input::TOUCHEVENT_RELEASE);
+    _game->touchEvent(Touch::TOUCH_RELEASE, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
@@ -194,7 +193,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     NSPoint point = [event locationInWindow];
     if (__leftMouseDown)
     {
-        _game->touch(point.x, WINDOW_HEIGHT - point.y, Input::TOUCHEVENT_MOVE);
+        _game->touchEvent(Touch::TOUCH_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
     }
 }
 
@@ -253,194 +252,194 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
     switch(keyCode)
     {
         case 0x69:
-            return Input::KEY_PRINT;
+            return Keyboard::KEY_PRINT;
         case 0x35:
-            return Input::KEY_ESCAPE;
+            return Keyboard::KEY_ESCAPE;
         case 0x33:
-            return Input::KEY_BACKSPACE;
+            return Keyboard::KEY_BACKSPACE;
         case 0x30:
-            return Input::KEY_TAB;
+            return Keyboard::KEY_TAB;
         case 0x24:
-            return Input::KEY_RETURN;
+            return Keyboard::KEY_RETURN;
         case 0x72:
-            return Input::KEY_INSERT;
+            return Keyboard::KEY_INSERT;
         case 0x73:
-            return Input::KEY_HOME;
+            return Keyboard::KEY_HOME;
         case 0x74:
-            return Input::KEY_PG_UP;
+            return Keyboard::KEY_PG_UP;
         case 0x79:
-            return Input::KEY_PG_DOWN;
+            return Keyboard::KEY_PG_DOWN;
         case 0x75:
-            return Input::KEY_DELETE;
+            return Keyboard::KEY_DELETE;
         case 0x77:
-            return Input::KEY_END;
+            return Keyboard::KEY_END;
         case 0x7B:
-            return Input::KEY_LEFT_ARROW;
+            return Keyboard::KEY_LEFT_ARROW;
         case 0x7C:
-            return Input::KEY_RIGHT_ARROW;
+            return Keyboard::KEY_RIGHT_ARROW;
         case 0x7E:
-            return Input::KEY_UP_ARROW;
+            return Keyboard::KEY_UP_ARROW;
         case 0x7D:
-            return Input::KEY_DOWN_ARROW;
+            return Keyboard::KEY_DOWN_ARROW;
         case 0x47:
-            return Input::KEY_NUM_LOCK;
+            return Keyboard::KEY_NUM_LOCK;
         case 0x45:
-            return Input::KEY_KP_PLUS;
+            return Keyboard::KEY_KP_PLUS;
         case 0x4E:
-            return Input::KEY_KP_MINUS;
+            return Keyboard::KEY_KP_MINUS;
         case 0x43:
-            return Input::KEY_KP_MULTIPLY;
+            return Keyboard::KEY_KP_MULTIPLY;
         case 0x4B:
-            return Input::KEY_KP_DIVIDE;
+            return Keyboard::KEY_KP_DIVIDE;
         case 0x59:
-            return Input::KEY_KP_HOME;
+            return Keyboard::KEY_KP_HOME;
         case 0x5B:
-            return Input::KEY_KP_UP;
+            return Keyboard::KEY_KP_UP;
         case 0x5C:
-            return Input::KEY_KP_PG_UP;
+            return Keyboard::KEY_KP_PG_UP;
         case 0x56:
-            return Input::KEY_KP_LEFT;
+            return Keyboard::KEY_KP_LEFT;
         case 0x57:
-            return Input::KEY_KP_FIVE;
+            return Keyboard::KEY_KP_FIVE;
         case 0x58:
-            return Input::KEY_KP_RIGHT;
+            return Keyboard::KEY_KP_RIGHT;
         case 0x53:
-            return Input::KEY_KP_END;
+            return Keyboard::KEY_KP_END;
         case 0x54:
-            return Input::KEY_KP_DOWN;
+            return Keyboard::KEY_KP_DOWN;
         case 0x55:
-            return Input::KEY_KP_PG_DOWN;
+            return Keyboard::KEY_KP_PG_DOWN;
         case 0x52:
-            return Input::KEY_KP_INSERT;
+            return Keyboard::KEY_KP_INSERT;
         case 0x41:
-            return Input::KEY_KP_DELETE;
+            return Keyboard::KEY_KP_DELETE;
         case 0x7A:
-            return Input::KEY_F1;
+            return Keyboard::KEY_F1;
         case 0x78:
-            return Input::KEY_F2;
+            return Keyboard::KEY_F2;
         case 0x63:
-            return Input::KEY_F3;
+            return Keyboard::KEY_F3;
         case 0x76:
-            return Input::KEY_F4;
+            return Keyboard::KEY_F4;
         case 0x60:
-            return Input::KEY_F5;
+            return Keyboard::KEY_F5;
         case 0x61:
-            return Input::KEY_F6;
+            return Keyboard::KEY_F6;
         case 0x62:
-            return Input::KEY_F7;
+            return Keyboard::KEY_F7;
         case 0x64:
-            return Input::KEY_F8;
+            return Keyboard::KEY_F8;
         case 0x65:
-            return Input::KEY_F9;
+            return Keyboard::KEY_F9;
         case 0x6D:
-            return Input::KEY_F10;
+            return Keyboard::KEY_F10;
         
         // MACOS reserved:
-        //return Input::KEY_F11;
-        //return Input::KEY_F12;
-        // return Input::KEY_PAUSE;
-        // return Input::KEY_SCROLL_LOCK;
+        //return Keyboard::KEY_F11;
+        //return Keyboard::KEY_F12;
+        // return Keyboard::KEY_PAUSE;
+        // return Keyboard::KEY_SCROLL_LOCK;
             
         case 0x31:
-            return Input::KEY_SPACE;
+            return Keyboard::KEY_SPACE;
         case 0x1D:
-            return __shiftDown ? Input::KEY_RIGHT_PARENTHESIS : Input::KEY_ZERO;
+            return __shiftDown ? Keyboard::KEY_RIGHT_PARENTHESIS : Keyboard::KEY_ZERO;
         case 0x12:
-            return __shiftDown ? Input::KEY_EXCLAM : Input::KEY_ONE;
+            return __shiftDown ? Keyboard::KEY_EXCLAM : Keyboard::KEY_ONE;
         case 0x13:
-            return __shiftDown ? Input::KEY_AT : Input::KEY_TWO;
+            return __shiftDown ? Keyboard::KEY_AT : Keyboard::KEY_TWO;
         case 0x14:
-            return __shiftDown ? Input::KEY_NUMBER : Input::KEY_THREE;
+            return __shiftDown ? Keyboard::KEY_NUMBER : Keyboard::KEY_THREE;
         case 0x15:
-            return __shiftDown ? Input::KEY_DOLLAR : Input::KEY_FOUR;
+            return __shiftDown ? Keyboard::KEY_DOLLAR : Keyboard::KEY_FOUR;
         case 0x17:
-            return __shiftDown ? Input::KEY_PERCENT : Input::KEY_FIVE;
+            return __shiftDown ? Keyboard::KEY_PERCENT : Keyboard::KEY_FIVE;
         case 0x16:
-            return __shiftDown ? Input::KEY_CIRCUMFLEX : Input::KEY_SIX;
+            return __shiftDown ? Keyboard::KEY_CIRCUMFLEX : Keyboard::KEY_SIX;
         case 0x1A:
-            return __shiftDown ? Input::KEY_AMPERSAND : Input::KEY_SEVEN;
+            return __shiftDown ? Keyboard::KEY_AMPERSAND : Keyboard::KEY_SEVEN;
         case 0x1C:
-            return __shiftDown ? Input::KEY_ASTERISK : Input::KEY_EIGHT;
+            return __shiftDown ? Keyboard::KEY_ASTERISK : Keyboard::KEY_EIGHT;
         case 0x19:
-            return __shiftDown ? Input::KEY_LEFT_PARENTHESIS : Input::KEY_NINE;
+            return __shiftDown ? Keyboard::KEY_LEFT_PARENTHESIS : Keyboard::KEY_NINE;
         case 0x18:
-            return __shiftDown ? Input::KEY_EQUAL : Input::KEY_PLUS;
+            return __shiftDown ? Keyboard::KEY_EQUAL : Keyboard::KEY_PLUS;
         case 0x2B:
-            return __shiftDown ? Input::KEY_LESS_THAN : Input::KEY_COMMA;
+            return __shiftDown ? Keyboard::KEY_LESS_THAN : Keyboard::KEY_COMMA;
         case 0x1B:
-            return __shiftDown ? Input::KEY_UNDERSCORE : Input::KEY_MINUS;
+            return __shiftDown ? Keyboard::KEY_UNDERSCORE : Keyboard::KEY_MINUS;
         case 0x2F:
-            return __shiftDown ? Input::KEY_GREATER_THAN : Input::KEY_PERIOD;
+            return __shiftDown ? Keyboard::KEY_GREATER_THAN : Keyboard::KEY_PERIOD;
         case 0x29:
-            return __shiftDown ? Input::KEY_COLON : Input::KEY_SEMICOLON;
+            return __shiftDown ? Keyboard::KEY_COLON : Keyboard::KEY_SEMICOLON;
         case 0x2C:
-            return __shiftDown ? Input::KEY_QUESTION : Input::KEY_SLASH;
+            return __shiftDown ? Keyboard::KEY_QUESTION : Keyboard::KEY_SLASH;
         case 0x32:
-            return __shiftDown ? Input::KEY_GRAVE : Input::KEY_TILDE;
+            return __shiftDown ? Keyboard::KEY_GRAVE : Keyboard::KEY_TILDE;
         case 0x21:
-            return __shiftDown ? Input::KEY_LEFT_BRACE : Input::KEY_LEFT_BRACKET;
+            return __shiftDown ? Keyboard::KEY_LEFT_BRACE : Keyboard::KEY_LEFT_BRACKET;
         case 0x2A:
-            return __shiftDown ? Input::KEY_BAR : Input::KEY_BACK_SLASH;
+            return __shiftDown ? Keyboard::KEY_BAR : Keyboard::KEY_BACK_SLASH;
         case 0x1E:
-            return __shiftDown ? Input::KEY_RIGHT_BRACE : Input::KEY_RIGHT_BRACKET;
+            return __shiftDown ? Keyboard::KEY_RIGHT_BRACE : Keyboard::KEY_RIGHT_BRACKET;
         case 0x27:
-            return __shiftDown ? Input::KEY_QUOTE : Input::KEY_APOSTROPHE;
+            return __shiftDown ? Keyboard::KEY_QUOTE : Keyboard::KEY_APOSTROPHE;
             
         case 0x00:
-             return __shiftDown ? Input::KEY_CAPITAL_A : Input::KEY_A;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_A : Keyboard::KEY_A;
         case 0x0B:
-             return __shiftDown ? Input::KEY_CAPITAL_B : Input::KEY_B;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_B : Keyboard::KEY_B;
         case 0x08:
-             return __shiftDown ? Input::KEY_CAPITAL_C : Input::KEY_C;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_C : Keyboard::KEY_C;
         case 0x02:
-             return __shiftDown ? Input::KEY_CAPITAL_D : Input::KEY_D;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_D : Keyboard::KEY_D;
         case 0x0E:
-             return __shiftDown ? Input::KEY_CAPITAL_E : Input::KEY_E;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_E : Keyboard::KEY_E;
         case 0x03:
-             return __shiftDown ? Input::KEY_CAPITAL_F : Input::KEY_F;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_F : Keyboard::KEY_F;
         case 0x05:
-             return __shiftDown ? Input::KEY_CAPITAL_G : Input::KEY_G;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_G : Keyboard::KEY_G;
         case 0x04:
-             return __shiftDown ? Input::KEY_CAPITAL_H : Input::KEY_H;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_H : Keyboard::KEY_H;
         case 0x22:
-             return __shiftDown ? Input::KEY_CAPITAL_I : Input::KEY_I;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_I : Keyboard::KEY_I;
         case 0x26:
-             return __shiftDown ? Input::KEY_CAPITAL_J : Input::KEY_J;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_J : Keyboard::KEY_J;
         case 0x28:
-             return __shiftDown ? Input::KEY_CAPITAL_K : Input::KEY_K;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_K : Keyboard::KEY_K;
         case 0x25:
-             return __shiftDown ? Input::KEY_CAPITAL_L : Input::KEY_L;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_L : Keyboard::KEY_L;
         case 0x2E:
-             return __shiftDown ? Input::KEY_CAPITAL_M : Input::KEY_M;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_M : Keyboard::KEY_M;
         case 0x2D:
-             return __shiftDown ? Input::KEY_CAPITAL_N : Input::KEY_N;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_N : Keyboard::KEY_N;
         case 0x1F:
-             return __shiftDown ? Input::KEY_CAPITAL_O : Input::KEY_O;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_O : Keyboard::KEY_O;
         case 0x23:
-             return __shiftDown ? Input::KEY_CAPITAL_P : Input::KEY_P;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_P : Keyboard::KEY_P;
         case 0x0C:
-             return __shiftDown ? Input::KEY_CAPITAL_Q : Input::KEY_Q;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_Q : Keyboard::KEY_Q;
         case 0x0F:
-             return __shiftDown ? Input::KEY_CAPITAL_R : Input::KEY_R;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_R : Keyboard::KEY_R;
         case 0x01:
-             return __shiftDown ? Input::KEY_CAPITAL_S : Input::KEY_S;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_S : Keyboard::KEY_S;
         case 0x11:
-             return __shiftDown ? Input::KEY_CAPITAL_T : Input::KEY_T;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_T : Keyboard::KEY_T;
         case 0x20:
-             return __shiftDown ? Input::KEY_CAPITAL_U : Input::KEY_U;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_U : Keyboard::KEY_U;
         case 0x09:
-             return __shiftDown ? Input::KEY_CAPITAL_V : Input::KEY_V;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_V : Keyboard::KEY_V;
         case 0x0D:
-             return __shiftDown ? Input::KEY_CAPITAL_W : Input::KEY_W;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_W : Keyboard::KEY_W;
         case 0x07:
-             return __shiftDown ? Input::KEY_CAPITAL_X : Input::KEY_X;
+             return __shiftDown ? Keyboard::KEY_CAPITAL_X : Keyboard::KEY_X;
         case 0x10:
-            return __shiftDown ? Input::KEY_CAPITAL_Y : Input::KEY_Y;
+            return __shiftDown ? Keyboard::KEY_CAPITAL_Y : Keyboard::KEY_Y;
         case 0x06:
-            return __shiftDown ? Input::KEY_CAPITAL_Z : Input::KEY_Z;
+            return __shiftDown ? Keyboard::KEY_CAPITAL_Z : Keyboard::KEY_Z;
 
         default:
-            return Input::KEY_NONE;
+            return Keyboard::KEY_NONE;
     }
 }
 
@@ -448,47 +447,46 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
 {
     unsigned int keyCode = [event keyCode];
     unsigned int flags = [event modifierFlags];
-    
     switch (keyCode) 
     {
         case 0x39:
-            _game->keyPress(Input::KEY_CAPS_LOCK, (flags & NSAlphaShiftKeyMask) ? Input::KEYEVENT_DOWN : Input::KEYEVENT_UP);
+            _game->keyEvent((flags & NSAlphaShiftKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_CAPS_LOCK);
             break;
         case 0x38:
-            _game->keyPress(Input::KEY_LEFT_SHIFT, (flags & NSShiftKeyMask) ? Input::KEYEVENT_DOWN : Input::KEYEVENT_UP);
+            _game->keyEvent((flags & NSShiftKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_LEFT_SHIFT);
             break;
         case 0x3C:
-            _game->keyPress(Input::KEY_RIGHT_SHIFT, (flags & NSShiftKeyMask) ? Input::KEYEVENT_DOWN : Input::KEYEVENT_UP);
+            _game->keyEvent((flags & NSShiftKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_RIGHT_SHIFT);
             break;
         case 0x3A:
-            _game->keyPress(Input::KEY_LEFT_ALT, (flags & NSAlternateKeyMask) ? Input::KEYEVENT_DOWN : Input::KEYEVENT_UP);
+            _game->keyEvent((flags & NSAlternateKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_LEFT_ALT);
             break;
         case 0x3D:
-            _game->keyPress(Input::KEY_RIGHT_ALT, (flags & NSAlternateKeyMask) ? Input::KEYEVENT_DOWN : Input::KEYEVENT_UP);
+            _game->keyEvent((flags & NSAlternateKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_RIGHT_ALT);
             break;
         case 0x3B:
-            _game->keyPress(Input::KEY_LEFT_CTRL, (flags & NSControlKeyMask) ? Input::KEYEVENT_DOWN : Input::KEYEVENT_UP);
+            _game->keyEvent((flags & NSControlKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_LEFT_CTRL);
             break;
         case 0x3E:
-            _game->keyPress(Input::KEY_RIGHT_CTRL, (flags & NSControlKeyMask) ? Input::KEYEVENT_DOWN : Input::KEYEVENT_UP);
+            _game->keyEvent((flags & NSControlKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_RIGHT_CTRL);
             break;
         case 0x37:
-            _game->keyPress(Input::KEY_LEFT_HYPER, (flags & NSCommandKeyMask) ? Input::KEYEVENT_DOWN : Input::KEYEVENT_UP);
+            _game->keyEvent((flags & NSCommandKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_LEFT_HYPER);
             break;
         case 0x36:
-            _game->keyPress(Input::KEY_RIGHT_HYPER, (flags & NSCommandKeyMask) ? Input::KEYEVENT_DOWN : Input::KEYEVENT_UP);
+            _game->keyEvent((flags & NSCommandKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_RIGHT_HYPER);
             break;
     }
 }
 
 - (void) keyDown: (NSEvent*) event
 {    
-    _game->keyPress(getKey([event keyCode], [event modifierFlags]), Input::KEYEVENT_DOWN);
+    _game->keyEvent(Keyboard::KEY_PRESS, getKey([event keyCode], [event modifierFlags]));
 }
 
 - (void) keyUp: (NSEvent*) event
 {    
-    _game->keyPress(getKey([event keyCode], [event modifierFlags]), Input::KEYEVENT_UP);
+    _game->keyEvent(Keyboard::KEY_RELEASE, getKey([event keyCode], [event modifierFlags]));
 }
 
 @end
@@ -584,12 +582,7 @@ int Platform::getOrientationAngle()
     return 0;
 }
 
-bool Platform::isAccelerometerSupported()
-{
-    return true;
-}
-
-void Platform::getAccelerometerPitchAndRoll(float* pitch, float* roll)
+void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     *pitch = __pitch;
     *roll = __roll;
@@ -600,7 +593,7 @@ void Platform::swapBuffers()
     if (__view)
         CGLFlushDrawable((CGLContextObj)[[__view openGLContext] CGLContextObj]);
 }
-    
+
 }
 
 #endif
