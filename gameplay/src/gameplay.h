@@ -2,10 +2,10 @@
 #include "Base.h"
 #include "Platform.h"
 #include "Game.h"
-#include "Input.h"
+#include "Keyboard.h"
+#include "Touch.h"
 #include "FileSystem.h"
 #include "Package.h"
-#include "Theme.h"
 
 // Math
 #include "Rectangle.h"
@@ -66,6 +66,3 @@
 #include "PhysicsSocketConstraint.h"
 #include "PhysicsSpringConstraint.h"
 #include "PhysicsRigidBody.h"
-#include "PhysicsMotionState.h"
-
-

@@ -23,9 +23,9 @@ public:
     virtual ~MeshGame();
 
     /**
-     * Touch event handler.
+     * @see Game::touchEvent
      */
-    void touch(int x, int y, int touchEvent);
+    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
 protected:
 
@@ -51,7 +51,7 @@ protected:
 
 private:
 
-    void drawScene(Node* node, long cookie);
+    bool drawScene(Node* node, void* cookie);
 
     void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 

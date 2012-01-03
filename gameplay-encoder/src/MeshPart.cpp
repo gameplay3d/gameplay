@@ -6,7 +6,7 @@ namespace gameplay
 
 MeshPart::MeshPart(void) :
     _primitiveType(TRIANGLES),
-    _indexFormat(INDEX8)
+    _indexFormat(INDEX16)
 {
 }
 
@@ -18,30 +18,33 @@ unsigned int MeshPart::getTypeId(void) const
 {
     return MESHPART_ID;
 }
+
 const char* MeshPart::getElementName(void) const
 {
     return "MeshPart";
 }
+
 void MeshPart::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
 
     write(_primitiveType, file);
-    write(_indexFormat, file);
+    write((unsigned int)_indexFormat, file);
 
     // write the number of bytes
     write(indicesByteSize(), file);
     // for each index
-    for (std::vector<unsigned int>::const_iterator i = _indices.begin(); i != _indices.end(); i++)
+    for (std::vector<unsigned int>::const_iterator i = _indices.begin(); i != _indices.end(); ++i)
     {
         writeBinaryIndex(*i, file);
     }
 }
+
 void MeshPart::writeText(FILE* file)
 {
     fprintElementStart(file);
     fprintfElement(file, "primitiveType", _primitiveType);
-    fprintfElement(file, "indexFormat", _indexFormat);
+    fprintfElement(file, "indexFormat", (unsigned int)_indexFormat);
     fprintfElement(file, "%d ", "indices", _indices);
     fprintElementEnd(file);
 }
@@ -68,12 +71,19 @@ unsigned int MeshPart::indexFormatSize() const
     {
     case INDEX32:
         return 4;
-    case INDEX16:
+    default: // INDEX16
         return 2;
-    case INDEX8:
-    default:
-        return 1;
     }
+}
+
+MeshPart::IndexFormat MeshPart::getIndexFormat() const
+{
+    return _indexFormat;
+}
+
+unsigned int MeshPart::getIndex(unsigned int i) const
+{
+    return _indices[i];
 }
 
 void MeshPart::writeBinaryIndex(unsigned int index, FILE* file)
@@ -83,12 +93,8 @@ void MeshPart::writeBinaryIndex(unsigned int index, FILE* file)
     case INDEX32:
         write(index, file);
         break;
-    case INDEX16:
+    default: // INDEX16
         write((unsigned short)index, file);
-        break;
-    case INDEX8:
-    default:
-        write((unsigned char)index, file);
         break;
     }
 }

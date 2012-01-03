@@ -1,6 +1,3 @@
-#ifndef GAMEPLAYMAINQNX_H_
-#define GAMEPLAYMAINQNX_H_
-
 #ifdef __QNX__
 
 #include "gameplay.h"
@@ -19,7 +16,5 @@ int main(int argc, char** argv)
     delete platform;
     return result;
 }
-
-#endif
 
 #endif

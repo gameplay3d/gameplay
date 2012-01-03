@@ -49,6 +49,20 @@ inline Vector2& Vector2::operator*=(float x)
     return *this;
 }
 
+inline bool Vector2::operator<(const Vector2& v) const
+{
+    if (x == v.x)
+    {
+        return y < v.y;
+    }
+    return x < v.x;
+}
+
+inline bool Vector2::operator==(const Vector2& v) const
+{
+    return x==v.x && y==v.y;
+}
+
 inline Vector2 operator*(float x, const Vector2& v)
 {
     Vector2 result(v);

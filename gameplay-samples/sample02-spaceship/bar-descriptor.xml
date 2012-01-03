@@ -29,13 +29,13 @@
 
     <!-- Description, displayed in the BlackBerry Tablet OS application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
-
+    <description>Spaceship Sample</description>
+  
     <!-- Copyright information. Optional. -->
     <!-- <copyright></copyright> -->
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
     <author>Research In Motion</author>
-    <description>Spaceship Sample</description>
     
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
     <!-- <authorId>ABC1234YjsnUk235h</authorId> -->
@@ -57,6 +57,7 @@
     <asset path="res//background.ogg">res/background.ogg</asset>
     <asset path="res/background.png">res/background.png</asset>
     <asset path="res/propulsion_glow.png">res/propulsion_glow.png</asset>
+    <asset path="res/splash.png">res/splash.png</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.fsh}">res/shaders/colored-specular.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.vsh}">res/shaders/colored-specular.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.fsh}">res/shaders/diffuse.fsh</asset>
@@ -105,7 +106,7 @@
     </icon>
     
     <!--  The splash screen that will appear when your application is launching. Should be 1024x600. -->
-    <!-- <splashscreen></splashscreen> -->
+     <!-- <splashscreen></splashscreen>-->
 
     <!-- Request permission to execute native code.  Required for native applications. -->
     <action system="true">run_native</action>

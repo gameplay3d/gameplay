@@ -28,7 +28,7 @@ void Animations::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
     write(_animations.size(), file);
-    for (std::vector<Animation*>::iterator i = _animations.begin(); i != _animations.end(); i++)
+    for (std::vector<Animation*>::iterator i = _animations.begin(); i != _animations.end(); ++i)
     {
         (*i)->writeBinary(file);
     }
@@ -39,7 +39,7 @@ void Animations::writeText(FILE* file)
     fprintElementStart(file);
     if (_animations.size() > 0 )
     {
-        for (std::vector<Animation*>::iterator i = _animations.begin(); i != _animations.end(); i++)
+        for (std::vector<Animation*>::iterator i = _animations.begin(); i != _animations.end(); ++i)
         {
             (*i)->writeText(file);
         }

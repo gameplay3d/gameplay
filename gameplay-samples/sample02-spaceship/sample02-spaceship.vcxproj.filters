@@ -38,6 +38,9 @@
     <None Include="res\spaceship.wav">
       <Filter>res</Filter>
     </None>
+    <None Include="res\splash.png">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SpaceshipGame.h">

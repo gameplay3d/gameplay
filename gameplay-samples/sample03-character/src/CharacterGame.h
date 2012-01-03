@@ -23,9 +23,9 @@ public:
     virtual ~CharacterGame();
 
     /**
-     * @see Game::touch
+     * @see Game::touchEvent
      */
-    void touch(int x, int y, int touchEvent);
+    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
 protected:
 
@@ -51,7 +51,7 @@ protected:
 
 private:
 
-    void drawScene(Node* node, long cookie);
+    bool drawScene(Node* node, void* cookie);
 
     void loadAnimationClips();
 

@@ -15,6 +15,7 @@ public:
     {
         FILEFORMAT_UNKNOWN,
         FILEFORMAT_DAE,
+        FILEFORMAT_FBX,
         FILEFORMAT_TTF,
         FILEFORMAT_GPB
     };
@@ -28,6 +29,11 @@ public:
      * Destructor.
      */
     ~EncoderArguments(void);
+
+    /**
+     * Gets the EncoderArguments instance.
+     */
+    static EncoderArguments* getInstance();
 
     /**
      * Gets the file format from the file path based on the extension.
@@ -49,8 +55,18 @@ public:
      */
     const std::string& getDAEOutputPath() const;
 
+    /**
+     * Returns the output path/folder.
+     */
+    std::string getOutputPath() const;
+
     const std::vector<std::string>& getGroupAnimationNodeId() const;
     const std::vector<std::string>& getGroupAnimationAnimationId() const;
+
+    bool containsGroupNodeId(const std::string& nodeId) const;
+    const std::string getAnimationId(const std::string& nodeId) const;
+
+    const std::vector<std::string>& getHeightmapNodeIds() const;
 
     /**
      * Returns true if an error occured while parsing the command line arguments.
@@ -109,6 +125,8 @@ private:
 
     std::vector<std::string> _groupAnimationNodeId;
     std::vector<std::string> _groupAnimationAnimationId;
+    std::vector<std::string> _heightmapNodeIds;
+
 };
 
 }

@@ -77,7 +77,7 @@ Scene* SceneLoader::load(const char* filePath)
     while (true)
     {
         Properties* ns = sceneProperties->getNextNamespace();
-        if (strcmp(ns->getNamespace(), "physics") == 0)
+        if (ns == NULL || strcmp(ns->getNamespace(), "physics") == 0)
         {
             physics = ns;
             break;
@@ -184,7 +184,7 @@ void SceneLoader::addSceneNodeProperty(SceneNodeProperty::Type type, const char*
 
 void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* sceneProperties)
 {
-    // Apply all of the remaining scene node properties.
+    // Apply all of the remaining scene node properties except rigid body (we apply that last).
     for (unsigned int i = 0; i < _nodeProperties.size(); i++)
     {
         // If the referenced node doesn't exist in the scene, then we
@@ -254,36 +254,8 @@ void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* scen
                 break;
             }
             case SceneNodeProperty::RIGIDBODY:
-            {
-                // If the scene file specifies a rigid body model, use it for creating the rigid body.
-                Properties* np = sceneProperties->getNamespace(_nodeProperties[i]._nodeID);
-                const char* name = NULL;
-                if (np && (name = np->getString("rigidbodymodel")))
-                {
-                    Node* modelNode = scene->findNode(name);
-                    if (!modelNode)
-                        WARN_VARG("Node '%s' does not exist; attempting to use its model for rigid body creation.", name);
-                    else
-                    {
-                        if (!modelNode->getModel())
-                            WARN_VARG("Node '%s' does not have a model; attempting to use its model for rigid body creation.", name);
-                        else
-                        {
-                            // Set the specified model during physics rigid body creation.
-                            Model* model = node->getModel();
-                            node->setModel(modelNode->getModel());
-                            node->setPhysicsRigidBody(p);
-                            node->setModel(model);
-                        }
-                    }
-                }
-                else if (!node->getModel())
-                    WARN_VARG("Attempting to set a rigid body on node '%s', which has no model.", _nodeProperties[i]._nodeID);
-                else
-                    node->setPhysicsRigidBody(p);
-
+                // Process this last in a separate loop to allow scale, translate, rotate to be applied first.
                 break;
-            }
             default:
                 // This cannot happen.
                 break;
@@ -322,8 +294,74 @@ void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* scen
                 break;
             }
         }
+    }
 
-        
+    // Process rigid body properties.
+    for (unsigned int i = 0; i < _nodeProperties.size(); i++)
+    {
+        if (_nodeProperties[i]._type == SceneNodeProperty::RIGIDBODY)
+        {
+            // If the referenced node doesn't exist in the scene, then we
+            // can't do anything so we skip to the next scene node property.
+            Node* node = scene->findNode(_nodeProperties[i]._nodeID);
+            if (!node)
+            {
+                WARN_VARG("Attempting to set a property for node '%s', which does not exist in the scene.", _nodeProperties[i]._nodeID);
+                continue;
+            }
+
+            // Check to make sure the referenced properties object was loaded properly.
+            Properties* p = _propertiesFromFile[_nodeProperties[i]._file];
+            if (!p)
+            {
+                WARN_VARG("The referenced node data in file '%s' failed to load.", _nodeProperties[i]._file.c_str());
+                continue;
+            }
+
+            // If a specific namespace within the file was specified, load that namespace.
+            if (_nodeProperties[i]._id.size() > 0)
+            {
+                p = p->getNamespace(_nodeProperties[i]._id.c_str());
+                if (!p)
+                {
+                    WARN_VARG("The referenced node data at '%s#%s' failed to load.", _nodeProperties[i]._file.c_str(), _nodeProperties[i]._id.c_str());
+                    continue;
+                }
+            }
+            else
+            {
+                // Otherwise, use the first namespace.
+                p->rewind();
+                p = p->getNextNamespace();
+            }
+
+            // If the scene file specifies a rigid body model, use it for creating the rigid body.
+            Properties* np = sceneProperties->getNamespace(_nodeProperties[i]._nodeID);
+            const char* name = NULL;
+            if (np && (name = np->getString("rigidbodymodel")))
+            {
+                Node* modelNode = scene->findNode(name);
+                if (!modelNode)
+                    WARN_VARG("Node '%s' does not exist; attempting to use its model for rigid body creation.", name);
+                else
+                {
+                    if (!modelNode->getModel())
+                        WARN_VARG("Node '%s' does not have a model; attempting to use its model for rigid body creation.", name);
+                    else
+                    {
+                        // Set the specified model during physics rigid body creation.
+                        Model* model = node->getModel();
+                        node->setModel(modelNode->getModel());
+                        node->setPhysicsRigidBody(p);
+                        node->setModel(model);
+                    }
+                }
+            }
+            else if (!node->getModel())
+                WARN_VARG("Attempting to set a rigid body on node '%s', which has no model.", _nodeProperties[i]._nodeID);
+            else
+                node->setPhysicsRigidBody(p);
+        }
     }
 }
 
@@ -365,6 +403,7 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                         {
                             node->setId(_nodeProperties[i]._nodeID);
                             scene->addNode(node);
+                            SAFE_RELEASE(node);
                         }
                         
                         SAFE_RELEASE(tmpPackage);

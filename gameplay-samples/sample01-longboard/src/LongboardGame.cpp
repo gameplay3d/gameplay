@@ -178,13 +178,13 @@ void LongboardGame::buildGradient()
 
 void LongboardGame::update(long elapsedTime)
 {
-    // Query the accelerometer
+    // Query the accelerometer values.
     float pitch, roll;
-    Input::getAccelerometerPitchAndRoll(&pitch, &roll);
+    getAccelerometerValues(&pitch, &roll);
 
     // Clamp angles
-    pitch = fmax(fmin(pitch, PITCH_MAX), PITCH_MIN);
-    roll = fmax(fmin(roll, ROLL_MAX), -ROLL_MAX);
+    pitch = max(min(pitch, PITCH_MAX), PITCH_MIN);
+    roll = max(min(roll, ROLL_MAX), -ROLL_MAX);
 
     // Calculate the 'throttle' (which is the % controlling change in acceleration, similar to a car's gas pedal)
     float throttle = 1.0f - ((pitch - PITCH_MIN) / PITCH_RANGE);

@@ -17,6 +17,10 @@ bool equals(const std::string& a, const char* b);
  */
 bool equalsIgnoreCase(const std::string& a, const char* b);
 
+std::string getFilenameFromFilePath(const std::string& filepath);
+
+std::string getFilenameNoExt(const std::string& filename);
+
 }
 
 #endif

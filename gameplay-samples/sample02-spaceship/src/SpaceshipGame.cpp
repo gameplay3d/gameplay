@@ -72,6 +72,8 @@ SpaceshipGame::~SpaceshipGame()
 
 void SpaceshipGame::initialize()
 {
+    renderOnce(this, &SpaceshipGame::drawSplash, 0);
+
     // Create our render state block that will be reused across all materials
     _stateBlock = RenderState::StateBlock::create();
     _stateBlock->setDepthTest(true);
@@ -449,52 +451,64 @@ void SpaceshipGame::render(long elapsedTime)
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
     // Visit scene nodes for opaque drawing
-    _scene->visit(this, &SpaceshipGame::visitNode, 0);
+    _scene->visit(this, &SpaceshipGame::drawScene, (void*)0);
 
     // Visit scene nodes for transparent drawing
-    _scene->visit(this, &SpaceshipGame::visitNode, 1);
+    _scene->visit(this, &SpaceshipGame::drawScene, (void*)1);
 
     // Draw game text (yellow)
+    drawText();
+}
+
+void SpaceshipGame::drawSplash(void* coookie)
+{
+    clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
+    SpriteBatch* batch = SpriteBatch::create("res/splash.png");
+    batch->begin();
+    batch->draw(Rectangle(0, 0, 1024, 600), Rectangle(0, 0, 1024, 600), Vector4::one());
+    batch->end();
+    SAFE_DELETE(batch);
+}
+
+bool SpaceshipGame::drawScene(Node* node, void* cookie)
+{
+    Model* model = node->getModel();
+    if (model)
+    {
+        // Transparent nodes must be drawn last (stage 1)
+        bool isTransparent = (node == _glowNode);
+
+        // Skip transparent objects for stage 0
+        if ((!isTransparent && (int)cookie == 0) || (isTransparent && (int)cookie == 1))
+            model->draw();
+    }
+
+    return true;
+}
+
+void SpaceshipGame::drawText()
+{
     _font->begin();
     char text[1024];
     sprintf(text, "%dsec.", (int)_time);
-    _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1));
+    _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1), _font->getSize());
     if (_finished)
     {
-        _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one());
+        _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one(), _font->getSize());
     }
     _font->end();
 }
 
-void SpaceshipGame::visitNode(Node* node, long cookie)
+void SpaceshipGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    Model* model = node->getModel();
-    if (model == NULL)
-        return;
-
-    // Transparent nodes must be drawn last (stage 1)
-    bool isTransparent = (node == _glowNode);
-
-    // Skip transparent objects for stage 0
-    if (cookie == 0 && isTransparent)
-        return;
-    // Skip opaque objects for stage 1
-    if (cookie == 1 && !isTransparent)
-        return;
-
-    model->draw();
-}
-
-void SpaceshipGame::touch(int x, int y, int touchEvent)
-{
-    switch (touchEvent)
+    switch (evt)
     {
-    case Input::TOUCHEVENT_PRESS:
+    case Touch::TOUCH_PRESS:
         if (_finished && (getAbsoluteTime() - _finishedTime) > 1000L)
         {
             resetGame();
         }
-    case Input::TOUCHEVENT_MOVE:
+    case Touch::TOUCH_MOVE:
         if (!_finished)
         {
             _pushing = true;
@@ -502,7 +516,7 @@ void SpaceshipGame::touch(int x, int y, int touchEvent)
         }
         break;
 
-    case Input::TOUCHEVENT_RELEASE:
+    case Touch::TOUCH_RELEASE:
         _pushing = false;
         break;
     }

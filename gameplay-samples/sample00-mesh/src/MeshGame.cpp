@@ -60,23 +60,23 @@ void MeshGame::render(long elapsedTime)
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 5, getFrameRate());
 }
 
-void MeshGame::touch(int x, int y, int touchEvent)
+void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    switch (touchEvent)
+    switch (evt)
     {
-    case Input::TOUCHEVENT_PRESS:
+    case Touch::TOUCH_PRESS:
         {
             _touched = true;
             _touchX = x;
         }
         break;
-    case Input::TOUCHEVENT_RELEASE:
+    case Touch::TOUCH_RELEASE:
         {
             _touched = false;
             _touchX = 0;
         }
         break;
-    case Input::TOUCHEVENT_MOVE:
+    case Touch::TOUCH_MOVE:
         {
             int deltaX = x - _touchX;
             _touchX = x;
@@ -88,11 +88,12 @@ void MeshGame::touch(int x, int y, int touchEvent)
     };
 }
 
-void MeshGame::drawScene(Node* node, long cookie)
+bool MeshGame::drawScene(Node* node, void* cookie)
 {
     Model* model = node->getModel(); 
     if (model)
         model->draw();
+    return true;
 }
 
 void MeshGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
@@ -100,7 +101,7 @@ void MeshGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, u
     char buffer[10];
     sprintf(buffer, "%u", fps);
     font->begin();
-    font->drawText(buffer, x, y, color);
+    font->drawText(buffer, x, y, color, font->getSize());
     font->end();
 }
 

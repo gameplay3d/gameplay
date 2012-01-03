@@ -23,9 +23,9 @@ public:
     virtual ~SpaceshipGame();
 
     /**
-     * @see Game::touch
+     * @see Game::touchEvent
      */
-    void touch(int x, int y, int touchEvent);
+    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
 protected:
 
@@ -85,9 +85,19 @@ private:
     void resetGame();
 
     /**
-     * Visits nodes in a scene.
+     * Draw the splash screen
      */
-    void visitNode(Node* node, long cookie);
+    void drawSplash(void* cookie);
+
+    /**
+     * Draws the scene
+     */
+    bool drawScene(Node* node, void* cookie);
+
+    /**
+     * Draws the text.
+     */
+    void drawText();
 
     // Scene variables
     Scene* _scene;

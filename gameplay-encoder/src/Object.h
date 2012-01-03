@@ -22,8 +22,6 @@ public:
         ANIMATION_ID = 4,
         ANIMATIONCHANNEL_ID = 5,
         NODEINSTANCE_ID = 8,
-        CAMERAINSTANCE_ID = 9,
-        LIGHTINSTANCE_ID = 10,
         MODEL_ID = 11,
         MATERIAL_ID = 16,
         EFFECT_ID = 17,
@@ -113,7 +111,7 @@ public:
         write(list.size(), file);
         // Then write each element
         typename std::list<T>::const_iterator i;
-        for (i = list.begin(); i != list.end(); i++)
+        for (i = list.begin(); i != list.end(); ++i)
         {
             (*i)->writeBinary(file);
         }
@@ -129,7 +127,7 @@ public:
         write(vector.size(), file);
         // Then write each element
         typename std::vector<T>::const_iterator i;
-        for (i = vector.begin(); i != vector.end(); i++)
+        for (i = vector.begin(); i != vector.end(); ++i)
         {
             (*i)->writeBinary(file);
         }

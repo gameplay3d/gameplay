@@ -1,6 +1,7 @@
 #ifndef MESH_H_
 #define MESH_H_
 
+#include "Ref.h"
 #include "VertexFormat.h"
 #include "Vector3.h"
 #include "BoundingBox.h"
@@ -47,7 +48,7 @@ public:
     };
 
     /**
-     * Constructs a basic static mesh with the specified vertex format.
+     * Constructs a new mesh with the specified vertex format.
      *
      * @param vertexFormat The vertex format.
      * @param vertexCount The number of vertices.
@@ -55,7 +56,7 @@ public:
      * 
      * @return The created mesh.
      */
-    static Mesh* createMesh(VertexFormat* vertexFormat, unsigned int vertexCount, bool dynamic = false);
+    static Mesh* createMesh(const VertexFormat& vertexFormat, unsigned int vertexCount, bool dynamic = false);
 
     /**
      * Creates a new textured 3D quad.
@@ -127,7 +128,7 @@ public:
      *
      * @return The vertex format.
      */
-    const VertexFormat* getVertexFormat() const;
+    const VertexFormat& getVertexFormat() const;
 
     /**
      * Gets the number of vertices in the mesh.
@@ -148,7 +149,7 @@ public:
      *
      * @return The vertex buffer object handle.
      */
-    VertexBuffer getVertexBuffer() const;
+    VertexBufferHandle getVertexBuffer() const;
 
     /**
      * Determines if the mesh is dynamic.
@@ -285,7 +286,7 @@ private:
     /**
      * Constructor.
      */
-    Mesh();
+    Mesh(const VertexFormat& vertexFormat);
 
     /**
      * Constructor.
@@ -294,9 +295,9 @@ private:
      */
     Mesh(const Mesh& copy);
 
-    VertexFormat* _vertexFormat;
+    const VertexFormat _vertexFormat;
     unsigned int _vertexCount;
-    VertexBuffer _vertexBuffer;
+    VertexBufferHandle _vertexBuffer;
     PrimitiveType _primitiveType;
     unsigned int _partCount;
     MeshPart** _parts;

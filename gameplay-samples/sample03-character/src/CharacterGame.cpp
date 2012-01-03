@@ -61,20 +61,22 @@ void CharacterGame::render(long elapsedTime)
     _scene->visit(this, &CharacterGame::drawScene);
 }
 
-void CharacterGame::drawScene(Node* node, long cookie)
+bool CharacterGame::drawScene(Node* node, void* cookie)
 {
     Model* model = node->getModel();
     if (model)
     {
         model->draw();
     }
+    return true;
 }
 
-void CharacterGame::touch(int x, int y, int touchEvent)
+void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    switch (touchEvent)
+
+    switch (evt)
     {
-    case Input::TOUCHEVENT_PRESS:
+    case Touch::TOUCH_PRESS:
         {
             _rotateX = x;
             switch (_animationState)
@@ -103,12 +105,12 @@ void CharacterGame::touch(int x, int y, int touchEvent)
             _animationState = (_animationState + 1) % 5;
         }
         break;
-    case Input::TOUCHEVENT_RELEASE:
+    case Touch::TOUCH_RELEASE:
         {
             _rotateX = 0;
         }
         break;
-    case Input::TOUCHEVENT_MOVE:
+    case Touch::TOUCH_MOVE:
         {
             int deltaX = x - _rotateX;
             _rotateX = x;

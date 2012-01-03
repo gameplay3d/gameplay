@@ -35,6 +35,9 @@ using std::isdigit;
 using std::toupper;
 using std::tolower;
 using std::size_t;
+using std::min;
+using std::max;
+using std::modf;
 
 // Common
 #ifndef NULL
@@ -69,41 +72,8 @@ extern void printError(const char* format, ...);
 // Bullet Physics
 #include <btBulletDynamicsCommon.h>
 
-// Since Bullet overrides new, we have to allocate objects manually using its
-// aligned allocation function when we turn on memory leak detection in GamePlay.
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
-#define BULLET_NEW(type, name) \
-    type* name = (type*)btAlignedAlloc(sizeof(type), 16); \
-    type __##name##_tmp; \
-    memcpy(name, &__##name##_tmp, sizeof(type))
-
-#define BULLET_NEW_VARG(type, name, ...) \
-    type* name = (type*)btAlignedAlloc(sizeof(type), 16); \
-    type __##name##_tmp (__VA_ARGS__); \
-    memcpy(name, &__##name##_tmp, sizeof(type))
-
-#define BULLET_DELETE(name) \
-    if (name) \
-    { \
-        btAlignedFree(name); \
-        name = NULL; \
-    }
-
-#else
-#define BULLET_NEW(type, name) \
-    type* name = new type()
-
-#define BULLET_NEW_VARG(type, name, ...) \
-    type* name = new type(__VA_ARGS__)
-
-#define BULLET_DELETE(name) SAFE_DELETE(name)
-#endif
-
-
 // Debug new for memory leak detection
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
 #include "DebugNew.h"
-#endif
 
 // Object deletion macro
 #define SAFE_DELETE(x) \
@@ -148,6 +118,11 @@ extern void printError(const char* format, ...);
 #define M_1_PI                      0.31830988618379067154
 #endif
 
+// NOMINMAX makes sure that windef.h doesn't add macros min and max
+#ifdef WIN32
+    #define NOMINMAX
+#endif
+
 // Audio (OpenAL)
 #ifdef __QNX__
 #include <AL/al.h>
@@ -184,7 +159,6 @@ extern void printError(const char* format, ...);
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
-    #include <GL/wglew.h>
 #elif __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
@@ -208,8 +182,8 @@ extern void printError(const char* format, ...);
 namespace gameplay
 {
 typedef GLint VertexAttribute;
-typedef GLuint VertexBuffer;
-typedef GLuint IndexBuffer;
+typedef GLuint VertexBufferHandle;
+typedef GLuint IndexBufferHandle;
 typedef GLuint TextureHandle;
 typedef GLuint FrameBufferHandle;
 typedef GLuint RenderBufferHandle;
@@ -267,25 +241,7 @@ extern GLenum __gl_error_code;
 #define GL_LAST_ERROR() __gl_error_code
 
 
-#if defined(WIN32) || defined(__APPLE__)
-
-    inline float fminf(float a, float b)
-    {
-      return a < b ? a : b;
-    }
-    inline float fmin(float a, float b)
-    {
-      return a < b ? a : b;
-    }
-    inline float fmaxf(float a, float b)
-    {
-      return a > b ? a : b;
-    }
-    inline float fmax(float a, float b)
-    {
-      return a > b ? a : b;
-    }
-        
+#if defined(WIN32)
     #pragma warning( disable : 4172 )
     #pragma warning( disable : 4244 )
     #pragma warning( disable : 4311 )
@@ -293,5 +249,6 @@ extern GLenum __gl_error_code;
     #pragma warning( disable : 4800 )
     #pragma warning( disable : 4996 )
 #endif
+
 
 #endif

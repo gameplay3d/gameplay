@@ -51,21 +51,6 @@ public:
     static const int ANIMATE_SCALE_Z = 4;
 
     /**
-     * Scale xy animation property. Data=sx,sy
-     */
-    static const int ANIMATE_SCALE_XY = 5;
-
-    /**
-     * Scale xz animation property. Data=sx,sz
-     */
-    static const int ANIMATE_SCALE_XZ = 6;
-
-    /**
-     * Scale yz animation property. Data=sy,sz
-     */
-    static const int ANIMATE_SCALE_YZ = 7;
-
-    /**
      * Rotation animation property. Data=qx,qy,qz,qw (as quaternion).
      */
     static const int ANIMATE_ROTATE = 8;
@@ -89,21 +74,6 @@ public:
      * Translate z animation property. Data=tz
      */
     static const int ANIMATE_TRANSLATE_Z = 12;
-
-    /**
-     * Translate xy animation property. Data=tx,ty
-     */
-    static const int ANIMATE_TRANSLATE_XY = 13;
-
-    /**
-     * Translate xz animation property. Data=tx,tz
-     */
-    static const int ANIMATE_TRANSLATE_XZ = 14;
-
-    /**
-     * Translate yz animation property. Data=ty,tz
-     */
-    static const int ANIMATE_TRANSLATE_YZ = 15;
 
     /**
      * Rotation + Translation animation property (Rigid Body). Data=qx,qy,qz,qw,tx,ty,tz
