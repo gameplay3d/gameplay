@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		42475D7C14720ECE00610A6A /* libdom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42475D7B14720ECE00610A6A /* libdom.a */; };
+		42783423148D6F7500A6E27F /* FBXSceneEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4278341E148D6F7500A6E27F /* FBXSceneEncoder.cpp */; };
 		4283905914896E6C00E2B2F5 /* BoundingVolume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4283905714896E6C00E2B2F5 /* BoundingVolume.cpp */; };
 		4283906314896F1600E2B2F5 /* Curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4283906114896F1600E2B2F5 /* Curve.cpp */; };
 		42C8EE0A14724CD700E43619 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDB714724CD700E43619 /* Animation.cpp */; };
@@ -15,7 +16,6 @@
 		42C8EE0C14724CD700E43619 /* Animations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDBB14724CD700E43619 /* Animations.cpp */; };
 		42C8EE0D14724CD700E43619 /* Base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDBD14724CD700E43619 /* Base.cpp */; };
 		42C8EE0E14724CD700E43619 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDBF14724CD700E43619 /* Camera.cpp */; };
-		42C8EE0F14724CD700E43619 /* CameraInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDC114724CD700E43619 /* CameraInstance.cpp */; };
 		42C8EE1014724CD700E43619 /* DAEChannelTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDC314724CD700E43619 /* DAEChannelTarget.cpp */; };
 		42C8EE1114724CD700E43619 /* DAEOptimizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDC514724CD700E43619 /* DAEOptimizer.cpp */; };
 		42C8EE1214724CD700E43619 /* DAESceneEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDC714724CD700E43619 /* DAESceneEncoder.cpp */; };
@@ -28,7 +28,6 @@
 		42C8EE1914724CD700E43619 /* GPBDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDD514724CD700E43619 /* GPBDecoder.cpp */; };
 		42C8EE1A14724CD700E43619 /* GPBFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDD714724CD700E43619 /* GPBFile.cpp */; };
 		42C8EE1B14724CD700E43619 /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDD914724CD700E43619 /* Light.cpp */; };
-		42C8EE1C14724CD700E43619 /* LightInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDDB14724CD700E43619 /* LightInstance.cpp */; };
 		42C8EE1D14724CD700E43619 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDDD14724CD700E43619 /* main.cpp */; };
 		42C8EE1E14724CD700E43619 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDDE14724CD700E43619 /* Material.cpp */; };
 		42C8EE1F14724CD700E43619 /* MaterialParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDE014724CD700E43619 /* MaterialParameter.cpp */; };
@@ -75,6 +74,11 @@
 /* Begin PBXFileReference section */
 		42475CE6147208A000610A6A /* gameplay-encoder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "gameplay-encoder"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42475D7B14720ECE00610A6A /* libdom.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdom.a; path = "../external-deps/collada-dom/lib/macos/libdom.a"; sourceTree = "<group>"; };
+		4278341E148D6F7500A6E27F /* FBXSceneEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FBXSceneEncoder.cpp; path = src/FBXSceneEncoder.cpp; sourceTree = SOURCE_ROOT; };
+		4278341F148D6F7500A6E27F /* FBXSceneEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBXSceneEncoder.h; path = src/FBXSceneEncoder.h; sourceTree = SOURCE_ROOT; };
+		42783420148D6F7500A6E27F /* Vector2.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Vector2.inl; path = src/Vector2.inl; sourceTree = SOURCE_ROOT; };
+		42783421148D6F7500A6E27F /* Vector3.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Vector3.inl; path = src/Vector3.inl; sourceTree = SOURCE_ROOT; };
+		42783422148D6F7500A6E27F /* Vector4.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Vector4.inl; path = src/Vector4.inl; sourceTree = SOURCE_ROOT; };
 		4283905714896E6C00E2B2F5 /* BoundingVolume.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BoundingVolume.cpp; path = src/BoundingVolume.cpp; sourceTree = SOURCE_ROOT; };
 		4283905814896E6C00E2B2F5 /* BoundingVolume.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BoundingVolume.h; path = src/BoundingVolume.h; sourceTree = SOURCE_ROOT; };
 		4283906114896F1600E2B2F5 /* Curve.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Curve.cpp; path = ../gameplay/src/Curve.cpp; sourceTree = "<group>"; };
@@ -89,8 +93,6 @@
 		42C8EDBE14724CD700E43619 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base.h; path = src/Base.h; sourceTree = SOURCE_ROOT; };
 		42C8EDBF14724CD700E43619 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Camera.cpp; path = src/Camera.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDC014724CD700E43619 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = src/Camera.h; sourceTree = SOURCE_ROOT; };
-		42C8EDC114724CD700E43619 /* CameraInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraInstance.cpp; path = src/CameraInstance.cpp; sourceTree = SOURCE_ROOT; };
-		42C8EDC214724CD700E43619 /* CameraInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraInstance.h; path = src/CameraInstance.h; sourceTree = SOURCE_ROOT; };
 		42C8EDC314724CD700E43619 /* DAEChannelTarget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DAEChannelTarget.cpp; path = src/DAEChannelTarget.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDC414724CD700E43619 /* DAEChannelTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DAEChannelTarget.h; path = src/DAEChannelTarget.h; sourceTree = SOURCE_ROOT; };
 		42C8EDC514724CD700E43619 /* DAEOptimizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DAEOptimizer.cpp; path = src/DAEOptimizer.cpp; sourceTree = SOURCE_ROOT; };
@@ -115,8 +117,6 @@
 		42C8EDD814724CD700E43619 /* GPBFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPBFile.h; path = src/GPBFile.h; sourceTree = SOURCE_ROOT; };
 		42C8EDD914724CD700E43619 /* Light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Light.cpp; path = src/Light.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDDA14724CD700E43619 /* Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Light.h; path = src/Light.h; sourceTree = SOURCE_ROOT; };
-		42C8EDDB14724CD700E43619 /* LightInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LightInstance.cpp; path = src/LightInstance.cpp; sourceTree = SOURCE_ROOT; };
-		42C8EDDC14724CD700E43619 /* LightInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightInstance.h; path = src/LightInstance.h; sourceTree = SOURCE_ROOT; };
 		42C8EDDD14724CD700E43619 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDDE14724CD700E43619 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Material.cpp; path = src/Material.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDDF14724CD700E43619 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Material.h; path = src/Material.h; sourceTree = SOURCE_ROOT; };
@@ -221,8 +221,6 @@
 				4283905814896E6C00E2B2F5 /* BoundingVolume.h */,
 				42C8EDBF14724CD700E43619 /* Camera.cpp */,
 				42C8EDC014724CD700E43619 /* Camera.h */,
-				42C8EDC114724CD700E43619 /* CameraInstance.cpp */,
-				42C8EDC214724CD700E43619 /* CameraInstance.h */,
 				42C8EDC314724CD700E43619 /* DAEChannelTarget.cpp */,
 				42C8EDC414724CD700E43619 /* DAEChannelTarget.h */,
 				42C8EDC514724CD700E43619 /* DAEOptimizer.cpp */,
@@ -235,6 +233,8 @@
 				42C8EDCC14724CD700E43619 /* Effect.h */,
 				42C8EDCD14724CD700E43619 /* EncoderArguments.cpp */,
 				42C8EDCE14724CD700E43619 /* EncoderArguments.h */,
+				4278341E148D6F7500A6E27F /* FBXSceneEncoder.cpp */,
+				4278341F148D6F7500A6E27F /* FBXSceneEncoder.h */,
 				42C8EDCF14724CD700E43619 /* FileIO.cpp */,
 				42C8EDD014724CD700E43619 /* FileIO.h */,
 				42C8EDD114724CD700E43619 /* Font.cpp */,
@@ -247,8 +247,6 @@
 				42C8EDD814724CD700E43619 /* GPBFile.h */,
 				42C8EDD914724CD700E43619 /* Light.cpp */,
 				42C8EDDA14724CD700E43619 /* Light.h */,
-				42C8EDDB14724CD700E43619 /* LightInstance.cpp */,
-				42C8EDDC14724CD700E43619 /* LightInstance.h */,
 				42C8EDDD14724CD700E43619 /* main.cpp */,
 				42C8EDDE14724CD700E43619 /* Material.cpp */,
 				42C8EDDF14724CD700E43619 /* Material.h */,
@@ -286,10 +284,13 @@
 				42C8EDFF14724CD700E43619 /* TTFFontEncoder.h */,
 				42C8EE0014724CD700E43619 /* Vector2.cpp */,
 				42C8EE0114724CD700E43619 /* Vector2.h */,
+				42783420148D6F7500A6E27F /* Vector2.inl */,
 				42C8EE0214724CD700E43619 /* Vector3.cpp */,
 				42C8EE0314724CD700E43619 /* Vector3.h */,
+				42783421148D6F7500A6E27F /* Vector3.inl */,
 				42C8EE0414724CD700E43619 /* Vector4.cpp */,
 				42C8EE0514724CD700E43619 /* Vector4.h */,
+				42783422148D6F7500A6E27F /* Vector4.inl */,
 				42C8EE0614724CD700E43619 /* Vertex.cpp */,
 				42C8EE0714724CD700E43619 /* Vertex.h */,
 				42C8EE0814724CD700E43619 /* VertexElement.cpp */,
@@ -377,7 +378,6 @@
 				42C8EE0C14724CD700E43619 /* Animations.cpp in Sources */,
 				42C8EE0D14724CD700E43619 /* Base.cpp in Sources */,
 				42C8EE0E14724CD700E43619 /* Camera.cpp in Sources */,
-				42C8EE0F14724CD700E43619 /* CameraInstance.cpp in Sources */,
 				42C8EE1014724CD700E43619 /* DAEChannelTarget.cpp in Sources */,
 				42C8EE1114724CD700E43619 /* DAEOptimizer.cpp in Sources */,
 				42C8EE1214724CD700E43619 /* DAESceneEncoder.cpp in Sources */,
@@ -390,7 +390,6 @@
 				42C8EE1914724CD700E43619 /* GPBDecoder.cpp in Sources */,
 				42C8EE1A14724CD700E43619 /* GPBFile.cpp in Sources */,
 				42C8EE1B14724CD700E43619 /* Light.cpp in Sources */,
-				42C8EE1C14724CD700E43619 /* LightInstance.cpp in Sources */,
 				42C8EE1D14724CD700E43619 /* main.cpp in Sources */,
 				42C8EE1E14724CD700E43619 /* Material.cpp in Sources */,
 				42C8EE1F14724CD700E43619 /* MaterialParameter.cpp in Sources */,
@@ -416,6 +415,7 @@
 				42C8EE3314724CD700E43619 /* VertexElement.cpp in Sources */,
 				4283905914896E6C00E2B2F5 /* BoundingVolume.cpp in Sources */,
 				4283906314896F1600E2B2F5 /* Curve.cpp in Sources */,
+				42783423148D6F7500A6E27F /* FBXSceneEncoder.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,6 +455,7 @@
 				OTHER_TEST_FLAGS = "";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4";
 				WARNING_CFLAGS = "";
 			};
 			name = Debug;
@@ -488,6 +489,7 @@
 				OTHER_TEST_FLAGS = "";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4";
 				WARNING_CFLAGS = "";
 			};
 			name = Release;
@@ -501,7 +503,9 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					"../external-deps/freetype2/include",
 					"../external-deps/collada-dom/include",
@@ -513,9 +517,11 @@
 					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macos\"",
 					"\"$(SRCROOT)/../external-deps/pcre/lib/macos\"",
 					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
+					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBXSDK20122/lib/gcc4/ub\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4 /Applications/Autodesk/FBXSDK20122/include";
 			};
 			name = Debug;
 		};
@@ -528,7 +534,9 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					"../external-deps/freetype2/include",
 					"../external-deps/collada-dom/include",
@@ -540,9 +548,11 @@
 					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macos\"",
 					"\"$(SRCROOT)/../external-deps/pcre/lib/macos\"",
 					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
+					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBXSDK20122/lib/gcc4/ub\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4 /Applications/Autodesk/FBXSDK20122/include";
 			};
 			name = Release;
 		};

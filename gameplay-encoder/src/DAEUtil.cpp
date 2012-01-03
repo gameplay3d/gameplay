@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "DAEUtil.h"
+#include "StringUtil.h"
 
 namespace gameplay
 {
@@ -14,6 +15,55 @@ namespace gameplay
  */
 int getIndex(const domInstance_controller::domSkeleton_Array& skeletonArray, const domNodeRef& node);
 
+void getAnimationChannels(const domNodeRef& node, std::list<domChannelRef>& channels)
+{
+    assert(node->getId());
+    std::string nodeIdSlash (node->getId());
+    nodeIdSlash.append("/");
+
+    domCOLLADA* root = (domCOLLADA*)node->getDocument()->getDomRoot();
+
+    domLibrary_animations_Array& animationLibrary = root->getLibrary_animations_array();
+    size_t animationLibraryCount = animationLibrary.getCount();
+    for (size_t i = 0; i < animationLibraryCount; ++i)
+    {
+        domLibrary_animationsRef& animationsRef = animationLibrary.get(i);
+        domAnimation_Array& animationArray = animationsRef->getAnimation_array();
+        size_t animationCount = animationArray.getCount();
+        for (size_t j = 0; j < animationCount; ++j)
+        {
+            domAnimationRef& animationRef = animationArray.get(j);
+            domChannel_Array& channelArray = animationRef->getChannel_array();
+            size_t channelArrayCount = channelArray.getCount();
+            for (size_t k = 0; k < channelArrayCount; ++k)
+            {
+                domChannelRef& channel = channelArray.get(k);
+                const char* target = channel->getTarget();
+
+                // TODO: Assumes only one target per channel?
+                if (startsWith(target, nodeIdSlash.c_str()))
+                {
+                    channels.push_back(channel);
+                }
+            }
+        }
+    }
+
+    // Recursively do the same for all nodes
+    daeTArray< daeSmartRef<daeElement> > children;
+    node->getChildren(children);
+    size_t childCount = children.getCount();
+    for (size_t i = 0; i < childCount; ++i)
+    {
+        daeElementRef childElement = children[i];
+        if (childElement->getElementType() == COLLADA_TYPE::NODE)
+        {
+            domNodeRef childNode = daeSafeCast<domNode>(childElement);
+            getAnimationChannels(childNode, channels);
+        }
+    }
+}
+
 void getJointNames(const domSourceRef source, std::vector<std::string>& list)
 {
     // BLENDER used name_array
@@ -22,7 +72,7 @@ void getJointNames(const domSourceRef source, std::vector<std::string>& list)
     {
         domListOfNames& ids = nameArray->getValue();
         size_t jointCount = (size_t)nameArray->getCount();
-        for (size_t j = 0; j < jointCount; j++)
+        for (size_t j = 0; j < jointCount; ++j)
         {
             list.push_back(std::string(ids.get(j)));
         }
@@ -35,7 +85,7 @@ void getJointNames(const domSourceRef source, std::vector<std::string>& list)
         {
             xsIDREFS& ids = idArray->getValue();
             size_t jointCount = (size_t)idArray->getCount();
-            for (size_t j = 0; j < jointCount; j++)
+            for (size_t j = 0; j < jointCount; ++j)
             {
                 list.push_back(std::string(ids.get(j).getID()));
             }
@@ -48,7 +98,7 @@ void getJointNames(const domSkin* skin, std::vector<std::string>& list)
     const domSkin::domJointsRef& joints = skin->getJoints();
     const domInputLocal_Array& inputArray = joints->getInput_array();
     size_t inputCount = inputArray.getCount();
-    for (size_t i = 0; i < inputCount; i++)
+    for (size_t i = 0; i < inputCount; ++i)
     {
         const domInputLocalRef input = inputArray.get(i);
         const char* semantic = input->getSemantic();
@@ -72,7 +122,7 @@ domSource* getInputSource(const domChannelRef& channel)
         domSampler* sampler = daeSafeCast<domSampler>(element);
         const domInputLocal_Array& inputArray = sampler->getInput_array();
         size_t inputArrayCount = inputArray.getCount();
-        for (size_t i = 0; i < inputArrayCount; i++)
+        for (size_t i = 0; i < inputArrayCount; ++i)
         {
             const domInputLocalRef& input = inputArray.get(i);
             if (strcmp(input->getSemantic(), "INPUT") == 0)
@@ -108,7 +158,7 @@ const domSamplerRef getSampler(const domChannelRef& channel)
         
         const domSampler_Array& samplerArray = animation->getSampler_array();
         size_t count = samplerArray.getCount();
-        for (size_t i = 0; i < count; i++)
+        for (size_t i = 0; i < count; ++i)
         {
             const domSamplerRef& sampler = samplerArray.get(i);
             if (id.compare(sampler->getId()) == 0)
@@ -133,7 +183,7 @@ const domSourceRef getSource(const domInputLocalRef& inputLocal, const domAnimat
     const std::string& id = uri.id();
     const domSource_Array& sourceArray = animation->getSource_array();
     size_t count = sourceArray.getCount();
-    for (size_t i = 0; i < count; i++)
+    for (size_t i = 0; i < count; ++i)
     {
         const domSourceRef source = sourceArray.get(i);
         if (id.compare(source->getId()) == 0)
@@ -154,7 +204,7 @@ const domName_arrayRef getSourceNameArray(const domSourceRef& source)
     daeTArray<daeSmartRef<daeElement> > children;
     source->getChildren(children);
     size_t childCount = children.getCount();
-    for (size_t i = 0; i < childCount; i++)
+    for (size_t i = 0; i < childCount; ++i)
     {
         const daeElementRef element = children.get(i);
         if (element->getElementType() == COLLADA_TYPE::NAME_ARRAY)
@@ -223,7 +273,7 @@ bool equalKeyTimes(const domSource* s1, const domSource* s2)
         const domListOfFloats& list2 = f2->getValue();
 
         size_t count = (size_t)f1->getCount();
-        for (size_t i = 0; i < count; i++)
+        for (size_t i = 0; i < count; ++i)
         {
             if (list1.get(i) != list2.get(i))
             {
@@ -259,7 +309,7 @@ void moveChannelAndSouresToAnimation(domChannelRef& channel, domAnimationRef& an
 
         domInputLocal_Array& inputArray = sampler->getInput_array();
         size_t inputArrayCount = inputArray.getCount();
-        for (size_t i = 0; i < inputArrayCount; i++)
+        for (size_t i = 0; i < inputArrayCount; ++i)
         {
             inputArray = sampler->getInput_array();
             const domInputLocalRef& input = inputArray.get(i);
@@ -289,7 +339,7 @@ int getIndex(const domInstance_controller::domSkeleton_Array& skeletonArray, con
 {
     const std::string nodeId = node->getId();
     size_t count = skeletonArray.getCount();
-    for (size_t i = 0; i < count; i++)
+    for (size_t i = 0; i < count; ++i)
     {
         const domInstance_controller::domSkeletonRef& skeleton = skeletonArray.get(i);
         daeElementRef element = skeleton->getValue().getElement();

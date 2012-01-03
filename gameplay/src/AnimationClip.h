@@ -239,7 +239,6 @@ private:
     unsigned long _timeStarted;               // The game time when this clip was actually started.
     unsigned long _elapsedTime;               // Time elapsed while the clip is running.
     long _runningTime;                        // Keeps track of the Animation's relative time in respect to the active duration.
-    unsigned int* _channelPriority;           // Keeps track of each channel's priority.
     AnimationClip* _crossFadeToClip;          // The clip to cross fade to
     unsigned long _crossFadeStart;            // The time at which the cross fade started.
     unsigned long _crossFadeOutElapsed;       // The amount of time that has elapsed for the crossfade.

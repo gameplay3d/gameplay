@@ -10,7 +10,7 @@ void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, unsigned c
     // offset dst bitmap by x,y.
     dstBitmap +=  (x + (y * dstWidth));
 
-    for (int i = 0; i < srcHeight; i++)
+    for (int i = 0; i < srcHeight; ++i)
     {
         memcpy(dstBitmap, (const void*)srcBitmap, srcWidth);
         srcBitmap += srcWidth;
@@ -91,7 +91,7 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
     int rowSize = 0; // Stores the total number of rows required to all glyphs.
     
     // Find the width of the image.
-    for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ascii++)
+    for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
     {
         // Load glyph image into the slot (erase previous one)
         error = FT_Load_Char(face, ascii, FT_LOAD_RENDER);
@@ -136,7 +136,7 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
 
         // Find out the squared texture size that would fit all the require font glyphs.
         i = 0;
-        for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ascii++)
+        for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
         {
             // Load glyph image into the slot (erase the previous one).
             error = FT_Load_Char(face, ascii, FT_LOAD_RENDER);
@@ -203,7 +203,7 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
     penY = 0;
     row = 0;
     i = 0;
-    for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ascii++)
+    for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
     {
         // Load glyph image into the slot (erase the previous one).
         error = FT_Load_Char(face, ascii, FT_LOAD_RENDER);
@@ -268,7 +268,7 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
     // File header and version.
     char fileHeader[9]     = {'«', 'G', 'P', 'B', '»', '\r', '\n', '\x1A', '\n'};
     fwrite(fileHeader, sizeof(char), 9, gpbFp);
-    fwrite(gameplay::VERSION, sizeof(char), 2, gpbFp);
+    fwrite(gameplay::GPB_VERSION, sizeof(char), 2, gpbFp);
 
     // Write Ref table (for a single font)
     writeUint(gpbFp, 1);                // Ref[] count

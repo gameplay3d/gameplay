@@ -84,5 +84,4 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     return buffer;
 }
 
-
 }

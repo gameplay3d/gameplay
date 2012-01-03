@@ -283,15 +283,14 @@ void BoundingSphere::set(const BoundingBox& box)
 void BoundingSphere::transform(const Matrix& matrix)
 {
     // Translate the center point.
-    Vector3 translate;
-    matrix.transformPoint(center, &translate);
-    center = translate;
+    matrix.transformPoint(center, &center);
 
-    // Calculate the sphere's new radius from the radii in each direction (take the largest).
-    matrix.decompose(&translate, NULL, NULL);
-    float r = radius * translate.x;
-    r = fmaxf(radius, radius * translate.y);
-    r = fmaxf(radius, radius * translate.z);
+    // Scale the sphere's radius by the scale fo the matrix
+    Vector3 scale;
+    matrix.decompose(&scale, NULL, NULL);
+    float r = radius * scale.x;
+    r = max(r, radius * scale.y);
+    r = max(r, radius * scale.z);
     radius = r;
 }
 

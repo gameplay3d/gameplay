@@ -8,13 +8,16 @@
 namespace gameplay
 {
 
-Mesh::Mesh() 
-    : _vertexFormat(NULL), _vertexCount(0), _vertexBuffer(0), _primitiveType(TRIANGLES), 
+Mesh::Mesh(const VertexFormat& vertexFormat) 
+    : _vertexFormat(vertexFormat), _vertexCount(0), _vertexBuffer(0), _primitiveType(TRIANGLES), 
       _partCount(0), _parts(NULL), _dynamic(false)
 {
 }
 
-Mesh::Mesh(const Mesh& copy)
+Mesh::Mesh(const Mesh& copy) :
+    _vertexFormat(copy._vertexFormat), _vertexCount(copy._vertexCount), _vertexBuffer(copy._vertexBuffer),
+    _primitiveType(copy._primitiveType), _partCount(copy._partCount), _parts(copy._parts), _dynamic(copy._dynamic),
+    _boundingBox(copy._boundingBox), _boundingSphere(copy._boundingSphere)
 {
     // hidden
 }
@@ -32,11 +35,9 @@ Mesh::~Mesh()
         glDeleteBuffers(1, &_vertexBuffer);
         _vertexBuffer = 0;
     }
-
-    SAFE_RELEASE(_vertexFormat);
 }
 
-Mesh* Mesh::createMesh(VertexFormat* vertexFormat, unsigned int vertexCount, bool dynamic)
+Mesh* Mesh::createMesh(const VertexFormat& vertexFormat, unsigned int vertexCount, bool dynamic)
 {
     GLuint vbo;
     GL_ASSERT( glGenBuffers(1, &vbo) );
@@ -52,7 +53,7 @@ Mesh* Mesh::createMesh(VertexFormat* vertexFormat, unsigned int vertexCount, boo
         return NULL;
     }
 
-    GL_CHECK( glBufferData(GL_ARRAY_BUFFER, vertexFormat->getVertexSize() * vertexCount, NULL, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW) );
+    GL_CHECK( glBufferData(GL_ARRAY_BUFFER, vertexFormat.getVertexSize() * vertexCount, NULL, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW) );
     if (GL_LAST_ERROR())
     {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -60,13 +61,10 @@ Mesh* Mesh::createMesh(VertexFormat* vertexFormat, unsigned int vertexCount, boo
         return NULL;
     }
 
-    Mesh* mesh = new Mesh();
-    mesh->_vertexFormat = vertexFormat;
+    Mesh* mesh = new Mesh(vertexFormat);
     mesh->_vertexCount = vertexCount;
     mesh->_vertexBuffer = vbo;
     mesh->_dynamic = dynamic;
-
-    vertexFormat->addRef();
 
     return mesh;
 }
@@ -91,9 +89,7 @@ Mesh* Mesh::createQuad(float x, float y, float width, float height)
         VertexFormat::Element(VertexFormat::NORMAL, 3),
         VertexFormat::Element(VertexFormat::TEXCOORD0, 2)
     };
-    VertexFormat* format = VertexFormat::create(elements, 3);
-    Mesh* mesh = Mesh::createMesh(format, 4, false);
-    SAFE_RELEASE(format);
+    Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 3), 4, false);
     if (mesh == NULL)
     {
         return NULL;
@@ -125,9 +121,7 @@ Mesh* Mesh::createQuadFullscreen()
         VertexFormat::Element(VertexFormat::POSITION, 2),
         VertexFormat::Element(VertexFormat::TEXCOORD0, 2)
     };
-    VertexFormat* format = VertexFormat::create(elements, 2);
-    Mesh* mesh = Mesh::createMesh(format, 4, false);
-    SAFE_RELEASE(format);
+    Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 2), 4, false);
     if (mesh == NULL)
     {
         return NULL;
@@ -163,9 +157,7 @@ Mesh* Mesh::createQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, 
         VertexFormat::Element(VertexFormat::TEXCOORD0, 2)
     };
 
-    VertexFormat* format = VertexFormat::create(elements, 3);
-    Mesh* mesh = Mesh::createMesh(format, 4, false);
-    SAFE_RELEASE(format);
+    Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 3), 4, false);
     if (mesh == NULL)
     {
         return NULL;
@@ -186,9 +178,7 @@ Mesh* Mesh::createLines(Vector3* points, unsigned int pointCount)
     {
         VertexFormat::Element(VertexFormat::POSITION, 3)
     };
-    VertexFormat* format = VertexFormat::create(elements, 1);
-    Mesh* mesh = Mesh::createMesh(format, pointCount, false);
-    SAFE_RELEASE(format);
+    Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 1), pointCount, false);
     if (mesh == NULL)
     {
         SAFE_DELETE_ARRAY(vertices);
@@ -233,9 +223,7 @@ Mesh* Mesh::createBoundingBox(const BoundingBox& box)
     {
         VertexFormat::Element(VertexFormat::POSITION, 3)
     };
-    VertexFormat* format = VertexFormat::create(elements, 1);
-    Mesh* mesh = Mesh::createMesh(format, 18, false);
-    SAFE_RELEASE(format);
+    Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 1), 18, false);
     if (mesh == NULL)
     {
         return NULL;
@@ -247,7 +235,7 @@ Mesh* Mesh::createBoundingBox(const BoundingBox& box)
     return mesh;
 }
 
-const VertexFormat* Mesh::getVertexFormat() const
+const VertexFormat& Mesh::getVertexFormat() const
 {
     return _vertexFormat;
 }
@@ -259,10 +247,10 @@ unsigned int Mesh::getVertexCount() const
 
 unsigned int Mesh::getVertexSize() const
 {
-    return _vertexFormat->getVertexSize();
+    return _vertexFormat.getVertexSize();
 }
 
-VertexBuffer Mesh::getVertexBuffer() const
+VertexBufferHandle Mesh::getVertexBuffer() const
 {
     return _vertexBuffer;
 }
@@ -289,7 +277,7 @@ void Mesh::setVertexData(void* vertexData, unsigned int vertexStart, unsigned in
 
     if (vertexStart == 0 && vertexCount == 0)
     {
-        GL_ASSERT( glBufferData(GL_ARRAY_BUFFER, _vertexFormat->getVertexSize() * _vertexCount, vertexData, _dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW) );
+        GL_ASSERT( glBufferData(GL_ARRAY_BUFFER, _vertexFormat.getVertexSize() * _vertexCount, vertexData, _dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW) );
     }
     else
     {
@@ -298,7 +286,7 @@ void Mesh::setVertexData(void* vertexData, unsigned int vertexStart, unsigned in
             vertexCount = _vertexCount - vertexStart;
         }
 
-        GL_ASSERT( glBufferSubData(GL_ARRAY_BUFFER, vertexStart * _vertexFormat->getVertexSize(), vertexCount * _vertexFormat->getVertexSize(), vertexData) );
+        GL_ASSERT( glBufferSubData(GL_ARRAY_BUFFER, vertexStart * _vertexFormat.getVertexSize(), vertexCount * _vertexFormat.getVertexSize(), vertexData) );
     }
 }
 

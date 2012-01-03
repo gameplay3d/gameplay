@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 Model::Model(void) :
-    _ref(NULL),
+    _mesh(NULL),
     _meshSkin(NULL)
 {
 }
@@ -27,9 +27,9 @@ void Model::writeBinary(FILE* file)
     Object::writeBinary(file);
 
     // xref:Mesh
-    if (_ref != NULL)
+    if (_mesh != NULL)
     {
-        _ref->writeBinaryXref(file);
+        _mesh->writeBinaryXref(file);
     }
     else
     {
@@ -56,9 +56,9 @@ void Model::writeText(FILE* file)
     // Compute mesh bounds before writing
 
     fprintElementStart(file);
-    if (_ref != NULL)
+    if (_mesh != NULL)
     {
-        fprintfElement(file, "ref", _ref->getId());
+        fprintfElement(file, "ref", _mesh->getId());
     }
     if (_meshSkin != NULL)
     {
@@ -72,18 +72,23 @@ MeshSkin* Model::getSkin()
     return _meshSkin;
 }
 
+Mesh* Model::getMesh()
+{
+    return _mesh;
+}
+
 void Model::setMesh(Mesh* mesh)
 {
-    _ref = mesh;
+    _mesh = mesh;
 
     if (mesh)
     {
         mesh->model = this;
     }
 
-    if (_ref && _meshSkin)
+    if (_mesh && _meshSkin)
     {
-        _meshSkin->_mesh = _ref;
+        _meshSkin->_mesh = _mesh;
     }
 }
 
@@ -93,7 +98,7 @@ void Model::setSkin(MeshSkin* skin)
 
     if (_meshSkin)
     {
-        _meshSkin->_mesh = _ref;
+        _meshSkin->_mesh = _mesh;
     }
 }
 

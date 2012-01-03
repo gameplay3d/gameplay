@@ -2,6 +2,7 @@
 #define ANIMATION_H_
 
 #include "Ref.h"
+#include "Properties.h"
 
 namespace gameplay
 {
@@ -134,6 +135,16 @@ private:
     ~Animation();
 
     /**
+     * Creates the default clip.
+     */
+    void createDefaultClip();
+
+    /**
+     * Creates AnimationClip's for this Animation from the specified Property object.
+     */
+    void createClips(Properties* animationProperties, unsigned int frameCount);
+
+    /**
      * Adds a clip to this Animation.
      */
     void addClip(AnimationClip* clip);
@@ -142,11 +153,6 @@ private:
      * Finds the clip with the given ID.
      */
     AnimationClip* findClip(const char* id) const;
-
-    /**
-     * Creates the default clip.
-     */
-    void createDefaultClip();
 
     /**
      * Creates a channel within this animation.
@@ -167,6 +173,11 @@ private:
      * Removes a channel from the animation.
      */
     void removeChannel(Channel* channel);
+
+    /**
+     * Sets the rotation offset in a Curve representing a Transform's animation data.
+     */
+    void setTransformRotationOffset(Curve* curve, unsigned int propertyId);
     
     AnimationController* _controller;       // The AnimationController that this Animation will run on.
     std::string _id;                        // The Animation's ID.

@@ -100,6 +100,7 @@ public:
     class StateBlock : public Ref
     {
         friend class RenderState;
+        friend class Game;
 
     public:
 
@@ -194,6 +195,8 @@ public:
         void bindNoRestore();
 
         static void restore(long stateOverrideBits);
+
+        static void enableDepthWrite();
 
         // States
         bool _blendEnabled;

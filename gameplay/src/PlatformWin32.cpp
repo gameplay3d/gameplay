@@ -4,8 +4,7 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
-
-using namespace std;
+#include <GL/wglew.h>
 
 static long __timeTicksPerMillis;
 static long __timeStart;
@@ -13,229 +12,229 @@ static long __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static float __roll;
 static float __pitch;
-static HWND __hwnd = 0;
 static HINSTANCE __hinstance = 0;
+static HWND __hwnd = 0;
 static HDC __hdc = 0;
 static HGLRC __hrc = 0;
 
-// Gets the gameplay::Input::Key enumeration constant that corresponds
+// Gets the gameplay::Keyboard::Key enumeration constant that corresponds
 // to the given key and shift modifier combination.
-static gameplay::Input::Key getGameplayInputKey(WPARAM win32KeyCode, bool shiftDown)
+static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
 {
     // TODO: Handle the following keys
-    //gameplay::Input::KEY_SYSREQ
-    //gameplay::Input::KEY_BREAK
-    //gameplay::Input::KEY_MENU
-    //gameplay::Input::KEY_KP_ENTER
+    //gameplay::Keyboard::KEY_SYSREQ
+    //gameplay::Keyboard::KEY_BREAK
+    //gameplay::Keyboard::KEY_MENU
+    //gameplay::Keyboard::KEY_KP_ENTER
 
     switch (win32KeyCode)
     {
     case VK_PAUSE:
-        return gameplay::Input::KEY_PAUSE;
+        return gameplay::Keyboard::KEY_PAUSE;
     case VK_SCROLL:
-        return gameplay::Input::KEY_SCROLL_LOCK;
+        return gameplay::Keyboard::KEY_SCROLL_LOCK;
     case VK_PRINT:
-        return gameplay::Input::KEY_PRINT;
+        return gameplay::Keyboard::KEY_PRINT;
     case VK_ESCAPE:
-        return gameplay::Input::KEY_ESCAPE;
+        return gameplay::Keyboard::KEY_ESCAPE;
     case VK_BACK:
-        return gameplay::Input::KEY_BACKSPACE;
+        return gameplay::Keyboard::KEY_BACKSPACE;
     case VK_TAB:
-        return shiftDown ? gameplay::Input::KEY_BACK_TAB : gameplay::Input::KEY_TAB;
+        return shiftDown ? gameplay::Keyboard::KEY_BACK_TAB : gameplay::Keyboard::KEY_TAB;
     case VK_RETURN:
-        return gameplay::Input::KEY_RETURN;
+        return gameplay::Keyboard::KEY_RETURN;
     case VK_CAPITAL:
-        return gameplay::Input::KEY_CAPS_LOCK;
+        return gameplay::Keyboard::KEY_CAPS_LOCK;
     case VK_LSHIFT:
-        return gameplay::Input::KEY_LEFT_SHIFT;
+        return gameplay::Keyboard::KEY_LEFT_SHIFT;
     case VK_RSHIFT:
-        return gameplay::Input::KEY_RIGHT_SHIFT;
+        return gameplay::Keyboard::KEY_RIGHT_SHIFT;
     case VK_LCONTROL:
-        return gameplay::Input::KEY_LEFT_CTRL;
+        return gameplay::Keyboard::KEY_LEFT_CTRL;
     case VK_RCONTROL:
-        return gameplay::Input::KEY_RIGHT_CTRL;
+        return gameplay::Keyboard::KEY_RIGHT_CTRL;
     case VK_LMENU:
-        return gameplay::Input::KEY_LEFT_ALT;
+        return gameplay::Keyboard::KEY_LEFT_ALT;
     case VK_RMENU:
-        return gameplay::Input::KEY_RIGHT_ALT;
+        return gameplay::Keyboard::KEY_RIGHT_ALT;
     case VK_LWIN:
-        return gameplay::Input::KEY_LEFT_HYPER;
+        return gameplay::Keyboard::KEY_LEFT_HYPER;
     case VK_RWIN:
-        return gameplay::Input::KEY_RIGHT_HYPER;
+        return gameplay::Keyboard::KEY_RIGHT_HYPER;
     case VK_INSERT:
-        return gameplay::Input::KEY_INSERT;
+        return gameplay::Keyboard::KEY_INSERT;
     case VK_HOME:
-        return gameplay::Input::KEY_HOME;
+        return gameplay::Keyboard::KEY_HOME;
     case VK_PRIOR:
-        return gameplay::Input::KEY_PG_UP;
+        return gameplay::Keyboard::KEY_PG_UP;
     case VK_DELETE:
-        return gameplay::Input::KEY_DELETE;
+        return gameplay::Keyboard::KEY_DELETE;
     case VK_END:
-        return gameplay::Input::KEY_END;
+        return gameplay::Keyboard::KEY_END;
     case VK_NEXT:
-        return gameplay::Input::KEY_PG_DOWN;
+        return gameplay::Keyboard::KEY_PG_DOWN;
     case VK_LEFT:
-        return gameplay::Input::KEY_LEFT_ARROW;
+        return gameplay::Keyboard::KEY_LEFT_ARROW;
     case VK_RIGHT:
-        return gameplay::Input::KEY_RIGHT_ARROW;
+        return gameplay::Keyboard::KEY_RIGHT_ARROW;
     case VK_UP:
-        return gameplay::Input::KEY_UP_ARROW;
+        return gameplay::Keyboard::KEY_UP_ARROW;
     case VK_DOWN:
-        return gameplay::Input::KEY_DOWN_ARROW;
+        return gameplay::Keyboard::KEY_DOWN_ARROW;
     case VK_NUMLOCK:
-        return gameplay::Input::KEY_NUM_LOCK;
+        return gameplay::Keyboard::KEY_NUM_LOCK;
     case VK_ADD:
-        return gameplay::Input::KEY_KP_PLUS;
+        return gameplay::Keyboard::KEY_KP_PLUS;
     case VK_SUBTRACT:
-        return gameplay::Input::KEY_KP_MINUS;
+        return gameplay::Keyboard::KEY_KP_MINUS;
     case VK_MULTIPLY:
-        return gameplay::Input::KEY_KP_MULTIPLY;
+        return gameplay::Keyboard::KEY_KP_MULTIPLY;
     case VK_DIVIDE:
-        return gameplay::Input::KEY_KP_DIVIDE;
+        return gameplay::Keyboard::KEY_KP_DIVIDE;
     case VK_NUMPAD7:
-        return gameplay::Input::KEY_KP_HOME;
+        return gameplay::Keyboard::KEY_KP_HOME;
     case VK_NUMPAD8:
-        return gameplay::Input::KEY_KP_UP;
+        return gameplay::Keyboard::KEY_KP_UP;
     case VK_NUMPAD9:
-        return gameplay::Input::KEY_KP_PG_UP;
+        return gameplay::Keyboard::KEY_KP_PG_UP;
     case VK_NUMPAD4:
-        return gameplay::Input::KEY_KP_LEFT;
+        return gameplay::Keyboard::KEY_KP_LEFT;
     case VK_NUMPAD5:
-        return gameplay::Input::KEY_KP_FIVE;
+        return gameplay::Keyboard::KEY_KP_FIVE;
     case VK_NUMPAD6:
-        return gameplay::Input::KEY_KP_RIGHT;
+        return gameplay::Keyboard::KEY_KP_RIGHT;
     case VK_NUMPAD1:
-        return gameplay::Input::KEY_KP_END;
+        return gameplay::Keyboard::KEY_KP_END;
     case VK_NUMPAD2:
-        return gameplay::Input::KEY_KP_DOWN;
+        return gameplay::Keyboard::KEY_KP_DOWN;
     case VK_NUMPAD3:
-        return gameplay::Input::KEY_KP_PG_DOWN;
+        return gameplay::Keyboard::KEY_KP_PG_DOWN;
     case VK_NUMPAD0:
-        return gameplay::Input::KEY_KP_INSERT;
+        return gameplay::Keyboard::KEY_KP_INSERT;
     case VK_DECIMAL:
-        return gameplay::Input::KEY_KP_DELETE;
+        return gameplay::Keyboard::KEY_KP_DELETE;
     case VK_F1:
-        return gameplay::Input::KEY_F1;
+        return gameplay::Keyboard::KEY_F1;
     case VK_F2:
-        return gameplay::Input::KEY_F2;
+        return gameplay::Keyboard::KEY_F2;
     case VK_F3:
-        return gameplay::Input::KEY_F3;
+        return gameplay::Keyboard::KEY_F3;
     case VK_F4:
-        return gameplay::Input::KEY_F4;
+        return gameplay::Keyboard::KEY_F4;
     case VK_F5:
-        return gameplay::Input::KEY_F5;
+        return gameplay::Keyboard::KEY_F5;
     case VK_F6:
-        return gameplay::Input::KEY_F6;
+        return gameplay::Keyboard::KEY_F6;
     case VK_F7:
-        return gameplay::Input::KEY_F7;
+        return gameplay::Keyboard::KEY_F7;
     case VK_F8:
-        return gameplay::Input::KEY_F8;
+        return gameplay::Keyboard::KEY_F8;
     case VK_F9:
-        return gameplay::Input::KEY_F9;
+        return gameplay::Keyboard::KEY_F9;
     case VK_F10:
-        return gameplay::Input::KEY_F10;
+        return gameplay::Keyboard::KEY_F10;
     case VK_F11:
-        return gameplay::Input::KEY_F11;
+        return gameplay::Keyboard::KEY_F11;
     case VK_F12:
-        return gameplay::Input::KEY_F12;
+        return gameplay::Keyboard::KEY_F12;
     case VK_SPACE:
-        return gameplay::Input::KEY_SPACE;
+        return gameplay::Keyboard::KEY_SPACE;
     case 0x30:
-        return shiftDown ? gameplay::Input::KEY_RIGHT_PARENTHESIS : gameplay::Input::KEY_ZERO;
+        return shiftDown ? gameplay::Keyboard::KEY_RIGHT_PARENTHESIS : gameplay::Keyboard::KEY_ZERO;
     case 0x31:
-        return shiftDown ? gameplay::Input::KEY_EXCLAM : gameplay::Input::KEY_ONE;
+        return shiftDown ? gameplay::Keyboard::KEY_EXCLAM : gameplay::Keyboard::KEY_ONE;
     case 0x32:
-        return shiftDown ? gameplay::Input::KEY_AT : gameplay::Input::KEY_TWO;
+        return shiftDown ? gameplay::Keyboard::KEY_AT : gameplay::Keyboard::KEY_TWO;
     case 0x33:
-        return shiftDown ? gameplay::Input::KEY_NUMBER : gameplay::Input::KEY_THREE;
+        return shiftDown ? gameplay::Keyboard::KEY_NUMBER : gameplay::Keyboard::KEY_THREE;
     case 0x34:
-        return shiftDown ? gameplay::Input::KEY_DOLLAR : gameplay::Input::KEY_FOUR;
+        return shiftDown ? gameplay::Keyboard::KEY_DOLLAR : gameplay::Keyboard::KEY_FOUR;
     case 0x35:
-        return shiftDown ? gameplay::Input::KEY_PERCENT : gameplay::Input::KEY_FIVE;
+        return shiftDown ? gameplay::Keyboard::KEY_PERCENT : gameplay::Keyboard::KEY_FIVE;
     case 0x36:
-        return shiftDown ? gameplay::Input::KEY_CIRCUMFLEX : gameplay::Input::KEY_SIX;
+        return shiftDown ? gameplay::Keyboard::KEY_CIRCUMFLEX : gameplay::Keyboard::KEY_SIX;
     case 0x37:
-        return shiftDown ? gameplay::Input::KEY_AMPERSAND : gameplay::Input::KEY_SEVEN;
+        return shiftDown ? gameplay::Keyboard::KEY_AMPERSAND : gameplay::Keyboard::KEY_SEVEN;
     case 0x38:
-        return shiftDown ? gameplay::Input::KEY_ASTERISK : gameplay::Input::KEY_EIGHT;
+        return shiftDown ? gameplay::Keyboard::KEY_ASTERISK : gameplay::Keyboard::KEY_EIGHT;
     case 0x39:
-        return shiftDown ? gameplay::Input::KEY_LEFT_PARENTHESIS : gameplay::Input::KEY_NINE;
+        return shiftDown ? gameplay::Keyboard::KEY_LEFT_PARENTHESIS : gameplay::Keyboard::KEY_NINE;
     case VK_OEM_PLUS:
-        return shiftDown ? gameplay::Input::KEY_EQUAL : gameplay::Input::KEY_PLUS;
+        return shiftDown ? gameplay::Keyboard::KEY_EQUAL : gameplay::Keyboard::KEY_PLUS;
     case VK_OEM_COMMA:
-        return shiftDown ? gameplay::Input::KEY_LESS_THAN : gameplay::Input::KEY_COMMA;
+        return shiftDown ? gameplay::Keyboard::KEY_LESS_THAN : gameplay::Keyboard::KEY_COMMA;
     case VK_OEM_MINUS:
-        return shiftDown ? gameplay::Input::KEY_UNDERSCORE : gameplay::Input::KEY_MINUS;
+        return shiftDown ? gameplay::Keyboard::KEY_UNDERSCORE : gameplay::Keyboard::KEY_MINUS;
     case VK_OEM_PERIOD:
-        return shiftDown ? gameplay::Input::KEY_GREATER_THAN : gameplay::Input::KEY_PERIOD;
+        return shiftDown ? gameplay::Keyboard::KEY_GREATER_THAN : gameplay::Keyboard::KEY_PERIOD;
     case VK_OEM_1:
-        return shiftDown ? gameplay::Input::KEY_COLON : gameplay::Input::KEY_SEMICOLON;
+        return shiftDown ? gameplay::Keyboard::KEY_COLON : gameplay::Keyboard::KEY_SEMICOLON;
     case VK_OEM_2:
-        return shiftDown ? gameplay::Input::KEY_QUESTION : gameplay::Input::KEY_SLASH;
+        return shiftDown ? gameplay::Keyboard::KEY_QUESTION : gameplay::Keyboard::KEY_SLASH;
     case VK_OEM_3:
-        return shiftDown ? gameplay::Input::KEY_GRAVE : gameplay::Input::KEY_TILDE;
+        return shiftDown ? gameplay::Keyboard::KEY_GRAVE : gameplay::Keyboard::KEY_TILDE;
     case VK_OEM_4:
-        return shiftDown ? gameplay::Input::KEY_LEFT_BRACE : gameplay::Input::KEY_LEFT_BRACKET;
+        return shiftDown ? gameplay::Keyboard::KEY_LEFT_BRACE : gameplay::Keyboard::KEY_LEFT_BRACKET;
     case VK_OEM_5:
-        return shiftDown ? gameplay::Input::KEY_BAR : gameplay::Input::KEY_BACK_SLASH;
+        return shiftDown ? gameplay::Keyboard::KEY_BAR : gameplay::Keyboard::KEY_BACK_SLASH;
     case VK_OEM_6:
-        return shiftDown ? gameplay::Input::KEY_RIGHT_BRACE : gameplay::Input::KEY_RIGHT_BRACKET;
+        return shiftDown ? gameplay::Keyboard::KEY_RIGHT_BRACE : gameplay::Keyboard::KEY_RIGHT_BRACKET;
     case VK_OEM_7:
-        return shiftDown ? gameplay::Input::KEY_QUOTE : gameplay::Input::KEY_APOSTROPHE;
+        return shiftDown ? gameplay::Keyboard::KEY_QUOTE : gameplay::Keyboard::KEY_APOSTROPHE;
     case 0x41:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_A : gameplay::Input::KEY_A;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_A : gameplay::Keyboard::KEY_A;
     case 0x42:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_B : gameplay::Input::KEY_B;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_B : gameplay::Keyboard::KEY_B;
     case 0x43:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_C : gameplay::Input::KEY_C;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_C : gameplay::Keyboard::KEY_C;
     case 0x44:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_D : gameplay::Input::KEY_D;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_D : gameplay::Keyboard::KEY_D;
     case 0x45:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_E : gameplay::Input::KEY_E;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_E : gameplay::Keyboard::KEY_E;
     case 0x46:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_F : gameplay::Input::KEY_F;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_F : gameplay::Keyboard::KEY_F;
     case 0x47:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_G : gameplay::Input::KEY_G;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_G : gameplay::Keyboard::KEY_G;
     case 0x48:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_H : gameplay::Input::KEY_H;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_H : gameplay::Keyboard::KEY_H;
     case 0x49:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_I : gameplay::Input::KEY_I;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_I : gameplay::Keyboard::KEY_I;
     case 0x4A:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_J : gameplay::Input::KEY_J;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_J : gameplay::Keyboard::KEY_J;
     case 0x4B:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_K : gameplay::Input::KEY_K;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_K : gameplay::Keyboard::KEY_K;
     case 0x4C:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_L : gameplay::Input::KEY_L;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_L : gameplay::Keyboard::KEY_L;
     case 0x4D:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_M : gameplay::Input::KEY_M;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_M : gameplay::Keyboard::KEY_M;
     case 0x4E:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_N : gameplay::Input::KEY_N;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_N : gameplay::Keyboard::KEY_N;
     case 0x4F:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_O : gameplay::Input::KEY_O;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_O : gameplay::Keyboard::KEY_O;
     case 0x50:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_P : gameplay::Input::KEY_P;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_P : gameplay::Keyboard::KEY_P;
     case 0x51:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_Q : gameplay::Input::KEY_Q;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_Q : gameplay::Keyboard::KEY_Q;
     case 0x52:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_R : gameplay::Input::KEY_R;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_R : gameplay::Keyboard::KEY_R;
     case 0x53:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_S : gameplay::Input::KEY_S;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_S : gameplay::Keyboard::KEY_S;
     case 0x54:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_T : gameplay::Input::KEY_T;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_T : gameplay::Keyboard::KEY_T;
     case 0x55:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_U : gameplay::Input::KEY_U;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_U : gameplay::Keyboard::KEY_U;
     case 0x56:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_V : gameplay::Input::KEY_V;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_V : gameplay::Keyboard::KEY_V;
     case 0x57:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_W : gameplay::Input::KEY_W;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_W : gameplay::Keyboard::KEY_W;
     case 0x58:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_X : gameplay::Input::KEY_X;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_X : gameplay::Keyboard::KEY_X;
     case 0x59:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_Y : gameplay::Input::KEY_Y;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_Y : gameplay::Keyboard::KEY_Y;
     case 0x5A:
-        return shiftDown ? gameplay::Input::KEY_CAPITAL_Z : gameplay::Input::KEY_Z;
+        return shiftDown ? gameplay::Keyboard::KEY_CAPITAL_Z : gameplay::Keyboard::KEY_Z;
     default:
-        return gameplay::Input::KEY_NONE;
+        return gameplay::Keyboard::KEY_NONE;
     }
 }
 
@@ -254,6 +253,11 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     switch (msg)
     {
+    case WM_PAINT:
+        gameplay::Game::getInstance()->frame();
+        SwapBuffers(__hdc);
+        return 0;
+
     case WM_CLOSE:
         DestroyWindow(__hwnd);
         return 0;
@@ -263,13 +267,13 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return 0;
 
     case WM_LBUTTONDOWN:
-        gameplay::Game::getInstance()->touch(LOWORD(lParam), HIWORD(lParam), gameplay::Input::TOUCHEVENT_PRESS);
+        gameplay::Game::getInstance()->touchEvent(gameplay::Touch::TOUCH_PRESS, LOWORD(lParam), HIWORD(lParam), 0);
         lMouseDown = true;
         return 0;
 
     case WM_LBUTTONUP:
         lMouseDown = false;
-        gameplay::Game::getInstance()->touch(LOWORD(lParam), HIWORD(lParam), gameplay::Input::TOUCHEVENT_RELEASE);
+        gameplay::Game::getInstance()->touchEvent(gameplay::Touch::TOUCH_RELEASE, LOWORD(lParam), HIWORD(lParam), 0);
         return 0;
 
     case WM_RBUTTONDOWN:
@@ -297,7 +301,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
         if (lMouseDown)
         {
-            gameplay::Game::getInstance()->touch(LOWORD(lParam), HIWORD(lParam), gameplay::Input::TOUCHEVENT_MOVE);
+            gameplay::Game::getInstance()->touchEvent(gameplay::Touch::TOUCH_MOVE, LOWORD(lParam), HIWORD(lParam), 0);
             return 0;
         }
         else if (rMouseDown)
@@ -307,8 +311,8 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             __pitch += (float)(HIWORD(lParam) - ly) * ACCELEROMETER_Y_FACTOR;
 
             // Clamp the values to the valid range.
-            __roll = max(min(__roll, 90.0), -90.0);
-            __pitch = max(min(__pitch, 90.0), -90.0);
+            __roll = max(min(__roll, 90.0f), -90.0f);
+            __pitch = max(min(__pitch, 90.0f), -90.0f);
 
             // Update the last X/Y values.
             lx = LOWORD(lParam);
@@ -326,14 +330,14 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (wParam == VK_LSHIFT || wParam == VK_RSHIFT)
             shiftDown = true;
 
-        gameplay::Game::getInstance()->keyPress(getGameplayInputKey(wParam, shiftDown), gameplay::Input::KEYEVENT_DOWN);
+        gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown));
         break;
 
     case WM_KEYUP:
         if (wParam == VK_LSHIFT || wParam == VK_RSHIFT)
             shiftDown = false;
 
-        gameplay::Game::getInstance()->keyPress(getGameplayInputKey(wParam, shiftDown), gameplay::Input::KEYEVENT_UP);
+        gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_RELEASE, getKey(wParam, shiftDown));
         break;
 
     case WM_SETFOCUS:
@@ -474,6 +478,7 @@ Platform* Platform::create(Game* game)
     // Vertical sync.
     wglSwapIntervalEXT(__vsync ? 1 : 0);
 
+    // Show the window
     ShowWindow(__hwnd, SW_SHOW);
 
     return platform;
@@ -501,7 +506,10 @@ int Platform::enterMessagePump()
     __pitch = 0.0;
     __roll = 0.0;
 
-    _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);
+    SwapBuffers(__hdc);
+
+    if (_game->getState() != Game::RUNNING)
+        _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     // Enter event dispatch loop.
     MSG msg;
@@ -517,12 +525,6 @@ int Platform::enterMessagePump()
                 _game->exit();
                 break;
             }
-        }
-
-        if (_game->getState() != Game::PAUSED)
-        {
-            _game->frame();
-            SwapBuffers(__hdc);
         }
 
         // If we are done, then exit.
@@ -563,15 +565,25 @@ int Platform::getOrientationAngle()
     return 0;
 }
 
-bool Platform::isAccelerometerSupported()
+void Platform::setMultiTouch(bool enabled)
 {
-    return true;
 }
 
-void Platform::getAccelerometerPitchAndRoll(float* pitch, float* roll)
+bool Platform::isMultiTouch()
+{
+    return false;
+}
+
+void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     *pitch = __pitch;
     *roll = __roll;
+}
+
+void Platform::swapBuffers()
+{
+    if (__hdc)
+        SwapBuffers(__hdc);
 }
 
 }

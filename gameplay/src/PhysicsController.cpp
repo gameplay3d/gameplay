@@ -5,7 +5,7 @@
 #include "PhysicsMotionState.h"
 #include "SceneLoader.h"
 
-// The initial capacity of the bullet debug draw's vertex batch.
+// The initial capacity of the Bullet debug drawer's vertex batch.
 #define INITIAL_CAPACITY 280
 
 namespace gameplay
@@ -20,6 +20,12 @@ PhysicsController::PhysicsController()
     // Default gravity is 9.8 along the negative Y axis.
 }
 
+PhysicsController::~PhysicsController()
+{
+    SAFE_DELETE(_debugDrawer);
+    SAFE_DELETE(_listeners);
+}
+
 void PhysicsController::addStatusListener(Listener* listener)
 {
     if (!_listeners)
@@ -27,15 +33,10 @@ void PhysicsController::addStatusListener(Listener* listener)
 
     _listeners->push_back(listener);
 }
-    
-PhysicsController::~PhysicsController()
-{
-    SAFE_DELETE(_debugDrawer);
-    SAFE_DELETE(_listeners);
-}
 
 PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
+    checkConstraintRigidBodies(a, b);
     PhysicsFixedConstraint* constraint = new PhysicsFixedConstraint(a, b);
     addConstraint(a, b, constraint);
     return constraint;
@@ -43,6 +44,7 @@ PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBod
 
 PhysicsGenericConstraint* PhysicsController::createGenericConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
+    checkConstraintRigidBodies(a, b);
     PhysicsGenericConstraint* constraint = new PhysicsGenericConstraint(a, b);
     addConstraint(a, b, constraint);
     return constraint;
@@ -52,8 +54,8 @@ PhysicsGenericConstraint* PhysicsController::createGenericConstraint(PhysicsRigi
     const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, PhysicsRigidBody* b,
     const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
 {
-    PhysicsGenericConstraint* constraint = new PhysicsGenericConstraint(a, rotationOffsetA, translationOffsetA, 
-                                                                        b, rotationOffsetB, translationOffsetB);
+    checkConstraintRigidBodies(a, b);
+    PhysicsGenericConstraint* constraint = new PhysicsGenericConstraint(a, rotationOffsetA, translationOffsetA, b, rotationOffsetB, translationOffsetB);
     addConstraint(a, b, constraint);
     return constraint;
 }
@@ -62,14 +64,15 @@ PhysicsHingeConstraint* PhysicsController::createHingeConstraint(PhysicsRigidBod
     const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, PhysicsRigidBody* b, 
     const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
 {
-    PhysicsHingeConstraint* constraint = new PhysicsHingeConstraint(a, rotationOffsetA, translationOffsetA, 
-                                                                    b, rotationOffsetB, translationOffsetB);
+    checkConstraintRigidBodies(a, b);
+    PhysicsHingeConstraint* constraint = new PhysicsHingeConstraint(a, rotationOffsetA, translationOffsetA, b, rotationOffsetB, translationOffsetB);
     addConstraint(a, b, constraint);
     return constraint;
 }
 
 PhysicsSocketConstraint* PhysicsController::createSocketConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
+    checkConstraintRigidBodies(a, b);
     PhysicsSocketConstraint* constraint = new PhysicsSocketConstraint(a, b);
     addConstraint(a, b, constraint);
     return constraint;
@@ -78,14 +81,15 @@ PhysicsSocketConstraint* PhysicsController::createSocketConstraint(PhysicsRigidB
 PhysicsSocketConstraint* PhysicsController::createSocketConstraint(PhysicsRigidBody* a,
     const Vector3& translationOffsetA, PhysicsRigidBody* b, const Vector3& translationOffsetB)
 {
-    PhysicsSocketConstraint* constraint = new PhysicsSocketConstraint(a,translationOffsetA, 
-                                                                      b, translationOffsetB);
+    checkConstraintRigidBodies(a, b);
+    PhysicsSocketConstraint* constraint = new PhysicsSocketConstraint(a,translationOffsetA, b, translationOffsetB);
     addConstraint(a, b, constraint);
     return constraint;
 }
 
 PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
+    checkConstraintRigidBodies(a, b);
     PhysicsSpringConstraint* constraint = new PhysicsSpringConstraint(a, b);
     addConstraint(a, b, constraint);
     return constraint;
@@ -94,17 +98,10 @@ PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidB
 PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,           
                                                                    PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
 {
-    PhysicsSpringConstraint* constraint = new PhysicsSpringConstraint(a, rotationOffsetA, translationOffsetA, 
-                                                                      b, rotationOffsetB, translationOffsetB);
+    checkConstraintRigidBodies(a, b);
+    PhysicsSpringConstraint* constraint = new PhysicsSpringConstraint(a, rotationOffsetA, translationOffsetA, b, rotationOffsetB, translationOffsetB);
     addConstraint(a, b, constraint);
     return constraint;
-}
-
-void PhysicsController::drawDebug(const Matrix& viewProjection)
-{
-    _debugDrawer->begin(viewProjection);
-    _world->debugDrawWorld();
-    _debugDrawer->end();
 }
 
 const Vector3& PhysicsController::getGravity(const Vector3& gravity) const
@@ -118,6 +115,13 @@ void PhysicsController::setGravity(const Vector3& gravity)
 
     if (_world)
         _world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
+}
+
+void PhysicsController::drawDebug(const Matrix& viewProjection)
+{
+    _debugDrawer->begin(viewProjection);
+    _world->debugDrawWorld();
+    _debugDrawer->end();
 }
 
 void PhysicsController::initialize()
@@ -310,7 +314,7 @@ PhysicsRigidBody* PhysicsController::getRigidBody(const btCollisionObject* colli
 btCollisionShape* PhysicsController::createBox(const Vector3& min, const Vector3& max, const btVector3& scale)
 {
     btVector3 halfExtents(scale.x() * 0.5 * abs(max.x - min.x), scale.y() * 0.5 * abs(max.y - min.y), scale.z() * 0.5 * abs(max.z - min.z));
-    BULLET_NEW_VARG(btBoxShape, box, halfExtents);
+    btBoxShape* box = bullet_new<btBoxShape>(halfExtents);
     _shapes.push_back(box);
 
     return box;
@@ -326,7 +330,7 @@ btCollisionShape* PhysicsController::createSphere(float radius, const btVector3&
     if (uniformScale < scale.z())
         uniformScale = scale.z();
     
-    BULLET_NEW_VARG(btSphereShape, sphere, uniformScale * radius);
+    btSphereShape* sphere = bullet_new<btSphereShape>(uniformScale * radius);
     _shapes.push_back(sphere);
     
     return sphere;
@@ -343,7 +347,7 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
     unsigned int vertexCount = data->mesh->getVertexCount();
     body->_vertexData = new float[vertexCount * 3];
     Vector3 v;
-    int vertexStride = data->mesh->getVertexFormat()->getVertexSize();
+    int vertexStride = data->mesh->getVertexFormat().getVertexSize();
     for (unsigned int i = 0; i < vertexCount; i++)
     {
         v.set(*((float*)&data->vertexData[i * vertexStride + 0 * sizeof(float)]),
@@ -353,7 +357,7 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
         memcpy(&(body->_vertexData[i * 3]), &v, sizeof(float) * 3);
     }
     
-    BULLET_NEW(btTriangleIndexVertexArray, meshInterface);
+    btTriangleIndexVertexArray* meshInterface = bullet_new<btTriangleIndexVertexArray>();
 
     if (data->mesh->getPartCount() > 0)
     {
@@ -426,7 +430,7 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
         meshInterface->addIndexedMesh(indexedMesh, indexedMesh.m_indexType);
     }
 
-    BULLET_NEW_VARG(btBvhTriangleMeshShape, shape, meshInterface, true);
+    btBvhTriangleMeshShape* shape = bullet_new<btBvhTriangleMeshShape>(meshInterface, true);
     _shapes.push_back(shape);
 
     return shape;
@@ -442,7 +446,24 @@ void PhysicsController::addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, 
     
     _world->addConstraint(constraint->_constraint);
 }
+
+bool PhysicsController::checkConstraintRigidBodies(PhysicsRigidBody* a, PhysicsRigidBody* b)
+{
+    if (!a->supportsConstraints())
+    {
+        WARN_VARG("Rigid body '%s' does not support constraints; unexpected behavior may occur.", a->_node->getId());
+        return false;
+    }
     
+    if (b && !b->supportsConstraints())
+    {
+        WARN_VARG("Rigid body '%s' does not support constraints; unexpected behavior may occur.", b->_node->getId());
+        return false;
+    }
+
+    return true;
+}
+
 void PhysicsController::removeConstraint(PhysicsConstraint* constraint)
 {
     // Find the constraint and remove it from the physics world.
@@ -459,14 +480,15 @@ void PhysicsController::removeConstraint(PhysicsConstraint* constraint)
     
 PhysicsController::DebugDrawer::DebugDrawer()
     : _mode(btIDebugDraw::DBG_DrawAabb | btIDebugDraw::DBG_DrawConstraintLimits | btIDebugDraw::DBG_DrawConstraints | 
-       btIDebugDraw::DBG_DrawContactPoints | btIDebugDraw::DBG_DrawWireframe), _program(0), _positionAttrib(0),
-       _colorAttrib(0), _viewProjectionMatrixUniform(0), _viewProjection(NULL), _vertexData(NULL), _vertexCount(0), _vertexDataSize(0)
+       btIDebugDraw::DBG_DrawContactPoints | btIDebugDraw::DBG_DrawWireframe), _effect(NULL), _positionAttrib(0), _colorAttrib(0),
+       _viewProjectionMatrixUniform(NULL), _viewProjection(NULL), _vertexData(NULL), _vertexCount(0), _vertexDataSize(0)
 {
     // Unused
 }
 
 PhysicsController::DebugDrawer::~DebugDrawer()
 {
+    SAFE_RELEASE(_effect);
     SAFE_DELETE_ARRAY(_vertexData);
 }
 
@@ -478,8 +500,8 @@ void PhysicsController::DebugDrawer::begin(const Matrix& viewProjection)
 
 void PhysicsController::DebugDrawer::end()
 {
-    // Lazy load the shader program for drawing.
-    if (!_program)
+    // Lazy load the effect for drawing.
+    if (!_effect)
     {
         // Vertex shader for drawing colored lines.
         const char* vs_str = 
@@ -506,73 +528,22 @@ void PhysicsController::DebugDrawer::end()
             "}"
         };
         
-        // Load the vertex shader.
-        GLuint vs;
-        GL_ASSERT( vs = glCreateShader(GL_VERTEX_SHADER) );
-        GLint shader_str_len = strlen(vs_str);
-        GL_ASSERT( glShaderSource(vs, 1, &vs_str, &shader_str_len) );
-        GL_ASSERT( glCompileShader(vs) );
-        GLint status;
-        GL_ASSERT( glGetShaderiv(vs, GL_COMPILE_STATUS, &status) );
-        if (status == GL_FALSE)
-        {
-            GLchar errorMessage[512];
-            GL_ASSERT( glGetShaderInfoLog(vs, sizeof(errorMessage), 0, errorMessage) );
-            WARN_VARG("Physics debug drawing will not work; vertex shader failed to compile with error: '%s'", errorMessage);
-            return;
-        }
-        
-        // Load the fragment shader.
-        GLuint fs;
-        GL_ASSERT( fs = glCreateShader(GL_FRAGMENT_SHADER) );
-        shader_str_len = strlen(fs_str);
-        GL_ASSERT( glShaderSource(fs, 1, &fs_str, &shader_str_len) );
-        GL_ASSERT( glCompileShader(fs) );
-        GL_ASSERT( glGetShaderiv(fs, GL_COMPILE_STATUS, &status) );
-        if (status == GL_FALSE)
-        {
-            GLchar errorMessage[512];
-            GL_ASSERT( glGetShaderInfoLog(fs, sizeof(errorMessage), 0, errorMessage) );
-            WARN_VARG("Physics debug drawing will not work; fragment shader failed to compile with error: '%s'", errorMessage);
-            return;
-        }
-        
-        // Create the shader program and link it.
-        GL_ASSERT( _program = glCreateProgram() );
-        GL_ASSERT( glAttachShader(_program, vs) );
-        GL_ASSERT( glAttachShader(_program, fs) );
-        GL_ASSERT( glLinkProgram(_program) );
-        GL_ASSERT( glGetProgramiv(_program, GL_LINK_STATUS, &status) );
-        if (status == GL_FALSE)
-        {
-            GLchar errorMessage[512];
-            GL_ASSERT( glGetProgramInfoLog(_program, sizeof(errorMessage), 0, errorMessage) );
-            WARN_VARG("Physics debug drawing will not work; shader program failed to link with error: '%s'", errorMessage);
-            return;
-        }
-        
-        // Get the attribute and uniform locations.
-        GL_ASSERT( glUseProgram(_program) );
-        GL_ASSERT( _positionAttrib = glGetAttribLocation(_program, "a_position") );
-        GL_ASSERT( _colorAttrib = glGetAttribLocation(_program, "a_color") );
-        GL_ASSERT( _viewProjectionMatrixUniform = glGetUniformLocation(_program, "u_viewProjectionMatrix") );
+        _effect = Effect::createFromSource(vs_str, fs_str);
+        _positionAttrib = _effect->getVertexAttribute("a_position");
+        _colorAttrib = _effect->getVertexAttribute("a_color");
+        _viewProjectionMatrixUniform = _effect->getUniform("u_viewProjectionMatrix");
     }
     
-    // Set the shader program and vertex attributes.
-    GL_ASSERT( glUseProgram(_program) );
+    // Bind the effect and set the vertex attributes.
+    _effect->bind();
     GL_ASSERT( glEnableVertexAttribArray(_positionAttrib) );
     GL_ASSERT( glEnableVertexAttribArray(_colorAttrib) );
     GL_ASSERT( glVertexAttribPointer(_positionAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 7, _vertexData) );
     GL_ASSERT( glVertexAttribPointer(_colorAttrib, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 7, &_vertexData[3]) );
     
     // Set the camera's view projection matrix and draw.
-    GL_ASSERT( glUniformMatrix4fv(_viewProjectionMatrixUniform, 1, GL_FALSE, _viewProjection->m) );
+    _effect->setValue( _viewProjectionMatrixUniform, _viewProjection);
     GL_ASSERT( glDrawArrays(GL_LINES, 0, _vertexCount / 7) );
-    
-    // Reset shader state.
-    GL_ASSERT( glDisableVertexAttribArray(_positionAttrib) );
-    GL_ASSERT( glDisableVertexAttribArray(_colorAttrib) );
-    GL_ASSERT( glUseProgram(0) );
 }
 
 void PhysicsController::DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor)

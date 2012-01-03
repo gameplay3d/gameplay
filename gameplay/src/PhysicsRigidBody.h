@@ -15,7 +15,7 @@ class PhysicsConstraint;
 /**
  * Defines a class for physics rigid bodies.
  */
-class PhysicsRigidBody
+class PhysicsRigidBody : public Transform::Listener
 {
     friend class Node;
     friend class PhysicsConstraint;
@@ -191,6 +191,15 @@ public:
     inline const Vector3& getGravity() const;
 
     /**
+     * Gets the height at the given point (only for rigid bodies of type HEIGHTFIELD).
+     * 
+     * @param x The x position.
+     * @param y The y position.
+     * @return The height at the given point.
+     */
+    float getHeight(float x, float y) const;
+
+    /**
      * Gets the rigid body's linear damping.
      * 
      * @return The linear damping.
@@ -301,6 +310,22 @@ private:
         float restitution = 0.0, float linearDamping = 0.0, float angularDamping = 0.0);
 
     /**
+     * Creates a heightfield rigid body.
+     * 
+     * @param node The node to create the heightfield rigid body for; note that the node must have
+     *      a model attached to it prior to creating a rigid body for it.
+     * @param image The heightfield image.
+     * @param mass The mass of the rigid body, in kilograms.
+     * @param friction The friction of the rigid body (non-zero values give best simulation results).
+     * @param restitution The restitution of the rigid body (this controls the bounciness of
+     *      the rigid body; use zero for best simulation results).
+     * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
+     * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
+     */
+    PhysicsRigidBody(Node* node, Image* image, float mass, float friction = 0.5,
+        float restitution = 0.0, float linearDamping = 0.0, float angularDamping = 0.0);
+
+    /**
      * Destructor.
      */
     ~PhysicsRigidBody();
@@ -341,6 +366,12 @@ private:
 
     // Removes a constraint from this rigid body (used by the constraint destructor).
     void removeConstraint(PhysicsConstraint* constraint);
+    
+    // Whether or not the rigid body supports constraints fully.
+    bool supportsConstraints();
+
+    // Used for implementing getHeight() when the heightfield has a transform that can change.
+    void transformChanged(Transform* transform, long cookie);
 
     // Internal class used to implement the collidesWith(PhysicsRigidBody*) function.
     struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
@@ -363,6 +394,11 @@ private:
     mutable Vector3* _linearVelocity;
     float* _vertexData;
     std::vector<unsigned char*> _indexData;
+    float* _heightfieldData;
+    unsigned int _width;
+    unsigned int _height;
+    mutable Matrix* _inverse;
+    mutable bool _inverseIsDirty;
 };
 
 }

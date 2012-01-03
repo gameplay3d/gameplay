@@ -167,16 +167,18 @@ public:
      *
      * Calling this method invokes the specified method pointer for each node
      * in the scene hierarchy, passing the Node and the specified cookie value.
-     * The visitMethod parameter must be a pointer to a method that has a void
-     * return type and accepts two parameters: a Node pointer and a long value
-     * (cookie).
+     * 
+     * The visitMethod parameter must be a pointer to a method that has a bool
+     * return type and accepts two parameters: a Node pointer and a void* (cookie).
+     * The scene travesal continues while visitMethod return true. Returning false
+     * will cause the traversal to stop.
      *
      * @param instance The pointer to an instance of the object that contains visitMethod.
      * @param visitMethod The pointer to the class method to call for each node in the scene.
      * @param cookie An optional user-defined parameter that will be passed to each invocation of visitMethod.
      */
     template <class T>
-    void visit(T* instance, void (T::*visitMethod)(Node*,long), long cookie = 0);
+    void visit(T* instance, bool (T::*visitMethod)(Node*,void*), void* cookie = 0);
 
 private:
 
@@ -199,7 +201,7 @@ private:
      * Visits the given node and all of its children recursively.
      */
     template <class T>
-    void visitNode(Node* node, T* instance, void (T::*visitMethod)(Node*,long), long cookie);
+    bool visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,void*), void* cookie);
 
     std::string _id;
     Camera* _activeCamera;
@@ -212,25 +214,30 @@ private:
 };
 
 template <class T>
-void Scene::visit(T* instance, void (T::*visitMethod)(Node*,long), long cookie)
+void Scene::visit(T* instance, bool (T::*visitMethod)(Node*,void*), void* cookie)
 {
     for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
     {
-        visitNode(node, instance, visitMethod, cookie);
+        if (!visitNode(node, instance, visitMethod, cookie))
+            return;
     }
 }
 
 template <class T>
-void Scene::visitNode(Node* node, T* instance, void (T::*visitMethod)(Node*,long), long cookie)
+bool Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,void*), void* cookie)
 {
     // Invoke the visit method for this node.
-    (instance->*visitMethod)(node, cookie);
+    if (!(instance->*visitMethod)(node, cookie))
+        return false;
 
     // Recurse for all children.
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
-        visitNode(child, instance, visitMethod, cookie);
+        if (!visitNode(child, instance, visitMethod, cookie))
+            return false;
     }
+
+    return true;
 }
 
 }

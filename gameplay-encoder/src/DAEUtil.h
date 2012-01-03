@@ -5,6 +5,14 @@ namespace gameplay
 {
 
 /**
+ * Gets all of the animation channels that target the given node and appends them to the list.
+ * 
+ * @param node The node that the animation channels target.
+ * @param channels The list of channels to append to.
+ */
+void getAnimationChannels(const domNodeRef& node, std::list<domChannelRef>& channels);
+
+/**
  * Gets the joint names for the given source and appends them to the given list.
  * 
  * @param source The source element to search in.
@@ -39,7 +47,7 @@ domSource* getInputSource(const domChannelRef& channel);
 const domSamplerRef getSampler(const domChannelRef& channel);
 
 /**
- * Returns the source from the given sampler input. 
+ * Returns the source from the given sampler input.
  * Searchs within the given animation.
  * 
  * @param inputLocal The input element within a sampler.

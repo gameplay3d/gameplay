@@ -1,33 +1,26 @@
-#ifndef INPUT_H_
-#define INPUT_H_
+
+#ifndef KEYBOARD_H_
+#define KEYBOARD_H_
 
 namespace gameplay
 {
 
 /**
- * Defines an input class for requesting input.
+ * Keyboard key event and key definitions.
  */
-class Input
+class Keyboard
 {
+    friend class Platform;
+
 public:
 
-    /**
-     * The touch event.
-     */
-    enum TouchEvent
-    {
-        TOUCHEVENT_PRESS,
-        TOUCHEVENT_RELEASE,
-        TOUCHEVENT_MOVE
-    };
-
-    /**
-     * The key event.
+   /**
+     * The keyboard event.
      */
     enum KeyEvent
     {
-        KEYEVENT_DOWN,
-        KEYEVENT_UP
+        KEY_PRESS,
+        KEY_RELEASE
     };
 
     /**
@@ -192,27 +185,12 @@ public:
         KEY_TILDE
     };
 
-    /**
-     * Indicates if the game device supports accelerometer.
-     * 
-     * @return true if the accelerometer is supported; false otherwise.
-     */
-    static bool isAccelerometerSupported();
-
-    /**
-     * Gets the current accelerometer pitch and roll angles.
-     *
-     * @param pitch The pitch angle returned (in degrees). If NULL then not returned.
-     * @param roll The roll angle returned (in degrees). If NULL then not returned.
-     */
-    static void getAccelerometerPitchAndRoll(float* pitch, float* roll);
-
 private:
 
     /**
      * Constructor. Private for static.
      */
-    Input();
+    Keyboard() { }
 };
 
 }
