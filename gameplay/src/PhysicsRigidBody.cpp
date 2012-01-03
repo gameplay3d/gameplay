@@ -161,8 +161,6 @@ PhysicsRigidBody::~PhysicsRigidBody()
         if (_body->getMotionState())
             delete _body->getMotionState();
 
-        SAFE_DELETE(_shape);
-
         Game::getInstance()->getPhysicsController()->removeRigidBody(this);
         SAFE_DELETE(_body);
     }
