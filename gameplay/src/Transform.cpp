@@ -551,6 +551,7 @@ unsigned int Transform::getAnimationPropertyComponentCount(int propertyId) const
 {
     switch (propertyId)
     {
+        case ANIMATE_SCALE_UNIT:
         case ANIMATE_SCALE_X:
         case ANIMATE_SCALE_Y:
         case ANIMATE_SCALE_Z:
@@ -576,6 +577,9 @@ void Transform::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 {
     switch (propertyId)
     {
+        case ANIMATE_SCALE_UNIT:
+            value->setFloat(0, _scale.x);
+            break;
         case ANIMATE_SCALE:
             value->setFloat(0, _scale.x);
             value->setFloat(1, _scale.y);
@@ -640,6 +644,9 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value)
 {
     switch (propertyId)
     {
+        case ANIMATE_SCALE_UNIT:
+            setScale(value->getFloat(0));
+            break;
         case ANIMATE_SCALE:
             setScale(value->getFloat(0), value->getFloat(1), value->getFloat(2));
             break;
