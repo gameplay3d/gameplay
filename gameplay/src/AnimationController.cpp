@@ -66,6 +66,7 @@ Animation* AnimationController::createAnimationFromTo(const char* id, AnimationT
 
     Animation* animation = createAnimation(id, target, propertyId, 2, keyTimes, keyValues, type);
 
+    SAFE_DELETE_ARRAY(keyValues);
     SAFE_DELETE_ARRAY(keyTimes);
     
     return animation;
@@ -85,6 +86,7 @@ Animation* AnimationController::createAnimationFromBy(const char* id, AnimationT
 
     Animation* animation = createAnimation(id, target, propertyId, 2, keyTimes, keyValues, type);
 
+    SAFE_DELETE_ARRAY(keyValues);
     SAFE_DELETE_ARRAY(keyTimes);
 
     return animation;
