@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 AnimationController::AnimationController()
-    : _state(IDLE), _animations(NULL)
+    : _state(STOPPED), _animations(NULL)
 {
 }
 
@@ -112,6 +112,7 @@ void AnimationController::stopAllAnimations()
         clip->_isPlaying = false;
         clip->onEnd();
         SAFE_RELEASE(clip);
+        clipIter++;
     }
     _runningClips.clear();
 
@@ -269,7 +270,7 @@ void AnimationController::initialize()
 void AnimationController::finalize()
 {
     stopAllAnimations();
-    _state = PAUSED;
+    _state = STOPPED;
 }
 
 void AnimationController::resume()
