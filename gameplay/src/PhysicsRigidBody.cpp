@@ -14,15 +14,16 @@ const int PhysicsRigidBody::Listener::DIRTY         = 0x01;
 const int PhysicsRigidBody::Listener::COLLISION     = 0x02;
 const int PhysicsRigidBody::Listener::REGISTERED    = 0x04;
 
-// Internal values used for creating mesh and heightfield rigid bodies.
+// Internal values used for creating mesh, heightfield, and capsule rigid bodies.
 #define SHAPE_MESH ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 1))
 #define SHAPE_HEIGHTFIELD ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 2))
+#define SHAPE_CAPSULE ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 3))
 
 // Helper function for calculating heights from heightmap (image) or heightfield data.
 static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
 
 PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, float mass, 
-        float friction, float restitution, float linearDamping, float angularDamping)
+    float friction, float restitution, float linearDamping, float angularDamping)
         : _shape(NULL), _body(NULL), _node(node), _listeners(NULL), _angularVelocity(NULL),
         _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL), _vertexData(NULL),
         _indexData(NULL), _heightfieldData(NULL), _inverse(NULL), _inverseIsDirty(true)
@@ -142,6 +143,29 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, Image* image, float mass,
 
     // Add the rigid body as a listener on the node's transform.
     _node->addListener(this);
+}
+
+PhysicsRigidBody::PhysicsRigidBody(Node* node, float radius, float height, float mass, float friction,
+    float restitution, float linearDamping, float angularDamping)
+        : _shape(NULL), _body(NULL), _node(node), _listeners(NULL), _angularVelocity(NULL),
+        _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL), _vertexData(NULL),
+        _indexData(NULL), _heightfieldData(NULL), _inverse(NULL), _inverseIsDirty(true)
+{
+    // Create the capsule collision shape.
+    _shape = Game::getInstance()->getPhysicsController()->createCapsule(radius, height);
+
+    // Use the center of the bounding sphere as the center of mass offset.
+    Vector3 c(node->getModel()->getMesh()->getBoundingSphere().center);
+    c.negate();
+
+    // Create the Bullet rigid body.
+    if (c.lengthSquared() > MATH_EPSILON)
+        _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
+    else
+        _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
+
+    // Add the rigid body to the physics world.
+    Game::getInstance()->getPhysicsController()->addRigidBody(this);
 }
 
 PhysicsRigidBody::~PhysicsRigidBody()
@@ -292,6 +316,8 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     Vector3* gravity = NULL;
     Vector3* anisotropicFriction = NULL;
     const char* imagePath = NULL;
+    float radius = -1.0f;
+    float height = -1.0f;
 
     // Load the defined properties.
     properties->rewind();
@@ -309,6 +335,8 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
                 type = SHAPE_MESH;
             else if (typeStr == "HEIGHTFIELD")
                 type = SHAPE_HEIGHTFIELD;
+            else if (typeStr == "CAPSULE")
+                type = SHAPE_CAPSULE;
             else
             {
                 WARN_VARG("Could not create rigid body; unsupported value for rigid body type: '%s'.", typeStr.c_str());
@@ -353,6 +381,14 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
         {
             imagePath = properties->getString();
         }
+        else if (strcmp(name, "radius") == 0)
+        {
+            radius = properties->getFloat();
+        }
+        else if (strcmp(name, "height") == 0)
+        {
+            height = properties->getFloat();
+        }
     }
 
     // If the rigid body type is equal to mesh, check that the node's mesh's primitive type is supported.
@@ -378,30 +414,48 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
 
     // Create the rigid body.
     PhysicsRigidBody* body = NULL;
-    if (imagePath == NULL)
+    switch (type)
     {
-        body = new PhysicsRigidBody(node, type, mass, friction, restitution, linearDamping, angularDamping);
-    }
-    else
-    {
-        // Load the image data from the given file path.
-        Image* image = Image::create(imagePath);
-        if (!image)
-            return NULL;
+        case SHAPE_HEIGHTFIELD:
+            if (imagePath == NULL)
+            {
+                WARN("Heightfield rigid body requires an image path.");
+            }
+            else
+            {
+                // Load the image data from the given file path.
+                Image* image = Image::create(imagePath);
+                if (!image)
+                    return NULL;
 
-        // Ensure that the image's pixel format is supported.
-        switch (image->getFormat())
-        {
-            case Image::RGB:
-            case Image::RGBA:
-                break;
-            default:
-                WARN_VARG("Heightmap: pixel format is not supported: %d", image->getFormat());
-                return NULL;
-        }
+                // Ensure that the image's pixel format is supported.
+                switch (image->getFormat())
+                {
+                    case Image::RGB:
+                    case Image::RGBA:
+                        break;
+                    default:
+                        WARN_VARG("Heightmap: pixel format is not supported: %d", image->getFormat());
+                        return NULL;
+                }
 
-        body = new PhysicsRigidBody(node, image, mass, friction, restitution, linearDamping, angularDamping);
-        SAFE_RELEASE(image);
+                body = new PhysicsRigidBody(node, image, mass, friction, restitution, linearDamping, angularDamping);
+                SAFE_RELEASE(image);
+            }
+            break;
+        case SHAPE_CAPSULE:
+            if (radius == -1.0f || height == -1.0f)
+            {
+                WARN("Both 'radius' and 'height' must be specified for a capsule rigid body.");
+            }
+            else
+            {
+                body = new PhysicsRigidBody(node, radius, height, mass, friction, restitution, linearDamping, angularDamping);
+            }
+            break;
+        default:
+            body = new PhysicsRigidBody(node, type, mass, friction, restitution, linearDamping, angularDamping);
+            break;
     }
 
     // Set any initially defined properties.
