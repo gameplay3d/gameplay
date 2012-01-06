@@ -353,6 +353,29 @@ btCollisionShape* PhysicsController::createBox(const Vector3& min, const Vector3
     return box;
 }
 
+btCollisionShape* PhysicsController::createCapsule(float radius, float height)
+{
+    // Return the capsule shape from the cache if it already exists.
+    for (unsigned int i = 0; i < _shapes.size(); i++)
+    {
+        if (_shapes[i]->_shape->getShapeType() == CAPSULE_SHAPE_PROXYTYPE)
+        {
+            btCapsuleShape* capsule = static_cast<btCapsuleShape*>(_shapes[i]->_shape);
+            if (capsule->getRadius() == radius && capsule->getHalfHeight() == 0.5f * height)
+            {
+                _shapes[i]->addRef();
+                return capsule;
+            }
+        }
+    }
+    
+    // Create the capsule shape and add it to the cache.
+    btCapsuleShape* capsule = bullet_new<btCapsuleShape>(radius, height);
+    _shapes.push_back(new PhysicsCollisionShape(capsule));
+
+    return capsule;
+}
+
 btCollisionShape* PhysicsController::createSphere(float radius, const btVector3& scale)
 {
     // Since sphere shapes depend only on the radius, the best we can do is take
