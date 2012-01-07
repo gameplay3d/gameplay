@@ -635,8 +635,6 @@ bool Matrix::invert(Matrix* dst) const
     inverse.m[14] = -m[12] * a3 + m[13] * a1 - m[14] * a0;
     inverse.m[15] = m[8] * a3 - m[9] * a1 + m[10] * a0;
 
-    memcpy(dst->m, inverse.m, MATRIX_SIZE);
-
     multiply(inverse, 1.0f / det, dst);
 
     return true;
