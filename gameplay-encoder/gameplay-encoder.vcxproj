@@ -145,7 +145,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NO_BOOST;NO_ZAE;USE_FBX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NO_BOOST;NO_ZAE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../external-deps/freetype2/include;../external-deps/collada-dom/include;../external-deps/collada-dom/include/1.4;../external-deps/libpng/include;../external-deps/zlib/include;C:/Program Files/Autodesk/FBX/FbxSdk/2012.2/include</AdditionalIncludeDirectories>
       <DisableLanguageExtensions>
       </DisableLanguageExtensions>

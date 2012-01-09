@@ -141,7 +141,7 @@ void EncoderArguments::printUsage() const
     fprintf(stderr,"  .ttf\t(TrueType Font)\n");
     fprintf(stderr,"\n");
     fprintf(stderr,"COLLADA and FBX file options:\n");
-    fprintf(stderr,"  -i<id>\t\tFilter by node ID.\n");
+    fprintf(stderr,"  -i <id>\t\tFilter by node ID.\n");
     fprintf(stderr,"  -t\t\t\tWrite text/xml.\n");
     fprintf(stderr,"  -groupAnimations <node id> <animation id>\n" \
         "\t\t\tGroup all animation channels targetting the nodes into a new animation.\n");
