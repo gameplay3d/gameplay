@@ -115,6 +115,16 @@ void GPBFile::addNode(Node* node)
     _nodes.push_back(node);
 }
 
+void GPBFile::addScenelessNode(Node* node)
+{
+    addToRefTable(node);
+    _nodes.push_back(node);
+    // Nodes are normally written to file as part of a scene. 
+    // Nodes that don't belong to a scene need to be written on their own (outside a scene).
+    // That is why node is added to the list of objects here.
+    _objects.push_back(node);
+}
+
 void GPBFile::addAnimation(Animation* animation)
 {
     _animations.add(animation);
