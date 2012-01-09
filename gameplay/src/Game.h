@@ -191,6 +191,7 @@ public:
      * @param evt The key event that occured.
      * @param key The key code that was pressed, released or repeated.
      * 
+     * @see Keyboard::KeyEvent
      * @see Keyboard::Key
      */
     virtual void keyEvent(Keyboard::KeyEvent evt, int key);
@@ -199,6 +200,9 @@ public:
      * Touch callback on touch events.
      *
      * @param evt The touch event that occurred.
+     * @param x The x position of the touch in pixels. Left edge is zero.
+     * @param y The y position of the touch in pixels. Top edge is zero.
+     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
      *
      * @see Touch::TouchEvent
      */
