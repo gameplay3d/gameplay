@@ -272,23 +272,31 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
         {
             if (nodeId == NULL)
             {
-                // If the -n <node_id> parameter was not passed then write out the entire scene.
+                // If the -i <node_id> parameter was not passed then write out the entire scene.
                 begin();
                 loadScene((domVisual_scene*)scene);
                 end("load scene");
             }
             else
             {
-                // Resolve/Search for the node the user specified with the -n <node_id> parameter.
+                // Resolve/Search for the node the user specified with the -i <node_id> parameter.
                 daeSIDResolver resolver(scene, nodeId);
-                const domNode* node = daeSafeCast<domNode>(resolver.getElement());
-                if (node)
+                domNode* nodeElement = daeSafeCast<domNode>(resolver.getElement());
+                if (nodeElement)
                 {
-                    //createNode(node, NULL);
+                    Node* node = loadNode(nodeElement, NULL);
+                    if (node)
+                    {
+                        _gamePlayFile.addScenelessNode(node);
+                    }
+                    else
+                    {
+                        fprintf(stderr,"COLLADA File loaded to the dom, but failed to load node %s.\n", nodeId);
+                    }
                 }
                 else
                 {
-                    fprintf(stderr,"COLLADA File loaded to the dom, but node was not found with -n%s.\n", nodeId);
+                    fprintf(stderr,"COLLADA File loaded to the dom, but node was not found with node ID %s.\n", nodeId);
                 }
             }
         }
