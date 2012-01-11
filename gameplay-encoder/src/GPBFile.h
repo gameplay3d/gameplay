@@ -65,6 +65,10 @@ public:
     void addLight(Light* light);
     void addMesh(Mesh* mesh);
     void addNode(Node* node);
+    /**
+     * Adds a node that does not belong to a scene.
+     */
+    void addScenelessNode(Node* node);
     void addAnimation(Animation* animation);
 
     /**
