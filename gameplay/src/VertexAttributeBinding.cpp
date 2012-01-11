@@ -17,7 +17,7 @@ VertexAttributeBinding::VertexAttributeBinding() :
 VertexAttributeBinding::~VertexAttributeBinding()
 {
     // Delete from the vertex attribute binding cache.
-    std::vector<VertexAttributeBinding*>::iterator itr = find(__vertexAttributeBindingCache.begin(), __vertexAttributeBindingCache.end(), this);
+    std::vector<VertexAttributeBinding*>::iterator itr = std::find(__vertexAttributeBindingCache.begin(), __vertexAttributeBindingCache.end(), this);
     if (itr != __vertexAttributeBindingCache.end())
     {
         __vertexAttributeBindingCache.erase(itr);
