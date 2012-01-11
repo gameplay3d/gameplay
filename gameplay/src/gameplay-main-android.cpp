@@ -17,7 +17,12 @@ extern ASensorManager* __sensorManager;
 extern const ASensor* __accelerometerSensor;
 extern ASensorEventQueue* __sensorEventQueue;
 extern ASensorEvent __sensorEvent;
+
+namespace gameplay
+{
 extern Keyboard::Key getKey(int keycode, int metastate);
+}
+
 bool __initialized;
 
 /**

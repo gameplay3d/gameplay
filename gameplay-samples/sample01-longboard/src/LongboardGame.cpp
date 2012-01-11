@@ -65,7 +65,7 @@ void LongboardGame::finalize()
     SAFE_RELEASE(_board);
     SAFE_RELEASE(_wheels);
     SAFE_RELEASE(_gradient);
-    SAFE_RELEASE(_wheelsSound);
+    //SAFE_RELEASE(_wheelsSound);
 }
 
 void LongboardGame::buildGround()
@@ -145,10 +145,12 @@ void LongboardGame::buildWheels()
     wheelsMaterial->getParameter("u_textureRepeat")->setValue(Vector2::one());
     wheelsMaterial->getParameter("u_textureTransform")->setValue(Vector2::zero());
 
+    /*
     // Load audio sound
     _wheelsSound = AudioSource::create("res/longboard.wav");
     if (_wheelsSound)
         _wheelsSound->setLooped(true);
+    */
 
     // Release objects that are owned by mesh instances
     SAFE_RELEASE(wheelsMesh);
@@ -186,9 +188,11 @@ void LongboardGame::update(long elapsedTime)
     pitch = max(min(pitch, PITCH_MAX), PITCH_MIN);
     roll = max(min(roll, ROLL_MAX), -ROLL_MAX);
 
+    
     // Calculate the 'throttle' (which is the % controlling change in acceleration, similar to a car's gas pedal)
     float throttle = 1.0f - ((pitch - PITCH_MIN) / PITCH_RANGE);
 
+    /*
     if (throttle > 0.0f)
     {
         if (_wheelsSound->getState() != AudioSource::PLAYING)
@@ -200,6 +204,7 @@ void LongboardGame::update(long elapsedTime)
     {
         _wheelsSound->stop();
     }
+    */
 
     // Update velocity based on current throttle.
     // Note that this is a very simplified calculation that ignores acceleration (assumes it's constant)
