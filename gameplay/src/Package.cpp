@@ -66,12 +66,30 @@ bool Package::readArray(unsigned int* length, T** ptr)
     }
     if (*length > 0)
     {
-       *ptr = new T[*length];
-       if (fread(*ptr, sizeof(T), *length, _file) != *length)
-       {
-           SAFE_DELETE_ARRAY(*ptr);
-           return false;
-       }
+        *ptr = new T[*length];
+        if (fread(*ptr, sizeof(T), *length, _file) != *length)
+        {
+            SAFE_DELETE_ARRAY(*ptr);
+            return false;
+        }
+    }
+    return true;
+}
+
+template <class T>
+bool Package::readArray(unsigned int* length, std::vector<T>* values)
+{
+    if (!read(length))
+    {
+        return false;
+    }
+    if (*length > 0 && values)
+    {
+        values->resize(*length);
+        if (fread(&(*values)[0], sizeof(T), *length, _file) != *length)
+        {
+            return false;
+        }
     }
     return true;
 }
@@ -87,20 +105,16 @@ std::string readString(FILE* fp)
     // Sanity check to detect if string length is far too big
     assert(length < PACKAGE_MAX_STRING_LENGTH);
 
-    char* str = new char[length + 1];
+    std::string str;
     if (length > 0)
     {
-        if (fread(str, 1, length, fp) != length)
+        str.resize(length);
+        if (fread(&str[0], 1, length, fp) != length)
         {
-            SAFE_DELETE_ARRAY(str);
             return std::string();
         }
     }
-
-    str[length] = '\0';
-    std::string result(str);
-    SAFE_DELETE_ARRAY(str);
-    return result;
+    return str;
 }
 
 Package* Package::create(const char* path)
@@ -907,11 +921,11 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
         }
     }
 
-    unsigned long* keyTimes = NULL;
-    float* values = NULL;
-    float* tangentsIn = NULL;
-    float* tangentsOut = NULL;
-    unsigned int* interpolation = NULL;
+    std::vector<unsigned long> keyTimes;
+    std::vector<float> values;
+    std::vector<float> tangentsIn;
+    std::vector<float> tangentsOut;
+    std::vector<unsigned long> interpolation;
 
     // length of the arrays
     unsigned int keyTimesCount;
@@ -924,7 +938,6 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
     if (!readArray(&keyTimesCount, &keyTimes))
     {
         LOG_ERROR_VARG("Failed to read %s for %s: %s", "keyTimes", "animation", id);
-        SAFE_DELETE_ARRAY(keyTimes);
         return NULL;
     }
     
@@ -932,8 +945,6 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
     if (!readArray(&valuesCount, &values))
     {
         LOG_ERROR_VARG("Failed to read %s for %s: %s", "values", "animation", id);
-        SAFE_DELETE_ARRAY(keyTimes);
-        SAFE_DELETE_ARRAY(values);
         return NULL;
     }
     
@@ -941,9 +952,6 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
     if (!readArray(&tangentsInCount, &tangentsIn))
     {
         LOG_ERROR_VARG("Failed to read %s for %s: %s", "tangentsIn", "animation", id);
-        SAFE_DELETE_ARRAY(keyTimes);
-        SAFE_DELETE_ARRAY(values);
-        SAFE_DELETE_ARRAY(tangentsIn);
         return NULL;
     }
     
@@ -951,10 +959,6 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
     if (!readArray(&tangentsOutCount, &tangentsOut))
     {
         LOG_ERROR_VARG("Failed to read %s for %s: %s", "tangentsOut", "animation", id);
-        SAFE_DELETE_ARRAY(keyTimes);
-        SAFE_DELETE_ARRAY(values);
-        SAFE_DELETE_ARRAY(tangentsIn);
-        SAFE_DELETE_ARRAY(tangentsOut);
         return NULL;
     }
     
@@ -962,11 +966,6 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
     if (!readArray(&interpolationCount, &interpolation))
     {
         LOG_ERROR_VARG("Failed to read %s for %s: %s", "interpolation", "animation", id);
-        SAFE_DELETE_ARRAY(keyTimes);
-        SAFE_DELETE_ARRAY(values);
-        SAFE_DELETE_ARRAY(tangentsIn);
-        SAFE_DELETE_ARRAY(tangentsOut);
-        SAFE_DELETE_ARRAY(interpolation);
         return NULL;
     }
 
@@ -976,22 +975,17 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
     // TODO: Handle other target attributes later.
     if (targetAttribute > 0)
     {
+        assert(keyTimes.size() > 0 && values.size() > 0);
         if (animation == NULL)
         {
             // TODO: This code currently assumes LINEAR only
-            animation = controller->createAnimation(animationId, target, targetAttribute, keyTimesCount, keyTimes, values, Curve::LINEAR);
+            animation = controller->createAnimation(animationId, target, targetAttribute, keyTimesCount, &keyTimes[0], &values[0], Curve::LINEAR);
         }
         else
         {
-            animation->createChannel(target, targetAttribute, keyTimesCount, keyTimes, values, Curve::LINEAR);
+            animation->createChannel(target, targetAttribute, keyTimesCount, &keyTimes[0], &values[0], Curve::LINEAR);
         }
     }
-
-    SAFE_DELETE_ARRAY(keyTimes);
-    SAFE_DELETE_ARRAY(values);
-    SAFE_DELETE_ARRAY(tangentsIn);
-    SAFE_DELETE_ARRAY(tangentsOut);
-    SAFE_DELETE_ARRAY(interpolation);
 
     return animation;
 }

@@ -117,7 +117,8 @@ private:
     {
         RUNNING,
         IDLE,
-        PAUSED
+        PAUSED,
+        STOPPED
     };
 
     /**

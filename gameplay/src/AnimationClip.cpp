@@ -441,6 +441,16 @@ bool AnimationClip::update(unsigned long elapsedTime)
     if (!_isPlaying)
     {
         onEnd();
+        // Notify end listeners if any.
+        if (_endListeners)
+        {
+            std::vector<Listener*>::iterator listener = _endListeners->begin();
+            while (listener != _endListeners->end())
+            {
+                (*listener)->animationEvent(this, Listener::END);
+                listener++;
+            }
+        }
     }
 
     return !_isPlaying;
@@ -494,17 +504,6 @@ void AnimationClip::onEnd()
 
     _blendWeight = 1.0f;
     _timeStarted = 0;
-
-    // Notify end listeners if any.
-    if (_endListeners)
-    {
-        std::vector<Listener*>::iterator listener = _endListeners->begin();
-        while (listener != _endListeners->end())
-        {
-            (*listener)->animationEvent(this, Listener::END);
-            listener++;
-        }
-    }
 }
 
 }

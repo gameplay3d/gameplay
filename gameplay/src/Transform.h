@@ -33,6 +33,11 @@ public:
     /**
      * Scale animation property. Data=sx,sy,sz
      */
+    static const int ANIMATE_SCALE_UNIT = 0;
+
+    /**
+     * Scale animation property. Data=scale
+     */
     static const int ANIMATE_SCALE = 1;
 
     /**
