@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 AnimationController::AnimationController()
-    : _state(IDLE), _animations(NULL)
+    : _state(STOPPED), _animations(NULL)
 {
 }
 
@@ -66,6 +66,7 @@ Animation* AnimationController::createAnimationFromTo(const char* id, AnimationT
 
     Animation* animation = createAnimation(id, target, propertyId, 2, keyTimes, keyValues, type);
 
+    SAFE_DELETE_ARRAY(keyValues);
     SAFE_DELETE_ARRAY(keyTimes);
     
     return animation;
@@ -85,6 +86,7 @@ Animation* AnimationController::createAnimationFromBy(const char* id, AnimationT
 
     Animation* animation = createAnimation(id, target, propertyId, 2, keyTimes, keyValues, type);
 
+    SAFE_DELETE_ARRAY(keyValues);
     SAFE_DELETE_ARRAY(keyTimes);
 
     return animation;
@@ -112,6 +114,7 @@ void AnimationController::stopAllAnimations()
         clip->_isPlaying = false;
         clip->onEnd();
         SAFE_RELEASE(clip);
+        clipIter++;
     }
     _runningClips.clear();
 
@@ -269,7 +272,7 @@ void AnimationController::initialize()
 void AnimationController::finalize()
 {
     stopAllAnimations();
-    _state = PAUSED;
+    _state = STOPPED;
 }
 
 void AnimationController::resume()
