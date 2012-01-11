@@ -45,8 +45,8 @@ PFNGLISVERTEXARRAYOESPROC glIsVertexArray = NULL;
 namespace gameplay
 {
 
-// Gets the Keyboard::Key enumeration constant that corresponds to the given QNX key code.
-Keyboard::Key getKey(int keycode, int metastate)
+// Gets the Keyboard::Key enumeration constant that corresponds to the given Android key code.
+extern Keyboard::Key getKey(int keycode, int metastate)
 {
     bool shiftOn = (metastate == AMETA_SHIFT_ON);
     
