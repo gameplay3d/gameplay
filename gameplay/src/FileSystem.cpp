@@ -1,8 +1,54 @@
 #include "Base.h"
 #include "FileSystem.h"
 
+#ifdef __ANDROID__
+extern AAssetManager* __assetManager;
+#endif
+
 namespace gameplay
 {
+
+#ifdef __ANDROID__
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+void makepath(std::string path, int mode)
+{
+    std::vector<std::string> dirs;
+    while (path.length() > 0)
+    {
+        int index = path.find('/');
+        std::string dir = (index == -1 ) ? path : path.substr(0, index);
+        if (dir.length() > 0)
+            dirs.push_back(dir);
+        
+        if (index + 1 >= path.length() || index == -1)
+            break;
+            
+        path = path.substr(index + 1);
+    }
+    
+    struct stat s;
+    std::string dirPath;
+    for (unsigned int i = 0; i < dirs.size(); i++)
+    {
+        dirPath += "/";
+        dirPath += dirs[i];
+        if (stat(dirPath.c_str(), &s) != 0)
+        {
+            // Directory does not exist.
+            if (mkdir(dirPath.c_str(), 0777) != 0)
+            {
+                WARN_VARG("Failed to create directory: '%s'", dirPath.c_str());
+                return;
+            }
+        }
+    }
+    
+    return;
+}
+#endif
 
 static std::string __resourcePath("./");
 
@@ -28,10 +74,29 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
 {
     std::string fullPath(__resourcePath);
     fullPath += path;
+    
+#ifdef __ANDROID__
+    std::string directoryPath = fullPath.substr(0, fullPath.rfind('/'));
+    struct stat s;
+    if (stat(directoryPath.c_str(), &s) != 0)
+        makepath(directoryPath.c_str(), 0777);
 
+    if (stat(fullPath.c_str(), &s) != 0)
+    {
+        AAsset* asset = AAssetManager_open(__assetManager, path, AASSET_MODE_RANDOM);
+        const void* data = AAsset_getBuffer(asset);
+        int length = AAsset_getLength(asset);
+        FILE* file = fopen(fullPath.c_str(), "wb");
+        
+        int ret = fwrite(data, sizeof(unsigned char), length, file);
+        assert(ret == length);
+        fclose(file);
+    }
+#endif
+    
     FILE* fp = fopen(fullPath.c_str(), mode);
-
-// Win32 doesnt support a asset or bundle definitions.
+    
+// Win32 doesn't support an asset or bundle definitions.
 #ifdef WIN32
     if (fp == NULL)
     {
