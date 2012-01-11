@@ -17,10 +17,8 @@ extern ASensorManager* __sensorManager;
 extern const ASensor* __accelerometerSensor;
 extern ASensorEventQueue* __sensorEventQueue;
 extern ASensorEvent __sensorEvent;
-
-//extern gameplay::Keyboard::Key getKey(int keycode, int metastate);
+extern Keyboard::Key getKey(int keycode, int metastate);
 bool __initialized;
-
 
 /**
  * Process the next input event.
@@ -61,14 +59,12 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
 		switch(action)
 		{
 			case AKEY_EVENT_ACTION_DOWN:
-				//Game::getInstance()->keyEvent(Keyboard::KEY_PRESS, getKey(keycode, metastate));
+				Game::getInstance()->keyEvent(Keyboard::KEY_PRESS, getKey(keycode, metastate));
 				break;
 					
 			case AKEY_EVENT_ACTION_UP:
-				//Game::getInstance()->keyEvent(Keyboard::KEY_RELEASE, getKey(keycode, metastate));
+				Game::getInstance()->keyEvent(Keyboard::KEY_RELEASE, getKey(keycode, metastate));
 				break;
-			
-		
 		}
     }
     return 0;

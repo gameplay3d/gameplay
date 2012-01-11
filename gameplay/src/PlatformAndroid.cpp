@@ -42,20 +42,151 @@ PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays = NULL;
 PFNGLISVERTEXARRAYOESPROC glIsVertexArray = NULL;
 
-
-
-//gameplay::Keyboard::Key getKey(int keycode, int metastate);
-
 namespace gameplay
 {
 
 // Gets the Keyboard::Key enumeration constant that corresponds to the given QNX key code.
 Keyboard::Key getKey(int keycode, int metastate)
 {
+    bool shiftOn = (metastate == AMETA_SHIFT_ON);
     
-	// TODO.
-	
-	return Keyboard::KEY_NONE;
+    switch(keycode)
+    {
+        case AKEYCODE_HOME:
+            return Keyboard::KEY_HOME;
+        case AKEYCODE_0:
+            return Keyboard::KEY_ZERO;
+        case AKEYCODE_1:
+            return Keyboard::KEY_ONE;
+        case AKEYCODE_2:
+            return Keyboard::KEY_TWO;
+        case AKEYCODE_3:
+            return Keyboard::KEY_THREE;
+        case AKEYCODE_4:
+            return Keyboard::KEY_FOUR;
+        case AKEYCODE_5:
+            return Keyboard::KEY_FIVE;
+        case AKEYCODE_6:
+            return Keyboard::KEY_SIX;
+        case AKEYCODE_7:
+            return Keyboard::KEY_SEVEN;
+        case AKEYCODE_8:
+            return Keyboard::KEY_EIGHT;
+        case AKEYCODE_9:
+            return Keyboard::KEY_NINE;
+        case AKEYCODE_STAR:
+            return Keyboard::KEY_ASTERISK;
+        case AKEYCODE_POUND:
+            return Keyboard::KEY_NUMBER;
+        case AKEYCODE_DPAD_UP:
+            return Keyboard::KEY_UP_ARROW;
+        case AKEYCODE_DPAD_DOWN:
+            return Keyboard::KEY_DOWN_ARROW;
+        case AKEYCODE_DPAD_LEFT:
+            return Keyboard::KEY_LEFT_ARROW;
+        case AKEYCODE_DPAD_RIGHT:
+            return Keyboard::KEY_RIGHT_ARROW;
+        case AKEYCODE_A:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_A : Keyboard::KEY_A;
+        case AKEYCODE_B:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_B : Keyboard::KEY_B;
+       case AKEYCODE_C:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_C : Keyboard::KEY_C;
+        case AKEYCODE_D:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_D : Keyboard::KEY_D;
+        case AKEYCODE_E:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_E : Keyboard::KEY_E;
+        case AKEYCODE_F:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_F : Keyboard::KEY_F;
+        case AKEYCODE_G:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_G : Keyboard::KEY_G;
+        case AKEYCODE_H:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_H : Keyboard::KEY_H;
+        case AKEYCODE_I:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_I : Keyboard::KEY_I;
+        case AKEYCODE_J:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_J : Keyboard::KEY_J;
+        case AKEYCODE_K:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_K : Keyboard::KEY_K;
+        case AKEYCODE_L:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_L : Keyboard::KEY_L;
+        case AKEYCODE_M:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_M : Keyboard::KEY_M;
+        case AKEYCODE_N:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_N : Keyboard::KEY_N;
+        case AKEYCODE_O:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_O : Keyboard::KEY_O;
+        case AKEYCODE_P:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_P : Keyboard::KEY_P;
+        case AKEYCODE_Q:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_Q : Keyboard::KEY_Q;
+        case AKEYCODE_R:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_R : Keyboard::KEY_R;
+        case AKEYCODE_S:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_S : Keyboard::KEY_S;
+        case AKEYCODE_T:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_T : Keyboard::KEY_T;
+        case AKEYCODE_U:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_U : Keyboard::KEY_U;
+        case AKEYCODE_V:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_V : Keyboard::KEY_V;
+        case AKEYCODE_W:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_W : Keyboard::KEY_W;
+        case AKEYCODE_X:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_X : Keyboard::KEY_X;
+        case AKEYCODE_Y:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_Y : Keyboard::KEY_Y;
+        case AKEYCODE_Z:
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_Y : Keyboard::KEY_Y;
+        case AKEYCODE_COMMA:
+            return Keyboard::KEY_COMMA;
+        case AKEYCODE_PERIOD:
+            return Keyboard::KEY_PERIOD;
+        case AKEYCODE_ALT_LEFT:
+            return Keyboard::KEY_LEFT_ALT;
+        case AKEYCODE_ALT_RIGHT:
+            return Keyboard::KEY_RIGHT_ALT;
+        case AKEYCODE_SHIFT_LEFT:
+            return Keyboard::KEY_LEFT_SHIFT;
+        case AKEYCODE_SHIFT_RIGHT:
+            return Keyboard::KEY_RIGHT_SHIFT;
+        case AKEYCODE_TAB:
+            return Keyboard::KEY_TAB;
+        case AKEYCODE_SPACE:
+            return Keyboard::KEY_SPACE;
+        case AKEYCODE_ENTER:
+            return Keyboard::KEY_RETURN;
+        case AKEYCODE_DEL:
+            return Keyboard::KEY_DELETE;
+        case AKEYCODE_GRAVE:
+            return Keyboard::KEY_GRAVE;
+        case AKEYCODE_MINUS:
+            return Keyboard::KEY_MINUS;
+        case AKEYCODE_EQUALS:
+            return Keyboard::KEY_EQUAL;
+        case AKEYCODE_LEFT_BRACKET:
+            return Keyboard::KEY_LEFT_BRACKET;
+        case AKEYCODE_RIGHT_BRACKET:
+            return Keyboard::KEY_RIGHT_BRACKET;
+        case AKEYCODE_BACKSLASH:
+            return Keyboard::KEY_BACK_SLASH;
+        case AKEYCODE_SEMICOLON:
+            return Keyboard::KEY_SEMICOLON;
+        case AKEYCODE_APOSTROPHE:
+            return Keyboard::KEY_APOSTROPHE;
+        case AKEYCODE_SLASH:
+            return Keyboard::KEY_SLASH;
+        case AKEYCODE_AT:
+            return Keyboard::KEY_AT;
+        case AKEYCODE_PLUS:
+            return Keyboard::KEY_PLUS;
+        case AKEYCODE_PAGE_UP:
+            return Keyboard::KEY_PG_UP;
+        case AKEYCODE_PAGE_DOWN:
+            return Keyboard::KEY_PG_DOWN;
+        default:
+            return Keyboard::KEY_NONE;
+    }
 }
 
 
