@@ -255,7 +255,7 @@ private:
 
     static const char ANIMATION_UNIFORM_BIT = 0x01;
 
-    void MaterialParameter::applyAnimationValue(AnimationValue* value, float blendWeight, int components);
+    void applyAnimationValue(AnimationValue* value, float blendWeight, int components);
 
     unsigned int _count;
     bool _dynamic;
