@@ -393,178 +393,134 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
             {
                 case FLOAT:
                 {
-                    float value1 = value->getFloat(0);
-                    if (blendWeight != 1.0f)
-                        value1 *= blendWeight;
-
-                    if ((_bitFlag & UNIFORM_BIT) != UNIFORM_BIT)
+                    if (_count == 1)
                     {
-                        if (_count == 1)
+                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
                         {
-                            _value.floatValue = value1;
+                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
+
+                            if (blendWeight != 1.0f)
+                                _value.floatValue = value->getFloat(0) * blendWeight;
+                            else
+                                _value.floatValue = value->getFloat(0);
                         }
                         else
                         {
-                            for (unsigned int i = 0; i < _count; i++)
-                                _value.floatPtrValue[i] = value1;
+                            if (blendWeight != 1.0f)
+                                _value.floatValue += value->getFloat(0) * blendWeight;
+                            else
+                                _value.floatValue += value->getFloat(0);
                         }
-                        _bitFlag |= UNIFORM_BIT;
                     }
                     else
                     {
-                        if (_count == 1)
-                        {
-                            _value.floatValue += value1;
-                        }
-                        else
-                        {
-                            for (unsigned int i = 0; i < _count; i++)
-                                _value.floatPtrValue[i] += value1;
-                        }
-                    }
+                        applyAnimationValue(value, blendWeight, 1);
+                    }                    
                     break;
                 }
                 case INT:
                 {
-                    float value1 = value->getFloat(0);
-                    if (blendWeight != 1.0f)
-                        value1 *= blendWeight;
-
-                    if ((_bitFlag & UNIFORM_BIT) != UNIFORM_BIT)
+                    if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
                     {
+                        _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
+
                         if (_count == 1)
                         {
-                            _value.intValue = value1;
+                            if (blendWeight != 1.0f)
+                                _value.intValue = value->getFloat(0) * blendWeight;
+                            else
+                                _value.intValue = value->getFloat(0);
                         }
                         else
                         {
-                            for (unsigned int i = 0; i < _count; i++)
-                                _value.intPtrValue[i] = value1;
+                            if (blendWeight != 1.0f)
+                            {
+                                for (unsigned int i = 0; i < _count; i++)
+                                    _value.intPtrValue[i] = value->getFloat(i) * blendWeight;
+                            }
+                            else
+                            {
+                                for (unsigned int i = 0; i < _count; i++)
+                                    _value.intPtrValue[i] = value->getFloat(i);
+                            }
                         }
-                        _bitFlag |= UNIFORM_BIT;
                     }
                     else
                     {
                         if (_count == 1)
                         {
-                            _value.intValue += value1;
+                            if (blendWeight != 1.0f)
+                                _value.intValue += value->getFloat(0) * blendWeight;
+                            else
+                                _value.intValue += value->getFloat(0);
                         }
                         else
                         {
-                            for (unsigned int i = 0; i < _count; i++)
-                                _value.intPtrValue[i] += value1;
+                            if (blendWeight != 1.0f)
+                            {
+                                for (unsigned int i = 0; i < _count; i++)
+                                    _value.intPtrValue[i] += value->getFloat(i) * blendWeight;
+                            }
+                            else
+                            {
+                                for (unsigned int i = 0; i < _count; i++)
+                                    _value.intPtrValue[i] += value->getFloat(i);
+                            }
                         }
                     }
                     break;
                 }
                 case VECTOR2:
                 {
-                    float value1 = value->getFloat(0);
-                    float value2 = value->getFloat(1);
-                    if (blendWeight != 1.0f)
-                    {
-                        value1 *= blendWeight;
-                        value2 *= blendWeight;
-                    }
-
-                    if ((_bitFlag & UNIFORM_BIT) != UNIFORM_BIT)
-                    {
-                        unsigned int count = _count * 2;
-                        for (unsigned int i = 0; i < count; i++)
-                        {
-                            _value.floatPtrValue[i] = value1;
-                            _value.floatPtrValue[++i] = value2;
-                        }
-                        _bitFlag |= UNIFORM_BIT;
-                    }
-                    else
-                    {
-                        unsigned int count = _count * 2;
-                        for (unsigned int i = 0; i < count; i++)
-                        {
-                            _value.floatPtrValue[i] += value1;
-                            _value.floatPtrValue[++i] += value2;
-                        }
-                    }
+                    applyAnimationValue(value, blendWeight, 2);
                     break;
                 }
                 case VECTOR3:
                 {
-                    float value1 = value->getFloat(0);
-                    float value2 = value->getFloat(1);
-                    float value3 = value->getFloat(2);
-                    if (blendWeight != 1.0f)
-                    {
-                        value1 *= blendWeight;
-                        value2 *= blendWeight;
-                        value3 *= blendWeight;
-                    }
-
-                    if ((_bitFlag & UNIFORM_BIT) != UNIFORM_BIT)
-                    {
-                        unsigned int count = _count * 3;
-                        for (unsigned int i = 0; i < count; i++)
-                        {
-                            _value.floatPtrValue[i] = value1;
-                            _value.floatPtrValue[++i] = value2;
-                            _value.floatPtrValue[++i] = value3;
-                        }
-                        _bitFlag |= UNIFORM_BIT;
-                    }
-                    else
-                    {
-                        unsigned int count = _count * 3;
-                        for (unsigned int i = 0; i < count; i++)
-                        {
-                            _value.floatPtrValue[i] += value1;
-                            _value.floatPtrValue[++i] += value2;
-                            _value.floatPtrValue[++i] += value3;
-                        }
-                    }
+                    applyAnimationValue(value, blendWeight, 3);
                     break;
                 }
                 case VECTOR4:
                 {
-                    float value1 = value->getFloat(0);
-                    float value2 = value->getFloat(1);
-                    float value3 = value->getFloat(2);
-                    float value4 = value->getFloat(3);
-                    if (blendWeight != 1.0f)
-                    {
-                        value1 *= blendWeight;
-                        value2 *= blendWeight;
-                        value3 *= blendWeight;
-                        value4 *= blendWeight;
-                    }
-
-                    if ((_bitFlag & UNIFORM_BIT) != UNIFORM_BIT)
-                    {
-                        unsigned int count = _count * 4;
-                        for (unsigned int i = 0; i < count; i++)
-                        {
-                            _value.floatPtrValue[i] = value1;
-                            _value.floatPtrValue[++i] = value2;
-                            _value.floatPtrValue[++i] = value3;
-                            _value.floatPtrValue[++i] = value4;
-                        }
-                        _bitFlag |= UNIFORM_BIT;
-                    }
-                    else
-                    {
-                        unsigned int count = _count * 4;
-                        for (unsigned int i = 0; i < count; i++)
-                        {
-                            _value.floatPtrValue[i] += value1;
-                            _value.floatPtrValue[++i] += value2;
-                            _value.floatPtrValue[++i] += value3;
-                            _value.floatPtrValue[++i] += value4;;
-                        }
-                    }
+                    applyAnimationValue(value, blendWeight, 4);
                     break;
                 }
 
                 // UNSUPPORTED: NONE, MATRIX, METHOD, SAMPLER 
             }
+        }
+    }
+}
+
+void MaterialParameter::applyAnimationValue(AnimationValue* value, float blendWeight, int components)
+{
+    unsigned int count = _count * components;
+    if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
+    {
+        _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
+
+        if (blendWeight != 1.0f)
+        {
+            for (unsigned int i = 0; i < count; i++)
+                _value.floatPtrValue[i] = value->getFloat(i) * blendWeight;
+        }
+        else
+        {
+            for (unsigned int i = 0; i < count; i++)
+                _value.floatPtrValue[i] = value->getFloat(i);
+        }
+    }
+    else
+    {
+        if (blendWeight != 1.0f)
+        {
+            for (unsigned int i = 0; i < count; i++)
+                _value.floatPtrValue[i] += (value->getFloat(i) * blendWeight);
+        }
+        else
+        {
+            for (unsigned int i = 0; i < count; i++)
+                _value.floatPtrValue[i] += value->getFloat(i);
         }
     }
 }

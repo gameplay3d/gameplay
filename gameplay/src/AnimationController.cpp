@@ -349,12 +349,12 @@ void AnimationController::update(long elapsedTime)
         }
     }
 
-    // Loop through active AnimationTarget's and reset their _bitFlag for the next frame.
+    // Loop through active AnimationTarget's and reset their _animationPropertyBitFlag for the next frame.
     std::list<AnimationTarget*>::iterator targetItr = _activeTargets.begin();
     while (targetItr != _activeTargets.end())
     {
         AnimationTarget* target = (*targetItr);
-        target->_bitFlag = 0x00;
+        target->_animationPropertyBitFlag = 0x00;
         targetItr++;
     }
     _activeTargets.clear();

@@ -253,7 +253,9 @@ private:
         METHOD
     } _type;
 
-    static const char UNIFORM_BIT = 0x01;
+    static const char ANIMATION_UNIFORM_BIT = 0x01;
+
+    void MaterialParameter::applyAnimationValue(AnimationValue* value, float blendWeight, int components);
 
     unsigned int _count;
     bool _dynamic;
