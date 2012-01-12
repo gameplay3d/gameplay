@@ -16,6 +16,14 @@
 
 using namespace std;
 
+int __width;
+int __height;
+static EGLDisplay __eglDisplay = EGL_NO_DISPLAY;
+static EGLContext __eglContext = EGL_NO_CONTEXT;
+static EGLSurface __eglSurface = EGL_NO_SURFACE;
+static EGLConfig __eglConfig = 0;
+
+
 struct timespec __timespec;
 static long __timeStart;
 static long __timeAbsolute;
@@ -23,18 +31,15 @@ static bool __vsync = WINDOW_VSYNC;
 
 struct android_app* __state;
 extern std::string __assetsPath;
-int __width;
-int __height;
-static EGLDisplay __eglDisplay = EGL_NO_DISPLAY;
-static EGLContext __eglContext = EGL_NO_CONTEXT;
-static EGLSurface __eglSurface = EGL_NO_SURFACE;
-static EGLConfig __eglConfig = 0;
+
 ASensorManager* __sensorManager;
-const ASensor* __accelerometerSensor;
 ASensorEventQueue* __sensorEventQueue;
 ASensorEvent __sensorEvent;
+const ASensor* __accelerometerSensor;
+
 static int __orientationAngle;
 static bool __multiTouch = false;
+extern bool __displayKeyboard;
 
 static const char* __glExtensions;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray = NULL;
@@ -44,6 +49,71 @@ PFNGLISVERTEXARRAYOESPROC glIsVertexArray = NULL;
 
 namespace gameplay
 {
+
+extern void displayKeyboard(android_app* state, bool pShow)
+{ 
+    
+    // The following functions is supposed to show / hide functins from a native activity.. but currently
+    // do not work. 
+    // ANativeActivity_showSoftInput(state->activity, ANATIVEACTIVITY_SHOW_SOFT_INPUT_IMPLICIT);
+    // ANativeActivity_hideSoftInput(state->activity, ANATIVEACTIVITY_HIDE_SOFT_INPUT_IMPLICIT_ONLY);
+    
+    // Show or hide the keyboard by calling the appropriate Java method through JNI instead.
+    // Attaches the current thread to the JVM.
+    jint lResult;
+    jint lFlags = 0;
+    JavaVM* lJavaVM = state->activity->vm;
+    JNIEnv* lJNIEnv = state->activity->env; 
+    JavaVMAttachArgs lJavaVMAttachArgs;
+    lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+    lJavaVMAttachArgs.name = "NativeThread";
+    lJavaVMAttachArgs.group = NULL;
+    lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs); 
+    if (lResult == JNI_ERR)
+    { 
+        return; 
+    } 
+    // Retrieves NativeActivity. 
+    jobject lNativeActivity = state->activity->clazz;
+    jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+    // Retrieves Context.INPUT_METHOD_SERVICE.
+    jclass ClassContext = lJNIEnv->FindClass("android/content/Context");
+    jfieldID FieldINPUT_METHOD_SERVICE = lJNIEnv->GetStaticFieldID(ClassContext, "INPUT_METHOD_SERVICE", "Ljava/lang/String;");
+    jobject INPUT_METHOD_SERVICE = lJNIEnv->GetStaticObjectField(ClassContext, FieldINPUT_METHOD_SERVICE);
+    
+    // Runs getSystemService(Context.INPUT_METHOD_SERVICE).
+    jclass ClassInputMethodManager = lJNIEnv->FindClass("android/view/inputmethod/InputMethodManager");
+    jmethodID MethodGetSystemService = lJNIEnv->GetMethodID(ClassNativeActivity, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
+    jobject lInputMethodManager = lJNIEnv->CallObjectMethod(lNativeActivity, MethodGetSystemService, INPUT_METHOD_SERVICE);
+    
+    // Runs getWindow().getDecorView().
+    jmethodID MethodGetWindow = lJNIEnv->GetMethodID(ClassNativeActivity, "getWindow", "()Landroid/view/Window;");
+    jobject lWindow = lJNIEnv->CallObjectMethod(lNativeActivity, MethodGetWindow);
+    jclass ClassWindow = lJNIEnv->FindClass("android/view/Window");
+    jmethodID MethodGetDecorView = lJNIEnv->GetMethodID(ClassWindow, "getDecorView", "()Landroid/view/View;");
+    jobject lDecorView = lJNIEnv->CallObjectMethod(lWindow, MethodGetDecorView);
+    if (pShow)
+    {
+        // Runs lInputMethodManager.showSoftInput(...).
+        jmethodID MethodShowSoftInput = lJNIEnv->GetMethodID( ClassInputMethodManager, "showSoftInput", "(Landroid/view/View;I)Z");
+        jboolean lResult = lJNIEnv->CallBooleanMethod(lInputMethodManager, MethodShowSoftInput, lDecorView, lFlags); 
+    } 
+    else 
+    { 
+        // Runs lWindow.getViewToken() 
+        jclass ClassView = lJNIEnv->FindClass("android/view/View");
+        jmethodID MethodGetWindowToken = lJNIEnv->GetMethodID(ClassView, "getWindowToken", "()Landroid/os/IBinder;");
+        jobject lBinder = lJNIEnv->CallObjectMethod(lDecorView, MethodGetWindowToken); 
+        
+        // lInputMethodManager.hideSoftInput(...). 
+        jmethodID MethodHideSoftInput = lJNIEnv->GetMethodID(ClassInputMethodManager, "hideSoftInputFromWindow", "(Landroid/os/IBinder;I)Z"); 
+        jboolean lRes = lJNIEnv->CallBooleanMethod( lInputMethodManager, MethodHideSoftInput, lBinder, lFlags); 
+    }
+    
+    // Finished with the JVM.
+    lJavaVM->DetachCurrentThread(); 
+}
 
 // Gets the Keyboard::Key enumeration constant that corresponds to the given Android key code.
 extern Keyboard::Key getKey(int keycode, int metastate)
@@ -286,7 +356,7 @@ Platform* Platform::create(Game* game)
         EGL_NONE
     };
 
-	const EGLint eglSurfaceAttrs[] =
+    const EGLint eglSurfaceAttrs[] =
     {
         EGL_RENDER_BUFFER,    EGL_BACK_BUFFER,
         EGL_NONE
@@ -344,7 +414,7 @@ Platform* Platform::create(Game* game)
 
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_WIDTH, &__width);
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_HEIGHT, &__height);
-	
+    
     WARN_VARG("Platform::create - WIDTH: %d HEIGHT = %d" , __width, __height);
     
     // Set vsync.
@@ -356,8 +426,8 @@ Platform* Platform::create(Game* game)
     if (strstr(__glExtensions, "GL_OES_vertex_array_object") || strstr(__glExtensions, "GL_ARB_vertex_array_object"))
     {
         WARN("Platform::create - VAOs supported");
-		
-		// Disable VAO extension for now.
+        
+        // Disable VAO extension for now.
         glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
         glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArrays");
         glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
@@ -389,49 +459,49 @@ long timespec2millis(struct timespec *a)
 int Platform::enterMessagePump()
 {
     static int state = 0;
-	
-	switch (state)
-	{
-		case 0:
-			// Get the initial time.
-			clock_gettime(CLOCK_REALTIME, &__timespec);
-			__timeStart = timespec2millis(&__timespec);
-			__timeAbsolute = 0L;
-			WARN_VARG("Platform::enterMessagePump() - WIDTH: %d HEIGHT = %d" , __width, __height);
-			_game->run(__width, __height);
-			
-			state = 1;
-			break;
-		case 1:
-			// Idle time (no events left to process) is spent rendering.
-			// We skip rendering when the app is paused.
-			if (_game->getState() != Game::PAUSED)
-			{
-				_game->frame();
+    
+    switch (state)
+    {
+        case 0:
+            // Get the initial time.
+            clock_gettime(CLOCK_REALTIME, &__timespec);
+            __timeStart = timespec2millis(&__timespec);
+            __timeAbsolute = 0L;
+            WARN_VARG("Platform::enterMessagePump() - WIDTH: %d HEIGHT = %d" , __width, __height);
+            _game->run(__width, __height);
+            
+            state = 1;
+            break;
+        case 1:
+            // Idle time (no events left to process) is spent rendering.
+            // We skip rendering when the app is paused.
+            if (_game->getState() != Game::PAUSED)
+            {
+                _game->frame();
 
-				// Post the new frame to the display.
-				// Note that there are a couple cases where eglSwapBuffers could fail
-				// with an error code that requires a certain level of re-initialization:
-				//
-				// 1) EGL_BAD_NATIVE_WINDOW - Called when the surface we're currently using
-				//    is invalidated. This would require us to destroy our EGL surface,
-				//    close our OpenKODE window, and start again.
-				//
-				// 2) EGL_CONTEXT_LOST - Power management event that led to our EGL context
-				//    being lost. Requires us to re-create and re-initalize our EGL context
-				//    and all OpenGL ES state.
-				//
-				// For now, if we get these, we'll simply exit.
-				int rc = eglSwapBuffers(__eglDisplay, __eglSurface);
-				if (rc != EGL_TRUE)
-				{
-					perror("eglSwapBuffers");
-					_game->exit();
-					break;
-				}
-			}
-			break;
-	}
+                // Post the new frame to the display.
+                // Note that there are a couple cases where eglSwapBuffers could fail
+                // with an error code that requires a certain level of re-initialization:
+                //
+                // 1) EGL_BAD_NATIVE_WINDOW - Called when the surface we're currently using
+                //    is invalidated. This would require us to destroy our EGL surface,
+                //    close our OpenKODE window, and start again.
+                //
+                // 2) EGL_CONTEXT_LOST - Power management event that led to our EGL context
+                //    being lost. Requires us to re-create and re-initalize our EGL context
+                //    and all OpenGL ES state.
+                //
+                // For now, if we get these, we'll simply exit.
+                int rc = eglSwapBuffers(__eglDisplay, __eglSurface);
+                if (rc != EGL_TRUE)
+                {
+                    perror("eglSwapBuffers");
+                    _game->exit();
+                    break;
+                }
+            }
+            break;
+    }
     
     return 0;
 }
@@ -479,24 +549,32 @@ bool Platform::isMultiTouch()
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     double tx, ty, tz;
-	ASensorEvent event;
-	
-	// By default, android accelerometer values are oriented to the portrait mode.
-	// flipping the x and y to get the desired landscape mode values.
-	tx = -__sensorEvent.acceleration.y;
-	ty = __sensorEvent.acceleration.x;
-	tz = -__sensorEvent.acceleration.z;
-	
-	if (pitch != NULL)
-		*pitch = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
-	if (roll != NULL)
-		*roll = atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;
+    ASensorEvent event;
+    
+    // By default, android accelerometer values are oriented to the portrait mode.
+    // flipping the x and y to get the desired landscape mode values.
+    tx = -__sensorEvent.acceleration.y;
+    ty = __sensorEvent.acceleration.x;
+    tz = -__sensorEvent.acceleration.z;
+    
+    if (pitch != NULL)
+        *pitch = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
+    if (roll != NULL)
+        *roll = atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;
 }
 
 void Platform::swapBuffers()
 {
     if (__eglDisplay && __eglSurface)
         eglSwapBuffers(__eglDisplay, __eglSurface);
+}
+
+void Platform::displayKeyboard(bool display)
+{
+    if (display)
+        __displayKeyboard = true;
+    else
+        __displayKeyboard = false;
 }
 
 }

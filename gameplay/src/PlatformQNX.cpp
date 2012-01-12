@@ -13,6 +13,7 @@
 #include <bps/navigator.h>
 #include <bps/accelerometer.h>
 #include <bps/orientation.h>
+#include <bps/virtualkeyboard.h>
 
 #define TOUCH_COUNT_MAX     4
 
@@ -877,6 +878,14 @@ void Platform::swapBuffers()
 {
     if (__eglDisplay && __eglSurface)
         eglSwapBuffers(__eglDisplay, __eglSurface);
+}
+
+void Platform::displayKeyboard(bool display)
+{
+    if (display)
+        virtualkeyboard_show();
+    else
+        virtualkeyboard_hide();
 }
 
 }
