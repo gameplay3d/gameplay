@@ -8,7 +8,7 @@ namespace gameplay
 {
 
 AnimationTarget::AnimationTarget()
-    : _targetType(SCALAR), _highestPriority(NULL), _animationChannels(NULL)
+    : _targetType(SCALAR), _bitFlag(0x00), _animationChannels(NULL)
 {
 }
 
