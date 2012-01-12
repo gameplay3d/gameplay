@@ -184,7 +184,14 @@ public:
      * Menu callback on menu events.
      */
     virtual void menu();
-
+    
+    /**
+     * Shows or hides the virtual keyboard (if supported).
+     *
+     * @param display true when virtual keyboard needs to be displayed; false otherwise.
+     */
+     inline void displayKeyboard(bool display);
+     
     /**
      * Keyboard callback on keyPress events.
      *
