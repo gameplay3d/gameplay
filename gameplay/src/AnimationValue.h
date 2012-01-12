@@ -72,11 +72,10 @@ private:
      */
     ~AnimationValue();
 
-    bool _isFirstActing;            // Flag indicating if this value's channel is the first to act on the target.
     unsigned int _componentCount;   // The number of float values for the property.
     unsigned int _componentSize;    // The number of bytes of memory the property is.
-    float* _currentValue;           // The current value of the property.
-    float* _interpolatedValue;      // The last interpolated value of the property.
+    float* _value;                  // The current value of the property.
+
 };
 
 }
