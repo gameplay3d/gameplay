@@ -662,9 +662,9 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
             if (blendWeight != 1.0f)
                 scale *= blendWeight;
 
-            animateScaleX(scale);
-            animateScaleY(scale);
-            animateScaleZ(scale);
+            applyAnimationValueScaleX(scale);
+            applyAnimationValueScaleY(scale);
+            applyAnimationValueScaleZ(scale);
             
             break;
         }   
@@ -680,9 +680,9 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
                 sz *= blendWeight;
             }
 
-            animateScaleX(sx);
-            animateScaleY(sy);
-            animateScaleZ(sz);
+            applyAnimationValueScaleX(sx);
+            applyAnimationValueScaleY(sy);
+            applyAnimationValueScaleZ(sz);
 
             break;
         }
@@ -693,7 +693,7 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
             if (blendWeight != 1.0f)
                 sx *= blendWeight;
 
-            animateScaleX(sx);
+            applyAnimationValueScaleX(sx);
 
             break;
         }
@@ -704,7 +704,7 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
             if (blendWeight != 1.0f)
                 sy *= blendWeight;
 
-            animateScaleY(sy);
+            applyAnimationValueScaleY(sy);
 
             break;
         }
@@ -715,7 +715,7 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
             if (blendWeight != 1.0f)
                 sz *= blendWeight;
 
-            animateScaleZ(sz);
+            applyAnimationValueScaleZ(sz);
 
             break;
         }
@@ -726,7 +726,7 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
             if (blendWeight != 1.0f)
                 Quaternion::slerp(Quaternion::identity(), q, blendWeight, &q);
 
-            animateRotate(&q);
+            applyAnimationValueRotation(&q);
             
             break;
         }
@@ -743,9 +743,9 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
                 tz *= blendWeight;
             }
 
-            animateTranslateX(tx);
-            animateTranslateY(ty);
-            animateTranslateZ(tz);
+            applyAnimationValueTranslationX(tx);
+            applyAnimationValueTranslationY(ty);
+            applyAnimationValueTranslationZ(tz);
             
             break;
         }
@@ -756,7 +756,7 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
             if (blendWeight != 1.0f)
                 tx *= blendWeight;
 
-            animateTranslateX(tx);
+            applyAnimationValueTranslationX(tx);
 
             break;
         }
@@ -767,7 +767,7 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
             if (blendWeight != 1.0f)
                 ty *= blendWeight;
             
-            animateTranslateY(ty);
+            applyAnimationValueTranslationY(ty);
 
             break;
         }
@@ -778,7 +778,7 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
             if (blendWeight != 1.0f)
                 tz *= blendWeight;
 
-            animateTranslateZ(tz);
+            applyAnimationValueTranslationZ(tz);
 
             break;
         }
@@ -797,10 +797,10 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
                 tz *= blendWeight;
             }
 
-            animateRotate(&q);
-            animateTranslateX(tx);
-            animateTranslateY(ty);
-            animateTranslateZ(tz);
+            applyAnimationValueRotation(&q);
+            applyAnimationValueTranslationX(tx);
+            applyAnimationValueTranslationY(ty);
+            applyAnimationValueTranslationZ(tz);
             
             break;
         }
@@ -825,13 +825,13 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
                 tz *= blendWeight;
             }
 
-            animateScaleX(sx);
-            animateScaleY(sy);
-            animateScaleZ(sz);
-            animateRotate(&q);
-            animateTranslateX(tx);
-            animateTranslateY(ty);
-            animateTranslateZ(tz);
+            applyAnimationValueScaleX(sx);
+            applyAnimationValueScaleY(sy);
+            applyAnimationValueScaleZ(sz);
+            applyAnimationValueRotation(&q);
+            applyAnimationValueTranslationX(tx);
+            applyAnimationValueTranslationY(ty);
+            applyAnimationValueTranslationZ(tz);
             
             break;
         }
@@ -884,12 +884,11 @@ void Transform::transformChanged()
     }
 }
 
-
-void Transform::animateScaleX(float sx)
+void Transform::applyAnimationValueScaleX(float sx)
 {
-    if ((_bitFlag & SCALE_X_BIT) != SCALE_X_BIT)
+    if ((_animationPropertyBitFlag & ANIMATION_SCALE_X_BIT) != ANIMATION_SCALE_X_BIT)
     {
-        _bitFlag |= SCALE_X_BIT;
+        _animationPropertyBitFlag |= ANIMATION_SCALE_X_BIT;
         setScaleX(sx);
     }
     else
@@ -899,11 +898,11 @@ void Transform::animateScaleX(float sx)
     }
 }
 
-void Transform::animateScaleY(float sy)
+void Transform::applyAnimationValueScaleY(float sy)
 {
-    if ((_bitFlag & SCALE_Y_BIT) != SCALE_Y_BIT)
+    if ((_animationPropertyBitFlag & ANIMATION_SCALE_Y_BIT) != ANIMATION_SCALE_Y_BIT)
     {
-        _bitFlag |= SCALE_Y_BIT;
+        _animationPropertyBitFlag |= ANIMATION_SCALE_Y_BIT;
         setScaleY(sy);
     }
     else
@@ -913,11 +912,11 @@ void Transform::animateScaleY(float sy)
     }
 }
 
-void Transform::animateScaleZ(float sz)
+void Transform::applyAnimationValueScaleZ(float sz)
 {
-    if ((_bitFlag & SCALE_Z_BIT) != SCALE_Z_BIT)
+    if ((_animationPropertyBitFlag & ANIMATION_SCALE_Z_BIT) != ANIMATION_SCALE_Z_BIT)
     {
-        _bitFlag |= SCALE_Z_BIT;
+        _animationPropertyBitFlag |= ANIMATION_SCALE_Z_BIT;
         setScaleZ(sz);
     }
     else
@@ -927,11 +926,11 @@ void Transform::animateScaleZ(float sz)
     }
 }
 
-void Transform::animateRotate(Quaternion* q)
+void Transform::applyAnimationValueRotation(Quaternion* q)
 {
-    if ((_bitFlag & ROTATE_BIT) != ROTATE_BIT)
+    if ((_animationPropertyBitFlag & ANIMATION_ROTATION_BIT) != ANIMATION_ROTATION_BIT)
     {
-        _bitFlag |= ROTATE_BIT;
+        _animationPropertyBitFlag |= ANIMATION_ROTATION_BIT;
         setRotation(*q);
     }
     else
@@ -940,11 +939,11 @@ void Transform::animateRotate(Quaternion* q)
     }
 }
 
-void Transform::animateTranslateX(float tx)
+void Transform::applyAnimationValueTranslationX(float tx)
 {
-    if ((_bitFlag & TRANSLATE_X_BIT) != TRANSLATE_X_BIT)
+    if ((_animationPropertyBitFlag & ANIMATION_TRANSLATION_X_BIT) != ANIMATION_TRANSLATION_X_BIT)
     {
-        _bitFlag |= TRANSLATE_X_BIT;
+        _animationPropertyBitFlag |= ANIMATION_TRANSLATION_X_BIT;
         setTranslationX(tx);
     }
     else
@@ -953,11 +952,11 @@ void Transform::animateTranslateX(float tx)
     }
 }
 
-void Transform::animateTranslateY(float ty)
+void Transform::applyAnimationValueTranslationY(float ty)
 {
-    if ((_bitFlag & TRANSLATE_Y_BIT) != TRANSLATE_Y_BIT)
+    if ((_animationPropertyBitFlag & ANIMATION_TRANSLATION_Y_BIT) != ANIMATION_TRANSLATION_Y_BIT)
     {
-        _bitFlag |= TRANSLATE_Y_BIT;
+        _animationPropertyBitFlag |= ANIMATION_TRANSLATION_Y_BIT;
         setTranslationY(ty);
     }
     else
@@ -966,11 +965,11 @@ void Transform::animateTranslateY(float ty)
     }
 }
 
-void Transform::animateTranslateZ(float tz)
+void Transform::applyAnimationValueTranslationZ(float tz)
 {
-    if ((_bitFlag & TRANSLATE_Z_BIT) != TRANSLATE_Z_BIT)
+    if ((_animationPropertyBitFlag & ANIMATION_TRANSLATION_Z_BIT) != ANIMATION_TRANSLATION_Z_BIT)
     {
-        _bitFlag |= TRANSLATE_Z_BIT;
+        _animationPropertyBitFlag |= ANIMATION_TRANSLATION_Z_BIT;
         setTranslationZ(tz);
     }
     else
@@ -978,7 +977,4 @@ void Transform::animateTranslateZ(float tz)
         translateZ(tz);
     }
 }
-
-
-
 }

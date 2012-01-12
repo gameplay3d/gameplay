@@ -746,23 +746,21 @@ protected:
     std::list<TransformListener>* _listeners;
 
 private:
-    static const char SCALE_X_BIT = 0x01; 
-    static const char SCALE_Y_BIT = 0x02; 
-    static const char SCALE_Z_BIT = 0x04; 
-    static const char ROTATE_BIT = 0x08;  
-    static const char TRANSLATE_X_BIT = 0x10; 
-    static const char TRANSLATE_Y_BIT = 0x20; 
-    static const char TRANSLATE_Z_BIT = 0x40; 
+    static const char ANIMATION_SCALE_X_BIT = 0x01; 
+    static const char ANIMATION_SCALE_Y_BIT = 0x02; 
+    static const char ANIMATION_SCALE_Z_BIT = 0x04; 
+    static const char ANIMATION_ROTATION_BIT = 0x08;  
+    static const char ANIMATION_TRANSLATION_X_BIT = 0x10; 
+    static const char ANIMATION_TRANSLATION_Y_BIT = 0x20; 
+    static const char ANIMATION_TRANSLATION_Z_BIT = 0x40; 
 
-    void animateScaleX(float sx);
-    void animateScaleY(float sy);
-    void animateScaleZ(float sz);
-    void animateRotate(Quaternion* q);
-    void animateTranslateX(float tx);
-    void animateTranslateY(float ty);
-    void animateTranslateZ(float tz);
-
-
+    void applyAnimationValueScaleX(float sx);
+    void applyAnimationValueScaleY(float sy);
+    void applyAnimationValueScaleZ(float sz);
+    void applyAnimationValueRotation(Quaternion* q);
+    void applyAnimationValueTranslationX(float tx);
+    void applyAnimationValueTranslationY(float ty);
+    void applyAnimationValueTranslationZ(float tz);
 };
 
 }

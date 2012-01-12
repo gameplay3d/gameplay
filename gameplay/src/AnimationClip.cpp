@@ -295,10 +295,10 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
         target = channel->_target;
         value = _values[i];
 
-        // If the target's _bitFlag is clear, we can assume that this is the first
+        // If the target's _animationPropertyBitFlag is clear, we can assume that this is the first
         // animation channel to act on the target and we can add the target to the list of
         // active targets stored by the AnimationController.
-        if (target->_bitFlag == 0x00)
+        if (target->_animationPropertyBitFlag == 0x00)
             activeTargets->push_front(target);
 
         // Evaluate the point on Curve
