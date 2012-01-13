@@ -1109,19 +1109,12 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
 }
 
 void Curve::interpolateQuaternion(float s, float* from, float* to, float* dst) const
-{
-    Quaternion quatFrom(from);
-    Quaternion quatTo(to);
-
-    // Normalize the quaternions.
-    quatFrom.normalize();
-    quatTo.normalize();
-        
+{        
     // Evaluate.
     if (s >= 0)
-        Quaternion::slerp(quatFrom, quatTo, s, (Quaternion*)dst);
+        Quaternion::slerp(from[0], from[1], from[2], from[3], to[0], to[1], to[2], to[3], s, dst, dst + 1, dst + 2, dst + 3);
     else
-        Quaternion::slerp(quatTo, quatFrom, -s, (Quaternion*)dst);
+        Quaternion::slerp(to[0], to[1], to[2], to[3], from[0], from[1], from[2], from[3], s, dst, dst + 1, dst + 2, dst + 3);
 }
 
 int Curve::determineIndex(float time) const

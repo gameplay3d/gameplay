@@ -205,7 +205,8 @@ private:
     void destroyAllAnimations();
     
     State _state;                               // The current state of the AnimationController.
-    std::list<AnimationClip*> _runningClips;    // A list of currently running AnimationClips.
+    std::list<AnimationClip*> _runningClips;    // A list of running AnimationClips.
+    std::list<AnimationTarget*> _activeTargets;   // A list of animating AnimationTargets.
     std::vector<Animation*> _animations;        // A list of animations registered with the AnimationController
 };
 
