@@ -374,7 +374,7 @@ void AudioSource::setGain(float gain)
 #else
     if (_playerVolume)
     {
-        SLmillibel volume = gain * (_maxVolume - SL_MILLIBEL_MIN) + SL_MILLIBEL_MIN;
+        SLmillibel volume = (gain < MATH_EPSILON) ? SL_MILLIBEL_MIN : (10.0f * log10(gain)) * 100;
         SLresult result = (*_playerVolume)->SetVolumeLevel(_playerVolume, volume);
         if (result != SL_RESULT_SUCCESS)
         {
