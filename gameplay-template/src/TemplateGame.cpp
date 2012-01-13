@@ -62,11 +62,11 @@ void TemplateGame::touch(int x, int y, int touchEvent)
 {
     switch (touchEvent)
     {
-    case Input::TOUCHEVENT_PRESS:
+    case Touch::TOUCH_PRESS:
         break;
-    case Input::TOUCHEVENT_RELEASE:
+    case Touch::TOUCH_RELEASE:
         break;
-    case Input::TOUCHEVENT_MOVE:
+    case Touch::TOUCH_MOVE:
         break;
     };
 }
