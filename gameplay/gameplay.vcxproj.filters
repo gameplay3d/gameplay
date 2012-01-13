@@ -70,6 +70,8 @@
     <ClCompile Include="src\VertexAttributeBinding.cpp" />
     <ClCompile Include="src\VertexFormat.cpp" />
     <ClCompile Include="src\Viewport.cpp" />
+    <ClCompile Include="src\gameplay-main-android.cpp" />
+    <ClCompile Include="src\PlatformAndroid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h" />

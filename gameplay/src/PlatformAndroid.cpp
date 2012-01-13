@@ -403,8 +403,6 @@ Platform* Platform::create(Game* game)
         checkErrorEGL("eglCreateWindowSurface");
         goto error;
     }
-
-    LOGI("Platform::create - 3");
     
     if (eglMakeCurrent(__eglDisplay, __eglSurface, __eglSurface, __eglContext) != EGL_TRUE)
     {
@@ -415,8 +413,6 @@ Platform* Platform::create(Game* game)
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_WIDTH, &__width);
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_HEIGHT, &__height);
     
-    WARN_VARG("Platform::create - WIDTH: %d HEIGHT = %d" , __width, __height);
-    
     // Set vsync.
     eglSwapInterval(__eglDisplay, WINDOW_VSYNC ? 1 : 0);
 
@@ -425,8 +421,6 @@ Platform* Platform::create(Game* game)
 
     if (strstr(__glExtensions, "GL_OES_vertex_array_object") || strstr(__glExtensions, "GL_ARB_vertex_array_object"))
     {
-        WARN("Platform::create - VAOs supported");
-        
         // Disable VAO extension for now.
         glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
         glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArrays");
@@ -467,7 +461,6 @@ int Platform::enterMessagePump()
             clock_gettime(CLOCK_REALTIME, &__timespec);
             __timeStart = timespec2millis(&__timespec);
             __timeAbsolute = 0L;
-            WARN_VARG("Platform::enterMessagePump() - WIDTH: %d HEIGHT = %d" , __width, __height);
             _game->run(__width, __height);
             
             state = 1;
