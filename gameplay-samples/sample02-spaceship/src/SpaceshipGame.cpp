@@ -94,12 +94,11 @@ void SpaceshipGame::initialize()
     initializeSpaceship();
     initializeEnvironment();
 
-    /*
     // Create a background audio track
     _backgroundSound = AudioSource::create("res/background.ogg");
     if (_backgroundSound)
         _backgroundSound->setLooped(true);
-    */
+    
     // Create font
     _font = Font::create("res/airstrip28.gpb");
 
@@ -147,15 +146,13 @@ void SpaceshipGame::initializeSpaceship()
     _glowDiffuseParameter = material->getParameter("u_diffuseColor");
     initializeMaterial(material, false, false);
 
-    /*
     // Setup the sound
     _spaceshipSound = AudioSource::create("res/spaceship.wav");
     if (_spaceshipSound)
     {
-        _spaceshipSound->setGain(0.5f);
+        //_spaceshipSound->setGain(0.5f);
         _spaceshipSound->setLooped(true);
     }
-    */
 }
 
 void SpaceshipGame::initializeEnvironment()
@@ -225,8 +222,8 @@ void SpaceshipGame::initializeMaterial(Material* material, bool lighting, bool s
 
 void SpaceshipGame::finalize()
 {
-    //SAFE_RELEASE(_backgroundSound);
-    //SAFE_RELEASE(_spaceshipSound);
+    SAFE_RELEASE(_backgroundSound);
+    SAFE_RELEASE(_spaceshipSound);
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_stateBlock);
     SAFE_RELEASE(_scene);
@@ -240,19 +237,16 @@ void SpaceshipGame::update(long elapsedTime)
     if (!_finished)
     {
         _time += t;
-    /*
+
         // Play the background track
         if (_backgroundSound->getState() != AudioSource::PLAYING)
             _backgroundSound->play();
-    */
     }
     else
     {
-    /*
         // Stop the background track
         if (_backgroundSound->getState() != AudioSource::STOPPED)
             _backgroundSound->stop();
-    */
     }
 
     // Set initial force due to gravity
@@ -342,21 +336,17 @@ void SpaceshipGame::update(long elapsedTime)
         // Apply ship spin
         _shipNode->rotateY(MATH_DEG_TO_RAD(SHIP_ROTATE_SPEED_MAX * t * _throttle));
 
-        /*
         // Play sound effect
         if (_spaceshipSound->getState() != AudioSource::PLAYING)
             _spaceshipSound->play();
         
         // Set the pitch based on the throttle
         _spaceshipSound->setPitch(_throttle * SOUND_PITCH_SCALE);
-        */
     }
     else
     {
-        /*
         // Stop sound effect
         _spaceshipSound->stop();
-        */
     }
 
     // Modify ship glow effect based on the throttle

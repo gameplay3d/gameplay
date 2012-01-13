@@ -16,8 +16,6 @@
 SAMPLE_PATH := $(call my-dir)/../../src
 LIBPNG_PATH := $(call my-dir)/../../../../external-deps/libpng/lib/android/arm
 ZLIB_PATH := $(call my-dir)/../../../../external-deps/zlib/lib/android/arm
-OPENAL_PATH := $(call my-dir)/../../../../external-deps/openal/lib/android/arm
-OGGVORBIS_PATH := $(call my-dir)/../../../../external-deps/oggvorbis/lib/android/arm
 BULLET_PATH := $(call my-dir)/../../../../external-deps/bullet/lib/android/arm
 
 # gameplay
@@ -41,34 +39,6 @@ LOCAL_MODULE    := libzlib
 LOCAL_SRC_FILES := libzlib.a
 include $(PREBUILT_STATIC_LIBRARY)
 
-# libopenal
-LOCAL_PATH := $(OPENAL_PATH)
-include $(CLEAR_VARS)
-LOCAL_MODULE    := libopenal 
-LOCAL_SRC_FILES := libopenal.a
-include $(PREBUILT_STATIC_LIBRARY)
-
-# libogg
-LOCAL_PATH := $(OGGVORBIS_PATH)
-include $(CLEAR_VARS)
-LOCAL_MODULE    := libogg
-LOCAL_SRC_FILES := libogg.a
-include $(PREBUILT_STATIC_LIBRARY)
-
-# libvorbis
-LOCAL_PATH := $(OGGVORBIS_PATH)
-include $(CLEAR_VARS)
-LOCAL_MODULE    := libvorbis
-LOCAL_SRC_FILES := libvorbis.a
-include $(PREBUILT_STATIC_LIBRARY)
-
-# libvorbisfile
-LOCAL_PATH := $(OGGVORBIS_PATH)
-include $(CLEAR_VARS)
-LOCAL_MODULE    := libvorbisfile 
-LOCAL_SRC_FILES := libvorbisfile.a
-include $(PREBUILT_STATIC_LIBRARY)
-
 # libbullet
 LOCAL_PATH := $(BULLET_PATH)
 include $(CLEAR_VARS)
@@ -83,10 +53,10 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := sample03-character
 LOCAL_SRC_FILES := ../android/jni/main.cpp CharacterGame.cpp
 
-LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 
-LOCAL_CFLAGS    := -D__ANDROID__ -I"../../../external-deps/bullet/include" -I"../../../external-deps/openal/include" -I"../../../external-deps/libpng/include" -I"../../../external-deps/oggvorbis/include" -I"../../../gameplay/src"
+LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
+LOCAL_CFLAGS    := -D__ANDROID__ -I"../../../external-deps/bullet/include" -I"../../../external-deps/libpng/include" -I"../../../gameplay/src"
 
-LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay libpng libzlib libbullet libvorbisfile libvorbis libogg libopenal
+LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay libpng libzlib libbullet
 
 include $(BUILD_SHARED_LIBRARY)
 $(call import-module,android/native_app_glue)

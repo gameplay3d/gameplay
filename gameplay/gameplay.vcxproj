@@ -36,6 +36,7 @@
     <ClCompile Include="src\FrameBuffer.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\gameplay-main-android.cpp" />
     <ClCompile Include="src\gameplay-main-qnx.cpp" />
     <ClCompile Include="src\gameplay-main-win32.cpp" />
     <ClCompile Include="src\Image.cpp" />
@@ -63,6 +64,7 @@
     <ClCompile Include="src\PhysicsSocketConstraint.cpp" />
     <ClCompile Include="src\PhysicsSpringConstraint.cpp" />
     <ClCompile Include="src\Plane.cpp" />
+    <ClCompile Include="src\PlatformAndroid.cpp" />
     <ClCompile Include="src\PlatformQNX.cpp" />
     <ClCompile Include="src\PlatformWin32.cpp" />
     <ClCompile Include="src\Properties.cpp" />

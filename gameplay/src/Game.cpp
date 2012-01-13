@@ -90,10 +90,8 @@ bool Game::startup()
     _animationController = new AnimationController();
     _animationController->initialize();
 
-    #if 0
     _audioController = new AudioController();
     _audioController->initialize();
-    #endif
 
     _physicsController = new PhysicsController();
     _physicsController->initialize();
@@ -113,10 +111,8 @@ void Game::shutdown()
         _animationController->finalize();
         SAFE_DELETE(_animationController);
 
-        #if 0
         _audioController->finalize();
         SAFE_DELETE(_audioController);
-        #endif
 
         _physicsController->finalize();
         SAFE_DELETE(_physicsController);
@@ -134,9 +130,7 @@ void Game::pause()
         _state = PAUSED;
         _pausedTimeLast = Platform::getAbsoluteTime();
         _animationController->pause();
-        #if 0
         _audioController->pause();
-        #endif
         _physicsController->pause();
     }
 }
@@ -148,9 +142,7 @@ void Game::resume()
         _state = RUNNING;
         _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
         _animationController->resume();
-        #if 0
         _audioController->resume();
-        #endif
         _physicsController->resume();
     }
 }
@@ -190,9 +182,7 @@ void Game::frame()
     update(elapsedTime);
 
     // Audio Rendering.
-    #if 0
     _audioController->update(elapsedTime);
-    #endif
     // Graphics Rendering.
     render(elapsedTime);
 
