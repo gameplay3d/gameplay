@@ -250,4 +250,13 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 {
 }
 
+bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y)
+{
+    return false;
+}
+
+void Game::mouseWheelEvent(int x, int y, int delta)
+{
+}
+
 }
