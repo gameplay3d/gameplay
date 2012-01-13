@@ -331,7 +331,7 @@ void SpaceshipGame::update(long elapsedTime)
     }
     _shipGroupNode->rotateZ(MATH_DEG_TO_RAD(_shipTilt));
 
-    if (_throttle > 0.0f)
+    if (_throttle > MATH_EPSILON)
     {
         // Apply ship spin
         _shipNode->rotateY(MATH_DEG_TO_RAD(SHIP_ROTATE_SPEED_MAX * t * _throttle));
