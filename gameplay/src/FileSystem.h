@@ -34,6 +34,16 @@ public:
     static const char* getResourcePath();
 
     /**
+     * Lists the files in the specified directory and adds the files to the vector. Excludes directories.
+     * 
+     * @param dirPath Directory path relative to the path set in <code>setResourcePath(const char*)</code>.
+     * @param files The vector to append the files to.
+     * 
+     * @return True if successful, false if error.
+     */
+    static bool listFiles(const char* dirPath, std::vector<std::string>& files);
+
+    /**
      * Opens the specified file.
      *
      * The file at the specified location is opened, relative to the currently set

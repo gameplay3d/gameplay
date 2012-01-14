@@ -19,6 +19,10 @@ Quaternion::Quaternion(float* array)
     set(array);
 }
 
+Quaternion::Quaternion(const Vector3& axis, float angle)
+{
+    set(axis, angle);
+}
 
 Quaternion::Quaternion(const Quaternion& copy)
 {
@@ -31,14 +35,14 @@ Quaternion::~Quaternion()
 
 const Quaternion& Quaternion::identity()
 {
-    static Quaternion* value = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
-    return *value;
+    static Quaternion value(0.0f, 0.0f, 0.0f, 1.0f);
+    return value;
 }
 
 const Quaternion& Quaternion::zero()
 {
-    static Quaternion* value = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
-    return *value;
+    static Quaternion value(0.0f, 0.0f, 0.0f, 0.0f);
+    return value;
 }
 
 bool Quaternion::isIdentity() const
@@ -49,13 +53,6 @@ bool Quaternion::isIdentity() const
 bool Quaternion::isZero() const
 {
     return x == 0.0f && y == 0.0f && z == 0.0f && z == 0.0f;
-}
-
-void Quaternion::createFromRotationMatrix(const Matrix& m, Quaternion* dst)
-{
-    assert(dst);
-
-    m.decompose(NULL, dst, NULL);
 }
 
 void Quaternion::createFromAxisAngle(const Vector3& axis, float angle, Quaternion* dst)
@@ -154,12 +151,12 @@ void Quaternion::normalize(Quaternion* dst) const
 
     float n = x * x + y * y + z * z + w * w;
 
-    // already normalized
+    // Already normalized.
     if (n == 1.0f)
         return;
 
     n = sqrt(n);
-    // too close to zero
+    // Too close to zero.
     if (n < 0.000001f)
         return;
 
@@ -186,6 +183,11 @@ void Quaternion::set(float* array)
     y = array[1];
     z = array[2];
     w = array[3];
+}
+
+void Quaternion::set(const Vector3& axis, float angle)
+{
+    Quaternion::createFromAxisAngle(axis, angle, this);
 }
 
 void Quaternion::set(const Quaternion& q)
@@ -223,6 +225,17 @@ void Quaternion::lerp(const Quaternion& q1, const Quaternion& q2, float t, Quate
     assert(dst);
     assert(!(t < 0.0f || t > 1.0f));
 
+    if (t == 0.0f)
+    {
+        memcpy(dst, &q1, sizeof(float) * 4);
+        return;
+    }
+    else if (t == 1.0f)
+    {
+        memcpy(dst, &q2, sizeof(float) * 4);
+        return;
+    }
+
     float t1 = 1.0f - t;
 
     dst->x = t1 * q1.x + t * q2.x;
@@ -233,12 +246,56 @@ void Quaternion::lerp(const Quaternion& q1, const Quaternion& q2, float t, Quate
 
 void Quaternion::slerp(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)
 {
+    slerp(q1.x, q1.y, q1.z, q1.w, q2.x, q2.y, q2.z, q2.w, t, &dst->x, &dst->y, &dst->z, &dst->w);
+}
+
+void Quaternion::squad(const Quaternion& q1, const Quaternion& q2, const Quaternion& s1, const Quaternion& s2, float t, Quaternion* dst)
+{
+    assert(dst);
+    assert(!(t < 0.0f || t > 1.0f));
+
+    Quaternion dstQ(0.0f, 0.0f, 0.0f, 1.0f);
+    Quaternion dstS(0.0f, 0.0f, 0.0f, 1.0f);
+
+    slerpForSquad(q1, q2, t, &dstQ);
+    slerpForSquad(s1, s2, t, &dstS);
+    slerpForSquad(dstQ, dstS, 2.0f * t * (1.0f - t), dst);
+}
+
+void Quaternion::slerp(float q1x, float q1y, float q1z, float q1w, float q2x, float q2y, float q2z, float q2w, float t, float* dstx, float* dsty, float* dstz, float* dstw)
+{
     // Fast slerp implementation by kwhatmough:
     // It contains no division operations, no trig, no inverse trig
     // and no sqrt. Not only does this code tolerate small constraint
     // errors in the input quaternions, it actually corrects for them.
-    assert(dst);
+    assert(dstx && dsty && dstz && dstw);
     assert(!(t < 0.0f || t > 1.0f));
+
+    if (t == 0.0f)
+    {
+        *dstx = q1x;
+        *dsty = q1y;
+        *dstz = q1z;
+        *dstw = q1w;
+        return;
+    }
+    else if (t == 1.0f)
+    {
+        *dstx = q2x;
+        *dsty = q2y;
+        *dstz = q2z;
+        *dstw = q2w;
+        return;
+    }
+
+    if (q1x == q2x && q1y == q2y && q1z == q2z && q1w == q2w)
+    {
+        *dstx = q1x;
+        *dsty = q1y;
+        *dstz = q1z;
+        *dstw = q1w;
+        return;
+    }
 
     float halfY, alpha, beta;
     float u, f1, f2a, f2b;
@@ -246,7 +303,7 @@ void Quaternion::slerp(const Quaternion& q1, const Quaternion& q2, float t, Quat
     float halfSecHalfTheta, versHalfTheta;
     float sqNotU, sqU;
 
-    float cosTheta = q1.w * q2.w + q1.x * q2.x + q1.y * q2.y + q1.z * q2.z;
+    float cosTheta = q1w * q2w + q1x * q2x + q1y * q2y + q1z * q2z;
 
     // As usual in all slerp implementations, we fold theta.
     alpha = cosTheta >= 0 ? 1.0f : -1.0f;
@@ -287,34 +344,21 @@ void Quaternion::slerp(const Quaternion& q1, const Quaternion& q2, float t, Quat
     beta = f1 + f2b;
 
     // Apply final coefficients to a and b as usual.
-    float w = alpha * q1.w + beta * q2.w;
-    float x = alpha * q1.x + beta * q2.x;
-    float y = alpha * q1.y + beta * q2.y;
-    float z = alpha * q1.z + beta * q2.z;
+    float w = alpha * q1w + beta * q2w;
+    float x = alpha * q1x + beta * q2x;
+    float y = alpha * q1y + beta * q2y;
+    float z = alpha * q1z + beta * q2z;
 
     // This final adjustment to the quaternion's length corrects for
-    // any small constraint error in the inputs q1 and q2. But as you
+    // any small constraint error in the inputs q1 and q2 But as you
     // can see, it comes at the cost of 9 additional multiplication
     // operations. If this error-correcting feature is not required,
     // the following code may be removed.
     f1 = 1.5f - 0.5f * (w * w + x * x + y * y + z * z);
-    dst->w = w * f1;
-    dst->x = x * f1;
-    dst->y = y * f1;
-    dst->z = z * f1;
-}
-
-void Quaternion::squad(const Quaternion& q1, const Quaternion& q2, const Quaternion& s1, const Quaternion& s2, float t, Quaternion* dst)
-{
-    assert(dst);
-    assert(!(t < 0.0f || t > 1.0f));
-
-    Quaternion dstQ(0.0f, 0.0f, 0.0f, 1.0f);
-    Quaternion dstS(0.0f, 0.0f, 0.0f, 1.0f);
-
-    slerpForSquad(q1, q2, t, &dstQ);
-    slerpForSquad(s1, s2, t, &dstS);
-    slerpForSquad(dstQ, dstS, 2.0f * t * (1.0f - t), dst);
+    *dstw = w * f1;
+    *dstx = x * f1;
+    *dsty = y * f1;
+    *dstz = z * f1;
 }
 
 void Quaternion::slerpForSquad(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)
