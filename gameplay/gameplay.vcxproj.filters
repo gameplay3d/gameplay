@@ -434,6 +434,9 @@
     <ClInclude Include="src\MeshBatch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Mouse.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\bumped-specular.vsh">

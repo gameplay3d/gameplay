@@ -304,7 +304,7 @@ unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyI
                     return 0;
                 case FLOAT:
                 case INT:
-                    return 1;
+                    return _count;
                 case VECTOR2:
                     return 2 * _count;
                 case VECTOR3:
@@ -329,10 +329,30 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
             switch (_type)
             {
                 case FLOAT:
-                    value->setFloat(0, _value.floatValue);
+                    if (_count == 1)
+                    {
+                        value->setFloat(0, _value.floatValue);
+                    }
+                    else
+                    {
+                        for (unsigned int i = 0; i < _count; i++)
+                        {
+                            value->setFloat(i, _value.floatPtrValue[i]);
+                        }
+                    }
                     break;
                 case INT:
-                    value->setFloat(0, _value.intValue);
+                    if (_count == 1)
+                    {
+                        value->setFloat(0, _value.intValue);
+                    }
+                    else
+                    {
+                        for (unsigned int i = 0; i < _count; i++)
+                        {
+                            value->setFloat(i, _value.intPtrValue[i]);
+                        }
+                    }
                     break;
                 case VECTOR2:
                     for (unsigned int i = 0; i < _count; i++)
@@ -359,8 +379,12 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
     }
 }
 
-void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue* value)
+void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight)
 {
+    assert(blendWeight >= 0.0f && blendWeight <= 1.0f);
+    if (blendWeight == 0.0f)
+        return;
+
     switch (propertyId)
     {
         case ANIMATE_UNIFORM:
@@ -368,32 +392,135 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
             switch (_type)
             {
                 case FLOAT:
-                    _value.floatValue = value->getFloat(0);
+                {
+                    if (_count == 1)
+                    {
+                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
+                        {
+                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
+
+                            if (blendWeight != 1.0f)
+                                _value.floatValue = value->getFloat(0) * blendWeight;
+                            else
+                                _value.floatValue = value->getFloat(0);
+                        }
+                        else
+                        {
+                            if (blendWeight != 1.0f)
+                                _value.floatValue += value->getFloat(0) * blendWeight;
+                            else
+                                _value.floatValue += value->getFloat(0);
+                        }
+                    }
+                    else
+                    {
+                        applyAnimationValue(value, blendWeight, 1);
+                    }                    
                     break;
+                }
                 case INT:
-                    _value.intValue = value->getFloat(0);
+                {
+                    if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
+                    {
+                        _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
+
+                        if (_count == 1)
+                        {
+                            if (blendWeight != 1.0f)
+                                _value.intValue = value->getFloat(0) * blendWeight;
+                            else
+                                _value.intValue = value->getFloat(0);
+                        }
+                        else
+                        {
+                            if (blendWeight != 1.0f)
+                            {
+                                for (unsigned int i = 0; i < _count; i++)
+                                    _value.intPtrValue[i] = value->getFloat(i) * blendWeight;
+                            }
+                            else
+                            {
+                                for (unsigned int i = 0; i < _count; i++)
+                                    _value.intPtrValue[i] = value->getFloat(i);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (_count == 1)
+                        {
+                            if (blendWeight != 1.0f)
+                                _value.intValue += value->getFloat(0) * blendWeight;
+                            else
+                                _value.intValue += value->getFloat(0);
+                        }
+                        else
+                        {
+                            if (blendWeight != 1.0f)
+                            {
+                                for (unsigned int i = 0; i < _count; i++)
+                                    _value.intPtrValue[i] += value->getFloat(i) * blendWeight;
+                            }
+                            else
+                            {
+                                for (unsigned int i = 0; i < _count; i++)
+                                    _value.intPtrValue[i] += value->getFloat(i);
+                            }
+                        }
+                    }
                     break;
+                }
                 case VECTOR2:
-                    for (unsigned int i = 0; i < _count; i++)
-                    {
-                        value->getFloat(_value.floatPtrValue, i * 2, 2);
-                    }
+                {
+                    applyAnimationValue(value, blendWeight, 2);
                     break;
+                }
                 case VECTOR3:
-                    for (unsigned int i = 0; i < _count; i++)
-                    {
-                        value->getFloat(_value.floatPtrValue, i * 3, 3);
-                    }
+                {
+                    applyAnimationValue(value, blendWeight, 3);
                     break;
+                }
                 case VECTOR4:
-                    for (unsigned int i = 0; i < _count; i++)
-                    {
-                        value->getFloat(_value.floatPtrValue, i * 4, 4);
-                    }
+                {
+                    applyAnimationValue(value, blendWeight, 4);
                     break;
+                }
 
                 // UNSUPPORTED: NONE, MATRIX, METHOD, SAMPLER 
             }
+        }
+    }
+}
+
+void MaterialParameter::applyAnimationValue(AnimationValue* value, float blendWeight, int components)
+{
+    unsigned int count = _count * components;
+    if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
+    {
+        _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
+
+        if (blendWeight != 1.0f)
+        {
+            for (unsigned int i = 0; i < count; i++)
+                _value.floatPtrValue[i] = value->getFloat(i) * blendWeight;
+        }
+        else
+        {
+            for (unsigned int i = 0; i < count; i++)
+                _value.floatPtrValue[i] = value->getFloat(i);
+        }
+    }
+    else
+    {
+        if (blendWeight != 1.0f)
+        {
+            for (unsigned int i = 0; i < count; i++)
+                _value.floatPtrValue[i] += (value->getFloat(i) * blendWeight);
+        }
+        else
+        {
+            for (unsigned int i = 0; i < count; i++)
+                _value.floatPtrValue[i] += value->getFloat(i);
         }
     }
 }
