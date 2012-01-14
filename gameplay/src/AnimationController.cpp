@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 AnimationController::AnimationController()
-    : _state(IDLE), _animations(NULL)
+    : _state(STOPPED), _animations(NULL)
 {
 }
 
@@ -66,6 +66,7 @@ Animation* AnimationController::createAnimationFromTo(const char* id, AnimationT
 
     Animation* animation = createAnimation(id, target, propertyId, 2, keyTimes, keyValues, type);
 
+    SAFE_DELETE_ARRAY(keyValues);
     SAFE_DELETE_ARRAY(keyTimes);
     
     return animation;
@@ -85,6 +86,7 @@ Animation* AnimationController::createAnimationFromBy(const char* id, AnimationT
 
     Animation* animation = createAnimation(id, target, propertyId, 2, keyTimes, keyValues, type);
 
+    SAFE_DELETE_ARRAY(keyValues);
     SAFE_DELETE_ARRAY(keyTimes);
 
     return animation;
@@ -112,6 +114,7 @@ void AnimationController::stopAllAnimations()
         clip->_isPlaying = false;
         clip->onEnd();
         SAFE_RELEASE(clip);
+        clipIter++;
     }
     _runningClips.clear();
 
@@ -269,7 +272,7 @@ void AnimationController::initialize()
 void AnimationController::finalize()
 {
     stopAllAnimations();
-    _state = PAUSED;
+    _state = STOPPED;
 }
 
 void AnimationController::resume()
@@ -330,11 +333,12 @@ void AnimationController::update(long elapsedTime)
     if (_state != RUNNING)
         return;
 
+    // Loop through running clips and call update() on them.
     std::list<AnimationClip*>::iterator clipIter = _runningClips.begin();
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = (*clipIter);
-        if (clip->update(elapsedTime))
+        if (clip->update(elapsedTime, &_activeTargets))
         {
             SAFE_RELEASE(clip);
             clipIter = _runningClips.erase(clipIter);
@@ -344,6 +348,16 @@ void AnimationController::update(long elapsedTime)
             clipIter++;
         }
     }
+
+    // Loop through active AnimationTarget's and reset their _animationPropertyBitFlag for the next frame.
+    std::list<AnimationTarget*>::iterator targetItr = _activeTargets.begin();
+    while (targetItr != _activeTargets.end())
+    {
+        AnimationTarget* target = (*targetItr);
+        target->_animationPropertyBitFlag = 0x00;
+        targetItr++;
+    }
+    _activeTargets.clear();
     
     if (_runningClips.empty())
         _state = IDLE;

@@ -191,6 +191,14 @@ public:
 
 private:
 
+    struct PhysicsCollisionShape : public Ref
+    {
+        PhysicsCollisionShape(btCollisionShape* shape) : _shape(shape) {}
+        ~PhysicsCollisionShape() { SAFE_DELETE(_shape); }
+
+        btCollisionShape* _shape;
+    };
+
     /**
      * Constructor.
      */
@@ -238,6 +246,9 @@ private:
     // Creates a box collision shape to be used in the creation of a rigid body.
     btCollisionShape* createBox(const Vector3& min, const Vector3& max, const btVector3& scale);
 
+    // Creates a capsule collision shape to be used in the creation of a rigid body.
+    btCollisionShape* createCapsule(float radius, float height);
+
     // Creates a sphere collision shape to be used in the creation of a rigid body.
     btCollisionShape* createSphere(float radius, const btVector3& scale);
 
@@ -258,6 +269,12 @@ private:
     {
     public:
 
+        struct DebugVertex
+        {
+            float x, y, z;
+            float r, g, b, a;
+        };
+
         DebugDrawer();        
         ~DebugDrawer();
         
@@ -268,7 +285,7 @@ private:
         void drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor);        
         void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);        
         void drawContactPoint(const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color);        
-        void reportErrorWarning(const char* warningString);        
+        void reportErrorWarning(const char* warningString);
         void draw3dText(const btVector3& location, const char* textString);        
         void setDebugMode(int mode);        
         int	getDebugMode() const;
@@ -276,14 +293,8 @@ private:
     private:
         
         int _mode;
-        Effect* _effect;
-        VertexAttribute _positionAttrib;
-        VertexAttribute _colorAttrib;
-        Uniform* _viewProjectionMatrixUniform;
         const Matrix* _viewProjection;
-        float* _vertexData;
-        unsigned int _vertexCount;
-        unsigned int _vertexDataSize;
+        MeshBatch* _meshBatch;
     };
     
     btDefaultCollisionConfiguration* _collisionConfiguration;
@@ -291,7 +302,7 @@ private:
     btBroadphaseInterface* _overlappingPairCache;
     btSequentialImpulseConstraintSolver* _solver;
     btDynamicsWorld* _world;
-    btAlignedObjectArray<btCollisionShape*> _shapes;
+    std::vector<PhysicsCollisionShape*> _shapes;
     DebugDrawer* _debugDrawer;
     Listener::EventType _status;
     std::vector<Listener*>* _listeners;
