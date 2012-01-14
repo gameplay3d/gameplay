@@ -115,6 +115,7 @@
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\MeshBatch.h" />
+    <ClInclude Include="src\Mouse.h" />
     <ClInclude Include="src\Pass.h" />
     <ClInclude Include="src\MaterialParameter.h" />
     <ClInclude Include="src\Matrix.h" />
