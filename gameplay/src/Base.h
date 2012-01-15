@@ -160,13 +160,39 @@ extern void printError(const char* format, ...);
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
 #elif __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-#define glBindVertexArray glBindVertexArrayAPPLE
-#define glDeleteVertexArrays glDeleteVertexArraysAPPLE
-#define glGenVertexArrays glGenVertexArraysAPPLE
-#define glIsVertexArray glIsVertexArrayAPPLE
+    #include "TargetConditionals.h"
+    // NOTE: Alternative
+    // #ifdef __MAC_OS_X_VERSION_MAX_ALLOWED
+    // ...
+    // #elif TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+    // ...
+    // #endif
+    // NOTE: TARGET_OS_MAC is defined in iOS libs, therefore the 
+    // below order matters, the above does not not
+    // see: http://developer.apple.com/library/mac/#documentation/developertools/conceptual/cross_development/Using/using.html
+
+    #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+        #include <OpenGLES/ES2/gl.h>
+        #include <OpenGLES/ES2/glext.h>
+        #define glBindVertexArray glBindVertexArrayOES
+        #define glDeleteVertexArrays glDeleteVertexArraysOES
+        #define glGenVertexArrays glGenVertexArraysOES
+        #define glIsVertexArray glIsVertexArrayOES
+        #define glClearDepth glClearDepthf
+        #define OPENGL_ES 1
+    #elif TARGET_OS_MAC
+        #include <OpenGL/gl.h>
+        #include <OpenGL/glext.h>
+        #define glBindVertexArray glBindVertexArrayAPPLE
+        #define glDeleteVertexArrays glDeleteVertexArraysAPPLE
+        #define glGenVertexArrays glGenVertexArraysAPPLE
+        #define glIsVertexArray glIsVertexArrayAPPLE
+    #else
+        #error "Unsupported Apple Device"
+    #endif
 #endif
+
+
 
 // Graphics (GLSL)
 #define VERTEX_ATTRIBUTE_POSITION_NAME              "a_position"
