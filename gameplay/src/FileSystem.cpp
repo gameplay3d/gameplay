@@ -7,6 +7,7 @@
     #include <stdio.h>
 #else
     #include <dirent.h>
+    #include <sys/stat.h>
 #endif
 
 namespace gameplay
