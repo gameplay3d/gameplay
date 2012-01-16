@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42458CC014C3ABF800EFFB61 /* sample03-character-ios.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */; };
 		42CCD571146EC4B300353661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD570146EC4B300353661 /* Cocoa.framework */; };
 		42CCD5A2146EC5BF00353661 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A1146EC5BF00353661 /* OpenAL.framework */; };
 		42CCD5A4146EC5C600353661 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A3146EC5C600353661 /* OpenGL.framework */; };
@@ -41,6 +42,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-ios.plist"; sourceTree = "<group>"; };
 		42C932E61491A1AC0098216A /* sample03-character-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-macos.plist"; sourceTree = "<group>"; };
 		42CCD56C146EC4B300353661 /* sample03-character.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD570146EC4B300353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -59,7 +61,6 @@
 		42CD0EFD147D93560000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisenc.a"; sourceTree = "<group>"; };
 		42CD0EFE147D93560000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisfile.a"; sourceTree = "<group>"; };
 		5B43D1DD14C35F4C008A5D9D /* sample03-character.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B43D1E014C35F4D008A5D9D /* sample03-character-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "sample03-character-ios.plist"; path = "/Users/bslack/src/git/GamePlay/gameplay-samples/sample03-character/sample03-character-ios.plist"; sourceTree = "<absolute>"; };
 		5B43D1E314C35F71008A5D9D /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 		5B43D1E614C3603D008A5D9D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5B43D1E814C3604C008A5D9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -129,8 +130,8 @@
 		42CCD561146EC4B300353661 = {
 			isa = PBXGroup;
 			children = (
+				42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */,
 				42C932E61491A1AC0098216A /* sample03-character-macos.plist */,
-				5B43D1E014C35F4D008A5D9D /* sample03-character-ios.plist */,
 				42CCD5B0146EC62A00353661 /* icon.png */,
 				42CCD5B3146EC65F00353661 /* res */,
 				42CCD576146EC4B300353661 /* src */,
@@ -194,9 +195,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		42CCD56B146EC4B300353661 /* sample03-character-macosx */ = {
+		42CCD56B146EC4B300353661 /* sample03-character-macos */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character-macosx" */;
+			buildConfigurationList = 42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character-macos" */;
 			buildPhases = (
 				42CCD568146EC4B300353661 /* Sources */,
 				42CCD569146EC4B300353661 /* Frameworks */,
@@ -207,7 +208,7 @@
 			);
 			dependencies = (
 			);
-			name = "sample03-character-macosx";
+			name = "sample03-character-macos";
 			productName = "sample03-character";
 			productReference = 42CCD56C146EC4B300353661 /* sample03-character.app */;
 			productType = "com.apple.product-type.application";
@@ -250,7 +251,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42CCD56B146EC4B300353661 /* sample03-character-macosx */,
+				42CCD56B146EC4B300353661 /* sample03-character-macos */,
 				5B43D1C614C35F4C008A5D9D /* sample03-character-ios */,
 			);
 		};
@@ -272,6 +273,7 @@
 			files = (
 				5B43D1D814C35F4C008A5D9D /* icon.png in Resources */,
 				5B43D1D914C35F4C008A5D9D /* res in Resources */,
+				42458CC014C3ABF800EFFB61 /* sample03-character-ios.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,7 +503,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character-macosx" */ = {
+		42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				42CCD58B146EC4B300353661 /* Debug */,

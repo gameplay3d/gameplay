@@ -136,14 +136,11 @@ extern void printError(const char* format, ...);
 #endif
 #include <vorbis/vorbisfile.h>
 
-// Screen/Window
-#define WINDOW_WIDTH        1024
-#define WINDOW_HEIGHT       600
-#define WINDOW_VSYNC        1
-#define WINDOW_FULLSCREEN   0
-
 // Image
 #include <png.h>
+
+#define WINDOW_VSYNC        1
+#define WINDOW_FULLSCREEN   0
 
 // Graphics (OpenGL)
 #ifdef __QNX__
@@ -155,22 +152,16 @@ extern void printError(const char* format, ...);
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
     #define glClearDepth glClearDepthf
-   #define OPENGL_ES
+    #define OPENGL_ES
+    #define WINDOW_WIDTH    1024
+    #define WINDOW_HEIGHT   600
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
+    #define WINDOW_WIDTH    1024
+    #define WINDOW_HEIGHT   600
 #elif __APPLE__
     #include "TargetConditionals.h"
-    // NOTE: Alternative
-    // #ifdef __MAC_OS_X_VERSION_MAX_ALLOWED
-    // ...
-    // #elif TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-    // ...
-    // #endif
-    // NOTE: TARGET_OS_MAC is defined in iOS libs, therefore the 
-    // below order matters, the above does not not
-    // see: http://developer.apple.com/library/mac/#documentation/developertools/conceptual/cross_development/Using/using.html
-
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
         #include <OpenGLES/ES2/gl.h>
         #include <OpenGLES/ES2/glext.h>
@@ -179,7 +170,9 @@ extern void printError(const char* format, ...);
         #define glGenVertexArrays glGenVertexArraysOES
         #define glIsVertexArray glIsVertexArrayOES
         #define glClearDepth glClearDepthf
-        #define OPENGL_ES 1
+        #define OPENGL_ES
+        #define WINDOW_WIDTH    480
+        #define WINDOW_HEIGHT   360
     #elif TARGET_OS_MAC
         #include <OpenGL/gl.h>
         #include <OpenGL/glext.h>
@@ -187,6 +180,8 @@ extern void printError(const char* format, ...);
         #define glDeleteVertexArrays glDeleteVertexArraysAPPLE
         #define glGenVertexArrays glGenVertexArraysAPPLE
         #define glIsVertexArray glIsVertexArrayAPPLE
+        #define WINDOW_WIDTH    960
+        #define WINDOW_HEIGHT   640
     #else
         #error "Unsupported Apple Device"
     #endif

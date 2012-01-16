@@ -559,8 +559,8 @@
 		4234D9A314686C52003031B3 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				5B43D19714C35347008A5D9D /* GamePlay */,
-				5B43D19614C35344008A5D9D /* Platform */,
+				5B43D19714C35347008A5D9D /* gameplay */,
+				5B43D19614C35344008A5D9D /* platform */,
 			);
 			name = src;
 			path = gameplay;
@@ -614,23 +614,23 @@
 			name = "Mac OS X";
 			sourceTree = "<group>";
 		};
-		5B43D19614C35344008A5D9D /* Platform */ = {
+		5B43D19614C35344008A5D9D /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				42CD0DE0147D8FF50000361E /* gameplay-main-win32.cpp */,
 				42CD0DDE147D8FF50000361E /* gameplay-main-macos.mm */,
 				5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */,
 				42CD0DDF147D8FF50000361E /* gameplay-main-qnx.cpp */,
-				42CD0DE0147D8FF50000361E /* gameplay-main-win32.cpp */,
 				42CD0E19147D8FF50000361E /* Platform.h */,
-				42CD0E1A147D8FF50000361E /* PlatformMacOS.mm */,
-				42CD0E1B147D8FF50000361E /* PlatformQNX.cpp */,
 				42CD0E1C147D8FF50000361E /* PlatformWin32.cpp */,
+				42CD0E1A147D8FF50000361E /* PlatformMacOS.mm */,
 				5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */,
+				42CD0E1B147D8FF50000361E /* PlatformQNX.cpp */,
 			);
-			name = Platform;
+			name = platform;
 			sourceTree = "<group>";
 		};
-		5B43D19714C35347008A5D9D /* GamePlay */ = {
+		5B43D19714C35347008A5D9D /* gameplay */ = {
 			isa = PBXGroup;
 			children = (
 				42CD0DB1147D8FF50000361E /* Animation.cpp */,
@@ -786,7 +786,7 @@
 				42CD0E44147D8FF50000361E /* Viewport.cpp */,
 				42CD0E45147D8FF50000361E /* Viewport.h */,
 			);
-			name = GamePlay;
+			name = gameplay;
 			sourceTree = "<group>";
 		};
 		5B5ADCE014C22DBE00AC6109 /* iOS */ = {
@@ -971,9 +971,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4234D99914686C52003031B3 /* gameplay-macosx */ = {
+		4234D99914686C52003031B3 /* gameplay-macos */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4234D9AB14686C52003031B3 /* Build configuration list for PBXNativeTarget "gameplay-macosx" */;
+			buildConfigurationList = 4234D9AB14686C52003031B3 /* Build configuration list for PBXNativeTarget "gameplay-macos" */;
 			buildPhases = (
 				4234D99614686C52003031B3 /* Sources */,
 				4234D99714686C52003031B3 /* Frameworks */,
@@ -983,7 +983,7 @@
 			);
 			dependencies = (
 			);
-			name = "gameplay-macosx";
+			name = "gameplay-macos";
 			productName = gameplay;
 			productReference = 4234D99A14686C52003031B3 /* libgameplay.a */;
 			productType = "com.apple.product-type.library.static";
@@ -1025,7 +1025,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4234D99914686C52003031B3 /* gameplay-macosx */,
+				4234D99914686C52003031B3 /* gameplay-macos */,
 				5B04C52B14BFCFE100EB0071 /* gameplay-ios */,
 			);
 		};
@@ -1389,7 +1389,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4234D9AB14686C52003031B3 /* Build configuration list for PBXNativeTarget "gameplay-macosx" */ = {
+		4234D9AB14686C52003031B3 /* Build configuration list for PBXNativeTarget "gameplay-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4234D9A914686C52003031B3 /* Debug */,
