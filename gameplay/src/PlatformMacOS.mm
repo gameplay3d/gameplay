@@ -65,7 +65,6 @@ static View* __view = NULL;
     [[NSApplication sharedApplication] terminate:self];
 }
 
-
 - (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
