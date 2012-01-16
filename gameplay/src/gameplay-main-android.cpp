@@ -134,8 +134,11 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
 /**
  * Main entry point.
  */
-void amain(struct android_app* state)
+void android_main(struct android_app* state)
 {
+	// Make sure glue isn't stripped.
+    app_dummy();
+    
     ANativeActivity* activity = state->activity;
     JNIEnv* env = activity->env;
 

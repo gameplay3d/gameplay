@@ -19,7 +19,7 @@ ZLIB_PATH := $(call my-dir)/../../../../external-deps/zlib/lib/android/arm
 BULLET_PATH := $(call my-dir)/../../../../external-deps/bullet/lib/android/arm
 
 # gameplay
-LOCAL_PATH := $(call my-dir)/../../../../gameplay-android/obj/local/armeabi
+LOCAL_PATH := $(call my-dir)/../../../../gameplay/android/obj/local/armeabi
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libgameplay
 LOCAL_SRC_FILES := libgameplay.a
@@ -51,7 +51,7 @@ LOCAL_PATH := $(SAMPLE_PATH)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := sample00-mesh
-LOCAL_SRC_FILES := ../android/jni/main.cpp MeshGame.cpp
+LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp MeshGame.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
 LOCAL_CFLAGS    := -D__ANDROID__ -I"../../../external-deps/bullet/include" -I"../../../external-deps/libpng/include" -I"../../../gameplay/src"
