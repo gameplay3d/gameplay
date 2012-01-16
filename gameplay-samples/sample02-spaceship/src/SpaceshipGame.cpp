@@ -479,7 +479,7 @@ bool SpaceshipGame::drawScene(Node* node, void* cookie)
         bool isTransparent = (node == _glowNode);
 
         // Skip transparent objects for stage 0
-        if ((!isTransparent && (int)cookie == 0) || (isTransparent && (int)cookie == 1))
+        if ((!isTransparent && (int*)cookie == 0) || (isTransparent && (int*)cookie == (int*)1))
             model->draw();
     }
 
