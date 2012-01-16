@@ -449,6 +449,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_OPENMP_SUPPORT = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -468,6 +469,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC++";
 				PRODUCT_NAME = "sample00-mesh";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -480,6 +482,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_OPENMP_SUPPORT = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -499,6 +502,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC++";
 				PRODUCT_NAME = "sample00-mesh";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
