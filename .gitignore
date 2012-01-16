@@ -125,3 +125,9 @@
 /gameplay-samples/sample03-character/android/obj
 /gameplay-samples/sample03-character/android/NUL
 /gameplay-samples/sample01-longboard/NUL
+
+/gameplay/android/NUL
+/gameplay/android/proguard.cfg
+/gameplay/android/local.properties
+/gameplay/android/project.properties
+/gameplay/android/obj
