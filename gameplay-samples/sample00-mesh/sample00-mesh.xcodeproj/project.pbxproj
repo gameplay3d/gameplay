@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4217006314697FF100A45C02 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4217006214697FF100A45C02 /* Cocoa.framework */; };
 		4220A6E5146B121000CAEB3A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4220A6E4146B121000CAEB3A /* QuartzCore.framework */; };
+		42458CB614C3AB1600EFFB61 /* sample00-mesh-ios.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42458CB514C3AB1600EFFB61 /* sample00-mesh-ios.plist */; };
 		42A3C5DE146C96640091C1E4 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42A3C5DD146C96640091C1E4 /* res */; };
 		42A3C5E4146CB7420091C1E4 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A3C5E3146CB7420091C1E4 /* libpng.a */; };
 		42A3C5E6146CB7690091C1E4 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A3C5E5146CB7690091C1E4 /* libz.dylib */; };
@@ -44,6 +45,7 @@
 		4217005E14697FF100A45C02 /* sample00-mesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample00-mesh.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4217006214697FF100A45C02 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4220A6E4146B121000CAEB3A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		42458CB514C3AB1600EFFB61 /* sample00-mesh-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample00-mesh-ios.plist"; sourceTree = "<group>"; };
 		42A3C5DD146C96640091C1E4 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		42A3C5E3146CB7420091C1E4 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
 		42A3C5E5146CB7690091C1E4 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -59,7 +61,6 @@
 		42F68AA51469CDE100E0E3C4 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		42F68AA61469CDE100E0E3C4 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B04C5E614BFE1A200EB0071 /* sample00-mesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample00-mesh.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B04C5E914BFE1A300EB0071 /* sample00-mesh-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "sample00-mesh-ios.plist"; path = "/Users/bslack/src/git/GamePlay/gameplay-samples/sample00-mesh/sample00-mesh-ios.plist"; sourceTree = "<absolute>"; };
 		5B04C5EA14BFE25C00EB0071 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 		5B04C5ED14BFE48A00EB0071 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5B04C5EF14BFE4AA00EB0071 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -114,9 +115,9 @@
 		4217005314697FF100A45C02 = {
 			isa = PBXGroup;
 			children = (
-				42CCD4B3146D914B00353661 /* icon.png */,
 				42F68AA31469CC3000E0E3C4 /* sample00-mesh-macos.plist */,
-				5B04C5E914BFE1A300EB0071 /* sample00-mesh-ios.plist */,
+				42458CB514C3AB1600EFFB61 /* sample00-mesh-ios.plist */,
+				42CCD4B3146D914B00353661 /* icon.png */,
 				42A3C5DD146C96640091C1E4 /* res */,
 				4217006814697FF100A45C02 /* src */,
 				427D4F46147DC9460076760E /* Libraries */,
@@ -194,9 +195,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4217005D14697FF100A45C02 /* sample00-mesh-MacOSX */ = {
+		4217005D14697FF100A45C02 /* sample00-mesh-macos */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4217007C14697FF200A45C02 /* Build configuration list for PBXNativeTarget "sample00-mesh-MacOSX" */;
+			buildConfigurationList = 4217007C14697FF200A45C02 /* Build configuration list for PBXNativeTarget "sample00-mesh-macos" */;
 			buildPhases = (
 				4217005A14697FF100A45C02 /* Sources */,
 				4217005B14697FF100A45C02 /* Frameworks */,
@@ -207,14 +208,14 @@
 			);
 			dependencies = (
 			);
-			name = "sample00-mesh-MacOSX";
+			name = "sample00-mesh-macos";
 			productName = "sample00-mesh";
 			productReference = 4217005E14697FF100A45C02 /* sample00-mesh.app */;
 			productType = "com.apple.product-type.application";
 		};
-		5B04C5CF14BFE1A200EB0071 /* sample00-mesh-iOS */ = {
+		5B04C5CF14BFE1A200EB0071 /* sample00-mesh-ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5B04C5E314BFE1A200EB0071 /* Build configuration list for PBXNativeTarget "sample00-mesh-iOS" */;
+			buildConfigurationList = 5B04C5E314BFE1A200EB0071 /* Build configuration list for PBXNativeTarget "sample00-mesh-ios" */;
 			buildPhases = (
 				5B04C5D014BFE1A200EB0071 /* Sources */,
 				5B04C5D214BFE1A200EB0071 /* Frameworks */,
@@ -225,7 +226,7 @@
 			);
 			dependencies = (
 			);
-			name = "sample00-mesh-iOS";
+			name = "sample00-mesh-ios";
 			productName = "sample00-mesh";
 			productReference = 5B04C5E614BFE1A200EB0071 /* sample00-mesh.app */;
 			productType = "com.apple.product-type.application";
@@ -250,8 +251,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4217005D14697FF100A45C02 /* sample00-mesh-MacOSX */,
-				5B04C5CF14BFE1A200EB0071 /* sample00-mesh-iOS */,
+				4217005D14697FF100A45C02 /* sample00-mesh-macos */,
+				5B04C5CF14BFE1A200EB0071 /* sample00-mesh-ios */,
 			);
 		};
 /* End PBXProject section */
@@ -272,6 +273,7 @@
 			files = (
 				5B04C5E114BFE1A200EB0071 /* res in Resources */,
 				5B04C5E214BFE1A200EB0071 /* icon.png in Resources */,
+				42458CB614C3AB1600EFFB61 /* sample00-mesh-ios.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -517,7 +519,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4217007C14697FF200A45C02 /* Build configuration list for PBXNativeTarget "sample00-mesh-MacOSX" */ = {
+		4217007C14697FF200A45C02 /* Build configuration list for PBXNativeTarget "sample00-mesh-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4217007D14697FF200A45C02 /* Debug */,
@@ -526,7 +528,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5B04C5E314BFE1A200EB0071 /* Build configuration list for PBXNativeTarget "sample00-mesh-iOS" */ = {
+		5B04C5E314BFE1A200EB0071 /* Build configuration list for PBXNativeTarget "sample00-mesh-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5B04C5E414BFE1A200EB0071 /* Debug */,
