@@ -58,9 +58,9 @@ bool TemplateGame::drawScene(Node* node, void* cookie)
     return true;
 }
 
-void TemplateGame::touch(int x, int y, int touchEvent)
+void TemplateGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    switch (touchEvent)
+    switch (evt)
     {
     case Touch::TOUCH_PRESS:
         break;
