@@ -392,7 +392,8 @@ long getMachTimeInMilliseconds()
     return YES;
 }
 
-- (void)accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration
+
+- (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration
 {
     UIAccelerationValue x, y, z;
     x = acceleration.x;

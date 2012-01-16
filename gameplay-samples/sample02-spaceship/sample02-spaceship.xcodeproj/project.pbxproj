@@ -44,7 +44,7 @@
 /* Begin PBXFileReference section */
 		42458CBA14C3AB4D00EFFB61 /* sample02-spaceship-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample02-spaceship-ios.plist"; sourceTree = "<group>"; };
 		42C932E31491A18F0098216A /* sample02-spaceship-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample02-spaceship-macos.plist"; sourceTree = "<group>"; };
-		42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample02-spaceship-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "sample02-spaceship-macosx.app"; path = "sample02-spaceship-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD51A146EBF3600353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42CCD547146EC0AE00353661 /* SpaceshipGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SpaceshipGame.cpp; path = src/SpaceshipGame.cpp; sourceTree = SOURCE_ROOT; };
 		42CCD548146EC0AE00353661 /* SpaceshipGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpaceshipGame.h; path = src/SpaceshipGame.h; sourceTree = SOURCE_ROOT; };
@@ -437,6 +437,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -457,6 +458,7 @@
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample02-spaceship";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = app;
 			};
@@ -466,6 +468,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -486,6 +489,7 @@
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample02-spaceship";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = app;
 			};
