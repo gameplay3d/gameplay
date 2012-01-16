@@ -174,14 +174,11 @@ extern void printError(const char* format, ...);
 #include <vorbis/vorbisfile.h>
 #endif
 
-// Screen/Window
-#define WINDOW_WIDTH        1024
-#define WINDOW_HEIGHT       600
-#define WINDOW_VSYNC        1
-#define WINDOW_FULLSCREEN   0
-
 // Image
 #include <png.h>
+
+#define WINDOW_VSYNC        1
+#define WINDOW_FULLSCREEN   0
 
 // Graphics (OpenGL)
 #if defined (__QNX__) || defined(__ANDROID__)
@@ -193,18 +190,42 @@ extern void printError(const char* format, ...);
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
     #define glClearDepth glClearDepthf
-   #define OPENGL_ES
+    #define OPENGL_ES
+    #define WINDOW_WIDTH    1024
+    #define WINDOW_HEIGHT   600
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
+    #define WINDOW_WIDTH    1024
+    #define WINDOW_HEIGHT   600
 #elif __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-#define glBindVertexArray glBindVertexArrayAPPLE
-#define glDeleteVertexArrays glDeleteVertexArraysAPPLE
-#define glGenVertexArrays glGenVertexArraysAPPLE
-#define glIsVertexArray glIsVertexArrayAPPLE
+    #include "TargetConditionals.h"
+    #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+        #include <OpenGLES/ES2/gl.h>
+        #include <OpenGLES/ES2/glext.h>
+        #define glBindVertexArray glBindVertexArrayOES
+        #define glDeleteVertexArrays glDeleteVertexArraysOES
+        #define glGenVertexArrays glGenVertexArraysOES
+        #define glIsVertexArray glIsVertexArrayOES
+        #define glClearDepth glClearDepthf
+        #define OPENGL_ES
+        #define WINDOW_WIDTH    480
+        #define WINDOW_HEIGHT   360
+    #elif TARGET_OS_MAC
+        #include <OpenGL/gl.h>
+        #include <OpenGL/glext.h>
+        #define glBindVertexArray glBindVertexArrayAPPLE
+        #define glDeleteVertexArrays glDeleteVertexArraysAPPLE
+        #define glGenVertexArrays glGenVertexArraysAPPLE
+        #define glIsVertexArray glIsVertexArrayAPPLE
+        #define WINDOW_WIDTH    960
+        #define WINDOW_HEIGHT   640
+    #else
+        #error "Unsupported Apple Device"
+    #endif
 #endif
+
+
 
 // Graphics (GLSL)
 #define VERTEX_ATTRIBUTE_POSITION_NAME              "a_position"

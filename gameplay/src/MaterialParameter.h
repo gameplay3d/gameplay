@@ -164,7 +164,7 @@ public:
     /**
      * @see AnimationTarget#setAnimationProperty
      */
-    void setAnimationPropertyValue(int propertyId, AnimationValue* value);
+    void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 private:
 
@@ -252,6 +252,10 @@ private:
         SAMPLER,
         METHOD
     } _type;
+
+    static const char ANIMATION_UNIFORM_BIT = 0x01;
+
+    void applyAnimationValue(AnimationValue* value, float blendWeight, int components);
 
     unsigned int _count;
     bool _dynamic;

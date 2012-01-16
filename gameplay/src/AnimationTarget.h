@@ -45,7 +45,7 @@ public:
      * @param propertyId The ID of the property on the AnimationTarget to set the animation property value on.
      * @param value The container to set the animation property value in.
      */
-    virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value) = 0;
+    virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f) = 0;
 
 protected:
     
@@ -69,6 +69,8 @@ protected:
 
     TargetType _targetType;             // The type of target this is.
 
+    char _animationPropertyBitFlag;     // Bit flag used to indicate which properties on the AnimationTarget are currently animating.
+
 private:
 
     /**
@@ -86,9 +88,8 @@ private:
      */
     static int getPropertyId(TargetType type, const char* propertyIdStr);
 
-    Animation::Channel* _highestPriority;
     std::vector<Animation::Channel*>* _animationChannels;   // Collection of all animation channels that target the AnimationTarget
-
+    
 };
 }
 

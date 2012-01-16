@@ -98,6 +98,7 @@
     <ClInclude Include="src\VertexElement.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\Quaternion.inl" />
     <None Include="src\Vector2.inl" />
     <None Include="src\Vector3.inl" />
     <None Include="src\Vector4.inl" />
