@@ -46,33 +46,38 @@ long getMachTimeInMilliseconds()
     return (long)((mach_absolute_time() * s_timebase_info.numer) / (kOneMillion * s_timebase_info.denom));
 }
 
-@interface GameplayView : UIView 
+
+@interface View : UIView 
 {
     EAGLContext* context;	
-    CADisplayLink *displayLink;
-    
-	GLuint defaultFramebuffer, colorRenderbuffer, depthRenderbuffer;
-    GLint framebufferWidth, framebufferHeight;
-    BOOL useDepthBuffer;
-    
+    CADisplayLink* displayLink;
+	GLuint defaultFramebuffer;
+    GLuint colorRenderbuffer;
+    GLuint depthRenderbuffer;
+    GLint framebufferWidth;
+    GLint framebufferHeight;    
     NSInteger swapInterval;
     BOOL updating;
     Game* _game;
 }
+
 @property (readonly, nonatomic, getter=isUpdating) BOOL updating;
+@property (readonly, nonatomic, getter=getContext) EAGLContext* context;
 
 - (void)startUpdating;
 - (void)stopUpdating;
 - (void)update:(id)sender;
-
 - (void)createFramebuffer;
 - (void)deleteFramebuffer;
 
 @end
 
-@implementation GameplayView
+static View* __view = NULL;
+
+@implementation View
 
 @synthesize updating;
+@synthesize context;
 
 + (Class) layerClass
 {
@@ -81,6 +86,7 @@ long getMachTimeInMilliseconds()
 
 - (id) initWithFrame:(CGRect)frame
 {
+    __view = self;
     if ((self = [super initWithFrame:frame]))
 	{
         // Do a sanity check
@@ -105,8 +111,7 @@ long getMachTimeInMilliseconds()
         layer.opaque = TRUE;
         layer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, 
-                                    kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, 
-                                    nil];
+                                    kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
 		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         if (!context || ![EAGLContext setCurrentContext:context])
 		{
@@ -119,21 +124,20 @@ long getMachTimeInMilliseconds()
         defaultFramebuffer = 0;
         colorRenderbuffer = 0;
         depthRenderbuffer = 0;
-        useDepthBuffer = TRUE;
-        
+        framebufferWidth = 0;
+        framebufferHeight = 0;
 		swapInterval = 1;        
         updating = FALSE;
         
         [self createFramebuffer];
         
-        // GamePlay Setup
         // Set the resource path and initalize the game
         NSString* bundlePath = [[[NSBundle mainBundle] bundlePath] stringByAppendingString:@"/"];
         FileSystem::setResourcePath([bundlePath fileSystemRepresentation]); 
         
         _game = Game::getInstance();
         __timeStart = getMachTimeInMilliseconds();
-        _game->run(framebufferWidth, framebufferHeight);
+        _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);    // TODO: Handle based on current orientation
     }
     return self;
 }
@@ -149,45 +153,39 @@ long getMachTimeInMilliseconds()
     [super dealloc];
 }
 
-// iOS Requires all content go to a rendering buffer
-// then it is swapped into the windows rendering surface
 - (void)createFramebuffer
 {
+    // iOS Requires all content go to a rendering buffer then it is swapped into the windows rendering surface
     assert(defaultFramebuffer == 0);
     //NSLog(@"EAGLView: creating Framebuffer");
     
     // Create the default frame buffer, and render buffer
     glGenFramebuffers(1, &defaultFramebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);    
     glGenRenderbuffers(1, &colorRenderbuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);    
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
     
     // request storage, width, and height of the view that we will render in
     [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &framebufferWidth);
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &framebufferHeight);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
-
-    // Optionally use depth buffer
-    // If desired, create the depth buffer, and request storage for the depth buffer
-    // Then attach to the frame buffer
-    if(useDepthBuffer)
-    {
-        glGenRenderbuffers(1, &depthRenderbuffer);
-        glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, framebufferWidth, framebufferHeight);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
-    }
-
+    
+    glGenRenderbuffers(1, &depthRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, framebufferWidth, framebufferHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
+    
     // Sanity check, ensure that the framebuffer is valid
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         NSLog(@"ERROR: Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
 }
 
-//deleting the framebuffer and all the buffers it contains
 - (void)deleteFramebuffer
 {
-    if (context) {
+    // Deleting the framebuffer and all the buffers it contains
+    if (context) 
+    {
         [EAGLContext setCurrentContext:context];        
         if (defaultFramebuffer) 
         {
@@ -219,7 +217,9 @@ long getMachTimeInMilliseconds()
 		}
 	}
 }
-- (int)swapInterval {
+
+- (int)swapInterval 
+{
     return swapInterval;
 }
 
@@ -251,6 +251,7 @@ long getMachTimeInMilliseconds()
         [EAGLContext setCurrentContext:context];
         if (!defaultFramebuffer)
             [self createFramebuffer];
+        
         glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
         glViewport(0, 0, framebufferWidth, framebufferHeight);
 
@@ -265,46 +266,58 @@ long getMachTimeInMilliseconds()
 - (void) layoutSubviews
 {
     [self deleteFramebuffer];
-	//_game->resize() //(CAEAGLLayer*)self.layer];
 }
 
+- (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event 
+{
+    unsigned int uniqueTouch = 0;
+    for(UITouch *t in touches) 
+    {
+        CGPoint touchLoc = [t locationInView:nil];
+        // TODO: Handle this based on orientation
+        Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.y,  WINDOW_WIDTH - touchLoc.x, uniqueTouch);
+    }
+}
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent *)event 
+{
     unsigned int uniqueTouch = 0;
-    for(UITouch *t in touches) {
+    for(UITouch* t in touches) 
+    {
         CGPoint touchLoc = [t locationInView:nil];
-        Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.x, touchLoc.y, uniqueTouch);
+        // TODO: Handle this based on orientation
+        Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchLoc.y, WINDOW_WIDTH - touchLoc.x, uniqueTouch);
     }
 }
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    unsigned 
-    int uniqueTouch = 0;
-    for(UITouch *t in touches) {
-        CGPoint touchLoc = [t locationInView:nil];
-        Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchLoc.x, touchLoc.y, uniqueTouch);
-    }
-}
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    unsigned int uniqueTouch = 0;
-    for(UITouch *t in touches) {
-        CGPoint touchLoc = [t locationInView:nil];
-        Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchLoc.x, touchLoc.y, uniqueTouch);
-    }
-}
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+
+- (void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event 
+{
     // No equivalent for this in GamePlay -- treat as touch end
     [self touchesEnded:touches withEvent:event];
 }
 
+- (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event 
+{
+    unsigned 
+    int uniqueTouch = 0;
+    for(UITouch* t in touches) 
+    {
+        CGPoint touchLoc = [t locationInView:nil];
+        // TODO: Handle this based on orientation
+        Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchLoc.y,  WINDOW_WIDTH - touchLoc.x, uniqueTouch);
+    }
+}
+
 @end
 
 
-@interface GameplayViewController : UIViewController
+@interface ViewController : UIViewController
 - (void)startUpdating;
 - (void)stopUpdating;
 @end
 
-@implementation GameplayViewController 
+
+@implementation ViewController 
 
 - (id)init 
 {
@@ -313,6 +326,7 @@ long getMachTimeInMilliseconds()
     }
     return self;
 }
+
 - (void)dealloc 
 {
     __rootView = nil;
@@ -328,53 +342,64 @@ long getMachTimeInMilliseconds()
 #pragma mark - View lifecycle
 - (void)loadView
 {
-    self.view = [[[GameplayView alloc] init] autorelease];
-    if(__rootView == nil) {
+    self.view = [[[View alloc] init] autorelease];
+    if(__rootView == nil) 
+    {
         __rootView = self.view;
     }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
-    // Currently support landscape only?
+    // Return YES for supported orientation, currently support landscape only?
     return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
 
-- (void)startUpdating {
-    [(GameplayView*)self.view startUpdating];
+- (void)startUpdating 
+{
+    [(View*)self.view startUpdating];
 }
-- (void)stopUpdating {
-    [(GameplayView*)self.view stopUpdating];
 
+- (void)stopUpdating 
+{
+    [(View*)self.view stopUpdating];
 }
 
 @end
 
 
-@interface AppDelegate : UIApplication <UIApplicationDelegate> 
+@interface AppDelegate : UIApplication <UIApplicationDelegate, UIAccelerometerDelegate>
 {
     UIWindow* window;
-    GameplayViewController* viewController;
+    ViewController* viewController;
 }
 @end
+
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
+    [UIApplication sharedApplication].statusBarHidden = YES;
+    UIAccelerometer*  accelerometer = [UIAccelerometer sharedAccelerometer];
+    accelerometer.updateInterval = 1 / 40.0;    // 40Hz
+    accelerometer.delegate = self;
+    
     window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    viewController = [[GameplayViewController alloc] init];
+    viewController = [[ViewController alloc] init];
     [window setRootViewController:viewController];
     [window makeKeyAndVisible];
-    
-    // Hide the status bar 
-    // Possilibitlies for hiding include:
-    // * UIStatusBarAnimationNone
-    // * UIStatusBarAnimationFade
-    // * UIStatusBarAnimationSlide
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     return YES;
+}
+
+- (void)accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration
+{
+    UIAccelerationValue x, y, z;
+    x = acceleration.x;
+    y = acceleration.y;
+    z = acceleration.z;
+    
+    // Do something with the values.
 }
 
 - (void)applicationWillResignActive:(UIApplication*)application
@@ -415,7 +440,6 @@ long getMachTimeInMilliseconds()
 
 namespace gameplay
 {
-    
     extern void printError(const char* format, ...)
     {
         va_list argptr;
@@ -498,7 +522,8 @@ namespace gameplay
     
     void Platform::swapBuffers()
     {
-        
+        if (__view)
+            [[__view getContext] presentRenderbuffer:GL_RENDERBUFFER];
     }
     
 }
