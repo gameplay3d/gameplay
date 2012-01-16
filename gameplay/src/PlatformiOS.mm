@@ -20,7 +20,9 @@ using namespace gameplay;
 static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
 static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
 
-static UIView *__rootView;
+@class View;
+
+static View* __view = NULL;
 static long __timeStart;
 static long __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
@@ -72,7 +74,6 @@ long getMachTimeInMilliseconds()
 
 @end
 
-static View* __view = NULL;
 
 @implementation View
 
@@ -86,7 +87,6 @@ static View* __view = NULL;
 
 - (id) initWithFrame:(CGRect)frame
 {
-    __view = self;
     if ((self = [super initWithFrame:frame]))
 	{
         // Do a sanity check
@@ -329,7 +329,7 @@ static View* __view = NULL;
 
 - (void)dealloc 
 {
-    __rootView = nil;
+    __view = nil;
     [super dealloc];
 }
 
@@ -343,9 +343,9 @@ static View* __view = NULL;
 - (void)loadView
 {
     self.view = [[[View alloc] init] autorelease];
-    if(__rootView == nil) 
+    if(__view == nil) 
     {
-        __rootView = self.view;
+        __view = self.view;
     }
 }
 
@@ -512,12 +512,12 @@ namespace gameplay
     
     void Platform::setMultiTouch(bool enabled) 
     {
-        __rootView.multipleTouchEnabled = enabled;
+        __view.multipleTouchEnabled = enabled;
     }
     
     bool Platform::isMultiTouch() 
     {
-        return __rootView.multipleTouchEnabled;
+        return __view.multipleTouchEnabled;
     }
     
     void Platform::swapBuffers()
