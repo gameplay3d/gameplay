@@ -306,6 +306,8 @@ int getKey(unichar keyCode);
     for(UITouch *t in touches) 
     {
         CGPoint touchLoc = [t locationInView:self];
+        if(self.multipleTouchEnabled == YES) 
+            uniqueTouch = [t hash];
         Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.y,  touchLoc.x, uniqueTouch);
     }
 }
@@ -316,6 +318,8 @@ int getKey(unichar keyCode);
     for(UITouch* t in touches) 
     {
         CGPoint touchLoc = [t locationInView:self];
+        if(self.multipleTouchEnabled == YES) 
+            uniqueTouch = [t hash];
         Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchLoc.y, touchLoc.x, uniqueTouch);
     }
 }
@@ -333,6 +337,8 @@ int getKey(unichar keyCode);
     for(UITouch* t in touches) 
     {
         CGPoint touchLoc = [t locationInView:self];
+        if(self.multipleTouchEnabled == YES) 
+            uniqueTouch = [t hash];
         Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchLoc.y,  touchLoc.x, uniqueTouch);
     }
 }
