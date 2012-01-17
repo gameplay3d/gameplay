@@ -12,7 +12,8 @@ extern struct android_app* __state;
  */
 void android_main(struct android_app* state)
 {
-    // Make sure glue isn't stripped.
+    // Android specific : Dummy function that needs to be called to 
+    // ensure that the native activity works properly behind the scenes.
     app_dummy();
     
     __state = state;
@@ -24,7 +25,8 @@ void android_main(struct android_app* state)
     Game::getInstance()->exit();
     delete platform;
     
-    // We need to exit the process to cleanup global resources.
+    // Android specific : the process needs to exit to 
+    // to trigger cleanup of global resources (such as game).
     exit(0);
 }
 
