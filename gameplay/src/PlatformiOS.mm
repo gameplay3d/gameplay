@@ -36,6 +36,39 @@ static bool __shiftDown = false;
 long getMachTimeInMilliseconds(); 
 int getKey(unichar keyCode);
 
+@interface UITouch (RotationPointExtension)
+- (CGPoint)locationInViewWithRotation:(UIView *)view;
+@end
+@implementation UITouch (RotationPointExtension)
+- (CGPoint)locationInViewWithRotation:(UIView *)view 
+{
+    CGPoint touchLoc = [self locationInView:view];
+    CGPoint rotatedPoint = touchLoc;
+    if(view == nil) view = self.window; 
+    
+    if([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait) 
+    {
+        rotatedPoint.x = touchLoc.x;
+        rotatedPoint.y = touchLoc.y;
+    } 
+    else if([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) 
+    {
+        rotatedPoint.x = view.frame.size.width - touchLoc.x;
+        rotatedPoint.y = view.frame.size.height - touchLoc.y;
+    } 
+    else if([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft)
+    {
+        rotatedPoint.x = touchLoc.y;
+        rotatedPoint.y = view.frame.size.width - touchLoc.x;
+    } 
+    else if([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight) 
+    {
+        rotatedPoint.x = view.frame.size.height - touchLoc.y;
+        rotatedPoint.y = touchLoc.x;
+    }
+    return rotatedPoint;
+}
+@end
 
 @interface View : UIView <UIKeyInput>
 {
@@ -306,8 +339,7 @@ int getKey(unichar keyCode);
     unsigned int uniqueTouch = 0;
     for(UITouch *t in touches) 
     {
-        CGPoint touchLoc = [t locationInView:nil];
-        // TODO: Handle this based on orientation
+        CGPoint touchLoc = [t locationInViewWithRotation:nil];
         Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.y,  WINDOW_WIDTH - touchLoc.x, uniqueTouch);
     }
 }
@@ -317,8 +349,7 @@ int getKey(unichar keyCode);
     unsigned int uniqueTouch = 0;
     for(UITouch* t in touches) 
     {
-        CGPoint touchLoc = [t locationInView:nil];
-        // TODO: Handle this based on orientation
+        CGPoint touchLoc = [t locationInViewWithRotation:nil];
         Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchLoc.y, WINDOW_WIDTH - touchLoc.x, uniqueTouch);
     }
 }
@@ -335,8 +366,7 @@ int getKey(unichar keyCode);
     int uniqueTouch = 0;
     for(UITouch* t in touches) 
     {
-        CGPoint touchLoc = [t locationInView:nil];
-        // TODO: Handle this based on orientation
+        CGPoint touchLoc = [t locationInViewWithRotation:nil];
         Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchLoc.y,  WINDOW_WIDTH - touchLoc.x, uniqueTouch);
     }
 }
