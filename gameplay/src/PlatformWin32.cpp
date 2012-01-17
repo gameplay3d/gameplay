@@ -610,6 +610,11 @@ void Platform::swapBuffers()
         SwapBuffers(__hdc);
 }
 
+void Platform::displayKeyboard(bool display)
+{
+    // Do nothing.
+}
+
 }
 
 #endif
