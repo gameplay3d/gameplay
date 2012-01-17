@@ -20,18 +20,18 @@ using namespace gameplay;
 static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
 static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
 
+@class AppDelegate;
 @class View;
 
+static AppDelegate *__appDelegate = NULL;
 static View* __view = NULL;
+
 static long __timeStart;
 static long __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static float __pitch;
 static float __roll;
-static bool __hasMouse = false;
-static bool __leftMouseDown = false;
-static bool __rightMouseDown = false;
-static bool __shiftDown = false;
+
 
 long getMachTimeInMilliseconds(); 
 int getKey(unichar keyCode);
@@ -332,8 +332,7 @@ int getKey(unichar keyCode);
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event 
 {
-    unsigned 
-    int uniqueTouch = 0;
+    unsigned int uniqueTouch = 0;
     for(UITouch* t in touches) 
     {
         CGPoint touchLoc = [t locationInView:self];
@@ -415,6 +414,7 @@ int getKey(unichar keyCode);
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
+    __appDelegate = self;
     [UIApplication sharedApplication].statusBarHidden = YES;
     UIAccelerometer*  accelerometer = [UIAccelerometer sharedAccelerometer];
     accelerometer.updateInterval = 1 / 40.0;    // 40Hz
