@@ -3,6 +3,7 @@
 
 #include "Keyboard.h"
 #include "Touch.h"
+#include "Mouse.h"
 #include "AudioController.h"
 #include "AnimationController.h"
 #include "PhysicsController.h"
@@ -207,6 +208,29 @@ public:
      * @see Touch::TouchEvent
      */
     virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    /**
+     * Mouse callback on mouse events. If the game does not consume the mouse move event or left mouse click event
+     * then it is interpreted as a touch event instead.
+     *
+     * @param evt The mouse event that occurred.
+     * @param x The x position of the mouse in pixels. Left edge is zero.
+     * @param y The y position of the mouse in pixels. Top edge is zero.
+     *
+     * @return True if the mouse event is consumed or false if it is not consumed.
+     *
+     * @see Mouse::MouseEvent
+     */
+    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y);
+
+    /**
+     * Mouse callback on mouse wheel events.
+     *
+     * @param x The x position of the mouse in pixels. Left edge is zero.
+     * @param y The y position of the mouse in pixels. Top edge is zero.
+     * @param delta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
+     */
+    virtual void mouseWheelEvent(int x, int y, int delta);
 
     /**
      * Sets muli-touch is to be enabled/disabled. Default is disabled.
