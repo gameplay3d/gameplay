@@ -39,7 +39,7 @@ ASensorEventQueue* __sensorEventQueue;
 ASensorEvent __sensorEvent;
 const ASensor* __accelerometerSensor;
 
-static int __orientationAngle;
+static int __orientationAngle = 90; // Landscape by default.
 static bool __multiTouch = false;
 bool __displayKeyboard = false;
 
@@ -452,9 +452,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
 {
     switch (cmd) 
     {
-        case APP_CMD_SAVE_STATE:
-            // TODO
-            break;
         case APP_CMD_INIT_WINDOW:
             // The window is being shown, get it ready.
             if (app->window != NULL)
@@ -529,10 +526,6 @@ Platform* Platform::create(Game* game)
 {
     Platform* platform = new Platform(game);
     
-    // TODO: Determine initial orientation angle.
-    //orientation_direction_t direction;
-    //orientation_get(&direction, &__orientationAngle);
-
     return platform;
 }
 
