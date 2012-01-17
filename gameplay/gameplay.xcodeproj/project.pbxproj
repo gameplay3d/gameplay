@@ -540,6 +540,7 @@
 		4234D98A14686BB6003031B3 = {
 			isa = PBXGroup;
 			children = (
+				5BE64DE414C4FABD00DD7397 /* iOSTest */,
 				4234D9A314686C52003031B3 /* src */,
 				427D4F42147DC8DE0076760E /* Libraries */,
 				42CCD4AF146D811D00353661 /* Frameworks */,
@@ -809,6 +810,13 @@
 				5B5ADCE214C22DF900AC6109 /* libz.dylib */,
 			);
 			name = "Mac OS X";
+			sourceTree = "<group>";
+		};
+		5BE64DE414C4FABD00DD7397 /* iOSTest */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = iOSTest;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

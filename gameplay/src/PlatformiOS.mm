@@ -345,7 +345,7 @@ long getMachTimeInMilliseconds()
     self.view = [[[View alloc] init] autorelease];
     if(__view == nil) 
     {
-        __view = self.view;
+        __view = (View*)self.view;
     }
 }
 
