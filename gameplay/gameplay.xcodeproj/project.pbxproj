@@ -484,6 +484,9 @@
 		5B04C5F714BFE50B00EB0071 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		5B04C5F914BFE51000EB0071 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		5B04C5FB14BFE51600EB0071 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		5B3383A214C5181E000DC4F8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		5B3383A414C5181E000DC4F8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5B3383A614C5181E000DC4F8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		5B43D17914C3497B008A5D9D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		5B5ADCE214C22DF900AC6109 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = SDKs/MacOSX10.7.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5B5ADCE414C22E1F00AC6109 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
@@ -540,7 +543,6 @@
 		4234D98A14686BB6003031B3 = {
 			isa = PBXGroup;
 			children = (
-				5BE64DE414C4FABD00DD7397 /* iOSTest */,
 				4234D9A314686C52003031B3 /* src */,
 				427D4F42147DC8DE0076760E /* Libraries */,
 				42CCD4AF146D811D00353661 /* Frameworks */,
@@ -587,6 +589,9 @@
 			children = (
 				5B04C5FE14BFE52F00EB0071 /* Mac OS X */,
 				5B04C5FD14BFE52300EB0071 /* iOS */,
+				5B3383A214C5181E000DC4F8 /* UIKit.framework */,
+				5B3383A414C5181E000DC4F8 /* Foundation.framework */,
+				5B3383A614C5181E000DC4F8 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -810,13 +815,6 @@
 				5B5ADCE214C22DF900AC6109 /* libz.dylib */,
 			);
 			name = "Mac OS X";
-			sourceTree = "<group>";
-		};
-		5BE64DE414C4FABD00DD7397 /* iOSTest */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = iOSTest;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
