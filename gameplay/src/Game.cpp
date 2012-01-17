@@ -175,6 +175,7 @@ void Game::frame()
 
     // Update the scheduled and running animations.
     _animationController->update(elapsedTime);
+    
     // Update the physics.
     _physicsController->update(elapsedTime);
     // Application Update.
