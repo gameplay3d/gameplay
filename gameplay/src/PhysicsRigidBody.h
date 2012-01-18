@@ -326,6 +326,23 @@ private:
         float restitution = 0.0, float linearDamping = 0.0, float angularDamping = 0.0);
 
     /**
+     * Creates a capsule rigid body.
+     * 
+     * @param node The node to create the heightfield rigid body for; note that the node must have
+     *      a model attached to it prior to creating a rigid body for it.
+     * @param radius The radius of the capsule.
+     * @param height The height of the cylindrical part of the capsule (not including the ends).
+     * @param mass The mass of the rigid body, in kilograms.
+     * @param friction The friction of the rigid body (non-zero values give best simulation results).
+     * @param restitution The restitution of the rigid body (this controls the bounciness of
+     *      the rigid body; use zero for best simulation results).
+     * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
+     * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
+     */
+    PhysicsRigidBody(Node* node, float radius, float height, float mass, float friction = 0.5,
+        float restitution = 0.0, float linearDamping = 0.0, float angularDamping = 0.0);
+
+    /**
      * Destructor.
      */
     ~PhysicsRigidBody();
