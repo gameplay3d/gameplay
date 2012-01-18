@@ -186,11 +186,13 @@
     <None Include="src\BoundingSphere.inl" />
     <None Include="src\Curve.inl" />
     <None Include="src\Game.inl" />
+    <None Include="src\gameplay-main-ios.mm" />
     <None Include="src\gameplay-main-macos.mm" />
     <None Include="src\Image.inl" />
     <None Include="src\Matrix.inl" />
     <None Include="src\MeshBatch.inl" />
     <None Include="src\Plane.inl" />
+    <None Include="src\PlatformiOS.mm" />
     <None Include="src\PlatformMacOS.mm" />
     <None Include="src\Quaternion.inl" />
     <None Include="src\Ray.inl" />

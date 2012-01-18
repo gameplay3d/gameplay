@@ -32,7 +32,7 @@
   
   <td style="padding-left: 0.5em;">
    <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -120,10 +120,11 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a1bf79dd9d03dfe74826b87bd376e6f38">draw</a> (float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#aae1b18511d335ed10c027627a5cefe04">end</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html">RenderState::StateBlock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#ac683e1a29357346c2aafa73fd86d81f7">getStateBlock</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_effect.html">Effect</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#aaef7584cd97df33e52ca7587747c8a12">getEffect</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a801483dd03d82ebbbc9fbfb47a77bb0d">getMaterial</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a03f381137640f9ad77e73b0c584f0749">setProjectionMatrix</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;matrix)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a2aea8c0131ad9517d635c41695c0f075">create</a> (const char *texturePath, <a class="el" href="classgameplay_1_1_effect.html">Effect</a> *effect=NULL, unsigned int initialCapacity=0)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a044d08767257dda5dd1a36e15338d995">create</a> (<a class="el" href="classgameplay_1_1_texture.html">Texture</a> *texture, <a class="el" href="classgameplay_1_1_effect.html">Effect</a> *effect=NULL, unsigned int initialCapacity=0)</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
@@ -167,6 +168,59 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 <div class="memdoc">
 <p>Begins drawing sprites.</p>
 <p>This method must be called before drawing any sprites and it must eventually be followed by a call to <a class="el" href="classgameplay_1_1_sprite_batch.html#aae1b18511d335ed10c027627a5cefe04">end()</a>. </p>
+
+</div>
+</div>
+<a class="anchor" id="a2aea8c0131ad9517d635c41695c0f075"></a><!-- doxytag: member="gameplay::SpriteBatch::create" ref="a2aea8c0131ad9517d635c41695c0f075" args="(const char *texturePath, Effect *effect=NULL, unsigned int initialCapacity=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> * gameplay::SpriteBatch::create </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>texturePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_effect.html">Effect</a> *&#160;</td>
+          <td class="paramname"><em>effect</em> = <code>NULL</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>initialCapacity</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Creates a new <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> for drawing sprites with the given texture.</p>
+<p>If the effect parameter is NULL, a default effect is used which applies an orthographic projection for the currently bound viewport. A custom projection matrix can be used with the default effect by passing a new projection matrix into the <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> via the setProjectionMatrix method.</p>
+<p>If a custom effect is specified, it must meet the following requirements: </p>
+<ol>
+<li>
+The vertex shader inputs must include a vec3 position, a vec2 tex coord and a vec4 color. </li>
+<li>
+The names of the the vertex shader inputs must match the names defined by the VERTEX_ATTRIBUTE_XXX constants. </li>
+<li>
+The fragment shader must define at least a single sampler/texture uniform. </li>
+</ol>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">texturePath</td><td>The path of the texture for this sprite batch. </td></tr>
+    <tr><td class="paramname">effect</td><td>An optional effect to use with the <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>. </td></tr>
+    <tr><td class="paramname">initialCapacity</td><td>An optional initial capacity of the batch (number of sprites).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>A new <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> for drawing sprites using the given texture. </dd></dl>
 
 </div>
 </div>
@@ -661,12 +715,12 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
 
 </div>
 </div>
-<a class="anchor" id="aaef7584cd97df33e52ca7587747c8a12"></a><!-- doxytag: member="gameplay::SpriteBatch::getEffect" ref="aaef7584cd97df33e52ca7587747c8a12" args="()" -->
+<a class="anchor" id="a801483dd03d82ebbbc9fbfb47a77bb0d"></a><!-- doxytag: member="gameplay::SpriteBatch::getMaterial" ref="a801483dd03d82ebbbc9fbfb47a77bb0d" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_effect.html">Effect</a> * gameplay::SpriteBatch::getEffect </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_material.html">Material</a> * gameplay::SpriteBatch::getMaterial </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -674,8 +728,8 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the effect used by this batch.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The effect. </dd></dl>
+<p>Gets the material used by this batch.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The material. </dd></dl>
 
 </div>
 </div>
@@ -713,7 +767,7 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
 </div>
 <div class="memdoc">
 <p>Sets a custom projection matrix to use with the sprite batch.</p>
-<p>When the default effect is used with a <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> (i.e. when NULL is passed into the 'effect' parameter of <a class="el" href="classgameplay_1_1_sprite_batch.html#a044d08767257dda5dd1a36e15338d995">SpriteBatch::create</a>), this method sets a custom projection matrix to be used instead of the default orthographic projection.</p>
+<p>When the default effect is used with a <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> (i.e. when NULL is passed into the 'effect' parameter of <a class="el" href="classgameplay_1_1_sprite_batch.html#a2aea8c0131ad9517d635c41695c0f075">SpriteBatch::create</a>), this method sets a custom projection matrix to be used instead of the default orthographic projection.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">matrix</td><td>The new projection matrix to be used with the default effect. </td></tr>
@@ -748,7 +802,7 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:06 for GamePlay by
+    <li class="footer">Generated on Wed Jan 18 2012 02:20:20 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

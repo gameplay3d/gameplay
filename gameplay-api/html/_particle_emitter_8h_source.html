@@ -32,7 +32,7 @@
   
   <td style="padding-left: 0.5em;">
    <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -106,240 +106,243 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00008"></a>00008 <span class="preprocessor">#include &quot;Texture.h&quot;</span>
 <a name="l00009"></a>00009 <span class="preprocessor">#include &quot;Rectangle.h&quot;</span>
 <a name="l00010"></a>00010 <span class="preprocessor">#include &quot;SpriteBatch.h&quot;</span>
-<a name="l00011"></a>00011 
-<a name="l00012"></a>00012 <span class="keyword">namespace </span>gameplay
-<a name="l00013"></a>00013 {
-<a name="l00014"></a>00014 
-<a name="l00015"></a>00015 <span class="keyword">class </span>Node;
-<a name="l00016"></a>00016 
-<a name="l00138"></a><a class="code" href="classgameplay_1_1_particle_emitter.html">00138</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_ref.html">Ref</a>
-<a name="l00139"></a>00139 {
-<a name="l00140"></a>00140     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_node.html">Node</a>;
-<a name="l00141"></a>00141 
-<a name="l00142"></a>00142 <span class="keyword">public</span>:
-<a name="l00143"></a>00143 
-<a name="l00144"></a>00144     <span class="keyword">enum</span> TextureBlending
-<a name="l00145"></a>00145     {
-<a name="l00146"></a>00146         BLEND_OPAQUE,
-<a name="l00147"></a>00147         BLEND_TRANSPARENT,
-<a name="l00148"></a>00148         BLEND_ADDITIVE,
-<a name="l00149"></a>00149         BLEND_MULTIPLIED
-<a name="l00150"></a>00150     };
-<a name="l00151"></a>00151 
-<a name="l00159"></a>00159     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* <a class="code" href="classgameplay_1_1_particle_emitter.html#af8ac3412cd63797063f1097edb8aff61">create</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* particleFile);
-<a name="l00160"></a>00160 
-<a name="l00167"></a>00167     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* <a class="code" href="classgameplay_1_1_particle_emitter.html#af8ac3412cd63797063f1097edb8aff61">create</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* texturePath, TextureBlending blending,  <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> particleCountMax);
-<a name="l00168"></a>00168 
-<a name="l00174"></a>00174     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a287f4ce20f23a544846812e2e684a347">setEmissionRate</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> rate);
-<a name="l00175"></a>00175 
-<a name="l00181"></a>00181     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a8987d5135c26dcd3299fb2606f8f8bdd">getEmissionRate</a>() <span class="keyword">const</span>;
-<a name="l00182"></a>00182 
-<a name="l00188"></a>00188     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#ae2c361f40c23e62670341e5455fd3856">start</a>();
-<a name="l00189"></a>00189 
-<a name="l00195"></a>00195     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#aafbbca12525c915b20753a2e7de7c878">stop</a>();
-<a name="l00196"></a>00196 
-<a name="l00202"></a>00202     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a37eccfc13be8b09815eaf5daeabf91c7">isStarted</a>() <span class="keyword">const</span>;
-<a name="l00203"></a>00203 
-<a name="l00215"></a>00215     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#afa630f0ad9c29d089469d18b546eafcc">emit</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> particleCount);
-<a name="l00216"></a>00216 
-<a name="l00222"></a>00222     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a37a003d736bf37f70ab25f911c42649c">getParticlesCount</a>() <span class="keyword">const</span>;
-<a name="l00223"></a>00223 
-<a name="l00239"></a>00239     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a11f3889a0737f3dc92a503f6b4f142e5">setEllipsoid</a>(<span class="keywordtype">bool</span> ellipsoid);
-<a name="l00240"></a>00240 
-<a name="l00246"></a>00246     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#afd6bee509e6176467e0734804bb92516">isEllipsoid</a>() <span class="keyword">const</span>;
-<a name="l00247"></a>00247 
-<a name="l00257"></a>00257     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a0d03c8b15c9509e8577ec31250219e59">setSize</a>(<span class="keywordtype">float</span> startMin, <span class="keywordtype">float</span> startMax, <span class="keywordtype">float</span> endMin, <span class="keywordtype">float</span> endMax);
+<a name="l00011"></a>00011 <span class="preprocessor">#include &quot;Properties.h&quot;</span>
+<a name="l00012"></a>00012 
+<a name="l00013"></a>00013 <span class="keyword">namespace </span>gameplay
+<a name="l00014"></a>00014 {
+<a name="l00015"></a>00015 
+<a name="l00016"></a>00016 <span class="keyword">class </span>Node;
+<a name="l00017"></a>00017 
+<a name="l00139"></a><a class="code" href="classgameplay_1_1_particle_emitter.html">00139</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_ref.html">Ref</a>
+<a name="l00140"></a>00140 {
+<a name="l00141"></a>00141     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_node.html">Node</a>;
+<a name="l00142"></a>00142 
+<a name="l00143"></a>00143 <span class="keyword">public</span>:
+<a name="l00144"></a>00144 
+<a name="l00145"></a>00145     <span class="keyword">enum</span> TextureBlending
+<a name="l00146"></a>00146     {
+<a name="l00147"></a>00147         BLEND_OPAQUE,
+<a name="l00148"></a>00148         BLEND_TRANSPARENT,
+<a name="l00149"></a>00149         BLEND_ADDITIVE,
+<a name="l00150"></a>00150         BLEND_MULTIPLIED
+<a name="l00151"></a>00151     };
+<a name="l00152"></a>00152 
+<a name="l00160"></a>00160     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* <a class="code" href="classgameplay_1_1_particle_emitter.html#af8ac3412cd63797063f1097edb8aff61">create</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* particleFile);
+<a name="l00161"></a>00161 
+<a name="l00169"></a>00169     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* <a class="code" href="classgameplay_1_1_particle_emitter.html#af8ac3412cd63797063f1097edb8aff61">create</a>(<a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties);
+<a name="l00170"></a>00170 
+<a name="l00178"></a>00178     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* <a class="code" href="classgameplay_1_1_particle_emitter.html#af8ac3412cd63797063f1097edb8aff61">create</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* texturePath, TextureBlending textureBlending,  <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> particleCountMax);
+<a name="l00179"></a>00179 
+<a name="l00185"></a>00185     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a287f4ce20f23a544846812e2e684a347">setEmissionRate</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> rate);
+<a name="l00186"></a>00186 
+<a name="l00192"></a>00192     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a8987d5135c26dcd3299fb2606f8f8bdd">getEmissionRate</a>() <span class="keyword">const</span>;
+<a name="l00193"></a>00193 
+<a name="l00199"></a>00199     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#ae2c361f40c23e62670341e5455fd3856">start</a>();
+<a name="l00200"></a>00200 
+<a name="l00206"></a>00206     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#aafbbca12525c915b20753a2e7de7c878">stop</a>();
+<a name="l00207"></a>00207 
+<a name="l00213"></a>00213     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a37eccfc13be8b09815eaf5daeabf91c7">isStarted</a>() <span class="keyword">const</span>;
+<a name="l00214"></a>00214 
+<a name="l00226"></a>00226     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#afa630f0ad9c29d089469d18b546eafcc">emit</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> particleCount);
+<a name="l00227"></a>00227 
+<a name="l00233"></a>00233     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a37a003d736bf37f70ab25f911c42649c">getParticlesCount</a>() <span class="keyword">const</span>;
+<a name="l00234"></a>00234 
+<a name="l00250"></a>00250     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a11f3889a0737f3dc92a503f6b4f142e5">setEllipsoid</a>(<span class="keywordtype">bool</span> ellipsoid);
+<a name="l00251"></a>00251 
+<a name="l00257"></a>00257     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#afd6bee509e6176467e0734804bb92516">isEllipsoid</a>() <span class="keyword">const</span>;
 <a name="l00258"></a>00258 
-<a name="l00264"></a>00264     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a19788cea8f2393b5ea2f7de72810df12">getSizeStartMin</a>() <span class="keyword">const</span>;
-<a name="l00265"></a>00265 
-<a name="l00271"></a>00271     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#ac68410583d6412b36084d7032c62b75b">getSizeStartMax</a>() <span class="keyword">const</span>;
-<a name="l00272"></a>00272 
-<a name="l00278"></a>00278     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a79f046417e5c2fe65786ec55aaa08f85">getSizeEndMin</a>() <span class="keyword">const</span>;
-<a name="l00279"></a>00279 
-<a name="l00285"></a>00285     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#adc9650fe7605a900b892fb6327c847c2">getSizeEndMax</a>() <span class="keyword">const</span>;
-<a name="l00286"></a>00286 
-<a name="l00295"></a>00295     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#ac737b476f60a85fa3f9a12074e6b2685">setColor</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; startVariance, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; end, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; endVariance);
-<a name="l00296"></a>00296     
-<a name="l00302"></a>00302     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#ac97c3aa6ab787959d68472038dbe1a27">getColorStart</a>() <span class="keyword">const</span>;
-<a name="l00303"></a>00303 
-<a name="l00309"></a>00309     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#ac3a31a59b47d7caf1b825ba2aac2c7e7">getColorStartVariance</a>() <span class="keyword">const</span>;
-<a name="l00310"></a>00310 
-<a name="l00316"></a>00316     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a7dca77a07ef97fe627c8d44db38dbc0a">getColorEnd</a>() <span class="keyword">const</span>;
-<a name="l00317"></a>00317 
-<a name="l00323"></a>00323     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#ae6933fcd41046a79d6b17d3218296f0f">getColorEndVariance</a>() <span class="keyword">const</span>;
-<a name="l00324"></a>00324 
-<a name="l00331"></a>00331     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a31e83fd0043df3acfd779ad12f046de3">setEnergy</a>(<span class="keywordtype">long</span> energyMin, <span class="keywordtype">long</span> energyMax);
-<a name="l00332"></a>00332 
-<a name="l00338"></a>00338     <span class="keywordtype">long</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a529f770bad79666c8c30eaf237ea425e">getEnergyMin</a>() <span class="keyword">const</span>;
-<a name="l00339"></a>00339 
-<a name="l00345"></a>00345     <span class="keywordtype">long</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a292c97dfbf5f34806062241fd9465a28">getEnergyMax</a>() <span class="keyword">const</span>;
-<a name="l00346"></a>00346 
-<a name="l00353"></a>00353     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#aa88f70c6cf88e8e55a44fcaf1592e1e4">setPosition</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; position, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; positionVariance);
-<a name="l00354"></a>00354 
-<a name="l00360"></a>00360     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#ab39da8bf1d9f5bec9f98efb0096dd109">getPosition</a>() <span class="keyword">const</span>;
-<a name="l00361"></a>00361 
-<a name="l00367"></a>00367     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a8243c76bc2738a8e8e295561ba3ff44e">getPositionVariance</a>() <span class="keyword">const</span>;
-<a name="l00368"></a>00368 
-<a name="l00375"></a>00375     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a6ef02ca0184224111ec82bdb01eff654">setVelocity</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; velocity, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; velocityVariance);
-<a name="l00376"></a>00376 
-<a name="l00382"></a>00382     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a422bc8ad00cf9188b82144ce5711eadc">getVelocity</a>() <span class="keyword">const</span>;
-<a name="l00383"></a>00383 
-<a name="l00389"></a>00389     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a2b6e4677c77b2cf6bd46f4fc5a577b06">getVelocityVariance</a>() <span class="keyword">const</span>;
-<a name="l00390"></a>00390 
-<a name="l00396"></a>00396     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#aa497aef655119f17427c2f1470e3c13c">getAcceleration</a>() <span class="keyword">const</span>;
-<a name="l00397"></a>00397 
-<a name="l00404"></a>00404     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#aba8a822870089a3651e3c5a354ed83cd">setAcceleration</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; acceleration, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; accelerationVariance);
-<a name="l00405"></a>00405 
-<a name="l00411"></a>00411     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a4ef3d77b80af5371246b75f996b45b9d">getAccelerationVariance</a>() <span class="keyword">const</span>;
-<a name="l00412"></a>00412 
-<a name="l00420"></a>00420     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#ab425e49dd04194dca554d9f6b7f73f14">setRotationPerParticle</a>(<span class="keywordtype">float</span> speedMin, <span class="keywordtype">float</span> speedMax);
-<a name="l00421"></a>00421 
-<a name="l00427"></a>00427     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#aa7bebe50ad62318daa6544cbd43f8482">getRotationPerParticleSpeedMin</a>() <span class="keyword">const</span>;
-<a name="l00428"></a>00428 
-<a name="l00434"></a>00434     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#ab79ad7403e1db4e77d510c64972cbc0a">getRotationPerParticleSpeedMax</a>() <span class="keyword">const</span>;
-<a name="l00435"></a>00435 
-<a name="l00446"></a>00446    <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a76a5979dc7a8aa349bd0f2ac272dd8af">setRotation</a>(<span class="keywordtype">float</span> speedMin, <span class="keywordtype">float</span> speedMax, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axisVariance);
-<a name="l00447"></a>00447 
-<a name="l00453"></a>00453     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a110dad1165857642f37da660412f3217">getRotationSpeedMin</a>() <span class="keyword">const</span>;
-<a name="l00454"></a>00454 
-<a name="l00460"></a>00460     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a0b65fb7a5dd362f51171e83791e211de">getRotationSpeedMax</a>() <span class="keyword">const</span>;
-<a name="l00461"></a>00461 
-<a name="l00467"></a>00467     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a36751f7e9322d0679e156b0fd3b3d3b1">getRotationAxis</a>() <span class="keyword">const</span>;
-<a name="l00468"></a>00468 
-<a name="l00474"></a>00474     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a49c226e796571a19a70ff8f87b3dadee">getRotationAxisVariance</a>() <span class="keyword">const</span>;
-<a name="l00475"></a>00475 
-<a name="l00481"></a>00481     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a0de38b6825804f2ed87dfc7b9e8fb82b">setSpriteAnimated</a>(<span class="keywordtype">bool</span> animated);
-<a name="l00482"></a>00482 
-<a name="l00486"></a>00486     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a2265cf2de9f9e8b9181d18a9c334a87d">isSpriteAnimated</a>() <span class="keyword">const</span>;
-<a name="l00487"></a>00487 
-<a name="l00499"></a>00499     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#adc8207a1d287a66db574816eb234de99">setSpriteLooped</a>(<span class="keywordtype">bool</span> looped);
-<a name="l00500"></a>00500 
-<a name="l00506"></a>00506     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a1e0be548109998a02f62754beb3055b8">isSpriteLooped</a>() <span class="keyword">const</span>;
-<a name="l00507"></a>00507 
-<a name="l00515"></a>00515     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a44bee89bd868e13ff7f47c1a439b5dd5">setSpriteFrameRandomOffset</a>(<span class="keywordtype">int</span> maxOffset);
-<a name="l00516"></a>00516     
-<a name="l00520"></a>00520     <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a808b3b2ec768132149671fce9d9c08a5">getSpriteFrameRandomOffset</a>() <span class="keyword">const</span>;
-<a name="l00521"></a>00521 
-<a name="l00527"></a>00527     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#abda24773f1c51bdb49e1a8c9e611ec07">setSpriteFrameDuration</a>(<span class="keywordtype">long</span> duration);
-<a name="l00528"></a>00528 
-<a name="l00534"></a>00534     <span class="keywordtype">long</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a68707540f5cb26801063e1d0212846d8">getSpriteFrameDuration</a>() <span class="keyword">const</span>;
-<a name="l00535"></a>00535 
-<a name="l00542"></a>00542     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a3ef05e6abc632cf5f104050badd02dcd">setSpriteTexCoords</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> frameCount, <span class="keywordtype">float</span>* texCoords);
-<a name="l00543"></a>00543 
-<a name="l00551"></a>00551     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a62bac95c8068152dc139115cb8424f14">setSpriteFrameCoords</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> frameCount, <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>* frameCoords);
-<a name="l00552"></a>00552 
-<a name="l00564"></a>00564     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a62bac95c8068152dc139115cb8424f14">setSpriteFrameCoords</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> frameCount, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
-<a name="l00565"></a>00565 
-<a name="l00571"></a>00571     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_particle_emitter.html#abff5331cf6f298dcda2b70be6f03c866">getNode</a>() <span class="keyword">const</span>;
-<a name="l00572"></a>00572 
-<a name="l00581"></a>00581     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a33307756955a0e069be33c3116afaa33">setOrbit</a>(<span class="keywordtype">bool</span> orbitPosition, <span class="keywordtype">bool</span> orbitVelocity, <span class="keywordtype">bool</span> orbitAcceleration);
-<a name="l00582"></a>00582 
-<a name="l00588"></a>00588     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a9569f892f7b845211b820980e420aee9">update</a>(<span class="keywordtype">long</span> elapsedTime);
-<a name="l00589"></a>00589 
-<a name="l00593"></a>00593     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#ae683f3d5eba31607f92997dd7692cbb4">draw</a>();
-<a name="l00594"></a>00594 
-<a name="l00595"></a>00595 <span class="keyword">private</span>:
-<a name="l00596"></a>00596 
-<a name="l00600"></a>00600     <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>(<a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* batch, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> particlesCount);
-<a name="l00601"></a>00601 
-<a name="l00605"></a>00605     ~<a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>();
-<a name="l00606"></a>00606 
-<a name="l00610"></a>00610     <span class="keywordtype">void</span> setNode(<a class="code" href="classgameplay_1_1_node.html">Node</a>* node);
-<a name="l00611"></a>00611 
-<a name="l00615"></a>00615     <span class="keywordtype">float</span> generateScalar(<span class="keywordtype">float</span> min, <span class="keywordtype">float</span> max);
-<a name="l00616"></a>00616 
-<a name="l00617"></a>00617     <span class="keywordtype">long</span> generateScalar(<span class="keywordtype">long</span> min, <span class="keywordtype">long</span> max);
-<a name="l00618"></a>00618 
-<a name="l00622"></a>00622     <span class="keywordtype">void</span> generateVectorInRect(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; base, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; variance, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst);
-<a name="l00623"></a>00623 
-<a name="l00627"></a>00627     <span class="keywordtype">void</span> generateVectorInEllipsoid(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; center, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; scale, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst);
-<a name="l00628"></a>00628 
-<a name="l00629"></a>00629     <span class="keywordtype">void</span> generateVector(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; base, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; variance, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst, <span class="keywordtype">bool</span> ellipsoid);
-<a name="l00630"></a>00630 
-<a name="l00634"></a>00634     <span class="keywordtype">void</span> generateColor(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; base, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; variance, <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* dst);
-<a name="l00635"></a>00635 
-<a name="l00639"></a>00639     <span class="keyword">static</span> TextureBlending getTextureBlendingFromString(<span class="keyword">const</span> <span class="keywordtype">char</span>* src);
-<a name="l00640"></a>00640 
-<a name="l00641"></a>00641     <span class="keywordtype">void</span> setTextureBlending(TextureBlending blending);
-<a name="l00642"></a>00642 
-<a name="l00646"></a>00646     <span class="keyword">class </span>Particle
-<a name="l00647"></a>00647     {
-<a name="l00648"></a>00648 
-<a name="l00649"></a>00649     <span class="keyword">public</span>:
-<a name="l00650"></a>00650         <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _position;
-<a name="l00651"></a>00651         <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _velocity;
-<a name="l00652"></a>00652         <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _acceleration;
-<a name="l00653"></a>00653         <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _colorStart;
-<a name="l00654"></a>00654         <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _colorEnd;
-<a name="l00655"></a>00655         <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _color;
-<a name="l00656"></a>00656         <span class="keywordtype">float</span> _rotationPerParticleSpeed;
-<a name="l00657"></a>00657         <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _rotationAxis;
-<a name="l00658"></a>00658         <span class="keywordtype">float</span> _rotationSpeed;
-<a name="l00659"></a>00659         <span class="keywordtype">float</span> _angle;
-<a name="l00660"></a>00660         <span class="keywordtype">long</span> _energyStart;
-<a name="l00661"></a>00661         <span class="keywordtype">long</span> _energy;
-<a name="l00662"></a>00662         <span class="keywordtype">float</span> _sizeStart;
-<a name="l00663"></a>00663         <span class="keywordtype">float</span> _sizeEnd;
-<a name="l00664"></a>00664         <span class="keywordtype">float</span> _size;
-<a name="l00665"></a>00665         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _frame;
-<a name="l00666"></a>00666         <span class="keywordtype">float</span> _timeOnCurrentFrame;
-<a name="l00667"></a>00667     };
-<a name="l00668"></a>00668 
-<a name="l00669"></a>00669     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _particleCountMax;
-<a name="l00670"></a>00670     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _particleCount;
-<a name="l00671"></a>00671     Particle* _particles;
-<a name="l00672"></a>00672     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _emissionRate;
-<a name="l00673"></a>00673     <span class="keywordtype">bool</span> _started;
-<a name="l00674"></a>00674     <span class="keywordtype">bool</span> _ellipsoid;
-<a name="l00675"></a>00675     <span class="keywordtype">float</span> _sizeStartMin;
-<a name="l00676"></a>00676     <span class="keywordtype">float</span> _sizeStartMax;
-<a name="l00677"></a>00677     <span class="keywordtype">float</span> _sizeEndMin;
-<a name="l00678"></a>00678     <span class="keywordtype">float</span> _sizeEndMax;
-<a name="l00679"></a>00679     <span class="keywordtype">float</span> _energyMin;
-<a name="l00680"></a>00680     <span class="keywordtype">float</span> _energyMax;
-<a name="l00681"></a>00681     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _colorStart;
-<a name="l00682"></a>00682     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _colorStartVar;
-<a name="l00683"></a>00683     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _colorEnd;
-<a name="l00684"></a>00684     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _colorEndVar;
-<a name="l00685"></a>00685     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _position;
-<a name="l00686"></a>00686     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _positionVar;
-<a name="l00687"></a>00687     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _velocity;
-<a name="l00688"></a>00688     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _velocityVar;
-<a name="l00689"></a>00689     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _acceleration;
-<a name="l00690"></a>00690     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _accelerationVar;
-<a name="l00691"></a>00691     <span class="keywordtype">float</span> _rotationPerParticleSpeedMin;
-<a name="l00692"></a>00692     <span class="keywordtype">float</span> _rotationPerParticleSpeedMax;
-<a name="l00693"></a>00693     <span class="keywordtype">float</span> _rotationSpeedMin;
-<a name="l00694"></a>00694     <span class="keywordtype">float</span> _rotationSpeedMax;
-<a name="l00695"></a>00695     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _rotationAxis;
-<a name="l00696"></a>00696     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _rotationAxisVar;
-<a name="l00697"></a>00697     <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a> _rotation;
-<a name="l00698"></a>00698     <a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* _spriteBatch;
-<a name="l00699"></a>00699     TextureBlending _spriteTextureBlending;
-<a name="l00700"></a>00700     <span class="keywordtype">float</span> _spriteTextureWidth;
-<a name="l00701"></a>00701     <span class="keywordtype">float</span> _spriteTextureHeight;
-<a name="l00702"></a>00702     <span class="keywordtype">float</span> _spriteTextureWidthRatio;
-<a name="l00703"></a>00703     <span class="keywordtype">float</span> _spriteTextureHeightRatio;
-<a name="l00704"></a>00704     <span class="keywordtype">float</span>* _spriteTextureCoords;
-<a name="l00705"></a>00705     <span class="keywordtype">bool</span> _spriteAnimated;
-<a name="l00706"></a>00706     <span class="keywordtype">bool</span> _spriteLooped;
-<a name="l00707"></a>00707     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _spriteFrameCount;
-<a name="l00708"></a>00708     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _spriteFrameRandomOffset;
-<a name="l00709"></a>00709     <span class="keywordtype">long</span> _spriteFrameDuration;
-<a name="l00710"></a>00710     <span class="keywordtype">float</span> _spriteFrameDurationSecs;
-<a name="l00711"></a>00711     <span class="keywordtype">float</span> _spritePercentPerFrame;
-<a name="l00712"></a>00712     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _node;
-<a name="l00713"></a>00713     <span class="keywordtype">bool</span> _orbitPosition;
-<a name="l00714"></a>00714     <span class="keywordtype">bool</span> _orbitVelocity;
-<a name="l00715"></a>00715     <span class="keywordtype">bool</span> _orbitAcceleration;
-<a name="l00716"></a>00716     <span class="keywordtype">float</span> _timePerEmission;
-<a name="l00717"></a>00717     <span class="keywordtype">long</span> _timeLast;
-<a name="l00718"></a>00718     <span class="keywordtype">long</span> _timeRunning;
-<a name="l00719"></a>00719 };
-<a name="l00720"></a>00720 
-<a name="l00721"></a>00721 }
-<a name="l00722"></a>00722 
-<a name="l00723"></a>00723 <span class="preprocessor">#endif</span>
+<a name="l00268"></a>00268     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a0d03c8b15c9509e8577ec31250219e59">setSize</a>(<span class="keywordtype">float</span> startMin, <span class="keywordtype">float</span> startMax, <span class="keywordtype">float</span> endMin, <span class="keywordtype">float</span> endMax);
+<a name="l00269"></a>00269 
+<a name="l00275"></a>00275     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a19788cea8f2393b5ea2f7de72810df12">getSizeStartMin</a>() <span class="keyword">const</span>;
+<a name="l00276"></a>00276 
+<a name="l00282"></a>00282     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#ac68410583d6412b36084d7032c62b75b">getSizeStartMax</a>() <span class="keyword">const</span>;
+<a name="l00283"></a>00283 
+<a name="l00289"></a>00289     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a79f046417e5c2fe65786ec55aaa08f85">getSizeEndMin</a>() <span class="keyword">const</span>;
+<a name="l00290"></a>00290 
+<a name="l00296"></a>00296     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#adc9650fe7605a900b892fb6327c847c2">getSizeEndMax</a>() <span class="keyword">const</span>;
+<a name="l00297"></a>00297 
+<a name="l00306"></a>00306     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#ac737b476f60a85fa3f9a12074e6b2685">setColor</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; startVariance, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; end, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; endVariance);
+<a name="l00307"></a>00307     
+<a name="l00313"></a>00313     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#ac97c3aa6ab787959d68472038dbe1a27">getColorStart</a>() <span class="keyword">const</span>;
+<a name="l00314"></a>00314 
+<a name="l00320"></a>00320     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#ac3a31a59b47d7caf1b825ba2aac2c7e7">getColorStartVariance</a>() <span class="keyword">const</span>;
+<a name="l00321"></a>00321 
+<a name="l00327"></a>00327     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a7dca77a07ef97fe627c8d44db38dbc0a">getColorEnd</a>() <span class="keyword">const</span>;
+<a name="l00328"></a>00328 
+<a name="l00334"></a>00334     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#ae6933fcd41046a79d6b17d3218296f0f">getColorEndVariance</a>() <span class="keyword">const</span>;
+<a name="l00335"></a>00335 
+<a name="l00342"></a>00342     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a31e83fd0043df3acfd779ad12f046de3">setEnergy</a>(<span class="keywordtype">long</span> energyMin, <span class="keywordtype">long</span> energyMax);
+<a name="l00343"></a>00343 
+<a name="l00349"></a>00349     <span class="keywordtype">long</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a529f770bad79666c8c30eaf237ea425e">getEnergyMin</a>() <span class="keyword">const</span>;
+<a name="l00350"></a>00350 
+<a name="l00356"></a>00356     <span class="keywordtype">long</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a292c97dfbf5f34806062241fd9465a28">getEnergyMax</a>() <span class="keyword">const</span>;
+<a name="l00357"></a>00357 
+<a name="l00364"></a>00364     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#aa88f70c6cf88e8e55a44fcaf1592e1e4">setPosition</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; position, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; positionVariance);
+<a name="l00365"></a>00365 
+<a name="l00371"></a>00371     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#ab39da8bf1d9f5bec9f98efb0096dd109">getPosition</a>() <span class="keyword">const</span>;
+<a name="l00372"></a>00372 
+<a name="l00378"></a>00378     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a8243c76bc2738a8e8e295561ba3ff44e">getPositionVariance</a>() <span class="keyword">const</span>;
+<a name="l00379"></a>00379 
+<a name="l00386"></a>00386     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a6ef02ca0184224111ec82bdb01eff654">setVelocity</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; velocity, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; velocityVariance);
+<a name="l00387"></a>00387 
+<a name="l00393"></a>00393     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a422bc8ad00cf9188b82144ce5711eadc">getVelocity</a>() <span class="keyword">const</span>;
+<a name="l00394"></a>00394 
+<a name="l00400"></a>00400     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a2b6e4677c77b2cf6bd46f4fc5a577b06">getVelocityVariance</a>() <span class="keyword">const</span>;
+<a name="l00401"></a>00401 
+<a name="l00407"></a>00407     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#aa497aef655119f17427c2f1470e3c13c">getAcceleration</a>() <span class="keyword">const</span>;
+<a name="l00408"></a>00408 
+<a name="l00415"></a>00415     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#aba8a822870089a3651e3c5a354ed83cd">setAcceleration</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; acceleration, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; accelerationVariance);
+<a name="l00416"></a>00416 
+<a name="l00422"></a>00422     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a4ef3d77b80af5371246b75f996b45b9d">getAccelerationVariance</a>() <span class="keyword">const</span>;
+<a name="l00423"></a>00423 
+<a name="l00431"></a>00431     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#ab425e49dd04194dca554d9f6b7f73f14">setRotationPerParticle</a>(<span class="keywordtype">float</span> speedMin, <span class="keywordtype">float</span> speedMax);
+<a name="l00432"></a>00432 
+<a name="l00438"></a>00438     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#aa7bebe50ad62318daa6544cbd43f8482">getRotationPerParticleSpeedMin</a>() <span class="keyword">const</span>;
+<a name="l00439"></a>00439 
+<a name="l00445"></a>00445     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#ab79ad7403e1db4e77d510c64972cbc0a">getRotationPerParticleSpeedMax</a>() <span class="keyword">const</span>;
+<a name="l00446"></a>00446 
+<a name="l00457"></a>00457    <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a76a5979dc7a8aa349bd0f2ac272dd8af">setRotation</a>(<span class="keywordtype">float</span> speedMin, <span class="keywordtype">float</span> speedMax, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axis, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; axisVariance);
+<a name="l00458"></a>00458 
+<a name="l00464"></a>00464     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a110dad1165857642f37da660412f3217">getRotationSpeedMin</a>() <span class="keyword">const</span>;
+<a name="l00465"></a>00465 
+<a name="l00471"></a>00471     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a0b65fb7a5dd362f51171e83791e211de">getRotationSpeedMax</a>() <span class="keyword">const</span>;
+<a name="l00472"></a>00472 
+<a name="l00478"></a>00478     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a36751f7e9322d0679e156b0fd3b3d3b1">getRotationAxis</a>() <span class="keyword">const</span>;
+<a name="l00479"></a>00479 
+<a name="l00485"></a>00485     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_particle_emitter.html#a49c226e796571a19a70ff8f87b3dadee">getRotationAxisVariance</a>() <span class="keyword">const</span>;
+<a name="l00486"></a>00486 
+<a name="l00492"></a>00492     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a0de38b6825804f2ed87dfc7b9e8fb82b">setSpriteAnimated</a>(<span class="keywordtype">bool</span> animated);
+<a name="l00493"></a>00493 
+<a name="l00497"></a>00497     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a2265cf2de9f9e8b9181d18a9c334a87d">isSpriteAnimated</a>() <span class="keyword">const</span>;
+<a name="l00498"></a>00498 
+<a name="l00510"></a>00510     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#adc8207a1d287a66db574816eb234de99">setSpriteLooped</a>(<span class="keywordtype">bool</span> looped);
+<a name="l00511"></a>00511 
+<a name="l00517"></a>00517     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a1e0be548109998a02f62754beb3055b8">isSpriteLooped</a>() <span class="keyword">const</span>;
+<a name="l00518"></a>00518 
+<a name="l00526"></a>00526     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a44bee89bd868e13ff7f47c1a439b5dd5">setSpriteFrameRandomOffset</a>(<span class="keywordtype">int</span> maxOffset);
+<a name="l00527"></a>00527     
+<a name="l00531"></a>00531     <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a808b3b2ec768132149671fce9d9c08a5">getSpriteFrameRandomOffset</a>() <span class="keyword">const</span>;
+<a name="l00532"></a>00532 
+<a name="l00538"></a>00538     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#abda24773f1c51bdb49e1a8c9e611ec07">setSpriteFrameDuration</a>(<span class="keywordtype">long</span> duration);
+<a name="l00539"></a>00539 
+<a name="l00545"></a>00545     <span class="keywordtype">long</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a68707540f5cb26801063e1d0212846d8">getSpriteFrameDuration</a>() <span class="keyword">const</span>;
+<a name="l00546"></a>00546 
+<a name="l00553"></a>00553     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a3ef05e6abc632cf5f104050badd02dcd">setSpriteTexCoords</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> frameCount, <span class="keywordtype">float</span>* texCoords);
+<a name="l00554"></a>00554 
+<a name="l00562"></a>00562     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a62bac95c8068152dc139115cb8424f14">setSpriteFrameCoords</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> frameCount, <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>* frameCoords);
+<a name="l00563"></a>00563 
+<a name="l00575"></a>00575     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a62bac95c8068152dc139115cb8424f14">setSpriteFrameCoords</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> frameCount, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
+<a name="l00576"></a>00576 
+<a name="l00582"></a>00582     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_particle_emitter.html#abff5331cf6f298dcda2b70be6f03c866">getNode</a>() <span class="keyword">const</span>;
+<a name="l00583"></a>00583 
+<a name="l00592"></a>00592     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a33307756955a0e069be33c3116afaa33">setOrbit</a>(<span class="keywordtype">bool</span> orbitPosition, <span class="keywordtype">bool</span> orbitVelocity, <span class="keywordtype">bool</span> orbitAcceleration);
+<a name="l00593"></a>00593 
+<a name="l00599"></a>00599     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#a9569f892f7b845211b820980e420aee9">update</a>(<span class="keywordtype">long</span> elapsedTime);
+<a name="l00600"></a>00600 
+<a name="l00604"></a>00604     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_particle_emitter.html#ae683f3d5eba31607f92997dd7692cbb4">draw</a>();
+<a name="l00605"></a>00605 
+<a name="l00606"></a>00606 <span class="keyword">private</span>:
+<a name="l00607"></a>00607 
+<a name="l00611"></a>00611     <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>(<a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* batch, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> particlesCount);
+<a name="l00612"></a>00612 
+<a name="l00616"></a>00616     ~<a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>();
+<a name="l00617"></a>00617 
+<a name="l00621"></a>00621     <span class="keywordtype">void</span> setNode(<a class="code" href="classgameplay_1_1_node.html">Node</a>* node);
+<a name="l00622"></a>00622 
+<a name="l00626"></a>00626     <span class="keywordtype">float</span> generateScalar(<span class="keywordtype">float</span> min, <span class="keywordtype">float</span> max);
+<a name="l00627"></a>00627 
+<a name="l00628"></a>00628     <span class="keywordtype">long</span> generateScalar(<span class="keywordtype">long</span> min, <span class="keywordtype">long</span> max);
+<a name="l00629"></a>00629 
+<a name="l00633"></a>00633     <span class="keywordtype">void</span> generateVectorInRect(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; base, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; variance, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst);
+<a name="l00634"></a>00634 
+<a name="l00638"></a>00638     <span class="keywordtype">void</span> generateVectorInEllipsoid(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; center, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; scale, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst);
+<a name="l00639"></a>00639 
+<a name="l00640"></a>00640     <span class="keywordtype">void</span> generateVector(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; base, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; variance, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* dst, <span class="keywordtype">bool</span> ellipsoid);
+<a name="l00641"></a>00641 
+<a name="l00645"></a>00645     <span class="keywordtype">void</span> generateColor(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; base, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; variance, <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>* dst);
+<a name="l00646"></a>00646 
+<a name="l00650"></a>00650     <span class="keyword">static</span> TextureBlending getTextureBlendingFromString(<span class="keyword">const</span> <span class="keywordtype">char</span>* src);
+<a name="l00651"></a>00651 
+<a name="l00652"></a>00652     <span class="keywordtype">void</span> setTextureBlending(TextureBlending blending);
+<a name="l00653"></a>00653 
+<a name="l00657"></a>00657     <span class="keyword">class </span>Particle
+<a name="l00658"></a>00658     {
+<a name="l00659"></a>00659 
+<a name="l00660"></a>00660     <span class="keyword">public</span>:
+<a name="l00661"></a>00661         <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _position;
+<a name="l00662"></a>00662         <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _velocity;
+<a name="l00663"></a>00663         <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _acceleration;
+<a name="l00664"></a>00664         <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _colorStart;
+<a name="l00665"></a>00665         <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _colorEnd;
+<a name="l00666"></a>00666         <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _color;
+<a name="l00667"></a>00667         <span class="keywordtype">float</span> _rotationPerParticleSpeed;
+<a name="l00668"></a>00668         <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _rotationAxis;
+<a name="l00669"></a>00669         <span class="keywordtype">float</span> _rotationSpeed;
+<a name="l00670"></a>00670         <span class="keywordtype">float</span> _angle;
+<a name="l00671"></a>00671         <span class="keywordtype">long</span> _energyStart;
+<a name="l00672"></a>00672         <span class="keywordtype">long</span> _energy;
+<a name="l00673"></a>00673         <span class="keywordtype">float</span> _sizeStart;
+<a name="l00674"></a>00674         <span class="keywordtype">float</span> _sizeEnd;
+<a name="l00675"></a>00675         <span class="keywordtype">float</span> _size;
+<a name="l00676"></a>00676         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _frame;
+<a name="l00677"></a>00677         <span class="keywordtype">float</span> _timeOnCurrentFrame;
+<a name="l00678"></a>00678     };
+<a name="l00679"></a>00679 
+<a name="l00680"></a>00680     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _particleCountMax;
+<a name="l00681"></a>00681     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _particleCount;
+<a name="l00682"></a>00682     Particle* _particles;
+<a name="l00683"></a>00683     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _emissionRate;
+<a name="l00684"></a>00684     <span class="keywordtype">bool</span> _started;
+<a name="l00685"></a>00685     <span class="keywordtype">bool</span> _ellipsoid;
+<a name="l00686"></a>00686     <span class="keywordtype">float</span> _sizeStartMin;
+<a name="l00687"></a>00687     <span class="keywordtype">float</span> _sizeStartMax;
+<a name="l00688"></a>00688     <span class="keywordtype">float</span> _sizeEndMin;
+<a name="l00689"></a>00689     <span class="keywordtype">float</span> _sizeEndMax;
+<a name="l00690"></a>00690     <span class="keywordtype">float</span> _energyMin;
+<a name="l00691"></a>00691     <span class="keywordtype">float</span> _energyMax;
+<a name="l00692"></a>00692     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _colorStart;
+<a name="l00693"></a>00693     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _colorStartVar;
+<a name="l00694"></a>00694     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _colorEnd;
+<a name="l00695"></a>00695     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _colorEndVar;
+<a name="l00696"></a>00696     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _position;
+<a name="l00697"></a>00697     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _positionVar;
+<a name="l00698"></a>00698     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _velocity;
+<a name="l00699"></a>00699     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _velocityVar;
+<a name="l00700"></a>00700     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _acceleration;
+<a name="l00701"></a>00701     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _accelerationVar;
+<a name="l00702"></a>00702     <span class="keywordtype">float</span> _rotationPerParticleSpeedMin;
+<a name="l00703"></a>00703     <span class="keywordtype">float</span> _rotationPerParticleSpeedMax;
+<a name="l00704"></a>00704     <span class="keywordtype">float</span> _rotationSpeedMin;
+<a name="l00705"></a>00705     <span class="keywordtype">float</span> _rotationSpeedMax;
+<a name="l00706"></a>00706     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _rotationAxis;
+<a name="l00707"></a>00707     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _rotationAxisVar;
+<a name="l00708"></a>00708     <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a> _rotation;
+<a name="l00709"></a>00709     <a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* _spriteBatch;
+<a name="l00710"></a>00710     TextureBlending _spriteTextureBlending;
+<a name="l00711"></a>00711     <span class="keywordtype">float</span> _spriteTextureWidth;
+<a name="l00712"></a>00712     <span class="keywordtype">float</span> _spriteTextureHeight;
+<a name="l00713"></a>00713     <span class="keywordtype">float</span> _spriteTextureWidthRatio;
+<a name="l00714"></a>00714     <span class="keywordtype">float</span> _spriteTextureHeightRatio;
+<a name="l00715"></a>00715     <span class="keywordtype">float</span>* _spriteTextureCoords;
+<a name="l00716"></a>00716     <span class="keywordtype">bool</span> _spriteAnimated;
+<a name="l00717"></a>00717     <span class="keywordtype">bool</span> _spriteLooped;
+<a name="l00718"></a>00718     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _spriteFrameCount;
+<a name="l00719"></a>00719     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _spriteFrameRandomOffset;
+<a name="l00720"></a>00720     <span class="keywordtype">long</span> _spriteFrameDuration;
+<a name="l00721"></a>00721     <span class="keywordtype">float</span> _spriteFrameDurationSecs;
+<a name="l00722"></a>00722     <span class="keywordtype">float</span> _spritePercentPerFrame;
+<a name="l00723"></a>00723     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _node;
+<a name="l00724"></a>00724     <span class="keywordtype">bool</span> _orbitPosition;
+<a name="l00725"></a>00725     <span class="keywordtype">bool</span> _orbitVelocity;
+<a name="l00726"></a>00726     <span class="keywordtype">bool</span> _orbitAcceleration;
+<a name="l00727"></a>00727     <span class="keywordtype">float</span> _timePerEmission;
+<a name="l00728"></a>00728     <span class="keywordtype">long</span> _timeLast;
+<a name="l00729"></a>00729     <span class="keywordtype">long</span> _timeRunning;
+<a name="l00730"></a>00730 };
+<a name="l00731"></a>00731 
+<a name="l00732"></a>00732 }
+<a name="l00733"></a>00733 
+<a name="l00734"></a>00734 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -360,7 +363,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
+    <li class="footer">Generated on Wed Jan 18 2012 02:20:17 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
