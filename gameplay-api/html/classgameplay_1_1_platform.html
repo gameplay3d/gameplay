@@ -32,7 +32,7 @@
   
   <td style="padding-left: 0.5em;">
    <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -119,8 +119,11 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aa7936bf90741ee305184f2b38467923b">isVsync</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#acacf35e2782bd3253a231dd0bd459f64">setVsync</a> (bool enable)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a85a6299f0626e9de47a470279e5b6fb6">getOrientationAngle</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a0588979a57a0bb12899be26e6671f5b0">isAccelerometerSupported</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#ad8c11f17aa335ce83e2f7b116dccd184">getAccelerometerPitchAndRoll</a> (float *pitch, float *roll)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a3a3f93c158269eb93949ba5d9b550c70">setMultiTouch</a> (bool enabled)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aac96a0a5b3d2ff0b7aca92eaa6126a80">isMultiTouch</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a388195e784d2820c0d6158c4a10c8a97">getAccelerometerValues</a> (float *pitch, float *roll)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a52ceea1e71f2c8d99310baa61a69223b">swapBuffers</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aea3bd12f36c33c33824bc1ccdd4f32f3">displayKeyboard</a> (bool display)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a platform. </p>
@@ -168,6 +171,30 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aea3bd12f36c33c33824bc1ccdd4f32f3"></a><!-- doxytag: member="gameplay::Platform::displayKeyboard" ref="aea3bd12f36c33c33824bc1ccdd4f32f3" args="(bool display)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void gameplay::Platform::displayKeyboard </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>display</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Shows or hides the virtual keyboard (if supported).</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">display</td><td>true when virtual keyboard needs to be displayed and false otherwise. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ab5379118d7f39805fb7d62820aa36cd6"></a><!-- doxytag: member="gameplay::Platform::enterMessagePump" ref="ab5379118d7f39805fb7d62820aa36cd6" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -205,12 +232,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad8c11f17aa335ce83e2f7b116dccd184"></a><!-- doxytag: member="gameplay::Platform::getAccelerometerPitchAndRoll" ref="ad8c11f17aa335ce83e2f7b116dccd184" args="(float *pitch, float *roll)" -->
+<a class="anchor" id="a388195e784d2820c0d6158c4a10c8a97"></a><!-- doxytag: member="gameplay::Platform::getAccelerometerValues" ref="a388195e784d2820c0d6158c4a10c8a97" args="(float *pitch, float *roll)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static void gameplay::Platform::getAccelerometerPitchAndRoll </td>
+          <td class="memname">static void gameplay::Platform::getAccelerometerValues </td>
           <td>(</td>
           <td class="paramtype">float *&#160;</td>
           <td class="paramname"><em>pitch</em>, </td>
@@ -229,7 +256,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the platform accelerometer pitch and roll.</p>
+<p>Gets the platform accelerometer values.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">pitch</td><td>The accelerometer pitch. </td></tr>
@@ -258,12 +285,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0588979a57a0bb12899be26e6671f5b0"></a><!-- doxytag: member="gameplay::Platform::isAccelerometerSupported" ref="a0588979a57a0bb12899be26e6671f5b0" args="()" -->
+<a class="anchor" id="aac96a0a5b3d2ff0b7aca92eaa6126a80"></a><!-- doxytag: member="gameplay::Platform::isMultiTouch" ref="aac96a0a5b3d2ff0b7aca92eaa6126a80" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static bool gameplay::Platform::isAccelerometerSupported </td>
+          <td class="memname">static bool gameplay::Platform::isMultiTouch </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td><code> [static]</code></td>
@@ -271,8 +298,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Indicates whether the platform supports an accelerometer.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>true if the accelerometer is supported, false otherwise. </dd></dl>
+<p>Is multi-touch mode enabled. </p>
 
 </div>
 </div>
@@ -318,6 +344,24 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a3a3f93c158269eb93949ba5d9b550c70"></a><!-- doxytag: member="gameplay::Platform::setMultiTouch" ref="a3a3f93c158269eb93949ba5d9b550c70" args="(bool enabled)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void gameplay::Platform::setMultiTouch </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enabled</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Set if multi-touch is enabled on the platform </p>
+
+</div>
+</div>
 <a class="anchor" id="acacf35e2782bd3253a231dd0bd459f64"></a><!-- doxytag: member="gameplay::Platform::setVsync" ref="acacf35e2782bd3253a231dd0bd459f64" args="(bool enable)" -->
 <div class="memitem">
 <div class="memproto">
@@ -339,6 +383,23 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a52ceea1e71f2c8d99310baa61a69223b"></a><!-- doxytag: member="gameplay::Platform::swapBuffers" ref="a52ceea1e71f2c8d99310baa61a69223b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void gameplay::Platform::swapBuffers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Swaps the frame buffer on the device. </p>
 
 </div>
 </div>
@@ -366,7 +427,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
+    <li class="footer">Generated on Wed Jan 18 2012 02:20:20 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
