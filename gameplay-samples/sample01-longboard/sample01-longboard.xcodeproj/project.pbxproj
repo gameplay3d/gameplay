@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		42458CB414C3AAF900EFFB61 /* sample01-longboard-ios.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42458CB314C3AAF900EFFB61 /* sample01-longboard-ios.plist */; };
 		42CCD493146D80DA00353661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD492146D80DA00353661 /* Cocoa.framework */; };
 		42CCD4BF146D91D700353661 /* LongboardGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CCD4BD146D91D700353661 /* LongboardGame.cpp */; };
 		42CCD4C2146D91E800353661 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD4C1146D91E800353661 /* icon.png */; };
@@ -39,6 +38,7 @@
 		5B04C6A014C0EC7B00EB0071 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C69F14C0EC7B00EB0071 /* libgameplay.a */; };
 		5B43D19A14C35927008A5D9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D19914C35927008A5D9D /* Foundation.framework */; };
 		5B43D19B14C359C6008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C69F14C0EC7B00EB0071 /* libgameplay.a */; };
+		5BD7770114C781BC001CADA0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BD7770014C781BC001CADA0 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +67,7 @@
 		5B04C69C14C0EC7100EB0071 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		5B04C69F14C0EC7B00EB0071 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 		5B43D19914C35927008A5D9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5BD7770014C781BC001CADA0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BD7770114C781BC001CADA0 /* CoreMotion.framework in Frameworks */,
 				5B43D19A14C35927008A5D9D /* Foundation.framework in Frameworks */,
 				5B04C6A014C0EC7B00EB0071 /* libgameplay.a in Frameworks */,
 				5B04C69D14C0EC7100EB0071 /* OpenAL.framework in Frameworks */,
@@ -130,6 +132,7 @@
 		42CCD483146D80DA00353661 = {
 			isa = PBXGroup;
 			children = (
+				5BD7770014C781BC001CADA0 /* CoreMotion.framework */,
 				42458CB314C3AAF900EFFB61 /* sample01-longboard-ios.plist */,
 				42C932E01491A1640098216A /* sample01-longboard-macos.plist */,
 				42CCD4C1146D91E800353661 /* icon.png */,
@@ -273,7 +276,6 @@
 			files = (
 				5B04C68E14C0EBF900EB0071 /* icon.png in Resources */,
 				5B04C68F14C0EBF900EB0071 /* res in Resources */,
-				42458CB414C3AAF900EFFB61 /* sample01-longboard-ios.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
