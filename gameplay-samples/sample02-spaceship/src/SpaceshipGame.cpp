@@ -99,7 +99,7 @@ void SpaceshipGame::initialize()
     _backgroundSound = AudioSource::create("res/background.ogg");
     if (_backgroundSound)
         _backgroundSound->setLooped(true);
-
+    
     // Create font
     _font = Font::create("res/airstrip28.gpb");
 
@@ -151,7 +151,7 @@ void SpaceshipGame::initializeSpaceship()
     _spaceshipSound = AudioSource::create("res/spaceship.wav");
     if (_spaceshipSound)
     {
-        _spaceshipSound->setGain(0.5f);
+        //_spaceshipSound->setGain(0.5f);
         _spaceshipSound->setLooped(true);
     }
 }
@@ -234,9 +234,11 @@ void SpaceshipGame::update(long elapsedTime)
 {
     // Calculate elapsed time in seconds
     float t = (float)elapsedTime / 1000.0;
+    
     if (!_finished)
     {
         _time += t;
+
         // Play the background track
         if (_backgroundSound->getState() != AudioSource::PLAYING)
             _backgroundSound->play();
@@ -330,7 +332,7 @@ void SpaceshipGame::update(long elapsedTime)
     }
     _shipGroupNode->rotateZ(MATH_DEG_TO_RAD(_shipTilt));
 
-    if (_throttle > 0.0f)
+    if (_throttle > MATH_EPSILON)
     {
         // Apply ship spin
         _shipNode->rotateY(MATH_DEG_TO_RAD(SHIP_ROTATE_SPEED_MAX * t * _throttle));
@@ -338,7 +340,7 @@ void SpaceshipGame::update(long elapsedTime)
         // Play sound effect
         if (_spaceshipSound->getState() != AudioSource::PLAYING)
             _spaceshipSound->play();
-
+        
         // Set the pitch based on the throttle
         _spaceshipSound->setPitch(_throttle * SOUND_PITCH_SCALE);
     }
