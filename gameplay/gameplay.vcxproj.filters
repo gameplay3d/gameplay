@@ -222,6 +222,12 @@
     <ClCompile Include="src\MeshBatch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\gameplay-main-android.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlatformAndroid.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">

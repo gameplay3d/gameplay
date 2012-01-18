@@ -61,4 +61,9 @@ inline void Game::getAccelerometerValues(float* pitch, float* roll)
     Platform::getAccelerometerValues(pitch, roll);
 }
 
+inline void Game::displayKeyboard(bool display)
+{
+    Platform::displayKeyboard(display);
+}
+
 }

@@ -94,6 +94,13 @@ public:
      * Swaps the frame buffer on the device.
      */
     static void swapBuffers();
+    
+    /**
+     * Shows or hides the virtual keyboard (if supported).
+     *
+     * @param display true when virtual keyboard needs to be displayed and false otherwise.
+     */
+     static void displayKeyboard(bool display);
 
 private:
 
