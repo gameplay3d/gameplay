@@ -308,7 +308,7 @@ int getKey(unichar keyCode);
         CGPoint touchLoc = [t locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.y,  touchLoc.x, uniqueTouch);
+        Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.x,  touchLoc.y, uniqueTouch);
     }
 }
 
@@ -320,7 +320,7 @@ int getKey(unichar keyCode);
         CGPoint touchLoc = [t locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchLoc.y, touchLoc.x, uniqueTouch);
+        Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchLoc.x, touchLoc.y, uniqueTouch);
     }
 }
 
@@ -338,7 +338,7 @@ int getKey(unichar keyCode);
         CGPoint touchLoc = [t locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchLoc.y,  touchLoc.x, uniqueTouch);
+        Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchLoc.x,  touchLoc.y, uniqueTouch);
     }
 }
 
@@ -786,6 +786,13 @@ namespace gameplay
     {
         if (__view)
             [[__view getContext] presentRenderbuffer:GL_RENDERBUFFER];
+    }
+    
+    void displayKeyboard(bool display) {
+        if(__view) {
+            if(display) [__view showKeyboard];
+            else [__view dismissKeyboard];
+        }
     }
     
 }
