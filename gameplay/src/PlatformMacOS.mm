@@ -593,6 +593,11 @@ void Platform::swapBuffers()
         CGLFlushDrawable((CGLContextObj)[[__view openGLContext] CGLContextObj]);
 }
 
+void Platform::displayKeyboard(bool display)
+{
+    // Do nothing.
+}
+
 }
 
 #endif

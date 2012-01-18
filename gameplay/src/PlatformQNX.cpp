@@ -13,6 +13,7 @@
 #include <bps/navigator.h>
 #include <bps/accelerometer.h>
 #include <bps/orientation.h>
+#include <bps/virtualkeyboard.h>
 
 #define TOUCH_COUNT_MAX     4
 
@@ -688,7 +689,6 @@ int Platform::enterMessagePump()
     int eventType;
     int flags;
     int value;
-    int visible = 1;
     int position[2];
     int domain;
     mtouch_event_t touchEvent;
@@ -805,7 +805,7 @@ int Platform::enterMessagePump()
                         // Handle right mouse
                         if (buttons & SCREEN_RIGHT_MOUSE_BUTTON)
                         {
-                            if (mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON == 0)
+                            if ((mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON) == 0)
                             {
                                 move = false;
                                 mouse_pressed |= SCREEN_RIGHT_MOUSE_BUTTON;
@@ -822,7 +822,7 @@ int Platform::enterMessagePump()
                         // Handle middle mouse
                         if (buttons & SCREEN_MIDDLE_MOUSE_BUTTON)
                         {
-                            if (mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON == 0)
+                            if ((mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON) == 0)
                             {
                                 move = false;
                                 mouse_pressed |= SCREEN_MIDDLE_MOUSE_BUTTON;
@@ -883,8 +883,8 @@ int Platform::enterMessagePump()
             break;
 
         // Idle time (no events left to process) is spent rendering.
-        // We skip rendering when the window is not visible or the app is paused.
-        if (visible && _game->getState() != Game::PAUSED)
+        // We skip rendering when the app is paused.
+        if (_game->getState() != Game::PAUSED)
         {
             _game->frame();
 
@@ -981,6 +981,14 @@ void Platform::swapBuffers()
 {
     if (__eglDisplay && __eglSurface)
         eglSwapBuffers(__eglDisplay, __eglSurface);
+}
+
+void Platform::displayKeyboard(bool display)
+{
+    if (display)
+        virtualkeyboard_show();
+    else
+        virtualkeyboard_hide();
 }
 
 }
