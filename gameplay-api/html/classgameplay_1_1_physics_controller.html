@@ -32,7 +32,7 @@
   
   <td style="padding-left: 0.5em;">
    <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -110,10 +110,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>DebugDrawer</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">Listener</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsCollisionShape</b></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a67624e5152c9fe2cad41042ce8f5c208">addStatusListener</a> (<a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">Listener</a> *listener)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a9c9c7800807569809a677be38873170a">addStatusListener</a> (<a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">PhysicsController::Listener</a> *listener)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_fixed_constraint.html">PhysicsFixedConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ad418fdf90f310e24e4277e1c78dcc7ff">createFixedConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b=NULL)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_generic_constraint.html">PhysicsGenericConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ac39232277d236de4947a116c1232837c">createGenericConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b=NULL)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_generic_constraint.html">PhysicsGenericConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#afbbb421f300c7b2310c2d6b34c1230cf">createGenericConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;rotationOffsetA, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translationOffsetA, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b=NULL, const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;rotationOffsetB=<a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a>(), const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translationOffsetB=<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>())</td></tr>
@@ -124,6 +126,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_spring_constraint.html">PhysicsSpringConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a08247ecdea429e6430877414eccfbaae">createSpringConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;rotationOffsetA, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translationOffsetA, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b, const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;rotationOffsetB, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translationOffsetB)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ae5fce39a6a72c120d51e97b1ef5d429c">getGravity</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;gravity) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ab085ecda3423f445960150208e5ba1c9">setGravity</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;gravity)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ae2089a6dababa097ef955d1105c4bd6d">drawDebug</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;viewProjection)</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa2fab026580d6f14280c2ffb8063a314"></a><!-- doxytag: member="gameplay::PhysicsController::Game" ref="aa2fab026580d6f14280c2ffb8063a314" args="" -->
@@ -136,21 +139,21 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a class for controlling game physics. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a67624e5152c9fe2cad41042ce8f5c208"></a><!-- doxytag: member="gameplay::PhysicsController::addStatusListener" ref="a67624e5152c9fe2cad41042ce8f5c208" args="(Listener *listener)" -->
+<a class="anchor" id="a9c9c7800807569809a677be38873170a"></a><!-- doxytag: member="gameplay::PhysicsController::addStatusListener" ref="a9c9c7800807569809a677be38873170a" args="(PhysicsController::Listener *listener)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void gameplay::PhysicsController::addStatusListener </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">Listener</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">PhysicsController::Listener</a> *&#160;</td>
           <td class="paramname"><em>listener</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Adds a status listener.</p>
+<p>Adds a listener to the physics controller.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">listener</td><td>The listener to add. </td></tr>
@@ -538,6 +541,30 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 
 </div>
 </div>
+<a class="anchor" id="ae2089a6dababa097ef955d1105c4bd6d"></a><!-- doxytag: member="gameplay::PhysicsController::drawDebug" ref="ae2089a6dababa097ef955d1105c4bd6d" args="(const Matrix &amp;viewProjection)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::PhysicsController::drawDebug </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>viewProjection</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Draws debugging information (rigid body outlines, etc.) using the given view projection matrix.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">viewProjection</td><td>The view projection matrix to use when drawing. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ae5fce39a6a72c120d51e97b1ef5d429c"></a><!-- doxytag: member="gameplay::PhysicsController::getGravity" ref="ae5fce39a6a72c120d51e97b1ef5d429c" args="(const Vector3 &amp;gravity) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -606,7 +633,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
+    <li class="footer">Generated on Wed Jan 18 2012 02:20:19 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
