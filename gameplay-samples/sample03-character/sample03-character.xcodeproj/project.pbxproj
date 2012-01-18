@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		42458CC014C3ABF800EFFB61 /* sample03-character-ios.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */; };
 		42CCD571146EC4B300353661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD570146EC4B300353661 /* Cocoa.framework */; };
 		42CCD5A2146EC5BF00353661 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A1146EC5BF00353661 /* OpenAL.framework */; };
 		42CCD5A4146EC5C600353661 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A3146EC5C600353661 /* OpenGL.framework */; };
@@ -22,6 +21,7 @@
 		42CD0F01147D93560000361E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFC147D93560000361E /* libvorbis.a */; };
 		42CD0F02147D93560000361E /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFD147D93560000361E /* libvorbisenc.a */; };
 		42CD0F03147D93560000361E /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFE147D93560000361E /* libvorbisfile.a */; };
+		5B0FF06314C783FA00499CE3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B0FF06214C783FA00499CE3 /* CoreMotion.framework */; };
 		5B43D1C814C35F4C008A5D9D /* CharacterGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CCD5AD146EC62000353661 /* CharacterGame.cpp */; };
 		5B43D1CB14C35F4C008A5D9D /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFA147D93560000361E /* libbullet.a */; };
 		5B43D1CC14C35F4C008A5D9D /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFB147D93560000361E /* libogg.a */; };
@@ -60,6 +60,7 @@
 		42CD0EFC147D93560000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbis.a"; sourceTree = "<group>"; };
 		42CD0EFD147D93560000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisenc.a"; sourceTree = "<group>"; };
 		42CD0EFE147D93560000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisfile.a"; sourceTree = "<group>"; };
+		5B0FF06214C783FA00499CE3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		5B43D1DD14C35F4C008A5D9D /* sample03-character.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B43D1E314C35F71008A5D9D /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 		5B43D1E614C3603D008A5D9D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -93,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B0FF06314C783FA00499CE3 /* CoreMotion.framework in Frameworks */,
 				5B43D1EC14C3604C008A5D9D /* Foundation.framework in Frameworks */,
 				5B43D1ED14C3604C008A5D9D /* OpenAL.framework in Frameworks */,
 				5B43D1EE14C3604C008A5D9D /* OpenGLES.framework in Frameworks */,
@@ -172,6 +174,7 @@
 		5B43D1F014C36051008A5D9D /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				5B0FF06214C783FA00499CE3 /* CoreMotion.framework */,
 				5B43D1E814C3604C008A5D9D /* Foundation.framework */,
 				5B43D1E914C3604C008A5D9D /* OpenAL.framework */,
 				5B43D1EA14C3604C008A5D9D /* OpenGLES.framework */,
@@ -273,7 +276,6 @@
 			files = (
 				5B43D1D814C35F4C008A5D9D /* icon.png in Resources */,
 				5B43D1D914C35F4C008A5D9D /* res in Resources */,
-				42458CC014C3ABF800EFFB61 /* sample03-character-ios.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

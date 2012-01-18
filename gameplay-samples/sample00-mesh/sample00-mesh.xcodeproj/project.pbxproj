@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4217006314697FF100A45C02 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4217006214697FF100A45C02 /* Cocoa.framework */; };
 		4220A6E5146B121000CAEB3A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4220A6E4146B121000CAEB3A /* QuartzCore.framework */; };
-		42458CB614C3AB1600EFFB61 /* sample00-mesh-ios.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42458CB514C3AB1600EFFB61 /* sample00-mesh-ios.plist */; };
 		42A3C5DE146C96640091C1E4 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42A3C5DD146C96640091C1E4 /* res */; };
 		42A3C5E4146CB7420091C1E4 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A3C5E3146CB7420091C1E4 /* libpng.a */; };
 		42A3C5E6146CB7690091C1E4 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A3C5E5146CB7690091C1E4 /* libz.dylib */; };
@@ -39,6 +38,7 @@
 		5B04C5F214BFE4AF00EB0071 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5F114BFE4AF00EB0071 /* OpenGLES.framework */; };
 		5B04C5F414BFE4B400EB0071 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5F314BFE4B400EB0071 /* OpenAL.framework */; };
 		5B04C60214C0699C00EB0071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C60114C0699C00EB0071 /* Foundation.framework */; };
+		5B0FF05C14C783BD00499CE3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B0FF05B14C783BD00499CE3 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +67,7 @@
 		5B04C5F114BFE4AF00EB0071 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		5B04C5F314BFE4B400EB0071 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
 		5B04C60114C0699C00EB0071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5B0FF05B14C783BD00499CE3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B0FF05C14C783BD00499CE3 /* CoreMotion.framework in Frameworks */,
 				5B04C60214C0699C00EB0071 /* Foundation.framework in Frameworks */,
 				5B04C5F414BFE4B400EB0071 /* OpenAL.framework in Frameworks */,
 				5B04C5F214BFE4AF00EB0071 /* OpenGLES.framework in Frameworks */,
@@ -183,6 +185,7 @@
 		5B04C60014BFE54200EB0071 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				5B0FF05B14C783BD00499CE3 /* CoreMotion.framework */,
 				5B04C60114C0699C00EB0071 /* Foundation.framework */,
 				5B04C5F314BFE4B400EB0071 /* OpenAL.framework */,
 				5B04C5F114BFE4AF00EB0071 /* OpenGLES.framework */,
@@ -273,7 +276,6 @@
 			files = (
 				5B04C5E114BFE1A200EB0071 /* res in Resources */,
 				5B04C5E214BFE1A200EB0071 /* icon.png in Resources */,
-				42458CB614C3AB1600EFFB61 /* sample00-mesh-ios.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
