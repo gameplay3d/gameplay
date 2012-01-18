@@ -1,6 +1,10 @@
 *.suo
 *.sdf
 *.opensdf
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
 /.metadata
 /169.254.0.1
 /ipch
@@ -131,3 +135,4 @@
 /gameplay/android/local.properties
 /gameplay/android/project.properties
 /gameplay/android/obj
+

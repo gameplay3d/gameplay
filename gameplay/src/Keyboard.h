@@ -182,7 +182,11 @@ public:
         KEY_LEFT_BRACE        = '{',
         KEY_BAR               = '|',
         KEY_RIGHT_BRACE       = '}',
-        KEY_TILDE             = '~'
+        KEY_TILDE             = '~',
+        KEY_EURO,
+        KEY_POUND,
+        KEY_YEN,
+        KEY_MIDDLE_DOT
     };
 
 private:

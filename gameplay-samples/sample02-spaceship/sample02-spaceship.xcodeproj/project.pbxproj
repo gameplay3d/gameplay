@@ -44,7 +44,7 @@
 /* Begin PBXFileReference section */
 		42458CBA14C3AB4D00EFFB61 /* sample02-spaceship-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample02-spaceship-ios.plist"; sourceTree = "<group>"; };
 		42C932E31491A18F0098216A /* sample02-spaceship-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample02-spaceship-macos.plist"; sourceTree = "<group>"; };
-		42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "sample02-spaceship-macosx.app"; path = "sample02-spaceship-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42CCD516146EBF3600353661 /* sample02-spaceship-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample02-spaceship-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD51A146EBF3600353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42CCD547146EC0AE00353661 /* SpaceshipGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SpaceshipGame.cpp; path = src/SpaceshipGame.cpp; sourceTree = SOURCE_ROOT; };
 		42CCD548146EC0AE00353661 /* SpaceshipGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpaceshipGame.h; path = src/SpaceshipGame.h; sourceTree = SOURCE_ROOT; };
@@ -144,7 +144,7 @@
 		42CCD517146EBF3600353661 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */,
+				42CCD516146EBF3600353661 /* sample02-spaceship-macos.app */,
 				5B43D1B414C35A0E008A5D9D /* sample02-spaceship.app */,
 			);
 			name = Products;
@@ -210,7 +210,7 @@
 			);
 			name = "sample02-spaceship-macos";
 			productName = "sample02-spaceship";
-			productReference = 42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */;
+			productReference = 42CCD516146EBF3600353661 /* sample02-spaceship-macos.app */;
 			productType = "com.apple.product-type.application";
 		};
 		5B43D19D14C35A0E008A5D9D /* sample02-spaceship-ios */ = {
@@ -394,8 +394,6 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -424,8 +422,6 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";

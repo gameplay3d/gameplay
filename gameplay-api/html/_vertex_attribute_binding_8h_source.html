@@ -32,7 +32,7 @@
   
   <td style="padding-left: 0.5em;">
    <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -100,51 +100,56 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define VERTEXATTRIBUTEBINDING_H_</span>
 <a name="l00003"></a>00003 <span class="preprocessor"></span>
 <a name="l00004"></a>00004 <span class="preprocessor">#include &quot;Ref.h&quot;</span>
-<a name="l00005"></a>00005 
-<a name="l00006"></a>00006 <span class="keyword">namespace </span>gameplay
-<a name="l00007"></a>00007 {
-<a name="l00008"></a>00008 
-<a name="l00009"></a>00009 <span class="keyword">class </span>Mesh;
-<a name="l00010"></a>00010 <span class="keyword">class </span>Effect;
-<a name="l00011"></a>00011 
-<a name="l00025"></a><a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">00025</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_ref.html">Ref</a>
-<a name="l00026"></a>00026 {
-<a name="l00027"></a>00027 <span class="keyword">public</span>:
-<a name="l00028"></a>00028 
-<a name="l00035"></a>00035     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>* <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html#af42f5fc025daf399b0fd53e13ed0660c">create</a>(<a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>* mesh, <a class="code" href="classgameplay_1_1_effect.html">Effect</a>* effect);
-<a name="l00036"></a>00036 
-<a name="l00040"></a>00040     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html#aeaee5c067b4e025f79e36e4a93886200">bind</a>();
-<a name="l00041"></a>00041 
-<a name="l00045"></a>00045     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html#a12afc9540ec15973f78088b3ab4ede0f">unbind</a>();
-<a name="l00046"></a>00046 
-<a name="l00047"></a>00047 <span class="keyword">private</span>:
-<a name="l00048"></a>00048 
-<a name="l00049"></a>00049     <span class="keyword">class </span>VertexAttribute
-<a name="l00050"></a>00050     {
-<a name="l00051"></a>00051     <span class="keyword">public</span>:
-<a name="l00052"></a>00052         <span class="keywordtype">bool</span> enabled;
-<a name="l00053"></a>00053         <span class="keywordtype">int</span> size;
-<a name="l00054"></a>00054         GLenum type;
-<a name="l00055"></a>00055         <span class="keywordtype">bool</span> normalized;
-<a name="l00056"></a>00056         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> stride;
-<a name="l00057"></a>00057         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> offset;
-<a name="l00058"></a>00058     };
-<a name="l00059"></a>00059 
-<a name="l00063"></a>00063     <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>();
-<a name="l00064"></a>00064 
-<a name="l00068"></a>00068     ~<a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>();
-<a name="l00069"></a>00069 
-<a name="l00070"></a>00070     <span class="keywordtype">void</span> setVertexAttribPointer(GLuint indx, GLint size, GLenum type, GLboolean normalize, GLsizei stride, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> offset);
-<a name="l00071"></a>00071 
-<a name="l00072"></a>00072     GLuint _handle;
-<a name="l00073"></a>00073     VertexAttribute* _attributes;
-<a name="l00074"></a>00074     <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>* _mesh;
-<a name="l00075"></a>00075     <a class="code" href="classgameplay_1_1_effect.html">Effect</a>* _effect;
-<a name="l00076"></a>00076 };
-<a name="l00077"></a>00077 
-<a name="l00078"></a>00078 }
-<a name="l00079"></a>00079 
-<a name="l00080"></a>00080 <span class="preprocessor">#endif</span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &quot;VertexFormat.h&quot;</span>
+<a name="l00006"></a>00006 
+<a name="l00007"></a>00007 <span class="keyword">namespace </span>gameplay
+<a name="l00008"></a>00008 {
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="keyword">class </span>Mesh;
+<a name="l00011"></a>00011 <span class="keyword">class </span>Effect;
+<a name="l00012"></a>00012 
+<a name="l00032"></a><a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">00032</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_ref.html">Ref</a>
+<a name="l00033"></a>00033 {
+<a name="l00034"></a>00034 <span class="keyword">public</span>:
+<a name="l00035"></a>00035 
+<a name="l00050"></a>00050     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>* <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html#af42f5fc025daf399b0fd53e13ed0660c">create</a>(<a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>* mesh, <a class="code" href="classgameplay_1_1_effect.html">Effect</a>* effect);
+<a name="l00051"></a>00051 
+<a name="l00067"></a>00067     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>* <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html#af42f5fc025daf399b0fd53e13ed0660c">create</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>&amp; vertexFormat, <span class="keywordtype">void</span>* vertexPointer, <a class="code" href="classgameplay_1_1_effect.html">Effect</a>* effect);
+<a name="l00068"></a>00068 
+<a name="l00072"></a>00072     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html#aeaee5c067b4e025f79e36e4a93886200">bind</a>();
+<a name="l00073"></a>00073 
+<a name="l00077"></a>00077     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html#a12afc9540ec15973f78088b3ab4ede0f">unbind</a>();
+<a name="l00078"></a>00078 
+<a name="l00079"></a>00079 <span class="keyword">private</span>:
+<a name="l00080"></a>00080 
+<a name="l00081"></a>00081     <span class="keyword">class </span>VertexAttribute
+<a name="l00082"></a>00082     {
+<a name="l00083"></a>00083     <span class="keyword">public</span>:
+<a name="l00084"></a>00084         <span class="keywordtype">bool</span> enabled;
+<a name="l00085"></a>00085         <span class="keywordtype">int</span> size;
+<a name="l00086"></a>00086         GLenum type;
+<a name="l00087"></a>00087         <span class="keywordtype">bool</span> normalized;
+<a name="l00088"></a>00088         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> stride;
+<a name="l00089"></a>00089         <span class="keywordtype">void</span>* pointer;
+<a name="l00090"></a>00090     };
+<a name="l00091"></a>00091 
+<a name="l00095"></a>00095     <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>();
+<a name="l00096"></a>00096 
+<a name="l00100"></a>00100     ~<a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>();
+<a name="l00101"></a>00101 
+<a name="l00102"></a>00102     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>* <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html#af42f5fc025daf399b0fd53e13ed0660c">create</a>(<a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>* mesh, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>&amp; vertexFormat, <span class="keywordtype">void</span>* vertexPointer, <a class="code" href="classgameplay_1_1_effect.html">Effect</a>* effect);
+<a name="l00103"></a>00103 
+<a name="l00104"></a>00104     <span class="keywordtype">void</span> setVertexAttribPointer(GLuint indx, GLint size, GLenum type, GLboolean normalize, GLsizei stride, <span class="keywordtype">void</span>* pointer);
+<a name="l00105"></a>00105 
+<a name="l00106"></a>00106     GLuint _handle;
+<a name="l00107"></a>00107     VertexAttribute* _attributes;
+<a name="l00108"></a>00108     <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>* _mesh;
+<a name="l00109"></a>00109     <a class="code" href="classgameplay_1_1_effect.html">Effect</a>* _effect;
+<a name="l00110"></a>00110 };
+<a name="l00111"></a>00111 
+<a name="l00112"></a>00112 }
+<a name="l00113"></a>00113 
+<a name="l00114"></a>00114 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -165,7 +170,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
+    <li class="footer">Generated on Wed Jan 18 2012 02:20:18 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
