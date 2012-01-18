@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42458CB414C3AAF900EFFB61 /* sample01-longboard-ios.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42458CB314C3AAF900EFFB61 /* sample01-longboard-ios.plist */; };
 		42CCD493146D80DA00353661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD492146D80DA00353661 /* Cocoa.framework */; };
 		42CCD4BF146D91D700353661 /* LongboardGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CCD4BD146D91D700353661 /* LongboardGame.cpp */; };
 		42CCD4C2146D91E800353661 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD4C1146D91E800353661 /* icon.png */; };
@@ -16,15 +17,32 @@
 		42CCD4D7146D949200353661 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD4D6146D949200353661 /* libz.dylib */; };
 		42CCD4DB146D94AA00353661 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD4DA146D94AA00353661 /* libpng.a */; };
 		42CCD4DD146D950400353661 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD4DC146D950400353661 /* res */; };
-		42CD0ED7147D92A70000361E /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0ED6147D92A70000361E /* libgameplay.a */; };
 		42CD0EDD147D92CA0000361E /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0ED8147D92CA0000361E /* libbullet.a */; };
 		42CD0EDE147D92CA0000361E /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0ED9147D92CA0000361E /* libogg.a */; };
 		42CD0EDF147D92CA0000361E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EDA147D92CA0000361E /* libvorbis.a */; };
 		42CD0EE0147D92CA0000361E /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EDB147D92CA0000361E /* libvorbisenc.a */; };
 		42CD0EE1147D92CA0000361E /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EDC147D92CA0000361E /* libvorbisfile.a */; };
+		5B04C67E14C0EBF900EB0071 /* LongboardGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CCD4BD146D91D700353661 /* LongboardGame.cpp */; };
+		5B04C68114C0EBF900EB0071 /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0ED8147D92CA0000361E /* libbullet.a */; };
+		5B04C68214C0EBF900EB0071 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0ED9147D92CA0000361E /* libogg.a */; };
+		5B04C68314C0EBF900EB0071 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EDA147D92CA0000361E /* libvorbis.a */; };
+		5B04C68414C0EBF900EB0071 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EDB147D92CA0000361E /* libvorbisenc.a */; };
+		5B04C68514C0EBF900EB0071 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EDC147D92CA0000361E /* libvorbisfile.a */; };
+		5B04C68614C0EBF900EB0071 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD4DA146D94AA00353661 /* libpng.a */; };
+		5B04C68714C0EBF900EB0071 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD4D6146D949200353661 /* libz.dylib */; };
+		5B04C68E14C0EBF900EB0071 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD4C1146D91E800353661 /* icon.png */; };
+		5B04C68F14C0EBF900EB0071 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD4DC146D950400353661 /* res */; };
+		5B04C69814C0EC5E00EB0071 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C69714C0EC5E00EB0071 /* UIKit.framework */; };
+		5B04C69A14C0EC6700EB0071 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C69914C0EC6700EB0071 /* QuartzCore.framework */; };
+		5B04C69D14C0EC7100EB0071 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C69B14C0EC7100EB0071 /* OpenAL.framework */; };
+		5B04C69E14C0EC7100EB0071 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C69C14C0EC7100EB0071 /* OpenGLES.framework */; };
+		5B04C6A014C0EC7B00EB0071 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C69F14C0EC7B00EB0071 /* libgameplay.a */; };
+		5B43D19A14C35927008A5D9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D19914C35927008A5D9D /* Foundation.framework */; };
+		5B43D19B14C359C6008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C69F14C0EC7B00EB0071 /* libgameplay.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		42458CB314C3AAF900EFFB61 /* sample01-longboard-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample01-longboard-ios.plist"; sourceTree = "<group>"; };
 		42C932E01491A1640098216A /* sample01-longboard-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample01-longboard-macos.plist"; sourceTree = "<group>"; };
 		42CCD48E146D80DA00353661 /* sample01-longboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample01-longboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD492146D80DA00353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -37,12 +55,18 @@
 		42CCD4D6146D949200353661 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		42CCD4DA146D94AA00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
 		42CCD4DC146D950400353661 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
-		42CD0ED6147D92A70000361E /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 		42CD0ED8147D92CA0000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macos/libbullet.a"; sourceTree = "<group>"; };
 		42CD0ED9147D92CA0000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macos/libogg.a"; sourceTree = "<group>"; };
 		42CD0EDA147D92CA0000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbis.a"; sourceTree = "<group>"; };
 		42CD0EDB147D92CA0000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisenc.a"; sourceTree = "<group>"; };
 		42CD0EDC147D92CA0000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisfile.a"; sourceTree = "<group>"; };
+		5B04C69314C0EBF900EB0071 /* sample01-longboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample01-longboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B04C69714C0EC5E00EB0071 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		5B04C69914C0EC6700EB0071 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		5B04C69B14C0EC7100EB0071 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		5B04C69C14C0EC7100EB0071 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		5B04C69F14C0EC7B00EB0071 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
+		5B43D19914C35927008A5D9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42CD0ED7147D92A70000361E /* libgameplay.a in Frameworks */,
+				5B43D19B14C359C6008A5D9D /* libgameplay.a in Frameworks */,
 				42CD0EDD147D92CA0000361E /* libbullet.a in Frameworks */,
 				42CD0EDE147D92CA0000361E /* libogg.a in Frameworks */,
 				42CD0EDF147D92CA0000361E /* libvorbis.a in Frameworks */,
@@ -65,13 +89,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5B04C67F14C0EBF900EB0071 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B43D19A14C35927008A5D9D /* Foundation.framework in Frameworks */,
+				5B04C6A014C0EC7B00EB0071 /* libgameplay.a in Frameworks */,
+				5B04C69D14C0EC7100EB0071 /* OpenAL.framework in Frameworks */,
+				5B04C69E14C0EC7100EB0071 /* OpenGLES.framework in Frameworks */,
+				5B04C69A14C0EC6700EB0071 /* QuartzCore.framework in Frameworks */,
+				5B04C69814C0EC5E00EB0071 /* UIKit.framework in Frameworks */,
+				5B04C68114C0EBF900EB0071 /* libbullet.a in Frameworks */,
+				5B04C68214C0EBF900EB0071 /* libogg.a in Frameworks */,
+				5B04C68314C0EBF900EB0071 /* libvorbis.a in Frameworks */,
+				5B04C68414C0EBF900EB0071 /* libvorbisenc.a in Frameworks */,
+				5B04C68514C0EBF900EB0071 /* libvorbisfile.a in Frameworks */,
+				5B04C68614C0EBF900EB0071 /* libpng.a in Frameworks */,
+				5B04C68714C0EBF900EB0071 /* libz.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		427D4F48147DC9610076760E /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				42CD0ED6147D92A70000361E /* libgameplay.a */,
+				5B04C69F14C0EC7B00EB0071 /* libgameplay.a */,
 				42CD0ED8147D92CA0000361E /* libbullet.a */,
 				42CD0ED9147D92CA0000361E /* libogg.a */,
 				42CD0EDA147D92CA0000361E /* libvorbis.a */,
@@ -86,6 +130,7 @@
 		42CCD483146D80DA00353661 = {
 			isa = PBXGroup;
 			children = (
+				42458CB314C3AAF900EFFB61 /* sample01-longboard-ios.plist */,
 				42C932E01491A1640098216A /* sample01-longboard-macos.plist */,
 				42CCD4C1146D91E800353661 /* icon.png */,
 				42CCD4DC146D950400353661 /* res */,
@@ -100,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				42CCD48E146D80DA00353661 /* sample01-longboard.app */,
+				5B04C69314C0EBF900EB0071 /* sample01-longboard.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -107,10 +153,8 @@
 		42CCD491146D80DA00353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				42CCD492146D80DA00353661 /* Cocoa.framework */,
-				42CCD4D0146D93F900353661 /* QuartzCore.framework */,
-				42CCD4D4146D941A00353661 /* OpenGL.framework */,
-				42CCD4D2146D941000353661 /* OpenAL.framework */,
+				5B04C6A214C0ED5D00EB0071 /* iOS */,
+				5B04C6A114C0ED5B00EB0071 /* Mac OS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -125,12 +169,35 @@
 			path = "sample01-longboard";
 			sourceTree = "<group>";
 		};
+		5B04C6A114C0ED5B00EB0071 /* Mac OS */ = {
+			isa = PBXGroup;
+			children = (
+				42CCD492146D80DA00353661 /* Cocoa.framework */,
+				42CCD4D0146D93F900353661 /* QuartzCore.framework */,
+				42CCD4D4146D941A00353661 /* OpenGL.framework */,
+				42CCD4D2146D941000353661 /* OpenAL.framework */,
+			);
+			name = "Mac OS";
+			sourceTree = "<group>";
+		};
+		5B04C6A214C0ED5D00EB0071 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				5B43D19914C35927008A5D9D /* Foundation.framework */,
+				5B04C69B14C0EC7100EB0071 /* OpenAL.framework */,
+				5B04C69C14C0EC7100EB0071 /* OpenGLES.framework */,
+				5B04C69914C0EC6700EB0071 /* QuartzCore.framework */,
+				5B04C69714C0EC5E00EB0071 /* UIKit.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		42CCD48D146D80DA00353661 /* sample01-longboard */ = {
+		42CCD48D146D80DA00353661 /* sample01-longboard-macos */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 42CCD4AC146D80DB00353661 /* Build configuration list for PBXNativeTarget "sample01-longboard" */;
+			buildConfigurationList = 42CCD4AC146D80DB00353661 /* Build configuration list for PBXNativeTarget "sample01-longboard-macos" */;
 			buildPhases = (
 				42CCD48A146D80DA00353661 /* Sources */,
 				42CCD48B146D80DA00353661 /* Frameworks */,
@@ -141,9 +208,27 @@
 			);
 			dependencies = (
 			);
-			name = "sample01-longboard";
+			name = "sample01-longboard-macos";
 			productName = "sample01-longboard";
 			productReference = 42CCD48E146D80DA00353661 /* sample01-longboard.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5B04C67C14C0EBF900EB0071 /* sample01-longboard-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B04C69014C0EBF900EB0071 /* Build configuration list for PBXNativeTarget "sample01-longboard-ios" */;
+			buildPhases = (
+				5B04C67D14C0EBF900EB0071 /* Sources */,
+				5B04C67F14C0EBF900EB0071 /* Frameworks */,
+				5B04C68C14C0EBF900EB0071 /* ShellScript */,
+				5B04C68D14C0EBF900EB0071 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "sample01-longboard-ios";
+			productName = "sample01-longboard";
+			productReference = 5B04C69314C0EBF900EB0071 /* sample01-longboard.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -166,7 +251,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42CCD48D146D80DA00353661 /* sample01-longboard */,
+				42CCD48D146D80DA00353661 /* sample01-longboard-macos */,
+				5B04C67C14C0EBF900EB0071 /* sample01-longboard-ios */,
 			);
 		};
 /* End PBXProject section */
@@ -181,10 +267,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5B04C68D14C0EBF900EB0071 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B04C68E14C0EBF900EB0071 /* icon.png in Resources */,
+				5B04C68F14C0EBF900EB0071 /* res in Resources */,
+				42458CB414C3AAF900EFFB61 /* sample01-longboard-ios.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		4224466A14716A7D0021F131 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "touch -cm ${SRCROOT}/res";
+		};
+		5B04C68C14C0EBF900EB0071 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -208,6 +317,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5B04C67D14C0EBF900EB0071 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B04C67E14C0EBF900EB0071 /* LongboardGame.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -215,7 +332,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -234,6 +350,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				VALID_ARCHS = "armv6 i386 x86_64 armv7";
 			};
 			name = Debug;
 		};
@@ -241,7 +359,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -253,13 +370,15 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				VALID_ARCHS = "armv6 i386 x86_64 armv7";
 			};
 			name = Release;
 		};
 		42CCD4AD146D80DB00353661 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -278,9 +397,12 @@
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "sample01-longboard";
+				SUPPORTED_PLATFORMS = macosx;
+				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -288,7 +410,7 @@
 		42CCD4AE146D80DB00353661 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -307,9 +429,78 @@
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "sample01-longboard";
+				SUPPORTED_PLATFORMS = macosx;
+				VALID_ARCHS = "i386 x86_64";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		5B04C69114C0EBF900EB0071 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					../../gameplay/src,
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
+				);
+				INFOPLIST_FILE = "sample01-longboard-ios.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+				);
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_NAME = "sample01-longboard";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				VALID_ARCHS = "armv6 armv7";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		5B04C69214C0EBF900EB0071 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					../../gameplay/src,
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
+				);
+				INFOPLIST_FILE = "sample01-longboard-ios.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+				);
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_NAME = "sample01-longboard";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				VALID_ARCHS = "armv6 armv7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -326,11 +517,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		42CCD4AC146D80DB00353661 /* Build configuration list for PBXNativeTarget "sample01-longboard" */ = {
+		42CCD4AC146D80DB00353661 /* Build configuration list for PBXNativeTarget "sample01-longboard-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				42CCD4AD146D80DB00353661 /* Debug */,
 				42CCD4AE146D80DB00353661 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5B04C69014C0EBF900EB0071 /* Build configuration list for PBXNativeTarget "sample01-longboard-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B04C69114C0EBF900EB0071 /* Debug */,
+				5B04C69214C0EBF900EB0071 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -65,7 +65,6 @@ static View* __view = NULL;
     [[NSApplication sharedApplication] terminate:self];
 }
 
-
 - (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -529,7 +528,7 @@ Platform* Platform::create(Game* game)
 int Platform::enterMessagePump()
 {
     NSAutoreleasePool* pool = [NSAutoreleasePool new];
-    NSApplication* NSApp = [NSApplication sharedApplication];
+    NSApplication* app = [NSApplication sharedApplication];
     NSRect screenBounds = [[NSScreen mainScreen] frame];
     NSRect viewBounds = NSMakeRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     
@@ -550,7 +549,7 @@ int Platform::enterMessagePump()
     [window setDelegate:__view];
     [__view release];
     
-    [NSApp run];
+    [app run];
     
     [pool release];
     return EXIT_SUCCESS;
