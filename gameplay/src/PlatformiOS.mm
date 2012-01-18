@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import <CoreMotion/CoreMotion.h>
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/EAGLDrawable.h>
 #import <OpenGLES/ES2/gl.h>
@@ -308,7 +309,7 @@ int getKey(unichar keyCode);
         CGPoint touchLoc = [t locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.y,  touchLoc.x, uniqueTouch);
+        Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.x,  touchLoc.y, uniqueTouch);
     }
 }
 
@@ -320,7 +321,7 @@ int getKey(unichar keyCode);
         CGPoint touchLoc = [t locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchLoc.y, touchLoc.x, uniqueTouch);
+        Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchLoc.x, touchLoc.y, uniqueTouch);
     }
 }
 
@@ -338,7 +339,7 @@ int getKey(unichar keyCode);
         CGPoint touchLoc = [t locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchLoc.y,  touchLoc.x, uniqueTouch);
+        Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchLoc.x,  touchLoc.y, uniqueTouch);
     }
 }
 
@@ -402,10 +403,11 @@ int getKey(unichar keyCode);
 @end
 
 
-@interface AppDelegate : UIApplication <UIApplicationDelegate, UIAccelerometerDelegate>
+@interface AppDelegate : UIApplication <UIApplicationDelegate>
 {
     UIWindow* window;
     ViewController* viewController;
+    CMMotionManager *motionManager;
 }
 @end
 
@@ -416,10 +418,15 @@ int getKey(unichar keyCode);
 {
     __appDelegate = self;
     [UIApplication sharedApplication].statusBarHidden = YES;
-    UIAccelerometer*  accelerometer = [UIAccelerometer sharedAccelerometer];
-    accelerometer.updateInterval = 1 / 40.0;    // 40Hz
-    accelerometer.delegate = self;
+
     
+    motionManager = [[CMMotionManager alloc] init];
+    if([motionManager isAccelerometerAvailable] == YES) 
+    {
+        motionManager.accelerometerUpdateInterval = 1 / 40.0;    // 40Hz
+        [motionManager startAccelerometerUpdates];
+    }
+        
     window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     viewController = [[ViewController alloc] init];
     [window setRootViewController:viewController];
@@ -427,15 +434,23 @@ int getKey(unichar keyCode);
     return YES;
 }
 
-
-- (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration
+- (void)getAccelerometerPitch:(float *)pitch roll:(float *)roll 
 {
-    UIAccelerationValue x, y, z;
-    x = acceleration.x;
-    y = acceleration.y;
-    z = acceleration.z;
+    float p = 0.0f;
+    float r = 0.0f;
+    CMAccelerometerData *accelerometerData = motionManager.accelerometerData;
+    if(accelerometerData != nil) 
+    {
+        float tx, ty, tz;
+        tx = accelerometerData.acceleration.y;
+        ty = -accelerometerData.acceleration.x;
+        tz = -accelerometerData.acceleration.z;      
+        p = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
+        r = atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;     
+    }
     
-    // Do something with the values.
+    if(pitch != NULL) *pitch = p;
+    if(roll != NULL) *roll = r;
 }
 
 - (void)applicationWillResignActive:(UIApplication*)application
@@ -468,6 +483,7 @@ int getKey(unichar keyCode);
     [window setRootViewController:nil];
     [viewController release];
     [window release];
+    [motionManager release];
 	[super dealloc];
 }
 
@@ -768,8 +784,7 @@ namespace gameplay
     
     void Platform::getAccelerometerValues(float* pitch, float* roll)
     {
-        *pitch = __pitch;
-        *roll = __roll;
+        [__appDelegate getAccelerometerPitch:pitch roll:roll];
     }
     
     void Platform::setMultiTouch(bool enabled) 
@@ -786,6 +801,13 @@ namespace gameplay
     {
         if (__view)
             [[__view getContext] presentRenderbuffer:GL_RENDERBUFFER];
+    }
+    
+    void displayKeyboard(bool display) {
+        if(__view) {
+            if(display) [__view showKeyboard];
+            else [__view dismissKeyboard];
+        }
     }
     
 }

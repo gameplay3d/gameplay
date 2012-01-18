@@ -304,6 +304,9 @@
 		5B5ADCE314C22DF900AC6109 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5ADCE214C22DF900AC6109 /* libz.dylib */; };
 		5B5ADCE514C22E1F00AC6109 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5ADCE414C22E1F00AC6109 /* libz.dylib */; };
 		5B5ADD2F14C2439700AC6109 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5ADD2E14C2439700AC6109 /* Foundation.framework */; };
+		5BB0823D14C6FEC40019975F /* Mouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB0823C14C6FEC40019975F /* Mouse.h */; };
+		5BB0823E14C6FEC40019975F /* Mouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB0823C14C6FEC40019975F /* Mouse.h */; };
+		5BD776FD14C77E1F001CADA0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BD776FC14C77E1F001CADA0 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -484,9 +487,6 @@
 		5B04C5F714BFE50B00EB0071 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		5B04C5F914BFE51000EB0071 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		5B04C5FB14BFE51600EB0071 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		5B3383A214C5181E000DC4F8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		5B3383A414C5181E000DC4F8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		5B3383A614C5181E000DC4F8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		5B43D17914C3497B008A5D9D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		5B5ADCE214C22DF900AC6109 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = SDKs/MacOSX10.7.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5B5ADCE414C22E1F00AC6109 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
@@ -497,6 +497,10 @@
 		5B5DB93214C25BA5007755DB /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbis.a"; sourceTree = "<group>"; };
 		5B5DB93314C25BA5007755DB /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbisenc.a"; sourceTree = "<group>"; };
 		5B5DB93414C25BA5007755DB /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbisfile.a"; sourceTree = "<group>"; };
+		5BB0823814C6FEB10019975F /* gameplay-main-android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-android.cpp"; path = "src/gameplay-main-android.cpp"; sourceTree = SOURCE_ROOT; };
+		5BB0823914C6FEB10019975F /* PlatformAndroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformAndroid.cpp; path = src/PlatformAndroid.cpp; sourceTree = SOURCE_ROOT; };
+		5BB0823C14C6FEC40019975F /* Mouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mouse.h; path = src/Mouse.h; sourceTree = SOURCE_ROOT; };
+		5BD776FC14C77E1F001CADA0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -522,6 +526,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BD776FD14C77E1F001CADA0 /* CoreMotion.framework in Frameworks */,
 				5B5ADD2F14C2439700AC6109 /* Foundation.framework in Frameworks */,
 				5B5ADCE514C22E1F00AC6109 /* libz.dylib in Frameworks */,
 				5B04C5FC14BFE51600EB0071 /* OpenAL.framework in Frameworks */,
@@ -589,9 +594,6 @@
 			children = (
 				5B04C5FE14BFE52F00EB0071 /* Mac OS X */,
 				5B04C5FD14BFE52300EB0071 /* iOS */,
-				5B3383A214C5181E000DC4F8 /* UIKit.framework */,
-				5B3383A414C5181E000DC4F8 /* Foundation.framework */,
-				5B3383A614C5181E000DC4F8 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -599,6 +601,7 @@
 		5B04C5FD14BFE52300EB0071 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				5BD776FC14C77E1F001CADA0 /* CoreMotion.framework */,
 				5B43D17914C3497B008A5D9D /* CoreGraphics.framework */,
 				5B5ADD2E14C2439700AC6109 /* Foundation.framework */,
 				5B04C5FB14BFE51600EB0071 /* OpenAL.framework */,
@@ -623,11 +626,13 @@
 		5B43D19614C35344008A5D9D /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				5BB0823814C6FEB10019975F /* gameplay-main-android.cpp */,
 				42CD0DE0147D8FF50000361E /* gameplay-main-win32.cpp */,
 				42CD0DDE147D8FF50000361E /* gameplay-main-macos.mm */,
 				5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */,
 				42CD0DDF147D8FF50000361E /* gameplay-main-qnx.cpp */,
 				42CD0E19147D8FF50000361E /* Platform.h */,
+				5BB0823914C6FEB10019975F /* PlatformAndroid.cpp */,
 				42CD0E1C147D8FF50000361E /* PlatformWin32.cpp */,
 				42CD0E1A147D8FF50000361E /* PlatformMacOS.mm */,
 				5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */,
@@ -639,6 +644,7 @@
 		5B43D19714C35347008A5D9D /* gameplay */ = {
 			isa = PBXGroup;
 			children = (
+				5BB0823C14C6FEC40019975F /* Mouse.h */,
 				42CD0DB1147D8FF50000361E /* Animation.cpp */,
 				42CD0DB2147D8FF50000361E /* Animation.h */,
 				42CD0DB3147D8FF50000361E /* AnimationClip.cpp */,
@@ -894,6 +900,7 @@
 				4208DEEC14A407B900D3C511 /* Keyboard.h in Headers */,
 				4208DEEE14A407D500D3C511 /* Touch.h in Headers */,
 				4201819114A41B18008C3F56 /* MeshBatch.h in Headers */,
+				5BB0823D14C6FEC40019975F /* Mouse.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -971,6 +978,7 @@
 				5B04C5C414BFCFE100EB0071 /* Keyboard.h in Headers */,
 				5B04C5C514BFCFE100EB0071 /* Touch.h in Headers */,
 				5B04C5C614BFCFE100EB0071 /* MeshBatch.h in Headers */,
+				5BB0823E14C6FEC40019975F /* Mouse.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
