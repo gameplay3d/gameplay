@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -113,7 +112,8 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_properties.html#a524131493746464a6354bfee94a99560">getNamespace</a>(const char *id) const </td><td><a class="el" href="classgameplay_1_1_properties.html">gameplay::Properties</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_properties.html#a874181016cdafa026a052baf0c10597c">getNamespace</a>() const </td><td><a class="el" href="classgameplay_1_1_properties.html">gameplay::Properties</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_properties.html#a75aca7c32447c266425aeb5c1635be31">getNextNamespace</a>()</td><td><a class="el" href="classgameplay_1_1_properties.html">gameplay::Properties</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_properties.html#a899b47563b2b1aa1d79df7156a3918d3">getNextProperty</a>(const char **value=NULL)</td><td><a class="el" href="classgameplay_1_1_properties.html">gameplay::Properties</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_properties.html#a666b05652f9d3d2b3c3ca8b4bc331bae">getNextProperty</a>(char **value=NULL)</td><td><a class="el" href="classgameplay_1_1_properties.html">gameplay::Properties</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_properties.html#a40e005c3e4e6d9f28305b5ee425629a9">getQuaternionFromAxisAngle</a>(const char *name, Quaternion *out) const </td><td><a class="el" href="classgameplay_1_1_properties.html">gameplay::Properties</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_properties.html#aa684e793fd755acf2611079ea4e56b96">getString</a>(const char *name=NULL) const </td><td><a class="el" href="classgameplay_1_1_properties.html">gameplay::Properties</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_properties.html#aafe27a822f80ddea40bc02851726191a">getType</a>(const char *name=NULL) const </td><td><a class="el" href="classgameplay_1_1_properties.html">gameplay::Properties</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_properties.html#a4404d17148833a5b5978d2bcb781a200">getVector2</a>(const char *name, Vector2 *out) const </td><td><a class="el" href="classgameplay_1_1_properties.html">gameplay::Properties</a></td><td></td></tr>
@@ -138,7 +138,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -148,7 +148,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:04 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

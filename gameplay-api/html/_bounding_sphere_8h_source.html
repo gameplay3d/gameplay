@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -157,7 +156,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00176"></a>00176     <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a>&amp; sphere, <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>* points, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> count);
 <a name="l00177"></a>00177 };
 <a name="l00178"></a>00178 
-<a name="l00186"></a>00186 <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> <a class="code" href="namespacegameplay.html#a30e8f726bc44ff2a8e04fe622c1e0ed5">operator*</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; matrix, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a>&amp; sphere);
+<a name="l00186"></a>00186 <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> operator*(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; matrix, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a>&amp; sphere);
 <a name="l00187"></a>00187 
 <a name="l00188"></a>00188 }
 <a name="l00189"></a>00189 
@@ -174,7 +173,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -184,7 +183,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:02 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:01 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

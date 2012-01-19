@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -199,24 +198,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00239"></a>00239     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> _timeStarted;               <span class="comment">// The game time when this clip was actually started.</span>
 <a name="l00240"></a>00240     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> _elapsedTime;               <span class="comment">// Time elapsed while the clip is running.</span>
 <a name="l00241"></a>00241     <span class="keywordtype">long</span> _runningTime;                        <span class="comment">// Keeps track of the Animation&#39;s relative time in respect to the active duration.</span>
-<a name="l00242"></a>00242     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* _channelPriority;           <span class="comment">// Keeps track of each channel&#39;s priority.</span>
-<a name="l00243"></a>00243     <a class="code" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>* _crossFadeToClip;          <span class="comment">// The clip to cross fade to</span>
-<a name="l00244"></a>00244     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> _crossFadeStart;            <span class="comment">// The time at which the cross fade started.</span>
-<a name="l00245"></a>00245     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> _crossFadeOutElapsed;       <span class="comment">// The amount of time that has elapsed for the crossfade.</span>
-<a name="l00246"></a>00246     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> _crossFadeOutDuration;      <span class="comment">// The duration of the cross fade.</span>
-<a name="l00247"></a>00247     <span class="keywordtype">float</span> _blendWeight;                       <span class="comment">// The clip&#39;s blendweight</span>
-<a name="l00248"></a>00248     <span class="keywordtype">bool</span> _isFadingOutStarted;                 <span class="comment">// Flag to indicate if the cross fade started</span>
-<a name="l00249"></a>00249     <span class="keywordtype">bool</span> _isFadingOut;                        <span class="comment">// Flag to indicate if the clip is fading out</span>
-<a name="l00250"></a>00250     <span class="keywordtype">bool</span> _isFadingIn;                         <span class="comment">// Flag to indicate if the clip is fading in.</span>
-<a name="l00251"></a>00251     std::vector&lt;AnimationValue*&gt; _values;     <span class="comment">// AnimationValue holder.</span>
-<a name="l00252"></a>00252     std::vector&lt;Listener*&gt;* _beginListeners;  <span class="comment">// Collection of begin listeners on the clip</span>
-<a name="l00253"></a>00253     std::vector&lt;Listener*&gt;* _endListeners;    <span class="comment">// Collection of end listeners on the clip</span>
-<a name="l00254"></a>00254 
-<a name="l00255"></a>00255 };
-<a name="l00256"></a>00256 
-<a name="l00257"></a>00257 }
-<a name="l00258"></a>00258 
-<a name="l00259"></a>00259 <span class="preprocessor">#endif</span>
+<a name="l00242"></a>00242     <a class="code" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>* _crossFadeToClip;          <span class="comment">// The clip to cross fade to</span>
+<a name="l00243"></a>00243     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> _crossFadeStart;            <span class="comment">// The time at which the cross fade started.</span>
+<a name="l00244"></a>00244     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> _crossFadeOutElapsed;       <span class="comment">// The amount of time that has elapsed for the crossfade.</span>
+<a name="l00245"></a>00245     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> _crossFadeOutDuration;      <span class="comment">// The duration of the cross fade.</span>
+<a name="l00246"></a>00246     <span class="keywordtype">float</span> _blendWeight;                       <span class="comment">// The clip&#39;s blendweight</span>
+<a name="l00247"></a>00247     <span class="keywordtype">bool</span> _isFadingOutStarted;                 <span class="comment">// Flag to indicate if the cross fade started</span>
+<a name="l00248"></a>00248     <span class="keywordtype">bool</span> _isFadingOut;                        <span class="comment">// Flag to indicate if the clip is fading out</span>
+<a name="l00249"></a>00249     <span class="keywordtype">bool</span> _isFadingIn;                         <span class="comment">// Flag to indicate if the clip is fading in.</span>
+<a name="l00250"></a>00250     std::vector&lt;AnimationValue*&gt; _values;     <span class="comment">// AnimationValue holder.</span>
+<a name="l00251"></a>00251     std::vector&lt;Listener*&gt;* _beginListeners;  <span class="comment">// Collection of begin listeners on the clip</span>
+<a name="l00252"></a>00252     std::vector&lt;Listener*&gt;* _endListeners;    <span class="comment">// Collection of end listeners on the clip</span>
+<a name="l00253"></a>00253 
+<a name="l00254"></a>00254 };
+<a name="l00255"></a>00255 
+<a name="l00256"></a>00256 }
+<a name="l00257"></a>00257 
+<a name="l00258"></a>00258 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -227,7 +225,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -237,7 +235,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:02 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:01 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

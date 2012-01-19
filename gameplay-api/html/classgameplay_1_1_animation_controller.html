@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -111,6 +110,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#a6611a79d921ca44f2d5bfed37ec11de1">createAnimation</a> (const char *id, <a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a> *target, int propertyId, unsigned int keyCount, unsigned long *keyTimes, float *keyValues, <a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">Curve::InterpolationType</a> type)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#a11c72ecd9b571da25e50c436e5c95c4c">createAnimation</a> (const char *id, <a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a> *target, int propertyId, unsigned int keyCount, unsigned long *keyTimes, float *keyValues, float *keyInValue, float *keyOutValue, <a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">Curve::InterpolationType</a> type)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#af8c170da016677c7fae7b09785057858">createAnimation</a> (const char *id, <a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a> *target, const char *animationFile)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#aa3c6882485399085d7276e7d62c9969a">createAnimationFromTo</a> (const char *id, <a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a> *target, int propertyId, float *from, float *to, <a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">Curve::InterpolationType</a> type, unsigned long duration)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#afe9607971679caaa67a8012aa5168cad">createAnimationFromBy</a> (const char *id, <a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a> *target, int propertyId, float *from, float *by, <a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">Curve::InterpolationType</a> type, unsigned long duration)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#a9f28490ed5db01bc5136918adbdbedbe">getAnimation</a> (const char *id) const </td></tr>
@@ -123,6 +123,8 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Game</b></td></tr>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad47388abe0372b9b407ebabb3379a976"></a><!-- doxytag: member="gameplay::AnimationController::AnimationClip" ref="ad47388abe0372b9b407ebabb3379a976" args="" -->
 class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationClip</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2fe0821e1332c0b5783af15362004aa5"></a><!-- doxytag: member="gameplay::AnimationController::SceneLoader" ref="a2fe0821e1332c0b5783af15362004aa5" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>SceneLoader</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a class for controlling game animation. </p>
@@ -194,7 +196,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationClip</b></t
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The newly created animation, or NULL if an animation with the given ID already exists. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The newly created animation. </dd></dl>
 
 </div>
 </div>
@@ -279,7 +281,50 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationClip</b></t
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The newly created animation, or NULL if an animation with the given ID already exists. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The newly created animation. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af8c170da016677c7fae7b09785057858"></a><!-- doxytag: member="gameplay::AnimationController::createAnimation" ref="af8c170da016677c7fae7b09785057858" args="(const char *id, AnimationTarget *target, const char *animationFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> * gameplay::AnimationController::createAnimation </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a> *&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>animationFile</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Creates an animation on this target using the data from the given properties object.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>The ID of the animation. </td></tr>
+    <tr><td class="paramname">target</td><td>The animation target. </td></tr>
+    <tr><td class="paramname">animationFile</td><td>The animation file defining the animation data.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The newly created animation. </dd></dl>
 
 </div>
 </div>
@@ -350,7 +395,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationClip</b></t
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The newly created animation, or NULL if an animation with the given ID already exists. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The newly created animation. </dd></dl>
 
 </div>
 </div>
@@ -421,7 +466,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationClip</b></t
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The newly created animation, or NULL if an animation with the given ID already exists. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The newly created animation. </dd></dl>
 
 </div>
 </div>
@@ -475,14 +520,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationClip</b></t
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_animation_controller.html">AnimationController</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -492,7 +537,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationClip</b></t
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:04 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:02 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

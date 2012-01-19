@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -188,7 +187,8 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#af8ac3412cd63797063f1097edb8aff61">create</a> (const char *particleFile)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a90b392d11616fb0fa221f753c5818e1b">create</a> (const char *texturePath, TextureBlending blending, unsigned int particleCountMax)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a9b0b57491cba63d78e2c0094fec11cc8">create</a> (<a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a2ffa63542069e88cd1e4b148bebdcbde">create</a> (const char *texturePath, TextureBlending textureBlending, unsigned int particleCountMax)</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6db9d28bd448a131448276ee03de1e6d"></a><!-- doxytag: member="gameplay::ParticleEmitter::Node" ref="a6db9d28bd448a131448276ee03de1e6d" args="" -->
@@ -261,7 +261,32 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a90b392d11616fb0fa221f753c5818e1b"></a><!-- doxytag: member="gameplay::ParticleEmitter::create" ref="a90b392d11616fb0fa221f753c5818e1b" args="(const char *texturePath, TextureBlending blending, unsigned int particleCountMax)" -->
+<a class="anchor" id="a9b0b57491cba63d78e2c0094fec11cc8"></a><!-- doxytag: member="gameplay::ParticleEmitter::create" ref="a9b0b57491cba63d78e2c0094fec11cc8" args="(Properties *properties)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> * gameplay::ParticleEmitter::create </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td>
+          <td class="paramname"><em>properties</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Creates a particle emitter from the specified properties object.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">properties</td><td>The properties object defining the particle emitter (must have namespace equal to 'particle'). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The newly created particle emitter, or <code>NULL</code> if the particle emitter failed to load. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2ffa63542069e88cd1e4b148bebdcbde"></a><!-- doxytag: member="gameplay::ParticleEmitter::create" ref="a2ffa63542069e88cd1e4b148bebdcbde" args="(const char *texturePath, TextureBlending textureBlending, unsigned int particleCountMax)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -275,7 +300,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">TextureBlending&#160;</td>
-          <td class="paramname"><em>blending</em>, </td>
+          <td class="paramname"><em>textureBlending</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -295,6 +320,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">texturePath</td><td>A path to the image to use as this ParticleEmitter's texture. </td></tr>
+    <tr><td class="paramname">textureBlending</td><td>The type of texture blending to be used for the particles emitted. </td></tr>
     <tr><td class="paramname">particleCountMax</td><td>The maximum number of particles that can be alive at one time in this ParticleEmitter's system. </td></tr>
   </table>
   </dd>
@@ -1591,14 +1617,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -1608,7 +1634,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:03 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

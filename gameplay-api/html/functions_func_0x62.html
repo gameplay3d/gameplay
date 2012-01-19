@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -136,17 +135,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <h3><a class="anchor" id="index_b"></a>- b -</h3><ul>
 <li>begin()
 : <a class="el" href="classgameplay_1_1_font.html#afc9fec3961ca4475ee840cfca2e28319">gameplay::Font</a>
+, <a class="el" href="classgameplay_1_1_mesh_batch.html#a35942489987084b71f222b5edd3b9984">gameplay::MeshBatch</a>
 , <a class="el" href="classgameplay_1_1_sprite_batch.html#acccf9b0d9d23593702cc83ecd1f2ebc9">gameplay::SpriteBatch</a>
 </li>
 <li>bind()
-: <a class="el" href="classgameplay_1_1_frame_buffer.html#a84e07fb4a32d5cb954ae734e232e5a7f">gameplay::FrameBuffer</a>
-, <a class="el" href="classgameplay_1_1_texture_1_1_sampler.html#a25372f518083a0a6fa43c01499b77005">gameplay::Texture::Sampler</a>
-, <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html#aeaee5c067b4e025f79e36e4a93886200">gameplay::VertexAttributeBinding</a>
-, <a class="el" href="classgameplay_1_1_pass.html#a309772048014e32dc61ed01c7dfac34d">gameplay::Pass</a>
-, <a class="el" href="classgameplay_1_1_viewport.html#a1a458bcf99d551de28e962404b62d8ed">gameplay::Viewport</a>
-, <a class="el" href="classgameplay_1_1_effect.html#a3def698055a1e241d308d1626784d404">gameplay::Effect</a>
-, <a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a191c50f6e7f169acde2dcbd0c07a49a0">gameplay::RenderState::StateBlock</a>
+: <a class="el" href="classgameplay_1_1_effect.html#a3def698055a1e241d308d1626784d404">gameplay::Effect</a>
 , <a class="el" href="classgameplay_1_1_render_state.html#ad3a158e8cc808d7405296002e1e164c0">gameplay::RenderState</a>
+, <a class="el" href="classgameplay_1_1_texture_1_1_sampler.html#a25372f518083a0a6fa43c01499b77005">gameplay::Texture::Sampler</a>
+, <a class="el" href="classgameplay_1_1_frame_buffer.html#a84e07fb4a32d5cb954ae734e232e5a7f">gameplay::FrameBuffer</a>
+, <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html#aeaee5c067b4e025f79e36e4a93886200">gameplay::VertexAttributeBinding</a>
+, <a class="el" href="classgameplay_1_1_viewport.html#a1a458bcf99d551de28e962404b62d8ed">gameplay::Viewport</a>
+, <a class="el" href="classgameplay_1_1_pass.html#a309772048014e32dc61ed01c7dfac34d">gameplay::Pass</a>
+, <a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a191c50f6e7f169acde2dcbd0c07a49a0">gameplay::RenderState::StateBlock</a>
 </li>
 <li>bindAudioListenerToCamera()
 : <a class="el" href="classgameplay_1_1_scene.html#a3c3e6c8ff626476027f67d08d409ba36">gameplay::Scene</a>
@@ -176,7 +176,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -186,7 +186,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:02 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -128,10 +127,6 @@ Public Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aeda54e8fa43853b7795b53d99aab08b4">Type</a> { <b>NODE</b> =  1, 
 <b>JOINT</b> =  2
  }</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#af4762e3acbeef5bb81b6f016610691c0">BoundsType</a> { <b>NONE</b>, 
-<b>BOX</b>, 
-<b>SPHERE</b>
- }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a46560582234f547970a18ae691fd44fc">getId</a> () const </td></tr>
@@ -154,7 +149,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ab41ebdcc12616a93079fedd50d167879">getInverseTransposeWorldViewMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a425203605e6aba0838fee6057623cd03">getViewMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ab396c23990679f45dcf5bd3477d53f8d">getInverseViewMatrix</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a2265e96c01c9aa6e68b5a6f2c5ab86bc">getProjectionMatrix</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aa5534d70a603883431a0a5f692d6d383">getProjectionMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a1c19bce9f534b65316b5b315e91c13d4">getViewProjectionMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a50f1144b114d222a9ad5bea75cd3428b">getInverseViewProjectionMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a4e69a0886698b08c91f8c4434b9c172f">getWorldViewProjectionMatrix</a> () const </td></tr>
@@ -169,16 +164,19 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aaf77efed0146acb8fad73497916818f8">setLight</a> (<a class="el" href="classgameplay_1_1_light.html">Light</a> *light)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_model.html">Model</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ac1fc666ef833732493e4b6f52e837096">getModel</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aa3dc1fedce81d47d06a81a000ea6b1a7">setModel</a> (<a class="el" href="classgameplay_1_1_model.html">Model</a> *model)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af503da107458894c92617953826a35d0"></a><!-- doxytag: member="gameplay::Node::getForm" ref="af503da107458894c92617953826a35d0" args="() const " -->
+<a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getForm</b> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a44bc8c91f74faa7c6ffb02e3b380feae"></a><!-- doxytag: member="gameplay::Node::setForm" ref="a44bc8c91f74faa7c6ffb02e3b380feae" args="(Form *form)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setForm</b> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#abbd78c961e780f30baecf8a264ad8b34">getAudioSource</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a0eef42b73a98454126679bf259e0831e">setAudioSource</a> (<a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a> *audio)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a0841e080bc9a013d587c7f03db54a867">getParticleEmitter</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a3d723fca56ded58e0b4553662bf1d31a">setParticleEmitter</a> (<a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *emitter)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ad00b33eac50808e73253790dfa0aaebc">getPhysicsRigidBody</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aade8d1749321b62d6c3bf43e6f383994">setPhysicsRigidBody</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html#acb0eec013fec5ce91d59a91bf3fd1497">PhysicsRigidBody::Type</a> type, float mass=0.0f, float friction=0.5f, float restitution=0.0f, float linearDamping=0.0f, float angularDamping=0.0f)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_bounding_box.html">BoundingBox</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a62c66aadd305973e50e969b5ce55766e">getBoundingBox</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a789443ee10c8c1004f21fee71a4df531">setPhysicsRigidBody</a> (const char *filePath)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a08c9977271849dadf084b3aeb60f8bb3">setPhysicsRigidBody</a> (<a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a1c7b0cbdd4d306c77dd56d6481335393">getBoundingSphere</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html#af4762e3acbeef5bb81b6f016610691c0">Node::BoundsType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a1027977832fd2596f50854dfc1a1162d">getBoundsType</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#abfaee0141421e052cd969962405ed2fe">setBoundsType</a> (<a class="el" href="classgameplay_1_1_node.html#af4762e3acbeef5bb81b6f016610691c0">Node::BoundsType</a> type)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a3af33f591f4dd25cf2e08f917bcef0bb">create</a> (const char *id=NULL)</td></tr>
@@ -188,10 +186,10 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#abb47b5a2830768df8d1089f752655725">Node</a> (const <a class="el" href="classgameplay_1_1_node.html">Node</a> &amp;copy)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a5d836d1a078a17eb53396ce65b7d9e00">~Node</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a71bec872c8bebe618885caf08843a5f5">remove</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d9e0a5ff4b151d540ef2cddf0e1cb7e"></a><!-- doxytag: member="gameplay::Node::transformChanged" ref="a7d9e0a5ff4b151d540ef2cddf0e1cb7e" args="()" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>transformChanged</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a7d9e0a5ff4b151d540ef2cddf0e1cb7e">transformChanged</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad101852cbf54700c3d10c78f69004fe9"></a><!-- doxytag: member="gameplay::Node::hierarchyChanged" ref="ad101852cbf54700c3d10c78f69004fe9" args="()" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>hierarchyChanged</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a320998fd768ae47558ba7ad77a60074a">setBoundsDirty</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2ab3598cd3d86143d25cffb970e09a4"></a><!-- doxytag: member="gameplay::Node::_scene" ref="ae2ab3598cd3d86143d25cffb970e09a4" args="" -->
@@ -214,6 +212,8 @@ unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>_childCount</
 <a class="el" href="classgameplay_1_1_light.html">Light</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_light</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a05686a4de65e5a86f32bf40a82113c53"></a><!-- doxytag: member="gameplay::Node::_model" ref="a05686a4de65e5a86f32bf40a82113c53" args="" -->
 <a class="el" href="classgameplay_1_1_model.html">Model</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_model</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afd2de9961b45705acba1c670ef21f536"></a><!-- doxytag: member="gameplay::Node::_form" ref="afd2de9961b45705acba1c670ef21f536" args="" -->
+<a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_form</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac837c4ea233f97e5c6f1a8b7af82ca6d"></a><!-- doxytag: member="gameplay::Node::_audioSource" ref="ac837c4ea233f97e5c6f1a8b7af82ca6d" args="" -->
 <a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_audioSource</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab61b2ddfd46374d273b6bacc6f807e5c"></a><!-- doxytag: member="gameplay::Node::_particleEmitter" ref="ab61b2ddfd46374d273b6bacc6f807e5c" args="" -->
@@ -226,37 +226,20 @@ unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>_childCount</
 int&#160;</td><td class="memItemRight" valign="bottom"><b>_dirtyBits</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7436cc6cc8a9ea6e3388b425dee1b202"></a><!-- doxytag: member="gameplay::Node::_notifyHierarchyChanged" ref="a7436cc6cc8a9ea6e3388b425dee1b202" args="" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>_notifyHierarchyChanged</b></td></tr>
-<tr><td class="memItemLeft" ><a class="anchor" id="a1e3043f7928be78314fe8a536497bc28"></a><!-- doxytag: member="gameplay::Node::_bounds" ref="a1e3043f7928be78314fe8a536497bc28" args="" -->
-union {</td></tr>
-<tr><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="classgameplay_1_1_bounding_box.html">BoundingBox</a> *&#160;&#160;&#160;<b>box</b></td></tr>
-<tr><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> *&#160;&#160;&#160;<b>sphere</b></td></tr>
-<tr><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><b>_bounds</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f260baa1681dcae45ea26154f94e23f"></a><!-- doxytag: member="gameplay::Node::_boundsType" ref="a9f260baa1681dcae45ea26154f94e23f" args="" -->
-<a class="el" href="classgameplay_1_1_node.html#af4762e3acbeef5bb81b6f016610691c0">BoundsType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_boundsType</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa45f1a5609704c99849b77b5db57b4b5"></a><!-- doxytag: member="gameplay::Node::_bounds" ref="aa45f1a5609704c99849b77b5db57b4b5" args="" -->
+<a class="el" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_bounds</b></td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a032858ae1fe02d2d1170981c2af2d67c"></a><!-- doxytag: member="gameplay::Node::Scene" ref="a032858ae1fe02d2d1170981c2af2d67c" args="" -->
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Scene</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a305c04df1d8a4683e8bfe85167fcfdab"></a><!-- doxytag: member="gameplay::Node::Package" ref="a305c04df1d8a4683e8bfe85167fcfdab" args="" -->
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe0a64f7e3808b1762846efaf311bd94"></a><!-- doxytag: member="gameplay::Node::MeshSkin" ref="afe0a64f7e3808b1762846efaf311bd94" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>MeshSkin</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a basic hierachial structure of transformation spaces. </p>
 </div><hr/><h2>Member Enumeration Documentation</h2>
-<a class="anchor" id="af4762e3acbeef5bb81b6f016610691c0"></a><!-- doxytag: member="gameplay::Node::BoundsType" ref="af4762e3acbeef5bb81b6f016610691c0" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="classgameplay_1_1_node.html#af4762e3acbeef5bb81b6f016610691c0">gameplay::Node::BoundsType</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Defines types of bounding volumes for nodes. </p>
-
-</div>
-</div>
 <a class="anchor" id="aeda54e8fa43853b7795b53d99aab08b4"></a><!-- doxytag: member="gameplay::Node::Type" ref="aeda54e8fa43853b7795b53d99aab08b4" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -506,25 +489,6 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 
 </div>
 </div>
-<a class="anchor" id="a62c66aadd305973e50e969b5ce55766e"></a><!-- doxytag: member="gameplay::Node::getBoundingBox" ref="a62c66aadd305973e50e969b5ce55766e" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="classgameplay_1_1_bounding_box.html">BoundingBox</a> &amp; gameplay::Node::getBoundingBox </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns the bounding box for the <a class="el" href="classgameplay_1_1_node.html">Node</a>, in world space.</p>
-<p>The returned box is only meaningful for nodes who have a bounds type of BOUNDS_TYPE_BOX, which can be specified via the setBoundsType method. Additionally, bounding volumes are only meaningful for nodes that contain data which itself contains a bounding volume, such as Model/Mesh.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The world-space bounding box for the node. </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a1c7b0cbdd4d306c77dd56d6481335393"></a><!-- doxytag: member="gameplay::Node::getBoundingSphere" ref="a1c7b0cbdd4d306c77dd56d6481335393" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -539,25 +503,10 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 </div>
 <div class="memdoc">
 <p>Returns the bounding sphere for the <a class="el" href="classgameplay_1_1_node.html">Node</a>, in world space.</p>
-<p>The returned sphere is only meaningful for nodes who have a bounds type of BOUNDS_TYPE_SPHERE, which can be specified via the setBoundsType method. Additionally, bounding volumes are only meaningful for nodes that contain data which itself contains a bounding volume, such as Model/Mesh.</p>
+<p>The bounding sphere for a node represents the area, in world space, that the node contains. This includes the space occupied by any child nodes as well as the space occupied by any data inside the node (such as models).</p>
+<p>Bounding spheres for nodes are rough approximations of the data contained within a node and they are intended for visibility testing or first-pass intersection testing only. They are not appropriate for accurate collision detection since they most often do not tightly contain a node's content.</p>
+<p>A node that does not occupy any space will return a bounding sphere with a center point equal to the node translation and a radius of zero.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The world-space bounding sphere for the node. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a1027977832fd2596f50854dfc1a1162d"></a><!-- doxytag: member="gameplay::Node::getBoundsType" ref="a1027977832fd2596f50854dfc1a1162d" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_node.html#af4762e3acbeef5bb81b6f016610691c0">Node::BoundsType</a> gameplay::Node::getBoundsType </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns the current bounding volume type of the node. </p>
 
 </div>
 </div>
@@ -848,12 +797,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 
 </div>
 </div>
-<a class="anchor" id="a2265e96c01c9aa6e68b5a6f2c5ab86bc"></a><!-- doxytag: member="gameplay::Node::getProjectionMatrix" ref="a2265e96c01c9aa6e68b5a6f2c5ab86bc" args="() const " -->
+<a class="anchor" id="aa5534d70a603883431a0a5f692d6d383"></a><!-- doxytag: member="gameplay::Node::getProjectionMatrix" ref="aa5534d70a603883431a0a5f692d6d383" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; gameplay::Node::getProjectionMatrix </td>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp; gameplay::Node::getProjectionMatrix </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1008,8 +957,6 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 <p>Gets the world matrix corresponding to this node.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The world matrix of this node. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_joint.html#a04b4a91a6b979e592eee3b17e69f211b">gameplay::Joint</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a8009fcd6e1a4ebcae7ff6a16ca4d3205"></a><!-- doxytag: member="gameplay::Node::getWorldViewMatrix" ref="a8009fcd6e1a4ebcae7ff6a16ca4d3205" args="() const " -->
@@ -1131,21 +1078,20 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 
 </div>
 </div>
-<a class="anchor" id="abfaee0141421e052cd969962405ed2fe"></a><!-- doxytag: member="gameplay::Node::setBoundsType" ref="abfaee0141421e052cd969962405ed2fe" args="(Node::BoundsType type)" -->
+<a class="anchor" id="a320998fd768ae47558ba7ad77a60074a"></a><!-- doxytag: member="gameplay::Node::setBoundsDirty" ref="a320998fd768ae47558ba7ad77a60074a" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void gameplay::Node::setBoundsType </td>
+          <td class="memname">void gameplay::Node::setBoundsDirty </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_node.html#af4762e3acbeef5bb81b6f016610691c0">Node::BoundsType</a>&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
-          <td></td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [protected]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Sets the bounding volume type of the node. </p>
+<p>Marks the bounding volume of the node as dirty. </p>
 
 </div>
 </div>
@@ -1337,6 +1283,75 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 
 </div>
 </div>
+<a class="anchor" id="a789443ee10c8c1004f21fee71a4df531"></a><!-- doxytag: member="gameplay::Node::setPhysicsRigidBody" ref="a789443ee10c8c1004f21fee71a4df531" args="(const char *filePath)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Node::setPhysicsRigidBody </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filePath</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the physics rigid body for this node using the rigid body definition in the given file.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>The path to the file that contains the rigid body definition. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a08c9977271849dadf084b3aeb60f8bb3"></a><!-- doxytag: member="gameplay::Node::setPhysicsRigidBody" ref="a08c9977271849dadf084b3aeb60f8bb3" args="(Properties *properties)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Node::setPhysicsRigidBody </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td>
+          <td class="paramname"><em>properties</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the physics rigid body for this node from the given properties object.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">properties</td><td>The properties object defining the rigid body (must have namespace equal to 'rigidbody'). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a7d9e0a5ff4b151d540ef2cddf0e1cb7e"></a><!-- doxytag: member="gameplay::Node::transformChanged" ref="a7d9e0a5ff4b151d540ef2cddf0e1cb7e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Node::transformChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Called when this Node's transform changes. </p>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_joint.html#af0ca30705f3d4ff515f799ab16133151">gameplay::Joint</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_node_8h_source.html">Node.h</a></li>
 <li>gameplay/src/Node.cpp</li>
@@ -1345,14 +1360,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_node.html">Node</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -1362,7 +1377,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:03 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

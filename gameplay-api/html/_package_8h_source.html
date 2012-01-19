@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -109,109 +108,116 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00011"></a>00011 
 <a name="l00016"></a><a class="code" href="classgameplay_1_1_package.html">00016</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_package.html">Package</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_ref.html">Ref</a>
 <a name="l00017"></a>00017 {
-<a name="l00018"></a>00018 <span class="keyword">public</span>:
+<a name="l00018"></a>00018     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_scene_loader.html">SceneLoader</a>;
 <a name="l00019"></a>00019 
-<a name="l00030"></a>00030     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_package.html">Package</a>* <a class="code" href="classgameplay_1_1_package.html#a7b6b2870c5eb2de2ba2aaedd973cebe7">create</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* path);
-<a name="l00031"></a>00031 
-<a name="l00040"></a>00040     <a class="code" href="classgameplay_1_1_scene.html">Scene</a>* <a class="code" href="classgameplay_1_1_package.html#a4ddcd565c5d291890d8d99da157975ff">loadScene</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span> = NULL);
-<a name="l00041"></a>00041 
-<a name="l00049"></a>00049     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_package.html#aad9b533d86910132c59e01331a3be598">loadNode</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>);
-<a name="l00050"></a>00050 
-<a name="l00058"></a>00058     <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>* <a class="code" href="classgameplay_1_1_package.html#a4d854371edcaa54155db0e41c0ab540b">loadMesh</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>);
-<a name="l00059"></a>00059 
-<a name="l00067"></a>00067     <a class="code" href="classgameplay_1_1_font.html">Font</a>* <a class="code" href="classgameplay_1_1_package.html#ad631dccb3bf1d435f2a6a35d459a6c34">loadFont</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>);
-<a name="l00068"></a>00068 
-<a name="l00076"></a>00076     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_package.html#aea4edcbd687fb2d7101a600f845c0f6e">contains</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>) <span class="keyword">const</span>;
-<a name="l00077"></a>00077 
-<a name="l00081"></a>00081     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_package.html#afa0cf534d5e4d59cb127a215d3299b63">getObjectCount</a>() <span class="keyword">const</span>;
-<a name="l00082"></a>00082 
-<a name="l00090"></a>00090     <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classgameplay_1_1_package.html#a4d6dc19f76b2f091392b734b45454712">getObjectID</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index) <span class="keyword">const</span>;
-<a name="l00091"></a>00091 
-<a name="l00092"></a>00092 <span class="keyword">private</span>:
+<a name="l00020"></a>00020 <span class="keyword">public</span>:
+<a name="l00021"></a>00021 
+<a name="l00032"></a>00032     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_package.html">Package</a>* <a class="code" href="classgameplay_1_1_package.html#a7b6b2870c5eb2de2ba2aaedd973cebe7">create</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* path);
+<a name="l00033"></a>00033 
+<a name="l00042"></a>00042     <a class="code" href="classgameplay_1_1_scene.html">Scene</a>* <a class="code" href="classgameplay_1_1_package.html#a4ddcd565c5d291890d8d99da157975ff">loadScene</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span> = NULL);
+<a name="l00043"></a>00043 
+<a name="l00051"></a>00051     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_package.html#aad9b533d86910132c59e01331a3be598">loadNode</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>);
+<a name="l00052"></a>00052 
+<a name="l00060"></a>00060     <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>* <a class="code" href="classgameplay_1_1_package.html#a4d854371edcaa54155db0e41c0ab540b">loadMesh</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>);
+<a name="l00061"></a>00061 
+<a name="l00069"></a>00069     <a class="code" href="classgameplay_1_1_font.html">Font</a>* <a class="code" href="classgameplay_1_1_package.html#ad631dccb3bf1d435f2a6a35d459a6c34">loadFont</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>);
+<a name="l00070"></a>00070 
+<a name="l00078"></a>00078     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_package.html#aea4edcbd687fb2d7101a600f845c0f6e">contains</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>) <span class="keyword">const</span>;
+<a name="l00079"></a>00079 
+<a name="l00083"></a>00083     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_package.html#afa0cf534d5e4d59cb127a215d3299b63">getObjectCount</a>() <span class="keyword">const</span>;
+<a name="l00084"></a>00084 
+<a name="l00092"></a>00092     <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classgameplay_1_1_package.html#a4d6dc19f76b2f091392b734b45454712">getObjectID</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index) <span class="keyword">const</span>;
 <a name="l00093"></a>00093 
-<a name="l00094"></a>00094     <span class="keyword">class </span>Reference
-<a name="l00095"></a>00095     {
-<a name="l00096"></a>00096     <span class="keyword">public</span>:
-<a name="l00097"></a>00097         std::string id;
-<a name="l00098"></a>00098         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> type;
-<a name="l00099"></a>00099         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> offset;
-<a name="l00100"></a>00100 
-<a name="l00104"></a>00104         Reference();
-<a name="l00105"></a>00105 
-<a name="l00109"></a>00109         ~Reference();
-<a name="l00110"></a>00110     };
-<a name="l00111"></a>00111 
-<a name="l00112"></a>00112     <span class="keyword">class </span>MeshSkinData
-<a name="l00113"></a>00113     {
-<a name="l00114"></a>00114     <span class="keyword">public</span>:
-<a name="l00115"></a>00115         <a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>* skin;
-<a name="l00116"></a>00116         std::vector&lt;std::string&gt; joints;
-<a name="l00117"></a>00117         std::vector&lt;Matrix&gt; inverseBindPoseMatrices;
-<a name="l00118"></a>00118     };
-<a name="l00119"></a>00119 
-<a name="l00120"></a>00120     <a class="code" href="classgameplay_1_1_package.html">Package</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* path);
-<a name="l00121"></a>00121 
-<a name="l00125"></a>00125     ~<a class="code" href="classgameplay_1_1_package.html">Package</a>();
-<a name="l00126"></a>00126 
-<a name="l00130"></a>00130     Reference* find(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>) <span class="keyword">const</span>;
-<a name="l00131"></a>00131 
-<a name="l00135"></a>00135     <span class="keywordtype">void</span> clearLoadSession();
-<a name="l00136"></a>00136 
-<a name="l00143"></a>00143     <span class="keyword">const</span> <span class="keywordtype">char</span>* getIdFromOffset() <span class="keyword">const</span>;
-<a name="l00144"></a>00144 
-<a name="l00153"></a>00153     <span class="keyword">const</span> <span class="keywordtype">char</span>* getIdFromOffset(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> offset) <span class="keyword">const</span>;
-<a name="l00154"></a>00154 
-<a name="l00164"></a>00164     Reference* seekTo(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> type);
-<a name="l00165"></a>00165 
-<a name="l00173"></a>00173     Reference* seekToFirstType(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> type);
-<a name="l00174"></a>00174 
-<a name="l00180"></a>00180     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_package.html#aad9b533d86910132c59e01331a3be598">loadNode</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <a class="code" href="classgameplay_1_1_scene.html">Scene</a>* sceneContext, <a class="code" href="classgameplay_1_1_node.html">Node</a>* nodeContext);
-<a name="l00181"></a>00181 
-<a name="l00189"></a>00189     <span class="keywordtype">bool</span> read(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* ptr);
-<a name="l00190"></a>00190 
-<a name="l00198"></a>00198     <span class="keywordtype">bool</span> read(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* ptr);
-<a name="l00199"></a>00199 
-<a name="l00207"></a>00207     <span class="keywordtype">bool</span> read(<span class="keywordtype">float</span>* ptr);
-<a name="l00208"></a>00208 
-<a name="l00217"></a>00217     <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00218"></a>00218     <span class="keywordtype">bool</span> readArray(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* length, T** ptr);
-<a name="l00219"></a>00219 
-<a name="l00227"></a>00227     <span class="keywordtype">bool</span> readMatrix(<span class="keywordtype">float</span>* m);
-<a name="l00228"></a>00228 
-<a name="l00236"></a>00236     <span class="keywordtype">bool</span> readXref(std::string&amp; <span class="keywordtype">id</span>);
-<a name="l00237"></a>00237 
-<a name="l00244"></a>00244     <a class="code" href="classgameplay_1_1_node.html">Node</a>* readNode(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* sceneContext, <a class="code" href="classgameplay_1_1_node.html">Node</a>* nodeContext);
-<a name="l00245"></a>00245 
-<a name="l00251"></a>00251     <a class="code" href="classgameplay_1_1_camera.html">Camera</a>* readCamera();
-<a name="l00252"></a>00252 
-<a name="l00258"></a>00258     <a class="code" href="classgameplay_1_1_light.html">Light</a>* readLight();
-<a name="l00259"></a>00259 
-<a name="l00265"></a>00265     <a class="code" href="classgameplay_1_1_model.html">Model</a>* readModel(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* sceneContext, <a class="code" href="classgameplay_1_1_node.html">Node</a>* nodeContext);
-<a name="l00266"></a>00266 
-<a name="l00272"></a>00272     <a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>* readMeshSkin(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* sceneContext, <a class="code" href="classgameplay_1_1_node.html">Node</a>* nodeContext);
-<a name="l00273"></a>00273 
-<a name="l00279"></a>00279     <span class="keywordtype">void</span> readAnimation(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* scene);
+<a name="l00094"></a>00094 <span class="keyword">private</span>:
+<a name="l00095"></a>00095 
+<a name="l00096"></a>00096     <span class="keyword">class </span>Reference
+<a name="l00097"></a>00097     {
+<a name="l00098"></a>00098     <span class="keyword">public</span>:
+<a name="l00099"></a>00099         std::string id;
+<a name="l00100"></a>00100         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> type;
+<a name="l00101"></a>00101         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> offset;
+<a name="l00102"></a>00102 
+<a name="l00106"></a>00106         Reference();
+<a name="l00107"></a>00107 
+<a name="l00111"></a>00111         ~Reference();
+<a name="l00112"></a>00112     };
+<a name="l00113"></a>00113 
+<a name="l00114"></a>00114     <span class="keyword">struct </span>MeshSkinData
+<a name="l00115"></a>00115     {
+<a name="l00116"></a>00116         <a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>* skin;
+<a name="l00117"></a>00117         std::vector&lt;std::string&gt; joints;
+<a name="l00118"></a>00118         std::vector&lt;Matrix&gt; inverseBindPoseMatrices;
+<a name="l00119"></a>00119     };
+<a name="l00120"></a>00120 
+<a name="l00121"></a>00121     <a class="code" href="classgameplay_1_1_package.html">Package</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* path);
+<a name="l00122"></a>00122 
+<a name="l00126"></a>00126     ~<a class="code" href="classgameplay_1_1_package.html">Package</a>();
+<a name="l00127"></a>00127 
+<a name="l00131"></a>00131     Reference* find(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>) <span class="keyword">const</span>;
+<a name="l00132"></a>00132 
+<a name="l00136"></a>00136     <span class="keywordtype">void</span> clearLoadSession();
+<a name="l00137"></a>00137 
+<a name="l00144"></a>00144     <span class="keyword">const</span> <span class="keywordtype">char</span>* getIdFromOffset() <span class="keyword">const</span>;
+<a name="l00145"></a>00145 
+<a name="l00154"></a>00154     <span class="keyword">const</span> <span class="keywordtype">char</span>* getIdFromOffset(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> offset) <span class="keyword">const</span>;
+<a name="l00155"></a>00155 
+<a name="l00165"></a>00165     Reference* seekTo(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> type);
+<a name="l00166"></a>00166 
+<a name="l00174"></a>00174     Reference* seekToFirstType(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> type);
+<a name="l00175"></a>00175 
+<a name="l00186"></a>00186     <a class="code" href="classgameplay_1_1_scene.html">Scene</a>* <a class="code" href="classgameplay_1_1_package.html#a4ddcd565c5d291890d8d99da157975ff">loadScene</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <span class="keyword">const</span> std::vector&lt;std::string&gt;* nodesWithMeshRB);
+<a name="l00187"></a>00187 
+<a name="l00196"></a>00196     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_package.html#aad9b533d86910132c59e01331a3be598">loadNode</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <span class="keywordtype">bool</span> loadWithMeshRBSupport);
+<a name="l00197"></a>00197 
+<a name="l00203"></a>00203     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_package.html#aad9b533d86910132c59e01331a3be598">loadNode</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <a class="code" href="classgameplay_1_1_scene.html">Scene</a>* sceneContext, <a class="code" href="classgameplay_1_1_node.html">Node</a>* nodeContext, <span class="keywordtype">bool</span> loadWithMeshRBSupport);
+<a name="l00204"></a>00204 
+<a name="l00215"></a>00215     <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>* <a class="code" href="classgameplay_1_1_package.html#a4d854371edcaa54155db0e41c0ab540b">loadMesh</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <span class="keywordtype">bool</span> loadWithMeshRBSupport, <span class="keyword">const</span> <span class="keywordtype">char</span>* nodeId);
+<a name="l00216"></a>00216 
+<a name="l00224"></a>00224     <span class="keywordtype">bool</span> read(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* ptr);
+<a name="l00225"></a>00225 
+<a name="l00233"></a>00233     <span class="keywordtype">bool</span> read(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* ptr);
+<a name="l00234"></a>00234 
+<a name="l00242"></a>00242     <span class="keywordtype">bool</span> read(<span class="keywordtype">float</span>* ptr);
+<a name="l00243"></a>00243 
+<a name="l00252"></a>00252     <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00253"></a>00253     <span class="keywordtype">bool</span> readArray(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* length, T** ptr);
+<a name="l00254"></a>00254 
+<a name="l00262"></a>00262     <span class="keywordtype">bool</span> readMatrix(<span class="keywordtype">float</span>* m);
+<a name="l00263"></a>00263 
+<a name="l00271"></a>00271     <span class="keywordtype">bool</span> readXref(std::string&amp; <span class="keywordtype">id</span>);
+<a name="l00272"></a>00272 
+<a name="l00279"></a>00279     <a class="code" href="classgameplay_1_1_node.html">Node</a>* readNode(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* sceneContext, <a class="code" href="classgameplay_1_1_node.html">Node</a>* nodeContext, <span class="keyword">const</span> std::vector&lt;std::string&gt;* nodesWithMeshRB);
 <a name="l00280"></a>00280 
-<a name="l00286"></a>00286     <span class="keywordtype">void</span> readAnimations(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* scene);
+<a name="l00286"></a>00286     <a class="code" href="classgameplay_1_1_camera.html">Camera</a>* readCamera();
 <a name="l00287"></a>00287 
-<a name="l00297"></a>00297     <a class="code" href="classgameplay_1_1_animation.html">Animation</a>* readAnimationChannel(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* scene, <a class="code" href="classgameplay_1_1_animation.html">Animation</a>* animation, <span class="keyword">const</span> <span class="keywordtype">char</span>* animationId);
-<a name="l00298"></a>00298 
-<a name="l00305"></a>00305     <span class="keywordtype">void</span> setTransform(<span class="keyword">const</span> <span class="keywordtype">float</span>* values, <a class="code" href="classgameplay_1_1_transform.html">Transform</a>* transform);
-<a name="l00306"></a>00306 
-<a name="l00310"></a>00310     <span class="keywordtype">void</span> resolveJointReferences(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* sceneContext, <a class="code" href="classgameplay_1_1_node.html">Node</a>* nodeContext);
-<a name="l00311"></a>00311 
-<a name="l00312"></a>00312 <span class="keyword">private</span>:
-<a name="l00313"></a>00313     std::string _path;
-<a name="l00314"></a>00314     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _referenceCount;
-<a name="l00315"></a>00315     Reference* _references;
-<a name="l00316"></a>00316     FILE* _file;
-<a name="l00317"></a>00317 
-<a name="l00318"></a>00318     std::vector&lt;MeshSkinData*&gt; _meshSkins;
-<a name="l00319"></a>00319 };
-<a name="l00320"></a>00320 
-<a name="l00321"></a>00321 }
+<a name="l00293"></a>00293     <a class="code" href="classgameplay_1_1_light.html">Light</a>* readLight();
+<a name="l00294"></a>00294 
+<a name="l00300"></a>00300     <a class="code" href="classgameplay_1_1_model.html">Model</a>* readModel(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* sceneContext, <a class="code" href="classgameplay_1_1_node.html">Node</a>* nodeContext, <span class="keywordtype">bool</span> loadWithMeshRBSupport, <span class="keyword">const</span> <span class="keywordtype">char</span>* nodeId);
+<a name="l00301"></a>00301 
+<a name="l00307"></a>00307     <a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>* readMeshSkin(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* sceneContext, <a class="code" href="classgameplay_1_1_node.html">Node</a>* nodeContext);
+<a name="l00308"></a>00308 
+<a name="l00314"></a>00314     <span class="keywordtype">void</span> readAnimation(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* scene);
+<a name="l00315"></a>00315 
+<a name="l00321"></a>00321     <span class="keywordtype">void</span> readAnimations(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* scene);
 <a name="l00322"></a>00322 
-<a name="l00323"></a>00323 <span class="preprocessor">#endif</span>
+<a name="l00332"></a>00332     <a class="code" href="classgameplay_1_1_animation.html">Animation</a>* readAnimationChannel(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* scene, <a class="code" href="classgameplay_1_1_animation.html">Animation</a>* animation, <span class="keyword">const</span> <span class="keywordtype">char</span>* animationId);
+<a name="l00333"></a>00333 
+<a name="l00340"></a>00340     <span class="keywordtype">void</span> setTransform(<span class="keyword">const</span> <span class="keywordtype">float</span>* values, <a class="code" href="classgameplay_1_1_transform.html">Transform</a>* transform);
+<a name="l00341"></a>00341 
+<a name="l00345"></a>00345     <span class="keywordtype">void</span> resolveJointReferences(<a class="code" href="classgameplay_1_1_scene.html">Scene</a>* sceneContext, <a class="code" href="classgameplay_1_1_node.html">Node</a>* nodeContext);
+<a name="l00346"></a>00346 
+<a name="l00347"></a>00347 <span class="keyword">private</span>:
+<a name="l00348"></a>00348     std::string _path;
+<a name="l00349"></a>00349     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _referenceCount;
+<a name="l00350"></a>00350     Reference* _references;
+<a name="l00351"></a>00351     FILE* _file;
+<a name="l00352"></a>00352 
+<a name="l00353"></a>00353     std::vector&lt;MeshSkinData*&gt; _meshSkins;
+<a name="l00354"></a>00354 };
+<a name="l00355"></a>00355 
+<a name="l00356"></a>00356 }
+<a name="l00357"></a>00357 
+<a name="l00358"></a>00358 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -222,7 +228,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -232,7 +238,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:01 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

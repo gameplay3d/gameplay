@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -97,7 +96,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Label Class Reference</div>  </div>
 </div>
@@ -108,9 +109,10 @@ Inheritance diagram for gameplay::Label:</div>
  <div class="center">
   <img src="classgameplay_1_1_label.png" usemap="#gameplay::Label_map" alt=""/>
   <map id="gameplay::Label_map" name="gameplay::Label_map">
-<area href="classgameplay_1_1_control.html" alt="gameplay::Control" shape="rect" coords="0,56,113,80"/>
-<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="0,0,113,24"/>
-<area href="classgameplay_1_1_button.html" alt="gameplay::Button" shape="rect" coords="0,168,113,192"/>
+<area href="classgameplay_1_1_control.html" alt="gameplay::Control" shape="rect" coords="0,56,129,80"/>
+<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="0,0,129,24"/>
+<area href="classgameplay_1_1_button.html" alt="gameplay::Button" shape="rect" coords="0,168,129,192"/>
+<area href="classgameplay_1_1_check_box.html" alt="gameplay::CheckBox" shape="rect" coords="0,224,129,248"/>
 </map>
  </div></div>
 
@@ -118,36 +120,43 @@ Inheritance diagram for gameplay::Label:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acea87ae23240c92b3bef05e6013e4511"></a><!-- doxytag: member="gameplay::Label::setFont" ref="acea87ae23240c92b3bef05e6013e4511" args="(Font *font)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setFont</b> (<a class="el" href="classgameplay_1_1_font.html">Font</a> *font)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a29f916c4b4afab37d6bdaa467720d3c7"></a><!-- doxytag: member="gameplay::Label::setText" ref="a29f916c4b4afab37d6bdaa467720d3c7" args="(const char *text)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setText</b> (const char *text)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abcd823e23d958b3ac71ef23871806bd5"></a><!-- doxytag: member="gameplay::Label::setColor" ref="abcd823e23d958b3ac71ef23871806bd5" args="(Vector4 color)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (<a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> color)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad493244ad902d10d71ede12b8095bbb2"></a><!-- doxytag: member="gameplay::Label::setAlignment" ref="ad493244ad902d10d71ede12b8095bbb2" args="(Font::Justify alignment)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setAlignment</b> (<a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Font::Justify</a> alignment)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2c8d17a8867a73bb4d7a629e980355f"></a><!-- doxytag: member="gameplay::Label::getText" ref="ae2c8d17a8867a73bb4d7a629e980355f" args="()" -->
+const char *&#160;</td><td class="memItemRight" valign="bottom"><b>getText</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d38e84f76be84908cd96779772d647e"></a><!-- doxytag: member="gameplay::Label::drawText" ref="a8d38e84f76be84908cd96779772d647e" args="(const Vector2 &amp;position)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>drawText</b> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;position)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3121af711bf48d6cea5e1d7782e64819"></a><!-- doxytag: member="gameplay::Label::create" ref="a3121af711bf48d6cea5e1d7782e64819" args="(const char *id, unsigned int x, unsigned int y, unsigned int width, unsigned int height)" -->
-static <a class="el" href="classgameplay_1_1_label.html">Label</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const char *id, unsigned int x, unsigned int y, unsigned int width, unsigned int height)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c2938a5705b7e6ffd45ae31f8b783f5"></a><!-- doxytag: member="gameplay::Label::getLabel" ref="a6c2938a5705b7e6ffd45ae31f8b783f5" args="(const char *id)" -->
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58a98173ef1d8ce78bb89375fb89fd0e"></a><!-- doxytag: member="gameplay::Label::create" ref="a58a98173ef1d8ce78bb89375fb89fd0e" args="(Theme::Style *style, Properties *properties)" -->
+static <a class="el" href="classgameplay_1_1_label.html">Label</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a588dba9afc8bd643e04fcc6f06f023af"></a><!-- doxytag: member="gameplay::Label::getLabel" ref="a588dba9afc8bd643e04fcc6f06f023af" args="(const char *id)" -->
 static <a class="el" href="classgameplay_1_1_label.html">Label</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getLabel</b> (const char *id)</td></tr>
+<tr><td colspan="2"><h2><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa1e458fdb8520d26998ccdb1b71696c1"></a><!-- doxytag: member="gameplay::Label::Label" ref="aa1e458fdb8520d26998ccdb1b71696c1" args="(const Label &amp;copy)" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>Label</b> (const <a class="el" href="classgameplay_1_1_label.html">Label</a> &amp;copy)</td></tr>
+<tr><td colspan="2"><h2><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5bf6bfb1335b826775daecf044dd76ef"></a><!-- doxytag: member="gameplay::Label::_text" ref="a5bf6bfb1335b826775daecf044dd76ef" args="" -->
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>_text</b></td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_label_8h_source.html">Label.h</a></li>
+<li>gameplay/src/Label.cpp</li>
 </ul>
 </div>
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_label.html">Label</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -157,7 +166,7 @@ static <a class="el" href="classgameplay_1_1_label.html">Label</a> *&#160;</td><
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:35 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:03 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

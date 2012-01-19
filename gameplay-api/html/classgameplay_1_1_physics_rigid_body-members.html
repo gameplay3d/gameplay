@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -111,6 +110,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a02df71c8c1582092311211704c5b86a1">getAnisotropicFriction</a>() const </td><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html">gameplay::PhysicsRigidBody</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html#aac0d3cfe9b879b9b64ea06b2995bae13">getFriction</a>() const </td><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html">gameplay::PhysicsRigidBody</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html#ad70a656e7ec75484703192eb98cebbc0">getGravity</a>() const </td><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html">gameplay::PhysicsRigidBody</a></td><td><code> [inline]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a11c19c2e9245487eb8de22164c3247ba">getHeight</a>(float x, float y) const </td><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html">gameplay::PhysicsRigidBody</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html#af73a81428c16adde683cae7777820136">getLinearDamping</a>() const </td><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html">gameplay::PhysicsRigidBody</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a78d51cbe06697011cc5e34f92b7d3390">getLinearVelocity</a>() const </td><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html">gameplay::PhysicsRigidBody</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html#ac99820502359a37cb8e356c8c6dee06f">getNode</a>() const </td><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html">gameplay::PhysicsRigidBody</a></td><td><code> [inline]</code></td></tr>
@@ -136,6 +136,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
   <tr bgcolor="#f0f0f0"><td><b>SHAPE_NONE</b> enum value (defined in <a class="el" href="classgameplay_1_1_physics_rigid_body.html">gameplay::PhysicsRigidBody</a>)</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html">gameplay::PhysicsRigidBody</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>SHAPE_SPHERE</b> enum value (defined in <a class="el" href="classgameplay_1_1_physics_rigid_body.html">gameplay::PhysicsRigidBody</a>)</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html">gameplay::PhysicsRigidBody</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html#acb0eec013fec5ce91d59a91bf3fd1497">Type</a> enum name</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body.html">gameplay::PhysicsRigidBody</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>~Listener</b>() (defined in <a class="el" href="classgameplay_1_1_transform_1_1_listener.html">gameplay::Transform::Listener</a>)</td><td><a class="el" href="classgameplay_1_1_transform_1_1_listener.html">gameplay::Transform::Listener</a></td><td><code> [inline, virtual]</code></td></tr>
 </table></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -145,7 +146,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -155,7 +156,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:04 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -101,6 +100,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 This is the complete list of members for <a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a>, including all inherited members.<table>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_sprite_batch.html#acccf9b0d9d23593702cc83ecd1f2ebc9">begin</a>()</td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_sprite_batch.html#a2aea8c0131ad9517d635c41695c0f075">create</a>(const char *texturePath, Effect *effect=NULL, unsigned int initialCapacity=0)</td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_sprite_batch.html#a044d08767257dda5dd1a36e15338d995">create</a>(Texture *texture, Effect *effect=NULL, unsigned int initialCapacity=0)</td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_sprite_batch.html#a7e440ac07da7a39f4b3bf577a8d71e5a">draw</a>(const Rectangle &amp;dst, const Rectangle &amp;src, const Vector4 &amp;color=Vector4::one())</td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_sprite_batch.html#aa062e24c927689d3aafa9581515b6609">draw</a>(const Vector3 &amp;dst, const Rectangle &amp;src, const Vector2 &amp;scale, const Vector4 &amp;color=Vector4::one())</td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td></td></tr>
@@ -109,7 +109,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_s
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_sprite_batch.html#a42bb08796911363a8cbd743c4936fc90">draw</a>(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4 &amp;color)</td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_sprite_batch.html#a1bf79dd9d03dfe74826b87bd376e6f38">draw</a>(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4 &amp;color)</td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_sprite_batch.html#aae1b18511d335ed10c027627a5cefe04">end</a>()</td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_sprite_batch.html#aaef7584cd97df33e52ca7587747c8a12">getEffect</a>()</td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_sprite_batch.html#a801483dd03d82ebbbc9fbfb47a77bb0d">getMaterial</a>()</td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_sprite_batch.html#ac683e1a29357346c2aafa73fd86d81f7">getStateBlock</a>() const </td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>Package</b> (defined in <a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a>)</td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_sprite_batch.html#a03f381137640f9ad77e73b0c584f0749">setProjectionMatrix</a>(const Matrix &amp;matrix)</td><td><a class="el" href="classgameplay_1_1_sprite_batch.html">gameplay::SpriteBatch</a></td><td></td></tr>
@@ -123,7 +123,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_s
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -133,7 +133,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_s
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:06 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:04 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

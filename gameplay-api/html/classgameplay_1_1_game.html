@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -139,19 +138,21 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a6a0ab2f3c261627aaf03068a2d43c36e">getWidth</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a03206e4c2b39564fbae3b7cef5c2bdb0">getHeight</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aed3bfa9c1cfcdd4eb0729284d5e10a8d">clear</a> (<a class="el" href="classgameplay_1_1_game.html#a7866ef6e9e0ee3b812b408a75cc13cdb">ClearFlags</a> flags, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;clearColor, float clearDepth, int clearStencil)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_audio_controller.html">AudioController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a342d7bb280fe269880f116304c6319a2">getAudioController</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation_controller.html">AnimationController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a82c41575f4d5b6c43b6346d8ede83048">getAnimationController</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_controller.html">PhysicsController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#adf4cf2bb1f2e0a2f1ce093605d228389">getPhysicsController</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_audio_controller.html">AudioController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a8c61ea6646bfa4b8e3f751de5a79db92">getAudioController</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation_controller.html">AnimationController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a8a1c5c8f4f16cb1b21b43faf6cc506d2">getAnimationController</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_controller.html">PhysicsController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aec67c78179a5f461357197e292a4266f">getPhysicsController</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ac54e0ed0d3157f770198207757ce21a8">menu</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ae72780b41a76a9743f4cf464815366f4">keyChar</a> (char key)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3c9a257bdb68dbcf0ccd06ac218b91bb">keyPress</a> (int key, int keyEvent)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aa79015292fdfc1c48000f0234027e57b">touch</a> (int x, int y, int touchEvent)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#acfd2e62b6399c2e8fca9874a9bf9674e">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a8f90ba8e84a472c25e8e0d4db2a58b5c">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ade96e57a1dbd20ab2dfb4203b4c0d6f6">setMultiTouch</a> (bool enabled)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a04720fabcd25eba03eaee2f81cfcdc16">isMultiTouch</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a11c781fe9845aa0e787f72844059e028">getAccelerometerValues</a> (float *pitch, float *roll)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_game.html">Game</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a79120f8a5d412bf06a73c9f39b69cefa">getInstance</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#acf6d3b145041cdef23c96b70acf21a25">getAbsoluteTime</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#abad60e3bb150173f4b7eb2c59924c0d8">isVsync</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#af37b1cc5095b3ddbaf571211654f3068">setVsync</a> (bool enable)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#acf6d3b145041cdef23c96b70acf21a25">getAbsoluteTime</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a1f929b64ca92bbf30a4bebd2236fe961">getGameTime</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -160,6 +161,8 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a84a8111bf36fa5d631272ac955943b40">finalize</a> ()=0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3461a4e6cc1324d4121db4b6a6c4a74e">update</a> (long elapsedTime)=0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a864e51608b422ea8c04034fce7057854">render</a> (long elapsedTime)=0</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">renderOnce</a> (T *instance, void(T::*method)(void *), void *cookie)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines the basic game initialization, logic and platform delegates. </p>
@@ -307,7 +310,7 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Finalizes the game on exit. </p>
+<p>Finalize callback that is called when the game on exits. </p>
 
 </div>
 </div>
@@ -347,7 +350,42 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a82c41575f4d5b6c43b6346d8ede83048"></a><!-- doxytag: member="gameplay::Game::getAnimationController" ref="a82c41575f4d5b6c43b6346d8ede83048" args="()" -->
+<a class="anchor" id="a11c781fe9845aa0e787f72844059e028"></a><!-- doxytag: member="gameplay::Game::getAccelerometerValues" ref="a11c781fe9845aa0e787f72844059e028" args="(float *pitch, float *roll)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Game::getAccelerometerValues </td>
+          <td>(</td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>pitch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>roll</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the current accelerometer values.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pitch</td><td>The pitch angle returned (in degrees). If NULL then not returned. </td></tr>
+    <tr><td class="paramname">roll</td><td>The roll angle returned (in degrees). If NULL then not returned. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a8a1c5c8f4f16cb1b21b43faf6cc506d2"></a><!-- doxytag: member="gameplay::Game::getAnimationController" ref="a8a1c5c8f4f16cb1b21b43faf6cc506d2" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -355,7 +393,7 @@ Protected Member Functions</h2></td></tr>
           <td class="memname"><a class="el" href="classgameplay_1_1_animation_controller.html">AnimationController</a> * gameplay::Game::getAnimationController </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const<code> [inline]</code></td>
         </tr>
       </table>
 </div>
@@ -365,15 +403,15 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a342d7bb280fe269880f116304c6319a2"></a><!-- doxytag: member="gameplay::Game::getAudioController" ref="a342d7bb280fe269880f116304c6319a2" args="() const " -->
+<a class="anchor" id="a8c61ea6646bfa4b8e3f751de5a79db92"></a><!-- doxytag: member="gameplay::Game::getAudioController" ref="a8c61ea6646bfa4b8e3f751de5a79db92" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classgameplay_1_1_audio_controller.html">AudioController</a> * gameplay::Game::getAudioController </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_audio_controller.html">AudioController</a> * gameplay::Game::getAudioController </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const<code> [inline]</code></td>
         </tr>
       </table>
 </div>
@@ -391,7 +429,7 @@ Protected Member Functions</h2></td></tr>
           <td class="memname">unsigned int gameplay::Game::getFrameRate </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const<code> [inline]</code></td>
         </tr>
       </table>
 </div>
@@ -428,7 +466,7 @@ Protected Member Functions</h2></td></tr>
           <td class="memname">unsigned int gameplay::Game::getHeight </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const<code> [inline]</code></td>
         </tr>
       </table>
 </div>
@@ -456,7 +494,7 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="adf4cf2bb1f2e0a2f1ce093605d228389"></a><!-- doxytag: member="gameplay::Game::getPhysicsController" ref="adf4cf2bb1f2e0a2f1ce093605d228389" args="()" -->
+<a class="anchor" id="aec67c78179a5f461357197e292a4266f"></a><!-- doxytag: member="gameplay::Game::getPhysicsController" ref="aec67c78179a5f461357197e292a4266f" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -464,7 +502,7 @@ Protected Member Functions</h2></td></tr>
           <td class="memname"><a class="el" href="classgameplay_1_1_physics_controller.html">PhysicsController</a> * gameplay::Game::getPhysicsController </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const<code> [inline]</code></td>
         </tr>
       </table>
 </div>
@@ -482,7 +520,7 @@ Protected Member Functions</h2></td></tr>
           <td class="memname"><a class="el" href="classgameplay_1_1_game.html#ab92abc94a6896257f0155f42533cda4c">Game::State</a> gameplay::Game::getState </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const<code> [inline]</code></td>
         </tr>
       </table>
 </div>
@@ -500,7 +538,7 @@ Protected Member Functions</h2></td></tr>
           <td class="memname">unsigned int gameplay::Game::getWidth </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const<code> [inline]</code></td>
         </tr>
       </table>
 </div>
@@ -523,7 +561,25 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Initializes the game on startup. </p>
+<p>Initialize callback that is called just before the first frame when the game starts. </p>
+
+</div>
+</div>
+<a class="anchor" id="a04720fabcd25eba03eaee2f81cfcdc16"></a><!-- doxytag: member="gameplay::Game::isMultiTouch" ref="a04720fabcd25eba03eaee2f81cfcdc16" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool gameplay::Game::isMultiTouch </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Is multi-touch mode enabled.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>true is multi-touch is enabled. </dd></dl>
 
 </div>
 </div>
@@ -545,45 +601,21 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae72780b41a76a9743f4cf464815366f4"></a><!-- doxytag: member="gameplay::Game::keyChar" ref="ae72780b41a76a9743f4cf464815366f4" args="(char key)" -->
+<a class="anchor" id="acfd2e62b6399c2e8fca9874a9bf9674e"></a><!-- doxytag: member="gameplay::Game::keyEvent" ref="acfd2e62b6399c2e8fca9874a9bf9674e" args="(Keyboard::KeyEvent evt, int key)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void gameplay::Game::keyChar </td>
+          <td class="memname">void gameplay::Game::keyEvent </td>
           <td>(</td>
-          <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>key</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p><a class="el" href="classgameplay_1_1_input.html">Input</a> callback on keyChar events.</p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">key</td><td>The key code pressed. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a3c9a257bdb68dbcf0ccd06ac218b91bb"></a><!-- doxytag: member="gameplay::Game::keyPress" ref="a3c9a257bdb68dbcf0ccd06ac218b91bb" args="(int key, int keyEvent)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void gameplay::Game::keyPress </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>key</em>, </td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>keyEvent</em>&#160;</td>
+          <td class="paramname"><em>key</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -593,17 +625,15 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p><a class="el" href="classgameplay_1_1_input.html">Input</a> callback on keyPress events.</p>
+<p><a class="el" href="classgameplay_1_1_keyboard.html">Keyboard</a> callback on keyPress events.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">key</td><td>The key code pressed. </td></tr>
-    <tr><td class="paramname">keyEvent</td><td>The key event that occured.</td></tr>
+    <tr><td class="paramname">evt</td><td>The key event that occured. </td></tr>
+    <tr><td class="paramname">key</td><td>The key code that was pressed, released or repeated.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_input.html#a7eddccc5229a4c8770f389dfcb38295a">Input::Key</a> </dd>
-<dd>
-<a class="el" href="classgameplay_1_1_input.html#a1b76718629ac3d89d49e4dcc331db738">Input::KeyEvent</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_keyboard.html#a4e04e50db898d22f57e2a6de766ff81b">Keyboard::Key</a> </dd></dl>
 
 </div>
 </div>
@@ -666,6 +696,43 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a65345d6dcfe7b0562fd8a98ec79b0151"></a><!-- doxytag: member="gameplay::Game::renderOnce" ref="a65345d6dcfe7b0562fd8a98ec79b0151" args="(T *instance, void(T::*method)(void *), void *cookie)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Game::renderOnce </td>
+          <td>(</td>
+          <td class="paramtype">T *&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void(T::*)(void *)&#160;</td>
+          <td class="paramname"><em>method</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>cookie</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Renders a single frame once and then swaps it to the display.</p>
+<p>This is useful for rendering splash screens. </p>
+
+</div>
+</div>
 <a class="anchor" id="a363c5ac0d99fc937dead943351f574c1"></a><!-- doxytag: member="gameplay::Game::resume" ref="a363c5ac0d99fc937dead943351f574c1" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -719,6 +786,30 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ade96e57a1dbd20ab2dfb4203b4c0d6f6"></a><!-- doxytag: member="gameplay::Game::setMultiTouch" ref="ade96e57a1dbd20ab2dfb4203b4c0d6f6" args="(bool enabled)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Game::setMultiTouch </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enabled</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets muli-touch is to be enabled/disabled. Default is disabled.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">enabled</td><td>true sets multi-touch is enabled, false to be disabled. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="af37b1cc5095b3ddbaf571211654f3068"></a><!-- doxytag: member="gameplay::Game::setVsync" ref="af37b1cc5095b3ddbaf571211654f3068" args="(bool enable)" -->
 <div class="memitem">
 <div class="memproto">
@@ -743,13 +834,19 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa79015292fdfc1c48000f0234027e57b"></a><!-- doxytag: member="gameplay::Game::touch" ref="aa79015292fdfc1c48000f0234027e57b" args="(int x, int y, int touchEvent)" -->
+<a class="anchor" id="a8f90ba8e84a472c25e8e0d4db2a58b5c"></a><!-- doxytag: member="gameplay::Game::touchEvent" ref="a8f90ba8e84a472c25e8e0d4db2a58b5c" args="(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void gameplay::Game::touch </td>
+          <td class="memname">void gameplay::Game::touchEvent </td>
           <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
@@ -762,8 +859,8 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>touchEvent</em>&#160;</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>contactIndex</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -773,16 +870,14 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p><a class="el" href="classgameplay_1_1_input.html">Input</a> callback on touch events.</p>
+<p><a class="el" href="classgameplay_1_1_touch.html">Touch</a> callback on touch events.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">x</td><td>The x position of the touch. </td></tr>
-    <tr><td class="paramname">y</td><td>The y position of the touch. </td></tr>
-    <tr><td class="paramname">touchEvent</td><td>The touch event that occurred.</td></tr>
+    <tr><td class="paramname">evt</td><td>The touch event that occurred.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_input.html#ab5a8862a330846709cb86983a7be04fe">Input::TouchEvent</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> </dd></dl>
 
 </div>
 </div>
@@ -814,19 +909,20 @@ Protected Member Functions</h2></td></tr>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_game_8h_source.html">Game.h</a></li>
 <li>gameplay/src/Game.cpp</li>
+<li>gameplay/src/Game.inl</li>
 </ul>
 </div>
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_game.html">Game</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -836,7 +932,7 @@ Protected Member Functions</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:04 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:03 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

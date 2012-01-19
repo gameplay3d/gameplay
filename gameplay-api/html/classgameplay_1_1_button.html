@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -96,9 +95,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div id="doc-content">
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a>  </div>
+<a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Button Class Reference</div>  </div>
 </div>
@@ -109,45 +109,99 @@ Inheritance diagram for gameplay::Button:</div>
  <div class="center">
   <img src="classgameplay_1_1_button.png" usemap="#gameplay::Button_map" alt=""/>
   <map id="gameplay::Button_map" name="gameplay::Button_map">
-<area href="classgameplay_1_1_label.html" alt="gameplay::Label" shape="rect" coords="0,112,113,136"/>
-<area href="classgameplay_1_1_control.html" alt="gameplay::Control" shape="rect" coords="0,56,113,80"/>
-<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="0,0,113,24"/>
+<area href="classgameplay_1_1_label.html" alt="gameplay::Label" shape="rect" coords="0,112,129,136"/>
+<area href="classgameplay_1_1_control.html" alt="gameplay::Control" shape="rect" coords="0,56,129,80"/>
+<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="0,0,129,24"/>
+<area href="classgameplay_1_1_check_box.html" alt="gameplay::CheckBox" shape="rect" coords="0,224,129,248"/>
 </map>
  </div></div>
 
 <p><a href="classgameplay_1_1_button-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>Callback</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>CallbackImpl</b></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memTemplParams" colspan="2"><a class="anchor" id="aa5b12a8de044f1491fb718ff93c8f638"></a><!-- doxytag: member="gameplay::Button::setCallback" ref="aa5b12a8de044f1491fb718ff93c8f638" args="(T *instance, void(T::*callbackMethod)(Button *))" -->
-template&lt;class T &gt; </td></tr>
-<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>setCallback</b> (T *instance, void(T::*callbackMethod)(<a class="el" href="classgameplay_1_1_button.html">Button</a> *))</td></tr>
+<tr><td class="memTemplParams" colspan="2"><a class="anchor" id="a701a54287dd81b09e4411d8e1261b47c"></a><!-- doxytag: member="gameplay::Button::setCallback" ref="a701a54287dd81b09e4411d8e1261b47c" args="(ClassType *instance, void(ClassType::*callbackMethod)(Button *))" -->
+template&lt;class ClassType &gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>setCallback</b> (ClassType *instance, void(ClassType::*callbackMethod)(<a class="el" href="classgameplay_1_1_button.html">Button</a> *))</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_button.html#a5e03e0b1ce3a32edf0bd5f3efd85f1fb">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aad56d8508d704c1a5694574df783135f"></a><!-- doxytag: member="gameplay::Button::create" ref="aad56d8508d704c1a5694574df783135f" args="(const char *id, unsigned int x, unsigned int y, unsigned int width, unsigned int height)" -->
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8acf3264b5f8d00c78e930e7aed6f5ee"></a><!-- doxytag: member="gameplay::Button::create" ref="a8acf3264b5f8d00c78e930e7aed6f5ee" args="(Theme::Style *style, Properties *properties)" -->
+static <a class="el" href="classgameplay_1_1_button.html">Button</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a16a7d2be224d55b7a358c8307984f78d"></a><!-- doxytag: member="gameplay::Button::create" ref="a16a7d2be224d55b7a358c8307984f78d" args="(const char *id, unsigned int x, unsigned int y, unsigned int width, unsigned int height)" -->
 static <a class="el" href="classgameplay_1_1_button.html">Button</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const char *id, unsigned int x, unsigned int y, unsigned int width, unsigned int height)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae04b67a099493a6b1f059a3461418f76"></a><!-- doxytag: member="gameplay::Button::getButton" ref="ae04b67a099493a6b1f059a3461418f76" args="(const char *id)" -->
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c747d00d94f0c4c8136b355ebbfffad"></a><!-- doxytag: member="gameplay::Button::getButton" ref="a6c747d00d94f0c4c8136b355ebbfffad" args="(const char *id)" -->
 static <a class="el" href="classgameplay_1_1_button.html">Button</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getButton</b> (const char *id)</td></tr>
-<tr><td colspan="2"><h2><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a8348dfc8e24ae970e81d0e4da2849e"></a><!-- doxytag: member="gameplay::Button::touch" ref="a0a8348dfc8e24ae970e81d0e4da2849e" args="(int x, int y, int touchEvent)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>touch</b> (int x, int y, int touchEvent)</td></tr>
+<tr><td colspan="2"><h2><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad2202fcd185f27229be0173cd9029899"></a><!-- doxytag: member="gameplay::Button::_callback" ref="ad2202fcd185f27229be0173cd9029899" args="" -->
+Callback *&#160;</td><td class="memItemRight" valign="bottom"><b>_callback</b></td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a5e03e0b1ce3a32edf0bd5f3efd85f1fb"></a><!-- doxytag: member="gameplay::Button::touchEvent" ref="a5e03e0b1ce3a32edf0bd5f3efd85f1fb" args="(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Button::touchEvent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>contactIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Defaults to empty stub. </p>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#ad1ffebe740b4c6846297fd222a96720e">gameplay::Control</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_check_box.html#a6f42cd3c5fbdc847490913d09146ccfc">gameplay::CheckBox</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_button_8h_source.html">Button.h</a></li>
+<li>gameplay/src/Button.cpp</li>
 </ul>
 </div>
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_button.html">Button</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -157,7 +211,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>touch</b> (int x, int
 </div>
 
 
-    <li class="footer">Generated on Fri Nov 11 2011 14:51:34 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:02 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

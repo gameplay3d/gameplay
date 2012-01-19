@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -126,58 +125,60 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00034"></a>00034 
 <a name="l00042"></a>00042     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>* <a class="code" href="classgameplay_1_1_audio_source.html#a3f2da691b5e09704c314d18ab4e6113e">create</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* path);
 <a name="l00043"></a>00043 
-<a name="l00047"></a>00047     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#a2d267325c838d24188210b1943846085">play</a>();
-<a name="l00048"></a>00048 
-<a name="l00052"></a>00052     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#a6804f9b49bd8e9cd4d19cdd9477c6af0">pause</a>();
-<a name="l00053"></a>00053 
-<a name="l00057"></a>00057     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#a895920e4520c05ecbf393806bc2ef9f0">resume</a>();
-<a name="l00058"></a>00058 
-<a name="l00062"></a>00062     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#acc6b7a0607f5af5b694e1d6add7e1820">stop</a>();
-<a name="l00063"></a>00063 
-<a name="l00067"></a>00067     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#a9974ed052d73d89a7758426ddd1efb98">rewind</a>();
-<a name="l00068"></a>00068 
-<a name="l00074"></a>00074     <a class="code" href="classgameplay_1_1_audio_source.html#a53fd1787d6625fc16b765be2b3c2a7ae">AudioSource::State</a> <a class="code" href="classgameplay_1_1_audio_source.html#af1bb2c2fed72d276c6f51d7c5a00696a">getState</a>() <span class="keyword">const</span>;
-<a name="l00075"></a>00075 
-<a name="l00081"></a>00081     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_audio_source.html#a323ff6fb92199d2d62f0d1ec5245b0ac">isLooped</a>() <span class="keyword">const</span>;
-<a name="l00082"></a>00082 
-<a name="l00088"></a>00088     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#a43aa4b9de4bfc39a0cef6b15de315b81">setLooped</a>(<span class="keywordtype">bool</span> looped);
-<a name="l00089"></a>00089 
-<a name="l00095"></a>00095     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_audio_source.html#a79b0d9f563333da5347c1eca6ad4e90b">getGain</a>() <span class="keyword">const</span>;
-<a name="l00096"></a>00096 
-<a name="l00102"></a>00102     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#ac8d7d4e9ca891ed8eb101f06b4379864">setGain</a>(<span class="keywordtype">float</span> gain);
-<a name="l00103"></a>00103 
-<a name="l00109"></a>00109     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_audio_source.html#a0ae0e4657604a20744102ba43920eb40">getPitch</a>() <span class="keyword">const</span>;
-<a name="l00110"></a>00110 
-<a name="l00116"></a>00116     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#af744814fc44fa8aa16f761e09c9ad48d">setPitch</a>(<span class="keywordtype">float</span> pitch);
-<a name="l00117"></a>00117 
-<a name="l00123"></a>00123     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_audio_source.html#a9a5a9c9cad6f24d4e5649b77e715c0b8">getVelocity</a>() <span class="keyword">const</span>;
-<a name="l00124"></a>00124 
-<a name="l00130"></a>00130     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#aeb6e1769a202af905fa89a94f909e1c8">setVelocity</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; velocity);
-<a name="l00131"></a>00131 
-<a name="l00137"></a>00137     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_audio_source.html#a2e87606825237829aecf39b0b337123a">getNode</a>() <span class="keyword">const</span>;
-<a name="l00138"></a>00138 
-<a name="l00139"></a>00139 <span class="keyword">private</span>:
-<a name="l00140"></a>00140 
-<a name="l00144"></a>00144     <a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>(<a class="code" href="classgameplay_1_1_audio_buffer.html">AudioBuffer</a>* buffer, ALuint source);
-<a name="l00145"></a>00145 
-<a name="l00149"></a>00149     <span class="keyword">virtual</span> ~<a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>();
-<a name="l00150"></a>00150 
-<a name="l00154"></a>00154     <span class="keywordtype">void</span> setNode(<a class="code" href="classgameplay_1_1_node.html">Node</a>* node);
-<a name="l00155"></a>00155 
-<a name="l00159"></a>00159     <span class="keywordtype">void</span> transformChanged(<a class="code" href="classgameplay_1_1_transform.html">Transform</a>* transform);
-<a name="l00160"></a>00160 
-<a name="l00161"></a>00161     ALuint _alSource;
-<a name="l00162"></a>00162     <a class="code" href="classgameplay_1_1_audio_buffer.html">AudioBuffer</a>* _buffer;
-<a name="l00163"></a>00163     <span class="keywordtype">bool</span> _looped;
-<a name="l00164"></a>00164     <span class="keywordtype">float</span> _gain;
-<a name="l00165"></a>00165     <span class="keywordtype">float</span> _pitch;
-<a name="l00166"></a>00166     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _velocity;
-<a name="l00167"></a>00167     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _node;
-<a name="l00168"></a>00168 };
-<a name="l00169"></a>00169 
-<a name="l00170"></a>00170 }
-<a name="l00171"></a>00171 
-<a name="l00172"></a>00172 <span class="preprocessor">#endif</span>
+<a name="l00050"></a>00050     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>* <a class="code" href="classgameplay_1_1_audio_source.html#a3f2da691b5e09704c314d18ab4e6113e">create</a>(<a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties);
+<a name="l00051"></a>00051 
+<a name="l00055"></a>00055     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#a2d267325c838d24188210b1943846085">play</a>();
+<a name="l00056"></a>00056 
+<a name="l00060"></a>00060     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#a6804f9b49bd8e9cd4d19cdd9477c6af0">pause</a>();
+<a name="l00061"></a>00061 
+<a name="l00065"></a>00065     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#a895920e4520c05ecbf393806bc2ef9f0">resume</a>();
+<a name="l00066"></a>00066 
+<a name="l00070"></a>00070     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#acc6b7a0607f5af5b694e1d6add7e1820">stop</a>();
+<a name="l00071"></a>00071 
+<a name="l00075"></a>00075     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#a9974ed052d73d89a7758426ddd1efb98">rewind</a>();
+<a name="l00076"></a>00076 
+<a name="l00082"></a>00082     <a class="code" href="classgameplay_1_1_audio_source.html#a53fd1787d6625fc16b765be2b3c2a7ae">AudioSource::State</a> <a class="code" href="classgameplay_1_1_audio_source.html#af1bb2c2fed72d276c6f51d7c5a00696a">getState</a>() <span class="keyword">const</span>;
+<a name="l00083"></a>00083 
+<a name="l00089"></a>00089     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_audio_source.html#a323ff6fb92199d2d62f0d1ec5245b0ac">isLooped</a>() <span class="keyword">const</span>;
+<a name="l00090"></a>00090 
+<a name="l00096"></a>00096     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#a43aa4b9de4bfc39a0cef6b15de315b81">setLooped</a>(<span class="keywordtype">bool</span> looped);
+<a name="l00097"></a>00097 
+<a name="l00103"></a>00103     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_audio_source.html#a79b0d9f563333da5347c1eca6ad4e90b">getGain</a>() <span class="keyword">const</span>;
+<a name="l00104"></a>00104 
+<a name="l00110"></a>00110     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#ac8d7d4e9ca891ed8eb101f06b4379864">setGain</a>(<span class="keywordtype">float</span> gain);
+<a name="l00111"></a>00111 
+<a name="l00117"></a>00117     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_audio_source.html#a0ae0e4657604a20744102ba43920eb40">getPitch</a>() <span class="keyword">const</span>;
+<a name="l00118"></a>00118 
+<a name="l00124"></a>00124     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#af744814fc44fa8aa16f761e09c9ad48d">setPitch</a>(<span class="keywordtype">float</span> pitch);
+<a name="l00125"></a>00125 
+<a name="l00131"></a>00131     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; <a class="code" href="classgameplay_1_1_audio_source.html#a9a5a9c9cad6f24d4e5649b77e715c0b8">getVelocity</a>() <span class="keyword">const</span>;
+<a name="l00132"></a>00132 
+<a name="l00138"></a>00138     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_audio_source.html#aeb6e1769a202af905fa89a94f909e1c8">setVelocity</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; velocity);
+<a name="l00139"></a>00139 
+<a name="l00145"></a>00145     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_audio_source.html#a2e87606825237829aecf39b0b337123a">getNode</a>() <span class="keyword">const</span>;
+<a name="l00146"></a>00146 
+<a name="l00147"></a>00147 <span class="keyword">private</span>:
+<a name="l00148"></a>00148 
+<a name="l00152"></a>00152     <a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>(<a class="code" href="classgameplay_1_1_audio_buffer.html">AudioBuffer</a>* buffer, ALuint source);
+<a name="l00153"></a>00153 
+<a name="l00157"></a>00157     <span class="keyword">virtual</span> ~<a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>();
+<a name="l00158"></a>00158 
+<a name="l00162"></a>00162     <span class="keywordtype">void</span> setNode(<a class="code" href="classgameplay_1_1_node.html">Node</a>* node);
+<a name="l00163"></a>00163 
+<a name="l00167"></a>00167     <span class="keywordtype">void</span> transformChanged(<a class="code" href="classgameplay_1_1_transform.html">Transform</a>* transform, <span class="keywordtype">long</span> cookie);
+<a name="l00168"></a>00168 
+<a name="l00169"></a>00169     ALuint _alSource;
+<a name="l00170"></a>00170     <a class="code" href="classgameplay_1_1_audio_buffer.html">AudioBuffer</a>* _buffer;
+<a name="l00171"></a>00171     <span class="keywordtype">bool</span> _looped;
+<a name="l00172"></a>00172     <span class="keywordtype">float</span> _gain;
+<a name="l00173"></a>00173     <span class="keywordtype">float</span> _pitch;
+<a name="l00174"></a>00174     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _velocity;
+<a name="l00175"></a>00175     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _node;
+<a name="l00176"></a>00176 };
+<a name="l00177"></a>00177 
+<a name="l00178"></a>00178 }
+<a name="l00179"></a>00179 
+<a name="l00180"></a>00180 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -188,7 +189,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -198,7 +199,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:02 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:01 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

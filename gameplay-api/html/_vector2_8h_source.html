@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -195,15 +194,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00371"></a>00371     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a> <a class="code" href="classgameplay_1_1_vector2.html#a6ae453d00c0b6db4959dbe8c3b8166da">operator*</a>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector2.html#a0ee3c83ed867bffe2945953b62874a17">x</a>) <span class="keyword">const</span>;
 <a name="l00372"></a>00372 
 <a name="l00379"></a>00379     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; <a class="code" href="classgameplay_1_1_vector2.html#a8429da0d4ce723517fc1169c4d3cb108">operator*=</a>(<span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_vector2.html#a0ee3c83ed867bffe2945953b62874a17">x</a>);
-<a name="l00380"></a>00380 };
-<a name="l00381"></a>00381 
-<a name="l00389"></a>00389 <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a> <a class="code" href="namespacegameplay.html#a30e8f726bc44ff2a8e04fe622c1e0ed5">operator*</a>(<span class="keywordtype">float</span> x, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; v);
-<a name="l00390"></a>00390 
-<a name="l00391"></a>00391 }
-<a name="l00392"></a>00392 
-<a name="l00393"></a>00393 <span class="preprocessor">#include &quot;Vector2.inl&quot;</span>
-<a name="l00394"></a>00394 
-<a name="l00395"></a>00395 <span class="preprocessor">#endif</span>
+<a name="l00380"></a>00380 
+<a name="l00388"></a>00388     <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_vector2.html#a65bf1ad7073fab88d60cef414f2db8b9">operator&lt;</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; v) <span class="keyword">const</span>;
+<a name="l00389"></a>00389 
+<a name="l00397"></a>00397     <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_vector2.html#ac95758cb149b825e7efd088ae7b22892">operator==</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; v) <span class="keyword">const</span>;
+<a name="l00398"></a>00398 };
+<a name="l00399"></a>00399 
+<a name="l00407"></a>00407 <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a> operator*(<span class="keywordtype">float</span> x, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; v);
+<a name="l00408"></a>00408 
+<a name="l00409"></a>00409 }
+<a name="l00410"></a>00410 
+<a name="l00411"></a>00411 <span class="preprocessor">#include &quot;Vector2.inl&quot;</span>
+<a name="l00412"></a>00412 
+<a name="l00413"></a>00413 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -214,7 +217,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -224,7 +227,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:01 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

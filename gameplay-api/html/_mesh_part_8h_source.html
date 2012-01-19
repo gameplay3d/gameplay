@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -121,7 +120,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00045"></a>00045 
 <a name="l00051"></a>00051     <a class="code" href="classgameplay_1_1_mesh.html#a865d9e14d59471e8773694faa8656db1">Mesh::IndexFormat</a> <a class="code" href="classgameplay_1_1_mesh_part.html#a3cfc279a6abb74c325a55d73df1b636e">getIndexFormat</a>() <span class="keyword">const</span>;
 <a name="l00052"></a>00052 
-<a name="l00058"></a>00058     IndexBuffer <a class="code" href="classgameplay_1_1_mesh_part.html#a32123e7f097a72d1fca3b24706fcebd3">getIndexBuffer</a>() <span class="keyword">const</span>;
+<a name="l00058"></a>00058     IndexBufferHandle <a class="code" href="classgameplay_1_1_mesh_part.html#a45da2fae501c00b46f252adb9a3e302d">getIndexBuffer</a>() <span class="keyword">const</span>;
 <a name="l00059"></a>00059 
 <a name="l00065"></a>00065     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_mesh_part.html#a82060080735b7b513f0f731defebfdff">isDynamic</a>() <span class="keyword">const</span>;
 <a name="l00066"></a>00066 
@@ -140,7 +139,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00102"></a>00102     <a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">Mesh::PrimitiveType</a> _primitiveType;
 <a name="l00103"></a>00103     <a class="code" href="classgameplay_1_1_mesh.html#a865d9e14d59471e8773694faa8656db1">Mesh::IndexFormat</a> _indexFormat;
 <a name="l00104"></a>00104     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _indexCount;
-<a name="l00105"></a>00105     IndexBuffer _indexBuffer;
+<a name="l00105"></a>00105     IndexBufferHandle _indexBuffer;
 <a name="l00106"></a>00106     <span class="keywordtype">bool</span> _dynamic;
 <a name="l00107"></a>00107 };
 <a name="l00108"></a>00108 
@@ -157,7 +156,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -167,7 +166,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:01 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

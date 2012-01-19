@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -106,7 +105,8 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
   <tr bgcolor="#f0f0f0"><td><b>BLEND_OPAQUE</b> enum value (defined in <a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a>)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>BLEND_TRANSPARENT</b> enum value (defined in <a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a>)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#af8ac3412cd63797063f1097edb8aff61">create</a>(const char *particleFile)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td><code> [static]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#a90b392d11616fb0fa221f753c5818e1b">create</a>(const char *texturePath, TextureBlending blending, unsigned int particleCountMax)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#a9b0b57491cba63d78e2c0094fec11cc8">create</a>(Properties *properties)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#a2ffa63542069e88cd1e4b148bebdcbde">create</a>(const char *texturePath, TextureBlending textureBlending, unsigned int particleCountMax)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#ae683f3d5eba31607f92997dd7692cbb4">draw</a>()</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#afa630f0ad9c29d089469d18b546eafcc">emit</a>(unsigned int particleCount)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#aa497aef655119f17427c2f1470e3c13c">getAcceleration</a>() const </td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
@@ -176,7 +176,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -186,7 +186,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:03 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

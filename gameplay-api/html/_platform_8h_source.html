@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -99,48 +98,55 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef PLATFORM_H_</span>
 <a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define PLATFORM_H_</span>
 <a name="l00003"></a>00003 <span class="preprocessor"></span>
-<a name="l00004"></a>00004 <span class="keyword">namespace </span>gameplay
-<a name="l00005"></a>00005 {
-<a name="l00006"></a>00006 
-<a name="l00007"></a>00007 <span class="keyword">class </span>Game;
+<a name="l00004"></a>00004 <span class="preprocessor">#include &quot;Touch.h&quot;</span>
+<a name="l00005"></a>00005 
+<a name="l00006"></a>00006 <span class="keyword">namespace </span>gameplay
+<a name="l00007"></a>00007 {
 <a name="l00008"></a>00008 
-<a name="l00012"></a><a class="code" href="classgameplay_1_1_platform.html">00012</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_platform.html">Platform</a>
-<a name="l00013"></a>00013 {
-<a name="l00014"></a>00014 <span class="keyword">public</span>:
-<a name="l00015"></a>00015 
-<a name="l00019"></a>00019     <a class="code" href="classgameplay_1_1_platform.html#af14fb3031cb23770e420cfd259c41595">~Platform</a>();
-<a name="l00020"></a>00020 
-<a name="l00028"></a>00028     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_platform.html">Platform</a>* <a class="code" href="classgameplay_1_1_platform.html#a665a2091d832c2eca7a29a51228fe9e9">create</a>(<a class="code" href="classgameplay_1_1_game.html">Game</a>* game);
-<a name="l00029"></a>00029 
-<a name="l00038"></a>00038     <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_platform.html#ab5379118d7f39805fb7d62820aa36cd6">enterMessagePump</a>();
-<a name="l00039"></a>00039 
-<a name="l00045"></a>00045     <span class="keyword">static</span> <span class="keywordtype">long</span> <a class="code" href="classgameplay_1_1_platform.html#aebc82fa22dfec7cc8cba5b28aff04d00">getAbsoluteTime</a>();
-<a name="l00046"></a>00046 
-<a name="l00052"></a>00052     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_platform.html#a45d449a6b5d17f1ed9d75512de8374a1">setAbsoluteTime</a>(<span class="keywordtype">long</span> time);
-<a name="l00053"></a>00053 
-<a name="l00059"></a>00059     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_platform.html#aa7936bf90741ee305184f2b38467923b">isVsync</a>();
-<a name="l00060"></a>00060 
-<a name="l00066"></a>00066     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_platform.html#acacf35e2782bd3253a231dd0bd459f64">setVsync</a>(<span class="keywordtype">bool</span> enable);
-<a name="l00067"></a>00067 
-<a name="l00073"></a>00073     <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_platform.html#a85a6299f0626e9de47a470279e5b6fb6">getOrientationAngle</a>();
-<a name="l00074"></a>00074 
-<a name="l00080"></a>00080     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_platform.html#a0588979a57a0bb12899be26e6671f5b0">isAccelerometerSupported</a>();
+<a name="l00009"></a>00009 <span class="keyword">class </span>Game;
+<a name="l00010"></a>00010 
+<a name="l00014"></a><a class="code" href="classgameplay_1_1_platform.html">00014</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_platform.html">Platform</a>
+<a name="l00015"></a>00015 {
+<a name="l00016"></a>00016 <span class="keyword">public</span>:
+<a name="l00017"></a>00017 
+<a name="l00021"></a>00021     <a class="code" href="classgameplay_1_1_platform.html#af14fb3031cb23770e420cfd259c41595">~Platform</a>();
+<a name="l00022"></a>00022 
+<a name="l00030"></a>00030     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_platform.html">Platform</a>* <a class="code" href="classgameplay_1_1_platform.html#a665a2091d832c2eca7a29a51228fe9e9">create</a>(<a class="code" href="classgameplay_1_1_game.html">Game</a>* game);
+<a name="l00031"></a>00031 
+<a name="l00040"></a>00040     <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_platform.html#ab5379118d7f39805fb7d62820aa36cd6">enterMessagePump</a>();
+<a name="l00041"></a>00041 
+<a name="l00047"></a>00047     <span class="keyword">static</span> <span class="keywordtype">long</span> <a class="code" href="classgameplay_1_1_platform.html#aebc82fa22dfec7cc8cba5b28aff04d00">getAbsoluteTime</a>();
+<a name="l00048"></a>00048 
+<a name="l00054"></a>00054     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_platform.html#a45d449a6b5d17f1ed9d75512de8374a1">setAbsoluteTime</a>(<span class="keywordtype">long</span> time);
+<a name="l00055"></a>00055 
+<a name="l00061"></a>00061     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_platform.html#aa7936bf90741ee305184f2b38467923b">isVsync</a>();
+<a name="l00062"></a>00062 
+<a name="l00068"></a>00068     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_platform.html#acacf35e2782bd3253a231dd0bd459f64">setVsync</a>(<span class="keywordtype">bool</span> enable);
+<a name="l00069"></a>00069 
+<a name="l00075"></a>00075     <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_platform.html#a85a6299f0626e9de47a470279e5b6fb6">getOrientationAngle</a>();
+<a name="l00076"></a>00076 
+<a name="l00080"></a>00080     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_platform.html#a3a3f93c158269eb93949ba5d9b550c70">setMultiTouch</a>(<span class="keywordtype">bool</span> enabled);
 <a name="l00081"></a>00081 
-<a name="l00088"></a>00088     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_platform.html#ad8c11f17aa335ce83e2f7b116dccd184">getAccelerometerPitchAndRoll</a>(<span class="keywordtype">float</span>* pitch, <span class="keywordtype">float</span>* roll);
-<a name="l00089"></a>00089 
-<a name="l00090"></a>00090 <span class="keyword">private</span>:
-<a name="l00091"></a>00091 
-<a name="l00095"></a>00095     <a class="code" href="classgameplay_1_1_platform.html">Platform</a>(<a class="code" href="classgameplay_1_1_game.html">Game</a>* game);
-<a name="l00096"></a>00096 
-<a name="l00100"></a>00100     <a class="code" href="classgameplay_1_1_platform.html">Platform</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_platform.html">Platform</a>&amp; copy);
+<a name="l00085"></a>00085     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_platform.html#aac96a0a5b3d2ff0b7aca92eaa6126a80">isMultiTouch</a>();
+<a name="l00086"></a>00086 
+<a name="l00093"></a>00093     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_platform.html#a388195e784d2820c0d6158c4a10c8a97">getAccelerometerValues</a>(<span class="keywordtype">float</span>* pitch, <span class="keywordtype">float</span>* roll);
+<a name="l00094"></a>00094 
+<a name="l00098"></a>00098     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_platform.html#a52ceea1e71f2c8d99310baa61a69223b">swapBuffers</a>();
+<a name="l00099"></a>00099 
+<a name="l00100"></a>00100     <span class="keyword">static</span> <span class="keywordtype">void</span> touchEventInternal(<a class="code" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> contactIndex);
 <a name="l00101"></a>00101 
-<a name="l00102"></a>00102     <a class="code" href="classgameplay_1_1_game.html">Game</a>* _game;
+<a name="l00102"></a>00102 <span class="keyword">private</span>:
 <a name="l00103"></a>00103 
-<a name="l00104"></a>00104 };
-<a name="l00105"></a>00105 
-<a name="l00106"></a>00106 }
-<a name="l00107"></a>00107 
-<a name="l00108"></a>00108 <span class="preprocessor">#endif</span>
+<a name="l00107"></a>00107     <a class="code" href="classgameplay_1_1_platform.html">Platform</a>(<a class="code" href="classgameplay_1_1_game.html">Game</a>* game);
+<a name="l00108"></a>00108 
+<a name="l00112"></a>00112     <a class="code" href="classgameplay_1_1_platform.html">Platform</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_platform.html">Platform</a>&amp; copy);
+<a name="l00113"></a>00113 
+<a name="l00114"></a>00114     <a class="code" href="classgameplay_1_1_game.html">Game</a>* _game;                <span class="comment">// The game this platform is interfacing with.</span>
+<a name="l00115"></a>00115 };
+<a name="l00116"></a>00116 
+<a name="l00117"></a>00117 }
+<a name="l00118"></a>00118 
+<a name="l00119"></a>00119 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -151,7 +157,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -161,7 +167,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:01 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

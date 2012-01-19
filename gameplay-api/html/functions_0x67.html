@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -155,9 +154,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getAccelerationVariance()
 : <a class="el" href="classgameplay_1_1_particle_emitter.html#a4ef3d77b80af5371246b75f996b45b9d">gameplay::ParticleEmitter</a>
 </li>
-<li>getAccelerometerPitchAndRoll()
-: <a class="el" href="classgameplay_1_1_platform.html#ad8c11f17aa335ce83e2f7b116dccd184">gameplay::Platform</a>
-, <a class="el" href="classgameplay_1_1_input.html#a8bcc74bafd7096387bf517f4b646bb8c">gameplay::Input</a>
+<li>getAccelerometerValues()
+: <a class="el" href="classgameplay_1_1_platform.html#a388195e784d2820c0d6158c4a10c8a97">gameplay::Platform</a>
+, <a class="el" href="classgameplay_1_1_game.html#a11c781fe9845aa0e787f72844059e028">gameplay::Game</a>
 </li>
 <li>getActiveCamera()
 : <a class="el" href="classgameplay_1_1_scene.html#a6fb2b6aff4199c33a68b979a8bf2284b">gameplay::Scene</a>
@@ -182,7 +181,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classgameplay_1_1_animation_clip.html#ad3f3bff739adbb745618f6d2427ed374">gameplay::AnimationClip</a>
 </li>
 <li>getAnimationController()
-: <a class="el" href="classgameplay_1_1_game.html#a82c41575f4d5b6c43b6346d8ede83048">gameplay::Game</a>
+: <a class="el" href="classgameplay_1_1_game.html#a8a1c5c8f4f16cb1b21b43faf6cc506d2">gameplay::Game</a>
 </li>
 <li>getAnimationPropertyComponentCount()
 : <a class="el" href="classgameplay_1_1_animation_target.html#a963d6a3f8e77c59cfb9ac2284d961c31">gameplay::AnimationTarget</a>
@@ -201,7 +200,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_camera.html#ab5e1708bdf0cb08ad28f9789d61503d6">gameplay::Camera</a>
 </li>
 <li>getAudioController()
-: <a class="el" href="classgameplay_1_1_game.html#a342d7bb280fe269880f116304c6319a2">gameplay::Game</a>
+: <a class="el" href="classgameplay_1_1_game.html#a8c61ea6646bfa4b8e3f751de5a79db92">gameplay::Game</a>
 </li>
 <li>getAudioSource()
 : <a class="el" href="classgameplay_1_1_node.html#abbd78c961e780f30baecf8a264ad8b34">gameplay::Node</a>
@@ -222,19 +221,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getBool()
 : <a class="el" href="classgameplay_1_1_properties.html#a0f836f9ec9d07cf4c2497de6b1f2f7ee">gameplay::Properties</a>
 </li>
+<li>getBorder()
+: <a class="el" href="classgameplay_1_1_theme_1_1_style.html#aeeb9979094584c8a1c214f70444ccde5">gameplay::Theme::Style</a>
+</li>
 <li>getBottom()
 : <a class="el" href="classgameplay_1_1_frustum.html#a983b43f2fc2f2701ba13d5b2d631c107">gameplay::Frustum</a>
 </li>
 <li>getBoundingBox()
 : <a class="el" href="classgameplay_1_1_mesh.html#a516dc8fb43669fb7252dca9fde829f2d">gameplay::Mesh</a>
-, <a class="el" href="classgameplay_1_1_node.html#a62c66aadd305973e50e969b5ce55766e">gameplay::Node</a>
 </li>
 <li>getBoundingSphere()
 : <a class="el" href="classgameplay_1_1_mesh.html#aedb15ace17b6f915fd9c3ab9af0c78d1">gameplay::Mesh</a>
 , <a class="el" href="classgameplay_1_1_node.html#a1c7b0cbdd4d306c77dd56d6481335393">gameplay::Node</a>
 </li>
-<li>getBoundsType()
-: <a class="el" href="classgameplay_1_1_node.html#a1027977832fd2596f50854dfc1a1162d">gameplay::Node</a>
+<li>getBounds()
+: <a class="el" href="classgameplay_1_1_control.html#aa6ac16d09681bb54497e1379705c8aed">gameplay::Control</a>
 </li>
 <li>getBreakingImpulse()
 : <a class="el" href="classgameplay_1_1_physics_constraint.html#a86d8778f474d1db27317014e9cffebb1">gameplay::PhysicsConstraint</a>
@@ -245,6 +246,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>getCameraType()
 : <a class="el" href="classgameplay_1_1_camera.html#adc39f5958fbece47cb06704ce0ce07cb">gameplay::Camera</a>
+</li>
+<li>getCapacity()
+: <a class="el" href="classgameplay_1_1_mesh_batch.html#a44f84cde8592daba3dbe2062d2e15f3b">gameplay::MeshBatch</a>
 </li>
 <li>getCenter()
 : <a class="el" href="classgameplay_1_1_bounding_box.html#a078a7235ffb74ceff58953b0c012afaa">gameplay::BoundingBox</a>
@@ -274,12 +278,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getComponentCount()
 : <a class="el" href="classgameplay_1_1_curve.html#a88cb908bf32c2166519b9b3e7feb11c9">gameplay::Curve</a>
 </li>
+<li>getControl()
+: <a class="el" href="classgameplay_1_1_container.html#adba2435961faaa968311a0acf986f737">gameplay::Container</a>
+</li>
 <li>getCorners()
 : <a class="el" href="classgameplay_1_1_bounding_box.html#a4a1081a6552c69cacaf20422b7f677f3">gameplay::BoundingBox</a>
 , <a class="el" href="classgameplay_1_1_frustum.html#a2570da2f955daec8fb44a95fe25af049">gameplay::Frustum</a>
 </li>
 <li>getCurrentEffect()
 : <a class="el" href="classgameplay_1_1_effect.html#afca19efa9d718823f5685693e23847d9">gameplay::Effect</a>
+</li>
+<li>getCursor()
+: <a class="el" href="classgameplay_1_1_theme_1_1_style_1_1_overlay.html#a2dca29ecdd324ffa955a4606fb98fbde">gameplay::Theme::Style::Overlay</a>
+</li>
+<li>getData()
+: <a class="el" href="classgameplay_1_1_image.html#ac5c566683e2d7e2d4a5daec7904bbe34">gameplay::Image</a>
 </li>
 <li>getDepthStencilTarget()
 : <a class="el" href="classgameplay_1_1_depth_stencil_target.html#a5327e217d77ea8539d5ab9c10266aeba">gameplay::DepthStencilTarget</a>
@@ -292,8 +305,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_plane.html#ac534f62e8e061033a91888a098f7aa0d">gameplay::Plane</a>
 </li>
 <li>getDownVector()
-: <a class="el" href="classgameplay_1_1_transform.html#a358ec577ae13c8e19b84810769e15e4b">gameplay::Transform</a>
-, <a class="el" href="classgameplay_1_1_matrix.html#a265558a47f80e2c54d3f505c57d3390c">gameplay::Matrix</a>
+: <a class="el" href="classgameplay_1_1_matrix.html#a265558a47f80e2c54d3f505c57d3390c">gameplay::Matrix</a>
+, <a class="el" href="classgameplay_1_1_transform.html#a358ec577ae13c8e19b84810769e15e4b">gameplay::Transform</a>
 </li>
 <li>getDuration()
 : <a class="el" href="classgameplay_1_1_animation.html#a243766189b90b129549757fd4e059f97">gameplay::Animation</a>
@@ -301,7 +314,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getEffect()
 : <a class="el" href="classgameplay_1_1_uniform.html#a4cbad44d55134dab7683024af42fe531">gameplay::Uniform</a>
 , <a class="el" href="classgameplay_1_1_pass.html#a28b7e05f0a571dec8c039280c99baab3">gameplay::Pass</a>
-, <a class="el" href="classgameplay_1_1_sprite_batch.html#aaef7584cd97df33e52ca7587747c8a12">gameplay::SpriteBatch</a>
 </li>
 <li>getElaspedTime()
 : <a class="el" href="classgameplay_1_1_animation_clip.html#a7e69fea3f954c14384937486db6bfe90">gameplay::AnimationClip</a>
@@ -317,6 +329,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>getEndTime()
 : <a class="el" href="classgameplay_1_1_animation_clip.html#ae0898f2d6b4d3d886d1f2bba8ef0dbd5">gameplay::AnimationClip</a>
+, <a class="el" href="classgameplay_1_1_curve.html#a00bc89b513da0e855f52496abfcdb2f1">gameplay::Curve</a>
 </li>
 <li>getEnergyMax()
 : <a class="el" href="classgameplay_1_1_particle_emitter.html#a292c97dfbf5f34806062241fd9465a28">gameplay::ParticleEmitter</a>
@@ -343,8 +356,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_animation_value.html#ab41575a733d683ed48cd760ca87dc4db">gameplay::AnimationValue</a>
 , <a class="el" href="classgameplay_1_1_properties.html#a87bcd441ca09a77b35e2e7ac91a5cf82">gameplay::Properties</a>
 </li>
+<li>getFont()
+: <a class="el" href="classgameplay_1_1_theme_1_1_style_1_1_overlay.html#a683c510bead094a683a2d5b12f214382">gameplay::Theme::Style::Overlay</a>
+</li>
 <li>getFormat()
 : <a class="el" href="classgameplay_1_1_depth_stencil_target.html#ab4144df9584907fb18e104f8328e7265">gameplay::DepthStencilTarget</a>
+, <a class="el" href="classgameplay_1_1_image.html#a8b92c4923a912cc841a43dbe9b2bc466">gameplay::Image</a>
 </li>
 <li>getForwardVector()
 : <a class="el" href="classgameplay_1_1_matrix.html#a24bfcdb9b653d18c7c4d98114c1e0aba">gameplay::Matrix</a>
@@ -384,6 +401,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>getHeight()
 : <a class="el" href="classgameplay_1_1_game.html#a03206e4c2b39564fbae3b7cef5c2bdb0">gameplay::Game</a>
+, <a class="el" href="classgameplay_1_1_image.html#aee42f88a9981c86676867e0c466dcdfe">gameplay::Image</a>
+, <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a11c19c2e9245487eb8de22164c3247ba">gameplay::PhysicsRigidBody</a>
 , <a class="el" href="classgameplay_1_1_texture.html#a5c84500dc18a15edfc4b6644c6e07673">gameplay::Texture</a>
 , <a class="el" href="classgameplay_1_1_viewport.html#a374f515a74ed74ed19dd21e49f5f6405">gameplay::Viewport</a>
 </li>
@@ -395,6 +414,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classgameplay_1_1_properties.html#ad2eafddb76357a7d044bc53107bfe785">gameplay::Properties</a>
 , <a class="el" href="classgameplay_1_1_scene.html#af652fe36341c513f99a1013bdaff586e">gameplay::Scene</a>
 , <a class="el" href="classgameplay_1_1_technique.html#a68a3149741a811d88c87f59c5e5aded9">gameplay::Technique</a>
+, <a class="el" href="classgameplay_1_1_theme_1_1_cursor.html#afbe4b48f66b6cc226dc4c126cbc0ee9c">gameplay::Theme::Cursor</a>
+, <a class="el" href="classgameplay_1_1_theme_1_1_style.html#ad6e7224281b7819c0d590c61251a04ae">gameplay::Theme::Style</a>
 </li>
 <li>getID()
 : <a class="el" href="classgameplay_1_1_animation_clip.html#af7b6b4a022626e713af8baabc621009a">gameplay::AnimationClip</a>
@@ -403,7 +424,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classgameplay_1_1_render_target.html#a589cd7af4278af644e307190e525cd08">gameplay::RenderTarget</a>
 </li>
 <li>getIndexBuffer()
-: <a class="el" href="classgameplay_1_1_mesh_part.html#a32123e7f097a72d1fca3b24706fcebd3">gameplay::MeshPart</a>
+: <a class="el" href="classgameplay_1_1_mesh_part.html#a45da2fae501c00b46f252adb9a3e302d">gameplay::MeshPart</a>
 </li>
 <li>getIndexCount()
 : <a class="el" href="classgameplay_1_1_mesh_part.html#a6510763a55c4c3127a614c411ff9a17c">gameplay::MeshPart</a>
@@ -435,14 +456,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classgameplay_1_1_node.html#ab396c23990679f45dcf5bd3477d53f8d">gameplay::Node</a>
 </li>
 <li>getInverseViewProjectionMatrix()
-: <a class="el" href="classgameplay_1_1_node.html#a50f1144b114d222a9ad5bea75cd3428b">gameplay::Node</a>
-, <a class="el" href="classgameplay_1_1_camera.html#ab1a04a72e7520c9281e233a69316b6ef">gameplay::Camera</a>
+: <a class="el" href="classgameplay_1_1_camera.html#ab1a04a72e7520c9281e233a69316b6ef">gameplay::Camera</a>
+, <a class="el" href="classgameplay_1_1_node.html#a50f1144b114d222a9ad5bea75cd3428b">gameplay::Node</a>
 </li>
 <li>getJoint()
-: <a class="el" href="classgameplay_1_1_mesh_skin.html#a6b33d2fc8c3c310db2e43382ca63bc8a">gameplay::MeshSkin</a>
+: <a class="el" href="classgameplay_1_1_mesh_skin.html#a0a47a3c532f733b05d4141a7a8ff180f">gameplay::MeshSkin</a>
 </li>
-<li>getJointMatrix()
-: <a class="el" href="classgameplay_1_1_joint.html#aa17a9ed039173ccf880b8b827302f2ac">gameplay::Joint</a>
+<li>getJointCount()
+: <a class="el" href="classgameplay_1_1_mesh_skin.html#ac4ac1ae68062adce1e7b4e73f3ea5635">gameplay::MeshSkin</a>
+</li>
+<li>getJointIndex()
+: <a class="el" href="classgameplay_1_1_mesh_skin.html#ac34041b4ea554b407a13684fabd789e4">gameplay::MeshSkin</a>
 </li>
 <li>getLeft()
 : <a class="el" href="classgameplay_1_1_frustum.html#a65adbc47c8a2ec72b6856263ce085f23">gameplay::Frustum</a>
@@ -466,8 +490,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getLong()
 : <a class="el" href="classgameplay_1_1_properties.html#a08a728a5e59bbbbe130cf52ad2646aba">gameplay::Properties</a>
 </li>
+<li>getMargin()
+: <a class="el" href="classgameplay_1_1_theme_1_1_style.html#a17311a3f7e39ef86b401518e6298bc8f">gameplay::Theme::Style</a>
+</li>
 <li>getMaterial()
-: <a class="el" href="classgameplay_1_1_model.html#af490bb5aa0edfe51b936677079d77c69">gameplay::Model</a>
+: <a class="el" href="classgameplay_1_1_mesh_batch.html#ae5e518b4f8b44ab1fa07c67dedd9dc05">gameplay::MeshBatch</a>
+, <a class="el" href="classgameplay_1_1_model.html#af490bb5aa0edfe51b936677079d77c69">gameplay::Model</a>
+, <a class="el" href="classgameplay_1_1_sprite_batch.html#a801483dd03d82ebbbc9fbfb47a77bb0d">gameplay::SpriteBatch</a>
 </li>
 <li>getMatrix()
 : <a class="el" href="classgameplay_1_1_frustum.html#ad1ae967dc50ed4c262af0727cf4a701d">gameplay::Frustum</a>
@@ -493,14 +522,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_model.html#aae5ddb51f3e067eba671794af5586165">gameplay::Model</a>
 </li>
 <li>getModel()
-: <a class="el" href="classgameplay_1_1_node.html#ac1fc666ef833732493e4b6f52e837096">gameplay::Node</a>
+: <a class="el" href="classgameplay_1_1_mesh_skin.html#a79d672dc28a7fe682c99efe5ce29eedd">gameplay::MeshSkin</a>
+, <a class="el" href="classgameplay_1_1_node.html#ac1fc666ef833732493e4b6f52e837096">gameplay::Node</a>
 </li>
 <li>getName()
 : <a class="el" href="classgameplay_1_1_uniform.html#a67c5a9eff18491dd11c7e18aa96b8be9">gameplay::Uniform</a>
 , <a class="el" href="classgameplay_1_1_material_parameter.html#a3c8512ef7b40dbd975fb4f06184cf4e6">gameplay::MaterialParameter</a>
 </li>
 <li>getNamespace()
-: <a class="el" href="classgameplay_1_1_properties.html#a524131493746464a6354bfee94a99560">gameplay::Properties</a>
+: <a class="el" href="classgameplay_1_1_properties.html#a874181016cdafa026a052baf0c10597c">gameplay::Properties</a>
 </li>
 <li>getNear()
 : <a class="el" href="classgameplay_1_1_frustum.html#a7adc05491eba593b41b2bfa4e6d0a2a2">gameplay::Frustum</a>
@@ -512,7 +542,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_properties.html#a75aca7c32447c266425aeb5c1635be31">gameplay::Properties</a>
 </li>
 <li>getNextProperty()
-: <a class="el" href="classgameplay_1_1_properties.html#a899b47563b2b1aa1d79df7156a3918d3">gameplay::Properties</a>
+: <a class="el" href="classgameplay_1_1_properties.html#a666b05652f9d3d2b3c3ca8b4bc331bae">gameplay::Properties</a>
 </li>
 <li>getNextSibling()
 : <a class="el" href="classgameplay_1_1_node.html#a6cd971ffc848362a6fb8de305934beec">gameplay::Node</a>
@@ -555,6 +585,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getOuterAngleCos()
 : <a class="el" href="classgameplay_1_1_light.html#a306703445dcc5b2cc34f055675caee29">gameplay::Light</a>
 </li>
+<li>getOverlay()
+: <a class="el" href="classgameplay_1_1_theme_1_1_style.html#a4dc7fbd021c1b0515b4d810bc0495eb7">gameplay::Theme::Style</a>
+</li>
+<li>getPadding()
+: <a class="el" href="classgameplay_1_1_theme_1_1_style.html#a93addda8215f9ac3cf70c597fe4956b2">gameplay::Theme::Style</a>
+</li>
 <li>getParameter()
 : <a class="el" href="classgameplay_1_1_render_state.html#a2627c31c1ad9e79fad636df1b3fe7da9">gameplay::RenderState</a>
 </li>
@@ -580,7 +616,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_technique.html#a6b3eb03a4b337fc4b473cd08f88f14be">gameplay::Technique</a>
 </li>
 <li>getPhysicsController()
-: <a class="el" href="classgameplay_1_1_game.html#adf4cf2bb1f2e0a2f1ce093605d228389">gameplay::Game</a>
+: <a class="el" href="classgameplay_1_1_game.html#aec67c78179a5f461357197e292a4266f">gameplay::Game</a>
 </li>
 <li>getPhysicsRigidBody()
 : <a class="el" href="classgameplay_1_1_node.html#ad00b33eac50808e73253790dfa0aaebc">gameplay::Node</a>
@@ -607,7 +643,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>getProjectionMatrix()
 : <a class="el" href="classgameplay_1_1_camera.html#a8f0028ac5e6ea4b3306e72abbe70c94e">gameplay::Camera</a>
-, <a class="el" href="classgameplay_1_1_node.html#a2265e96c01c9aa6e68b5a6f2c5ab86bc">gameplay::Node</a>
+, <a class="el" href="classgameplay_1_1_node.html#aa5534d70a603883431a0a5f692d6d383">gameplay::Node</a>
+</li>
+<li>getQuaternionFromAxisAngle()
+: <a class="el" href="classgameplay_1_1_properties.html#a40e005c3e4e6d9f28305b5ee425629a9">gameplay::Properties</a>
 </li>
 <li>getRange()
 : <a class="el" href="classgameplay_1_1_light.html#a01a67249790ad15f6575561fd57e3325">gameplay::Light</a>
@@ -617,6 +656,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>getRefCount()
 : <a class="el" href="classgameplay_1_1_ref.html#a6f58fd4c48dd9ed3ad2019d88fd1196d">gameplay::Ref</a>
+</li>
+<li>getRegion()
+: <a class="el" href="classgameplay_1_1_theme_1_1_cursor.html#ad0f7a007953116036e95fe96882d3593">gameplay::Theme::Cursor</a>
+, <a class="el" href="classgameplay_1_1_theme_1_1_style_1_1_overlay.html#ad7b3c03269e82f985781925625457a25">gameplay::Theme::Style::Overlay</a>
 </li>
 <li>getRenderTarget()
 : <a class="el" href="classgameplay_1_1_frame_buffer.html#aebded0d4d37b5a34162bb37e96a6ec5c">gameplay::FrameBuffer</a>
@@ -635,17 +678,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_frustum.html#ac23be4904fd35ecfbceebe9bd9dd2fa0">gameplay::Frustum</a>
 </li>
 <li>getRightVector()
-: <a class="el" href="classgameplay_1_1_transform.html#aaffcfc63bb2e090c379e53a2c48bdfa3">gameplay::Transform</a>
+: <a class="el" href="classgameplay_1_1_transform.html#a577ec8cda9eaf69c7a4f57c5b31f69c1">gameplay::Transform</a>
 , <a class="el" href="classgameplay_1_1_matrix.html#a9a1f090647081540b8802b20123720e2">gameplay::Matrix</a>
-, <a class="el" href="classgameplay_1_1_transform.html#a577ec8cda9eaf69c7a4f57c5b31f69c1">gameplay::Transform</a>
+, <a class="el" href="classgameplay_1_1_transform.html#aaffcfc63bb2e090c379e53a2c48bdfa3">gameplay::Transform</a>
+</li>
+<li>getRootJoint()
+: <a class="el" href="classgameplay_1_1_mesh_skin.html#af79030e022bccfd6c744c30bd8e8432c">gameplay::MeshSkin</a>
 </li>
 <li>getRootNode()
 : <a class="el" href="classgameplay_1_1_node.html#a52dbe8d9d6858f5cc95125e9e346497c">gameplay::Node</a>
 </li>
 <li>getRotation()
-: <a class="el" href="classgameplay_1_1_transform.html#a41cfbd517d4e62be2c249103d2bcf944">gameplay::Transform</a>
+: <a class="el" href="classgameplay_1_1_transform.html#ab33fdaa0808fed6a9d93aa2d8c6023d8">gameplay::Transform</a>
 , <a class="el" href="classgameplay_1_1_matrix.html#ac69f205f47736dbd8f6e64b28eae1bab">gameplay::Matrix</a>
-, <a class="el" href="classgameplay_1_1_transform.html#a1311d5999aa2f235bf8b101d59587c79">gameplay::Transform</a>
 </li>
 <li>getRotationAxis()
 : <a class="el" href="classgameplay_1_1_particle_emitter.html#a36751f7e9322d0679e156b0fd3b3d3b1">gameplay::ParticleEmitter</a>
@@ -675,7 +720,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_particle_emitter.html#a110dad1165857642f37da660412f3217">gameplay::ParticleEmitter</a>
 </li>
 <li>getScale()
-: <a class="el" href="classgameplay_1_1_matrix.html#aba9573dd191bd04d5b79a6e74b35d525">gameplay::Matrix</a>
+: <a class="el" href="classgameplay_1_1_transform.html#a5886844a77ca86699cddec4e414feaf0">gameplay::Transform</a>
+, <a class="el" href="classgameplay_1_1_matrix.html#aba9573dd191bd04d5b79a6e74b35d525">gameplay::Matrix</a>
 , <a class="el" href="classgameplay_1_1_transform.html#a94c3507d0b37529c50dfa42a7bf20515">gameplay::Transform</a>
 </li>
 <li>getScaleX()
@@ -689,6 +735,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>getScene()
 : <a class="el" href="classgameplay_1_1_node.html#a5e9f041efc65034abc341431299f63ab">gameplay::Node</a>
+</li>
+<li>getSize()
+: <a class="el" href="classgameplay_1_1_font.html#a37eadad72bb882e24a656c9efb0ebda1">gameplay::Font</a>
 </li>
 <li>getSizeEndMax()
 : <a class="el" href="classgameplay_1_1_particle_emitter.html#adc9650fe7605a900b892fb6327c847c2">gameplay::ParticleEmitter</a>
@@ -715,11 +764,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_particle_emitter.html#a808b3b2ec768132149671fce9d9c08a5">gameplay::ParticleEmitter</a>
 </li>
 <li>getStartTime()
-: <a class="el" href="classgameplay_1_1_animation_clip.html#a66b9cad3b41aba5a1695917489b6f92d">gameplay::AnimationClip</a>
+: <a class="el" href="classgameplay_1_1_curve.html#ae960ef36166c683ad325f4c276ee70f6">gameplay::Curve</a>
+, <a class="el" href="classgameplay_1_1_animation_clip.html#a66b9cad3b41aba5a1695917489b6f92d">gameplay::AnimationClip</a>
 </li>
 <li>getState()
-: <a class="el" href="classgameplay_1_1_audio_source.html#af1bb2c2fed72d276c6f51d7c5a00696a">gameplay::AudioSource</a>
-, <a class="el" href="classgameplay_1_1_game.html#a879629a0f000430b4cbb60e94b379f32">gameplay::Game</a>
+: <a class="el" href="classgameplay_1_1_game.html#a879629a0f000430b4cbb60e94b379f32">gameplay::Game</a>
+, <a class="el" href="classgameplay_1_1_audio_source.html#af1bb2c2fed72d276c6f51d7c5a00696a">gameplay::AudioSource</a>
 </li>
 <li>getStateBlock()
 : <a class="el" href="classgameplay_1_1_sprite_batch.html#ac683e1a29357346c2aafa73fd86d81f7">gameplay::SpriteBatch</a>
@@ -728,16 +778,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getString()
 : <a class="el" href="classgameplay_1_1_properties.html#aa684e793fd755acf2611079ea4e56b96">gameplay::Properties</a>
 </li>
+<li>getStyle()
+: <a class="el" href="classgameplay_1_1_theme.html#a372252f5f0a3da261cdcaa6db549f429">gameplay::Theme</a>
+</li>
 <li>getTechnique()
-: <a class="el" href="classgameplay_1_1_material.html#aa3a9573b9c169ab69cec1ee00623376d">gameplay::Material</a>
+: <a class="el" href="classgameplay_1_1_material.html#a6d67f4ec82e7070c29a558aed15417b6">gameplay::Material</a>
 </li>
 <li>getTechniqueCount()
 : <a class="el" href="classgameplay_1_1_material.html#a8705383d2960022d1ab000e3020a9609">gameplay::Material</a>
 </li>
 <li>getTexture()
-: <a class="el" href="classgameplay_1_1_texture_1_1_sampler.html#ae291fd50e8e3648c6ed4c5d852a31f4d">gameplay::Texture::Sampler</a>
+: <a class="el" href="classgameplay_1_1_depth_stencil_target.html#a3d7f3f57c9c17778b8352e84559b848d">gameplay::DepthStencilTarget</a>
 , <a class="el" href="classgameplay_1_1_render_target.html#aa31237603c1755a19ae1c72e295c3a11">gameplay::RenderTarget</a>
-, <a class="el" href="classgameplay_1_1_depth_stencil_target.html#a3d7f3f57c9c17778b8352e84559b848d">gameplay::DepthStencilTarget</a>
+, <a class="el" href="classgameplay_1_1_texture_1_1_sampler.html#ae291fd50e8e3648c6ed4c5d852a31f4d">gameplay::Texture::Sampler</a>
 </li>
 <li>getTop()
 : <a class="el" href="classgameplay_1_1_frustum.html#aaa9dde0f2dfb219fd8315dfed517b6b7">gameplay::Frustum</a>
@@ -749,8 +802,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_physics_constraint.html#a9b98ab06381f9218e5725169db77fc36">gameplay::PhysicsConstraint</a>
 </li>
 <li>getTranslation()
-: <a class="el" href="classgameplay_1_1_transform.html#a5b77d57b7a0f419f7238f3d095d80d2c">gameplay::Transform</a>
+: <a class="el" href="classgameplay_1_1_transform.html#aa294de74db9cf78687c87aad9b5c15b4">gameplay::Transform</a>
 , <a class="el" href="classgameplay_1_1_matrix.html#a3afb4000253e6cd1b300c0f7fd12ff1e">gameplay::Matrix</a>
+, <a class="el" href="classgameplay_1_1_transform.html#a5b77d57b7a0f419f7238f3d095d80d2c">gameplay::Transform</a>
 </li>
 <li>getTranslationOffset()
 : <a class="el" href="classgameplay_1_1_physics_constraint.html#a4eaa77666367baf3ef5fd9ef44534ae4">gameplay::PhysicsConstraint</a>
@@ -777,20 +831,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_transform.html#ab602baa162c212ceb5fa1ada2fdc07d7">gameplay::Transform</a>
 </li>
 <li>getType()
-: <a class="el" href="classgameplay_1_1_joint.html#a0b125d5f1dcee6b9207afa752fe0462a">gameplay::Joint</a>
-, <a class="el" href="classgameplay_1_1_uniform.html#a5fb2a33230657d50edf77aec5718a307">gameplay::Uniform</a>
+: <a class="el" href="classgameplay_1_1_uniform.html#a5fb2a33230657d50edf77aec5718a307">gameplay::Uniform</a>
 , <a class="el" href="classgameplay_1_1_node.html#a87f2240f4a949e0ddf686f491c05c91d">gameplay::Node</a>
 , <a class="el" href="classgameplay_1_1_properties.html#aafe27a822f80ddea40bc02851726191a">gameplay::Properties</a>
+, <a class="el" href="classgameplay_1_1_theme_1_1_style_1_1_overlay.html#a05fea58429c4263d2c4fbc79541d875b">gameplay::Theme::Style::Overlay</a>
+, <a class="el" href="classgameplay_1_1_joint.html#a0b125d5f1dcee6b9207afa752fe0462a">gameplay::Joint</a>
 </li>
 <li>getUniform()
-: <a class="el" href="classgameplay_1_1_effect.html#aaa379a79a232f2e40334de3b8bbaed8f">gameplay::Effect</a>
+: <a class="el" href="classgameplay_1_1_effect.html#abef1af436a9ccc1b68ad621f74aa141e">gameplay::Effect</a>
 </li>
 <li>getUniformCount()
 : <a class="el" href="classgameplay_1_1_effect.html#a3526ede59dbfec5bfc8808700853d414">gameplay::Effect</a>
 </li>
 <li>getUpVector()
-: <a class="el" href="classgameplay_1_1_matrix.html#a6495ec080d4132335a649bf44f17c4dc">gameplay::Matrix</a>
-, <a class="el" href="classgameplay_1_1_transform.html#a6276ca6f625390046dd499518d1a49ba">gameplay::Transform</a>
+: <a class="el" href="classgameplay_1_1_transform.html#a6276ca6f625390046dd499518d1a49ba">gameplay::Transform</a>
+, <a class="el" href="classgameplay_1_1_matrix.html#a6495ec080d4132335a649bf44f17c4dc">gameplay::Matrix</a>
+, <a class="el" href="classgameplay_1_1_transform.html#a2f55e29ba047a7ddb6aa7adb06190d2b">gameplay::Transform</a>
+</li>
+<li>getUVs()
+: <a class="el" href="classgameplay_1_1_theme_1_1_cursor.html#a0492c38b5c23228f8f1e6029ea7fe16c">gameplay::Theme::Cursor</a>
 </li>
 <li>getVector2()
 : <a class="el" href="classgameplay_1_1_properties.html#a4404d17148833a5b5978d2bcb781a200">gameplay::Properties</a>
@@ -802,8 +861,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_properties.html#aa4931aadbe533e8e4b65ce3ec35a3508">gameplay::Properties</a>
 </li>
 <li>getVelocity()
-: <a class="el" href="classgameplay_1_1_audio_source.html#a9a5a9c9cad6f24d4e5649b77e715c0b8">gameplay::AudioSource</a>
-, <a class="el" href="classgameplay_1_1_audio_listener.html#a2fd7df2679ffb9fceb064ffa00d73e6b">gameplay::AudioListener</a>
+: <a class="el" href="classgameplay_1_1_audio_listener.html#a2fd7df2679ffb9fceb064ffa00d73e6b">gameplay::AudioListener</a>
+, <a class="el" href="classgameplay_1_1_audio_source.html#a9a5a9c9cad6f24d4e5649b77e715c0b8">gameplay::AudioSource</a>
 , <a class="el" href="classgameplay_1_1_particle_emitter.html#a422bc8ad00cf9188b82144ce5711eadc">gameplay::ParticleEmitter</a>
 </li>
 <li>getVelocityVariance()
@@ -813,17 +872,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_effect.html#ae93fcc9523040444d4c399fef1871fa4">gameplay::Effect</a>
 </li>
 <li>getVertexBuffer()
-: <a class="el" href="classgameplay_1_1_mesh.html#ad3584bfe1caa6fe1294f36c5ef9b4bd7">gameplay::Mesh</a>
+: <a class="el" href="classgameplay_1_1_mesh.html#adbb9ba9503e14358cfbb91050c095322">gameplay::Mesh</a>
 </li>
 <li>getVertexCount()
 : <a class="el" href="classgameplay_1_1_mesh.html#a494b6ac9f634dfbb3b970017341f0c74">gameplay::Mesh</a>
 </li>
 <li>getVertexFormat()
-: <a class="el" href="classgameplay_1_1_mesh.html#a58b55fb3b8659236311c9e18a186e91a">gameplay::Mesh</a>
+: <a class="el" href="classgameplay_1_1_mesh.html#ac9fca007f149de6607dc1b2e9c52515c">gameplay::Mesh</a>
 </li>
 <li>getVertexSize()
-: <a class="el" href="classgameplay_1_1_vertex_format.html#a2c27ab28bf3ba6ce1d9309991ab77e85">gameplay::VertexFormat</a>
-, <a class="el" href="classgameplay_1_1_mesh.html#a3501ead2128e9cb3890f4fc043aa5abf">gameplay::Mesh</a>
+: <a class="el" href="classgameplay_1_1_mesh.html#a3501ead2128e9cb3890f4fc043aa5abf">gameplay::Mesh</a>
+, <a class="el" href="classgameplay_1_1_vertex_format.html#a2c27ab28bf3ba6ce1d9309991ab77e85">gameplay::VertexFormat</a>
 </li>
 <li>getViewMatrix()
 : <a class="el" href="classgameplay_1_1_camera.html#a7255ec8e9cfcaff1a77457ce689ce4b4">gameplay::Camera</a>
@@ -833,20 +892,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_scene.html#a9894084f460e1e7b6152536964ad12ff">gameplay::Scene</a>
 </li>
 <li>getViewProjectionMatrix()
-: <a class="el" href="classgameplay_1_1_node.html#a1c19bce9f534b65316b5b315e91c13d4">gameplay::Node</a>
-, <a class="el" href="classgameplay_1_1_camera.html#a492d60b6828a89f0f5d8f9103b9b1922">gameplay::Camera</a>
+: <a class="el" href="classgameplay_1_1_camera.html#a492d60b6828a89f0f5d8f9103b9b1922">gameplay::Camera</a>
+, <a class="el" href="classgameplay_1_1_node.html#a1c19bce9f534b65316b5b315e91c13d4">gameplay::Node</a>
 </li>
 <li>getWidth()
-: <a class="el" href="classgameplay_1_1_viewport.html#a69b50fb1e479d0b96eb04290775ab466">gameplay::Viewport</a>
-, <a class="el" href="classgameplay_1_1_texture.html#a80bddd8745b36e0c51cf54adbb1a55f6">gameplay::Texture</a>
+: <a class="el" href="classgameplay_1_1_image.html#a267a01b0cb9b5c857e0ab4722cf08990">gameplay::Image</a>
 , <a class="el" href="classgameplay_1_1_game.html#a6a0ab2f3c261627aaf03068a2d43c36e">gameplay::Game</a>
+, <a class="el" href="classgameplay_1_1_viewport.html#a69b50fb1e479d0b96eb04290775ab466">gameplay::Viewport</a>
+, <a class="el" href="classgameplay_1_1_texture.html#a80bddd8745b36e0c51cf54adbb1a55f6">gameplay::Texture</a>
 </li>
 <li>getWorldCenterOfMass()
 : <a class="el" href="classgameplay_1_1_physics_constraint.html#a4a4f4106651c9f25b5bc69fb2b09f05c">gameplay::PhysicsConstraint</a>
 </li>
 <li>getWorldMatrix()
-: <a class="el" href="classgameplay_1_1_joint.html#a04b4a91a6b979e592eee3b17e69f211b">gameplay::Joint</a>
-, <a class="el" href="classgameplay_1_1_node.html#ac5a80241a7ead3f80a3184c683cc644a">gameplay::Node</a>
+: <a class="el" href="classgameplay_1_1_node.html#ac5a80241a7ead3f80a3184c683cc644a">gameplay::Node</a>
 </li>
 <li>getWorldTransform()
 : <a class="el" href="classgameplay_1_1_physics_motion_state.html#a23347f66fcca39beff4252b2978be9f2">gameplay::PhysicsMotionState</a>
@@ -879,7 +938,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -889,7 +948,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:02 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

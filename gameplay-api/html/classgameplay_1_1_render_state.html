@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -131,11 +130,14 @@ Public Types</h2></td></tr>
 &#160;&#160;<b>NONE</b>, 
 <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017ad1ac1447b8493cf679f6d2a795c00538">WORLD_MATRIX</a>, 
 <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a1d263042494a24659d78c27a2a4ebd62">VIEW_MATRIX</a>, 
-<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017affc42be9b34ab81b119e40393af52f12">WORLD_VIEW_MATRIX</a>, 
+<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017ae73eac1b7e779040db3ac0f2600e264d">PROJECTION_MATRIX</a>, 
 <br/>
-&#160;&#160;<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a3370e5491e60fe679cbdace4340ba898">WORLD_VIEW_PROJECTION_MATRIX</a>, 
+&#160;&#160;<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017affc42be9b34ab81b119e40393af52f12">WORLD_VIEW_MATRIX</a>, 
+<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017ad4493886553d11e2ee264e00f40fe89a">VIEW_PROJECTION_MATRIX</a>, 
+<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a3370e5491e60fe679cbdace4340ba898">WORLD_VIEW_PROJECTION_MATRIX</a>, 
 <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a73e903b7e3d4b348eed13d495310e488">INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX</a>, 
-<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017abc793c81555aeab2c8aa37c62e1f559a">CAMERA_WORLD_POSITION</a>, 
+<br/>
+&#160;&#160;<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017abc793c81555aeab2c8aa37c62e1f559a">CAMERA_WORLD_POSITION</a>, 
 <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a41afd51c64cc5826c61a4df659596600">MATRIX_PALETTE</a>
 <br/>
  }</td></tr>
@@ -223,8 +225,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Model</b></td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017a1d263042494a24659d78c27a2a4ebd62"></a><!-- doxytag: member="VIEW_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017a1d263042494a24659d78c27a2a4ebd62" args="" -->VIEW_MATRIX</em>&nbsp;</td><td>
 <p>Binds the View matrix of the active camera for the node's scene. </p>
 </td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017ae73eac1b7e779040db3ac0f2600e264d"></a><!-- doxytag: member="PROJECTION_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017ae73eac1b7e779040db3ac0f2600e264d" args="" -->PROJECTION_MATRIX</em>&nbsp;</td><td>
+<p>Binds the Projection matrix of the active camera for the node's scene. </p>
+</td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017affc42be9b34ab81b119e40393af52f12"></a><!-- doxytag: member="WORLD_VIEW_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017affc42be9b34ab81b119e40393af52f12" args="" -->WORLD_VIEW_MATRIX</em>&nbsp;</td><td>
 <p>Binds a node's WorldView matrix. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017ad4493886553d11e2ee264e00f40fe89a"></a><!-- doxytag: member="VIEW_PROJECTION_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017ad4493886553d11e2ee264e00f40fe89a" args="" -->VIEW_PROJECTION_MATRIX</em>&nbsp;</td><td>
+<p>Binds the ViewProjection matrix of the active camera for the node's scene. </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017a3370e5491e60fe679cbdace4340ba898"></a><!-- doxytag: member="WORLD_VIEW_PROJECTION_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017a3370e5491e60fe679cbdace4340ba898" args="" -->WORLD_VIEW_PROJECTION_MATRIX</em>&nbsp;</td><td>
 <p>Binds a node's WorldViewProjection matrix. </p>
@@ -585,14 +593,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Model</b></td></tr>
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_render_state.html">RenderState</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -602,7 +610,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Model</b></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:06 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:04 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

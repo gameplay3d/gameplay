@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -126,10 +125,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_technique.html">Technique</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#ad053cd0a9a7b349e95c4a7a3180a9118">getTechnique</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#a2ea499d069a79c1a0e7c5713840c0607">setTechnique</a> (unsigned int index)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#a1bf2904504de4dffc7410f4645d19b3d">setTechnique</a> (const char *id)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#a4b318b40657165de79a359081caab74e">setMeshBinding</a> (<a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *mesh)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#a576cfb1e7b05d78604e2e0c50df68ef5">create</a> (const char *materialPath)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#abb9955b646562e10a08b00632740029f">create</a> (<a class="el" href="classgameplay_1_1_properties.html">Properties</a> *materialProperties)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#a3aaa95ad0525c4f7d9e4a0e94d456567">create</a> (<a class="el" href="classgameplay_1_1_effect.html">Effect</a> *effect)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#ae06604f6760bac16cc0027e6f80b0408">create</a> (const char *vshPath, const char *fshPath, const char *defines=NULL)</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
@@ -163,6 +162,31 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>RenderState</b></td>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">materialPath</td><td>Path path to the material file.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>A new <a class="el" href="classgameplay_1_1_material.html">Material</a>. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abb9955b646562e10a08b00632740029f"></a><!-- doxytag: member="gameplay::Material::create" ref="abb9955b646562e10a08b00632740029f" args="(Properties *materialProperties)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_material.html">Material</a> * gameplay::Material::create </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td>
+          <td class="paramname"><em>materialProperties</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Creates a material from the specified properties object.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">materialProperties</td><td>The properties object defining the material (must have namespace equal to 'material'). </td></tr>
   </table>
   </dd>
 </dl>
@@ -326,31 +350,6 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>RenderState</b></td>
 
 </div>
 </div>
-<a class="anchor" id="a4b318b40657165de79a359081caab74e"></a><!-- doxytag: member="gameplay::Material::setMeshBinding" ref="a4b318b40657165de79a359081caab74e" args="(Mesh *mesh)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void gameplay::Material::setMeshBinding </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *&#160;</td>
-          <td class="paramname"><em>mesh</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Stores a binding for the specified mesh onto all techniques and passes in this material.</p>
-<p>This method creates and stores a <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> for all techniques and passes onto the specified <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a>. When a mesh binding is set, the <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> will be automatically bound when the <a class="el" href="classgameplay_1_1_render_state.html#ad3a158e8cc808d7405296002e1e164c0">bind()</a> method is called for a pass.</p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">mesh</td><td>The <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> to create and store a <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> for (or NULL to remove an existing mesh bindings). </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a class="anchor" id="a2ea499d069a79c1a0e7c5713840c0607"></a><!-- doxytag: member="gameplay::Material::setTechnique" ref="a2ea499d069a79c1a0e7c5713840c0607" args="(unsigned int index)" -->
 <div class="memitem">
 <div class="memproto">
@@ -407,14 +406,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>RenderState</b></td>
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_material.html">Material</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -424,7 +423,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>RenderState</b></td>
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:04 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:03 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

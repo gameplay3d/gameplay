@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -124,7 +123,7 @@ Public Types</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a5c98a5b467182f2a3fd9bb8abac9127e">~Properties</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a899b47563b2b1aa1d79df7156a3918d3">getNextProperty</a> (const char **value=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a666b05652f9d3d2b3c3ca8b4bc331bae">getNextProperty</a> (char **value=NULL)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a75aca7c32447c266425aeb5c1635be31">getNextNamespace</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ade9fc061db01646ef889838713c8cead">rewind</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a524131493746464a6354bfee94a99560">getNamespace</a> (const char *id) const </td></tr>
@@ -141,6 +140,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a4404d17148833a5b5978d2bcb781a200">getVector2</a> (const char *name, <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ae0729d6e4abdcd81823cd46ff20e5e5b">getVector3</a> (const char *name, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#aa4931aadbe533e8e4b65ce3ec35a3508">getVector4</a> (const char *name, <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *out) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a40e005c3e4e6d9f28305b5ee425629a9">getQuaternionFromAxisAngle</a> (const char *name, <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a6abca23de971ae87e57e29ef4f0bfa21">getColor</a> (const char *name, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#af435904c37ba32c1080d76aa23323003">getColor</a> (const char *name, <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *out) const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
@@ -207,13 +207,13 @@ int height = spriteTexture-&gt;getInt("height");
  
 // Deleting the top-level Properties object will clean up all nested namespaces.
 SAFE_DELETE(properties);
-</pre></div><p>On the other hand, if the structure of the file is not known in advance its namespaces and name/value pairs can be retrieved one by one using the <a class="el" href="classgameplay_1_1_properties.html#a75aca7c32447c266425aeb5c1635be31">getNextNamespace()</a> and <a class="el" href="classgameplay_1_1_properties.html#a899b47563b2b1aa1d79df7156a3918d3">getNextProperty()</a> methods. The following method prints the contents of any properties file to the console:</p>
+</pre></div><p>On the other hand, if the structure of the file is not known in advance its namespaces and name/value pairs can be retrieved one by one using the <a class="el" href="classgameplay_1_1_properties.html#a75aca7c32447c266425aeb5c1635be31">getNextNamespace()</a> and <a class="el" href="classgameplay_1_1_properties.html#a666b05652f9d3d2b3c3ca8b4bc331bae">getNextProperty()</a> methods. The following method prints the contents of any properties file to the console:</p>
 <div class="fragment"><pre class="fragment">
 void printProperties(Properties* properties)
 {
     // Print the name and ID of the current namespace.
     const char* spacename = properties-&gt;getNamespace();
-    const char* id = properties-&gt;getID();
+    const char* id = properties-&gt;getId();
     WARN_VARG("Namespace: %s  ID: %s\n{", spacename, id);
  
     // Print all properties in this namespace.
@@ -605,14 +605,14 @@ void printProperties(Properties* properties)
 
 </div>
 </div>
-<a class="anchor" id="a899b47563b2b1aa1d79df7156a3918d3"></a><!-- doxytag: member="gameplay::Properties::getNextProperty" ref="a899b47563b2b1aa1d79df7156a3918d3" args="(const char **value=NULL)" -->
+<a class="anchor" id="a666b05652f9d3d2b3c3ca8b4bc331bae"></a><!-- doxytag: member="gameplay::Properties::getNextProperty" ref="a666b05652f9d3d2b3c3ca8b4bc331bae" args="(char **value=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">const char * gameplay::Properties::getNextProperty </td>
           <td>(</td>
-          <td class="paramtype">const char **&#160;</td>
+          <td class="paramtype">char **&#160;</td>
           <td class="paramname"><em>value</em> = <code>NULL</code></td><td>)</td>
           <td></td>
         </tr>
@@ -627,6 +627,42 @@ void printProperties(Properties* properties)
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The name of the next property, or NULL if there are no properties remaining. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a40e005c3e4e6d9f28305b5ee425629a9"></a><!-- doxytag: member="gameplay::Properties::getQuaternionFromAxisAngle" ref="a40e005c3e4e6d9f28305b5ee425629a9" args="(const char *name, Quaternion *out) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool gameplay::Properties::getQuaternionFromAxisAngle </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> *&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Interpret the value of the given property as a <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> specified as an axis angle. If the property does not exist, out will be set to Quaternion(). If the property exists but could not be scanned, an error will be logged and out will be set to Quaternion().</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the property to interpret, or NULL to return the current property's value. </td></tr>
+    <tr><td class="paramname">out</td><td>The quaternion to set to this property's interpreted value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True on success, false if the property does not exist or could not be scanned. </dd></dl>
 
 </div>
 </div>
@@ -801,7 +837,7 @@ void printProperties(Properties* properties)
       </table>
 </div>
 <div class="memdoc">
-<p>Rewind the <a class="el" href="classgameplay_1_1_properties.html#a899b47563b2b1aa1d79df7156a3918d3">getNextProperty()</a> and <a class="el" href="classgameplay_1_1_properties.html#a75aca7c32447c266425aeb5c1635be31">getNextNamespace()</a> iterators to the beginning of the file. </p>
+<p>Rewind the <a class="el" href="classgameplay_1_1_properties.html#a666b05652f9d3d2b3c3ca8b4bc331bae">getNextProperty()</a> and <a class="el" href="classgameplay_1_1_properties.html#a75aca7c32447c266425aeb5c1635be31">getNextNamespace()</a> iterators to the beginning of the file. </p>
 
 </div>
 </div>
@@ -813,14 +849,14 @@ void printProperties(Properties* properties)
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_properties.html">Properties</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -830,7 +866,7 @@ void printProperties(Properties* properties)
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
+    <li class="footer">Generated on Thu Jan 19 2012 10:48:04 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
