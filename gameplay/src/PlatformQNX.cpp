@@ -805,7 +805,7 @@ int Platform::enterMessagePump()
                         // Handle right mouse
                         if (buttons & SCREEN_RIGHT_MOUSE_BUTTON)
                         {
-                            if (mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON == 0)
+                            if ((mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON) == 0)
                             {
                                 move = false;
                                 mouse_pressed |= SCREEN_RIGHT_MOUSE_BUTTON;
@@ -822,7 +822,7 @@ int Platform::enterMessagePump()
                         // Handle middle mouse
                         if (buttons & SCREEN_MIDDLE_MOUSE_BUTTON)
                         {
-                            if (mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON == 0)
+                            if ((mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON) == 0)
                             {
                                 move = false;
                                 mouse_pressed |= SCREEN_MIDDLE_MOUSE_BUTTON;

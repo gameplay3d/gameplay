@@ -264,6 +264,18 @@ private:
     bool readArray(unsigned int* length, std::vector<T>* values);
 
     /**
+     * Reads an array of values and the array length from the current file position.
+     * 
+     * @param length A pointer to where the length of the array will be copied to.
+     * @param values A pointer to the vector to copy the values to. The vector will be resized if it is smaller than length.
+     * @param readSize The size that reads will be preformed at, size must be the same as or smaller then the sizeof(T)
+     * 
+     * @return True if successful, false if an error occurred.
+     */
+    template <class T>
+    bool readArray(unsigned int* length, std::vector<T>* values, unsigned int readSize);
+    
+    /**
      * Reads 16 floats from the current file position.
      *
      * @param m A pointer to float array of size 16.
