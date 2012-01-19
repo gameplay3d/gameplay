@@ -32,7 +32,7 @@
   
   <td style="padding-left: 0.5em;">
    <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -136,10 +136,11 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#abc8401dd63189911b3844beb938d1cb9">getAmbientColor</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#a6ba9b754208e53e248c25b4c180279bf">setAmbientColor</a> (float red, float green, float blue)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#aa5a96c338b0259b5d4ce0ceb31ae5aa4">visit</a> (T *instance, void(T::*visitMethod)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *, long), long cookie=0)</td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#adec0ddf4c4287d4a5edd157768411cf3">visit</a> (T *instance, bool(T::*visitMethod)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *, void *), void *cookie=0)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_scene.html">Scene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#ab275a23e3f9d57ee3ed14ba971aae3cc">createScene</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_scene.html">Scene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#a53dc054e44bd6b17653ae0884402b9dd">load</a> (const char *filePath)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Represents the root container for a hierarchy of nodes. </p>
@@ -436,6 +437,31 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a53dc054e44bd6b17653ae0884402b9dd"></a><!-- doxytag: member="gameplay::Scene::load" ref="a53dc054e44bd6b17653ae0884402b9dd" args="(const char *filePath)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_scene.html">Scene</a> * gameplay::Scene::load </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filePath</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Loads a scene from the given '.scene' file.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>The path to the '.scene' file to load from. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The loaded scene or <code>NULL</code> if the scene could not be loaded from the given file. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a6d1aae801439be43f2d8e11edbc4b77f"></a><!-- doxytag: member="gameplay::Scene::removeAllNodes" ref="a6d1aae801439be43f2d8e11edbc4b77f" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -591,7 +617,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa5a96c338b0259b5d4ce0ceb31ae5aa4"></a><!-- doxytag: member="gameplay::Scene::visit" ref="aa5a96c338b0259b5d4ce0ceb31ae5aa4" args="(T *instance, void(T::*visitMethod)(Node *, long), long cookie=0)" -->
+<a class="anchor" id="adec0ddf4c4287d4a5edd157768411cf3"></a><!-- doxytag: member="gameplay::Scene::visit" ref="adec0ddf4c4287d4a5edd157768411cf3" args="(T *instance, bool(T::*visitMethod)(Node *, void *), void *cookie=0)" -->
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -606,13 +632,13 @@ template&lt;class T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">void(T::*)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *, long)&#160;</td>
+          <td class="paramtype">bool(T::*)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *, void *)&#160;</td>
           <td class="paramname"><em>visitMethod</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">long&#160;</td>
+          <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>cookie</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
@@ -624,7 +650,8 @@ template&lt;class T &gt; </div>
 </div>
 <div class="memdoc">
 <p>Visits each node in the scene and calls the specified method pointer.</p>
-<p>Calling this method invokes the specified method pointer for each node in the scene hierarchy, passing the <a class="el" href="classgameplay_1_1_node.html">Node</a> and the specified cookie value. The visitMethod parameter must be a pointer to a method that has a void return type and accepts two parameters: a <a class="el" href="classgameplay_1_1_node.html">Node</a> pointer and a long value (cookie).</p>
+<p>Calling this method invokes the specified method pointer for each node in the scene hierarchy, passing the <a class="el" href="classgameplay_1_1_node.html">Node</a> and the specified cookie value.</p>
+<p>The visitMethod parameter must be a pointer to a method that has a bool return type and accepts two parameters: a <a class="el" href="classgameplay_1_1_node.html">Node</a> pointer and a void* (cookie). The scene travesal continues while visitMethod return true. Returning false will cause the traversal to stop.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">instance</td><td>The pointer to an instance of the object that contains visitMethod. </td></tr>
@@ -661,7 +688,7 @@ template&lt;class T &gt; </div>
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:06 for GamePlay by
+    <li class="footer">Generated on Wed Jan 18 2012 02:20:20 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

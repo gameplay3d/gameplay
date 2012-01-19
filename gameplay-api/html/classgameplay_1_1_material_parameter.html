@@ -32,7 +32,7 @@
   
   <td style="padding-left: 0.5em;">
    <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -147,7 +147,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#a702904543343dcdd3936acaaada48c73">bindValue</a> (ClassType *classInstance, ParameterType(ClassType::*valueMethod)() const, unsigned int(ClassType::*countMethod)() const)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#a6f898406a1e9390d7a26dba04e3b71e0">getAnimationPropertyComponentCount</a> (int propertyId) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#a4128baa81318a61cd6791b0cff9a5ea3">getAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#ab3c98c1f5fc7b2a5accf65702ce195af">setAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#aaf03d11eb0ad260816f213fdccfac4b4">setAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value, float blendWeight=1.0f)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#a0846a7aabb77f4efbb3b7038b8479948">ANIMATE_UNIFORM</a> = 1</td></tr>
@@ -312,7 +312,7 @@ template&lt;class ClassType , class ParameterType &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ab3c98c1f5fc7b2a5accf65702ce195af"></a><!-- doxytag: member="gameplay::MaterialParameter::setAnimationPropertyValue" ref="ab3c98c1f5fc7b2a5accf65702ce195af" args="(int propertyId, AnimationValue *value)" -->
+<a class="anchor" id="aaf03d11eb0ad260816f213fdccfac4b4"></a><!-- doxytag: member="gameplay::MaterialParameter::setAnimationPropertyValue" ref="aaf03d11eb0ad260816f213fdccfac4b4" args="(int propertyId, AnimationValue *value, float blendWeight=1.0f)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -326,7 +326,13 @@ template&lt;class ClassType , class ParameterType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>blendWeight</em> = <code>1.0f</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -338,7 +344,7 @@ template&lt;class ClassType , class ParameterType &gt; </div>
 <div class="memdoc">
 <dl class="see"><dt><b>See also:</b></dt><dd>AnimationTarget::setAnimationProperty </dd></dl>
 
-<p>Implements <a class="el" href="classgameplay_1_1_animation_target.html#a7aa3d929d61f6df9128b56a27f293a21">gameplay::AnimationTarget</a>.</p>
+<p>Implements <a class="el" href="classgameplay_1_1_animation_target.html#a84a39aaabebfe0f05387778c3e7cefb0">gameplay::AnimationTarget</a>.</p>
 
 </div>
 </div>
@@ -712,7 +718,7 @@ template&lt;class ClassType , class ParameterType &gt; </div>
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:04 for GamePlay by
+    <li class="footer">Generated on Wed Jan 18 2012 02:20:19 for GamePlay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
