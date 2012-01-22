@@ -132,7 +132,6 @@
 		42CCD483146D80DA00353661 = {
 			isa = PBXGroup;
 			children = (
-				5BD7770014C781BC001CADA0 /* CoreMotion.framework */,
 				42458CB314C3AAF900EFFB61 /* sample01-longboard-ios.plist */,
 				42C932E01491A1640098216A /* sample01-longboard-macos.plist */,
 				42CCD4C1146D91E800353661 /* icon.png */,
@@ -186,6 +185,7 @@
 		5B04C6A214C0ED5D00EB0071 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				5BD7770014C781BC001CADA0 /* CoreMotion.framework */,
 				5B43D19914C35927008A5D9D /* Foundation.framework */,
 				5B04C69B14C0EC7100EB0071 /* OpenAL.framework */,
 				5B04C69C14C0EC7100EB0071 /* OpenGLES.framework */,
