@@ -1,7 +1,7 @@
 var NAVTREE =
 [
-  [ "GamePlay", "index.html", [
-    [ "GamePlay - 3D Game Framework", "index.html", null ],
+  [ "gameplay", "index.html", [
+    [ "gameplay - 3D Game Framework", "index.html", null ],
     [ "Class List", "annotated.html", [
       [ "gameplay::Animation", "classgameplay_1_1_animation.html", null ],
       [ "gameplay::AnimationClip", "classgameplay_1_1_animation_clip.html", null ],
