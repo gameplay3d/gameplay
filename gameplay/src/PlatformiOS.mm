@@ -236,6 +236,7 @@ int getKey(unichar keyCode);
         displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update:)];
         [displayLink setFrameInterval:swapInterval];
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        _game->resume();
 		updating = TRUE;
 	}
 }
@@ -244,6 +245,7 @@ int getKey(unichar keyCode);
 {
 	if (updating)
 	{
+        _game->pause();
 		[displayLink invalidate];
         displayLink = nil;
 		updating = FALSE;
