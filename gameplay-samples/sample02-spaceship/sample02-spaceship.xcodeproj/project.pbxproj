@@ -39,6 +39,7 @@
 		5B43D1C214C35AA7008A5D9D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1C114C35AA7008A5D9D /* QuartzCore.framework */; };
 		5B43D1C314C35C18008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1B714C35A65008A5D9D /* libgameplay.a */; };
 		5B43D1C514C35F13008A5D9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1C414C35F13008A5D9D /* Foundation.framework */; };
+		5B707B1014C853BE00BBF7CA /* icon_iPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B707B0F14C853BE00BBF7CA /* icon_iPhone.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		5B43D1BF14C35AA0008A5D9D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5B43D1C114C35AA7008A5D9D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		5B43D1C414C35F13008A5D9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5B707B0F14C853BE00BBF7CA /* icon_iPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_iPhone.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 		42CCD50B146EBF3600353661 = {
 			isa = PBXGroup;
 			children = (
+				5B707B0F14C853BE00BBF7CA /* icon_iPhone.png */,
 				42458CBA14C3AB4D00EFFB61 /* sample02-spaceship-ios.plist */,
 				42C932E31491A18F0098216A /* sample02-spaceship-macos.plist */,
 				42CCD55D146EC24F00353661 /* icon.png */,
@@ -276,6 +279,7 @@
 			files = (
 				5B43D1AF14C35A0E008A5D9D /* icon.png in Resources */,
 				5B43D1B014C35A0E008A5D9D /* res in Resources */,
+				5B707B1014C853BE00BBF7CA /* icon_iPhone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
