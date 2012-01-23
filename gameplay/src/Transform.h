@@ -754,13 +754,13 @@ private:
     static const char ANIMATION_TRANSLATION_Y_BIT = 0x20; 
     static const char ANIMATION_TRANSLATION_Z_BIT = 0x40; 
 
-    void applyAnimationValueScaleX(float sx);
-    void applyAnimationValueScaleY(float sy);
-    void applyAnimationValueScaleZ(float sz);
-    void applyAnimationValueRotation(Quaternion* q);
-    void applyAnimationValueTranslationX(float tx);
-    void applyAnimationValueTranslationY(float ty);
-    void applyAnimationValueTranslationZ(float tz);
+    void applyAnimationValueScaleX(float sx, float blendWeight);
+    void applyAnimationValueScaleY(float sy, float blendWeight);
+    void applyAnimationValueScaleZ(float sz, float blendWeight);
+    void applyAnimationValueRotation(Quaternion* q, float blendWeight);
+    void applyAnimationValueTranslationX(float tx, float blendWeight);
+    void applyAnimationValueTranslationY(float ty, float blendWeight);
+    void applyAnimationValueTranslationZ(float tz, float blendWeight);
 };
 
 }
