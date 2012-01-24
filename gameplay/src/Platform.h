@@ -1,6 +1,8 @@
 #ifndef PLATFORM_H_
 #define PLATFORM_H_
 
+#include "Touch.h"
+
 namespace gameplay
 {
 
@@ -94,6 +96,8 @@ public:
      * Swaps the frame buffer on the device.
      */
     static void swapBuffers();
+
+    static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
 private:
 

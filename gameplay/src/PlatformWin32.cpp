@@ -267,13 +267,13 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return 0;
 
     case WM_LBUTTONDOWN:
-        gameplay::Game::getInstance()->touchEvent(gameplay::Touch::TOUCH_PRESS, LOWORD(lParam), HIWORD(lParam), 0);
+        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, LOWORD(lParam), HIWORD(lParam), 0);
         lMouseDown = true;
         return 0;
 
     case WM_LBUTTONUP:
         lMouseDown = false;
-        gameplay::Game::getInstance()->touchEvent(gameplay::Touch::TOUCH_RELEASE, LOWORD(lParam), HIWORD(lParam), 0);
+        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, LOWORD(lParam), HIWORD(lParam), 0);
         return 0;
 
     case WM_RBUTTONDOWN:
@@ -301,7 +301,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
         if (lMouseDown)
         {
-            gameplay::Game::getInstance()->touchEvent(gameplay::Touch::TOUCH_MOVE, LOWORD(lParam), HIWORD(lParam), 0);
+            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, LOWORD(lParam), HIWORD(lParam), 0);
             return 0;
         }
         else if (rMouseDown)
@@ -584,6 +584,12 @@ void Platform::swapBuffers()
 {
     if (__hdc)
         SwapBuffers(__hdc);
+}
+
+void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+    Form::touchEventInternal(evt, x, y, contactIndex);
 }
 
 }

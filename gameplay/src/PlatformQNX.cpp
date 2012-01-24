@@ -710,12 +710,12 @@ int Platform::enterMessagePump()
                         if (!__multiTouch)
                         {
                             screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                           Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, position[0], position[1], 0);
+                           gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, position[0], position[1], 0);
                         }
                         else
                         {
                             screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                            Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchEvent.x, touchEvent.y, touchEvent.contact_id);
+                            gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
                         break;
                     }
@@ -725,12 +725,12 @@ int Platform::enterMessagePump()
                         if (!__multiTouch)
                         {
                             screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                           Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, position[0], position[1], 0);
+                           gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, position[0], position[1], 0);
                         }
                         else
                         {
                             screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                            Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
+                            gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
                         break;
                     }
@@ -740,12 +740,12 @@ int Platform::enterMessagePump()
                         if (!__multiTouch)
                         {
                             screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                           Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, position[0], position[1], 0);
+                           gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, position[0], position[1], 0);
                         }
                         else
                         {
                             screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                            Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
+                            gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
                         break;
                         break;
@@ -878,6 +878,12 @@ void Platform::swapBuffers()
 {
     if (__eglDisplay && __eglSurface)
         eglSwapBuffers(__eglDisplay, __eglSurface);
+}
+
+void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+    Form::touchEventInternal(evt, x, y, contactIndex);
 }
 
 }

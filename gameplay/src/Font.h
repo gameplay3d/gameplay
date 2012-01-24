@@ -175,6 +175,10 @@ public:
     void measureText(const char* text, const Rectangle& clip, unsigned int size, Rectangle* out,
                      Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool ignoreClip = false);
 
+    SpriteBatch* getSpriteBatch();
+
+    static Justify getJustifyFromString(const char* justify);
+
 
 private:
 

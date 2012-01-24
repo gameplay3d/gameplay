@@ -178,14 +178,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     NSPoint point = [event locationInWindow];
     __leftMouseDown = true;
-    _game->touchEvent(Touch::TOUCH_PRESS, point.x, WINDOW_HEIGHT - point.y, 0);
+    gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void) mouseUp: (NSEvent*) event
 {
     NSPoint point = [event locationInWindow];
     __leftMouseDown = false;
-    _game->touchEvent(Touch::TOUCH_RELEASE, point.x, WINDOW_HEIGHT - point.y, 0);
+    gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
@@ -193,7 +193,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     NSPoint point = [event locationInWindow];
     if (__leftMouseDown)
     {
-        _game->touchEvent(Touch::TOUCH_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
+        gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
     }
 }
 
@@ -592,6 +592,12 @@ void Platform::swapBuffers()
 {
     if (__view)
         CGLFlushDrawable((CGLContextObj)[[__view openGLContext] CGLContextObj]);
+}
+
+void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+    Form::touchEventInternal(evt, x, y, contactIndex);
 }
 
 }
