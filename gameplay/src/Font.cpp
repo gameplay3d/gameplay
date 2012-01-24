@@ -1117,4 +1117,76 @@ void Font::addLineInfo(const Rectangle& area, int lineWidth, int lineLength, Jus
     }
 }
 
+SpriteBatch* Font::getSpriteBatch()
+{
+    return _batch;
+}
+
+Font::Justify Font::getJustifyFromString(const char* justify)
+{
+    if (strcmp(justify, "ALIGN_LEFT") == 0)
+    {
+        return Font::ALIGN_LEFT;
+    }
+    else if (strcmp(justify, "ALIGN_HCENTER") == 0)
+    {
+        return Font::ALIGN_HCENTER;
+    }
+    else if (strcmp(justify, "ALIGN_RIGHT") == 0)
+    {
+        return Font::ALIGN_RIGHT;
+    }
+    else if (strcmp(justify, "ALIGN_TOP") == 0)
+    {
+        return Font::ALIGN_TOP;
+    }
+    else if (strcmp(justify, "ALIGN_VCENTER") == 0)
+    {
+        return Font::ALIGN_VCENTER;
+    }
+    else if (strcmp(justify, "ALIGN_BOTTOM") == 0)
+    {
+        return Font::ALIGN_BOTTOM;
+    }
+    else if (strcmp(justify, "ALIGN_TOP_LEFT") == 0)
+    {
+        return Font::ALIGN_TOP_LEFT;
+    }
+    else if (strcmp(justify, "ALIGN_VCENTER_LEFT") == 0)
+    {
+        return Font::ALIGN_VCENTER_LEFT;
+    }
+    else if (strcmp(justify, "ALIGN_BOTTOM_LEFT") == 0)
+    {
+        return Font::ALIGN_BOTTOM_LEFT;
+    }
+    else if (strcmp(justify, "ALIGN_TOP_HCENTER") == 0)
+    {
+        return Font::ALIGN_TOP_HCENTER;
+    }
+    else if (strcmp(justify, "ALIGN_VCENTER_HCENTER") == 0)
+    {
+        return Font::ALIGN_VCENTER_HCENTER;
+    }
+    else if (strcmp(justify, "ALIGN_BOTTOM_HCENTER") == 0)
+    {
+        return Font::ALIGN_BOTTOM_HCENTER;
+    }
+    else if (strcmp(justify, "ALIGN_TOP_RIGHT") == 0)
+    {
+        return Font::ALIGN_TOP_RIGHT;
+    }
+    else if (strcmp(justify, "ALIGN_VCENTER_RIGHT") == 0)
+    {
+        return Font::ALIGN_VCENTER_RIGHT;
+    }
+    else if (strcmp(justify, "ALIGN_BOTTOM_RIGHT") == 0)
+    {
+        return Font::ALIGN_BOTTOM_RIGHT;
+    }
+
+    // Default.
+    return Font::ALIGN_TOP_LEFT;
+}
+
 }

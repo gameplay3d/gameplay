@@ -12,7 +12,7 @@ namespace gameplay
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
-    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL), 
+    _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL), 
     _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true)
 {
     if (id)
@@ -565,6 +565,31 @@ void Node::setModel(Model* model)
 Model* Node::getModel() const
 {
     return _model;
+}
+
+void Node::setForm(Form* form)
+{
+    if (_form != form)
+    {
+        if (_form)
+        {
+            _form->setNode(NULL);
+            SAFE_RELEASE(_form);
+        }
+
+        _form = form;
+
+        if (_form)
+        {
+            _form->addRef();
+            _form->setNode(this);
+        }
+    }
+}
+
+Form* Node::getForm() const
+{
+    return _form;
 }
 
 const BoundingSphere& Node::getBoundingSphere() const
