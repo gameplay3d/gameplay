@@ -183,7 +183,8 @@ public:
         KEY_EURO              = 0x20AC,
         KEY_POUND             = 0x00A3,
         KEY_YEN               = 0x00A5,
-        KEY_MIDDLE_DOT        = 0x0095
+        KEY_MIDDLE_DOT        = 0x0095,
+        KEY_SEARCH            = 0xFFAA
     };
 
 private:

@@ -51,9 +51,13 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
         return gameplay::Keyboard::KEY_CTRL;
     case VK_MENU:
         return gameplay::Keyboard::KEY_ALT;
+    case VK_APPS:
+        return gameplay::Keyboard::KEY_MENU;
     case VK_LWIN:
     case VK_RWIN:
         return gameplay::Keyboard::KEY_HYPER;
+    case VK_BROWSER_SEARCH:
+        return gameplay::Keyboard::KEY_SEARCH;
     case VK_INSERT:
         return gameplay::Keyboard::KEY_INSERT;
     case VK_HOME:
