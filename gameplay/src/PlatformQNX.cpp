@@ -75,21 +75,17 @@ static Keyboard::Key getKey(int qnxKeycode)
     case KEYCODE_CAPS_LOCK:
         return Keyboard::KEY_CAPS_LOCK;
     case KEYCODE_LEFT_SHIFT:
-        return Keyboard::KEY_LEFT_SHIFT;
     case KEYCODE_RIGHT_SHIFT:
-        return Keyboard::KEY_RIGHT_SHIFT;
+        return Keyboard::KEY_SHIFT;
     case KEYCODE_LEFT_CTRL:
-        return Keyboard::KEY_LEFT_CTRL;
     case KEYCODE_RIGHT_CTRL:
-        return Keyboard::KEY_RIGHT_CTRL;
+        return Keyboard::KEY_CTRL;
     case KEYCODE_LEFT_ALT:
-        return Keyboard::KEY_LEFT_ALT;
     case KEYCODE_RIGHT_ALT:
-        return Keyboard::KEY_RIGHT_ALT;
+        return Keyboard::KEY_ALT;
     case KEYCODE_LEFT_HYPER:
-        return Keyboard::KEY_LEFT_HYPER;
     case KEYCODE_RIGHT_HYPER:
-        return Keyboard::KEY_RIGHT_HYPER;
+        return Keyboard::KEY_HYPER;
     case KEYCODE_INSERT:
         return Keyboard::KEY_INSERT;
     case KEYCODE_HOME:
@@ -252,6 +248,14 @@ static Keyboard::Key getKey(int qnxKeycode)
         return Keyboard::KEY_QUOTE;
     case KEYCODE_APOSTROPHE:
         return Keyboard::KEY_APOSTROPHE;
+    case 0x20AC:
+        return Keyboard::KEY_EURO;
+    case KEYCODE_POUND_SIGN:
+        return Keyboard::KEY_POUND;
+    case KEYCODE_YEN_SIGN:
+        return Keyboard::KEY_YEN;
+    case KEYCODE_MIDDLE_DOT:
+        return Keyboard::KEY_MIDDLE_DOT;
     case KEYCODE_CAPITAL_A:
         return Keyboard::KEY_CAPITAL_A;
     case KEYCODE_A:
@@ -359,6 +363,37 @@ static Keyboard::Key getKey(int qnxKeycode)
     default:
         return Keyboard::KEY_NONE;
     }
+}
+
+/**
+ * Returns the unicode value from the given QNX key code value.
+ * Some non-printable characters also have corresponding unicode values, such as backspace.
+ *
+ * @param qnxKeyCode The keyboard key code.
+ *
+ * @return The unicode value or 0 if the keycode did not represent a unicode key.
+ */
+static int getUnicode(int qnxKeyCode)
+{
+    if (qnxKeyCode >= KEYCODE_PC_KEYS && qnxKeyCode <= UNICODE_PRIVATE_USE_AREA_LAST)
+    {
+        switch (qnxKeyCode)
+        {
+        case KEYCODE_BACKSPACE:
+            return 0x0008;
+        case KEYCODE_TAB:
+            return 0x0009;
+        case KEYCODE_KP_ENTER:
+        case KEYCODE_RETURN:
+            return 0x000A;
+        case KEYCODE_ESCAPE:
+            return 0x001B;
+        // Win32 doesn't consider delete to be a key char.
+        default:
+            return 0;
+        }
+    }
+    return qnxKeyCode;
 }
 
 extern void printError(const char* format, ...)
@@ -859,7 +894,17 @@ int Platform::enterMessagePump()
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_KEY_FLAGS, &flags);
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_KEY_SYM, &value);
                         gameplay::Keyboard::KeyEvent evt = (flags & KEY_DOWN) ? gameplay::Keyboard::KEY_PRESS :  gameplay::Keyboard::KEY_RELEASE;
-                        Game::getInstance()->keyEvent(evt, getKey(value));
+                        // Suppress key repeats
+                        if ((flags & KEY_REPEAT) == 0)
+                        {
+                            Game::getInstance()->keyEvent(evt, getKey(value));
+                            if (evt == gameplay::Keyboard::KEY_PRESS && flags & KEY_SYM_VALID)
+                            {
+                                int unicode = getUnicode(value);
+                                if (unicode)
+                                    Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_CHAR, unicode);
+                            }
+                        }
                         break;
                     }
                 }
