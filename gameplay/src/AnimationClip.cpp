@@ -12,7 +12,7 @@ AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long
     : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _duration(_endTime - _startTime), _repeatCount(1.0f), 
       _activeDuration(_duration * _repeatCount), _speed(1.0f), _isPlaying(false), _timeStarted(0), _elapsedTime(0), 
       _crossFadeToClip(NULL), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), _isFadingOutStarted(false), 
-      _isFadingOut(false), _isFadingIn(false), _beginListeners(NULL), _endListeners(NULL)
+      _isFadingOut(false), _isFadingIn(false), _beginListeners(NULL), _endListeners(NULL), _listeners(NULL)
 {
     assert(0 <= startTime && startTime <= animation->_duration && 0 <= endTime && endTime <= animation->_duration);
     
@@ -36,6 +36,7 @@ AnimationClip::~AnimationClip()
     SAFE_RELEASE(_crossFadeToClip);
     SAFE_DELETE(_beginListeners);
     SAFE_DELETE(_endListeners);
+    SAFE_DELETE(_listeners);
 }
 
 const char* AnimationClip::getID() const
@@ -178,6 +179,44 @@ void AnimationClip::crossFade(AnimationClip* clip, unsigned long duration)
     _crossFadeToClip->play(); 
 }
 
+void AnimationClip::addListener(AnimationClip::Listener* listener, unsigned long eventTime)
+{
+    assert(listener);
+    assert(eventTime < _duration);
+
+    listener->_listenerTime = eventTime;
+
+    if (!_listeners)
+    {
+        _listeners = new ListenerList;
+        _listeners->_list.push_front(listener);
+        if (_isPlaying)
+            _listeners->_listItr = _listeners->_list.begin();
+    }
+    else
+    {
+        for (std::list<Listener*>::iterator itr = _listeners->_list.begin(); itr != _listeners->_list.begin(); itr++)
+        {
+            if (eventTime < (*itr)->_listenerTime)
+            {
+                itr = _listeners->_list.insert(itr, listener);
+
+                // If playing, update the iterator if we need to.
+                // otherwise, it will just be set the next time the clip gets played.
+                if (_isPlaying)
+                {
+                    unsigned long currentTime = _elapsedTime % _duration;
+                    if ((_speed >= 0.0f && currentTime < eventTime && eventTime < (*_listeners->_listItr)->_listenerTime) || 
+                        (_speed <= 0 && currentTime > eventTime && eventTime > (*_listeners->_listItr)->_listenerTime))
+                        _listeners->_listItr = itr;
+                }
+
+                return;
+            }
+        }
+    }
+}
+
 void AnimationClip::addBeginListener(AnimationClip::Listener* listener)
 {
     if (!_beginListeners)
@@ -203,10 +242,10 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
 
     unsigned long currentTime = 0L;
     // Check to see if clip is complete.
-    if (_repeatCount != REPEAT_INDEFINITE && ((_speed >= 0 && _elapsedTime >= (long) _activeDuration) || (_speed <= 0 && _elapsedTime <= 0)))
+    if (_repeatCount != REPEAT_INDEFINITE && ((_speed >= 0.0f && _elapsedTime >= (long) _activeDuration) || (_speed <= 0.0f && _elapsedTime <= 0L)))
     {
         _isPlaying = false;
-        if (_speed >= 0)
+        if (_speed >= 0.0f)
         {
             currentTime = _activeDuration % _duration; // Get's the fractional part of the final repeat.
             if (currentTime == 0L)
@@ -220,7 +259,19 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
     else
     {
         // Gets portion/fraction of the repeat.
-        currentTime = (float) (_elapsedTime % _duration);
+        currentTime = _elapsedTime % _duration;
+    }
+
+    // Notify any listeners of Animation events.
+    if (_listeners)
+    {
+        while (_listeners->_listItr != _listeners->_list.end() && (_speed >= 0.0f && currentTime % _duration >= (*_listeners->_listItr)->_listenerTime) || 
+                                                     (_speed <= 0.0f && currentTime % _duration <= (*_listeners->_listItr)->_listenerTime))
+        {
+            
+            (*_listeners->_listItr)->animationEvent(this, Listener::DEFAULT);
+            (_listeners->_listItr)++;
+        }
     }
 
     // Add back in start time, and divide by the total animation's duration to get the actual percentage complete
@@ -327,10 +378,16 @@ void AnimationClip::onBegin()
     if (_speed >= 0)
     {
         _elapsedTime = 0;
+
+        if (_listeners)
+            _listeners->_listItr = _listeners->_list.begin();
     }
     else
     {
         _elapsedTime = _activeDuration;
+
+        if (_listeners)
+            _listeners->_listItr = _listeners->_list.end();
     }
 
     _elapsedTime += (Game::getGameTime() - _timeStarted) * _speed;
