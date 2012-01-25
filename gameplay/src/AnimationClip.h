@@ -32,13 +32,25 @@ public:
      */
     class Listener
     {
+        friend AnimationClip;
+
     public:
+
+        Listener() 
+            : _listenerTime(0L)
+        {
+        }
 
         /**
          * The type of animation event.
          */
         enum EventType 
         {
+            /**
+             * Default event type.
+             */
+            DEFAULT,
+
             /**
              * Event fired when the clip begins.
              */
@@ -54,6 +66,9 @@ public:
          * Handles when animation event occurs.
          */
         virtual void animationEvent(AnimationClip* clip, EventType type) = 0;
+
+    private:
+        unsigned long _listenerTime;
     };
 
     /**
@@ -190,6 +205,8 @@ public:
      */
     void addEndListener(AnimationClip::Listener* listener);
 
+    void addListener(AnimationClip::Listener* listener, unsigned long time);
+
 private:
 
     /**
@@ -248,6 +265,14 @@ private:
     std::vector<AnimationValue*> _values;           // AnimationValue holder.
     std::vector<Listener*>* _beginListeners;        // Collection of begin listeners on the clip.
     std::vector<Listener*>* _endListeners;          // Collection of end listeners on the clip.
+
+    struct ListenerList
+    {
+        std::list<Listener*> _list;             // List of listeners.
+        std::list<Listener*>::iterator _listItr; // Pointer to the next listener event to be triggered.
+    };
+
+    ListenerList* _listeners;                        // Collection of listeners on the clip.
 
 };
 
