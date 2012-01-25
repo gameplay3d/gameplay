@@ -10,9 +10,9 @@ namespace gameplay
 
 AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long startTime, unsigned long endTime)
     : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _duration(_endTime - _startTime), _repeatCount(1.0f), 
-      _activeDuration(_duration * _repeatCount), _speed(1.0f), _isPlaying(false), _timeStarted(0), _elapsedTime(0), _runningTime(0), 
-      _crossFadeToClip(NULL), _crossFadeStart(0), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), 
-      _isFadingOutStarted(false), _isFadingOut(false), _isFadingIn(false), _beginListeners(NULL), _endListeners(NULL)
+      _activeDuration(_duration * _repeatCount), _speed(1.0f), _isPlaying(false), _timeStarted(0), _elapsedTime(0), 
+      _crossFadeToClip(NULL), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), _isFadingOutStarted(false), 
+      _isFadingOut(false), _isFadingIn(false), _beginListeners(NULL), _endListeners(NULL)
 {
     assert(0 <= startTime && startTime <= animation->_duration && 0 <= endTime && endTime <= animation->_duration);
     
@@ -151,34 +151,30 @@ void AnimationClip::crossFade(AnimationClip* clip, unsigned long duration)
 {
     assert(clip);
 
-    if (clip->_isPlaying && clip->_isFadingOut)
-    {
-        clip->_isFadingOut = false;
-        clip->_crossFadeToClip->_isFadingIn = false;
-        SAFE_RELEASE(clip->_crossFadeToClip);
-    }
-
-    // If I already have a clip I'm fading too.. release it.
+    // If I already have a clip I'm fading to and it's not the same as the given clip release it.
+    // Assign the new clip and increase it's ref count.
+    // TODO: Do I need to anything else to the crossFade clip here before releasing?
     if (_crossFadeToClip)
         SAFE_RELEASE(_crossFadeToClip);
-
-    // Assign the clip we're fading to, and increase its ref count.
+        
     _crossFadeToClip = clip;
     _crossFadeToClip->addRef();
         
-    // Set the fade in clip to fading in, and set the duration of the fade in.
+    // Set the crossfade clip to fading in, and initialize it's blend weight to zero.
     _crossFadeToClip->_isFadingIn = true;
+    _crossFadeToClip->_blendWeight = 0.0f;
     
-    // Set this clip to fade out, and reset the elapsed time for the fade out.
+    // Set this clip to fade out, set the fade duration and reset the fade elapsed time.
     _isFadingOut = true;
     _crossFadeOutElapsed = 0;
     _crossFadeOutDuration = duration;
-    _crossFadeStart = (Game::getGameTime() - _timeStarted);
     _isFadingOutStarted = true;
     
+    // If this clip is currently not playing, we should start playing it.
     if (!_isPlaying)
         play();
 
+    // Start playing the cross fade clip.
     _crossFadeToClip->play(); 
 }
 
@@ -200,83 +196,80 @@ void AnimationClip::addEndListener(AnimationClip::Listener* listener)
 
 bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*>* activeTargets)
 {
-    float speed = _speed;
     if (!_isPlaying)
-    {
         onBegin();
-        _elapsedTime = Game::getGameTime() - _timeStarted;
-        _runningTime = _elapsedTime * speed;
-    }
-    else
-    {
-        // Update elapsed time.
-        _elapsedTime += elapsedTime;
-        _runningTime += elapsedTime * speed;
-    }
+    else 
+        _elapsedTime += elapsedTime * _speed;
 
-    float percentComplete = 0.0f;
-
+    unsigned long currentTime = 0L;
     // Check to see if clip is complete.
-    if (_repeatCount != REPEAT_INDEFINITE && ((_speed >= 0 && _runningTime >= (long) _activeDuration) || (_speed < 0 && _runningTime <= 0)))
+    if (_repeatCount != REPEAT_INDEFINITE && ((_speed >= 0 && _elapsedTime >= (long) _activeDuration) || (_speed <= 0 && _elapsedTime <= 0)))
     {
         _isPlaying = false;
         if (_speed >= 0)
         {
-            percentComplete = _activeDuration % _duration; // Get's the fractional part of the final repeat.
-            if (percentComplete == 0.0f)
-                percentComplete = _duration;
+            currentTime = _activeDuration % _duration; // Get's the fractional part of the final repeat.
+            if (currentTime == 0L)
+                currentTime = _duration;
         }
         else
         {
-            percentComplete = 0.0f; // If we are negative speed, the end value should be 0.
+            currentTime = 0L; // If we are negative speed, the end value should be 0.
         }
     }
     else
     {
         // Gets portion/fraction of the repeat.
-        percentComplete = (float) (_runningTime % _duration);
+        currentTime = (float) (_elapsedTime % _duration);
     }
 
     // Add back in start time, and divide by the total animation's duration to get the actual percentage complete
-    percentComplete = (float)(_startTime + percentComplete) / (float) _animation->_duration;
+    float percentComplete = (float)(_startTime + currentTime) / (float) _animation->_duration;
     
     if (_isFadingOut)
     {
         if (_isFadingOutStarted) // Calculate elapsed time since the fade out begin.
         {
-            _crossFadeOutElapsed = (_elapsedTime - _crossFadeStart) * speed;
+            _crossFadeOutElapsed = (Game::getGameTime() - _crossFadeToClip->_timeStarted) * _speed; 
             _isFadingOutStarted = false;
         }
         else
         {
             // continue tracking elapsed time.
-            _crossFadeOutElapsed += elapsedTime * speed;
+            _crossFadeOutElapsed += elapsedTime * abs(_speed);
         }
 
         if (_crossFadeOutElapsed < _crossFadeOutDuration)
         {
+            // Calculate this clip's blend weight.
             float tempBlendWeight = (float) (_crossFadeOutDuration - _crossFadeOutElapsed) / (float) _crossFadeOutDuration;
-            _crossFadeToClip->_blendWeight = (1.0f - tempBlendWeight);
             
-            // adjust the clip your blending to's weight to be a percentage of your current blend weight
+            // If this clip is fading in, adjust the crossfade clip's weight to be a percentage of your current blend weight
             if (_isFadingIn)
             {
-                _crossFadeToClip->_blendWeight *= _blendWeight;
+                _crossFadeToClip->_blendWeight = (1.0f - tempBlendWeight) * _blendWeight;
                 _blendWeight -= _crossFadeToClip->_blendWeight;
             }
             else
             {
+                // Just set the blend weight.
+                _crossFadeToClip->_blendWeight = (1.0f - tempBlendWeight);
                 _blendWeight = tempBlendWeight;
             }
         }
         else
-        {   // Fade done.
+        {   // Fade is done.
+            // Set the crossFadeToClip's blend weight to 1
             _crossFadeToClip->_blendWeight = 1.0f;
-                
+            
+            // Adjust the crossfade clip's blend weight if this clip is also fading in.
             if (_isFadingIn)
                 _crossFadeToClip->_blendWeight *= _blendWeight;
 
+            // The crossfade clip is no longer fading in
             _crossFadeToClip->_isFadingIn = false;
+
+            // Release the crossfade clip, mark ourselves as done and set our blend weight to 0.
             SAFE_RELEASE(_crossFadeToClip);
             _blendWeight = 0.0f; 
             _isFadingOut = false;
@@ -330,16 +323,17 @@ void AnimationClip::onBegin()
 {
     // Initialize animation to play.
     _isPlaying = true;
-    _elapsedTime = 0;
 
-    if (_speed > 0)
+    if (_speed >= 0)
     {
-        _runningTime = 0;
+        _elapsedTime = 0;
     }
     else
     {
-        _runningTime = _activeDuration;
+        _elapsedTime = _activeDuration;
     }
+
+    _elapsedTime += (Game::getGameTime() - _timeStarted) * _speed;
 
     // Notify begin listeners.. if any.
     if (_beginListeners)

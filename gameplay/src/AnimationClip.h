@@ -227,29 +227,27 @@ private:
      */
     void onEnd();
 
-    std::string _id;                          // AnimationClip ID.
-    Animation* _animation;                    // The Animation this clip is created from.
-    unsigned long _startTime;                 // Start time of the clip.
-    unsigned long _endTime;                   // End time of the clip.
-    unsigned long _duration;                  // The total duration.
-    float _repeatCount;                       // The clip's repeat count.
-    unsigned long _activeDuration;            // The active duration of the clip.
-    float _speed;                             // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.
-    bool _isPlaying;                          // A flag to indicate whether the clip is playing.
-    unsigned long _timeStarted;               // The game time when this clip was actually started.
-    unsigned long _elapsedTime;               // Time elapsed while the clip is running.
-    long _runningTime;                        // Keeps track of the Animation's relative time in respect to the active duration.
-    AnimationClip* _crossFadeToClip;          // The clip to cross fade to
-    unsigned long _crossFadeStart;            // The time at which the cross fade started.
-    unsigned long _crossFadeOutElapsed;       // The amount of time that has elapsed for the crossfade.
-    unsigned long _crossFadeOutDuration;      // The duration of the cross fade.
-    float _blendWeight;                       // The clip's blendweight
-    bool _isFadingOutStarted;                 // Flag to indicate if the cross fade started
-    bool _isFadingOut;                        // Flag to indicate if the clip is fading out
-    bool _isFadingIn;                         // Flag to indicate if the clip is fading in.
-    std::vector<AnimationValue*> _values;     // AnimationValue holder.
-    std::vector<Listener*>* _beginListeners;  // Collection of begin listeners on the clip
-    std::vector<Listener*>* _endListeners;    // Collection of end listeners on the clip
+    std::string _id;                                // AnimationClip ID.
+    Animation* _animation;                          // The Animation this clip is created from.
+    unsigned long _startTime;                       // Start time of the clip.
+    unsigned long _endTime;                         // End time of the clip.
+    unsigned long _duration;                        // The total duration.
+    float _repeatCount;                             // The clip's repeat count.
+    unsigned long _activeDuration;                  // The active duration of the clip.
+    float _speed;                                   // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.
+    bool _isPlaying;                                // A flag to indicate whether the clip is playing.
+    unsigned long _timeStarted;                     // The game time when this clip was actually started.
+    long _elapsedTime;                              // Time elapsed while the clip is running.
+    AnimationClip* _crossFadeToClip;                // The clip to cross fade to.
+    unsigned long _crossFadeOutElapsed;             // The amount of time that has elapsed for the crossfade.
+    unsigned long _crossFadeOutDuration;            // The duration of the cross fade.
+    float _blendWeight;                             // The clip's blendweight.
+    bool _isFadingOutStarted;                       // Flag to indicate if the cross fade started.
+    bool _isFadingOut;                              // Flag to indicate if the clip is fading out.
+    bool _isFadingIn;                               // Flag to indicate if the clip is fading in.
+    std::vector<AnimationValue*> _values;           // AnimationValue holder.
+    std::vector<Listener*>* _beginListeners;        // Collection of begin listeners on the clip.
+    std::vector<Listener*>* _endListeners;          // Collection of end listeners on the clip.
 
 };
 
