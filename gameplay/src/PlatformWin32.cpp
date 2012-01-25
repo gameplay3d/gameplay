@@ -45,22 +45,19 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
         return gameplay::Keyboard::KEY_RETURN;
     case VK_CAPITAL:
         return gameplay::Keyboard::KEY_CAPS_LOCK;
-    case VK_LSHIFT:
-        return gameplay::Keyboard::KEY_LEFT_SHIFT;
-    case VK_RSHIFT:
-        return gameplay::Keyboard::KEY_RIGHT_SHIFT;
-    case VK_LCONTROL:
-        return gameplay::Keyboard::KEY_LEFT_CTRL;
-    case VK_RCONTROL:
-        return gameplay::Keyboard::KEY_RIGHT_CTRL;
-    case VK_LMENU:
-        return gameplay::Keyboard::KEY_LEFT_ALT;
-    case VK_RMENU:
-        return gameplay::Keyboard::KEY_RIGHT_ALT;
+    case VK_SHIFT:
+        return gameplay::Keyboard::KEY_SHIFT;
+    case VK_CONTROL:
+        return gameplay::Keyboard::KEY_CTRL;
+    case VK_MENU:
+        return gameplay::Keyboard::KEY_ALT;
+    case VK_APPS:
+        return gameplay::Keyboard::KEY_MENU;
     case VK_LWIN:
-        return gameplay::Keyboard::KEY_LEFT_HYPER;
     case VK_RWIN:
-        return gameplay::Keyboard::KEY_RIGHT_HYPER;
+        return gameplay::Keyboard::KEY_HYPER;
+    case VK_BROWSER_SEARCH:
+        return gameplay::Keyboard::KEY_SEARCH;
     case VK_INSERT:
         return gameplay::Keyboard::KEY_INSERT;
     case VK_HOME:
@@ -172,7 +169,7 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
     case VK_OEM_2:
         return shiftDown ? gameplay::Keyboard::KEY_QUESTION : gameplay::Keyboard::KEY_SLASH;
     case VK_OEM_3:
-        return shiftDown ? gameplay::Keyboard::KEY_GRAVE : gameplay::Keyboard::KEY_TILDE;
+        return shiftDown ? gameplay::Keyboard::KEY_TILDE : gameplay::Keyboard::KEY_GRAVE;
     case VK_OEM_4:
         return shiftDown ? gameplay::Keyboard::KEY_LEFT_BRACE : gameplay::Keyboard::KEY_LEFT_BRACKET;
     case VK_OEM_5:
@@ -351,17 +348,31 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_KEYDOWN:
-        if (wParam == VK_LSHIFT || wParam == VK_RSHIFT)
+        if (wParam == VK_SHIFT)
             shiftDown = true;
 
-        gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown));
+        // Suppress key repeats
+        if ((lParam & 0x40000000) == 0)
+            gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown));
         break;
-
+        
     case WM_KEYUP:
-        if (wParam == VK_LSHIFT || wParam == VK_RSHIFT)
+        if (wParam == VK_SHIFT)
             shiftDown = false;
 
         gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_RELEASE, getKey(wParam, shiftDown));
+        break;
+
+    case WM_CHAR:
+        // Suppress key repeats
+        if ((lParam & 0x40000000) == 0)
+            gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_CHAR, wParam);
+        break;
+
+    case WM_UNICHAR:
+        // Suppress key repeats
+        if ((lParam & 0x40000000) == 0)
+            gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_CHAR, wParam);
         break;
 
     case WM_SETFOCUS:
