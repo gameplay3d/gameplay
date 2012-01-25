@@ -155,7 +155,7 @@ public:
     /**
      * Returns true if this is a joint node.
      */
-    bool isJoint();
+    bool isJoint() const;
 
     Node* getFirstCameraNode() const;
 
