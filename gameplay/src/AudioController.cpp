@@ -145,6 +145,9 @@ void AudioController::pause()
 
 void AudioController::resume()
 {
+#ifndef __ANDROID__    
+    alcMakeContextCurrent(_alcContext);
+#endif
     std::list<AudioSource*>::iterator itr = _playingSources.begin();
 
     // For each source that is playing, resume it.
