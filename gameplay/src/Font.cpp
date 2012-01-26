@@ -176,6 +176,8 @@ void Font::begin()
 
 void Font::drawText(const char* text, int x, int y, const Vector4& color, unsigned int size, bool rightToLeft)
 {
+    if (size == 0)
+        size = _size;
     float scale = (float)size / _size;
     char* cursor = NULL;
     if (rightToLeft)
@@ -288,6 +290,8 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
 
 void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify, bool wrap, bool rightToLeft)
 {
+    if (size == 0)
+        size = _size;
     float scale = (float)size / _size;
     char* token = const_cast<char*>(text);
     const int length = strlen(text);

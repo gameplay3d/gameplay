@@ -3,7 +3,6 @@
 #include "FileSystem.h"
 #include "MeshPart.h"
 #include "Scene.h"
-#include "SceneLoader.h"
 #include "Joint.h"
 
 #define GPB_PACKAGE_VERSION_MAJOR 1
@@ -300,11 +299,6 @@ bool Package::readMatrix(float* m)
 
 Scene* Package::loadScene(const char* id)
 {
-    return loadScene(id, NULL);
-}
-
-Scene* Package::loadScene(const char* id, const std::vector<std::string>* nodesWithMeshRB)
-{
     clearLoadSession();
 
     Reference* ref = NULL;
@@ -335,7 +329,7 @@ Scene* Package::loadScene(const char* id, const std::vector<std::string>* nodesW
         // Read each child directly into the scene
         for (unsigned int i = 0; i < childrenCount; i++)
         {
-            Node* node = readNode(scene, NULL, nodesWithMeshRB);
+            Node* node = readNode(scene, NULL);
             if (node)
             {
                 scene->addNode(node);
@@ -398,16 +392,11 @@ Scene* Package::loadScene(const char* id, const std::vector<std::string>* nodesW
 
 Node* Package::loadNode(const char* id)
 {
-    return loadNode(id, false);
-}
-
-Node* Package::loadNode(const char* id, bool loadWithMeshRBSupport)
-{
     assert(id);
 
     clearLoadSession();
 
-    Node* node = loadNode(id, NULL, NULL, loadWithMeshRBSupport);
+    Node* node = loadNode(id, NULL, NULL);
    
     if (node)
     {
@@ -417,7 +406,7 @@ Node* Package::loadNode(const char* id, bool loadWithMeshRBSupport)
     return node;
 }
 
-Node* Package::loadNode(const char* id, Scene* sceneContext, Node* nodeContext, bool loadWithMeshRBSupport)
+Node* Package::loadNode(const char* id, Scene* sceneContext, Node* nodeContext)
 {
     assert(id);
 
@@ -443,22 +432,13 @@ Node* Package::loadNode(const char* id, Scene* sceneContext, Node* nodeContext, 
             return NULL;
         }
 
-        if (loadWithMeshRBSupport)
-        {
-            std::vector<std::string> nodesWithMeshRBSupport;
-            nodesWithMeshRBSupport.push_back(id);
-            node = readNode(sceneContext, nodeContext, &nodesWithMeshRBSupport);
-        }
-        else
-        {
-            node = readNode(sceneContext, nodeContext, NULL);
-        }
+        node = readNode(sceneContext, nodeContext);
     }
 
     return node;
 }
 
-Node* Package::readNode(Scene* sceneContext, Node* nodeContext, const std::vector<std::string>* nodesWithMeshRB)
+Node* Package::readNode(Scene* sceneContext, Node* nodeContext)
 {
     const char* id = getIdFromOffset();
 
@@ -509,7 +489,7 @@ Node* Package::readNode(Scene* sceneContext, Node* nodeContext, const std::vecto
         // Read each child
         for (unsigned int i = 0; i < childrenCount; i++)
         {
-            Node* child = readNode(sceneContext, nodeContext, nodesWithMeshRB);
+            Node* child = readNode(sceneContext, nodeContext);
             if (child)
             {
                 node->addChild(child);
@@ -534,23 +514,8 @@ Node* Package::readNode(Scene* sceneContext, Node* nodeContext, const std::vecto
         SAFE_RELEASE(light);
     }
 
-    // Check if this node's id is in the list of nodes to be loaded with
-    // mesh rigid body support so that when we load the model we keep the proper data.
-    bool loadWithMeshRBSupport = false;
-    if (nodesWithMeshRB)
-    {
-        for (unsigned int i = 0; i < nodesWithMeshRB->size(); i++)
-        {
-            if (strcmp((*nodesWithMeshRB)[i].c_str(), id) == 0)
-            {
-                loadWithMeshRBSupport = true;
-                break;
-            }
-        }
-    }
-
     // Read model
-    Model* model = readModel(sceneContext, nodeContext, loadWithMeshRBSupport, node->getId());
+    Model* model = readModel(sceneContext, nodeContext, node->getId());
     if (model)
     {
         node->setModel(model);
@@ -681,14 +646,14 @@ Light* Package::readLight()
     return light;
 }
 
-Model* Package::readModel(Scene* sceneContext, Node* nodeContext, bool loadWithMeshRBSupport, const char* nodeId)
+Model* Package::readModel(Scene* sceneContext, Node* nodeContext, const char* nodeId)
 {
     // Read mesh
     Mesh* mesh = NULL;
     std::string xref = readString(_file);
     if (xref.length() > 1 && xref[0] == '#') // TODO: Handle full xrefs
     {
-        mesh = loadMesh(xref.c_str() + 1, loadWithMeshRBSupport, nodeId);
+        mesh = loadMesh(xref.c_str() + 1, nodeId);
         if (mesh)
         {
             Model* model = Model::create(mesh);
@@ -816,7 +781,7 @@ void Package::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
             {
                 jointId = jointId.substr(1, jointId.length() - 1);
 
-                Node* n = loadNode(jointId.c_str(), sceneContext, nodeContext, false);
+                Node* n = loadNode(jointId.c_str(), sceneContext, nodeContext);
                 if (n && n->getType() == Node::JOINT)
                 {
                     Joint* joint = static_cast<Joint*>(n);
@@ -992,12 +957,12 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
 
 Mesh* Package::loadMesh(const char* id)
 {
-    return loadMesh(id, false, NULL);
+    return loadMesh(id, false);
 }
 
-Mesh* Package::loadMesh(const char* id, bool loadWithMeshRBSupport, const char* nodeId)
+Mesh* Package::loadMesh(const char* id, const char* nodeId)
 {
-    // save the file position
+    // Save the file position
     long position = ftell(_file);
 
     // Seek to the specified Mesh
@@ -1007,6 +972,56 @@ Mesh* Package::loadMesh(const char* id, bool loadWithMeshRBSupport, const char* 
         return NULL;
     }
 
+    // Read mesh data
+    MeshData* meshData = readMeshData();
+    if (meshData == NULL)
+    {
+        return NULL;
+    }
+
+    // Create Mesh
+    Mesh* mesh = Mesh::createMesh(meshData->vertexFormat, meshData->vertexCount, false);
+    if (mesh == NULL)
+    {
+        LOG_ERROR_VARG("Failed to create mesh: %s", id);
+        SAFE_DELETE_ARRAY(meshData);
+        return NULL;
+    }
+
+    mesh->_url = _path;
+    mesh->_url += "#";
+    mesh->_url += id;
+
+    mesh->setVertexData(meshData->vertexData, 0, meshData->vertexCount);
+
+    mesh->_boundingBox.set(meshData->boundingBox);
+    mesh->_boundingSphere.set(meshData->boundingSphere);
+
+    // Create mesh parts
+    for (unsigned int i = 0; i < meshData->parts.size(); ++i)
+    {
+        MeshPartData* partData = meshData->parts[i];
+
+        MeshPart* part = mesh->addPart(partData->primitiveType, partData->indexFormat, partData->indexCount, false);
+        if (part == NULL)
+        {
+            LOG_ERROR_VARG("Failed to create mesh part (i=%d): %s", i, id);
+            SAFE_DELETE(meshData);
+            return NULL;
+        }
+        part->setIndexData(partData->indexData, 0, partData->indexCount);
+    }
+
+    SAFE_DELETE(meshData);
+
+    // Restore file pointer
+    fseek(_file, position, SEEK_SET);
+
+    return mesh;
+}
+
+Package::MeshData* Package::readMeshData()
+{
     // Read vertex format/elements
     unsigned int vertexElementCount;
     if (fread(&vertexElementCount, 4, 1, _file) != 1 || vertexElementCount < 1)
@@ -1027,60 +1042,42 @@ Mesh* Package::loadMesh(const char* id, bool loadWithMeshRBSupport, const char* 
         vertexElements[i].size = vSize;
     }
 
-    // Create VertexFormat
-    VertexFormat vertexFormat(vertexElements, vertexElementCount);
+    MeshData* meshData = new MeshData(VertexFormat(vertexElements, vertexElementCount));
+
     SAFE_DELETE_ARRAY(vertexElements);
 
     // Read vertex data
     unsigned int vertexByteCount;
     if (fread(&vertexByteCount, 4, 1, _file) != 1 || vertexByteCount == 0)
     {
+        SAFE_DELETE(meshData);
         return NULL;
     }
-    unsigned char* vertexData = new unsigned char[vertexByteCount];
-    if (fread(vertexData, 1, vertexByteCount, _file) != vertexByteCount)
+    meshData->vertexCount = vertexByteCount / meshData->vertexFormat.getVertexSize();
+    meshData->vertexData = new unsigned char[vertexByteCount];
+    if (fread(meshData->vertexData, 1, vertexByteCount, _file) != vertexByteCount)
     {
-        LOG_ERROR_VARG("Failed to read %d vertex data bytes for mesh: %s", vertexByteCount, id);
+        SAFE_DELETE(meshData);
         return NULL;
     }
 
     // Read mesh bounds (bounding box and bounding sphere)
-    Vector3 boundsMin, boundsMax, boundsCenter;
-    float boundsRadius = 0.0f;
-    if (fread(&boundsMin.x, 4, 3, _file) != 3 || fread(&boundsMax.x, 4, 3, _file) != 3)
+    if (fread(&meshData->boundingBox.min.x, 4, 3, _file) != 3 || fread(&meshData->boundingBox.max.x, 4, 3, _file) != 3)
     {
-        LOG_ERROR_VARG("Failed to read bounding box for mesh: %s", id);
+        SAFE_DELETE(meshData);
         return NULL;
     }
-    if (fread(&boundsCenter.x, 4, 3, _file) != 3 || fread(&boundsRadius, 4, 1, _file) != 1)
+    if (fread(&meshData->boundingSphere.center.x, 4, 3, _file) != 3 || fread(&meshData->boundingSphere.radius, 4, 1, _file) != 1)
     {
-        LOG_ERROR_VARG("Failed to read bounding sphere for mesh: %s", id);
+        SAFE_DELETE(meshData);
         return NULL;
     }
-
-    // Create Mesh
-    int vertexCount = vertexByteCount / vertexFormat.getVertexSize();
-    Mesh* mesh = Mesh::createMesh(vertexFormat, vertexCount, false);
-    if (mesh == NULL)
-    {
-        LOG_ERROR_VARG("Failed to create mesh: %s", id);
-        SAFE_DELETE_ARRAY(vertexData);
-        return NULL;
-    }
-    mesh->setVertexData(vertexData, 0, vertexCount);
-    if (loadWithMeshRBSupport)
-        SceneLoader::addMeshRigidBodyData(nodeId, mesh, vertexData, vertexByteCount);
-    SAFE_DELETE_ARRAY(vertexData);
-
-    // Set mesh bounding volumes
-    mesh->_boundingBox.set(boundsMin, boundsMax);
-    mesh->_boundingSphere.set(boundsCenter, boundsRadius);
 
     // Read mesh parts
     unsigned int meshPartCount;
     if (fread(&meshPartCount, 4, 1, _file) != 1)
     {
-        SAFE_RELEASE(mesh);
+        SAFE_DELETE(meshData);
         return NULL;
     }
     for (unsigned int i = 0; i < meshPartCount; ++i)
@@ -1091,23 +1088,18 @@ Mesh* Package::loadMesh(const char* id, bool loadWithMeshRBSupport, const char* 
             fread(&iFormat, 4, 1, _file) != 1 ||
             fread(&iByteCount, 4, 1, _file) != 1)
         {
-            LOG_ERROR_VARG("Failed to read mesh part (i=%d): %s", i, id);
-            SAFE_RELEASE(mesh);
+            SAFE_DELETE(meshData);
             return NULL;
         }
 
-        unsigned char* indexData = new unsigned char[iByteCount];
-        if (fread(indexData, 1, iByteCount, _file) != iByteCount)
-        {
-            LOG_ERROR_VARG("Failed to read %d index data bytes for mesh part (i=%d): %s", iByteCount, i, id);
-            SAFE_DELETE_ARRAY(indexData);
-            SAFE_RELEASE(mesh);
-            return NULL;
-        }
+        MeshPartData* partData = new MeshPartData();
+        meshData->parts.push_back(partData);
 
-        Mesh::IndexFormat indexFormat = (Mesh::IndexFormat)iFormat;
+        partData->primitiveType = (Mesh::PrimitiveType)pType;
+        partData->indexFormat = (Mesh::IndexFormat)iFormat;
+        
         unsigned int indexSize = 0;
-        switch (indexFormat)
+        switch (partData->indexFormat)
         {
         case Mesh::INDEX8:
             indexSize = 1;
@@ -1119,23 +1111,53 @@ Mesh* Package::loadMesh(const char* id, bool loadWithMeshRBSupport, const char* 
             indexSize = 4;
             break;
         }
-        unsigned int indexCount = iByteCount / indexSize;
-        MeshPart* part = mesh->addPart((Mesh::PrimitiveType)pType, indexFormat, indexCount, false);
-        if (part == NULL)
+
+        partData->indexCount = iByteCount / indexSize;
+
+        partData->indexData = new unsigned char[iByteCount];
+        if (fread(partData->indexData, 1, iByteCount, _file) != iByteCount)
         {
-            LOG_ERROR_VARG("Failed to create mesh part (i=%d): %s", i, id);
-            SAFE_DELETE_ARRAY(indexData);
-            SAFE_RELEASE(mesh);
+            SAFE_DELETE(meshData);
             return NULL;
         }
-        part->setIndexData(indexData, 0, indexCount);
-        if (loadWithMeshRBSupport)
-            SceneLoader::addMeshRigidBodyData(nodeId, indexData, iByteCount);
-        SAFE_DELETE_ARRAY(indexData);
     }
 
-    fseek(_file, position, SEEK_SET);
-    return mesh;
+    return meshData;
+}
+
+Package::MeshData* Package::readMeshData(const char* url)
+{
+    assert(url);
+
+    unsigned int len = strlen(url);
+    if (len == 0)
+        return NULL;
+
+    // Parse URL (formatted as 'package#id')
+    std::string urlstring(url);
+    unsigned int pos = urlstring.find('#');
+    if (pos == std::string::npos)
+        return NULL;
+
+    std::string file = urlstring.substr(0, pos);
+    std::string id = urlstring.substr(pos + 1);
+
+    // Load package
+    Package* pkg = Package::create(file.c_str());
+    if (pkg == NULL)
+        return NULL;
+
+    // Seek to mesh with specified ID in package
+    Reference* ref = pkg->seekTo(id.c_str(), PACKAGE_TYPE_MESH);
+    if (ref == NULL)
+        return NULL;
+
+    // Read mesh data from current file position
+    MeshData* meshData = pkg->readMeshData();
+
+    SAFE_RELEASE(pkg);
+
+    return meshData;
 }
 
 Font* Package::loadFont(const char* id)
@@ -1265,13 +1287,38 @@ const char* Package::getObjectID(unsigned int index) const
     return (index >= _referenceCount ? NULL : _references[index].id.c_str());
 }
 
-Package::Reference::Reference() :
-    type(0), offset(0)
+Package::Reference::Reference()
+    : type(0), offset(0)
 {
 }
 
 Package::Reference::~Reference()
 {
+}
+
+Package::MeshPartData::MeshPartData() :
+    indexCount(0), indexData(NULL)
+{
+}
+
+Package::MeshPartData::~MeshPartData()
+{
+    SAFE_DELETE_ARRAY(indexData);
+}
+
+Package::MeshData::MeshData(const VertexFormat& vertexFormat)
+    : vertexFormat(vertexFormat), vertexCount(0), vertexData(NULL)
+{
+}
+
+Package::MeshData::~MeshData()
+{
+    SAFE_DELETE_ARRAY(vertexData);
+
+    for (unsigned int i = 0; i < parts.size(); ++i)
+    {
+        SAFE_DELETE(parts[i]);
+    }
 }
 
 }

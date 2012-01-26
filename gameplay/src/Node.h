@@ -172,9 +172,18 @@ public:
     const Matrix& getWorldViewMatrix() const;
 
     /**
+     * Gets the inverse transpose world matrix corresponding to this node.
+     *
+     * This matrix is typically used to transform normal vectors into world space.
+     *
+     * @return The inverse world matrix of this node.
+     */
+    const Matrix& getInverseTransposeWorldMatrix() const;
+
+    /**
      * Gets the inverse transpose world view matrix corresponding to this node.
      *
-     * This matrix is typically used to transform normal vectors.
+     * This matrix is typically used to transform normal vectors into view space.
      *
      * @return The inverse world view matrix of this node.
      */
@@ -258,6 +267,13 @@ public:
      * @return The translation vector of the scene's active camera.
      */
     Vector3 getActiveCameraTranslationWorld() const;
+
+    /**
+     * Returns the view-space translation vector of the currently active camera for this node's scene.
+     *
+     * @return The translation vector of the scene's active camera, in view-space.
+     */
+    Vector3 getActiveCameraTranslationView() const;
 
     /**
      * Returns the pointer to this node's camera.

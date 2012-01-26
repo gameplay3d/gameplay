@@ -151,7 +151,7 @@ public:
      * 
      * @return The ambient color of the scene.
      */
-    const Vector3& getAmbientColor();
+    const Vector3& getAmbientColor() const;
 
     /**
      * Sets the ambient color of the scene.

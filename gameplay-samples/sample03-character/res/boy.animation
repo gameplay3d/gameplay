@@ -1,0 +1,16 @@
+animation boyAnimation
+{
+    frameCount = 100
+    clip walk
+    {
+        begin = 0
+        end = 40
+        repeatCount = INDEFINITE
+    }
+    clip idle
+    {
+        begin = 60
+        end = 100
+        repeatCount = INDEFINITE
+    }
+}

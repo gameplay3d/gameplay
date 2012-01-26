@@ -1,0 +1,81 @@
+scene
+{
+    path = res/scene.gpb
+
+    node Boy
+    {
+        material[0] = res/scene.material#BoySkin
+        material[1] = res/scene.material#BoyShirt
+        material[2] = res/scene.material#BoyShorts
+        material[3] = res/scene.material#BoyShoes
+    }
+
+    node BoyShadow
+    {
+        material = res/scene.material#BoyShadow
+    }
+
+    node Table
+    {
+        material = res/scene.material#TableGreen
+    }
+
+    node GreenChair
+    {
+        url = GreenChair*
+        material = res/scene.material#TableGreen
+    }
+
+    node BlueChair
+    {
+        url = BlueChair*
+        material = res/scene.material#TableBlue
+    }
+
+    node StorageOrganizer
+    {
+        material = res/scene.material#White
+    }
+
+    node Ground
+    {
+        material = res/scene.material#Ground
+    }
+
+    node Wall
+    {
+        url = Wall*
+        material = res/scene.material#Wall
+    }
+
+    node WindowLedge
+    {
+        material = res/scene.material#White
+    }
+
+    node Door
+    {
+        url = Door*
+        material = res/scene.material#White
+    }
+
+    node Bookshelf
+    {
+        material = res/scene.material#White
+    }
+
+    node Toybox
+    {
+        material = res/scene.material#Toybox
+    }
+
+    node FloorTiles
+    {
+        material = res/scene.material#FloorTiles
+    }
+
+    node Rainbow
+    {
+        material = res/scene.material#Rainbow
+    }
+}
