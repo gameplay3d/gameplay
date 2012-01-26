@@ -12,7 +12,7 @@ AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long
     : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _duration(_endTime - _startTime), _repeatCount(1.0f), 
       _activeDuration(_duration * _repeatCount), _speed(1.0f), _isPlaying(false), _timeStarted(0), _elapsedTime(0), 
       _crossFadeToClip(NULL), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), _isFadingOutStarted(false), 
-      _isFadingOut(false), _isFadingIn(false), _beginListeners(NULL), _endListeners(NULL), _listeners(NULL)
+      _isFadingOut(false), _isFadingIn(false), _beginListeners(NULL), _endListeners(NULL), _listeners(NULL), _listenerItr(NULL)
 {
     assert(0 <= startTime && startTime <= animation->_duration && 0 <= endTime && endTime <= animation->_duration);
     
@@ -37,6 +37,7 @@ AnimationClip::~AnimationClip()
     SAFE_DELETE(_beginListeners);
     SAFE_DELETE(_endListeners);
     SAFE_DELETE(_listeners);
+    SAFE_DELETE(_listenerItr);
 }
 
 const char* AnimationClip::getID() const
@@ -188,29 +189,30 @@ void AnimationClip::addListener(AnimationClip::Listener* listener, unsigned long
 
     if (!_listeners)
     {
-        _listeners = new ListenerList;
-        _listeners->_list.push_front(listener);
+        _listeners = new std::list<Listener*>;
+        _listeners->push_front(listener);
+
+        _listenerItr = new std::list<Listener*>::iterator;
         if (_isPlaying)
-            _listeners->_listItr = _listeners->_list.begin();
+            *_listenerItr = _listeners->begin();
     }
     else
     {
-        for (std::list<Listener*>::iterator itr = _listeners->_list.begin(); itr != _listeners->_list.begin(); itr++)
+        for (std::list<Listener*>::iterator itr = _listeners->begin(); itr != _listeners->begin(); itr++)
         {
             if (eventTime < (*itr)->_listenerTime)
             {
-                itr = _listeners->_list.insert(itr, listener);
+                itr = _listeners->insert(itr, listener);
 
                 // If playing, update the iterator if we need to.
                 // otherwise, it will just be set the next time the clip gets played.
                 if (_isPlaying)
                 {
                     unsigned long currentTime = _elapsedTime % _duration;
-                    if ((_speed >= 0.0f && currentTime < eventTime && eventTime < (*_listeners->_listItr)->_listenerTime) || 
-                        (_speed <= 0 && currentTime > eventTime && eventTime > (*_listeners->_listItr)->_listenerTime))
-                        _listeners->_listItr = itr;
+                    if ((_speed >= 0.0f && currentTime < eventTime && (*_listenerItr == _listeners->end() || eventTime < (**_listenerItr)->_listenerTime)) || 
+                        (_speed <= 0 && currentTime > eventTime && (*_listenerItr == _listeners->begin() || eventTime > (**_listenerItr)->_listenerTime)))
+                        *_listenerItr = itr;
                 }
-
                 return;
             }
         }
@@ -265,12 +267,21 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
     // Notify any listeners of Animation events.
     if (_listeners)
     {
-        while (_listeners->_listItr != _listeners->_list.end() && (_speed >= 0.0f && currentTime % _duration >= (*_listeners->_listItr)->_listenerTime) || 
-                                                     (_speed <= 0.0f && currentTime % _duration <= (*_listeners->_listItr)->_listenerTime))
+        if (_speed >= 0.0f)
         {
-            
-            (*_listeners->_listItr)->animationEvent(this, Listener::DEFAULT);
-            (_listeners->_listItr)++;
+            while (*_listenerItr != _listeners->end() && currentTime >= (**_listenerItr)->_listenerTime)
+            {
+                (**_listenerItr)->animationEvent(this, Listener::DEFAULT);
+                ++*_listenerItr;
+            }
+        }
+        else
+        {
+            while (*_listenerItr != _listeners->begin() && currentTime <= (**_listenerItr)->_listenerTime)
+            {
+                (**_listenerItr)->animationEvent(this, Listener::DEFAULT);
+                --*_listenerItr;
+            }
         }
     }
 
@@ -380,14 +391,14 @@ void AnimationClip::onBegin()
         _elapsedTime = 0;
 
         if (_listeners)
-            _listeners->_listItr = _listeners->_list.begin();
+            *_listenerItr = _listeners->begin(); 
     }
     else
     {
         _elapsedTime = _activeDuration;
 
         if (_listeners)
-            _listeners->_listItr = _listeners->_list.end();
+            *_listenerItr = _listeners->end();
     }
 
     _elapsedTime += (Game::getGameTime() - _timeStarted) * _speed;
