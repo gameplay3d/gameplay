@@ -20,7 +20,8 @@ public:
     enum KeyEvent
     {
         KEY_PRESS,
-        KEY_RELEASE
+        KEY_RELEASE,
+        KEY_CHAR
     };
 
     /**
@@ -40,15 +41,11 @@ public:
         KEY_BACK_TAB          = 0x0089,
         KEY_RETURN            = 0x000D,
         KEY_CAPS_LOCK         = 0x00E5,
-        KEY_LEFT_SHIFT        = 0x00E1,
-        KEY_RIGHT_SHIFT       = 0x00E2,
-        KEY_LEFT_CTRL         = 0x00E3,
-        KEY_RIGHT_CTRL        = 0x00E4,
-        KEY_LEFT_ALT          = 0x00E9,
-        KEY_RIGHT_ALT         = 0x00EA,
+        KEY_SHIFT             = 0x00E1,
+        KEY_CTRL              = 0x00E3,
+        KEY_ALT               = 0x00E9,
         KEY_MENU              = 0x1067,
-        KEY_LEFT_HYPER        = 0x10ED,
-        KEY_RIGHT_HYPER       = 0x10EE,
+        KEY_HYPER             = 0x10ED,
         KEY_INSERT            = 0x1063,
         KEY_HOME              = 0x1050,
         KEY_PG_UP             = 0x1055,
@@ -88,13 +85,13 @@ public:
         KEY_F10               = 0x00C7,
         KEY_F11               = 0x00C8,
         KEY_F12               = 0x00C9,
-        KEY_CIRCUMFLEX        = 0x005E,
         KEY_SPACE             = ' ',
         KEY_EXCLAM            = '!',
         KEY_QUOTE             = '"',
         KEY_NUMBER            = '#',
         KEY_DOLLAR            = '$',
         KEY_PERCENT           = '%',
+        KEY_CIRCUMFLEX        = '^',
         KEY_AMPERSAND         = '&',
         KEY_APOSTROPHE        = '\'',
         KEY_LEFT_PARENTHESIS  = '(',
@@ -183,10 +180,11 @@ public:
         KEY_BAR               = '|',
         KEY_RIGHT_BRACE       = '}',
         KEY_TILDE             = '~',
-        KEY_EURO,
-        KEY_POUND,
-        KEY_YEN,
-        KEY_MIDDLE_DOT
+        KEY_EURO              = 0x20AC,
+        KEY_POUND             = 0x00A3,
+        KEY_YEN               = 0x00A5,
+        KEY_MIDDLE_DOT        = 0x0095,
+        KEY_SEARCH            = 0xFFAA
     };
 
 private:

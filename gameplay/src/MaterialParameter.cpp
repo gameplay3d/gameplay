@@ -382,8 +382,6 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
 void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight)
 {
     assert(blendWeight >= 0.0f && blendWeight <= 1.0f);
-    if (blendWeight == 0.0f)
-        return;
 
     switch (propertyId)
     {
@@ -398,18 +396,11 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
                         if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
                         {
                             _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
-
-                            if (blendWeight != 1.0f)
-                                _value.floatValue = value->getFloat(0) * blendWeight;
-                            else
-                                _value.floatValue = value->getFloat(0);
+                            _value.floatValue = value->getFloat(0);
                         }
                         else
                         {
-                            if (blendWeight != 1.0f)
-                                _value.floatValue += value->getFloat(0) * blendWeight;
-                            else
-                                _value.floatValue += value->getFloat(0);
+                            _value.floatValue = Curve::lerp(blendWeight, _value.floatValue, value->getFloat(0));
                         }
                     }
                     else
@@ -420,52 +411,30 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
                 }
                 case INT:
                 {
-                    if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
+                    if (_count == 1)
                     {
-                        _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
-
-                        if (_count == 1)
+                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
                         {
-                            if (blendWeight != 1.0f)
-                                _value.intValue = value->getFloat(0) * blendWeight;
-                            else
-                                _value.intValue = value->getFloat(0);
+                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
+                            _value.intValue = value->getFloat(0);
                         }
                         else
                         {
-                            if (blendWeight != 1.0f)
-                            {
-                                for (unsigned int i = 0; i < _count; i++)
-                                    _value.intPtrValue[i] = value->getFloat(i) * blendWeight;
-                            }
-                            else
-                            {
-                                for (unsigned int i = 0; i < _count; i++)
-                                    _value.intPtrValue[i] = value->getFloat(i);
-                            }
+                            _value.intValue = Curve::lerp(blendWeight, _value.intValue, value->getFloat(0));
                         }
                     }
                     else
                     {
-                        if (_count == 1)
+                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
                         {
-                            if (blendWeight != 1.0f)
-                                _value.intValue += value->getFloat(0) * blendWeight;
-                            else
-                                _value.intValue += value->getFloat(0);
+                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
+                            for (unsigned int i = 0; i < _count; i++)
+                                _value.intPtrValue[i] = value->getFloat(i);
                         }
                         else
                         {
-                            if (blendWeight != 1.0f)
-                            {
-                                for (unsigned int i = 0; i < _count; i++)
-                                    _value.intPtrValue[i] += value->getFloat(i) * blendWeight;
-                            }
-                            else
-                            {
-                                for (unsigned int i = 0; i < _count; i++)
-                                    _value.intPtrValue[i] += value->getFloat(i);
-                            }
+                            for (unsigned int i = 0; i < _count; i++)
+                                _value.intPtrValue[i] = Curve::lerp(blendWeight, _value.intPtrValue[i], value->getFloat(i));
                         }
                     }
                     break;
@@ -499,29 +468,13 @@ void MaterialParameter::applyAnimationValue(AnimationValue* value, float blendWe
     {
         _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
 
-        if (blendWeight != 1.0f)
-        {
-            for (unsigned int i = 0; i < count; i++)
-                _value.floatPtrValue[i] = value->getFloat(i) * blendWeight;
-        }
-        else
-        {
-            for (unsigned int i = 0; i < count; i++)
-                _value.floatPtrValue[i] = value->getFloat(i);
-        }
+        for (unsigned int i = 0; i < count; i++)
+            _value.floatPtrValue[i] = value->getFloat(i);
     }
     else
     {
-        if (blendWeight != 1.0f)
-        {
-            for (unsigned int i = 0; i < count; i++)
-                _value.floatPtrValue[i] += (value->getFloat(i) * blendWeight);
-        }
-        else
-        {
-            for (unsigned int i = 0; i < count; i++)
-                _value.floatPtrValue[i] += value->getFloat(i);
-        }
+        for (unsigned int i = 0; i < count; i++)
+            _value.floatPtrValue[i] = Curve::lerp(blendWeight, _value.floatPtrValue[i], value->getFloat(i));
     }
 }
 
