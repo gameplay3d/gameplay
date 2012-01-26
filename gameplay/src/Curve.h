@@ -354,6 +354,11 @@ public:
      */
     void evaluate(float time, float* dst) const;
 
+    /**
+     * Linear interpolation function.
+     */
+    static float lerp(float t, float from, float to);
+
 private:
 
     /**
@@ -460,17 +465,17 @@ private:
     Point* _points;                     // The points on the curve.
 };
 
-inline float bezier(float eq0, float eq1, float eq2, float eq3, float from, float out, float to, float in);
+inline static float bezier(float eq0, float eq1, float eq2, float eq3, float from, float out, float to, float in);
 
-inline float bspline(float eq0, float eq1, float eq2, float eq3, float c0, float c1, float c2, float c3);
+inline static float bspline(float eq0, float eq1, float eq2, float eq3, float c0, float c1, float c2, float c3);
 
-inline float hermite(float h00, float h01, float h10, float h11, float from, float out, float to, float in);
+inline static float hermite(float h00, float h01, float h10, float h11, float from, float out, float to, float in);
 
-inline float hermiteFlat(float h00, float h01, float from, float to);
+inline static float hermiteFlat(float h00, float h01, float from, float to);
 
-inline float hermiteSmooth(float h00, float h01, float h10, float h11, float from, float out, float to, float in);
+inline static float hermiteSmooth(float h00, float h01, float h10, float h11, float from, float out, float to, float in);
 
-inline float lerp(float s, float from, float to);
+inline static float lerpInl(float s, float from, float to);
 
 }
 
