@@ -3,7 +3,7 @@
 #include "MeshPart.h"
 #include "PhysicsController.h"
 #include "PhysicsMotionState.h"
-#include "SceneLoader.h"
+#include "Package.h"
 
 // The initial capacity of the Bullet debug drawer's vertex batch.
 #define INITIAL_CAPACITY 280
@@ -403,23 +403,51 @@ btCollisionShape* PhysicsController::createSphere(float radius, const btVector3&
     // Create the sphere shape and add it to the cache.
     btSphereShape* sphere = bullet_new<btSphereShape>(uniformScale * radius);
     _shapes.push_back(new PhysicsCollisionShape(sphere));
-    
+
     return sphere;
 }
 
 btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
 {
-    // Retrieve the mesh rigid body data from the loaded scene.
-    const SceneLoader::MeshRigidBodyData* data = SceneLoader::getMeshRigidBodyData(body->_node->getId());
+    assert(body);
+
+    // Retrieve the mesh rigid body data from the node's mesh.
+    Model* model = body->_node ? body->_node->getModel() : NULL;
+    Mesh* mesh = model ? model->getMesh() : NULL;
+    if (mesh == NULL)
+    {
+        LOG_ERROR("Cannot create mesh rigid body for node without model/mesh.");
+        return NULL;
+    }
+
+    // Only support meshes with triangle list primitive types
+    if (mesh->getPrimitiveType() != Mesh::TRIANGLES)
+    {
+        LOG_ERROR("Cannot create mesh rigid body for mesh without TRIANGLES primitive type.");
+        return NULL;
+    }
+
+    // The mesh must have a valid URL (i.e. it must have been loaded from a Package)
+    // in order to fetch mesh data for computing mesh rigid body.
+    if (strlen(mesh->getUrl()) == 0)
+    {
+        LOG_ERROR("Cannot create mesh rigid body for mesh without valid URL.");
+        return NULL;
+    }
+
+    Package::MeshData* data = Package::readMeshData(mesh->getUrl());
+    if (data == NULL)
+    {
+        return NULL;
+    }
 
     // Copy the scaled vertex position data to the rigid body's local buffer.
     Matrix m;
     Matrix::createScale(body->_node->getScaleX(), body->_node->getScaleY(), body->_node->getScaleZ(), &m);
-    unsigned int vertexCount = data->mesh->getVertexCount();
-    body->_vertexData = new float[vertexCount * 3];
+    body->_vertexData = new float[data->vertexCount * 3];
     Vector3 v;
-    int vertexStride = data->mesh->getVertexFormat().getVertexSize();
-    for (unsigned int i = 0; i < vertexCount; i++)
+    int vertexStride = data->vertexFormat.getVertexSize();
+    for (unsigned int i = 0; i < data->vertexCount; i++)
     {
         v.set(*((float*)&data->vertexData[i * vertexStride + 0 * sizeof(float)]),
               *((float*)&data->vertexData[i * vertexStride + 1 * sizeof(float)]),
@@ -427,19 +455,20 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
         v *= m;
         memcpy(&(body->_vertexData[i * 3]), &v, sizeof(float) * 3);
     }
-    
+
     btTriangleIndexVertexArray* meshInterface = bullet_new<btTriangleIndexVertexArray>();
 
-    if (data->mesh->getPartCount() > 0)
+    unsigned int partCount = data->parts.size();
+    if (partCount > 0)
     {
         PHY_ScalarType indexType = PHY_UCHAR;
         int indexStride = 0;
-        MeshPart* meshPart = NULL;
-        for (unsigned int i = 0; i < data->mesh->getPartCount(); i++)
+        Package::MeshPartData* meshPart = NULL;
+        for (unsigned int i = 0; i < partCount; i++)
         {
-            meshPart = data->mesh->getPart(i);
+            meshPart = data->parts[i];
 
-            switch (meshPart->getIndexFormat())
+            switch (meshPart->indexFormat)
             {
             case Mesh::INDEX8:
                 indexType = PHY_UCHAR;
@@ -455,17 +484,16 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
                 break;
             }
 
-            // Copy the index data to the rigid body's local buffer.
-            unsigned int indexDataSize = meshPart->getIndexCount() * indexStride;
-            unsigned char* indexData = new unsigned char[indexDataSize];
-            memcpy(indexData, data->indexData[i], indexDataSize);
-            body->_indexData.push_back(indexData);
+            // Move the index data into the rigid body's local buffer.
+            // Set it to NULL in the MeshPartData so it is not released when the data is freed.
+            body->_indexData.push_back(meshPart->indexData);
+            meshPart->indexData = NULL;
 
             // Create a btIndexedMesh object for the current mesh part.
             btIndexedMesh indexedMesh;
             indexedMesh.m_indexType = indexType;
-            indexedMesh.m_numTriangles = meshPart->getIndexCount() / 3;
-            indexedMesh.m_numVertices = meshPart->getIndexCount();
+            indexedMesh.m_numTriangles = meshPart->indexCount / 3; // assume TRIANGLES primitive type
+            indexedMesh.m_numVertices = meshPart->indexCount;
             indexedMesh.m_triangleIndexBase = (const unsigned char*)body->_indexData[i];
             indexedMesh.m_triangleIndexStride = indexStride;
             indexedMesh.m_vertexBase = (const unsigned char*)body->_vertexData;
@@ -479,8 +507,8 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
     else
     {
         // Generate index data for the mesh locally in the rigid body.
-        unsigned int* indexData = new unsigned int[data->mesh->getVertexCount()];
-        for (unsigned int i = 0; i < data->mesh->getVertexCount(); i++)
+        unsigned int* indexData = new unsigned int[data->vertexCount];
+        for (unsigned int i = 0; i < data->vertexCount; i++)
         {
             indexData[i] = i;
         }
@@ -489,8 +517,8 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
         // Create a single btIndexedMesh object for the mesh interface.
         btIndexedMesh indexedMesh;
         indexedMesh.m_indexType = PHY_INTEGER;
-        indexedMesh.m_numTriangles = data->mesh->getVertexCount() / 3;
-        indexedMesh.m_numVertices = data->mesh->getVertexCount();
+        indexedMesh.m_numTriangles = data->vertexCount / 3; // assume TRIANGLES primitive type
+        indexedMesh.m_numVertices = data->vertexCount;
         indexedMesh.m_triangleIndexBase = body->_indexData[0];
         indexedMesh.m_triangleIndexStride = sizeof(unsigned int);
         indexedMesh.m_vertexBase = (const unsigned char*)body->_vertexData;
@@ -503,6 +531,9 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
 
     btBvhTriangleMeshShape* shape = bullet_new<btBvhTriangleMeshShape>(meshInterface, true);
     _shapes.push_back(new PhysicsCollisionShape(shape));
+
+    // Free the temporary mesh data now that it's stored in physics system
+    SAFE_DELETE(data);
 
     return shape;
 }

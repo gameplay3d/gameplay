@@ -124,6 +124,15 @@ public:
     static Mesh* createBoundingBox(const BoundingBox& box);
 
     /**
+     * Returns a URL from which the mesh was loaded from.
+     *
+     * For meshes loaded from a Package, this URL will point
+     * to the file and ID of the mesh within the package. For
+     * all other meshes, an empty string will be returned.
+     */
+    const char* getUrl() const;
+
+    /**
      * Gets the vertex format for the mesh.
      *
      * @return The vertex format.
@@ -295,6 +304,7 @@ private:
      */
     Mesh(const Mesh& copy);
 
+    std::string _url;
     const VertexFormat _vertexFormat;
     unsigned int _vertexCount;
     VertexBufferHandle _vertexBuffer;

@@ -30,7 +30,7 @@ void lighting(vec3 normalVector, vec3 cameraDirection, vec3 lightDirection, floa
     _diffuseColor = u_lightColor * _baseColor.rgb * diffuseIntensity;
 
     // Specular
-    vec3 halfVector = normalize(cameraDirection + lightDirection);
+    vec3 halfVector = normalize(lightDirection + cameraDirection);
     float specularIntensity = attenuation * max(0.0, pow(dot(normalVector, halfVector), u_specularExponent));
     specularIntensity = max(0.0, specularIntensity);
     _specularColor = u_lightColor * _baseColor.rgb * specularIntensity;

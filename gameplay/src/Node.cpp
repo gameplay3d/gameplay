@@ -310,7 +310,7 @@ const Matrix& Node::getWorldMatrix() const
 const Matrix& Node::getWorldViewMatrix() const
 {
     static Matrix worldView;
-    
+
     Matrix::multiply(getViewMatrix(), getWorldMatrix(), &worldView);
 
     return worldView;
@@ -319,16 +319,19 @@ const Matrix& Node::getWorldViewMatrix() const
 const Matrix& Node::getInverseTransposeWorldViewMatrix() const
 {
     static Matrix invTransWorldView;
-
-    // Assume the matrix is always dirty since the camera is moving
-    // almost every frame in most games.
-    //    
-    // TODO: Optimize here to NOT calculate the inverse transpose if the matrix is orthogonal.
     Matrix::multiply(getViewMatrix(), getWorldMatrix(), &invTransWorldView);
     invTransWorldView.invert();
     invTransWorldView.transpose();
-
     return invTransWorldView;
+}
+
+const Matrix& Node::getInverseTransposeWorldMatrix() const
+{
+    static Matrix invTransWorld;
+    invTransWorld = getWorldMatrix();
+    invTransWorld.invert();
+    invTransWorld.transpose();
+    return invTransWorld;
 }
 
 const Matrix& Node::getViewMatrix() const
@@ -437,6 +440,8 @@ Vector3 Node::getForwardVectorView() const
     Vector3 vector;
     getWorldMatrix().getForwardVector(&vector);
     getViewMatrix().transformVector(&vector);
+    //getForwardVector(&vector);
+    //getWorldViewMatrix().transformVector(&vector);
     return vector;
 }
 
@@ -452,6 +457,25 @@ Vector3 Node::getActiveCameraTranslationWorld() const
             if (cameraNode)
             {
                 return cameraNode->getTranslationWorld();
+            }
+        }
+    }
+
+    return Vector3::zero();
+}
+
+Vector3 Node::getActiveCameraTranslationView() const
+{
+    Scene* scene = getScene();
+    if (scene)
+    {
+        Camera* camera = scene->getActiveCamera();
+        if (camera)
+        {
+            Node* cameraNode = camera->getNode();
+            if (cameraNode)
+            {
+                return cameraNode->getTranslationView();
             }
         }
     }
