@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay::Transform::Listener Class Reference</title>
+<title>gameplay: gameplay::Transform::Listener Class Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -112,6 +112,8 @@ Inheritance diagram for gameplay::Transform::Listener:</div>
 <area href="classgameplay_1_1_audio_listener.html" alt="gameplay::AudioListener" shape="rect" coords="0,56,180,80"/>
 <area href="classgameplay_1_1_audio_source.html" alt="gameplay::AudioSource" shape="rect" coords="190,56,370,80"/>
 <area href="classgameplay_1_1_camera.html" alt="gameplay::Camera" shape="rect" coords="380,56,560,80"/>
+<area href="classgameplay_1_1_mesh_skin.html" alt="gameplay::MeshSkin" shape="rect" coords="570,56,750,80"/>
+<area href="classgameplay_1_1_physics_rigid_body.html" alt="gameplay::PhysicsRigidBody" shape="rect" coords="760,56,940,80"/>
 </map>
  </div></div>
 
@@ -119,12 +121,12 @@ Inheritance diagram for gameplay::Transform::Listener:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform_1_1_listener.html#a328ca9675b84bb23b2a5d61632cded5c">transformChanged</a> (<a class="el" href="classgameplay_1_1_transform.html">Transform</a> *transform)=0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform_1_1_listener.html#a719bdf75ddcac8ccc124df183d8e8051">transformChanged</a> (<a class="el" href="classgameplay_1_1_transform.html">Transform</a> *transform, long cookie)=0</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classgameplay_1_1_transform_1_1_listener.html">Listener</a> interface for <a class="el" href="classgameplay_1_1_transform.html">Transform</a> events. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a328ca9675b84bb23b2a5d61632cded5c"></a><!-- doxytag: member="gameplay::Transform::Listener::transformChanged" ref="a328ca9675b84bb23b2a5d61632cded5c" args="(Transform *transform)=0" -->
+<a class="anchor" id="a719bdf75ddcac8ccc124df183d8e8051"></a><!-- doxytag: member="gameplay::Transform::Listener::transformChanged" ref="a719bdf75ddcac8ccc124df183d8e8051" args="(Transform *transform, long cookie)=0" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -132,13 +134,32 @@ Public Member Functions</h2></td></tr>
           <td class="memname">virtual void gameplay::Transform::Listener::transformChanged </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_transform.html">Transform</a> *&#160;</td>
-          <td class="paramname"><em>transform</em></td><td>)</td>
-          <td><code> [pure virtual]</code></td>
+          <td class="paramname"><em>transform</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>cookie</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [pure virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Handles when an transform has changed. </p>
+<p>Handles when an transform has changed.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>The <a class="el" href="classgameplay_1_1_transform.html">Transform</a> object that was changed. </td></tr>
+    <tr><td class="paramname">cookie</td><td>Cookie value that was specified when the listener was registered. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classgameplay_1_1_mesh_skin.html#a5f6842c9b498baaf7114af3cfb9a6e45">gameplay::MeshSkin</a>.</p>
 
 </div>
 </div>
@@ -167,7 +188,7 @@ Public Member Functions</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:06 for GamePlay by
+    <li class="footer">Generated on Mon Jan 23 2012 13:10:21 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

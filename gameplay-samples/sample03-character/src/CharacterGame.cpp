@@ -11,6 +11,8 @@ bool _dDown = false;
 #define WALK_SPEED 0.06f
 #define ANIM_SPEED 1.5f
 
+int kcount = 0;
+
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _animationState(0), _rotateX(0)
 {
@@ -101,8 +103,8 @@ void CharacterGame::render(long elapsedTime)
     _scene->visit(this, &CharacterGame::drawScene);
 
     _font->begin();
-    char fps[1024];
-    sprintf(fps, "FPS: %d", getFrameRate());
+    char fps[32];
+    sprintf(fps, "%d", getFrameRate());
     _font->drawText(fps, 5, 5, Vector4(1,1,0,1), 20);
     _font->end();
 }
@@ -120,8 +122,15 @@ bool CharacterGame::drawScene(Node* node, void* cookie)
 
 void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
 {
+    Animation* a = Game::getInstance()->getAnimationController()->getAnimation("movements");
+    if (a == NULL)
+        return;
+    AnimationClip* walk = a->getClip("walk");
+    AnimationClip* idle = a->getClip("idle");
+
     if (evt == Keyboard::KEY_PRESS)
     {
+        kcount++;
         if (key == Keyboard::KEY_W)
             _wDown = true;
         else if (key == Keyboard::KEY_S)
@@ -130,6 +139,34 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             ;//_aDown = true;
         else if (key == Keyboard::KEY_D)
             ;//_dDown = true;
+
+        if (_wDown)
+        {
+            if (!walk->isPlaying())
+            {
+                idle->stop();
+                walk->setSpeed(ANIM_SPEED);
+                walk->play();
+            }
+            else if (walk->getSpeed() < 0)
+            {
+                walk->setSpeed(ANIM_SPEED);
+            }
+        }
+        else if (_sDown)
+        {
+            if (!walk->isPlaying())
+            {
+                idle->stop();
+                walk->setSpeed(-ANIM_SPEED);
+                walk->play();
+            }
+            else if (walk->getSpeed() > 0)
+            {
+                walk->setSpeed(-ANIM_SPEED);
+            }
+        }
+       
     }
     else if (evt == Keyboard::KEY_RELEASE)
     {
@@ -141,41 +178,8 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             _aDown = false;
         else if (key == Keyboard::KEY_D)
             _dDown = false;
-    }
 
-    static Animation* a = Game::getInstance()->getAnimationController()->getAnimation("movements");
-    static AnimationClip* walk = a->getClip("walk");
-    static AnimationClip* idle = a->getClip("idle");
-
-    if (_wDown)
-    {
-        if (!walk->isPlaying())
-        {
-            idle->stop();
-            walk->setSpeed(ANIM_SPEED);
-            walk->play();
-        }
-        else if (walk->getSpeed() < 0)
-        {
-            walk->setSpeed(ANIM_SPEED);
-        }
-    }
-    else if (_sDown)
-    {
-        if (!walk->isPlaying())
-        {
-            idle->stop();
-            walk->setSpeed(-ANIM_SPEED);
-            walk->play();
-        }
-        else if (walk->getSpeed() > 0)
-        {
-            walk->setSpeed(-ANIM_SPEED);
-        }
-    }
-    else
-    {
-        if (walk->isPlaying())
+        if (!_wDown && !_sDown && walk->isPlaying())
         {
             walk->stop();
             idle->play();

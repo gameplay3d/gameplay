@@ -28,7 +28,7 @@ inline float hermiteSmooth(float h00, float h01, float h10, float h11, float fro
     return h00 * from + h01 * to + h10 * out + h11 * in;
 }
 
-inline float lerp(float s, float from, float to)
+inline float lerpInl(float s, float from, float to)
 {
     return from + (to - from) * s;
 }

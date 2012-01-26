@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay::PhysicsRigidBody::Listener Class Reference</title>
+<title>gameplay: gameplay::PhysicsRigidBody::Listener Class Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -97,6 +97,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#friends">Friends</a>  </div>
   <div class="headertitle">
@@ -112,10 +113,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a62c06cda0c8a0437a7425dede9241e73">~Listener</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a493789ed1e119192bd66d879779f7d75">collisionEvent</a> (const <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_collision_pair.html">CollisionPair</a> &amp;collisionPair, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;contactPoint)=0</td></tr>
+<tr><td colspan="2"><h2><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">btScalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#ae89581990e161bed36b20107915b51e0">addSingleResult</a> (btManifoldPoint &amp;cp, const btCollisionObject *a, int partIdA, int indexA, const btCollisionObject *b, int partIdB, int indexB)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_collision_pair.html">CollisionPair</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a09bb0f50f7dc43c1e1838b6c8cbf2f99">_collisionStatus</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a09bb0f50f7dc43c1e1838b6c8cbf2f99"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::Listener::_collisionStatus" ref="a09bb0f50f7dc43c1e1838b6c8cbf2f99" args="" -->
+std::map&lt; <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_collision_pair.html">CollisionPair</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_collisionStatus</b></td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c7aa887ecde6200e42d2abcaba2597b"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::Listener::PhysicsRigidBody" ref="a3c7aa887ecde6200e42d2abcaba2597b" args="" -->
@@ -193,7 +197,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -237,21 +241,6 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b
 
 </div>
 </div>
-<hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="a09bb0f50f7dc43c1e1838b6c8cbf2f99"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::Listener::_collisionStatus" ref="a09bb0f50f7dc43c1e1838b6c8cbf2f99" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::map&lt;<a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_collision_pair.html">CollisionPair</a>, int&gt; <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a09bb0f50f7dc43c1e1838b6c8cbf2f99">gameplay::PhysicsRigidBody::Listener::_collisionStatus</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Holds the collision status for each pair of rigid bodies. </p>
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_physics_rigid_body_8h_source.html">PhysicsRigidBody.h</a></li>
 <li>gameplay/src/PhysicsRigidBody.cpp</li>
@@ -278,7 +267,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
+    <li class="footer">Generated on Mon Jan 23 2012 13:10:21 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

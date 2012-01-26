@@ -93,6 +93,26 @@ bool Package::readArray(unsigned int* length, std::vector<T>* values)
     return true;
 }
 
+template <class T>
+bool Package::readArray(unsigned int* length, std::vector<T>* values, unsigned int readSize)
+{
+    assert(sizeof(T) >= readSize);
+
+    if (!read(length))
+    {
+        return false;
+    }
+    if (*length > 0 && values)
+    {
+        values->resize(*length);
+        if (fread(&(*values)[0], readSize, *length, _file) != *length)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 std::string readString(FILE* fp)
 {
     unsigned int length;
@@ -900,7 +920,7 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
     unsigned int interpolationCount;
 
     // read key times
-    if (!readArray(&keyTimesCount, &keyTimes))
+    if (!readArray(&keyTimesCount, &keyTimes, sizeof(unsigned int)))
     {
         LOG_ERROR_VARG("Failed to read %s for %s: %s", "keyTimes", "animation", id);
         return NULL;
@@ -928,7 +948,7 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
     }
     
     // read interpolations
-    if (!readArray(&interpolationCount, &interpolation))
+    if (!readArray(&interpolationCount, &interpolation, sizeof(unsigned int)))
     {
         LOG_ERROR_VARG("Failed to read %s for %s: %s", "interpolation", "animation", id);
         return NULL;

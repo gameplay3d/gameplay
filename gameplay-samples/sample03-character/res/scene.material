@@ -1,10 +1,186 @@
+material Textured
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/diffuse.vsh
+            fragmentShader = res/shaders/diffuse.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            
+            sampler u_diffuseTexture
+            {
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material TexturedSpecular
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/diffuse-specular.vsh
+            fragmentShader = res/shaders/diffuse-specular.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            u_worldViewMatrix = WORLD_VIEW_MATRIX
+            u_cameraPosition = CAMERA_VIEW_POSITION
+            u_specularExponent = 50
+
+            sampler u_diffuseTexture
+            {
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material TexturedTransparent
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/diffuse.vsh
+            fragmentShader = res/shaders/diffuse.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            
+            sampler u_diffuseTexture
+            {
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            renderState
+            {
+                blend = true
+                srcBlend = SRC_ALPHA
+                dstBlend = ONE_MINUS_SRC_ALPHA
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material TexturedSpecularTransparent
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/diffuse-specular.vsh
+            fragmentShader = res/shaders/diffuse-specular.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            u_worldViewMatrix = WORLD_VIEW_MATRIX
+            u_cameraPosition = CAMERA_VIEW_POSITION
+            u_specularExponent = 50
+
+            sampler u_diffuseTexture
+            {
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            renderState
+            {
+                blend = true
+                srcBlend = SRC_ALPHA
+                dstBlend = ONE_MINUS_SRC_ALPHA
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material Colored
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/colored.vsh
+            fragmentShader = res/shaders/colored.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/colored-specular.vsh
+            fragmentShader = res/shaders/colored-specular.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            u_worldMatrix = WORLD_MATRIX
+            u_cameraPosition = CAMERA_WORLD_POSITION
+            u_specularExponent = 50
+            
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
 material BoySkin
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
             vertexShader = res/shaders/colored.vsh
             fragmentShader = res/shaders/colored.fsh
             defines = SKINNING;SKINNING_JOINT_COUNT 31

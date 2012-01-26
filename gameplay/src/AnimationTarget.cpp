@@ -2,13 +2,12 @@
 #include "AnimationTarget.h"
 #include "Animation.h"
 #include "Game.h"
-#include "Transform.h"
 
 namespace gameplay
 {
 
 AnimationTarget::AnimationTarget()
-    : _targetType(SCALAR), _highestPriority(NULL), _animationChannels(NULL)
+    : _targetType(SCALAR), _animationPropertyBitFlag(0x00), _animationChannels(NULL)
 {
 }
 

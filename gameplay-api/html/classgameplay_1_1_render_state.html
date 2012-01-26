@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay::RenderState Class Reference</title>
+<title>gameplay: gameplay::RenderState Class Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -131,11 +131,14 @@ Public Types</h2></td></tr>
 &#160;&#160;<b>NONE</b>, 
 <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017ad1ac1447b8493cf679f6d2a795c00538">WORLD_MATRIX</a>, 
 <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a1d263042494a24659d78c27a2a4ebd62">VIEW_MATRIX</a>, 
-<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017affc42be9b34ab81b119e40393af52f12">WORLD_VIEW_MATRIX</a>, 
+<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017ae73eac1b7e779040db3ac0f2600e264d">PROJECTION_MATRIX</a>, 
 <br/>
-&#160;&#160;<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a3370e5491e60fe679cbdace4340ba898">WORLD_VIEW_PROJECTION_MATRIX</a>, 
+&#160;&#160;<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017affc42be9b34ab81b119e40393af52f12">WORLD_VIEW_MATRIX</a>, 
+<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017ad4493886553d11e2ee264e00f40fe89a">VIEW_PROJECTION_MATRIX</a>, 
+<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a3370e5491e60fe679cbdace4340ba898">WORLD_VIEW_PROJECTION_MATRIX</a>, 
 <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a73e903b7e3d4b348eed13d495310e488">INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX</a>, 
-<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017abc793c81555aeab2c8aa37c62e1f559a">CAMERA_WORLD_POSITION</a>, 
+<br/>
+&#160;&#160;<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017abc793c81555aeab2c8aa37c62e1f559a">CAMERA_WORLD_POSITION</a>, 
 <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a41afd51c64cc5826c61a4df659596600">MATRIX_PALETTE</a>
 <br/>
  }</td></tr>
@@ -223,8 +226,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Model</b></td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017a1d263042494a24659d78c27a2a4ebd62"></a><!-- doxytag: member="VIEW_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017a1d263042494a24659d78c27a2a4ebd62" args="" -->VIEW_MATRIX</em>&nbsp;</td><td>
 <p>Binds the View matrix of the active camera for the node's scene. </p>
 </td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017ae73eac1b7e779040db3ac0f2600e264d"></a><!-- doxytag: member="PROJECTION_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017ae73eac1b7e779040db3ac0f2600e264d" args="" -->PROJECTION_MATRIX</em>&nbsp;</td><td>
+<p>Binds the Projection matrix of the active camera for the node's scene. </p>
+</td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017affc42be9b34ab81b119e40393af52f12"></a><!-- doxytag: member="WORLD_VIEW_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017affc42be9b34ab81b119e40393af52f12" args="" -->WORLD_VIEW_MATRIX</em>&nbsp;</td><td>
 <p>Binds a node's WorldView matrix. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017ad4493886553d11e2ee264e00f40fe89a"></a><!-- doxytag: member="VIEW_PROJECTION_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017ad4493886553d11e2ee264e00f40fe89a" args="" -->VIEW_PROJECTION_MATRIX</em>&nbsp;</td><td>
+<p>Binds the ViewProjection matrix of the active camera for the node's scene. </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017a3370e5491e60fe679cbdace4340ba898"></a><!-- doxytag: member="WORLD_VIEW_PROJECTION_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017a3370e5491e60fe679cbdace4340ba898" args="" -->WORLD_VIEW_PROJECTION_MATRIX</em>&nbsp;</td><td>
 <p>Binds a node's WorldViewProjection matrix. </p>
@@ -602,7 +611,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Model</b></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:06 for GamePlay by
+    <li class="footer">Generated on Mon Jan 23 2012 13:10:21 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

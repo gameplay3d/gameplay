@@ -78,4 +78,8 @@ scene
     {
         material = res/scene.material#Rainbow
     }
+
+    node Basketball
+    {
+    }
 }

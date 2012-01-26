@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay::Pass Class Reference</title>
+<title>gameplay: gameplay::Pass Class Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -122,7 +122,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#a3b2befd39ed16bac92a02b676c7718a8">getId</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_effect.html">Effect</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#a28b7e05f0a571dec8c039280c99baab3">getEffect</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#a7ab510a8df6fb2588b89052a84839b0e">getAutoBindProperties</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#abd695cf4638cc0ac5f3cdeb97567bd6f">setMeshBinding</a> (<a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *mesh)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#a3f4db53739c8a28fb2573829e6fbab63">setVertexAttributeBinding</a> (<a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> *binding)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#a309772048014e32dc61ed01c7dfac34d">bind</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#a5ff979f261605f2a09c222812690e866">unbind</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
@@ -207,29 +207,28 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>RenderState</b></td>
 
 </div>
 </div>
-<a class="anchor" id="abd695cf4638cc0ac5f3cdeb97567bd6f"></a><!-- doxytag: member="gameplay::Pass::setMeshBinding" ref="abd695cf4638cc0ac5f3cdeb97567bd6f" args="(Mesh *mesh)" -->
+<a class="anchor" id="a3f4db53739c8a28fb2573829e6fbab63"></a><!-- doxytag: member="gameplay::Pass::setVertexAttributeBinding" ref="a3f4db53739c8a28fb2573829e6fbab63" args="(VertexAttributeBinding *binding)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> * gameplay::Pass::setMeshBinding </td>
+          <td class="memname">void gameplay::Pass::setVertexAttributeBinding </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *&#160;</td>
-          <td class="paramname"><em>mesh</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> *&#160;</td>
+          <td class="paramname"><em>binding</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Stores a binding for this pass onto the specified mesh.</p>
-<p>This method creates and stores a <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> for this pass onto the specified <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a>. When a mesh binding is set, the <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> will be automatically bound when the <a class="el" href="classgameplay_1_1_pass.html#a309772048014e32dc61ed01c7dfac34d">bind()</a> method is called for the pass.</p>
+<p>Stores a vertex attribute binding for this pass.</p>
+<p>When a mesh binding is set, the <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> will be automatically bound when the <a class="el" href="classgameplay_1_1_pass.html#a309772048014e32dc61ed01c7dfac34d">bind()</a> method is called for the pass.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">mesh</td><td>The <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> to create and store a <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> for (or NULL to remove an existing mesh binding).</td></tr>
+    <tr><td class="paramname">binding</td><td>The <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> to set (or NULL to remove an existing binding). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The newly created <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> between this pass and the specified mesh. </dd></dl>
 
 </div>
 </div>
@@ -276,7 +275,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>RenderState</b></td>
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
+    <li class="footer">Generated on Mon Jan 23 2012 13:10:20 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

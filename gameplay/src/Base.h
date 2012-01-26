@@ -39,6 +39,10 @@ using std::min;
 using std::max;
 using std::modf;
 
+#ifdef __ANDROID__
+#include <android/asset_manager.h>
+#endif
+
 // Common
 #ifndef NULL
 #define NULL     0
@@ -49,6 +53,31 @@ namespace gameplay
 {
 extern void printError(const char* format, ...);
 }
+
+#ifdef __ANDROID__
+#include <android/log.h>
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
+
+// System Errors
+#define LOG_ERROR(x) \
+    { \
+        LOGI(x); \
+        assert(#x == 0); \
+    }
+#define LOG_ERROR_VARG(x, ...) \
+    { \
+        LOGI(x, __VA_ARGS__); \
+        assert(#x == 0); \
+    }
+
+// Warning macro
+#ifdef WARN
+#undef WARN
+#endif
+#define WARN(x) LOGI(x)
+#define WARN_VARG(x, ...) LOGI(x, __VA_ARGS__)
+
+#else
 
 // System Errors
 #define LOG_ERROR(x) \
@@ -68,6 +97,8 @@ extern void printError(const char* format, ...);
 #endif
 #define WARN(x) printError(x)
 #define WARN_VARG(x, ...) printError(x, __VA_ARGS__)
+
+#endif
 
 // Bullet Physics
 #include <btBulletDynamicsCommon.h>
@@ -123,7 +154,12 @@ extern void printError(const char* format, ...);
     #define NOMINMAX
 #endif
 
-// Audio (OpenAL)
+// Audio (OpenAL, OpenSL, OggVorbis)
+#ifdef __ANDROID__
+#include <SLES/OpenSLES.h>
+#include <SLES/OpenSLES_Android.h>
+#else
+
 #ifdef __QNX__
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -134,19 +170,18 @@ extern void printError(const char* format, ...);
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #endif
-#include <vorbis/vorbisfile.h>
 
-// Screen/Window
-#define WINDOW_WIDTH        1024
-#define WINDOW_HEIGHT       600
-#define WINDOW_VSYNC        1
-#define WINDOW_FULLSCREEN   0
+#include <vorbis/vorbisfile.h>
+#endif
 
 // Image
 #include <png.h>
 
+#define WINDOW_VSYNC        1
+#define WINDOW_FULLSCREEN   0
+
 // Graphics (OpenGL)
-#ifdef __QNX__
+#if defined (__QNX__) || defined(__ANDROID__)
     #include <EGL/egl.h>
     #include <GLES2/gl2.h>
     #include <GLES2/gl2ext.h>
@@ -155,18 +190,42 @@ extern void printError(const char* format, ...);
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
     #define glClearDepth glClearDepthf
-   #define OPENGL_ES
+    #define OPENGL_ES
+    #define WINDOW_WIDTH    1024
+    #define WINDOW_HEIGHT   600
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
+    #define WINDOW_WIDTH    1024
+    #define WINDOW_HEIGHT   600
 #elif __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-#define glBindVertexArray glBindVertexArrayAPPLE
-#define glDeleteVertexArrays glDeleteVertexArraysAPPLE
-#define glGenVertexArrays glGenVertexArraysAPPLE
-#define glIsVertexArray glIsVertexArrayAPPLE
+    #include "TargetConditionals.h"
+    #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+        #include <OpenGLES/ES2/gl.h>
+        #include <OpenGLES/ES2/glext.h>
+        #define glBindVertexArray glBindVertexArrayOES
+        #define glDeleteVertexArrays glDeleteVertexArraysOES
+        #define glGenVertexArrays glGenVertexArraysOES
+        #define glIsVertexArray glIsVertexArrayOES
+        #define glClearDepth glClearDepthf
+        #define OPENGL_ES
+        #define WINDOW_WIDTH    480
+        #define WINDOW_HEIGHT   360
+    #elif TARGET_OS_MAC
+        #include <OpenGL/gl.h>
+        #include <OpenGL/glext.h>
+        #define glBindVertexArray glBindVertexArrayAPPLE
+        #define glDeleteVertexArrays glDeleteVertexArraysAPPLE
+        #define glGenVertexArrays glGenVertexArraysAPPLE
+        #define glIsVertexArray glIsVertexArrayAPPLE
+        #define WINDOW_WIDTH    960
+        #define WINDOW_HEIGHT   640
+    #else
+        #error "Unsupported Apple Device"
+    #endif
 #endif
+
+
 
 // Graphics (GLSL)
 #define VERTEX_ATTRIBUTE_POSITION_NAME              "a_position"
@@ -250,5 +309,9 @@ extern GLenum __gl_error_code;
     #pragma warning( disable : 4996 )
 #endif
 
+#ifdef __ANDROID__
+#include <android_native_app_glue.h>
+extern void amain(struct android_app* state);
+#endif
 
 #endif

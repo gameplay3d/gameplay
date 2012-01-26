@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay/src/Pass.h Source File</title>
+<title>gameplay: gameplay/src/Pass.h Source File</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -121,31 +121,31 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00036"></a>00036 
 <a name="l00040"></a>00040     <span class="keyword">const</span> std::vector&lt;std::string&gt;* <a class="code" href="classgameplay_1_1_pass.html#a7ab510a8df6fb2588b89052a84839b0e">getAutoBindProperties</a>() <span class="keyword">const</span>;
 <a name="l00041"></a>00041 
-<a name="l00053"></a>00053     <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>* <a class="code" href="classgameplay_1_1_pass.html#abd695cf4638cc0ac5f3cdeb97567bd6f">setMeshBinding</a>(<a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>* mesh);
-<a name="l00054"></a>00054 
-<a name="l00061"></a>00061     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_pass.html#a309772048014e32dc61ed01c7dfac34d">bind</a>();
-<a name="l00062"></a>00062 
-<a name="l00069"></a>00069     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_pass.html#a5ff979f261605f2a09c222812690e866">unbind</a>();
-<a name="l00070"></a>00070 
-<a name="l00071"></a>00071 <span class="keyword">private</span>:
-<a name="l00072"></a>00072 
-<a name="l00076"></a>00076     <a class="code" href="classgameplay_1_1_pass.html">Pass</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <a class="code" href="classgameplay_1_1_technique.html">Technique</a>* technique, <a class="code" href="classgameplay_1_1_effect.html">Effect</a>* effect);
-<a name="l00077"></a>00077 
-<a name="l00081"></a>00081     <a class="code" href="classgameplay_1_1_pass.html">Pass</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_pass.html">Pass</a>&amp; copy);
-<a name="l00082"></a>00082 
-<a name="l00086"></a>00086     ~<a class="code" href="classgameplay_1_1_pass.html">Pass</a>();
-<a name="l00087"></a>00087 
-<a name="l00091"></a>00091     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_pass.html">Pass</a>* create(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <a class="code" href="classgameplay_1_1_technique.html">Technique</a>* technique, <span class="keyword">const</span> <span class="keywordtype">char</span>* vshPath, <span class="keyword">const</span> <span class="keywordtype">char</span>* fshPath, <span class="keyword">const</span> <span class="keywordtype">char</span>* defines);
-<a name="l00092"></a>00092 
-<a name="l00093"></a>00093     std::string _id;
-<a name="l00094"></a>00094     <a class="code" href="classgameplay_1_1_technique.html">Technique</a>* _technique;
-<a name="l00095"></a>00095     <a class="code" href="classgameplay_1_1_effect.html">Effect</a>* _effect;
-<a name="l00096"></a>00096     <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>* _vaBinding;
-<a name="l00097"></a>00097 };
-<a name="l00098"></a>00098 
-<a name="l00099"></a>00099 }
-<a name="l00100"></a>00100 
-<a name="l00101"></a>00101 <span class="preprocessor">#endif</span>
+<a name="l00050"></a>00050     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_pass.html#a3f4db53739c8a28fb2573829e6fbab63">setVertexAttributeBinding</a>(<a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>* binding);
+<a name="l00051"></a>00051 
+<a name="l00058"></a>00058     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_pass.html#a309772048014e32dc61ed01c7dfac34d">bind</a>();
+<a name="l00059"></a>00059 
+<a name="l00066"></a>00066     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_pass.html#a5ff979f261605f2a09c222812690e866">unbind</a>();
+<a name="l00067"></a>00067 
+<a name="l00068"></a>00068 <span class="keyword">private</span>:
+<a name="l00069"></a>00069 
+<a name="l00073"></a>00073     <a class="code" href="classgameplay_1_1_pass.html">Pass</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <a class="code" href="classgameplay_1_1_technique.html">Technique</a>* technique, <a class="code" href="classgameplay_1_1_effect.html">Effect</a>* effect);
+<a name="l00074"></a>00074 
+<a name="l00078"></a>00078     <a class="code" href="classgameplay_1_1_pass.html">Pass</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_pass.html">Pass</a>&amp; copy);
+<a name="l00079"></a>00079 
+<a name="l00083"></a>00083     ~<a class="code" href="classgameplay_1_1_pass.html">Pass</a>();
+<a name="l00084"></a>00084 
+<a name="l00088"></a>00088     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_pass.html">Pass</a>* create(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <a class="code" href="classgameplay_1_1_technique.html">Technique</a>* technique, <span class="keyword">const</span> <span class="keywordtype">char</span>* vshPath, <span class="keyword">const</span> <span class="keywordtype">char</span>* fshPath, <span class="keyword">const</span> <span class="keywordtype">char</span>* defines);
+<a name="l00089"></a>00089 
+<a name="l00090"></a>00090     std::string _id;
+<a name="l00091"></a>00091     <a class="code" href="classgameplay_1_1_technique.html">Technique</a>* _technique;
+<a name="l00092"></a>00092     <a class="code" href="classgameplay_1_1_effect.html">Effect</a>* _effect;
+<a name="l00093"></a>00093     <a class="code" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>* _vaBinding;
+<a name="l00094"></a>00094 };
+<a name="l00095"></a>00095 
+<a name="l00096"></a>00096 }
+<a name="l00097"></a>00097 
+<a name="l00098"></a>00098 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -166,7 +166,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
+    <li class="footer">Generated on Mon Jan 23 2012 13:10:19 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

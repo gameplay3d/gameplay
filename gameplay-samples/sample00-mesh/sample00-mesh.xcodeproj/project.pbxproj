@@ -14,7 +14,6 @@
 		42A3C5E6146CB7690091C1E4 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A3C5E5146CB7690091C1E4 /* libz.dylib */; };
 		42BBCD34146C89F900D2A5F8 /* MeshGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCD32146C89F900D2A5F8 /* MeshGame.cpp */; };
 		42CCD4B4146D914B00353661 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD4B3146D914B00353661 /* icon.png */; };
-		42CD0ED5147D928E0000361E /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0ED4147D928E0000361E /* libgameplay.a */; };
 		42CD0EE7147D92E60000361E /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EE2147D92E60000361E /* libbullet.a */; };
 		42CD0EE8147D92E60000361E /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EE3147D92E60000361E /* libogg.a */; };
 		42CD0EE9147D92E60000361E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EE4147D92E60000361E /* libvorbis.a */; };
@@ -22,19 +21,37 @@
 		42CD0EEB147D92E60000361E /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EE6147D92E60000361E /* libvorbisfile.a */; };
 		42F68AA71469CDE100E0E3C4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F68AA51469CDE100E0E3C4 /* OpenAL.framework */; };
 		42F68AA81469CDE100E0E3C4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F68AA61469CDE100E0E3C4 /* OpenGL.framework */; };
+		5B04C5D114BFE1A200EB0071 /* MeshGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BBCD32146C89F900D2A5F8 /* MeshGame.cpp */; };
+		5B04C5D414BFE1A200EB0071 /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EE2147D92E60000361E /* libbullet.a */; };
+		5B04C5D514BFE1A200EB0071 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EE3147D92E60000361E /* libogg.a */; };
+		5B04C5D614BFE1A200EB0071 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EE4147D92E60000361E /* libvorbis.a */; };
+		5B04C5D714BFE1A200EB0071 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EE5147D92E60000361E /* libvorbisenc.a */; };
+		5B04C5D814BFE1A200EB0071 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EE6147D92E60000361E /* libvorbisfile.a */; };
+		5B04C5D914BFE1A200EB0071 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A3C5E3146CB7420091C1E4 /* libpng.a */; };
+		5B04C5DA14BFE1A200EB0071 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A3C5E5146CB7690091C1E4 /* libz.dylib */; };
+		5B04C5E114BFE1A200EB0071 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42A3C5DD146C96640091C1E4 /* res */; };
+		5B04C5E214BFE1A200EB0071 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD4B3146D914B00353661 /* icon.png */; };
+		5B04C5EB14BFE25C00EB0071 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5EA14BFE25C00EB0071 /* libgameplay.a */; };
+		5B04C5EC14BFE27400EB0071 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5EA14BFE25C00EB0071 /* libgameplay.a */; };
+		5B04C5EE14BFE48A00EB0071 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5ED14BFE48A00EB0071 /* UIKit.framework */; };
+		5B04C5F014BFE4AA00EB0071 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5EF14BFE4AA00EB0071 /* QuartzCore.framework */; };
+		5B04C5F214BFE4AF00EB0071 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5F114BFE4AF00EB0071 /* OpenGLES.framework */; };
+		5B04C5F414BFE4B400EB0071 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5F314BFE4B400EB0071 /* OpenAL.framework */; };
+		5B04C60214C0699C00EB0071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C60114C0699C00EB0071 /* Foundation.framework */; };
+		5B0FF05C14C783BD00499CE3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B0FF05B14C783BD00499CE3 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4217005E14697FF100A45C02 /* sample00-mesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample00-mesh.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4217006214697FF100A45C02 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4220A6E4146B121000CAEB3A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		42458CB514C3AB1600EFFB61 /* sample00-mesh-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample00-mesh-ios.plist"; sourceTree = "<group>"; };
 		42A3C5DD146C96640091C1E4 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		42A3C5E3146CB7420091C1E4 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
 		42A3C5E5146CB7690091C1E4 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		42BBCD32146C89F900D2A5F8 /* MeshGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshGame.cpp; path = src/MeshGame.cpp; sourceTree = SOURCE_ROOT; };
 		42BBCD33146C89F900D2A5F8 /* MeshGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeshGame.h; path = src/MeshGame.h; sourceTree = SOURCE_ROOT; };
 		42CCD4B3146D914B00353661 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		42CD0ED4147D928E0000361E /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 		42CD0EE2147D92E60000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macos/libbullet.a"; sourceTree = "<group>"; };
 		42CD0EE3147D92E60000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macos/libogg.a"; sourceTree = "<group>"; };
 		42CD0EE4147D92E60000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbis.a"; sourceTree = "<group>"; };
@@ -43,6 +60,14 @@
 		42F68AA31469CC3000E0E3C4 /* sample00-mesh-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample00-mesh-macos.plist"; sourceTree = SOURCE_ROOT; };
 		42F68AA51469CDE100E0E3C4 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		42F68AA61469CDE100E0E3C4 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		5B04C5E614BFE1A200EB0071 /* sample00-mesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample00-mesh.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B04C5EA14BFE25C00EB0071 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
+		5B04C5ED14BFE48A00EB0071 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		5B04C5EF14BFE4AA00EB0071 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		5B04C5F114BFE4AF00EB0071 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		5B04C5F314BFE4B400EB0071 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		5B04C60114C0699C00EB0071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5B0FF05B14C783BD00499CE3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,7 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42CD0ED5147D928E0000361E /* libgameplay.a in Frameworks */,
+				5B04C5EC14BFE27400EB0071 /* libgameplay.a in Frameworks */,
 				42CD0EE7147D92E60000361E /* libbullet.a in Frameworks */,
 				42CD0EE8147D92E60000361E /* libogg.a in Frameworks */,
 				42CD0EE9147D92E60000361E /* libvorbis.a in Frameworks */,
@@ -65,6 +90,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5B04C5D214BFE1A200EB0071 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B0FF05C14C783BD00499CE3 /* CoreMotion.framework in Frameworks */,
+				5B04C60214C0699C00EB0071 /* Foundation.framework in Frameworks */,
+				5B04C5F414BFE4B400EB0071 /* OpenAL.framework in Frameworks */,
+				5B04C5F214BFE4AF00EB0071 /* OpenGLES.framework in Frameworks */,
+				5B04C5F014BFE4AA00EB0071 /* QuartzCore.framework in Frameworks */,
+				5B04C5EE14BFE48A00EB0071 /* UIKit.framework in Frameworks */,
+				5B04C5EB14BFE25C00EB0071 /* libgameplay.a in Frameworks */,
+				5B04C5D414BFE1A200EB0071 /* libbullet.a in Frameworks */,
+				5B04C5D514BFE1A200EB0071 /* libogg.a in Frameworks */,
+				5B04C5D614BFE1A200EB0071 /* libvorbis.a in Frameworks */,
+				5B04C5D714BFE1A200EB0071 /* libvorbisenc.a in Frameworks */,
+				5B04C5D814BFE1A200EB0071 /* libvorbisfile.a in Frameworks */,
+				5B04C5D914BFE1A200EB0071 /* libpng.a in Frameworks */,
+				5B04C5DA14BFE1A200EB0071 /* libz.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -72,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				42F68AA31469CC3000E0E3C4 /* sample00-mesh-macos.plist */,
+				42458CB514C3AB1600EFFB61 /* sample00-mesh-ios.plist */,
 				42CCD4B3146D914B00353661 /* icon.png */,
 				42A3C5DD146C96640091C1E4 /* res */,
 				4217006814697FF100A45C02 /* src */,
@@ -85,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				4217005E14697FF100A45C02 /* sample00-mesh.app */,
+				5B04C5E614BFE1A200EB0071 /* sample00-mesh.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -102,7 +150,7 @@
 		427D4F46147DC9460076760E /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				42CD0ED4147D928E0000361E /* libgameplay.a */,
+				5B04C5EA14BFE25C00EB0071 /* libgameplay.a */,
 				42CD0EE2147D92E60000361E /* libbullet.a */,
 				42CD0EE3147D92E60000361E /* libogg.a */,
 				42CD0EE4147D92E60000361E /* libvorbis.a */,
@@ -117,20 +165,42 @@
 		42CCD4B1146D814F00353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5B04C60014BFE54200EB0071 /* iOS */,
+				5B04C5FF14BFE53F00EB0071 /* Mac OS X */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5B04C5FF14BFE53F00EB0071 /* Mac OS X */ = {
+			isa = PBXGroup;
+			children = (
 				4217006214697FF100A45C02 /* Cocoa.framework */,
 				4220A6E4146B121000CAEB3A /* QuartzCore.framework */,
 				42F68AA61469CDE100E0E3C4 /* OpenGL.framework */,
 				42F68AA51469CDE100E0E3C4 /* OpenAL.framework */,
 			);
-			name = Frameworks;
+			name = "Mac OS X";
+			sourceTree = "<group>";
+		};
+		5B04C60014BFE54200EB0071 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				5B0FF05B14C783BD00499CE3 /* CoreMotion.framework */,
+				5B04C60114C0699C00EB0071 /* Foundation.framework */,
+				5B04C5F314BFE4B400EB0071 /* OpenAL.framework */,
+				5B04C5F114BFE4AF00EB0071 /* OpenGLES.framework */,
+				5B04C5EF14BFE4AA00EB0071 /* QuartzCore.framework */,
+				5B04C5ED14BFE48A00EB0071 /* UIKit.framework */,
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4217005D14697FF100A45C02 /* sample00-mesh */ = {
+		4217005D14697FF100A45C02 /* sample00-mesh-macos */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4217007C14697FF200A45C02 /* Build configuration list for PBXNativeTarget "sample00-mesh" */;
+			buildConfigurationList = 4217007C14697FF200A45C02 /* Build configuration list for PBXNativeTarget "sample00-mesh-macos" */;
 			buildPhases = (
 				4217005A14697FF100A45C02 /* Sources */,
 				4217005B14697FF100A45C02 /* Frameworks */,
@@ -141,9 +211,27 @@
 			);
 			dependencies = (
 			);
-			name = "sample00-mesh";
+			name = "sample00-mesh-macos";
 			productName = "sample00-mesh";
 			productReference = 4217005E14697FF100A45C02 /* sample00-mesh.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5B04C5CF14BFE1A200EB0071 /* sample00-mesh-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B04C5E314BFE1A200EB0071 /* Build configuration list for PBXNativeTarget "sample00-mesh-ios" */;
+			buildPhases = (
+				5B04C5D014BFE1A200EB0071 /* Sources */,
+				5B04C5D214BFE1A200EB0071 /* Frameworks */,
+				5B04C5DF14BFE1A200EB0071 /* ShellScript */,
+				5B04C5E014BFE1A200EB0071 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "sample00-mesh-ios";
+			productName = "sample00-mesh";
+			productReference = 5B04C5E614BFE1A200EB0071 /* sample00-mesh.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -166,7 +254,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4217005D14697FF100A45C02 /* sample00-mesh */,
+				4217005D14697FF100A45C02 /* sample00-mesh-macos */,
+				5B04C5CF14BFE1A200EB0071 /* sample00-mesh-ios */,
 			);
 		};
 /* End PBXProject section */
@@ -181,10 +270,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5B04C5E014BFE1A200EB0071 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B04C5E114BFE1A200EB0071 /* res in Resources */,
+				5B04C5E214BFE1A200EB0071 /* icon.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		422446691471626D0021F131 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+		};
+		5B04C5DF14BFE1A200EB0071 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -208,6 +319,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5B04C5D014BFE1A200EB0071 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B04C5D114BFE1A200EB0071 /* MeshGame.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -215,7 +334,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -234,8 +353,10 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				SDKROOT = macosx;
+				SDKROOT = "";
 				SHARED_PRECOMPS_DIR = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				VALID_ARCHS = "armv7 i386 x86_64 armv6";
 			};
 			name = Debug;
 		};
@@ -243,7 +364,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -255,15 +376,17 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				SDKROOT = macosx;
+				SDKROOT = "";
 				SHARED_PRECOMPS_DIR = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				VALID_ARCHS = "armv7 i386 x86_64 armv6";
 			};
 			name = Release;
 		};
 		4217007D14697FF200A45C02 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				ENABLE_OPENMP_SUPPORT = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -281,10 +404,13 @@
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "sample00-mesh";
 				SHARED_PRECOMPS_DIR = "";
+				SUPPORTED_PLATFORMS = macosx;
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -292,7 +418,7 @@
 		4217007E14697FF200A45C02 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				ENABLE_OPENMP_SUPPORT = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -310,9 +436,78 @@
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "sample00-mesh";
 				SHARED_PRECOMPS_DIR = "";
+				SUPPORTED_PLATFORMS = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "i386 x86_64";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		5B04C5E414BFE1A200EB0071 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_OPENMP_SUPPORT = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					../../gameplay/src,
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
+				);
+				INFOPLIST_FILE = "sample00-mesh-ios.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+				);
+				OTHER_LDFLAGS = "-ObjC++";
+				PRODUCT_NAME = "sample00-mesh";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+				SHARED_PRECOMPS_DIR = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		5B04C5E514BFE1A200EB0071 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_OPENMP_SUPPORT = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					../../gameplay/src,
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
+				);
+				INFOPLIST_FILE = "sample00-mesh-ios.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+				);
+				OTHER_LDFLAGS = "-ObjC++";
+				PRODUCT_NAME = "sample00-mesh";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+				SHARED_PRECOMPS_DIR = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -330,11 +525,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4217007C14697FF200A45C02 /* Build configuration list for PBXNativeTarget "sample00-mesh" */ = {
+		4217007C14697FF200A45C02 /* Build configuration list for PBXNativeTarget "sample00-mesh-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4217007D14697FF200A45C02 /* Debug */,
 				4217007E14697FF200A45C02 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5B04C5E314BFE1A200EB0071 /* Build configuration list for PBXNativeTarget "sample00-mesh-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B04C5E414BFE1A200EB0071 /* Debug */,
+				5B04C5E514BFE1A200EB0071 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

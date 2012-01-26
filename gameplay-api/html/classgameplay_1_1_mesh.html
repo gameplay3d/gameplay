@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay::Mesh Class Reference</title>
+<title>gameplay: gameplay::Mesh Class Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -135,10 +135,10 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a58b55fb3b8659236311c9e18a186e91a">getVertexFormat</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#ac9fca007f149de6607dc1b2e9c52515c">getVertexFormat</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a494b6ac9f634dfbb3b970017341f0c74">getVertexCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a3501ead2128e9cb3890f4fc043aa5abf">getVertexSize</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">VertexBuffer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#ad3584bfe1caa6fe1294f36c5ef9b4bd7">getVertexBuffer</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">VertexBufferHandle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#adbb9ba9503e14358cfbb91050c095322">getVertexBuffer</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#ad3891cfdea5c84c0b329fbdcca183746">isDynamic</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">PrimitiveType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a13b315bcb5960238eba0c178ba14e069">getPrimitiveType</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a2115babdcc1cc60461beeb39f967d6bc">setPrimitiveType</a> (<a class="el" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">Mesh::PrimitiveType</a> type)</td></tr>
@@ -153,7 +153,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a233dc8f6cbc2a5cb86c4a4b5c67ade62">~Mesh</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a5cd519a095bcc5a95c4faa863554fb71">createMesh</a> (<a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> *vertexFormat, unsigned int vertexCount, bool dynamic=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a48a316d52d718bdc65c96bd20d7cfdca">createMesh</a> (const <a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> &amp;vertexFormat, unsigned int vertexCount, bool dynamic=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#affe2691a2a8adc9aae8fd6e97abb6c90">createQuad</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;p1, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;p2, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;p3, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;p4)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a372ef0ed9842d7c7318482162ffc1d2a">createQuad</a> (float x, float y, float width, float height)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a50738a63a173cc28c3028dc94f3669d9">createQuadFullscreen</a> ()</td></tr>
@@ -329,14 +329,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 
 </div>
 </div>
-<a class="anchor" id="a5cd519a095bcc5a95c4faa863554fb71"></a><!-- doxytag: member="gameplay::Mesh::createMesh" ref="a5cd519a095bcc5a95c4faa863554fb71" args="(VertexFormat *vertexFormat, unsigned int vertexCount, bool dynamic=false)" -->
+<a class="anchor" id="a48a316d52d718bdc65c96bd20d7cfdca"></a><!-- doxytag: member="gameplay::Mesh::createMesh" ref="a48a316d52d718bdc65c96bd20d7cfdca" args="(const VertexFormat &amp;vertexFormat, unsigned int vertexCount, bool dynamic=false)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> * gameplay::Mesh::createMesh </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> &amp;&#160;</td>
           <td class="paramname"><em>vertexFormat</em>, </td>
         </tr>
         <tr>
@@ -359,7 +359,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
       </table>
 </div>
 <div class="memdoc">
-<p>Constructs a basic static mesh with the specified vertex format.</p>
+<p>Constructs a new mesh with the specified vertex format.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">vertexFormat</td><td>The vertex format. </td></tr>
@@ -508,6 +508,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 <div class="memdoc">
 <p>Returns the bounding box for the points in this mesh.</p>
 <p>Only meshes loaded from package files are imported with valid bounding volumes. Programmatically created meshes will contain empty bounding volumes until the setBoundingBox and/or setBoundingSphere methods are called to specify the mesh's local bounds.</p>
+<p>Meshes that are attached to a <a class="el" href="classgameplay_1_1_model.html">Model</a> with a <a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> will have a bounding volume that is not neccessarily tight fighting on the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> vertices. Instead, the bounding volume will be an approximation that contains all possible vertex positions in all possible poses after skinning is applied. This is neccessary since skinning vertices result in vertex positions that lie outside the original mesh bounds and could otherwise result in a bounding volume that does not fully contain an animated/skinned mesh.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The bounding box for the mesh. </dd></dl>
 
 </div>
@@ -527,6 +528,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 <div class="memdoc">
 <p>Returns the bounding sphere for the points in the mesh.</p>
 <p>Only meshes loaded from package files are imported with valid bounding volumes. Programmatically created meshes will contain empty bounding volumes until the setBoundingBox and/or setBoundingSphere methods are called to specify the mesh's local bounds.</p>
+<p>Meshes that are attached to a <a class="el" href="classgameplay_1_1_model.html">Model</a> with a <a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> will have a bounding volume that is not neccessarily tight fighting on the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> vertices. Instead, the bounding volume will be an approximation that contains all possible vertex positions in all possible poses after skinning is applied. This is neccessary since skinning vertices result in vertex positions that lie outside the original mesh bounds and could otherwise result in a bounding volume that does not fully contain an animated/skinned mesh.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The bounding sphere for the mesh. </dd></dl>
 
 </div>
@@ -594,12 +596,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 
 </div>
 </div>
-<a class="anchor" id="ad3584bfe1caa6fe1294f36c5ef9b4bd7"></a><!-- doxytag: member="gameplay::Mesh::getVertexBuffer" ref="ad3584bfe1caa6fe1294f36c5ef9b4bd7" args="() const " -->
+<a class="anchor" id="adbb9ba9503e14358cfbb91050c095322"></a><!-- doxytag: member="gameplay::Mesh::getVertexBuffer" ref="adbb9ba9503e14358cfbb91050c095322" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">VertexBuffer gameplay::Mesh::getVertexBuffer </td>
+          <td class="memname">VertexBufferHandle gameplay::Mesh::getVertexBuffer </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -630,12 +632,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 
 </div>
 </div>
-<a class="anchor" id="a58b55fb3b8659236311c9e18a186e91a"></a><!-- doxytag: member="gameplay::Mesh::getVertexFormat" ref="a58b55fb3b8659236311c9e18a186e91a" args="() const " -->
+<a class="anchor" id="ac9fca007f149de6607dc1b2e9c52515c"></a><!-- doxytag: member="gameplay::Mesh::getVertexFormat" ref="ac9fca007f149de6607dc1b2e9c52515c" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> * gameplay::Mesh::getVertexFormat </td>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> &amp; gameplay::Mesh::getVertexFormat </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -824,7 +826,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
+    <li class="footer">Generated on Mon Jan 23 2012 13:10:20 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

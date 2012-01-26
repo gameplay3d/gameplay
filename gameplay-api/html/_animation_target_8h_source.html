@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay/src/AnimationTarget.h Source File</title>
+<title>gameplay: gameplay/src/AnimationTarget.h Source File</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -120,7 +120,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00033"></a>00033 
 <a name="l00040"></a>00040     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_animation_target.html#a9e29517739e99d940e119dc2ee5a4aae">getAnimationPropertyValue</a>(<span class="keywordtype">int</span> propertyId, <a class="code" href="classgameplay_1_1_animation_value.html">AnimationValue</a>* value) = 0;
 <a name="l00041"></a>00041 
-<a name="l00048"></a>00048     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_animation_target.html#a7aa3d929d61f6df9128b56a27f293a21">setAnimationPropertyValue</a>(<span class="keywordtype">int</span> propertyId, <a class="code" href="classgameplay_1_1_animation_value.html">AnimationValue</a>* value) = 0;
+<a name="l00048"></a>00048     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_animation_target.html#a84a39aaabebfe0f05387778c3e7cefb0">setAnimationPropertyValue</a>(<span class="keywordtype">int</span> propertyId, <a class="code" href="classgameplay_1_1_animation_value.html">AnimationValue</a>* value, <span class="keywordtype">float</span> blendWeight = 1.0f) = 0;
 <a name="l00049"></a>00049 
 <a name="l00050"></a>00050 <span class="keyword">protected</span>:
 <a name="l00051"></a>00051     
@@ -138,17 +138,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00069"></a>00069 
 <a name="l00070"></a>00070     TargetType _targetType;             <span class="comment">// The type of target this is.</span>
 <a name="l00071"></a>00071 
-<a name="l00072"></a>00072 <span class="keyword">private</span>:
+<a name="l00072"></a>00072     <span class="keywordtype">char</span> _animationPropertyBitFlag;     <span class="comment">// Bit flag used to indicate which properties on the AnimationTarget are currently animating.</span>
 <a name="l00073"></a>00073 
-<a name="l00077"></a>00077     <a class="code" href="classgameplay_1_1_animation_target.html#a03d383afb9045efee09ec661bceedf80">AnimationTarget</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_animation_target.html">AnimationTarget</a>&amp; copy);
-<a name="l00078"></a>00078 
-<a name="l00079"></a>00079     Animation::Channel* _highestPriority;
-<a name="l00080"></a>00080     std::vector&lt;Animation::Channel*&gt;* _animationChannels;   <span class="comment">// Collection of all animation channels that target the AnimationTarget</span>
-<a name="l00081"></a>00081 
-<a name="l00082"></a>00082 };
-<a name="l00083"></a>00083 }
-<a name="l00084"></a>00084 
-<a name="l00085"></a>00085 <span class="preprocessor">#endif</span>
+<a name="l00074"></a>00074 <span class="keyword">private</span>:
+<a name="l00075"></a>00075 
+<a name="l00079"></a>00079     <a class="code" href="classgameplay_1_1_animation_target.html#a03d383afb9045efee09ec661bceedf80">AnimationTarget</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_animation_target.html">AnimationTarget</a>&amp; copy);
+<a name="l00080"></a>00080 
+<a name="l00089"></a>00089     <span class="keyword">static</span> <span class="keywordtype">int</span> getPropertyId(TargetType type, <span class="keyword">const</span> <span class="keywordtype">char</span>* propertyIdStr);
+<a name="l00090"></a>00090 
+<a name="l00091"></a>00091     std::vector&lt;Animation::Channel*&gt;* _animationChannels;   <span class="comment">// Collection of all animation channels that target the AnimationTarget</span>
+<a name="l00092"></a>00092     
+<a name="l00093"></a>00093 };
+<a name="l00094"></a>00094 }
+<a name="l00095"></a>00095 
+<a name="l00096"></a>00096 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -169,7 +172,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:02 for GamePlay by
+    <li class="footer">Generated on Mon Jan 23 2012 13:10:19 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

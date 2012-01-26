@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Keyboard.h"
 #include "Touch.h"
+#include "Mouse.h"
 #include "FileSystem.h"
 #include "Package.h"
 
@@ -66,6 +67,3 @@
 #include "PhysicsSocketConstraint.h"
 #include "PhysicsSpringConstraint.h"
 #include "PhysicsRigidBody.h"
-
-
-

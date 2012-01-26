@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay/src/VertexFormat.h Source File</title>
+<title>gameplay: gameplay/src/VertexFormat.h Source File</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -99,68 +99,71 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef VERTEXFORMAT_H_</span>
 <a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define VERTEXFORMAT_H_</span>
 <a name="l00003"></a>00003 <span class="preprocessor"></span>
-<a name="l00004"></a>00004 <span class="preprocessor">#include &quot;Ref.h&quot;</span>
-<a name="l00005"></a>00005 
-<a name="l00006"></a>00006 <span class="keyword">namespace </span>gameplay
-<a name="l00007"></a>00007 {
-<a name="l00008"></a>00008 
-<a name="l00015"></a><a class="code" href="classgameplay_1_1_vertex_format.html">00015</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_ref.html">Ref</a>
-<a name="l00016"></a>00016 {
-<a name="l00017"></a>00017 <span class="keyword">public</span>:
-<a name="l00018"></a>00018 
-<a name="l00022"></a><a class="code" href="classgameplay_1_1_vertex_format.html#a8ae70c40a5000a4e4b52cdca35923c26">00022</a>     <span class="keyword">enum</span> <a class="code" href="classgameplay_1_1_vertex_format.html#a8ae70c40a5000a4e4b52cdca35923c26">Usage</a>
-<a name="l00023"></a>00023     {
-<a name="l00024"></a>00024         POSITION = 1,
-<a name="l00025"></a>00025         NORMAL = 2,
-<a name="l00026"></a>00026         COLOR = 3,
-<a name="l00027"></a>00027         TANGENT = 4,
-<a name="l00028"></a>00028         BINORMAL = 5,
-<a name="l00029"></a>00029         BLENDWEIGHTS = 6,
-<a name="l00030"></a>00030         BLENDINDICES = 7,
-<a name="l00031"></a>00031         TEXCOORD0 = 8,
-<a name="l00032"></a>00032         TEXCOORD1 = 9,
-<a name="l00033"></a>00033         TEXCOORD2 = 10,
-<a name="l00034"></a>00034         TEXCOORD3 = 11,
-<a name="l00035"></a>00035         TEXCOORD4 = 12,
-<a name="l00036"></a>00036         TEXCOORD5 = 13,
-<a name="l00037"></a>00037         TEXCOORD6 = 14,
-<a name="l00038"></a>00038         TEXCOORD7 = 15
-<a name="l00039"></a>00039     };
-<a name="l00040"></a>00040 
-<a name="l00049"></a><a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html">00049</a>     <span class="keyword">class </span><a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html">Element</a>
-<a name="l00050"></a>00050     {
-<a name="l00051"></a>00051     <span class="keyword">public</span>:
-<a name="l00055"></a><a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#aedb2a6efcd033fe52fb3a9335697f760">00055</a>         <a class="code" href="classgameplay_1_1_vertex_format.html#a8ae70c40a5000a4e4b52cdca35923c26">Usage</a> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#aedb2a6efcd033fe52fb3a9335697f760">usage</a>;
-<a name="l00056"></a>00056 
-<a name="l00060"></a><a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#a42d29ad62d81493778d3d196c068ccb2">00060</a>         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#a42d29ad62d81493778d3d196c068ccb2">size</a>;
-<a name="l00061"></a>00061 
-<a name="l00065"></a>00065         <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#a4783c96c88ea37c6bbe860e7e279b3a3">Element</a>();
-<a name="l00066"></a>00066 
-<a name="l00073"></a>00073         <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#a4783c96c88ea37c6bbe860e7e279b3a3">Element</a>(<a class="code" href="classgameplay_1_1_vertex_format.html#a8ae70c40a5000a4e4b52cdca35923c26">Usage</a> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#aedb2a6efcd033fe52fb3a9335697f760">usage</a>, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#a42d29ad62d81493778d3d196c068ccb2">size</a>);
-<a name="l00074"></a>00074     };
-<a name="l00075"></a>00075 
-<a name="l00084"></a>00084     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>* <a class="code" href="classgameplay_1_1_vertex_format.html#a4e91ece72eed6b7c30aea10dc46c2258">create</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html">Element</a>* elements, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> elementCount);
-<a name="l00085"></a>00085 
-<a name="l00091"></a>00091     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html">Element</a>&amp; <a class="code" href="classgameplay_1_1_vertex_format.html#a568f735523ff8a3d636cb779f3e5ec70">getElement</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index) <span class="keyword">const</span>;
-<a name="l00092"></a>00092 
-<a name="l00098"></a>00098     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_vertex_format.html#a1a60f640e8ab4e8a951dac15e5cd582f">getElementCount</a>() <span class="keyword">const</span>;
-<a name="l00099"></a>00099 
-<a name="l00103"></a>00103     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_vertex_format.html#a2c27ab28bf3ba6ce1d9309991ab77e85">getVertexSize</a>() <span class="keyword">const</span>;
-<a name="l00104"></a>00104 
-<a name="l00105"></a>00105 <span class="keyword">private</span>:
+<a name="l00004"></a>00004 <span class="keyword">namespace </span>gameplay
+<a name="l00005"></a>00005 {
+<a name="l00006"></a>00006 
+<a name="l00013"></a><a class="code" href="classgameplay_1_1_vertex_format.html">00013</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>
+<a name="l00014"></a>00014 {
+<a name="l00015"></a>00015 <span class="keyword">public</span>:
+<a name="l00016"></a>00016 
+<a name="l00020"></a><a class="code" href="classgameplay_1_1_vertex_format.html#a8ae70c40a5000a4e4b52cdca35923c26">00020</a>     <span class="keyword">enum</span> <a class="code" href="classgameplay_1_1_vertex_format.html#a8ae70c40a5000a4e4b52cdca35923c26">Usage</a>
+<a name="l00021"></a>00021     {
+<a name="l00022"></a>00022         POSITION = 1,
+<a name="l00023"></a>00023         NORMAL = 2,
+<a name="l00024"></a>00024         COLOR = 3,
+<a name="l00025"></a>00025         TANGENT = 4,
+<a name="l00026"></a>00026         BINORMAL = 5,
+<a name="l00027"></a>00027         BLENDWEIGHTS = 6,
+<a name="l00028"></a>00028         BLENDINDICES = 7,
+<a name="l00029"></a>00029         TEXCOORD0 = 8,
+<a name="l00030"></a>00030         TEXCOORD1 = 9,
+<a name="l00031"></a>00031         TEXCOORD2 = 10,
+<a name="l00032"></a>00032         TEXCOORD3 = 11,
+<a name="l00033"></a>00033         TEXCOORD4 = 12,
+<a name="l00034"></a>00034         TEXCOORD5 = 13,
+<a name="l00035"></a>00035         TEXCOORD6 = 14,
+<a name="l00036"></a>00036         TEXCOORD7 = 15
+<a name="l00037"></a>00037     };
+<a name="l00038"></a>00038 
+<a name="l00047"></a><a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html">00047</a>     <span class="keyword">class </span><a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html">Element</a>
+<a name="l00048"></a>00048     {
+<a name="l00049"></a>00049     <span class="keyword">public</span>:
+<a name="l00053"></a><a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#aedb2a6efcd033fe52fb3a9335697f760">00053</a>         <a class="code" href="classgameplay_1_1_vertex_format.html#a8ae70c40a5000a4e4b52cdca35923c26">Usage</a> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#aedb2a6efcd033fe52fb3a9335697f760">usage</a>;
+<a name="l00054"></a>00054 
+<a name="l00058"></a><a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#a42d29ad62d81493778d3d196c068ccb2">00058</a>         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#a42d29ad62d81493778d3d196c068ccb2">size</a>;
+<a name="l00059"></a>00059 
+<a name="l00063"></a>00063         <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#a4783c96c88ea37c6bbe860e7e279b3a3">Element</a>();
+<a name="l00064"></a>00064 
+<a name="l00071"></a>00071         <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#a4783c96c88ea37c6bbe860e7e279b3a3">Element</a>(<a class="code" href="classgameplay_1_1_vertex_format.html#a8ae70c40a5000a4e4b52cdca35923c26">Usage</a> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#aedb2a6efcd033fe52fb3a9335697f760">usage</a>, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#a42d29ad62d81493778d3d196c068ccb2">size</a>);
+<a name="l00072"></a>00072 
+<a name="l00080"></a>00080         <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#aebd33e1ab3b57f929fb4a114872ef3fb">operator == </a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html">Element</a>&amp; e) <span class="keyword">const</span>;
+<a name="l00081"></a>00081 
+<a name="l00089"></a>00089         <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html#ac31d9501bc8053e2b0732ddc683140fe">operator != </a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html">Element</a>&amp; e) <span class="keyword">const</span>;
+<a name="l00090"></a>00090     };
+<a name="l00091"></a>00091 
+<a name="l00100"></a>00100     <a class="code" href="classgameplay_1_1_vertex_format.html#a3477e747689699fbfbd6bd85a4cbad11">VertexFormat</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html">Element</a>* elements, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> elementCount);
+<a name="l00101"></a>00101 
+<a name="l00105"></a>00105     <a class="code" href="classgameplay_1_1_vertex_format.html#a0781b181edd2bcb50df82a8e46c90a43">~VertexFormat</a>();
 <a name="l00106"></a>00106 
-<a name="l00110"></a>00110     <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>();
-<a name="l00111"></a>00111 
-<a name="l00115"></a>00115     ~<a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>();
-<a name="l00116"></a>00116 
-<a name="l00117"></a>00117     <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html">Element</a>* _elements;
-<a name="l00118"></a>00118     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _elementCount;
-<a name="l00119"></a>00119     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _vertexSize;
-<a name="l00120"></a>00120 };
-<a name="l00121"></a>00121 
-<a name="l00122"></a>00122 }
-<a name="l00123"></a>00123 
-<a name="l00124"></a>00124 <span class="preprocessor">#endif</span>
+<a name="l00112"></a>00112     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format_1_1_element.html">Element</a>&amp; <a class="code" href="classgameplay_1_1_vertex_format.html#a568f735523ff8a3d636cb779f3e5ec70">getElement</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index) <span class="keyword">const</span>;
+<a name="l00113"></a>00113 
+<a name="l00119"></a>00119     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_vertex_format.html#a1a60f640e8ab4e8a951dac15e5cd582f">getElementCount</a>() <span class="keyword">const</span>;
+<a name="l00120"></a>00120 
+<a name="l00124"></a>00124     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_vertex_format.html#a2c27ab28bf3ba6ce1d9309991ab77e85">getVertexSize</a>() <span class="keyword">const</span>;
+<a name="l00125"></a>00125 
+<a name="l00133"></a>00133     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_vertex_format.html#a94f4c76295589edb2f94c62d7a7f43ff">operator == </a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>&amp; f) <span class="keyword">const</span>;
+<a name="l00134"></a>00134 
+<a name="l00142"></a>00142     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_vertex_format.html#a3df43d156327ac05b071f021f898cc9e">operator != </a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>&amp; f) <span class="keyword">const</span>;
+<a name="l00143"></a>00143 
+<a name="l00144"></a>00144 <span class="keyword">private</span>:
+<a name="l00145"></a>00145 
+<a name="l00146"></a>00146     std::vector&lt;Element&gt; _elements;
+<a name="l00147"></a>00147     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _vertexSize;
+<a name="l00148"></a>00148 };
+<a name="l00149"></a>00149 
+<a name="l00150"></a>00150 }
+<a name="l00151"></a>00151 
+<a name="l00152"></a>00152 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -181,7 +184,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:03 for GamePlay by
+    <li class="footer">Generated on Mon Jan 23 2012 13:10:19 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

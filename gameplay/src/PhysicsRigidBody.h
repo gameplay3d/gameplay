@@ -35,7 +35,8 @@ public:
     {
         SHAPE_BOX,
         SHAPE_SPHERE,
-        SHAPE_NONE
+        SHAPE_NONE,
+        SHAPE_MAX = 10
     };
 
     /** 

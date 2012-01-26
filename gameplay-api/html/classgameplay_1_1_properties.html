@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay::Properties Class Reference</title>
+<title>gameplay: gameplay::Properties Class Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -141,6 +141,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a4404d17148833a5b5978d2bcb781a200">getVector2</a> (const char *name, <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ae0729d6e4abdcd81823cd46ff20e5e5b">getVector3</a> (const char *name, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#aa4931aadbe533e8e4b65ce3ec35a3508">getVector4</a> (const char *name, <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *out) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a40e005c3e4e6d9f28305b5ee425629a9">getQuaternionFromAxisAngle</a> (const char *name, <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a6abca23de971ae87e57e29ef4f0bfa21">getColor</a> (const char *name, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#af435904c37ba32c1080d76aa23323003">getColor</a> (const char *name, <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *out) const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
@@ -630,6 +631,42 @@ void printProperties(Properties* properties)
 
 </div>
 </div>
+<a class="anchor" id="a40e005c3e4e6d9f28305b5ee425629a9"></a><!-- doxytag: member="gameplay::Properties::getQuaternionFromAxisAngle" ref="a40e005c3e4e6d9f28305b5ee425629a9" args="(const char *name, Quaternion *out) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool gameplay::Properties::getQuaternionFromAxisAngle </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> *&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Interpret the value of the given property as a <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> specified as an axis angle. If the property does not exist, out will be set to Quaternion(). If the property exists but could not be scanned, an error will be logged and out will be set to Quaternion().</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the property to interpret, or NULL to return the current property's value. </td></tr>
+    <tr><td class="paramname">out</td><td>The quaternion to set to this property's interpreted value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True on success, false if the property does not exist or could not be scanned. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="aa684e793fd755acf2611079ea4e56b96"></a><!-- doxytag: member="gameplay::Properties::getString" ref="aa684e793fd755acf2611079ea4e56b96" args="(const char *name=NULL) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -830,7 +867,7 @@ void printProperties(Properties* properties)
 </div>
 
 
-    <li class="footer">Generated on Thu Dec 1 2011 16:25:05 for GamePlay by
+    <li class="footer">Generated on Mon Jan 23 2012 13:10:21 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

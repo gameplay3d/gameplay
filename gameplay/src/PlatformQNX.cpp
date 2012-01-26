@@ -13,6 +13,7 @@
 #include <bps/navigator.h>
 #include <bps/accelerometer.h>
 #include <bps/orientation.h>
+#include <bps/virtualkeyboard.h>
 
 #define TOUCH_COUNT_MAX     4
 
@@ -74,21 +75,17 @@ static Keyboard::Key getKey(int qnxKeycode)
     case KEYCODE_CAPS_LOCK:
         return Keyboard::KEY_CAPS_LOCK;
     case KEYCODE_LEFT_SHIFT:
-        return Keyboard::KEY_LEFT_SHIFT;
     case KEYCODE_RIGHT_SHIFT:
-        return Keyboard::KEY_RIGHT_SHIFT;
+        return Keyboard::KEY_SHIFT;
     case KEYCODE_LEFT_CTRL:
-        return Keyboard::KEY_LEFT_CTRL;
     case KEYCODE_RIGHT_CTRL:
-        return Keyboard::KEY_RIGHT_CTRL;
+        return Keyboard::KEY_CTRL;
     case KEYCODE_LEFT_ALT:
-        return Keyboard::KEY_LEFT_ALT;
     case KEYCODE_RIGHT_ALT:
-        return Keyboard::KEY_RIGHT_ALT;
+        return Keyboard::KEY_ALT;
     case KEYCODE_LEFT_HYPER:
-        return Keyboard::KEY_LEFT_HYPER;
     case KEYCODE_RIGHT_HYPER:
-        return Keyboard::KEY_RIGHT_HYPER;
+        return Keyboard::KEY_HYPER;
     case KEYCODE_INSERT:
         return Keyboard::KEY_INSERT;
     case KEYCODE_HOME:
@@ -251,6 +248,14 @@ static Keyboard::Key getKey(int qnxKeycode)
         return Keyboard::KEY_QUOTE;
     case KEYCODE_APOSTROPHE:
         return Keyboard::KEY_APOSTROPHE;
+    case 0x20AC:
+        return Keyboard::KEY_EURO;
+    case KEYCODE_POUND_SIGN:
+        return Keyboard::KEY_POUND;
+    case KEYCODE_YEN_SIGN:
+        return Keyboard::KEY_YEN;
+    case KEYCODE_MIDDLE_DOT:
+        return Keyboard::KEY_MIDDLE_DOT;
     case KEYCODE_CAPITAL_A:
         return Keyboard::KEY_CAPITAL_A;
     case KEYCODE_A:
@@ -358,6 +363,37 @@ static Keyboard::Key getKey(int qnxKeycode)
     default:
         return Keyboard::KEY_NONE;
     }
+}
+
+/**
+ * Returns the unicode value from the given QNX key code value.
+ * Some non-printable characters also have corresponding unicode values, such as backspace.
+ *
+ * @param qnxKeyCode The keyboard key code.
+ *
+ * @return The unicode value or 0 if the keycode did not represent a unicode key.
+ */
+static int getUnicode(int qnxKeyCode)
+{
+    if (qnxKeyCode >= KEYCODE_PC_KEYS && qnxKeyCode <= UNICODE_PRIVATE_USE_AREA_LAST)
+    {
+        switch (qnxKeyCode)
+        {
+        case KEYCODE_BACKSPACE:
+            return 0x0008;
+        case KEYCODE_TAB:
+            return 0x0009;
+        case KEYCODE_KP_ENTER:
+        case KEYCODE_RETURN:
+            return 0x000A;
+        case KEYCODE_ESCAPE:
+            return 0x001B;
+        // Win32 doesn't consider delete to be a key char.
+        default:
+            return 0;
+        }
+    }
+    return qnxKeyCode;
 }
 
 extern void printError(const char* format, ...)
@@ -665,13 +701,29 @@ long timespec2millis(struct timespec *a)
     return a->tv_sec*1000 + a->tv_nsec/1000000;
 }
 
+/**
+ * Fires a mouse event or a touch event on the game.
+ * If the mouse event is not consumed, a touch event is fired instead.
+ *
+ * @param mouseEvent The mouse event to fire.
+ * @param touchEvent The touch event to fire.
+ * @param x The x position of the touch in pixels.
+ * @param y The y position of the touch in pixels.
+ */
+void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEvent, int x, int y)
+{
+    if (!Game::getInstance()->mouseEvent(mouseEvent, x, y))
+    {
+        Game::getInstance()->touchEvent(touchEvent, x, y, 0);
+    }
+}
+
 int Platform::enterMessagePump()
 {
     int rc;
     int eventType;
     int flags;
     int value;
-    int visible = 1;
     int position[2];
     int domain;
     mtouch_event_t touchEvent;
@@ -710,7 +762,7 @@ int Platform::enterMessagePump()
                         if (!__multiTouch)
                         {
                             screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                           Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, position[0], position[1], 0);
+                            Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, position[0], position[1], 0);
                         }
                         else
                         {
@@ -725,7 +777,7 @@ int Platform::enterMessagePump()
                         if (!__multiTouch)
                         {
                             screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                           Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, position[0], position[1], 0);
+                            Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, position[0], position[1], 0);
                         }
                         else
                         {
@@ -751,12 +803,108 @@ int Platform::enterMessagePump()
                         break;
                     }
 
+                    case SCREEN_EVENT_POINTER:
+                    {
+                        static int mouse_pressed = 0;
+                        int buttons;
+                        int wheel;
+                        // A move event will be fired unless a button state changed.
+                        bool move = true;
+                        bool left_move = false;
+                        //This is a mouse move event, it is applicable to a device with a usb mouse or simulator
+                        screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_BUTTONS, &buttons);
+                        screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_SOURCE_POSITION, position);
+                        screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_MOUSE_WHEEL, &wheel);
+
+                        // Handle left mouse. Interpret as touch if the left mouse event is not consumed.
+                        if (buttons & SCREEN_LEFT_MOUSE_BUTTON)
+                        {
+                            if (mouse_pressed & SCREEN_LEFT_MOUSE_BUTTON)
+                            {
+                                left_move = true;
+                            }
+                            else
+                            {
+                                move = false;
+                                mouse_pressed |= SCREEN_LEFT_MOUSE_BUTTON;
+                                mouseOrTouchEvent(Mouse::MOUSE_LEFT_BUTTON_PRESS, Touch::TOUCH_PRESS, position[0], position[1]);
+                            }
+                        }
+                        else if (mouse_pressed & SCREEN_LEFT_MOUSE_BUTTON)
+                        {
+                            move = false;
+                            mouse_pressed &= ~SCREEN_LEFT_MOUSE_BUTTON;
+                            mouseOrTouchEvent(Mouse::MOUSE_LEFT_BUTTON_RELEASE, Touch::TOUCH_RELEASE, position[0], position[1]);
+                        }
+
+                        // Handle right mouse
+                        if (buttons & SCREEN_RIGHT_MOUSE_BUTTON)
+                        {
+                            if ((mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON) == 0)
+                            {
+                                move = false;
+                                mouse_pressed |= SCREEN_RIGHT_MOUSE_BUTTON;
+                                Game::getInstance()->mouseEvent(Mouse::MOUSE_RIGHT_BUTTON_PRESS, position[0], position[1]);
+                            }
+                        }
+                        else if (mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON)
+                        {
+                            move = false;
+                            mouse_pressed &= ~SCREEN_RIGHT_MOUSE_BUTTON;
+                            Game::getInstance()->mouseEvent(Mouse::MOUSE_RIGHT_BUTTON_RELEASE, position[0], position[1]);
+                        }
+
+                        // Handle middle mouse
+                        if (buttons & SCREEN_MIDDLE_MOUSE_BUTTON)
+                        {
+                            if ((mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON) == 0)
+                            {
+                                move = false;
+                                mouse_pressed |= SCREEN_MIDDLE_MOUSE_BUTTON;
+                                Game::getInstance()->mouseEvent(Mouse::MOUSE_MIDDLE_BUTTON_PRESS, position[0], position[1]);
+                            }
+                        }
+                        else if (mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON)
+                        {
+                            move = false;
+                            mouse_pressed &= ~SCREEN_MIDDLE_MOUSE_BUTTON;
+                            Game::getInstance()->mouseEvent(Mouse::MOUSE_MIDDLE_BUTTON_RELEASE, position[0], position[1]);
+                        }
+
+                        // Fire a move event if none of the buttons changed.
+                        if (left_move)
+                        {
+                            mouseOrTouchEvent(Mouse::MOUSE_MOVE, Touch::TOUCH_MOVE, position[0], position[1]);
+                        }
+                        else if (move)
+                        {
+                            Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, position[0], position[1]);
+                        }
+
+                        // Handle mouse wheel events
+                        if (wheel)
+                        {
+                            Game::getInstance()->mouseWheelEvent(position[0], position[1], -wheel);
+                        }
+                        break;
+                    }
+
                     case SCREEN_EVENT_KEYBOARD:
                     {
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_KEY_FLAGS, &flags);
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_KEY_SYM, &value);
                         gameplay::Keyboard::KeyEvent evt = (flags & KEY_DOWN) ? gameplay::Keyboard::KEY_PRESS :  gameplay::Keyboard::KEY_RELEASE;
-                        Game::getInstance()->keyEvent(evt, getKey(value));
+                        // Suppress key repeats
+                        if ((flags & KEY_REPEAT) == 0)
+                        {
+                            Game::getInstance()->keyEvent(evt, getKey(value));
+                            if (evt == gameplay::Keyboard::KEY_PRESS && flags & KEY_SYM_VALID)
+                            {
+                                int unicode = getUnicode(value);
+                                if (unicode)
+                                    Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_CHAR, unicode);
+                            }
+                        }
                         break;
                     }
                 }
@@ -780,8 +928,8 @@ int Platform::enterMessagePump()
             break;
 
         // Idle time (no events left to process) is spent rendering.
-        // We skip rendering when the window is not visible or the app is paused.
-        if (visible && _game->getState() != Game::PAUSED)
+        // We skip rendering when the app is paused.
+        if (_game->getState() != Game::PAUSED)
         {
             _game->frame();
 
@@ -878,6 +1026,14 @@ void Platform::swapBuffers()
 {
     if (__eglDisplay && __eglSurface)
         eglSwapBuffers(__eglDisplay, __eglSurface);
+}
+
+void Platform::displayKeyboard(bool display)
+{
+    if (display)
+        virtualkeyboard_show();
+    else
+        virtualkeyboard_hide();
 }
 
 }

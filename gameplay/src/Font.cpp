@@ -53,7 +53,7 @@ Font::Font(const Font& copy)
 Font::~Font()
 {
     // Remove this Font from the font cache.
-    std::vector<Font*>::iterator itr = find(__fontCache.begin(), __fontCache.end(), this);
+    std::vector<Font*>::iterator itr = std::find(__fontCache.begin(), __fontCache.end(), this);
     if (itr != __fontCache.end())
     {
         __fontCache.erase(itr);
