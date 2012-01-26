@@ -253,15 +253,6 @@ private:
      */
     void onEnd();
 
-    /**
-     * A list that keeps a pointer to the next listener event to be triggered.
-     */
-    struct ListenerList
-    {
-        std::list<Listener*> _list;
-        std::list<Listener*>::iterator _listItr;
-    };
-
     std::string _id;                                // AnimationClip ID.
     Animation* _animation;                          // The Animation this clip is created from.
     unsigned long _startTime;                       // Start time of the clip.
@@ -283,7 +274,8 @@ private:
     std::vector<AnimationValue*> _values;           // AnimationValue holder.
     std::vector<Listener*>* _beginListeners;        // Collection of begin listeners on the clip.
     std::vector<Listener*>* _endListeners;          // Collection of end listeners on the clip.
-    ListenerList* _listeners;                       // Collection of listeners on the clip.
+    std::list<Listener*>* _listeners;               // Ordered collection of listeners on the clip.
+    std::list<Listener*>::iterator* _listenerItr;   // Iterator that points to the next listener event to be triggered.
 };
 
 }
