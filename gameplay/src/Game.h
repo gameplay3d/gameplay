@@ -197,7 +197,8 @@ public:
      * Keyboard callback on keyPress events.
      *
      * @param evt The key event that occured.
-     * @param key The key code that was pressed, released or repeated.
+     * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
+     *            If evt is KEY_CHAR then key is the unicode value of the character.
      * 
      * @see Keyboard::KeyEvent
      * @see Keyboard::Key
