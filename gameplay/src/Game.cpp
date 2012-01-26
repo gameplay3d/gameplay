@@ -175,6 +175,7 @@ void Game::frame()
 
     // Update the scheduled and running animations.
     _animationController->update(elapsedTime);
+    
     // Update the physics.
     _physicsController->update(elapsedTime);
     // Application Update.
@@ -247,6 +248,15 @@ void Game::keyEvent(Keyboard::KeyEvent evt, int key)
 }
 
 void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+}
+
+bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y)
+{
+    return false;
+}
+
+void Game::mouseWheelEvent(int x, int y, int delta)
 {
 }
 

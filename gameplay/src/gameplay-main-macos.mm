@@ -12,7 +12,9 @@ int main(int argc, char** argv)
     Game* game = Game::getInstance();
     assert(game != NULL);
     Platform* platform = Platform::create(game);
-    return platform->enterMessagePump();
+    int result = platform->enterMessagePump();
+	delete platform;
+    return result;
 }
 
 #endif

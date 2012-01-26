@@ -31,12 +31,12 @@ class Transform : public AnimationTarget
 public:
 
     /**
-     * Scale animation property. Data=sx,sy,sz
+     * Scale animation property. Data=scale
      */
     static const int ANIMATE_SCALE_UNIT = 0;
 
     /**
-     * Scale animation property. Data=scale
+     * Scale animation property. Data=sx,sy,sz
      */
     static const int ANIMATE_SCALE = 1;
 
@@ -323,6 +323,16 @@ public:
      * @param dst The vector to store the result in.
      */
     void getRightVector(Vector3* dst) const;
+
+    /**
+     * Rotates this transform's rotation component by the given rotation.
+     *
+     * @param qx The quaternion x value.
+     * @param qy The quaternion y value.
+     * @param qz The quaternion z value.
+     * @param qw The quaternion w value.
+     */
+    void rotate(float qx, float qy, float qz, float qw);
 
     /**
      * Rotates this transform's rotation component by the given rotation.
@@ -715,7 +725,7 @@ public:
     /**
      * @see AnimationTarget#setAnimationProperty
      */
-    void setAnimationPropertyValue(int propertyId, AnimationValue* value);
+    void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 protected:
 
@@ -735,6 +745,22 @@ protected:
     mutable bool _matrixDirty;
     std::list<TransformListener>* _listeners;
 
+private:
+    static const char ANIMATION_SCALE_X_BIT = 0x01; 
+    static const char ANIMATION_SCALE_Y_BIT = 0x02; 
+    static const char ANIMATION_SCALE_Z_BIT = 0x04; 
+    static const char ANIMATION_ROTATION_BIT = 0x08;  
+    static const char ANIMATION_TRANSLATION_X_BIT = 0x10; 
+    static const char ANIMATION_TRANSLATION_Y_BIT = 0x20; 
+    static const char ANIMATION_TRANSLATION_Z_BIT = 0x40; 
+
+    void applyAnimationValueScaleX(float sx, float blendWeight);
+    void applyAnimationValueScaleY(float sy, float blendWeight);
+    void applyAnimationValueScaleZ(float sz, float blendWeight);
+    void applyAnimationValueRotation(Quaternion* q, float blendWeight);
+    void applyAnimationValueTranslationX(float tx, float blendWeight);
+    void applyAnimationValueTranslationY(float ty, float blendWeight);
+    void applyAnimationValueTranslationZ(float tz, float blendWeight);
 };
 
 }

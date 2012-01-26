@@ -10,9 +10,9 @@ namespace gameplay
 
 AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long startTime, unsigned long endTime)
     : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _duration(_endTime - _startTime), _repeatCount(1.0f), 
-      _activeDuration(_duration * _repeatCount), _speed(1.0f), _isPlaying(false), _timeStarted(0), _elapsedTime(0), _runningTime(0), 
-      _crossFadeToClip(NULL), _crossFadeStart(0), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), 
-      _isFadingOutStarted(false), _isFadingOut(false), _isFadingIn(false), _beginListeners(NULL), _endListeners(NULL)
+      _activeDuration(_duration * _repeatCount), _speed(1.0f), _isPlaying(false), _timeStarted(0), _elapsedTime(0), 
+      _crossFadeToClip(NULL), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), _isFadingOutStarted(false), 
+      _isFadingOut(false), _isFadingIn(false), _beginListeners(NULL), _endListeners(NULL), _listeners(NULL)
 {
     assert(0 <= startTime && startTime <= animation->_duration && 0 <= endTime && endTime <= animation->_duration);
     
@@ -36,6 +36,7 @@ AnimationClip::~AnimationClip()
     SAFE_RELEASE(_crossFadeToClip);
     SAFE_DELETE(_beginListeners);
     SAFE_DELETE(_endListeners);
+    SAFE_DELETE(_listeners);
 }
 
 const char* AnimationClip::getID() const
@@ -151,35 +152,69 @@ void AnimationClip::crossFade(AnimationClip* clip, unsigned long duration)
 {
     assert(clip);
 
-    if (clip->_isPlaying && clip->_isFadingOut)
-    {
-        clip->_isFadingOut = false;
-        clip->_crossFadeToClip->_isFadingIn = false;
-        SAFE_RELEASE(clip->_crossFadeToClip);
-    }
-
-    // If I already have a clip I'm fading too.. release it.
+    // If I already have a clip I'm fading to and it's not the same as the given clip release it.
+    // Assign the new clip and increase it's ref count.
+    // TODO: Do I need to anything else to the crossFade clip here before releasing?
     if (_crossFadeToClip)
         SAFE_RELEASE(_crossFadeToClip);
-
-    // Assign the clip we're fading to, and increase its ref count.
+        
     _crossFadeToClip = clip;
     _crossFadeToClip->addRef();
         
-    // Set the fade in clip to fading in, and set the duration of the fade in.
+    // Set the crossfade clip to fading in, and initialize it's blend weight to zero.
     _crossFadeToClip->_isFadingIn = true;
+    _crossFadeToClip->_blendWeight = 0.0f;
     
-    // Set this clip to fade out, and reset the elapsed time for the fade out.
+    // Set this clip to fade out, set the fade duration and reset the fade elapsed time.
     _isFadingOut = true;
     _crossFadeOutElapsed = 0;
     _crossFadeOutDuration = duration;
-    _crossFadeStart = (Game::getGameTime() - _timeStarted);
     _isFadingOutStarted = true;
     
+    // If this clip is currently not playing, we should start playing it.
     if (!_isPlaying)
         play();
 
+    // Start playing the cross fade clip.
     _crossFadeToClip->play(); 
+}
+
+void AnimationClip::addListener(AnimationClip::Listener* listener, unsigned long eventTime)
+{
+    assert(listener);
+    assert(eventTime < _duration);
+
+    listener->_listenerTime = eventTime;
+
+    if (!_listeners)
+    {
+        _listeners = new ListenerList;
+        _listeners->_list.push_front(listener);
+        if (_isPlaying)
+            _listeners->_listItr = _listeners->_list.begin();
+    }
+    else
+    {
+        for (std::list<Listener*>::iterator itr = _listeners->_list.begin(); itr != _listeners->_list.begin(); itr++)
+        {
+            if (eventTime < (*itr)->_listenerTime)
+            {
+                itr = _listeners->_list.insert(itr, listener);
+
+                // If playing, update the iterator if we need to.
+                // otherwise, it will just be set the next time the clip gets played.
+                if (_isPlaying)
+                {
+                    unsigned long currentTime = _elapsedTime % _duration;
+                    if ((_speed >= 0.0f && currentTime < eventTime && eventTime < (*_listeners->_listItr)->_listenerTime) || 
+                        (_speed <= 0 && currentTime > eventTime && eventTime > (*_listeners->_listItr)->_listenerTime))
+                        _listeners->_listItr = itr;
+                }
+
+                return;
+            }
+        }
+    }
 }
 
 void AnimationClip::addBeginListener(AnimationClip::Listener* listener)
@@ -198,85 +233,94 @@ void AnimationClip::addEndListener(AnimationClip::Listener* listener)
     _endListeners->push_back(listener);
 }
 
-bool AnimationClip::update(unsigned long elapsedTime)
+bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*>* activeTargets)
 {
-    float speed = _speed;
     if (!_isPlaying)
-    {
         onBegin();
-        _elapsedTime = Game::getGameTime() - _timeStarted;
-        _runningTime = _elapsedTime * speed;
-    }
-    else
-    {
-        // Update elapsed time.
-        _elapsedTime += elapsedTime;
-        _runningTime += elapsedTime * speed;
-    }
+    else 
+        _elapsedTime += elapsedTime * _speed;
 
-    float percentComplete = 0.0f;
-
+    unsigned long currentTime = 0L;
     // Check to see if clip is complete.
-    if (_repeatCount != REPEAT_INDEFINITE && ((_speed >= 0 && _runningTime >= (long) _activeDuration) || (_speed < 0 && _runningTime <= 0)))
+    if (_repeatCount != REPEAT_INDEFINITE && ((_speed >= 0.0f && _elapsedTime >= (long) _activeDuration) || (_speed <= 0.0f && _elapsedTime <= 0L)))
     {
         _isPlaying = false;
-        if (_speed >= 0)
+        if (_speed >= 0.0f)
         {
-            percentComplete = _activeDuration % _duration; // Get's the fractional part of the final repeat.
-            if (percentComplete == 0.0f)
-                percentComplete = _duration;
+            currentTime = _activeDuration % _duration; // Get's the fractional part of the final repeat.
+            if (currentTime == 0L)
+                currentTime = _duration;
         }
         else
         {
-            percentComplete = 0.0f; // If we are negative speed, the end value should be 0.
+            currentTime = 0L; // If we are negative speed, the end value should be 0.
         }
     }
     else
     {
         // Gets portion/fraction of the repeat.
-        percentComplete = (float) (_runningTime % _duration);
+        currentTime = _elapsedTime % _duration;
+    }
+
+    // Notify any listeners of Animation events.
+    if (_listeners)
+    {
+        while (_listeners->_listItr != _listeners->_list.end() && (_speed >= 0.0f && currentTime % _duration >= (*_listeners->_listItr)->_listenerTime) || 
+                                                     (_speed <= 0.0f && currentTime % _duration <= (*_listeners->_listItr)->_listenerTime))
+        {
+            
+            (*_listeners->_listItr)->animationEvent(this, Listener::DEFAULT);
+            (_listeners->_listItr)++;
+        }
     }
 
     // Add back in start time, and divide by the total animation's duration to get the actual percentage complete
-    percentComplete = (float)(_startTime + percentComplete) / (float) _animation->_duration;
+    float percentComplete = (float)(_startTime + currentTime) / (float) _animation->_duration;
     
     if (_isFadingOut)
     {
         if (_isFadingOutStarted) // Calculate elapsed time since the fade out begin.
         {
-            _crossFadeOutElapsed = (_elapsedTime - _crossFadeStart) * speed;
+            _crossFadeOutElapsed = (Game::getGameTime() - _crossFadeToClip->_timeStarted) * _speed; 
             _isFadingOutStarted = false;
         }
         else
         {
             // continue tracking elapsed time.
-            _crossFadeOutElapsed += elapsedTime * speed;
+            _crossFadeOutElapsed += elapsedTime * abs(_speed);
         }
 
         if (_crossFadeOutElapsed < _crossFadeOutDuration)
         {
+            // Calculate this clip's blend weight.
             float tempBlendWeight = (float) (_crossFadeOutDuration - _crossFadeOutElapsed) / (float) _crossFadeOutDuration;
-            _crossFadeToClip->_blendWeight = (1.0f - tempBlendWeight);
             
-            // adjust the clip your blending to's weight to be a percentage of your current blend weight
+            // If this clip is fading in, adjust the crossfade clip's weight to be a percentage of your current blend weight
             if (_isFadingIn)
             {
-                _crossFadeToClip->_blendWeight *= _blendWeight;
+                _crossFadeToClip->_blendWeight = (1.0f - tempBlendWeight) * _blendWeight;
                 _blendWeight -= _crossFadeToClip->_blendWeight;
             }
             else
             {
+                // Just set the blend weight.
+                _crossFadeToClip->_blendWeight = (1.0f - tempBlendWeight);
                 _blendWeight = tempBlendWeight;
             }
         }
         else
-        {   // Fade done.
+        {   // Fade is done.
+            // Set the crossFadeToClip's blend weight to 1
             _crossFadeToClip->_blendWeight = 1.0f;
-                
+            
+            // Adjust the crossfade clip's blend weight if this clip is also fading in.
             if (_isFadingIn)
                 _crossFadeToClip->_blendWeight *= _blendWeight;
 
+            // The crossfade clip is no longer fading in
             _crossFadeToClip->_isFadingIn = false;
+
+            // Release the crossfade clip, mark ourselves as done and set our blend weight to 0.
             SAFE_RELEASE(_crossFadeToClip);
             _blendWeight = 0.0f; 
             _isFadingOut = false;
@@ -295,146 +339,16 @@ bool AnimationClip::update(unsigned long elapsedTime)
         target = channel->_target;
         value = _values[i];
 
-        // Get the current value.
-        target->getAnimationPropertyValue(channel->_propertyId, value);
+        // If the target's _animationPropertyBitFlag is clear, we can assume that this is the first
+        // animation channel to act on the target and we can add the target to the list of
+        // active targets stored by the AnimationController.
+        if (target->_animationPropertyBitFlag == 0x00)
+            activeTargets->push_front(target);
 
-        bool isHighest = false;
-        // My channel priority has changed if my priority is greater than the active animation count.
-        if (!target->_highestPriority)
-        {
-            target->_highestPriority = channel;
-            value->_isFirstActing = true;
-        }
-
-        if (_blendWeight != 0.0f)
-        {
-            // Evaluate point on Curve.
-            channel->_curve->evaluate(percentComplete, value->_interpolatedValue);
-
-            if (!channel->_curve->_quaternionOffset)
-            {
-                if (value->_isFirstActing)
-                {
-                    unsigned int componentCount = value->_componentCount;
-                    for (unsigned int j = 0; j < componentCount; j++)
-                    {
-                        if (_blendWeight != 1.0f)
-                            value->_interpolatedValue[j] *= _blendWeight;
-
-                        value->_currentValue[j] = value->_interpolatedValue[j];
-                    }
-                }
-                else
-                {
-                    unsigned int componentCount = value->_componentCount;
-                    for (unsigned int j = 0; j < componentCount; j++)
-                    {
-                        if (_blendWeight != 1.0f)
-                            value->_interpolatedValue[j] *= _blendWeight;
-
-                        value->_currentValue[j] += value->_interpolatedValue[j];
-                    }
-                }
-            }
-            else
-            {   //We have Quaternions!!!
-                unsigned int quaternionOffset = *(channel->_curve->_quaternionOffset);
-                
-                if (value->_isFirstActing)
-                {
-                    unsigned int j = 0;
-                    for (; j < quaternionOffset; j++)
-                    {
-                        if (_blendWeight != 1.0f)
-                            value->_interpolatedValue[j] *= _blendWeight;
-
-                        value->_currentValue[j] = value->_interpolatedValue[j];
-                    }
-
-                    // We are at the index for a quaternion component. Handle the next for components as a whole quaternion.
-                    Quaternion* interpolatedQuaternion = (Quaternion*) (value->_interpolatedValue + j);
-                    Quaternion* currentQuaternion = (Quaternion*) (value->_currentValue + j);
-
-                    // If we have a blend weight, we apply it by slerping from the identity to our interpolated value at the given weight.
-                    if (_blendWeight != 1.0f)
-                        Quaternion::slerp(Quaternion::identity(), *interpolatedQuaternion, _blendWeight, interpolatedQuaternion);
-                    
-                    // Add in contribution.
-                    currentQuaternion->set(*interpolatedQuaternion);
-                    
-                    unsigned int componentCount = value->_componentCount;
-                    for (j += 4; j < componentCount; j++)
-                    {
-                        if (_blendWeight != 1.0f)
-                            value->_interpolatedValue[j] *= _blendWeight;
-
-                        value->_currentValue[j] = value->_interpolatedValue[j];
-                    }
-                }
-                else
-                {
-                    unsigned int j = 0;
-                    for (; j < quaternionOffset; j++)
-                    {
-                        if (_blendWeight != 1.0f)
-                            value->_interpolatedValue[j] *= _blendWeight;
-
-                        value->_currentValue[j] += value->_interpolatedValue[j];
-                    }
-                    // We are at the index for a quaternion component. Handle the next for components as a whole quaternion.
-
-                    Quaternion* interpolatedQuaternion = (Quaternion*) (value->_interpolatedValue + j);
-                    Quaternion* currentQuaternion = (Quaternion*) (value->_currentValue + j);
-
-                    // If we have a blend weight, we apply it by slerping from the identity to our interpolated value at the given weight.
-                    if (_blendWeight != 1.0f)
-                        Quaternion::slerp(Quaternion::identity(), *interpolatedQuaternion, _blendWeight, interpolatedQuaternion);
-                    
-                    // Add in contribution.
-                    currentQuaternion->multiply(*interpolatedQuaternion);
-                    
-                    unsigned int componentCount = value->_componentCount;
-                    for (j += 4; j < componentCount; j++)
-                    {
-                        if (_blendWeight != 1.0f)
-                            value->_interpolatedValue[j] *= _blendWeight;
-
-                        value->_currentValue[j] += value->_interpolatedValue[j];
-                    }
-                }
-            }
-        }
-        else if (value->_isFirstActing)
-        {
-            if (!channel->_curve->_quaternionOffset)
-            {
-                memset(value->_currentValue, 0.0f, value->_componentCount);
-            }
-            else
-            {
-                unsigned int quaternionOffset = *(channel->_curve->_quaternionOffset);
-                unsigned int j = 0;
-                for (; j < quaternionOffset; j++)
-                {
-                    value->_currentValue[j] = 0.0f;
-                }
-
-                // We are at the index for a quaternion component. Handle the next for components as a whole quaternion.
-                Quaternion* currentQuaternion = (Quaternion*) (value->_currentValue + j);
-
-                // Set it to identity.
-                currentQuaternion->setIdentity();
-                
-                unsigned int componentCount = value->_componentCount;
-                for (j += 4; j < componentCount; j++)
-                {
-                    value->_currentValue[j] = 0.0f;
-                }
-            }
-        }
-        
+        // Evaluate the point on Curve
+        channel->_curve->evaluate(percentComplete, value->_value);
         // Set the animation value on the target property.
-        target->setAnimationPropertyValue(channel->_propertyId, value);
+        target->setAnimationPropertyValue(channel->_propertyId, value, _blendWeight);
     }
 
     // When ended. Probably should move to it's own method so we can call it when the clip is ended early.
@@ -460,16 +374,23 @@ void AnimationClip::onBegin()
 {
     // Initialize animation to play.
     _isPlaying = true;
-    _elapsedTime = 0;
 
-    if (_speed > 0)
+    if (_speed >= 0)
     {
-        _runningTime = 0;
+        _elapsedTime = 0;
+
+        if (_listeners)
+            _listeners->_listItr = _listeners->_list.begin();
     }
     else
     {
-        _runningTime = _activeDuration;
+        _elapsedTime = _activeDuration;
+
+        if (_listeners)
+            _listeners->_listItr = _listeners->_list.end();
     }
+
+    _elapsedTime += (Game::getGameTime() - _timeStarted) * _speed;
 
     // Notify begin listeners.. if any.
     if (_beginListeners)
@@ -485,23 +406,6 @@ void AnimationClip::onBegin()
 
 void AnimationClip::onEnd()
 {
-    AnimationValue* value;
-    Animation::Channel* channel = NULL;
-    AnimationTarget* target = NULL;
-    unsigned int channelCount = _animation->_channels.size();
-    for (unsigned int i = 0; i < channelCount; i++)
-    {
-        value = _values[i];
-
-        if (value->_isFirstActing)
-        {
-            channel = _animation->_channels[i];
-            target = channel->_target;
-            target->_highestPriority = NULL;
-            value->_isFirstActing = false;
-        }
-    }
-
     _blendWeight = 1.0f;
     _timeStarted = 0;
 }

@@ -222,6 +222,12 @@
     <ClCompile Include="src\MeshBatch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\gameplay-main-android.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlatformAndroid.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -434,6 +440,9 @@
     <ClInclude Include="src\MeshBatch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Mouse.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\bumped-specular.vsh">
@@ -515,6 +524,12 @@
       <Filter>src</Filter>
     </None>
     <None Include="src\MeshBatch.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\gameplay-main-ios.mm">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\PlatformiOS.mm">
       <Filter>src</Filter>
     </None>
   </ItemGroup>

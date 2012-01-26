@@ -703,6 +703,11 @@ void Curve::evaluate(float time, float* dst) const
     interpolateLinear(t, from, to, dst);
 }
 
+float Curve::lerp(float t, float from, float to)
+{
+    return lerpInl(t, from, to);
+}
+
 void Curve::setQuaternionOffset(unsigned int offset)
 {
     assert(offset <= (_componentCount - 4));
@@ -1078,7 +1083,7 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
             if (fromValue[i] == toValue[i])
                 dst[i] = fromValue[i];
             else
-                dst[i] = lerp(s, fromValue[i], toValue[i]);
+                dst[i] = lerpInl(s, fromValue[i], toValue[i]);
         }
     }
     else
@@ -1091,7 +1096,7 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
             if (fromValue[i] == toValue[i])
                 dst[i] = fromValue[i];
             else
-                dst[i] = lerp(s, fromValue[i], toValue[i]);
+                dst[i] = lerpInl(s, fromValue[i], toValue[i]);
         }
 
         // Handle quaternion component.
@@ -1103,25 +1108,22 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
             if (fromValue[i] == toValue[i])
                 dst[i] = fromValue[i];
             else
-                dst[i] = lerp(s, fromValue[i], toValue[i]);
+                dst[i] = lerpInl(s, fromValue[i], toValue[i]);
         }
     }
 }
 
 void Curve::interpolateQuaternion(float s, float* from, float* to, float* dst) const
 {
-    Quaternion quatFrom(from);
-    Quaternion quatTo(to);
-
-    // Normalize the quaternions.
-    quatFrom.normalize();
-    quatTo.normalize();
-        
     // Evaluate.
     if (s >= 0)
-        Quaternion::slerp(quatFrom, quatTo, s, (Quaternion*)dst);
+    {
+        Quaternion::slerp(from[0], from[1], from[2], from[3], to[0], to[1], to[2], to[3], s, dst, dst + 1, dst + 2, dst + 3);
+    }
     else
-        Quaternion::slerp(quatTo, quatFrom, -s, (Quaternion*)dst);
+        Quaternion::slerp(to[0], to[1], to[2], to[3], from[0], from[1], from[2], from[3], s, dst, dst + 1, dst + 2, dst + 3);
+
+    //((Quaternion*) dst)->normalize();
 }
 
 int Curve::determineIndex(float time) const
