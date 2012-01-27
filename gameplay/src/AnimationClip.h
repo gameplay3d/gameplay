@@ -32,7 +32,7 @@ public:
      */
     class Listener
     {
-        friend AnimationClip;
+        friend class AnimationClip;
 
     public:
 
