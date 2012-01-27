@@ -371,9 +371,11 @@ public:
 private:
     
     /**
-     * Constructor.
+     * Constructors.
      */
+    Properties();
     Properties(FILE* file);
+    Properties(const Properties& copy);
 
     /**
      * Constructor. Read from the beginning of namespace specified
