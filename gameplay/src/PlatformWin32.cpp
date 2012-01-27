@@ -264,7 +264,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return 0;
 
     case WM_LBUTTONDOWN:
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_LEFT_BUTTON_PRESS, LOWORD(lParam), HIWORD(lParam)))
+        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0))
         {
             gameplay::Game::getInstance()->touchEvent(gameplay::Touch::TOUCH_PRESS, LOWORD(lParam), HIWORD(lParam), 0);
         }
@@ -273,30 +273,30 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case WM_LBUTTONUP:
         lMouseDown = false;
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_LEFT_BUTTON_RELEASE, LOWORD(lParam), HIWORD(lParam)))
+        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0))
         {
             gameplay::Game::getInstance()->touchEvent(gameplay::Touch::TOUCH_RELEASE, LOWORD(lParam), HIWORD(lParam), 0);
         }
         return 0;
 
     case WM_RBUTTONDOWN:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RIGHT_BUTTON_PRESS, LOWORD(lParam), HIWORD(lParam));
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0);
         rMouseDown = true;
         lx = LOWORD(lParam);
         ly = HIWORD(lParam);
         break;
 
     case WM_RBUTTONUP:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RIGHT_BUTTON_RELEASE, LOWORD(lParam), HIWORD(lParam));
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0);
         rMouseDown = false;
         break;
 
     case WM_MBUTTONDOWN:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MIDDLE_BUTTON_PRESS, LOWORD(lParam), HIWORD(lParam));
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON, LOWORD(lParam), HIWORD(lParam), 0);
         break;
 
     case WM_MBUTTONUP:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MIDDLE_BUTTON_RELEASE, LOWORD(lParam), HIWORD(lParam));
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, LOWORD(lParam), HIWORD(lParam), 0);
         break;
 
     case WM_MOUSEMOVE:
@@ -313,7 +313,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             TrackMouseEvent(&tme);
         }
 
-        bool consumed = gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, LOWORD(lParam), HIWORD(lParam));
+        bool consumed = gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, LOWORD(lParam), HIWORD(lParam), 0);
         if (lMouseDown && !consumed)
         {
             // Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
@@ -344,7 +344,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_MOUSEWHEEL:
-        gameplay::Game::getInstance()->mouseWheelEvent(LOWORD(lParam), HIWORD(lParam), GET_WHEEL_DELTA_WPARAM(wParam) / 120);
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_WHEEL, LOWORD(lParam), HIWORD(lParam), GET_WHEEL_DELTA_WPARAM(wParam) / 120);
         break;
 
     case WM_KEYDOWN:

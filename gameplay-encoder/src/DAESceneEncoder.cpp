@@ -1240,9 +1240,9 @@ void DAESceneEncoder::loadSkeleton(domInstance_controller::domSkeleton* skeleton
     for (std::vector<std::string>::const_iterator i = jointNames.begin(); i != jointNames.end(); i++)
     {
         Object* obj = _gamePlayFile.getFromRefTable(*i);
-        if (obj)
+        if (obj && obj->getTypeId() == Object::NODE_ID)
         {
-            Node* node = (Node*)obj;
+            Node* node = static_cast<Node*>(obj);
             _joints.push_back(node);
         }
     }
@@ -1673,10 +1673,9 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
             {
                 maxOffset = offset;
             }
-            int type = polygonInputs[k]->type;
-
             unsigned int polyIndex = (unsigned int) polyInts.get(poly + offset);
-            switch (type)
+
+            switch (polygonInputs[k]->type)
             {
             case POSITION:
                 vertex = Vertex(); // TODO
@@ -1707,16 +1706,52 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
                 vertex.normal.z = (float)source.get(polyIndex * 3 + 2);
                 break;
 
-            // TODO: Handle reading of per-vertex colors.
-            // HOW do we know how many color components to read?
-            // We must examine the Collada input accessor and read the stride/count to verify this - not ONLY for Color, but we should be doing this for ALL components (i.e. Position, Normal, etc).
-//            case Color:
-//                vertex.hasColor = true;
-//                vertex.Diffuse.R = (float)source.get(polyIndex * 3);
-//                vertex.Diffuse.G = (float)source.get(polyIndex * 3 + 1);
-//                vertex.Diffuse.B = (float)source.get(polyIndex * 3 + 2);
-//                vertex.Diffuse.A = (float)source.get(polyIndex * 3 + 3);
-//                break;
+            // TODO: We must examine the Collada input accessor and read the stride/count to verify this - not ONLY for Color, but we should be doing this for ALL components (i.e. Position, Normal, etc).
+            case COLOR:
+            {
+                domAccessor* accessor = polygonInputs[k]->accessor;
+                if (accessor)
+                {
+                    vertex.hasDiffuse = true;
+                    vertex.diffuse.w = 1.0f;
+                    unsigned int stride = (unsigned int)polygonInputs[k]->accessor->getStride();
+                    unsigned int index = polyIndex * stride;
+
+                    const domParam_Array& paramArray = accessor->getParam_array();
+                    const size_t paramArrayCount = paramArray.getCount();
+
+                    for (size_t i = 0; i < paramArrayCount; ++i)
+                    {
+                        const domParamRef& param = paramArray.get(i);
+                        const char* name = param->getName();
+                        if (name)
+                        {
+                            switch (name[0])
+                            {
+                            case 'r':
+                            case 'R':
+                                vertex.diffuse.x = (float)source.get(index + i); // red
+                                break;
+                            case 'g':
+                            case 'G':
+                                vertex.diffuse.y = (float)source.get(index + i); // green
+                                break;
+                            case 'b':
+                            case 'B':
+                                vertex.diffuse.z = (float)source.get(index + i); // blue
+                                break;
+                            case 'a':
+                            case 'A':
+                                vertex.diffuse.w = (float)source.get(index + i); // alpha
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
 
             case TANGENT:
                 vertex.hasTangent = true;
@@ -1786,7 +1821,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
     }
     
     bool hasNormals = mesh->vertices[0].hasNormal;
-    bool hasColors = mesh->vertices[0].hasColor;
+    bool hasDiffuses = mesh->vertices[0].hasDiffuse;
     bool hasTangents = mesh->vertices[0].hasTangent;
     bool hasBinormals = mesh->vertices[0].hasBinormal;
     bool hasTexCoords = mesh->vertices[0].hasTexCoord;
@@ -1796,38 +1831,38 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
     // It should be the same order as how the Vertex data is written.
 
     // Position
-    mesh->addVetexAttribute(POSITION, 3);
+    mesh->addVetexAttribute(POSITION, Vertex::POSITION_COUNT);
     
     // Normals
     if (hasNormals)
     {
-        mesh->addVetexAttribute(NORMAL, 3);
+        mesh->addVetexAttribute(NORMAL, Vertex::NORMAL_COUNT);
     }
     // Tangents
     if (hasTangents)
     {
-        mesh->addVetexAttribute(TANGENT, 3);
+        mesh->addVetexAttribute(TANGENT, Vertex::TANGENT_COUNT);
     }
     // Binormals
     if (hasBinormals)
     {
-        mesh->addVetexAttribute(BINORMAL, 3);
+        mesh->addVetexAttribute(BINORMAL, Vertex::BINORMAL_COUNT);
     }
     // Texture Coordinates
     if (hasTexCoords)
     {
-        mesh->addVetexAttribute(TEXCOORD0, 2);
+        mesh->addVetexAttribute(TEXCOORD0, Vertex::TEXCOORD_COUNT);
     }
     // Diffuse Color
-    if (hasColors)
+    if (hasDiffuses)
     {
-        mesh->addVetexAttribute(COLOR, 3);
+        mesh->addVetexAttribute(COLOR, Vertex::DIFFUSE_COUNT);
     }
     // Skinning BlendWeights BlendIndices
-    if (hasWeights /*_vertexBlendWeights && _vertexBlendIndices*/)
+    if (hasWeights)
     {
-        mesh->addVetexAttribute(BLENDWEIGHTS, 4);
-        mesh->addVetexAttribute(BLENDINDICES, 4);
+        mesh->addVetexAttribute(BLENDWEIGHTS, Vertex::BLEND_WEIGHTS_COUNT);
+        mesh->addVetexAttribute(BLENDINDICES, Vertex::BLEND_INDICES_COUNT);
     }
 
     _gamePlayFile.addMesh(mesh);
@@ -1846,7 +1881,6 @@ void DAESceneEncoder::warning(const char* message)
 
 int DAESceneEncoder::getVertexUsageType(const std::string& semantic)
 {
-    int type = -1;
     if (semantic.length() > 0)
     {
         switch (semantic[0])
@@ -1854,48 +1888,47 @@ int DAESceneEncoder::getVertexUsageType(const std::string& semantic)
         case 'P':
             if (equals(semantic, "POSITION"))
             {
-                type = POSITION;
+                return POSITION;
             }
-            break;
         case 'N':
             if (equals(semantic, "NORMAL"))
             {
-                type = NORMAL;
+                return NORMAL;
             }
         case 'C':
             if (equals(semantic, "COLOR"))
             {
-                type = COLOR;
+                return COLOR;
             }
         case 'T':
             if (equals(semantic, "TANGENT"))
             {
-                type = TANGENT;
+                return TANGENT;
             }
             else if (equals(semantic, "TEXCOORD"))
             {
-                type = TEXCOORD0;
+                return TEXCOORD0;
             }
             else if (equals(semantic, "TEXTANGENT"))
             {
                 // Treat TEXTANGENT as TANGENT
-                type = TANGENT;
+                return TANGENT;
             }
             else if (equals(semantic, "TEXBINORMAL"))
             {
                 // Treat TEXBINORMAL as BINORMAL
-                type = BINORMAL;
+                return BINORMAL;
             }
         case 'B':
             if (equals(semantic, "BINORMAL"))
             {
-                type = BINORMAL;
+                return BINORMAL;
             }
         default:
-            break;
+            return -1;
         }
     }
-    return type;
+    return -1;
 }
 
 DAESceneEncoder::DAEPolygonInput::DAEPolygonInput(void) :

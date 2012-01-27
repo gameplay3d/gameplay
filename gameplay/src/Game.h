@@ -224,21 +224,13 @@ public:
      * @param evt The mouse event that occurred.
      * @param x The x position of the mouse in pixels. Left edge is zero.
      * @param y The y position of the mouse in pixels. Top edge is zero.
+     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
      *
      * @return True if the mouse event is consumed or false if it is not consumed.
      *
      * @see Mouse::MouseEvent
      */
-    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y);
-
-    /**
-     * Mouse callback on mouse wheel events.
-     *
-     * @param x The x position of the mouse in pixels. Left edge is zero.
-     * @param y The y position of the mouse in pixels. Top edge is zero.
-     * @param delta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
-     */
-    virtual void mouseWheelEvent(int x, int y, int delta);
+    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
      * Sets muli-touch is to be enabled/disabled. Default is disabled.
