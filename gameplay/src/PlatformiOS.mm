@@ -34,7 +34,8 @@ static float __pitch;
 static float __roll;
 
 
-long getMachTimeInMilliseconds(); 
+long getMachTimeInMilliseconds();
+
 int getKey(unichar keyCode);
 
 @interface View : UIView <UIKeyInput>
@@ -59,7 +60,7 @@ int getKey(unichar keyCode);
 - (void)update:(id)sender;
 - (void)setSwapInterval:(NSInteger)interval;
 - (int)swapInterval;
-
+- (void)swapBuffers;
 - (BOOL)showKeyboard;
 - (BOOL)dismissKeyboard;
 @end
@@ -113,6 +114,12 @@ int getKey(unichar keyCode);
 			[self release];
 			return nil;
 		}
+
+            if (!defaultFramebuffer)
+                [self createFramebuffer];
+            
+        glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
+        glViewport(0, 0, framebufferWidth, framebufferHeight);
         
         // Initialize Internal Defaults
         displayLink = nil;
@@ -132,10 +139,11 @@ int getKey(unichar keyCode);
         
         _game = Game::getInstance();
         __timeStart = getMachTimeInMilliseconds();
-        _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);    // TODO: Handle based on current orientation            
+        _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);          
     }
     return self;
 }
+
 - (void) dealloc
 {
     _game->exit();
@@ -163,7 +171,6 @@ int getKey(unichar keyCode);
 {
     // iOS Requires all content go to a rendering buffer then it is swapped into the windows rendering surface
     assert(defaultFramebuffer == 0);
-    //NSLog(@"EAGLView: creating Framebuffer");
     
     // Create the default frame buffer, and render buffer
     glGenFramebuffers(1, &defaultFramebuffer);
@@ -229,6 +236,15 @@ int getKey(unichar keyCode);
     return swapInterval;
 }
 
+- (void)swapBuffers
+{
+    if (context != nil)
+    {
+        glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+        [context presentRenderbuffer:GL_RENDERBUFFER];
+    }
+}
+
 - (void)startUpdating
 {
 	if (!updating)
@@ -271,17 +287,20 @@ int getKey(unichar keyCode);
     }
 }
 
-- (BOOL)showKeyboard {
+- (BOOL)showKeyboard 
+{
     return [self becomeFirstResponder];
 }
-- (BOOL)dismissKeyboard {
+
+- (BOOL)dismissKeyboard 
+{
     return [self resignFirstResponder];
 }
 
 /*
  * Virtual Keyboard Support
  */
-- (void)insertText:(NSString *)text 
+- (void)insertText:(NSString*)text 
 {
     if([text length] == 0) return;
     assert([text length] == 1);
@@ -290,11 +309,13 @@ int getKey(unichar keyCode);
     Game::getInstance()->keyEvent(Keyboard::KEY_PRESS, gpk);    
     Game::getInstance()->keyEvent(Keyboard::KEY_RELEASE, gpk);    
 }
+
 - (void)deleteBackward 
 {
     Game::getInstance()->keyEvent(Keyboard::KEY_PRESS, Keyboard::KEY_BACKSPACE);    
     Game::getInstance()->keyEvent(Keyboard::KEY_RELEASE, Keyboard::KEY_BACKSPACE);    
 }
+
 - (BOOL)hasText 
 {
     return YES;
@@ -451,8 +472,10 @@ int getKey(unichar keyCode);
         r = atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;     
     }
     
-    if(pitch != NULL) *pitch = p;
-    if(roll != NULL) *roll = r;
+    if(pitch != NULL) 
+        *pitch = p;
+    if(roll != NULL) 
+        *roll = r;
 }
 
 - (void)applicationWillResignActive:(UIApplication*)application
@@ -505,7 +528,8 @@ long getMachTimeInMilliseconds()
 
 int getKey(unichar keyCode) 
 {
-    switch(keyCode) {
+    switch(keyCode) 
+    {
         case 0x30:
             return Keyboard::KEY_ZERO;
         case 0x31:
@@ -720,97 +744,100 @@ int getKey(unichar keyCode)
 
 namespace gameplay
 {
-    extern void printError(const char* format, ...)
-    {
-        va_list argptr;
-        va_start(argptr, format);
-        vfprintf(stderr, format, argptr);
-        fprintf(stderr, "\n");
-        va_end(argptr);
-    }
     
-    Platform::Platform(Game* game)
-        : _game(game)
+extern void printError(const char* format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+    vfprintf(stderr, format, argptr);
+    fprintf(stderr, "\n");
+    va_end(argptr);
+}
+
+Platform::Platform(Game* game)
+    : _game(game)
+{
+}
+
+Platform::Platform(const Platform& copy)
+{
+    // hidden
+}
+
+Platform::~Platform()
+{
+}
+
+Platform* Platform::create(Game* game)
+{
+    Platform* platform = new Platform(game);
+    return platform;
+}
+
+int Platform::enterMessagePump()
+{
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    [AppDelegate load];
+    UIApplicationMain(0, nil, NSStringFromClass([AppDelegate class]), NSStringFromClass([AppDelegate class]));
+    [pool release];
+    return EXIT_SUCCESS;
+}
+
+long Platform::getAbsoluteTime()
+{
+    __timeAbsolute = getMachTimeInMilliseconds();
+    return __timeAbsolute;
+}
+
+void Platform::setAbsoluteTime(long time)
+{
+    __timeAbsolute = time;
+}
+
+bool Platform::isVsync()
+{
+    return __vsync;
+}
+
+void Platform::setVsync(bool enable)
+{
+    __vsync = enable;
+}
+
+int Platform::getOrientationAngle()
+{
+    return 0;
+}
+
+void Platform::getAccelerometerValues(float* pitch, float* roll)
+{
+    [__appDelegate getAccelerometerPitch:pitch roll:roll];
+}
+
+void Platform::setMultiTouch(bool enabled) 
+{
+    __view.multipleTouchEnabled = enabled;
+}
+
+bool Platform::isMultiTouch() 
+{
+    return __view.multipleTouchEnabled;
+}
+
+void Platform::swapBuffers()
+{
+    if (__view)
+        [__view swapBuffers];
+}
+
+void displayKeyboard(bool display) 
+{
+    if(__view) 
     {
+        if(display) [__view showKeyboard];
+        else [__view dismissKeyboard];
     }
-    
-    Platform::Platform(const Platform& copy)
-    {
-        // hidden
-    }
-    
-    Platform::~Platform()
-    {
-    }
-    
-    Platform* Platform::create(Game* game)
-    {
-        Platform* platform = new Platform(game);
-        return platform;
-    }
-    
-    int Platform::enterMessagePump()
-    {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        [AppDelegate load];
-        UIApplicationMain(0, nil, NSStringFromClass([AppDelegate class]), NSStringFromClass([AppDelegate class]));
-        [pool release];
-        return EXIT_SUCCESS;
-    }
-    
-    long Platform::getAbsoluteTime()
-    {
-        __timeAbsolute = getMachTimeInMilliseconds();
-        return __timeAbsolute;
-    }
-    
-    void Platform::setAbsoluteTime(long time)
-    {
-        __timeAbsolute = time;
-    }
-    
-    bool Platform::isVsync()
-    {
-        return __vsync;
-    }
-    
-    void Platform::setVsync(bool enable)
-    {
-        __vsync = enable;
-    }
-    
-    int Platform::getOrientationAngle()
-    {
-        return 0;
-    }
-    
-    void Platform::getAccelerometerValues(float* pitch, float* roll)
-    {
-        [__appDelegate getAccelerometerPitch:pitch roll:roll];
-    }
-    
-    void Platform::setMultiTouch(bool enabled) 
-    {
-        __view.multipleTouchEnabled = enabled;
-    }
-    
-    bool Platform::isMultiTouch() 
-    {
-        return __view.multipleTouchEnabled;
-    }
-    
-    void Platform::swapBuffers()
-    {
-        if (__view)
-            [[__view getContext] presentRenderbuffer:GL_RENDERBUFFER];
-    }
-    
-    void displayKeyboard(bool display) {
-        if(__view) {
-            if(display) [__view showKeyboard];
-            else [__view dismissKeyboard];
-        }
-    }
+}
     
 }
 
