@@ -99,6 +99,17 @@ public:
     void adjust();
 
 private:
+    void optimizeTransformAnimations();
+
+    /**
+     * Decomposes an ANIMATE_SCALE_ROTATE_TRANSLATE channel into 3 new channels. (Scale, Rotate and Translate)
+     * 
+     * @param animation The animation that the channel belongs to.
+     * @param channel The animation channel to decompose.
+     */
+    void decomposeTransformAnimationChannel(Animation* animation, const AnimationChannel* channel);
+
+private:
 
     FILE* _file;
     std::list<Object*> _objects;

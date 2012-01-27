@@ -296,7 +296,7 @@ void Node::setIsJoint(bool value)
     _joint = value;
 }
 
-bool Node::isJoint()
+bool Node::isJoint() const
 {
     return _joint;
 }
@@ -324,7 +324,7 @@ Node* Node::getFirstCameraNode() const
 {
     if (hasCamera())
     {
-        return (Node*)this;
+        return const_cast<Node*>(this);
     }
     for (Node* node = getFirstChild(); node != NULL; node = node->getNextSibling())
     {

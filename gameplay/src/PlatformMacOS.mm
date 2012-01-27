@@ -503,7 +503,6 @@ extern void printError(const char* format, ...)
     va_end(argptr);
 }
     
-    
 Platform::Platform(Game* game)
 : _game(game)
 {
