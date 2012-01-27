@@ -27,7 +27,7 @@ You must then rebuild gameplay-encoder with the follow platform/tooling instruct
 - Add "fbxsdk-2012.2-mdd.lib" and "wininet.lib" to the Additional Dependencies (Linker/Input)
   * Example: fbxsdk-2012.2-mdd.lib;wininet.lib
 - Add a post build event to copy the DLL (Build Events/Post-Build Event)
-  * Example: copy /Y "C:/Program Files/Autodesk/FBX/FbxSdk/2012.2/lib/vs2010/x86/fbxsdk-2012.2d.dll" "$(TargetDir)"
+  * Example: copy /Y "C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\lib\vs2010\x86\fbxsdk-2012.2d.dll" "$(TargetDir)"
 - Build gameplay-encoder
 
 ### Building FBX Support on Mac OS X using XCode 4
