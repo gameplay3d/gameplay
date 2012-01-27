@@ -712,7 +712,7 @@ long timespec2millis(struct timespec *a)
  */
 void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEvent, int x, int y)
 {
-    if (!Game::getInstance()->mouseEvent(mouseEvent, x, y))
+    if (!Game::getInstance()->mouseEvent(mouseEvent, x, y, 0))
     {
         Game::getInstance()->touchEvent(touchEvent, x, y, 0);
     }
@@ -827,14 +827,14 @@ int Platform::enterMessagePump()
                             {
                                 move = false;
                                 mouse_pressed |= SCREEN_LEFT_MOUSE_BUTTON;
-                                mouseOrTouchEvent(Mouse::MOUSE_LEFT_BUTTON_PRESS, Touch::TOUCH_PRESS, position[0], position[1]);
+                                mouseOrTouchEvent(Mouse::MOUSE_PRESS_LEFT_BUTTON, Touch::TOUCH_PRESS, position[0], position[1]);
                             }
                         }
                         else if (mouse_pressed & SCREEN_LEFT_MOUSE_BUTTON)
                         {
                             move = false;
                             mouse_pressed &= ~SCREEN_LEFT_MOUSE_BUTTON;
-                            mouseOrTouchEvent(Mouse::MOUSE_LEFT_BUTTON_RELEASE, Touch::TOUCH_RELEASE, position[0], position[1]);
+                            mouseOrTouchEvent(Mouse::MOUSE_RELEASE_LEFT_BUTTON, Touch::TOUCH_RELEASE, position[0], position[1]);
                         }
 
                         // Handle right mouse
@@ -844,14 +844,14 @@ int Platform::enterMessagePump()
                             {
                                 move = false;
                                 mouse_pressed |= SCREEN_RIGHT_MOUSE_BUTTON;
-                                Game::getInstance()->mouseEvent(Mouse::MOUSE_RIGHT_BUTTON_PRESS, position[0], position[1]);
+                                Game::getInstance()->mouseEvent(Mouse::MOUSE_PRESS_RIGHT_BUTTON, position[0], position[1], 0);
                             }
                         }
                         else if (mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON)
                         {
                             move = false;
                             mouse_pressed &= ~SCREEN_RIGHT_MOUSE_BUTTON;
-                            Game::getInstance()->mouseEvent(Mouse::MOUSE_RIGHT_BUTTON_RELEASE, position[0], position[1]);
+                            Game::getInstance()->mouseEvent(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, position[0], position[1], 0);
                         }
 
                         // Handle middle mouse
@@ -861,14 +861,14 @@ int Platform::enterMessagePump()
                             {
                                 move = false;
                                 mouse_pressed |= SCREEN_MIDDLE_MOUSE_BUTTON;
-                                Game::getInstance()->mouseEvent(Mouse::MOUSE_MIDDLE_BUTTON_PRESS, position[0], position[1]);
+                                Game::getInstance()->mouseEvent(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, position[0], position[1], 0);
                             }
                         }
                         else if (mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON)
                         {
                             move = false;
                             mouse_pressed &= ~SCREEN_MIDDLE_MOUSE_BUTTON;
-                            Game::getInstance()->mouseEvent(Mouse::MOUSE_MIDDLE_BUTTON_RELEASE, position[0], position[1]);
+                            Game::getInstance()->mouseEvent(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, position[0], position[1], 0);
                         }
 
                         // Fire a move event if none of the buttons changed.
@@ -878,13 +878,13 @@ int Platform::enterMessagePump()
                         }
                         else if (move)
                         {
-                            Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, position[0], position[1]);
+                            Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, position[0], position[1], 0);
                         }
 
                         // Handle mouse wheel events
                         if (wheel)
                         {
-                            Game::getInstance()->mouseWheelEvent(position[0], position[1], -wheel);
+                            Game::getInstance()->mouseEvent(Mouse::MOUSE_WHEEL, position[0], position[1], -wheel);
                         }
                         break;
                     }
