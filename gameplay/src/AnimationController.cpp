@@ -111,10 +111,8 @@ void AnimationController::stopAllAnimations()
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = *clipIter;
-        clip->_isPlaying = false;
-        clip->onEnd();
-        SAFE_RELEASE(clip);
         clipIter++;
+        clip->stop();
     }
     _runningClips.clear();
 
@@ -294,18 +292,8 @@ void AnimationController::schedule(AnimationClip* clip)
     {
         _state = RUNNING;
     }
-    
-    if (clip->_isPlaying)
-    {
-        _runningClips.remove(clip);
-        clip->_isPlaying = false;
-        clip->onEnd();
-    }
-    else
-    {
-        clip->addRef();
-    }
 
+    clip->addRef();
     _runningClips.push_back(clip);
 }
 
