@@ -382,8 +382,6 @@ private:
      */
     Properties(FILE* file, const char* name, const char* id = NULL, const char* parentID = NULL);
 
-    //Properties(const Properties& copy);
-
     void readProperties(FILE* file);
 
     void skipWhiteSpace(FILE* file);
