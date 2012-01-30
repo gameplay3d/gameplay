@@ -251,8 +251,13 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
 {
     if (!isClipStateBitSet(CLIP_IS_STARTED_BIT))
         onBegin();
-    else 
+    else
+    {
         _elapsedTime += elapsedTime * _speed;
+
+        if (_repeatCount == REPEAT_INDEFINITE && _elapsedTime <= 0)
+            _elapsedTime = _activeDuration + _elapsedTime;
+    }
 
     unsigned long currentTime = 0L;
     // Check to see if clip is complete.
@@ -401,21 +406,19 @@ void AnimationClip::onBegin()
     setClipStateBit(CLIP_IS_STARTED_BIT);
     if (_speed >= 0)
     {
-        _elapsedTime = 0;
+        _elapsedTime = (Game::getGameTime() - _timeStarted) * _speed;
 
         if (_listeners)
             *_listenerItr = _listeners->begin(); 
     }
     else
     {
-        _elapsedTime = _activeDuration;
+        _elapsedTime = _activeDuration + (Game::getGameTime() - _timeStarted) * _speed;
 
         if (_listeners)
             *_listenerItr = _listeners->end();
     }
-
-    _elapsedTime += (Game::getGameTime() - _timeStarted) * _speed;
-
+    
     // Notify begin listeners.. if any.
     if (_beginListeners)
     {
