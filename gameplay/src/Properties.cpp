@@ -15,9 +15,7 @@ Properties::Properties(const Properties& copy)
     _namespace = copy._namespace;
     _id = copy._id;
     _parentID = copy._parentID;
-
     _properties = copy._properties;
-    _propertiesItr = _properties.end();
     
     _namespaces = std::vector<Properties*>();
     std::vector<Properties*>::const_iterator it;
@@ -25,14 +23,13 @@ Properties::Properties(const Properties& copy)
     {
         _namespaces.push_back(new Properties(**it));
     }
-    _namespacesItr = _namespaces.end();
+    rewind();
 }
 
 Properties::Properties(FILE* file)
 {
     readProperties(file);
-    _propertiesItr = _properties.end();
-    _namespacesItr = _namespaces.end();
+    rewind();
 }
 
 Properties::Properties(FILE* file, const char* name, const char* id, const char* parentID) : _namespace(name)
@@ -46,8 +43,7 @@ Properties::Properties(FILE* file, const char* name, const char* id, const char*
         _parentID = parentID;
     }
     readProperties(file);
-    _propertiesItr = _properties.end();
-    _namespacesItr = _namespaces.end();
+    rewind();
 }
 
 Properties* Properties::create(const char* filePath)
@@ -298,22 +294,28 @@ void Properties::resolveInheritance(const char* id)
                 // Copy the child.
                 Properties* overrides = new Properties(*derived);
 
+                // Delete the child's data.
+                unsigned int count = derived->_namespaces.size();
+                for (unsigned int i = 0; i < count; i++)
+                {
+                    SAFE_DELETE(derived->_namespaces[i]);
+                }
+
                 // Copy data from the parent into the child.
                 derived->_properties = parent->_properties;
-                derived->_propertiesItr = derived->_properties.end();
                 derived->_namespaces = std::vector<Properties*>();
                 std::vector<Properties*>::const_iterator itt;
                 for (itt = parent->_namespaces.begin(); itt < parent->_namespaces.end(); itt++)
                 {
                     derived->_namespaces.push_back(new Properties(**itt));
                 }
-                derived->_namespacesItr = derived->_namespaces.end();
+                derived->rewind();
 
                 // Take the original copy of the child and override the data copied from the parent.
                 derived->mergeWith(overrides);
 
                 // Delete the child copy.
-                delete overrides;
+                SAFE_DELETE(overrides);
             }
         }
 
@@ -343,6 +345,7 @@ void Properties::mergeWith(Properties* overrides)
         this->_properties[name] = value;
         name = overrides->getNextProperty(&value);
     }
+    SAFE_DELETE(value);
     this->_propertiesItr = this->_properties.end();
 
     // Merge all common nested namespaces, add new ones.
