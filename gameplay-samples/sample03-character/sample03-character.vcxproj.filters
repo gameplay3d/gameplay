@@ -23,12 +23,15 @@
     <None Include="res\boy.animation">
       <Filter>res</Filter>
     </None>
+    <None Include="res\scene.physics">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CharacterGame.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\CharacterController.cpp">
+    <ClCompile Include="src\PhysicsCharacter.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,7 +39,7 @@
     <ClInclude Include="src\CharacterGame.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\CharacterController.h">
+    <ClInclude Include="src\PhysicsCharacter.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

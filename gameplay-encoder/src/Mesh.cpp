@@ -156,7 +156,7 @@ void Mesh::generateHeightmap(const char* filename)
     float* heights = new float[width * height];
     int index = 0;
     float minHeight = FLT_MAX;
-    float maxHeight = FLT_MIN;
+    float maxHeight = -FLT_MAX;
     for (int z = minZ; z <= maxZ; z++)
     {
         rayOrigin.z = (float)z;
@@ -392,7 +392,7 @@ void Mesh::computeBounds()
     }
 
     bounds.min.x = bounds.min.y = bounds.min.z = FLT_MAX;
-    bounds.max.x = bounds.max.y = bounds.max.z = FLT_MIN;
+    bounds.max.x = bounds.max.y = bounds.max.z = -FLT_MAX;
     bounds.center.x = bounds.center.y = bounds.center.z = 0.0f;
     bounds.radius = 0.0f;
 

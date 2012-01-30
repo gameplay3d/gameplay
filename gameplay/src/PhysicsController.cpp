@@ -636,9 +636,9 @@ void PhysicsController::DebugDrawer::begin(const Matrix& viewProjection)
 
 void PhysicsController::DebugDrawer::end()
 {
+    _meshBatch->end();
     _meshBatch->getMaterial()->getParameter("u_viewProjectionMatrix")->setValue(_viewProjection);
     _meshBatch->draw();
-    _meshBatch->end();
 }
 
 void PhysicsController::DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor)

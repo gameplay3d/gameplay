@@ -8,8 +8,8 @@ bool _wDown = false;
 bool _sDown = false;
 bool _aDown = false;
 bool _dDown = false;
-#define WALK_SPEED 0.06f
-#define ANIM_SPEED 1.5f
+#define WALK_SPEED 0.12f
+#define ANIM_SPEED 9.0f
 
 int kcount = 0;
 
@@ -81,7 +81,8 @@ void CharacterGame::finalize()
 
 void CharacterGame::update(long elapsedTime)
 {
-    Node* node = _character;//_scene->findNode("Camera");
+    Node* node = _character;
+    //Node* node = _scene->findNode("Camera");
     if (_wDown)
         node->translateForward(-WALK_SPEED);
     else if (_sDown)
@@ -102,11 +103,39 @@ void CharacterGame::render(long elapsedTime)
     // Draw our scene
     _scene->visit(this, &CharacterGame::drawScene);
 
+    Game::getInstance()->getPhysicsController()->drawDebug(_scene->getActiveCamera()->getViewProjectionMatrix());
+
     _font->begin();
     char fps[32];
     sprintf(fps, "%d", getFrameRate());
     _font->drawText(fps, 5, 5, Vector4(1,1,0,1), 20);
     _font->end();
+}
+
+void drawBoundingSphere(Scene* scene, const BoundingSphere& sphere)
+{
+    // Draw sphere
+    static Model* boundsModel = NULL;
+    if (boundsModel == NULL)
+    {
+        Package* pkg = Package::create("res/sphere.gpb");
+        Mesh* mesh = pkg->loadMesh("sphereShape");
+        SAFE_RELEASE(pkg);
+        boundsModel = Model::create(mesh);
+        SAFE_RELEASE(mesh);
+        boundsModel->setMaterial("res/shaders/solid.vsh", "res/shaders/solid.fsh");
+        boundsModel->getMaterial()->getParameter("u_diffuseColor")->setValue(Vector4(0, 1, 0, 1));
+        boundsModel->getMaterial()->getStateBlock()->setCullFace(false);
+        boundsModel->getMaterial()->getStateBlock()->setDepthTest(true);
+        boundsModel->getMaterial()->getStateBlock()->setDepthWrite(true);
+    }
+
+    static Matrix m;
+    Matrix::createTranslation(sphere.center, &m);
+    m.scale(sphere.radius / 0.5f);
+    Matrix::multiply(scene->getActiveCamera()->getViewProjectionMatrix(), m, &m);
+    boundsModel->getMaterial()->getParameter("u_worldViewProjectionMatrix")->setValue(m);
+    boundsModel->draw(true);
 }
 
 bool CharacterGame::drawScene(Node* node, void* cookie)
@@ -115,6 +144,8 @@ bool CharacterGame::drawScene(Node* node, void* cookie)
     if (model)
     {
         model->draw();
+
+        //drawBoundingSphere(_scene, node->getBoundingSphere());
     }
 
     return true;
@@ -234,7 +265,7 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
             _rotateX = x;
             _rotateY = y;
             _character->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
-            //_character->rotateX(-MATH_DEG_TO_RAD(deltaY * 0.5f));
+            _scene->findNode("Camera")->rotateX(-MATH_DEG_TO_RAD(deltaY * 0.5f));
             //_character->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
         }
         break;

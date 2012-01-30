@@ -94,42 +94,6 @@ material TexturedTransparent
     }
 }
 
-material TexturedSpecularTransparent
-{
-    technique
-    {
-        pass
-        {
-            vertexShader = res/shaders/diffuse-specular.vsh
-            fragmentShader = res/shaders/diffuse-specular.fsh
-
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_worldViewMatrix = WORLD_VIEW_MATRIX
-            u_cameraPosition = CAMERA_VIEW_POSITION
-            u_specularExponent = 50
-
-            sampler u_diffuseTexture
-            {
-                mipmap = true
-                wrapS = CLAMP
-                wrapT = CLAMP
-                minFilter = LINEAR_MIPMAP_LINEAR
-                magFilter = LINEAR
-            }
-
-            renderState
-            {
-                blend = true
-                srcBlend = SRC_ALPHA
-                dstBlend = ONE_MINUS_SRC_ALPHA
-                cullFace = true
-                depthTest = true
-            }
-        }
-    }
-}
-
 material Colored
 {
     technique
@@ -175,397 +139,191 @@ material ColoredSpecular
     }
 }
 
-material BoySkin
+material BoySkin : Colored
 {
     technique
     {
         pass
         {
-            vertexShader = res/shaders/colored.vsh
-            fragmentShader = res/shaders/colored.fsh
             defines = SKINNING;SKINNING_JOINT_COUNT 31
-
-            // uniforms
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             u_matrixPalette = MATRIX_PALETTE
             u_diffuseColor = 0.84, 0.76, 0.67, 1
-            
-            // render state
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-            }
         }
     }
 }
 
-material BoyShirt
+material BoyShirt : Colored
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
-            vertexShader = res/shaders/colored.vsh
-            fragmentShader = res/shaders/colored.fsh
             defines = SKINNING;SKINNING_JOINT_COUNT 31
-
-            // uniforms
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             u_matrixPalette = MATRIX_PALETTE
             u_diffuseColor = 0.27, 0.46, 0.82, 1
-            
-            // render state
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-            }
         }
     }
 }
 
-material BoyShorts
+material BoyShorts : Colored
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
-            vertexShader = res/shaders/colored.vsh
-            fragmentShader = res/shaders/colored.fsh
             defines = SKINNING;SKINNING_JOINT_COUNT 31
-
-            // uniforms
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             u_matrixPalette = MATRIX_PALETTE
             u_diffuseColor = 0.96, 0.47, 0.47, 1
-            
-            // render state
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-            }
         }
     }
 }
 
-material BoyShoes
+material BoyShoes : Colored
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
-            vertexShader = res/shaders/colored.vsh
-            fragmentShader = res/shaders/colored.fsh
             defines = SKINNING;SKINNING_JOINT_COUNT 31
-
-            // uniforms
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             u_matrixPalette = MATRIX_PALETTE
             u_diffuseColor = 0.25, 0.19, 0.06, 1
-            
-            // render state
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-            }
         }
     }
 }
 
-material BoyShadow
+material BoyShadow : TexturedTransparent
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
-            vertexShader = res/shaders/diffuse.vsh
-            fragmentShader = res/shaders/diffuse.fsh
-
-            // uniforms
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            
-            // samplers
             sampler u_diffuseTexture
             {
                 path = res/shadow.png
-                mipmap = true
-                wrapS = CLAMP
-                wrapT = CLAMP
-                minFilter = LINEAR_MIPMAP_LINEAR
-                magFilter = LINEAR
-            }
-
-            // render state
-            renderState
-            {
-                blend = true
-                srcBlend = SRC_ALPHA
-                dstBlend = ONE_MINUS_SRC_ALPHA
-                cullFace = true
-                depthTest = true
             }
         }
     }
 }
 
-material FloorTiles
+material FloorTiles : Textured
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
-            vertexShader = res/shaders/diffuse.vsh
-            fragmentShader = res/shaders/diffuse.fsh
-
-            // uniforms
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            
-            // samplers
             sampler u_diffuseTexture
             {
                 path = res/tiles.png
-                mipmap = true
-                wrapS = CLAMP
-                wrapT = CLAMP
-                minFilter = LINEAR_MIPMAP_LINEAR
-                magFilter = LINEAR
-            }
-
-            // render state
-            renderState
-            {
-                cullFace = true
-                depthTest = true
             }
         }
     }
 }
 
-material Rainbow
+material Rainbow : TexturedTransparent
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
-            vertexShader = res/shaders/diffuse.vsh
-            fragmentShader = res/shaders/diffuse.fsh
-
-            // uniforms
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            
-            // samplers
             sampler u_diffuseTexture
             {
                 path = res/rainbow.png
-                mipmap = true
-                wrapS = CLAMP
-                wrapT = CLAMP
-                minFilter = LINEAR_MIPMAP_LINEAR
-                magFilter = LINEAR
-            }
-
-            // render state
-            renderState
-            {
-                blend = true
-                srcBlend = SRC_ALPHA
-                dstBlend = ONE_MINUS_SRC_ALPHA
-                cullFace = true
-                depthTest = true
             }
         }
     }
 }
 
-material Ground
+material Ground : TexturedSpecular
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
-            vertexShader = res/shaders/diffuse-specular.vsh
-            fragmentShader = res/shaders/diffuse-specular.fsh
-
-            // uniforms
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_worldViewMatrix = WORLD_VIEW_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_cameraPosition = CAMERA_VIEW_POSITION
             u_specularExponent = 50
 
-            // samplers
             sampler u_diffuseTexture
             {
                 path = res/wood.png
-                mipmap = true
                 wrapS = REPEAT
                 wrapT = REPEAT
-                minFilter = LINEAR_MIPMAP_LINEAR
-                magFilter = LINEAR
-            }
-            
-            // render state
-            renderState
-            {
-                cullFace = true
-                depthTest = true
             }
         }
     }
 }
 
-material Wall
+material Wall : ColoredSpecular
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
-            vertexShader = res/shaders/colored-specular.vsh
-            fragmentShader = res/shaders/colored-specular.fsh
-
-            // uniforms
-            u_worldMatrix = WORLD_MATRIX
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_cameraPosition = CAMERA_WORLD_POSITION
             u_specularExponent = 50
             u_diffuseColor = 0.6, 0.75, 1, 1
-            
-            // render state
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-            }
         }
     }
 }
 
-material Toybox
+material Toybox : ColoredSpecular
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
-            vertexShader = res/shaders/colored-specular.vsh
-            fragmentShader = res/shaders/colored-specular.fsh
-
-            // uniforms
-            u_worldMatrix = WORLD_MATRIX
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_cameraPosition = CAMERA_WORLD_POSITION
             u_specularExponent = 50
             u_diffuseColor = 0.45, 0.1, 0.1, 1
-            
-            // render state
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-            }
         }
     }
 }
 
-material White
+material White : ColoredSpecular
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
-            vertexShader = res/shaders/colored-specular.vsh
-            fragmentShader = res/shaders/colored-specular.fsh
-
-            // uniforms
-            u_worldMatrix = WORLD_MATRIX
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_cameraPosition = CAMERA_WORLD_POSITION
             u_specularExponent = 50
             u_diffuseColor = 1, 1, 1, 1
-            
-            // render state
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-            }
         }
     }
 }
 
-material TableGreen
+material TableGreen : ColoredSpecular
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
-            vertexShader = res/shaders/colored-specular.vsh
-            fragmentShader = res/shaders/colored-specular.fsh
-
-            // uniforms
-            u_worldMatrix = WORLD_MATRIX
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_cameraPosition = CAMERA_WORLD_POSITION
             u_specularExponent = 50
             u_diffuseColor = 0.8, 1, 0, 1
-            
-            // render state
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-            }
         }
     }
 }
 
-material TableBlue
+material TableBlue : ColoredSpecular
 {
     technique
     {
-        pass 0
+        pass
         {
-            // shaders
-            vertexShader = res/shaders/colored-specular.vsh
-            fragmentShader = res/shaders/colored-specular.fsh
-
-            // uniforms
-            u_worldMatrix = WORLD_MATRIX
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_cameraPosition = CAMERA_WORLD_POSITION
             u_specularExponent = 50
             u_diffuseColor = 0.18, 0.85, 1, 1
-            
-            // render state
-            renderState
+        }
+    }
+}
+
+material Basketball : TexturedSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 25
+
+            sampler u_diffuseTexture
             {
-                cullFace = true
-                depthTest = true
+                path = res/bball.png
+                wrapS = REPEAT
+                wrapT = REPEAT
             }
         }
     }

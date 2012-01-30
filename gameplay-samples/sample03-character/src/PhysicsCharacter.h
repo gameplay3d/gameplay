@@ -1,5 +1,5 @@
-#ifndef CHARACTERCONTROLLER_H_
-#define CHARACTERCONTROLLER_H_
+#ifndef PHYSICSCHARACTER_H_
+#define PHYSICSCHARACTER_H_
 
 #include "gameplay.h"
 
@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 /**
- * Controller class for a human-like game character.
+ * Physics controller class for a human-like game character.
  *
  * This class can be used to control the movements and collisions of a character
  * in a game. It interacts with the Physics system to apply gravity and handle
@@ -18,7 +18,7 @@ namespace gameplay
  * run, jump, etc; and the controller will handle blending between these
  * animations as needed.
  */
-class CharacterController
+class PhysicsCharacter
 {
 public:
 
@@ -27,12 +27,12 @@ public:
      *
      * @param node Scene node that represents the character.
      */
-    CharacterController(Node* node);
+    PhysicsCharacter(Node* node);
 
     /**
      * Destructor.
      */
-    virtual ~CharacterController();
+    virtual ~PhysicsCharacter();
 
     /**
      * Moves the character by the given 
