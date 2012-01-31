@@ -26,6 +26,7 @@ static int __ly;
 static bool __hasMouse = false;
 static bool __leftMouseDown = false;
 static bool __rightMouseDown = false;
+static bool __otherMouseDown = false;
 static bool __shiftDown = false;
 
 long getMachTimeInMilliseconds()
@@ -176,22 +177,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     [super dealloc];
 }
 
-/**
- * Fires a mouse event or a touch event on the game.
- * If the mouse event is not consumed, a touch event is fired instead.
- *
- * @param mouseEvent The mouse event to fire.
- * @param touchEvent The touch event to fire.
- * @param x The x position of the touch in pixels.
- * @param y The y position of the touch in pixels.
- */
-void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEvent, int x, int y)
-{
-    if (!Game::getInstance()->mouseEvent(mouseEvent, x, y, 0))
-    {
-        Game::getInstance()->touchEvent(touchEvent, x, y, 0);
-    }
-}
+
 - (void) mouse: (Mouse::MouseEvent) mouseEvent orTouchEvent: (Touch::TouchEvent) touchEvent atX: (int) x y: (int) y s: (int) s 
 {
     if (!Game::getInstance()->mouseEvent(mouseEvent, x, y, s))
@@ -200,27 +186,6 @@ void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEven
     }
         
 }
-
-/*
- // Fire a move event if none of the buttons changed.
- if (left_move)
- {
- mouseOrTouchEvent(Mouse::MOUSE_MOVE, Touch::TOUCH_MOVE, position[0], position[1]);
- }
- else if (move)
- {
- Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, position[0], position[1], 0);
- }
- 
- // Handle mouse wheel events
- if (wheel)
- {
- Game::getInstance()->mouseEvent(Mouse::MOUSE_WHEEL, position[0], position[1], -wheel);
- }
- break;
- */
-
-
 
 - (void) mouseDown: (NSEvent*) event
 {
@@ -248,15 +213,11 @@ void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEven
     __leftMouseDown = false;
     [self mouse: Mouse::MOUSE_RELEASE_LEFT_BUTTON orTouchEvent: Touch::TOUCH_RELEASE atX: point.x y: WINDOW_HEIGHT - point.y s: 0];
 }
+
 - (void)mouseMoved:(NSEvent *) event 
 {
     NSPoint point = [event locationInWindow];
     Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
-}
-- (void)scrollWheel: (NSEvent *) event 
-{
-    NSPoint point = [event locationInWindow];
-    Game::getInstance()->mouseEvent(Mouse::MOUSE_WHEEL, point.x, WINDOW_HEIGHT - point.y, (int)([theEvent deltaY] * 10.0f));
 }
 
 - (void) mouseDragged: (NSEvent*) event
@@ -274,13 +235,14 @@ void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEven
      NSPoint point = [event locationInWindow];
     __lx = point.x;
     __ly = WINDOW_HEIGHT - point.y;    
-    //_game->mouseEvent(Mouse::MOUSE_PRESS_RIGHT_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
+    _game->mouseEvent(Mouse::MOUSE_PRESS_RIGHT_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void) rightMouseUp: (NSEvent*) event
 {
    __rightMouseDown = false;
-    //_game->mouseEvent(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
+    NSPoint point = [event locationInWindow];
+    _game->mouseEvent(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void) rightMouseDragged: (NSEvent*) event
@@ -299,26 +261,31 @@ void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEven
         // Update the last X/Y values.
         __lx = point.x;
         __ly = (WINDOW_HEIGHT - point.y);
-        //_game->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
     }
+    
+    // In right-mouse case, whether __rightMouseDown is true or false
+    // this should not matter, mouse move is still occuring
+    _game->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
 }
+
 - (void)otherMouseDown: (NSEvent *) event 
 {
+    __otherMouseDown = true;
     NSPoint point = [event locationInWindow];
     _game->mouseEvent(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
 }
+
 - (void)otherMouseUp: (NSEvent *) event 
 {
+    __otherMouseDown = false;
     NSPoint point = [event locationInWindow];
     _game->mouseEvent(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
 }
+
 - (void)otherMouseDragged: (NSEvent *) event 
 {
-    if(__hasMouse) 
-    {
-        NSPoint point = [event locationInWindow];
-        _game->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
-    }
+    NSPoint point = [event locationInWindow];
+    _game->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void) mouseEntered: (NSEvent*)event
@@ -326,10 +293,17 @@ void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEven
     __hasMouse = true;
 }
 
+- (void)scrollWheel: (NSEvent *) event 
+{
+    NSPoint point = [event locationInWindow];
+    Game::getInstance()->mouseEvent(Mouse::MOUSE_WHEEL, point.x, WINDOW_HEIGHT - point.y, (int)([event deltaY] * 10.0f));
+}
+
 - (void) mouseExited: (NSEvent*)event
 {
     __leftMouseDown = false;
     __rightMouseDown = false;
+    __otherMouseDown = false;
     __hasMouse = false;
 }
 
