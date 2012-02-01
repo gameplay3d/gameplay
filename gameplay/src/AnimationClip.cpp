@@ -160,6 +160,9 @@ void AnimationClip::crossFade(AnimationClip* clip, unsigned long duration)
 {
     assert(clip);
 
+    // Check if the given clip is fading into this clip.
+    // We should reset the clip from fading out, and this one from fading in 
+    // in order to start the crossfade back the other way.
     if (clip->isClipStateBitSet(CLIP_IS_FADING_OUT_BIT) && clip->_crossFadeToClip == this)
     {
         clip->resetClipStateBit(CLIP_IS_FADING_OUT_BIT);
@@ -174,13 +177,13 @@ void AnimationClip::crossFade(AnimationClip* clip, unsigned long duration)
         SAFE_RELEASE(_crossFadeToClip);
     }
 
-    // Set the crossfade clip
+    // Set and initialize the crossfade clip
     _crossFadeToClip = clip;
     _crossFadeToClip->addRef();
     _crossFadeToClip->setClipStateBit(CLIP_IS_FADING_IN_BIT);
     _crossFadeToClip->_blendWeight = 0.0f;
     
-    // Set this clip to fade out, set the fade duration and reset the fade elapsed time.
+    // Set and intiliaze this clip to fade out
     setClipStateBit(CLIP_IS_FADING_OUT_STARTED_BIT);
     setClipStateBit(CLIP_IS_FADING_OUT_BIT);
     _crossFadeOutElapsed = 0L;
