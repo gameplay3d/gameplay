@@ -271,9 +271,17 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
         resetClipStateBit(CLIP_IS_STARTED_BIT);
         if (_speed >= 0.0f)
         {
-            currentTime = _activeDuration % _duration; // Get's the fractional part of the final repeat.
-            if (currentTime == 0L)
-                currentTime = _duration;
+            // If _duration == 0, we have a "pose". Just set currentTime to 0.
+            if (_duration == 0)
+            {
+                currentTime = 0L;
+            }
+            else
+            {
+                currentTime = _activeDuration % _duration; // Get's the fractional part of the final repeat.
+                if (currentTime == 0L)
+                    currentTime = _duration;
+            }
         }
         else
         {
@@ -282,8 +290,11 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
     }
     else
     {
-        // Gets portion/fraction of the repeat.
-        currentTime = _elapsedTime % _duration;
+        // If _duration == 0, we have a "pose". Just set currentTime to 0.
+        if (_duration == 0)
+            currentTime = 0L;
+        else // Gets portion/fraction of the repeat.
+            currentTime = _elapsedTime % _duration;
     }
 
     // Notify any listeners of Animation events.
