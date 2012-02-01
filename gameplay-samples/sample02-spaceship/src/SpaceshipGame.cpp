@@ -468,7 +468,7 @@ void SpaceshipGame::drawSplash(void* coookie)
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
     SpriteBatch* batch = SpriteBatch::create("res/splash.png");
     batch->begin();
-    batch->draw(Rectangle(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT), Rectangle(0, 0, 1024, 600), Vector4::one());
+    batch->draw(Rectangle(0, 0, this->getWidth(), this->getHeight()), Rectangle(0, 0, 1024, 600), Vector4::one());
     batch->end();
     SAFE_DELETE(batch);
 }
