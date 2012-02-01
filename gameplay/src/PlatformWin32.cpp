@@ -475,6 +475,11 @@ Platform* Platform::create(Game* game)
     // Get the drawing context.
     __hdc = GetDC(__hwnd);
 
+    // Center the window
+    const int screenX = (GetSystemMetrics(SM_CXSCREEN) - WINDOW_WIDTH) / 2;
+    const int screenY = (GetSystemMetrics(SM_CYSCREEN) - WINDOW_HEIGHT) / 2;
+    ::SetWindowPos(__hwnd, __hwnd, screenX, screenY, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+
     // Choose pixel format. 32-bit. RGBA.
     PIXELFORMATDESCRIPTOR pfd;
     memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
