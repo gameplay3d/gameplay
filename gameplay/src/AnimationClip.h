@@ -222,6 +222,7 @@ private:
     static const char CLIP_IS_FADING_OUT_STARTED_BIT = 0x04;  // Bit representing that a cross fade has started.
     static const char CLIP_IS_FADING_OUT_BIT = 0x08;          // Bit representing whether the clip is fading out.
     static const char CLIP_IS_FADING_IN_BIT = 0x10;           // Bit representing whether the clip is fading out.
+    static const char CLIP_ALL_BITS = 0x1F;
 
     /**
      * Constructor.
