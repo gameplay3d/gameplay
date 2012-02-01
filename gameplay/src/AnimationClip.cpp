@@ -137,12 +137,11 @@ void AnimationClip::play()
 {
     if (isClipStateBitSet(CLIP_IS_PLAYING_BIT))
     {
-        _animation->_controller->unschedule(this);
-        resetClipStateBit(CLIP_IS_STARTED_BIT);
         onEnd();
+        _animation->_controller->unschedule(this);
     }
-    else
-        setClipStateBit(CLIP_IS_PLAYING_BIT);
+    
+    setClipStateBit(CLIP_IS_PLAYING_BIT);
     
     _animation->_controller->schedule(this);
     _timeStarted = Game::getGameTime();
@@ -152,9 +151,8 @@ void AnimationClip::stop()
 {
     if (isClipStateBitSet(CLIP_IS_PLAYING_BIT))
     {
-        _animation->_controller->unschedule(this);
-        resetClipStateBit(CLIP_IS_PLAYING_BIT | CLIP_IS_STARTED_BIT);
         onEnd();
+        _animation->_controller->unschedule(this);
     }
 }
 
@@ -162,26 +160,30 @@ void AnimationClip::crossFade(AnimationClip* clip, unsigned long duration)
 {
     assert(clip);
 
+    if (clip->isClipStateBitSet(CLIP_IS_FADING_OUT_BIT) && clip->_crossFadeToClip == this)
+    {
+        clip->resetClipStateBit(CLIP_IS_FADING_OUT_BIT);
+        clip->_crossFadeToClip->resetClipStateBit(CLIP_IS_FADING_IN_BIT);
+        SAFE_RELEASE(clip->_crossFadeToClip);
+    }
+
     // If I already have a clip I'm fading to and it's not the same as the given clip release it.
     // Assign the new clip and increase it's ref count.
     if (_crossFadeToClip)
     {
-        _crossFadeToClip->stop();
-        _crossFadeToClip->resetClipStateBit(CLIP_IS_FADING_IN_BIT);
         SAFE_RELEASE(_crossFadeToClip);
     }
-        
+
+    // Set the crossfade clip
     _crossFadeToClip = clip;
     _crossFadeToClip->addRef();
-        
-    // Set the crossfade clip to fading in, and initialize it's blend weight to zero.
     _crossFadeToClip->setClipStateBit(CLIP_IS_FADING_IN_BIT);
     _crossFadeToClip->_blendWeight = 0.0f;
     
     // Set this clip to fade out, set the fade duration and reset the fade elapsed time.
     setClipStateBit(CLIP_IS_FADING_OUT_STARTED_BIT);
     setClipStateBit(CLIP_IS_FADING_OUT_BIT);
-    _crossFadeOutElapsed = 0;
+    _crossFadeOutElapsed = 0L;
     _crossFadeOutDuration = duration;
     
     // If this clip is currently not playing, we should start playing it.
@@ -338,20 +340,11 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
         }
         else
         {   // Fade is done.
-            // Set blendweights
             _crossFadeToClip->_blendWeight = 1.0f;
-
-            // Adjust the crossfade clip's blend weight if this clip is also fading in.
-            if (isClipStateBitSet(CLIP_IS_FADING_IN_BIT))
-                _crossFadeToClip->_blendWeight *= _blendWeight;
-
-            _blendWeight = 0.0f; 
-
-            // reset the states of our clips to turn off the cross fade.
+            _blendWeight = 0.0f;
+            resetClipStateBit(CLIP_IS_STARTED_BIT);            
+            resetClipStateBit(CLIP_IS_FADING_OUT_BIT);
             _crossFadeToClip->resetClipStateBit(CLIP_IS_FADING_IN_BIT);
-            resetClipStateBit(CLIP_IS_FADING_OUT_BIT | CLIP_IS_STARTED_BIT);
-
-            // Release the crossfade clip, mark ourselves as done and set our blend weight to 0.
             SAFE_RELEASE(_crossFadeToClip);
         }
     }
@@ -435,7 +428,7 @@ void AnimationClip::onEnd()
 {
     _blendWeight = 1.0f;
     _timeStarted = 0;
-    resetClipStateBit(CLIP_IS_PLAYING_BIT);
+    resetClipStateBit(CLIP_ALL_BITS);
 }
 
 bool AnimationClip::isClipStateBitSet(char bit) const
