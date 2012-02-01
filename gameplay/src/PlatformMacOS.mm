@@ -13,6 +13,10 @@
 using namespace std;
 using namespace gameplay;
 
+// Default to 720p
+#define WINDOW_WIDTH    1280
+#define WINDOW_HEIGHT   720
+
 static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
 static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
 
@@ -621,7 +625,17 @@ int Platform::enterMessagePump()
     [pool release];
     return EXIT_SUCCESS;
 }
-    
+
+unsigned int Platform::getDisplayWidth()
+{
+    return WINDOW_WIDTH;
+}
+
+unsigned int Platform::getDisplayHeight()
+{
+    return WINDOW_HEIGHT;
+}
+
 long Platform::getAbsoluteTime()
 {
     __timeAbsolute = getMachTimeInMilliseconds();
