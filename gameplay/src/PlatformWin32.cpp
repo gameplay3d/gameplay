@@ -6,6 +6,10 @@
 #include "Game.h"
 #include <GL/wglew.h>
 
+// Default to 720p
+#define WINDOW_WIDTH    1280
+#define WINDOW_HEIGHT   720
+
 static long __timeTicksPerMillis;
 static long __timeStart;
 static long __timeAbsolute;
@@ -471,6 +475,11 @@ Platform* Platform::create(Game* game)
     // Get the drawing context.
     __hdc = GetDC(__hwnd);
 
+    // Center the window
+    const int screenX = (GetSystemMetrics(SM_CXSCREEN) - WINDOW_WIDTH) / 2;
+    const int screenY = (GetSystemMetrics(SM_CYSCREEN) - WINDOW_HEIGHT) / 2;
+    ::SetWindowPos(__hwnd, __hwnd, screenX, screenY, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+
     // Choose pixel format. 32-bit. RGBA.
     PIXELFORMATDESCRIPTOR pfd;
     memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
@@ -570,6 +579,16 @@ int Platform::enterMessagePump()
     return msg.wParam;
 }
 
+unsigned int Platform::getDisplayWidth()
+{
+    return WINDOW_WIDTH;
+}
+
+unsigned int Platform::getDisplayHeight()
+{
+    return WINDOW_HEIGHT;
+}
+    
 long Platform::getAbsoluteTime()
 {
        LARGE_INTEGER queryTime;
