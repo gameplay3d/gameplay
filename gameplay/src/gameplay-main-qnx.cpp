@@ -4,6 +4,9 @@
 
 using namespace gameplay;
 
+extern const int WINDOW_WIDTH  = 1024;
+extern const int WINDOW_HEIGHT = 600;
+
 /**
  * Main entry point.
  */
