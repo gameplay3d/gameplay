@@ -180,10 +180,6 @@ extern void printError(const char* format, ...);
 #define WINDOW_VSYNC        1
 #define WINDOW_FULLSCREEN   0
 
-// Display Properties
-extern const int WINDOW_WIDTH;
-extern const int WINDOW_HEIGHT;
-
 // Graphics (OpenGL)
 #if defined (__QNX__) || defined(__ANDROID__)
     #include <EGL/egl.h>
