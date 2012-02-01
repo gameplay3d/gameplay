@@ -191,13 +191,9 @@ extern void printError(const char* format, ...);
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
-    #define WINDOW_WIDTH    1024
-    #define WINDOW_HEIGHT   600
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
-    #define WINDOW_WIDTH    1024
-    #define WINDOW_HEIGHT   600
 #elif __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
@@ -209,8 +205,6 @@ extern void printError(const char* format, ...);
         #define glIsVertexArray glIsVertexArrayOES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
-        #define WINDOW_WIDTH    480
-        #define WINDOW_HEIGHT   360
     #elif TARGET_OS_MAC
         #include <OpenGL/gl.h>
         #include <OpenGL/glext.h>
@@ -218,8 +212,6 @@ extern void printError(const char* format, ...);
         #define glDeleteVertexArrays glDeleteVertexArraysAPPLE
         #define glGenVertexArrays glGenVertexArraysAPPLE
         #define glIsVertexArray glIsVertexArrayAPPLE
-        #define WINDOW_WIDTH    960
-        #define WINDOW_HEIGHT   640
     #else
         #error "Unsupported Apple Device"
     #endif
