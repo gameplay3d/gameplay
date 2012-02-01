@@ -265,7 +265,7 @@ void SpaceshipGame::update(long elapsedTime)
         // We will use this vector to apply a "pushing" force to the space ship, similar to what
         // happens when you hold a magnet close to an object with opposite polarity.
         Vector2 pushForce((shipCenterScreen.x - _pushPoint.x), -(shipCenterScreen.y - _pushPoint.y));
-
+        
         // Transform the vector so that a smaller magnitude emits a larger force and applying the
         // maximum touch distance.
         float distance = (std::max)(TOUCH_DISTANCE_MAX - pushForce.length(), 0.0f);
@@ -468,7 +468,7 @@ void SpaceshipGame::drawSplash(void* coookie)
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
     SpriteBatch* batch = SpriteBatch::create("res/splash.png");
     batch->begin();
-    batch->draw(Rectangle(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT), Rectangle(0, 0, 1024, 600), Vector4::one());
+    batch->draw(Rectangle(0, 0, this->getWidth(), this->getHeight()), Rectangle(0, 0, 1024, 600), Vector4::one());
     batch->end();
     SAFE_DELETE(batch);
 }
