@@ -265,7 +265,7 @@ void SpaceshipGame::update(long elapsedTime)
         // We will use this vector to apply a "pushing" force to the space ship, similar to what
         // happens when you hold a magnet close to an object with opposite polarity.
         Vector2 pushForce((shipCenterScreen.x - _pushPoint.x), -(shipCenterScreen.y - _pushPoint.y));
-
+        
         // Transform the vector so that a smaller magnitude emits a larger force and applying the
         // maximum touch distance.
         float distance = (std::max)(TOUCH_DISTANCE_MAX - pushForce.length(), 0.0f);
