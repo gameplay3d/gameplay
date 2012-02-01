@@ -68,8 +68,15 @@ int Game::run(int width, int height)
     if (_state != UNINITIALIZED)
         return -1;
 
-    _width = width;
-    _height = height;
+    if (width == -1)
+        _width = Platform::getDisplayWidth();
+    else
+        _width = width;
+    
+    if (height == -1)
+        _height = Platform::getDisplayHeight();
+    else
+        _height = height;
 
     // Start up game systems.
     if (!startup())
