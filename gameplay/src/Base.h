@@ -108,7 +108,6 @@ extern void printError(const char* format, ...);
 
 // Object deletion macro
 #define SAFE_DELETE(x) \
-    if (x) \
     { \
         delete x; \
         x = NULL; \
@@ -116,7 +115,6 @@ extern void printError(const char* format, ...);
 
 // Array deletion macro
 #define SAFE_DELETE_ARRAY(x) \
-    if (x) \
     { \
         delete[] x; \
         x = NULL; \
