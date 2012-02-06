@@ -15,7 +15,7 @@ using namespace gameplay;
  * 
  * @return The aspect ratio from the camera.
  */
-float getAspectRatio(KFbxCamera* fbxCamera);
+static float getAspectRatio(KFbxCamera* fbxCamera);
 
 /**
  * Returns the field of view Y from the given camera.
@@ -24,7 +24,7 @@ float getAspectRatio(KFbxCamera* fbxCamera);
  * 
  * @return The field of view Y.
  */
-float getFieldOfView(KFbxCamera* fbxCamera);
+static float getFieldOfView(KFbxCamera* fbxCamera);
 
 /**
  * Loads the texture coordinates from given mesh's polygon part into the vertex.
@@ -34,7 +34,7 @@ float getFieldOfView(KFbxCamera* fbxCamera);
  * @param posInPoly The position in the polygon.
  * @param vertex The vertex to copy the texture coordinates to.
  */
-void loadTextureCoords(KFbxMesh* fbxMesh, int polyIndex, int posInPoly, Vertex* vertex);
+static void loadTextureCoords(KFbxMesh* fbxMesh, int polyIndex, int posInPoly, Vertex* vertex);
 
 /**
  * Loads the normal from the mesh and adds it to the given vertex.
@@ -43,7 +43,7 @@ void loadTextureCoords(KFbxMesh* fbxMesh, int polyIndex, int posInPoly, Vertex* 
  * @param vertexIndex The vertex index in the mesh.
  * @param vertex The vertex to copy to.
  */
-void loadNormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
+static void loadNormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
 
 /**
  * Loads the tangent from the mesh and adds it to the given vertex.
@@ -52,7 +52,7 @@ void loadNormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
  * @param vertexIndex The index of the vertex within fbxMesh.
  * @param vertex The vertex to copy to.
  */
-void loadTangent(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
+static void loadTangent(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
 
 /**
  * Loads the binormal from the mesh and adds it to the given vertex.
@@ -61,7 +61,7 @@ void loadTangent(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
  * @param vertexIndex The index of the vertex within fbxMesh.
  * @param vertex The vertex to copy to.
  */
-void loadBinormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
+static void loadBinormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
 
 /**
  * Loads the vertex diffuse color from the mesh and adds it to the given vertex.
@@ -70,7 +70,7 @@ void loadBinormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
  * @param vertexIndex The index of the vertex within fbxMesh.
  * @param vertex The vertex to copy to.
  */
-void loadVertexColor(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
+static void loadVertexColor(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
 
 /**
  * Loads the blend weight and blend indices data into the vertex.
@@ -78,7 +78,7 @@ void loadVertexColor(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
  * @param vertexWeights List of vertex weights. The x member contains the blendIndices. The y member contains the blendWeights.
  * @param vertex The vertex to copy the blend data to.
  */
-void loadBlendData(const std::vector<Vector2>& vertexWeights, Vertex* vertex);
+static void loadBlendData(const std::vector<Vector2>& vertexWeights, Vertex* vertex);
 
 /**
  * Loads the blend weights and blend indices from the given mesh.
@@ -90,17 +90,17 @@ void loadBlendData(const std::vector<Vector2>& vertexWeights, Vertex* vertex);
  * 
  * @return True if this mesh has a mesh skin, false otherwise.
  */
-bool loadBlendWeights(KFbxMesh* fbxMesh, std::vector<std::vector<Vector2> >& weights);
+static bool loadBlendWeights(KFbxMesh* fbxMesh, std::vector<std::vector<Vector2> >& weights);
 
 /**
  * Copies from an FBX matrix to a float[16] array.
  */
-void copyMatrix(const KFbxMatrix& fbxMatrix, float* matrix);
+static void copyMatrix(const KFbxMatrix& fbxMatrix, float* matrix);
 
 /**
  * Copies from an FBX matrix to a gameplay matrix.
  */
-void copyMatrix(const KFbxMatrix& fbxMatrix, Matrix& matrix);
+static void copyMatrix(const KFbxMatrix& fbxMatrix, Matrix& matrix);
 
 /**
  * Finds the min and max start time and stop time of the given animation curve.
@@ -114,7 +114,7 @@ void copyMatrix(const KFbxMatrix& fbxMatrix, Matrix& matrix);
  * @param stopTime The max stop time. (in/out)
  * @param frameRate The frame rate. (in/out)
  */
-void findMinMaxTime(KFbxAnimCurve* animCurve, float* startTime, float* stopTime, float* frameRate);
+static void findMinMaxTime(KFbxAnimCurve* animCurve, float* startTime, float* stopTime, float* frameRate);
 
 /**
  * Appends a key frame of the given node's transform at the given time.
@@ -124,7 +124,7 @@ void findMinMaxTime(KFbxAnimCurve* animCurve, float* startTime, float* stopTime,
  * @param keyTimes The list of key times to append to.
  * @param keyValues The list of key values to append to.
  */
-void appendKeyFrame(KFbxNode* fbxNode, float time, std::vector<float>* keyTimes, std::vector<float>* keyValues);
+static void appendKeyFrame(KFbxNode* fbxNode, float time, std::vector<float>* keyTimes, std::vector<float>* keyValues);
 
 /**
  * Decomposes the given node's matrix transform at the given time and copies to scale, rotation and translation.
@@ -135,7 +135,7 @@ void appendKeyFrame(KFbxNode* fbxNode, float time, std::vector<float>* keyTimes,
  * @param rotation The rotation to copy to.
  * @param translation The translation to copy to.
  */
-void decompose(KFbxNode* fbxNode, float time, Vector3* scale, Quaternion* rotation, Vector3* translation);
+static void decompose(KFbxNode* fbxNode, float time, Vector3* scale, Quaternion* rotation, Vector3* translation);
 
 /**
  * Creates an animation channel that targets the given node and target attribute using the given key times and key values.
@@ -147,7 +147,7 @@ void decompose(KFbxNode* fbxNode, float time, Vector3* scale, Quaternion* rotati
  * 
  * @return The newly created animation channel.
  */
-AnimationChannel* createAnimationChannel(KFbxNode* fbxNode, unsigned int targetAttrib, const std::vector<float>& keyTimes, const std::vector<float>& keyValues);
+static AnimationChannel* createAnimationChannel(KFbxNode* fbxNode, unsigned int targetAttrib, const std::vector<float>& keyTimes, const std::vector<float>& keyValues);
 
 void addScaleChannel(Animation* animation, KFbxNode* fbxNode, float startTime, float stopTime);
 
