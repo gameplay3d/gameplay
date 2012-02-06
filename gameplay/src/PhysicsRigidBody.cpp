@@ -44,7 +44,7 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
         }
         case SHAPE_MESH:
         {
-            _shape = Game::getInstance()->getPhysicsController()->createMesh(this);
+            _shape = Game::getInstance()->getPhysicsController()->createMesh(this, node->getScale());
             break;
         }
     }
@@ -583,11 +583,13 @@ btScalar PhysicsRigidBody::Listener::addSingleResult(btManifoldPoint& cp,
     if (_collisionStatus.count(pair) > 0)
     {
         if ((_collisionStatus[pair] & COLLISION) == 0)
-            collisionEvent(pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()));
+            collisionEvent(COLLIDING, pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()),
+                Vector3(cp.getPositionWorldOnB().x(), cp.getPositionWorldOnB().y(), cp.getPositionWorldOnB().z()));
     }
     else
     {
-        collisionEvent(pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()));
+        collisionEvent(COLLIDING, pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()),
+            Vector3(cp.getPositionWorldOnB().x(), cp.getPositionWorldOnB().y(), cp.getPositionWorldOnB().z()));
     }
 
     // Update the collision status cache (we remove the dirty bit
