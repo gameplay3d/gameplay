@@ -234,14 +234,22 @@ void PhysicsController::update(long elapsedTime)
     }
 
     // Go through the physics rigid bodies and update the collision listeners.
-    for (unsigned int i = 0; i < _bodies.size(); i++)
+    unsigned int size = _bodies.size();
+    unsigned int listenerCount = 0;
+    PhysicsRigidBody* body = NULL;
+    PhysicsRigidBody::Listener* listener = NULL;
+    PhysicsController* physicsController = Game::getInstance()->getPhysicsController();
+    for (unsigned int i = 0; i < size; i++)
     {
-        if (_bodies[i]->_listeners)
+        body = _bodies[i];
+        if (body->_listeners)
         {
-            for (unsigned int k = 0; k < _bodies[i]->_listeners->size(); k++)
+            listenerCount = body->_listeners->size();
+            for (unsigned int k = 0; k < listenerCount; k++)
             {
-                std::map<PhysicsRigidBody::CollisionPair, int>::iterator iter = (*_bodies[i]->_listeners)[k]->_collisionStatus.begin();
-                for (; iter != (*_bodies[i]->_listeners)[k]->_collisionStatus.end(); iter++)
+                listener = (*body->_listeners)[k];
+                std::map<PhysicsRigidBody::CollisionPair, int>::iterator iter = listener->_collisionStatus.begin();
+                for (; iter != listener->_collisionStatus.end(); iter++)
                 {
                     // If this collision pair was one that was registered for listening, then perform the collision test.
                     // (In the case where we register for all collisions with a rigid body, there will be a lot
@@ -249,9 +257,9 @@ void PhysicsController::update(long elapsedTime)
                     if ((iter->second & PhysicsRigidBody::Listener::REGISTERED) != 0)
                     {
                         if (iter->first._rbB)
-                            Game::getInstance()->getPhysicsController()->_world->contactPairTest(iter->first._rbA->_body, iter->first._rbB->_body, *(*_bodies[i]->_listeners)[k]);
+                            physicsController->_world->contactPairTest(iter->first._rbA->_body, iter->first._rbB->_body, *listener);
                         else
-                            Game::getInstance()->getPhysicsController()->_world->contactTest(iter->first._rbA->_body, *(*_bodies[i]->_listeners)[k]);
+                            physicsController->_world->contactTest(iter->first._rbA->_body, *listener);
                     }
                 }   
             }
@@ -270,6 +278,11 @@ void PhysicsController::update(long elapsedTime)
                 {
                     if ((iter->second & PhysicsRigidBody::Listener::DIRTY) != 0)
                     {
+                        if ((iter->second & PhysicsRigidBody::Listener::COLLISION) != 0 && iter->first._rbB)
+                        {
+                            (*_bodies[i]->_listeners)[k]->collisionEvent(PhysicsRigidBody::Listener::NOT_COLLIDING, iter->first, Vector3::zero());
+                        }
+
                         iter->second &= ~PhysicsRigidBody::Listener::COLLISION;
                     }
                 }
@@ -407,14 +420,14 @@ btCollisionShape* PhysicsController::createSphere(float radius, const btVector3&
     return sphere;
 }
 
-btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
+btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body, const Vector3& scale)
 {
     // Retrieve the mesh rigid body data from the loaded scene.
     const SceneLoader::MeshRigidBodyData* data = SceneLoader::getMeshRigidBodyData(body->_node->getId());
 
     // Copy the scaled vertex position data to the rigid body's local buffer.
     Matrix m;
-    Matrix::createScale(body->_node->getScaleX(), body->_node->getScaleY(), body->_node->getScaleZ(), &m);
+    Matrix::createScale(scale, &m);
     unsigned int vertexCount = data->mesh->getVertexCount();
     body->_vertexData = new float[vertexCount * 3];
     Vector3 v;
@@ -467,7 +480,7 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
             indexedMesh.m_numTriangles = meshPart->getIndexCount() / 3;
             indexedMesh.m_numVertices = meshPart->getIndexCount();
             indexedMesh.m_triangleIndexBase = (const unsigned char*)body->_indexData[i];
-            indexedMesh.m_triangleIndexStride = indexStride;
+            indexedMesh.m_triangleIndexStride = indexStride*3;
             indexedMesh.m_vertexBase = (const unsigned char*)body->_vertexData;
             indexedMesh.m_vertexStride = sizeof(float)*3;
             indexedMesh.m_vertexType = PHY_FLOAT;

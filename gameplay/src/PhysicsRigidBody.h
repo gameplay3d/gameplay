@@ -76,20 +76,36 @@ public:
 
     public:
         /**
+         * The type of collision event.
+         */
+        enum EventType
+        {
+            /**
+             * Event fired when the two rigid bodies start colliding.
+             */
+            COLLIDING,
+
+            /**
+             * Event fired when the two rigid bodies no longer collide.
+             */
+            NOT_COLLIDING
+        };
+
+        /**
          * Destructor.
          */
         virtual ~Listener();
 
         /**
-         * Handles when a collision occurs for the rigid body where this listener is registered.
+         * Handles when a collision starts or stops occurring for the rigid body where this listener is registered.
          * 
+         * @param type The type of collision event.
          * @param collisionPair The two rigid bodies involved in the collision.
-         * @param contactPoint The point (in world space) where the collision occurred.
+         * @param contactPointA The contact point with the first rigid body (in world space).
+         * @param contactPointB The contact point with the second rigid body (in world space).
          */
-        virtual void collisionEvent(const CollisionPair& collisionPair, const Vector3& contactPoint) = 0;
-        
-    protected:
-        
+        virtual void collisionEvent(EventType type, const CollisionPair& collisionPair, const Vector3& contactPointA = Vector3(), const Vector3& contactPointB = Vector3()) = 0;
+
         /**
          * Internal function used for Bullet integration (do not use or override).
          */
