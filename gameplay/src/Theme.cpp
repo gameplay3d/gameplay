@@ -21,31 +21,34 @@ namespace gameplay
     Theme::~Theme()
     {
         // Destroy all the cursors, styles and , fonts.
-        for (unsigned int i = 0, count = _cursors.size(); i < count; ++i)
-        {
-            Cursor* cursor = _cursors[i];
-            if (cursor)
-            {
-                delete cursor;
-            }
-        }
-
         for (unsigned int i = 0, count = _styles.size(); i < count; ++i)
         {
             Style* style = _styles[i];
-            if (style)
-            {
-                delete style;
-            }
+            SAFE_DELETE(style);
+        }
+
+        for (unsigned int i = 0, count = _cursors.size(); i < count; ++i)
+        {
+            Cursor* cursor = _cursors[i];
+            SAFE_DELETE(cursor);
         }
 
         for (unsigned int i = 0, count = _fonts.size(); i < count; ++i)
         {
             Font* font = _fonts[i];
-            if (font)
-            {
-                SAFE_RELEASE(font);
-            }
+            SAFE_RELEASE(font);
+        }
+
+        for (unsigned int i = 0, count = _icons.size(); i < count; ++i)
+        {
+            Icon* icon = _icons[i];
+            SAFE_RELEASE(icon);
+        }
+
+        for (unsigned int i = 0, count = _sliders.size(); i < count; ++i)
+        {
+            SliderIcon* slider = _sliders[i];
+            SAFE_RELEASE(slider);
         }
 
         SAFE_DELETE(_spriteBatch);
@@ -60,6 +63,9 @@ namespace gameplay
 
     Theme::Style::Overlay::~Overlay()
     {
+        //SAFE_RELEASE(_cursor);
+        SAFE_RELEASE(_checkBoxIcon);
+        SAFE_RELEASE(_radioButtonIcon);
         SAFE_RELEASE(_font);
     }
 
@@ -67,7 +73,7 @@ namespace gameplay
     {
         for (int i = 0; i < MAX_OVERLAYS; i++)
         {
-            SAFE_DELETE(_overlays[i]);
+            SAFE_RELEASE(_overlays[i]);
         }
     }
 
@@ -131,41 +137,73 @@ namespace gameplay
                 Theme::Cursor* c = new Theme::Cursor(space->getId(), region, color);
                 theme->_cursors.push_back(c);
             }
-            else if (strcmp(spacename, "checkBox") == 0)
+            else if (strcmp(spacename, "icon") == 0)
             {
-                Vector2 unchecked;
-                space->getVector2("uncheckedPosition", &unchecked);
-                Vector2 checked;
-                space->getVector2("checkedPosition", &checked);
+                Vector2 offVec;
+                Vector2 onVec;
                 Vector2 size;
+                Vector2 activeVec;
+                space->getVector2("offPosition", &offVec);
+                space->getVector2("onPosition", &onVec);
+                space->getVector2("activePosition", &activeVec);
                 space->getVector2("size", &size);
 
-                float tw = 1.0f / theme->_texture->getWidth();
-                float th = 1.0f / theme->_texture->getHeight();
+                float tw = theme->_texture->getWidth();
+                float th = theme->_texture->getHeight();
 
                 UVs on;
-                on.u1 = checked.x * tw;
-                on.u2 = (checked.x + size.x) * tw;
-                on.v1 = 1.0f - (checked.y * tw);
-                on.v2 = 1.0f - ((checked.y + size.y) * tw);
-
                 UVs off;
-                off.u1 = unchecked.x * tw;
-                off.u2 = (unchecked.x + size.x) * tw;
-                off.v1 = 1.0f - (unchecked.y * tw);
-                off.v2 = 1.0f - ((unchecked.y + size.y) * tw);
+                UVs active;
+                generateUVs(onVec.x, onVec.y, size.x, size.y, tw, th, &on);
+                generateUVs(offVec.x, offVec.y, size.x, size.y, tw, th, &off);
+                generateUVs(activeVec.x, activeVec.y, size.x, size.y, tw, th, &active);
 
-                CheckBoxIcon* icon = new CheckBoxIcon();
+                Icon* icon = new Icon();
                 icon->id = space->getId();
                 icon->on = on;
                 icon->off = off;
+                icon->active = active;
                 icon->size = size;
 
-                theme->_checkBoxIcons.push_back(icon);
+                theme->_icons.push_back(icon);
             }
-            else if (strcmp(spacename, "radiobutton") == 0)
+            else if (strcmp(spacename, "slider") == 0)
             {
+                Vector4 leftCapRegion;
+                Vector4 rightCapRegion;
+                Vector4 trackRegion;
+                Vector4 markerRegion;
+                space->getVector4("leftCapRegion", &leftCapRegion);
+                space->getVector4("rightCapRegion", &rightCapRegion);
+                space->getVector4("trackRegion", &trackRegion);
+                space->getVector4("markerRegion", &markerRegion);
 
+                float tw = theme->_texture->getWidth();
+                float th = theme->_texture->getHeight();
+
+                // Vec4f regions:
+                // .z == width, .w == height
+                UVs leftCap;
+                UVs rightCap;
+                UVs track;
+                UVs marker;
+                generateUVs(leftCapRegion.x, leftCapRegion.y, leftCapRegion.z, leftCapRegion.w, tw, th, &leftCap);
+                generateUVs(rightCapRegion.x, rightCapRegion.y, rightCapRegion.z, rightCapRegion.w, tw, th, &rightCap);
+                generateUVs(trackRegion.x, trackRegion.y, trackRegion.z, trackRegion.w, tw, th, &track);
+                generateUVs(markerRegion.x, markerRegion.y, markerRegion.z, markerRegion.w, tw, th, &marker);
+
+                SliderIcon* sliderIcon = new SliderIcon();
+                sliderIcon->id = space->getId();
+                sliderIcon->leftCap = leftCap;
+                sliderIcon->rightCap = rightCap;
+                sliderIcon->track = track;
+                sliderIcon->marker = marker;
+                sliderIcon->leftCapSize.set(leftCapRegion.z, leftCapRegion.w);
+                sliderIcon->rightCapSize.set(rightCapRegion.z, rightCapRegion.w);
+                sliderIcon->trackSize.set(trackRegion.z, trackRegion.w);
+                sliderIcon->markerSize.set(markerRegion.z, markerRegion.w);
+
+                theme->_sliders.push_back(sliderIcon);
             }
 
             space = themeProperties->getNextNamespace();
@@ -220,14 +258,42 @@ namespace gameplay
                         bool rightToLeft = innerSpace->getBool("rightToLeft");
 
                         const char* checkBoxString = innerSpace->getString("checkBox");
-                        CheckBoxIcon* icon = NULL;
+                        Icon* checkBoxIcon = NULL;
                         if (checkBoxString)
                         {
-                            for (unsigned int i = 0; i < theme->_checkBoxIcons.size(); i++)
+                            for (unsigned int i = 0; i < theme->_icons.size(); i++)
                             {
-                                if (strcmp(theme->_checkBoxIcons[i]->id.c_str(), checkBoxString) == 0)
+                                if (strcmp(theme->_icons[i]->id.c_str(), checkBoxString) == 0)
                                 {
-                                    icon = theme->_checkBoxIcons[i];
+                                    checkBoxIcon = theme->_icons[i];
+                                    break;
+                                }
+                            }
+                        }
+
+                        const char* radioButtonString = innerSpace->getString("radioButton");
+                        Icon* radioButtonIcon = NULL;
+                        if (radioButtonString)
+                        {
+                            for (unsigned int i = 0; i < theme->_icons.size(); i++)
+                            {
+                                if (strcmp(theme->_icons[i]->id.c_str(), radioButtonString) == 0)
+                                {
+                                    radioButtonIcon = theme->_icons[i];
+                                    break;
+                                }
+                            }
+                        }
+
+                        const char* sliderString = innerSpace->getString("slider");
+                        SliderIcon* sliderIcon = NULL;
+                        if (sliderString)
+                        {
+                            for (unsigned int i = 0; i < theme->_sliders.size(); ++i)
+                            {
+                                if (strcmp(theme->_sliders[i]->id.c_str(), sliderString) == 0)
+                                {
+                                    sliderIcon = theme->_sliders[i];
                                     break;
                                 }
                             }
@@ -243,7 +309,9 @@ namespace gameplay
                         normal->setFontSize(fontSize);
                         normal->setTextAlignment(alignment);
                         normal->setTextRightToLeft(rightToLeft);
-                        normal->setCheckBoxIcon(icon);
+                        normal->setCheckBoxIcon(checkBoxIcon);
+                        normal->setRadioButtonIcon(radioButtonIcon);
+                        normal->setSliderIcon(sliderIcon);
 
                         // Done with this pass.
                         break;
@@ -351,14 +419,14 @@ namespace gameplay
                         }
 
                         const char* checkBoxString = innerSpace->getString("checkBox");
-                        CheckBoxIcon* checkBoxIcon = NULL;
+                        Icon* checkBoxIcon = NULL;
                         if (checkBoxString)
                         {
-                            for (unsigned int i = 0; i < theme->_checkBoxIcons.size(); i++)
+                            for (unsigned int i = 0; i < theme->_icons.size(); i++)
                             {
-                                if (strcmp(theme->_checkBoxIcons[i]->id.c_str(), checkBoxString) == 0)
+                                if (strcmp(theme->_icons[i]->id.c_str(), checkBoxString) == 0)
                                 {
-                                    checkBoxIcon = theme->_checkBoxIcons[i];
+                                    checkBoxIcon = theme->_icons[i];
                                     break;
                                 }
                             }
@@ -366,6 +434,42 @@ namespace gameplay
                         if (!checkBoxIcon)
                         {
                             checkBoxIcon = normal->getCheckBoxIcon();
+                        }
+
+                        const char* radioButtonString = innerSpace->getString("radioButton");
+                        Icon* radioButtonIcon = NULL;
+                        if (radioButtonString)
+                        {
+                            for (unsigned int i = 0; i < theme->_icons.size(); i++)
+                            {
+                                if (strcmp(theme->_icons[i]->id.c_str(), radioButtonString) == 0)
+                                {
+                                    radioButtonIcon = theme->_icons[i];
+                                    break;
+                                }
+                            }
+                        }
+                        if (!radioButtonIcon)
+                        {
+                            radioButtonIcon = normal->getRadioButtonIcon();
+                        }
+
+                        const char* sliderString = innerSpace->getString("slider");
+                        SliderIcon* sliderIcon = NULL;
+                        if (sliderString)
+                        {
+                            for (unsigned int i = 0; i < theme->_sliders.size(); ++i)
+                            {
+                                if (strcmp(theme->_sliders[i]->id.c_str(), sliderString) == 0)
+                                {
+                                    sliderIcon = theme->_sliders[i];
+                                    break;
+                                }
+                            }
+                        }
+                        if (!sliderIcon)
+                        {
+                            sliderIcon = normal->getSliderIcon();
                         }
 
                         // TODO: Cursor.
@@ -381,6 +485,8 @@ namespace gameplay
                             focus->setTextAlignment(alignment);
                             focus->setTextRightToLeft(rightToLeft);
                             focus->setCheckBoxIcon(checkBoxIcon);
+                            focus->setRadioButtonIcon(radioButtonIcon);
+                            focus->setSliderIcon(sliderIcon);
                         }
                         else if (strcmp(innerSpacename, "active") == 0)
                         {
@@ -393,6 +499,8 @@ namespace gameplay
                             active->setTextAlignment(alignment);
                             active->setTextRightToLeft(rightToLeft);
                             active->setCheckBoxIcon(checkBoxIcon);
+                            active->setRadioButtonIcon(radioButtonIcon);
+                            active->setSliderIcon(sliderIcon);
                         }
                     }
 
@@ -411,6 +519,7 @@ namespace gameplay
                 else
                 {
                     focus = normal;
+                    focus->addRef();
                 }
                 if (active)
                 {
@@ -419,6 +528,7 @@ namespace gameplay
                 else
                 {
                     active = normal;
+                    active->addRef();
                 }
 
                 Theme::Style* s = new Theme::Style(space->getId(), margin, border, padding, normal, focus, active);
@@ -456,8 +566,6 @@ namespace gameplay
             Theme::Style::Overlay* normal, Theme::Style::Overlay* focus, Theme::Style::Overlay* active)
         : _id(id), _margin(margin), _border(border), _padding(padding)
     {
-        // 
-
         _overlays[OVERLAY_NORMAL] = normal;
         _overlays[OVERLAY_FOCUS] = focus;
         _overlays[OVERLAY_ACTIVE] = active;
@@ -508,12 +616,12 @@ namespace gameplay
         return _padding;
     }
 
-    Theme::Style::Overlay::Overlay()
+    Theme::Style::Overlay::Overlay() : _cursor(NULL), _checkBoxIcon(NULL), _radioButtonIcon(NULL), _font(NULL)
     {
     }
 
     Theme::Style::Overlay::Overlay(Theme::Style::OverlayType type)
-        : _type(type)
+        : _cursor(NULL), _checkBoxIcon(NULL), _radioButtonIcon(NULL), _sliderIcon(NULL), _font(NULL), _type(type)
     {
     }
 
@@ -613,11 +721,16 @@ namespace gameplay
 
     void Theme::Style::Overlay::setFont(Font* font)
     {
-        _font = font;
-
-        if (_font)
+        if (_font != font)
         {
-            font->addRef();
+            SAFE_RELEASE(_font);
+
+            _font = font;
+
+            if (font)
+            {
+                font->addRef();
+            }
         }
     }
 
@@ -682,13 +795,99 @@ namespace gameplay
         _borderColor = color;
     }
 
-    void Theme::Style::Overlay::setCheckBoxIcon(CheckBoxIcon* icon)
+    void Theme::Style::Overlay::setCheckBoxIcon(Icon* icon)
     {
-        _checkBoxIcon = icon;
+        if (_checkBoxIcon != icon)
+        {
+            SAFE_RELEASE(_checkBoxIcon);
+
+            _checkBoxIcon = icon;
+
+            if (icon)
+            {
+                icon->addRef();
+            }
+        }
     }
 
-    Theme::CheckBoxIcon* Theme::Style::Overlay::getCheckBoxIcon()
+    Theme::Icon* Theme::Style::Overlay::getCheckBoxIcon()
     {
         return _checkBoxIcon;
+    }
+
+    void Theme::Style::Overlay::setRadioButtonIcon(Icon* icon)
+    {
+        if (_radioButtonIcon != icon)
+        {
+            SAFE_RELEASE(_radioButtonIcon);
+
+            _radioButtonIcon = icon;
+
+            if (icon)
+            {
+                icon->addRef();
+            }
+        }
+    }
+
+    Theme::Icon* Theme::Style::Overlay::getRadioButtonIcon()
+    {
+        return _radioButtonIcon;
+    }
+
+    void Theme::Style::Overlay::setSliderIcon(SliderIcon* slider)
+    {
+        if (_sliderIcon != slider)
+        {
+            SAFE_RELEASE(_sliderIcon);
+
+            _sliderIcon = slider;
+
+            if (slider)
+            {
+                slider->addRef();
+            }
+        }
+    }
+
+    Theme::SliderIcon* Theme::Style::Overlay::getSliderIcon()
+    {
+        return _sliderIcon;
+    }
+
+    void Theme::Style::Overlay::addRef()
+    {
+        Ref::addRef();
+        
+        if (_font)
+        {
+            _font->addRef();
+        }
+        
+        if (_radioButtonIcon)
+        {
+            _radioButtonIcon->addRef();
+        }
+        
+        if (_checkBoxIcon)
+        {
+            _checkBoxIcon->addRef();
+        }
+
+        if (_sliderIcon)
+        {
+            _sliderIcon->addRef();
+        }
+    }
+
+    void Theme::generateUVs(float x, float y, float width, float height, float textureWidth, float textureHeight, UVs* uvs)
+    {
+        float tw = 1.0f / textureWidth;
+        float th = 1.0f / textureHeight;
+
+        uvs->u1 = x * tw;
+        uvs->u2 = (x + width) * tw;
+        uvs->v1 = 1.0f - (y * th);
+        uvs->v2 = 1.0f - ((y + height) * th);
     }
 }

@@ -6,11 +6,30 @@
 namespace gameplay
 {
 
+Properties::Properties()
+{
+}
+
+Properties::Properties(const Properties& copy)
+{
+    _namespace = copy._namespace;
+    _id = copy._id;
+    _parentID = copy._parentID;
+    _properties = copy._properties;
+    
+    _namespaces = std::vector<Properties*>();
+    std::vector<Properties*>::const_iterator it;
+    for (it = copy._namespaces.begin(); it < copy._namespaces.end(); it++)
+    {
+        _namespaces.push_back(new Properties(**it));
+    }
+    rewind();
+}
+
 Properties::Properties(FILE* file)
 {
     readProperties(file);
-    _propertiesItr = _properties.end();
-    _namespacesItr = _namespaces.end();
+    rewind();
 }
 
 Properties::Properties(FILE* file, const char* name, const char* id, const char* parentID) : _namespace(name)
@@ -24,8 +43,7 @@ Properties::Properties(FILE* file, const char* name, const char* id, const char*
         _parentID = parentID;
     }
     readProperties(file);
-    _propertiesItr = _properties.end();
-    _namespacesItr = _namespaces.end();
+    rewind();
 }
 
 Properties* Properties::create(const char* filePath)
@@ -275,25 +293,29 @@ void Properties::resolveInheritance(const char* id)
 
                 // Copy the child.
                 Properties* overrides = new Properties(*derived);
-                overrides->_propertiesItr = overrides->_properties.end();
-                overrides->_namespacesItr = overrides->_namespaces.end();
+
+                // Delete the child's data.
+                unsigned int count = derived->_namespaces.size();
+                for (unsigned int i = 0; i < count; i++)
+                {
+                    SAFE_DELETE(derived->_namespaces[i]);
+                }
 
                 // Copy data from the parent into the child.
                 derived->_properties = parent->_properties;
-                derived->_propertiesItr = derived->_properties.end();
                 derived->_namespaces = std::vector<Properties*>();
-                std::vector<Properties*>::const_iterator it;
-                for (it = parent->_namespaces.begin(); it < parent->_namespaces.end(); it++)
+                std::vector<Properties*>::const_iterator itt;
+                for (itt = parent->_namespaces.begin(); itt < parent->_namespaces.end(); itt++)
                 {
-                    derived->_namespaces.push_back(new Properties(**it));
+                    derived->_namespaces.push_back(new Properties(**itt));
                 }
-                derived->_namespacesItr = derived->_namespaces.end();
+                derived->rewind();
 
                 // Take the original copy of the child and override the data copied from the parent.
                 derived->mergeWith(overrides);
 
                 // Delete the child copy.
-                delete overrides;
+                SAFE_DELETE(overrides);
             }
         }
 
@@ -316,12 +338,14 @@ void Properties::mergeWith(Properties* overrides)
 {
     // Overwrite or add each property found in child.
     char* value = new char[255];
+    overrides->rewind();
     const char* name = overrides->getNextProperty(&value);
     while (name)
     {
         this->_properties[name] = value;
         name = overrides->getNextProperty(&value);
     }
+    SAFE_DELETE(value);
     this->_propertiesItr = this->_properties.end();
 
     // Merge all common nested namespaces, add new ones.
@@ -336,7 +360,7 @@ void Properties::mergeWith(Properties* overrides)
         {
             if (strcmp(derivedNamespace->getNamespace(), overridesNamespace->getNamespace()) == 0 &&
                 strcmp(derivedNamespace->getId(), overridesNamespace->getId()) == 0)
-            {
+            {   
                 derivedNamespace->mergeWith(overridesNamespace);
                 merged = true;
             }
@@ -348,8 +372,6 @@ void Properties::mergeWith(Properties* overrides)
         {
             // Add this new namespace.
             Properties* newNamespace = new Properties(*overridesNamespace);
-            newNamespace->_propertiesItr = newNamespace->_properties.end();
-            newNamespace->_namespacesItr = newNamespace->_namespaces.end();
 
             this->_namespaces.push_back(newNamespace);
             this->_namespacesItr = this->_namespaces.end();

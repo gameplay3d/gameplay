@@ -7,8 +7,6 @@
 namespace gameplay
 {
 
-    class Theme;
-
 class Label : public Control
 {
 public:
@@ -21,6 +19,7 @@ public:
     void drawText(const Vector2& position);
 
 protected:
+
     Label();
     Label(const Label& copy);
     virtual ~Label();

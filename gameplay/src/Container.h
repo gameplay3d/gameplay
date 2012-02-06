@@ -14,6 +14,7 @@ public:
      * A Container's layout type must be specified at creation time.
      */
     static Container* create(const char* id, Layout::Type type);
+    static Container* create(Theme::Style* style, Properties* properties, Theme* theme);
     static Container* getContainer(const char* id);
 
     Layout* getLayout();
@@ -68,12 +69,17 @@ public:
 
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    bool isContainer();
+
 protected:
     Container();
     Container(const Container& copy);
     virtual ~Container();
 
+    static Layout::Type getLayoutType(const char* layoutString);
+
     bool isDirty();
+    void addControls(Theme* theme, Properties* properties);
 
     Layout* _layout;
     std::vector<Control*> _controls;

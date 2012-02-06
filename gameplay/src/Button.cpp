@@ -56,20 +56,26 @@ namespace gameplay
 
     void Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
     {
-        switch (evt)
+        if (_state != STATE_DISABLED)
         {
-        case Touch::TOUCH_PRESS:
-            _state = Control::STATE_ACTIVE;
-            break;
-        case Touch::TOUCH_RELEASE:
-            if (_callback &&
-                x > 0 && x <= _size.x &&
-                y > 0 && y <= _size.y)
+            switch (evt)
             {
-                _callback->trigger(this);
+            case Touch::TOUCH_PRESS:
+                // TODO: button-down callback.
+
+                _state = Control::STATE_ACTIVE;
+                break;
+            case Touch::TOUCH_RELEASE:
+                if (_callback &&
+                    x > 0 && x <= _size.x &&
+                    y > 0 && y <= _size.y)
+                {
+                    // Button-clicked callback.
+                    _callback->trigger(this);
+                }
+                setState(Control::STATE_NORMAL);
+                break;
             }
-            setState(Control::STATE_NORMAL);
-            break;
         }
     }
 }

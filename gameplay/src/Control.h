@@ -19,7 +19,8 @@ public:
     {
         STATE_NORMAL,
         STATE_FOCUS,
-        STATE_ACTIVE
+        STATE_ACTIVE,
+        STATE_DISABLED
     };
 
     const char* getID();
@@ -34,12 +35,33 @@ public:
     const Rectangle& getBounds(bool includePadding) const;
 
     /**
-     * Position of this Control relative to its parent Container.
+     * Set the position of this Control relative to its parent Container.
+     *
+     * @param x The x coordinate.
+     * @param y The y coordinate.
      */
     void setPosition(float x, float y);
+
+    /**
+     * Get the position of this Control relative to its parent Container.
+     *
+     * @return The position vector.
+     */
     const Vector2& getPosition() const;
 
+    /**
+     * Set the size of this Control, including its border and padding.
+     *
+     * @param width The width.
+     * @param height The height.
+     */
     void setSize(float width, float height);
+
+    /**
+     * Get the size of this Control, including its border and padding.
+     *
+     * @return The size vector.
+     */
     const Vector2& getSize() const;
 
     /**
@@ -48,26 +70,17 @@ public:
      *
      * Similarly set this on the width and/or height of a Container to tightly fit
      * the Container around all its children.
+     *
+     * @param width Whether to automatically determine this Control's width.
+     * @param height Whether to automatically determine this Control's height.
      */
     void setAutoSize(bool width, bool height);
 
-    /**
-     * 
-     * When auto-size is set on width and/or height:
-     * Space added to the calculated (tightly bound) width and height.
-     */
-    void setBorder(float horizontal, float vertical);
-    const Vector2& getBorder() const;
-
-    /**
-     * In a layout of any type other than Absolute,
-     * guarantee this much empty space surrounding this Control.
-     */
-    void setPadding(float horizontal, float vertical);
-    const Vector2& getPadding() const;
-
     void setState(State state);
     State getState();
+
+    void disable();
+    void enable();
 
     Theme::Style::OverlayType getOverlayType();
 
@@ -93,6 +106,8 @@ public:
     Theme::Style* getStyle() const;
 
     void themeChanged();
+
+    virtual bool isContainer();
 
 protected:
     Control();

@@ -53,26 +53,6 @@ namespace gameplay
         _autoHeight = height;
     }
 
-    void Control::setBorder(float horizontal, float vertical)
-    {
-        _border.set(horizontal, vertical);
-    }
-
-    const Vector2& Control::getBorder() const
-    {
-        return _border;
-    }
-
-    void Control::setPadding(float horizontal, float vertical)
-    {
-        _padding.set(horizontal, vertical);
-    }
-
-    const Vector2& Control::getPadding() const
-    {
-        return _padding;
-    }
-
     void Control::setStyle(Theme::Style* style)
     {
         _style = style;
@@ -91,6 +71,16 @@ namespace gameplay
     Control::State Control::getState()
     {
         return _state;
+    }
+
+    void Control::disable()
+    {
+        _state = STATE_DISABLED;
+    }
+
+    void Control::enable()
+    {
+        _state = STATE_NORMAL;
     }
 
     Theme::Style::OverlayType Control::getOverlayType()
@@ -186,6 +176,11 @@ namespace gameplay
             return true;
         }
 
+        return false;
+    }
+
+    bool Control::isContainer()
+    {
         return false;
     }
 }

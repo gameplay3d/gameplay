@@ -177,10 +177,11 @@ void Font::begin()
 void Font::drawText(const char* text, int x, int y, const Vector4& color, unsigned int size, bool rightToLeft)
 {
     float scale = (float)size / _size;
-    char* cursor = NULL;
+    const char* cursor = NULL;
+
     if (rightToLeft)
     {
-        cursor = const_cast<char*>(text);
+        cursor = text;
     }
 
     int xPos = x, yPos = y;
@@ -289,7 +290,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
 void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify, bool wrap, bool rightToLeft)
 {
     float scale = (float)size / _size;
-    char* token = const_cast<char*>(text);
+    const char* token = text;
     const int length = strlen(text);
     int yPos = area.y;
 
@@ -305,7 +306,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         hAlign = ALIGN_LEFT;
     }
 
-    token = const_cast<char*>(text);
+    token = text;
 
     // For alignments other than top-left, need to calculate the y position to begin drawing from
     // and the starting x position of each line.  For right-to-left text, need to determine
@@ -476,12 +477,12 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         xPos = *xPositionsIt++;
     }
 
-    token = const_cast<char*>(text);
+    token = text;
     
     int iteration = 1;
     unsigned int lineLength;
     unsigned int currentLineLength = 0;
-    char* lineStart;
+    const char* lineStart;
     std::vector<unsigned int>::const_iterator lineLengthsIt;
     if (rightToLeft)
     {
@@ -651,7 +652,7 @@ void Font::measureText(const char* text, unsigned int size, unsigned int* width,
 {
     float scale = (float)size / _size;
     const int length = strlen(text);
-    char* token = const_cast<char*>(text);
+    const char* token = text;
 
     *width = 0;
     *height = 0;
@@ -691,7 +692,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
         hAlign = ALIGN_LEFT;
     }
 
-    char* token = const_cast<char*>(text);
+    const char* token = text;
     std::vector<bool> emptyLines;
     std::vector<Vector2> lines;
 
@@ -1027,7 +1028,7 @@ unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigne
 
 unsigned int Font::getReversedTokenLength(const char* token, const char* bufStart)
 {
-    char* cursor = const_cast<char*>(token);
+    const char* cursor = token;
     char c = cursor[0];
     unsigned int length = 0;
 
@@ -1046,7 +1047,7 @@ unsigned int Font::getReversedTokenLength(const char* token, const char* bufStar
     return length;
 }
 
-bool Font::handleDelimiters(char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
+bool Font::handleDelimiters(const char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
                       std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd)
 {
     char delimiter = *token[0];
