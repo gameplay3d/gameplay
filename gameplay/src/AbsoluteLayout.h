@@ -13,7 +13,7 @@ public:
 
     Layout::Type getType();
 
-    void update(std::vector<Control*> controls, const Vector2& size);
+    void update(std::vector<Control*> controls, const Vector2& size, Theme::Style* containerStyle);
 
 private:
     AbsoluteLayout();

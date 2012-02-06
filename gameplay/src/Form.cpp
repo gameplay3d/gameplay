@@ -12,7 +12,7 @@ namespace gameplay
 {
     static std::vector<Form*> __forms;
 
-    Form::Form() : _theme(NULL), _quad(NULL), _node(NULL), _frameBuffer(NULL)
+    Form::Form() : _theme(NULL), _quad(NULL), _node(NULL), _frameBuffer(NULL), _viewport(NULL)
     {
     }
 
@@ -72,45 +72,7 @@ namespace gameplay
         form->setStyle(form->getTheme()->getStyle(styleName));
 
         // Add all the controls to the form.
-        Properties* controlSpace = formProperties->getNextNamespace();
-        while (controlSpace != NULL)
-        {
-            Control* control = NULL;
-
-            const char* controlStyleName = controlSpace->getString("style");
-            Theme::Style* controlStyle = NULL;
-            if (controlStyleName)
-            {
-                 controlStyle = form->getTheme()->getStyle(controlStyleName);
-            }
-
-            const char* controlName = controlSpace->getNamespace();
-            if (strcmp(controlName, "label") == 0)
-            {
-                control = Label::create(controlStyle, controlSpace);
-            }
-            else if (strcmp(controlName, "button") == 0)
-            {
-                control = Button::create(controlStyle, controlSpace);
-            }
-            else if (strcmp(controlName, "checkbox") == 0)
-            {
-                control = CheckBox::create(controlStyle, controlSpace);
-            }
-            else if (strcmp(controlName, "radioGroup") == 0)
-            {
-                //control = RadioGroup::create(controlStyle, controlSpace);
-            }
-
-            // Add the new control to the form.
-            if (control)
-            {
-                form->addControl(control);
-            }
-
-            // Get the next control.
-            controlSpace = formProperties->getNextNamespace();
-        }
+        form->addControls(form->getTheme(), formProperties);
 
         return form;
     }
@@ -315,27 +277,6 @@ namespace gameplay
         material->getParameter("u_textureTransform")->setValue(Vector2::zero());
 
         SAFE_RELEASE(sampler);
-    }
-
-    Layout::Type Form::getLayoutType(const char* layoutString)
-    {
-        if (strcmp(layoutString, "LAYOUT_ABSOLUTE") == 0)
-        {
-            return Layout::LAYOUT_ABSOLUTE;
-        }
-        else if (strcmp(layoutString, "LAYOUT_VERTICAL") == 0)
-        {
-            return Layout::LAYOUT_VERTICAL;
-        }
-        else if (strcmp(layoutString, "LAYOUT_FLOW") == 0)
-        {
-            return Layout::LAYOUT_FLOW;
-        }
-        else
-        {
-            // Default.
-            return Layout::LAYOUT_ABSOLUTE;
-        }
     }
 
     void Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)

@@ -52,8 +52,6 @@ private:
     void draw(SpriteBatch* spriteBatch, const Vector2& position);
 
     static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-    
-    static Layout::Type getLayoutType(const char* layoutString);
 
     Theme* _theme;              // The Theme applied to this Form.
     Model* _quad;               // Quad for rendering this Form in world-space.

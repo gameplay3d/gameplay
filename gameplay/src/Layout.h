@@ -19,7 +19,7 @@ public:
 
     virtual Type getType() = 0;
 
-    virtual void update(std::vector<Control*> controls, const Vector2& size) = 0;
+    virtual void update(std::vector<Control*> controls, const Vector2& size, Theme::Style* containerStyle) = 0;
 
 protected:
     //Layout();

@@ -26,7 +26,7 @@ namespace gameplay
         return Layout::LAYOUT_ABSOLUTE;
     }
 
-    void AbsoluteLayout::update(std::vector<Control*> controls, const Vector2& size)
+    void AbsoluteLayout::update(std::vector<Control*> controls, const Vector2& size, Theme::Style* containerStyle)
     {
         // An AbsoluteLayout does nothing to modify the layout of Controls.
     }

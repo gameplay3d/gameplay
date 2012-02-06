@@ -371,16 +371,16 @@ public:
 private:
     
     /**
-     * Constructor.
+     * Constructors.
      */
+    Properties();
     Properties(FILE* file);
+    Properties(const Properties& copy);
 
     /**
      * Constructor. Read from the beginning of namespace specified
      */
     Properties(FILE* file, const char* name, const char* id = NULL, const char* parentID = NULL);
-
-    //Properties(const Properties& copy);
 
     void readProperties(FILE* file);
 

@@ -3,7 +3,7 @@
 
 namespace gameplay
 {
-    VerticalLayout::VerticalLayout()
+    VerticalLayout::VerticalLayout() : _bottomToTop(false)
     {
     }
 
@@ -31,9 +31,10 @@ namespace gameplay
         return Layout::LAYOUT_VERTICAL;
     }
 
-    void VerticalLayout::update(std::vector<Control*> controls, const Vector2& size)
+    void VerticalLayout::update(std::vector<Control*> controls, const Vector2& size, Theme::Style* containerStyle)
     {
-        float yPosition = 0.0f;
+        float yPosition = containerStyle->getBorder().top + containerStyle->getPadding().top;
+        float xPosition = containerStyle->getBorder().left + containerStyle->getPadding().left;
 
         unsigned int i, end, iter;
         if (_bottomToTop)
@@ -57,7 +58,7 @@ namespace gameplay
 
             yPosition += margin.top;
 
-            control->setPosition(0.0f, yPosition);
+            control->setPosition(xPosition, yPosition);
 
             yPosition += size.y + margin.bottom;
 

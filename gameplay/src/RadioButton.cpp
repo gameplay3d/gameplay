@@ -1,58 +1,69 @@
 #include "Base.h"
-#include "CheckBox.h"
+#include "RadioButton.h"
 
 namespace gameplay
 {
 
-static std::vector<CheckBox*> __checkBoxes;
+static std::vector<RadioButton*> __radioButtons;
 
-CheckBox::CheckBox()
+RadioButton::RadioButton() : _groupId(NULL), _selected(false)
 {
 }
 
-CheckBox::CheckBox(const CheckBox& copy)
+RadioButton::RadioButton(const RadioButton& copy)
 {
     // Hidden.
 }
 
-CheckBox::~CheckBox()
+RadioButton::~RadioButton()
 {
 
 }
 
-CheckBox* CheckBox::create(Theme::Style* style, Properties* properties)
+RadioButton* RadioButton::create(Theme::Style* style, Properties* properties)
 {
-    CheckBox* checkbox = new CheckBox();
-    checkbox->_style = style;
-    checkbox->_id = properties->getId();
-    properties->getVector2("position", &checkbox->_position);
-    properties->getVector2("size", &checkbox->_size);
-    checkbox->_text = properties->getString("text");
-
-    __checkBoxes.push_back(checkbox);
-
-    return checkbox;
-}
-
-CheckBox* CheckBox::getCheckBox(const char* id)
-{
-    std::vector<CheckBox*>::const_iterator it;
-    for (it = __checkBoxes.begin(); it < __checkBoxes.end(); it++)
+    RadioButton* radioButton = new RadioButton();
+    radioButton->_style = style;
+    radioButton->_id = properties->getId();
+    properties->getVector2("position", &radioButton->_position);
+    properties->getVector2("size", &radioButton->_size);
+    radioButton->_text = properties->getString("text");
+    radioButton->_groupId = properties->getString("group");
+    if (properties->getBool("selected"))
     {
-        CheckBox* checkbox = *it;
-        if (strcmp(id, checkbox->getID()) == 0)
+        RadioButton::clearSelected(radioButton->_groupId);
+        radioButton->_selected = true;
+    }
+
+    __radioButtons.push_back(radioButton);
+
+    return radioButton;
+}
+
+RadioButton* RadioButton::getRadioButton(const char* id)
+{
+    std::vector<RadioButton*>::const_iterator it;
+    for (it = __radioButtons.begin(); it < __radioButtons.end(); it++)
+    {
+        RadioButton* radioButton = *it;
+        if (strcmp(id, radioButton->getID()) == 0)
         {
-            return checkbox;
+            return radioButton;
         }
     }
 
     return NULL;
 }
 
-void CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+void RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     switch (evt)
     {
+    case Touch::TOUCH_PRESS:
+        {
+            _state = Control::STATE_ACTIVE;
+        }
+        break;
     case Touch::TOUCH_RELEASE:
         {
             if (_state == Control::STATE_ACTIVE)
@@ -60,22 +71,39 @@ void CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
                 if (x > 0 && x <= _size.x &&
                     y > 0 && y <= _size.y)
                 {
-                    _checked = !_checked;
+                    if (_callback)
+                    {
+                        _callback->trigger(this);
+                    }
+                    RadioButton::clearSelected(_groupId);
+                    _selected = true;
                 }
+                setState(Control::STATE_NORMAL);
             }
         }
         break;
     }
-
-    Button::touchEvent(evt, x, y, contactIndex);
 }
 
-void CheckBox::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
+void RadioButton::clearSelected(const char* groupId)
+{
+    std::vector<RadioButton*>::const_iterator it;
+    for (it = __radioButtons.begin(); it < __radioButtons.end(); it++)
+    {
+        RadioButton* radioButton = *it;
+        if (strcmp(groupId, radioButton->_groupId) == 0)
+        {
+            radioButton->_selected = false;
+        }
+    }
+}
+
+void RadioButton::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
 {
     // Left, v-center.
     // TODO: Set an alignment for icons.
     Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-    Theme::Icon* icon = overlay->getCheckBoxIcon();
+    Theme::Icon* icon = overlay->getRadioButtonIcon();
     if (icon)
     {
         Theme::Border border = _style->getBorder();
@@ -88,7 +116,7 @@ void CheckBox::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
         {
             spriteBatch->draw(pos.x, pos.y, icon->size.x, icon->size.y, icon->active.u1, icon->active.v1, icon->active.u2, icon->active.v2, overlay->getBorderColor());
         }
-        else if (_checked)
+        else if (_selected)
         {
             spriteBatch->draw(pos.x, pos.y, icon->size.x, icon->size.y, icon->on.u1, icon->on.v1, icon->on.u2, icon->on.v2, overlay->getBorderColor());
         }
@@ -99,11 +127,11 @@ void CheckBox::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
     }
 }
 
-void CheckBox::drawText(const Vector2& position)
+void RadioButton::drawText(const Vector2& position)
 {
     // TODO: Batch all labels that use the same font.
     Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-    Theme::Icon* icon = overlay->getCheckBoxIcon();
+    Theme::Icon* icon = overlay->getRadioButtonIcon();
     Theme::Border border = _style->getBorder();
     Theme::Padding padding = _style->getPadding();
 

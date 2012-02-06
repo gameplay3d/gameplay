@@ -17,6 +17,7 @@ namespace gameplay
 
 #define MAX_OVERLAYS 3
 #define MAX_OVERLAY_REGIONS 9
+
 /**
  * This class represents the apperance of an UI form described in a 
  * theme file. A theme file, at its simplest, contains a source texture atlas,
@@ -45,13 +46,29 @@ public:
         float right;
     } Margin, Border, Padding;
 
-    typedef struct icon
+    class Icon : public Ref
     {
+    public:
         std::string id;
         UVs off;
         UVs on;
+        UVs active;
         Vector2 size;
-    } CheckBoxIcon, RadioButtonIcon;
+    };
+
+    class SliderIcon : public Ref
+    {
+    public:
+        std::string id;
+        UVs leftCap;
+        UVs rightCap;
+        UVs track;
+        UVs marker;
+        Vector2 leftCapSize;
+        Vector2 rightCapSize;
+        Vector2 trackSize;
+        Vector2 markerSize;
+    };
 
     /**
      * Creates an instance of a Theme from a theme file.
@@ -135,24 +152,47 @@ public:
         Theme::Style::Overlay* getOverlay(OverlayType overlayType) const;
 
         /**
-         * Gets the Border region of this overlay.
+         * Gets the Border region of this style.
          */
         const Theme::Border& getBorder() const;
 
         /**
-         * Gets the Padding region of this overlay.
+         * Gets the Padding region of this style.
          */
         const Theme::Padding& getPadding() const;
 
         /**
-         * Gets the Margin region of this overlay.
+         * Gets the Margin region of this style.
          */
         const Theme::Margin& getMargin() const;
+
+        /**
+         * Set the size of this Style's border.
+         *
+         * When auto-size is set on width and/or height:
+         * Space added to the calculated (tightly bound) width and height.
+         *
+         */
+        void setBorder(float top, float bottom, float left, float right);
+
+        /**
+         * Set this size of this Style's padding.
+         *
+         * Padding is the space between a Control's content (all icons and text) and its border.
+         */
+        void setPadding(float top, float bottom, float left, float right);
+
+        /**
+         * Set the size of this Style's margin.
+         *
+         * The margin is used by Layouts other than AbsoluteLayout to put space between Controls.
+         */
+        void setMargin(float top, float bottom, float left, float right);
        
         /**
          * This class represents a control's overlay for one of the 3 modes: normal, focussed or active.
          */
-        class Overlay
+        class Overlay : public Ref
         {
         public:
             Overlay();
@@ -223,18 +263,28 @@ public:
 
             void setBorderColor(const Vector4& color);
             
-            void setCheckBoxIcon(CheckBoxIcon* icon);
+            void setCheckBoxIcon(Icon* icon);
 
-            CheckBoxIcon* getCheckBoxIcon();
+            Icon* getCheckBoxIcon();
+
+            void setRadioButtonIcon(Icon* icon);
+
+            Icon* getRadioButtonIcon();
+
+            void setSliderIcon(SliderIcon* slider);
+
+            SliderIcon* getSliderIcon();
+
+            void addRef();
         
         private:
-           
             OverlayType _type;
             Rectangle _region;
             UVs _uvs[MAX_OVERLAY_REGIONS];
             Cursor* _cursor;
-            CheckBoxIcon* _checkBoxIcon;
-            RadioButtonIcon* _radioButtonIcon;
+            Icon* _checkBoxIcon;
+            Icon* _radioButtonIcon;
+            SliderIcon* _sliderIcon;
             Font* _font;
             unsigned int _fontSize;
             Font::Justify _alignment;
@@ -268,13 +318,16 @@ private:
      */
     ~Theme();
 
+    static void generateUVs(float x, float y, float width, float height, float textureWidth, float textureHeight, UVs* uvs);
+
     std::string _path;
     Texture* _texture;
     SpriteBatch* _spriteBatch;
     std::vector<Cursor *> _cursors;
     std::vector<Style *> _styles;
     std::vector<Font *> _fonts;
-    std::vector<CheckBoxIcon *> _checkBoxIcons;
+    std::vector<Icon*> _icons;
+    std::vector<SliderIcon*> _sliders;
 };
 
 }

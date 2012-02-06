@@ -2,6 +2,12 @@
 #include "Container.h"
 #include "Layout.h"
 #include "AbsoluteLayout.h"
+#include "VerticalLayout.h"
+#include "Label.h"
+#include "Button.h"
+#include "CheckBox.h"
+#include "RadioButton.h"
+#include "Slider.h"
 
 namespace gameplay
 {
@@ -30,6 +36,7 @@ namespace gameplay
         case Layout::LAYOUT_FLOW:
             break;
         case Layout::LAYOUT_VERTICAL:
+            layout = VerticalLayout::create();
             break;
         }
 
@@ -40,6 +47,74 @@ namespace gameplay
         __containers.push_back(container);
 
         return container;
+    }
+
+    Container* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
+    {
+        const char* id = properties->getId();
+        const char* layoutString = properties->getString("layout");
+        Container* container = Container::create(id, getLayoutType(layoutString));
+
+        container->_style = style;
+        properties->getVector2("position", &container->_position);
+        properties->getVector2("size", &container->_size);
+
+        container->addControls(theme, properties);
+
+        return container;
+    }
+
+    void Container::addControls(Theme* theme, Properties* properties)
+    {
+        // Add all the controls to this container.
+        Properties* controlSpace = properties->getNextNamespace();
+        while (controlSpace != NULL)
+        {
+            Control* control = NULL;
+
+            const char* controlStyleName = controlSpace->getString("style");
+            Theme::Style* controlStyle = NULL;
+            if (controlStyleName)
+            {
+                 controlStyle = theme->getStyle(controlStyleName);
+            }
+
+            std::string controlName(controlSpace->getNamespace());
+            std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
+            if (controlName == "LABEL")
+            {
+                control = Label::create(controlStyle, controlSpace);
+            }
+            else if (controlName == "BUTTON")
+            {
+                control = Button::create(controlStyle, controlSpace);
+            }
+            else if (controlName == "CHECKBOX")
+            {
+                control = CheckBox::create(controlStyle, controlSpace);
+            }
+            else if (controlName == "RADIOBUTTON")
+            {
+                control = RadioButton::create(controlStyle, controlSpace);
+            }
+            else if (controlName == "CONTAINER")
+            {
+                control = Container::create(controlStyle, controlSpace, theme);
+            }
+            else if (controlName == "SLIDER")
+            {
+                control = Slider::create(controlStyle, controlSpace);
+            }
+
+            // Add the new control to the form.
+            if (control)
+            {
+                addControl(control);
+            }
+
+            // Get the next control.
+            controlSpace = properties->getNextNamespace();
+        }
     }
 
     Container* Container::getContainer(const char* id)
@@ -133,17 +208,33 @@ namespace gameplay
         // Should probably have sizeChanged() for this.
         //if (isDirty())
         {
-            _layout->update(_controls, _size);
+            // Call update() on nested Containers.
+            std::vector<Control*>::const_iterator it;
+            for (it = _controls.begin(); it < _controls.end(); it++)
+            {
+                // Can't do this without enabling run-time type information!
+                //Container* container = dynamic_cast<Container*>(*it);
+
+                Control* control = *it;
+                if (control->isContainer())
+                {
+                    Container* container = static_cast<Container*>(control);
+                    container->update();
+                }
+            }
+            
+            _layout->update(_controls, _size, _style);
         }
     }
 
     void Container::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
     {
+        Vector2 pos(position.x + _position.x, position.y + _position.y);
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
-            control->drawSprites(spriteBatch, position);
+            control->drawSprites(spriteBatch, pos);
         }
 
         _dirty = false;
@@ -151,11 +242,12 @@ namespace gameplay
 
     void Container::drawText(const Vector2& position)
     {
+        Vector2 pos(position.x + _position.x, position.y + _position.y);
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
-            control->drawText(position);
+            control->drawText(pos);
         }
 
         _dirty = false;
@@ -211,5 +303,33 @@ namespace gameplay
             setState(Control::STATE_NORMAL);
             break;
         }
+    }
+
+    Layout::Type Container::getLayoutType(const char* layoutString)
+    {
+        std::string layoutName(layoutString);
+        std::transform(layoutName.begin(), layoutName.end(), layoutName.begin(), (int(*)(int))toupper);
+        if (layoutName == "LAYOUT_ABSOLUTE")
+        {
+            return Layout::LAYOUT_ABSOLUTE;
+        }
+        else if (layoutName == "LAYOUT_VERTICAL")
+        {
+            return Layout::LAYOUT_VERTICAL;
+        }
+        else if (layoutName == "LAYOUT_FLOW")
+        {
+            return Layout::LAYOUT_FLOW;
+        }
+        else
+        {
+            // Default.
+            return Layout::LAYOUT_ABSOLUTE;
+        }
+    }
+
+    bool Container::isContainer()
+    {
+        return true;
     }
 }
