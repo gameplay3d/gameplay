@@ -198,7 +198,7 @@ private:
     unsigned int getReversedTokenLength(const char* token, const char* bufStart);
 
     // Returns false if EOF was reached, true otherwise.
-    bool handleDelimiters(char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
+    bool handleDelimiters(const char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
                           std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd);
     void addLineInfo(const Rectangle& area, int lineWidth, int lineLength, Justify hAlign,
                      std::vector<int>* xPositions, std::vector<unsigned int>* lineLengths, bool rightToLeft);
