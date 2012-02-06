@@ -96,8 +96,8 @@ public:
     /**
      * Call this method to initialize the game, and begin running the game.
      *
-     * @param width The width of the game window to run at.
-     * @param height The height of the game window to run at.
+     * @param width The width of the game window to run at. Default is -1 meaning native resolution width.
+     * @param height The height of the game window to run at. Default is -1 meaning native resolution height.
      * 
      * @return Zero for normal termination, or non-zero if an error occurred.
      */
