@@ -9,7 +9,7 @@ inline Ray& Ray::operator*=(const Matrix& matrix)
     return *this;
 }
 
-inline Ray operator*(const Matrix& matrix, const Ray& ray)
+inline const Ray operator*(const Matrix& matrix, const Ray& ray)
 {
     Ray r(ray);
     r.transform(matrix);
