@@ -962,6 +962,16 @@ int Platform::enterMessagePump()
 
     return 0;
 }
+    
+unsigned int Platform::getDisplayWidth()
+{
+    return __screenWindowSize[0];
+}
+
+unsigned int Platform::getDisplayHeight()
+{
+    return __screenWindowSize[1];
+}
 
 long Platform::getAbsoluteTime()
 {
