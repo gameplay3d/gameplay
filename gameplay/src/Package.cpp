@@ -1089,7 +1089,7 @@ Mesh* Package::loadMesh(const char* id, bool loadWithMeshRBSupport, const char* 
     }
     mesh->setVertexData(vertexData, 0, vertexCount);
     if (loadWithMeshRBSupport)
-        SceneLoader::addMeshRigidBodyData(nodeId, mesh, vertexData, vertexByteCount);
+        SceneLoader::addMeshRigidBodyData(_path, nodeId, mesh, vertexData, vertexByteCount);
     SAFE_DELETE_ARRAY(vertexData);
 
     // Set mesh bounding volumes
@@ -1150,7 +1150,7 @@ Mesh* Package::loadMesh(const char* id, bool loadWithMeshRBSupport, const char* 
         }
         part->setIndexData(indexData, 0, indexCount);
         if (loadWithMeshRBSupport)
-            SceneLoader::addMeshRigidBodyData(nodeId, indexData, iByteCount);
+            SceneLoader::addMeshRigidBodyData(_path, nodeId, indexData, iByteCount);
         SAFE_DELETE_ARRAY(indexData);
     }
 

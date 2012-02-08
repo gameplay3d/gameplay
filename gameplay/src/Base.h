@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <set>
 #include <stack>
 #include <map>
 #include <algorithm>
@@ -145,6 +146,7 @@ extern void printError(const char* format, ...);
 #define MATH_PIOVER4                M_PI_4
 #define MATH_PIX2                   6.28318530717958647693f
 #define MATH_EPSILON                0.000001f
+#define MATH_CLAMP(x, lo, hi)       ((x < lo) ? lo : ((x > hi) ? hi : x))
 #ifndef M_1_PI
 #define M_1_PI                      0.31830988618379067154
 #endif
