@@ -1274,6 +1274,7 @@ void appendKeyFrame(KFbxNode* fbxNode, float time, std::vector<float>* keyTimes,
     Quaternion rotation;
     Vector3 translation;
     matrix.decompose(&scale, &rotation, &translation);
+    rotation.normalize();
 
     keyTimes->push_back(time);
     keyValues->push_back(scale.x);
