@@ -350,6 +350,11 @@ public:
      */
     inline Quaternion& operator*=(const Quaternion& q);
 
+    /**
+     * Defines implicit conversion operator to the Bullet btQuaternion type.
+     */
+    inline operator btQuaternion() const;
+
 private:
 
     /**
