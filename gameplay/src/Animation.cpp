@@ -31,7 +31,8 @@ Animation::~Animation()
 {
     if (_defaultClip)
     {
-        _defaultClip->stop();
+        if (_defaultClip->isClipStateBitSet(AnimationClip::CLIP_IS_PLAYING_BIT))
+            _controller->unschedule(_defaultClip);
         SAFE_RELEASE(_defaultClip);
     }
 
@@ -42,7 +43,8 @@ Animation::~Animation()
         while (clipIter != _clips->end())
         {   
             AnimationClip* clip = *clipIter;
-            clip->stop();
+            if (clip->isClipStateBitSet(AnimationClip::CLIP_IS_PLAYING_BIT))
+                _controller->unschedule(clip);
             SAFE_RELEASE(clip);
             clipIter++;
         }
