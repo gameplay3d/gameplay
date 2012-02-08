@@ -326,7 +326,15 @@ void AnimationController::update(long elapsedTime)
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = (*clipIter);
-        if (clip->update(elapsedTime, &_activeTargets))
+        if (clip->isClipStateBitSet(AnimationClip::CLIP_IS_RESTARTED_BIT))
+        {   // If the CLIP_IS_RESTARTED_BIT is set, we should end the clip and 
+            // move it from where it is in the running clips list to the back.
+            clip->onEnd();
+            clip->setClipStateBit(AnimationClip::CLIP_IS_PLAYING_BIT);
+            _runningClips.push_back(clip);
+            clipIter = _runningClips.erase(clipIter);
+        }
+        else if (clip->update(elapsedTime, &_activeTargets))
         {
             SAFE_RELEASE(clip);
             clipIter = _runningClips.erase(clipIter);
