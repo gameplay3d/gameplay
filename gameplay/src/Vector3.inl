@@ -1,10 +1,11 @@
 #include "Vector3.h"
 #include "Matrix.h"
+#include "Base.h"
 
 namespace gameplay
 {
 
-inline Vector3 Vector3::operator+(const Vector3& v) const
+inline const Vector3 Vector3::operator+(const Vector3& v) const
 {
     Vector3 result(*this);
     result.add(v);
@@ -17,7 +18,7 @@ inline Vector3& Vector3::operator+=(const Vector3& v)
     return *this;
 }
 
-inline Vector3 Vector3::operator-(const Vector3& v) const
+inline const Vector3 Vector3::operator-(const Vector3& v) const
 {
     Vector3 result(*this);
     result.subtract(v);
@@ -30,14 +31,14 @@ inline Vector3& Vector3::operator-=(const Vector3& v)
     return *this;
 }
 
-inline Vector3 Vector3::operator-() const
+inline const Vector3 Vector3::operator-() const
 {
     Vector3 result(*this);
     result.negate();
     return result;
 }
 
-inline Vector3 Vector3::operator*(float x) const
+inline const Vector3 Vector3::operator*(float x) const
 {
     Vector3 result(*this);
     result.scale(x);
@@ -68,7 +69,12 @@ inline bool Vector3::operator==(const Vector3& v) const
     return x==v.x && y==v.y && z==v.z;
 }
 
-inline Vector3 operator*(float x, const Vector3& v)
+inline Vector3::operator btVector3() const
+{
+    return btVector3(x, y, z);
+}
+
+inline const Vector3 operator*(float x, const Vector3& v)
 {
     Vector3 result(v);
     result.scale(x);

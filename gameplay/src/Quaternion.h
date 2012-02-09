@@ -340,7 +340,7 @@ public:
      * @param q The quaternion to multiply.
      * @return The quaternion product.
      */
-    inline Quaternion operator*(const Quaternion& q) const;
+    inline const Quaternion operator*(const Quaternion& q) const;
 
     /**
      * Multiplies this quaternion with the given quaternion.
@@ -349,6 +349,11 @@ public:
      * @return This quaternion, after the multiplication occurs.
      */
     inline Quaternion& operator*=(const Quaternion& q);
+
+    /**
+     * Defines implicit conversion operator to the Bullet btQuaternion type.
+     */
+    inline operator btQuaternion() const;
 
 private:
 

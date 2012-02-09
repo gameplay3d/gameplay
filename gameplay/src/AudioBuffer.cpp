@@ -179,6 +179,12 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     if (fread(stream, 1, 8, file) != 8 || memcmp(stream, "fmt ", 4) != 0 )
         return false;
     
+    unsigned int section_size;
+    section_size  = stream[7]<<24;
+    section_size |= stream[6]<<16;
+    section_size |= stream[5]<<8;
+    section_size |= stream[4];
+
     // Check for a valid pcm format.
     if (fread(stream, 1, 2, file) != 2 || stream[1] != 0 || stream[0] != 1)
     {
@@ -216,7 +222,6 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     bits  = stream[1]<<8;
     bits |= stream[0];
     
-
     // Now convert the given channel count and bit depth into an OpenAL format. 
     ALuint format = 0;
     if (bits == 8)
@@ -239,13 +244,45 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
         return false;
     }
     
-    // Read the data chunk, which will hold the decoded sample data 
-    if (fread(stream, 1, 4, file) != 4 || memcmp(stream, "data", 4) != 0)
+    // Check against the size of the format header as there may be more data that we need to read
+    if (section_size > 16)
     {
-        LOG_ERROR("WAV file has no data.");
-        return false;
+    	unsigned int length = section_size - 16;
+
+    	// extension size is 2 bytes
+    	if (fread(stream, 1, length, file) != length)
+    		return false;
     }
-    
+
+    if (fread(stream, 1, 4, file) != 4)
+    	return false;
+
+    // read the next chunk, could be fact section or the data section
+    if (memcmp(stream, "fact", 4) == 0)
+    {
+    	if (fread(stream, 1, 4, file) != 4)
+    		return false;
+
+    	section_size  = stream[3]<<24;
+    	section_size |= stream[2]<<16;
+    	section_size |= stream[1]<<8;
+    	section_size |= stream[0];
+
+    	// read in the rest of the fact section
+    	if (fread(stream, 1, section_size, file) != section_size)
+    		return false;
+
+    	if (fread(stream, 1, 4, file) != 4)
+    		return false;
+    }
+
+    // should now be the data section which holds the decoded sample data
+    if (memcmp(stream, "data", 4) != 0)
+    {
+    	LOG_ERROR("WAV file has no data.");
+    	return false;
+    }
+
     // Read how much data is remaining and buffer it up.
     unsigned int dataSize;
     fread(&dataSize, sizeof(int), 1, file);

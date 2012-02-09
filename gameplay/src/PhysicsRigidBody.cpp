@@ -10,10 +10,6 @@
 namespace gameplay
 {
 
-const int PhysicsRigidBody::Listener::DIRTY         = 0x01;
-const int PhysicsRigidBody::Listener::COLLISION     = 0x02;
-const int PhysicsRigidBody::Listener::REGISTERED    = 0x04;
-
 // Internal values used for creating mesh, heightfield, and capsule rigid bodies.
 #define SHAPE_MESH ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 1))
 #define SHAPE_HEIGHTFIELD ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 2))
@@ -28,33 +24,40 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
         _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL), _vertexData(NULL),
         _indexData(NULL), _heightfieldData(NULL), _inverse(NULL), _inverseIsDirty(true)
 {
+    // Get the node's world scale (we need to apply this during creation since rigid bodies don't scale dynamically).
+    Vector3 scale;
+    node->getWorldMatrix().getScale(&scale);
+
     switch (type)
     {
         case SHAPE_BOX:
         {
             const BoundingBox& box = node->getModel()->getMesh()->getBoundingBox();
-            _shape = Game::getInstance()->getPhysicsController()->createBox(box.min, box.max, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
+            _shape = Game::getInstance()->getPhysicsController()->createBox(box.min, box.max, scale);
             break;
         }
         case SHAPE_SPHERE:
         {
             const BoundingSphere& sphere = node->getModel()->getMesh()->getBoundingSphere();
-            _shape = Game::getInstance()->getPhysicsController()->createSphere(sphere.radius, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
+            _shape = Game::getInstance()->getPhysicsController()->createSphere(sphere.radius, scale);
             break;
         }
         case SHAPE_MESH:
         {
-            _shape = Game::getInstance()->getPhysicsController()->createMesh(this);
+            _shape = Game::getInstance()->getPhysicsController()->createMesh(this, scale);
             break;
         }
     }
 
     // Use the center of the bounding sphere as the center of mass offset.
     Vector3 c(node->getModel()->getMesh()->getBoundingSphere().center);
+    c.x *= scale.x;
+    c.y *= scale.y;
+    c.z *= scale.z;
     c.negate();
 
-    // Create the Bullet rigid body.
-    if (c.lengthSquared() > MATH_EPSILON)
+    // Create the Bullet rigid body (we don't apply center of mass offsets on mesh rigid bodies).
+    if (c.lengthSquared() > MATH_EPSILON && type != SHAPE_MESH)
         _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
     else
         _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
@@ -151,11 +154,18 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, float radius, float height, float
         _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL), _vertexData(NULL),
         _indexData(NULL), _heightfieldData(NULL), _inverse(NULL), _inverseIsDirty(true)
 {
+    // Get the node's world scale (we need to apply this during creation since rigid bodies don't scale dynamically).
+    Vector3 scale;
+    node->getWorldMatrix().getScale(&scale);
+
     // Create the capsule collision shape.
     _shape = Game::getInstance()->getPhysicsController()->createCapsule(radius, height);
 
     // Use the center of the bounding sphere as the center of mass offset.
     Vector3 c(node->getModel()->getMesh()->getBoundingSphere().center);
+    c.x *= scale.x;
+    c.y *= scale.y;
+    c.z *= scale.z;
     c.negate();
 
     // Create the Bullet rigid body.
@@ -205,13 +215,7 @@ PhysicsRigidBody::~PhysicsRigidBody()
 
 void PhysicsRigidBody::addCollisionListener(Listener* listener, PhysicsRigidBody* body)
 {
-    if (!_listeners)
-        _listeners = new std::vector<Listener*>();
-
-    CollisionPair pair(this, body);
-    listener->_collisionStatus[pair] = PhysicsRigidBody::Listener::REGISTERED;
-
-    _listeners->push_back(listener);
+    Game::getInstance()->getPhysicsController()->addCollisionListener(listener, this, body);
 }
 
 void PhysicsRigidBody::applyForce(const Vector3& force, const Vector3* relativePosition)
@@ -222,9 +226,9 @@ void PhysicsRigidBody::applyForce(const Vector3& force, const Vector3* relativeP
     {
         _body->activate();
         if (relativePosition)
-            _body->applyForce(btVector3(force.x, force.y, force.z), btVector3(relativePosition->x, relativePosition->y, relativePosition->z));
+            _body->applyForce(force, *relativePosition);
         else
-            _body->applyCentralForce(btVector3(force.x, force.y, force.z));
+            _body->applyCentralForce(force);
     }
 }
 
@@ -238,10 +242,10 @@ void PhysicsRigidBody::applyImpulse(const Vector3& impulse, const Vector3* relat
 
         if (relativePosition)
         {
-            _body->applyImpulse(btVector3(impulse.x, impulse.y, impulse.z), btVector3(relativePosition->x, relativePosition->y, relativePosition->z));
+            _body->applyImpulse(impulse, *relativePosition);
         }
         else
-            _body->applyCentralImpulse(btVector3(impulse.x, impulse.y, impulse.z));
+            _body->applyCentralImpulse(impulse);
     }
 }
 
@@ -252,7 +256,7 @@ void PhysicsRigidBody::applyTorque(const Vector3& torque)
     if (torque.lengthSquared() > MATH_EPSILON)
     {
         _body->activate();
-        _body->applyTorque(btVector3(torque.x, torque.y, torque.z));
+        _body->applyTorque(torque);
     }
 }
 
@@ -263,7 +267,7 @@ void PhysicsRigidBody::applyTorqueImpulse(const Vector3& torque)
     if (torque.lengthSquared() > MATH_EPSILON)
     {
         _body->activate();
-        _body->applyTorqueImpulse(btVector3(torque.x, torque.y, torque.z));
+        _body->applyTorqueImpulse(torque);
     }
 }
 
@@ -566,36 +570,6 @@ PhysicsRigidBody::CollisionPair::CollisionPair(PhysicsRigidBody* rbA, PhysicsRig
 PhysicsRigidBody::Listener::~Listener()
 {
     // Unused
-}
-
-btScalar PhysicsRigidBody::Listener::addSingleResult(btManifoldPoint& cp, 
-                                                     const btCollisionObject* a, int partIdA, int indexA, 
-                                                     const btCollisionObject* b, int partIdB, int indexB)
-{
-    // Get pointers to the PhysicsRigidBody objects.
-    PhysicsRigidBody* rbA = Game::getInstance()->getPhysicsController()->getRigidBody(a);
-    PhysicsRigidBody* rbB = Game::getInstance()->getPhysicsController()->getRigidBody(b);
-    
-    // If the given rigid body pair has collided in the past, then
-    // we notify the listener only if the pair was not colliding
-    // during the previous frame. Otherwise, it's a new pair, so notify the listener.
-    CollisionPair pair(rbA, rbB);
-    if (_collisionStatus.count(pair) > 0)
-    {
-        if ((_collisionStatus[pair] & COLLISION) == 0)
-            collisionEvent(pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()));
-    }
-    else
-    {
-        collisionEvent(pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()));
-    }
-
-    // Update the collision status cache (we remove the dirty bit
-    // set in the controller's update so that this particular collision pair's
-    // status is not reset to 'no collision' when the controller's update completes).
-    _collisionStatus[pair] &= ~DIRTY;
-    _collisionStatus[pair] |= COLLISION;
-    return 0.0f;
 }
 
 btScalar PhysicsRigidBody::CollidesWithCallback::addSingleResult(btManifoldPoint& cp, 
