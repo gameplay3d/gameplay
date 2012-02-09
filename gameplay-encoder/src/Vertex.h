@@ -13,6 +13,15 @@ class Vertex
 {
 public:
 
+    static const unsigned int POSITION_COUNT = 3;
+    static const unsigned int NORMAL_COUNT = 3;
+    static const unsigned int TANGENT_COUNT = 3;
+    static const unsigned int BINORMAL_COUNT = 3;
+    static const unsigned int TEXCOORD_COUNT = 2;
+    static const unsigned int DIFFUSE_COUNT = 4;
+    static const unsigned int BLEND_WEIGHTS_COUNT = 4;
+    static const unsigned int BLEND_INDICES_COUNT = 4;
+
     /**
      * Constructor.
      */
@@ -28,11 +37,12 @@ public:
     Vector3 tangent;
     Vector3 binormal;
     Vector2 texCoord;
+    Vector4 diffuse;
 
     Vector4 blendWeights;
     Vector4 blendIndices;
 
-    bool hasNormal, hasTangent, hasBinormal, hasTexCoord, hasColor, hasWeights;
+    bool hasNormal, hasTangent, hasBinormal, hasTexCoord, hasDiffuse, hasWeights;
 
     inline bool operator<(const Vertex& v) const
     {
@@ -46,15 +56,19 @@ public:
                     {
                         if (texCoord == v.texCoord)
                         {
-                            if (blendWeights == v.blendWeights)
+                            if (diffuse == v.diffuse)
                             {
-                                if (blendIndices == v.blendIndices)
+                                if (blendWeights == v.blendWeights)
                                 {
-                                    return false;
+                                    if (blendIndices == v.blendIndices)
+                                    {
+                                        return false;
+                                    }
+                                    return blendIndices < v.blendIndices;
                                 }
-                                return blendIndices < v.blendIndices;
+                                return blendWeights < v.blendWeights;
                             }
-                            return blendWeights < v.blendWeights;
+                            return diffuse < v.diffuse;
                         }
                         return texCoord < v.texCoord;
                     }
@@ -70,7 +84,7 @@ public:
     inline bool operator==(const Vertex& v) const
     {
         return position==v.position && normal==v.normal && tangent==v.tangent && binormal==v.binormal && texCoord==v.texCoord &&
-            blendWeights==v.blendWeights && blendIndices==v.blendIndices;
+            diffuse==v.diffuse && blendWeights==v.blendWeights && blendIndices==v.blendIndices;
     }
 
     /**

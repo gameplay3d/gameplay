@@ -766,7 +766,17 @@ int Platform::enterMessagePump()
         gameplay::displayKeyboard(__state, __displayKeyboard);
     }
 }
-
+   
+unsigned int Platform::getDisplayWidth()
+{
+    return __width;
+}
+    
+unsigned int Platform::getDisplayHeight()
+{
+    return __height;
+}
+    
 long Platform::getAbsoluteTime()
 {
     clock_gettime(CLOCK_REALTIME, &__timespec);
