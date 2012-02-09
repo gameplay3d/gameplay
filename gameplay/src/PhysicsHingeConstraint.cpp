@@ -27,13 +27,13 @@ PhysicsHingeConstraint::PhysicsHingeConstraint(PhysicsRigidBody* a, const Quater
         b->getNode()->getWorldMatrix().getScale(&sB);
         Vector3 tB(translationOffsetB.x * sB.x, translationOffsetB.y * sB.y, translationOffsetB.z * sB.z);
 
-        btTransform frameInA(btQuaternion(rotationOffsetA.x, rotationOffsetA.y, rotationOffsetA.z, rotationOffsetA.w), btVector3(tA.x, tA.y, tA.z));
-        btTransform frameInB(btQuaternion(rotationOffsetB.x, rotationOffsetB.y, rotationOffsetB.z, rotationOffsetB.w), btVector3(tB.x, tB.y, tB.z));
+        btTransform frameInA(rotationOffsetA, tA);
+        btTransform frameInB(rotationOffsetB, tB);
         _constraint = new btHingeConstraint(*a->_body, *b->_body, frameInA, frameInB);
     }
     else
     {
-        btTransform frameInA(btQuaternion(rotationOffsetA.x, rotationOffsetA.y, rotationOffsetA.z, rotationOffsetA.w), btVector3(tA.x, tA.y, tA.z));
+        btTransform frameInA(rotationOffsetA, tA);
         _constraint = new btHingeConstraint(*a->_body, frameInA);
     }
 }

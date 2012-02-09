@@ -15,7 +15,7 @@ namespace gameplay
 /**
  * Defines a class for controlling game physics.
  */
-class PhysicsController
+class PhysicsController : public btCollisionWorld::ContactResultCallback
 {
     friend class Game;
     friend class PhysicsConstraint;
@@ -189,8 +189,36 @@ public:
      */
     void drawDebug(const Matrix& viewProjection);
 
+    /**
+     * Gets the first rigid body that the given ray intersects.
+     * 
+     * @param ray The ray to test intersection with.
+     * @return The first rigid body that the ray intersects.
+     */
+    PhysicsRigidBody* rayTest(const Ray& ray);
+
+protected:
+
+    /**
+     * Internal function used for Bullet integration (do not use or override).
+     */
+    btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB);    
+
 private:
 
+    // Internal constants for the collision status cache.
+    static const int DIRTY;
+    static const int COLLISION;
+    static const int REGISTERED;
+
+    // Represents the collision listeners and status for a given collision pair (used by the collision status cache).
+    struct CollisionInfo
+    {
+        std::vector<PhysicsRigidBody::Listener*> _listeners;
+        int _status;
+    };
+
+    // Wraps Bullet collision shapes (used for implementing shape caching).
     struct PhysicsCollisionShape : public Ref
     {
         PhysicsCollisionShape(btCollisionShape* shape) : _shape(shape) {}
@@ -234,6 +262,9 @@ private:
      */
     void update(long elapsedTime);
 
+    // Adds the given collision listener for the two given rigid bodies.
+    void addCollisionListener(PhysicsRigidBody::Listener* listener, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+
     // Adds the given rigid body to the world.
     void addRigidBody(PhysicsRigidBody* body);
     
@@ -253,7 +284,7 @@ private:
     btCollisionShape* createSphere(float radius, const btVector3& scale);
 
     // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createMesh(PhysicsRigidBody* body);
+    btCollisionShape* createMesh(PhysicsRigidBody* body, const Vector3& scale);
 
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
@@ -308,6 +339,7 @@ private:
     std::vector<Listener*>* _listeners;
     std::vector<PhysicsRigidBody*> _bodies;
     Vector3 _gravity;
+    std::map<PhysicsRigidBody::CollisionPair, CollisionInfo> _collisionStatus;  
 };
 
 }
