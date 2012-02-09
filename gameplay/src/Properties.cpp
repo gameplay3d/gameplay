@@ -6,22 +6,44 @@
 namespace gameplay
 {
 
+Properties::Properties()
+{
+}
+
+Properties::Properties(const Properties& copy)
+{
+    _namespace = copy._namespace;
+    _id = copy._id;
+    _parentID = copy._parentID;
+    _properties = copy._properties;
+    
+    _namespaces = std::vector<Properties*>();
+    std::vector<Properties*>::const_iterator it;
+    for (it = copy._namespaces.begin(); it < copy._namespaces.end(); it++)
+    {
+        _namespaces.push_back(new Properties(**it));
+    }
+    rewind();
+}
+
 Properties::Properties(FILE* file)
 {
     readProperties(file);
-    _propertiesItr = _properties.end();
-    _namespacesItr = _namespaces.end();
+    rewind();
 }
 
-Properties::Properties(FILE* file, const char* name, const char* id) : _namespace(name)
+Properties::Properties(FILE* file, const char* name, const char* id, const char* parentID) : _namespace(name)
 {
     if (id)
     {
         _id = id;
     }
+    if (parentID)
+    {
+        _parentID = parentID;
+    }
     readProperties(file);
-    _propertiesItr = _properties.end();
-    _namespacesItr = _namespaces.end();
+    rewind();
 }
 
 Properties* Properties::create(const char* filePath)
@@ -36,6 +58,8 @@ Properties* Properties::create(const char* filePath)
 
     Properties* properties = new Properties(file);
 
+    properties->resolveInheritance();
+
     fclose(file);
 
     return properties;
@@ -47,7 +71,9 @@ void Properties::readProperties(FILE* file)
     int c;
     char* name;
     char* value;
+    char* parentID;
     char* rc;
+    char* rcc;
 
     while (true)
     {
@@ -104,11 +130,16 @@ void Properties::readProperties(FILE* file)
             }
             else
             {
+                parentID = NULL;
+
                 // This line might begin or end a namespace,
                 // or it might be a key/value pair without '='.
 
                 // Check for '{' on same line.
                 rc = strchr(line, '{');
+
+                // Check for inheritance: ':'
+                rcc = strchr(line, ':');
             
                 // Get the name of the namespace.
                 name = strtok(line, " \t\n{");
@@ -124,12 +155,18 @@ void Properties::readProperties(FILE* file)
                 }
 
                 // Get its ID if it has one.
-                value = strtok(NULL, "{");
+                value = strtok(NULL, ":{");
                 value = trimWhiteSpace(value);
+                if (rcc != NULL)
+                {
+                    parentID = strtok(NULL, "{");
+                    parentID = trimWhiteSpace(parentID);
+                }
+
                 if (value != NULL && value[0] == '{')
                 {
                     // New namespace without an ID.
-                    Properties* space = new Properties(file, name, NULL);
+                    Properties* space = new Properties(file, name, NULL, parentID);
                     _namespaces.push_back(space);
                 }
                 else
@@ -138,7 +175,7 @@ void Properties::readProperties(FILE* file)
                     if (rc != NULL)
                     {
                         // Create new namespace.
-                        Properties* space = new Properties(file, name, value);
+                        Properties* space = new Properties(file, name, value, parentID);
                         _namespaces.push_back(space);
                     }
                     else
@@ -149,7 +186,7 @@ void Properties::readProperties(FILE* file)
                         if (c == '{')
                         {
                             // Create new namespace.
-                            Properties* space = new Properties(file, name, value);
+                            Properties* space = new Properties(file, name, value, parentID);
                             _namespaces.push_back(space);
                         }
                         else
@@ -228,7 +265,123 @@ char* Properties::trimWhiteSpace(char *str)
     return str;
 }
 
-const char* Properties::getNextProperty(const char** value)
+void Properties::resolveInheritance(const char* id)
+{
+    // Namespaces can be defined like so:
+    // "name id : parentID { }"
+    // This method merges data from the parent namespace into the child.
+
+    // Get a top-level namespace.
+    Properties* derived;
+    if (id)
+    {
+        derived = getNamespace(id);
+    }
+    else
+    {
+        derived = getNextNamespace();
+    }
+    while (derived)
+    {
+        // If the namespace has a parent ID, find the parent.
+        if (!derived->_parentID.empty())
+        {
+            Properties* parent = getNamespace(derived->_parentID.c_str());
+            if (parent)
+            {
+                resolveInheritance(parent->getId());
+
+                // Copy the child.
+                Properties* overrides = new Properties(*derived);
+
+                // Delete the child's data.
+                unsigned int count = derived->_namespaces.size();
+                for (unsigned int i = 0; i < count; i++)
+                {
+                    SAFE_DELETE(derived->_namespaces[i]);
+                }
+
+                // Copy data from the parent into the child.
+                derived->_properties = parent->_properties;
+                derived->_namespaces = std::vector<Properties*>();
+                std::vector<Properties*>::const_iterator itt;
+                for (itt = parent->_namespaces.begin(); itt < parent->_namespaces.end(); itt++)
+                {
+                    derived->_namespaces.push_back(new Properties(**itt));
+                }
+                derived->rewind();
+
+                // Take the original copy of the child and override the data copied from the parent.
+                derived->mergeWith(overrides);
+
+                // Delete the child copy.
+                SAFE_DELETE(overrides);
+            }
+        }
+
+        // Resolve inheritance within this namespace.
+        derived->resolveInheritance();
+
+        // Get the next top-level namespace and check again.
+        if (!id)
+        {
+            derived = getNextNamespace();
+        }
+        else
+        {
+            derived = NULL;
+        }
+    }
+}
+
+void Properties::mergeWith(Properties* overrides)
+{
+    // Overwrite or add each property found in child.
+    char* value = new char[255];
+    overrides->rewind();
+    const char* name = overrides->getNextProperty(&value);
+    while (name)
+    {
+        this->_properties[name] = value;
+        name = overrides->getNextProperty(&value);
+    }
+    SAFE_DELETE(value);
+    this->_propertiesItr = this->_properties.end();
+
+    // Merge all common nested namespaces, add new ones.
+    Properties* overridesNamespace = overrides->getNextNamespace();
+    while (overridesNamespace)
+    {
+        bool merged = false;
+
+        rewind();
+        Properties* derivedNamespace = getNextNamespace();
+        while (derivedNamespace)
+        {
+            if (strcmp(derivedNamespace->getNamespace(), overridesNamespace->getNamespace()) == 0 &&
+                strcmp(derivedNamespace->getId(), overridesNamespace->getId()) == 0)
+            {   
+                derivedNamespace->mergeWith(overridesNamespace);
+                merged = true;
+            }
+
+            derivedNamespace = getNextNamespace();
+        }
+
+        if (!merged)
+        {
+            // Add this new namespace.
+            Properties* newNamespace = new Properties(*overridesNamespace);
+
+            this->_namespaces.push_back(newNamespace);
+            this->_namespacesItr = this->_namespaces.end();
+        }
+
+        overridesNamespace = overrides->getNextNamespace();
+    }
+}
+
+const char* Properties::getNextProperty(char** value)
 {
     if (_propertiesItr == _properties.end())
     {
@@ -248,7 +401,7 @@ const char* Properties::getNextProperty(const char** value)
         {
             if (value)
             {
-                *value = _propertiesItr->second.c_str();
+                strcpy(*value, _propertiesItr->second.c_str());
             }
             return name.c_str();
         }
@@ -324,34 +477,35 @@ bool Properties::exists(const char* name) const
     return _properties.find(name) != _properties.end();
 }
 
-bool isStringNumeric(const char* str)
+const bool isStringNumeric(const char* str)
 {
-    char* ptr = const_cast<char*>(str);
+    // The first character may be '-'
+    if (*str == '-')
+        str++;
 
-    // First character must be a digit
-    if (!isdigit(*ptr))
+    // The first character after the sign must be a digit
+    if (!isdigit(*str))
         return false;
-    ptr++;
+    str++;
 
     // All remaining characters must be digits, with a single decimal (.) permitted
     unsigned int decimalCount = 0;
-    while (*ptr)
+    while (*str)
     {
-        if (!isdigit(*ptr))
+        if (!isdigit(*str))
         {
-            if (*ptr == '.' && decimalCount == 0)
+            if (*str == '.' && decimalCount == 0)
             {
                 // Max of 1 decimal allowed
                 decimalCount++;
             }
             else
             {
-                // Not a number
+                return false;
             }
         }
-        ptr++;
+        str++;
     }
-    
     return true;
 }
 

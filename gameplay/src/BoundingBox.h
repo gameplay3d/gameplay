@@ -191,7 +191,7 @@ public:
  * @param box The bounding box to transform.
  * @return The resulting transformed bounding box.
  */
-inline BoundingBox operator*(const Matrix& matrix, const BoundingBox& box);
+inline const BoundingBox operator*(const Matrix& matrix, const BoundingBox& box);
 
 }
 
