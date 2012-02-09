@@ -395,6 +395,15 @@ public:
      * @return True if this vector is equal to the given vector, false otherwise.
      */
     inline bool operator==(const Vector2& v) const;
+
+    /**
+     * Determines if this vector is not equal to the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is not equal to the given vector, false otherwise.
+     */
+    inline bool operator!=(const Vector2& v) const;
 };
 
 /**

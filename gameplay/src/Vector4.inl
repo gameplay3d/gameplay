@@ -75,6 +75,11 @@ inline bool Vector4::operator==(const Vector4& v) const
     return x==v.x && y==v.y && z==v.z && w==v.w;
 }
 
+inline bool Vector4::operator!=(const Vector4& v) const
+{
+    return x!=v.x || y!=v.y || z!=v.z || w!=v.w;
+}
+
 inline Vector4 operator*(float x, const Vector4& v)
 {
     Vector4 result(v);
