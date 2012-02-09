@@ -63,6 +63,11 @@ inline bool Vector2::operator==(const Vector2& v) const
     return x==v.x && y==v.y;
 }
 
+inline bool Vector2::operator!=(const Vector2& v) const
+{
+    return x!=v.x || y!=v.y;
+}
+
 inline const Vector2 operator*(float x, const Vector2& v)
 {
     Vector2 result(v);
