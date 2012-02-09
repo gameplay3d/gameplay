@@ -111,10 +111,8 @@ void AnimationController::stopAllAnimations()
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = *clipIter;
-        clip->_isPlaying = false;
-        clip->onEnd();
-        SAFE_RELEASE(clip);
         clipIter++;
+        clip->stop();
     }
     _runningClips.clear();
 
@@ -294,18 +292,8 @@ void AnimationController::schedule(AnimationClip* clip)
     {
         _state = RUNNING;
     }
-    
-    if (clip->_isPlaying)
-    {
-        _runningClips.remove(clip);
-        clip->_isPlaying = false;
-        clip->onEnd();
-    }
-    else
-    {
-        clip->addRef();
-    }
 
+    clip->addRef();
     _runningClips.push_back(clip);
 }
 
@@ -338,7 +326,15 @@ void AnimationController::update(long elapsedTime)
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = (*clipIter);
-        if (clip->update(elapsedTime, &_activeTargets))
+        if (clip->isClipStateBitSet(AnimationClip::CLIP_IS_RESTARTED_BIT))
+        {   // If the CLIP_IS_RESTARTED_BIT is set, we should end the clip and 
+            // move it from where it is in the running clips list to the back.
+            clip->onEnd();
+            clip->setClipStateBit(AnimationClip::CLIP_IS_PLAYING_BIT);
+            _runningClips.push_back(clip);
+            clipIter = _runningClips.erase(clipIter);
+        }
+        else if (clip->update(elapsedTime, &_activeTargets))
         {
             SAFE_RELEASE(clip);
             clipIter = _runningClips.erase(clipIter);

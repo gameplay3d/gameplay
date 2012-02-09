@@ -13,6 +13,10 @@
 using namespace std;
 using namespace gameplay;
 
+// Default to 720p
+#define WINDOW_WIDTH    1280
+#define WINDOW_HEIGHT   720
+
 static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
 static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
 
@@ -26,6 +30,7 @@ static int __ly;
 static bool __hasMouse = false;
 static bool __leftMouseDown = false;
 static bool __rightMouseDown = false;
+static bool __otherMouseDown = false;
 static bool __shiftDown = false;
 
 long getMachTimeInMilliseconds()
@@ -102,9 +107,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (id) initWithFrame: (NSRect) frame
 {    
-    lock = [[NSRecursiveLock alloc] init];
-    _game = Game::getInstance();
-    __timeStart = getMachTimeInMilliseconds();
+
     NSOpenGLPixelFormatAttribute attrs[] = 
     {
         NSOpenGLPFAAccelerated,
@@ -120,7 +123,12 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     if (!pf)
         NSLog(@"OpenGL pixel format not supported.");
     
-    self = [super initWithFrame:frame pixelFormat:[pf autorelease]];  
+    if((self = [super initWithFrame:frame pixelFormat:[pf autorelease]])) 
+    {
+        lock = [[NSRecursiveLock alloc] init];
+        _game = Game::getInstance();
+        __timeStart = getMachTimeInMilliseconds();
+    }
     
     return self;
 }
@@ -173,18 +181,47 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     [super dealloc];
 }
 
+
+- (void) mouse: (Mouse::MouseEvent) mouseEvent orTouchEvent: (Touch::TouchEvent) touchEvent atX: (int) x y: (int) y s: (int) s 
+{
+    if (!Game::getInstance()->mouseEvent(mouseEvent, x, y, s))
+    {
+        Game::getInstance()->touchEvent(touchEvent, x, y, 0);
+    }
+        
+}
+
 - (void) mouseDown: (NSEvent*) event
 {
     NSPoint point = [event locationInWindow];
     __leftMouseDown = true;
-    _game->touchEvent(Touch::TOUCH_PRESS, point.x, WINDOW_HEIGHT - point.y, 0);
+    [self mouse: Mouse::MOUSE_PRESS_LEFT_BUTTON orTouchEvent: Touch::TOUCH_PRESS atX: WINDOW_HEIGHT - point.x y: point.y s: 0];
+
+    
+    //_game->mouseEvent(Mouse::MOUSE_PRESS_LEFT_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
+   /* 
+    MOUSE_PRESS_LEFT_BUTTON,
+    MOUSE_RELEASE_LEFT_BUTTON,
+    MOUSE_PRESS_MIDDLE_BUTTON,
+    MOUSE_RELEASE_MIDDLE_BUTTON,
+    MOUSE_PRESS_RIGHT_BUTTON,
+    MOUSE_RELEASE_RIGHT_BUTTON,
+    MOUSE_MOVE,
+    MOUSE_WHEEL
+*/
 }
 
 - (void) mouseUp: (NSEvent*) event
 {
     NSPoint point = [event locationInWindow];
     __leftMouseDown = false;
-    _game->touchEvent(Touch::TOUCH_RELEASE, point.x, WINDOW_HEIGHT - point.y, 0);
+    [self mouse: Mouse::MOUSE_RELEASE_LEFT_BUTTON orTouchEvent: Touch::TOUCH_RELEASE atX: point.x y: WINDOW_HEIGHT - point.y s: 0];
+}
+
+- (void)mouseMoved:(NSEvent *) event 
+{
+    NSPoint point = [event locationInWindow];
+    Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
@@ -192,7 +229,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     NSPoint point = [event locationInWindow];
     if (__leftMouseDown)
     {
-        _game->touchEvent(Touch::TOUCH_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
+        [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE atX: point.x y: WINDOW_HEIGHT - point.y s: 0];
     }
 }
 
@@ -201,12 +238,15 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     __rightMouseDown = true;
      NSPoint point = [event locationInWindow];
     __lx = point.x;
-    __ly = WINDOW_HEIGHT - point.y;
+    __ly = WINDOW_HEIGHT - point.y;    
+    _game->mouseEvent(Mouse::MOUSE_PRESS_RIGHT_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void) rightMouseUp: (NSEvent*) event
 {
    __rightMouseDown = false;
+    NSPoint point = [event locationInWindow];
+    _game->mouseEvent(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void) rightMouseDragged: (NSEvent*) event
@@ -226,6 +266,30 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         __lx = point.x;
         __ly = (WINDOW_HEIGHT - point.y);
     }
+    
+    // In right-mouse case, whether __rightMouseDown is true or false
+    // this should not matter, mouse move is still occuring
+    _game->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
+}
+
+- (void)otherMouseDown: (NSEvent *) event 
+{
+    __otherMouseDown = true;
+    NSPoint point = [event locationInWindow];
+    _game->mouseEvent(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
+}
+
+- (void)otherMouseUp: (NSEvent *) event 
+{
+    __otherMouseDown = false;
+    NSPoint point = [event locationInWindow];
+    _game->mouseEvent(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
+}
+
+- (void)otherMouseDragged: (NSEvent *) event 
+{
+    NSPoint point = [event locationInWindow];
+    _game->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void) mouseEntered: (NSEvent*)event
@@ -233,10 +297,17 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     __hasMouse = true;
 }
 
+- (void)scrollWheel: (NSEvent *) event 
+{
+    NSPoint point = [event locationInWindow];
+    Game::getInstance()->mouseEvent(Mouse::MOUSE_WHEEL, point.x, WINDOW_HEIGHT - point.y, (int)([event deltaY] * 10.0f));
+}
+
 - (void) mouseExited: (NSEvent*)event
 {
     __leftMouseDown = false;
     __rightMouseDown = false;
+    __otherMouseDown = false;
     __hasMouse = false;
 }
 
@@ -544,6 +615,7 @@ int Platform::enterMessagePump()
                         backing:NSBackingStoreBuffered
                         defer:NO];
     
+    [window setAcceptsMouseMovedEvents:YES];
     [window setContentView:__view];
     [window setDelegate:__view];
     [__view release];
@@ -553,7 +625,17 @@ int Platform::enterMessagePump()
     [pool release];
     return EXIT_SUCCESS;
 }
-    
+
+unsigned int Platform::getDisplayWidth()
+{
+    return WINDOW_WIDTH;
+}
+
+unsigned int Platform::getDisplayHeight()
+{
+    return WINDOW_HEIGHT;
+}
+
 long Platform::getAbsoluteTime()
 {
     __timeAbsolute = getMachTimeInMilliseconds();
