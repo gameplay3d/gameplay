@@ -12,6 +12,7 @@ std::vector<SceneLoader::SceneAnimation> SceneLoader::_animations;
 std::vector<SceneLoader::SceneNodeProperty> SceneLoader::_nodeProperties;
 std::vector<std::string> SceneLoader::_nodesWithMeshRB;
 std::map<std::string, SceneLoader::MeshRigidBodyData>* SceneLoader::_meshRigidBodyData = NULL;
+std::string SceneLoader::_path;
 
 Scene* SceneLoader::load(const char* filePath)
 {
@@ -35,8 +36,10 @@ Scene* SceneLoader::load(const char* filePath)
         SAFE_DELETE(properties);
         return NULL;
     }
-    
 
+    // Get the path to the main GPB.
+    _path = sceneProperties->getString("path");
+    
     // Build the node URL/property and animation reference tables and load the referenced files.
     buildReferenceTables(sceneProperties);
     loadReferencedFiles();
@@ -124,7 +127,7 @@ Scene* SceneLoader::load(const char* filePath)
     return scene;
 }
 
-void SceneLoader::addMeshRigidBodyData(std::string id, Mesh* mesh, unsigned char* vertexData, unsigned int vertexByteCount)
+void SceneLoader::addMeshRigidBodyData(std::string package, std::string id, Mesh* mesh, unsigned char* vertexData, unsigned int vertexByteCount)
 {
     if (!_meshRigidBodyData)
     {
@@ -132,17 +135,47 @@ void SceneLoader::addMeshRigidBodyData(std::string id, Mesh* mesh, unsigned char
         return;
     }
 
+    // If the node with the mesh rigid body is renamed, we need to find the new id.
+    for (unsigned int i = 0; i < _nodeProperties.size(); i++)
+    {
+        if (_nodeProperties[i]._type == SceneNodeProperty::URL &&
+            _nodeProperties[i]._id == id)
+        {
+            if ((package == _path && _nodeProperties[i]._file.size() == 0) ||
+                (package == _nodeProperties[i]._file))
+            {
+                id = _nodeProperties[i]._nodeID;
+                break;
+            }
+        }
+    }
+
     (*_meshRigidBodyData)[id].mesh = mesh;
     (*_meshRigidBodyData)[id].vertexData = new unsigned char[vertexByteCount];
     memcpy((*_meshRigidBodyData)[id].vertexData, vertexData, vertexByteCount);
 }
 
-void SceneLoader::addMeshRigidBodyData(std::string id, unsigned char* indexData, unsigned int indexByteCount)
+void SceneLoader::addMeshRigidBodyData(std::string package, std::string id, unsigned char* indexData, unsigned int indexByteCount)
 {
     if (!_meshRigidBodyData)
     {
         WARN("Attempting to add mesh rigid body data outside of scene loading; ignoring request.");
         return;
+    }
+
+    // If the node with the mesh rigid body is renamed, we need to find the new id.
+    for (unsigned int i = 0; i < _nodeProperties.size(); i++)
+    {
+        if (_nodeProperties[i]._type == SceneNodeProperty::URL &&
+            _nodeProperties[i]._id == id)
+        {
+            if ((package == _path && _nodeProperties[i]._file.size() == 0) ||
+                (package == _nodeProperties[i]._file))
+            {
+                id = _nodeProperties[i]._nodeID;
+                break;
+            }
+        }
     }
 
     unsigned char* indexDataCopy = new unsigned char[indexByteCount];
@@ -568,7 +601,19 @@ void SceneLoader::calculateNodesWithMeshRigidBodies(const Properties* scenePrope
                     if (p && (name = p->getString("rigidbodymodel")))
                         _nodesWithMeshRB.push_back(name);
                     else
-                        _nodesWithMeshRB.push_back(_nodeProperties[i]._nodeID);
+                    {
+                        const char* id = _nodeProperties[i]._nodeID;
+                        for (unsigned int j = 0; j < _nodeProperties.size(); j++)
+                        {
+                            if (_nodeProperties[j]._type == SceneNodeProperty::URL &&
+                                _nodeProperties[j]._nodeID == _nodeProperties[i]._nodeID)
+                            {
+                                id = _nodeProperties[j]._id.c_str();
+                                break;
+                            }
+                        }
+                        _nodesWithMeshRB.push_back(id);
+                    }
                 }
             }
         }
@@ -704,18 +749,17 @@ PhysicsConstraint* SceneLoader::loadHingeConstraint(const Properties* constraint
 Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
 {
     // Load the main scene from the specified path.
-    const char* path = sceneProperties->getString("path");
-    Package* package = Package::create(path);
+    Package* package = Package::create(_path.c_str());
     if (!package)
     {
-        WARN_VARG("Failed to load scene GPB file '%s'.", path);
+        WARN_VARG("Failed to load scene GPB file '%s'.", _path.c_str());
         return NULL;
     }
     
     Scene* scene = package->loadScene(NULL, &_nodesWithMeshRB);
     if (!scene)
     {
-        WARN_VARG("Failed to load scene from '%s'.", path);
+        WARN_VARG("Failed to load scene from '%s'.", _path.c_str());
         SAFE_RELEASE(package);
         return NULL;
     }
