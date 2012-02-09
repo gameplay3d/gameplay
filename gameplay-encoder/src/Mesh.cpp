@@ -273,7 +273,6 @@ void Mesh::writeBinaryVertices(FILE* file)
     }
 
     // Write bounds
-    computeBounds();
     write(&bounds.min.x, 3, file);
     write(&bounds.max.x, 3, file);
     write(&bounds.center.x, 3, file);
@@ -302,7 +301,6 @@ void Mesh::writeText(FILE* file)
     fprintf(file, "</vertices>\n");
 
     // write bounds
-    computeBounds();
     fprintf(file, "<bounds>\n");
     fprintf(file, "<min>\n");
     writeVectorText(bounds.min, file);
