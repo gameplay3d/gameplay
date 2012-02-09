@@ -18,6 +18,11 @@
 using namespace std;
 using namespace gameplay;
 
+// UIScreen bounds are provided as if device was in portrait mode
+// Gameplay defaults to landscape
+extern const int WINDOW_WIDTH  = [[UIScreen mainScreen] bounds].size.height;
+extern const int WINDOW_HEIGHT = [[UIScreen mainScreen] bounds].size.width;
+
 static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
 static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
 
@@ -332,7 +337,7 @@ int getKey(unichar keyCode);
         CGPoint touchLoc = [t locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.x,  touchLoc.y, uniqueTouch);
+        Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.x, touchLoc.y, uniqueTouch);
     }
 }
 
@@ -362,7 +367,7 @@ int getKey(unichar keyCode);
         CGPoint touchLoc = [t locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchLoc.x,  touchLoc.y, uniqueTouch);
+        Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchLoc.x, touchLoc.y, uniqueTouch);
     }
 }
 
@@ -781,6 +786,16 @@ int Platform::enterMessagePump()
     UIApplicationMain(0, nil, NSStringFromClass([AppDelegate class]), NSStringFromClass([AppDelegate class]));
     [pool release];
     return EXIT_SUCCESS;
+}
+    
+unsigned int Platform::getDisplayWidth()
+{
+    return WINDOW_WIDTH;
+}
+
+unsigned int Platform::getDisplayHeight()
+{
+    return WINDOW_HEIGHT;
 }
 
 long Platform::getAbsoluteTime()
