@@ -220,7 +220,7 @@ private:
  * @param plane The plane to transform.
  * @return The resulting transformed plane.
  */
-inline Plane operator*(const Matrix& matrix, const Plane& plane);
+inline const Plane operator*(const Matrix& matrix, const Plane& plane);
 
 }
 
