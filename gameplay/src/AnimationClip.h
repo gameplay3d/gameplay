@@ -230,7 +230,7 @@ private:
     static const char CLIP_IS_FADING_IN_BIT = 0x10;           // Bit representing whether the clip is fading out.
     static const char CLIP_IS_MARKED_FOR_REMOVAL_BIT = 0x20;  // Bit representing whether the clip has ended and should be removed from the AnimationController.
     static const char CLIP_IS_RESTARTED_BIT = 0x40;           // Bit representing if the clip should be restarted by the AnimationController.
-    static const char CLIP_ALL_BITS = 0x4F;                   // Bit mask for all the state bits.
+    static const char CLIP_ALL_BITS = 0x7F;                   // Bit mask for all the state bits.
 
     /**
      * ListenerEvent.

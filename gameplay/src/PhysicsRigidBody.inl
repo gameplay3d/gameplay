@@ -75,12 +75,12 @@ inline bool PhysicsRigidBody::isKinematic() const
 
 inline void PhysicsRigidBody::setAngularVelocity(const Vector3& velocity)
 {
-    _body->setAngularVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+    _body->setAngularVelocity(velocity);
 }
 
 inline void PhysicsRigidBody::setAnisotropicFriction(const Vector3& friction)
 {
-    _body->setAnisotropicFriction(btVector3(friction.x, friction.y, friction.z));
+    _body->setAnisotropicFriction(friction);
 }
 
 inline void PhysicsRigidBody::setDamping(float linearDamping, float angularDamping)
@@ -95,7 +95,7 @@ inline void PhysicsRigidBody::setFriction(float friction)
 
 inline void PhysicsRigidBody::setGravity(const Vector3& gravity)
 {
-    _body->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
+    _body->setGravity(gravity);
 }
 
 inline void PhysicsRigidBody::setKinematic(bool kinematic)
@@ -114,7 +114,7 @@ inline void PhysicsRigidBody::setKinematic(bool kinematic)
 
 inline void PhysicsRigidBody::setLinearVelocity(const Vector3& velocity)
 {
-    _body->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+    _body->setLinearVelocity(velocity);
 }
 
 inline void PhysicsRigidBody::setRestitution(float restitution)

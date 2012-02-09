@@ -1,6 +1,8 @@
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
 
+class btVector3;
+
 namespace gameplay
 {
 
@@ -425,6 +427,11 @@ public:
      * @return True if this vector is equal to the given vector, false otherwise.
      */
     inline bool operator==(const Vector3& v) const;
+
+    /**
+     * Defines implicit conversion operator to the Bullet btVector3 type.
+     */
+    inline operator btVector3() const;
 };
 
 /**

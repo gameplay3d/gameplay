@@ -58,8 +58,8 @@ private:
         std::string _id;
     };
 
-    static void addMeshRigidBodyData(std::string id, Mesh* mesh, unsigned char* vertexData, unsigned int vertexByteCount);
-    static void addMeshRigidBodyData(std::string id, unsigned char* indexData, unsigned int indexByteCount);
+    static void addMeshRigidBodyData(std::string package, std::string id, Mesh* mesh, unsigned char* vertexData, unsigned int vertexByteCount);
+    static void addMeshRigidBodyData(std::string package, std::string id, unsigned char* indexData, unsigned int indexByteCount);
     static void addSceneAnimation(const char* animationID, const char* targetID, const char* url);
     static void addSceneNodeProperty(SceneNodeProperty::Type type, const char* nodeID, const char* url = NULL);
     static void applyNodeProperties(const Scene* scene, const Properties* sceneProperties);
@@ -93,6 +93,9 @@ private:
 
     // Stores the mesh data needed for triangle mesh rigid body support.
     static std::map<std::string, MeshRigidBodyData>* _meshRigidBodyData;
+
+    // The path of the main GPB for the scene being loaded.
+    static std::string _path;
 };
 
 }
