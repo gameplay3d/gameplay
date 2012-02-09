@@ -477,34 +477,35 @@ bool Properties::exists(const char* name) const
     return _properties.find(name) != _properties.end();
 }
 
-bool isStringNumeric(const char* str)
+const bool isStringNumeric(const char* str)
 {
-    char* ptr = const_cast<char*>(str);
+    // The first character may be '-'
+    if (*str == '-')
+        str++;
 
-    // First character must be a digit
-    if (!isdigit(*ptr))
+    // The first character after the sign must be a digit
+    if (!isdigit(*str))
         return false;
-    ptr++;
+    str++;
 
     // All remaining characters must be digits, with a single decimal (.) permitted
     unsigned int decimalCount = 0;
-    while (*ptr)
+    while (*str)
     {
-        if (!isdigit(*ptr))
+        if (!isdigit(*str))
         {
-            if (*ptr == '.' && decimalCount == 0)
+            if (*str == '.' && decimalCount == 0)
             {
                 // Max of 1 decimal allowed
                 decimalCount++;
             }
             else
             {
-                // Not a number
+                return false;
             }
         }
-        ptr++;
+        str++;
     }
-    
     return true;
 }
 
