@@ -103,6 +103,8 @@ extern void printError(const char* format, ...);
 
 // Bullet Physics
 #include <btBulletDynamicsCommon.h>
+#define BV(v) (btVector3((v).x, (v).y, (v).z))
+#define BQ(q) (btQuaternion((q).x, (q).y, (q).z, (q).w))
 
 // Debug new for memory leak detection
 #include "DebugNew.h"
