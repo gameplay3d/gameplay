@@ -226,9 +226,9 @@ void PhysicsRigidBody::applyForce(const Vector3& force, const Vector3* relativeP
     {
         _body->activate();
         if (relativePosition)
-            _body->applyForce(force, *relativePosition);
+            _body->applyForce(BV(force), BV(*relativePosition));
         else
-            _body->applyCentralForce(force);
+            _body->applyCentralForce(BV(force));
     }
 }
 
@@ -242,10 +242,10 @@ void PhysicsRigidBody::applyImpulse(const Vector3& impulse, const Vector3* relat
 
         if (relativePosition)
         {
-            _body->applyImpulse(impulse, *relativePosition);
+            _body->applyImpulse(BV(impulse), BV(*relativePosition));
         }
         else
-            _body->applyCentralImpulse(impulse);
+            _body->applyCentralImpulse(BV(impulse));
     }
 }
 
@@ -256,7 +256,7 @@ void PhysicsRigidBody::applyTorque(const Vector3& torque)
     if (torque.lengthSquared() > MATH_EPSILON)
     {
         _body->activate();
-        _body->applyTorque(torque);
+        _body->applyTorque(BV(torque));
     }
 }
 
@@ -267,7 +267,7 @@ void PhysicsRigidBody::applyTorqueImpulse(const Vector3& torque)
     if (torque.lengthSquared() > MATH_EPSILON)
     {
         _body->activate();
-        _body->applyTorqueImpulse(torque);
+        _body->applyTorqueImpulse(BV(torque));
     }
 }
 

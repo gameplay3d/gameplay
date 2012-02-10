@@ -1,4 +1,5 @@
 #include "PhysicsRigidBody.h"
+#include "Base.h"
 
 namespace gameplay
 {
@@ -75,12 +76,12 @@ inline bool PhysicsRigidBody::isKinematic() const
 
 inline void PhysicsRigidBody::setAngularVelocity(const Vector3& velocity)
 {
-    _body->setAngularVelocity(velocity);
+    _body->setAngularVelocity(BV(velocity));
 }
 
 inline void PhysicsRigidBody::setAnisotropicFriction(const Vector3& friction)
 {
-    _body->setAnisotropicFriction(friction);
+    _body->setAnisotropicFriction(BV(friction));
 }
 
 inline void PhysicsRigidBody::setDamping(float linearDamping, float angularDamping)
@@ -95,7 +96,7 @@ inline void PhysicsRigidBody::setFriction(float friction)
 
 inline void PhysicsRigidBody::setGravity(const Vector3& gravity)
 {
-    _body->setGravity(gravity);
+    _body->setGravity(BV(gravity));
 }
 
 inline void PhysicsRigidBody::setKinematic(bool kinematic)
@@ -114,7 +115,7 @@ inline void PhysicsRigidBody::setKinematic(bool kinematic)
 
 inline void PhysicsRigidBody::setLinearVelocity(const Vector3& velocity)
 {
-    _body->setLinearVelocity(velocity);
+    _body->setLinearVelocity(BV(velocity));
 }
 
 inline void PhysicsRigidBody::setRestitution(float restitution)

@@ -38,11 +38,11 @@ PhysicsSocketConstraint::PhysicsSocketConstraint(PhysicsRigidBody* a, const Vect
         b->getNode()->getWorldMatrix().getScale(&sB);
         Vector3 tB(translationOffsetB.x * sB.x, translationOffsetB.y * sB.y, translationOffsetB.z * sB.z);
 
-        _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, tA, tB);
+        _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, BV(tA), BV(tB));
     }
     else
     {
-        _constraint = new btPoint2PointConstraint(*a->_body, tA);
+        _constraint = new btPoint2PointConstraint(*a->_body, BV(tA));
     }
 }
 

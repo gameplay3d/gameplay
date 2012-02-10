@@ -1,8 +1,6 @@
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
 
-class btVector3;
-
 namespace gameplay
 {
 
@@ -366,12 +364,12 @@ public:
     inline Vector3& operator+=(const Vector3& v);
 
     /**
-     * Calculates the sum of this vector with the given vector.
+     * Calculates the difference of this vector with the given vector.
      * 
      * Note: this does not modify this vector.
      * 
-     * @param v The vector to add.
-     * @return The vector sum.
+     * @param v The vector to subtract.
+     * @return The vector difference.
      */
     inline const Vector3 operator-(const Vector3& v) const;
 
@@ -429,9 +427,13 @@ public:
     inline bool operator==(const Vector3& v) const;
 
     /**
-     * Defines implicit conversion operator to the Bullet btVector3 type.
+     * Determines if this vector is not equal to the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is not equal to the given vector, false otherwise.
      */
-    inline operator btVector3() const;
+    inline bool operator!=(const Vector3& v) const;
 };
 
 /**
