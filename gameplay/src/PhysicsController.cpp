@@ -118,7 +118,7 @@ void PhysicsController::setGravity(const Vector3& gravity)
     _gravity = gravity;
 
     if (_world)
-        _world->setGravity(_gravity);
+        _world->setGravity(BV(_gravity));
 }
 
 void PhysicsController::drawDebug(const Matrix& viewProjection)
@@ -130,8 +130,8 @@ void PhysicsController::drawDebug(const Matrix& viewProjection)
 
 PhysicsRigidBody* PhysicsController::rayTest(const Ray& ray)
 {
-    btCollisionWorld::ClosestRayResultCallback callback(ray.getOrigin(), ray.getDirection());
-    _world->rayTest(ray.getOrigin(), ray.getDirection(), callback);
+    btCollisionWorld::ClosestRayResultCallback callback(BV(ray.getOrigin()), BV(ray.getDirection()));
+    _world->rayTest(BV(ray.getOrigin()), BV(ray.getDirection()), callback);
     if (callback.hasHit())
         return getRigidBody(callback.m_collisionObject);
 
@@ -214,7 +214,7 @@ void PhysicsController::initialize()
 
     // Create the world.
     _world = new btDiscreteDynamicsWorld(_dispatcher, _overlappingPairCache, _solver, _collisionConfiguration);
-    _world->setGravity(_gravity);
+    _world->setGravity(BV(_gravity));
 
     // Set up debug drawing.
     _debugDrawer = new DebugDrawer();
@@ -423,9 +423,9 @@ PhysicsRigidBody* PhysicsController::getRigidBody(const btCollisionObject* colli
     return NULL;
 }
 
-btCollisionShape* PhysicsController::createBox(const Vector3& min, const Vector3& max, const btVector3& scale)
+btCollisionShape* PhysicsController::createBox(const Vector3& min, const Vector3& max, const Vector3& scale)
 {
-    btVector3 halfExtents(scale.x() * 0.5 * abs(max.x - min.x), scale.y() * 0.5 * abs(max.y - min.y), scale.z() * 0.5 * abs(max.z - min.z));
+    btVector3 halfExtents(scale.x * 0.5 * abs(max.x - min.x), scale.y * 0.5 * abs(max.y - min.y), scale.z * 0.5 * abs(max.z - min.z));
 
     // Return the box shape from the cache if it already exists.
     for (unsigned int i = 0; i < _shapes.size(); i++)
@@ -471,15 +471,15 @@ btCollisionShape* PhysicsController::createCapsule(float radius, float height)
     return capsule;
 }
 
-btCollisionShape* PhysicsController::createSphere(float radius, const btVector3& scale)
+btCollisionShape* PhysicsController::createSphere(float radius, const Vector3& scale)
 {
     // Since sphere shapes depend only on the radius, the best we can do is take
     // the largest dimension and apply that as the uniform scale to the rigid body.
-    float uniformScale = scale.x();
-    if (uniformScale < scale.y())
-        uniformScale = scale.y();
-    if (uniformScale < scale.z())
-        uniformScale = scale.z();
+    float uniformScale = scale.x;
+    if (uniformScale < scale.y)
+        uniformScale = scale.y;
+    if (uniformScale < scale.z)
+        uniformScale = scale.z;
     
     // Return the sphere shape from the cache if it already exists.
     for (unsigned int i = 0; i < _shapes.size(); i++)

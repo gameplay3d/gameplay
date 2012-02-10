@@ -1,6 +1,5 @@
 #include "Vector3.h"
 #include "Matrix.h"
-#include "Base.h"
 
 namespace gameplay
 {
@@ -69,9 +68,9 @@ inline bool Vector3::operator==(const Vector3& v) const
     return x==v.x && y==v.y && z==v.z;
 }
 
-inline Vector3::operator btVector3() const
+inline bool Vector3::operator!=(const Vector3& v) const
 {
-    return btVector3(x, y, z);
+    return x!=v.x || y!=v.y || z!=v.z;
 }
 
 inline const Vector3 operator*(float x, const Vector3& v)
