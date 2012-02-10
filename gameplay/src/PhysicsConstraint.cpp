@@ -118,7 +118,7 @@ btTransform PhysicsConstraint::getTransformOffset(const Node* node, const Vector
     
     t = offsetByCenterOfMass(node, t);
 
-    return btTransform(r, t);
+    return btTransform(BQ(r), BV(t));
 }
 
 Vector3 PhysicsConstraint::getWorldCenterOfMass(const Model* model)

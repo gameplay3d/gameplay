@@ -275,13 +275,13 @@ private:
     PhysicsRigidBody* getRigidBody(const btCollisionObject* collisionObject);
     
     // Creates a box collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createBox(const Vector3& min, const Vector3& max, const btVector3& scale);
+    btCollisionShape* createBox(const Vector3& min, const Vector3& max, const Vector3& scale);
 
     // Creates a capsule collision shape to be used in the creation of a rigid body.
     btCollisionShape* createCapsule(float radius, float height);
 
     // Creates a sphere collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createSphere(float radius, const btVector3& scale);
+    btCollisionShape* createSphere(float radius, const Vector3& scale);
 
     // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
     btCollisionShape* createMesh(PhysicsRigidBody* body, const Vector3& scale);

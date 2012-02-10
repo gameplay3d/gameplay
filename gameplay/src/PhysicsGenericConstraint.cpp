@@ -45,13 +45,13 @@ PhysicsGenericConstraint::PhysicsGenericConstraint(PhysicsRigidBody* a, const Qu
         b->getNode()->getWorldMatrix().getScale(&sB);
         Vector3 tB(translationOffsetB.x * sB.x, translationOffsetB.y * sB.y, translationOffsetB.z * sB.z);
 
-        btTransform frameInA(rotationOffsetA, tA);
-        btTransform frameInB(rotationOffsetB, tB);
+        btTransform frameInA(BQ(rotationOffsetA), BV(tA));
+        btTransform frameInB(BQ(rotationOffsetB), BV(tB));
         _constraint = new btGeneric6DofConstraint(*a->_body, *b->_body, frameInA, frameInB, true);
     }
     else
     {
-        btTransform frameInA(rotationOffsetA, tA);
+        btTransform frameInA(BQ(rotationOffsetA), BV(tA));
         _constraint = new btGeneric6DofConstraint(*a->_body, frameInA, true);
     }
 }
