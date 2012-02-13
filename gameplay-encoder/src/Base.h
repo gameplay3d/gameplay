@@ -78,6 +78,14 @@ void fillArray(float values[], float value, size_t length);
 
 #define ISZERO(x) (fabs(x) < 0.000001f)
 
+// Object deletion macro
+#define SAFE_DELETE(x) \
+    if (x) \
+    { \
+        delete x; \
+        x = NULL; \
+    }
+
 #ifdef NDEBUG
 #define DEBUGPRINT(x)
 #define DEBUGPRINT_VARG(x, ...)

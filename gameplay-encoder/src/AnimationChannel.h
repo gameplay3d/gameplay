@@ -60,6 +60,9 @@ public:
     const std::vector<float>& getTangentsOut() const;
     const std::vector<unsigned int>& getInterpolationTypes() const;
 
+    /**
+     * Removes duplicate key frames from the animation channel.
+     */
     void removeDuplicates();
 
     void convertToQuaternion();
@@ -77,7 +80,15 @@ public:
 
 private:
 
-    void deleteRange(size_t begin, size_t end);
+    /**
+     * Deletes all key frames from key time index begin to key time index end (exclusive).
+     * 
+     * @param begin The start index to delete.
+     * @param end The index to delete up to but not including.
+     * @param propSize The size of the animation propery to delete. Example: Translate(x,y,z) is size 3.
+     */
+    void deleteRange(size_t begin, size_t end, size_t propSize);
+
 private:
 
     std::string _targetId;

@@ -65,6 +65,10 @@ public:
     void addLight(Light* light);
     void addMesh(Mesh* mesh);
     void addNode(Node* node);
+    /**
+     * Adds a node that does not belong to a scene.
+     */
+    void addScenelessNode(Node* node);
     void addAnimation(Animation* animation);
 
     /**
@@ -93,6 +97,21 @@ public:
      * Adjusts the game play binary file before it is written.
      */
     void adjust();
+
+private:
+    /**
+     * Computes the bounds of all meshes in the node hierarchy.
+     */
+    void computeBounds(Node* node);
+    void optimizeTransformAnimations();
+
+    /**
+     * Decomposes an ANIMATE_SCALE_ROTATE_TRANSLATE channel into 3 new channels. (Scale, Rotate and Translate)
+     * 
+     * @param animation The animation that the channel belongs to.
+     * @param channel The animation channel to decompose.
+     */
+    void decomposeTransformAnimationChannel(Animation* animation, const AnimationChannel* channel);
 
 private:
 

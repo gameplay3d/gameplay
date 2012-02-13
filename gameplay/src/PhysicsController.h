@@ -15,7 +15,7 @@ namespace gameplay
 /**
  * Defines a class for controlling game physics.
  */
-class PhysicsController
+class PhysicsController : public btCollisionWorld::ContactResultCallback
 {
     friend class Game;
     friend class PhysicsConstraint;
@@ -189,7 +189,43 @@ public:
      */
     void drawDebug(const Matrix& viewProjection);
 
+    /**
+     * Gets the first rigid body that the given ray intersects.
+     * 
+     * @param ray The ray to test intersection with.
+     * @return The first rigid body that the ray intersects.
+     */
+    PhysicsRigidBody* rayTest(const Ray& ray);
+
+protected:
+
+    /**
+     * Internal function used for Bullet integration (do not use or override).
+     */
+    btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB);    
+
 private:
+
+    // Internal constants for the collision status cache.
+    static const int DIRTY;
+    static const int COLLISION;
+    static const int REGISTERED;
+
+    // Represents the collision listeners and status for a given collision pair (used by the collision status cache).
+    struct CollisionInfo
+    {
+        std::vector<PhysicsRigidBody::Listener*> _listeners;
+        int _status;
+    };
+
+    // Wraps Bullet collision shapes (used for implementing shape caching).
+    struct PhysicsCollisionShape : public Ref
+    {
+        PhysicsCollisionShape(btCollisionShape* shape) : _shape(shape) {}
+        ~PhysicsCollisionShape() { SAFE_DELETE(_shape); }
+
+        btCollisionShape* _shape;
+    };
 
     /**
      * Constructor.
@@ -226,6 +262,9 @@ private:
      */
     void update(long elapsedTime);
 
+    // Adds the given collision listener for the two given rigid bodies.
+    void addCollisionListener(PhysicsRigidBody::Listener* listener, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+
     // Adds the given rigid body to the world.
     void addRigidBody(PhysicsRigidBody* body);
     
@@ -236,13 +275,16 @@ private:
     PhysicsRigidBody* getRigidBody(const btCollisionObject* collisionObject);
     
     // Creates a box collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createBox(const Vector3& min, const Vector3& max, const btVector3& scale);
+    btCollisionShape* createBox(const Vector3& min, const Vector3& max, const Vector3& scale);
+
+    // Creates a capsule collision shape to be used in the creation of a rigid body.
+    btCollisionShape* createCapsule(float radius, float height);
 
     // Creates a sphere collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createSphere(float radius, const btVector3& scale);
+    btCollisionShape* createSphere(float radius, const Vector3& scale);
 
     // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createMesh(PhysicsRigidBody* body);
+    btCollisionShape* createMesh(PhysicsRigidBody* body, const Vector3& scale);
 
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
@@ -258,6 +300,12 @@ private:
     {
     public:
 
+        struct DebugVertex
+        {
+            float x, y, z;
+            float r, g, b, a;
+        };
+
         DebugDrawer();        
         ~DebugDrawer();
         
@@ -268,7 +316,7 @@ private:
         void drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor);        
         void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);        
         void drawContactPoint(const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color);        
-        void reportErrorWarning(const char* warningString);        
+        void reportErrorWarning(const char* warningString);
         void draw3dText(const btVector3& location, const char* textString);        
         void setDebugMode(int mode);        
         int	getDebugMode() const;
@@ -276,14 +324,8 @@ private:
     private:
         
         int _mode;
-        Effect* _effect;
-        VertexAttribute _positionAttrib;
-        VertexAttribute _colorAttrib;
-        Uniform* _viewProjectionMatrixUniform;
         const Matrix* _viewProjection;
-        float* _vertexData;
-        unsigned int _vertexCount;
-        unsigned int _vertexDataSize;
+        MeshBatch* _meshBatch;
     };
     
     btDefaultCollisionConfiguration* _collisionConfiguration;
@@ -291,12 +333,13 @@ private:
     btBroadphaseInterface* _overlappingPairCache;
     btSequentialImpulseConstraintSolver* _solver;
     btDynamicsWorld* _world;
-    btAlignedObjectArray<btCollisionShape*> _shapes;
+    std::vector<PhysicsCollisionShape*> _shapes;
     DebugDrawer* _debugDrawer;
     Listener::EventType _status;
     std::vector<Listener*>* _listeners;
     std::vector<PhysicsRigidBody*> _bodies;
     Vector3 _gravity;
+    std::map<PhysicsRigidBody::CollisionPair, CollisionInfo> _collisionStatus;  
 };
 
 }

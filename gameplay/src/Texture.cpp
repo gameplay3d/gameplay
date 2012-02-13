@@ -26,7 +26,7 @@ Texture::~Texture()
     // Remove ourself from the texture cache.
     if (_cached)
     {
-        std::vector<Texture*>::iterator itr = find(__textureCache.begin(), __textureCache.end(), this);
+        std::vector<Texture*>::iterator itr = std::find(__textureCache.begin(), __textureCache.end(), this);
         if (itr != __textureCache.end())
         {
             __textureCache.erase(itr);
@@ -68,7 +68,8 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
             if (tolower(ext[1]) == 'p' && tolower(ext[2]) == 'n' && tolower(ext[3]) == 'g')
             {
                 Image* image = Image::create(path);
-                texture = create(image, generateMipmaps);
+                if (image)
+                    texture = create(image, generateMipmaps);
                 SAFE_RELEASE(image);
             }
             break;

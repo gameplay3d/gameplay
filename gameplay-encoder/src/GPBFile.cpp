@@ -1,10 +1,18 @@
 #include "Base.h"
 #include "GPBFile.h"
+#include "Transform.h"
+
+#define EPSILON 1.2e-7f;
 
 namespace gameplay
 {
 
 static GPBFile* __instance = NULL;
+
+/**
+ * Returns true if the given value is close to one.
+ */
+static bool isAlmostOne(float value);
 
 GPBFile::GPBFile(void)
     : _file(NULL), _animationsAdded(false)
@@ -113,6 +121,16 @@ void GPBFile::addNode(Node* node)
 {
     addToRefTable(node);
     _nodes.push_back(node);
+}
+
+void GPBFile::addScenelessNode(Node* node)
+{
+    addToRefTable(node);
+    _nodes.push_back(node);
+    // Nodes are normally written to file as part of a scene. 
+    // Nodes that don't belong to a scene need to be written on their own (outside a scene).
+    // That is why node is added to the list of objects here.
+    _objects.push_back(node);
 }
 
 void GPBFile::addAnimation(Animation* animation)
@@ -235,6 +253,14 @@ void GPBFile::adjust()
         }
     }
 
+    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+    {
+        computeBounds(*i);
+    }
+
+    // try to convert joint transform animations into rotation animations
+    //optimizeTransformAnimations();
+
     // TODO:
     // remove ambient _lights
     // for each node
@@ -247,6 +273,134 @@ void GPBFile::adjust()
     //   Search for animations that have the same target and key times and see if they can be merged.
     //   Blender will output a simple translation animation to 3 separate animations with the same key times but targetting X, Y and Z.
     //   This can be merged into one animation. Same for scale animations.
+}
+
+void GPBFile::computeBounds(Node* node)
+{
+    assert(node);
+    if (Model* model = node->getModel())
+    {
+        if (Mesh* mesh = model->getMesh())
+        {
+            mesh->computeBounds();
+        }
+        if (MeshSkin* skin = model->getSkin())
+        {
+            skin->computeBounds();
+        }
+    }
+    for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
+    {
+        computeBounds(child);
+    }
+}
+
+void GPBFile::optimizeTransformAnimations()
+{
+    const unsigned int animationCount = _animations.getAnimationCount();
+    for (unsigned int animationIndex = 0; animationIndex < animationCount; ++animationIndex)
+    {
+        Animation* animation = _animations.getAnimation(animationIndex);
+        assert(animation);
+        const int channelCount = animation->getAnimationChannelCount();
+        // loop backwards because we will be adding and removing channels
+        for (int channelIndex = channelCount -1; channelIndex >= 0 ; --channelIndex)
+        {
+            AnimationChannel* channel = animation->getAnimationChannel(channelIndex);
+            assert(channel);
+            // get target node
+            const Object* obj = _refTable.get(channel->getTargetId());
+            if (obj && obj->getTypeId() == Object::NODE_ID)
+            {
+                const Node* node = static_cast<const Node*>(obj);
+                if (node->isJoint() && channel->getTargetAttribute() == Transform::ANIMATE_SCALE_ROTATE_TRANSLATE)
+                {
+                    decomposeTransformAnimationChannel(animation, channel);
+
+                    animation->remove(channel);
+                    SAFE_DELETE(channel);
+                }
+            }
+        }
+    }
+}
+
+
+void GPBFile::decomposeTransformAnimationChannel(Animation* animation, const AnimationChannel* channel)
+{
+    const std::vector<float>& keyTimes = channel->getKeyTimes();
+    const std::vector<float>& keyValues = channel->getKeyValues();
+    const size_t keyTimesSize = keyTimes.size();
+    const size_t keyValuesSize = keyValues.size();
+
+    std::vector<float> scaleKeyValues;
+    std::vector<float> rotateKeyValues;
+    std::vector<float> translateKeyValues;
+                    
+    scaleKeyValues.reserve(keyTimesSize * 3);
+    rotateKeyValues.reserve(keyTimesSize * 4);
+    translateKeyValues.reserve(keyTimesSize * 3);
+
+    for (size_t kv = 0; kv < keyValuesSize; kv += 10)
+    {
+        scaleKeyValues.push_back(keyValues[kv]);
+        scaleKeyValues.push_back(keyValues[kv+1]);
+        scaleKeyValues.push_back(keyValues[kv+2]);
+
+        rotateKeyValues.push_back(keyValues[kv+3]);
+        rotateKeyValues.push_back(keyValues[kv+4]);
+        rotateKeyValues.push_back(keyValues[kv+5]);
+        rotateKeyValues.push_back(keyValues[kv+6]);
+
+        translateKeyValues.push_back(keyValues[kv+7]);
+        translateKeyValues.push_back(keyValues[kv+8]);
+        translateKeyValues.push_back(keyValues[kv+9]);
+    }
+
+    // replace transform animation channel with translate, rotate and scale animation channels
+
+    // Don't add the scale channel if all the key values are close to 1.0
+    size_t oneCount = (size_t)std::count_if(scaleKeyValues.begin(), scaleKeyValues.end(), isAlmostOne);
+    if (scaleKeyValues.size() != oneCount)
+    {
+        AnimationChannel* scaleChannel = new AnimationChannel();
+        scaleChannel->setTargetId(channel->getTargetId());
+        scaleChannel->setKeyTimes(channel->getKeyTimes());
+        scaleChannel->setTangentsIn(channel->getTangentsIn());
+        scaleChannel->setTangentsOut(channel->getTangentsOut());
+        scaleChannel->setInterpolations(channel->getInterpolationTypes());
+        scaleChannel->setTargetAttribute(Transform::ANIMATE_SCALE);
+        scaleChannel->setKeyValues(scaleKeyValues);
+        scaleChannel->removeDuplicates();
+        animation->add(scaleChannel);
+    }
+
+    AnimationChannel* rotateChannel = new AnimationChannel();
+    rotateChannel->setTargetId(channel->getTargetId());
+    rotateChannel->setKeyTimes(channel->getKeyTimes());
+    rotateChannel->setTangentsIn(channel->getTangentsIn());
+    rotateChannel->setTangentsOut(channel->getTangentsOut());
+    rotateChannel->setInterpolations(channel->getInterpolationTypes());
+    rotateChannel->setTargetAttribute(Transform::ANIMATE_ROTATE);
+    rotateChannel->setKeyValues(rotateKeyValues);
+    rotateChannel->removeDuplicates();
+    animation->add(rotateChannel);
+
+    AnimationChannel* translateChannel = new AnimationChannel();
+    translateChannel->setTargetId(channel->getTargetId());
+    translateChannel->setKeyTimes(channel->getKeyTimes());
+    translateChannel->setTangentsIn(channel->getTangentsIn());
+    translateChannel->setTangentsOut(channel->getTangentsOut());
+    translateChannel->setInterpolations(channel->getInterpolationTypes());
+    translateChannel->setTargetAttribute(Transform::ANIMATE_TRANSLATE);
+    translateChannel->setKeyValues(translateKeyValues);
+    translateChannel->removeDuplicates();
+    animation->add(translateChannel);
+}
+
+static bool isAlmostOne(float value)
+{
+    return std::abs(value - 1.0f) < EPSILON;
 }
 
 }

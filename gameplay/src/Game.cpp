@@ -68,8 +68,15 @@ int Game::run(int width, int height)
     if (_state != UNINITIALIZED)
         return -1;
 
-    _width = width;
-    _height = height;
+    if (width == -1)
+        _width = Platform::getDisplayWidth();
+    else
+        _width = width;
+    
+    if (height == -1)
+        _height = Platform::getDisplayHeight();
+    else
+        _height = height;
 
     // Start up game systems.
     if (!startup())
@@ -175,6 +182,7 @@ void Game::frame()
 
     // Update the scheduled and running animations.
     _animationController->update(elapsedTime);
+    
     // Update the physics.
     _physicsController->update(elapsedTime);
     // Application Update.
@@ -248,6 +256,11 @@ void Game::keyEvent(Keyboard::KeyEvent evt, int key)
 
 void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
+}
+
+bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    return false;
 }
 
 }

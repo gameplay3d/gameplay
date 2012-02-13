@@ -460,7 +460,7 @@ bool Matrix::decompose(Vector3* scale, Quaternion* rotation, Vector3* translatio
     // Now calculate the rotation from the resulting matrix (axes).
     float trace = xaxis.x + yaxis.y + zaxis.z + 1.0f;
 
-    if (trace > MATH_TOLERANCE)
+    if (trace > MATH_EPSILON)
     {
         float s = 0.5f / sqrt(trace);
         rotation->w = 0.25f / s;
@@ -634,8 +634,6 @@ bool Matrix::invert(Matrix* dst) const
     inverse.m[13] = m[0] * b3 - m[1] * b1 + m[2] * b0;
     inverse.m[14] = -m[12] * a3 + m[13] * a1 - m[14] * a0;
     inverse.m[15] = m[8] * a3 - m[9] * a1 + m[10] * a0;
-
-    memcpy(dst->m, inverse.m, MATRIX_SIZE);
 
     multiply(inverse, 1.0f / det, dst);
 

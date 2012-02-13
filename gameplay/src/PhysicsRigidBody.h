@@ -35,7 +35,8 @@ public:
     {
         SHAPE_BOX,
         SHAPE_SPHERE,
-        SHAPE_NONE
+        SHAPE_NONE,
+        SHAPE_MAX = 10
     };
 
     /** 
@@ -68,44 +69,42 @@ public:
     /**
      * Collision listener interface.
      */
-    class Listener : public btCollisionWorld::ContactResultCallback
+    class Listener
     {
         friend class PhysicsRigidBody;
         friend class PhysicsController;
 
     public:
         /**
+         * The type of collision event.
+         */
+        enum EventType
+        {
+            /**
+             * Event fired when the two rigid bodies start colliding.
+             */
+            COLLIDING,
+
+            /**
+             * Event fired when the two rigid bodies no longer collide.
+             */
+            NOT_COLLIDING
+        };
+
+        /**
          * Destructor.
          */
         virtual ~Listener();
 
         /**
-         * Handles when a collision occurs for the rigid body where this listener is registered.
+         * Handles when a collision starts or stops occurring for the rigid body where this listener is registered.
          * 
+         * @param type The type of collision event.
          * @param collisionPair The two rigid bodies involved in the collision.
-         * @param contactPoint The point (in world space) where the collision occurred.
+         * @param contactPointA The contact point with the first rigid body (in world space).
+         * @param contactPointB The contact point with the second rigid body (in world space).
          */
-        virtual void collisionEvent(const CollisionPair& collisionPair, const Vector3& contactPoint) = 0;
-        
-    protected:
-        
-        /**
-         * Internal function used for Bullet integration (do not use or override).
-         */
-        btScalar addSingleResult(btManifoldPoint& cp, 
-                                 const btCollisionObject* a, int partIdA, int indexA, 
-                                 const btCollisionObject* b, int partIdB, int indexB);
-
-        std::map<CollisionPair, int> _collisionStatus;  // Holds the collision status for each pair of rigid bodies. 
-        
-    private:
-
-        // Internal constant.
-        static const int DIRTY;
-        // Internal constant.
-        static const int COLLISION;
-        // Internal constant.
-        static const int REGISTERED;
+        virtual void collisionEvent(EventType type, const CollisionPair& collisionPair, const Vector3& contactPointA = Vector3(), const Vector3& contactPointB = Vector3()) = 0;
     };
 
     /**
@@ -323,6 +322,23 @@ private:
      * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
      */
     PhysicsRigidBody(Node* node, Image* image, float mass, float friction = 0.5,
+        float restitution = 0.0, float linearDamping = 0.0, float angularDamping = 0.0);
+
+    /**
+     * Creates a capsule rigid body.
+     * 
+     * @param node The node to create the heightfield rigid body for; note that the node must have
+     *      a model attached to it prior to creating a rigid body for it.
+     * @param radius The radius of the capsule.
+     * @param height The height of the cylindrical part of the capsule (not including the ends).
+     * @param mass The mass of the rigid body, in kilograms.
+     * @param friction The friction of the rigid body (non-zero values give best simulation results).
+     * @param restitution The restitution of the rigid body (this controls the bounciness of
+     *      the rigid body; use zero for best simulation results).
+     * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
+     * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
+     */
+    PhysicsRigidBody(Node* node, float radius, float height, float mass, float friction = 0.5,
         float restitution = 0.0, float linearDamping = 0.0, float angularDamping = 0.0);
 
     /**

@@ -10,50 +10,54 @@
 namespace gameplay
 {
 
-const int PhysicsRigidBody::Listener::DIRTY         = 0x01;
-const int PhysicsRigidBody::Listener::COLLISION     = 0x02;
-const int PhysicsRigidBody::Listener::REGISTERED    = 0x04;
-
-// Internal values used for creating mesh and heightfield rigid bodies.
+// Internal values used for creating mesh, heightfield, and capsule rigid bodies.
 #define SHAPE_MESH ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 1))
 #define SHAPE_HEIGHTFIELD ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 2))
+#define SHAPE_CAPSULE ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 3))
 
 // Helper function for calculating heights from heightmap (image) or heightfield data.
 static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
 
 PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, float mass, 
-        float friction, float restitution, float linearDamping, float angularDamping)
+    float friction, float restitution, float linearDamping, float angularDamping)
         : _shape(NULL), _body(NULL), _node(node), _listeners(NULL), _angularVelocity(NULL),
         _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL), _vertexData(NULL),
         _indexData(NULL), _heightfieldData(NULL), _inverse(NULL), _inverseIsDirty(true)
 {
+    // Get the node's world scale (we need to apply this during creation since rigid bodies don't scale dynamically).
+    Vector3 scale;
+    node->getWorldMatrix().getScale(&scale);
+
     switch (type)
     {
         case SHAPE_BOX:
         {
             const BoundingBox& box = node->getModel()->getMesh()->getBoundingBox();
-            _shape = Game::getInstance()->getPhysicsController()->createBox(box.min, box.max, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
+            _shape = Game::getInstance()->getPhysicsController()->createBox(box.min, box.max, scale);
             break;
         }
         case SHAPE_SPHERE:
         {
             const BoundingSphere& sphere = node->getModel()->getMesh()->getBoundingSphere();
-            _shape = Game::getInstance()->getPhysicsController()->createSphere(sphere.radius, btVector3(node->getScaleX(), node->getScaleY(), node->getScaleZ()));
+            _shape = Game::getInstance()->getPhysicsController()->createSphere(sphere.radius, scale);
             break;
         }
         case SHAPE_MESH:
         {
-            _shape = Game::getInstance()->getPhysicsController()->createMesh(this);
+            _shape = Game::getInstance()->getPhysicsController()->createMesh(this, scale);
             break;
         }
     }
 
     // Use the center of the bounding sphere as the center of mass offset.
     Vector3 c(node->getModel()->getMesh()->getBoundingSphere().center);
+    c.x *= scale.x;
+    c.y *= scale.y;
+    c.z *= scale.z;
     c.negate();
 
-    // Create the Bullet rigid body.
-    if (c.lengthSquared() > MATH_EPSILON)
+    // Create the Bullet rigid body (we don't apply center of mass offsets on mesh rigid bodies).
+    if (c.lengthSquared() > MATH_EPSILON && type != SHAPE_MESH)
         _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
     else
         _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
@@ -144,6 +148,36 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, Image* image, float mass,
     _node->addListener(this);
 }
 
+PhysicsRigidBody::PhysicsRigidBody(Node* node, float radius, float height, float mass, float friction,
+    float restitution, float linearDamping, float angularDamping)
+        : _shape(NULL), _body(NULL), _node(node), _listeners(NULL), _angularVelocity(NULL),
+        _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL), _vertexData(NULL),
+        _indexData(NULL), _heightfieldData(NULL), _inverse(NULL), _inverseIsDirty(true)
+{
+    // Get the node's world scale (we need to apply this during creation since rigid bodies don't scale dynamically).
+    Vector3 scale;
+    node->getWorldMatrix().getScale(&scale);
+
+    // Create the capsule collision shape.
+    _shape = Game::getInstance()->getPhysicsController()->createCapsule(radius, height);
+
+    // Use the center of the bounding sphere as the center of mass offset.
+    Vector3 c(node->getModel()->getMesh()->getBoundingSphere().center);
+    c.x *= scale.x;
+    c.y *= scale.y;
+    c.z *= scale.z;
+    c.negate();
+
+    // Create the Bullet rigid body.
+    if (c.lengthSquared() > MATH_EPSILON)
+        _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping, &c);
+    else
+        _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
+
+    // Add the rigid body to the physics world.
+    Game::getInstance()->getPhysicsController()->addRigidBody(this);
+}
+
 PhysicsRigidBody::~PhysicsRigidBody()
 {
     // Clean up all constraints linked to this rigid body.
@@ -160,8 +194,6 @@ PhysicsRigidBody::~PhysicsRigidBody()
     {
         if (_body->getMotionState())
             delete _body->getMotionState();
-
-        SAFE_DELETE(_shape);
 
         Game::getInstance()->getPhysicsController()->removeRigidBody(this);
         SAFE_DELETE(_body);
@@ -183,13 +215,7 @@ PhysicsRigidBody::~PhysicsRigidBody()
 
 void PhysicsRigidBody::addCollisionListener(Listener* listener, PhysicsRigidBody* body)
 {
-    if (!_listeners)
-        _listeners = new std::vector<Listener*>();
-
-    CollisionPair pair(this, body);
-    listener->_collisionStatus[pair] = PhysicsRigidBody::Listener::REGISTERED;
-
-    _listeners->push_back(listener);
+    Game::getInstance()->getPhysicsController()->addCollisionListener(listener, this, body);
 }
 
 void PhysicsRigidBody::applyForce(const Vector3& force, const Vector3* relativePosition)
@@ -200,9 +226,9 @@ void PhysicsRigidBody::applyForce(const Vector3& force, const Vector3* relativeP
     {
         _body->activate();
         if (relativePosition)
-            _body->applyForce(btVector3(force.x, force.y, force.z), btVector3(relativePosition->x, relativePosition->y, relativePosition->z));
+            _body->applyForce(BV(force), BV(*relativePosition));
         else
-            _body->applyCentralForce(btVector3(force.x, force.y, force.z));
+            _body->applyCentralForce(BV(force));
     }
 }
 
@@ -216,10 +242,10 @@ void PhysicsRigidBody::applyImpulse(const Vector3& impulse, const Vector3* relat
 
         if (relativePosition)
         {
-            _body->applyImpulse(btVector3(impulse.x, impulse.y, impulse.z), btVector3(relativePosition->x, relativePosition->y, relativePosition->z));
+            _body->applyImpulse(BV(impulse), BV(*relativePosition));
         }
         else
-            _body->applyCentralImpulse(btVector3(impulse.x, impulse.y, impulse.z));
+            _body->applyCentralImpulse(BV(impulse));
     }
 }
 
@@ -230,7 +256,7 @@ void PhysicsRigidBody::applyTorque(const Vector3& torque)
     if (torque.lengthSquared() > MATH_EPSILON)
     {
         _body->activate();
-        _body->applyTorque(btVector3(torque.x, torque.y, torque.z));
+        _body->applyTorque(BV(torque));
     }
 }
 
@@ -241,7 +267,7 @@ void PhysicsRigidBody::applyTorqueImpulse(const Vector3& torque)
     if (torque.lengthSquared() > MATH_EPSILON)
     {
         _body->activate();
-        _body->applyTorqueImpulse(btVector3(torque.x, torque.y, torque.z));
+        _body->applyTorqueImpulse(BV(torque));
     }
 }
 
@@ -294,6 +320,8 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     Vector3* gravity = NULL;
     Vector3* anisotropicFriction = NULL;
     const char* imagePath = NULL;
+    float radius = -1.0f;
+    float height = -1.0f;
 
     // Load the defined properties.
     properties->rewind();
@@ -311,6 +339,8 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
                 type = SHAPE_MESH;
             else if (typeStr == "HEIGHTFIELD")
                 type = SHAPE_HEIGHTFIELD;
+            else if (typeStr == "CAPSULE")
+                type = SHAPE_CAPSULE;
             else
             {
                 WARN_VARG("Could not create rigid body; unsupported value for rigid body type: '%s'.", typeStr.c_str());
@@ -355,6 +385,14 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
         {
             imagePath = properties->getString();
         }
+        else if (strcmp(name, "radius") == 0)
+        {
+            radius = properties->getFloat();
+        }
+        else if (strcmp(name, "height") == 0)
+        {
+            height = properties->getFloat();
+        }
     }
 
     // If the rigid body type is equal to mesh, check that the node's mesh's primitive type is supported.
@@ -380,30 +418,48 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
 
     // Create the rigid body.
     PhysicsRigidBody* body = NULL;
-    if (imagePath == NULL)
+    switch (type)
     {
-        body = new PhysicsRigidBody(node, type, mass, friction, restitution, linearDamping, angularDamping);
-    }
-    else
-    {
-        // Load the image data from the given file path.
-        Image* image = Image::create(imagePath);
-        if (!image)
-            return NULL;
+        case SHAPE_HEIGHTFIELD:
+            if (imagePath == NULL)
+            {
+                WARN("Heightfield rigid body requires an image path.");
+            }
+            else
+            {
+                // Load the image data from the given file path.
+                Image* image = Image::create(imagePath);
+                if (!image)
+                    return NULL;
 
-        // Ensure that the image's pixel format is supported.
-        switch (image->getFormat())
-        {
-            case Image::RGB:
-            case Image::RGBA:
-                break;
-            default:
-                WARN_VARG("Heightmap: pixel format is not supported: %d", image->getFormat());
-                return NULL;
-        }
+                // Ensure that the image's pixel format is supported.
+                switch (image->getFormat())
+                {
+                    case Image::RGB:
+                    case Image::RGBA:
+                        break;
+                    default:
+                        WARN_VARG("Heightmap: pixel format is not supported: %d", image->getFormat());
+                        return NULL;
+                }
 
-        body = new PhysicsRigidBody(node, image, mass, friction, restitution, linearDamping, angularDamping);
-        SAFE_RELEASE(image);
+                body = new PhysicsRigidBody(node, image, mass, friction, restitution, linearDamping, angularDamping);
+                SAFE_RELEASE(image);
+            }
+            break;
+        case SHAPE_CAPSULE:
+            if (radius == -1.0f || height == -1.0f)
+            {
+                WARN("Both 'radius' and 'height' must be specified for a capsule rigid body.");
+            }
+            else
+            {
+                body = new PhysicsRigidBody(node, radius, height, mass, friction, restitution, linearDamping, angularDamping);
+            }
+            break;
+        default:
+            body = new PhysicsRigidBody(node, type, mass, friction, restitution, linearDamping, angularDamping);
+            break;
     }
 
     // Set any initially defined properties.
@@ -514,36 +570,6 @@ PhysicsRigidBody::CollisionPair::CollisionPair(PhysicsRigidBody* rbA, PhysicsRig
 PhysicsRigidBody::Listener::~Listener()
 {
     // Unused
-}
-
-btScalar PhysicsRigidBody::Listener::addSingleResult(btManifoldPoint& cp, 
-                                                     const btCollisionObject* a, int partIdA, int indexA, 
-                                                     const btCollisionObject* b, int partIdB, int indexB)
-{
-    // Get pointers to the PhysicsRigidBody objects.
-    PhysicsRigidBody* rbA = Game::getInstance()->getPhysicsController()->getRigidBody(a);
-    PhysicsRigidBody* rbB = Game::getInstance()->getPhysicsController()->getRigidBody(b);
-    
-    // If the given rigid body pair has collided in the past, then
-    // we notify the listener only if the pair was not colliding
-    // during the previous frame. Otherwise, it's a new pair, so notify the listener.
-    CollisionPair pair(rbA, rbB);
-    if (_collisionStatus.count(pair) > 0)
-    {
-        if ((_collisionStatus[pair] & COLLISION) == 0)
-            collisionEvent(pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()));
-    }
-    else
-    {
-        collisionEvent(pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()));
-    }
-
-    // Update the collision status cache (we remove the dirty bit
-    // set in the controller's update so that this particular collision pair's
-    // status is not reset to 'no collision' when the controller's update completes).
-    _collisionStatus[pair] &= ~DIRTY;
-    _collisionStatus[pair] |= COLLISION;
-    return 0.0f;
 }
 
 btScalar PhysicsRigidBody::CollidesWithCallback::addSingleResult(btManifoldPoint& cp, 
