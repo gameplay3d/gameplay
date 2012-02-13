@@ -3,7 +3,7 @@
 namespace gameplay
 {
 
-inline Vector2 Vector2::operator+(const Vector2& v) const
+inline const Vector2 Vector2::operator+(const Vector2& v) const
 {
     Vector2 result(*this);
     result.add(v);
@@ -16,7 +16,7 @@ inline Vector2& Vector2::operator+=(const Vector2& v)
     return *this;
 }
 
-inline Vector2 Vector2::operator-(const Vector2& v) const
+inline const Vector2 Vector2::operator-(const Vector2& v) const
 {
     Vector2 result(*this);
     result.subtract(v);
@@ -29,14 +29,14 @@ inline Vector2& Vector2::operator-=(const Vector2& v)
     return *this;
 }
 
-inline Vector2 Vector2::operator-() const
+inline const Vector2 Vector2::operator-() const
 {
     Vector2 result(*this);
     result.negate();
     return result;
 }
 
-inline Vector2 Vector2::operator*(float x) const
+inline const Vector2 Vector2::operator*(float x) const
 {
     Vector2 result(*this);
     result.scale(x);
@@ -63,7 +63,12 @@ inline bool Vector2::operator==(const Vector2& v) const
     return x==v.x && y==v.y;
 }
 
-inline Vector2 operator*(float x, const Vector2& v)
+inline bool Vector2::operator!=(const Vector2& v) const
+{
+    return x!=v.x || y!=v.y;
+}
+
+inline const Vector2 operator*(float x, const Vector2& v)
 {
     Vector2 result(v);
     result.scale(x);

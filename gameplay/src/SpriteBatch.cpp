@@ -14,14 +14,6 @@
     vtx.u = vu; vtx.v = vv; \
     vtx.r = vr; vtx.g = vg; vtx.b = vb; vtx.a = va
 
-// Sprite vertex structured used for batching
-struct SpriteVertex
-{
-    float x, y, z;
-    float u, v;
-    float r, g, b, a;
-};
-
 // Default sprite vertex shader
 #define SPRITE_VSH \
     "uniform mat4 u_projectionMatrix;\n" \
@@ -52,6 +44,14 @@ struct SpriteVertex
 
 namespace gameplay
 {
+
+// Sprite vertex structured used for batching
+struct SpriteVertex
+{
+    float x, y, z;
+    float u, v;
+    float r, g, b, a;
+};
 
 // Shared sprite effects
 static Effect* __spriteEffect = NULL;

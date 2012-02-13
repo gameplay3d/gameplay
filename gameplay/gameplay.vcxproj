@@ -42,6 +42,7 @@
     <ClCompile Include="src\FrameBuffer.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\gameplay-main-android.cpp" />
     <ClCompile Include="src\gameplay-main-qnx.cpp" />
     <ClCompile Include="src\gameplay-main-win32.cpp" />
     <ClCompile Include="src\Image.cpp" />
@@ -70,6 +71,7 @@
     <ClCompile Include="src\PhysicsSocketConstraint.cpp" />
     <ClCompile Include="src\PhysicsSpringConstraint.cpp" />
     <ClCompile Include="src\Plane.cpp" />
+    <ClCompile Include="src\PlatformAndroid.cpp" />
     <ClCompile Include="src\PlatformQNX.cpp" />
     <ClCompile Include="src\PlatformWin32.cpp" />
     <ClCompile Include="src\Properties.cpp" />
@@ -135,6 +137,7 @@
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\MeshBatch.h" />
+    <ClInclude Include="src\Mouse.h" />
     <ClInclude Include="src\Pass.h" />
     <ClInclude Include="src\MaterialParameter.h" />
     <ClInclude Include="src\Matrix.h" />
@@ -208,11 +211,13 @@
     <None Include="src\BoundingSphere.inl" />
     <None Include="src\Curve.inl" />
     <None Include="src\Game.inl" />
+    <None Include="src\gameplay-main-ios.mm" />
     <None Include="src\gameplay-main-macos.mm" />
     <None Include="src\Image.inl" />
     <None Include="src\Matrix.inl" />
     <None Include="src\MeshBatch.inl" />
     <None Include="src\Plane.inl" />
+    <None Include="src\PlatformiOS.mm" />
     <None Include="src\PlatformMacOS.mm" />
     <None Include="src\Quaternion.inl" />
     <None Include="src\Ray.inl" />

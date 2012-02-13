@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay::Platform Class Reference</title>
+<title>gameplay: gameplay::Platform Class Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -122,8 +123,7 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aac96a0a5b3d2ff0b7aca92eaa6126a80">isMultiTouch</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a388195e784d2820c0d6158c4a10c8a97">getAccelerometerValues</a> (float *pitch, float *roll)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a52ceea1e71f2c8d99310baa61a69223b">swapBuffers</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6812cbda855837531c8631eb4763fdb5"></a><!-- doxytag: member="gameplay::Platform::touchEventInternal" ref="a6812cbda855837531c8631eb4763fdb5" args="(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)" -->
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>touchEventInternal</b> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aea3bd12f36c33c33824bc1ccdd4f32f3">displayKeyboard</a> (bool display)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a platform. </p>
@@ -168,6 +168,30 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>touchEventInte
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The created platform interface. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aea3bd12f36c33c33824bc1ccdd4f32f3"></a><!-- doxytag: member="gameplay::Platform::displayKeyboard" ref="aea3bd12f36c33c33824bc1ccdd4f32f3" args="(bool display)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void gameplay::Platform::displayKeyboard </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>display</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Shows or hides the virtual keyboard (if supported).</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">display</td><td>true when virtual keyboard needs to be displayed and false otherwise. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -386,14 +410,14 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>touchEventInte
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><b>gameplay</b>      </li>
+      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_platform.html">Platform</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -403,7 +427,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>touchEventInte
 </div>
 
 
-    <li class="footer">Generated on Thu Jan 19 2012 10:48:04 for GamePlay by
+    <li class="footer">Generated on Mon Jan 23 2012 13:10:21 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

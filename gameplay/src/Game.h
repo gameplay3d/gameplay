@@ -3,6 +3,7 @@
 
 #include "Keyboard.h"
 #include "Touch.h"
+#include "Mouse.h"
 #include "AudioController.h"
 #include "AnimationController.h"
 #include "PhysicsController.h"
@@ -95,8 +96,8 @@ public:
     /**
      * Call this method to initialize the game, and begin running the game.
      *
-     * @param width The width of the game window to run at.
-     * @param height The height of the game window to run at.
+     * @param width The width of the game window to run at. Default is -1 meaning native resolution width.
+     * @param height The height of the game window to run at. Default is -1 meaning native resolution height.
      * 
      * @return Zero for normal termination, or non-zero if an error occurred.
      */
@@ -184,13 +185,22 @@ public:
      * Menu callback on menu events.
      */
     virtual void menu();
-
+    
+    /**
+     * Shows or hides the virtual keyboard (if supported).
+     *
+     * @param display true when virtual keyboard needs to be displayed; false otherwise.
+     */
+     inline void displayKeyboard(bool display);
+     
     /**
      * Keyboard callback on keyPress events.
      *
      * @param evt The key event that occured.
-     * @param key The key code that was pressed, released or repeated.
+     * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
+     *            If evt is KEY_CHAR then key is the unicode value of the character.
      * 
+     * @see Keyboard::KeyEvent
      * @see Keyboard::Key
      */
     virtual void keyEvent(Keyboard::KeyEvent evt, int key);
@@ -199,10 +209,28 @@ public:
      * Touch callback on touch events.
      *
      * @param evt The touch event that occurred.
+     * @param x The x position of the touch in pixels. Left edge is zero.
+     * @param y The y position of the touch in pixels. Top edge is zero.
+     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
      *
      * @see Touch::TouchEvent
      */
     virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    /**
+     * Mouse callback on mouse events. If the game does not consume the mouse move event or left mouse click event
+     * then it is interpreted as a touch event instead.
+     *
+     * @param evt The mouse event that occurred.
+     * @param x The x position of the mouse in pixels. Left edge is zero.
+     * @param y The y position of the mouse in pixels. Top edge is zero.
+     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
+     *
+     * @return True if the mouse event is consumed or false if it is not consumed.
+     *
+     * @see Mouse::MouseEvent
+     */
+    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
      * Sets muli-touch is to be enabled/disabled. Default is disabled.

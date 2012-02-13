@@ -61,8 +61,8 @@ SpaceshipGame game;
 
 SpaceshipGame::SpaceshipGame() 
     : _scene(NULL), _cameraNode(NULL), _shipGroupNode(NULL), _shipNode(NULL), _propulsionNode(NULL), _glowNode(NULL),
-      _stateBlock(NULL), _font(NULL), _throttle(0), _shipTilt(0), _finished(false), _finishedTime(0), _pushing(false), _time(0),
-      _glowDiffuseParameter(NULL), _shipSpecularParameter(NULL), _spaceshipSound(NULL)
+      _stateBlock(NULL), _font(NULL), _throttle(0), _shipTilt(0), _finished(false), _finishedTime(0), _pushing(false), _time(0), 
+       _glowDiffuseParameter(NULL), _shipSpecularParameter(NULL), _spaceshipSound(NULL)
 {
 }
 
@@ -72,6 +72,7 @@ SpaceshipGame::~SpaceshipGame()
 
 void SpaceshipGame::initialize()
 {
+    // TODO: Not working on iOS
     renderOnce(this, &SpaceshipGame::drawSplash, 0);
 
     // Create our render state block that will be reused across all materials
@@ -98,7 +99,7 @@ void SpaceshipGame::initialize()
     _backgroundSound = AudioSource::create("res/background.ogg");
     if (_backgroundSound)
         _backgroundSound->setLooped(true);
-
+    
     // Create font
     _font = Font::create("res/airstrip28.gpb");
 
@@ -150,7 +151,7 @@ void SpaceshipGame::initializeSpaceship()
     _spaceshipSound = AudioSource::create("res/spaceship.wav");
     if (_spaceshipSound)
     {
-        _spaceshipSound->setGain(0.5f);
+        //_spaceshipSound->setGain(0.5f);
         _spaceshipSound->setLooped(true);
     }
 }
@@ -233,9 +234,11 @@ void SpaceshipGame::update(long elapsedTime)
 {
     // Calculate elapsed time in seconds
     float t = (float)elapsedTime / 1000.0;
+    
     if (!_finished)
     {
         _time += t;
+
         // Play the background track
         if (_backgroundSound->getState() != AudioSource::PLAYING)
             _backgroundSound->play();
@@ -262,7 +265,7 @@ void SpaceshipGame::update(long elapsedTime)
         // We will use this vector to apply a "pushing" force to the space ship, similar to what
         // happens when you hold a magnet close to an object with opposite polarity.
         Vector2 pushForce((shipCenterScreen.x - _pushPoint.x), -(shipCenterScreen.y - _pushPoint.y));
-
+        
         // Transform the vector so that a smaller magnitude emits a larger force and applying the
         // maximum touch distance.
         float distance = (std::max)(TOUCH_DISTANCE_MAX - pushForce.length(), 0.0f);
@@ -329,7 +332,7 @@ void SpaceshipGame::update(long elapsedTime)
     }
     _shipGroupNode->rotateZ(MATH_DEG_TO_RAD(_shipTilt));
 
-    if (_throttle > 0.0f)
+    if (_throttle > MATH_EPSILON)
     {
         // Apply ship spin
         _shipNode->rotateY(MATH_DEG_TO_RAD(SHIP_ROTATE_SPEED_MAX * t * _throttle));
@@ -337,7 +340,7 @@ void SpaceshipGame::update(long elapsedTime)
         // Play sound effect
         if (_spaceshipSound->getState() != AudioSource::PLAYING)
             _spaceshipSound->play();
-
+        
         // Set the pitch based on the throttle
         _spaceshipSound->setPitch(_throttle * SOUND_PITCH_SCALE);
     }
@@ -465,7 +468,7 @@ void SpaceshipGame::drawSplash(void* coookie)
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
     SpriteBatch* batch = SpriteBatch::create("res/splash.png");
     batch->begin();
-    batch->draw(Rectangle(0, 0, 1024, 600), Rectangle(0, 0, 1024, 600), Vector4::one());
+    batch->draw(Rectangle(0, 0, this->getWidth(), this->getHeight()), Rectangle(0, 0, 1024, 600), Vector4::one());
     batch->end();
     SAFE_DELETE(batch);
 }
@@ -479,7 +482,7 @@ bool SpaceshipGame::drawScene(Node* node, void* cookie)
         bool isTransparent = (node == _glowNode);
 
         // Skip transparent objects for stage 0
-        if ((!isTransparent && (int)cookie == 0) || (isTransparent && (int)cookie == 1))
+        if ((!isTransparent && (int*)cookie == 0) || (isTransparent && (int*)cookie == (int*)1))
             model->draw();
     }
 

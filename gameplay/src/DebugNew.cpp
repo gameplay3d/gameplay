@@ -109,7 +109,8 @@ void* debugAlloc(std::size_t size, const char* file, int line)
 
 void debugFree(void* p)
 {
-    assert(p);
+    if (p == 0)
+        return;
 
     // Backup passed in pointer to access memory allocation record
     void* mem = ((unsigned char*)p) - sizeof(MemoryAllocationRecord);

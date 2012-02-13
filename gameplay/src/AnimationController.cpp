@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 AnimationController::AnimationController()
-    : _state(IDLE), _animations(NULL)
+    : _state(STOPPED), _animations(NULL)
 {
 }
 
@@ -66,6 +66,7 @@ Animation* AnimationController::createAnimationFromTo(const char* id, AnimationT
 
     Animation* animation = createAnimation(id, target, propertyId, 2, keyTimes, keyValues, type);
 
+    SAFE_DELETE_ARRAY(keyValues);
     SAFE_DELETE_ARRAY(keyTimes);
     
     return animation;
@@ -85,6 +86,7 @@ Animation* AnimationController::createAnimationFromBy(const char* id, AnimationT
 
     Animation* animation = createAnimation(id, target, propertyId, 2, keyTimes, keyValues, type);
 
+    SAFE_DELETE_ARRAY(keyValues);
     SAFE_DELETE_ARRAY(keyTimes);
 
     return animation;
@@ -109,9 +111,8 @@ void AnimationController::stopAllAnimations()
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = *clipIter;
-        clip->_isPlaying = false;
-        clip->onEnd();
-        SAFE_RELEASE(clip);
+        clipIter++;
+        clip->stop();
     }
     _runningClips.clear();
 
@@ -144,7 +145,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     
     char delimeter = ' ';
     unsigned int startOffset = 0;
-    unsigned int endOffset = std::string::npos;
+    unsigned int endOffset = (unsigned int)std::string::npos;
     
     unsigned long* keyTimes = new unsigned long[keyCount];
     for (unsigned int i = 0; i < keyCount; i++)
@@ -162,7 +163,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     }
 
     startOffset = 0;
-    endOffset = std::string::npos;
+    endOffset = (unsigned int)std::string::npos;
     
     int componentCount = target->getAnimationPropertyComponentCount(propertyId);
     assert(componentCount > 0);
@@ -190,7 +191,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     {
         keyIn = new float[components];
         startOffset = 0;
-        endOffset = std::string::npos;
+        endOffset = (unsigned int)std::string::npos;
         for (unsigned int i = 0; i < components; i++)
         {
             endOffset = static_cast<std::string>(keyInStr).find_first_of(delimeter, startOffset);
@@ -212,7 +213,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     {   
         keyOut = new float[components];
         startOffset = 0;
-        endOffset = std::string::npos;
+        endOffset = (unsigned int)std::string::npos;
         for (unsigned int i = 0; i < components; i++)
         {
             endOffset = static_cast<std::string>(keyOutStr).find_first_of(delimeter, startOffset);
@@ -269,7 +270,7 @@ void AnimationController::initialize()
 void AnimationController::finalize()
 {
     stopAllAnimations();
-    _state = PAUSED;
+    _state = STOPPED;
 }
 
 void AnimationController::resume()
@@ -291,18 +292,8 @@ void AnimationController::schedule(AnimationClip* clip)
     {
         _state = RUNNING;
     }
-    
-    if (clip->_isPlaying)
-    {
-        _runningClips.remove(clip);
-        clip->_isPlaying = false;
-        clip->onEnd();
-    }
-    else
-    {
-        clip->addRef();
-    }
 
+    clip->addRef();
     _runningClips.push_back(clip);
 }
 
@@ -330,11 +321,20 @@ void AnimationController::update(long elapsedTime)
     if (_state != RUNNING)
         return;
 
+    // Loop through running clips and call update() on them.
     std::list<AnimationClip*>::iterator clipIter = _runningClips.begin();
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = (*clipIter);
-        if (clip->update(elapsedTime))
+        if (clip->isClipStateBitSet(AnimationClip::CLIP_IS_RESTARTED_BIT))
+        {   // If the CLIP_IS_RESTARTED_BIT is set, we should end the clip and 
+            // move it from where it is in the running clips list to the back.
+            clip->onEnd();
+            clip->setClipStateBit(AnimationClip::CLIP_IS_PLAYING_BIT);
+            _runningClips.push_back(clip);
+            clipIter = _runningClips.erase(clipIter);
+        }
+        else if (clip->update(elapsedTime, &_activeTargets))
         {
             SAFE_RELEASE(clip);
             clipIter = _runningClips.erase(clipIter);
@@ -344,6 +344,16 @@ void AnimationController::update(long elapsedTime)
             clipIter++;
         }
     }
+
+    // Loop through active AnimationTarget's and reset their _animationPropertyBitFlag for the next frame.
+    std::list<AnimationTarget*>::iterator targetItr = _activeTargets.begin();
+    while (targetItr != _activeTargets.end())
+    {
+        AnimationTarget* target = (*targetItr);
+        target->_animationPropertyBitFlag = 0x00;
+        targetItr++;
+    }
+    _activeTargets.clear();
     
     if (_runningClips.empty())
         _state = IDLE;

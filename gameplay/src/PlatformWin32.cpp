@@ -6,6 +6,10 @@
 #include "Game.h"
 #include <GL/wglew.h>
 
+// Default to 720p
+#define WINDOW_WIDTH    1280
+#define WINDOW_HEIGHT   720
+
 static long __timeTicksPerMillis;
 static long __timeStart;
 static long __timeAbsolute;
@@ -47,6 +51,14 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
         return gameplay::Keyboard::KEY_CAPS_LOCK;
     case VK_SHIFT:
         return gameplay::Keyboard::KEY_SHIFT;
+    case VK_CONTROL:
+        return gameplay::Keyboard::KEY_CTRL;
+    case VK_MENU:
+        return gameplay::Keyboard::KEY_ALT;
+    case VK_APPS:
+        return gameplay::Keyboard::KEY_MENU;
+    case VK_SHIFT:
+        return gameplay::Keyboard::KEY_SHIFT;
     case VK_LSHIFT:
         return gameplay::Keyboard::KEY_LEFT_SHIFT;
     case VK_RSHIFT:
@@ -60,9 +72,10 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
     case VK_RMENU:
         return gameplay::Keyboard::KEY_RIGHT_ALT;
     case VK_LWIN:
-        return gameplay::Keyboard::KEY_LEFT_HYPER;
     case VK_RWIN:
-        return gameplay::Keyboard::KEY_RIGHT_HYPER;
+        return gameplay::Keyboard::KEY_HYPER;
+    case VK_BROWSER_SEARCH:
+        return gameplay::Keyboard::KEY_SEARCH;
     case VK_INSERT:
         return gameplay::Keyboard::KEY_INSERT;
     case VK_HOME:
@@ -174,7 +187,7 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
     case VK_OEM_2:
         return shiftDown ? gameplay::Keyboard::KEY_QUESTION : gameplay::Keyboard::KEY_SLASH;
     case VK_OEM_3:
-        return shiftDown ? gameplay::Keyboard::KEY_GRAVE : gameplay::Keyboard::KEY_TILDE;
+        return shiftDown ? gameplay::Keyboard::KEY_TILDE : gameplay::Keyboard::KEY_GRAVE;
     case VK_OEM_4:
         return shiftDown ? gameplay::Keyboard::KEY_LEFT_BRACE : gameplay::Keyboard::KEY_LEFT_BRACKET;
     case VK_OEM_5:
@@ -270,26 +283,43 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return 0;
 
     case WM_LBUTTONDOWN:
-        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, LOWORD(lParam), HIWORD(lParam), 0);
+        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0))
+        {
+	        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, LOWORD(lParam), HIWORD(lParam), 0);
+        }
         lMouseDown = true;
         return 0;
 
     case WM_LBUTTONUP:
         lMouseDown = false;
-        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, LOWORD(lParam), HIWORD(lParam), 0);
+        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0))
+        {
+	        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, LOWORD(lParam), HIWORD(lParam), 0);
+        }
         return 0;
 
     case WM_RBUTTONDOWN:
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0);
         rMouseDown = true;
         lx = LOWORD(lParam);
         ly = HIWORD(lParam);
         break;
 
     case WM_RBUTTONUP:
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0);
         rMouseDown = false;
         break;
 
+    case WM_MBUTTONDOWN:
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON, LOWORD(lParam), HIWORD(lParam), 0);
+        break;
+
+    case WM_MBUTTONUP:
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, LOWORD(lParam), HIWORD(lParam), 0);
+        break;
+
     case WM_MOUSEMOVE:
+    {
         if (!hasMouse)
         {
             hasMouse = true;
@@ -302,8 +332,10 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             TrackMouseEvent(&tme);
         }
 
-        if (lMouseDown)
+        bool consumed = gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, LOWORD(lParam), HIWORD(lParam), 0);
+        if (lMouseDown && !consumed)
         {
+            // Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, LOWORD(lParam), HIWORD(lParam), 0);
             return 0;
         }
@@ -322,11 +354,16 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             ly = HIWORD(lParam);
         }
         break;
+    }
 
     case WM_MOUSELEAVE:
         hasMouse = false;
         lMouseDown = false;
         rMouseDown = false;
+        break;
+
+    case WM_MOUSEWHEEL:
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_WHEEL, LOWORD(lParam), HIWORD(lParam), GET_WHEEL_DELTA_WPARAM(wParam) / 120);
         break;
 
     case WM_KEYDOWN:
@@ -336,14 +373,28 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (wParam == VK_CAPITAL)
             capsOn = !capsOn;
 
-        gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown ^ capsOn));
+        // Suppress key repeats
+        if ((lParam & 0x40000000) == 0)
+	        gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown ^ capsOn));
         break;
-
+        
     case WM_KEYUP:
         if (wParam == VK_SHIFT || wParam == VK_LSHIFT || wParam == VK_RSHIFT)
             shiftDown = false;
 
         gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_RELEASE, getKey(wParam, shiftDown ^ capsOn));
+        break;
+
+    case WM_CHAR:
+        // Suppress key repeats
+        if ((lParam & 0x40000000) == 0)
+            gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_CHAR, wParam);
+        break;
+
+    case WM_UNICHAR:
+        // Suppress key repeats
+        if ((lParam & 0x40000000) == 0)
+            gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_CHAR, wParam);
         break;
 
     case WM_SETFOCUS:
@@ -441,6 +492,11 @@ Platform* Platform::create(Game* game)
 
     // Get the drawing context.
     __hdc = GetDC(__hwnd);
+
+    // Center the window
+    const int screenX = (GetSystemMetrics(SM_CXSCREEN) - WINDOW_WIDTH) / 2;
+    const int screenY = (GetSystemMetrics(SM_CYSCREEN) - WINDOW_HEIGHT) / 2;
+    ::SetWindowPos(__hwnd, __hwnd, screenX, screenY, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 
     // Choose pixel format. 32-bit. RGBA.
     PIXELFORMATDESCRIPTOR pfd;
@@ -541,6 +597,16 @@ int Platform::enterMessagePump()
     return msg.wParam;
 }
 
+unsigned int Platform::getDisplayWidth()
+{
+    return WINDOW_WIDTH;
+}
+
+unsigned int Platform::getDisplayHeight()
+{
+    return WINDOW_HEIGHT;
+}
+    
 long Platform::getAbsoluteTime()
 {
        LARGE_INTEGER queryTime;
@@ -590,6 +656,11 @@ void Platform::swapBuffers()
 {
     if (__hdc)
         SwapBuffers(__hdc);
+}
+
+void Platform::displayKeyboard(bool display)
+{
+    // Do nothing.
 }
 
 void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)

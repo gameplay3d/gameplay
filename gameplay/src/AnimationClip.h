@@ -32,13 +32,24 @@ public:
      */
     class Listener
     {
+        friend class AnimationClip;
+
     public:
+
+        Listener() 
+        {
+        }
 
         /**
          * The type of animation event.
          */
         enum EventType 
         {
+            /**
+             * Default event type.
+             */
+            DEFAULT,
+
             /**
              * Event fired when the clip begins.
              */
@@ -124,6 +135,13 @@ public:
     unsigned long getActiveDuration() const;
 
     /**
+     * Gets the AnimationClip's duration.
+     *
+     * @return the AnimationClip's duration.
+     */
+    unsigned long getDuration() const;
+
+    /**
      * Set the AnimationClip's running speed. 
      *
      * @param speed The clips running speed.
@@ -177,20 +195,63 @@ public:
     void crossFade(AnimationClip* clip, unsigned long duration);
 
     /**
-     * Adds a animation begin listener.
+     * Adds an animation begin listener.
      *
-     * @param listener The listener to be called when an animation clip begins.
+     * @param listener The listener to be called when an AnimationClip begins.
      */
     void addBeginListener(AnimationClip::Listener* listener);
 
     /**
-     * Adds a animation end listener.
+     * Adds an animation end listener.
      *
-     * @param listener The listener to be called when an animation clip ends.
+     * @param listener The listener to be called when an AnimationClip ends.
      */
     void addEndListener(AnimationClip::Listener* listener);
 
+    /**
+     * Adds an animation listener to be called back at the specified eventTime during the playback 
+     * of the AnimationClip.
+     *
+     * @param listener The listener to be called when the AnimationClip reaches the 
+     *      specified time in its playback.
+     * @param eventTime The time the listener will be called during the playback of the AnimationClip. 
+     *      Must be between 0 and the duration of the AnimationClip.
+     */
+    void addListener(AnimationClip::Listener* listener, unsigned long eventTime);
+
 private:
+    /**
+     * State bits.
+     */
+    static const char CLIP_IS_PLAYING_BIT = 0x01;             // Bit representing whether AnimationClip is a running clip in AnimationController
+    static const char CLIP_IS_STARTED_BIT = 0x02;             // Bit representing whether the AnimationClip has actually been started (ie: received first call to update())
+    static const char CLIP_IS_FADING_OUT_STARTED_BIT = 0x04;  // Bit representing that a cross fade has started.
+    static const char CLIP_IS_FADING_OUT_BIT = 0x08;          // Bit representing whether the clip is fading out.
+    static const char CLIP_IS_FADING_IN_BIT = 0x10;           // Bit representing whether the clip is fading out.
+    static const char CLIP_IS_MARKED_FOR_REMOVAL_BIT = 0x20;  // Bit representing whether the clip has ended and should be removed from the AnimationController.
+    static const char CLIP_IS_RESTARTED_BIT = 0x40;           // Bit representing if the clip should be restarted by the AnimationController.
+    static const char CLIP_ALL_BITS = 0x7F;                   // Bit mask for all the state bits.
+
+    /**
+     * ListenerEvent.
+     *
+     * Internal structure used for storing the event time at which an AnimationClip::Listener should be called back.
+     */
+    struct ListenerEvent
+    {
+        /** 
+         * Constructor.
+         */
+        ListenerEvent(Listener* listener, unsigned long eventTime);
+
+        /**
+         * Destructor.
+         */
+        ~ListenerEvent();
+
+        Listener* _listener;        // This listener to call back when this event is triggered.
+        unsigned long _eventTime;   // The time at which the listener will be called back at during the playback of the AnimationClip.
+    };
 
     /**
      * Constructor.
@@ -215,7 +276,7 @@ private:
     /**
      * Updates the animation with the elapsed time.
      */
-    bool update(unsigned long elapsedTime);
+    bool update(unsigned long elapsedTime, std::list<AnimationTarget*>* activeTargets);
 
     /**
      * Handles when the AnimationClip begins.
@@ -227,32 +288,42 @@ private:
      */
     void onEnd();
 
-    std::string _id;                          // AnimationClip ID.
-    Animation* _animation;                    // The Animation this clip is created from.
-    unsigned long _startTime;                 // Start time of the clip.
-    unsigned long _endTime;                   // End time of the clip.
-    unsigned long _duration;                  // The total duration.
-    float _repeatCount;                       // The clip's repeat count.
-    unsigned long _activeDuration;            // The active duration of the clip.
-    float _speed;                             // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.
-    bool _isPlaying;                          // A flag to indicate whether the clip is playing.
-    unsigned long _timeStarted;               // The game time when this clip was actually started.
-    unsigned long _elapsedTime;               // Time elapsed while the clip is running.
-    long _runningTime;                        // Keeps track of the Animation's relative time in respect to the active duration.
-    AnimationClip* _crossFadeToClip;          // The clip to cross fade to
-    unsigned long _crossFadeStart;            // The time at which the cross fade started.
-    unsigned long _crossFadeOutElapsed;       // The amount of time that has elapsed for the crossfade.
-    unsigned long _crossFadeOutDuration;      // The duration of the cross fade.
-    float _blendWeight;                       // The clip's blendweight
-    bool _isFadingOutStarted;                 // Flag to indicate if the cross fade started
-    bool _isFadingOut;                        // Flag to indicate if the clip is fading out
-    bool _isFadingIn;                         // Flag to indicate if the clip is fading in.
-    std::vector<AnimationValue*> _values;     // AnimationValue holder.
-    std::vector<Listener*>* _beginListeners;  // Collection of begin listeners on the clip
-    std::vector<Listener*>* _endListeners;    // Collection of end listeners on the clip
+    /**
+     * Determines whether the given bit is set in the AnimationClip's state.
+     */
+    bool isClipStateBitSet(char bit) const;
 
+    /**
+     * Sets the given bit in the AnimationClip's state.
+     */
+    void setClipStateBit(char bit);
+
+    /**
+     * Resets the given bit in the AnimationClip's state.
+     */
+    void resetClipStateBit(char bit);
+
+    std::string _id;                                    // AnimationClip ID.
+    Animation* _animation;                              // The Animation this clip is created from.
+    unsigned long _startTime;                           // Start time of the clip.
+    unsigned long _endTime;                             // End time of the clip.
+    unsigned long _duration;                            // The total duration.
+    char _stateBits;                                    // Bit flag used to keep track of the clip's current state.
+    float _repeatCount;                                 // The clip's repeat count.
+    unsigned long _activeDuration;                      // The active duration of the clip.
+    float _speed;                                       // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.
+    unsigned long _timeStarted;                         // The game time when this clip was actually started.
+    long _elapsedTime;                                  // Time elapsed while the clip is running.
+    AnimationClip* _crossFadeToClip;                    // The clip to cross fade to.
+    unsigned long _crossFadeOutElapsed;                 // The amount of time that has elapsed for the crossfade.
+    unsigned long _crossFadeOutDuration;                // The duration of the cross fade.
+    float _blendWeight;                                 // The clip's blendweight.
+    std::vector<AnimationValue*> _values;               // AnimationValue holder.
+    std::vector<Listener*>* _beginListeners;            // Collection of begin listeners on the clip.
+    std::vector<Listener*>* _endListeners;              // Collection of end listeners on the clip.
+    std::list<ListenerEvent*>* _listeners;              // Ordered collection of listeners on the clip.
+    std::list<ListenerEvent*>::iterator* _listenerItr;  // Iterator that points to the next listener event to be triggered.
 };
 
 }
-
 #endif

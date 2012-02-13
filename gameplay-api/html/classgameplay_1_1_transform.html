@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay::Transform Class Reference</title>
+<title>gameplay: gameplay::Transform Class Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -158,6 +159,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#acd0342f6c86d64953ab0f8cb79bf51e6">getLeftVector</a> (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *dst) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#aaffcfc63bb2e090c379e53a2c48bdfa3">getRightVector</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a577ec8cda9eaf69c7a4f57c5b31f69c1">getRightVector</a> (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *dst) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#ae018f48fd978f2a8f96ecee662b9dc19">rotate</a> (float qx, float qy, float qz, float qw)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a5be09c000db9f322169e6ce69b08c438">rotate</a> (const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;rotation)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a23593622609b64feb6b55724e09d9222">rotate</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;axis, float angle)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a8c8c36c06246378a13263b8bc6a7596b">rotate</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;rotation)</td></tr>
@@ -206,9 +208,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a5458202ad2700c3106d0af7663046a04">removeListener</a> (<a class="el" href="classgameplay_1_1_transform_1_1_listener.html">Transform::Listener</a> *listener)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a842ce88c27aaedb5b43e0ac675ba7b1f">getAnimationPropertyComponentCount</a> (int propertyId) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#aa511e1efa7282723e0bfbe38742ec410">getAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#ad288e7b072321f80f19a9bf9b033775d">setAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a444e7a96105255379d13ac2b0523d5e3">setAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value, float blendWeight=1.0f)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#afcd076b42dcf0ec38f95cfc3c5548fad">ANIMATE_SCALE_UNIT</a> = 0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a7ba5172e68aaf77a6efa2e5b3e59bf6a">ANIMATE_SCALE</a> = 1</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a315f0674a4b6c006afcc6abfc3e135d1">ANIMATE_SCALE_X</a> = 2</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a4664ed966d22b30fa58f105e057f2e19">ANIMATE_SCALE_Y</a> = 3</td></tr>
@@ -1037,6 +1040,55 @@ std::list&lt; <a class="el" href="structgameplay_1_1_transform_1_1_transform_lis
 
 </div>
 </div>
+<a class="anchor" id="ae018f48fd978f2a8f96ecee662b9dc19"></a><!-- doxytag: member="gameplay::Transform::rotate" ref="ae018f48fd978f2a8f96ecee662b9dc19" args="(float qx, float qy, float qz, float qw)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Transform::rotate </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>qx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>qy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>qz</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>qw</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Rotates this transform's rotation component by the given rotation.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">qx</td><td>The quaternion x value. </td></tr>
+    <tr><td class="paramname">qy</td><td>The quaternion y value. </td></tr>
+    <tr><td class="paramname">qz</td><td>The quaternion z value. </td></tr>
+    <tr><td class="paramname">qw</td><td>The quaternion w value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a5be09c000db9f322169e6ce69b08c438"></a><!-- doxytag: member="gameplay::Transform::rotate" ref="a5be09c000db9f322169e6ce69b08c438" args="(const Quaternion &amp;rotation)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1511,7 +1563,7 @@ std::list&lt; <a class="el" href="structgameplay_1_1_transform_1_1_transform_lis
 
 </div>
 </div>
-<a class="anchor" id="ad288e7b072321f80f19a9bf9b033775d"></a><!-- doxytag: member="gameplay::Transform::setAnimationPropertyValue" ref="ad288e7b072321f80f19a9bf9b033775d" args="(int propertyId, AnimationValue *value)" -->
+<a class="anchor" id="a444e7a96105255379d13ac2b0523d5e3"></a><!-- doxytag: member="gameplay::Transform::setAnimationPropertyValue" ref="a444e7a96105255379d13ac2b0523d5e3" args="(int propertyId, AnimationValue *value, float blendWeight=1.0f)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1525,7 +1577,13 @@ std::list&lt; <a class="el" href="structgameplay_1_1_transform_1_1_transform_lis
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>blendWeight</em> = <code>1.0f</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1537,7 +1595,7 @@ std::list&lt; <a class="el" href="structgameplay_1_1_transform_1_1_transform_lis
 <div class="memdoc">
 <dl class="see"><dt><b>See also:</b></dt><dd>AnimationTarget::setAnimationProperty </dd></dl>
 
-<p>Implements <a class="el" href="classgameplay_1_1_animation_target.html#a7aa3d929d61f6df9128b56a27f293a21">gameplay::AnimationTarget</a>.</p>
+<p>Implements <a class="el" href="classgameplay_1_1_animation_target.html#a84a39aaabebfe0f05387778c3e7cefb0">gameplay::AnimationTarget</a>.</p>
 
 </div>
 </div>
@@ -2414,6 +2472,20 @@ std::list&lt; <a class="el" href="structgameplay_1_1_transform_1_1_transform_lis
 
 </div>
 </div>
+<a class="anchor" id="afcd076b42dcf0ec38f95cfc3c5548fad"></a><!-- doxytag: member="gameplay::Transform::ANIMATE_SCALE_UNIT" ref="afcd076b42dcf0ec38f95cfc3c5548fad" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int <a class="el" href="classgameplay_1_1_transform.html#afcd076b42dcf0ec38f95cfc3c5548fad">gameplay::Transform::ANIMATE_SCALE_UNIT</a> = 0<code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Scale animation property. Data=scale </p>
+
+</div>
+</div>
 <a class="anchor" id="a315f0674a4b6c006afcc6abfc3e135d1"></a><!-- doxytag: member="gameplay::Transform::ANIMATE_SCALE_X" ref="a315f0674a4b6c006afcc6abfc3e135d1" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -2520,14 +2592,14 @@ std::list&lt; <a class="el" href="structgameplay_1_1_transform_1_1_transform_lis
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><b>gameplay</b>      </li>
+      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_transform.html">Transform</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -2537,7 +2609,7 @@ std::list&lt; <a class="el" href="structgameplay_1_1_transform_1_1_transform_lis
 </div>
 
 
-    <li class="footer">Generated on Thu Jan 19 2012 10:48:05 for GamePlay by
+    <li class="footer">Generated on Mon Jan 23 2012 13:10:21 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

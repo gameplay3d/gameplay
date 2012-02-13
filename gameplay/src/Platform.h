@@ -39,6 +39,20 @@ public:
      * @return The platform message pump return code.
      */
     int enterMessagePump();
+    
+    /**
+     * Gets the display width.
+     * 
+     * @return The display width.
+     */
+    static unsigned int getDisplayWidth();
+    
+    /**
+     * Gets the display height.
+     * 
+     * @return The display height.
+     */
+    static unsigned int getDisplayHeight();
 
     /**
      * Gets the absolute platform time starting from when the message pump was started.
@@ -97,6 +111,13 @@ public:
      * Swaps the frame buffer on the device.
      */
     static void swapBuffers();
+    
+    /**
+     * Shows or hides the virtual keyboard (if supported).
+     *
+     * @param display true when virtual keyboard needs to be displayed and false otherwise.
+     */
+     static void displayKeyboard(bool display);
 
     static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
