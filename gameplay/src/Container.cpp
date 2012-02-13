@@ -8,6 +8,7 @@
 #include "CheckBox.h"
 #include "RadioButton.h"
 #include "Slider.h"
+#include "TextBox.h"
 
 namespace gameplay
 {
@@ -23,11 +24,18 @@ namespace gameplay
 
     Container::~Container()
     {
+        std::vector<Control*>::iterator it;
+        for (it = _controls.begin(); it < _controls.end(); it++)
+        {
+            SAFE_RELEASE((*it));
+        }
+
+        SAFE_RELEASE(_layout);
     }
 
     Container* Container::create(const char* id, Layout::Type type)
     {
-        Layout* layout;
+        Layout* layout = NULL;
         switch(type)
         {
         case Layout::LAYOUT_ABSOLUTE:
@@ -105,6 +113,10 @@ namespace gameplay
             {
                 control = Slider::create(controlStyle, controlSpace);
             }
+            else if (controlName == "TEXTBOX")
+            {
+                control = TextBox::create(controlStyle, controlSpace);
+            }
 
             // Add the new control to the form.
             if (control)
@@ -140,7 +152,6 @@ namespace gameplay
     unsigned int Container::addControl(Control* control)
     {
         _controls.push_back(control);
-        control->addRef();
 
         return _controls.size() - 1;
     }
@@ -203,28 +214,20 @@ namespace gameplay
         return NULL;
     }
 
-    void Container::update()
+    std::vector<Control*> Container::getControls() const
+    {
+        return _controls;
+    }
+
+    void Container::update(const Vector2& position)
     {
         // Should probably have sizeChanged() for this.
-        //if (isDirty())
+        if (isDirty())
         {
-            // Call update() on nested Containers.
-            std::vector<Control*>::const_iterator it;
-            for (it = _controls.begin(); it < _controls.end(); it++)
-            {
-                // Can't do this without enabling run-time type information!
-                //Container* container = dynamic_cast<Container*>(*it);
-
-                Control* control = *it;
-                if (control->isContainer())
-                {
-                    Container* container = static_cast<Container*>(control);
-                    container->update();
-                }
-            }
-            
-            _layout->update(_controls, _size, _style);
+            _layout->update(this);
         }
+
+        _dirty = false;
     }
 
     void Container::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
@@ -283,7 +286,7 @@ namespace gameplay
             const Vector2& size = control->getSize();
             const Vector2& position = control->getPosition();
             
-            if (control->getState() == Control::STATE_ACTIVE ||
+            if (control->getState() != Control::STATE_NORMAL ||
                 (x >= position.x &&
                  x <= position.x + size.x &&
                  y >= position.y &&
@@ -302,6 +305,16 @@ namespace gameplay
         case Touch::TOUCH_RELEASE:
             setState(Control::STATE_NORMAL);
             break;
+        }
+    }
+
+    void Container::keyEvent(Keyboard::KeyEvent evt, int key)
+    {
+        std::vector<Control*>::const_iterator it;
+        for (it = _controls.begin(); it < _controls.end(); it++)
+        {
+            Control* control = *it;
+            control->keyEvent(evt, key);
         }
     }
 
@@ -326,10 +339,5 @@ namespace gameplay
             // Default.
             return Layout::LAYOUT_ABSOLUTE;
         }
-    }
-
-    bool Container::isContainer()
-    {
-        return true;
     }
 }

@@ -78,23 +78,29 @@ void CheckBox::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
     Theme::Icon* icon = overlay->getCheckBoxIcon();
     if (icon)
     {
-        Theme::Border border = _style->getBorder();
-        Theme::Padding padding = _style->getPadding();
+        const Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
+        Theme::Border border;
+        if (containerRegion)
+        {
+                border = containerRegion->getBorder();
+        }
+        const Theme::Padding padding = _style->getPadding();
+
+        const Vector2 size = icon->getSize();
+        const Vector4 color = icon->getColor();
 
         Vector2 pos(position.x + _position.x + border.left + padding.left,
-            position.y + _position.y + (_size.y - border.bottom - padding.bottom) / 2.0f - icon->size.y / 2.0f);
+            position.y + _position.y + (_size.y - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
 
-        if (_state == STATE_ACTIVE)
+        if (_checked)
         {
-            spriteBatch->draw(pos.x, pos.y, icon->size.x, icon->size.y, icon->active.u1, icon->active.v1, icon->active.u2, icon->active.v2, overlay->getBorderColor());
-        }
-        else if (_checked)
-        {
-            spriteBatch->draw(pos.x, pos.y, icon->size.x, icon->size.y, icon->on.u1, icon->on.v1, icon->on.u2, icon->on.v2, overlay->getBorderColor());
+            const Theme::UVs on = icon->getOnUVs();
+            spriteBatch->draw(pos.x, pos.y, size.x, size.y, on.u1, on.v1, on.u2, on.v2, color);
         }
         else
         {
-            spriteBatch->draw(pos.x, pos.y, icon->size.x, icon->size.y, icon->off.u1, icon->off.v1, icon->off.u2, icon->off.v2, overlay->getBorderColor());
+            const Theme::UVs off = icon->getOffUVs();
+            spriteBatch->draw(pos.x, pos.y, size.x, size.y, off.u1, off.v1, off.u2, off.v2, color);
         }
     }
 }
@@ -104,14 +110,19 @@ void CheckBox::drawText(const Vector2& position)
     // TODO: Batch all labels that use the same font.
     Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
     Theme::Icon* icon = overlay->getCheckBoxIcon();
-    Theme::Border border = _style->getBorder();
+    Theme::Border border;
+    Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
+    if (containerRegion)
+    {
+        border = overlay->getContainerRegion()->getBorder();
+    }
     Theme::Padding padding = _style->getPadding();
 
     // Set up the text viewport.
     float iconWidth = 0.0f;
     if (icon)
     {
-        iconWidth = icon->size.x;
+        iconWidth = icon->getSize().x;
     }
 
     Font* font = overlay->getFont();

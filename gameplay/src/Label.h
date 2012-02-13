@@ -16,6 +16,8 @@ public:
     void setText(const char* text);
     const char* getText();
 
+    void update(const Vector2& position);
+
     void drawText(const Vector2& position);
 
 protected:
@@ -25,6 +27,7 @@ protected:
     virtual ~Label();
 
     std::string _text;
+    Rectangle _viewport;
 };
 
 }

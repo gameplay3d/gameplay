@@ -886,6 +886,12 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
     Form::touchEventInternal(evt, x, y, contactIndex);
 }
 
+void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Form::keyEventInternal(evt, key);
+}
+
 }
 
 #endif

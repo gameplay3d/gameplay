@@ -7,6 +7,7 @@
 #include "Node.h"
 #include "FrameBuffer.h"
 #include "Touch.h"
+#include "Keyboard.h"
 
 namespace gameplay
 {
@@ -40,6 +41,7 @@ public:
 
     void setNode(Node* node);
 
+    void update();
     void draw();
 
 private:
@@ -52,6 +54,8 @@ private:
     void draw(SpriteBatch* spriteBatch, const Vector2& position);
 
     static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    static void keyEventInternal(Keyboard::KeyEvent evt, int key);
 
     Theme* _theme;              // The Theme applied to this Form.
     Model* _quad;               // Quad for rendering this Form in world-space.

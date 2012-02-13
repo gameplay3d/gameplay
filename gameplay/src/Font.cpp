@@ -997,6 +997,389 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
     }
 }
 
+unsigned int Font::getIndexAtLocation(const char* text, const Rectangle& area, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
+                                      Justify justify, bool wrap, bool rightToLeft)
+{
+    unsigned int charIndex = 0;
+
+    // Essentially need to measure text until we reach inLocation.
+    float scale = (float)size / _size;
+    const char* token = text;
+    const int length = strlen(text);
+    int yPos = area.y;
+
+    Justify vAlign = static_cast<Justify>(justify & 0xF0);
+    if (vAlign == 0)
+    {
+        vAlign = ALIGN_TOP;
+    }
+
+    Justify hAlign = static_cast<Justify>(justify & 0x0F);
+    if (hAlign == 0)
+    {
+        hAlign = ALIGN_LEFT;
+    }
+
+    token = text;
+
+    // For alignments other than top-left, need to calculate the y position to begin drawing from
+    // and the starting x position of each line.  For right-to-left text, need to determine
+    // the number of characters on each line.
+    std::vector<int> xPositions;
+    std::vector<unsigned int> lineLengths;
+    if (vAlign != ALIGN_TOP || hAlign != ALIGN_LEFT || rightToLeft)
+    {
+        int lineWidth = 0;
+        int delimWidth = 0;
+
+        if (wrap)
+        {
+            // Go a word at a time.
+            bool reachedEOF = false;
+            unsigned int lineLength = 0;
+            while (token[0] != 0)
+            {
+                unsigned int tokenWidth = 0;
+
+                // Handle delimiters until next token.
+                char delimiter = token[0];
+                while (delimiter == ' ' ||
+                       delimiter == '\t' ||
+                       delimiter == '\r' ||
+                       delimiter == '\n' ||
+                       delimiter == 0)
+                {
+                    switch (delimiter)
+                    {
+                        case ' ':
+                            delimWidth += size>>1;
+                            lineLength++;
+                            break;
+                        case '\r':
+                        case '\n':
+                            yPos += size;
+
+                            if (lineWidth > 0)
+                            {
+                                addLineInfo(area, lineWidth, lineLength, hAlign, &xPositions, &lineLengths, rightToLeft);
+                            }
+
+                            lineWidth = 0;
+                            lineLength = 0;
+                            delimWidth = 0;
+                            break;
+                        case '\t':
+                            delimWidth += (size>>1)*4;
+                            lineLength++;
+                            break;
+                        case 0:
+                            reachedEOF = true;
+                            break;
+                    }
+
+                    if (reachedEOF)
+                    {
+                        break;
+                    }
+
+                    token++;
+                    delimiter = token[0];
+                }
+
+                if (reachedEOF || token == NULL)
+                {
+                    break;
+                }
+
+                unsigned int tokenLength = strcspn(token, " \r\n\t");
+                tokenWidth += getTokenWidth(token, tokenLength, size, scale);
+
+                // Wrap if necessary.
+                if (lineWidth + tokenWidth + delimWidth > area.width)
+                {
+                    yPos += size;
+
+                    // Push position of current line.
+                    if (lineLength)
+                    {
+                        addLineInfo(area, lineWidth, lineLength-1, hAlign, &xPositions, &lineLengths, rightToLeft);
+                    }
+                    else
+                    {
+                        addLineInfo(area, lineWidth, tokenLength, hAlign, &xPositions, &lineLengths, rightToLeft);
+                    }
+
+                    // Move token to the next line.
+                    lineWidth = 0;
+                    lineLength = 0;
+                    delimWidth = 0;
+                }
+                else
+                {
+                    lineWidth += delimWidth;
+                    delimWidth = 0;
+                }
+
+                lineWidth += tokenWidth;
+                lineLength += tokenLength;
+                token += tokenLength;
+            }
+
+            // Final calculation of vertical position.
+            int textHeight = yPos - area.y;
+            int vWhiteSpace = area.height - textHeight;
+            if (vAlign == ALIGN_VCENTER)
+            {
+                yPos = area.y + vWhiteSpace / 2;
+            }
+            else if (vAlign == ALIGN_BOTTOM)
+            {
+                yPos = area.y + vWhiteSpace;
+            }
+
+            // Calculation of final horizontal position.
+            addLineInfo(area, lineWidth, lineLength, hAlign, &xPositions, &lineLengths, rightToLeft);
+        }
+        else
+        {
+            // Go a line at a time.
+            while (token[0] != 0)
+            {
+                char delimiter = token[0];
+                while (delimiter == '\n')
+                {
+                    yPos += size;
+                    ++token;
+                    delimiter = token[0];
+                }
+
+                unsigned int tokenLength = strcspn(token, "\n");
+                if (tokenLength == 0)
+                {
+                    tokenLength = strlen(token);
+                }
+
+                int lineWidth = getTokenWidth(token, tokenLength, size, scale);
+                addLineInfo(area, lineWidth, tokenLength, hAlign, &xPositions, &lineLengths, rightToLeft);
+
+                token += tokenLength;
+            }
+
+            int textHeight = yPos - area.y;
+            int vWhiteSpace = area.height - textHeight;
+            if (vAlign == ALIGN_VCENTER)
+            {
+                yPos = area.y + vWhiteSpace / 2;
+            }
+            else if (vAlign == ALIGN_BOTTOM)
+            {
+                yPos = area.y + vWhiteSpace;
+            }
+        }
+
+        if (vAlign == ALIGN_TOP)
+        {
+            yPos = area.y;
+        }
+    }
+
+    // Now we have the info we need in order to render.
+    int xPos = area.x;
+    std::vector<int>::const_iterator xPositionsIt = xPositions.begin();
+    if (xPositionsIt != xPositions.end())
+    {
+        xPos = *xPositionsIt++;
+    }
+
+    token = text;
+    
+    int iteration = 1;
+    unsigned int lineLength;
+    unsigned int currentLineLength = 0;
+    const char* lineStart;
+    std::vector<unsigned int>::const_iterator lineLengthsIt;
+    if (rightToLeft)
+    {
+        lineStart = token;
+        lineLengthsIt = lineLengths.begin();
+        lineLength = *lineLengthsIt++;
+        token += lineLength - 1;
+        iteration = -1;
+    }
+
+    while (token[0] != 0)
+    {
+        // Handle delimiters until next token.
+        unsigned int delimLength = 0;
+        int result = handleDelimiters(&token, size, iteration, area.x, &xPos, &yPos, &delimLength, &xPositionsIt, xPositions.end(), &inLocation);
+        charIndex += delimLength;
+        currentLineLength += delimLength;
+        if (result == 0)
+        {
+            break;
+        }
+        else if (result == 2)
+        {
+            outLocation->x = xPos;
+            outLocation->y = yPos;
+            return charIndex;
+        }
+
+        if (inLocation.x >= xPos && inLocation.x < xPos + (size>>3) &&
+            inLocation.y >= yPos && inLocation.y < yPos + size)
+        {
+            outLocation->x = xPos;
+            outLocation->y = yPos;
+            return charIndex;
+        }
+
+        bool truncated = false;
+        unsigned int tokenLength;
+        unsigned int tokenWidth;
+        unsigned int startIndex;
+        if (rightToLeft)
+        {
+            tokenLength = getReversedTokenLength(token, text);
+            currentLineLength += tokenLength;
+            charIndex += tokenLength;
+            token -= (tokenLength - 1);
+            tokenWidth = getTokenWidth(token, tokenLength, size, scale);
+            iteration = -1;
+            startIndex = tokenLength - 1;
+        }
+        else
+        {
+            tokenLength = strcspn(token, " \r\n\t");
+            tokenWidth = getTokenWidth(token, tokenLength, size, scale);
+            iteration = 1;
+            startIndex = 0;
+        }
+
+        // Wrap if necessary.
+        if (wrap &&
+            xPos + tokenWidth > area.x + area.width ||
+            (rightToLeft && currentLineLength > lineLength))
+        {
+            yPos += size;
+            currentLineLength = tokenLength;
+
+            if (xPositionsIt != xPositions.end())
+            {
+                xPos = *xPositionsIt++;
+            }
+            else
+            {
+                xPos = area.x;
+            }
+        }
+
+        if (yPos > area.y + area.height)
+        {
+            // Truncate below area's vertical limit.
+            break;
+        }
+
+        for (int i = startIndex; i < (int)tokenLength && i >= 0; i += iteration)
+        {
+            char c = token[i];
+            int glyphIndex = c - 32; // HACK for ASCII
+        
+            if (glyphIndex >= 0 && glyphIndex < (int)_glyphCount)
+            {
+                Glyph& g = _glyphs[glyphIndex];
+
+                if (xPos + (int)(g.width*scale) > area.x + area.width)
+                {
+                    // Truncate this line and go on to the next one.
+                    truncated = true;
+                    break;
+                }
+
+                // Check against inLocation.
+                if (inLocation.x >= xPos && inLocation.x < xPos + g.width*scale + (size>>3) &&
+                    inLocation.y >= yPos && inLocation.y < yPos + size)
+                {
+                    outLocation->x = xPos;
+                    outLocation->y = yPos;
+                    return charIndex;
+                }
+
+                xPos += g.width*scale + (size>>3);
+                charIndex++;
+            }
+        }
+
+        if (!truncated)
+        {
+            if (rightToLeft)
+            {
+                if (token == lineStart)
+                {
+                    token += lineLength;
+                    
+                    // Now handle delimiters going forwards.
+                    if (!handleDelimiters(&token, size, 1, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
+                    {
+                        break;
+                    }
+                    charIndex += currentLineLength;
+
+                    if (lineLengthsIt != lineLengths.end())
+                    {
+                        lineLength = *lineLengthsIt++;
+                    }
+                    lineStart = token;
+                    token += lineLength-1;
+                    charIndex += tokenLength;
+                }
+                else
+                {
+                    token--;
+                }
+            }
+            else
+            {
+                token += tokenLength;
+            }
+        }
+        else
+        {
+            if (rightToLeft)
+            {
+                token = lineStart + lineLength;
+                
+                if (!handleDelimiters(&token, size, 1, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
+                {
+                    break;
+                }
+
+                if (lineLengthsIt != lineLengths.end())
+                {
+                    lineLength = *lineLengthsIt++;
+                }
+                lineStart = token;
+                token += lineLength-1;
+            }
+            else
+            {
+                // Skip the rest of this line.
+                unsigned int tokenLength = strcspn(token, "\n");
+
+                if (tokenLength > 0)
+                {                
+                    // Get first token of next line.
+                    token += tokenLength;
+                    charIndex += tokenLength;
+                }
+            }
+        }
+    }
+
+    outLocation->x = xPos;
+    outLocation->y = yPos;
+    return charIndex;
+}
+
 unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigned int size, float scale)
 {
     // Calculate width of word or line.
@@ -1047,8 +1430,8 @@ unsigned int Font::getReversedTokenLength(const char* token, const char* bufStar
     return length;
 }
 
-bool Font::handleDelimiters(const char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
-                      std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd)
+int Font::handleDelimiters(const char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
+                      std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd, const Vector2* stopAtPosition)
 {
     char delimiter = *token[0];
     bool nextLine = true;
@@ -1058,6 +1441,14 @@ bool Font::handleDelimiters(const char** token, const unsigned int size, const i
             delimiter == '\n' ||
             delimiter == 0)
     {
+        if (stopAtPosition &&
+            stopAtPosition->x >= *xPos && stopAtPosition->x < *xPos + (size>>1) &&
+            stopAtPosition->y >= *yPos && stopAtPosition->y < *yPos + size)
+        {
+            // Success + stopAtPosition was reached.
+            return 2;
+        }
+
         switch (delimiter)
         {
             case ' ':
@@ -1089,14 +1480,16 @@ bool Font::handleDelimiters(const char** token, const unsigned int size, const i
                 (*lineLength)++;
                 break;
             case 0:
-                return false;
+                // EOF reached.
+                return 0;
         }
 
         *token += iteration;
         delimiter = *token[0];
     }
 
-    return true;
+    // Success.
+    return 1;
 }
 
 void Font::addLineInfo(const Rectangle& area, int lineWidth, int lineLength, Justify hAlign,
