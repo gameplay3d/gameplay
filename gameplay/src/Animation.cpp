@@ -67,7 +67,6 @@ Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int p
 Animation::Channel::~Channel()
 {
     SAFE_DELETE(_curve);
-    _animation->removeChannel(this);
     SAFE_RELEASE(_animation);
 }
 

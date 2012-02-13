@@ -13,7 +13,14 @@ AnimationController::AnimationController()
 
 AnimationController::~AnimationController()
 {
-    destroyAllAnimations();
+    std::vector<Animation*>::iterator itr = _animations.begin();
+    for ( ; itr != _animations.end(); itr++)
+    {
+        Animation* temp = *itr;
+        SAFE_RELEASE(temp);
+    }
+
+    _animations.clear();
 }
 
 Animation* AnimationController::createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, Curve::InterpolationType type)
@@ -111,12 +118,9 @@ void AnimationController::stopAllAnimations()
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = *clipIter;
-        clipIter++;
         clip->stop();
+        clipIter++;
     }
-    _runningClips.clear();
-
-    _state = IDLE;
 }
 
 Animation* AnimationController::createAnimation(const char* id, AnimationTarget* target, Properties* animationProperties)
@@ -269,7 +273,13 @@ void AnimationController::initialize()
 
 void AnimationController::finalize()
 {
-    stopAllAnimations();
+    std::list<AnimationClip*>::iterator itr = _runningClips.begin();
+    for ( ; itr != _runningClips.end(); itr++)
+    {
+        AnimationClip* clip = *itr;
+        SAFE_RELEASE(clip);
+    }
+    _runningClips.clear();
     _state = STOPPED;
 }
 
@@ -366,30 +376,45 @@ void AnimationController::addAnimation(Animation* animation)
 
 void AnimationController::destroyAnimation(Animation* animation)
 {
-    std::vector<Animation*>::iterator itr = _animations.begin();
+    assert(animation);
 
-    while (itr != _animations.end())
+    std::vector<Animation::Channel*>::iterator cItr = animation->_channels.begin();
+    for (; cItr != animation->_channels.end(); cItr++)
     {
-        if (animation == *itr)
+        Animation::Channel* channel = *cItr;
+        channel->_target->deleteChannel(channel);
+    }
+
+    std::vector<Animation*>::iterator aItr = _animations.begin();
+    while (aItr != _animations.end())
+    {
+        if (animation == *aItr)
         {
-            Animation* animation = *itr;
-            _animations.erase(itr);
-            SAFE_RELEASE(animation);
+            Animation* temp = *aItr;
+            SAFE_RELEASE(temp);
+            _animations.erase(aItr);
             return;
         }
-        itr++;
+        aItr++;
     }
 }
 
 void AnimationController::destroyAllAnimations()
 {
-    std::vector<Animation*>::iterator itr = _animations.begin();
+    std::vector<Animation*>::iterator aItr = _animations.begin();
     
-    while (itr != _animations.end())
+    while (aItr != _animations.end())
     {
-        Animation* animation = *itr;
+        Animation* animation = *aItr;
+        std::vector<Animation::Channel*>::iterator cItr = animation->_channels.begin();
+        for (; cItr != animation->_channels.end(); cItr++)
+        {
+            Animation::Channel* channel = *cItr;
+            channel->_target->deleteChannel(channel);
+        }
+
         SAFE_RELEASE(animation);
-        itr++;
+        aItr++;
     }
 
     _animations.clear();
