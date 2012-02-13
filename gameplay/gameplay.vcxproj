@@ -85,6 +85,7 @@
     <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
+    <ClCompile Include="src\TextBox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Theme.cpp" />
     <ClCompile Include="src\Transform.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="src\Slider.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />
+    <ClInclude Include="src\TextBox.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Theme.h" />
     <ClInclude Include="src\Touch.h" />
