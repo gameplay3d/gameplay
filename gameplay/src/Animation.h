@@ -92,6 +92,7 @@ private:
      */
     class Channel
     {
+        friend class AnimationController;
         friend class AnimationClip;
         friend class Animation;
         friend class AnimationTarget;

@@ -19,6 +19,7 @@ AnimationTarget::~AnimationTarget()
         while (itr != _animationChannels->end())
         {
             Animation::Channel* channel = (*itr);
+            channel->_animation->removeChannel(channel);
             SAFE_DELETE(channel);
             itr++;
         }
@@ -93,6 +94,28 @@ int AnimationTarget::getPropertyId(TargetType type, const char* propertyIdStr)
     }
 
     return -1;
+}
+
+void AnimationTarget::deleteChannel(Animation::Channel* channel)
+{
+    if (_animationChannels)
+    {
+        std::vector<Animation::Channel*>::iterator itr = _animationChannels->begin();
+        for ( ; itr != _animationChannels->end(); itr++)
+        {
+            Animation::Channel* temp = *itr;
+            if (channel == temp)
+            {
+                SAFE_DELETE(channel);
+                _animationChannels->erase(itr);
+
+                if (_animationChannels->empty())
+                    SAFE_DELETE(_animationChannels);
+
+                return;
+            }
+        }
+    }
 }
 
 }
