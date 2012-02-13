@@ -7,6 +7,7 @@
 #include "SpriteBatch.h"
 #include "Theme.h"
 #include "Touch.h"
+#include "Keyboard.h"
 
 namespace gameplay
 {
@@ -82,12 +83,16 @@ public:
     void disable();
     void enable();
 
-    Theme::Style::OverlayType getOverlayType();
+    Theme::Style::OverlayType getOverlayType() const;
 
     /**
      * Defaults to empty stub.
      */
     virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    virtual void keyEvent(Keyboard::KeyEvent evt, int key);
+
+    virtual void update(const Vector2& position);
 
     /**
      * Draws the themed border and background of a control.
@@ -106,8 +111,6 @@ public:
     Theme::Style* getStyle() const;
 
     void themeChanged();
-
-    virtual bool isContainer();
 
 protected:
     Control();

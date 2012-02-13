@@ -7,7 +7,6 @@ namespace gameplay
 
     Label::Label() : _text("")
     {
-
     }
 
     Label::Label(const Label& copy)
@@ -60,25 +59,36 @@ namespace gameplay
         return _text.c_str();
     }
 
-    void Label::drawText(const Vector2& position)
+    void Label::update(const Vector2& position)
     {
-        // TODO: Batch all labels that use the same font.
         Vector2 pos(position.x + _position.x, position.y + _position.y);
         Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-        Theme::Border border = _style->getBorder();
+        
+        Theme::Border border;
+        Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
+        if (containerRegion)
+        {
+            border = overlay->getContainerRegion()->getBorder();
+        }
         Theme::Padding padding = _style->getPadding();
 
         // Set up the text viewport.
         Font* font = overlay->getFont();
-        Rectangle viewport(pos.x + border.left + padding.left,
-                           pos.y + border.top + padding.top,
-                           _size.x - border.left - padding.left - border.right - padding.right,
-                           _size.y - border.top - padding.top - border.bottom - padding.bottom - font->getSize());
+        _viewport.set(pos.x + border.left + padding.left,
+                      pos.y + border.top + padding.top,
+                      _size.x - border.left - padding.left - border.right - padding.right,
+                      _size.y - border.top - padding.top - border.bottom - padding.bottom - font->getSize());
+    }
+
+    void Label::drawText(const Vector2& position)
+    {
+        // TODO: Batch all labels that use the same font.
+        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+        Font* font = overlay->getFont();
 
         // Draw the text.
-        
         font->begin();
-        font->drawText(_text.c_str(), viewport, overlay->getTextColor(), overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+        font->drawText(_text.c_str(), _viewport, overlay->getTextColor(), overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
         font->end();
 
         _dirty = false;

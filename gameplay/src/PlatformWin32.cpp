@@ -45,6 +45,8 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
         return gameplay::Keyboard::KEY_RETURN;
     case VK_CAPITAL:
         return gameplay::Keyboard::KEY_CAPS_LOCK;
+    case VK_SHIFT:
+        return gameplay::Keyboard::KEY_SHIFT;
     case VK_LSHIFT:
         return gameplay::Keyboard::KEY_LEFT_SHIFT;
     case VK_RSHIFT:
@@ -250,6 +252,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     static int lx, ly;
 
     static bool shiftDown = false;
+    static bool capsOn = false;
 
     switch (msg)
     {
@@ -327,17 +330,20 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_KEYDOWN:
-        if (wParam == VK_LSHIFT || wParam == VK_RSHIFT)
+        if (wParam == VK_SHIFT || wParam == VK_LSHIFT || wParam == VK_RSHIFT)
             shiftDown = true;
 
-        gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown));
+        if (wParam == VK_CAPITAL)
+            capsOn = !capsOn;
+
+        gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown ^ capsOn));
         break;
 
     case WM_KEYUP:
-        if (wParam == VK_LSHIFT || wParam == VK_RSHIFT)
+        if (wParam == VK_SHIFT || wParam == VK_LSHIFT || wParam == VK_RSHIFT)
             shiftDown = false;
 
-        gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_RELEASE, getKey(wParam, shiftDown));
+        gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_RELEASE, getKey(wParam, shiftDown ^ capsOn));
         break;
 
     case WM_SETFOCUS:
@@ -590,6 +596,12 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
 {
     Game::getInstance()->touchEvent(evt, x, y, contactIndex);
     Form::touchEventInternal(evt, x, y, contactIndex);
+}
+
+void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Form::keyEventInternal(evt, key);
 }
 
 }

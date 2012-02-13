@@ -83,7 +83,7 @@ namespace gameplay
         _state = STATE_NORMAL;
     }
 
-    Theme::Style::OverlayType Control::getOverlayType()
+    Theme::Style::OverlayType Control::getOverlayType() const
     {
         switch (_state)
         {
@@ -103,31 +103,38 @@ namespace gameplay
         // Empty stub to be implemented by Button and its descendents.
     }
 
+    void Control::keyEvent(Keyboard::KeyEvent evt, int key)
+    {
+    }
+
+    void Control::update(const Vector2& position)
+    {
+    }
+
     void Control::drawBorder(SpriteBatch* spriteBatch, const Vector2& position)
     {
         Vector2 pos(position.x + _position.x, position.y + _position.y);
 
-        // Get the overlay for this control's current state.
-        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-
-        if (overlay && !(overlay->getRegion().isEmpty()))
+        // Get the border and background images for this control's current state.
+        Theme::ContainerRegion* containerRegion = _style->getOverlay(getOverlayType())->getContainerRegion();
+        if (containerRegion)
         {
             // Get the UVs.
             Theme::UVs topLeft, top, topRight, left, center, right, bottomLeft, bottom, bottomRight;
-            topLeft = overlay->getUVs(Theme::Style::Overlay::TOP_LEFT);
-            top = overlay->getUVs(Theme::Style::Overlay::TOP);
-            topRight = overlay->getUVs(Theme::Style::Overlay::TOP_RIGHT);
-            left = overlay->getUVs(Theme::Style::Overlay::LEFT);
-            center = overlay->getUVs(Theme::Style::Overlay::CENTER);
-            right = overlay->getUVs(Theme::Style::Overlay::RIGHT);
-            bottomLeft = overlay->getUVs(Theme::Style::Overlay::BOTTOM_LEFT);
-            bottom = overlay->getUVs(Theme::Style::Overlay::BOTTOM);
-            bottomRight = overlay->getUVs(Theme::Style::Overlay::BOTTOM_RIGHT);
+            topLeft = containerRegion->getUVs(Theme::ContainerRegion::TOP_LEFT);
+            top = containerRegion->getUVs(Theme::ContainerRegion::TOP);
+            topRight = containerRegion->getUVs(Theme::ContainerRegion::TOP_RIGHT);
+            left = containerRegion->getUVs(Theme::ContainerRegion::LEFT);
+            center = containerRegion->getUVs(Theme::ContainerRegion::CENTER);
+            right = containerRegion->getUVs(Theme::ContainerRegion::RIGHT);
+            bottomLeft = containerRegion->getUVs(Theme::ContainerRegion::BOTTOM_LEFT);
+            bottom = containerRegion->getUVs(Theme::ContainerRegion::BOTTOM);
+            bottomRight = containerRegion->getUVs(Theme::ContainerRegion::BOTTOM_RIGHT);
 
             // Calculate screen-space positions.
-            Theme::Border border = _style->getBorder();
+            Theme::Border border = containerRegion->getBorder();
             Theme::Padding padding = _style->getPadding();
-            Vector4 borderColor = overlay->getBorderColor();
+            Vector4 borderColor = containerRegion->getColor();
 
             float midWidth = _size.x - border.left - border.right;
             float midHeight = _size.y - border.top - border.bottom;
@@ -170,17 +177,6 @@ namespace gameplay
 
     bool Control::isDirty()
     {
-        if (_dirty)
-        {
-            _dirty = false;
-            return true;
-        }
-
-        return false;
-    }
-
-    bool Control::isContainer()
-    {
-        return false;
+        return _dirty;
     }
 }

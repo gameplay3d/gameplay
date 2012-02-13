@@ -2,6 +2,7 @@
 #define PLATFORM_H_
 
 #include "Touch.h"
+#include "Keyboard.h"
 
 namespace gameplay
 {
@@ -98,6 +99,8 @@ public:
     static void swapBuffers();
 
     static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    static void keyEventInternal(Keyboard::KeyEvent evt, int key);
 
 private:
 

@@ -11,6 +11,7 @@ namespace gameplay
 
     Button::~Button()
     {
+        SAFE_DELETE(_callback);
     }
 
     Button* Button::create(Theme::Style* style, Properties* properties)

@@ -57,19 +57,21 @@ public:
      */
     Control* getControl(const char* id) const;
 
+    std::vector<Control*> getControls() const;
+
     /**
      * Updates the position of each Control within this Container
      * according to the Container's Layout.
      */
-    void update();
+    virtual void update(const Vector2& position);
 
     //void draw(Theme* theme, const Vector2& position);
-    void drawSprites(SpriteBatch* spriteBatch, const Vector2& position);
-    void drawText(const Vector2& position);
+    virtual void drawSprites(SpriteBatch* spriteBatch, const Vector2& position);
+    virtual void drawText(const Vector2& position);
 
-    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+    virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
-    bool isContainer();
+    virtual void keyEvent(Keyboard::KeyEvent evt, int key);
 
 protected:
     Container();

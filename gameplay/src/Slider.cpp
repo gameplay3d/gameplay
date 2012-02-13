@@ -63,14 +63,22 @@ void Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
         y > 0 && y <= _size.y)
     {
         // Horizontal case.
-        Theme::Border border = _style->getBorder();
+        Theme::Border border;
+        Theme::ContainerRegion* containerRegion = _style->getOverlay(getOverlayType())->getContainerRegion();
+        if (containerRegion)
+        {
+            border = containerRegion->getBorder();
+        }
         Theme::Padding padding = _style->getPadding();
 
-        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-        Theme::SliderIcon* icon = overlay->getSliderIcon();
+        const Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+        const Theme::SliderIcon* icon = overlay->getSliderIcon();
 
-        float markerPosition = ((float)x - icon->rightCapSize.x - border.left - padding.left) /
-                               (_size.x - border.left - border.right - padding.left - padding.right - icon->leftCapSize.x - icon->rightCapSize.x);
+        const Vector2 minCapSize = icon->getMinCapSize();
+        const Vector2 maxCapSize = icon->getMaxCapSize();
+
+        float markerPosition = ((float)x - maxCapSize.x - border.left - padding.left) /
+                               (_size.x - border.left - border.right - padding.left - padding.right - minCapSize.x - maxCapSize.x);
         if (markerPosition > 1.0f)
         {
             markerPosition = 1.0f;
@@ -102,26 +110,43 @@ void Slider::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
     Theme::SliderIcon* icon = overlay->getSliderIcon();
     if (icon)
     {
-        Theme::Border border = _style->getBorder();
+        Theme::Border border;
+        Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
+        if (containerRegion)
+        {
+            border = containerRegion->getBorder();
+        }
         Theme::Padding padding = _style->getPadding();
+
+        const Vector2 minCapSize = icon->getMinCapSize();
+        const Vector2 maxCapSize = icon->getMaxCapSize();
+        const Vector2 markerSize = icon->getMarkerSize();
+        const Vector2 trackSize = icon->getTrackSize();
+
+        const Theme::UVs minCap = icon->getMinCapUVs();
+        const Theme::UVs maxCap = icon->getMaxCapUVs();
+        const Theme::UVs marker = icon->getMarkerUVs();
+        const Theme::UVs track = icon->getTrackUVs();
+
+        const Vector4 color = icon->getColor();
 
         // Draw order: track, caps, marker.
         float midY = position.y + _position.y + (_size.y - border.bottom - padding.bottom) / 2.0f;
-        Vector2 pos(position.x + _position.x + border.left + padding.left, midY - icon->trackSize.y / 2.0f);
-        spriteBatch->draw(pos.x, pos.y, _size.x, icon->trackSize.y, icon->track.u1, icon->track.v1, icon->track.u2, icon->track.v2, overlay->getBorderColor());
+        Vector2 pos(position.x + _position.x + border.left + padding.left, midY - trackSize.y / 2.0f);
+        spriteBatch->draw(pos.x, pos.y, _size.x, trackSize.y, track.u1, track.v1, track.u2, track.v2, color);
 
-        pos.y = midY - icon->leftCapSize.y / 2.0f;
-        spriteBatch->draw(pos.x, pos.y, icon->leftCapSize.x, icon->leftCapSize.y, icon->leftCap.u1, icon->leftCap.v1, icon->leftCap.u2, icon->leftCap.v2, overlay->getBorderColor());
+        pos.y = midY - minCapSize.y / 2.0f;
+        spriteBatch->draw(pos.x, pos.y, minCapSize.x, minCapSize.y, minCap.u1, minCap.v1, minCap.u2, minCap.v2, color);
         
-        pos.x = position.x + _position.x + _size.x - border.left - padding.left - icon->rightCapSize.x;
-        spriteBatch->draw(pos.x, pos.y, icon->rightCapSize.x, icon->rightCapSize.y, icon->rightCap.u1, icon->rightCap.v1, icon->rightCap.u2, icon->rightCap.v2, overlay->getBorderColor());
+        pos.x = position.x + _position.x + _size.x - border.left - padding.left - maxCapSize.x;
+        spriteBatch->draw(pos.x, pos.y, maxCapSize.x, maxCapSize.y, maxCap.u1, maxCap.v1, maxCap.u2, maxCap.v2, color);
 
         // Percent across.
         float markerPosition = _value / (_max - _min);
-        markerPosition *= _size.x - border.left - padding.left - border.right - padding.right - icon->leftCapSize.x - icon->rightCapSize.x - icon->markerSize.x;
-        pos.x = position.x + _position.x + border.left + padding.left + icon->leftCapSize.x + markerPosition;
-        pos.y = midY - icon->markerSize.y / 2.0f;
-        spriteBatch->draw(pos.x, pos.y, icon->markerSize.x, icon->markerSize.y, icon->marker.u1, icon->marker.v1, icon->marker.u2, icon->marker.v2, overlay->getBorderColor());
+        markerPosition *= _size.x - border.left - padding.left - border.right - padding.right - minCapSize.x - maxCapSize.x - markerSize.x;
+        pos.x = position.x + _position.x + border.left + padding.left +  minCapSize.x + markerPosition;
+        pos.y = midY - markerSize.y / 2.0f;
+        spriteBatch->draw(pos.x, pos.y, markerSize.x, markerSize.y, marker.u1, marker.v1, marker.u2, marker.v2, color);
     }
 }
 

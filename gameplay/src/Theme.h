@@ -2,8 +2,8 @@
  * Theme.h
  */
 
-# ifndef THEME_H_
-# define THEME_H_
+#ifndef THEME_H_
+#define THEME_H_
 
 #include "Base.h"
 #include "Ref.h"
@@ -19,7 +19,7 @@ namespace gameplay
 #define MAX_OVERLAY_REGIONS 9
 
 /**
- * This class represents the apperance of an UI form described in a 
+ * This class represents the appearance of an UI form described in a 
  * theme file. A theme file, at its simplest, contains a source texture atlas,
  * the texture coordinates of each control in its different mode. Once loaded,
  * the appearance properties can be retrieved using a style id and set on a UI control.
@@ -44,36 +44,143 @@ public:
         float bottom;
         float left;
         float right;
+
+        padding() : top(0), bottom(0), left(0), right(0) {}
     } Margin, Border, Padding;
 
     class Icon : public Ref
     {
     public:
-        std::string id;
-        UVs off;
-        UVs on;
-        UVs active;
-        Vector2 size;
+        static Icon* create(const char* id, const Texture& texture, const Vector2& size,
+                            const Vector2& offPosition, const Vector2& onPosition, const Vector4& color);
+
+        const char* getId() const;
+        const Vector2& getSize() const;
+        const Vector4& getColor() const;
+        const Theme::UVs& getOffUVs() const;
+        const Theme::UVs& getOnUVs() const;
+
+    private:
+        Icon(const Texture& texture, const Vector2& size, const Vector2& offPosition, const Vector2& onPosition, const Vector4& color);
+        Icon(const Icon& copy);
+        ~Icon();
+
+        std::string _id;
+        Vector2 _size;
+        Vector4 _color;
+        UVs _off;
+        UVs _on;
     };
 
     class SliderIcon : public Ref
     {
     public:
-        std::string id;
-        UVs leftCap;
-        UVs rightCap;
-        UVs track;
-        UVs marker;
-        Vector2 leftCapSize;
-        Vector2 rightCapSize;
-        Vector2 trackSize;
-        Vector2 markerSize;
+        static SliderIcon* create(const char* id, const Texture& texture, const Vector4& minCapRegion, const Vector4& maxCapRegion,
+                                  const Vector4& markerRegion, const Vector4& trackRegion, const Vector4& color);
+
+        const char* getId() const;
+        const Theme::UVs& getMinCapUVs() const;
+        const Theme::UVs& getMaxCapUVs() const;
+        const Theme::UVs& getMarkerUVs() const;
+        const Theme::UVs& getTrackUVs() const;
+        const Vector2& getMinCapSize() const;
+        const Vector2& getMaxCapSize() const;
+        const Vector2& getMarkerSize() const;
+        const Vector2& getTrackSize() const;
+        const Vector4& getColor() const;
+
+    private:
+        SliderIcon(const Texture& texture, const Vector4& minCapRegion, const Vector4& maxCapRegion,
+                   const Vector4& markerRegion, const Vector4& trackRegion, const Vector4& color);
+        SliderIcon(const SliderIcon& copy);
+        ~SliderIcon();
+
+        std::string _id;
+        UVs _minCap;
+        UVs _maxCap;
+        UVs _marker;
+        UVs _track;
+        Vector2 _minCapSize;
+        Vector2 _maxCapSize;
+        Vector2 _markerSize;
+        Vector2 _trackSize;
+        Vector4 _color;
+    };
+    
+    /**
+     * This class represents the appearance of a cursor.
+     */
+    class Cursor : public Ref
+    {
+    public:
+        static Theme::Cursor* create(const char* id, const Texture& texture, const Rectangle& region, const Vector4& color);
+
+       /**
+        * Returns the Id of this Cursor.
+        */
+        const char* getId() const;
+
+       /**
+        * Gets a UV coordinates computed from the texture region.
+        */
+        const Theme::UVs& getUVs() const;
+
+        const Vector2& getSize() const;
+
+        const Vector4& getColor() const;
+    
+    private:
+        Cursor(const Texture& texture, const Rectangle& region, const Vector4& color);
+        Cursor(const Cursor& copy);
+        ~Cursor();
+
+        std::string _id;
+        UVs _uvs;
+        Vector2 _size;
+        Vector4 _color;
+    };
+
+    class ContainerRegion : public Ref
+    {
+    public:
+        static ContainerRegion* create(const char* id, const Texture& texture, const Rectangle& region, const Theme::Border& border, const Vector4& color);
+
+        enum ContainerArea
+        {
+            TOP_LEFT, TOP, TOP_RIGHT,
+            LEFT, CENTER, RIGHT,
+            BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT
+        };
+
+        const char* getId() const;
+        const Theme::Border& getBorder() const;
+        const Theme::UVs& getUVs(ContainerArea area) const;
+        const Vector4& getColor() const;
+        
+        /**
+         * Set the size of this ContainerRegion's border.
+         *
+         * When auto-size is set on width and/or height:
+         * Space added to the calculated (tightly bound) width and height.
+         *
+         */
+        //void setBorder(float top, float bottom, float left, float right);
+
+    private:
+        ContainerRegion(const Texture& texture, const Rectangle& region, const Theme::Border& border, const Vector4& color);
+        ContainerRegion(const ContainerRegion& copy);
+        ~ContainerRegion();
+    
+        std::string _id;
+        Theme::Border _border;
+        UVs _uvs[MAX_OVERLAY_REGIONS];
+        Vector4 _color;
     };
 
     /**
      * Creates an instance of a Theme from a theme file.
      *
-     * @param path path to a theme file.
+     * @param path Path to a theme file.
      *
      * @return A new Theme.
      */
@@ -82,44 +189,13 @@ public:
     /**
      * Returns style with the given name.
      *
-     * @param name Name of the style (as specified in the Theme file).
+     * @param id ID of the style (as specified in the Theme file).
      *
-     * @return instance of the Style.
+     * @return Instance of the Style.
      */
-    Theme::Style* getStyle(const char* styleName) const;
+    Theme::Style* getStyle(const char* id) const;
 
     SpriteBatch* getSpriteBatch() const;
-
-    /**
-     * This class represents the apperance of a cursor.
-     */
-    class Cursor
-    {
-    public:
-        Cursor(const char* id, const Rectangle& region, const Vector4& color);
-
-       /**
-        * Returns the Id of this Cursor.
-        */
-        const char* getId() const;
-
-       /**
-        * Gets a texture region in the texture atlas for a cursor.
-        */
-        const Rectangle& getRegion() const;
-
-       /**
-        * Gets a UV coordinates computed from the texture region.
-        */
-        const Theme::UVs& getUVs() const;
-    
-    private:
-
-        std::string _id;
-        Rectangle _region;
-        UVs _uvs;
-        Vector4 _color;
-    };
     
     /**
      * This class represents the apperance of a control's style.
@@ -136,7 +212,7 @@ public:
             OVERLAY_ACTIVE
         };
 
-        Style(const char* id, const Theme::Margin& margin, const Theme::Border& border, const Theme::Padding& padding,
+        Style(const char* id, const Theme::Margin& margin, const Theme::Padding& padding,
             Theme::Style::Overlay* normal, Theme::Style::Overlay* focus, Theme::Style::Overlay* active);
 
         ~Style();
@@ -152,11 +228,6 @@ public:
         Theme::Style::Overlay* getOverlay(OverlayType overlayType) const;
 
         /**
-         * Gets the Border region of this style.
-         */
-        const Theme::Border& getBorder() const;
-
-        /**
          * Gets the Padding region of this style.
          */
         const Theme::Padding& getPadding() const;
@@ -165,15 +236,6 @@ public:
          * Gets the Margin region of this style.
          */
         const Theme::Margin& getMargin() const;
-
-        /**
-         * Set the size of this Style's border.
-         *
-         * When auto-size is set on width and/or height:
-         * Space added to the calculated (tightly bound) width and height.
-         *
-         */
-        void setBorder(float top, float bottom, float left, float right);
 
         /**
          * Set this size of this Style's padding.
@@ -195,39 +257,12 @@ public:
         class Overlay : public Ref
         {
         public:
-            Overlay();
-            Overlay(OverlayType type);
-
-            enum OverlayArea
-            {
-                TOP_LEFT, TOP, TOP_RIGHT,
-                LEFT, CENTER, RIGHT,
-                BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT
-            };
-
-           /**
-            * Destructor.
-            */
-            ~Overlay();
+            static Overlay* create();
 
            /**
             * Returns the Overlay type.
             */
             OverlayType getType();
-            
-            /**
-            * Gets a texture region in the texture atlas that the overlay uses.
-            */
-            const Rectangle& getRegion() const;
-
-            void setRegion(const Rectangle& region);
-
-            // Calculates and sets UV coordinates based on the current region and given border and texture size.
-            void calculateUVs(const Theme::Border& border, unsigned int textureWidth, unsigned int textureHeight);
-
-            const Theme::UVs& getUVs(OverlayArea area);
-
-            void setUVs(OverlayArea area, const Theme::UVs& uvs);
 
            /**
             * Gets a font associated with this overlay.
@@ -248,40 +283,38 @@ public:
             bool getTextRightToLeft() const;
             void setTextRightToLeft(bool rightToLeft);
 
+            const Vector4& getTextColor() const;
+            void setTextColor(const Vector4& color);
+            
            /**
             * Gets a cursor associated with this overlay.
             */
-            Cursor* getCursor() const;
-
-            void setCursor(Cursor* cursor);
-
-            const Vector4& getTextColor() const;
-
-            void setTextColor(const Vector4& color);
-
-            const Vector4& getBorderColor() const;
-
-            void setBorderColor(const Vector4& color);
+            void setTextCursor(Cursor* cursor);
+            Cursor* getTextCursor() const;
+            
+            void setMouseCursor(Cursor* cursor);
+            Cursor* getMouseCursor() const;
             
             void setCheckBoxIcon(Icon* icon);
-
-            Icon* getCheckBoxIcon();
+            Icon* getCheckBoxIcon() const;
 
             void setRadioButtonIcon(Icon* icon);
-
-            Icon* getRadioButtonIcon();
+            Icon* getRadioButtonIcon() const;
 
             void setSliderIcon(SliderIcon* slider);
-
-            SliderIcon* getSliderIcon();
-
-            void addRef();
+            SliderIcon* getSliderIcon() const;
+            
+            void setContainerRegion(ContainerRegion* container);
+            ContainerRegion* getContainerRegion() const;
         
         private:
-            OverlayType _type;
-            Rectangle _region;
-            UVs _uvs[MAX_OVERLAY_REGIONS];
-            Cursor* _cursor;
+            Overlay();
+            Overlay(const Overlay& copy);
+            ~Overlay();
+
+            ContainerRegion* _container;
+            Cursor* _textCursor;
+            Cursor* _mouseCursor;
             Icon* _checkBoxIcon;
             Icon* _radioButtonIcon;
             SliderIcon* _sliderIcon;
@@ -290,10 +323,10 @@ public:
             Font::Justify _alignment;
             bool _textRightToLeft;
             Vector4 _textColor;
-            Vector4 _borderColor;
         };
 
     private:
+        Style(const Style& style);
         
         std::string _id;
         Border _border;
@@ -318,16 +351,18 @@ private:
      */
     ~Theme();
 
-    static void generateUVs(float x, float y, float width, float height, float textureWidth, float textureHeight, UVs* uvs);
+    static void generateUVs(const Texture& texture, float x, float y, float width, float height, UVs* uvs);
+    void lookUpSprites(const Properties* overlaySpace, Icon** checkBoxIcon, Icon** radioButtonIcon, SliderIcon** sliderIcon,
+                              Cursor** textCursor, Cursor** mouseCursor, ContainerRegion** containerRegion);
 
     std::string _path;
     Texture* _texture;
     SpriteBatch* _spriteBatch;
-    std::vector<Cursor *> _cursors;
-    std::vector<Style *> _styles;
-    std::vector<Font *> _fonts;
+    std::vector<Cursor*> _cursors;
+    std::vector<Style*> _styles;
     std::vector<Icon*> _icons;
     std::vector<SliderIcon*> _sliders;
+    std::vector<ContainerRegion*> _containers;
 };
 
 }

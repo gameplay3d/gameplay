@@ -31,10 +31,22 @@ namespace gameplay
         return Layout::LAYOUT_VERTICAL;
     }
 
-    void VerticalLayout::update(std::vector<Control*> controls, const Vector2& size, Theme::Style* containerStyle)
+    void VerticalLayout::update(const Container* container)
     {
-        float yPosition = containerStyle->getBorder().top + containerStyle->getPadding().top;
-        float xPosition = containerStyle->getBorder().left + containerStyle->getPadding().left;
+        // Need border, padding.
+        Theme::Style* style = container->getStyle();
+        Theme::Border border;
+        Theme::ContainerRegion* containerRegion = style->getOverlay(container->getOverlayType())->getContainerRegion();
+        if (containerRegion)
+        {
+            border = containerRegion->getBorder();
+        }
+        Theme::Padding padding = style->getPadding();
+
+        float yPosition = border.top + padding.top;
+        float xPosition = border.left + padding.left;
+
+        std::vector<Control*> controls = container->getControls();
 
         unsigned int i, end, iter;
         if (_bottomToTop)
@@ -59,6 +71,7 @@ namespace gameplay
             yPosition += margin.top;
 
             control->setPosition(xPosition, yPosition);
+            control->update(container->getPosition());
 
             yPosition += size.y + margin.bottom;
 

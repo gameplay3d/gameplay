@@ -74,6 +74,8 @@ namespace gameplay
         // Add all the controls to the form.
         form->addControls(form->getTheme(), formProperties);
 
+        SAFE_DELETE(properties);
+
         return form;
     }
 
@@ -161,6 +163,11 @@ namespace gameplay
         _viewport = new Viewport(0, 0, _size.x, _size.y);
     }
 
+    void Form::update()
+    {
+        Container::update(Vector2::zero());
+    }
+
     void Form::draw()
     {
         // If this Form has a Node then it's a 3D Form.  The contents will be rendered
@@ -183,11 +190,11 @@ namespace gameplay
                 _frameBuffer->bind();
                 _viewport->bind();
 
-                // Clear form background color.
                 Game* game = Game::getInstance();
-                game->clear(Game::CLEAR_COLOR, _style->getOverlay(getOverlayType())->getBorderColor(), 1.0f, 0);
 
-                //draw(_theme, _position);
+                // Clear form background color.
+                //game->clear(Game::CLEAR_COLOR, _style->getOverlay(getOverlayType())->getBorderColor(), 1.0f, 0);
+
                 draw(_theme->getSpriteBatch(), _position);
                 FrameBuffer::bindDefault();
 
@@ -312,6 +319,16 @@ namespace gameplay
                     form->touchEvent(evt, x - position.x, y - position.y, contactIndex);
                 }
             }
+        }
+    }
+
+    void Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
+    {
+        std::vector<Form*>::const_iterator it;
+        for (it = __forms.begin(); it < __forms.end(); it++)
+        {
+            Form* form = *it;
+            form->keyEvent(evt, key);
         }
     }
 }

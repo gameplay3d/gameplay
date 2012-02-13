@@ -2,10 +2,11 @@
 #define LAYOUT_H_
 
 #include "Ref.h"
-#include "Control.h"
 
 namespace gameplay
 {
+
+class Container;
 
 class Layout : public Ref
 {
@@ -19,7 +20,7 @@ public:
 
     virtual Type getType() = 0;
 
-    virtual void update(std::vector<Control*> controls, const Vector2& size, Theme::Style* containerStyle) = 0;
+    virtual void update(const Container* container) = 0;
 
 protected:
     //Layout();

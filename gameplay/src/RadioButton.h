@@ -26,9 +26,9 @@ private:
     RadioButton(const RadioButton& copy);
 
     // Clear the _selected flag of all RadioButtons in the given group.
-    static void clearSelected(const char* groupId);
+    static void clearSelected(const std::string& groupId);
 
-    const char* _groupId;
+    std::string _groupId;
     bool _selected;
 };
 
