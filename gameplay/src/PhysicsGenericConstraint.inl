@@ -45,42 +45,42 @@ inline const Vector3& PhysicsGenericConstraint::getTranslationOffsetB() const
 
 inline void PhysicsGenericConstraint::setAngularLowerLimit(const Vector3& limits)
 {
-    ((btGeneric6DofConstraint*)_constraint)->setAngularLowerLimit(limits);
+    ((btGeneric6DofConstraint*)_constraint)->setAngularLowerLimit(BV(limits));
 }
 
 inline void PhysicsGenericConstraint::setAngularUpperLimit(const Vector3& limits)
 {
-    ((btGeneric6DofConstraint*)_constraint)->setAngularUpperLimit(limits);
+    ((btGeneric6DofConstraint*)_constraint)->setAngularUpperLimit(BV(limits));
 }
 
 inline void PhysicsGenericConstraint::setLinearLowerLimit(const Vector3& limits)
 {
-    ((btGeneric6DofConstraint*)_constraint)->setLinearLowerLimit(limits);
+    ((btGeneric6DofConstraint*)_constraint)->setLinearLowerLimit(BV(limits));
 }
     
 inline void PhysicsGenericConstraint::setLinearUpperLimit(const Vector3& limits)
 {
-    ((btGeneric6DofConstraint*)_constraint)->setLinearUpperLimit(limits);
+    ((btGeneric6DofConstraint*)_constraint)->setLinearUpperLimit(BV(limits));
 }
 
 inline void PhysicsGenericConstraint::setRotationOffsetA(const Quaternion& rotationOffset)
 {
-    static_cast<btGeneric6DofConstraint*>(_constraint)->getFrameOffsetA().setRotation(rotationOffset);
+    static_cast<btGeneric6DofConstraint*>(_constraint)->getFrameOffsetA().setRotation(BQ(rotationOffset));
 }
 
 inline void PhysicsGenericConstraint::setRotationOffsetB(const Quaternion& rotationOffset)
 {
-    static_cast<btGeneric6DofConstraint*>(_constraint)->getFrameOffsetB().setRotation(rotationOffset);
+    static_cast<btGeneric6DofConstraint*>(_constraint)->getFrameOffsetB().setRotation(BQ(rotationOffset));
 }
 
 inline void PhysicsGenericConstraint::setTranslationOffsetA(const Vector3& translationOffset)
 {
-    static_cast<btGeneric6DofConstraint*>(_constraint)->getFrameOffsetA().setOrigin(translationOffset);
+    static_cast<btGeneric6DofConstraint*>(_constraint)->getFrameOffsetA().setOrigin(BV(translationOffset));
 }
 
 inline void PhysicsGenericConstraint::setTranslationOffsetB(const Vector3& translationOffset)
 {
-    static_cast<btGeneric6DofConstraint*>(_constraint)->getFrameOffsetB().setOrigin(translationOffset);
+    static_cast<btGeneric6DofConstraint*>(_constraint)->getFrameOffsetB().setOrigin(BV(translationOffset));
 }
 
 }
