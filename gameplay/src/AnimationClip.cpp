@@ -163,6 +163,13 @@ void AnimationClip::play()
 {
     if (isClipStateBitSet(CLIP_IS_PLAYING_BIT))
     {
+        // If paused, reset the bit and return.
+        if (isClipStateBitSet(CLIP_IS_PAUSED_BIT))
+        {
+            resetClipStateBit(CLIP_IS_PAUSED_BIT);
+            return;
+        }
+
         // If the clip is set to be removed, reset the flag.
         if (isClipStateBitSet(CLIP_IS_MARKED_FOR_REMOVAL_BIT))
             resetClipStateBit(CLIP_IS_MARKED_FOR_REMOVAL_BIT);
@@ -183,12 +190,20 @@ void AnimationClip::stop()
 {
     if (isClipStateBitSet(CLIP_IS_PLAYING_BIT))
     {
-        // If the clip was slated to be restarted, reset this flag.
-        if (isClipStateBitSet(CLIP_IS_RESTARTED_BIT))
-            resetClipStateBit(CLIP_IS_RESTARTED_BIT);
+        // Reset the restarted and paused bits. 
+        resetClipStateBit(CLIP_IS_RESTARTED_BIT);
+        resetClipStateBit(CLIP_IS_PAUSED_BIT);
 
         // Mark the clip to removed from the AnimationController.
         setClipStateBit(CLIP_IS_MARKED_FOR_REMOVAL_BIT);
+    }
+}
+
+void AnimationClip::pause()
+{
+    if (isClipStateBitSet(CLIP_IS_PLAYING_BIT) && !isClipStateBitSet(CLIP_IS_MARKED_FOR_REMOVAL_BIT))
+    {
+        setClipStateBit(CLIP_IS_PAUSED_BIT);
     }
 }
 
@@ -291,7 +306,11 @@ void AnimationClip::addEndListener(AnimationClip::Listener* listener)
 
 bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*>* activeTargets)
 {
-    if (isClipStateBitSet(CLIP_IS_MARKED_FOR_REMOVAL_BIT))
+    if (isClipStateBitSet(CLIP_IS_PAUSED_BIT))
+    {
+        return false;
+    }
+    else if (isClipStateBitSet(CLIP_IS_MARKED_FOR_REMOVAL_BIT))
     {   // If the marked for removal bit is set, it means stop() was called on the AnimationClip at some point
         // after the last update call. Reset the flag, and return true so the AnimationClip is removed from the 
         // running clips on the AnimationController.

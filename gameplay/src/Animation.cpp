@@ -121,10 +121,10 @@ AnimationClip* Animation::getClip(const char* id)
     }
 }
 
-void Animation::play(const char* id)
+void Animation::play(const char* clipId)
 {
     // If id is NULL, play the default clip.
-    if (id == NULL)
+    if (clipId == NULL)
     {
         if (_defaultClip == NULL)
             createDefaultClip();
@@ -134,32 +134,41 @@ void Animation::play(const char* id)
     else
     {
         // Find animation clip.. and play.
-        AnimationClip* clip = findClip(id);
+        AnimationClip* clip = findClip(clipId);
         if (clip != NULL)
-        {
             clip->play();
-        }
     }
 }
 
-void Animation::stop(const char* id)
+void Animation::stop(const char* clipId)
 {
     // If id is NULL, play the default clip.
-    if (id == NULL)
+    if (clipId == NULL)
     {
-        if (_defaultClip == NULL)
-            createDefaultClip();
-
-        _defaultClip->stop();
+        if (_defaultClip)
+            _defaultClip->stop();
     }
     else
     {
         // Find animation clip.. and play.
-        AnimationClip* clip = findClip(id);
+        AnimationClip* clip = findClip(clipId);
         if (clip != NULL)
-        {
             clip->stop();
-        }
+    }
+}
+
+void Animation::pause(const char * clipId)
+{
+    if (clipId == NULL)
+    {
+        if (_defaultClip)
+            _defaultClip->pause();
+    }
+    else
+    {
+        AnimationClip* clip = findClip(clipId);
+        if (clip != NULL)
+            clip->pause();
     }
 }
 

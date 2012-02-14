@@ -82,6 +82,13 @@ public:
      */
     void stop(const char* clipId = NULL);
 
+    /** 
+     * Pauses the AnimationClip with the specified name.
+     *
+     * @param clipId The ID of the AnimationClip to pause. If NULL, pauses the default clip.
+     */
+    void pause(const char* clipId = NULL);
+
 private:
 
     /**
