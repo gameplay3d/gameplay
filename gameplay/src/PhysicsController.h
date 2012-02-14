@@ -210,6 +210,7 @@ private:
     static const int DIRTY;
     static const int COLLISION;
     static const int REGISTERED;
+    static const int REMOVE;
 
     // Represents the collision listeners and status for a given collision pair (used by the collision status cache).
     struct CollisionInfo

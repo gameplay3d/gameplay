@@ -213,6 +213,13 @@ public:
     bool isStarted() const;
 
     /**
+     * Gets whether this ParticleEmitter is currently active (i.e. if any of its particles are alive).
+     * 
+     * @return Whether this ParticleEmitter is currently active.
+     */
+    bool isActive() const;
+
+    /**
      * Generates an arbitrary number of particles all at once.  Each newly emitted
      * particle has its properties assigned within the ranges defined by its ParticleEmitter.
      *

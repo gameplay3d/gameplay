@@ -59,7 +59,7 @@ inline const Vector3& PhysicsRigidBody::getLinearVelocity() const
     return *_linearVelocity;
 }
 
-inline const Node* PhysicsRigidBody::getNode() const
+inline Node* PhysicsRigidBody::getNode()
 {
     return _node;
 }
