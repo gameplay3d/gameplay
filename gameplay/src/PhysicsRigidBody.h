@@ -217,7 +217,7 @@ public:
      * 
      * @return The node.
      */
-    inline const Node* getNode() const;
+    inline Node* getNode();
 
     /**
      * Gets the rigid body's restitution.
