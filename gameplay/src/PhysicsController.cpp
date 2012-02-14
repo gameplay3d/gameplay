@@ -14,6 +14,7 @@ namespace gameplay
 const int PhysicsController::DIRTY         = 0x01;
 const int PhysicsController::COLLISION     = 0x02;
 const int PhysicsController::REGISTERED    = 0x04;
+const int PhysicsController::REMOVE        = 0x08;
 
 PhysicsController::PhysicsController()
   : _collisionConfiguration(NULL), _dispatcher(NULL),
@@ -158,14 +159,20 @@ btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisi
             std::vector<PhysicsRigidBody::Listener*>::const_iterator iter = collisionInfo._listeners.begin();
             for (; iter != collisionInfo._listeners.end(); iter++)
             {
-                (*iter)->collisionEvent(PhysicsRigidBody::Listener::COLLIDING, pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()),
-                    Vector3(cp.getPositionWorldOnB().x(), cp.getPositionWorldOnB().y(), cp.getPositionWorldOnB().z()));
+                if ((collisionInfo._status & REMOVE) == 0)
+                {
+                    (*iter)->collisionEvent(PhysicsRigidBody::Listener::COLLIDING, pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()),
+                        Vector3(cp.getPositionWorldOnB().x(), cp.getPositionWorldOnB().y(), cp.getPositionWorldOnB().z()));
+                }
             }
         }
     }
     else
     {
         CollisionInfo& collisionInfo = _collisionStatus[pair];
+
+        // Initialized the status for the new entry.
+        collisionInfo._status = 0;
 
         // Add the appropriate listeners.
         PhysicsRigidBody::CollisionPair p1(pair._rbA, NULL);
@@ -192,8 +199,11 @@ btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisi
         std::vector<PhysicsRigidBody::Listener*>::iterator iter = collisionInfo._listeners.begin();
         for (; iter != collisionInfo._listeners.end(); iter++)
         {
-            (*iter)->collisionEvent(PhysicsRigidBody::Listener::COLLIDING, pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()),
-                Vector3(cp.getPositionWorldOnB().x(), cp.getPositionWorldOnB().y(), cp.getPositionWorldOnB().z()));
+            if ((collisionInfo._status & REMOVE) == 0)
+            {
+                (*iter)->collisionEvent(PhysicsRigidBody::Listener::COLLIDING, pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()),
+                    Vector3(cp.getPositionWorldOnB().x(), cp.getPositionWorldOnB().y(), cp.getPositionWorldOnB().z()));
+            }
         }
     }
 
@@ -297,12 +307,24 @@ void PhysicsController::update(long elapsedTime)
     // During collision processing, if a collision occurs, the status is 
     // set to COLLISION and the DIRTY bit is cleared. Then, after collision processing 
     // is finished, if a given status is still dirty, the COLLISION bit is cleared.
+    //
+    // If an entry was marked for removal in the last frame, remove it now.
 
     // Dirty the collision status cache entries.
     std::map<PhysicsRigidBody::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
-    for (; iter != _collisionStatus.end(); iter++)
+    for (; iter != _collisionStatus.end();)
     {
-        iter->second._status |= DIRTY;
+        if ((iter->second._status & REMOVE) != 0)
+        {
+            std::map<PhysicsRigidBody::CollisionPair, CollisionInfo>::iterator eraseIter = iter;
+            iter++;
+            _collisionStatus.erase(eraseIter);
+        }
+        else
+        {
+            iter->second._status |= DIRTY;
+            iter++;
+        }
     }
 
     // Go through the collision status cache and perform all registered collision tests.
@@ -312,7 +334,7 @@ void PhysicsController::update(long elapsedTime)
         // If this collision pair was one that was registered for listening, then perform the collision test.
         // (In the case where we register for all collisions with a rigid body, there will be a lot
         // of collision pairs in the status cache that we did not explicitly register for.)
-        if ((iter->second._status & REGISTERED) != 0)
+        if ((iter->second._status & REGISTERED) != 0 && (iter->second._status & REMOVE) == 0)
         {
             if (iter->first._rbB)
                 _world->contactPairTest(iter->first._rbA->_body, iter->first._rbB->_body, *this);
@@ -343,8 +365,13 @@ void PhysicsController::update(long elapsedTime)
 
 void PhysicsController::addCollisionListener(PhysicsRigidBody::Listener* listener, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB)
 {
-    // Add the listener and ensure the status includes that this collision pair is registered.
     PhysicsRigidBody::CollisionPair pair(rbA, rbB);
+
+    // Make sure the status of the entry is initialized properly.
+    if (_collisionStatus.count(pair) == 0)
+        _collisionStatus[pair]._status = 0;
+
+    // Add the listener and ensure the status includes that this collision pair is registered.
     _collisionStatus[pair]._listeners.push_back(listener);
     if ((_collisionStatus[pair]._status & PhysicsController::REGISTERED) == 0)
         _collisionStatus[pair]._status |= PhysicsController::REGISTERED;
@@ -396,18 +423,12 @@ void PhysicsController::removeRigidBody(PhysicsRigidBody* rigidBody)
         }
     }
 
-    // Find all references to the rigid body in the collision status cache and remove them.
+    // Find all references to the rigid body in the collision status cache and mark them for removal.
     std::map<PhysicsRigidBody::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
-    for (; iter != _collisionStatus.end();)
+    for (; iter != _collisionStatus.end(); iter++)
     {
         if (iter->first._rbA == rigidBody || iter->first._rbB == rigidBody)
-        {
-            std::map<PhysicsRigidBody::CollisionPair, CollisionInfo>::iterator eraseIter = iter;
-            iter++;
-            _collisionStatus.erase(eraseIter);
-        }
-        else
-            iter++;
+            iter->second._status |= REMOVE;
     }
 }
 
