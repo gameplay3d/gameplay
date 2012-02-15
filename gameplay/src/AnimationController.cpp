@@ -111,10 +111,8 @@ void AnimationController::stopAllAnimations()
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = *clipIter;
-        clip->_isPlaying = false;
-        clip->onEnd();
-        SAFE_RELEASE(clip);
         clipIter++;
+        clip->stop();
     }
     _runningClips.clear();
 
@@ -147,7 +145,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     
     char delimeter = ' ';
     unsigned int startOffset = 0;
-    unsigned int endOffset = std::string::npos;
+    unsigned int endOffset = (unsigned int)std::string::npos;
     
     unsigned long* keyTimes = new unsigned long[keyCount];
     for (unsigned int i = 0; i < keyCount; i++)
@@ -165,7 +163,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     }
 
     startOffset = 0;
-    endOffset = std::string::npos;
+    endOffset = (unsigned int)std::string::npos;
     
     int componentCount = target->getAnimationPropertyComponentCount(propertyId);
     assert(componentCount > 0);
@@ -193,7 +191,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     {
         keyIn = new float[components];
         startOffset = 0;
-        endOffset = std::string::npos;
+        endOffset = (unsigned int)std::string::npos;
         for (unsigned int i = 0; i < components; i++)
         {
             endOffset = static_cast<std::string>(keyInStr).find_first_of(delimeter, startOffset);
@@ -215,7 +213,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     {   
         keyOut = new float[components];
         startOffset = 0;
-        endOffset = std::string::npos;
+        endOffset = (unsigned int)std::string::npos;
         for (unsigned int i = 0; i < components; i++)
         {
             endOffset = static_cast<std::string>(keyOutStr).find_first_of(delimeter, startOffset);
@@ -294,18 +292,8 @@ void AnimationController::schedule(AnimationClip* clip)
     {
         _state = RUNNING;
     }
-    
-    if (clip->_isPlaying)
-    {
-        _runningClips.remove(clip);
-        clip->_isPlaying = false;
-        clip->onEnd();
-    }
-    else
-    {
-        clip->addRef();
-    }
 
+    clip->addRef();
     _runningClips.push_back(clip);
 }
 

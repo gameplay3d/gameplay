@@ -31,15 +31,9 @@
     <ClCompile Include="src\CharacterGame.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PhysicsCharacter.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CharacterGame.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PhysicsCharacter.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

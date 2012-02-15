@@ -20,6 +20,7 @@ class PhysicsController
     friend class Game;
     friend class PhysicsConstraint;
     friend class PhysicsRigidBody;
+    friend class PhysicsCharacter;
 
 public:
 
@@ -253,7 +254,7 @@ private:
     btCollisionShape* createSphere(float radius, const btVector3& scale);
 
     // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createMesh(PhysicsRigidBody* body);
+    btCollisionShape* createMesh(PhysicsRigidBody* body, const Vector3& scale);
 
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
@@ -302,6 +303,7 @@ private:
     btBroadphaseInterface* _overlappingPairCache;
     btSequentialImpulseConstraintSolver* _solver;
     btDynamicsWorld* _world;
+    btGhostPairCallback* _ghostPairCallback;
     std::vector<PhysicsCollisionShape*> _shapes;
     DebugDrawer* _debugDrawer;
     Listener::EventType _status;

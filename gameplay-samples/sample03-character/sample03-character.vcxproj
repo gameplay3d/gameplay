@@ -153,11 +153,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CharacterGame.cpp" />
-    <ClCompile Include="src\PhysicsCharacter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CharacterGame.h" />
-    <ClInclude Include="src\PhysicsCharacter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

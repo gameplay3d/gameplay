@@ -63,7 +63,7 @@ private:
 
     Font* _font;
     Scene* _scene;
-    Node* _character;
+    PhysicsCharacter* _character;
     Animation* _animation;
     unsigned int _animationState;
     int _rotateX;

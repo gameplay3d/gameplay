@@ -32,7 +32,7 @@ public:
      */
     class Listener
     {
-        friend AnimationClip;
+        friend class AnimationClip;
 
     public:
 
@@ -217,6 +217,12 @@ public:
     void addListener(AnimationClip::Listener* listener, unsigned long eventTime);
 
 private:
+    static const char CLIP_IS_PLAYING_BIT = 0x01;             // Bit representing whether AnimationClip is a running clip in AnimationController
+    static const char CLIP_IS_STARTED_BIT = 0x02;             // Bit representing whether the AnimationClip has actually been started (ie: received first call to update())
+    static const char CLIP_IS_FADING_OUT_STARTED_BIT = 0x04;  // Bit representing that a cross fade has started.
+    static const char CLIP_IS_FADING_OUT_BIT = 0x08;          // Bit representing whether the clip is fading out.
+    static const char CLIP_IS_FADING_IN_BIT = 0x10;           // Bit representing whether the clip is fading out.
+    static const char CLIP_ALL_BITS = 0x1F;                   // Bit mask for all the state bits.
 
     /**
      * Constructor.
@@ -254,38 +260,41 @@ private:
     void onEnd();
 
     /**
-     * A list that keeps a pointer to the next listener event to be triggered.
+     * Determines whether the given bit is set in the AnimationClip's state.
      */
-    struct ListenerList
-    {
-        std::list<Listener*> _list;
-        std::list<Listener*>::iterator _listItr;
-    };
+    bool isClipStateBitSet(char bit) const;
+
+    /**
+     * Sets the given bit in the AnimationClip's state.
+     */
+    void setClipStateBit(char bit);
+
+    /**
+     * Resets the given bit in the AnimationClip's state.
+     */
+    void resetClipStateBit(char bit);
 
     std::string _id;                                // AnimationClip ID.
     Animation* _animation;                          // The Animation this clip is created from.
     unsigned long _startTime;                       // Start time of the clip.
     unsigned long _endTime;                         // End time of the clip.
     unsigned long _duration;                        // The total duration.
+    char _stateBits;                                // Bit flag used to keep track of the clip's current state.
     float _repeatCount;                             // The clip's repeat count.
     unsigned long _activeDuration;                  // The active duration of the clip.
     float _speed;                                   // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.
-    bool _isPlaying;                                // A flag to indicate whether the clip is playing.
     unsigned long _timeStarted;                     // The game time when this clip was actually started.
     long _elapsedTime;                              // Time elapsed while the clip is running.
     AnimationClip* _crossFadeToClip;                // The clip to cross fade to.
     unsigned long _crossFadeOutElapsed;             // The amount of time that has elapsed for the crossfade.
     unsigned long _crossFadeOutDuration;            // The duration of the cross fade.
     float _blendWeight;                             // The clip's blendweight.
-    bool _isFadingOutStarted;                       // Flag to indicate if the cross fade started.
-    bool _isFadingOut;                              // Flag to indicate if the clip is fading out.
-    bool _isFadingIn;                               // Flag to indicate if the clip is fading in.
     std::vector<AnimationValue*> _values;           // AnimationValue holder.
     std::vector<Listener*>* _beginListeners;        // Collection of begin listeners on the clip.
     std::vector<Listener*>* _endListeners;          // Collection of end listeners on the clip.
-    ListenerList* _listeners;                       // Collection of listeners on the clip.
+    std::list<Listener*>* _listeners;               // Ordered collection of listeners on the clip.
+    std::list<Listener*>::iterator* _listenerItr;   // Iterator that points to the next listener event to be triggered.
 };
 
 }
-
 #endif

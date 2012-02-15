@@ -3,15 +3,11 @@
 // Declare our game instance
 CharacterGame game; 
 
+unsigned int keyFlags = 0;
 float _rotateY = 0.0f;
-bool _wDown = false;
-bool _sDown = false;
-bool _aDown = false;
-bool _dDown = false;
-#define WALK_SPEED 0.12f
-#define ANIM_SPEED 9.0f
-
-int kcount = 0;
+#define WALK_SPEED  7.5f
+#define ANIM_SPEED 10.0f
+#define BLEND_DURATION 150.0f
 
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _animationState(0), _rotateX(0)
@@ -31,7 +27,7 @@ void CharacterGame::initialize()
     _scene = Scene::load("res/scene.scene");
 
     // Store character node.
-    _character = _scene->findNode("Boy");
+    _character = new PhysicsCharacter(_scene->findNode("BoyCharacter"), PhysicsCharacter::Capsule(1.5f, 5.0f, 2.25f));//0.0f));//2.9f));
 
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initScene);
@@ -81,19 +77,52 @@ void CharacterGame::finalize()
 
 void CharacterGame::update(long elapsedTime)
 {
-    Node* node = _character;
-    //Node* node = _scene->findNode("Camera");
-    if (_wDown)
-        node->translateForward(-WALK_SPEED);
-    else if (_sDown)
-        node->translateForward(WALK_SPEED);
-    if (_aDown)
-        node->translateLeft(-WALK_SPEED);
-    else if (_dDown)
-        node->translateLeft(WALK_SPEED);
+    // Update character animation and movement
+    if (keyFlags == 0)
+    {
+        _character->play("idle", PhysicsCharacter::PLAY_REPEAT, 1.0f, BLEND_DURATION);
+    }
+    else
+    {
+        // Forward motion
+        if (keyFlags & 1)
+        {
+            _character->play("walk", PhysicsCharacter::PLAY_REPEAT, ANIM_SPEED, BLEND_DURATION);
+            _character->moveForward(1.0f);
+        }
+        else if (keyFlags & 2)
+        {
+            _character->play("walk", PhysicsCharacter::PLAY_REPEAT, -ANIM_SPEED, BLEND_DURATION);
+            _character->moveForward(-1.0f);
+        }
+        else
+        {
+            // Cancel forward movement
+            _character->moveForward(0.0f);
+        }
 
-    node->setTranslationY(0);
+        // Strafing
+        if (keyFlags & 4)
+        {
+            _character->play("walk", PhysicsCharacter::PLAY_REPEAT, ANIM_SPEED, BLEND_DURATION);
+            _character->moveRight(1.0f);
+        }
+        else if (keyFlags & 8)
+        {
+            _character->play("walk", PhysicsCharacter::PLAY_REPEAT, -ANIM_SPEED, BLEND_DURATION);
+            _character->moveRight(-1.0f);
+        }
+        else
+        {
+            // Cancel right movement
+            _character->moveRight(0.0f);
+        }
+    }
+
+    //_character->update(elapsedTime);
 }
+
+bool drawDebug = false;
 
 void CharacterGame::render(long elapsedTime)
 {
@@ -103,7 +132,8 @@ void CharacterGame::render(long elapsedTime)
     // Draw our scene
     _scene->visit(this, &CharacterGame::drawScene);
 
-    Game::getInstance()->getPhysicsController()->drawDebug(_scene->getActiveCamera()->getViewProjectionMatrix());
+    if (drawDebug)
+        Game::getInstance()->getPhysicsController()->drawDebug(_scene->getActiveCamera()->getViewProjectionMatrix());
 
     _font->begin();
     char fps[32];
@@ -143,7 +173,7 @@ bool CharacterGame::drawScene(Node* node, void* cookie)
     Model* model = node->getModel();
     if (model)
     {
-        model->draw();
+        model->draw(false);
 
         //drawBoundingSphere(_scene, node->getBoundingSphere());
     }
@@ -151,69 +181,67 @@ bool CharacterGame::drawScene(Node* node, void* cookie)
     return true;
 }
 
+bool cameraToggle = false;
+Quaternion cr;
+Vector3 ct;
+
 void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-    Animation* a = Game::getInstance()->getAnimationController()->getAnimation("movements");
-    if (a == NULL)
-        return;
-    AnimationClip* walk = a->getClip("walk");
-    AnimationClip* idle = a->getClip("idle");
-
     if (evt == Keyboard::KEY_PRESS)
     {
-        kcount++;
-        if (key == Keyboard::KEY_W)
-            _wDown = true;
-        else if (key == Keyboard::KEY_S)
-            _sDown = true;
-        else if (key == Keyboard::KEY_A)
-            ;//_aDown = true;
-        else if (key == Keyboard::KEY_D)
-            ;//_dDown = true;
-
-        if (_wDown)
+        switch (key)
         {
-            if (!walk->isPlaying())
+        case Keyboard::KEY_W:
+            keyFlags |= 1;
+            break;
+        case Keyboard::KEY_S:
+            keyFlags |= 2;
+            break;
+        case Keyboard::KEY_A:
+            keyFlags |= 4;
+            break;
+        case Keyboard::KEY_D:
+            keyFlags |= 8;
+            break;
+        case Keyboard::KEY_P:
+            drawDebug = !drawDebug;
+            break;
+        case Keyboard::KEY_C:
             {
-                idle->stop();
-                walk->setSpeed(ANIM_SPEED);
-                walk->play();
+                Node* c = _scene->findNode("Camera");
+                cameraToggle = !cameraToggle;
+                if (cameraToggle)
+                {
+                    cr = c->getRotation();
+                    ct = c->getTranslation();
+                    c->setTranslation(0, 20, 0);
+                    c->setRotation(Vector3::unitX(), MATH_DEG_TO_RAD(-90.0f));
+                }
+                else
+                {
+                    c->setRotation(cr);
+                    c->setTranslation(ct);
+                }
             }
-            else if (walk->getSpeed() < 0)
-            {
-                walk->setSpeed(ANIM_SPEED);
-            }
+            break;
         }
-        else if (_sDown)
-        {
-            if (!walk->isPlaying())
-            {
-                idle->stop();
-                walk->setSpeed(-ANIM_SPEED);
-                walk->play();
-            }
-            else if (walk->getSpeed() > 0)
-            {
-                walk->setSpeed(-ANIM_SPEED);
-            }
-        }
-       
     }
     else if (evt == Keyboard::KEY_RELEASE)
     {
-        if (key == Keyboard::KEY_W)
-            _wDown = false;
-        else if (key == Keyboard::KEY_S)
-            _sDown = false;
-        else if (key == Keyboard::KEY_A)
-            _aDown = false;
-        else if (key == Keyboard::KEY_D)
-            _dDown = false;
-
-        if (!_wDown && !_sDown && walk->isPlaying())
+        switch (key)
         {
-            walk->stop();
-            idle->play();
+        case Keyboard::KEY_W:
+            keyFlags &= ~1;
+            break;
+        case Keyboard::KEY_S:
+            keyFlags &= ~2;
+            break;
+        case Keyboard::KEY_A:
+            keyFlags &= ~4;
+            break;
+        case Keyboard::KEY_D:
+            keyFlags &= ~8;
+            break;
         }
     }
 }
@@ -226,30 +254,6 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
         {
             _rotateX = x;
             _rotateY = y;
-            switch (_animationState)
-            {
-                case 0:
-                    _animation->stop("head");
-                    _animation->play("right_arm");
-                    break;
-                case 1:
-                    _animation->stop("right_arm");
-                    _animation->play("left_arm");
-                    break;
-                case 2:
-                    _animation->stop("left_arm");
-                    _animation->play("right_leg");
-                    break;
-                case 3:
-                    _animation->stop("right_leg");
-                    _animation->play("left_leg");
-                    break;
-                case 4:
-                    _animation->stop("left_leg");
-                    _animation->play("head");
-                    break;
-            }
-            _animationState = (_animationState + 1) % 5;
         }
         break;
     case Touch::TOUCH_RELEASE:
@@ -264,7 +268,7 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
             int deltaY = y - _rotateY;
             _rotateX = x;
             _rotateY = y;
-            _character->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
+            _character->getNode()->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
             _scene->findNode("Camera")->rotateX(-MATH_DEG_TO_RAD(deltaY * 0.5f));
             //_character->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
         }
@@ -278,6 +282,9 @@ void CharacterGame::loadAnimationClips()
 {
     _animation = Game::getInstance()->getAnimationController()->getAnimation("movements");
     _animation->createClips("res/boy.animation");
-    AnimationClip* clip = _animation->getClip("idle");
-    clip->play();
+
+    _character->addAnimation("idle", _animation->getClip("idle"), 0.0f);
+    _character->addAnimation("walk", _animation->getClip("walk"), WALK_SPEED);
+
+    _character->play("idle", PhysicsCharacter::PLAY_REPEAT);
 }
