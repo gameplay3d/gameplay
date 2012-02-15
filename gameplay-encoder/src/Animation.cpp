@@ -51,6 +51,15 @@ void Animation::add(AnimationChannel* animationChannel)
     _channels.push_back(animationChannel);
 }
 
+void Animation::remove(AnimationChannel* animationChannel)
+{
+    std::vector<AnimationChannel*>::iterator it = std::find(_channels.begin(), _channels.end(), animationChannel);
+    if (it != _channels.end())
+    {
+        _channels.erase(it);
+    }
+}
+
 unsigned int Animation::getAnimationChannelCount() const
 {
     return _channels.size();
@@ -58,6 +67,7 @@ unsigned int Animation::getAnimationChannelCount() const
 
 AnimationChannel* Animation::getAnimationChannel(unsigned int index) const
 {
+    assert(index < _channels.size());
     return _channels[index];
 }
 

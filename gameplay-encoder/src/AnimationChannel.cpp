@@ -43,7 +43,7 @@ void AnimationChannel::writeText(FILE* file)
 {
     fprintElementStart(file);
     fprintfElement(file, "targetId", _targetId);
-    fprintfElement(file, "targetAttrib", _targetAttrib);
+    fprintf(file, "<%s>%u %s</%s>\n", "targetAttrib", _targetAttrib, Transform::getPropertyString(_targetAttrib), "targetAttrib");
     fprintfElement(file, "%f ", "keytimes", _keytimes);
     fprintfElement(file, "%f ", "values", _keyValues);
     fprintfElement(file, "%f ", "tangentsIn", _tangentsIn);
@@ -130,27 +130,29 @@ void AnimationChannel::setInterpolations(const std::vector<unsigned int>& values
 
 void AnimationChannel::removeDuplicates()
 {
-    if (_targetAttrib == Transform::ANIMATE_SCALE_ROTATE_TRANSLATE)
+    size_t propSize = Transform::getPropertySize(_targetAttrib);
+
+    if (propSize > 1 && !_interpolations.empty() && _interpolations[0] == LINEAR)
     {
         size_t prevIndex = 0;
 
         std::vector<float>::iterator prevStart = _keyValues.begin();
-        std::vector<float>::iterator prevEnd   = _keyValues.begin() + 9;
+        std::vector<float>::iterator prevEnd = prevStart + propSize - 1;
         
         size_t i = 1;
         for (i = 1; i < _keytimes.size(); ++i)
         {
-            std::vector<float>::iterator start = _keyValues.begin() + i * 10;
-            std::vector<float>::iterator end = _keyValues.begin() + (i * 10 + 9);
+            std::vector<float>::iterator start = _keyValues.begin() + i * propSize;
+            std::vector<float>::iterator end = start + propSize - 1;
 
-            if (!equal(prevStart, prevEnd, start))
+            if (!equal(prevStart, prevEnd, start) || i == _keytimes.size() - 1)
             {
                 if (i - prevIndex > 2)
                 {
-                    deleteRange(prevIndex+1, i);
+                    deleteRange(prevIndex+1, i, propSize);
                     i = prevIndex;
-                    prevStart = _keyValues.begin() + i * 10;
-                    prevEnd = _keyValues.begin() + (i * 10 + 9);
+                    prevStart = _keyValues.begin() + i * propSize;
+                    prevEnd = prevStart + propSize - 1;
                 }
                 else
                 {
@@ -162,7 +164,7 @@ void AnimationChannel::removeDuplicates()
         }
         if (i - 1 - prevIndex >= 2)
         {
-            deleteRange(prevIndex+1, i);
+            deleteRange(prevIndex+1, i, propSize);
         }
     }
 }
@@ -270,13 +272,14 @@ unsigned int AnimationChannel::getInterpolationType(const char* str)
     return value;
 }
 
-void AnimationChannel::deleteRange(size_t begin, size_t end)
+void AnimationChannel::deleteRange(size_t begin, size_t end, size_t propSize)
 {
+    assert(end > begin);
     // delete range
     printf("delete %lu to %lu\n", begin, end - 1);
 
-    std::vector<float>::iterator a = _keyValues.begin() + begin * 10;
-    std::vector<float>::iterator b = _keyValues.begin() + end * 10;
+    std::vector<float>::iterator a = _keyValues.begin() + begin * propSize;
+    std::vector<float>::iterator b = _keyValues.begin() + end * propSize;
     _keyValues.erase(a, b);
 
     a = _keytimes.begin() + begin;
@@ -286,9 +289,11 @@ void AnimationChannel::deleteRange(size_t begin, size_t end)
     if (_interpolations.size() > 1)
     {
         std::vector<unsigned int>::iterator a = _interpolations.begin() + begin;
-        std::vector<unsigned int>::iterator b = _interpolations.begin() + end * 10;
+        std::vector<unsigned int>::iterator b = _interpolations.begin() + end * propSize;
         _interpolations.erase(a, b);
     }
+
+    // TODO: also remove key frames from _tangentsIn and _tangentsOut once other curve types are supported.
 }
 
 }
