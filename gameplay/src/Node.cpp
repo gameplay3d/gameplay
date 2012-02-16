@@ -693,12 +693,12 @@ void Node::setParticleEmitter(ParticleEmitter* emitter)
     }
 }
 
-PhysicsRigidBody* Node::getPhysicsRigidBody() const
+PhysicsRigidBody* Node::getRigidBody() const
 {
     return _physicsRigidBody;
 }
 
-void Node::setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float friction,
+void Node::setRigidBody(PhysicsRigidBody::Type type, float mass, float friction,
         float restitution, float linearDamping, float angularDamping)
 {
     SAFE_DELETE(_physicsRigidBody);
@@ -707,14 +707,14 @@ void Node::setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float fr
         _physicsRigidBody = new PhysicsRigidBody(this, type, mass, friction, restitution, linearDamping, angularDamping);
 }
 
-void Node::setPhysicsRigidBody(const char* filePath)
+void Node::setRigidBody(const char* filePath)
 {
     SAFE_DELETE(_physicsRigidBody);
 
     _physicsRigidBody = PhysicsRigidBody::create(this, filePath);
 }
 
-void Node::setPhysicsRigidBody(Properties* properties)
+void Node::setRigidBody(Properties* properties)
 {
     SAFE_DELETE(_physicsRigidBody);
 
