@@ -349,7 +349,7 @@ public:
      *
      * @return The pointer to this node's physics rigid body or NULL.
      */
-    PhysicsRigidBody* getPhysicsRigidBody() const;
+    PhysicsRigidBody* getRigidBody() const;
 
     /**
      * Sets (or disables) the physics rigid body for this node.
@@ -366,7 +366,7 @@ public:
      * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
      * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
      */
-    void setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass = 0.0f, float friction = 0.5f,
+    void setRigidBody(PhysicsRigidBody::Type type, float mass = 0.0f, float friction = 0.5f,
         float restitution = 0.0f, float linearDamping = 0.0f, float angularDamping = 0.0f);
 
     /**
@@ -374,14 +374,14 @@ public:
      * 
      * @param filePath The path to the file that contains the rigid body definition.
      */
-    void setPhysicsRigidBody(const char* filePath);
+    void setRigidBody(const char* filePath);
 
     /**
      * Sets the physics rigid body for this node from the given properties object.
      * 
      * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidbody').
      */
-    void setPhysicsRigidBody(Properties* properties);
+    void setRigidBody(Properties* properties);
 
     /**
      * Returns the bounding sphere for the Node, in world space.

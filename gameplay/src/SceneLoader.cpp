@@ -385,7 +385,7 @@ void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* scen
                         // Set the specified model during physics rigid body creation.
                         Model* model = node->getModel();
                         node->setModel(modelNode->getModel());
-                        node->setPhysicsRigidBody(p);
+                        node->setRigidBody(p);
                         node->setModel(model);
                     }
                 }
@@ -393,7 +393,7 @@ void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* scen
             else if (!node->getModel())
                 WARN_VARG("Attempting to set a rigid body on node '%s', which has no model.", _nodeProperties[i]._nodeID);
             else
-                node->setPhysicsRigidBody(p);
+                node->setRigidBody(p);
         }
     }
 }
@@ -807,7 +807,7 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
                 WARN_VARG("Node '%s' to be used as 'rigidBodyA' for constraint %s cannot be found.", name, constraint->getId());
                 continue;
             }
-            PhysicsRigidBody* rbA = rbANode->getPhysicsRigidBody();
+            PhysicsRigidBody* rbA = rbANode->getRigidBody();
             if (!rbA)
             {
                 WARN_VARG("Node '%s' to be used as 'rigidBodyA' does not have a rigid body.", name);
@@ -828,7 +828,7 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
                     WARN_VARG("Node '%s' to be used as 'rigidBodyB' for constraint %s cannot be found.", name, constraint->getId());
                     continue;
                 }
-                rbB = rbBNode->getPhysicsRigidBody();
+                rbB = rbBNode->getRigidBody();
                 if (!rbB)
                 {
                     WARN_VARG("Node '%s' to be used as 'rigidBodyB' does not have a rigid body.", name);
