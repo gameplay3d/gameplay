@@ -109,7 +109,7 @@ PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidB
     return constraint;
 }
 
-const Vector3& PhysicsController::getGravity(const Vector3& gravity) const
+const Vector3& PhysicsController::getGravity() const
 {
     return _gravity;
 }
