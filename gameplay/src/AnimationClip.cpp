@@ -509,17 +509,17 @@ void AnimationClip::onEnd()
     }
 }
 
-bool AnimationClip::isClipStateBitSet(char bit) const
+bool AnimationClip::isClipStateBitSet(unsigned char bit) const
 {
     return (_stateBits & bit) == bit;
 }
 
-void AnimationClip::setClipStateBit(char bit)
+void AnimationClip::setClipStateBit(unsigned char bit)
 {
     _stateBits |= bit;
 }
 
-void AnimationClip::resetClipStateBit(char bit)
+void AnimationClip::resetClipStateBit(unsigned char bit)
 {
     _stateBits &= ~bit;
 }
