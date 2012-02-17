@@ -204,7 +204,7 @@ float Vector4::distanceSquared(const Vector4& v) const
     return (dx * dx + dy * dy + dz * dz + dw * dw);
 }
 
-float Vector4::dot(const Vector4& v)
+float Vector4::dot(const Vector4& v) const
 {
     return (x * v.x + y * v.y + z * v.z + w * v.w);
 }
