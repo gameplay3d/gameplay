@@ -1000,6 +1000,18 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
 unsigned int Font::getIndexAtLocation(const char* text, const Rectangle& area, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
                                       Justify justify, bool wrap, bool rightToLeft)
 {
+    return getIndexOrLocation(text, area, size, inLocation, outLocation, -1, justify, wrap, rightToLeft);
+}
+
+void Font::getLocationAtIndex(const char* text, const Rectangle& clip, unsigned int size, Vector2* outLocation, const unsigned int destIndex,
+                              Justify justify, bool wrap, bool rightToLeft)
+{
+    getIndexOrLocation(text, clip, size, *outLocation, outLocation, destIndex, justify, wrap, rightToLeft);
+}
+
+unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
+                                      const int destIndex, Justify justify, bool wrap, bool rightToLeft)
+{
     unsigned int charIndex = 0;
 
     // Essentially need to measure text until we reach inLocation.
@@ -1211,8 +1223,16 @@ unsigned int Font::getIndexAtLocation(const char* text, const Rectangle& area, u
     {
         // Handle delimiters until next token.
         unsigned int delimLength = 0;
-        int result = handleDelimiters(&token, size, iteration, area.x, &xPos, &yPos, &delimLength, &xPositionsIt, xPositions.end(), &inLocation);
-        charIndex += delimLength;
+        int result;
+        if (destIndex == -1)
+        {
+            result = handleDelimiters(&token, size, iteration, area.x, &xPos, &yPos, &delimLength, &xPositionsIt, xPositions.end(), &charIndex, &inLocation);
+        }
+        else
+        {
+            result = handleDelimiters(&token, size, iteration, area.x, &xPos, &yPos, &delimLength, &xPositionsIt, xPositions.end(), &charIndex, NULL, charIndex, destIndex);
+        }
+
         currentLineLength += delimLength;
         if (result == 0)
         {
@@ -1225,8 +1245,10 @@ unsigned int Font::getIndexAtLocation(const char* text, const Rectangle& area, u
             return charIndex;
         }
 
-        if (inLocation.x >= xPos && inLocation.x < xPos + (size>>3) &&
-            inLocation.y >= yPos && inLocation.y < yPos + size)
+        if (destIndex == charIndex ||
+            (destIndex == -1 &&
+             inLocation.x >= xPos && inLocation.x < xPos + (size>>3) &&
+             inLocation.y >= yPos && inLocation.y < yPos + size))
         {
             outLocation->x = xPos;
             outLocation->y = yPos;
@@ -1296,8 +1318,10 @@ unsigned int Font::getIndexAtLocation(const char* text, const Rectangle& area, u
                 }
 
                 // Check against inLocation.
-                if (inLocation.x >= xPos && inLocation.x < xPos + g.width*scale + (size>>3) &&
-                    inLocation.y >= yPos && inLocation.y < yPos + size)
+                if (destIndex == charIndex ||
+                    (destIndex == -1 &&
+                    inLocation.x >= xPos && inLocation.x < xPos + g.width*scale + (size>>3) &&
+                    inLocation.y >= yPos && inLocation.y < yPos + size))
                 {
                     outLocation->x = xPos;
                     outLocation->y = yPos;
@@ -1431,7 +1455,8 @@ unsigned int Font::getReversedTokenLength(const char* token, const char* bufStar
 }
 
 int Font::handleDelimiters(const char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
-                      std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd, const Vector2* stopAtPosition)
+                          std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd, unsigned int* charIndex,
+                          const Vector2* stopAtPosition, const int currentIndex, const int destIndex)
 {
     char delimiter = *token[0];
     bool nextLine = true;
@@ -1441,9 +1466,10 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
             delimiter == '\n' ||
             delimiter == 0)
     {
-        if (stopAtPosition &&
+        if ((stopAtPosition &&
             stopAtPosition->x >= *xPos && stopAtPosition->x < *xPos + (size>>1) &&
-            stopAtPosition->y >= *yPos && stopAtPosition->y < *yPos + size)
+            stopAtPosition->y >= *yPos && stopAtPosition->y < *yPos + size) ||
+            (currentIndex >= 0 && destIndex >= 0 && currentIndex + *lineLength == destIndex))
         {
             // Success + stopAtPosition was reached.
             return 2;
@@ -1454,6 +1480,10 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
             case ' ':
                 *xPos += size>>1;
                 (*lineLength)++;
+                if (charIndex)
+                {
+                    (*charIndex)++;
+                }
                 break;
             case '\r':
             case '\n':
@@ -1473,11 +1503,19 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
                     }
                     nextLine = false;
                     *lineLength = 0;
+                    if (charIndex)
+                    {
+                        (*charIndex)++;
+                    }
                 }
                 break;
             case '\t':
                 *xPos += (size>>1)*4;
                 (*lineLength)++;
+                if (charIndex)
+                {
+                    (*charIndex)++;
+                }
                 break;
             case 0:
                 // EOF reached.

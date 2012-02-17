@@ -45,7 +45,7 @@ TextBox* TextBox::getTextBox(const char* id)
     return NULL;
 }
 
-void TextBox::setTouchLocation(int x, int y)
+void TextBox::setCursorLocation(int x, int y)
 {
     Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
     Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
@@ -56,7 +56,7 @@ void TextBox::setTouchLocation(int x, int y)
     }
     Theme::Padding padding = _style->getPadding();
 
-    _touchLocation.set(x - border.left - padding.left + _viewport.x,
+    _cursorLocation.set(x - border.left - padding.left + _viewport.x,
                        y - border.top - padding.top + _viewport.y);
 }
 
@@ -77,7 +77,7 @@ void TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
                 x > 0 && x <= _size.x &&
                 y > 0 && y <= _size.y)
             {
-                setTouchLocation(x, y);
+                setCursorLocation(x, y);
                 _dirty = true;
             }
             break;
@@ -85,7 +85,7 @@ void TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
             if (x > 0 && x <= _size.x &&
                 y > 0 && y <= _size.y)
             {
-                setTouchLocation(x, y);
+                setCursorLocation(x, y);
                 _state = STATE_FOCUS;
                 _dirty = true;
             }
@@ -104,62 +104,131 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
     {
         switch (evt)
         {
-        case Keyboard::KEY_PRESS:
-            break;
-        case Keyboard::KEY_RELEASE:
-            Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-            Font* font = overlay->getFont();
-
-            // _text.insert / replace / remove depending on key.
-            switch (key)
+            case Keyboard::KEY_PRESS:
             {
-            case Keyboard::KEY_BACKSPACE:
-                break;
-            case Keyboard::KEY_DELETE:
-                break;
-            //case Keyboard::KEY_TAB:
-                // May be handled by default?
-                // May want to insert 4 spaces instead of \t.
-                // If this were the web we'd want to switch focus to the next Control...
-                //break;
-            case Keyboard::KEY_HOME:
-                // Move cursor to beginning of line.
-                break;
-            case Keyboard::KEY_END:
-                // Move cursor to end of line.
-                break;
-            case Keyboard::KEY_PG_DOWN:
-                break;
-            case Keyboard::KEY_PG_UP:
-                break;
-            default:
-                // Insert character into string.
-                _textIndex = font->getIndexAtLocation(_text.c_str(), _viewport, overlay->getFontSize(), _touchLocation, &_touchLocation,
-                    overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
-
-                _text.insert(_textIndex, 1, (char)key);
-                
-                // Move cursor forward.
-                unsigned int w, h;
-                font->measureText((char*)&key, overlay->getFontSize(), &w, &h);
-                ++_textIndex;
-                _touchLocation.x += w;
-                //_cursorLocation.x += w;
-                
-                // Wrap cursor if necessary.
-                if (_touchLocation.x >= _viewport.x + _viewport.width)
+                switch (key)
                 {
-                    //_cursorLocation.x = w;
-                    _touchLocation.x = w;
-                    //_cursorLocation.y += h;
-                    _touchLocation.x += h;
+                    case Keyboard::KEY_HOME:
+                    {
+                        // TODO: Move cursor to beginning of line.
+                        // This only works for left alignment...
+                        
+                        //_cursorLocation.x = _viewport.x;
+                        //_dirty = true;
+                        break;
+                    }
+                    case Keyboard::KEY_END:
+                    {
+                        // TODO: Move cursor to end of line.
+                        break;
+                    }
+                    case Keyboard::KEY_DELETE:
+                    {
+                        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+                        Font* font = overlay->getFont();
+                        unsigned int fontSize = overlay->getFontSize();
+                        unsigned int textIndex = font->getIndexAtLocation(_text.c_str(), _viewport, fontSize, _cursorLocation, &_cursorLocation,
+                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+
+                        _text.erase(textIndex, 1);
+                        font->getLocationAtIndex(_text.c_str(), _viewport, fontSize, &_cursorLocation, textIndex,
+                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        _dirty = true;
+                        break;
+                    }
+                    case Keyboard::KEY_LEFT_ARROW:
+                    {
+                        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+                        Font* font = overlay->getFont();
+                        unsigned int fontSize = overlay->getFontSize();
+                        unsigned int textIndex = font->getIndexAtLocation(_text.c_str(), _viewport, fontSize, _cursorLocation, &_cursorLocation,
+                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+
+                        font->getLocationAtIndex(_text.c_str(), _viewport, fontSize, &_cursorLocation, textIndex - 1,
+                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        _dirty = true;
+                        break;
+                    }
+                    case Keyboard::KEY_RIGHT_ARROW:
+                    {
+                        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+                        Font* font = overlay->getFont();
+                        unsigned int fontSize = overlay->getFontSize();
+                        unsigned int textIndex = font->getIndexAtLocation(_text.c_str(), _viewport, fontSize, _cursorLocation, &_cursorLocation,
+                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+
+                        font->getLocationAtIndex(_text.c_str(), _viewport, fontSize, &_cursorLocation, textIndex + 1,
+                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        _dirty = true;
+                        break;
+                    }
+                    case Keyboard::KEY_UP_ARROW:
+                    {
+                        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+                        Font* font = overlay->getFont();
+                        unsigned int fontSize = overlay->getFontSize();
+
+                        _cursorLocation.y -= fontSize;
+                        font->getIndexAtLocation(_text.c_str(), _viewport, fontSize, _cursorLocation, &_cursorLocation,
+                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        _dirty = true;
+                        break;
+                    }
+                    case Keyboard::KEY_DOWN_ARROW:
+                    {
+                        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+                        Font* font = overlay->getFont();
+                        unsigned int fontSize = overlay->getFontSize();
+
+                        _cursorLocation.y += fontSize;
+                        font->getIndexAtLocation(_text.c_str(), _viewport, fontSize, _cursorLocation, &_cursorLocation,
+                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        _dirty = true;
+                        break;
+                    }
                 }
-
-                _dirty = true;
-
                 break;
             }
-            break;
+
+            case Keyboard::KEY_CHAR:
+            {
+                Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+                Font* font = overlay->getFont();
+                unsigned int fontSize = overlay->getFontSize();
+                unsigned int textIndex = font->getIndexAtLocation(_text.c_str(), _viewport, fontSize, _cursorLocation, &_cursorLocation,
+                    overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+
+                switch (key)
+                {
+                    case Keyboard::KEY_BACKSPACE:
+                    {
+                        if (textIndex > 0)
+                        {
+                            --textIndex;
+                            _text.erase(textIndex, 1);
+                            font->getLocationAtIndex(_text.c_str(), _viewport, fontSize, &_cursorLocation, textIndex,
+                                overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+
+                            _dirty = true;
+                        }
+                        break;
+                    }
+                    default:
+                    {
+                        // Insert character into string.
+                        _text.insert(textIndex, 1, (char)key);
+
+                        // Get new location of cursor.
+                        font->getLocationAtIndex(_text.c_str(), _viewport, fontSize, &_cursorLocation, textIndex + 1,
+                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                
+                        _dirty = true;
+                        break;
+                    }
+            
+                    break;
+                }
+            }
         }
     }
 }
@@ -186,7 +255,7 @@ void TextBox::update(const Vector2& position)
     // Get index into string and cursor location from the last recorded touch location.
     if (_state == STATE_FOCUS)
     {
-        _textIndex = font->getIndexAtLocation(_text.c_str(), _viewport, overlay->getFontSize(), _touchLocation, &_touchLocation,
+        font->getIndexAtLocation(_text.c_str(), _viewport, overlay->getFontSize(), _cursorLocation, &_cursorLocation,
             overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
     }
 
@@ -214,7 +283,7 @@ void TextBox::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
             const Theme::UVs uvs = cursor->getUVs();
             unsigned int fontSize = overlay->getFontSize();
 
-            spriteBatch->draw(_touchLocation.x - (size.x / 2.0f), _touchLocation.y, size.x, fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
+            spriteBatch->draw(_cursorLocation.x - (size.x / 2.0f), _cursorLocation.y, size.x, fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
         }
     }
 }

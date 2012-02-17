@@ -195,6 +195,8 @@ public:
      */
     Theme::Style* getStyle(const char* id) const;
 
+    void setProjectionMatrix(const Matrix& matrix);
+
     SpriteBatch* getSpriteBatch() const;
     
     /**
@@ -363,6 +365,7 @@ private:
     std::vector<Icon*> _icons;
     std::vector<SliderIcon*> _sliders;
     std::vector<ContainerRegion*> _containers;
+    std::set<Font*> _fonts;
 };
 
 }
