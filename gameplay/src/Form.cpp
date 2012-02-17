@@ -301,9 +301,6 @@ namespace gameplay
             Node* node = form->_node;
             if (node)
             {
-                // Work in progress: Picking within 3D forms.
-
-                /*
                 Scene* scene = node->getScene();
                 Camera* camera = scene->getActiveCamera();
 
@@ -350,14 +347,16 @@ namespace gameplay
 
                         // If the resulting point lies within the quad,
                         // project it into the form's space.
+                        m.invert();
+                        m.transformPoint(&point);
 
-
-                        // Projection from point (C) on plane with normal n containing point P.
-                        Vector3 cp(point, min);
-
+                        if (point.x >= 0 && point.x <= size.x &&
+                            point.y >= 0 && point.y <= size.y)
+                        {
+                            form->touchEvent(evt, point.x, size.y - point.y, contactIndex);
+                        }
                     }
                 }
-                */
             }
             else
             {

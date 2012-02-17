@@ -1111,7 +1111,7 @@ namespace gameplay
         const char* containerString = overlaySpace->getString("container");
         if (containerString)
         {
-            for (unsigned int i = 0; i < _cursors.size(); ++i)
+            for (unsigned int i = 0; i < _containers.size(); ++i)
             {
                 if (strcmp(_containers[i]->getId(), containerString) == 0)
                 {
