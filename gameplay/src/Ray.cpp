@@ -105,7 +105,31 @@ float Ray::intersects(const Frustum& frustum) const
 
 float Ray::intersects(const Plane& plane) const
 {
-    return plane.intersects(*this);
+    const Vector3& normal = plane.getNormal();
+    // If the origin of the ray is on the plane then the distance is zero.
+    float m = (normal.dot(_origin) + plane.getDistance());
+    if (fabs(m) < MATH_EPSILON)
+    {
+        return 0.0f;
+    }
+
+    float dot = normal.dot(_direction);
+    
+    // If the dot product of the plane's normal and this ray's direction is zero,
+    // then the ray is parallel to the plane and does not intersect it.
+    if ( dot == 0.0f )
+    {
+        return INTERSECTS_NONE;
+    }
+    
+    // Calculate the distance along the ray's direction vector to the point where
+    // the ray intersects the plane (if it is negative the plane is behind the ray).
+    float d = -m / dot;
+    if ( d < 0.0f )
+    {
+        return INTERSECTS_NONE;
+    }
+    return d;
 }
 
 void Ray::set(const Vector3& origin, const Vector3& direction)
