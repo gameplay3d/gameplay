@@ -70,7 +70,7 @@ public:
     /**
      * Collision listener interface.
      */
-    class Listener : public btCollisionWorld::ContactResultCallback
+    class Listener
     {
         friend class PhysicsRigidBody;
         friend class PhysicsController;
@@ -106,24 +106,6 @@ public:
          * @param contactPointB The contact point with the second rigid body (in world space).
          */
         virtual void collisionEvent(EventType type, const CollisionPair& collisionPair, const Vector3& contactPointA = Vector3(), const Vector3& contactPointB = Vector3()) = 0;
-
-        /**
-         * Internal function used for Bullet integration (do not use or override).
-         */
-        btScalar addSingleResult(btManifoldPoint& cp, 
-                                 const btCollisionObject* a, int partIdA, int indexA, 
-                                 const btCollisionObject* b, int partIdB, int indexB);
-
-        std::map<CollisionPair, int> _collisionStatus;  // Holds the collision status for each pair of rigid bodies. 
-        
-    private:
-
-        // Internal constant.
-        static const int DIRTY;
-        // Internal constant.
-        static const int COLLISION;
-        // Internal constant.
-        static const int REGISTERED;
     };
 
     /**
@@ -236,7 +218,7 @@ public:
      * 
      * @return The node.
      */
-    inline const Node* getNode() const;
+    inline Node* getNode();
 
     /**
      * Gets the rigid body's restitution.

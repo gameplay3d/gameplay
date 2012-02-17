@@ -99,6 +99,10 @@ public:
     void adjust();
 
 private:
+    /**
+     * Computes the bounds of all meshes in the node hierarchy.
+     */
+    void computeBounds(Node* node);
     void optimizeTransformAnimations();
 
     /**

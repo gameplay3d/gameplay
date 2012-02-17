@@ -15,7 +15,7 @@ namespace gameplay
 /**
  * Defines a class for controlling game physics.
  */
-class PhysicsController
+class PhysicsController : public btCollisionWorld::ContactResultCallback
 {
     friend class Game;
     friend class PhysicsConstraint;
@@ -182,7 +182,7 @@ public:
      * @param gravity The gravity vector.
      */
     void setGravity(const Vector3& gravity);
-    
+   
     /**
      * Draws debugging information (rigid body outlines, etc.) using the given view projection matrix.
      * 
@@ -190,8 +190,41 @@ public:
      */
     void drawDebug(const Matrix& viewProjection);
 
+    /**
+     * Gets the first rigid body that the given ray intersects.
+     * 
+     * @param ray The ray to test intersection with.
+     * @param hitPoint Optional Vector3 point that is populated with the world-space point of intersection.
+     * @param hitDistance Optional float pointer that is populated with the distance along the ray
+     *      (as a fraction between 0-1) where the intersection occurred.
+     *
+     * @return The first rigid body that the ray intersects, or NULL if no intersection was found.
+     */
+    PhysicsRigidBody* rayTest(const Ray& ray, Vector3* hitPoint = NULL, float* hitFraction = NULL);
+
+protected:
+
+    /**
+     * Internal function used for Bullet integration (do not use or override).
+     */
+    btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB);    
+
 private:
 
+    // Internal constants for the collision status cache.
+    static const int DIRTY;
+    static const int COLLISION;
+    static const int REGISTERED;
+    static const int REMOVE;
+
+    // Represents the collision listeners and status for a given collision pair (used by the collision status cache).
+    struct CollisionInfo
+    {
+        std::vector<PhysicsRigidBody::Listener*> _listeners;
+        int _status;
+    };
+
+    // Wraps Bullet collision shapes (used for implementing shape caching).
     struct PhysicsCollisionShape : public Ref
     {
         PhysicsCollisionShape(btCollisionShape* shape) : _shape(shape) {}
@@ -235,6 +268,9 @@ private:
      */
     void update(long elapsedTime);
 
+    // Adds the given collision listener for the two given rigid bodies.
+    void addCollisionListener(PhysicsRigidBody::Listener* listener, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+
     // Adds the given rigid body to the world.
     void addRigidBody(PhysicsRigidBody* body);
     
@@ -245,13 +281,13 @@ private:
     PhysicsRigidBody* getRigidBody(const btCollisionObject* collisionObject);
     
     // Creates a box collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createBox(const Vector3& min, const Vector3& max, const btVector3& scale);
+    btCollisionShape* createBox(const Vector3& min, const Vector3& max, const Vector3& scale);
 
     // Creates a capsule collision shape to be used in the creation of a rigid body.
     btCollisionShape* createCapsule(float radius, float height);
 
     // Creates a sphere collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createSphere(float radius, const btVector3& scale);
+    btCollisionShape* createSphere(float radius, const Vector3& scale);
 
     // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
     btCollisionShape* createMesh(PhysicsRigidBody* body, const Vector3& scale);
@@ -310,6 +346,7 @@ private:
     std::vector<Listener*>* _listeners;
     std::vector<PhysicsRigidBody*> _bodies;
     Vector3 _gravity;
+    std::map<PhysicsRigidBody::CollisionPair, CollisionInfo> _collisionStatus;  
 };
 
 }

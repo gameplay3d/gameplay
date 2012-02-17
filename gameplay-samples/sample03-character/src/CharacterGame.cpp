@@ -27,7 +27,8 @@ void CharacterGame::initialize()
     _scene = Scene::load("res/scene.scene");
 
     // Store character node.
-    _character = new PhysicsCharacter(_scene->findNode("BoyCharacter"), PhysicsCharacter::Capsule(1.5f, 5.0f, 2.25f));//0.0f));//2.9f));
+    _character = new PhysicsCharacter(_scene->findNode("BoyCharacter"), PhysicsCharacter::Capsule(1.5f, 5.0f, 2.25f));
+    _character->setCamera(_scene->getActiveCamera(), PhysicsCharacter::CAMERA_ATTACH | PhysicsCharacter::CAMERA_FIX_OCCLUSIONS);
 
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initScene);
@@ -80,19 +81,19 @@ void CharacterGame::update(long elapsedTime)
     // Update character animation and movement
     if (keyFlags == 0)
     {
-        _character->play("idle", PhysicsCharacter::PLAY_REPEAT, 1.0f, BLEND_DURATION);
+        _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT, 1.0f, BLEND_DURATION);
     }
     else
     {
         // Forward motion
         if (keyFlags & 1)
         {
-            _character->play("walk", PhysicsCharacter::PLAY_REPEAT, ANIM_SPEED, BLEND_DURATION);
+            _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
             _character->moveForward(1.0f);
         }
         else if (keyFlags & 2)
         {
-            _character->play("walk", PhysicsCharacter::PLAY_REPEAT, -ANIM_SPEED, BLEND_DURATION);
+            _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
             _character->moveForward(-1.0f);
         }
         else
@@ -104,12 +105,12 @@ void CharacterGame::update(long elapsedTime)
         // Strafing
         if (keyFlags & 4)
         {
-            _character->play("walk", PhysicsCharacter::PLAY_REPEAT, ANIM_SPEED, BLEND_DURATION);
+            _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
             _character->moveRight(1.0f);
         }
         else if (keyFlags & 8)
         {
-            _character->play("walk", PhysicsCharacter::PLAY_REPEAT, -ANIM_SPEED, BLEND_DURATION);
+            _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
             _character->moveRight(-1.0f);
         }
         else
@@ -269,7 +270,7 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
             _rotateX = x;
             _rotateY = y;
             _character->getNode()->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
-            _scene->findNode("Camera")->rotateX(-MATH_DEG_TO_RAD(deltaY * 0.5f));
+            //_scene->findNode("Camera")->rotateX(-MATH_DEG_TO_RAD(deltaY * 0.5f));
             //_character->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
         }
         break;
@@ -286,5 +287,5 @@ void CharacterGame::loadAnimationClips()
     _character->addAnimation("idle", _animation->getClip("idle"), 0.0f);
     _character->addAnimation("walk", _animation->getClip("walk"), WALK_SPEED);
 
-    _character->play("idle", PhysicsCharacter::PLAY_REPEAT);
+    _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT);
 }

@@ -627,6 +627,7 @@ bool DAESceneEncoder::loadTarget(const domChannelRef& channelRef, AnimationChann
                     Quaternion rotation;
                     Vector3 translation;
                     matrix.decompose(&scale, &rotation, &translation);
+                    rotation.normalize();
 
                     size_t k = i * 10;
                     floats[k+0] = scale.x;

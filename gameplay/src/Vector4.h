@@ -348,7 +348,7 @@ public:
      * @param v The vector to add.
      * @return The vector sum.
      */
-    inline Vector4 operator+(const Vector4& v) const;
+    inline const Vector4 operator+(const Vector4& v) const;
 
     /**
      * Adds the given vector to this vector.
@@ -366,7 +366,7 @@ public:
      * @param v The vector to add.
      * @return The vector sum.
      */
-    inline Vector4 operator-(const Vector4& v) const;
+    inline const Vector4 operator-(const Vector4& v) const;
 
     /**
      * Subtracts the given vector from this vector.
@@ -383,7 +383,7 @@ public:
      * 
      * @return The negation of this vector.
      */
-    inline Vector4 operator-() const;
+    inline const Vector4 operator-() const;
 
     /**
      * Calculates the scalar product of this vector with the given value.
@@ -393,7 +393,7 @@ public:
      * @param x The value to scale by.
      * @return The scaled vector.
      */
-    inline Vector4 operator*(float x) const;
+    inline const Vector4 operator*(float x) const;
 
     /**
      * Scales this vector by the given value.
@@ -420,6 +420,15 @@ public:
      * @return True if this vector is equal to the given vector, false otherwise.
      */
     inline bool operator==(const Vector4& v) const;
+
+    /**
+     * Determines if this vector is not equal to the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is not equal to the given vector, false otherwise.
+     */
+    inline bool operator!=(const Vector4& v) const;
 };
 
 /**
@@ -429,7 +438,7 @@ public:
  * @param v The vector to scale.
  * @return The scaled vector.
  */
-inline Vector4 operator*(float x, const Vector4& v);
+inline const Vector4 operator*(float x, const Vector4& v);
 
 }
 
