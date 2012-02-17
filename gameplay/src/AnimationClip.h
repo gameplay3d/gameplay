@@ -187,6 +187,11 @@ public:
     void stop();
 
     /**
+     * Pauses the AnimationClip.
+     */
+    void pause();
+
+    /**
      * Fades this clip out, and the specified clip in over the given duration.
      *
      * @param clip The clip to fade into.
@@ -223,14 +228,15 @@ private:
     /**
      * State bits.
      */
-    static const char CLIP_IS_PLAYING_BIT = 0x01;             // Bit representing whether AnimationClip is a running clip in AnimationController
-    static const char CLIP_IS_STARTED_BIT = 0x02;             // Bit representing whether the AnimationClip has actually been started (ie: received first call to update())
-    static const char CLIP_IS_FADING_OUT_STARTED_BIT = 0x04;  // Bit representing that a cross fade has started.
-    static const char CLIP_IS_FADING_OUT_BIT = 0x08;          // Bit representing whether the clip is fading out.
-    static const char CLIP_IS_FADING_IN_BIT = 0x10;           // Bit representing whether the clip is fading out.
-    static const char CLIP_IS_MARKED_FOR_REMOVAL_BIT = 0x20;  // Bit representing whether the clip has ended and should be removed from the AnimationController.
-    static const char CLIP_IS_RESTARTED_BIT = 0x40;           // Bit representing if the clip should be restarted by the AnimationController.
-    static const char CLIP_ALL_BITS = 0x7F;                   // Bit mask for all the state bits.
+    static const unsigned char CLIP_IS_PLAYING_BIT = 0x01;             // Bit representing whether AnimationClip is a running clip in AnimationController
+    static const unsigned char CLIP_IS_STARTED_BIT = 0x02;             // Bit representing whether the AnimationClip has actually been started (ie: received first call to update())
+    static const unsigned char CLIP_IS_FADING_OUT_STARTED_BIT = 0x04;  // Bit representing that a cross fade has started.
+    static const unsigned char CLIP_IS_FADING_OUT_BIT = 0x08;          // Bit representing whether the clip is fading out.
+    static const unsigned char CLIP_IS_FADING_IN_BIT = 0x10;           // Bit representing whether the clip is fading out.
+    static const unsigned char CLIP_IS_MARKED_FOR_REMOVAL_BIT = 0x20;  // Bit representing whether the clip has ended and should be removed from the AnimationController.
+    static const unsigned char CLIP_IS_RESTARTED_BIT = 0x40;           // Bit representing if the clip should be restarted by the AnimationController.
+    static const unsigned char CLIP_IS_PAUSED_BIT = 0x80;              // Bit representing if the clip is currently paused.
+    static const unsigned char CLIP_ALL_BITS = 0xFF;                   // Bit mask for all the state bits.
 
     /**
      * ListenerEvent.
@@ -291,24 +297,24 @@ private:
     /**
      * Determines whether the given bit is set in the AnimationClip's state.
      */
-    bool isClipStateBitSet(char bit) const;
+    bool isClipStateBitSet(unsigned char bit) const;
 
     /**
      * Sets the given bit in the AnimationClip's state.
      */
-    void setClipStateBit(char bit);
+    void setClipStateBit(unsigned char bit);
 
     /**
      * Resets the given bit in the AnimationClip's state.
      */
-    void resetClipStateBit(char bit);
+    void resetClipStateBit(unsigned char bit);
 
     std::string _id;                                    // AnimationClip ID.
     Animation* _animation;                              // The Animation this clip is created from.
     unsigned long _startTime;                           // Start time of the clip.
     unsigned long _endTime;                             // End time of the clip.
     unsigned long _duration;                            // The total duration.
-    char _stateBits;                                    // Bit flag used to keep track of the clip's current state.
+    unsigned char _stateBits;                           // Bit flag used to keep track of the clip's current state.
     float _repeatCount;                                 // The clip's repeat count.
     unsigned long _activeDuration;                      // The active duration of the clip.
     float _speed;                                       // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.

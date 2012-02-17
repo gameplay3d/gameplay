@@ -69,6 +69,7 @@ SpriteBatch::SpriteBatch(const SpriteBatch& copy)
 SpriteBatch::~SpriteBatch()
 {
     SAFE_DELETE(_batch);
+    SAFE_RELEASE(__spriteEffect);
 }
 
 SpriteBatch* SpriteBatch::create(const char* texturePath, Effect* effect, unsigned int initialCapacity)
@@ -205,23 +206,33 @@ void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& 
 }
 
 void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color,
-                       const Vector2& rotationPoint, float rotationAngle)
+                       const Vector2& rotationPoint, float rotationAngle, bool positionIsCenter)
 {
-    // Expand dst by scale into 4 points.
-    float x2 = dst.x + width;
-    float y2 = dst.y + height;
+    float x = dst.x;
+    float y = dst.y;
+
+    // Treat the given position as the center if the user specified it as such.
+    if (positionIsCenter)
+    {
+        x -= 0.5f * width;
+        y -= 0.5f * height;
+    }
+
+    // Expand the destination position by scale into 4 points.
+    float x2 = x + width;
+    float y2 = y + height;
     
-    Vector2 upLeft(dst.x, dst.y);
-    Vector2 upRight(x2, dst.y);
-    Vector2 downLeft(dst.x, y2);
+    Vector2 upLeft(x, y);
+    Vector2 upRight(x2, y);
+    Vector2 downLeft(x, y2);
     Vector2 downRight(x2, y2);
 
     // Rotate points around rotationAxis by rotationAngle.
     Vector2 pivotPoint(rotationPoint);
     pivotPoint.x *= width;
     pivotPoint.y *= height;
-    pivotPoint.x += dst.x;
-    pivotPoint.y += dst.y;
+    pivotPoint.x += x;
+    pivotPoint.y += y;
     upLeft.rotate(pivotPoint, rotationAngle);
     upRight.rotate(pivotPoint, rotationAngle);
     downLeft.rotate(pivotPoint, rotationAngle);
@@ -239,13 +250,54 @@ void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, 
     _batch->add(v, 4, indices, 4);
 }
 
+void SpriteBatch::draw(const Vector3& position, const Vector3& right, const Vector3& forward, float width, float height,
+    float u1, float v1, float u2, float v2, const Vector4& color, const Vector2& rotationPoint, float rotationAngle)
+{
+    // Calculate the vertex positions.
+    Vector3 p[4];
+    p[0] = position - 0.5f * width * right;
+    p[1] = position + 0.5f * width * right;
+    p[2] = p[0] + height * forward;
+    p[3] = p[1] + height * forward;
+
+    // Calculate the rotation point.
+    Vector3 rp = p[0] + (rotationPoint.x * width * right) + (rotationPoint.y * height * forward);
+
+    // Rotate all points the specified amount about the given point (about the up vector).
+    Vector3 u;
+    Vector3::cross(right, forward, &u);
+    Matrix rotation;
+    Matrix::createRotation(u, rotationAngle, &rotation);
+    p[0] = (rotation * (p[0] - rp)) + rp;
+    p[1] = (rotation * (p[1] - rp)) + rp;
+    p[2] = (rotation * (p[2] - rp)) + rp;
+    p[3] = (rotation * (p[3] - rp)) + rp;
+
+    // Add the sprite vertex data to the batch.
+    static SpriteVertex v[4];
+    ADD_SPRITE_VERTEX(v[0], p[0].x, p[0].y, p[0].z, u1, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[1], p[1].x, p[1].y, p[1].z, u2, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[2], p[2].x, p[2].y, p[2].z, u1, v2, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[3], p[3].x, p[3].y, p[3].z, u2, v2, color.x, color.y, color.z, color.w);
+    
+    static const unsigned short indices[4] = { 0, 1, 2, 3 };
+    _batch->add(v, 4, const_cast<unsigned short*>(indices), 4);
+}
+
 void SpriteBatch::draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color)
 {
     draw(x, y, 0, width, height, u1, v1, u2, v2, color);
 }
 
-void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color)
+void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, bool positionIsCenter)
 {
+    // Treat the given position as the center if the user specified it as such.
+    if (positionIsCenter)
+    {
+        x -= 0.5f * width;
+        y -= 0.5f * height;
+    }
+
     // Write sprite vertex data.
     float x2 = x + width;
     float y2 = y + height;
