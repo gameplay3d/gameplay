@@ -110,6 +110,16 @@ public:
      * Stops all AnimationClips currently playing on the AnimationController.
      */
     void stopAllAnimations();
+
+    /**
+     * Removes the given animation from this AnimationTarget.
+     */
+    void destroyAnimation(Animation* animation);
+
+    /**
+     * Removes all animations from the AnimationTarget.
+     */ 
+    void destroyAllAnimations();
        
 private:
 
@@ -193,16 +203,6 @@ private:
      * Adds an animation on this AnimationTarget.
      */ 
     void addAnimation(Animation* animation);
-
-    /**
-     * Removes the given animation from this AnimationTarget.
-     */
-    void destroyAnimation(Animation* animation);
-
-    /**
-     * Removes all animations from the AnimationTarget.
-     */ 
-    void destroyAllAnimations();
     
     State _state;                               // The current state of the AnimationController.
     std::list<AnimationClip*> _runningClips;    // A list of running AnimationClips.
