@@ -274,6 +274,8 @@ namespace gameplay
                         normal->setTextAlignment(alignment);
                         normal->setTextRightToLeft(rightToLeft);
 
+                        theme->_fonts.insert(font);
+
                         if (font) font->release();
 
                         // Done with this pass.
@@ -413,7 +415,7 @@ namespace gameplay
                             focus->setTextAlignment(alignment);
                             focus->setTextRightToLeft(rightToLeft);
 
-                            //if (font && font == normal->getFont()) font->release();
+                            theme->_fonts.insert(font);
                         }
                         else if (strcmp(innerSpacename, "active") == 0)
                         {
@@ -430,7 +432,7 @@ namespace gameplay
                             active->setTextAlignment(alignment);
                             active->setTextRightToLeft(rightToLeft);
 
-                            //if (font && font == normal->getFont()) font->release();
+                            theme->_fonts.insert(font);
                         }
                     }
 
@@ -475,6 +477,18 @@ namespace gameplay
         }
 
         return NULL;
+    }
+
+    void Theme::setProjectionMatrix(const Matrix& matrix)
+    {
+        _spriteBatch->setProjectionMatrix(matrix);
+
+        // Set the matrix on each Font used by the style.
+        std::set<Font*>::const_iterator it;
+        for (it = _fonts.begin(); it != _fonts.end(); ++it)
+        {
+            (*it)->getSpriteBatch()->setProjectionMatrix(matrix);
+        }
     }
 
     SpriteBatch* Theme::getSpriteBatch() const

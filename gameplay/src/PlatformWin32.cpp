@@ -57,20 +57,18 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
         return gameplay::Keyboard::KEY_ALT;
     case VK_APPS:
         return gameplay::Keyboard::KEY_MENU;
-    case VK_SHIFT:
-        return gameplay::Keyboard::KEY_SHIFT;
     case VK_LSHIFT:
-        return gameplay::Keyboard::KEY_LEFT_SHIFT;
+        return gameplay::Keyboard::KEY_SHIFT;
     case VK_RSHIFT:
-        return gameplay::Keyboard::KEY_RIGHT_SHIFT;
+        return gameplay::Keyboard::KEY_SHIFT;
     case VK_LCONTROL:
-        return gameplay::Keyboard::KEY_LEFT_CTRL;
+        return gameplay::Keyboard::KEY_CTRL;
     case VK_RCONTROL:
-        return gameplay::Keyboard::KEY_RIGHT_CTRL;
+        return gameplay::Keyboard::KEY_CTRL;
     case VK_LMENU:
-        return gameplay::Keyboard::KEY_LEFT_ALT;
+        return gameplay::Keyboard::KEY_ALT;
     case VK_RMENU:
-        return gameplay::Keyboard::KEY_RIGHT_ALT;
+        return gameplay::Keyboard::KEY_ALT;
     case VK_LWIN:
     case VK_RWIN:
         return gameplay::Keyboard::KEY_HYPER;
@@ -388,13 +386,13 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_CHAR:
         // Suppress key repeats
         if ((lParam & 0x40000000) == 0)
-            gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_CHAR, wParam);
+            gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, wParam);
         break;
 
     case WM_UNICHAR:
         // Suppress key repeats
         if ((lParam & 0x40000000) == 0)
-            gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_CHAR, wParam);
+            gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, wParam);
         break;
 
     case WM_SETFOCUS:

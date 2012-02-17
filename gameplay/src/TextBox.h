@@ -29,11 +29,10 @@ private:
     TextBox(const TextBox& copy);
     ~TextBox();
 
-    void setTouchLocation(int x, int y);
+    void setCursorLocation(int x, int y);
 
-    Vector2 _touchLocation;
     Vector2 _cursorLocation;
-    unsigned int _textIndex;
+    unsigned int textIndex;
 };
 
 }

@@ -7,6 +7,7 @@
 #include "Label.h"
 #include "Button.h"
 #include "CheckBox.h"
+#include "Scene.h"
 
 namespace gameplay
 {
@@ -150,17 +151,18 @@ namespace gameplay
 
     void Form::setNode(Node* node)
     {
+        // Set this Form up to be 3D by initializing a quad, projection matrix and viewport.
+        setQuad(0.0f, 0.0f, _size.x, _size.y);
+        Matrix::createOrthographicOffCenter(0, _size.x, _size.y, 0, 0, 1, &_projectionMatrix);
+        _theme->setProjectionMatrix(_projectionMatrix);
+        _viewport = new Viewport(0, 0, _size.x, _size.y);
+
         // Connect the new node.
         _node = node;
         if (_node)
         {
             _node->setModel(_quad);
         }
-
-        // Set this Form up to be 3D by initializing a quad, projection matrix and viewport.
-        setQuad(0.0f, 0.0f, _size.x, _size.y);
-        Matrix::createOrthographicOffCenter(0, _size.x, _size.y, 0, 0, 1, &_projectionMatrix);
-        _viewport = new Viewport(0, 0, _size.x, _size.y);
     }
 
     void Form::update()
@@ -186,7 +188,6 @@ namespace gameplay
         {
             if (isDirty())
             {
-                _theme->getSpriteBatch()->setProjectionMatrix(_projectionMatrix);
                 _frameBuffer->bind();
                 _viewport->bind();
 
@@ -210,7 +211,6 @@ namespace gameplay
         }
     }
 
-    //void Form::draw(Theme* theme, const Vector2& position)
     void Form::draw(SpriteBatch* spriteBatch, const Vector2& position)
     {
         std::vector<Control*>::const_iterator it;
@@ -227,7 +227,7 @@ namespace gameplay
         {
             Control* control = *it;
 
-            //if ((*it)->isDirty())
+            //if (!_node || (*it)->isDirty())
             {
                 control->drawBorder(spriteBatch, position);
 
@@ -242,7 +242,7 @@ namespace gameplay
         {
             Control* control = *it;
 
-            //if ((*it)->isDirty())
+            //if (!_node || (*it)->isDirty())
             {
                 control->drawText(position);
             }
@@ -263,7 +263,10 @@ namespace gameplay
         Material* material = _quad->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
 
         // Set the common render state block for the material
-        material->setStateBlock(_theme->getSpriteBatch()->getStateBlock());
+        RenderState::StateBlock* stateBlock = _theme->getSpriteBatch()->getStateBlock();
+        stateBlock->setDepthWrite(true);
+        //material->setStateBlock(_theme->getSpriteBatch()->getStateBlock());
+        material->setStateBlock(stateBlock);
 
         // Bind the WorldViewProjection matrix
         material->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
@@ -295,13 +298,66 @@ namespace gameplay
         {
             Form* form = *it;
 
-            if (form->_node)
+            Node* node = form->_node;
+            if (node)
             {
-                // Project point into world space.
+                // Work in progress: Picking within 3D forms.
 
-                // Check for collision with form.
+                /*
+                Scene* scene = node->getScene();
+                Camera* camera = scene->getActiveCamera();
 
-                // Unproject point into form's space.
+                if (camera)
+                {
+                    // Get info about the form's position.
+                    Matrix m = node->getMatrix();
+                    Vector2 size = form->getSize();
+                    Vector3 min(0, 0, 0);
+                    Vector3 max(size.x, size.y, 0);
+                    m.transformPoint(&min);
+                    m.transformPoint(&max);
+
+                    // Unproject point into world space.
+                    Ray ray;
+                    camera->pickRay(NULL, x, y, &ray);
+
+                    // Find the quad's plane.
+                    // We know its normal is the quad's forward vector.
+                    Vector3 normal = node->getForwardVectorWorld();
+
+                    // To get the plane's distance from the origin,
+                    // we'll find the distance to the plane defined
+                    // by the quad's upVector and one of its points
+                    // from the plane defined by the same vector
+                    // and the origin.
+                    float a = normal.x; float b = normal.y; float c = normal.z;
+                    float d = -(a*min.x) - (b*min.y) - (c*min.z);
+                    float distance = abs(d) /  sqrt(a*a + b*b + c*c);
+                    Plane plane(normal, distance);
+
+                    // Check for collision with plane.
+                    float collides = ray.intersects(plane);
+                    if (collides != Ray::INTERSECTS_NONE)
+                    {
+                        // Check for collision with form.
+                        // Multiply the ray's direction vector by collision distance
+                        // and add that to the ray's origin.
+                        Vector3 rayOrigin = ray.getOrigin();
+                        Vector3 rayDirection = ray.getDirection();
+
+                        float alpha = (distance - normal.dot(rayOrigin)) / normal.dot(rayDirection);
+                        Vector3 point = rayOrigin + alpha*rayDirection;
+
+                        // If the resulting point lies within the quad,
+                        // project it into the form's space.
+
+
+                        // Projection from point (C) on plane with normal n containing point P.
+                        Vector3 cp(point, min);
+
+                    }
+                }
+                */
             }
             else
             {
