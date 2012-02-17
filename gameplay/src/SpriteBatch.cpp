@@ -125,10 +125,6 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
 
     // Wrap the effect in a material
     Material* material = Material::create(effect); // +ref effect
-    if (effect == __spriteEffect)
-    {
-        effect->release();
-    }
 
     // Set initial material state
     material->getStateBlock()->setBlend(true);
