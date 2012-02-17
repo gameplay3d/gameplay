@@ -95,6 +95,9 @@ private:
     // Holds all the nodes+properties declared in the .scene file.
     static std::vector<SceneNode> _sceneNodes;
 
+
+    // The path of the main GPB for the scene being loaded.
+    static std::string _path;
 };
 
 }

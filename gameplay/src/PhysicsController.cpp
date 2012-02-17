@@ -11,6 +11,11 @@
 namespace gameplay
 {
 
+const int PhysicsController::DIRTY         = 0x01;
+const int PhysicsController::COLLISION     = 0x02;
+const int PhysicsController::REGISTERED    = 0x04;
+const int PhysicsController::REMOVE        = 0x08;
+
 PhysicsController::PhysicsController()
   : _collisionConfiguration(NULL), _dispatcher(NULL),
     _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _ghostPairCallback(NULL),
@@ -115,7 +120,7 @@ void PhysicsController::setGravity(const Vector3& gravity)
     _gravity = gravity;
 
     if (_world)
-        _world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
+        _world->setGravity(BV(_gravity));
 }
 
 void PhysicsController::drawDebug(const Matrix& viewProjection)
@@ -123,6 +128,100 @@ void PhysicsController::drawDebug(const Matrix& viewProjection)
     _debugDrawer->begin(viewProjection);
     _world->debugDrawWorld();
     _debugDrawer->end();
+}
+
+PhysicsRigidBody* PhysicsController::rayTest(const Ray& ray, Vector3* hitPoint, float* hitFraction)
+{
+    btCollisionWorld::ClosestRayResultCallback callback(BV(ray.getOrigin()), BV(ray.getDirection()));
+    _world->rayTest(BV(ray.getOrigin()), BV(ray.getDirection()), callback);
+    if (callback.hasHit())
+    {
+        if (hitPoint)
+            hitPoint->set(callback.m_hitPointWorld.x(), callback.m_hitPointWorld.y(), callback.m_hitPointWorld.z());
+
+        if (hitFraction)
+            *hitFraction = callback.m_closestHitFraction;
+
+        return getRigidBody(callback.m_collisionObject);
+    }
+
+    return NULL;
+}
+
+btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, 
+    const btCollisionObject* b, int partIdB, int indexB)
+{
+    // Get pointers to the PhysicsRigidBody objects.
+    PhysicsRigidBody* rbA = Game::getInstance()->getPhysicsController()->getRigidBody(a);
+    PhysicsRigidBody* rbB = Game::getInstance()->getPhysicsController()->getRigidBody(b);
+    
+    // If the given rigid body pair has collided in the past, then
+    // we notify the listeners only if the pair was not colliding
+    // during the previous frame. Otherwise, it's a new pair, so add a
+    // new entry to the cache with the appropriate listeners and notify them.
+    PhysicsRigidBody::CollisionPair pair(rbA, rbB);
+    if (_collisionStatus.count(pair) > 0)
+    {
+        const CollisionInfo& collisionInfo = _collisionStatus[pair];
+        if ((collisionInfo._status & COLLISION) == 0)
+        {
+            std::vector<PhysicsRigidBody::Listener*>::const_iterator iter = collisionInfo._listeners.begin();
+            for (; iter != collisionInfo._listeners.end(); iter++)
+            {
+                if ((collisionInfo._status & REMOVE) == 0)
+                {
+                    (*iter)->collisionEvent(PhysicsRigidBody::Listener::COLLIDING, pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()),
+                        Vector3(cp.getPositionWorldOnB().x(), cp.getPositionWorldOnB().y(), cp.getPositionWorldOnB().z()));
+                }
+            }
+        }
+    }
+    else
+    {
+        CollisionInfo& collisionInfo = _collisionStatus[pair];
+
+        // Initialized the status for the new entry.
+        collisionInfo._status = 0;
+
+        // Add the appropriate listeners.
+        PhysicsRigidBody::CollisionPair p1(pair._rbA, NULL);
+        if (_collisionStatus.count(p1) > 0)
+        {
+            const CollisionInfo& ci = _collisionStatus[p1];
+            std::vector<PhysicsRigidBody::Listener*>::const_iterator iter = ci._listeners.begin();
+            for (; iter != ci._listeners.end(); iter++)
+            {
+                collisionInfo._listeners.push_back(*iter);
+            }
+        }
+        PhysicsRigidBody::CollisionPair p2(pair._rbB, NULL);
+        if (_collisionStatus.count(p2) > 0)
+        {
+            const CollisionInfo& ci = _collisionStatus[p2];
+            std::vector<PhysicsRigidBody::Listener*>::const_iterator iter = ci._listeners.begin();
+            for (; iter != ci._listeners.end(); iter++)
+            {
+                collisionInfo._listeners.push_back(*iter);
+            }
+        }
+
+        std::vector<PhysicsRigidBody::Listener*>::iterator iter = collisionInfo._listeners.begin();
+        for (; iter != collisionInfo._listeners.end(); iter++)
+        {
+            if ((collisionInfo._status & REMOVE) == 0)
+            {
+                (*iter)->collisionEvent(PhysicsRigidBody::Listener::COLLIDING, pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()),
+                    Vector3(cp.getPositionWorldOnB().x(), cp.getPositionWorldOnB().y(), cp.getPositionWorldOnB().z()));
+            }
+        }
+    }
+
+    // Update the collision status cache (we remove the dirty bit
+    // set in the controller's update so that this particular collision pair's
+    // status is not reset to 'no collision' when the controller's update completes).
+    _collisionStatus[pair]._status &= ~DIRTY;
+    _collisionStatus[pair]._status |= COLLISION;
+    return 0.0f;
 }
 
 void PhysicsController::initialize()
@@ -134,7 +233,7 @@ void PhysicsController::initialize()
 
     // Create the world.
     _world = new btDiscreteDynamicsWorld(_dispatcher, _overlappingPairCache, _solver, _collisionConfiguration);
-    _world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
+    _world->setGravity(BV(_gravity));
 
     // Register ghost pair callback so bullet detects collisions with ghost objects (used for character collisions).
     _ghostPairCallback = bullet_new<btGhostPairCallback>();
@@ -222,81 +321,75 @@ void PhysicsController::update(long elapsedTime)
     // During collision processing, if a collision occurs, the status is 
     // set to COLLISION and the DIRTY bit is cleared. Then, after collision processing 
     // is finished, if a given status is still dirty, the COLLISION bit is cleared.
+    //
+    // If an entry was marked for removal in the last frame, remove it now.
 
-    // Dirty all the collision listeners' collision status caches.
-    for (unsigned int i = 0; i < _bodies.size(); i++)
+    // Dirty the collision status cache entries.
+    std::map<PhysicsRigidBody::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
+    for (; iter != _collisionStatus.end();)
     {
-        if (_bodies[i]->_listeners)
+        if ((iter->second._status & REMOVE) != 0)
         {
-            for (unsigned int k = 0; k < _bodies[i]->_listeners->size(); k++)
-            {
-                std::map<PhysicsRigidBody::CollisionPair, int>::iterator iter = (*_bodies[i]->_listeners)[k]->_collisionStatus.begin();
-                for (; iter != (*_bodies[i]->_listeners)[k]->_collisionStatus.end(); iter++)
-                {
-                    iter->second |= PhysicsRigidBody::Listener::DIRTY;
-                }
-            }
+            std::map<PhysicsRigidBody::CollisionPair, CollisionInfo>::iterator eraseIter = iter;
+            iter++;
+            _collisionStatus.erase(eraseIter);
+        }
+        else
+        {
+            iter->second._status |= DIRTY;
+            iter++;
         }
     }
 
-    // Go through the physics rigid bodies and update the collision listeners.
-    unsigned int size = _bodies.size();
-    unsigned int listenerCount = 0;
-    PhysicsRigidBody* body = NULL;
-    PhysicsRigidBody::Listener* listener = NULL;
-    PhysicsController* physicsController = Game::getInstance()->getPhysicsController();
-    for (unsigned int i = 0; i < size; i++)
+    // Go through the collision status cache and perform all registered collision tests.
+    iter = _collisionStatus.begin();
+    for (; iter != _collisionStatus.end(); iter++)
     {
-        body = _bodies[i];
-        if (body->_listeners)
+        // If this collision pair was one that was registered for listening, then perform the collision test.
+        // (In the case where we register for all collisions with a rigid body, there will be a lot
+        // of collision pairs in the status cache that we did not explicitly register for.)
+        if ((iter->second._status & REGISTERED) != 0 && (iter->second._status & REMOVE) == 0)
         {
-            listenerCount = body->_listeners->size();
-            for (unsigned int k = 0; k < listenerCount; k++)
-            {
-                listener = (*body->_listeners)[k];
-                std::map<PhysicsRigidBody::CollisionPair, int>::iterator iter = listener->_collisionStatus.begin();
-                for (; iter != listener->_collisionStatus.end(); iter++)
-                {
-                    // If this collision pair was one that was registered for listening, then perform the collision test.
-                    // (In the case where we register for all collisions with a rigid body, there will be a lot
-                    // of collision pairs in the status cache that we did not explicitly register for.)
-                    if ((iter->second & PhysicsRigidBody::Listener::REGISTERED) != 0)
-                    {
-                        if (iter->first._rbB)
-                            physicsController->_world->contactPairTest(iter->first._rbA->_body, iter->first._rbB->_body, *listener);
-                        else
-                            physicsController->_world->contactTest(iter->first._rbA->_body, *listener);
-                    }
-                }   
-            }
+            if (iter->first._rbB)
+                _world->contactPairTest(iter->first._rbA->_body, iter->first._rbB->_body, *this);
+            else
+                _world->contactTest(iter->first._rbA->_body, *this);
         }
     }
 
-    // Go through all the collision listeners and update their collision status caches.
-    for (unsigned int i = 0; i < _bodies.size(); i++)
+    // Update all the collision status cache entries.
+    iter = _collisionStatus.begin();
+    for (; iter != _collisionStatus.end(); iter++)
     {
-        if (_bodies[i]->_listeners)
+        if ((iter->second._status & DIRTY) != 0)
         {
-            for (unsigned int k = 0; k < _bodies[i]->_listeners->size(); k++)
+            if ((iter->second._status & COLLISION) != 0 && iter->first._rbB)
             {
-                std::map<PhysicsRigidBody::CollisionPair, int>::iterator iter = (*_bodies[i]->_listeners)[k]->_collisionStatus.begin();
-                for (; iter != (*_bodies[i]->_listeners)[k]->_collisionStatus.end(); iter++)
+                unsigned int size = iter->second._listeners.size();
+                for (unsigned int i = 0; i < size; i++)
                 {
-                    if ((iter->second & PhysicsRigidBody::Listener::DIRTY) != 0)
-                    {
-                        if ((iter->second & PhysicsRigidBody::Listener::COLLISION) != 0 && iter->first._rbB)
-                        {
-                            (*_bodies[i]->_listeners)[k]->collisionEvent(PhysicsRigidBody::Listener::NOT_COLLIDING, iter->first, Vector3::zero());
-                        }
-
-                        iter->second &= ~PhysicsRigidBody::Listener::COLLISION;
-                    }
+                    iter->second._listeners[i]->collisionEvent(PhysicsRigidBody::Listener::NOT_COLLIDING, iter->first);
                 }
             }
+
+            iter->second._status &= ~COLLISION;
         }
     }
 }
-    
+
+void PhysicsController::addCollisionListener(PhysicsRigidBody::Listener* listener, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB)
+{
+    PhysicsRigidBody::CollisionPair pair(rbA, rbB);
+
+    // Make sure the status of the entry is initialized properly.
+    if (_collisionStatus.count(pair) == 0)
+        _collisionStatus[pair]._status = 0;
+
+    // Add the listener and ensure the status includes that this collision pair is registered.
+    _collisionStatus[pair]._listeners.push_back(listener);
+    if ((_collisionStatus[pair]._status & PhysicsController::REGISTERED) == 0)
+        _collisionStatus[pair]._status |= PhysicsController::REGISTERED;
+}
 
 void PhysicsController::addRigidBody(PhysicsRigidBody* body)
 {
@@ -330,8 +423,26 @@ void PhysicsController::removeRigidBody(PhysicsRigidBody* rigidBody)
             else
                 _shapes[i]->release();
 
-            return;
+            break;
         }
+    }
+
+    // Remove the rigid body from the controller's list.
+    for (unsigned int i = 0; i < _bodies.size(); i++)
+    {
+        if (_bodies[i] == rigidBody)
+        {
+            _bodies.erase(_bodies.begin() + i);
+            break;
+        }
+    }
+
+    // Find all references to the rigid body in the collision status cache and mark them for removal.
+    std::map<PhysicsRigidBody::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
+    for (; iter != _collisionStatus.end(); iter++)
+    {
+        if (iter->first._rbA == rigidBody || iter->first._rbB == rigidBody)
+            iter->second._status |= REMOVE;
     }
 }
 
@@ -347,9 +458,9 @@ PhysicsRigidBody* PhysicsController::getRigidBody(const btCollisionObject* colli
     return NULL;
 }
 
-btCollisionShape* PhysicsController::createBox(const Vector3& min, const Vector3& max, const btVector3& scale)
+btCollisionShape* PhysicsController::createBox(const Vector3& min, const Vector3& max, const Vector3& scale)
 {
-    btVector3 halfExtents(scale.x() * 0.5 * abs(max.x - min.x), scale.y() * 0.5 * abs(max.y - min.y), scale.z() * 0.5 * abs(max.z - min.z));
+    btVector3 halfExtents(scale.x * 0.5 * abs(max.x - min.x), scale.y * 0.5 * abs(max.y - min.y), scale.z * 0.5 * abs(max.z - min.z));
 
     // Return the box shape from the cache if it already exists.
     for (unsigned int i = 0; i < _shapes.size(); i++)
@@ -395,15 +506,15 @@ btCollisionShape* PhysicsController::createCapsule(float radius, float height)
     return capsule;
 }
 
-btCollisionShape* PhysicsController::createSphere(float radius, const btVector3& scale)
+btCollisionShape* PhysicsController::createSphere(float radius, const Vector3& scale)
 {
     // Since sphere shapes depend only on the radius, the best we can do is take
     // the largest dimension and apply that as the uniform scale to the rigid body.
-    float uniformScale = scale.x();
-    if (uniformScale < scale.y())
-        uniformScale = scale.y();
-    if (uniformScale < scale.z())
-        uniformScale = scale.z();
+    float uniformScale = scale.x;
+    if (uniformScale < scale.y)
+        uniformScale = scale.y;
+    if (uniformScale < scale.z)
+        uniformScale = scale.z;
     
     // Return the sphere shape from the cache if it already exists.
     for (unsigned int i = 0; i < _shapes.size(); i++)

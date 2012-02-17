@@ -32,8 +32,8 @@ PhysicsSpringConstraint::PhysicsSpringConstraint(PhysicsRigidBody* a, const Quat
     b->getNode()->getWorldMatrix().getScale(&sB);
     Vector3 tB(translationOffsetB.x * sB.x, translationOffsetB.y * sB.y, translationOffsetB.z * sB.z);
 
-    btTransform frameInA(btQuaternion(rotationOffsetA.x, rotationOffsetA.y, rotationOffsetA.z, rotationOffsetA.w), btVector3(tA.x, tA.y, tA.z));
-    btTransform frameInB(btQuaternion(rotationOffsetB.x, rotationOffsetB.y, rotationOffsetB.z, rotationOffsetB.w), btVector3(tB.x, tB.y, tB.z));
+    btTransform frameInA(BQ(rotationOffsetA), BV(tA));
+    btTransform frameInB(BQ(rotationOffsetB), BV(tB));
     _constraint = new btGeneric6DofSpringConstraint(*a->_body, *b->_body, frameInA, frameInB, true);
 }
 

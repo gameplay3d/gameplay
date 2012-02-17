@@ -10,6 +10,7 @@ namespace gameplay
 std::map<std::string, Properties*> SceneLoader::_propertiesFromFile;
 std::vector<SceneLoader::SceneAnimation> SceneLoader::_animations;
 std::vector<SceneLoader::SceneNode> SceneLoader::_sceneNodes;
+std::string SceneLoader::_path;
 
 Scene* SceneLoader::load(const char* filePath)
 {
@@ -34,6 +35,8 @@ Scene* SceneLoader::load(const char* filePath)
         return NULL;
     }
 
+    // Get the path to the main GPB.
+    _path = sceneProperties->getString("path");
     // Build the node URL/property and animation reference tables and load the referenced files.
     buildReferenceTables(sceneProperties);
     loadReferencedFiles();
@@ -706,11 +709,10 @@ PhysicsConstraint* SceneLoader::loadHingeConstraint(const Properties* constraint
 Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
 {
     // Load the main scene from the specified path.
-    const char* path = sceneProperties->getString("path");
-    Package* package = Package::create(path);
+    Package* package = Package::create(_path.c_str());
     if (!package)
     {
-        WARN_VARG("Failed to load scene GPB file '%s'.", path);
+        WARN_VARG("Failed to load scene GPB file '%s'.", _path.c_str());
         return NULL;
     }
 
@@ -718,7 +720,7 @@ Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
     Scene* scene = package->loadScene(sceneID);
     if (!scene)
     {
-        WARN_VARG("Failed to load scene from '%s'.", path);
+        WARN_VARG("Failed to load scene from '%s'.", _path.c_str());
         SAFE_RELEASE(package);
         return NULL;
     }
