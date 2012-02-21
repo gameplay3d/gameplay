@@ -233,7 +233,7 @@ namespace gameplay
                     if (strcmp(innerSpacename, "normal") == 0)
                     {
                         Vector4 textColor(0, 0, 0, 1);
-                        if (space->exists("color"))
+                        if (innerSpace->exists("textColor"))
                         {
                             innerSpace->getColor("textColor", &textColor);
                         }
