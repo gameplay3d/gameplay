@@ -308,11 +308,9 @@ namespace gameplay
                 {
                     // Get info about the form's position.
                     Matrix m = node->getMatrix();
-                    Vector2 size = form->getSize();
+                    const Vector2& size = form->getSize();
                     Vector3 min(0, 0, 0);
-                    Vector3 max(size.x, size.y, 0);
                     m.transformPoint(&min);
-                    m.transformPoint(&max);
 
                     // Unproject point into world space.
                     Ray ray;
@@ -323,13 +321,12 @@ namespace gameplay
                     Vector3 normal = node->getForwardVectorWorld();
 
                     // To get the plane's distance from the origin,
-                    // we'll find the distance to the plane defined
-                    // by the quad's upVector and one of its points
-                    // from the plane defined by the same vector
-                    // and the origin.
-                    float a = normal.x; float b = normal.y; float c = normal.z;
-                    float d = -(a*min.x) - (b*min.y) - (c*min.z);
-                    float distance = abs(d) /  sqrt(a*a + b*b + c*c);
+                    // we'll find the distance from the plane defined
+                    // by the quad's forward vector and one of its points
+                    // to the plane defined by the same vector and the origin.
+                    const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
+                    const float d = -(a*min.x) - (b*min.y) - (c*min.z);
+                    const float distance = abs(d) /  sqrt(a*a + b*b + c*c);
                     Plane plane(normal, distance);
 
                     // Check for collision with plane.
@@ -341,15 +338,14 @@ namespace gameplay
                         // and add that to the ray's origin.
                         Vector3 rayOrigin = ray.getOrigin();
                         Vector3 rayDirection = ray.getDirection();
-
                         float alpha = (distance - normal.dot(rayOrigin)) / normal.dot(rayDirection);
                         Vector3 point = rayOrigin + alpha*rayDirection;
 
-                        // If the resulting point lies within the quad,
-                        // project it into the form's space.
+                        // Project this point into the plane.
                         m.invert();
                         m.transformPoint(&point);
 
+                        // If this point lies within the form, pass the touch event on.
                         if (point.x >= 0 && point.x <= size.x &&
                             point.y >= 0 && point.y <= size.y)
                         {

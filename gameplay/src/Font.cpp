@@ -205,7 +205,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                 switch (delimiter)
                 {
                 case ' ':
-                    xPos += size>>1;
+                    xPos += (float)size*0.5f;
                     break;
                 case '\r':
                 case '\n':
@@ -213,7 +213,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                     xPos = x;
                     break;
                 case '\t':
-                    xPos += (size>>1)*4;
+                    xPos += ((float)size*0.5f)*4;
                     break;
                 case 0:
                     done = true;
@@ -254,7 +254,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
             switch (c)
             {
             case ' ':
-                xPos += size>>1;
+                xPos += (float)size*0.5f;
                 break;
             case '\r':
             case '\n':
@@ -262,7 +262,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                 xPos = x;
                 break;
             case '\t':
-                xPos += (size>>1)*4;
+                xPos += ((float)size*0.5f)*4;
                 break;
             default:
                 int index = c - 32; // HACK for ASCII
@@ -270,7 +270,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                 {
                     Glyph& g = _glyphs[index];
                     _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
-                    xPos += g.width * scale + (size>>3);
+                    xPos += g.width * scale + ((float)size*0.125f);
                     break;
                 }
             }
@@ -338,7 +338,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                     switch (delimiter)
                     {
                         case ' ':
-                            delimWidth += size>>1;
+                            delimWidth += (float)size*0.5f;
                             lineLength++;
                             break;
                         case '\r':
@@ -355,7 +355,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                             delimWidth = 0;
                             break;
                         case '\t':
-                            delimWidth += (size>>1)*4;
+                            delimWidth += ((float)size*0.5f)*4;
                             lineLength++;
                             break;
                         case 0:
@@ -575,7 +575,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                         _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
                     }
                 }
-                xPos += g.width*scale + (size>>3);
+                xPos += g.width*scale + ((float)size*0.125f);
             }
         }
 
@@ -716,7 +716,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
                 switch (delimiter)
                 {
                     case ' ':
-                        delimWidth += size>>1;
+                        delimWidth += (float)size*0.5f;
                         break;
                     case '\r':
                     case '\n':
@@ -752,7 +752,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
                         delimWidth = 0;
                         break;
                     case '\t':
-                        delimWidth += (size>>1)*4;
+                        delimWidth += ((float)size*0.5f)*4;
                         break;
                     case 0:
                         reachedEOF = true;
@@ -1006,7 +1006,7 @@ unsigned int Font::getIndexAtLocation(const char* text, const Rectangle& area, u
 void Font::getLocationAtIndex(const char* text, const Rectangle& clip, unsigned int size, Vector2* outLocation, const unsigned int destIndex,
                               Justify justify, bool wrap, bool rightToLeft)
 {
-    getIndexOrLocation(text, clip, size, *outLocation, outLocation, destIndex, justify, wrap, rightToLeft);
+    getIndexOrLocation(text, clip, size, *outLocation, outLocation, (const int)destIndex, justify, wrap, rightToLeft);
 }
 
 unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
@@ -1064,7 +1064,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
                     switch (delimiter)
                     {
                         case ' ':
-                            delimWidth += size>>1;
+                            delimWidth += (float)size*0.5f;
                             lineLength++;
                             break;
                         case '\r':
@@ -1081,7 +1081,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
                             delimWidth = 0;
                             break;
                         case '\t':
-                            delimWidth += (size>>1)*4;
+                            delimWidth += ((float)size*0.5f)*4;
                             lineLength++;
                             break;
                         case 0:
@@ -1247,7 +1247,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
 
         if (destIndex == charIndex ||
             (destIndex == -1 &&
-             inLocation.x >= xPos && inLocation.x < xPos + (size>>3) &&
+             inLocation.x >= xPos && inLocation.x < floor(xPos + ((float)size*0.125f)) &&
              inLocation.y >= yPos && inLocation.y < yPos + size))
         {
             outLocation->x = xPos;
@@ -1320,7 +1320,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
                 // Check against inLocation.
                 if (destIndex == charIndex ||
                     (destIndex == -1 &&
-                    inLocation.x >= xPos && inLocation.x < xPos + g.width*scale + (size>>3) &&
+                    inLocation.x >= xPos && inLocation.x < floor(xPos + g.width*scale + ((float)size*0.125f)) &&
                     inLocation.y >= yPos && inLocation.y < yPos + size))
                 {
                     outLocation->x = xPos;
@@ -1328,7 +1328,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
                     return charIndex;
                 }
 
-                xPos += g.width*scale + (size>>3);
+                xPos += g.width*scale + ((float)size*0.125f);
                 charIndex++;
             }
         }
@@ -1414,17 +1414,17 @@ unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigne
         switch (c)
         {
         case ' ':
-            tokenWidth += size>>1;
+            tokenWidth += (float)size*0.5f;
             break;
         case '\t':
-            tokenWidth += (size>>1)*4;
+            tokenWidth += ((float)size*0.5f)*4;
             break;
         default:
             int glyphIndex = c - 32;
             if (glyphIndex >= 0 && glyphIndex < (int)_glyphCount)
             {
                 Glyph& g = _glyphs[glyphIndex];
-                tokenWidth += g.width * scale + (size>>3);
+                tokenWidth += g.width * scale + ((float)size*0.125f);
             }
             break;
         }
@@ -1467,7 +1467,7 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
             delimiter == 0)
     {
         if ((stopAtPosition &&
-            stopAtPosition->x >= *xPos && stopAtPosition->x < *xPos + (size>>1) &&
+            stopAtPosition->x >= *xPos && stopAtPosition->x < floor(*xPos + ((float)size*0.5f)) &&
             stopAtPosition->y >= *yPos && stopAtPosition->y < *yPos + size) ||
             (currentIndex >= 0 && destIndex >= 0 && currentIndex + *lineLength == destIndex))
         {
@@ -1478,7 +1478,7 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
         switch (delimiter)
         {
             case ' ':
-                *xPos += size>>1;
+                *xPos += (float)size*0.5f;
                 (*lineLength)++;
                 if (charIndex)
                 {
@@ -1510,7 +1510,7 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
                 }
                 break;
             case '\t':
-                *xPos += (size>>1)*4;
+                *xPos += ((float)size*0.5f)*4;
                 (*lineLength)++;
                 if (charIndex)
                 {

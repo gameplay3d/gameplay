@@ -77,7 +77,7 @@ namespace gameplay
         _viewport.set(pos.x + border.left + padding.left,
                       pos.y + border.top + padding.top,
                       _size.x - border.left - padding.left - border.right - padding.right,
-                      _size.y - border.top - padding.top - border.bottom - padding.bottom - font->getSize());
+                      _size.y - border.top - padding.top - border.bottom - padding.bottom - overlay->getFontSize());
     }
 
     void Label::drawText(const Vector2& position)
