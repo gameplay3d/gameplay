@@ -175,7 +175,7 @@ btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisi
         collisionInfo._status = 0;
 
         // Add the appropriate listeners.
-        PhysicsRigidBody::CollisionPair p1(pair._rbA, NULL);
+        PhysicsRigidBody::CollisionPair p1(pair.rigidBodyA, NULL);
         if (_collisionStatus.count(p1) > 0)
         {
             const CollisionInfo& ci = _collisionStatus[p1];
@@ -185,7 +185,7 @@ btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisi
                 collisionInfo._listeners.push_back(*iter);
             }
         }
-        PhysicsRigidBody::CollisionPair p2(pair._rbB, NULL);
+        PhysicsRigidBody::CollisionPair p2(pair.rigidBodyB, NULL);
         if (_collisionStatus.count(p2) > 0)
         {
             const CollisionInfo& ci = _collisionStatus[p2];
@@ -336,10 +336,10 @@ void PhysicsController::update(long elapsedTime)
         // of collision pairs in the status cache that we did not explicitly register for.)
         if ((iter->second._status & REGISTERED) != 0 && (iter->second._status & REMOVE) == 0)
         {
-            if (iter->first._rbB)
-                _world->contactPairTest(iter->first._rbA->_body, iter->first._rbB->_body, *this);
+            if (iter->first.rigidBodyB)
+                _world->contactPairTest(iter->first.rigidBodyA->_body, iter->first.rigidBodyB->_body, *this);
             else
-                _world->contactTest(iter->first._rbA->_body, *this);
+                _world->contactTest(iter->first.rigidBodyA->_body, *this);
         }
     }
 
@@ -349,7 +349,7 @@ void PhysicsController::update(long elapsedTime)
     {
         if ((iter->second._status & DIRTY) != 0)
         {
-            if ((iter->second._status & COLLISION) != 0 && iter->first._rbB)
+            if ((iter->second._status & COLLISION) != 0 && iter->first.rigidBodyB)
             {
                 unsigned int size = iter->second._listeners.size();
                 for (unsigned int i = 0; i < size; i++)
@@ -427,7 +427,7 @@ void PhysicsController::removeRigidBody(PhysicsRigidBody* rigidBody)
     std::map<PhysicsRigidBody::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
     for (; iter != _collisionStatus.end(); iter++)
     {
-        if (iter->first._rbA == rigidBody || iter->first._rbB == rigidBody)
+        if (iter->first.rigidBodyA == rigidBody || iter->first.rigidBodyB == rigidBody)
             iter->second._status |= REMOVE;
     }
 }
