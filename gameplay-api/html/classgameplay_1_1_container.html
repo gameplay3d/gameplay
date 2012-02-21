@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay::Container Class Reference</title>
+<title>gameplay: gameplay::Container Class Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -98,6 +98,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Container Class Reference</div>  </div>
@@ -131,15 +132,21 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>removeControl</b> (co
 void&#160;</td><td class="memItemRight" valign="bottom"><b>removeControl</b> (<a class="el" href="classgameplay_1_1_control.html">Control</a> *control)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#adba2435961faaa968311a0acf986f737">getControl</a> (unsigned int index) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a380599ed4444b9600f9ea9fe2caac12e">getControl</a> (const char *id) const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a13044472b01c7539fb2a88543028f996">update</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad9fc632bab4531b6db908c05259e8808"></a><!-- doxytag: member="gameplay::Container::getControls" ref="ad9fc632bab4531b6db908c05259e8808" args="() const " -->
+std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getControls</b> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a2a8879cde7e2ba4b2c8f6d6d4a0bfa8b">update</a> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;position)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a04b24845650ca279e497f7915cd45017"></a><!-- doxytag: member="gameplay::Container::drawSprites" ref="a04b24845650ca279e497f7915cd45017" args="(SpriteBatch *spriteBatch, const Vector2 &amp;position)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawSprites</b> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;position)</td></tr>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>drawSprites</b> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;position)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad9caaae121521ed1eb758cd817b64e6d"></a><!-- doxytag: member="gameplay::Container::drawText" ref="ad9caaae121521ed1eb758cd817b64e6d" args="(const Vector2 &amp;position)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawText</b> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;position)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#abe565fbd6bbdba8b260a8e1ef8f8a6bd">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>drawText</b> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;position)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#abe565fbd6bbdba8b260a8e1ef8f8a6bd">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d3a762ef3400d3ff53068e6856f9840"></a><!-- doxytag: member="gameplay::Container::keyEvent" ref="a7d3a762ef3400d3ff53068e6856f9840" args="(Keyboard::KeyEvent evt, int key)" -->
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>keyEvent</b> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ad4226ebd1ccaed4d8f40c563c5a275d1">create</a> (const char *id, Layout::Type type)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aadad4de9fc282190ef293ab38b8f6ebc"></a><!-- doxytag: member="gameplay::Container::create" ref="aadad4de9fc282190ef293ab38b8f6ebc" args="(Theme::Style *style, Properties *properties, Theme *theme)" -->
+static <a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties, <a class="el" href="classgameplay_1_1_theme.html">Theme</a> *theme)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a963dd7e62b0fbe98dec5311f00185463"></a><!-- doxytag: member="gameplay::Container::getContainer" ref="a963dd7e62b0fbe98dec5311f00185463" args="(const char *id)" -->
 static <a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getContainer</b> (const char *id)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
@@ -147,6 +154,12 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e5ffac1ead07d2448d0295d48891010"></a><!-- doxytag: member="gameplay::Container::Container" ref="a3e5ffac1ead07d2448d0295d48891010" args="(const Container &amp;copy)" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>Container</b> (const <a class="el" href="classgameplay_1_1_container.html">Container</a> &amp;copy)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a9fcc8ffd0d2124746001d5eb40fe1884">isDirty</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af9b23ef23b418aff9af1f382993df37a"></a><!-- doxytag: member="gameplay::Container::addControls" ref="af9b23ef23b418aff9af1f382993df37a" args="(Theme *theme, Properties *properties)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addControls</b> (<a class="el" href="classgameplay_1_1_theme.html">Theme</a> *theme, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
+<tr><td colspan="2"><h2><a name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3a751da27025a45156e25010828ce9e3"></a><!-- doxytag: member="gameplay::Container::getLayoutType" ref="a3a751da27025a45156e25010828ce9e3" args="(const char *layoutString)" -->
+static Layout::Type&#160;</td><td class="memItemRight" valign="bottom"><b>getLayoutType</b> (const char *layoutString)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b3920d09aa80bf7e328eb07f6f85328"></a><!-- doxytag: member="gameplay::Container::_layout" ref="a1b3920d09aa80bf7e328eb07f6f85328" args="" -->
@@ -353,20 +366,23 @@ std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> 
 
 </div>
 </div>
-<a class="anchor" id="a13044472b01c7539fb2a88543028f996"></a><!-- doxytag: member="gameplay::Container::update" ref="a13044472b01c7539fb2a88543028f996" args="()" -->
+<a class="anchor" id="a2a8879cde7e2ba4b2c8f6d6d4a0bfa8b"></a><!-- doxytag: member="gameplay::Container::update" ref="a2a8879cde7e2ba4b2c8f6d6d4a0bfa8b" args="(const Vector2 &amp;position)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void gameplay::Container::update </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
+          <td class="paramname"><em>position</em></td><td>)</td>
+          <td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Updates the position of each <a class="el" href="classgameplay_1_1_control.html">Control</a> within this <a class="el" href="classgameplay_1_1_container.html">Container</a> according to the Container's <a class="el" href="classgameplay_1_1_layout.html">Layout</a>. </p>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a>.</p>
 
 </div>
 </div>
@@ -395,7 +411,7 @@ std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> 
 </div>
 
 
-    <li class="footer">Generated on Thu Jan 19 2012 10:48:02 for GamePlay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:05:59 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

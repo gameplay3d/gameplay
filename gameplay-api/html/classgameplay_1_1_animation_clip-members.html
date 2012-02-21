@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -102,6 +101,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 This is the complete list of members for <a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a>, including all inherited members.<table>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#abf7d596e7960b8dfa7c79ace78aeaf71">addBeginListener</a>(AnimationClip::Listener *listener)</td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#af1e38797873c3fa5a8921e6b43e40719">addEndListener</a>(AnimationClip::Listener *listener)</td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#ac1ffa1b5991a31c5810902f72c445e64">addListener</a>(AnimationClip::Listener *listener, unsigned long eventTime)</td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a66e39f63477efb32cc190f6605ef0c74">addRef</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>Animation</b> (defined in <a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a>)</td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td><code> [friend]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>AnimationController</b> (defined in <a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a>)</td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td><code> [friend]</code></td></tr>
@@ -109,6 +109,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_a
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#ac336294bfed721fecbe9520d103e993f">getActiveDuration</a>() const </td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#ad3f3bff739adbb745618f6d2427ed374">getAnimation</a>() const </td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#a87e1eb6ea8944308b8c3c6326565323f">getBlendWeight</a>() const </td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#a438b928a919fd2b0184c17c520bb2879">getDuration</a>() const </td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#a7e69fea3f954c14384937486db6bfe90">getElaspedTime</a>() const </td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#ae0898f2d6b4d3d886d1f2bba8ef0dbd5">getEndTime</a>() const </td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#af7b6b4a022626e713af8baabc621009a">getID</a>() const </td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
@@ -117,6 +118,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_a
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#a53442765a6241c12aedce275f7cf2248">getSpeed</a>() const </td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#a66b9cad3b41aba5a1695917489b6f92d">getStartTime</a>() const </td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#a5c94a21f0850ea1c91b5612571510027">isPlaying</a>() const </td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#ac74a4379207b09ec2f949b4bc64e88e9">pause</a>()</td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_clip.html#ae3f523b557ddfdb3ef8b05bee79d090c">play</a>()</td><td><a class="el" href="classgameplay_1_1_animation_clip.html">gameplay::AnimationClip</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a866a859fcc96f2a48d5ee2f06a8c2a43">Ref</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#aafd8a7a7934b33c8bf216756d04cf33b">release</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
@@ -136,7 +138,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_a
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -146,7 +148,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_a
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:20 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:05:58 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -100,9 +99,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="contents">
 This is the complete list of members for <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a>, including all inherited members.<table>
-  <tr bgcolor="#f0f0f0"><td><b>_collisionStatus</b> (defined in <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a>)</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a></td><td><code> [protected]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#ae89581990e161bed36b20107915b51e0">addSingleResult</a>(btManifoldPoint &amp;cp, const btCollisionObject *a, int partIdA, int indexA, const btCollisionObject *b, int partIdB, int indexB)</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a></td><td><code> [protected]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a493789ed1e119192bd66d879779f7d75">collisionEvent</a>(const CollisionPair &amp;collisionPair, const Vector3 &amp;contactPoint)=0</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a></td><td><code> [pure virtual]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a293c4ee9306fd935041e71b8d0b1eb69a163df93846cd17d01a28b88f28a7648e">COLLIDING</a> enum value</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#aeb3e2461a70cd9fe33bcad3625058443">collisionEvent</a>(EventType type, const CollisionPair &amp;collisionPair, const Vector3 &amp;contactPointA=Vector3(), const Vector3 &amp;contactPointB=Vector3())=0</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a></td><td><code> [pure virtual]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a293c4ee9306fd935041e71b8d0b1eb69">EventType</a> enum name</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a293c4ee9306fd935041e71b8d0b1eb69a5e6da32229d9ea2a222efc786791681c">NOT_COLLIDING</a> enum value</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>PhysicsController</b> (defined in <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a>)</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a></td><td><code> [friend]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>PhysicsRigidBody</b> (defined in <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a>)</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a62c06cda0c8a0437a7425dede9241e73">~Listener</a>()</td><td><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">gameplay::PhysicsRigidBody::Listener</a></td><td><code> [virtual]</code></td></tr>
@@ -115,7 +115,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -125,7 +125,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:21 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:06:00 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

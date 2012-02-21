@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>GamePlay: gameplay::Theme::Cursor Class Reference</title>
+<title>gameplay: gameplay::Theme::Cursor Class Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -31,8 +31,8 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">GamePlay
-   &#160;<span id="projectnumber">1.1.0</span>
+   <div id="projectname">gameplay
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    
   </td>
@@ -95,26 +95,41 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Theme::Cursor Class Reference</div>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="gameplay::Theme::Cursor" -->
+<!-- doxytag: class="gameplay::Theme::Cursor" --><!-- doxytag: inherits="gameplay::Ref" -->
 <p><code>#include &lt;<a class="el" href="_theme_8h_source.html">Theme.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for gameplay::Theme::Cursor:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classgameplay_1_1_theme_1_1_cursor.png" usemap="#gameplay::Theme::Cursor_map" alt=""/>
+  <map id="gameplay::Theme::Cursor_map" name="gameplay::Theme::Cursor_map">
+<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="0,0,154,24"/>
+</map>
+ </div></div>
 
 <p><a href="classgameplay_1_1_theme_1_1_cursor-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a166c83378cbb8443743765608aff0d15"></a><!-- doxytag: member="gameplay::Theme::Cursor::Cursor" ref="a166c83378cbb8443743765608aff0d15" args="(const char *id, const Rectangle &amp;region, const Vector4 &amp;color)" -->
-&#160;</td><td class="memItemRight" valign="bottom"><b>Cursor</b> (const char *id, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;region, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme_1_1_cursor.html#afbe4b48f66b6cc226dc4c126cbc0ee9c">getId</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme_1_1_cursor.html#ad0f7a007953116036e95fe96882d3593">getRegion</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structgameplay_1_1_theme_1_1_u_vs.html">Theme::UVs</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme_1_1_cursor.html#a0492c38b5c23228f8f1e6029ea7fe16c">getUVs</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a45848f167a7366ae926564aa8c4320a8"></a><!-- doxytag: member="gameplay::Theme::Cursor::getSize" ref="a45848f167a7366ae926564aa8c4320a8" args="() const " -->
+const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getSize</b> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd0045fd888fb78ea874611c74c68ca2"></a><!-- doxytag: member="gameplay::Theme::Cursor::getColor" ref="abd0045fd888fb78ea874611c74c68ca2" args="() const " -->
+const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getColor</b> () const </td></tr>
+<tr><td colspan="2"><h2><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af0fbbf65ba53a2a1bc7785f5c5b97696"></a><!-- doxytag: member="gameplay::Theme::Cursor::create" ref="af0fbbf65ba53a2a1bc7785f5c5b97696" args="(const char *id, const Texture &amp;texture, const Rectangle &amp;region, const Vector4 &amp;color)" -->
+static <a class="el" href="classgameplay_1_1_theme_1_1_cursor.html">Theme::Cursor</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const char *id, const <a class="el" href="classgameplay_1_1_texture.html">Texture</a> &amp;texture, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;region, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>This class represents the apperance of a cursor. </p>
+<div class="textblock"><p>This class represents the appearance of a cursor. </p>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="afbe4b48f66b6cc226dc4c126cbc0ee9c"></a><!-- doxytag: member="gameplay::Theme::Cursor::getId" ref="afbe4b48f66b6cc226dc4c126cbc0ee9c" args="() const " -->
 <div class="memitem">
@@ -130,23 +145,6 @@ Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Returns the Id of this <a class="el" href="classgameplay_1_1_theme_1_1_cursor.html">Cursor</a>. </p>
-
-</div>
-</div>
-<a class="anchor" id="ad0f7a007953116036e95fe96882d3593"></a><!-- doxytag: member="gameplay::Theme::Cursor::getRegion" ref="ad0f7a007953116036e95fe96882d3593" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp; gameplay::Theme::Cursor::getRegion </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Gets a texture region in the texture atlas for a cursor. </p>
 
 </div>
 </div>
@@ -193,7 +191,7 @@ Public Member Functions</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Thu Jan 19 2012 10:48:04 for GamePlay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:06:01 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

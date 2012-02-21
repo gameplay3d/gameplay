@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -98,6 +97,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::PhysicsController Class Reference</div>  </div>
@@ -110,6 +110,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>CollisionInfo</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>DebugDrawer</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">Listener</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsCollisionShape</b></td></tr>
@@ -127,6 +128,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ae5fce39a6a72c120d51e97b1ef5d429c">getGravity</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;gravity) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ab085ecda3423f445960150208e5ba1c9">setGravity</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;gravity)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ae2089a6dababa097ef955d1105c4bd6d">drawDebug</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;viewProjection)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a4177f272a5f9e0374d6e5f8dc50e60d7">rayTest</a> (const <a class="el" href="classgameplay_1_1_ray.html">Ray</a> &amp;ray)</td></tr>
+<tr><td colspan="2"><h2><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">btScalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a44243d5391f18bc002ed35a9dade2544">addSingleResult</a> (btManifoldPoint &amp;cp, const btCollisionObject *a, int partIdA, int indexA, const btCollisionObject *b, int partIdB, int indexB)</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa2fab026580d6f14280c2ffb8063a314"></a><!-- doxytag: member="gameplay::PhysicsController::Game" ref="aa2fab026580d6f14280c2ffb8063a314" args="" -->
@@ -139,6 +144,64 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a class for controlling game physics. </p>
 </div><hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a44243d5391f18bc002ed35a9dade2544"></a><!-- doxytag: member="gameplay::PhysicsController::addSingleResult" ref="a44243d5391f18bc002ed35a9dade2544" args="(btManifoldPoint &amp;cp, const btCollisionObject *a, int partIdA, int indexA, const btCollisionObject *b, int partIdB, int indexB)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btScalar gameplay::PhysicsController::addSingleResult </td>
+          <td>(</td>
+          <td class="paramtype">btManifoldPoint &amp;&#160;</td>
+          <td class="paramname"><em>cp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const btCollisionObject *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>partIdA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>indexA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const btCollisionObject *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>partIdB</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>indexB</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Internal function used for Bullet integration (do not use or override). </p>
+
+</div>
+</div>
 <a class="anchor" id="a9c9c7800807569809a677be38873170a"></a><!-- doxytag: member="gameplay::PhysicsController::addStatusListener" ref="a9c9c7800807569809a677be38873170a" args="(PhysicsController::Listener *listener)" -->
 <div class="memitem">
 <div class="memproto">
@@ -584,6 +647,31 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 
 </div>
 </div>
+<a class="anchor" id="a4177f272a5f9e0374d6e5f8dc50e60d7"></a><!-- doxytag: member="gameplay::PhysicsController::rayTest" ref="a4177f272a5f9e0374d6e5f8dc50e60d7" args="(const Ray &amp;ray)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> * gameplay::PhysicsController::rayTest </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_ray.html">Ray</a> &amp;&#160;</td>
+          <td class="paramname"><em>ray</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the first rigid body that the given ray intersects.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ray</td><td>The ray to test intersection with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The first rigid body that the ray intersects. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ab085ecda3423f445960150208e5ba1c9"></a><!-- doxytag: member="gameplay::PhysicsController::setGravity" ref="ab085ecda3423f445960150208e5ba1c9" args="(const Vector3 &amp;gravity)" -->
 <div class="memitem">
 <div class="memproto">
@@ -616,14 +704,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_physics_controller.html">PhysicsController</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -633,7 +721,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:21 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:06:00 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

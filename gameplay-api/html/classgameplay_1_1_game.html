@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -146,8 +145,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a092768704d671429dc791304f208c75c">displayKeyboard</a> (bool display)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#acfd2e62b6399c2e8fca9874a9bf9674e">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a8f90ba8e84a472c25e8e0d4db2a58b5c">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aaa9e01ac6b1bb11402730cce48a9274f">mouseEvent</a> (<a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> evt, int x, int y)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a487eaf4a15dc7be69dbb7088c896e9ff">mouseWheelEvent</a> (int x, int y, int delta)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#af17666d88061d6daca4dac8e3175f940">mouseEvent</a> (<a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> evt, int x, int y, int wheelDelta)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ade96e57a1dbd20ab2dfb4203b4c0d6f6">setMultiTouch</a> (bool enabled)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a04720fabcd25eba03eaee2f81cfcdc16">isMultiTouch</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a11c781fe9845aa0e787f72844059e028">getAccelerometerValues</a> (float *pitch, float *roll)</td></tr>
@@ -657,7 +655,7 @@ Protected Member Functions</h2></td></tr>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">evt</td><td>The key event that occured. </td></tr>
-    <tr><td class="paramname">key</td><td>The key code that was pressed, released or repeated.</td></tr>
+    <tr><td class="paramname">key</td><td>If evt is KEY_PRESS or KEY_RELEASE then key is the key code from <a class="el" href="classgameplay_1_1_keyboard.html#a4e04e50db898d22f57e2a6de766ff81b">Keyboard::Key</a>. If evt is KEY_CHAR then key is the unicode value of the character.</td></tr>
   </table>
   </dd>
 </dl>
@@ -684,7 +682,7 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aaa9e01ac6b1bb11402730cce48a9274f"></a><!-- doxytag: member="gameplay::Game::mouseEvent" ref="aaa9e01ac6b1bb11402730cce48a9274f" args="(Mouse::MouseEvent evt, int x, int y)" -->
+<a class="anchor" id="af17666d88061d6daca4dac8e3175f940"></a><!-- doxytag: member="gameplay::Game::mouseEvent" ref="af17666d88061d6daca4dac8e3175f940" args="(Mouse::MouseEvent evt, int x, int y, int wheelDelta)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -704,7 +702,13 @@ Protected Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>y</em>&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wheelDelta</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -719,54 +723,13 @@ Protected Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">evt</td><td>The mouse event that occurred. </td></tr>
     <tr><td class="paramname">x</td><td>The x position of the mouse in pixels. Left edge is zero. </td></tr>
-    <tr><td class="paramname">y</td><td>The y position of the mouse in pixels. Top edge is zero.</td></tr>
+    <tr><td class="paramname">y</td><td>The y position of the mouse in pixels. Top edge is zero. </td></tr>
+    <tr><td class="paramname">wheelDelta</td><td>The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>True if the mouse event is consumed or false if it is not consumed.</dd></dl>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a487eaf4a15dc7be69dbb7088c896e9ff"></a><!-- doxytag: member="gameplay::Game::mouseWheelEvent" ref="a487eaf4a15dc7be69dbb7088c896e9ff" args="(int x, int y, int delta)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void gameplay::Game::mouseWheelEvent </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>delta</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p><a class="el" href="classgameplay_1_1_mouse.html">Mouse</a> callback on mouse wheel events.</p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">x</td><td>The x position of the mouse in pixels. Left edge is zero. </td></tr>
-    <tr><td class="paramname">y</td><td>The y position of the mouse in pixels. Top edge is zero. </td></tr>
-    <tr><td class="paramname">delta</td><td>The number of mouse wheel ticks. Positive is up (forward), negative is down (backward). </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -893,8 +856,8 @@ template&lt;class T &gt; </div>
 <p>Call this method to initialize the game, and begin running the game.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">width</td><td>The width of the game window to run at. </td></tr>
-    <tr><td class="paramname">height</td><td>The height of the game window to run at.</td></tr>
+    <tr><td class="paramname">width</td><td>The width of the game window to run at. Default is -1 meaning native resolution width. </td></tr>
+    <tr><td class="paramname">height</td><td>The height of the game window to run at. Default is -1 meaning native resolution height.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1034,14 +997,14 @@ template&lt;class T &gt; </div>
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_game.html">Game</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -1051,7 +1014,7 @@ template&lt;class T &gt; </div>
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:20 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:05:59 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

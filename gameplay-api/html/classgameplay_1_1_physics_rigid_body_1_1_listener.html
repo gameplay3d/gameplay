@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -96,9 +95,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div id="doc-content">
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::PhysicsRigidBody::Listener Class Reference</div>  </div>
@@ -109,17 +107,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p><a href="classgameplay_1_1_physics_rigid_body_1_1_listener-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a293c4ee9306fd935041e71b8d0b1eb69">EventType</a> { <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a293c4ee9306fd935041e71b8d0b1eb69a163df93846cd17d01a28b88f28a7648e">COLLIDING</a>, 
+<a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a293c4ee9306fd935041e71b8d0b1eb69a5e6da32229d9ea2a222efc786791681c">NOT_COLLIDING</a>
+ }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a62c06cda0c8a0437a7425dede9241e73">~Listener</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a493789ed1e119192bd66d879779f7d75">collisionEvent</a> (const <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_collision_pair.html">CollisionPair</a> &amp;collisionPair, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;contactPoint)=0</td></tr>
-<tr><td colspan="2"><h2><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">btScalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#ae89581990e161bed36b20107915b51e0">addSingleResult</a> (btManifoldPoint &amp;cp, const btCollisionObject *a, int partIdA, int indexA, const btCollisionObject *b, int partIdB, int indexB)</td></tr>
-<tr><td colspan="2"><h2><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a09bb0f50f7dc43c1e1838b6c8cbf2f99"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::Listener::_collisionStatus" ref="a09bb0f50f7dc43c1e1838b6c8cbf2f99" args="" -->
-std::map&lt; <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_collision_pair.html">CollisionPair</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_collisionStatus</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#aeb3e2461a70cd9fe33bcad3625058443">collisionEvent</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a293c4ee9306fd935041e71b8d0b1eb69">EventType</a> type, const <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_collision_pair.html">CollisionPair</a> &amp;collisionPair, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;contactPointA=<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>(), const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;contactPointB=<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>())=0</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c7aa887ecde6200e42d2abcaba2597b"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::Listener::PhysicsRigidBody" ref="a3c7aa887ecde6200e42d2abcaba2597b" args="" -->
@@ -129,7 +125,32 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Collision listener interface. </p>
-</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+</div><hr/><h2>Member Enumeration Documentation</h2>
+<a class="anchor" id="a293c4ee9306fd935041e71b8d0b1eb69"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::Listener::EventType" ref="a293c4ee9306fd935041e71b8d0b1eb69" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a293c4ee9306fd935041e71b8d0b1eb69">gameplay::PhysicsRigidBody::Listener::EventType</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The type of collision event. </p>
+<dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a293c4ee9306fd935041e71b8d0b1eb69a163df93846cd17d01a28b88f28a7648e"></a><!-- doxytag: member="COLLIDING" ref="a293c4ee9306fd935041e71b8d0b1eb69a163df93846cd17d01a28b88f28a7648e" args="" -->COLLIDING</em>&nbsp;</td><td>
+<p>Event fired when the two rigid bodies start colliding. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a293c4ee9306fd935041e71b8d0b1eb69a5e6da32229d9ea2a222efc786791681c"></a><!-- doxytag: member="NOT_COLLIDING" ref="a293c4ee9306fd935041e71b8d0b1eb69a5e6da32229d9ea2a222efc786791681c" args="" -->NOT_COLLIDING</em>&nbsp;</td><td>
+<p>Event fired when the two rigid bodies no longer collide. </p>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+</div>
+</div>
+<hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a62c06cda0c8a0437a7425dede9241e73"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::Listener::~Listener" ref="a62c06cda0c8a0437a7425dede9241e73" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -148,71 +169,19 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="ae89581990e161bed36b20107915b51e0"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::Listener::addSingleResult" ref="ae89581990e161bed36b20107915b51e0" args="(btManifoldPoint &amp;cp, const btCollisionObject *a, int partIdA, int indexA, const btCollisionObject *b, int partIdB, int indexB)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">btScalar gameplay::PhysicsRigidBody::Listener::addSingleResult </td>
-          <td>(</td>
-          <td class="paramtype">btManifoldPoint &amp;&#160;</td>
-          <td class="paramname"><em>cp</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const btCollisionObject *&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>partIdA</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>indexA</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const btCollisionObject *&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>partIdB</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>indexB</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Internal function used for Bullet integration (do not use or override). </p>
-
-</div>
-</div>
-<a class="anchor" id="a493789ed1e119192bd66d879779f7d75"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::Listener::collisionEvent" ref="a493789ed1e119192bd66d879779f7d75" args="(const CollisionPair &amp;collisionPair, const Vector3 &amp;contactPoint)=0" -->
+<a class="anchor" id="aeb3e2461a70cd9fe33bcad3625058443"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::Listener::collisionEvent" ref="aeb3e2461a70cd9fe33bcad3625058443" args="(EventType type, const CollisionPair &amp;collisionPair, const Vector3 &amp;contactPointA=Vector3(), const Vector3 &amp;contactPointB=Vector3())=0" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">virtual void gameplay::PhysicsRigidBody::Listener::collisionEvent </td>
           <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html#a293c4ee9306fd935041e71b8d0b1eb69">EventType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_collision_pair.html">CollisionPair</a> &amp;&#160;</td>
           <td class="paramname"><em>collisionPair</em>, </td>
         </tr>
@@ -220,7 +189,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
-          <td class="paramname"><em>contactPoint</em>&#160;</td>
+          <td class="paramname"><em>contactPointA</em> = <code><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>contactPointB</em> = <code><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -230,11 +205,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b
       </table>
 </div>
 <div class="memdoc">
-<p>Handles when a collision occurs for the rigid body where this listener is registered.</p>
+<p>Handles when a collision starts or stops occurring for the rigid body where this listener is registered.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
+    <tr><td class="paramname">type</td><td>The type of collision event. </td></tr>
     <tr><td class="paramname">collisionPair</td><td>The two rigid bodies involved in the collision. </td></tr>
-    <tr><td class="paramname">contactPoint</td><td>The point (in world space) where the collision occurred. </td></tr>
+    <tr><td class="paramname">contactPointA</td><td>The contact point with the first rigid body (in world space). </td></tr>
+    <tr><td class="paramname">contactPointB</td><td>The contact point with the second rigid body (in world space). </td></tr>
   </table>
   </dd>
 </dl>
@@ -249,7 +226,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_physics_rigid_body_1_1_listener.html">Listener</a>      </li>
 <!-- window showing the filter options -->
@@ -257,7 +234,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -267,7 +244,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:21 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:06:00 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
