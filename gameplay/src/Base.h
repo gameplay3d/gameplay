@@ -151,10 +151,12 @@ extern void printError(const char* format, ...);
 #define M_1_PI                      0.31830988618379067154
 #endif
 
-inline float round(float r)
-{
-    return (r > 0.0f) ? floor(r + 0.5f) : ceil(r - 0.5f);
-}
+#ifdef WIN32
+    inline float round(float r)
+    {
+        return (r > 0.0f) ? floor(r + 0.5f) : ceil(r - 0.5f);
+    }
+#endif
 
 // NOMINMAX makes sure that windef.h doesn't add macros min and max
 #ifdef WIN32
