@@ -18,7 +18,7 @@ public:
     ~Slider();
 
     static Slider* create(Theme::Style* style, Properties* properties);
-    static Slider* create(const char* id, float min, float max, float default = 0.0f, float step = 1.0f);
+    static Slider* create(const char* id, float min, float max, float defaultPosition = 0.0f, float step = 1.0f);
     static Slider* getSlider(const char* id);
 
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
