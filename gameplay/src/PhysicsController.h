@@ -173,7 +173,7 @@ public:
      * 
      * @return The gravity vector.
      */
-    const Vector3& getGravity(const Vector3& gravity) const;
+    const Vector3& getGravity() const;
 
     /**
      * Sets the gravity vector for the simulated physics world.

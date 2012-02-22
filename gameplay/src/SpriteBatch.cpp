@@ -251,8 +251,8 @@ void SpriteBatch::draw(const Vector3& position, const Vector3& right, const Vect
 {
     // Calculate the vertex positions.
     Vector3 p[4];
-    p[0] = position - 0.5f * width * right;
-    p[1] = position + 0.5f * width * right;
+    p[0] = position - 0.5f * width * right - 0.5f * height * forward;
+    p[1] = position + 0.5f * width * right - 0.5f * height * forward;
     p[2] = p[0] + height * forward;
     p[3] = p[1] + height * forward;
 
