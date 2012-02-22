@@ -22,8 +22,9 @@ namespace gameplay
         return _id.c_str();
     }
 
-    const Rectangle& Control::getBounds(bool includePadding) const
+    const Rectangle Control::getBounds(bool includePadding) const
     {
+        // TODO
         return Rectangle();
     }
 

@@ -331,8 +331,8 @@ public:
         Style(const Style& style);
         
         std::string _id;
-        Padding _padding;
         Margin _margin;
+        Padding _padding;
         Overlay* _overlays[MAX_OVERLAYS];
     };
 

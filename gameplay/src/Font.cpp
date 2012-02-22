@@ -1245,7 +1245,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
             return charIndex;
         }
 
-        if (destIndex == charIndex ||
+        if (destIndex == (int)charIndex ||
             (destIndex == -1 &&
              inLocation.x >= xPos && inLocation.x < floor(xPos + ((float)size*0.125f)) &&
              inLocation.y >= yPos && inLocation.y < yPos + size))
@@ -1318,7 +1318,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
                 }
 
                 // Check against inLocation.
-                if (destIndex == charIndex ||
+                if (destIndex == (int)charIndex ||
                     (destIndex == -1 &&
                     inLocation.x >= xPos && inLocation.x < floor(xPos + g.width*scale + ((float)size*0.125f)) &&
                     inLocation.y >= yPos && inLocation.y < yPos + size))
@@ -1469,7 +1469,7 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
         if ((stopAtPosition &&
             stopAtPosition->x >= *xPos && stopAtPosition->x < floor(*xPos + ((float)size*0.5f)) &&
             stopAtPosition->y >= *yPos && stopAtPosition->y < *yPos + size) ||
-            (currentIndex >= 0 && destIndex >= 0 && currentIndex + *lineLength == destIndex))
+            (currentIndex >= 0 && destIndex >= 0 && currentIndex + (int)*lineLength == destIndex))
         {
             // Success + stopAtPosition was reached.
             return 2;

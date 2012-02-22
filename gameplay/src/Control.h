@@ -33,7 +33,7 @@ public:
      * Can optionally include the Control's padding.
      * Query getPosition() and getSize() to learn the bounds without border or padding.
      */
-    const Rectangle& getBounds(bool includePadding) const;
+    const Rectangle getBounds(bool includePadding) const;
 
     /**
      * Set the position of this Control relative to its parent Container.
