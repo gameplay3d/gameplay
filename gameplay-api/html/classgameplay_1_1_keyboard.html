@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -110,7 +109,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">KeyEvent</a> { <b>KEY_PRESS</b>, 
-<b>KEY_RELEASE</b>
+<b>KEY_RELEASE</b>, 
+<b>KEY_CHAR</b>
  }</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_keyboard.html#a4e04e50db898d22f57e2a6de766ff81b">Key</a> { <br/>
 &#160;&#160;<b>KEY_NONE</b> =  0, 
@@ -128,17 +128,12 @@ Public Types</h2></td></tr>
 <b>KEY_RETURN</b> =  0x000D, 
 <b>KEY_CAPS_LOCK</b> =  0x00E5, 
 <br/>
-&#160;&#160;<b>KEY_LEFT_SHIFT</b> =  0x00E1, 
-<b>KEY_RIGHT_SHIFT</b> =  0x00E2, 
-<b>KEY_LEFT_CTRL</b> =  0x00E3, 
-<b>KEY_RIGHT_CTRL</b> =  0x00E4, 
-<br/>
-&#160;&#160;<b>KEY_LEFT_ALT</b> =  0x00E9, 
-<b>KEY_RIGHT_ALT</b> =  0x00EA, 
+&#160;&#160;<b>KEY_SHIFT</b> =  0x00E1, 
+<b>KEY_CTRL</b> =  0x00E3, 
+<b>KEY_ALT</b> =  0x00E9, 
 <b>KEY_MENU</b> =  0x1067, 
-<b>KEY_LEFT_HYPER</b> =  0x10ED, 
 <br/>
-&#160;&#160;<b>KEY_RIGHT_HYPER</b> =  0x10EE, 
+&#160;&#160;<b>KEY_HYPER</b> =  0x10ED, 
 <b>KEY_INSERT</b> =  0x1063, 
 <b>KEY_HOME</b> =  0x1050, 
 <b>KEY_PG_UP</b> =  0x1055, 
@@ -188,14 +183,14 @@ Public Types</h2></td></tr>
 <b>KEY_F11</b> =  0x00C8, 
 <b>KEY_F12</b> =  0x00C9, 
 <br/>
-&#160;&#160;<b>KEY_CIRCUMFLEX</b> =  0x005E, 
-<b>KEY_SPACE</b> =  ' ', 
+&#160;&#160;<b>KEY_SPACE</b> =  ' ', 
 <b>KEY_EXCLAM</b> =  '!', 
 <b>KEY_QUOTE</b> =  '"', 
+<b>KEY_NUMBER</b> =  '#', 
 <br/>
-&#160;&#160;<b>KEY_NUMBER</b> =  '#', 
-<b>KEY_DOLLAR</b> =  '$', 
+&#160;&#160;<b>KEY_DOLLAR</b> =  '$', 
 <b>KEY_PERCENT</b> =  '%', 
+<b>KEY_CIRCUMFLEX</b> =  '^', 
 <b>KEY_AMPERSAND</b> =  '&amp;', 
 <br/>
 &#160;&#160;<b>KEY_APOSTROPHE</b> =  '\'', 
@@ -306,11 +301,12 @@ Public Types</h2></td></tr>
 &#160;&#160;<b>KEY_BAR</b> =  '|', 
 <b>KEY_RIGHT_BRACE</b> =  '}', 
 <b>KEY_TILDE</b> =  '~', 
-<b>KEY_EURO</b>, 
+<b>KEY_EURO</b> =  0x20AC, 
 <br/>
-&#160;&#160;<b>KEY_POUND</b>, 
-<b>KEY_YEN</b>, 
-<b>KEY_MIDDLE_DOT</b>
+&#160;&#160;<b>KEY_POUND</b> =  0x00A3, 
+<b>KEY_YEN</b> =  0x00A5, 
+<b>KEY_MIDDLE_DOT</b> =  0x0095, 
+<b>KEY_SEARCH</b> =  0xFFAA
 <br/>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
@@ -356,14 +352,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Platform</b></td></t
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_keyboard.html">Keyboard</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -373,7 +369,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Platform</b></td></t
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:20 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:05:59 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

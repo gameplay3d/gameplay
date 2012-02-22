@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -103,160 +102,166 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00005"></a>00005 <span class="preprocessor">#include &quot;Camera.h&quot;</span>
 <a name="l00006"></a>00006 <span class="preprocessor">#include &quot;Light.h&quot;</span>
 <a name="l00007"></a>00007 <span class="preprocessor">#include &quot;Model.h&quot;</span>
-<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;AudioSource.h&quot;</span>
-<a name="l00009"></a>00009 <span class="preprocessor">#include &quot;ParticleEmitter.h&quot;</span>
-<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;PhysicsRigidBody.h&quot;</span>
-<a name="l00011"></a>00011 <span class="preprocessor">#include &quot;BoundingBox.h&quot;</span>
-<a name="l00012"></a>00012 
-<a name="l00013"></a>00013 <span class="keyword">namespace </span>gameplay
-<a name="l00014"></a>00014 {
-<a name="l00015"></a>00015 
-<a name="l00016"></a>00016 <span class="keyword">class </span>Package;
-<a name="l00017"></a>00017 <span class="keyword">class </span>Scene;
-<a name="l00018"></a>00018 
-<a name="l00022"></a><a class="code" href="classgameplay_1_1_node.html">00022</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_node.html">Node</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_transform.html">Transform</a>, <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_ref.html">Ref</a>
-<a name="l00023"></a>00023 {
-<a name="l00024"></a>00024     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_scene.html">Scene</a>;
-<a name="l00025"></a>00025     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_package.html">Package</a>;
-<a name="l00026"></a>00026     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>;
-<a name="l00027"></a>00027 
-<a name="l00028"></a>00028 <span class="keyword">public</span>:
+<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;Form.h&quot;</span>
+<a name="l00009"></a>00009 <span class="preprocessor">#include &quot;AudioSource.h&quot;</span>
+<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;ParticleEmitter.h&quot;</span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &quot;PhysicsRigidBody.h&quot;</span>
+<a name="l00012"></a>00012 <span class="preprocessor">#include &quot;BoundingBox.h&quot;</span>
+<a name="l00013"></a>00013 
+<a name="l00014"></a>00014 <span class="keyword">namespace </span>gameplay
+<a name="l00015"></a>00015 {
+<a name="l00016"></a>00016 
+<a name="l00017"></a>00017 <span class="keyword">class </span>Package;
+<a name="l00018"></a>00018 <span class="keyword">class </span>Scene;
+<a name="l00019"></a>00019 <span class="keyword">class </span>Form;
+<a name="l00020"></a>00020 
+<a name="l00024"></a><a class="code" href="classgameplay_1_1_node.html">00024</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_node.html">Node</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_transform.html">Transform</a>, <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_ref.html">Ref</a>
+<a name="l00025"></a>00025 {
+<a name="l00026"></a>00026     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_scene.html">Scene</a>;
+<a name="l00027"></a>00027     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_package.html">Package</a>;
+<a name="l00028"></a>00028     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>;
 <a name="l00029"></a>00029 
-<a name="l00033"></a><a class="code" href="classgameplay_1_1_node.html#aeda54e8fa43853b7795b53d99aab08b4">00033</a>     <span class="keyword">enum</span> <a class="code" href="classgameplay_1_1_node.html#aeda54e8fa43853b7795b53d99aab08b4">Type</a>
-<a name="l00034"></a>00034     {
-<a name="l00035"></a>00035         NODE = 1,
-<a name="l00036"></a>00036         JOINT = 2
-<a name="l00037"></a>00037     };
-<a name="l00038"></a>00038 
-<a name="l00044"></a>00044     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a3af33f591f4dd25cf2e08f917bcef0bb">create</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span> = NULL);
-<a name="l00045"></a>00045 
-<a name="l00051"></a>00051     <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classgameplay_1_1_node.html#a46560582234f547970a18ae691fd44fc">getId</a>() <span class="keyword">const</span>;
-<a name="l00052"></a>00052 
-<a name="l00058"></a>00058     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#ae211acf4c2b9c326d33dd679d8a2612c">setId</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>);
-<a name="l00059"></a>00059 
-<a name="l00063"></a>00063     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_node.html#aeda54e8fa43853b7795b53d99aab08b4">Node::Type</a> <a class="code" href="classgameplay_1_1_node.html#a87f2240f4a949e0ddf686f491c05c91d">getType</a>() <span class="keyword">const</span>;
-<a name="l00064"></a>00064 
-<a name="l00070"></a>00070     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a4b1fb32157481cc1a762a724851989a9">addChild</a>(<a class="code" href="classgameplay_1_1_node.html">Node</a>* child);
-<a name="l00071"></a>00071 
-<a name="l00077"></a>00077     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a51e8e007067ad815eb1e25ab1ee3870f">removeChild</a>(<a class="code" href="classgameplay_1_1_node.html">Node</a>* child);
-<a name="l00078"></a>00078 
-<a name="l00082"></a>00082     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#ac2cb7773ec8dcfe1aaa51168b7dca191">removeAllChildren</a>();
-<a name="l00083"></a>00083 
-<a name="l00089"></a>00089     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a477dbf63517afee08b1f38f00f7e92f4">getFirstChild</a>() <span class="keyword">const</span>;
-<a name="l00090"></a>00090 
-<a name="l00096"></a>00096     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a6cd971ffc848362a6fb8de305934beec">getNextSibling</a>() <span class="keyword">const</span>;
-<a name="l00097"></a>00097 
-<a name="l00103"></a>00103     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a343b3f421870a5a997fa88ef847c558d">getPreviousSibling</a>() <span class="keyword">const</span>;
-<a name="l00104"></a>00104 
-<a name="l00110"></a>00110     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a6c666d83684b15abb63565c1bf969ef9">getParent</a>() <span class="keyword">const</span>;
-<a name="l00111"></a>00111 
-<a name="l00117"></a>00117     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_node.html#a626c00f77bee1120374694edf4d5f6ab">getChildCount</a>() <span class="keyword">const</span>;
-<a name="l00118"></a>00118 
-<a name="l00133"></a>00133     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a0f15381ed7a448f5ca1e7433a07a645c">findNode</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <span class="keywordtype">bool</span> recursive = <span class="keyword">true</span>, <span class="keywordtype">bool</span> exactMatch = <span class="keyword">true</span>);
-<a name="l00134"></a>00134 
-<a name="l00146"></a>00146     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_node.html#ada059d9da4693a29d3a35daf8f9e51f0">findNodes</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, std::vector&lt;Node*&gt;&amp; nodes, <span class="keywordtype">bool</span> recursive = <span class="keyword">true</span>, <span class="keywordtype">bool</span> exactMatch = <span class="keyword">true</span>);
-<a name="l00147"></a>00147 
-<a name="l00153"></a>00153     <a class="code" href="classgameplay_1_1_scene.html">Scene</a>* <a class="code" href="classgameplay_1_1_node.html#a5e9f041efc65034abc341431299f63ab">getScene</a>() <span class="keyword">const</span>;
-<a name="l00154"></a>00154 
-<a name="l00158"></a>00158     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a52dbe8d9d6858f5cc95125e9e346497c">getRootNode</a>() <span class="keyword">const</span>;
-<a name="l00159"></a>00159 
-<a name="l00165"></a>00165     <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#ac5a80241a7ead3f80a3184c683cc644a">getWorldMatrix</a>() <span class="keyword">const</span>;
-<a name="l00166"></a>00166 
-<a name="l00172"></a>00172     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#a8009fcd6e1a4ebcae7ff6a16ca4d3205">getWorldViewMatrix</a>() <span class="keyword">const</span>;
-<a name="l00173"></a>00173 
-<a name="l00181"></a>00181     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#ab41ebdcc12616a93079fedd50d167879">getInverseTransposeWorldViewMatrix</a>() <span class="keyword">const</span>;
-<a name="l00182"></a>00182 
-<a name="l00189"></a>00189     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#a425203605e6aba0838fee6057623cd03">getViewMatrix</a>() <span class="keyword">const</span>;
-<a name="l00190"></a>00190 
-<a name="l00197"></a>00197     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#ab396c23990679f45dcf5bd3477d53f8d">getInverseViewMatrix</a>() <span class="keyword">const</span>;
-<a name="l00198"></a>00198 
-<a name="l00205"></a>00205     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#aa5534d70a603883431a0a5f692d6d383">getProjectionMatrix</a>() <span class="keyword">const</span>;
-<a name="l00206"></a>00206 
-<a name="l00213"></a>00213     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#a1c19bce9f534b65316b5b315e91c13d4">getViewProjectionMatrix</a>() <span class="keyword">const</span>;
-<a name="l00214"></a>00214 
-<a name="l00221"></a>00221     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#a50f1144b114d222a9ad5bea75cd3428b">getInverseViewProjectionMatrix</a>() <span class="keyword">const</span>;
-<a name="l00222"></a>00222 
-<a name="l00229"></a>00229     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#a4e69a0886698b08c91f8c4434b9c172f">getWorldViewProjectionMatrix</a>() <span class="keyword">const</span>;
-<a name="l00230"></a>00230 
-<a name="l00236"></a>00236     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_node.html#aa77feca98ea5592e2e50d4d9577ef501">getTranslationWorld</a>() <span class="keyword">const</span>;
-<a name="l00237"></a>00237 
-<a name="l00243"></a>00243     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_node.html#abf99ba95086ef4c3b3e24cfda3b922c8">getTranslationView</a>() <span class="keyword">const</span>;
-<a name="l00244"></a>00244 
-<a name="l00248"></a>00248     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_node.html#a5703a1e0a4569290aa8d90a25ebf5771">getForwardVectorWorld</a>() <span class="keyword">const</span>;
-<a name="l00249"></a>00249 
-<a name="l00253"></a>00253     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_node.html#af45441b2780e2f9ffc46f8da5bfc72ed">getForwardVectorView</a>() <span class="keyword">const</span>;
-<a name="l00254"></a>00254 
-<a name="l00260"></a>00260     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_node.html#aef6bfae445794ad6c6b401cd36a2ac1d">getActiveCameraTranslationWorld</a>() <span class="keyword">const</span>;
-<a name="l00261"></a>00261 
-<a name="l00267"></a>00267     <a class="code" href="classgameplay_1_1_camera.html">Camera</a>* <a class="code" href="classgameplay_1_1_node.html#a1d08bcf6f919dc10dc1bd53779f21b9b">getCamera</a>() <span class="keyword">const</span>;
-<a name="l00268"></a>00268 
-<a name="l00277"></a>00277     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#aa92e79f39c36188912c7288356cbb340">setCamera</a>(<a class="code" href="classgameplay_1_1_camera.html">Camera</a>* camera);
-<a name="l00278"></a>00278 
-<a name="l00284"></a>00284     <a class="code" href="classgameplay_1_1_light.html">Light</a>* <a class="code" href="classgameplay_1_1_node.html#a0e778ccc1ecc36978cf43342435cde9d">getLight</a>() <span class="keyword">const</span>;
-<a name="l00285"></a>00285 
-<a name="l00294"></a>00294     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#aaf77efed0146acb8fad73497916818f8">setLight</a>(<a class="code" href="classgameplay_1_1_light.html">Light</a>* light);
-<a name="l00295"></a>00295 
-<a name="l00301"></a>00301     <a class="code" href="classgameplay_1_1_model.html">Model</a>* <a class="code" href="classgameplay_1_1_node.html#ac1fc666ef833732493e4b6f52e837096">getModel</a>() <span class="keyword">const</span>;
-<a name="l00302"></a>00302 
-<a name="l00311"></a>00311     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#aa3dc1fedce81d47d06a81a000ea6b1a7">setModel</a>(<a class="code" href="classgameplay_1_1_model.html">Model</a>* model);
-<a name="l00312"></a>00312 
-<a name="l00318"></a>00318     <a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>* <a class="code" href="classgameplay_1_1_node.html#abbd78c961e780f30baecf8a264ad8b34">getAudioSource</a>() <span class="keyword">const</span>;
-<a name="l00319"></a>00319 
-<a name="l00328"></a>00328     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a0eef42b73a98454126679bf259e0831e">setAudioSource</a>(<a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>* audio);
-<a name="l00329"></a>00329 
-<a name="l00335"></a>00335     <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* <a class="code" href="classgameplay_1_1_node.html#a0841e080bc9a013d587c7f03db54a867">getParticleEmitter</a>() <span class="keyword">const</span>;
-<a name="l00336"></a>00336 
-<a name="l00345"></a>00345     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a3d723fca56ded58e0b4553662bf1d31a">setParticleEmitter</a>(<a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* emitter);
-<a name="l00346"></a>00346 
-<a name="l00352"></a>00352     <a class="code" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a>* <a class="code" href="classgameplay_1_1_node.html#ad00b33eac50808e73253790dfa0aaebc">getPhysicsRigidBody</a>() <span class="keyword">const</span>;
-<a name="l00353"></a>00353 
-<a name="l00369"></a>00369     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#aade8d1749321b62d6c3bf43e6f383994">setPhysicsRigidBody</a>(<a class="code" href="classgameplay_1_1_physics_rigid_body.html#acb0eec013fec5ce91d59a91bf3fd1497">PhysicsRigidBody::Type</a> type, <span class="keywordtype">float</span> mass = 0.0f, <span class="keywordtype">float</span> friction = 0.5f,
-<a name="l00370"></a>00370         <span class="keywordtype">float</span> restitution = 0.0f, <span class="keywordtype">float</span> linearDamping = 0.0f, <span class="keywordtype">float</span> angularDamping = 0.0f);
-<a name="l00371"></a>00371 
-<a name="l00377"></a>00377     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#aade8d1749321b62d6c3bf43e6f383994">setPhysicsRigidBody</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* filePath);
-<a name="l00378"></a>00378 
-<a name="l00384"></a>00384     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#aade8d1749321b62d6c3bf43e6f383994">setPhysicsRigidBody</a>(<a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties);
-<a name="l00385"></a>00385 
-<a name="l00405"></a>00405     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a>&amp; <a class="code" href="classgameplay_1_1_node.html#a1c7b0cbdd4d306c77dd56d6481335393">getBoundingSphere</a>() <span class="keyword">const</span>;
-<a name="l00406"></a>00406 
-<a name="l00407"></a>00407 <span class="keyword">protected</span>:
-<a name="l00408"></a>00408 
-<a name="l00412"></a>00412     <a class="code" href="classgameplay_1_1_node.html#af49c229bf5ef773d070d625dd7393442">Node</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>);
+<a name="l00030"></a>00030 <span class="keyword">public</span>:
+<a name="l00031"></a>00031 
+<a name="l00035"></a><a class="code" href="classgameplay_1_1_node.html#aeda54e8fa43853b7795b53d99aab08b4">00035</a>     <span class="keyword">enum</span> <a class="code" href="classgameplay_1_1_node.html#aeda54e8fa43853b7795b53d99aab08b4">Type</a>
+<a name="l00036"></a>00036     {
+<a name="l00037"></a>00037         NODE = 1,
+<a name="l00038"></a>00038         JOINT = 2
+<a name="l00039"></a>00039     };
+<a name="l00040"></a>00040 
+<a name="l00046"></a>00046     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a3af33f591f4dd25cf2e08f917bcef0bb">create</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span> = NULL);
+<a name="l00047"></a>00047 
+<a name="l00053"></a>00053     <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classgameplay_1_1_node.html#a46560582234f547970a18ae691fd44fc">getId</a>() <span class="keyword">const</span>;
+<a name="l00054"></a>00054 
+<a name="l00060"></a>00060     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#ae211acf4c2b9c326d33dd679d8a2612c">setId</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>);
+<a name="l00061"></a>00061 
+<a name="l00065"></a>00065     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_node.html#aeda54e8fa43853b7795b53d99aab08b4">Node::Type</a> <a class="code" href="classgameplay_1_1_node.html#a87f2240f4a949e0ddf686f491c05c91d">getType</a>() <span class="keyword">const</span>;
+<a name="l00066"></a>00066 
+<a name="l00072"></a>00072     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a4b1fb32157481cc1a762a724851989a9">addChild</a>(<a class="code" href="classgameplay_1_1_node.html">Node</a>* child);
+<a name="l00073"></a>00073 
+<a name="l00079"></a>00079     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a51e8e007067ad815eb1e25ab1ee3870f">removeChild</a>(<a class="code" href="classgameplay_1_1_node.html">Node</a>* child);
+<a name="l00080"></a>00080 
+<a name="l00084"></a>00084     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#ac2cb7773ec8dcfe1aaa51168b7dca191">removeAllChildren</a>();
+<a name="l00085"></a>00085 
+<a name="l00091"></a>00091     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a477dbf63517afee08b1f38f00f7e92f4">getFirstChild</a>() <span class="keyword">const</span>;
+<a name="l00092"></a>00092 
+<a name="l00098"></a>00098     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a6cd971ffc848362a6fb8de305934beec">getNextSibling</a>() <span class="keyword">const</span>;
+<a name="l00099"></a>00099 
+<a name="l00105"></a>00105     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a343b3f421870a5a997fa88ef847c558d">getPreviousSibling</a>() <span class="keyword">const</span>;
+<a name="l00106"></a>00106 
+<a name="l00112"></a>00112     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a6c666d83684b15abb63565c1bf969ef9">getParent</a>() <span class="keyword">const</span>;
+<a name="l00113"></a>00113 
+<a name="l00119"></a>00119     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_node.html#a626c00f77bee1120374694edf4d5f6ab">getChildCount</a>() <span class="keyword">const</span>;
+<a name="l00120"></a>00120 
+<a name="l00135"></a>00135     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a0f15381ed7a448f5ca1e7433a07a645c">findNode</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <span class="keywordtype">bool</span> recursive = <span class="keyword">true</span>, <span class="keywordtype">bool</span> exactMatch = <span class="keyword">true</span>);
+<a name="l00136"></a>00136 
+<a name="l00148"></a>00148     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_node.html#ada059d9da4693a29d3a35daf8f9e51f0">findNodes</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, std::vector&lt;Node*&gt;&amp; nodes, <span class="keywordtype">bool</span> recursive = <span class="keyword">true</span>, <span class="keywordtype">bool</span> exactMatch = <span class="keyword">true</span>);
+<a name="l00149"></a>00149 
+<a name="l00155"></a>00155     <a class="code" href="classgameplay_1_1_scene.html">Scene</a>* <a class="code" href="classgameplay_1_1_node.html#a5e9f041efc65034abc341431299f63ab">getScene</a>() <span class="keyword">const</span>;
+<a name="l00156"></a>00156 
+<a name="l00160"></a>00160     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node.html#a52dbe8d9d6858f5cc95125e9e346497c">getRootNode</a>() <span class="keyword">const</span>;
+<a name="l00161"></a>00161 
+<a name="l00167"></a>00167     <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#ac5a80241a7ead3f80a3184c683cc644a">getWorldMatrix</a>() <span class="keyword">const</span>;
+<a name="l00168"></a>00168 
+<a name="l00174"></a>00174     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#a8009fcd6e1a4ebcae7ff6a16ca4d3205">getWorldViewMatrix</a>() <span class="keyword">const</span>;
+<a name="l00175"></a>00175 
+<a name="l00183"></a>00183     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#ab41ebdcc12616a93079fedd50d167879">getInverseTransposeWorldViewMatrix</a>() <span class="keyword">const</span>;
+<a name="l00184"></a>00184 
+<a name="l00191"></a>00191     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#a425203605e6aba0838fee6057623cd03">getViewMatrix</a>() <span class="keyword">const</span>;
+<a name="l00192"></a>00192 
+<a name="l00199"></a>00199     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#ab396c23990679f45dcf5bd3477d53f8d">getInverseViewMatrix</a>() <span class="keyword">const</span>;
+<a name="l00200"></a>00200 
+<a name="l00207"></a>00207     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#aa5534d70a603883431a0a5f692d6d383">getProjectionMatrix</a>() <span class="keyword">const</span>;
+<a name="l00208"></a>00208 
+<a name="l00215"></a>00215     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#a1c19bce9f534b65316b5b315e91c13d4">getViewProjectionMatrix</a>() <span class="keyword">const</span>;
+<a name="l00216"></a>00216 
+<a name="l00223"></a>00223     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#a50f1144b114d222a9ad5bea75cd3428b">getInverseViewProjectionMatrix</a>() <span class="keyword">const</span>;
+<a name="l00224"></a>00224 
+<a name="l00231"></a>00231     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="code" href="classgameplay_1_1_node.html#a4e69a0886698b08c91f8c4434b9c172f">getWorldViewProjectionMatrix</a>() <span class="keyword">const</span>;
+<a name="l00232"></a>00232 
+<a name="l00238"></a>00238     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_node.html#aa77feca98ea5592e2e50d4d9577ef501">getTranslationWorld</a>() <span class="keyword">const</span>;
+<a name="l00239"></a>00239 
+<a name="l00245"></a>00245     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_node.html#abf99ba95086ef4c3b3e24cfda3b922c8">getTranslationView</a>() <span class="keyword">const</span>;
+<a name="l00246"></a>00246 
+<a name="l00250"></a>00250     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_node.html#a5703a1e0a4569290aa8d90a25ebf5771">getForwardVectorWorld</a>() <span class="keyword">const</span>;
+<a name="l00251"></a>00251 
+<a name="l00255"></a>00255     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_node.html#af45441b2780e2f9ffc46f8da5bfc72ed">getForwardVectorView</a>() <span class="keyword">const</span>;
+<a name="l00256"></a>00256 
+<a name="l00262"></a>00262     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> <a class="code" href="classgameplay_1_1_node.html#aef6bfae445794ad6c6b401cd36a2ac1d">getActiveCameraTranslationWorld</a>() <span class="keyword">const</span>;
+<a name="l00263"></a>00263 
+<a name="l00269"></a>00269     <a class="code" href="classgameplay_1_1_camera.html">Camera</a>* <a class="code" href="classgameplay_1_1_node.html#a1d08bcf6f919dc10dc1bd53779f21b9b">getCamera</a>() <span class="keyword">const</span>;
+<a name="l00270"></a>00270 
+<a name="l00279"></a>00279     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#aa92e79f39c36188912c7288356cbb340">setCamera</a>(<a class="code" href="classgameplay_1_1_camera.html">Camera</a>* camera);
+<a name="l00280"></a>00280 
+<a name="l00286"></a>00286     <a class="code" href="classgameplay_1_1_light.html">Light</a>* <a class="code" href="classgameplay_1_1_node.html#a0e778ccc1ecc36978cf43342435cde9d">getLight</a>() <span class="keyword">const</span>;
+<a name="l00287"></a>00287 
+<a name="l00296"></a>00296     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#aaf77efed0146acb8fad73497916818f8">setLight</a>(<a class="code" href="classgameplay_1_1_light.html">Light</a>* light);
+<a name="l00297"></a>00297 
+<a name="l00303"></a>00303     <a class="code" href="classgameplay_1_1_model.html">Model</a>* <a class="code" href="classgameplay_1_1_node.html#ac1fc666ef833732493e4b6f52e837096">getModel</a>() <span class="keyword">const</span>;
+<a name="l00304"></a>00304 
+<a name="l00313"></a>00313     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#aa3dc1fedce81d47d06a81a000ea6b1a7">setModel</a>(<a class="code" href="classgameplay_1_1_model.html">Model</a>* model);
+<a name="l00314"></a>00314 
+<a name="l00315"></a>00315     <a class="code" href="classgameplay_1_1_form.html">Form</a>* getForm() <span class="keyword">const</span>;
+<a name="l00316"></a>00316     <span class="keywordtype">void</span> setForm(<a class="code" href="classgameplay_1_1_form.html">Form</a>* form);
+<a name="l00317"></a>00317 
+<a name="l00323"></a>00323     <a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>* <a class="code" href="classgameplay_1_1_node.html#abbd78c961e780f30baecf8a264ad8b34">getAudioSource</a>() <span class="keyword">const</span>;
+<a name="l00324"></a>00324 
+<a name="l00333"></a>00333     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a0eef42b73a98454126679bf259e0831e">setAudioSource</a>(<a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>* audio);
+<a name="l00334"></a>00334 
+<a name="l00340"></a>00340     <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* <a class="code" href="classgameplay_1_1_node.html#a0841e080bc9a013d587c7f03db54a867">getParticleEmitter</a>() <span class="keyword">const</span>;
+<a name="l00341"></a>00341 
+<a name="l00350"></a>00350     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a3d723fca56ded58e0b4553662bf1d31a">setParticleEmitter</a>(<a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* emitter);
+<a name="l00351"></a>00351 
+<a name="l00357"></a>00357     <a class="code" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a>* <a class="code" href="classgameplay_1_1_node.html#a21230603c8321e76df2b9bc8a9cc8375">getRigidBody</a>() <span class="keyword">const</span>;
+<a name="l00358"></a>00358 
+<a name="l00374"></a>00374     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a0a4412d23d394037803d4219436bb0d1">setRigidBody</a>(<a class="code" href="classgameplay_1_1_physics_rigid_body.html#acb0eec013fec5ce91d59a91bf3fd1497">PhysicsRigidBody::Type</a> type, <span class="keywordtype">float</span> mass = 0.0f, <span class="keywordtype">float</span> friction = 0.5f,
+<a name="l00375"></a>00375         <span class="keywordtype">float</span> restitution = 0.0f, <span class="keywordtype">float</span> linearDamping = 0.0f, <span class="keywordtype">float</span> angularDamping = 0.0f);
+<a name="l00376"></a>00376 
+<a name="l00382"></a>00382     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a0a4412d23d394037803d4219436bb0d1">setRigidBody</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* filePath);
+<a name="l00383"></a>00383 
+<a name="l00389"></a>00389     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a0a4412d23d394037803d4219436bb0d1">setRigidBody</a>(<a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties);
+<a name="l00390"></a>00390 
+<a name="l00410"></a>00410     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a>&amp; <a class="code" href="classgameplay_1_1_node.html#a1c7b0cbdd4d306c77dd56d6481335393">getBoundingSphere</a>() <span class="keyword">const</span>;
+<a name="l00411"></a>00411 
+<a name="l00412"></a>00412 <span class="keyword">protected</span>:
 <a name="l00413"></a>00413 
-<a name="l00417"></a>00417     <a class="code" href="classgameplay_1_1_node.html#af49c229bf5ef773d070d625dd7393442">Node</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_node.html">Node</a>&amp; copy);
+<a name="l00417"></a>00417     <a class="code" href="classgameplay_1_1_node.html#af49c229bf5ef773d070d625dd7393442">Node</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>);
 <a name="l00418"></a>00418 
-<a name="l00422"></a>00422     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_node.html#a5d836d1a078a17eb53396ce65b7d9e00">~Node</a>();
+<a name="l00422"></a>00422     <a class="code" href="classgameplay_1_1_node.html#af49c229bf5ef773d070d625dd7393442">Node</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_node.html">Node</a>&amp; copy);
 <a name="l00423"></a>00423 
-<a name="l00427"></a>00427     <span class="keywordtype">void</span> <span class="keyword">remove</span>();
+<a name="l00427"></a>00427     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_node.html#a5d836d1a078a17eb53396ce65b7d9e00">~Node</a>();
 <a name="l00428"></a>00428 
-<a name="l00432"></a>00432     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a7d9e0a5ff4b151d540ef2cddf0e1cb7e">transformChanged</a>();
+<a name="l00432"></a>00432     <span class="keywordtype">void</span> <span class="keyword">remove</span>();
 <a name="l00433"></a>00433 
-<a name="l00434"></a>00434     <span class="keywordtype">void</span> hierarchyChanged();
-<a name="l00435"></a>00435 
-<a name="l00439"></a>00439     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a320998fd768ae47558ba7ad77a60074a">setBoundsDirty</a>();
+<a name="l00437"></a>00437     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a7d9e0a5ff4b151d540ef2cddf0e1cb7e">transformChanged</a>();
+<a name="l00438"></a>00438 
+<a name="l00439"></a>00439     <span class="keywordtype">void</span> hierarchyChanged();
 <a name="l00440"></a>00440 
-<a name="l00441"></a>00441     <a class="code" href="classgameplay_1_1_scene.html">Scene</a>* _scene;
-<a name="l00442"></a>00442     std::string _id;
-<a name="l00443"></a>00443     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _firstChild;
-<a name="l00444"></a>00444     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _nextSibling;
-<a name="l00445"></a>00445     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _prevSibling;
-<a name="l00446"></a>00446     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _parent;
-<a name="l00447"></a>00447     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _childCount;
-<a name="l00448"></a>00448     <a class="code" href="classgameplay_1_1_camera.html">Camera</a>* _camera;
-<a name="l00449"></a>00449     <a class="code" href="classgameplay_1_1_light.html">Light</a>* _light;
-<a name="l00450"></a>00450     <a class="code" href="classgameplay_1_1_model.html">Model</a>* _model;
-<a name="l00451"></a>00451     <a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>* _audioSource;
-<a name="l00452"></a>00452     <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* _particleEmitter;
-<a name="l00453"></a>00453     <a class="code" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a>* _physicsRigidBody;
-<a name="l00454"></a>00454     <span class="keyword">mutable</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a> _world;
-<a name="l00455"></a>00455     <span class="keyword">mutable</span> <span class="keywordtype">int</span> _dirtyBits;
-<a name="l00456"></a>00456     <span class="keywordtype">bool</span> _notifyHierarchyChanged;
-<a name="l00457"></a>00457     <span class="keyword">mutable</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> _bounds;
-<a name="l00458"></a>00458 };
-<a name="l00459"></a>00459 
-<a name="l00460"></a>00460 }
-<a name="l00461"></a>00461 
-<a name="l00462"></a>00462 <span class="preprocessor">#endif</span>
+<a name="l00444"></a>00444     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node.html#a320998fd768ae47558ba7ad77a60074a">setBoundsDirty</a>();
+<a name="l00445"></a>00445 
+<a name="l00446"></a>00446     <a class="code" href="classgameplay_1_1_scene.html">Scene</a>* _scene;
+<a name="l00447"></a>00447     std::string _id;
+<a name="l00448"></a>00448     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _firstChild;
+<a name="l00449"></a>00449     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _nextSibling;
+<a name="l00450"></a>00450     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _prevSibling;
+<a name="l00451"></a>00451     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _parent;
+<a name="l00452"></a>00452     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _childCount;
+<a name="l00453"></a>00453     <a class="code" href="classgameplay_1_1_camera.html">Camera</a>* _camera;
+<a name="l00454"></a>00454     <a class="code" href="classgameplay_1_1_light.html">Light</a>* _light;
+<a name="l00455"></a>00455     <a class="code" href="classgameplay_1_1_model.html">Model</a>* _model;
+<a name="l00456"></a>00456     <a class="code" href="classgameplay_1_1_form.html">Form</a>* _form;
+<a name="l00457"></a>00457     <a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>* _audioSource;
+<a name="l00458"></a>00458     <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* _particleEmitter;
+<a name="l00459"></a>00459     <a class="code" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a>* _physicsRigidBody;
+<a name="l00460"></a>00460     <span class="keyword">mutable</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a> _world;
+<a name="l00461"></a>00461     <span class="keyword">mutable</span> <span class="keywordtype">int</span> _dirtyBits;
+<a name="l00462"></a>00462     <span class="keywordtype">bool</span> _notifyHierarchyChanged;
+<a name="l00463"></a>00463     <span class="keyword">mutable</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> _bounds;
+<a name="l00464"></a>00464 };
+<a name="l00465"></a>00465 
+<a name="l00466"></a>00466 }
+<a name="l00467"></a>00467 
+<a name="l00468"></a>00468 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -267,7 +272,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -277,7 +282,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:19 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:05:57 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

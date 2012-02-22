@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -153,8 +152,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00058"></a>00058         std::string _id;
 <a name="l00059"></a>00059     };
 <a name="l00060"></a>00060 
-<a name="l00061"></a>00061     <span class="keyword">static</span> <span class="keywordtype">void</span> addMeshRigidBodyData(std::string <span class="keywordtype">id</span>, <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>* mesh, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* vertexData, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> vertexByteCount);
-<a name="l00062"></a>00062     <span class="keyword">static</span> <span class="keywordtype">void</span> addMeshRigidBodyData(std::string <span class="keywordtype">id</span>, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* indexData, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> indexByteCount);
+<a name="l00061"></a>00061     <span class="keyword">static</span> <span class="keywordtype">void</span> addMeshRigidBodyData(std::string package, std::string <span class="keywordtype">id</span>, <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>* mesh, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* vertexData, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> vertexByteCount);
+<a name="l00062"></a>00062     <span class="keyword">static</span> <span class="keywordtype">void</span> addMeshRigidBodyData(std::string package, std::string <span class="keywordtype">id</span>, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* indexData, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> indexByteCount);
 <a name="l00063"></a>00063     <span class="keyword">static</span> <span class="keywordtype">void</span> addSceneAnimation(<span class="keyword">const</span> <span class="keywordtype">char</span>* animationID, <span class="keyword">const</span> <span class="keywordtype">char</span>* targetID, <span class="keyword">const</span> <span class="keywordtype">char</span>* url);
 <a name="l00064"></a>00064     <span class="keyword">static</span> <span class="keywordtype">void</span> addSceneNodeProperty(SceneNodeProperty::Type type, <span class="keyword">const</span> <span class="keywordtype">char</span>* nodeID, <span class="keyword">const</span> <span class="keywordtype">char</span>* url = NULL);
 <a name="l00065"></a>00065     <span class="keyword">static</span> <span class="keywordtype">void</span> applyNodeProperties(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_scene.html">Scene</a>* scene, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_properties.html">Properties</a>* sceneProperties);
@@ -188,11 +187,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00093"></a>00093 
 <a name="l00094"></a>00094     <span class="comment">// Stores the mesh data needed for triangle mesh rigid body support.</span>
 <a name="l00095"></a>00095     <span class="keyword">static</span> std::map&lt;std::string, MeshRigidBodyData&gt;* _meshRigidBodyData;
-<a name="l00096"></a>00096 };
-<a name="l00097"></a>00097 
-<a name="l00098"></a>00098 }
-<a name="l00099"></a>00099 
-<a name="l00100"></a>00100 <span class="preprocessor">#endif</span>
+<a name="l00096"></a>00096 
+<a name="l00097"></a>00097     <span class="comment">// The path of the main GPB for the scene being loaded.</span>
+<a name="l00098"></a>00098     <span class="keyword">static</span> std::string _path;
+<a name="l00099"></a>00099 };
+<a name="l00100"></a>00100 
+<a name="l00101"></a>00101 }
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -203,7 +205,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -213,7 +215,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:19 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:05:57 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

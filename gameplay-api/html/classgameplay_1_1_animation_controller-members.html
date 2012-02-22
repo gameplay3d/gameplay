@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -107,6 +106,8 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_a
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_controller.html#af8c170da016677c7fae7b09785057858">createAnimation</a>(const char *id, AnimationTarget *target, const char *animationFile)</td><td><a class="el" href="classgameplay_1_1_animation_controller.html">gameplay::AnimationController</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_controller.html#afe9607971679caaa67a8012aa5168cad">createAnimationFromBy</a>(const char *id, AnimationTarget *target, int propertyId, float *from, float *by, Curve::InterpolationType type, unsigned long duration)</td><td><a class="el" href="classgameplay_1_1_animation_controller.html">gameplay::AnimationController</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_controller.html#aa3c6882485399085d7276e7d62c9969a">createAnimationFromTo</a>(const char *id, AnimationTarget *target, int propertyId, float *from, float *to, Curve::InterpolationType type, unsigned long duration)</td><td><a class="el" href="classgameplay_1_1_animation_controller.html">gameplay::AnimationController</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_controller.html#a2baceb4ec07bb6980ea758d97dfe3d37">destroyAllAnimations</a>()</td><td><a class="el" href="classgameplay_1_1_animation_controller.html">gameplay::AnimationController</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_controller.html#ab93a70181657e128518c2ecddd1b9e80">destroyAnimation</a>(Animation *animation)</td><td><a class="el" href="classgameplay_1_1_animation_controller.html">gameplay::AnimationController</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>Game</b> (defined in <a class="el" href="classgameplay_1_1_animation_controller.html">gameplay::AnimationController</a>)</td><td><a class="el" href="classgameplay_1_1_animation_controller.html">gameplay::AnimationController</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_controller.html#a9f28490ed5db01bc5136918adbdbedbe">getAnimation</a>(const char *id) const </td><td><a class="el" href="classgameplay_1_1_animation_controller.html">gameplay::AnimationController</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>SceneLoader</b> (defined in <a class="el" href="classgameplay_1_1_animation_controller.html">gameplay::AnimationController</a>)</td><td><a class="el" href="classgameplay_1_1_animation_controller.html">gameplay::AnimationController</a></td><td><code> [friend]</code></td></tr>
@@ -120,7 +121,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_a
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -130,7 +131,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_a
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:20 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:05:58 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

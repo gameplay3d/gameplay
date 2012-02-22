@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -100,6 +99,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="contents">
 This is the complete list of members for <a class="el" href="classgameplay_1_1_physics_controller.html">gameplay::PhysicsController</a>, including all inherited members.<table>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_controller.html#a44243d5391f18bc002ed35a9dade2544">addSingleResult</a>(btManifoldPoint &amp;cp, const btCollisionObject *a, int partIdA, int indexA, const btCollisionObject *b, int partIdB, int indexB)</td><td><a class="el" href="classgameplay_1_1_physics_controller.html">gameplay::PhysicsController</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_controller.html#a9c9c7800807569809a677be38873170a">addStatusListener</a>(PhysicsController::Listener *listener)</td><td><a class="el" href="classgameplay_1_1_physics_controller.html">gameplay::PhysicsController</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_controller.html#ad418fdf90f310e24e4277e1c78dcc7ff">createFixedConstraint</a>(PhysicsRigidBody *a, PhysicsRigidBody *b=NULL)</td><td><a class="el" href="classgameplay_1_1_physics_controller.html">gameplay::PhysicsController</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_controller.html#ac39232277d236de4947a116c1232837c">createGenericConstraint</a>(PhysicsRigidBody *a, PhysicsRigidBody *b=NULL)</td><td><a class="el" href="classgameplay_1_1_physics_controller.html">gameplay::PhysicsController</a></td><td></td></tr>
@@ -114,6 +114,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_controller.html#ae5fce39a6a72c120d51e97b1ef5d429c">getGravity</a>(const Vector3 &amp;gravity) const </td><td><a class="el" href="classgameplay_1_1_physics_controller.html">gameplay::PhysicsController</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>PhysicsConstraint</b> (defined in <a class="el" href="classgameplay_1_1_physics_controller.html">gameplay::PhysicsController</a>)</td><td><a class="el" href="classgameplay_1_1_physics_controller.html">gameplay::PhysicsController</a></td><td><code> [friend]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>PhysicsRigidBody</b> (defined in <a class="el" href="classgameplay_1_1_physics_controller.html">gameplay::PhysicsController</a>)</td><td><a class="el" href="classgameplay_1_1_physics_controller.html">gameplay::PhysicsController</a></td><td><code> [friend]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_controller.html#a4177f272a5f9e0374d6e5f8dc50e60d7">rayTest</a>(const Ray &amp;ray)</td><td><a class="el" href="classgameplay_1_1_physics_controller.html">gameplay::PhysicsController</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_physics_controller.html#ab085ecda3423f445960150208e5ba1c9">setGravity</a>(const Vector3 &amp;gravity)</td><td><a class="el" href="classgameplay_1_1_physics_controller.html">gameplay::PhysicsController</a></td><td></td></tr>
 </table></div>
 </div>
@@ -124,7 +125,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -134,7 +135,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:21 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:06:00 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

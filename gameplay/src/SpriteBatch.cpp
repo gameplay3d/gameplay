@@ -101,6 +101,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
         else
         {
             effect = __spriteEffect;
+            __spriteEffect->addRef();
         }
     }
 
