@@ -32,7 +32,7 @@ Slider* Slider::create(Theme::Style* style, Properties* properties)
     return slider;
 }
 
-Slider* Slider::create(const char* id, float min, float max, float default, float step)
+Slider* Slider::create(const char* id, float min, float max, float defaultPosition, float step)
 {
     Slider* slider = new Slider();
 
