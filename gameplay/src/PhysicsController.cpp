@@ -40,6 +40,16 @@ void PhysicsController::addStatusListener(Listener* listener)
     _listeners->push_back(listener);
 }
 
+PhysicsCharacter* PhysicsController::createCharacter(Node* node, float radius, float height, const Vector3& center)
+{
+    return new PhysicsCharacter(node, radius, height, center);
+}
+
+void PhysicsController::destroyCharacter(PhysicsCharacter* character)
+{
+    SAFE_DELETE(character);
+}
+
 PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
     checkConstraintRigidBodies(a, b);
@@ -110,7 +120,7 @@ PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidB
     return constraint;
 }
 
-const Vector3& PhysicsController::getGravity(const Vector3& gravity) const
+const Vector3& PhysicsController::getGravity() const
 {
     return _gravity;
 }

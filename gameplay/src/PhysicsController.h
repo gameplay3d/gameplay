@@ -8,6 +8,7 @@
 #include "PhysicsSocketConstraint.h"
 #include "PhysicsSpringConstraint.h"
 #include "PhysicsRigidBody.h"
+#include "PhysicsCharacter.h"
 
 namespace gameplay
 {
@@ -18,6 +19,7 @@ namespace gameplay
 class PhysicsController : public btCollisionWorld::ContactResultCallback
 {
     friend class Game;
+    friend Camera;
     friend class PhysicsConstraint;
     friend class PhysicsRigidBody;
     friend class PhysicsCharacter;
@@ -59,6 +61,42 @@ public:
      * @param listener The listener to add.
      */
     void addStatusListener(PhysicsController::Listener* listener);
+
+    /**
+     * Creates a new PhysicsCharacter.
+     *
+     * The created character is added to the physics world and automatically receives
+     * physics updates to handle interactions and collisions between the character
+     * and other physics objects in the world. The character will continue to receive
+     * updates until it is destroyed via the destroyCharacter(PhysicsCharacter*) method.
+     *
+     * The node may point to any node in the scene that you wish to control as a character.
+     * When a PhysicsCharacter is created for a particular node, the game will normally
+     * perform all movement directly through the PhysicsCharacter interface and not through
+     * the node itself.
+     *
+     * The radius, height and center parameters define a capsule volume that is used
+     * to represent the character in the physics world. All collision handling is 
+     * performed using this capsule.
+     *
+     * Note that PhysicsCharacter should not be mixed with rigid bodies. Therefore, you 
+     * should ensure that the node (and any of its children) used to create the
+     * PhysicsCharacter does not have any rigid bodies assigned. Doing so will cause
+     * unexpected results.
+     *
+     * @param node Scene node that represents the character.
+     * @param radius Radius of capsule volume used for character collisions.
+     * @param height Height of the capsule volume used for character collisions.
+     * @param center Center point of the capsule volume for the character.
+     */
+    PhysicsCharacter* createCharacter(Node* node, float radius, float height, const Vector3& center = Vector3::zero());
+
+    /**
+     * Destroys a PhysicsCharacter and removes it from the physics world.
+     *
+     * @param character PhysicsCharacter to destroy.
+     */
+    void destroyCharacter(PhysicsCharacter* character);
 
     /**
      * Creates a fixed constraint.
@@ -174,7 +212,7 @@ public:
      * 
      * @return The gravity vector.
      */
-    const Vector3& getGravity(const Vector3& gravity) const;
+    const Vector3& getGravity() const;
 
     /**
      * Sets the gravity vector for the simulated physics world.
