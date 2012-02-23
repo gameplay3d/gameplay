@@ -940,12 +940,12 @@ int Platform::enterMessagePump()
                         // Suppress key repeats
                         if ((flags & KEY_REPEAT) == 0)
                         {
-                            Game::getInstance()->keyEvent(evt, getKey(value));
+                            keyEventInternal(evt, getKey(value));
                             if (evt == gameplay::Keyboard::KEY_PRESS && flags & KEY_SYM_VALID)
                             {
                                 int unicode = getUnicode(value);
                                 if (unicode)
-                                    Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_CHAR, unicode);
+                                    keyEventInternal(gameplay::Keyboard::KEY_CHAR, unicode);
                             }
                         }
                         break;

@@ -764,7 +764,9 @@ ParticleEmitter::TextureBlending ParticleEmitter::getTextureBlendingFromString(c
 void ParticleEmitter::update(long elapsedTime)
 {
     if (!isActive())
+    {
         return;
+    }
 
     // Calculate the time passed since last update.
     float elapsedSecs = (float)elapsedTime / 1000.0f;
@@ -873,7 +875,9 @@ void ParticleEmitter::update(long elapsedTime)
 void ParticleEmitter::draw()
 {
     if (!isActive())
+    {
         return;
+    }
 
     if (_particleCount > 0)
     {

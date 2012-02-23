@@ -327,30 +327,22 @@ namespace gameplay
                     const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
                     const float d = -(a*min.x) - (b*min.y) - (c*min.z);
                     const float distance = abs(d) /  sqrt(a*a + b*b + c*c);
-                    Plane plane(normal, distance);
+                    Plane plane(normal, -distance);
 
                     // Check for collision with plane.
-                    float collides = ray.intersects(plane);
-                    if (collides != Ray::INTERSECTS_NONE)
+                    float collisionDistance = ray.intersects(plane);
+                    if (collisionDistance != Ray::INTERSECTS_NONE)
                     {
-                        // Check for collision with form.
                         // Multiply the ray's direction vector by collision distance
                         // and add that to the ray's origin.
-                        Vector3 rayOrigin = ray.getOrigin();
-                        Vector3 rayDirection = ray.getDirection();
-                        float alpha = (distance - normal.dot(rayOrigin)) / normal.dot(rayDirection);
-                        Vector3 point = rayOrigin + alpha*rayDirection;
+                        Vector3 point = ray.getOrigin() + collisionDistance*ray.getDirection();
 
                         // Project this point into the plane.
                         m.invert();
                         m.transformPoint(&point);
 
-                        // If this point lies within the form, pass the touch event on.
-                        if (point.x >= 0 && point.x <= size.x &&
-                            point.y >= 0 && point.y <= size.y)
-                        {
-                            form->touchEvent(evt, point.x, size.y - point.y, contactIndex);
-                        }
+                        // Pass the touch event on.
+                        form->touchEvent(evt, point.x, size.y - point.y, contactIndex);
                     }
                 }
             }
