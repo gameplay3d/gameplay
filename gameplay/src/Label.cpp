@@ -21,10 +21,20 @@ namespace gameplay
     {
         Label* label = new Label();
         label->_style = style;
-        label->_id = properties->getId();
         properties->getVector2("position", &label->_position);
         properties->getVector2("size", &label->_size);
-        label->_text = properties->getString("text");
+
+        const char* id = properties->getId();
+        if (id)
+        {
+            label->_id = id;
+        }
+
+        const char* text = properties->getString("text");
+        if (text)
+        {
+            label->_text = text;
+        }
 
         __labels.push_back(label);
 

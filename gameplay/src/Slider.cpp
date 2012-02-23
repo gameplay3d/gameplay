@@ -18,14 +18,24 @@ Slider* Slider::create(Theme::Style* style, Properties* properties)
     Slider* slider = new Slider();
 
     slider->_style = style;
-    slider->_id = properties->getId();
     properties->getVector2("position", &slider->_position);
     properties->getVector2("size", &slider->_size);
     slider->_min = properties->getFloat("min");
     slider->_max = properties->getFloat("max");
     slider->_value = properties->getFloat("value");
     slider->_step = properties->getFloat("step");
-    slider->_text = properties->getString("text");
+
+    const char* id = properties->getId();
+    if (id)
+    {
+        slider->_id = id;
+    }
+
+    const char* text = properties->getString("text");
+    if (text)
+    {
+        slider->_text = text;
+    }
 
     __sliders.push_back(slider);
 
