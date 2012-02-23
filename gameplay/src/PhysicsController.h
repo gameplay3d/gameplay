@@ -193,9 +193,10 @@ public:
      * Gets the first rigid body that the given ray intersects.
      * 
      * @param ray The ray to test intersection with.
+     * @param distance How far along the given ray to test for intersections.
      * @return The first rigid body that the ray intersects.
      */
-    PhysicsRigidBody* rayTest(const Ray& ray);
+    PhysicsRigidBody* rayTest(const Ray& ray, float distance);
 
 protected:
 
