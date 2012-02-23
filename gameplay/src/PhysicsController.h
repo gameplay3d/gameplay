@@ -19,7 +19,6 @@ namespace gameplay
 class PhysicsController : public btCollisionWorld::ContactResultCallback
 {
     friend class Game;
-    friend Camera;
     friend class PhysicsConstraint;
     friend class PhysicsRigidBody;
     friend class PhysicsCharacter;
