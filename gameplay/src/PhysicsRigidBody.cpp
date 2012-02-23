@@ -477,7 +477,6 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     return body;
 }
 
-
 float PhysicsRigidBody::getHeight(float x, float y) const
 {
     // This function is only supported for heightfield rigid bodies.

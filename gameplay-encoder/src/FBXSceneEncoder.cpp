@@ -269,7 +269,7 @@ void FBXSceneEncoder::loadAnimationChannels(KFbxAnimLayer* animLayer, KFbxNode* 
     // TODO: Ignore properties that are not animated (scale, rotation, translation)
     // This should result in only one animation channel per animated node.
 
-    float startTime = FLT_MAX, stopTime = -1.0f, frameRate = FLT_MIN;
+    float startTime = FLT_MAX, stopTime = -1.0f, frameRate = -FLT_MAX;
     bool tx = false, ty = false, tz = false, rx = false, ry = false, rz = false, sx = false, sy = false, sz = false;
     KFbxAnimCurve* animCurve = NULL;
     animCurve = fbxNode->LclTranslation.GetCurve<KFbxAnimCurve>(animLayer, KFCURVENODE_T_X);

@@ -71,7 +71,17 @@ inline float PhysicsRigidBody::getRestitution() const
 
 inline bool PhysicsRigidBody::isKinematic() const
 {
-    return (_body->getCollisionFlags() & btCollisionObject::CF_KINEMATIC_OBJECT) != 0;
+    return _body->isKinematicObject();
+}
+
+inline bool PhysicsRigidBody::isStatic() const
+{
+    return _body->isStaticObject();
+}
+
+inline bool PhysicsRigidBody::isDynamic() const
+{
+    return !_body->isStaticOrKinematicObject();
 }
 
 inline void PhysicsRigidBody::setAngularVelocity(const Vector3& velocity)
