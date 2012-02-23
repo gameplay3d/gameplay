@@ -13,10 +13,6 @@ namespace gameplay
 class Slider : public Button
 {
 public:
-
-    Slider();
-    ~Slider();
-
     static Slider* create(Theme::Style* style, Properties* properties);
     static Slider* create(const char* id, float min, float max, float defaultPosition = 0.0f, float step = 1.0f);
     static Slider* getSlider(const char* id);
@@ -29,8 +25,11 @@ public:
     void setValue(float value);
     float getValue();
 
-private:
+protected:
+    Slider();
+    ~Slider();
 
+private:
     float _min;
     float _max;
     float _step;

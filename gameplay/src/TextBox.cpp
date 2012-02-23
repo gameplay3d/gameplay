@@ -1,4 +1,5 @@
 #include "TextBox.h"
+#include "Game.h"
 
 namespace gameplay
 {
@@ -70,6 +71,7 @@ void TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
             if (_state == STATE_NORMAL)
             {
                 _state = STATE_ACTIVE;
+                Game::getInstance()->displayKeyboard(true);
             }
             break;
         case Touch::TOUCH_MOVE:
@@ -92,6 +94,7 @@ void TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
             else
             {
                 _state = STATE_NORMAL;
+                Game::getInstance()->displayKeyboard(false);
             }
             break;
         }
