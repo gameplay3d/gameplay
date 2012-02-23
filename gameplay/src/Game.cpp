@@ -263,4 +263,18 @@ bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
     return false;
 }
 
+void Game::updateOnce()
+{
+    // Update Time.
+    static long lastFrameTime = Game::getGameTime();
+    long frameTime = Game::getGameTime();
+    long elapsedTime = (frameTime - lastFrameTime);
+    lastFrameTime = frameTime;
+
+    // Update the internal controllers.
+    _animationController->update(elapsedTime);
+    _physicsController->update(elapsedTime);
+    _audioController->update(elapsedTime);
+}
+
 }

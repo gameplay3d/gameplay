@@ -30,6 +30,13 @@ Node::~Node()
 {
     removeAllChildren();
 
+    if (_model)
+        _model->setNode(NULL);
+    if (_audioSource)
+        _audioSource->setNode(NULL);
+    if (_particleEmitter)
+        _particleEmitter->setNode(NULL);
+
     SAFE_RELEASE(_camera);
     SAFE_RELEASE(_light);
     SAFE_RELEASE(_model);
