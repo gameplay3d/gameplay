@@ -24,15 +24,30 @@ RadioButton* RadioButton::create(Theme::Style* style, Properties* properties)
 {
     RadioButton* radioButton = new RadioButton();
     radioButton->_style = style;
-    radioButton->_id = properties->getId();
     properties->getVector2("position", &radioButton->_position);
     properties->getVector2("size", &radioButton->_size);
-    radioButton->_text = properties->getString("text");
-    radioButton->_groupId = properties->getString("group");
     if (properties->getBool("selected"))
     {
         RadioButton::clearSelected(radioButton->_groupId);
         radioButton->_selected = true;
+    }
+
+    const char* id = properties->getId();
+    if (id)
+    {
+        radioButton->_id = id;
+    }
+
+    const char* text = properties->getString("text");
+    if (text)
+    {
+        radioButton->_text = text;
+    }
+
+    const char* groupId = properties->getString("group");
+    if (groupId)
+    {
+        radioButton->_groupId = groupId;
     }
 
     __radioButtons.push_back(radioButton);

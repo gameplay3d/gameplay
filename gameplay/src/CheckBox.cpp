@@ -24,11 +24,21 @@ CheckBox* CheckBox::create(Theme::Style* style, Properties* properties)
 {
     CheckBox* checkbox = new CheckBox();
     checkbox->_style = style;
-    checkbox->_id = properties->getId();
     properties->getVector2("position", &checkbox->_position);
     properties->getVector2("size", &checkbox->_size);
     checkbox->_checked = properties->getBool("checked");
-    checkbox->_text = properties->getString("text");
+
+    const char* id = properties->getId();
+    if (id)
+    {
+        checkbox->_id = id;
+    }
+
+    const char* text = properties->getString("text");
+    if (text)
+    {
+        checkbox->_text = text;
+    }
 
     __checkBoxes.push_back(checkbox);
 
