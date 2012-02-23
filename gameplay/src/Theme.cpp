@@ -101,7 +101,7 @@ namespace gameplay
         
         // Parse the Properties object and set up the theme.
         const char* textureFile = themeProperties->getString("texture");
-        theme->_texture = Texture::create(textureFile, true);
+        theme->_texture = Texture::create(textureFile, false);
         theme->_spriteBatch = SpriteBatch::create(theme->_texture);
 
         Properties* space = themeProperties->getNextNamespace();

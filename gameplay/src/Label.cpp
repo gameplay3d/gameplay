@@ -92,6 +92,9 @@ namespace gameplay
 
     void Label::drawText(const Vector2& position)
     {
+        if (_text.size() <= 0)
+            return;
+
         // TODO: Batch all labels that use the same font.
         Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
         Font* font = overlay->getFont();
