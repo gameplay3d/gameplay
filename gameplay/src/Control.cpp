@@ -153,12 +153,12 @@ namespace gameplay
                 spriteBatch->draw(rightX, pos.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, borderColor);
             if (border.left)
                 spriteBatch->draw(pos.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, borderColor);
-            if (border.left && border.right && border.top && border.bottom)
-                spriteBatch->draw(pos.x + border.left, pos.y + border.top, _size.x - border.left - border.right, _size.y - border.top - border.bottom,
-                              center.u1, center.v1, center.u2, center.v2, borderColor);
+            
+            spriteBatch->draw(pos.x + border.left, pos.y + border.top, _size.x - border.left - border.right, _size.y - border.top - border.bottom,
+                center.u1, center.v1, center.u2, center.v2, borderColor);
+
             if (border.right)
-                spriteBatch->draw(rightX, midY, border.right, midHeight,
-                              right.u1, right.v1, right.u2, right.v2, borderColor);
+                spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, borderColor);
             if (border.bottom && border.left)
                 spriteBatch->draw(pos.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, borderColor);
             if (border.bottom)
