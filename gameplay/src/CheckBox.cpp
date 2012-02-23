@@ -6,7 +6,7 @@ namespace gameplay
 
 static std::vector<CheckBox*> __checkBoxes;
 
-CheckBox::CheckBox()
+CheckBox::CheckBox() : _checked(false)
 {
 }
 
@@ -27,6 +27,7 @@ CheckBox* CheckBox::create(Theme::Style* style, Properties* properties)
     checkbox->_id = properties->getId();
     properties->getVector2("position", &checkbox->_position);
     properties->getVector2("size", &checkbox->_size);
+    checkbox->_checked = properties->getBool("checked");
     checkbox->_text = properties->getString("text");
 
     __checkBoxes.push_back(checkbox);
