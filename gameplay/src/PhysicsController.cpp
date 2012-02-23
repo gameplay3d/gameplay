@@ -129,10 +129,10 @@ void PhysicsController::drawDebug(const Matrix& viewProjection)
     _debugDrawer->end();
 }
 
-PhysicsRigidBody* PhysicsController::rayTest(const Ray& ray)
+PhysicsRigidBody* PhysicsController::rayTest(const Ray& ray, float distance)
 {
-    btCollisionWorld::ClosestRayResultCallback callback(BV(ray.getOrigin()), BV(ray.getDirection()));
-    _world->rayTest(BV(ray.getOrigin()), BV(ray.getDirection()), callback);
+    btCollisionWorld::ClosestRayResultCallback callback(BV(ray.getOrigin()), BV(distance * ray.getDirection()));
+    _world->rayTest(BV(ray.getOrigin()), BV(distance * ray.getDirection()), callback);
     if (callback.hasHit())
         return getRigidBody(callback.m_collisionObject);
 

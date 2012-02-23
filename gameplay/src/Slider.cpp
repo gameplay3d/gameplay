@@ -135,16 +135,17 @@ void Slider::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
         Vector2 pos(position.x + _position.x + border.left + padding.left, midY - trackSize.y / 2.0f);
         spriteBatch->draw(pos.x, pos.y, _size.x, trackSize.y, track.u1, track.v1, track.u2, track.v2, color);
 
-        pos.y = midY - minCapSize.y / 2.0f;
+        pos.y = midY - minCapSize.y * 0.5f;
+        pos.x -= minCapSize.x * 0.5f;
         spriteBatch->draw(pos.x, pos.y, minCapSize.x, minCapSize.y, minCap.u1, minCap.v1, minCap.u2, minCap.v2, color);
         
-        pos.x = position.x + _position.x + _size.x - border.left - padding.left - maxCapSize.x;
+        pos.x = position.x + _position.x + _size.x - border.right - padding.right - maxCapSize.x * 0.5f;
         spriteBatch->draw(pos.x, pos.y, maxCapSize.x, maxCapSize.y, maxCap.u1, maxCap.v1, maxCap.u2, maxCap.v2, color);
 
         // Percent across.
         float markerPosition = _value / (_max - _min);
-        markerPosition *= _size.x - border.left - padding.left - border.right - padding.right - minCapSize.x - maxCapSize.x - markerSize.x;
-        pos.x = position.x + _position.x + border.left + padding.left +  minCapSize.x + markerPosition;
+        markerPosition *= _size.x - border.left - padding.left - border.right - padding.right - minCapSize.x * 0.5f - maxCapSize.x * 0.5f - markerSize.x;
+        pos.x = position.x + _position.x + border.left + padding.left + minCapSize.x * 0.5f + markerPosition;
         pos.y = midY - markerSize.y / 2.0f;
         spriteBatch->draw(pos.x, pos.y, markerSize.x, markerSize.y, marker.u1, marker.v1, marker.u2, marker.v2, color);
     }
