@@ -161,9 +161,4 @@ void Slider::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
     }
 }
 
-void Slider::drawText(const Vector2& position)
-{
-
-}
-
 }

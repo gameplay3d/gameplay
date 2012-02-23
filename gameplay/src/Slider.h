@@ -20,7 +20,6 @@ public:
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     void drawSprites(SpriteBatch* spriteBatch, const Vector2& position);
-    void drawText(const Vector2& position);
 
     void setValue(float value);
     float getValue();

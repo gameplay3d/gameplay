@@ -84,6 +84,11 @@ namespace gameplay
         _state = STATE_NORMAL;
     }
 
+    bool Control::isEnabled()
+    {
+        return _state == STATE_DISABLED;
+    }
+
     Theme::Style::OverlayType Control::getOverlayType() const
     {
         switch (_state)
@@ -145,26 +150,33 @@ namespace gameplay
             float bottomY = pos.y + _size.y - border.bottom;
 
             // Draw themed border sprites.
-            if (border.left && border.top)
-                spriteBatch->draw(pos.x, pos.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, borderColor);
-            if (border.top)
-                spriteBatch->draw(pos.x + border.left, pos.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, borderColor);
-            if (border.right && border.top)
-                spriteBatch->draw(rightX, pos.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, borderColor);
-            if (border.left)
-                spriteBatch->draw(pos.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, borderColor);
-            
-            spriteBatch->draw(pos.x + border.left, pos.y + border.top, _size.x - border.left - border.right, _size.y - border.top - border.bottom,
-                center.u1, center.v1, center.u2, center.v2, borderColor);
-
-            if (border.right)
-                spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, borderColor);
-            if (border.bottom && border.left)
-                spriteBatch->draw(pos.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, borderColor);
-            if (border.bottom)
-                spriteBatch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, borderColor);
-            if (border.bottom && border.right)
-                spriteBatch->draw(rightX, bottomY, border.right, border.bottom, bottomRight.u1, bottomRight.v1, bottomRight.u2, bottomRight.v2, borderColor);
+            if (!border.left && !border.right && !border.top && !border.bottom)
+            {
+                // No border, just draw the image.
+                spriteBatch->draw(pos.x, pos.y, _size.x, _size.y, center.u1, center.v1, center.u2, center.v2, borderColor);
+            }
+            else
+            {
+                if (border.left && border.top)
+                    spriteBatch->draw(pos.x, pos.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, borderColor);
+                if (border.top)
+                    spriteBatch->draw(pos.x + border.left, pos.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, borderColor);
+                if (border.right && border.top)
+                    spriteBatch->draw(rightX, pos.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, borderColor);
+                if (border.left)
+                    spriteBatch->draw(pos.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, borderColor);
+                if (border.left && border.right && border.top && border.bottom)
+                    spriteBatch->draw(pos.x + border.left, pos.y + border.top, _size.x - border.left - border.right, _size.y - border.top - border.bottom,
+                        center.u1, center.v1, center.u2, center.v2, borderColor);
+                if (border.right)
+                    spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, borderColor);
+                if (border.bottom && border.left)
+                    spriteBatch->draw(pos.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, borderColor);
+                if (border.bottom)
+                    spriteBatch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, borderColor);
+                if (border.bottom && border.right)
+                    spriteBatch->draw(rightX, bottomY, border.right, border.bottom, bottomRight.u1, bottomRight.v1, bottomRight.u2, bottomRight.v2, borderColor);
+            }
         }
     }
 
