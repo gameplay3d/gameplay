@@ -110,7 +110,8 @@ public:
     float intersects(const Frustum& frustum) const;
 
     /**
-     * Tests whether this ray intersects the specified plane.
+     * Tests whether this ray intersects the specified plane and returns the distance
+     * from the origin of the ray to the plane.
      *
      * @param plane The plane to test intersection with.
      * 

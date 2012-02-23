@@ -183,7 +183,7 @@ public:
      * 
      * @return The dot product.
      */
-    float dot(const Vector2& v);
+    float dot(const Vector2& v) const;
 
     /**
      * Returns the dot product between the specified vectors.

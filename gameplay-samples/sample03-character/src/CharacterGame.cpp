@@ -27,8 +27,10 @@ void CharacterGame::initialize()
     _scene = Scene::load("res/scene.scene");
 
     // Store character node.
-    _character = new PhysicsCharacter(_scene->findNode("BoyCharacter"), PhysicsCharacter::Capsule(1.5f, 5.0f, 2.25f));
-    _character->setCamera(_scene->getActiveCamera(), PhysicsCharacter::CAMERA_ATTACH | PhysicsCharacter::CAMERA_FIX_OCCLUSIONS);
+    _character = getPhysicsController()->createCharacter(_scene->findNode("BoyCharacter"), 1.5f, 5.0f, Vector3(0, 2.25f, 0));
+
+    // Ensure that the camera's view is unobstructed (for 16 units in front of the camera).
+    //_scene->getActiveCamera()->setOcclusionRange(16.0f);
 
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initScene);
@@ -72,6 +74,7 @@ bool CharacterGame::initScene(Node* node, void* cookie)
 
 void CharacterGame::finalize()
 {
+    getPhysicsController()->destroyCharacter(_character);
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_font);
 }
@@ -89,38 +92,36 @@ void CharacterGame::update(long elapsedTime)
         if (keyFlags & 1)
         {
             _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
-            _character->moveForward(1.0f);
+            _character->setForwardVelocity(1.0f);
         }
         else if (keyFlags & 2)
         {
             _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
-            _character->moveForward(-1.0f);
+            _character->setForwardVelocity(-1.0f);
         }
         else
         {
             // Cancel forward movement
-            _character->moveForward(0.0f);
+            _character->setForwardVelocity(0.0f);
         }
 
         // Strafing
         if (keyFlags & 4)
         {
             _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
-            _character->moveRight(1.0f);
+            _character->setRightVelocity(1.0f);
         }
         else if (keyFlags & 8)
         {
             _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
-            _character->moveRight(-1.0f);
+            _character->setRightVelocity(-1.0f);
         }
         else
         {
             // Cancel right movement
-            _character->moveRight(0.0f);
+            _character->setRightVelocity(0.0f);
         }
     }
-
-    //_character->update(elapsedTime);
 }
 
 bool drawDebug = false;

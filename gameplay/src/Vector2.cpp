@@ -139,7 +139,7 @@ float Vector2::distanceSquared(const Vector2& v) const
     return (dx * dx + dy * dy);
 }
 
-float Vector2::dot(const Vector2& v)
+float Vector2::dot(const Vector2& v) const
 {
     return (x * v.x + y * v.y);
 }

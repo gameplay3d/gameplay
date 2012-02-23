@@ -1,8 +1,8 @@
 rigidbody Boy
 {
     type = CAPSULE
-    radius = 1.0
-    height = 4
+    radius = 1.5
+    height = 5
     mass = 0.0
     kinematic = true
     friction = 0.5
