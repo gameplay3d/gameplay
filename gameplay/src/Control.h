@@ -82,6 +82,7 @@ public:
 
     void disable();
     void enable();
+    bool isEnabled();
 
     Theme::Style::OverlayType getOverlayType() const;
 
