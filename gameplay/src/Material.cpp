@@ -212,17 +212,17 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
     const char* fragmentShaderPath = passProperties->getString("fragmentShader");
     assert(fragmentShaderPath);
     const char* defines = passProperties->getString("defines");
-    std::string define = "";
+    std::string define;
     if (defines != NULL)
     {
-        char* token = strtok((char*)defines, ";");
-        while (token)
+        define = defines;
+        define.insert(0, "#define ");
+        unsigned int pos;
+        while ((pos = define.find(';')) != std::string::npos)
         {
-            define += "#define ";
-            define += token;
-            define += "\n";
-            token = strtok(NULL, ";");
+            define.replace(pos, 1, "\n#define ");
         }
+        define += "\n";
     }
 
     // Create the pass

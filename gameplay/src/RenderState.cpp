@@ -130,6 +130,10 @@ void RenderState::setParameterAutoBinding(const char* name, const char* autoBind
     {
         value = WORLD_VIEW_PROJECTION_MATRIX;
     }
+    else if (strcmp(autoBinding, "INVERSE_TRANSPOSE_WORLD_MATRIX") == 0)
+    {
+        value = INVERSE_TRANSPOSE_WORLD_MATRIX;
+    }
     else if (strcmp(autoBinding, "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX") == 0)
     {
         value = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX;
@@ -137,6 +141,10 @@ void RenderState::setParameterAutoBinding(const char* name, const char* autoBind
     else if (strcmp(autoBinding, "CAMERA_WORLD_POSITION") == 0)
     {
         value = CAMERA_WORLD_POSITION;
+    }
+    else if (strcmp(autoBinding, "CAMERA_VIEW_POSITION") == 0)
+    {
+        value = CAMERA_VIEW_POSITION;
     }
     else if (strcmp(autoBinding, "MATRIX_PALETTE") == 0)
     {
@@ -218,12 +226,20 @@ void RenderState::applyAutoBinding(const char* uniformName, AutoBinding autoBind
         getParameter(uniformName)->bindValue(_nodeBinding, &Node::getWorldViewProjectionMatrix);
         break;
 
+    case INVERSE_TRANSPOSE_WORLD_MATRIX:
+        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getInverseTransposeWorldMatrix);
+        break;
+
     case INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX:
         getParameter(uniformName)->bindValue(_nodeBinding, &Node::getInverseTransposeWorldViewMatrix);
         break;
 
     case CAMERA_WORLD_POSITION:
         getParameter(uniformName)->bindValue(_nodeBinding, &Node::getActiveCameraTranslationWorld);
+        break;
+
+    case CAMERA_VIEW_POSITION:
+        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getActiveCameraTranslationView);
         break;
 
     case MATRIX_PALETTE:

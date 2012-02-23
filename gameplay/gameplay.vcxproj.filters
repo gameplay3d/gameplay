@@ -264,6 +264,9 @@
     <ClCompile Include="src\TextBox.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\PhysicsCharacter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -516,6 +519,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\TextBox.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsCharacter.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

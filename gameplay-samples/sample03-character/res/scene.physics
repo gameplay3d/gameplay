@@ -1,0 +1,53 @@
+rigidbody Boy
+{
+    type = CAPSULE
+    radius = 1.5
+    height = 5
+    mass = 0.0
+    kinematic = true
+    friction = 0.5
+    restitution = 0.0
+    linearDamping = 0.1
+    angularDamping = 0.5
+    
+}
+
+rigidbody Basketball
+{
+    type = SPHERE
+    mass = 1.0
+    friction = 0.5
+    restitution = 1.0
+    linearDamping = 0.1
+    angularDamping = 0.5
+}
+
+rigidbody Chair
+{
+    type = BOX
+    mass = 100.0
+    friction = 1.0
+    restitution = 0.0
+    linearDamping = 0.9
+    angularDamping = 0.5
+}
+
+rigidbody Table
+{
+    type = BOX
+    mass = 1.0
+    friction = 0.5
+    restitution = 0.0
+    linearDamping = 0.1
+    angularDamping = 0.5
+}
+
+rigidbody StaticBox
+{
+    type = BOX
+    mass = 0.0
+    friction = 0.5
+    restitution = 0.75
+    linearDamping = 0.025
+    angularDamping = 0.16
+}

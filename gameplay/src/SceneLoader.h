@@ -15,8 +15,6 @@ namespace gameplay
  */
 class SceneLoader
 {
-    friend class Package;
-    friend class PhysicsController;
     friend class Scene;
 
 private:
@@ -26,13 +24,6 @@ private:
     
     // ------------------------------------------------------------------------
     // Helper structures and functions for SceneLoader::load(const char*).
-
-    struct MeshRigidBodyData
-    {
-        Mesh* mesh;
-        unsigned char* vertexData;
-        std::vector<unsigned char*> indexData;
-    };
 
     struct SceneAnimation
     {
@@ -47,27 +38,43 @@ private:
 
     struct SceneNodeProperty
     {
-        enum Type { AUDIO, MATERIAL, PARTICLE, RIGIDBODY, TRANSLATE, ROTATE, SCALE, URL };
+        enum Type
+        {
+            AUDIO = 1,
+            MATERIAL = 2,
+            PARTICLE = 4,
+            RIGIDBODY = 8,
+            TRANSLATE = 16,
+            ROTATE = 32,
+            SCALE = 64,
+            URL = 128
+        };
 
-        SceneNodeProperty(Type type, const char* nodeID, std::string file, std::string id)
-            : _type(type), _nodeID(nodeID), _file(file), _id(id) {}
+        SceneNodeProperty(Type type, std::string file, std::string id, int index) : _type(type), _file(file), _id(id), _index(index) { }
 
         Type _type;
-        const char* _nodeID;
         std::string _file;
         std::string _id;
+        int _index;
     };
 
-    static void addMeshRigidBodyData(std::string package, std::string id, Mesh* mesh, unsigned char* vertexData, unsigned int vertexByteCount);
-    static void addMeshRigidBodyData(std::string package, std::string id, unsigned char* indexData, unsigned int indexByteCount);
+    struct SceneNode
+    {
+        SceneNode() : _nodeID(""), _exactMatch(true) { }
+
+        const char* _nodeID;
+        bool _exactMatch;
+        std::vector<SceneNodeProperty> _properties;
+    };
+
     static void addSceneAnimation(const char* animationID, const char* targetID, const char* url);
-    static void addSceneNodeProperty(SceneNodeProperty::Type type, const char* nodeID, const char* url = NULL);
-    static void applyNodeProperties(const Scene* scene, const Properties* sceneProperties);
+    static void addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::Type type, const char* url = NULL, int index = 0);
+    static void applyNodeProperties(const Scene* scene, const Properties* sceneProperties, unsigned int typeFlags);
+    static void applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp);
     static void applyNodeUrls(Scene* scene);
     static void buildReferenceTables(Properties* sceneProperties);
     static void calculateNodesWithMeshRigidBodies(const Properties* sceneProperties);
     static void createAnimations(const Scene* scene);
-    static const MeshRigidBodyData* getMeshRigidBodyData(std::string id);
     static PhysicsConstraint* loadGenericConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
     static PhysicsConstraint* loadHingeConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
     static Scene* loadMainSceneData(const Properties* sceneProperties);
@@ -85,14 +92,9 @@ private:
     // Holds the animations declared in the .scene file.
     static std::vector<SceneAnimation> _animations;
 
-    // Holds all the node properties declared in the .scene file.
-    static std::vector<SceneNodeProperty> _nodeProperties;
+    // Holds all the nodes+properties declared in the .scene file.
+    static std::vector<SceneNode> _sceneNodes;
 
-    // Holds the node IDs that need to be loaded with mesh rigid body support.
-    static std::vector<std::string> _nodesWithMeshRB;
-
-    // Stores the mesh data needed for triangle mesh rigid body support.
-    static std::map<std::string, MeshRigidBodyData>* _meshRigidBodyData;
 
     // The path of the main GPB for the scene being loaded.
     static std::string _path;

@@ -1,0 +1,103 @@
+scene
+{
+    path = res/scene.gpb
+
+    node BoyMesh
+    {
+        material[0] = res/scene.material#BoySkin
+        material[1] = res/scene.material#BoyShorts
+        material[2] = res/scene.material#BoyShirt
+        material[3] = res/scene.material#BoyShoes
+        //rigidbody = res/scene.physics#Boy
+    }
+
+    node BoyShadow
+    {
+        material = res/scene.material#BoyShadow
+    }
+
+    node Table
+    {
+        url = Table*
+        material = res/scene.material#TableGreen
+        rigidbody = res/scene.physics#Table
+    }
+
+    node GreenChair
+    {
+        url = GreenChair*
+        material = res/scene.material#TableGreen
+        rigidbody = res/scene.physics#Chair
+    }
+
+    node BlueChair
+    {
+        url = BlueChair*
+        material = res/scene.material#TableBlue
+        rigidbody = res/scene.physics#Chair
+    }
+
+    node StorageOrganizer
+    {
+        material = res/scene.material#White
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node Ground
+    {
+        material = res/scene.material#Ground
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node Wall
+    {
+        url = Wall*
+        material = res/scene.material#Wall
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node WindowLedge
+    {
+        material = res/scene.material#White
+    }
+
+    node Door
+    {
+        url = Door*
+        material = res/scene.material#White
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node Bookshelf
+    {
+        material = res/scene.material#White
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node Toybox
+    {
+        material = res/scene.material#Toybox
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node FloorTiles
+    {
+        material = res/scene.material#FloorTiles
+    }
+
+    node Rainbow
+    {
+        material = res/scene.material#Rainbow
+    }
+
+    node Basketball
+    {
+        material = res/scene.material#Basketball
+        rigidbody = res/scene.physics#Basketball
+    }
+
+    physics
+    {
+        gravity = 0.0, -9.8, 0.0
+    }
+}

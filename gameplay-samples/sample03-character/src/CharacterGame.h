@@ -27,6 +27,11 @@ public:
      */
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    /**
+     * @see Game::keyEvent
+     */
+    void keyEvent(Keyboard::KeyEvent evt, int key);
+
 protected:
 
     /**
@@ -51,13 +56,14 @@ protected:
 
 private:
 
+    bool initScene(Node* node, void* cookie);
     bool drawScene(Node* node, void* cookie);
 
     void loadAnimationClips();
 
     Font* _font;
     Scene* _scene;
-    Node* _modelNode;
+    PhysicsCharacter* _character;
     Animation* _animation;
     unsigned int _animationState;
     int _rotateX;

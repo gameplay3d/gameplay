@@ -225,7 +225,7 @@ void MeshSkin::computeBounds()
         vertices.clear();
         BoundingVolume jointBounds;
         jointBounds.min.set(FLT_MAX, FLT_MAX, FLT_MAX);
-        jointBounds.max.set(FLT_MIN, FLT_MIN, FLT_MIN);
+        jointBounds.max.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
         for (unsigned int j = 0; j < vertexCount; ++j)
         {
             const Vertex& v = _mesh->getVertex(j);
@@ -354,7 +354,7 @@ void MeshSkin::computeBounds()
     Matrix temp;
     Matrix* jointTransforms = new Matrix[jointCount];
     _mesh->bounds.min.set(FLT_MAX, FLT_MAX, FLT_MAX);
-    _mesh->bounds.max.set(FLT_MIN, FLT_MIN, FLT_MIN);
+    _mesh->bounds.max.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
     _mesh->bounds.center.set(0, 0, 0);
     _mesh->bounds.radius = 0;
     Vector3 skinnedPos;
