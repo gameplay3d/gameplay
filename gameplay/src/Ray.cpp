@@ -107,7 +107,7 @@ float Ray::intersects(const Plane& plane) const
 {
     const Vector3& normal = plane.getNormal();
     // If the origin of the ray is on the plane then the distance is zero.
-    float alpha = plane.getDistance() - normal.dot(_origin);
+    float alpha = (normal.dot(_origin) + plane.getDistance());
     if (fabs(alpha) < MATH_EPSILON)
     {
         return 0.0f;
@@ -124,7 +124,7 @@ float Ray::intersects(const Plane& plane) const
     
     // Calculate the distance along the ray's direction vector to the point where
     // the ray intersects the plane (if it is negative the plane is behind the ray).
-    float d = alpha / dot;
+    float d = -alpha / dot;
     if (d < 0.0f)
     {
         return INTERSECTS_NONE;
