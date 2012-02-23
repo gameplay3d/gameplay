@@ -18,10 +18,20 @@ namespace gameplay
     {
         Button* button = new Button();
         button->_style = style;
-        button->_id = properties->getId();
         properties->getVector2("position", &button->_position);
         properties->getVector2("size", &button->_size);
-        button->_text = properties->getString("text");
+
+        const char* id = properties->getId();
+        if (id)
+        {
+            button->_id = id;
+        }
+
+        const char* text = properties->getString("text");
+        if (text)
+        {
+            button->_text = text;
+        }
 
         __buttons.push_back(button);
 
