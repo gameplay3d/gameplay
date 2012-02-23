@@ -9,6 +9,8 @@ float _rotateY = 0.0f;
 #define ANIM_SPEED 10.0f
 #define BLEND_DURATION 150.0f
 
+bool drawDebug = false;
+
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _animationState(0), _rotateX(0)
 {
@@ -124,8 +126,6 @@ void CharacterGame::update(long elapsedTime)
     }
 }
 
-bool drawDebug = false;
-
 void CharacterGame::render(long elapsedTime)
 {
     // Clear the color and depth buffers.
@@ -144,48 +144,16 @@ void CharacterGame::render(long elapsedTime)
     _font->end();
 }
 
-void drawBoundingSphere(Scene* scene, const BoundingSphere& sphere)
-{
-    // Draw sphere
-    static Model* boundsModel = NULL;
-    if (boundsModel == NULL)
-    {
-        Package* pkg = Package::create("res/sphere.gpb");
-        Mesh* mesh = pkg->loadMesh("sphereShape");
-        SAFE_RELEASE(pkg);
-        boundsModel = Model::create(mesh);
-        SAFE_RELEASE(mesh);
-        boundsModel->setMaterial("res/shaders/solid.vsh", "res/shaders/solid.fsh");
-        boundsModel->getMaterial()->getParameter("u_diffuseColor")->setValue(Vector4(0, 1, 0, 1));
-        boundsModel->getMaterial()->getStateBlock()->setCullFace(false);
-        boundsModel->getMaterial()->getStateBlock()->setDepthTest(true);
-        boundsModel->getMaterial()->getStateBlock()->setDepthWrite(true);
-    }
-
-    static Matrix m;
-    Matrix::createTranslation(sphere.center, &m);
-    m.scale(sphere.radius / 0.5f);
-    Matrix::multiply(scene->getActiveCamera()->getViewProjectionMatrix(), m, &m);
-    boundsModel->getMaterial()->getParameter("u_worldViewProjectionMatrix")->setValue(m);
-    boundsModel->draw(true);
-}
-
 bool CharacterGame::drawScene(Node* node, void* cookie)
 {
     Model* model = node->getModel();
     if (model)
     {
         model->draw(false);
-
-        //drawBoundingSphere(_scene, node->getBoundingSphere());
     }
 
     return true;
 }
-
-bool cameraToggle = false;
-Quaternion cr;
-Vector3 ct;
 
 void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
 {
@@ -207,24 +175,6 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         case Keyboard::KEY_P:
             drawDebug = !drawDebug;
-            break;
-        case Keyboard::KEY_C:
-            {
-                Node* c = _scene->findNode("Camera");
-                cameraToggle = !cameraToggle;
-                if (cameraToggle)
-                {
-                    cr = c->getRotation();
-                    ct = c->getTranslation();
-                    c->setTranslation(0, 20, 0);
-                    c->setRotation(Vector3::unitX(), MATH_DEG_TO_RAD(-90.0f));
-                }
-                else
-                {
-                    c->setRotation(cr);
-                    c->setTranslation(ct);
-                }
-            }
             break;
         }
     }
