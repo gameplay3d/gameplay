@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "Model.h"
+#include "Form.h"
 #include "AudioSource.h"
 #include "ParticleEmitter.h"
 #include "PhysicsRigidBody.h"
@@ -15,6 +16,7 @@ namespace gameplay
 
 class Package;
 class Scene;
+class Form;
 
 /**
  * Defines a basic hierachial structure of transformation spaces.
@@ -326,6 +328,9 @@ public:
      */
     void setModel(Model* model);
 
+    Form* getForm() const;
+    void setForm(Form* form);
+
     /**
      * Returns the pointer to this node's audio source.
      *
@@ -464,6 +469,7 @@ protected:
     Camera* _camera;
     Light* _light;
     Model* _model;
+    Form* _form;
     AudioSource* _audioSource;
     ParticleEmitter* _particleEmitter;
     PhysicsRigidBody* _physicsRigidBody;

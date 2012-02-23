@@ -232,13 +232,13 @@ public:
      * Gets the first rigid body that the given ray intersects.
      * 
      * @param ray The ray to test intersection with.
+     * @param distance How far along the given ray to test for intersections.
      * @param hitPoint Optional Vector3 point that is populated with the world-space point of intersection.
-     * @param hitDistance Optional float pointer that is populated with the distance along the ray
+     * @param hitFraction Optional float pointer that is populated with the distance along the ray
      *      (as a fraction between 0-1) where the intersection occurred.
-     *
      * @return The first rigid body that the ray intersects, or NULL if no intersection was found.
      */
-    PhysicsRigidBody* rayTest(const Ray& ray, Vector3* hitPoint = NULL, float* hitFraction = NULL);
+    PhysicsRigidBody* rayTest(const Ray& ray, float distance, Vector3* hitPoint = NULL, float* hitFraction = NULL);
 
 protected:
 
