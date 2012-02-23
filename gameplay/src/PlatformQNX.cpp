@@ -970,32 +970,27 @@ int Platform::enterMessagePump()
         if (_game->getState() == Game::UNINITIALIZED)
             break;
 
-        // Idle time (no events left to process) is spent rendering.
-        // We skip rendering when the app is paused.
-        if (_game->getState() != Game::PAUSED)
-        {
-            _game->frame();
+        _game->frame();
 
-            // Post the new frame to the display.
-            // Note that there are a couple cases where eglSwapBuffers could fail
-            // with an error code that requires a certain level of re-initialization:
-            //
-            // 1) EGL_BAD_NATIVE_WINDOW - Called when the surface we're currently using
-            //    is invalidated. This would require us to destroy our EGL surface,
-            //    close our OpenKODE window, and start again.
-            //
-            // 2) EGL_CONTEXT_LOST - Power management event that led to our EGL context
-            //    being lost. Requires us to re-create and re-initalize our EGL context
-            //    and all OpenGL ES state.
-            //
-            // For now, if we get these, we'll simply exit.
-            rc = eglSwapBuffers(__eglDisplay, __eglSurface);
-            if (rc != EGL_TRUE)
-            {
-                _game->exit();
-                perror("eglSwapBuffers");
-                break;
-            }
+        // Post the new frame to the display.
+        // Note that there are a couple cases where eglSwapBuffers could fail
+        // with an error code that requires a certain level of re-initialization:
+        //
+        // 1) EGL_BAD_NATIVE_WINDOW - Called when the surface we're currently using
+        //    is invalidated. This would require us to destroy our EGL surface,
+        //    close our OpenKODE window, and start again.
+        //
+        // 2) EGL_CONTEXT_LOST - Power management event that led to our EGL context
+        //    being lost. Requires us to re-create and re-initalize our EGL context
+        //    and all OpenGL ES state.
+        //
+        // For now, if we get these, we'll simply exit.
+        rc = eglSwapBuffers(__eglDisplay, __eglSurface);
+        if (rc != EGL_TRUE)
+        {
+            _game->exit();
+            perror("eglSwapBuffers");
+            break;
         }
     }
 

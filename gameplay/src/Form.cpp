@@ -298,6 +298,9 @@ namespace gameplay
         {
             Form* form = *it;
 
+            if (form->getState() == Control::STATE_DISABLED)
+                continue;
+
             Node* node = form->_node;
             if (node)
             {
@@ -371,6 +374,9 @@ namespace gameplay
         for (it = __forms.begin(); it < __forms.end(); it++)
         {
             Form* form = *it;
+            if (form->getState() == Control::STATE_DISABLED)
+                continue;
+
             form->keyEvent(evt, key);
         }
     }

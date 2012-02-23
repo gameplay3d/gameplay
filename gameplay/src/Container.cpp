@@ -279,6 +279,9 @@ namespace gameplay
 
     void Container::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
     {
+        if (getState() == Control::STATE_DISABLED)
+            return;
+
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
@@ -297,6 +300,9 @@ namespace gameplay
             }
         }
 
+        if (getState() == Control::STATE_DISABLED)
+            return;
+
         switch (evt)
         {
         case Touch::TOUCH_PRESS:
@@ -310,6 +316,9 @@ namespace gameplay
 
     void Container::keyEvent(Keyboard::KeyEvent evt, int key)
     {
+        if (getState() == Control::STATE_DISABLED)
+            return;
+
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
