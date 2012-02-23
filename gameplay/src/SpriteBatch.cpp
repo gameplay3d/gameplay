@@ -69,7 +69,16 @@ SpriteBatch::SpriteBatch(const SpriteBatch& copy)
 SpriteBatch::~SpriteBatch()
 {
     SAFE_DELETE(_batch);
-    SAFE_RELEASE(__spriteEffect);
+    if (!_customEffect)
+    {
+        if (__spriteEffect->getRefCount() == 1)
+        {
+            __spriteEffect->release();
+            __spriteEffect = NULL;
+        }
+        else
+            __spriteEffect->release();
+    }
 }
 
 SpriteBatch* SpriteBatch::create(const char* texturePath, Effect* effect, unsigned int initialCapacity)
@@ -84,7 +93,8 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
 {
     assert(texture != NULL);
 
-    if (effect == NULL)
+    bool customEffect = (effect != NULL);
+    if (!customEffect)
     {
         // Create our static sprite effect.
         if (__spriteEffect == NULL)
@@ -141,8 +151,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
     {
         VertexFormat::Element(VertexFormat::POSITION, 3),
         VertexFormat::Element(VertexFormat::TEXCOORD0, 2),
-        VertexFormat::Element(VertexFormat::COLOR, 4),
-        
+        VertexFormat::Element(VertexFormat::COLOR, 4)
     };
     VertexFormat vertexFormat(vertexElements, 3);
 
@@ -152,6 +161,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
 
     // Create the batch
     SpriteBatch* batch = new SpriteBatch();
+    batch->_customEffect = customEffect;
     batch->_batch = meshBatch;
     batch->_textureWidthRatio = 1.0f / (float)texture->getWidth();
     batch->_textureHeightRatio = 1.0f / (float)texture->getHeight();

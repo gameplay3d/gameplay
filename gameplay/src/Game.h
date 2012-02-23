@@ -299,6 +299,21 @@ protected:
     template <class T>
     void renderOnce(T* instance, void (T::*method)(void*), void* cookie);
 
+    /**
+     * Updates the game once.
+     *
+     * This is useful for rendering animated splash screens.
+     */
+    template <class T>
+    void updateOnce(T* instance, void (T::*method)(void*), void* cookie);
+
+    /**
+     * Updates the game once.
+     *
+     * This is useful for rendering animated splash screens.
+     */
+    void updateOnce();
+
 private:
 
     /**
