@@ -240,6 +240,9 @@ bool ParticleEmitter::isActive() const
     if (_started)
         return true;
 
+    if (!_node)
+        return false;
+
     bool active = false;
     for (unsigned int i = 0; i < _particleCount; i++)
     {
@@ -760,6 +763,9 @@ ParticleEmitter::TextureBlending ParticleEmitter::getTextureBlendingFromString(c
 
 void ParticleEmitter::update(long elapsedTime)
 {
+    if (!isActive())
+        return;
+
     // Calculate the time passed since last update.
     float elapsedSecs = (float)elapsedTime / 1000.0f;
 
@@ -866,6 +872,9 @@ void ParticleEmitter::update(long elapsedTime)
 
 void ParticleEmitter::draw()
 {
+    if (!isActive())
+        return;
+
     if (_particleCount > 0)
     {
         // Set our node's view projection matrix to this emitter's effect.
