@@ -133,18 +133,18 @@ inline void PhysicsRigidBody::setRestitution(float restitution)
     _body->setRestitution(restitution);
 }
 
-inline bool PhysicsRigidBody::CollisionPair::operator<(const CollisionPair& cp) const
+inline bool PhysicsRigidBody::CollisionPair::operator<(const CollisionPair& collisionPair) const
 {
     // If the pairs are equal, then return false.
-    if ((_rbA == cp._rbA && _rbB == cp._rbB) || (_rbA == cp._rbB && _rbB == cp._rbA))
+    if ((rigidBodyA == collisionPair.rigidBodyA && rigidBodyB == collisionPair.rigidBodyB) || (rigidBodyA == collisionPair.rigidBodyB && rigidBodyB == collisionPair.rigidBodyA))
         return false;
     else
     {
-        // We choose to compare based on _rbA arbitrarily.
-        if (_rbA < cp._rbA)
+        // We choose to compare based on rigidBodyA arbitrarily.
+        if (rigidBodyA < collisionPair.rigidBodyA)
             return true;
-        else if (_rbA == cp._rbA)
-            return _rbB < cp._rbB;
+        else if (rigidBodyA == collisionPair.rigidBodyA)
+            return rigidBodyB < collisionPair.rigidBodyB;
         else
             return false;
     }

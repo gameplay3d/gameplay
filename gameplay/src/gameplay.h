@@ -68,3 +68,14 @@
 #include "PhysicsSpringConstraint.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsCharacter.h"
+
+
+// UI
+#include "Theme.h"
+#include "Control.h"
+#include "Container.h"
+#include "Form.h"
+#include "Layout.h"
+#include "AbsoluteLayout.h"
+#include "Label.h"
+#include "Button.h"

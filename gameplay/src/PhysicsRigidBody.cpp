@@ -560,8 +560,8 @@ void PhysicsRigidBody::transformChanged(Transform* transform, long cookie)
     _inverseIsDirty = true;
 }
 
-PhysicsRigidBody::CollisionPair::CollisionPair(PhysicsRigidBody* rbA, PhysicsRigidBody* rbB)
-    : _rbA(rbA), _rbB(rbB)
+PhysicsRigidBody::CollisionPair::CollisionPair(PhysicsRigidBody* rigidBodyA, PhysicsRigidBody* rigidBodyB)
+    : rigidBodyA(rigidBodyA), rigidBodyB(rigidBodyB)
 {
     // Unused
 }

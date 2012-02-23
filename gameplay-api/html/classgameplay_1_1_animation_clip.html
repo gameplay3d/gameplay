@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -121,6 +120,7 @@ Inheritance diagram for gameplay::AnimationClip:</div>
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">Listener</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>ListenerEvent</b></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#af7b6b4a022626e713af8baabc621009a">getID</a> () const </td></tr>
@@ -132,6 +132,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a006f61a1f72e9428b5d9717530de04c1">getRepeatCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ac177842ec1730ce35cd02c47b03f8155">setActiveDuration</a> (unsigned long duration)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ac336294bfed721fecbe9520d103e993f">getActiveDuration</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a438b928a919fd2b0184c17c520bb2879">getDuration</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a0881be549f9b6d833fc055bdd1af57d2">setSpeed</a> (float speed)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a53442765a6241c12aedce275f7cf2248">getSpeed</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a128747035d2e8797a7364494a597c77f">setBlendWeight</a> (float blendWeight)</td></tr>
@@ -139,9 +140,11 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a5c94a21f0850ea1c91b5612571510027">isPlaying</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ae3f523b557ddfdb3ef8b05bee79d090c">play</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a60b8be3ef809c7001a870daf460267ba">stop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ac74a4379207b09ec2f949b4bc64e88e9">pause</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a1a804917d2545152cb1885463fb53a0d">crossFade</a> (<a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> *clip, unsigned long duration)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#abf7d596e7960b8dfa7c79ace78aeaf71">addBeginListener</a> (<a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">AnimationClip::Listener</a> *listener)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#af1e38797873c3fa5a8921e6b43e40719">addEndListener</a> (<a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">AnimationClip::Listener</a> *listener)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ac1ffa1b5991a31c5810902f72c445e64">addListener</a> (<a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">AnimationClip::Listener</a> *listener, unsigned long eventTime)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a32c79759c1e6a69d0d10db44579853b6">REPEAT_INDEFINITE</a> = 0</td></tr>
@@ -169,10 +172,10 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
       </table>
 </div>
 <div class="memdoc">
-<p>Adds a animation begin listener.</p>
+<p>Adds an animation begin listener.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">listener</td><td>The listener to be called when an animation clip begins. </td></tr>
+    <tr><td class="paramname">listener</td><td>The listener to be called when an <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> begins. </td></tr>
   </table>
   </dd>
 </dl>
@@ -193,10 +196,45 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
       </table>
 </div>
 <div class="memdoc">
-<p>Adds a animation end listener.</p>
+<p>Adds an animation end listener.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">listener</td><td>The listener to be called when an animation clip ends. </td></tr>
+    <tr><td class="paramname">listener</td><td>The listener to be called when an <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> ends. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ac1ffa1b5991a31c5810902f72c445e64"></a><!-- doxytag: member="gameplay::AnimationClip::addListener" ref="ac1ffa1b5991a31c5810902f72c445e64" args="(AnimationClip::Listener *listener, unsigned long eventTime)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::AnimationClip::addListener </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">AnimationClip::Listener</a> *&#160;</td>
+          <td class="paramname"><em>listener</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>eventTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Adds an animation listener to be called back at the specified eventTime during the playback of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">listener</td><td>The listener to be called when the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> reaches the specified time in its playback. </td></tr>
+    <tr><td class="paramname">eventTime</td><td>The time the listener will be called during the playback of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. Must be between 0 and the duration of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -289,6 +327,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 <div class="memdoc">
 <p>Gets the blend weight of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The blendweight of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a438b928a919fd2b0184c17c520bb2879"></a><!-- doxytag: member="gameplay::AnimationClip::getDuration" ref="a438b928a919fd2b0184c17c520bb2879" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long gameplay::AnimationClip::getDuration </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the AnimationClip's duration.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>the AnimationClip's duration. </dd></dl>
 
 </div>
 </div>
@@ -415,6 +471,23 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 <div class="memdoc">
 <p>Checks if the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> is playing.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>true if the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> is playing; false if the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> is not playing. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac74a4379207b09ec2f949b4bc64e88e9"></a><!-- doxytag: member="gameplay::AnimationClip::pause" ref="ac74a4379207b09ec2f949b4bc64e88e9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::AnimationClip::pause </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Pauses the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. </p>
 
 </div>
 </div>
@@ -573,14 +646,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -590,7 +663,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:20 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:05:58 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

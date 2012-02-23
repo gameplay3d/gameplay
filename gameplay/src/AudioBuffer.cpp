@@ -25,6 +25,17 @@ AudioBuffer::AudioBuffer(const char* path) : _filePath(path)
 
 AudioBuffer::~AudioBuffer()
 {
+    // Remove the buffer from the cache.
+    unsigned int bufferCount = (unsigned int)__buffers.size();
+    for (unsigned int i = 0; i < bufferCount; i++)
+    {
+        if (this == __buffers[i])
+        {
+            __buffers.erase(__buffers.begin() + i);
+            break;
+        }
+    }
+
 #ifndef __ANDROID__
     if (_alBuffer)
     {
@@ -247,40 +258,40 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     // Check against the size of the format header as there may be more data that we need to read
     if (section_size > 16)
     {
-    	unsigned int length = section_size - 16;
+        unsigned int length = section_size - 16;
 
-    	// extension size is 2 bytes
-    	if (fread(stream, 1, length, file) != length)
-    		return false;
+        // extension size is 2 bytes
+        if (fread(stream, 1, length, file) != length)
+            return false;
     }
 
     if (fread(stream, 1, 4, file) != 4)
-    	return false;
+        return false;
 
     // read the next chunk, could be fact section or the data section
     if (memcmp(stream, "fact", 4) == 0)
     {
-    	if (fread(stream, 1, 4, file) != 4)
-    		return false;
+        if (fread(stream, 1, 4, file) != 4)
+            return false;
 
-    	section_size  = stream[3]<<24;
-    	section_size |= stream[2]<<16;
-    	section_size |= stream[1]<<8;
-    	section_size |= stream[0];
+        section_size  = stream[3]<<24;
+        section_size |= stream[2]<<16;
+        section_size |= stream[1]<<8;
+        section_size |= stream[0];
 
-    	// read in the rest of the fact section
-    	if (fread(stream, 1, section_size, file) != section_size)
-    		return false;
+        // read in the rest of the fact section
+        if (fread(stream, 1, section_size, file) != section_size)
+            return false;
 
-    	if (fread(stream, 1, 4, file) != 4)
-    		return false;
+        if (fread(stream, 1, 4, file) != 4)
+            return false;
     }
 
     // should now be the data section which holds the decoded sample data
     if (memcmp(stream, "data", 4) != 0)
     {
-    	LOG_ERROR("WAV file has no data.");
-    	return false;
+        LOG_ERROR("WAV file has no data.");
+        return false;
     }
 
     // Read how much data is remaining and buffer it up.
@@ -325,34 +336,34 @@ bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
     else
         format = AL_FORMAT_STEREO16;
 
-	// size = #samples * #channels * 2 (for 16 bit)
+    // size = #samples * #channels * 2 (for 16 bit)
     unsigned int data_size = ov_pcm_total(&ogg_file, -1) * info->channels * 2;
     char* data = new char[data_size];
 
     while (size < data_size)
     {
-    	result = ov_read(&ogg_file, data + size, data_size - size, 0, 2, 1, &section);
-    	if (result > 0)
-    	{
-    		size += result;
-    	}
-    	else if (result < 0)
-    	{
-    		SAFE_DELETE_ARRAY(data);
-    		LOG_ERROR("OGG file missing data.");
-    		return false;
-    	}
-    	else
-    	{
-    		break;
-    	}
+        result = ov_read(&ogg_file, data + size, data_size - size, 0, 2, 1, &section);
+        if (result > 0)
+        {
+            size += result;
+        }
+        else if (result < 0)
+        {
+            SAFE_DELETE_ARRAY(data);
+            LOG_ERROR("OGG file missing data.");
+            return false;
+        }
+        else
+        {
+            break;
+        }
     }
     
     if (size == 0)
     {
-    	SAFE_DELETE_ARRAY(data);
-    	LOG_ERROR("Unable to read OGG data.");
-    	return false;
+        SAFE_DELETE_ARRAY(data);
+        LOG_ERROR("Unable to read OGG data.");
+        return false;
     }
 
     alBufferData(buffer, format, data, data_size, info->rate);

@@ -50,21 +50,21 @@ public:
         /**
          * Constructor.
          */
-        CollisionPair(PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+        CollisionPair(PhysicsRigidBody* rigidBodyA, PhysicsRigidBody* rigidBodyB);
 
         /**
          * Less than operator (needed for use as a key in map).
          * 
-         * @param cp The collision pair to compare.
+         * @param collisionPair The collision pair to compare.
          * @return True if this pair is "less than" the given pair; false otherwise.
          */
-        bool operator<(const CollisionPair& cp) const;
+        bool operator<(const CollisionPair& collisionPair) const;
 
         /** The first rigid body in the collision. */
-        PhysicsRigidBody* _rbA;
+        PhysicsRigidBody* rigidBodyA;
 
         /** The second rigid body in the collision. */
-        PhysicsRigidBody* _rbB;
+        PhysicsRigidBody* rigidBodyB;
     };
 
     /**

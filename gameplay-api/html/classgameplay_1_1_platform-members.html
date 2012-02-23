@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -105,13 +104,17 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#ab5379118d7f39805fb7d62820aa36cd6">enterMessagePump</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#aebc82fa22dfec7cc8cba5b28aff04d00">getAbsoluteTime</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a388195e784d2820c0d6158c4a10c8a97">getAccelerometerValues</a>(float *pitch, float *roll)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#ae041cb899960eda243f144dd8d1a917b">getDisplayHeight</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#abf163f9db26aac12f9bb9fca70eb061a">getDisplayWidth</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a85a6299f0626e9de47a470279e5b6fb6">getOrientationAngle</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#aac96a0a5b3d2ff0b7aca92eaa6126a80">isMultiTouch</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#aa7936bf90741ee305184f2b38467923b">isVsync</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>keyEventInternal</b>(Keyboard::KeyEvent evt, int key) (defined in <a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a>)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a45d449a6b5d17f1ed9d75512de8374a1">setAbsoluteTime</a>(long time)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a3a3f93c158269eb93949ba5d9b550c70">setMultiTouch</a>(bool enabled)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#acacf35e2782bd3253a231dd0bd459f64">setVsync</a>(bool enable)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a52ceea1e71f2c8d99310baa61a69223b">swapBuffers</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>touchEventInternal</b>(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) (defined in <a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a>)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#af14fb3031cb23770e420cfd259c41595">~Platform</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td></td></tr>
 </table></div>
 </div>
@@ -122,7 +125,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -132,7 +135,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:21 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:06:00 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
