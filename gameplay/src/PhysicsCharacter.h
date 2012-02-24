@@ -54,22 +54,6 @@ public:
     };
 
     /**
-     * Flags controlling how a character is moved.
-     */
-    enum MoveFlags
-    {
-        /**
-         * Translates the character.
-         */
-        MOVE_TRANSLATE = 1,
-
-        /**
-         * Rotates the character.
-         */
-        MOVE_ROTATE = 2
-    };
-
-    /**
      * Returns the character node for this PhysicsCharacter.
      *
      * @return The character Node.
@@ -170,7 +154,7 @@ public:
      * normalized (unit-length) velocity vector results in the character speed being
      * controled entirely by the current animation's velocity; whereas the speed of
      * the character can be augmented by modifying the magnitude of the velocity vector.
-     *
+
      * Note that a zero velocity vector and/or a zero animation move speed will
      * result in no character movement (the character will be stationary). A zero
      * velocity vector should be used when playing an animation that targets the
@@ -178,9 +162,38 @@ public:
      * animations will overwrite any transformations on the character's node.
      *
      * @param velocity Movement velocity.
-     * @param flags Optional bitwise combination of MoveFlags constants.
      */
-    void setVelocity(const Vector3& velocity, unsigned int flags = MOVE_TRANSLATE | MOVE_ROTATE);
+    void setVelocity(const Vector3& velocity);
+
+    /**
+     * Rotates the character.
+     *
+     * @param axis Axis of rotation.
+     * @param angle Angle in radians.
+     */
+    void rotate(const Vector3& axis, float angle);
+
+    /**
+     * Rotates the character.
+     *
+     * @param rotation Quaternion representing the rotation to apply.
+     */
+    void rotate(const Quaternion& rotation);
+
+    /**
+     * Sets the rotation of the character.
+     *
+     * @param axis Axis of rotation.
+     * @param angle Angle in radians.
+     */
+    void setRotation(const Vector3& axis, float angle);
+
+    /**
+     * Sets the rotation of the character.
+     *
+     * @param rotation Quaternion representing the new rotation.
+     */
+    void setRotation(const Quaternion& rotation);
 
     /**
      * Moves the character forward with the given velocity vector.
@@ -285,7 +298,6 @@ private:
     btVector3 _fallVelocity;
     btVector3 _currentVelocity;
     btVector3 _normalizedVelocity;
-    unsigned int _moveFlags;
     bool _colliding;
     btVector3 _collisionNormal;
     btVector3 _currentPosition;
