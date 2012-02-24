@@ -58,8 +58,8 @@ private:
 
     bool initScene(Node* node, void* cookie);
     bool drawScene(Node* node, void* cookie);
-
     void loadAnimationClips();
+    void fixCamera(long elapsedTime);
 
     Font* _font;
     Scene* _scene;
