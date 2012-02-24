@@ -54,9 +54,11 @@ protected:
 };
 
 PhysicsCharacter::PhysicsCharacter(Node* node, float radius, float height, const Vector3 center)
-    : _node(node), _forwardVelocity(0.0f), _rightVelocity(0.0f), _fallVelocity(0, 0, 0),
-    _currentVelocity(0,0,0), _colliding(false), _ghostObject(NULL), _collisionShape(NULL),
-    _ignoreTransformChanged(0), _stepHeight(0.2f), _slopeAngle(0.0f), _cosSlopeAngle(0.0f)
+    : _node(node), _motionState(NULL), _moveVelocity(0,0,0), _forwardVelocity(0.0f), _rightVelocity(0.0f),
+    _fallVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
+    _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0),
+    _ghostObject(NULL), _collisionShape(NULL), _ignoreTransformChanged(0),
+    _stepHeight(0.2f), _slopeAngle(0.0f), _cosSlopeAngle(0.0f)
 {
     setMaxSlopeAngle(45.0f);
 
@@ -82,10 +84,10 @@ PhysicsCharacter::PhysicsCharacter(Node* node, float radius, float height, const
     _ghostObject->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 
     btDynamicsWorld* world = Game::getInstance()->getPhysicsController()->_world;
-
+    
     // Register the ghost object for collisions with the world.
     // For now specify static flag only, so character does not interact with dynamic objects
-    world->addCollisionObject(_ghostObject, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::DefaultFilter);
+    world->addCollisionObject(_ghostObject, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter);
 
     // Register ourselves as an action on the physics world so we are called back during physics ticks
     world->addAction(this);
@@ -231,37 +233,38 @@ void PhysicsCharacter::play(CharacterAnimation* animation, unsigned int layer)
     }
 }
 
-void PhysicsCharacter::setVelocity(const Vector3& velocity, unsigned int flags)
+void PhysicsCharacter::setVelocity(const Vector3& velocity)
 {
     _moveVelocity.setValue(velocity.x, velocity.y, velocity.z);
-    _moveFlags = flags;
-
-    if (flags & MOVE_ROTATE)
-    {
-        Vector3 dn;
-        velocity.normalize(&dn);
-
-        float angle = std::acos(Vector3::dot(Vector3(0, 0, -1), dn));
-        _node->setRotation(Vector3::unitY(), angle);
-    }
-
-    updateCurrentVelocity();
 }
 
+void PhysicsCharacter::rotate(const Vector3& axis, float angle)
+{
+    _node->rotate(axis, angle);
+}
+
+void PhysicsCharacter::rotate(const Quaternion& rotation)
+{
+    _node->rotate(rotation);
+}
+
+void PhysicsCharacter::setRotation(const Vector3& axis, float angle)
+{
+    _node->setRotation(axis, angle);
+}
+
+void PhysicsCharacter::setRotation(const Quaternion& rotation)
+{
+    _node->setRotation(rotation);
+}
 void PhysicsCharacter::setForwardVelocity(float velocity)
 {
     _forwardVelocity = velocity;
-    _moveFlags = MOVE_TRANSLATE;
-
-    updateCurrentVelocity();
 }
 
 void PhysicsCharacter::setRightVelocity(float velocity)
 {
     _rightVelocity = velocity;
-    _moveFlags = MOVE_TRANSLATE;
-
-    updateCurrentVelocity();
 }
 
 void PhysicsCharacter::jump(float height)
@@ -305,8 +308,15 @@ void PhysicsCharacter::updateCurrentVelocity()
     }
 
     // Compute final combined movement vectors
-    _normalizedVelocity.normalize();
-    _currentVelocity = _normalizedVelocity * std::sqrt(velocity2);
+    if (_normalizedVelocity.isZero())
+    {
+        _currentVelocity.setZero();
+    }
+    else
+    {
+        _normalizedVelocity.normalize();
+        _currentVelocity = _normalizedVelocity * std::sqrt(velocity2);
+    }
 }
 
 void PhysicsCharacter::transformChanged(Transform* transform, long cookie)
@@ -382,8 +392,6 @@ void PhysicsCharacter::stepUp(btCollisionWorld* collisionWorld, btScalar time)
 
 void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, float time)
 {
-    btVector3 targetPosition = _currentPosition;
-
     // Process currently playing movements+animations and determine final move location
     float animationMoveSpeed = 0.0f;
     unsigned int animationCount = 0;
@@ -415,6 +423,14 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
         ++animationCount;
     }
 
+    updateCurrentVelocity();
+
+    if (_currentVelocity.isZero())
+    {
+        // No velocity, so we aren't moving
+        return;
+    }
+
     // Calculate final velocity
     btVector3 velocity(_currentVelocity);
     if (animationCount > 0)
@@ -424,7 +440,7 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
     velocity *= time; // since velocity is in meters per second
 
     // Translate the target position by the velocity vector (already scaled by t)
-    targetPosition += velocity;
+    btVector3 targetPosition = _currentPosition + velocity;
 
     // Check for collisions by performing a bullet convex sweep test
     btTransform start, end;
