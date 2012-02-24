@@ -8,7 +8,6 @@ scene
         material[1] = res/scene.material#BoyShorts
         material[2] = res/scene.material#BoyShirt
         material[3] = res/scene.material#BoyShoes
-        //rigidbody = res/scene.physics#Boy
     }
 
     node BoyShadow
@@ -35,6 +34,20 @@ scene
         url = BlueChair*
         material = res/scene.material#TableBlue
         rigidbody = res/scene.physics#Chair
+    }
+
+    node PlayTable
+    {
+        material[0] = res/scene.material#PlayTableTopMaterial
+        material[1] = res/scene.material#PlayTableMaterial1
+        material[2] = res/scene.material#PlayTableMaterial2
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node Easel
+    {
+        material = res/scene.material#Easel
+        rigidbody = res/scene.physics#StaticBox
     }
 
     node StorageOrganizer
@@ -94,6 +107,16 @@ scene
     {
         material = res/scene.material#Basketball
         rigidbody = res/scene.physics#Basketball
+    }
+
+    node BasketballNet
+    {
+        material[0] = res/scene.material#Black
+        material[1] = res/scene.material#BasketballPost
+        material[2] = res/scene.material#BasketballRim
+        material[3] = res/scene.material#White
+        material[4] = res/scene.material#Backboard
+        rigidbody = res/scene.physics#StaticBox
     }
 
     physics

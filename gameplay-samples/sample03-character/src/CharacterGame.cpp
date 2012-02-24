@@ -8,6 +8,7 @@ float _rotateY = 0.0f;
 #define WALK_SPEED  7.5f
 #define ANIM_SPEED 10.0f
 #define BLEND_DURATION 150.0f
+#define CAMERA_FOCUS_RANGE 16.0f
 
 bool drawDebug = false;
 
@@ -29,7 +30,7 @@ void CharacterGame::initialize()
     _scene = Scene::load("res/scene.scene");
 
     // Store character node.
-    _character = getPhysicsController()->createCharacter(_scene->findNode("BoyCharacter"), 1.5f, 5.0f, Vector3(0, 2.25f, 0));
+    _character = getPhysicsController()->createCharacter(_scene->findNode("BoyCharacter"), 1.2f, 5.0f, Vector3(0, 2.25f, 0));
 
     // Ensure that the camera's view is unobstructed (for 16 units in front of the camera).
     //_scene->getActiveCamera()->setOcclusionRange(16.0f);
@@ -124,6 +125,8 @@ void CharacterGame::update(long elapsedTime)
             _character->setRightVelocity(0.0f);
         }
     }
+
+    fixCamera(elapsedTime);
 }
 
 void CharacterGame::render(long elapsedTime)
@@ -239,4 +242,69 @@ void CharacterGame::loadAnimationClips()
     _character->addAnimation("walk", _animation->getClip("walk"), WALK_SPEED);
 
     _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT);
+}
+
+void CharacterGame::fixCamera(long elapsedTime)
+{
+    static float cameraOffset = 0.0f;
+
+#define RAY_STEP_SIZE 0.1f
+
+    Node* node = _scene->getActiveCamera()->getNode();
+    
+    Vector3 cameraForward = node->getForwardVectorWorld();
+    cameraForward.normalize();
+
+    Vector3 cameraPosition = node->getTranslationWorld();
+    Vector3 focalPoint = cameraPosition + (cameraForward * CAMERA_FOCUS_RANGE);
+
+    Ray cameraRay(cameraPosition, cameraPosition - focalPoint);
+
+    float d = cameraRay.getOrigin().distanceSquared(focalPoint);
+
+    Vector3 collisionPoint;
+    PhysicsRigidBody* cameraOcclusion = Game::getInstance()->getPhysicsController()->rayTest(cameraRay, CAMERA_FOCUS_RANGE, &collisionPoint);
+    bool cameraCollision = false;
+    if (cameraOcclusion)
+    {
+        Vector3 rayStep = cameraRay.getDirection() * RAY_STEP_SIZE;
+        do
+        {
+            float d2 = cameraRay.getOrigin().distanceSquared(collisionPoint);
+            if (d2 > d)
+                break; // collision point is past the character (not obstructing the view)
+
+            cameraCollision = true;
+
+            // Step along the camera ray closer to the character
+            cameraRay.setOrigin(cameraRay.getOrigin() - rayStep);
+
+            // Prevent camera from moving past character
+            if (cameraRay.getOrigin().distanceSquared(focalPoint) < (RAY_STEP_SIZE*RAY_STEP_SIZE))
+                break;
+        }
+        while (cameraOcclusion = Game::getInstance()->getPhysicsController()->rayTest(cameraRay, CAMERA_FOCUS_RANGE, &collisionPoint));
+    }
+
+    if (cameraCollision)
+    {
+        // Move camera
+        float moveDistance = cameraPosition.distance(cameraRay.getOrigin());
+        //node->setTranslation(0, 0, 0);
+        node->translateForward(moveDistance);
+        cameraOffset += moveDistance;
+    }
+    else
+    {
+        // Reset camera
+        if (cameraOffset != 0.0f)
+        {
+            node->translateForward(-cameraOffset);
+            cameraOffset = 0.0f;
+
+            // Call updateCamera again to ensure that moving back didn't cause a different
+            // object to obstruct the view.
+            fixCamera(elapsedTime);
+        }
+    }
 }

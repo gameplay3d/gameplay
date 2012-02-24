@@ -328,3 +328,111 @@ material Basketball : TexturedSpecular
         }
     }
 }
+
+material PlayTableTopMaterial : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 1, 0.9, 0.8, 1
+        }
+    }
+}
+
+material PlayTableMaterial1 : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.6, 0.1, 0, 1
+        }
+    }
+}
+
+material PlayTableMaterial2 : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0, 0.3, 0.58, 1
+        }
+    }
+}
+
+material Easel : TexturedSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 25
+
+            sampler u_diffuseTexture
+            {
+                path = res/decals.png
+                wrapS = CLAMP
+                wrapT = CLAMP
+            }
+        }
+    }
+}
+
+material Black : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.13, 0.13, 0.13, 1
+        }
+    }
+}
+
+material BasketballPost : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.14, 0.24, 0.8, 1
+        }
+    }
+}
+
+material BasketballRim : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.7, 0.17, 0.0, 1
+        }
+    }
+}
+
+material Backboard : TexturedSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 25
+
+            sampler u_diffuseTexture
+            {
+                path = res/backboard.png
+                wrapS = CLAMP
+                wrapT = CLAMP
+            }
+        }
+    }
+}

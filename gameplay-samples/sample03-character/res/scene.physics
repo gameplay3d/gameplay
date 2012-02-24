@@ -1,17 +1,3 @@
-rigidbody Boy
-{
-    type = CAPSULE
-    radius = 1.5
-    height = 5
-    mass = 0.0
-    kinematic = true
-    friction = 0.5
-    restitution = 0.0
-    linearDamping = 0.1
-    angularDamping = 0.5
-    
-}
-
 rigidbody Basketball
 {
     type = SPHERE
