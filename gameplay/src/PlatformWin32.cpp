@@ -253,6 +253,8 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
 
 LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    if (hwnd != __hwnd)
+        return DefWindowProc(hwnd, msg, wParam, lParam);
     // Scale factors for the mouse movement used to simulate the accelerometer.
     static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
     static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
