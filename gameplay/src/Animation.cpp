@@ -172,6 +172,18 @@ void Animation::pause(const char * clipId)
     }
 }
 
+bool Animation::targets(AnimationTarget* target) const
+{
+    for (std::vector<Animation::Channel*>::const_iterator itr = _channels.begin(); itr != _channels.end(); ++itr)
+    {
+        if ((*itr)->_target == target)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void Animation::createDefaultClip()
 {
     _defaultClip = new AnimationClip("default_clip", this, 0.0f, _duration);
