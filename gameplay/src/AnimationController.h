@@ -106,6 +106,11 @@ public:
      */
     Animation* getAnimation(const char* id) const;
 
+    /**
+     * Returns the first animation that targets the given AnimationTarget.
+     */
+    Animation* getAnimation(AnimationTarget* target) const;
+
     /** 
      * Stops all AnimationClips currently playing on the AnimationController.
      */

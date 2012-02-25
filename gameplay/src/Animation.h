@@ -89,6 +89,11 @@ public:
      */
     void pause(const char* clipId = NULL);
 
+    /**
+     * Returns true if this animation targets the given AnimationTarget.
+     */
+    bool targets(AnimationTarget* target) const;
+
 private:
 
     /**
