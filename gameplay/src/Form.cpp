@@ -59,28 +59,23 @@ namespace gameplay
         }
 
         // Create new form with given ID, theme and layout.
-        const char* id = formProperties->getId();
         const char* themeFile = formProperties->getString("theme");
         const char* layoutString = formProperties->getString("layout");
-        Form* form = Form::create(id, themeFile, getLayoutType(layoutString));
+        Form* form = Form::create(themeFile, getLayoutType(layoutString));
 
-        // Set form's position and dimensions.
-        formProperties->getVector2("position", &form->_position);
-        formProperties->getVector2("size", &form->_size);
-
-        // Set style from theme.
+        Theme* theme = form->getTheme();
         const char* styleName = formProperties->getString("style");
-        form->setStyle(form->getTheme()->getStyle(styleName));
+        form->init(theme->getStyle(styleName), formProperties);
 
         // Add all the controls to the form.
-        form->addControls(form->getTheme(), formProperties);
+        form->addControls(theme, formProperties);
 
         SAFE_DELETE(properties);
 
         return form;
     }
 
-    Form* Form::create(const char* id, const char* themeFile, Layout::Type type)
+    Form* Form::create(const char* themeFile, Layout::Type type)
     {
         Layout* layout;
         switch(type)
@@ -100,9 +95,7 @@ namespace gameplay
         assert(theme);
 
         Form* form = new Form();
-        form->_id = id;
         form->_layout = layout;
-        form->_frameBuffer = FrameBuffer::create(id);
         form->_theme = theme;
 
         __forms.push_back(form);
@@ -271,8 +264,14 @@ namespace gameplay
         // Bind the WorldViewProjection matrix
         material->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
 
+        // Create a FrameBuffer if necessary.
+        if (!_frameBuffer)
+        {
+            _frameBuffer = FrameBuffer::create(_id.c_str());
+        }
+
         // Use the FrameBuffer to texture the quad.
-        if (_frameBuffer->getRenderTarget() == NULL)
+        if (!_frameBuffer->getRenderTarget())
         {
             RenderTarget* rt = RenderTarget::create(_id.c_str(), _size.x, _size.y);
             _frameBuffer->setRenderTarget(rt);
@@ -289,7 +288,7 @@ namespace gameplay
         SAFE_RELEASE(sampler);
     }
 
-    void Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+    bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
     {
         // Check for a collision with each Form in __forms.
         // Pass the event on.
@@ -344,7 +343,21 @@ namespace gameplay
                             m.transformPoint(&point);
 
                             // Pass the touch event on.
-                            form->touchEvent(evt, point.x, size.y - point.y, contactIndex);
+                            const Vector2& size = form->getSize();
+                            const Vector2& position = form->getPosition();
+
+                            if (form->getState() == Control::STATE_FOCUS ||
+                                (evt == Touch::TOUCH_PRESS &&
+                                 point.x >= position.x &&
+                                 point.x <= position.x + size.x &&
+                                 point.y >= position.y &&
+                                 point.y <= position.y + size.y))
+                            {
+                               if (form->touchEvent(evt, point.x, size.y - point.y, contactIndex))
+                               {
+                                   return true;
+                               }
+                            }
                         }
                     }
                 }
@@ -354,18 +367,24 @@ namespace gameplay
                     const Vector2& size = form->getSize();
                     const Vector2& position = form->getPosition();
 
-                    if (form->getState() == Control::STATE_ACTIVE ||
-                        (x >= position.x &&
+                    if (form->getState() == Control::STATE_FOCUS ||
+                        (evt == Touch::TOUCH_PRESS &&
+                         x >= position.x &&
                          x <= position.x + size.x &&
                          y >= position.y &&
                          y <= position.y + size.y))
                     {
                         // Pass on the event's position relative to the form.
-                        form->touchEvent(evt, x - position.x, y - position.y, contactIndex);
+                        if (form->touchEvent(evt, x - position.x, y - position.y, contactIndex))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
         }
+
+        return false;
     }
 
     void Form::keyEventInternal(Keyboard::KeyEvent evt, int key)

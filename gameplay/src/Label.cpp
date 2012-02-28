@@ -41,6 +41,17 @@ namespace gameplay
         return label;
     }
 
+    void Label::init(Theme::Style* style, Properties* properties)
+    {
+        Control::init(style, properties);
+
+        const char* text = properties->getString("text");
+        if (text)
+        {
+            _text = text;
+        }
+    }
+
     Label* Label::getLabel(const char* id)
     {
         std::vector<Label*>::const_iterator it;
