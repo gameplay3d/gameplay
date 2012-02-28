@@ -59,28 +59,23 @@ namespace gameplay
         }
 
         // Create new form with given ID, theme and layout.
-        const char* id = formProperties->getId();
         const char* themeFile = formProperties->getString("theme");
         const char* layoutString = formProperties->getString("layout");
-        Form* form = Form::create(id, themeFile, getLayoutType(layoutString));
+        Form* form = Form::create(themeFile, getLayoutType(layoutString));
 
-        // Set form's position and dimensions.
-        formProperties->getVector2("position", &form->_position);
-        formProperties->getVector2("size", &form->_size);
-
-        // Set style from theme.
+        Theme* theme = form->getTheme();
         const char* styleName = formProperties->getString("style");
-        form->setStyle(form->getTheme()->getStyle(styleName));
+        form->init(theme->getStyle(styleName), formProperties);
 
         // Add all the controls to the form.
-        form->addControls(form->getTheme(), formProperties);
+        form->addControls(theme, formProperties);
 
         SAFE_DELETE(properties);
 
         return form;
     }
 
-    Form* Form::create(const char* id, const char* themeFile, Layout::Type type)
+    Form* Form::create(const char* themeFile, Layout::Type type)
     {
         Layout* layout;
         switch(type)
@@ -100,9 +95,7 @@ namespace gameplay
         assert(theme);
 
         Form* form = new Form();
-        form->_id = id;
         form->_layout = layout;
-        form->_frameBuffer = FrameBuffer::create(id);
         form->_theme = theme;
 
         __forms.push_back(form);
@@ -271,8 +264,14 @@ namespace gameplay
         // Bind the WorldViewProjection matrix
         material->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
 
+        // Create a FrameBuffer if necessary.
+        if (!_frameBuffer)
+        {
+            _frameBuffer = FrameBuffer::create(_id.c_str());
+        }
+
         // Use the FrameBuffer to texture the quad.
-        if (_frameBuffer->getRenderTarget() == NULL)
+        if (!_frameBuffer->getRenderTarget())
         {
             RenderTarget* rt = RenderTarget::create(_id.c_str(), _size.x, _size.y);
             _frameBuffer->setRenderTarget(rt);
@@ -289,7 +288,7 @@ namespace gameplay
         SAFE_RELEASE(sampler);
     }
 
-    void Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+    bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
     {
         // Check for a collision with each Form in __forms.
         // Pass the event on.
@@ -298,74 +297,94 @@ namespace gameplay
         {
             Form* form = *it;
 
-            if (form->getState() == Control::STATE_DISABLED)
-                continue;
-
-            Node* node = form->_node;
-            if (node)
+            if (form->isEnabled())
             {
-                Scene* scene = node->getScene();
-                Camera* camera = scene->getActiveCamera();
-
-                if (camera)
+                Node* node = form->_node;
+                if (node)
                 {
-                    // Get info about the form's position.
-                    Matrix m = node->getMatrix();
-                    const Vector2& size = form->getSize();
-                    Vector3 min(0, 0, 0);
-                    m.transformPoint(&min);
+                    Scene* scene = node->getScene();
+                    Camera* camera = scene->getActiveCamera();
 
-                    // Unproject point into world space.
-                    Ray ray;
-                    camera->pickRay(NULL, x, y, &ray);
-
-                    // Find the quad's plane.
-                    // We know its normal is the quad's forward vector.
-                    Vector3 normal = node->getForwardVectorWorld();
-
-                    // To get the plane's distance from the origin,
-                    // we'll find the distance from the plane defined
-                    // by the quad's forward vector and one of its points
-                    // to the plane defined by the same vector and the origin.
-                    const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
-                    const float d = -(a*min.x) - (b*min.y) - (c*min.z);
-                    const float distance = abs(d) /  sqrt(a*a + b*b + c*c);
-                    Plane plane(normal, -distance);
-
-                    // Check for collision with plane.
-                    float collisionDistance = ray.intersects(plane);
-                    if (collisionDistance != Ray::INTERSECTS_NONE)
+                    if (camera)
                     {
-                        // Multiply the ray's direction vector by collision distance
-                        // and add that to the ray's origin.
-                        Vector3 point = ray.getOrigin() + collisionDistance*ray.getDirection();
+                        // Get info about the form's position.
+                        Matrix m = node->getMatrix();
+                        const Vector2& size = form->getSize();
+                        Vector3 min(0, 0, 0);
+                        m.transformPoint(&min);
 
-                        // Project this point into the plane.
-                        m.invert();
-                        m.transformPoint(&point);
+                        // Unproject point into world space.
+                        Ray ray;
+                        camera->pickRay(NULL, x, y, &ray);
 
-                        // Pass the touch event on.
-                        form->touchEvent(evt, point.x, size.y - point.y, contactIndex);
+                        // Find the quad's plane.
+                        // We know its normal is the quad's forward vector.
+                        Vector3 normal = node->getForwardVectorWorld();
+
+                        // To get the plane's distance from the origin,
+                        // we'll find the distance from the plane defined
+                        // by the quad's forward vector and one of its points
+                        // to the plane defined by the same vector and the origin.
+                        const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
+                        const float d = -(a*min.x) - (b*min.y) - (c*min.z);
+                        const float distance = abs(d) /  sqrt(a*a + b*b + c*c);
+                        Plane plane(normal, -distance);
+
+                        // Check for collision with plane.
+                        float collisionDistance = ray.intersects(plane);
+                        if (collisionDistance != Ray::INTERSECTS_NONE)
+                        {
+                            // Multiply the ray's direction vector by collision distance
+                            // and add that to the ray's origin.
+                            Vector3 point = ray.getOrigin() + collisionDistance*ray.getDirection();
+
+                            // Project this point into the plane.
+                            m.invert();
+                            m.transformPoint(&point);
+
+                            // Pass the touch event on.
+                            const Vector2& size = form->getSize();
+                            const Vector2& position = form->getPosition();
+
+                            if (form->getState() == Control::STATE_FOCUS ||
+                                (evt == Touch::TOUCH_PRESS &&
+                                 point.x >= position.x &&
+                                 point.x <= position.x + size.x &&
+                                 point.y >= position.y &&
+                                 point.y <= position.y + size.y))
+                            {
+                               if (form->touchEvent(evt, point.x, size.y - point.y, contactIndex))
+                               {
+                                   return true;
+                               }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Simply compare with the form's bounds.
+                    const Vector2& size = form->getSize();
+                    const Vector2& position = form->getPosition();
+
+                    if (form->getState() == Control::STATE_FOCUS ||
+                        (evt == Touch::TOUCH_PRESS &&
+                         x >= position.x &&
+                         x <= position.x + size.x &&
+                         y >= position.y &&
+                         y <= position.y + size.y))
+                    {
+                        // Pass on the event's position relative to the form.
+                        if (form->touchEvent(evt, x - position.x, y - position.y, contactIndex))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
-            else
-            {
-                // Simply compare with the form's bounds.
-                const Vector2& size = form->getSize();
-                const Vector2& position = form->getPosition();
-
-                if (form->getState() == Control::STATE_ACTIVE ||
-                    (x >= position.x &&
-                     x <= position.x + size.x &&
-                     y >= position.y &&
-                     y <= position.y + size.y))
-                {
-                    // Pass on the event's position relative to the form.
-                    form->touchEvent(evt, x - position.x, y - position.y, contactIndex);
-                }
-            }
         }
+
+        return false;
     }
 
     void Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
@@ -374,9 +393,6 @@ namespace gameplay
         for (it = __forms.begin(); it < __forms.end(); it++)
         {
             Form* form = *it;
-            if (form->getState() == Control::STATE_DISABLED)
-                continue;
-
             form->keyEvent(evt, key);
         }
     }

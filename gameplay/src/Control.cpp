@@ -5,7 +5,7 @@ namespace gameplay
 {
     Control::Control()
         : _id(""), _state(Control::STATE_NORMAL), _size(Vector2::zero()), _position(Vector2::zero()), _border(Vector2::zero()), _padding(Vector2::zero()),
-          _autoWidth(true), _autoHeight(true), _dirty(true)
+          _autoWidth(true), _autoHeight(true), _dirty(true), _consumeTouchEvents(true)
     {
     }
 
@@ -15,6 +15,22 @@ namespace gameplay
 
     Control::~Control()
     {
+    }
+
+    void Control::init(Theme::Style* style, Properties* properties)
+    {
+        _style = style;
+
+        properties->getVector2("position", &_position);
+        properties->getVector2("size", &_size);
+
+        _state = Control::getStateFromString(properties->getString("state"));
+
+        const char* id = properties->getId();
+        if (id)
+        {
+            _id = id;
+        }
     }
 
     const char* Control::getID()
@@ -84,6 +100,11 @@ namespace gameplay
         _state = STATE_NORMAL;
     }
 
+    bool Control::isEnabled()
+    {
+        return _state != STATE_DISABLED;
+    }
+
     Theme::Style::OverlayType Control::getOverlayType() const
     {
         switch (_state)
@@ -94,14 +115,27 @@ namespace gameplay
             return Theme::Style::OVERLAY_FOCUS;
         case Control::STATE_ACTIVE:
             return Theme::Style::OVERLAY_ACTIVE;
+        case Control::STATE_DISABLED:
+            return Theme::Style::OVERLAY_DISABLED;
         default:
             return Theme::Style::OVERLAY_NORMAL;
         }
     }
 
-    void Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+    void Control::setConsumeTouchEvents(bool consume)
+    {
+        _consumeTouchEvents = consume;
+    }
+    
+    bool Control::getConsumeTouchEvents()
+    {
+        return _consumeTouchEvents;
+    }
+
+    bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
     {
         // Empty stub to be implemented by Button and its descendents.
+        return _consumeTouchEvents;
     }
 
     void Control::keyEvent(Keyboard::KeyEvent evt, int key)
@@ -145,26 +179,33 @@ namespace gameplay
             float bottomY = pos.y + _size.y - border.bottom;
 
             // Draw themed border sprites.
-            if (border.left && border.top)
-                spriteBatch->draw(pos.x, pos.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, borderColor);
-            if (border.top)
-                spriteBatch->draw(pos.x + border.left, pos.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, borderColor);
-            if (border.right && border.top)
-                spriteBatch->draw(rightX, pos.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, borderColor);
-            if (border.left)
-                spriteBatch->draw(pos.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, borderColor);
-            
-            spriteBatch->draw(pos.x + border.left, pos.y + border.top, _size.x - border.left - border.right, _size.y - border.top - border.bottom,
-                center.u1, center.v1, center.u2, center.v2, borderColor);
-
-            if (border.right)
-                spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, borderColor);
-            if (border.bottom && border.left)
-                spriteBatch->draw(pos.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, borderColor);
-            if (border.bottom)
-                spriteBatch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, borderColor);
-            if (border.bottom && border.right)
-                spriteBatch->draw(rightX, bottomY, border.right, border.bottom, bottomRight.u1, bottomRight.v1, bottomRight.u2, bottomRight.v2, borderColor);
+            if (!border.left && !border.right && !border.top && !border.bottom)
+            {
+                // No border, just draw the image.
+                spriteBatch->draw(pos.x, pos.y, _size.x, _size.y, center.u1, center.v1, center.u2, center.v2, borderColor);
+            }
+            else
+            {
+                if (border.left && border.top)
+                    spriteBatch->draw(pos.x, pos.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, borderColor);
+                if (border.top)
+                    spriteBatch->draw(pos.x + border.left, pos.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, borderColor);
+                if (border.right && border.top)
+                    spriteBatch->draw(rightX, pos.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, borderColor);
+                if (border.left)
+                    spriteBatch->draw(pos.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, borderColor);
+                if (border.left && border.right && border.top && border.bottom)
+                    spriteBatch->draw(pos.x + border.left, pos.y + border.top, _size.x - border.left - border.right, _size.y - border.top - border.bottom,
+                        center.u1, center.v1, center.u2, center.v2, borderColor);
+                if (border.right)
+                    spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, borderColor);
+                if (border.bottom && border.left)
+                    spriteBatch->draw(pos.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, borderColor);
+                if (border.bottom)
+                    spriteBatch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, borderColor);
+                if (border.bottom && border.right)
+                    spriteBatch->draw(rightX, bottomY, border.right, border.bottom, bottomRight.u1, bottomRight.v1, bottomRight.u2, bottomRight.v2, borderColor);
+            }
         }
     }
 
@@ -179,5 +220,32 @@ namespace gameplay
     bool Control::isDirty()
     {
         return _dirty;
+    }
+
+    Control::State Control::getStateFromString(const char* state)
+    {
+        if (!state)
+        {
+            return STATE_NORMAL;
+        }
+
+        if (strcmp(state, "STATE_NORMAL") == 0)
+        {
+            return STATE_NORMAL;
+        }
+        else if (strcmp(state, "STATE_ACTIVE") == 0)
+        {
+            return STATE_ACTIVE;
+        }
+        else if (strcmp(state, "STATE_FOCUS") == 0)
+        {
+            return STATE_FOCUS;
+        }
+        else if (strcmp(state, "STATE_DISABLED") == 0)
+        {
+            return STATE_DISABLED;
+        }
+
+        return STATE_NORMAL;
     }
 }

@@ -26,6 +26,8 @@ protected:
     Label(const Label& copy);
     virtual ~Label();
 
+    virtual void init(Theme::Style* style, Properties* properties);
+
     std::string _text;
     Rectangle _viewport;
 };
