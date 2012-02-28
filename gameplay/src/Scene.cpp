@@ -278,7 +278,7 @@ void Scene::setViewport(const Viewport& viewport)
     _viewport = viewport;
 }
 
-const Vector3& Scene::getAmbientColor()
+const Vector3& Scene::getAmbientColor() const
 {
     return _ambientColor;
 }

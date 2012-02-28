@@ -58,6 +58,11 @@ public:
         WORLD_VIEW_PROJECTION_MATRIX,
 
         /**
+         * Binds a node's InverseTransposeWorl matrix.
+         */
+        INVERSE_TRANSPOSE_WORLD_MATRIX,
+
+        /**
          * Binds a node's InverseTransposeWorldView matrix.
          */
         INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX,
@@ -66,6 +71,11 @@ public:
          * Binds the position (Vector3) of the active camera for the node's scene.
          */
         CAMERA_WORLD_POSITION,
+
+        /**
+         * Binds the view-space position (Vector3) of the active camera for the node's scene.
+         */
+        CAMERA_VIEW_POSITION,
 
         /**
          * Binds the matrix palette of MeshSkin attached to a node's model.

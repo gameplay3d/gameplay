@@ -271,6 +271,11 @@ namespace gameplay
 
     bool Container::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
     {
+        if (!isEnabled())
+        {
+            return false;
+        }
+
         bool eventConsumed = false;
 
         std::vector<Control*>::const_iterator it;

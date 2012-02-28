@@ -15,7 +15,7 @@ namespace gameplay
  */
 class Package : public Ref
 {
-    friend class SceneLoader;
+    friend class PhysicsController;
 
 public:
 
@@ -118,6 +118,31 @@ private:
         std::vector<Matrix> inverseBindPoseMatrices;
     };
 
+    struct MeshPartData
+    {
+        MeshPartData();
+        ~MeshPartData();
+
+        Mesh::PrimitiveType primitiveType;
+        Mesh::IndexFormat indexFormat;
+        unsigned int indexCount;
+        unsigned char* indexData;
+    };
+
+    struct MeshData
+    {
+        MeshData(const VertexFormat& vertexFormat);
+        ~MeshData();
+
+        VertexFormat vertexFormat;
+        unsigned int vertexCount;
+        unsigned char* vertexData;
+        BoundingBox boundingBox;
+        BoundingSphere boundingSphere;
+        Mesh::PrimitiveType primitiveType;
+        std::vector<MeshPartData*> parts;
+    };
+
     Package(const char* path);
 
     /**
@@ -174,45 +199,21 @@ private:
     Reference* seekToFirstType(unsigned int type);
 
     /**
-     * Loads the scene with the specified ID from the package, and loads the specified nodes with mesh rigid body support.
-     * If id is NULL then the first scene found is loaded.
-     * 
-     * @param id The ID of the scene to load (NULL to load the first scene).
-     * @param nodesWithMeshRB A list of the IDs of the nodes within the scene that 
-     *      should be loaded with support for triangle mesh rigid bodies.
-     * 
-     * @return The loaded scene, or NULL if the scene could not be loaded.
-     */
-    Scene* loadScene(const char* id, const std::vector<std::string>* nodesWithMeshRB);
-
-    /**
-     * Loads a node with the specified ID from the package, optionally with mesh rigid body support.
-     *
-     * @param id The ID of the node to load in the package.
-     * @param loadWithMeshRBSupport Whether or not to load the node with mesh rigid body support.
-     * 
-     * @return The loaded node, or NULL if the node could not be loaded.
-     */
-    Node* loadNode(const char* id, bool loadWithMeshRBSupport);
-
-    /**
      * Internal method to load a node.
      *
      * Only one of node or scene should be passed as non-NULL (or neither).
      */
-    Node* loadNode(const char* id, Scene* sceneContext, Node* nodeContext, bool loadWithMeshRBSupport);
+    Node* loadNode(const char* id, Scene* sceneContext, Node* nodeContext);
 
     /**
      * Loads a mesh with the specified ID from the package.
      *
      * @param id The ID of the mesh to load.
-     * @param loadWithMeshRBSupport Whether to load the mesh with 
-     *      support for triangle mesh rigid bodies or not.
      * @param nodeId The id of the mesh's model's parent node.
      * 
      * @return The loaded mesh, or NULL if the mesh could not be loaded.
      */
-    Mesh* loadMesh(const char* id, bool loadWithMeshRBSupport, const char* nodeId);
+    Mesh* loadMesh(const char* id, const char* nodeId);
 
     /**
      * Reads an unsigned int from the current file position.
@@ -299,7 +300,7 @@ private:
      * 
      * @return A pointer to new node or NULL if there was an error.
      */
-    Node* readNode(Scene* sceneContext, Node* nodeContext, const std::vector<std::string>* nodesWithMeshRB);
+    Node* readNode(Scene* sceneContext, Node* nodeContext);
 
     /**
      * Reads a camera from the current file position.
@@ -320,7 +321,25 @@ private:
      * 
      * @return A pointer to a new model or NULL if there was an error.
      */
-    Model* readModel(Scene* sceneContext, Node* nodeContext, bool loadWithMeshRBSupport, const char* nodeId);
+    Model* readModel(Scene* sceneContext, Node* nodeContext, const char* nodeId);
+
+    /**
+     * Reads mesh data from the current file position.
+     */
+    MeshData* readMeshData();
+
+    /**
+     * Reads mesh data for the specified URL.
+     *
+     * The specified URL should be formatted as 'package#id', where
+     * 'package' is the package file containing the mesh and 'id' is the ID
+     * of the mesh to read data for.
+     *
+     * @param url The URL to read mesh data from.
+     *
+     * @return The mesh rigid body data.
+     */
+    static MeshData* readMeshData(const char* url);
 
     /**
      * Reads a mesh skin from the current file position.
@@ -368,6 +387,7 @@ private:
     void resolveJointReferences(Scene* sceneContext, Node* nodeContext);
 
 private:
+
     std::string _path;
     unsigned int _referenceCount;
     Reference* _references;

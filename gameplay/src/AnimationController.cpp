@@ -112,6 +112,22 @@ Animation* AnimationController::getAnimation(const char* id) const
     return NULL;
 }
 
+Animation* AnimationController::getAnimation(AnimationTarget* target) const
+{
+    if (!target)
+        return NULL;
+    const unsigned int animationCount = _animations.size();
+    for (unsigned int i = 0; i < animationCount; ++i)
+    {
+        Animation* animation = _animations[i];
+        if (animation->targets(target))
+        {
+            return animation;
+        }
+    }
+    return NULL;
+}
+
 void AnimationController::stopAllAnimations() 
 {
     std::list<AnimationClip*>::iterator clipIter = _runningClips.begin();
