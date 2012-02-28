@@ -235,6 +235,27 @@ bool ParticleEmitter::isStarted() const
     return _started;
 }
 
+bool ParticleEmitter::isActive() const
+{
+    if (_started)
+        return true;
+
+    if (!_node)
+        return false;
+
+    bool active = false;
+    for (unsigned int i = 0; i < _particleCount; i++)
+    {
+        if (_particles[i]._energy > 0)
+        {
+            active = true;
+            break;
+        }
+    }
+
+    return active;
+}
+
 void ParticleEmitter::emit(unsigned int particleCount)
 {
     // Limit particleCount so as not to go over _particleCountMax.
@@ -742,6 +763,11 @@ ParticleEmitter::TextureBlending ParticleEmitter::getTextureBlendingFromString(c
 
 void ParticleEmitter::update(long elapsedTime)
 {
+    if (!isActive())
+    {
+        return;
+    }
+
     // Calculate the time passed since last update.
     float elapsedSecs = (float)elapsedTime / 1000.0f;
 
@@ -848,6 +874,11 @@ void ParticleEmitter::update(long elapsedTime)
 
 void ParticleEmitter::draw()
 {
+    if (!isActive())
+    {
+        return;
+    }
+
     if (_particleCount > 0)
     {
         // Set our node's view projection matrix to this emitter's effect.
@@ -867,7 +898,8 @@ void ParticleEmitter::draw()
             {
                 Particle* p = &_particles[i];
                 _spriteBatch->draw(p->_position.x, p->_position.y, p->_position.z, p->_size, p->_size,
-                                   _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3], p->_color);
+                                   _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3], p->_color,
+                                   true);
             }
         }
         else
@@ -879,7 +911,8 @@ void ParticleEmitter::draw()
             {
                 Particle* p = &_particles[i];
                 _spriteBatch->draw(p->_position, p->_size, p->_size,
-                                   _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3], p->_color, pivot, p->_angle);
+                                   _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3], p->_color, pivot, p->_angle,
+                                   true);
             }
         }
 

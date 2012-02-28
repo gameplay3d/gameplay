@@ -1,4 +1,5 @@
 #include "PhysicsRigidBody.h"
+#include "Base.h"
 
 namespace gameplay
 {
@@ -58,7 +59,7 @@ inline const Vector3& PhysicsRigidBody::getLinearVelocity() const
     return *_linearVelocity;
 }
 
-inline const Node* PhysicsRigidBody::getNode() const
+inline Node* PhysicsRigidBody::getNode()
 {
     return _node;
 }
@@ -70,17 +71,27 @@ inline float PhysicsRigidBody::getRestitution() const
 
 inline bool PhysicsRigidBody::isKinematic() const
 {
-    return (_body->getCollisionFlags() & btCollisionObject::CF_KINEMATIC_OBJECT) != 0;
+    return _body->isKinematicObject();
+}
+
+inline bool PhysicsRigidBody::isStatic() const
+{
+    return _body->isStaticObject();
+}
+
+inline bool PhysicsRigidBody::isDynamic() const
+{
+    return !_body->isStaticOrKinematicObject();
 }
 
 inline void PhysicsRigidBody::setAngularVelocity(const Vector3& velocity)
 {
-    _body->setAngularVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+    _body->setAngularVelocity(BV(velocity));
 }
 
 inline void PhysicsRigidBody::setAnisotropicFriction(const Vector3& friction)
 {
-    _body->setAnisotropicFriction(btVector3(friction.x, friction.y, friction.z));
+    _body->setAnisotropicFriction(BV(friction));
 }
 
 inline void PhysicsRigidBody::setDamping(float linearDamping, float angularDamping)
@@ -95,7 +106,7 @@ inline void PhysicsRigidBody::setFriction(float friction)
 
 inline void PhysicsRigidBody::setGravity(const Vector3& gravity)
 {
-    _body->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
+    _body->setGravity(BV(gravity));
 }
 
 inline void PhysicsRigidBody::setKinematic(bool kinematic)
@@ -114,7 +125,7 @@ inline void PhysicsRigidBody::setKinematic(bool kinematic)
 
 inline void PhysicsRigidBody::setLinearVelocity(const Vector3& velocity)
 {
-    _body->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+    _body->setLinearVelocity(BV(velocity));
 }
 
 inline void PhysicsRigidBody::setRestitution(float restitution)
@@ -122,18 +133,18 @@ inline void PhysicsRigidBody::setRestitution(float restitution)
     _body->setRestitution(restitution);
 }
 
-inline bool PhysicsRigidBody::CollisionPair::operator<(const CollisionPair& cp) const
+inline bool PhysicsRigidBody::CollisionPair::operator<(const CollisionPair& collisionPair) const
 {
     // If the pairs are equal, then return false.
-    if ((_rbA == cp._rbA && _rbB == cp._rbB) || (_rbA == cp._rbB && _rbB == cp._rbA))
+    if ((rigidBodyA == collisionPair.rigidBodyA && rigidBodyB == collisionPair.rigidBodyB) || (rigidBodyA == collisionPair.rigidBodyB && rigidBodyB == collisionPair.rigidBodyA))
         return false;
     else
     {
-        // We choose to compare based on _rbA arbitrarily.
-        if (_rbA < cp._rbA)
+        // We choose to compare based on rigidBodyA arbitrarily.
+        if (rigidBodyA < collisionPair.rigidBodyA)
             return true;
-        else if (_rbA == cp._rbA)
-            return _rbB < cp._rbB;
+        else if (rigidBodyA == collisionPair.rigidBodyA)
+            return rigidBodyB < collisionPair.rigidBodyB;
         else
             return false;
     }

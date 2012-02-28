@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "Model.h"
+#include "Form.h"
 #include "AudioSource.h"
 #include "ParticleEmitter.h"
 #include "PhysicsRigidBody.h"
@@ -15,6 +16,7 @@ namespace gameplay
 
 class Package;
 class Scene;
+class Form;
 
 /**
  * Defines a basic hierachial structure of transformation spaces.
@@ -172,9 +174,18 @@ public:
     const Matrix& getWorldViewMatrix() const;
 
     /**
+     * Gets the inverse transpose world matrix corresponding to this node.
+     *
+     * This matrix is typically used to transform normal vectors into world space.
+     *
+     * @return The inverse world matrix of this node.
+     */
+    const Matrix& getInverseTransposeWorldMatrix() const;
+
+    /**
      * Gets the inverse transpose world view matrix corresponding to this node.
      *
-     * This matrix is typically used to transform normal vectors.
+     * This matrix is typically used to transform normal vectors into view space.
      *
      * @return The inverse world view matrix of this node.
      */
@@ -260,6 +271,13 @@ public:
     Vector3 getActiveCameraTranslationWorld() const;
 
     /**
+     * Returns the view-space translation vector of the currently active camera for this node's scene.
+     *
+     * @return The translation vector of the scene's active camera, in view-space.
+     */
+    Vector3 getActiveCameraTranslationView() const;
+
+    /**
      * Returns the pointer to this node's camera.
      *
      * @return The pointer to this node's camera or NULL.
@@ -310,6 +328,9 @@ public:
      */
     void setModel(Model* model);
 
+    Form* getForm() const;
+    void setForm(Form* form);
+
     /**
      * Returns the pointer to this node's audio source.
      *
@@ -349,7 +370,7 @@ public:
      *
      * @return The pointer to this node's physics rigid body or NULL.
      */
-    PhysicsRigidBody* getPhysicsRigidBody() const;
+    PhysicsRigidBody* getRigidBody() const;
 
     /**
      * Sets (or disables) the physics rigid body for this node.
@@ -366,7 +387,7 @@ public:
      * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
      * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
      */
-    void setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass = 0.0f, float friction = 0.5f,
+    void setRigidBody(PhysicsRigidBody::Type type, float mass = 0.0f, float friction = 0.5f,
         float restitution = 0.0f, float linearDamping = 0.0f, float angularDamping = 0.0f);
 
     /**
@@ -374,14 +395,14 @@ public:
      * 
      * @param filePath The path to the file that contains the rigid body definition.
      */
-    void setPhysicsRigidBody(const char* filePath);
+    void setRigidBody(const char* filePath);
 
     /**
      * Sets the physics rigid body for this node from the given properties object.
      * 
      * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidbody').
      */
-    void setPhysicsRigidBody(Properties* properties);
+    void setRigidBody(Properties* properties);
 
     /**
      * Returns the bounding sphere for the Node, in world space.
@@ -448,6 +469,7 @@ protected:
     Camera* _camera;
     Light* _light;
     Model* _model;
+    Form* _form;
     AudioSource* _audioSource;
     ParticleEmitter* _particleEmitter;
     PhysicsRigidBody* _physicsRigidBody;

@@ -253,8 +253,13 @@ void GPBFile::adjust()
         }
     }
 
+    for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+    {
+        computeBounds(*i);
+    }
+
     // try to convert joint transform animations into rotation animations
-    //optimizeTransformAnimations(); // TODO: Fix bounding sphere before re-enabling this
+    //optimizeTransformAnimations();
 
     // TODO:
     // remove ambient _lights
@@ -268,6 +273,26 @@ void GPBFile::adjust()
     //   Search for animations that have the same target and key times and see if they can be merged.
     //   Blender will output a simple translation animation to 3 separate animations with the same key times but targetting X, Y and Z.
     //   This can be merged into one animation. Same for scale animations.
+}
+
+void GPBFile::computeBounds(Node* node)
+{
+    assert(node);
+    if (Model* model = node->getModel())
+    {
+        if (Mesh* mesh = model->getMesh())
+        {
+            mesh->computeBounds();
+        }
+        if (MeshSkin* skin = model->getSkin())
+        {
+            skin->computeBounds();
+        }
+    }
+    for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
+    {
+        computeBounds(child);
+    }
 }
 
 void GPBFile::optimizeTransformAnimations()

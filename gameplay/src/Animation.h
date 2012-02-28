@@ -82,6 +82,18 @@ public:
      */
     void stop(const char* clipId = NULL);
 
+    /** 
+     * Pauses the AnimationClip with the specified name.
+     *
+     * @param clipId The ID of the AnimationClip to pause. If NULL, pauses the default clip.
+     */
+    void pause(const char* clipId = NULL);
+
+    /**
+     * Returns true if this animation targets the given AnimationTarget.
+     */
+    bool targets(AnimationTarget* target) const;
+
 private:
 
     /**
@@ -92,6 +104,7 @@ private:
      */
     class Channel
     {
+        friend class AnimationController;
         friend class AnimationClip;
         friend class Animation;
         friend class AnimationTarget;

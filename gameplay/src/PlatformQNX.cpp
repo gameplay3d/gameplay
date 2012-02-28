@@ -504,10 +504,7 @@ Platform* Platform::create(Game* game)
     int screenUsage = SCREEN_USAGE_DISPLAY|SCREEN_USAGE_OPENGL_ES2;
     int screenSwapInterval = WINDOW_VSYNC ? 1 : 0;
     int screenTransparency = SCREEN_TRANSPARENCY_NONE;
-
-    // Hard-coded to fullscreen.
-    __screenWindowSize[0] = -1;
-    __screenWindowSize[1] = -1;
+    int angle = atoi(getenv("ORIENTATION"));
 
     // Hard-coded to (0,0).
     int windowPosition[] =
@@ -574,24 +571,70 @@ Platform* Platform::create(Game* game)
         goto error;
     }
 
-    if (__screenWindowSize[0] > 0 && __screenWindowSize[1] > 0)
+	screen_display_t screen_display;
+    rc = screen_get_window_property_pv(__screenWindow, SCREEN_PROPERTY_DISPLAY, (void **)&screen_display);
+    if (rc)
     {
-        rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_SIZE, __screenWindowSize);
-        if (rc)
-        {
-            perror("screen_set_window_property_iv(SCREEN_PROPERTY_SIZE)");
-            goto error;
-        }
+    	perror("screen_get_window_property_pv(SCREEN_PROPERTY_DISPLAY)");
+    	goto error;
     }
-    else
-    {
-        rc = screen_get_window_property_iv(__screenWindow, SCREEN_PROPERTY_SIZE, __screenWindowSize);
-        if (rc)
-        {
-            perror("screen_get_window_property_iv(SCREEN_PROPERTY_SIZE)");
-            goto error;
-        }
-    }
+
+	screen_display_mode_t screen_mode;
+	rc = screen_get_display_property_pv(screen_display, SCREEN_PROPERTY_MODE, (void**)&screen_mode);
+	if (rc)
+	{
+		perror("screen_get_display_property_pv(SCREEN_PROPERTY_MODE)");
+		goto error;
+	}
+
+    int size[2];
+	rc = screen_get_window_property_iv(__screenWindow, SCREEN_PROPERTY_BUFFER_SIZE, size);
+	if (rc)
+	{
+		perror("screen_get_window_property_iv(SCREEN_PROPERTY_BUFFER_SIZE)");
+		goto error;
+	}
+
+	__screenWindowSize[0] = size[0];
+	__screenWindowSize[1] = size[1];
+
+	if ((angle == 0) || (angle == 180))
+	{
+		if (((screen_mode.width > screen_mode.height) && (size[0] < size[1])) ||
+			((screen_mode.width < screen_mode.height) && (size[0] > size[1])))
+		{
+			__screenWindowSize[1] = size[0];
+			__screenWindowSize[0] = size[1];
+		}
+	}
+	else if ((angle == 90) || (angle == 270))
+	{
+		if (((screen_mode.width > screen_mode.height) && (size[0] > size[1])) ||
+			((screen_mode.width < screen_mode.height) && (size[0] < size[1])))
+		{
+			__screenWindowSize[1] = size[0];
+			__screenWindowSize[0] = size[1];
+		}
+	}
+	else
+	{
+		perror("Navigator returned an unexpected orientation angle.");
+		goto error;
+	}
+
+	rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_BUFFER_SIZE, __screenWindowSize);
+	if (rc)
+	{
+		perror("screen_set_window_property_iv(SCREEN_PROPERTY_BUFFER_SIZE)");
+		goto error;
+	}
+
+	rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_ROTATION, &angle);
+	if (rc)
+	{
+		perror("screen_set_window_property_iv(SCREEN_PROPERTY_ROTATION)");
+		goto error;
+	}
 
     if (windowPosition[0] != 0 || windowPosition[1] != 0)
     {
@@ -762,12 +805,12 @@ int Platform::enterMessagePump()
                         if (!__multiTouch)
                         {
                             screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                            Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, position[0], position[1], 0);
+                           gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, position[0], position[1], 0);
                         }
                         else
                         {
                             screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                            Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchEvent.x, touchEvent.y, touchEvent.contact_id);
+                            gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
                         break;
                     }
@@ -777,12 +820,12 @@ int Platform::enterMessagePump()
                         if (!__multiTouch)
                         {
                             screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                            Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, position[0], position[1], 0);
+                           gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, position[0], position[1], 0);
                         }
                         else
                         {
                             screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                            Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
+                            gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
                         break;
                     }
@@ -792,12 +835,12 @@ int Platform::enterMessagePump()
                         if (!__multiTouch)
                         {
                             screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                           Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, position[0], position[1], 0);
+                           gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, position[0], position[1], 0);
                         }
                         else
                         {
                             screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                            Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
+                            gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
                         break;
                         break;
@@ -897,12 +940,12 @@ int Platform::enterMessagePump()
                         // Suppress key repeats
                         if ((flags & KEY_REPEAT) == 0)
                         {
-                            Game::getInstance()->keyEvent(evt, getKey(value));
+                            keyEventInternal(evt, getKey(value));
                             if (evt == gameplay::Keyboard::KEY_PRESS && flags & KEY_SYM_VALID)
                             {
                                 int unicode = getUnicode(value);
                                 if (unicode)
-                                    Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_CHAR, unicode);
+                                    keyEventInternal(gameplay::Keyboard::KEY_CHAR, unicode);
                             }
                         }
                         break;
@@ -927,32 +970,27 @@ int Platform::enterMessagePump()
         if (_game->getState() == Game::UNINITIALIZED)
             break;
 
-        // Idle time (no events left to process) is spent rendering.
-        // We skip rendering when the app is paused.
-        if (_game->getState() != Game::PAUSED)
-        {
-            _game->frame();
+        _game->frame();
 
-            // Post the new frame to the display.
-            // Note that there are a couple cases where eglSwapBuffers could fail
-            // with an error code that requires a certain level of re-initialization:
-            //
-            // 1) EGL_BAD_NATIVE_WINDOW - Called when the surface we're currently using
-            //    is invalidated. This would require us to destroy our EGL surface,
-            //    close our OpenKODE window, and start again.
-            //
-            // 2) EGL_CONTEXT_LOST - Power management event that led to our EGL context
-            //    being lost. Requires us to re-create and re-initalize our EGL context
-            //    and all OpenGL ES state.
-            //
-            // For now, if we get these, we'll simply exit.
-            rc = eglSwapBuffers(__eglDisplay, __eglSurface);
-            if (rc != EGL_TRUE)
-            {
-                _game->exit();
-                perror("eglSwapBuffers");
-                break;
-            }
+        // Post the new frame to the display.
+        // Note that there are a couple cases where eglSwapBuffers could fail
+        // with an error code that requires a certain level of re-initialization:
+        //
+        // 1) EGL_BAD_NATIVE_WINDOW - Called when the surface we're currently using
+        //    is invalidated. This would require us to destroy our EGL surface,
+        //    close our OpenKODE window, and start again.
+        //
+        // 2) EGL_CONTEXT_LOST - Power management event that led to our EGL context
+        //    being lost. Requires us to re-create and re-initalize our EGL context
+        //    and all OpenGL ES state.
+        //
+        // For now, if we get these, we'll simply exit.
+        rc = eglSwapBuffers(__eglDisplay, __eglSurface);
+        if (rc != EGL_TRUE)
+        {
+            _game->exit();
+            perror("eglSwapBuffers");
+            break;
         }
     }
 
@@ -1044,6 +1082,18 @@ void Platform::displayKeyboard(bool display)
         virtualkeyboard_show();
     else
         virtualkeyboard_hide();
+}
+
+void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+    Form::touchEventInternal(evt, x, y, contactIndex);
+}
+
+void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Form::keyEventInternal(evt, key);
 }
 
 }

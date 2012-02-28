@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AbsoluteLayout.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\AnimationClip.cpp" />
     <ClCompile Include="src\AnimationController.cpp" />
@@ -26,13 +27,18 @@
     <ClCompile Include="src\AudioSource.cpp" />
     <ClCompile Include="src\BoundingBox.cpp" />
     <ClCompile Include="src\BoundingSphere.cpp" />
+    <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\CheckBox.cpp" />
+    <ClCompile Include="src\Container.cpp" />
+    <ClCompile Include="src\Control.cpp" />
     <ClCompile Include="src\Curve.cpp" />
     <ClCompile Include="src\DebugNew.cpp" />
     <ClCompile Include="src\DepthStencilTarget.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\Font.cpp" />
+    <ClCompile Include="src\Form.cpp" />
     <ClCompile Include="src\FrameBuffer.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
@@ -41,6 +47,7 @@
     <ClCompile Include="src\gameplay-main-win32.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Joint.cpp" />
+    <ClCompile Include="src\Label.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MeshBatch.cpp" />
@@ -54,6 +61,7 @@
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\Package.cpp" />
     <ClCompile Include="src\ParticleEmitter.cpp" />
+    <ClCompile Include="src\PhysicsCharacter.cpp" />
     <ClCompile Include="src\PhysicsConstraint.cpp" />
     <ClCompile Include="src\PhysicsController.cpp" />
     <ClCompile Include="src\PhysicsFixedConstraint.cpp" />
@@ -69,6 +77,7 @@
     <ClCompile Include="src\PlatformWin32.cpp" />
     <ClCompile Include="src\Properties.cpp" />
     <ClCompile Include="src\Quaternion.cpp" />
+    <ClCompile Include="src\RadioButton.cpp" />
     <ClCompile Include="src\Ray.cpp" />
     <ClCompile Include="src\Rectangle.cpp" />
     <ClCompile Include="src\Ref.cpp" />
@@ -76,18 +85,23 @@
     <ClCompile Include="src\RenderTarget.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SceneLoader.cpp" />
+    <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
+    <ClCompile Include="src\TextBox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\Theme.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\Vector2.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
     <ClCompile Include="src\Vector4.cpp" />
     <ClCompile Include="src\VertexAttributeBinding.cpp" />
     <ClCompile Include="src\VertexFormat.cpp" />
+    <ClCompile Include="src\VerticalLayout.cpp" />
     <ClCompile Include="src\Viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AbsoluteLayout.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\AnimationClip.h" />
     <ClInclude Include="src\AnimationController.h" />
@@ -100,13 +114,18 @@
     <ClInclude Include="src\Base.h" />
     <ClInclude Include="src\BoundingBox.h" />
     <ClInclude Include="src\BoundingSphere.h" />
+    <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\CheckBox.h" />
+    <ClInclude Include="src\Container.h" />
+    <ClInclude Include="src\Control.h" />
     <ClInclude Include="src\Curve.h" />
     <ClInclude Include="src\DebugNew.h" />
     <ClInclude Include="src\DepthStencilTarget.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FileSystem.h" />
     <ClInclude Include="src\Font.h" />
+    <ClInclude Include="src\Form.h" />
     <ClInclude Include="src\FrameBuffer.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Game.h" />
@@ -114,6 +133,8 @@
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Joint.h" />
     <ClInclude Include="src\Keyboard.h" />
+    <ClInclude Include="src\Label.h" />
+    <ClInclude Include="src\Layout.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\MeshBatch.h" />
@@ -128,6 +149,7 @@
     <ClInclude Include="src\Node.h" />
     <ClInclude Include="src\Package.h" />
     <ClInclude Include="src\ParticleEmitter.h" />
+    <ClInclude Include="src\PhysicsCharacter.h" />
     <ClInclude Include="src\PhysicsConstraint.h" />
     <ClInclude Include="src\PhysicsController.h" />
     <ClInclude Include="src\PhysicsFixedConstraint.h" />
@@ -141,6 +163,7 @@
     <ClInclude Include="src\Platform.h" />
     <ClInclude Include="src\Properties.h" />
     <ClInclude Include="src\Quaternion.h" />
+    <ClInclude Include="src\RadioButton.h" />
     <ClInclude Include="src\Ray.h" />
     <ClInclude Include="src\Rectangle.h" />
     <ClInclude Include="src\Ref.h" />
@@ -148,9 +171,12 @@
     <ClInclude Include="src\RenderTarget.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SceneLoader.h" />
+    <ClInclude Include="src\Slider.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />
+    <ClInclude Include="src\TextBox.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\Theme.h" />
     <ClInclude Include="src\Touch.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\Vector2.h" />
@@ -158,6 +184,7 @@
     <ClInclude Include="src\Vector4.h" />
     <ClInclude Include="src\VertexAttributeBinding.h" />
     <ClInclude Include="src\VertexFormat.h" />
+    <ClInclude Include="src\VerticalLayout.h" />
     <ClInclude Include="src\Viewport.h" />
   </ItemGroup>
   <ItemGroup>

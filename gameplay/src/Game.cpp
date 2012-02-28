@@ -161,45 +161,49 @@ void Game::exit()
 
 void Game::frame()
 {
-    if (_state != RUNNING)
+    if (!_initialized)
     {
-        return;
+        initialize();
+        _initialized = true;
+    }
+
+    if (_state == Game::RUNNING)
+    {
+        // Update Time.
+        static long lastFrameTime = Game::getGameTime();
+        long frameTime = Game::getGameTime();
+        long elapsedTime = (frameTime - lastFrameTime);
+        lastFrameTime = frameTime;
+
+        // Update the scheduled and running animations.
+        _animationController->update(elapsedTime);
+    
+        // Update the physics.
+        _physicsController->update(elapsedTime);
+        // Application Update.
+        update(elapsedTime);
+
+        // Audio Rendering.
+        _audioController->update(elapsedTime);
+        // Graphics Rendering.
+        render(elapsedTime);
+
+        // Update FPS.
+        ++_frameCount;
+        if ((Game::getGameTime() - _frameLastFPS) >= 1000)
+        {
+            _frameRate = _frameCount;
+            _frameCount = 0;
+            _frameLastFPS = Game::getGameTime();
+        }
     }
     else
     {
-        if (!_initialized)
-        {
-            initialize();
-            _initialized = true;
-        }
-    }
+        // Application Update.
+        update(0);
 
-    // Update Time.
-    static long lastFrameTime = Game::getGameTime();
-    long frameTime = Game::getGameTime();
-    long elapsedTime = (frameTime - lastFrameTime);
-    lastFrameTime = frameTime;
-
-    // Update the scheduled and running animations.
-    _animationController->update(elapsedTime);
-    
-    // Update the physics.
-    _physicsController->update(elapsedTime);
-    // Application Update.
-    update(elapsedTime);
-
-    // Audio Rendering.
-    _audioController->update(elapsedTime);
-    // Graphics Rendering.
-    render(elapsedTime);
-
-    // Update FPS.
-    ++_frameCount;
-    if ((Game::getGameTime() - _frameLastFPS) >= 1000)
-    {
-        _frameRate = _frameCount;
-        _frameCount = 0;
-        _frameLastFPS = Game::getGameTime();
+        // Graphics Rendering.
+        render(0);
     }
 }
 
@@ -261,6 +265,20 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
     return false;
+}
+
+void Game::updateOnce()
+{
+    // Update Time.
+    static long lastFrameTime = Game::getGameTime();
+    long frameTime = Game::getGameTime();
+    long elapsedTime = (frameTime - lastFrameTime);
+    lastFrameTime = frameTime;
+
+    // Update the internal controllers.
+    _animationController->update(elapsedTime);
+    _physicsController->update(elapsedTime);
+    _audioController->update(elapsedTime);
 }
 
 }

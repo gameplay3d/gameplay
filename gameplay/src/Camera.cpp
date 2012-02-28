@@ -2,6 +2,8 @@
 #include "Camera.h"
 #include "Game.h"
 #include "Node.h"
+#include "Game.h"
+#include "PhysicsController.h"
 
 // Camera dirty bits
 #define CAMERA_DIRTY_VIEW 1
@@ -340,7 +342,6 @@ void Camera::pickRay(const Viewport* viewport, float x, float y, Ray* dst)
 
     dst->set(nearPoint, direction);
 }
-
 
 void Camera::transformChanged(Transform* transform, long cookie)
 {

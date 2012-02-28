@@ -67,6 +67,8 @@ protected:
 
     void addChannel(Animation::Channel* animation);
 
+    void deleteChannel(Animation::Channel* channel);
+
     TargetType _targetType;             // The type of target this is.
 
     char _animationPropertyBitFlag;     // Bit flag used to indicate which properties on the AnimationTarget are currently animating.

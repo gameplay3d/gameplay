@@ -198,9 +198,9 @@ Reference
 34->Mesh
                 vertexFormat            VertexElement[] { enum VertexUsage usage, unint size }
                 vertices                byte[]
-                parts                   MeshPart[]
                 boundingBox             BoundingBox { float[3] min, float[3] max }
                 boundingSphere          BoundingSphere { float[3] center, float radius }
+                parts                   MeshPart[]
 ------------------------------------------------------------------------------------------------------
 35->MeshPart
                 primitiveType           enum PrimitiveType

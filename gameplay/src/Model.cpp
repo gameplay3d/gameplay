@@ -190,6 +190,11 @@ Material* Model::setMaterial(const char* materialPath, int partIndex)
     return material;
 }
 
+bool Model::hasPartMaterial(unsigned int partIndex) const
+{
+    return (partIndex >= 0 && partIndex < _partCount && _partMaterials && _partMaterials[partIndex]);
+}
+
 MeshSkin* Model::getSkin()
 {
     return _skin;
@@ -276,15 +281,15 @@ void Model::draw(bool wireframe)
             MeshPart* part = _mesh->getPart(i);
 
             // Get the material for this mesh part.
-            Material* material;
-            if (_partMaterials && i < _partCount && _partMaterials[i])
+            Material* material = getMaterial(i);
+            /*if (_partMaterials && i < _partCount && _partMaterials[i])
             {
                 material = _partMaterials[i]; // Use part material
             }
             else
             {
                 material = _material; // Use shared material
-            }
+            }*/
 
             if (material)
             {

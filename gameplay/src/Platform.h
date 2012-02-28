@@ -1,6 +1,9 @@
 #ifndef PLATFORM_H_
 #define PLATFORM_H_
 
+#include "Touch.h"
+#include "Keyboard.h"
+
 namespace gameplay
 {
 
@@ -115,6 +118,10 @@ public:
      * @param display true when virtual keyboard needs to be displayed and false otherwise.
      */
      static void displayKeyboard(bool display);
+
+    static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    static void keyEventInternal(Keyboard::KeyEvent evt, int key);
 
 private:
 
