@@ -61,6 +61,7 @@
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\Package.cpp" />
     <ClCompile Include="src\ParticleEmitter.cpp" />
+    <ClCompile Include="src\PhysicsCharacter.cpp" />
     <ClCompile Include="src\PhysicsConstraint.cpp" />
     <ClCompile Include="src\PhysicsController.cpp" />
     <ClCompile Include="src\PhysicsFixedConstraint.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="src\Node.h" />
     <ClInclude Include="src\Package.h" />
     <ClInclude Include="src\ParticleEmitter.h" />
+    <ClInclude Include="src\PhysicsCharacter.h" />
     <ClInclude Include="src\PhysicsConstraint.h" />
     <ClInclude Include="src\PhysicsController.h" />
     <ClInclude Include="src\PhysicsFixedConstraint.h" />

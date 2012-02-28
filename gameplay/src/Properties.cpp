@@ -567,12 +567,10 @@ const char* Properties::getString(const char* name) const
 
 bool Properties::getBool(const char* name) const
 {
-    if (exists(name))
+    const char* valueString = getString(name);
+    if (valueString)
     {
-        if (_properties.find(name)->second == "true")
-        {
-            return true;
-        }
+        return (strcmp(valueString, "true") == 0);
     }
 
     return false;

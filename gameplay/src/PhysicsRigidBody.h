@@ -18,6 +18,7 @@ class PhysicsConstraint;
 class PhysicsRigidBody : public Transform::Listener
 {
     friend class Node;
+    friend class PhysicsCharacter;
     friend class PhysicsConstraint;
     friend class PhysicsController;
     friend class PhysicsFixedConstraint;
@@ -232,6 +233,20 @@ public:
      * @return Whether the rigid body is kinematic or not.
      */
     inline bool isKinematic() const;
+
+    /**
+     * Gets whether the rigid body is a static rigid body or not.
+     *
+     * @return Whether the rigid body is static.
+     */
+    inline bool isStatic() const;
+
+    /**
+     * Gets whether the rigid body is a dynamic rigid body or not.
+     *
+     * @return Whether the rigid body is dynamic.
+     */
+    inline bool isDynamic() const;
 
     /**
      * Sets the rigid body's angular velocity.

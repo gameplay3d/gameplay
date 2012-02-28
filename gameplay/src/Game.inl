@@ -46,13 +46,6 @@ void Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
     Platform::swapBuffers();
 }
 
-template <class T>
-void Game::updateOnce(T* instance, void (T::*method)(void*), void* cookie)
-{
-    updateOnce();
-    (instance->*method)(cookie);
-}
-
 inline void Game::setMultiTouch(bool enabled)
 {
     Platform::setMultiTouch(enabled);
