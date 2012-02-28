@@ -36,8 +36,29 @@ AnimationClip::~AnimationClip()
     SAFE_RELEASE(_crossFadeToClip);
     SAFE_DELETE(_beginListeners);
     SAFE_DELETE(_endListeners);
-    SAFE_DELETE(_listeners);
+
+    if (_listeners)
+    {
+        *_listenerItr = _listeners->begin();
+        while (*_listenerItr != _listeners->end())
+        {
+            ListenerEvent* lEvt = **_listenerItr;
+            SAFE_DELETE(lEvt);
+            ++*_listenerItr;
+        }
+        SAFE_DELETE(_listeners);
+    }
     SAFE_DELETE(_listenerItr);
+}
+
+AnimationClip::ListenerEvent::ListenerEvent(Listener* listener, unsigned long eventTime)
+{
+    _listener = listener;
+    _eventTime = eventTime;
+}
+
+AnimationClip::ListenerEvent::~ListenerEvent()
+{
 }
 
 const char* AnimationClip::getID() const
@@ -108,6 +129,11 @@ unsigned long AnimationClip::getActiveDuration() const
     return _activeDuration;
 }
 
+unsigned long AnimationClip::getDuration() const
+{
+    return _duration;
+}
+
 void AnimationClip::setSpeed(float speed)
 {
     _speed = speed;
@@ -137,14 +163,26 @@ void AnimationClip::play()
 {
     if (isClipStateBitSet(CLIP_IS_PLAYING_BIT))
     {
-        _animation->_controller->unschedule(this);
-        resetClipStateBit(CLIP_IS_STARTED_BIT);
-        onEnd();
+        // If paused, reset the bit and return.
+        if (isClipStateBitSet(CLIP_IS_PAUSED_BIT))
+        {
+            resetClipStateBit(CLIP_IS_PAUSED_BIT);
+            return;
+        }
+
+        // If the clip is set to be removed, reset the flag.
+        if (isClipStateBitSet(CLIP_IS_MARKED_FOR_REMOVAL_BIT))
+            resetClipStateBit(CLIP_IS_MARKED_FOR_REMOVAL_BIT);
+
+        // Set the state bit to restart.
+        setClipStateBit(CLIP_IS_RESTARTED_BIT);
     }
     else
+    {
         setClipStateBit(CLIP_IS_PLAYING_BIT);
+        _animation->_controller->schedule(this);
+    }
     
-    _animation->_controller->schedule(this);
     _timeStarted = Game::getGameTime();
 }
 
@@ -152,9 +190,20 @@ void AnimationClip::stop()
 {
     if (isClipStateBitSet(CLIP_IS_PLAYING_BIT))
     {
-        _animation->_controller->unschedule(this);
-        resetClipStateBit(CLIP_IS_PLAYING_BIT | CLIP_IS_STARTED_BIT);
-        onEnd();
+        // Reset the restarted and paused bits. 
+        resetClipStateBit(CLIP_IS_RESTARTED_BIT);
+        resetClipStateBit(CLIP_IS_PAUSED_BIT);
+
+        // Mark the clip to removed from the AnimationController.
+        setClipStateBit(CLIP_IS_MARKED_FOR_REMOVAL_BIT);
+    }
+}
+
+void AnimationClip::pause()
+{
+    if (isClipStateBitSet(CLIP_IS_PLAYING_BIT) && !isClipStateBitSet(CLIP_IS_MARKED_FOR_REMOVAL_BIT))
+    {
+        setClipStateBit(CLIP_IS_PAUSED_BIT);
     }
 }
 
@@ -162,26 +211,33 @@ void AnimationClip::crossFade(AnimationClip* clip, unsigned long duration)
 {
     assert(clip);
 
+    // Check if the given clip is fading into this clip.
+    // We should reset the clip from fading out, and this one from fading in 
+    // in order to start the crossfade back the other way.
+    if (clip->isClipStateBitSet(CLIP_IS_FADING_OUT_BIT) && clip->_crossFadeToClip == this)
+    {
+        clip->resetClipStateBit(CLIP_IS_FADING_OUT_BIT);
+        clip->_crossFadeToClip->resetClipStateBit(CLIP_IS_FADING_IN_BIT);
+        SAFE_RELEASE(clip->_crossFadeToClip);
+    }
+
     // If I already have a clip I'm fading to and it's not the same as the given clip release it.
     // Assign the new clip and increase it's ref count.
     if (_crossFadeToClip)
     {
-        _crossFadeToClip->stop();
-        _crossFadeToClip->resetClipStateBit(CLIP_IS_FADING_IN_BIT);
         SAFE_RELEASE(_crossFadeToClip);
     }
-        
+
+    // Set and initialize the crossfade clip
     _crossFadeToClip = clip;
     _crossFadeToClip->addRef();
-        
-    // Set the crossfade clip to fading in, and initialize it's blend weight to zero.
     _crossFadeToClip->setClipStateBit(CLIP_IS_FADING_IN_BIT);
     _crossFadeToClip->_blendWeight = 0.0f;
     
-    // Set this clip to fade out, set the fade duration and reset the fade elapsed time.
+    // Set and intiliaze this clip to fade out
     setClipStateBit(CLIP_IS_FADING_OUT_STARTED_BIT);
     setClipStateBit(CLIP_IS_FADING_OUT_BIT);
-    _crossFadeOutElapsed = 0;
+    _crossFadeOutElapsed = 0L;
     _crossFadeOutDuration = duration;
     
     // If this clip is currently not playing, we should start playing it.
@@ -195,39 +251,40 @@ void AnimationClip::crossFade(AnimationClip* clip, unsigned long duration)
 void AnimationClip::addListener(AnimationClip::Listener* listener, unsigned long eventTime)
 {
     assert(listener);
-    assert(eventTime < _duration);
+    assert(eventTime < _activeDuration);
 
-    listener->_listenerTime = eventTime;
+    ListenerEvent* listenerEvent = new ListenerEvent(listener, eventTime);
 
     if (!_listeners)
     {
-        _listeners = new std::list<Listener*>;
-        _listeners->push_front(listener);
+        _listeners = new std::list<ListenerEvent*>;
+        _listeners->push_front(listenerEvent);
 
-        _listenerItr = new std::list<Listener*>::iterator;
+        _listenerItr = new std::list<ListenerEvent*>::iterator;
         if (isClipStateBitSet(CLIP_IS_PLAYING_BIT))
             *_listenerItr = _listeners->begin();
     }
     else
     {
-        for (std::list<Listener*>::iterator itr = _listeners->begin(); itr != _listeners->begin(); itr++)
+        for (std::list<ListenerEvent*>::iterator itr = _listeners->begin(); itr != _listeners->end(); itr++)
         {
-            if (eventTime < (*itr)->_listenerTime)
+            if (eventTime < (*itr)->_eventTime)
             {
-                itr = _listeners->insert(itr, listener);
+                itr = _listeners->insert(itr, listenerEvent);
 
                 // If playing, update the iterator if we need to.
                 // otherwise, it will just be set the next time the clip gets played.
                 if (isClipStateBitSet(CLIP_IS_PLAYING_BIT))
                 {
                     unsigned long currentTime = _elapsedTime % _duration;
-                    if ((_speed >= 0.0f && currentTime < eventTime && (*_listenerItr == _listeners->end() || eventTime < (**_listenerItr)->_listenerTime)) || 
-                        (_speed <= 0 && currentTime > eventTime && (*_listenerItr == _listeners->begin() || eventTime > (**_listenerItr)->_listenerTime)))
+                    if ((_speed >= 0.0f && currentTime < eventTime && (*_listenerItr == _listeners->end() || eventTime < (**_listenerItr)->_eventTime)) || 
+                        (_speed <= 0 && currentTime > eventTime && (*_listenerItr == _listeners->begin() || eventTime > (**_listenerItr)->_eventTime)))
                         *_listenerItr = itr;
                 }
                 return;
             }
         }
+        _listeners->push_back(listenerEvent);
     }
 }
 
@@ -249,8 +306,21 @@ void AnimationClip::addEndListener(AnimationClip::Listener* listener)
 
 bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*>* activeTargets)
 {
-    if (!isClipStateBitSet(CLIP_IS_STARTED_BIT))
+    if (isClipStateBitSet(CLIP_IS_PAUSED_BIT))
+    {
+        return false;
+    }
+    else if (isClipStateBitSet(CLIP_IS_MARKED_FOR_REMOVAL_BIT))
+    {   // If the marked for removal bit is set, it means stop() was called on the AnimationClip at some point
+        // after the last update call. Reset the flag, and return true so the AnimationClip is removed from the 
+        // running clips on the AnimationController.
+        onEnd();
+        return true;
+    }
+    else if (!isClipStateBitSet(CLIP_IS_STARTED_BIT))
+    {
         onBegin();
+    }
     else
     {
         _elapsedTime += elapsedTime * _speed;
@@ -266,9 +336,17 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
         resetClipStateBit(CLIP_IS_STARTED_BIT);
         if (_speed >= 0.0f)
         {
-            currentTime = _activeDuration % _duration; // Get's the fractional part of the final repeat.
-            if (currentTime == 0L)
-                currentTime = _duration;
+            // If _duration == 0, we have a "pose". Just set currentTime to 0.
+            if (_duration == 0)
+            {
+                currentTime = 0L;
+            }
+            else
+            {
+                currentTime = _activeDuration % _duration; // Get's the fractional part of the final repeat.
+                if (currentTime == 0L)
+                    currentTime = _duration;
+            }
         }
         else
         {
@@ -277,8 +355,11 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
     }
     else
     {
-        // Gets portion/fraction of the repeat.
-        currentTime = _elapsedTime % _duration;
+        // If _duration == 0, we have a "pose". Just set currentTime to 0.
+        if (_duration == 0)
+            currentTime = 0L;
+        else // Gets portion/fraction of the repeat.
+            currentTime = _elapsedTime % _duration;
     }
 
     // Notify any listeners of Animation events.
@@ -286,17 +367,17 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
     {
         if (_speed >= 0.0f)
         {
-            while (*_listenerItr != _listeners->end() && currentTime >= (**_listenerItr)->_listenerTime)
+            while (*_listenerItr != _listeners->end() && _elapsedTime >= (long) (**_listenerItr)->_eventTime)
             {
-                (**_listenerItr)->animationEvent(this, Listener::DEFAULT);
+                (**_listenerItr)->_listener->animationEvent(this, Listener::DEFAULT);
                 ++*_listenerItr;
             }
         }
         else
         {
-            while (*_listenerItr != _listeners->begin() && currentTime <= (**_listenerItr)->_listenerTime)
+            while (*_listenerItr != _listeners->begin() && _elapsedTime <= (long) (**_listenerItr)->_eventTime)
             {
-                (**_listenerItr)->animationEvent(this, Listener::DEFAULT);
+                (**_listenerItr)->_listener->animationEvent(this, Listener::DEFAULT);
                 --*_listenerItr;
             }
         }
@@ -338,20 +419,11 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
         }
         else
         {   // Fade is done.
-            // Set blendweights
             _crossFadeToClip->_blendWeight = 1.0f;
-
-            // Adjust the crossfade clip's blend weight if this clip is also fading in.
-            if (isClipStateBitSet(CLIP_IS_FADING_IN_BIT))
-                _crossFadeToClip->_blendWeight *= _blendWeight;
-
-            _blendWeight = 0.0f; 
-
-            // reset the states of our clips to turn off the cross fade.
+            _blendWeight = 0.0f;
+            resetClipStateBit(CLIP_IS_STARTED_BIT);            
+            resetClipStateBit(CLIP_IS_FADING_OUT_BIT);
             _crossFadeToClip->resetClipStateBit(CLIP_IS_FADING_IN_BIT);
-            resetClipStateBit(CLIP_IS_FADING_OUT_BIT | CLIP_IS_STARTED_BIT);
-
-            // Release the crossfade clip, mark ourselves as done and set our blend weight to 0.
             SAFE_RELEASE(_crossFadeToClip);
         }
     }
@@ -380,20 +452,9 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
     }
 
     // When ended. Probably should move to it's own method so we can call it when the clip is ended early.
-    if (!isClipStateBitSet(CLIP_IS_STARTED_BIT))
+    if (isClipStateBitSet(CLIP_IS_MARKED_FOR_REMOVAL_BIT) || !isClipStateBitSet(CLIP_IS_STARTED_BIT))
     {
         onEnd();
-        // Notify end listeners if any.
-        if (_endListeners)
-        {
-            std::vector<Listener*>::iterator listener = _endListeners->begin();
-            while (listener != _endListeners->end())
-            {
-                (*listener)->animationEvent(this, Listener::END);
-                listener++;
-            }
-        }
-
         return true;
     }
 
@@ -434,21 +495,31 @@ void AnimationClip::onBegin()
 void AnimationClip::onEnd()
 {
     _blendWeight = 1.0f;
-    _timeStarted = 0;
-    resetClipStateBit(CLIP_IS_PLAYING_BIT);
+    resetClipStateBit(CLIP_ALL_BITS);
+
+    // Notify end listeners if any.
+    if (_endListeners)
+    {
+        std::vector<Listener*>::iterator listener = _endListeners->begin();
+        while (listener != _endListeners->end())
+        {
+            (*listener)->animationEvent(this, Listener::END);
+            listener++;
+        }
+    }
 }
 
-bool AnimationClip::isClipStateBitSet(char bit) const
+bool AnimationClip::isClipStateBitSet(unsigned char bit) const
 {
     return (_stateBits & bit) == bit;
 }
 
-void AnimationClip::setClipStateBit(char bit)
+void AnimationClip::setClipStateBit(unsigned char bit)
 {
     _stateBits |= bit;
 }
 
-void AnimationClip::resetClipStateBit(char bit)
+void AnimationClip::resetClipStateBit(unsigned char bit)
 {
     _stateBits &= ~bit;
 }

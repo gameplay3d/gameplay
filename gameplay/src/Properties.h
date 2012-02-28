@@ -97,7 +97,7 @@ void printProperties(Properties* properties)
 {
     // Print the name and ID of the current namespace.
     const char* spacename = properties->getNamespace();
-    const char* id = properties->getID();
+    const char* id = properties->getId();
     WARN_VARG("Namespace: %s  ID: %s\n{", spacename, id);
  
     // Print all properties in this namespace.
@@ -163,7 +163,7 @@ public:
      * 
      * @return The name of the next property, or NULL if there are no properties remaining.
      */
-    const char* getNextProperty(const char** value = NULL);
+    const char* getNextProperty(char** value = NULL);
 
     /**
      * Get the next namespace.
@@ -371,14 +371,16 @@ public:
 private:
     
     /**
-     * Constructor.
+     * Constructors.
      */
+    Properties();
     Properties(FILE* file);
+    Properties(const Properties& copy);
 
     /**
      * Constructor. Read from the beginning of namespace specified
      */
-    Properties(FILE* file, const char* name, const char* id = NULL);
+    Properties(FILE* file, const char* name, const char* id = NULL, const char* parentID = NULL);
 
     void readProperties(FILE* file);
 
@@ -386,8 +388,15 @@ private:
 
     char* trimWhiteSpace(char* str);
 
+    // Called after create(); copies info from parents into derived namespaces.
+    void resolveInheritance(const char* id = NULL);
+
+    // Called by resolveInheritance().
+    void mergeWith(Properties* overrides);
+
     std::string _namespace;
     std::string _id;
+    std::string _parentID;
     std::map<std::string, std::string> _properties;
     std::map<std::string, std::string>::const_iterator _propertiesItr;
     std::vector<Properties*> _namespaces;

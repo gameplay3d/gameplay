@@ -31,7 +31,8 @@ Animation::~Animation()
 {
     if (_defaultClip)
     {
-        _defaultClip->stop();
+        if (_defaultClip->isClipStateBitSet(AnimationClip::CLIP_IS_PLAYING_BIT))
+            _controller->unschedule(_defaultClip);
         SAFE_RELEASE(_defaultClip);
     }
 
@@ -42,7 +43,8 @@ Animation::~Animation()
         while (clipIter != _clips->end())
         {   
             AnimationClip* clip = *clipIter;
-            clip->stop();
+            if (clip->isClipStateBitSet(AnimationClip::CLIP_IS_PLAYING_BIT))
+                _controller->unschedule(clip);
             SAFE_RELEASE(clip);
             clipIter++;
         }
@@ -65,7 +67,6 @@ Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int p
 Animation::Channel::~Channel()
 {
     SAFE_DELETE(_curve);
-    _animation->removeChannel(this);
     SAFE_RELEASE(_animation);
 }
 
@@ -120,10 +121,10 @@ AnimationClip* Animation::getClip(const char* id)
     }
 }
 
-void Animation::play(const char* id)
+void Animation::play(const char* clipId)
 {
     // If id is NULL, play the default clip.
-    if (id == NULL)
+    if (clipId == NULL)
     {
         if (_defaultClip == NULL)
             createDefaultClip();
@@ -133,33 +134,54 @@ void Animation::play(const char* id)
     else
     {
         // Find animation clip.. and play.
-        AnimationClip* clip = findClip(id);
+        AnimationClip* clip = findClip(clipId);
         if (clip != NULL)
-        {
             clip->play();
-        }
     }
 }
 
-void Animation::stop(const char* id)
+void Animation::stop(const char* clipId)
 {
     // If id is NULL, play the default clip.
-    if (id == NULL)
+    if (clipId == NULL)
     {
-        if (_defaultClip == NULL)
-            createDefaultClip();
-
-        _defaultClip->stop();
+        if (_defaultClip)
+            _defaultClip->stop();
     }
     else
     {
         // Find animation clip.. and play.
-        AnimationClip* clip = findClip(id);
+        AnimationClip* clip = findClip(clipId);
         if (clip != NULL)
-        {
             clip->stop();
+    }
+}
+
+void Animation::pause(const char * clipId)
+{
+    if (clipId == NULL)
+    {
+        if (_defaultClip)
+            _defaultClip->pause();
+    }
+    else
+    {
+        AnimationClip* clip = findClip(clipId);
+        if (clip != NULL)
+            clip->pause();
+    }
+}
+
+bool Animation::targets(AnimationTarget* target) const
+{
+    for (std::vector<Animation::Channel*>::const_iterator itr = _channels.begin(); itr != _channels.end(); ++itr)
+    {
+        if ((*itr)->_target == target)
+        {
+            return true;
         }
     }
+    return false;
 }
 
 void Animation::createDefaultClip()

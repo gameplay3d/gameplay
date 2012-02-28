@@ -299,6 +299,15 @@ protected:
     template <class T>
     void renderOnce(T* instance, void (T::*method)(void*), void* cookie);
 
+    /**
+     * Updates the game's internal systems (audio, animation, physics) once.
+     * 
+     * Note: This does not call the user-defined Game::update() function.
+     *
+     * This is useful for rendering animated splash screens.
+     */
+    void updateOnce();
+
 private:
 
     /**

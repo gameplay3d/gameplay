@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -124,8 +123,12 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_f
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_font.html#a544fa5bfca0b70e85a82e2e32c126509">drawText</a>(const char *text, int x, int y, const Vector4 &amp;color, unsigned int size, bool rightToLeft=false)</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_font.html#a2b76d58bcd3b5bbfa67f6790976faac0">drawText</a>(const char *text, const Rectangle &amp;clip, const Vector4 &amp;color, unsigned int size, Justify justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false)</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_font.html#a3702f26b3ba60db60e73ad6de5198d05">end</a>()</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>getIndexAtLocation</b>(const char *text, const Rectangle &amp;clip, unsigned int size, const Vector2 &amp;inLocation, Vector2 *outLocation, Justify justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false) (defined in <a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a>)</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>getJustifyFromString</b>(const char *justify) (defined in <a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a>)</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td><code> [static]</code></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>getLocationAtIndex</b>(const char *text, const Rectangle &amp;clip, unsigned int size, Vector2 *outLocation, const unsigned int destIndex, Justify justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false) (defined in <a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a>)</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a6f58fd4c48dd9ed3ad2019d88fd1196d">getRefCount</a>() const </td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_font.html#a37eadad72bb882e24a656c9efb0ebda1">getSize</a>()</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>getSpriteBatch</b>() (defined in <a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a>)</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>ITALIC</b> enum value (defined in <a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a>)</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> enum name</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_font.html#a15ef90498b3283f8472d8caa0020ef7e">measureText</a>(const char *text, unsigned int size, unsigned int *widthOut, unsigned int *heightOut)</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td></td></tr>
@@ -135,6 +138,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_f
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a866a859fcc96f2a48d5ee2f06a8c2a43">Ref</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#aafd8a7a7934b33c8bf216756d04cf33b">release</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_font.html#a1a26ebf11d0cb5530c0ba8ef0bcde246">Style</a> enum name</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>TextBox</b> (defined in <a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a>)</td><td><a class="el" href="classgameplay_1_1_font.html">gameplay::Font</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#afe8a1c0e91578d5c8671d9dabfa7daa1">~Ref</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td><code> [protected, virtual]</code></td></tr>
 </table></div>
 </div>
@@ -145,7 +149,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_f
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -155,7 +159,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_f
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:20 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:05:59 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

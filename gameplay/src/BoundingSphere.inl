@@ -9,7 +9,7 @@ inline BoundingSphere& BoundingSphere::operator*=(const Matrix& matrix)
     return *this;
 }
 
-inline BoundingSphere operator*(const Matrix& matrix, const BoundingSphere& sphere)
+inline const BoundingSphere operator*(const Matrix& matrix, const BoundingSphere& sphere)
 {
     BoundingSphere s(sphere);
     s.transform(matrix);

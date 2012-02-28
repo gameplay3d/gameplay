@@ -12,6 +12,7 @@ namespace gameplay
 class Font : public Ref
 {
     friend class Package;
+    friend class TextBox;
 
 public:
 
@@ -131,9 +132,9 @@ public:
      * @param x The viewport x position to draw text at.
      * @param y The viewport y position to draw text at.
      * @param color The color of text.
-     * @param size The size to draw text.
+     * @param size The size to draw text (0 for default size).
      */
-    void drawText(const char* text, int x, int y, const Vector4& color, unsigned int size, bool rightToLeft = false);
+    void drawText(const char* text, int x, int y, const Vector4& color, unsigned int size = 0, bool rightToLeft = false);
 
     /**
      * Draws the specified text within a rectangular area, with a specified alignment and scale.
@@ -142,13 +143,13 @@ public:
      * @param text The text to draw.
      * @param clip The viewport area to draw within.  Text will be clipped outside this rectangle.
      * @param color The color of text.
-     * @param size The size to draw text.
+     * @param size The size to draw text (0 for default size).
      * @param justify Justification of text within the viewport.
      * @param wrap Wraps text to fit within the width of the viewport if true.
      * @param rightToLeft
      */
-    void drawText(const char* text, const Rectangle& clip, const Vector4& color, unsigned int size,
-                  Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
+    void drawText(const char* text, const Rectangle& clip, const Vector4& color,
+        unsigned int size = 0, Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
 
     /**
      * Measures a string's width and height without alignment, wrapping or clipping.
@@ -175,6 +176,18 @@ public:
     void measureText(const char* text, const Rectangle& clip, unsigned int size, Rectangle* out,
                      Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool ignoreClip = false);
 
+    // Get an index into a string corresponding to the character nearest the given location within the clip region.
+    unsigned int getIndexAtLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
+                                    Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
+
+    // Get the location of the character at the given index.
+    void getLocationAtIndex(const char* text, const Rectangle& clip, unsigned int size, Vector2* outLocation, const unsigned int destIndex,
+                            Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
+
+    SpriteBatch* getSpriteBatch();
+
+    static Justify getJustifyFromString(const char* justify);
+
 
 private:
 
@@ -193,13 +206,18 @@ private:
      */
     ~Font();
 
+    // Used by both getIndexAtLocation and getLocationAtIndex.
+    unsigned int getIndexOrLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
+                                    const int destIndex = -1, Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
+
     // Utilities
     unsigned int getTokenWidth(const char* token, unsigned int length, unsigned int size, float scale);
     unsigned int getReversedTokenLength(const char* token, const char* bufStart);
 
-    // Returns false if EOF was reached, true otherwise.
-    bool handleDelimiters(char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
-                          std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd);
+    // Returns 0 if EOF was reached, 1 if delimiters were handles correctly, and 2 if the stopAtPosition was reached while handling delimiters.
+    int handleDelimiters(const char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
+                          std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd, unsigned int* charIndex = NULL,
+                          const Vector2* stopAtPosition = NULL, const int currentIndex = -1, const int destIndex = -1);
     void addLineInfo(const Rectangle& area, int lineWidth, int lineLength, Justify hAlign,
                      std::vector<int>* xPositions, std::vector<unsigned int>* lineLengths, bool rightToLeft);
 

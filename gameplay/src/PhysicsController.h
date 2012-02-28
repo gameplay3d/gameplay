@@ -8,6 +8,7 @@
 #include "PhysicsSocketConstraint.h"
 #include "PhysicsSpringConstraint.h"
 #include "PhysicsRigidBody.h"
+#include "PhysicsCharacter.h"
 
 namespace gameplay
 {
@@ -15,11 +16,12 @@ namespace gameplay
 /**
  * Defines a class for controlling game physics.
  */
-class PhysicsController
+class PhysicsController : public btCollisionWorld::ContactResultCallback
 {
     friend class Game;
     friend class PhysicsConstraint;
     friend class PhysicsRigidBody;
+    friend class PhysicsCharacter;
 
 public:
 
@@ -58,6 +60,42 @@ public:
      * @param listener The listener to add.
      */
     void addStatusListener(PhysicsController::Listener* listener);
+
+    /**
+     * Creates a new PhysicsCharacter.
+     *
+     * The created character is added to the physics world and automatically receives
+     * physics updates to handle interactions and collisions between the character
+     * and other physics objects in the world. The character will continue to receive
+     * updates until it is destroyed via the destroyCharacter(PhysicsCharacter*) method.
+     *
+     * The node may point to any node in the scene that you wish to control as a character.
+     * When a PhysicsCharacter is created for a particular node, the game will normally
+     * perform all movement directly through the PhysicsCharacter interface and not through
+     * the node itself.
+     *
+     * The radius, height and center parameters define a capsule volume that is used
+     * to represent the character in the physics world. All collision handling is 
+     * performed using this capsule.
+     *
+     * Note that PhysicsCharacter should not be mixed with rigid bodies. Therefore, you 
+     * should ensure that the node (and any of its children) used to create the
+     * PhysicsCharacter does not have any rigid bodies assigned. Doing so will cause
+     * unexpected results.
+     *
+     * @param node Scene node that represents the character.
+     * @param radius Radius of capsule volume used for character collisions.
+     * @param height Height of the capsule volume used for character collisions.
+     * @param center Center point of the capsule volume for the character.
+     */
+    PhysicsCharacter* createCharacter(Node* node, float radius, float height, const Vector3& center = Vector3::zero());
+
+    /**
+     * Destroys a PhysicsCharacter and removes it from the physics world.
+     *
+     * @param character PhysicsCharacter to destroy.
+     */
+    void destroyCharacter(PhysicsCharacter* character);
 
     /**
      * Creates a fixed constraint.
@@ -173,7 +211,7 @@ public:
      * 
      * @return The gravity vector.
      */
-    const Vector3& getGravity(const Vector3& gravity) const;
+    const Vector3& getGravity() const;
 
     /**
      * Sets the gravity vector for the simulated physics world.
@@ -181,7 +219,7 @@ public:
      * @param gravity The gravity vector.
      */
     void setGravity(const Vector3& gravity);
-    
+   
     /**
      * Draws debugging information (rigid body outlines, etc.) using the given view projection matrix.
      * 
@@ -189,8 +227,41 @@ public:
      */
     void drawDebug(const Matrix& viewProjection);
 
+    /**
+     * Gets the first rigid body that the given ray intersects.
+     * 
+     * @param ray The ray to test intersection with.
+     * @param distance How far along the given ray to test for intersections.
+     * @param hitPoint Optional Vector3 point that is populated with the world-space point of intersection.
+     * @param hitFraction Optional float pointer that is populated with the distance along the ray
+     *      (as a fraction between 0-1) where the intersection occurred.
+     * @return The first rigid body that the ray intersects, or NULL if no intersection was found.
+     */
+    PhysicsRigidBody* rayTest(const Ray& ray, float distance, Vector3* hitPoint = NULL, float* hitFraction = NULL);
+
+protected:
+
+    /**
+     * Internal function used for Bullet integration (do not use or override).
+     */
+    btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB);    
+
 private:
 
+    // Internal constants for the collision status cache.
+    static const int DIRTY;
+    static const int COLLISION;
+    static const int REGISTERED;
+    static const int REMOVE;
+
+    // Represents the collision listeners and status for a given collision pair (used by the collision status cache).
+    struct CollisionInfo
+    {
+        std::vector<PhysicsRigidBody::Listener*> _listeners;
+        int _status;
+    };
+
+    // Wraps Bullet collision shapes (used for implementing shape caching).
     struct PhysicsCollisionShape : public Ref
     {
         PhysicsCollisionShape(btCollisionShape* shape) : _shape(shape) {}
@@ -234,6 +305,9 @@ private:
      */
     void update(long elapsedTime);
 
+    // Adds the given collision listener for the two given rigid bodies.
+    void addCollisionListener(PhysicsRigidBody::Listener* listener, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+
     // Adds the given rigid body to the world.
     void addRigidBody(PhysicsRigidBody* body);
     
@@ -244,16 +318,16 @@ private:
     PhysicsRigidBody* getRigidBody(const btCollisionObject* collisionObject);
     
     // Creates a box collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createBox(const Vector3& min, const Vector3& max, const btVector3& scale);
+    btCollisionShape* createBox(const Vector3& min, const Vector3& max, const Vector3& scale);
 
     // Creates a capsule collision shape to be used in the creation of a rigid body.
     btCollisionShape* createCapsule(float radius, float height);
 
     // Creates a sphere collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createSphere(float radius, const btVector3& scale);
+    btCollisionShape* createSphere(float radius, const Vector3& scale);
 
     // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createMesh(PhysicsRigidBody* body);
+    btCollisionShape* createMesh(PhysicsRigidBody* body, const Vector3& scale);
 
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
@@ -302,12 +376,14 @@ private:
     btBroadphaseInterface* _overlappingPairCache;
     btSequentialImpulseConstraintSolver* _solver;
     btDynamicsWorld* _world;
+    btGhostPairCallback* _ghostPairCallback;
     std::vector<PhysicsCollisionShape*> _shapes;
     DebugDrawer* _debugDrawer;
     Listener::EventType _status;
     std::vector<Listener*>* _listeners;
     std::vector<PhysicsRigidBody*> _bodies;
     Vector3 _gravity;
+    std::map<PhysicsRigidBody::CollisionPair, CollisionInfo> _collisionStatus;  
 };
 
 }

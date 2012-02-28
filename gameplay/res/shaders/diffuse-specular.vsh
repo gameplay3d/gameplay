@@ -1,8 +1,8 @@
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;           // Matrix to transform a position to clip space.
 uniform mat4 u_inverseTransposeWorldViewMatrix;     // Matrix to transform a normal to view space.
-uniform mat4 u_worldMatrix;                         // Matrix to tranform a position to world space.
-uniform vec3 u_cameraPosition;                      // Position of the camera.
+uniform mat4 u_worldViewMatrix;                     // Matrix to tranform a position to view space.
+uniform vec3 u_cameraPosition;                      // Position of the camera in view space.
 
 // Inputs
 attribute vec4 a_position;                          // Vertex Position (x, y, z, w)
@@ -117,7 +117,6 @@ vec3 getNormal()
 
 #if defined(POINT_LIGHT)
 
-uniform mat4 u_worldViewMatrix;                         // Matrix to tranform a position to view space.
 uniform vec3 u_pointLightPosition;                      // Position
 uniform float u_pointLightRangeInverse;                 // Inverse of light range.
 varying vec4 v_vertexToPointLightDirection;             // Light direction w.r.t current vertex.
@@ -141,7 +140,6 @@ void applyLight(vec4 position)
 
 #elif defined(SPOT_LIGHT)
 
-uniform mat4 u_worldViewMatrix;                         // Matrix to tranform a position to view space.
 uniform vec3 u_spotLightPosition;                       // Position
 uniform float u_spotLightRangeInverse;                  // Inverse of light range.
 varying vec3 v_vertexToSpotLightDirection;              // Light direction w.r.t current vertex.
@@ -179,18 +177,18 @@ void main()
     gl_Position = u_worldViewProjectionMatrix * position;
 
     // Transform normal to view space.
-    mat3 inverseTransposeWorldViewMatrix = mat3(u_inverseTransposeWorldViewMatrix[0].xyz,
-                                                u_inverseTransposeWorldViewMatrix[1].xyz,
-                                                u_inverseTransposeWorldViewMatrix[2].xyz);
-    v_normalVector = inverseTransposeWorldViewMatrix * normal;
+    mat3 normalMatrix = mat3(u_inverseTransposeWorldViewMatrix[0].xyz,
+                             u_inverseTransposeWorldViewMatrix[1].xyz,
+                             u_inverseTransposeWorldViewMatrix[2].xyz);
+    v_normalVector = normalMatrix * normal;
 
     // Compute the camera direction.
-    vec4 positionWorldSpace = u_worldMatrix * position;
+    vec4 positionWorldSpace = u_worldViewMatrix * position;
     v_cameraDirection = u_cameraPosition - positionWorldSpace.xyz;
 
     // Apply light.
     applyLight(position);
 
-    // Pass on the texture coordinates to Fragment shader.
+	// Pass on the texture coordinates to Fragment shader.
     v_texCoord = a_texCoord;
 }

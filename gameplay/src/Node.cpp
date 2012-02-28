@@ -12,7 +12,7 @@ namespace gameplay
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
-    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL), 
+    _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL), 
     _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true)
 {
     if (id)
@@ -29,6 +29,13 @@ Node::Node(const Node& node)
 Node::~Node()
 {
     removeAllChildren();
+
+    if (_model)
+        _model->setNode(NULL);
+    if (_audioSource)
+        _audioSource->setNode(NULL);
+    if (_particleEmitter)
+        _particleEmitter->setNode(NULL);
 
     SAFE_RELEASE(_camera);
     SAFE_RELEASE(_light);
@@ -310,7 +317,7 @@ const Matrix& Node::getWorldMatrix() const
 const Matrix& Node::getWorldViewMatrix() const
 {
     static Matrix worldView;
-    
+
     Matrix::multiply(getViewMatrix(), getWorldMatrix(), &worldView);
 
     return worldView;
@@ -319,16 +326,19 @@ const Matrix& Node::getWorldViewMatrix() const
 const Matrix& Node::getInverseTransposeWorldViewMatrix() const
 {
     static Matrix invTransWorldView;
-
-    // Assume the matrix is always dirty since the camera is moving
-    // almost every frame in most games.
-    //    
-    // TODO: Optimize here to NOT calculate the inverse transpose if the matrix is orthogonal.
     Matrix::multiply(getViewMatrix(), getWorldMatrix(), &invTransWorldView);
     invTransWorldView.invert();
     invTransWorldView.transpose();
-
     return invTransWorldView;
+}
+
+const Matrix& Node::getInverseTransposeWorldMatrix() const
+{
+    static Matrix invTransWorld;
+    invTransWorld = getWorldMatrix();
+    invTransWorld.invert();
+    invTransWorld.transpose();
+    return invTransWorld;
 }
 
 const Matrix& Node::getViewMatrix() const
@@ -437,6 +447,8 @@ Vector3 Node::getForwardVectorView() const
     Vector3 vector;
     getWorldMatrix().getForwardVector(&vector);
     getViewMatrix().transformVector(&vector);
+    //getForwardVector(&vector);
+    //getWorldViewMatrix().transformVector(&vector);
     return vector;
 }
 
@@ -452,6 +464,25 @@ Vector3 Node::getActiveCameraTranslationWorld() const
             if (cameraNode)
             {
                 return cameraNode->getTranslationWorld();
+            }
+        }
+    }
+
+    return Vector3::zero();
+}
+
+Vector3 Node::getActiveCameraTranslationView() const
+{
+    Scene* scene = getScene();
+    if (scene)
+    {
+        Camera* camera = scene->getActiveCamera();
+        if (camera)
+        {
+            Node* cameraNode = camera->getNode();
+            if (cameraNode)
+            {
+                return cameraNode->getTranslationView();
             }
         }
     }
@@ -565,6 +596,31 @@ void Node::setModel(Model* model)
 Model* Node::getModel() const
 {
     return _model;
+}
+
+void Node::setForm(Form* form)
+{
+    if (_form != form)
+    {
+        if (_form)
+        {
+            _form->setNode(NULL);
+            SAFE_RELEASE(_form);
+        }
+
+        _form = form;
+
+        if (_form)
+        {
+            _form->addRef();
+            _form->setNode(this);
+        }
+    }
+}
+
+Form* Node::getForm() const
+{
+    return _form;
 }
 
 const BoundingSphere& Node::getBoundingSphere() const
@@ -693,12 +749,12 @@ void Node::setParticleEmitter(ParticleEmitter* emitter)
     }
 }
 
-PhysicsRigidBody* Node::getPhysicsRigidBody() const
+PhysicsRigidBody* Node::getRigidBody() const
 {
     return _physicsRigidBody;
 }
 
-void Node::setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float friction,
+void Node::setRigidBody(PhysicsRigidBody::Type type, float mass, float friction,
         float restitution, float linearDamping, float angularDamping)
 {
     SAFE_DELETE(_physicsRigidBody);
@@ -707,14 +763,14 @@ void Node::setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float fr
         _physicsRigidBody = new PhysicsRigidBody(this, type, mass, friction, restitution, linearDamping, angularDamping);
 }
 
-void Node::setPhysicsRigidBody(const char* filePath)
+void Node::setRigidBody(const char* filePath)
 {
     SAFE_DELETE(_physicsRigidBody);
 
     _physicsRigidBody = PhysicsRigidBody::create(this, filePath);
 }
 
-void Node::setPhysicsRigidBody(Properties* properties)
+void Node::setRigidBody(Properties* properties)
 {
     SAFE_DELETE(_physicsRigidBody);
 

@@ -1,0 +1,438 @@
+material Textured
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/diffuse.vsh
+            fragmentShader = res/shaders/diffuse.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            
+            sampler u_diffuseTexture
+            {
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material TexturedSpecular
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/diffuse-specular.vsh
+            fragmentShader = res/shaders/diffuse-specular.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            u_worldViewMatrix = WORLD_VIEW_MATRIX
+            u_cameraPosition = CAMERA_VIEW_POSITION
+            u_specularExponent = 50
+
+            sampler u_diffuseTexture
+            {
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material TexturedTransparent
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/diffuse.vsh
+            fragmentShader = res/shaders/diffuse.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            
+            sampler u_diffuseTexture
+            {
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            renderState
+            {
+                blend = true
+                srcBlend = SRC_ALPHA
+                dstBlend = ONE_MINUS_SRC_ALPHA
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material Colored
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/colored.vsh
+            fragmentShader = res/shaders/colored.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/colored-specular.vsh
+            fragmentShader = res/shaders/colored-specular.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            u_worldMatrix = WORLD_MATRIX
+            u_cameraPosition = CAMERA_WORLD_POSITION
+            u_specularExponent = 50
+            
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material BoySkin : Colored
+{
+    technique
+    {
+        pass
+        {
+            defines = SKINNING;SKINNING_JOINT_COUNT 31
+            u_matrixPalette = MATRIX_PALETTE
+            u_diffuseColor = 0.84, 0.76, 0.67, 1
+        }
+    }
+}
+
+material BoyShirt : Colored
+{
+    technique
+    {
+        pass
+        {
+            defines = SKINNING;SKINNING_JOINT_COUNT 31
+            u_matrixPalette = MATRIX_PALETTE
+            u_diffuseColor = 0.27, 0.46, 0.82, 1
+        }
+    }
+}
+
+material BoyShorts : Colored
+{
+    technique
+    {
+        pass
+        {
+            defines = SKINNING;SKINNING_JOINT_COUNT 31
+            u_matrixPalette = MATRIX_PALETTE
+            u_diffuseColor = 0.96, 0.47, 0.47, 1
+        }
+    }
+}
+
+material BoyShoes : Colored
+{
+    technique
+    {
+        pass
+        {
+            defines = SKINNING;SKINNING_JOINT_COUNT 31
+            u_matrixPalette = MATRIX_PALETTE
+            u_diffuseColor = 0.25, 0.19, 0.06, 1
+        }
+    }
+}
+
+material BoyShadow : TexturedTransparent
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = res/shadow.png
+            }
+        }
+    }
+}
+
+material FloorTiles : Textured
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = res/tiles.png
+            }
+        }
+    }
+}
+
+material Rainbow : TexturedTransparent
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = res/rainbow.png
+            }
+        }
+    }
+}
+
+material Ground : TexturedSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+
+            sampler u_diffuseTexture
+            {
+                path = res/wood.png
+                wrapS = REPEAT
+                wrapT = REPEAT
+            }
+        }
+    }
+}
+
+material Wall : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.6, 0.75, 1, 1
+        }
+    }
+}
+
+material Toybox : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.45, 0.1, 0.1, 1
+        }
+    }
+}
+
+material White : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 1, 1, 1, 1
+        }
+    }
+}
+
+material TableGreen : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.8, 1, 0, 1
+        }
+    }
+}
+
+material TableBlue : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.18, 0.85, 1, 1
+        }
+    }
+}
+
+material Basketball : TexturedSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 25
+
+            sampler u_diffuseTexture
+            {
+                path = res/bball.png
+                wrapS = REPEAT
+                wrapT = REPEAT
+            }
+        }
+    }
+}
+
+material PlayTableTopMaterial : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 1, 0.9, 0.8, 1
+        }
+    }
+}
+
+material PlayTableMaterial1 : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.6, 0.1, 0, 1
+        }
+    }
+}
+
+material PlayTableMaterial2 : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0, 0.3, 0.58, 1
+        }
+    }
+}
+
+material Easel : TexturedSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 25
+
+            sampler u_diffuseTexture
+            {
+                path = res/decals.png
+                wrapS = CLAMP
+                wrapT = CLAMP
+            }
+        }
+    }
+}
+
+material Black : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.13, 0.13, 0.13, 1
+        }
+    }
+}
+
+material BasketballPost : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.14, 0.24, 0.8, 1
+        }
+    }
+}
+
+material BasketballRim : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.7, 0.17, 0.0, 1
+        }
+    }
+}
+
+material Backboard : TexturedSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 25
+
+            sampler u_diffuseTexture
+            {
+                path = res/backboard.png
+                wrapS = CLAMP
+                wrapT = CLAMP
+            }
+        }
+    }
+}
