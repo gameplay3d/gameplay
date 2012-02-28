@@ -148,8 +148,8 @@ namespace gameplay
                 Vector4 maxCapRegion;
                 Vector4 trackRegion;
                 Vector4 markerRegion;
-                space->getVector4("leftCapRegion", &minCapRegion);
-                space->getVector4("rightCapRegion", &maxCapRegion);
+                space->getVector4("minCapRegion", &minCapRegion);
+                space->getVector4("maxCapRegion", &maxCapRegion);
                 space->getVector4("trackRegion", &trackRegion);
                 space->getVector4("markerRegion", &markerRegion);
                 
@@ -224,6 +224,7 @@ namespace gameplay
                 Theme::Style::Overlay* normal = NULL;
                 Theme::Style::Overlay* focus = NULL;
                 Theme::Style::Overlay* active = NULL;
+                Theme::Style::Overlay* disabled = NULL;
 
                 // Need to load OVERLAY_NORMAL first so that the other overlays can inherit from it.
                 Properties* innerSpace = space->getNextNamespace();
@@ -398,7 +399,6 @@ namespace gameplay
                             containerRegion = normal->getContainerRegion();
                         }
 
-                        
                         if (strcmp(innerSpacename, "focus") == 0)
                         {
                             focus = Theme::Style::Overlay::create();
@@ -434,6 +434,23 @@ namespace gameplay
 
                             theme->_fonts.insert(font);
                         }
+                        else if (strcmp(innerSpacename, "disabled") == 0)
+                        {
+                            disabled = Theme::Style::Overlay::create();
+                            disabled->setContainerRegion(containerRegion);
+                            disabled->setTextCursor(textCursor);
+                            disabled->setMouseCursor(mouseCursor);
+                            disabled->setCheckBoxIcon(checkBoxIcon);
+                            disabled->setRadioButtonIcon(radioButtonIcon);
+                            disabled->setSliderIcon(sliderIcon);
+                            disabled->setTextColor(textColor);
+                            disabled->setFont(font);
+                            disabled->setFontSize(fontSize);
+                            disabled->setTextAlignment(alignment);
+                            disabled->setTextRightToLeft(rightToLeft);
+
+                            theme->_fonts.insert(font);
+                        }
                     }
 
                     innerSpace = space->getNextNamespace();
@@ -451,7 +468,13 @@ namespace gameplay
                     active->addRef();
                 }
 
-                Theme::Style* s = new Theme::Style(space->getId(), margin, padding, normal, focus, active);
+                if (!disabled)
+                {
+                    disabled = normal;
+                    disabled->addRef();
+                }
+
+                Theme::Style* s = new Theme::Style(space->getId(), margin, padding, normal, focus, active, disabled);
                 theme->_styles.push_back(s);
             }
 
@@ -789,12 +812,13 @@ namespace gameplay
      * Theme::Style *
      ****************/
     Theme::Style::Style(const char* id, const Theme::Margin& margin, const Theme::Padding& padding,
-            Theme::Style::Overlay* normal, Theme::Style::Overlay* focus, Theme::Style::Overlay* active)
+            Theme::Style::Overlay* normal, Theme::Style::Overlay* focus, Theme::Style::Overlay* active, Theme::Style::Overlay* disabled)
         : _id(id), _margin(margin), _padding(padding)
     {
         _overlays[OVERLAY_NORMAL] = normal;
         _overlays[OVERLAY_FOCUS] = focus;
         _overlays[OVERLAY_ACTIVE] = active;
+        _overlays[OVERLAY_DISABLED] = disabled;
     }
 
     Theme::Style::~Style()

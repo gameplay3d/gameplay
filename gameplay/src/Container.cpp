@@ -33,7 +33,7 @@ namespace gameplay
         SAFE_RELEASE(_layout);
     }
 
-    Container* Container::create(const char* id, Layout::Type type)
+    Container* Container::create(Layout::Type type)
     {
         Layout* layout = NULL;
         switch(type)
@@ -49,7 +49,6 @@ namespace gameplay
         }
 
         Container* container = new Container();
-        container->_id = id;
         container->_layout = layout;
 
         __containers.push_back(container);
@@ -59,14 +58,9 @@ namespace gameplay
 
     Container* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
     {
-        const char* id = properties->getId();
         const char* layoutString = properties->getString("layout");
-        Container* container = Container::create(id, getLayoutType(layoutString));
-
-        container->_style = style;
-        properties->getVector2("position", &container->_position);
-        properties->getVector2("size", &container->_size);
-
+        Container* container = Container::create(getLayoutType(layoutString));
+        container->init(style, properties);
         container->addControls(theme, properties);
 
         return container;
@@ -226,8 +220,6 @@ namespace gameplay
         {
             _layout->update(this);
         }
-
-        _dirty = false;
     }
 
     void Container::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
@@ -277,10 +269,14 @@ namespace gameplay
         return false;
     }
 
-    void Container::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+    bool Container::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
     {
-        if (getState() == Control::STATE_DISABLED)
-            return;
+        if (!isEnabled())
+        {
+            return false;
+        }
+
+        bool eventConsumed = false;
 
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
@@ -290,35 +286,32 @@ namespace gameplay
             const Vector2& position = control->getPosition();
             
             if (control->getState() != Control::STATE_NORMAL ||
-                (x >= position.x &&
+                (evt == Touch::TOUCH_PRESS &&
+                 x >= position.x &&
                  x <= position.x + size.x &&
                  y >= position.y &&
                  y <= position.y + size.y))
             {
                 // Pass on the event's position relative to the control.
-                control->touchEvent(evt, x - position.x, y - position.y, contactIndex);
+                eventConsumed |= control->touchEvent(evt, x - position.x, y - position.y, contactIndex);
             }
         }
-
-        if (getState() == Control::STATE_DISABLED)
-            return;
 
         switch (evt)
         {
         case Touch::TOUCH_PRESS:
-            setState(Control::STATE_ACTIVE);
+            setState(Control::STATE_FOCUS);
             break;
         case Touch::TOUCH_RELEASE:
             setState(Control::STATE_NORMAL);
             break;
         }
+
+        return (_consumeTouchEvents | eventConsumed);
     }
 
     void Container::keyEvent(Keyboard::KeyEvent evt, int key)
     {
-        if (getState() == Control::STATE_DISABLED)
-            return;
-
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
@@ -329,6 +322,11 @@ namespace gameplay
 
     Layout::Type Container::getLayoutType(const char* layoutString)
     {
+        if (!layoutString)
+        {
+            return Layout::LAYOUT_ABSOLUTE;
+        }
+
         std::string layoutName(layoutString);
         std::transform(layoutName.begin(), layoutName.end(), layoutName.begin(), (int(*)(int))toupper);
         if (layoutName == "LAYOUT_ABSOLUTE")

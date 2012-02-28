@@ -16,26 +16,12 @@ Slider::~Slider()
 Slider* Slider::create(Theme::Style* style, Properties* properties)
 {
     Slider* slider = new Slider();
+    slider->init(style, properties);
 
-    slider->_style = style;
-    properties->getVector2("position", &slider->_position);
-    properties->getVector2("size", &slider->_size);
     slider->_min = properties->getFloat("min");
     slider->_max = properties->getFloat("max");
     slider->_value = properties->getFloat("value");
     slider->_step = properties->getFloat("step");
-
-    const char* id = properties->getId();
-    if (id)
-    {
-        slider->_id = id;
-    }
-
-    const char* text = properties->getString("text");
-    if (text)
-    {
-        slider->_text = text;
-    }
 
     __sliders.push_back(slider);
 
@@ -64,49 +50,115 @@ Slider* Slider::getSlider(const char* id)
     return NULL;
 }
 
-void Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+void Slider::setMin(float min)
 {
-    Button::touchEvent(evt, x, y, contactIndex);
+    _min = min;
+}
 
-    if (_state == STATE_ACTIVE &&
-        x > 0 && x <= _size.x &&
-        y > 0 && y <= _size.y)
+float Slider::getMin()
+{
+    return _min;
+}
+
+void Slider::setMax(float max)
+{
+    _max = max;
+}
+
+float Slider::getMax()
+{
+    return _max;
+}
+
+void Slider::setStep(float step)
+{
+    _step = step;
+}
+
+float Slider::getStep()
+{
+    return _step;
+}
+
+float Slider::getValue()
+{
+    return _value;
+}
+
+void Slider::setValue(float value)
+{
+    _value = value;
+}
+
+bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    if (!isEnabled())
     {
-        // Horizontal case.
-        Theme::Border border;
-        Theme::ContainerRegion* containerRegion = _style->getOverlay(getOverlayType())->getContainerRegion();
-        if (containerRegion)
-        {
-            border = containerRegion->getBorder();
-        }
-        Theme::Padding padding = _style->getPadding();
+        return false;
+    }
 
-        const Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-        const Theme::SliderIcon* icon = overlay->getSliderIcon();
+    bool consumeEvent = false;
 
-        const Vector2 minCapSize = icon->getMinCapSize();
-        const Vector2 maxCapSize = icon->getMaxCapSize();
+    switch (evt)
+    {
+    case Touch::TOUCH_PRESS:
+        _state = Control::STATE_ACTIVE;
+        _dirty = true;
+        // Fall through to calculate new value.
 
-        float markerPosition = ((float)x - maxCapSize.x - border.left - padding.left) /
-                               (_size.x - border.left - border.right - padding.left - padding.right - minCapSize.x - maxCapSize.x);
-        if (markerPosition > 1.0f)
+    case Touch::TOUCH_MOVE:
+    case Touch::TOUCH_RELEASE:
+        if (_state == STATE_ACTIVE &&
+            x > 0 && x <= _size.x &&
+            y > 0 && y <= _size.y)
         {
-            markerPosition = 1.0f;
-        }
-        else if (markerPosition < 0.0f)
-        {
-            markerPosition = 0.0f;
-        }
+            // Horizontal case.
+            Theme::Border border;
+            Theme::ContainerRegion* containerRegion = _style->getOverlay(getOverlayType())->getContainerRegion();
+            if (containerRegion)
+            {
+                border = containerRegion->getBorder();
+            }
+            Theme::Padding padding = _style->getPadding();
 
-        _value = markerPosition * _max;
-        if (_step > 0.0f)
-        {
-            float stepDistance = _step / (_max - _min);
+            const Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+            const Theme::SliderIcon* icon = overlay->getSliderIcon();
+
+            const Vector2 minCapSize = icon->getMinCapSize();
+            const Vector2 maxCapSize = icon->getMaxCapSize();
+
+            float markerPosition = ((float)x - maxCapSize.x - border.left - padding.left) /
+                                    (_size.x - border.left - border.right - padding.left - padding.right - minCapSize.x - maxCapSize.x);
+            if (markerPosition > 1.0f)
+            {
+                markerPosition = 1.0f;
+            }
+            else if (markerPosition < 0.0f)
+            {
+                markerPosition = 0.0f;
+            }
+
+            float oldValue = _value;
+            _value = markerPosition * _max;
+            if (_step > 0.0f)
+            {
+                float stepDistance = _step / (_max - _min);
             
-            int numSteps = round(_value / _step);
-            _value = _step * numSteps;
+                int numSteps = round(_value / _step);
+                _value = _step * numSteps;
+            }
+
+            // Call the callback if our value changed.
+            if (_callback && _value != oldValue)
+            {
+                _callback->trigger(this);
+            }
+
+            _dirty = true;
         }
     }
+
+    return consumeEvent;
 }
 
 void Slider::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
@@ -159,11 +211,6 @@ void Slider::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
         pos.y = midY - markerSize.y / 2.0f;
         spriteBatch->draw(pos.x, pos.y, markerSize.x, markerSize.y, marker.u1, marker.v1, marker.u2, marker.v2, color);
     }
-}
-
-void Slider::drawText(const Vector2& position)
-{
-
 }
 
 }

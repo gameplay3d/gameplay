@@ -23,7 +23,7 @@ public:
      * Create from .form file.
      */
     static Form* create(const char* path);
-    static Form* create(const char* id, const char* textureFile, Layout::Type type);
+    static Form* create(const char* textureFile, Layout::Type type);
     static Form* getForm(const char* id);
 
     void setTheme(Theme* theme);
@@ -53,7 +53,7 @@ private:
     void draw(SpriteBatch* spriteBatch);
     void draw(SpriteBatch* spriteBatch, const Vector2& position);
 
-    static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+    static bool touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     static void keyEventInternal(Keyboard::KeyEvent evt, int key);
 
