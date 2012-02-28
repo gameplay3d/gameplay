@@ -105,6 +105,7 @@ PhysicsCharacter::~PhysicsCharacter()
 
     _node->removeListener(this);
     SAFE_RELEASE(_node);
+    SAFE_DELETE(_motionState);
 }
 
 Node* PhysicsCharacter::getNode() const
