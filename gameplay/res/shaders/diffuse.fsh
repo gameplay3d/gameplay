@@ -23,8 +23,6 @@ void lighting(vec3 normalVector, vec3 lightDirection, float attenuation)
 
     // Diffuse
 	float ddot = dot(normalVector, lightDirection);
-	if (ddot < 0)
-		ddot = abs(ddot) * 0.5f; // simulate light bounce at half intensity
     float diffuseIntensity = attenuation * ddot;
     diffuseIntensity = max(0.0, diffuseIntensity);
     _diffuseColor = u_lightColor * _baseColor.rgb * diffuseIntensity;
