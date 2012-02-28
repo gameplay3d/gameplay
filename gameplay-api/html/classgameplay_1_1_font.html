@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -154,8 +155,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a37eadad72bb882e24a656c9efb0ebda1">getSize</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#afc9fec3961ca4475ee840cfca2e28319">begin</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a3702f26b3ba60db60e73ad6de5198d05">end</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a544fa5bfca0b70e85a82e2e32c126509">drawText</a> (const char *text, int x, int y, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, unsigned int size, bool rightToLeft=false)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a2b76d58bcd3b5bbfa67f6790976faac0">drawText</a> (const char *text, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, unsigned int size, <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a755172c9976d27f46600f58ae539cfc3">drawText</a> (const char *text, int x, int y, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, unsigned int size=0, bool rightToLeft=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a62daa6bb10ac0bdcf3af46802a40add5">drawText</a> (const char *text, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, unsigned int size=0, <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a15ef90498b3283f8472d8caa0020ef7e">measureText</a> (const char *text, unsigned int size, unsigned int *widthOut, unsigned int *heightOut)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#af0b1d2b8dec763cde4ee5c9e3e9bb9e2">measureText</a> (const char *text, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, unsigned int size, <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *out, <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify=ALIGN_TOP_LEFT, bool wrap=true, bool ignoreClip=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adea588cf12f55a10e73236473d6815ca"></a><!-- doxytag: member="gameplay::Font::getIndexAtLocation" ref="adea588cf12f55a10e73236473d6815ca" args="(const char *text, const Rectangle &amp;clip, unsigned int size, const Vector2 &amp;inLocation, Vector2 *outLocation, Justify justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false)" -->
@@ -329,7 +330,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>TextBox</b></td></tr
 
 </div>
 </div>
-<a class="anchor" id="a544fa5bfca0b70e85a82e2e32c126509"></a><!-- doxytag: member="gameplay::Font::drawText" ref="a544fa5bfca0b70e85a82e2e32c126509" args="(const char *text, int x, int y, const Vector4 &amp;color, unsigned int size, bool rightToLeft=false)" -->
+<a class="anchor" id="a755172c9976d27f46600f58ae539cfc3"></a><!-- doxytag: member="gameplay::Font::drawText" ref="a755172c9976d27f46600f58ae539cfc3" args="(const char *text, int x, int y, const Vector4 &amp;color, unsigned int size=0, bool rightToLeft=false)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -361,7 +362,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>TextBox</b></td></tr
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>size</em>, </td>
+          <td class="paramname"><em>size</em> = <code>0</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -384,14 +385,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>TextBox</b></td></tr
     <tr><td class="paramname">x</td><td>The viewport x position to draw text at. </td></tr>
     <tr><td class="paramname">y</td><td>The viewport y position to draw text at. </td></tr>
     <tr><td class="paramname">color</td><td>The color of text. </td></tr>
-    <tr><td class="paramname">size</td><td>The size to draw text. </td></tr>
+    <tr><td class="paramname">size</td><td>The size to draw text (0 for default size). </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a class="anchor" id="a2b76d58bcd3b5bbfa67f6790976faac0"></a><!-- doxytag: member="gameplay::Font::drawText" ref="a2b76d58bcd3b5bbfa67f6790976faac0" args="(const char *text, const Rectangle &amp;clip, const Vector4 &amp;color, unsigned int size, Justify justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false)" -->
+<a class="anchor" id="a62daa6bb10ac0bdcf3af46802a40add5"></a><!-- doxytag: member="gameplay::Font::drawText" ref="a62daa6bb10ac0bdcf3af46802a40add5" args="(const char *text, const Rectangle &amp;clip, const Vector4 &amp;color, unsigned int size=0, Justify justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -417,7 +418,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>TextBox</b></td></tr
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>size</em>, </td>
+          <td class="paramname"><em>size</em> = <code>0</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -451,7 +452,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>TextBox</b></td></tr
     <tr><td class="paramname">text</td><td>The text to draw. </td></tr>
     <tr><td class="paramname">clip</td><td>The viewport area to draw within. Text will be clipped outside this rectangle. </td></tr>
     <tr><td class="paramname">color</td><td>The color of text. </td></tr>
-    <tr><td class="paramname">size</td><td>The size to draw text. </td></tr>
+    <tr><td class="paramname">size</td><td>The size to draw text (0 for default size). </td></tr>
     <tr><td class="paramname">justify</td><td>Justification of text within the viewport. </td></tr>
     <tr><td class="paramname">wrap</td><td>Wraps text to fit within the width of the viewport if true. </td></tr>
     <tr><td class="paramname">rightToLeft</td><td></td></tr>
@@ -639,7 +640,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>TextBox</b></td></tr
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:05:59 for gameplay by
+    <li class="footer">Generated on Tue Feb 28 2012 11:07:43 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
