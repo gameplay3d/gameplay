@@ -86,10 +86,13 @@ public:
 
     Theme::Style::OverlayType getOverlayType() const;
 
+    void setConsumeTouchEvents(bool consume);
+    bool getConsumeTouchEvents();
+
     /**
      * Defaults to empty stub.
      */
-    virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+    virtual bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     virtual void keyEvent(Keyboard::KeyEvent evt, int key);
 
@@ -111,12 +114,15 @@ public:
     void setStyle(Theme::Style* Style);
     Theme::Style* getStyle() const;
 
-    void themeChanged();
+    static State getStateFromString(const char* state);
 
 protected:
     Control();
     Control(const Control& copy);
     virtual ~Control();
+
+    // Set properties common to all Controls.
+    virtual void init(Theme::Style* style, Properties* properties);
 
     std::string _id;
     State _state;           // Determines overlay used during draw().
@@ -127,6 +133,7 @@ protected:
     bool _autoWidth;
     bool _autoHeight;
     bool _dirty;
+    bool _consumeTouchEvents;
     Theme::Style* _style;
 };
 

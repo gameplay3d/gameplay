@@ -2,6 +2,7 @@
 #include "ParticleEmitter.h"
 #include "Game.h"
 #include "Node.h"
+#include "Scene.h"
 #include "Quaternion.h"
 #include "Properties.h"
 
@@ -58,7 +59,7 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
 
     // Use default SpriteBatch material.
     SpriteBatch* batch =  SpriteBatch::create(texture, NULL, particleCountMax);
-    texture->release(); // batch owns the texture
+    texture->release(); // batch owns the texture.
     assert(batch);
 
     ParticleEmitter* emitter = new ParticleEmitter(batch, particleCountMax);
@@ -890,30 +891,20 @@ void ParticleEmitter::draw()
         // Begin sprite batch drawing
         _spriteBatch->begin();
 
-        // Which draw call we use depends on whether particles are rotating.
-        if (_rotationPerParticleSpeedMin == 0.0f && _rotationPerParticleSpeedMax == 0.0f)
-        {
-            // No rotation.
-            for (unsigned int i = 0; i < _particleCount; i++)
-            {
-                Particle* p = &_particles[i];
-                _spriteBatch->draw(p->_position.x, p->_position.y, p->_position.z, p->_size, p->_size,
-                                   _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3], p->_color,
-                                   true);
-            }
-        }
-        else
-        {
-            // Rotation.
-            Vector2 pivot(0.5f, 0.5f);
+        // 2D Rotation.
+        Vector2 pivot(0.5f, 0.5f);
 
-            for (unsigned int i = 0; i < _particleCount; i++)
-            {
-                Particle* p = &_particles[i];
-                _spriteBatch->draw(p->_position, p->_size, p->_size,
-                                   _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3], p->_color, pivot, p->_angle,
-                                   true);
-            }
+        // 3D Rotation so that particles always face the camera.
+        Vector3 right = _node->getScene()->getActiveCamera()->getNode()->getRightVector();
+        Vector3 forward = _node->getScene()->getActiveCamera()->getNode()->getUpVector();
+
+        for (unsigned int i = 0; i < _particleCount; i++)
+        {
+            Particle* p = &_particles[i];
+
+            _spriteBatch->draw(p->_position, right, forward, p->_size, p->_size,
+                               _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3],
+                               p->_color, pivot, p->_angle);
         }
 
         // Render.

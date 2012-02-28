@@ -1556,6 +1556,11 @@ SpriteBatch* Font::getSpriteBatch()
 
 Font::Justify Font::getJustifyFromString(const char* justify)
 {
+    if (!justify)
+    {
+        return Font::ALIGN_TOP_LEFT;
+    }
+
     if (strcmp(justify, "ALIGN_LEFT") == 0)
     {
         return Font::ALIGN_LEFT;

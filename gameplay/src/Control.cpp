@@ -5,7 +5,7 @@ namespace gameplay
 {
     Control::Control()
         : _id(""), _state(Control::STATE_NORMAL), _size(Vector2::zero()), _position(Vector2::zero()), _border(Vector2::zero()), _padding(Vector2::zero()),
-          _autoWidth(true), _autoHeight(true), _dirty(true)
+          _autoWidth(true), _autoHeight(true), _dirty(true), _consumeTouchEvents(true)
     {
     }
 
@@ -15,6 +15,22 @@ namespace gameplay
 
     Control::~Control()
     {
+    }
+
+    void Control::init(Theme::Style* style, Properties* properties)
+    {
+        _style = style;
+
+        properties->getVector2("position", &_position);
+        properties->getVector2("size", &_size);
+
+        _state = Control::getStateFromString(properties->getString("state"));
+
+        const char* id = properties->getId();
+        if (id)
+        {
+            _id = id;
+        }
     }
 
     const char* Control::getID()
@@ -86,7 +102,7 @@ namespace gameplay
 
     bool Control::isEnabled()
     {
-        return _state == STATE_DISABLED;
+        return _state != STATE_DISABLED;
     }
 
     Theme::Style::OverlayType Control::getOverlayType() const
@@ -99,14 +115,27 @@ namespace gameplay
             return Theme::Style::OVERLAY_FOCUS;
         case Control::STATE_ACTIVE:
             return Theme::Style::OVERLAY_ACTIVE;
+        case Control::STATE_DISABLED:
+            return Theme::Style::OVERLAY_DISABLED;
         default:
             return Theme::Style::OVERLAY_NORMAL;
         }
     }
 
-    void Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+    void Control::setConsumeTouchEvents(bool consume)
+    {
+        _consumeTouchEvents = consume;
+    }
+    
+    bool Control::getConsumeTouchEvents()
+    {
+        return _consumeTouchEvents;
+    }
+
+    bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
     {
         // Empty stub to be implemented by Button and its descendents.
+        return _consumeTouchEvents;
     }
 
     void Control::keyEvent(Keyboard::KeyEvent evt, int key)
@@ -191,5 +220,32 @@ namespace gameplay
     bool Control::isDirty()
     {
         return _dirty;
+    }
+
+    Control::State Control::getStateFromString(const char* state)
+    {
+        if (!state)
+        {
+            return STATE_NORMAL;
+        }
+
+        if (strcmp(state, "STATE_NORMAL") == 0)
+        {
+            return STATE_NORMAL;
+        }
+        else if (strcmp(state, "STATE_ACTIVE") == 0)
+        {
+            return STATE_ACTIVE;
+        }
+        else if (strcmp(state, "STATE_FOCUS") == 0)
+        {
+            return STATE_FOCUS;
+        }
+        else if (strcmp(state, "STATE_DISABLED") == 0)
+        {
+            return STATE_DISABLED;
+        }
+
+        return STATE_NORMAL;
     }
 }
