@@ -15,6 +15,7 @@ namespace gameplay
 class PhysicsMotionState : public btMotionState
 {
     friend class PhysicsRigidBody;
+    friend class PhysicsCharacter;
     friend class PhysicsConstraint;
 
 protected:

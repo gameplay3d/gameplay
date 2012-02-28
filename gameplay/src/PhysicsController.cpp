@@ -3,7 +3,7 @@
 #include "MeshPart.h"
 #include "PhysicsController.h"
 #include "PhysicsMotionState.h"
-#include "SceneLoader.h"
+#include "Package.h"
 
 // The initial capacity of the Bullet debug drawer's vertex batch.
 #define INITIAL_CAPACITY 280
@@ -11,10 +11,15 @@
 namespace gameplay
 {
 
+const int PhysicsController::DIRTY         = 0x01;
+const int PhysicsController::COLLISION     = 0x02;
+const int PhysicsController::REGISTERED    = 0x04;
+const int PhysicsController::REMOVE        = 0x08;
+
 PhysicsController::PhysicsController()
   : _collisionConfiguration(NULL), _dispatcher(NULL),
-    _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _debugDrawer(NULL), 
-    _status(PhysicsController::Listener::DEACTIVATED), _listeners(NULL),
+    _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _ghostPairCallback(NULL),
+    _debugDrawer(NULL), _status(PhysicsController::Listener::DEACTIVATED), _listeners(NULL),
     _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0))
 {
     // Default gravity is 9.8 along the negative Y axis.
@@ -22,6 +27,7 @@ PhysicsController::PhysicsController()
 
 PhysicsController::~PhysicsController()
 {
+    SAFE_DELETE(_ghostPairCallback);
     SAFE_DELETE(_debugDrawer);
     SAFE_DELETE(_listeners);
 }
@@ -32,6 +38,16 @@ void PhysicsController::addStatusListener(Listener* listener)
         _listeners = new std::vector<Listener*>();
 
     _listeners->push_back(listener);
+}
+
+PhysicsCharacter* PhysicsController::createCharacter(Node* node, float radius, float height, const Vector3& center)
+{
+    return new PhysicsCharacter(node, radius, height, center);
+}
+
+void PhysicsController::destroyCharacter(PhysicsCharacter* character)
+{
+    SAFE_DELETE(character);
 }
 
 PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
@@ -104,7 +120,7 @@ PhysicsSpringConstraint* PhysicsController::createSpringConstraint(PhysicsRigidB
     return constraint;
 }
 
-const Vector3& PhysicsController::getGravity(const Vector3& gravity) const
+const Vector3& PhysicsController::getGravity() const
 {
     return _gravity;
 }
@@ -114,7 +130,7 @@ void PhysicsController::setGravity(const Vector3& gravity)
     _gravity = gravity;
 
     if (_world)
-        _world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
+        _world->setGravity(BV(_gravity));
 }
 
 void PhysicsController::drawDebug(const Matrix& viewProjection)
@@ -122,6 +138,100 @@ void PhysicsController::drawDebug(const Matrix& viewProjection)
     _debugDrawer->begin(viewProjection);
     _world->debugDrawWorld();
     _debugDrawer->end();
+}
+
+PhysicsRigidBody* PhysicsController::rayTest(const Ray& ray, float distance, Vector3* hitPoint, float* hitFraction)
+{
+    btCollisionWorld::ClosestRayResultCallback callback(BV(ray.getOrigin()), BV(distance * ray.getDirection()));
+    _world->rayTest(BV(ray.getOrigin()), BV(distance * ray.getDirection()), callback);
+    if (callback.hasHit())
+    {
+        if (hitPoint)
+            hitPoint->set(callback.m_hitPointWorld.x(), callback.m_hitPointWorld.y(), callback.m_hitPointWorld.z());
+
+        if (hitFraction)
+            *hitFraction = callback.m_closestHitFraction;
+
+        return getRigidBody(callback.m_collisionObject);
+    }
+
+    return NULL;
+}
+
+btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, 
+    const btCollisionObject* b, int partIdB, int indexB)
+{
+    // Get pointers to the PhysicsRigidBody objects.
+    PhysicsRigidBody* rbA = Game::getInstance()->getPhysicsController()->getRigidBody(a);
+    PhysicsRigidBody* rbB = Game::getInstance()->getPhysicsController()->getRigidBody(b);
+    
+    // If the given rigid body pair has collided in the past, then
+    // we notify the listeners only if the pair was not colliding
+    // during the previous frame. Otherwise, it's a new pair, so add a
+    // new entry to the cache with the appropriate listeners and notify them.
+    PhysicsRigidBody::CollisionPair pair(rbA, rbB);
+    if (_collisionStatus.count(pair) > 0)
+    {
+        const CollisionInfo& collisionInfo = _collisionStatus[pair];
+        if ((collisionInfo._status & COLLISION) == 0)
+        {
+            std::vector<PhysicsRigidBody::Listener*>::const_iterator iter = collisionInfo._listeners.begin();
+            for (; iter != collisionInfo._listeners.end(); iter++)
+            {
+                if ((collisionInfo._status & REMOVE) == 0)
+                {
+                    (*iter)->collisionEvent(PhysicsRigidBody::Listener::COLLIDING, pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()),
+                        Vector3(cp.getPositionWorldOnB().x(), cp.getPositionWorldOnB().y(), cp.getPositionWorldOnB().z()));
+                }
+            }
+        }
+    }
+    else
+    {
+        CollisionInfo& collisionInfo = _collisionStatus[pair];
+
+        // Initialized the status for the new entry.
+        collisionInfo._status = 0;
+
+        // Add the appropriate listeners.
+        PhysicsRigidBody::CollisionPair p1(pair.rigidBodyA, NULL);
+        if (_collisionStatus.count(p1) > 0)
+        {
+            const CollisionInfo& ci = _collisionStatus[p1];
+            std::vector<PhysicsRigidBody::Listener*>::const_iterator iter = ci._listeners.begin();
+            for (; iter != ci._listeners.end(); iter++)
+            {
+                collisionInfo._listeners.push_back(*iter);
+            }
+        }
+        PhysicsRigidBody::CollisionPair p2(pair.rigidBodyB, NULL);
+        if (_collisionStatus.count(p2) > 0)
+        {
+            const CollisionInfo& ci = _collisionStatus[p2];
+            std::vector<PhysicsRigidBody::Listener*>::const_iterator iter = ci._listeners.begin();
+            for (; iter != ci._listeners.end(); iter++)
+            {
+                collisionInfo._listeners.push_back(*iter);
+            }
+        }
+
+        std::vector<PhysicsRigidBody::Listener*>::iterator iter = collisionInfo._listeners.begin();
+        for (; iter != collisionInfo._listeners.end(); iter++)
+        {
+            if ((collisionInfo._status & REMOVE) == 0)
+            {
+                (*iter)->collisionEvent(PhysicsRigidBody::Listener::COLLIDING, pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()),
+                    Vector3(cp.getPositionWorldOnB().x(), cp.getPositionWorldOnB().y(), cp.getPositionWorldOnB().z()));
+            }
+        }
+    }
+
+    // Update the collision status cache (we remove the dirty bit
+    // set in the controller's update so that this particular collision pair's
+    // status is not reset to 'no collision' when the controller's update completes).
+    _collisionStatus[pair]._status &= ~DIRTY;
+    _collisionStatus[pair]._status |= COLLISION;
+    return 0.0f;
 }
 
 void PhysicsController::initialize()
@@ -133,7 +243,11 @@ void PhysicsController::initialize()
 
     // Create the world.
     _world = new btDiscreteDynamicsWorld(_dispatcher, _overlappingPairCache, _solver, _collisionConfiguration);
-    _world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
+    _world->setGravity(BV(_gravity));
+
+    // Register ghost pair callback so bullet detects collisions with ghost objects (used for character collisions).
+    _ghostPairCallback = bullet_new<btGhostPairCallback>();
+    _world->getPairCache()->setInternalGhostPairCallback(_ghostPairCallback);
 
     // Set up debug drawing.
     _debugDrawer = new DebugDrawer();
@@ -144,6 +258,7 @@ void PhysicsController::finalize()
 {
     // Clean up the world and its various components.
     SAFE_DELETE(_world);
+    SAFE_DELETE(_ghostPairCallback);
     SAFE_DELETE(_solver);
     SAFE_DELETE(_overlappingPairCache);
     SAFE_DELETE(_dispatcher);
@@ -216,68 +331,75 @@ void PhysicsController::update(long elapsedTime)
     // During collision processing, if a collision occurs, the status is 
     // set to COLLISION and the DIRTY bit is cleared. Then, after collision processing 
     // is finished, if a given status is still dirty, the COLLISION bit is cleared.
+    //
+    // If an entry was marked for removal in the last frame, remove it now.
 
-    // Dirty all the collision listeners' collision status caches.
-    for (unsigned int i = 0; i < _bodies.size(); i++)
+    // Dirty the collision status cache entries.
+    std::map<PhysicsRigidBody::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
+    for (; iter != _collisionStatus.end();)
     {
-        if (_bodies[i]->_listeners)
+        if ((iter->second._status & REMOVE) != 0)
         {
-            for (unsigned int k = 0; k < _bodies[i]->_listeners->size(); k++)
-            {
-                std::map<PhysicsRigidBody::CollisionPair, int>::iterator iter = (*_bodies[i]->_listeners)[k]->_collisionStatus.begin();
-                for (; iter != (*_bodies[i]->_listeners)[k]->_collisionStatus.end(); iter++)
-                {
-                    iter->second |= PhysicsRigidBody::Listener::DIRTY;
-                }
-            }
+            std::map<PhysicsRigidBody::CollisionPair, CollisionInfo>::iterator eraseIter = iter;
+            iter++;
+            _collisionStatus.erase(eraseIter);
+        }
+        else
+        {
+            iter->second._status |= DIRTY;
+            iter++;
         }
     }
 
-    // Go through the physics rigid bodies and update the collision listeners.
-    for (unsigned int i = 0; i < _bodies.size(); i++)
+    // Go through the collision status cache and perform all registered collision tests.
+    iter = _collisionStatus.begin();
+    for (; iter != _collisionStatus.end(); iter++)
     {
-        if (_bodies[i]->_listeners)
+        // If this collision pair was one that was registered for listening, then perform the collision test.
+        // (In the case where we register for all collisions with a rigid body, there will be a lot
+        // of collision pairs in the status cache that we did not explicitly register for.)
+        if ((iter->second._status & REGISTERED) != 0 && (iter->second._status & REMOVE) == 0)
         {
-            for (unsigned int k = 0; k < _bodies[i]->_listeners->size(); k++)
-            {
-                std::map<PhysicsRigidBody::CollisionPair, int>::iterator iter = (*_bodies[i]->_listeners)[k]->_collisionStatus.begin();
-                for (; iter != (*_bodies[i]->_listeners)[k]->_collisionStatus.end(); iter++)
-                {
-                    // If this collision pair was one that was registered for listening, then perform the collision test.
-                    // (In the case where we register for all collisions with a rigid body, there will be a lot
-                    // of collision pairs in the status cache that we did not explicitly register for.)
-                    if ((iter->second & PhysicsRigidBody::Listener::REGISTERED) != 0)
-                    {
-                        if (iter->first._rbB)
-                            Game::getInstance()->getPhysicsController()->_world->contactPairTest(iter->first._rbA->_body, iter->first._rbB->_body, *(*_bodies[i]->_listeners)[k]);
-                        else
-                            Game::getInstance()->getPhysicsController()->_world->contactTest(iter->first._rbA->_body, *(*_bodies[i]->_listeners)[k]);
-                    }
-                }   
-            }
+            if (iter->first.rigidBodyB)
+                _world->contactPairTest(iter->first.rigidBodyA->_body, iter->first.rigidBodyB->_body, *this);
+            else
+                _world->contactTest(iter->first.rigidBodyA->_body, *this);
         }
     }
 
-    // Go through all the collision listeners and update their collision status caches.
-    for (unsigned int i = 0; i < _bodies.size(); i++)
+    // Update all the collision status cache entries.
+    iter = _collisionStatus.begin();
+    for (; iter != _collisionStatus.end(); iter++)
     {
-        if (_bodies[i]->_listeners)
+        if ((iter->second._status & DIRTY) != 0)
         {
-            for (unsigned int k = 0; k < _bodies[i]->_listeners->size(); k++)
+            if ((iter->second._status & COLLISION) != 0 && iter->first.rigidBodyB)
             {
-                std::map<PhysicsRigidBody::CollisionPair, int>::iterator iter = (*_bodies[i]->_listeners)[k]->_collisionStatus.begin();
-                for (; iter != (*_bodies[i]->_listeners)[k]->_collisionStatus.end(); iter++)
+                unsigned int size = iter->second._listeners.size();
+                for (unsigned int i = 0; i < size; i++)
                 {
-                    if ((iter->second & PhysicsRigidBody::Listener::DIRTY) != 0)
-                    {
-                        iter->second &= ~PhysicsRigidBody::Listener::COLLISION;
-                    }
+                    iter->second._listeners[i]->collisionEvent(PhysicsRigidBody::Listener::NOT_COLLIDING, iter->first);
                 }
             }
+
+            iter->second._status &= ~COLLISION;
         }
     }
 }
-    
+
+void PhysicsController::addCollisionListener(PhysicsRigidBody::Listener* listener, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB)
+{
+    PhysicsRigidBody::CollisionPair pair(rbA, rbB);
+
+    // Make sure the status of the entry is initialized properly.
+    if (_collisionStatus.count(pair) == 0)
+        _collisionStatus[pair]._status = 0;
+
+    // Add the listener and ensure the status includes that this collision pair is registered.
+    _collisionStatus[pair]._listeners.push_back(listener);
+    if ((_collisionStatus[pair]._status & PhysicsController::REGISTERED) == 0)
+        _collisionStatus[pair]._status |= PhysicsController::REGISTERED;
+}
 
 void PhysicsController::addRigidBody(PhysicsRigidBody* body)
 {
@@ -311,8 +433,26 @@ void PhysicsController::removeRigidBody(PhysicsRigidBody* rigidBody)
             else
                 _shapes[i]->release();
 
-            return;
+            break;
         }
+    }
+
+    // Remove the rigid body from the controller's list.
+    for (unsigned int i = 0; i < _bodies.size(); i++)
+    {
+        if (_bodies[i] == rigidBody)
+        {
+            _bodies.erase(_bodies.begin() + i);
+            break;
+        }
+    }
+
+    // Find all references to the rigid body in the collision status cache and mark them for removal.
+    std::map<PhysicsRigidBody::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
+    for (; iter != _collisionStatus.end(); iter++)
+    {
+        if (iter->first.rigidBodyA == rigidBody || iter->first.rigidBodyB == rigidBody)
+            iter->second._status |= REMOVE;
     }
 }
 
@@ -328,9 +468,9 @@ PhysicsRigidBody* PhysicsController::getRigidBody(const btCollisionObject* colli
     return NULL;
 }
 
-btCollisionShape* PhysicsController::createBox(const Vector3& min, const Vector3& max, const btVector3& scale)
+btCollisionShape* PhysicsController::createBox(const Vector3& min, const Vector3& max, const Vector3& scale)
 {
-    btVector3 halfExtents(scale.x() * 0.5 * abs(max.x - min.x), scale.y() * 0.5 * abs(max.y - min.y), scale.z() * 0.5 * abs(max.z - min.z));
+    btVector3 halfExtents(scale.x * 0.5 * abs(max.x - min.x), scale.y * 0.5 * abs(max.y - min.y), scale.z * 0.5 * abs(max.z - min.z));
 
     // Return the box shape from the cache if it already exists.
     for (unsigned int i = 0; i < _shapes.size(); i++)
@@ -376,15 +516,15 @@ btCollisionShape* PhysicsController::createCapsule(float radius, float height)
     return capsule;
 }
 
-btCollisionShape* PhysicsController::createSphere(float radius, const btVector3& scale)
+btCollisionShape* PhysicsController::createSphere(float radius, const Vector3& scale)
 {
     // Since sphere shapes depend only on the radius, the best we can do is take
     // the largest dimension and apply that as the uniform scale to the rigid body.
-    float uniformScale = scale.x();
-    if (uniformScale < scale.y())
-        uniformScale = scale.y();
-    if (uniformScale < scale.z())
-        uniformScale = scale.z();
+    float uniformScale = scale.x;
+    if (uniformScale < scale.y)
+        uniformScale = scale.y;
+    if (uniformScale < scale.z)
+        uniformScale = scale.z;
     
     // Return the sphere shape from the cache if it already exists.
     for (unsigned int i = 0; i < _shapes.size(); i++)
@@ -403,23 +543,52 @@ btCollisionShape* PhysicsController::createSphere(float radius, const btVector3&
     // Create the sphere shape and add it to the cache.
     btSphereShape* sphere = bullet_new<btSphereShape>(uniformScale * radius);
     _shapes.push_back(new PhysicsCollisionShape(sphere));
-    
+
     return sphere;
 }
 
-btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
+btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body, const Vector3& scale)
 {
-    // Retrieve the mesh rigid body data from the loaded scene.
-    const SceneLoader::MeshRigidBodyData* data = SceneLoader::getMeshRigidBodyData(body->_node->getId());
+    assert(body);
+
+    // Retrieve the mesh rigid body data from the node's mesh.
+    Model* model = body->_node ? body->_node->getModel() : NULL;
+    Mesh* mesh = model ? model->getMesh() : NULL;
+    if (mesh == NULL)
+    {
+        LOG_ERROR("Cannot create mesh rigid body for node without model/mesh.");
+        return NULL;
+    }
+
+    // Only support meshes with triangle list primitive types
+    if (mesh->getPrimitiveType() != Mesh::TRIANGLES)
+    {
+        LOG_ERROR("Cannot create mesh rigid body for mesh without TRIANGLES primitive type.");
+        return NULL;
+    }
+
+    // The mesh must have a valid URL (i.e. it must have been loaded from a Package)
+    // in order to fetch mesh data for computing mesh rigid body.
+    if (strlen(mesh->getUrl()) == 0)
+    {
+        LOG_ERROR("Cannot create mesh rigid body for mesh without valid URL.");
+        return NULL;
+    }
+
+    Package::MeshData* data = Package::readMeshData(mesh->getUrl());
+    if (data == NULL)
+    {
+        return NULL;
+    }
 
     // Copy the scaled vertex position data to the rigid body's local buffer.
     Matrix m;
-    Matrix::createScale(body->_node->getScaleX(), body->_node->getScaleY(), body->_node->getScaleZ(), &m);
-    unsigned int vertexCount = data->mesh->getVertexCount();
+    Matrix::createScale(scale, &m);
+    unsigned int vertexCount = data->vertexCount;
     body->_vertexData = new float[vertexCount * 3];
     Vector3 v;
-    int vertexStride = data->mesh->getVertexFormat().getVertexSize();
-    for (unsigned int i = 0; i < vertexCount; i++)
+    int vertexStride = data->vertexFormat.getVertexSize();
+    for (unsigned int i = 0; i < data->vertexCount; i++)
     {
         v.set(*((float*)&data->vertexData[i * vertexStride + 0 * sizeof(float)]),
               *((float*)&data->vertexData[i * vertexStride + 1 * sizeof(float)]),
@@ -427,19 +596,20 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
         v *= m;
         memcpy(&(body->_vertexData[i * 3]), &v, sizeof(float) * 3);
     }
-    
+
     btTriangleIndexVertexArray* meshInterface = bullet_new<btTriangleIndexVertexArray>();
 
-    if (data->mesh->getPartCount() > 0)
+    unsigned int partCount = data->parts.size();
+    if (partCount > 0)
     {
         PHY_ScalarType indexType = PHY_UCHAR;
         int indexStride = 0;
-        MeshPart* meshPart = NULL;
-        for (unsigned int i = 0; i < data->mesh->getPartCount(); i++)
+        Package::MeshPartData* meshPart = NULL;
+        for (unsigned int i = 0; i < partCount; i++)
         {
-            meshPart = data->mesh->getPart(i);
+            meshPart = data->parts[i];
 
-            switch (meshPart->getIndexFormat())
+            switch (meshPart->indexFormat)
             {
             case Mesh::INDEX8:
                 indexType = PHY_UCHAR;
@@ -455,19 +625,18 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
                 break;
             }
 
-            // Copy the index data to the rigid body's local buffer.
-            unsigned int indexDataSize = meshPart->getIndexCount() * indexStride;
-            unsigned char* indexData = new unsigned char[indexDataSize];
-            memcpy(indexData, data->indexData[i], indexDataSize);
-            body->_indexData.push_back(indexData);
+            // Move the index data into the rigid body's local buffer.
+            // Set it to NULL in the MeshPartData so it is not released when the data is freed.
+            body->_indexData.push_back(meshPart->indexData);
+            meshPart->indexData = NULL;
 
             // Create a btIndexedMesh object for the current mesh part.
             btIndexedMesh indexedMesh;
             indexedMesh.m_indexType = indexType;
-            indexedMesh.m_numTriangles = meshPart->getIndexCount() / 3;
-            indexedMesh.m_numVertices = meshPart->getIndexCount();
+            indexedMesh.m_numTriangles = meshPart->indexCount / 3; // assume TRIANGLES primitive type
+            indexedMesh.m_numVertices = meshPart->indexCount;
             indexedMesh.m_triangleIndexBase = (const unsigned char*)body->_indexData[i];
-            indexedMesh.m_triangleIndexStride = indexStride;
+            indexedMesh.m_triangleIndexStride = indexStride*3;
             indexedMesh.m_vertexBase = (const unsigned char*)body->_vertexData;
             indexedMesh.m_vertexStride = sizeof(float)*3;
             indexedMesh.m_vertexType = PHY_FLOAT;
@@ -479,8 +648,8 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
     else
     {
         // Generate index data for the mesh locally in the rigid body.
-        unsigned int* indexData = new unsigned int[data->mesh->getVertexCount()];
-        for (unsigned int i = 0; i < data->mesh->getVertexCount(); i++)
+        unsigned int* indexData = new unsigned int[data->vertexCount];
+        for (unsigned int i = 0; i < data->vertexCount; i++)
         {
             indexData[i] = i;
         }
@@ -489,8 +658,8 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
         // Create a single btIndexedMesh object for the mesh interface.
         btIndexedMesh indexedMesh;
         indexedMesh.m_indexType = PHY_INTEGER;
-        indexedMesh.m_numTriangles = data->mesh->getVertexCount() / 3;
-        indexedMesh.m_numVertices = data->mesh->getVertexCount();
+        indexedMesh.m_numTriangles = data->vertexCount / 3; // assume TRIANGLES primitive type
+        indexedMesh.m_numVertices = data->vertexCount;
         indexedMesh.m_triangleIndexBase = body->_indexData[0];
         indexedMesh.m_triangleIndexStride = sizeof(unsigned int);
         indexedMesh.m_vertexBase = (const unsigned char*)body->_vertexData;
@@ -503,6 +672,9 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body)
 
     btBvhTriangleMeshShape* shape = bullet_new<btBvhTriangleMeshShape>(meshInterface, true);
     _shapes.push_back(new PhysicsCollisionShape(shape));
+
+    // Free the temporary mesh data now that it's stored in physics system
+    SAFE_DELETE(data);
 
     return shape;
 }
@@ -580,6 +752,7 @@ PhysicsController::DebugDrawer::DebugDrawer()
         
     Effect* effect = Effect::createFromSource(vs_str, fs_str);
     Material* material = Material::create(effect);
+    material->getStateBlock()->setDepthTest(true);
 
     VertexFormat::Element elements[] =
     {
@@ -605,9 +778,9 @@ void PhysicsController::DebugDrawer::begin(const Matrix& viewProjection)
 
 void PhysicsController::DebugDrawer::end()
 {
+    _meshBatch->end();
     _meshBatch->getMaterial()->getParameter("u_viewProjectionMatrix")->setValue(_viewProjection);
     _meshBatch->draw();
-    _meshBatch->end();
 }
 
 void PhysicsController::DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor)

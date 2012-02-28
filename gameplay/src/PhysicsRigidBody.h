@@ -18,6 +18,7 @@ class PhysicsConstraint;
 class PhysicsRigidBody : public Transform::Listener
 {
     friend class Node;
+    friend class PhysicsCharacter;
     friend class PhysicsConstraint;
     friend class PhysicsController;
     friend class PhysicsFixedConstraint;
@@ -49,64 +50,62 @@ public:
         /**
          * Constructor.
          */
-        CollisionPair(PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+        CollisionPair(PhysicsRigidBody* rigidBodyA, PhysicsRigidBody* rigidBodyB);
 
         /**
          * Less than operator (needed for use as a key in map).
          * 
-         * @param cp The collision pair to compare.
+         * @param collisionPair The collision pair to compare.
          * @return True if this pair is "less than" the given pair; false otherwise.
          */
-        bool operator<(const CollisionPair& cp) const;
+        bool operator<(const CollisionPair& collisionPair) const;
 
         /** The first rigid body in the collision. */
-        PhysicsRigidBody* _rbA;
+        PhysicsRigidBody* rigidBodyA;
 
         /** The second rigid body in the collision. */
-        PhysicsRigidBody* _rbB;
+        PhysicsRigidBody* rigidBodyB;
     };
 
     /**
      * Collision listener interface.
      */
-    class Listener : public btCollisionWorld::ContactResultCallback
+    class Listener
     {
         friend class PhysicsRigidBody;
         friend class PhysicsController;
 
     public:
         /**
+         * The type of collision event.
+         */
+        enum EventType
+        {
+            /**
+             * Event fired when the two rigid bodies start colliding.
+             */
+            COLLIDING,
+
+            /**
+             * Event fired when the two rigid bodies no longer collide.
+             */
+            NOT_COLLIDING
+        };
+
+        /**
          * Destructor.
          */
         virtual ~Listener();
 
         /**
-         * Handles when a collision occurs for the rigid body where this listener is registered.
+         * Handles when a collision starts or stops occurring for the rigid body where this listener is registered.
          * 
+         * @param type The type of collision event.
          * @param collisionPair The two rigid bodies involved in the collision.
-         * @param contactPoint The point (in world space) where the collision occurred.
+         * @param contactPointA The contact point with the first rigid body (in world space).
+         * @param contactPointB The contact point with the second rigid body (in world space).
          */
-        virtual void collisionEvent(const CollisionPair& collisionPair, const Vector3& contactPoint) = 0;
-        
-    protected:
-        
-        /**
-         * Internal function used for Bullet integration (do not use or override).
-         */
-        btScalar addSingleResult(btManifoldPoint& cp, 
-                                 const btCollisionObject* a, int partIdA, int indexA, 
-                                 const btCollisionObject* b, int partIdB, int indexB);
-
-        std::map<CollisionPair, int> _collisionStatus;  // Holds the collision status for each pair of rigid bodies. 
-        
-    private:
-
-        // Internal constant.
-        static const int DIRTY;
-        // Internal constant.
-        static const int COLLISION;
-        // Internal constant.
-        static const int REGISTERED;
+        virtual void collisionEvent(EventType type, const CollisionPair& collisionPair, const Vector3& contactPointA = Vector3(), const Vector3& contactPointB = Vector3()) = 0;
     };
 
     /**
@@ -219,7 +218,7 @@ public:
      * 
      * @return The node.
      */
-    inline const Node* getNode() const;
+    inline Node* getNode();
 
     /**
      * Gets the rigid body's restitution.
@@ -234,6 +233,20 @@ public:
      * @return Whether the rigid body is kinematic or not.
      */
     inline bool isKinematic() const;
+
+    /**
+     * Gets whether the rigid body is a static rigid body or not.
+     *
+     * @return Whether the rigid body is static.
+     */
+    inline bool isStatic() const;
+
+    /**
+     * Gets whether the rigid body is a dynamic rigid body or not.
+     *
+     * @return Whether the rigid body is dynamic.
+     */
+    inline bool isDynamic() const;
 
     /**
      * Sets the rigid body's angular velocity.

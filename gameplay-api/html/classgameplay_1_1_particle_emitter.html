@@ -51,7 +51,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -136,6 +135,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#ae2c361f40c23e62670341e5455fd3856">start</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#aafbbca12525c915b20753a2e7de7c878">stop</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a37eccfc13be8b09815eaf5daeabf91c7">isStarted</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#afe8c4584bc4ecddff370214ca5bf6394">isActive</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#afa630f0ad9c29d089469d18b546eafcc">emit</a> (unsigned int particleCount)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a37a003d736bf37f70ab25f911c42649c">getParticlesCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a11f3889a0737f3dc92a503f6b4f142e5">setEllipsoid</a> (bool ellipsoid)</td></tr>
@@ -853,6 +853,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 <div class="memdoc">
 <p>Gets the initial velocity variance of new particles.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The initial velocity variance of new particles. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afe8c4584bc4ecddff370214ca5bf6394"></a><!-- doxytag: member="gameplay::ParticleEmitter::isActive" ref="afe8c4584bc4ecddff370214ca5bf6394" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool gameplay::ParticleEmitter::isActive </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets whether this <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> is currently active (i.e. if any of its particles are alive).</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Whether this <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> is currently active. </dd></dl>
 
 </div>
 </div>
@@ -1618,14 +1636,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespacegameplay.html">gameplay</a>      </li>
+      <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>      </li>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -1635,7 +1653,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Mon Jan 23 2012 13:10:20 for gameplay by
+    <li class="footer">Generated on Sat Feb 18 2012 17:06:00 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

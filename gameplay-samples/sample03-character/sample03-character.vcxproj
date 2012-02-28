@@ -145,15 +145,11 @@
   <ItemGroup>
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
-    <None Include="res\arial.ttf" />
-    <None Include="res\arial40.gpb" />
-    <None Include="res\floor.material" />
-    <None Include="res\floor.png" />
-    <None Include="res\seymour-clips.animation" />
-    <None Include="res\seymour-diffuse.png" />
-    <None Include="res\seymour.dae" />
-    <None Include="res\seymour.gpb" />
-    <None Include="res\seymour.material" />
+    <None Include="res\boy.animation" />
+    <None Include="res\scene.dae" />
+    <None Include="res\scene.material" />
+    <None Include="res\scene.physics" />
+    <None Include="res\scene.scene" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CharacterGame.cpp" />

@@ -9,7 +9,7 @@ inline Plane& Plane::operator*=(const Matrix& matrix)
     return *this;
 }
 
-inline Plane operator*(const Matrix& matrix, const Plane& plane)
+inline const Plane operator*(const Matrix& matrix, const Plane& plane)
 {
     Plane p(plane);
     p.transform(matrix);

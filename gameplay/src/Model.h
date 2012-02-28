@@ -110,6 +110,15 @@ public:
     Material* setMaterial(const char* materialPath, int partIndex = -1);
 
     /**
+     * Determines if a custom (non-shared) material is set for the specified part index.
+     *
+     * @param partIndex MeshPart index.
+     *
+     * @return True if a custom MeshPart material is set for the specified index, false otherwise.
+     */
+    bool hasPartMaterial(unsigned int partIndex) const;
+
+    /**
      * Returns the MeshSkin.
      * 
      * @return The MeshSkin, or NULL if one is not set.

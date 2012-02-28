@@ -57,6 +57,18 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
         return gameplay::Keyboard::KEY_ALT;
     case VK_APPS:
         return gameplay::Keyboard::KEY_MENU;
+    case VK_LSHIFT:
+        return gameplay::Keyboard::KEY_SHIFT;
+    case VK_RSHIFT:
+        return gameplay::Keyboard::KEY_SHIFT;
+    case VK_LCONTROL:
+        return gameplay::Keyboard::KEY_CTRL;
+    case VK_RCONTROL:
+        return gameplay::Keyboard::KEY_CTRL;
+    case VK_LMENU:
+        return gameplay::Keyboard::KEY_ALT;
+    case VK_RMENU:
+        return gameplay::Keyboard::KEY_ALT;
     case VK_LWIN:
     case VK_RWIN:
         return gameplay::Keyboard::KEY_HYPER;
@@ -241,6 +253,12 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
 
 LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    if (hwnd != __hwnd)
+    {
+        // Ignore messages that are not for our game window
+        return DefWindowProc(hwnd, msg, wParam, lParam); 
+    }
+
     // Scale factors for the mouse movement used to simulate the accelerometer.
     static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
     static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
@@ -251,6 +269,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     static int lx, ly;
 
     static bool shiftDown = false;
+    static bool capsOn = false;
 
     switch (msg)
     {
@@ -270,7 +289,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_LBUTTONDOWN:
         if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0))
         {
-            gameplay::Game::getInstance()->touchEvent(gameplay::Touch::TOUCH_PRESS, LOWORD(lParam), HIWORD(lParam), 0);
+	        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, LOWORD(lParam), HIWORD(lParam), 0);
         }
         lMouseDown = true;
         return 0;
@@ -279,7 +298,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         lMouseDown = false;
         if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0))
         {
-            gameplay::Game::getInstance()->touchEvent(gameplay::Touch::TOUCH_RELEASE, LOWORD(lParam), HIWORD(lParam), 0);
+	        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, LOWORD(lParam), HIWORD(lParam), 0);
         }
         return 0;
 
@@ -321,7 +340,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (lMouseDown && !consumed)
         {
             // Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
-            gameplay::Game::getInstance()->touchEvent(gameplay::Touch::TOUCH_MOVE, LOWORD(lParam), HIWORD(lParam), 0);
+            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, LOWORD(lParam), HIWORD(lParam), 0);
             return 0;
         }
         else if (rMouseDown)
@@ -352,31 +371,34 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_KEYDOWN:
-        if (wParam == VK_SHIFT)
+        if (wParam == VK_SHIFT || wParam == VK_LSHIFT || wParam == VK_RSHIFT)
             shiftDown = true;
+
+        if (wParam == VK_CAPITAL)
+            capsOn = !capsOn;
 
         // Suppress key repeats
         if ((lParam & 0x40000000) == 0)
-            gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown));
+	        gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown ^ capsOn));
         break;
         
     case WM_KEYUP:
-        if (wParam == VK_SHIFT)
+        if (wParam == VK_SHIFT || wParam == VK_LSHIFT || wParam == VK_RSHIFT)
             shiftDown = false;
 
-        gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_RELEASE, getKey(wParam, shiftDown));
+        gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_RELEASE, getKey(wParam, shiftDown ^ capsOn));
         break;
 
     case WM_CHAR:
         // Suppress key repeats
         if ((lParam & 0x40000000) == 0)
-            gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_CHAR, wParam);
+            gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, wParam);
         break;
 
     case WM_UNICHAR:
         // Suppress key repeats
         if ((lParam & 0x40000000) == 0)
-            gameplay::Game::getInstance()->keyEvent(gameplay::Keyboard::KEY_CHAR, wParam);
+            gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, wParam);
         break;
 
     case WM_SETFOCUS:
@@ -385,7 +407,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_KILLFOCUS:
         break;
     }
-
+    
     return DefWindowProc(hwnd, msg, wParam, lParam); 
 }
 
@@ -643,6 +665,18 @@ void Platform::swapBuffers()
 void Platform::displayKeyboard(bool display)
 {
     // Do nothing.
+}
+
+void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+    Form::touchEventInternal(evt, x, y, contactIndex);
+}
+
+void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Form::keyEventInternal(evt, key);
 }
 
 }

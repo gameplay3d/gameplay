@@ -203,7 +203,7 @@ float Vector3::distanceSquared(const Vector3& v) const
     return (dx * dx + dy * dy + dz * dz);
 }
 
-float Vector3::dot(const Vector3& v)
+float Vector3::dot(const Vector3& v) const
 {
     return (x * v.x + y * v.y + z * v.z);
 }

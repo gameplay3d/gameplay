@@ -230,7 +230,7 @@ public:
      * 
      * @return The dot product.
      */
-    float dot(const Vector3& v);
+    float dot(const Vector3& v) const;
 
     /**
      * Returns the dot product between the specified vectors.
@@ -353,7 +353,7 @@ public:
      * @param v The vector to add.
      * @return The vector sum.
      */
-    inline Vector3 operator+(const Vector3& v) const;
+    inline const Vector3 operator+(const Vector3& v) const;
 
     /**
      * Adds the given vector to this vector.
@@ -364,14 +364,14 @@ public:
     inline Vector3& operator+=(const Vector3& v);
 
     /**
-     * Calculates the sum of this vector with the given vector.
+     * Calculates the difference of this vector with the given vector.
      * 
      * Note: this does not modify this vector.
      * 
-     * @param v The vector to add.
-     * @return The vector sum.
+     * @param v The vector to subtract.
+     * @return The vector difference.
      */
-    inline Vector3 operator-(const Vector3& v) const;
+    inline const Vector3 operator-(const Vector3& v) const;
 
     /**
      * Subtracts the given vector from this vector.
@@ -388,7 +388,7 @@ public:
      * 
      * @return The negation of this vector.
      */
-    inline Vector3 operator-() const;
+    inline const Vector3 operator-() const;
 
     /**
      * Calculates the scalar product of this vector with the given value.
@@ -398,7 +398,7 @@ public:
      * @param x The value to scale by.
      * @return The scaled vector.
      */
-    inline Vector3 operator*(float x) const;
+    inline const Vector3 operator*(float x) const;
 
     /**
      * Scales this vector by the given value.
@@ -425,6 +425,15 @@ public:
      * @return True if this vector is equal to the given vector, false otherwise.
      */
     inline bool operator==(const Vector3& v) const;
+
+    /**
+     * Determines if this vector is not equal to the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is not equal to the given vector, false otherwise.
+     */
+    inline bool operator!=(const Vector3& v) const;
 };
 
 /**
@@ -434,7 +443,7 @@ public:
  * @param v The vector to scale.
  * @return The scaled vector.
  */
-inline Vector3 operator*(float x, const Vector3& v);
+inline const Vector3 operator*(float x, const Vector3& v);
 
 }
 

@@ -831,7 +831,7 @@ public:
      * @param m The matrix to add.
      * @return The matrix sum.
      */
-    inline Matrix operator+(const Matrix& m) const;
+    inline const Matrix operator+(const Matrix& m) const;
     
     /**
      * Adds the given matrix to this matrix.
@@ -842,14 +842,14 @@ public:
     inline Matrix& operator+=(const Matrix& m);
 
     /**
-     * Calculates the sum of this matrix with the given matrix.
+     * Calculates the difference of this matrix with the given matrix.
      * 
      * Note: this does not modify this matrix.
      * 
-     * @param m The matrix to add.
-     * @return The matrix sum.
+     * @param m The matrix to subtract.
+     * @return The matrix difference.
      */
-    inline Matrix operator-(const Matrix& m) const;
+    inline const Matrix operator-(const Matrix& m) const;
 
     /**
      * Subtracts the given matrix from this matrix.
@@ -866,7 +866,7 @@ public:
      * 
      * @return The negation of this matrix.
      */
-    inline Matrix operator-() const;
+    inline const Matrix operator-() const;
 
     /**
      * Calculates the matrix product of this matrix with the given matrix.
@@ -876,7 +876,7 @@ public:
      * @param m The matrix to multiply by.
      * @return The matrix product.
      */
-    inline Matrix operator*(const Matrix& m) const;
+    inline const Matrix operator*(const Matrix& m) const;
 
     /**
      * Right-multiplies this matrix by the given matrix.
@@ -907,7 +907,7 @@ inline Vector3& operator*=(Vector3& v, const Matrix& m);
  * @param v The vector to transform.
  * @return The resulting transformed vector.
  */
-inline Vector3 operator*(const Matrix& m, const Vector3& v);
+inline const Vector3 operator*(const Matrix& m, const Vector3& v);
 
 /**
  * Transforms the given vector by the given matrix.
@@ -929,7 +929,7 @@ inline Vector4& operator*=(Vector4& v, const Matrix& m);
  * @param v The vector to transform.
  * @return The resulting transformed vector.
  */
-inline Vector4 operator*(const Matrix& m, const Vector4& v);
+inline const Vector4 operator*(const Matrix& m, const Vector4& v);
 
 }
 
