@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -137,31 +138,31 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00101"></a>00101 
 <a name="l00110"></a>00110     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_ray.html#a4d58ed8dcb6710e3ee9c856d97bdf158">intersects</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_frustum.html">Frustum</a>&amp; frustum) <span class="keyword">const</span>;
 <a name="l00111"></a>00111 
-<a name="l00120"></a>00120     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_ray.html#a4d58ed8dcb6710e3ee9c856d97bdf158">intersects</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_plane.html">Plane</a>&amp; plane) <span class="keyword">const</span>;
-<a name="l00121"></a>00121 
-<a name="l00128"></a>00128     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; origin, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; direction);
-<a name="l00129"></a>00129 
-<a name="l00135"></a>00135     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_ray.html">Ray</a>&amp; ray);
-<a name="l00136"></a>00136 
-<a name="l00142"></a>00142     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_ray.html#aad256bab9d2f0877e407cfec0d35e24c">transform</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; matrix);
-<a name="l00143"></a>00143 
-<a name="l00150"></a>00150     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_ray.html">Ray</a>&amp; <a class="code" href="classgameplay_1_1_ray.html#a77f796ed70caaedece251780cc57d436">operator*=</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; matrix);
-<a name="l00151"></a>00151 
-<a name="l00152"></a>00152 <span class="keyword">private</span>:
-<a name="l00153"></a>00153 
-<a name="l00157"></a>00157     <span class="keywordtype">void</span> normalize();
-<a name="l00158"></a>00158 
-<a name="l00159"></a>00159     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _origin;        <span class="comment">// The ray origin position.</span>
-<a name="l00160"></a>00160     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _direction;     <span class="comment">// The ray direction vector.</span>
-<a name="l00161"></a>00161 };
-<a name="l00162"></a>00162 
-<a name="l00170"></a>00170 <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_ray.html">Ray</a> operator*(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; matrix, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_ray.html">Ray</a>&amp; ray);
-<a name="l00171"></a>00171 
-<a name="l00172"></a>00172 }
-<a name="l00173"></a>00173 
-<a name="l00174"></a>00174 <span class="preprocessor">#include &quot;Ray.inl&quot;</span>
-<a name="l00175"></a>00175 
-<a name="l00176"></a>00176 <span class="preprocessor">#endif</span>
+<a name="l00121"></a>00121     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_ray.html#a4d58ed8dcb6710e3ee9c856d97bdf158">intersects</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_plane.html">Plane</a>&amp; plane) <span class="keyword">const</span>;
+<a name="l00122"></a>00122 
+<a name="l00129"></a>00129     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; origin, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; direction);
+<a name="l00130"></a>00130 
+<a name="l00136"></a>00136     <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_ray.html">Ray</a>&amp; ray);
+<a name="l00137"></a>00137 
+<a name="l00143"></a>00143     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_ray.html#aad256bab9d2f0877e407cfec0d35e24c">transform</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; matrix);
+<a name="l00144"></a>00144 
+<a name="l00151"></a>00151     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_ray.html">Ray</a>&amp; <a class="code" href="classgameplay_1_1_ray.html#a77f796ed70caaedece251780cc57d436">operator*=</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; matrix);
+<a name="l00152"></a>00152 
+<a name="l00153"></a>00153 <span class="keyword">private</span>:
+<a name="l00154"></a>00154 
+<a name="l00158"></a>00158     <span class="keywordtype">void</span> normalize();
+<a name="l00159"></a>00159 
+<a name="l00160"></a>00160     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _origin;        <span class="comment">// The ray origin position.</span>
+<a name="l00161"></a>00161     <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a> _direction;     <span class="comment">// The ray direction vector.</span>
+<a name="l00162"></a>00162 };
+<a name="l00163"></a>00163 
+<a name="l00171"></a>00171 <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_ray.html">Ray</a> operator*(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; matrix, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_ray.html">Ray</a>&amp; ray);
+<a name="l00172"></a>00172 
+<a name="l00173"></a>00173 }
+<a name="l00174"></a>00174 
+<a name="l00175"></a>00175 <span class="preprocessor">#include &quot;Ray.inl&quot;</span>
+<a name="l00176"></a>00176 
+<a name="l00177"></a>00177 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -182,7 +183,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:05:57 for gameplay by
+    <li class="footer">Generated on Tue Feb 28 2012 11:07:41 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

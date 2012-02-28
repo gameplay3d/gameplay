@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -96,7 +97,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::CheckBox Class Reference</div>  </div>
 </div>
@@ -118,7 +121,11 @@ Inheritance diagram for gameplay::CheckBox:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#a6f42cd3c5fbdc847490913d09146ccfc">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a34e2ccb3b0c56fa8d3995a996e6b5a3a"></a><!-- doxytag: member="gameplay::CheckBox::isChecked" ref="a34e2ccb3b0c56fa8d3995a996e6b5a3a" args="()" -->
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isChecked</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#a3849a62e5b3895b684592eacd6dd18b2">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a70064ae0f07f2a11a24db783a7dcbc47"></a><!-- doxytag: member="gameplay::CheckBox::update" ref="a70064ae0f07f2a11a24db783a7dcbc47" args="(const Vector2 &amp;position)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;position)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeafbd077b8a4470988396bfd100a0b39"></a><!-- doxytag: member="gameplay::CheckBox::drawSprites" ref="aeafbd077b8a4470988396bfd100a0b39" args="(SpriteBatch *spriteBatch, const Vector2 &amp;position)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawSprites</b> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;position)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaa60aae28f0a2198aae043d644dd6166"></a><!-- doxytag: member="gameplay::CheckBox::drawText" ref="aaa60aae28f0a2198aae043d644dd6166" args="(const Vector2 &amp;position)" -->
@@ -129,14 +136,24 @@ Static Public Member Functions</h2></td></tr>
 static <a class="el" href="classgameplay_1_1_check_box.html">CheckBox</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaf885a6499a0f98332e72486b2ae1c6a"></a><!-- doxytag: member="gameplay::CheckBox::getCheckBox" ref="aaf885a6499a0f98332e72486b2ae1c6a" args="(const char *id)" -->
 static <a class="el" href="classgameplay_1_1_check_box.html">CheckBox</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getCheckBox</b> (const char *id)</td></tr>
+<tr><td colspan="2"><h2><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a82d7a969fc0c4d21f2b679b534c2cf8c"></a><!-- doxytag: member="gameplay::CheckBox::CheckBox" ref="a82d7a969fc0c4d21f2b679b534c2cf8c" args="(const CheckBox &amp;copy)" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>CheckBox</b> (const <a class="el" href="classgameplay_1_1_check_box.html">CheckBox</a> &amp;copy)</td></tr>
+<tr><td colspan="2"><h2><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac4fce32c5359aee094b9c197522ef4e0"></a><!-- doxytag: member="gameplay::CheckBox::_checked" ref="ac4fce32c5359aee094b9c197522ef4e0" args="" -->
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_checked</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a38ec204c276e49d84f11ae1a6634667c"></a><!-- doxytag: member="gameplay::CheckBox::_iconSize" ref="a38ec204c276e49d84f11ae1a6634667c" args="" -->
+<a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_iconSize</b></td></tr>
 </table>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a6f42cd3c5fbdc847490913d09146ccfc"></a><!-- doxytag: member="gameplay::CheckBox::touchEvent" ref="a6f42cd3c5fbdc847490913d09146ccfc" args="(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)" -->
+<a class="anchor" id="a3849a62e5b3895b684592eacd6dd18b2"></a><!-- doxytag: member="gameplay::CheckBox::touchEvent" ref="a3849a62e5b3895b684592eacd6dd18b2" args="(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void gameplay::CheckBox::touchEvent </td>
+          <td class="memname">bool gameplay::CheckBox::touchEvent </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a>&#160;</td>
           <td class="paramname"><em>evt</em>, </td>
@@ -169,7 +186,7 @@ static <a class="el" href="classgameplay_1_1_check_box.html">CheckBox</a> *&#160
 <div class="memdoc">
 <p>Defaults to empty stub. </p>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_button.html#a5e03e0b1ce3a32edf0bd5f3efd85f1fb">gameplay::Button</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_button.html#a29c96c8eb4cefdf71806fbf3d048bb8f">gameplay::Button</a>.</p>
 
 </div>
 </div>
@@ -198,7 +215,7 @@ static <a class="el" href="classgameplay_1_1_check_box.html">CheckBox</a> *&#160
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:05:59 for gameplay by
+    <li class="footer">Generated on Tue Feb 28 2012 11:07:43 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

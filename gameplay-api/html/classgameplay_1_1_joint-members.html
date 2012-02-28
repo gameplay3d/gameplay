@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -150,6 +151,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_j
   <tr bgcolor="#f0f0f0"><td><b>dirty</b>() (defined in <a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a>)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a0f15381ed7a448f5ca1e7433a07a645c">findNode</a>(const char *id, bool recursive=true, bool exactMatch=true)</td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#ada059d9da4693a29d3a35daf8f9e51f0">findNodes</a>(const char *id, std::vector&lt; Node * &gt; &amp;nodes, bool recursive=true, bool exactMatch=true)</td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a1703ad8be4b10d3792ecb5cc3da7425e">getActiveCameraTranslationView</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#aef6bfae445794ad6c6b401cd36a2ac1d">getActiveCameraTranslationWorld</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a842ce88c27aaedb5b43e0ac675ba7b1f">getAnimationPropertyComponentCount</a>(int propertyId) const </td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#aa511e1efa7282723e0bfbe38742ec410">getAnimationPropertyValue</a>(int propertyId, AnimationValue *value)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td><code> [virtual]</code></td></tr>
@@ -169,6 +171,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_j
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a5703a1e0a4569290aa8d90a25ebf5771">getForwardVectorWorld</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a46560582234f547970a18ae691fd44fc">getId</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_joint.html#a16a59456c74ddb86f6b33fb63cdd133b">getInverseBindPose</a>() const </td><td><a class="el" href="classgameplay_1_1_joint.html">gameplay::Joint</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a71f9d55207e716b6f6f7936b401ed3df">getInverseTransposeWorldMatrix</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#ab41ebdcc12616a93079fedd50d167879">getInverseTransposeWorldViewMatrix</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#ab396c23990679f45dcf5bd3477d53f8d">getInverseViewMatrix</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a50f1144b114d222a9ad5bea75cd3428b">getInverseViewProjectionMatrix</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
@@ -319,7 +322,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_j
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:05:59 for gameplay by
+    <li class="footer">Generated on Tue Feb 28 2012 11:07:43 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

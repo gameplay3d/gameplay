@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -123,7 +124,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00026"></a>00026 
 <a name="l00027"></a>00027     <span class="keyword">const</span> <span class="keywordtype">char</span>* getID();
 <a name="l00028"></a>00028 
-<a name="l00036"></a>00036     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; <a class="code" href="classgameplay_1_1_control.html#aa6ac16d09681bb54497e1379705c8aed">getBounds</a>(<span class="keywordtype">bool</span> includePadding) <span class="keyword">const</span>;
+<a name="l00036"></a>00036     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a> <a class="code" href="classgameplay_1_1_control.html#a5d727fb2d1484a11baa4c77e6b9d2e4c">getBounds</a>(<span class="keywordtype">bool</span> includePadding) <span class="keyword">const</span>;
 <a name="l00037"></a>00037 
 <a name="l00044"></a>00044     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_control.html#a3c1f7dee87df548854e36ddf909e39ee">setPosition</a>(<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y);
 <a name="l00045"></a>00045 
@@ -140,46 +141,54 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00082"></a>00082 
 <a name="l00083"></a>00083     <span class="keywordtype">void</span> disable();
 <a name="l00084"></a>00084     <span class="keywordtype">void</span> enable();
-<a name="l00085"></a>00085 
-<a name="l00086"></a>00086     Theme::Style::OverlayType getOverlayType() <span class="keyword">const</span>;
-<a name="l00087"></a>00087 
-<a name="l00091"></a>00091     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_control.html#ad1ffebe740b4c6846297fd222a96720e">touchEvent</a>(<a class="code" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> contactIndex);
-<a name="l00092"></a>00092 
-<a name="l00093"></a>00093     <span class="keyword">virtual</span> <span class="keywordtype">void</span> keyEvent(<a class="code" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, <span class="keywordtype">int</span> key);
-<a name="l00094"></a>00094 
-<a name="l00095"></a>00095     <span class="keyword">virtual</span> <span class="keywordtype">void</span> update(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; position);
+<a name="l00085"></a>00085     <span class="keywordtype">bool</span> isEnabled();
+<a name="l00086"></a>00086 
+<a name="l00087"></a>00087     Theme::Style::OverlayType getOverlayType() <span class="keyword">const</span>;
+<a name="l00088"></a>00088 
+<a name="l00089"></a>00089     <span class="keywordtype">void</span> setConsumeTouchEvents(<span class="keywordtype">bool</span> consume);
+<a name="l00090"></a>00090     <span class="keywordtype">bool</span> getConsumeTouchEvents();
+<a name="l00091"></a>00091 
+<a name="l00095"></a>00095     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_control.html#ab1e9f30350403437d01e86a610dba8a5">touchEvent</a>(<a class="code" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> contactIndex);
 <a name="l00096"></a>00096 
-<a name="l00100"></a>00100     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_control.html#a560e5b848a0dcd1aa9658970366ff187">drawBorder</a>(<a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* spriteBatch, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; position);
-<a name="l00101"></a>00101     <span class="keyword">virtual</span> <span class="keywordtype">void</span> drawSprites(<a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* spriteBatch, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; position);
-<a name="l00102"></a>00102     <span class="keyword">virtual</span> <span class="keywordtype">void</span> drawText(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; position);
-<a name="l00103"></a>00103 
-<a name="l00108"></a>00108     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_control.html#a7f2f1b235d37761fd82fad1ab0cbac60">isDirty</a>();
-<a name="l00109"></a>00109 
-<a name="l00110"></a>00110     <span class="keywordtype">void</span> setStyle(<a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* Style);
-<a name="l00111"></a>00111     <a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* getStyle() <span class="keyword">const</span>;
-<a name="l00112"></a>00112 
-<a name="l00113"></a>00113     <span class="keywordtype">void</span> themeChanged();
-<a name="l00114"></a>00114 
-<a name="l00115"></a>00115 <span class="keyword">protected</span>:
-<a name="l00116"></a>00116     <a class="code" href="classgameplay_1_1_control.html">Control</a>();
-<a name="l00117"></a>00117     <a class="code" href="classgameplay_1_1_control.html">Control</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_control.html">Control</a>&amp; copy);
-<a name="l00118"></a>00118     <span class="keyword">virtual</span> ~<a class="code" href="classgameplay_1_1_control.html">Control</a>();
-<a name="l00119"></a>00119 
-<a name="l00120"></a>00120     std::string _id;
-<a name="l00121"></a>00121     State _state;           <span class="comment">// Determines overlay used during draw().</span>
-<a name="l00122"></a>00122     <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a> _size;
-<a name="l00123"></a>00123     <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a> _position;
-<a name="l00124"></a>00124     <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a> _border;
-<a name="l00125"></a>00125     <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a> _padding;
-<a name="l00126"></a>00126     <span class="keywordtype">bool</span> _autoWidth;
-<a name="l00127"></a>00127     <span class="keywordtype">bool</span> _autoHeight;
-<a name="l00128"></a>00128     <span class="keywordtype">bool</span> _dirty;
-<a name="l00129"></a>00129     <a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* _style;
-<a name="l00130"></a>00130 };
-<a name="l00131"></a>00131 
-<a name="l00132"></a>00132 }
-<a name="l00133"></a>00133 
-<a name="l00134"></a>00134 <span class="preprocessor">#endif</span>
+<a name="l00097"></a>00097     <span class="keyword">virtual</span> <span class="keywordtype">void</span> keyEvent(<a class="code" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, <span class="keywordtype">int</span> key);
+<a name="l00098"></a>00098 
+<a name="l00099"></a>00099     <span class="keyword">virtual</span> <span class="keywordtype">void</span> update(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; position);
+<a name="l00100"></a>00100 
+<a name="l00104"></a>00104     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_control.html#a560e5b848a0dcd1aa9658970366ff187">drawBorder</a>(<a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* spriteBatch, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; position);
+<a name="l00105"></a>00105     <span class="keyword">virtual</span> <span class="keywordtype">void</span> drawSprites(<a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* spriteBatch, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; position);
+<a name="l00106"></a>00106     <span class="keyword">virtual</span> <span class="keywordtype">void</span> drawText(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; position);
+<a name="l00107"></a>00107 
+<a name="l00112"></a>00112     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_control.html#a7f2f1b235d37761fd82fad1ab0cbac60">isDirty</a>();
+<a name="l00113"></a>00113 
+<a name="l00114"></a>00114     <span class="keywordtype">void</span> setStyle(<a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* Style);
+<a name="l00115"></a>00115     <a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* getStyle() <span class="keyword">const</span>;
+<a name="l00116"></a>00116 
+<a name="l00117"></a>00117     <span class="keyword">static</span> State getStateFromString(<span class="keyword">const</span> <span class="keywordtype">char</span>* state);
+<a name="l00118"></a>00118 
+<a name="l00119"></a>00119 <span class="keyword">protected</span>:
+<a name="l00120"></a>00120     <a class="code" href="classgameplay_1_1_control.html">Control</a>();
+<a name="l00121"></a>00121     <a class="code" href="classgameplay_1_1_control.html">Control</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_control.html">Control</a>&amp; copy);
+<a name="l00122"></a>00122     <span class="keyword">virtual</span> ~<a class="code" href="classgameplay_1_1_control.html">Control</a>();
+<a name="l00123"></a>00123 
+<a name="l00124"></a>00124     <span class="comment">// Set properties common to all Controls.</span>
+<a name="l00125"></a>00125     <span class="keyword">virtual</span> <span class="keywordtype">void</span> init(<a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* style, <a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties);
+<a name="l00126"></a>00126 
+<a name="l00127"></a>00127     std::string _id;
+<a name="l00128"></a>00128     State _state;           <span class="comment">// Determines overlay used during draw().</span>
+<a name="l00129"></a>00129     <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a> _size;
+<a name="l00130"></a>00130     <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a> _position;
+<a name="l00131"></a>00131     <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a> _border;
+<a name="l00132"></a>00132     <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a> _padding;
+<a name="l00133"></a>00133     <span class="keywordtype">bool</span> _autoWidth;
+<a name="l00134"></a>00134     <span class="keywordtype">bool</span> _autoHeight;
+<a name="l00135"></a>00135     <span class="keywordtype">bool</span> _dirty;
+<a name="l00136"></a>00136     <span class="keywordtype">bool</span> _consumeTouchEvents;
+<a name="l00137"></a>00137     <a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* _style;
+<a name="l00138"></a>00138 };
+<a name="l00139"></a>00139 
+<a name="l00140"></a>00140 }
+<a name="l00141"></a>00141 
+<a name="l00142"></a>00142 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -200,7 +209,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:05:57 for gameplay by
+    <li class="footer">Generated on Tue Feb 28 2012 11:07:41 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
