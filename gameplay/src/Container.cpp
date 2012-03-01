@@ -300,6 +300,11 @@ namespace gameplay
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
+            if (!control->isEnabled())
+            {
+                continue;
+            }
+
             const Rectangle& bounds = control->getBounds();
             if (control->getState() != Control::NORMAL ||
                 (evt == Touch::TOUCH_PRESS &&
@@ -313,6 +318,11 @@ namespace gameplay
             }
         }
 
+        if (!isEnabled())
+        {
+            return (_consumeTouchEvents & eventConsumed);
+        }
+
         switch (evt)
         {
         case Touch::TOUCH_PRESS:
@@ -323,7 +333,7 @@ namespace gameplay
             break;
         }
 
-        return (_consumeTouchEvents | eventConsumed);
+        return (_consumeTouchEvents & eventConsumed);
     }
 
     void Container::keyEvent(Keyboard::KeyEvent evt, int key)
@@ -332,6 +342,11 @@ namespace gameplay
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
+            if (!control->isEnabled())
+            {
+                continue;
+            }
+
             if (control->isContainer() || control->getState() == Control::FOCUS)
             {
                 control->keyEvent(evt, key);
