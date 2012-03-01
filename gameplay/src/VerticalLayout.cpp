@@ -43,8 +43,7 @@ namespace gameplay
         }
         Theme::Padding padding = style->getPadding();
 
-        float yPosition = border.top + padding.top;
-        float xPosition = border.left + padding.left;
+        float yPosition = 0;
 
         std::vector<Control*> controls = container->getControls();
 
@@ -65,15 +64,19 @@ namespace gameplay
         while (i != end)
         {
             Control* control = controls.at(i);
-            const Vector2& size = control->getSize();
+
+            const Rectangle& bounds = control->getBounds();
             const Theme::Margin& margin = control->getStyle()->getMargin();
 
             yPosition += margin.top;
 
-            control->setPosition(xPosition, yPosition);
-            control->update(container->getPosition());
+            control->setPosition(0, yPosition);
+            if (control->isDirty())
+            {
+                control->update(container->getClip());
+            }
 
-            yPosition += size.y + margin.bottom;
+            yPosition += bounds.height + margin.bottom;
 
             i += iter;
         }

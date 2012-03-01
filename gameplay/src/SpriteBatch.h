@@ -181,6 +181,21 @@ public:
     void draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color);
 
     /**
+     * Draws a single sprite, clipped within a rectangle.
+     * 
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param width The sprite width.
+     * @param height The sprite height
+     * @param u1 Texture coordinate.
+     * @param v1 Texture coordinate.
+     * @param u2 Texture coordinate.
+     * @param v2 Texture coordinate.
+     * @param color The color to tint the sprite. Use white for no tint.
+     */
+    void draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip);
+
+    /**
      * Draws a single sprite.
      * 
      * @param x The x coordinate.

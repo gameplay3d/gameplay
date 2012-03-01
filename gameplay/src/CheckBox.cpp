@@ -4,8 +4,6 @@
 namespace gameplay
 {
 
-static std::vector<CheckBox*> __checkBoxes;
-
 CheckBox::CheckBox() : _checked(false)
 {
 }
@@ -26,29 +24,30 @@ CheckBox* CheckBox::create(Theme::Style* style, Properties* properties)
     checkBox->init(style, properties);
     properties->getVector2("iconSize", &checkBox->_iconSize);
     checkBox->_checked = properties->getBool("checked");
-    __checkBoxes.push_back(checkBox);
 
     return checkBox;
-}
-
-CheckBox* CheckBox::getCheckBox(const char* id)
-{
-    std::vector<CheckBox*>::const_iterator it;
-    for (it = __checkBoxes.begin(); it < __checkBoxes.end(); it++)
-    {
-        CheckBox* checkBox = *it;
-        if (strcmp(id, checkBox->getID()) == 0)
-        {
-            return checkBox;
-        }
-    }
-
-    return NULL;
 }
 
 bool CheckBox::isChecked()
 {
     return _checked;
+}
+
+void CheckBox::setIconSize(float width, float height)
+{
+    _iconSize.set(width, height);
+}
+
+const Vector2& CheckBox::getIconSize() const
+{
+    Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+    Theme::Icon* icon = overlay->getCheckBoxIcon();
+    if (_iconSize.isZero() && icon)
+    {
+        return icon->getSize();
+    }
+
+    return _iconSize;
 }
 
 bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -62,10 +61,10 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     {
     case Touch::TOUCH_RELEASE:
         {
-            if (_state == Control::STATE_ACTIVE)
+            if (_state == Control::ACTIVE)
             {
-                if (x > 0 && x <= _size.x &&
-                    y > 0 && y <= _size.y)
+                if (x > 0 && x <= _bounds.width &&
+                    y > 0 && y <= _bounds.height)
                 {
                     _checked = !_checked;
                 }
@@ -77,35 +76,24 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     return Button::touchEvent(evt, x, y, contactIndex);
 }
 
-void CheckBox::update(const Vector2& position)
+void CheckBox::update(const Rectangle& clip)
 {
+    Control::update(clip);
+
     Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
     Theme::Icon* icon = overlay->getCheckBoxIcon();
-    Theme::Border border;
-    Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
-    if (containerRegion)
+    Vector2& size = _iconSize;
+    if (_iconSize.isZero() && icon)
     {
-        border = overlay->getContainerRegion()->getBorder();
+        size = icon->getSize();
     }
-    Theme::Padding padding = _style->getPadding();
+    float iconWidth = size.x;
 
-    // Set up the text viewport.
-    float iconWidth = 0.0f;
-    if (icon)
-    {
-        iconWidth = icon->getSize().x;
-    }
-
-    Font* font = overlay->getFont();
-    Vector2 pos(position.x + _position.x + border.left + padding.left + iconWidth,
-            position.y + _position.y + border.top + padding.top);
-
-    _viewport.set(pos.x, pos.y,
-        _size.x - border.left - padding.left - border.right - padding.right - iconWidth,
-        _size.y - border.top - padding.top - border.bottom - padding.bottom - overlay->getFontSize());
+    _clip.x += iconWidth;
+    _clip.width -= iconWidth;
 }
 
-void CheckBox::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
+void CheckBox::drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     // Left, v-center.
     // TODO: Set an alignment for icons.
@@ -129,8 +117,8 @@ void CheckBox::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
 
         const Vector4 color = icon->getColor();
 
-        Vector2 pos(position.x + _position.x + border.left + padding.left,
-            position.y + _position.y + (_size.y - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
+        Vector2 pos(clip.x + _position.x + border.left + padding.left,
+            clip.y + _position.y + (_bounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
 
         if (_checked)
         {
@@ -145,7 +133,7 @@ void CheckBox::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
     }
 }
 
-void CheckBox::drawText(const Vector2& position)
+void CheckBox::drawText(const Rectangle& clip)
 {
     // TODO: Batch all labels that use the same font.
     Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
@@ -153,7 +141,7 @@ void CheckBox::drawText(const Vector2& position)
     
     // Draw the text.
     font->begin();
-    font->drawText(_text.c_str(), _viewport, overlay->getTextColor(), overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+    font->drawText(_text.c_str(), _clip, overlay->getTextColor(), overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
     font->end();
 
     _dirty = false;

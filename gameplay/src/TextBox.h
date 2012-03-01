@@ -19,10 +19,10 @@ public:
 
     void keyEvent(Keyboard::KeyEvent evt, int key);
 
-    void update(const Vector2& position);
+    void update(const Rectangle& clip);
 
     // Draw the cursor.
-    void drawSprites(SpriteBatch* spriteBatch, const Vector2& position);
+    void drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip);
 
 private:
     TextBox();

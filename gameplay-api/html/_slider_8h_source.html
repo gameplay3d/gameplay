@@ -108,43 +108,49 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00010"></a>00010 <span class="keyword">namespace </span>gameplay
 <a name="l00011"></a>00011 {
 <a name="l00012"></a>00012 
-<a name="l00013"></a><a class="code" href="classgameplay_1_1_slider.html">00013</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_slider.html">Slider</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_button.html">Button</a>
-<a name="l00014"></a>00014 {
-<a name="l00015"></a>00015 <span class="keyword">public</span>:
-<a name="l00016"></a>00016     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_slider.html">Slider</a>* create(<a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* style, <a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties);
-<a name="l00017"></a>00017     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_slider.html">Slider</a>* create(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, <span class="keywordtype">float</span> min, <span class="keywordtype">float</span> max, <span class="keywordtype">float</span> defaultPosition = 0.0f, <span class="keywordtype">float</span> step = 1.0f);
-<a name="l00018"></a>00018     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_slider.html">Slider</a>* getSlider(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>);
-<a name="l00019"></a>00019 
-<a name="l00020"></a>00020     <span class="keywordtype">void</span> setMin(<span class="keywordtype">float</span> min);
-<a name="l00021"></a>00021     <span class="keywordtype">float</span> getMin();
-<a name="l00022"></a>00022 
-<a name="l00023"></a>00023     <span class="keywordtype">void</span> setMax(<span class="keywordtype">float</span> max);
-<a name="l00024"></a>00024     <span class="keywordtype">float</span> getMax();
-<a name="l00025"></a>00025 
-<a name="l00026"></a>00026     <span class="keywordtype">void</span> setStep(<span class="keywordtype">float</span> step);
-<a name="l00027"></a>00027     <span class="keywordtype">float</span> getStep();
-<a name="l00028"></a>00028 
-<a name="l00029"></a>00029     <span class="keywordtype">void</span> setValue(<span class="keywordtype">float</span> value);
-<a name="l00030"></a>00030     <span class="keywordtype">float</span> getValue();
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_slider.html#afb17c09c56241d08f2e5d41d739e641c">touchEvent</a>(<a class="code" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> contactIndex);
+<a name="l00030"></a><a class="code" href="classgameplay_1_1_slider.html">00030</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_slider.html">Slider</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_button.html">Button</a>
+<a name="l00031"></a>00031 {
+<a name="l00032"></a>00032     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_container.html">Container</a>;
 <a name="l00033"></a>00033 
-<a name="l00034"></a>00034     <span class="keywordtype">void</span> drawSprites(<a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* spriteBatch, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; position);
-<a name="l00035"></a>00035 
-<a name="l00036"></a>00036 <span class="keyword">protected</span>:
-<a name="l00037"></a>00037     <a class="code" href="classgameplay_1_1_slider.html">Slider</a>();
-<a name="l00038"></a>00038     ~<a class="code" href="classgameplay_1_1_slider.html">Slider</a>();
-<a name="l00039"></a>00039 
-<a name="l00040"></a>00040 <span class="keyword">private</span>:
-<a name="l00041"></a>00041     <span class="keywordtype">float</span> _min;
-<a name="l00042"></a>00042     <span class="keywordtype">float</span> _max;
-<a name="l00043"></a>00043     <span class="keywordtype">float</span> _step;
-<a name="l00044"></a>00044     <span class="keywordtype">float</span> _value;
-<a name="l00045"></a>00045 };
-<a name="l00046"></a>00046 
-<a name="l00047"></a>00047 }
+<a name="l00034"></a>00034 <span class="keyword">public</span>:
+<a name="l00040"></a>00040     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_slider.html#a0a36c638a54476870ddd871aa47d6ba0">setMin</a>(<span class="keywordtype">float</span> min);
+<a name="l00041"></a>00041 
+<a name="l00047"></a>00047     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_slider.html#a52bdf2fa978dca8f48bfc57228e0280c">getMin</a>();
 <a name="l00048"></a>00048 
-<a name="l00049"></a>00049 <span class="preprocessor">#endif</span>
+<a name="l00054"></a>00054     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_slider.html#ae451fb7a99cc5628c17635d2e42c1db3">setMax</a>(<span class="keywordtype">float</span> max);
+<a name="l00055"></a>00055 
+<a name="l00061"></a>00061     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_slider.html#a71f5e6d2f3dd4873be1d1192cf5aba04">getMax</a>();
+<a name="l00062"></a>00062 
+<a name="l00069"></a>00069     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_slider.html#afc61920ab128f903e416653fbccb3dd1">setStep</a>(<span class="keywordtype">float</span> step);
+<a name="l00070"></a>00070 
+<a name="l00076"></a>00076     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_slider.html#ae3a3c959c557e55c7b94332ce5bba503">getStep</a>();
+<a name="l00077"></a>00077 
+<a name="l00084"></a>00084     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_slider.html#ad2410e4eb320a2fdb0062fe3b286c4a7">setValue</a>(<span class="keywordtype">float</span> value);
+<a name="l00085"></a>00085 
+<a name="l00091"></a>00091     <span class="keywordtype">float</span> <a class="code" href="classgameplay_1_1_slider.html#a7c8eb61a0fdf26336c47b8682eb2c380">getValue</a>();
+<a name="l00092"></a>00092 
+<a name="l00093"></a>00093 <span class="keyword">protected</span>:
+<a name="l00094"></a>00094     <a class="code" href="classgameplay_1_1_slider.html">Slider</a>();
+<a name="l00095"></a>00095     ~<a class="code" href="classgameplay_1_1_slider.html">Slider</a>();
+<a name="l00096"></a>00096 
+<a name="l00097"></a>00097     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_slider.html">Slider</a>* <a class="code" href="classgameplay_1_1_slider.html#a2e6237b0fd43ece484c280b9d8d3b04f">create</a>(<a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* style, <a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties);
+<a name="l00098"></a>00098 
+<a name="l00099"></a>00099     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_slider.html#afb17c09c56241d08f2e5d41d739e641c">touchEvent</a>(<a class="code" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> contactIndex);
+<a name="l00100"></a>00100 
+<a name="l00101"></a>00101     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_slider.html#a8a3876ffe7fcb24ce164ba52ac9d2b4c">drawSprites</a>(<a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* spriteBatch, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; clip);
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103     <span class="keywordtype">float</span> _min;
+<a name="l00104"></a>00104     <span class="keywordtype">float</span> _max;
+<a name="l00105"></a>00105     <span class="keywordtype">float</span> _step;
+<a name="l00106"></a>00106     <span class="keywordtype">float</span> _value;
+<a name="l00107"></a>00107 
+<a name="l00108"></a>00108 <span class="keyword">private</span>:
+<a name="l00109"></a>00109     <a class="code" href="classgameplay_1_1_slider.html">Slider</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_slider.html">Slider</a>&amp; copy);
+<a name="l00110"></a>00110 };
+<a name="l00111"></a>00111 
+<a name="l00112"></a>00112 }
+<a name="l00113"></a>00113 
+<a name="l00114"></a>00114 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -165,7 +171,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Tue Feb 28 2012 11:07:41 for gameplay by
+    <li class="footer">Generated on Thu Mar 1 2012 18:34:53 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

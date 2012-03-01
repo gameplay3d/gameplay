@@ -8,31 +8,82 @@
 namespace gameplay
 {
 
+/**
+ * Similar to a checkbox, a radio button can be toggled between two states.
+ *
+ * However, a radio button can belong to a group, and only one radio button
+ * from a group can be selected at one time.
+ *
+ * The following properties are available for radio buttons:
+ *
+ * radioButton <RadioButton ID>
+ * {
+ *      style       = <Style ID>
+ *      position    = <x, y>
+ *      size        = <width, height>
+ *      text        = <string>
+ *      group       = <string>
+ *      iconSize    = <width, height>   // The size to draw the radio button icon, if different from its size in the texture.
+ * }
+ */
 class RadioButton : public Button
 {
+    friend class Container;
+
 public:
+    /**
+     * Get whether this radio button is currently selected.
+     *
+     * @return Whether this radio button is currently selected.
+     */
+    bool isSelected();
+
+    /**
+     * Set the size to draw the radio button icon.
+     *
+     * @param width The width to draw the radio button icon.
+     * @param height The height to draw the radio button icon.
+     */
+    void setIconSize(float width, float height);
+
+    /**
+     * Get the size at which the radio button icon will be drawn.
+     *
+     * @return The size of the radio button icon.
+     */
+    const Vector2& getIconSize() const;
+
+protected:
     RadioButton();
     virtual ~RadioButton();
 
+    /**
+     * Create a radio button with a given style and properties.
+     *
+     * @param style The style to apply to this radio button.
+     * @param properties The properties to set on this radio button.
+     *
+     * @return The new radio button.
+     */
     static RadioButton* create(Theme::Style* style, Properties* properties);
-    static RadioButton* getRadioButton(const char* id);
 
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
-    void update(const Vector2& position);
+    void update(const Rectangle& clip);
 
-    void drawSprites(SpriteBatch* spriteBatch, const Vector2& position);
-    void drawText(const Vector2& position);
+    void drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip);
 
-private:
-    RadioButton(const RadioButton& copy);
+    void drawText(const Rectangle& clip);
 
-    // Clear the _selected flag of all RadioButtons in the given group.
+    // Clear the _selected flag of all radio buttons in the given group.
     static void clearSelected(const std::string& groupId);
 
     std::string _groupId;
     bool _selected;
     Vector2 _iconSize;
+
+private:
+    RadioButton(const RadioButton& copy);
 };
 
 }

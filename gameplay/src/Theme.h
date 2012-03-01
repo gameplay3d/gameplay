@@ -15,8 +15,8 @@
 namespace gameplay
 {
 
-#define MAX_OVERLAYS 4
-#define MAX_OVERLAY_REGIONS 9
+static const unsigned int MAX_OVERLAYS = 4;
+static const unsigned int MAX_OVERLAY_REGIONS = 9;
 
 /**
  * This class represents the appearance of an UI form described in a 
@@ -26,10 +26,38 @@ namespace gameplay
  */
 class Theme: public Ref
 {
+    friend class Control;
+    friend class Form;
+    friend class Container;
+
 public:
     class Style;
     class Cursor;
 
+private:
+    /**
+     * Creates an instance of a Theme from a theme file.
+     *
+     * @param path Path to a theme file.
+     *
+     * @return A new Theme.
+     */
+    static Theme* create(const char* path);
+
+    /**
+     * Returns style with the given name.
+     *
+     * @param id ID of the style (as specified in the Theme file).
+     *
+     * @return Instance of the Style.
+     */
+    Theme::Style* getStyle(const char* id) const;
+
+    void setProjectionMatrix(const Matrix& matrix);
+
+    SpriteBatch* getSpriteBatch() const;
+
+public:
     typedef struct UVs
     {
         float u1;
@@ -50,10 +78,9 @@ public:
 
     class Icon : public Ref
     {
-    public:
-        static Icon* create(const char* id, const Texture& texture, const Vector2& size,
-                            const Vector2& offPosition, const Vector2& onPosition, const Vector4& color);
+        friend class Theme;
 
+    public:
         const char* getId() const;
         const Vector2& getSize() const;
         const Vector4& getColor() const;
@@ -65,6 +92,9 @@ public:
         Icon(const Icon& copy);
         ~Icon();
 
+        static Icon* create(const char* id, const Texture& texture, const Vector2& size,
+                            const Vector2& offPosition, const Vector2& onPosition, const Vector4& color);
+
         std::string _id;
         Vector2 _size;
         Vector4 _color;
@@ -74,10 +104,9 @@ public:
 
     class SliderIcon : public Ref
     {
-    public:
-        static SliderIcon* create(const char* id, const Texture& texture, const Vector4& minCapRegion, const Vector4& maxCapRegion,
-                                  const Vector4& markerRegion, const Vector4& trackRegion, const Vector4& color);
+        friend class Theme;
 
+    public:
         const char* getId() const;
         const Theme::UVs& getMinCapUVs() const;
         const Theme::UVs& getMaxCapUVs() const;
@@ -94,6 +123,9 @@ public:
                    const Vector4& markerRegion, const Vector4& trackRegion, const Vector4& color);
         SliderIcon(const SliderIcon& copy);
         ~SliderIcon();
+
+        static SliderIcon* create(const char* id, const Texture& texture, const Vector4& minCapRegion, const Vector4& maxCapRegion,
+                                  const Vector4& markerRegion, const Vector4& trackRegion, const Vector4& color);
 
         std::string _id;
         UVs _minCap;
@@ -112,9 +144,9 @@ public:
      */
     class Cursor : public Ref
     {
-    public:
-        static Theme::Cursor* create(const char* id, const Texture& texture, const Rectangle& region, const Vector4& color);
+        friend class Theme;
 
+    public:
        /**
         * Returns the Id of this Cursor.
         */
@@ -134,6 +166,8 @@ public:
         Cursor(const Cursor& copy);
         ~Cursor();
 
+        static Theme::Cursor* create(const char* id, const Texture& texture, const Rectangle& region, const Vector4& color);
+
         std::string _id;
         UVs _uvs;
         Vector2 _size;
@@ -142,9 +176,9 @@ public:
 
     class ContainerRegion : public Ref
     {
-    public:
-        static ContainerRegion* create(const char* id, const Texture& texture, const Rectangle& region, const Theme::Border& border, const Vector4& color);
+        friend class Theme;
 
+    public:
         enum ContainerArea
         {
             TOP_LEFT, TOP, TOP_RIGHT,
@@ -170,40 +204,22 @@ public:
         ContainerRegion(const Texture& texture, const Rectangle& region, const Theme::Border& border, const Vector4& color);
         ContainerRegion(const ContainerRegion& copy);
         ~ContainerRegion();
+
+        static ContainerRegion* create(const char* id, const Texture& texture, const Rectangle& region, const Theme::Border& border, const Vector4& color);
     
         std::string _id;
         Theme::Border _border;
         UVs _uvs[MAX_OVERLAY_REGIONS];
         Vector4 _color;
     };
-
-    /**
-     * Creates an instance of a Theme from a theme file.
-     *
-     * @param path Path to a theme file.
-     *
-     * @return A new Theme.
-     */
-    static Theme* create(const char* path);
-
-    /**
-     * Returns style with the given name.
-     *
-     * @param id ID of the style (as specified in the Theme file).
-     *
-     * @return Instance of the Style.
-     */
-    Theme::Style* getStyle(const char* id) const;
-
-    void setProjectionMatrix(const Matrix& matrix);
-
-    SpriteBatch* getSpriteBatch() const;
     
     /**
-     * This class represents the apperance of a control's style.
+     * This class represents the apperance of a control.
      */
     class Style
     {
+        friend class Theme;
+
     public:
         class Overlay;
 
@@ -214,11 +230,6 @@ public:
             OVERLAY_ACTIVE,
             OVERLAY_DISABLED
         };
-
-        Style(const char* id, const Theme::Margin& margin, const Theme::Padding& padding,
-            Theme::Style::Overlay* normal, Theme::Style::Overlay* focus, Theme::Style::Overlay* active, Theme::Style::Overlay* disabled);
-
-        ~Style();
 
         /**
          * Returns the Id of this Style.
@@ -259,9 +270,10 @@ public:
          */
         class Overlay : public Ref
         {
-        public:
-            static Overlay* create();
+            friend class Theme;
+            friend class Style;
 
+        public:
            /**
             * Returns the Overlay type.
             */
@@ -315,6 +327,8 @@ public:
             Overlay(const Overlay& copy);
             ~Overlay();
 
+            static Overlay* create();
+
             ContainerRegion* _container;
             Cursor* _textCursor;
             Cursor* _mouseCursor;
@@ -329,7 +343,10 @@ public:
         };
 
     private:
+        Style(const char* id, const Theme::Margin& margin, const Theme::Padding& padding,
+            Theme::Style::Overlay* normal, Theme::Style::Overlay* focus, Theme::Style::Overlay* active, Theme::Style::Overlay* disabled);
         Style(const Style& style);
+        ~Style();
         
         std::string _id;
         Margin _margin;
