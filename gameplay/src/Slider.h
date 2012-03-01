@@ -17,13 +17,21 @@ public:
     static Slider* create(const char* id, float min, float max, float defaultPosition = 0.0f, float step = 1.0f);
     static Slider* getSlider(const char* id);
 
-    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+    void setMin(float min);
+    float getMin();
 
-    void drawSprites(SpriteBatch* spriteBatch, const Vector2& position);
-    void drawText(const Vector2& position);
+    void setMax(float max);
+    float getMax();
+
+    void setStep(float step);
+    float getStep();
 
     void setValue(float value);
     float getValue();
+
+    bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    void drawSprites(SpriteBatch* spriteBatch, const Vector2& position);
 
 protected:
     Slider();

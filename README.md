@@ -2,17 +2,17 @@
 GamePlay is a open-source, cross-platform 3D native gaming framework making it easy to learn and write mobile and desktop games. 
 
 ## Supported Mobile Platforms
-- BlackBerry PlayBook 1/2 (using BlackBerry Native SDK 2)
+- BlackBerry PlayBook 2 (using BlackBerry Native SDK 2)
 - Google Android 4 (using Google Android NDK 7)
-- Apple iOS 4/5 (using Apple XCode 4)
+- Apple iOS 5 (using Apple XCode 4)
 
 ## Supported Desktop Platforms
-- Apple MacOS X (using Apple XCode 4)
 - Microsoft Windows XP/7 (using Microsoft Visual Studio 2010)
-    * Requires [Creative OpenAL 1.1] (http://connect.creativelabs.com/openal/Downloads/Forms/AllItems.aspx)
+- Apple MacOS X (using Apple XCode 4)
+    * Both require [Creative OpenAL 1.1] (http://connect.creativelabs.com/openal/Downloads/Forms/AllItems.aspx)
 
 ## Roadmap for 'next' branch
-- UI Overlays
+- Terrain and Water
 - Improvements to Lighting
 - More Samples and Tutorials
 

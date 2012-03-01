@@ -15,7 +15,7 @@
 namespace gameplay
 {
 
-#define MAX_OVERLAYS 3
+#define MAX_OVERLAYS 4
 #define MAX_OVERLAY_REGIONS 9
 
 /**
@@ -211,11 +211,12 @@ public:
         {
             OVERLAY_NORMAL,
             OVERLAY_FOCUS,
-            OVERLAY_ACTIVE
+            OVERLAY_ACTIVE,
+            OVERLAY_DISABLED
         };
 
         Style(const char* id, const Theme::Margin& margin, const Theme::Padding& padding,
-            Theme::Style::Overlay* normal, Theme::Style::Overlay* focus, Theme::Style::Overlay* active);
+            Theme::Style::Overlay* normal, Theme::Style::Overlay* focus, Theme::Style::Overlay* active, Theme::Style::Overlay* disabled);
 
         ~Style();
 

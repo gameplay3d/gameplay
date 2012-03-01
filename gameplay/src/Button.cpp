@@ -17,22 +17,7 @@ namespace gameplay
     Button* Button::create(Theme::Style* style, Properties* properties)
     {
         Button* button = new Button();
-        button->_style = style;
-        properties->getVector2("position", &button->_position);
-        properties->getVector2("size", &button->_size);
-
-        const char* id = properties->getId();
-        if (id)
-        {
-            button->_id = id;
-        }
-
-        const char* text = properties->getString("text");
-        if (text)
-        {
-            button->_text = text;
-        }
-
+        button->init(style, properties);
         __buttons.push_back(button);
 
         return button;
@@ -65,28 +50,35 @@ namespace gameplay
         return NULL;
     }
 
-    void Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+    bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
     {
-        if (_state != STATE_DISABLED)
+        if (!isEnabled())
         {
-            switch (evt)
-            {
-            case Touch::TOUCH_PRESS:
-                // TODO: button-down callback.
-
-                _state = Control::STATE_ACTIVE;
-                break;
-            case Touch::TOUCH_RELEASE:
-                if (_callback &&
-                    x > 0 && x <= _size.x &&
-                    y > 0 && y <= _size.y)
-                {
-                    // Button-clicked callback.
-                    _callback->trigger(this);
-                }
-                setState(Control::STATE_NORMAL);
-                break;
-            }
+            return false;
         }
+
+        switch (evt)
+        {
+        case Touch::TOUCH_PRESS:
+            _state = Control::STATE_ACTIVE;
+            _dirty = true;
+            return _consumeTouchEvents;
+        case Touch::TOUCH_RELEASE:
+            if (_callback &&
+                x > 0 && x <= _size.x &&
+                y > 0 && y <= _size.y)
+            {
+                // Button-clicked callback.
+                _callback->trigger(this);
+                setState(Control::STATE_NORMAL);
+                _dirty = true;
+                return _consumeTouchEvents;
+            }
+            _dirty = true;
+            setState(Control::STATE_NORMAL);
+            break;
+        }
+
+        return _consumeTouchEvents;
     }
 }

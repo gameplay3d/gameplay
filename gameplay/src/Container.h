@@ -13,7 +13,7 @@ public:
     /**
      * A Container's layout type must be specified at creation time.
      */
-    static Container* create(const char* id, Layout::Type type);
+    static Container* create(Layout::Type type);
     static Container* create(Theme::Style* style, Properties* properties, Theme* theme);
     static Container* getContainer(const char* id);
 
@@ -69,7 +69,7 @@ public:
     virtual void drawSprites(SpriteBatch* spriteBatch, const Vector2& position);
     virtual void drawText(const Vector2& position);
 
-    virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+    virtual bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     virtual void keyEvent(Keyboard::KeyEvent evt, int key);
 
