@@ -204,6 +204,7 @@ extern void printError(const char* format, ...);
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
+	#define GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG		0x8C02
 #elif __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
