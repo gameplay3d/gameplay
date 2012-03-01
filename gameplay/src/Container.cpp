@@ -297,6 +297,11 @@ namespace gameplay
             }
         }
 
+        if (!isEnabled())
+        {
+            return false;
+        }
+
         switch (evt)
         {
         case Touch::TOUCH_PRESS:
