@@ -5,8 +5,6 @@
 #include "PhysicsMotionState.h"
 #include "PhysicsRigidBody.h"
 
-#include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
-
 namespace gameplay
 {
 
@@ -126,8 +124,7 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, Image* image, float mass,
     SAFE_DELETE_ARRAY(data);
 
     // Create the heightfield collision shape.
-    _shape = bullet_new<btHeightfieldTerrainShape>(_width, _height, _heightfieldData,
-        1.0f, minHeight, maxHeight, 1, PHY_FLOAT, false);
+    _shape = Game::getInstance()->getPhysicsController()->createHeightfield(_width, _height, _heightfieldData, minHeight, maxHeight);
 
     // Offset the heightmap's center of mass according to the way that Bullet calculates the origin 
     // of its heightfield collision shape; see documentation for the btHeightfieldTerrainShape for more info.
