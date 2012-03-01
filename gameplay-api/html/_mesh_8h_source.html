@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -146,58 +147,61 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00114"></a>00114 
 <a name="l00124"></a>00124     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>* <a class="code" href="classgameplay_1_1_mesh.html#a787e520db2f695beb36aa849676de4c9">createBoundingBox</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_box.html">BoundingBox</a>&amp; box);
 <a name="l00125"></a>00125 
-<a name="l00131"></a>00131     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>&amp; <a class="code" href="classgameplay_1_1_mesh.html#ac9fca007f149de6607dc1b2e9c52515c">getVertexFormat</a>() <span class="keyword">const</span>;
-<a name="l00132"></a>00132 
-<a name="l00138"></a>00138     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_mesh.html#a494b6ac9f634dfbb3b970017341f0c74">getVertexCount</a>() <span class="keyword">const</span>;
-<a name="l00139"></a>00139 
-<a name="l00145"></a>00145     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_mesh.html#a3501ead2128e9cb3890f4fc043aa5abf">getVertexSize</a>() <span class="keyword">const</span>;
-<a name="l00146"></a>00146 
-<a name="l00152"></a>00152     VertexBufferHandle <a class="code" href="classgameplay_1_1_mesh.html#adbb9ba9503e14358cfbb91050c095322">getVertexBuffer</a>() <span class="keyword">const</span>;
-<a name="l00153"></a>00153 
-<a name="l00159"></a>00159     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_mesh.html#ad3891cfdea5c84c0b329fbdcca183746">isDynamic</a>() <span class="keyword">const</span>;
-<a name="l00160"></a>00160 
-<a name="l00170"></a>00170     <a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">PrimitiveType</a> <a class="code" href="classgameplay_1_1_mesh.html#a13b315bcb5960238eba0c178ba14e069">getPrimitiveType</a>() <span class="keyword">const</span>;
-<a name="l00171"></a>00171 
-<a name="l00182"></a>00182     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_mesh.html#a2115babdcc1cc60461beeb39f967d6bc">setPrimitiveType</a>(<a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">Mesh::PrimitiveType</a> type);
-<a name="l00183"></a>00183 
-<a name="l00191"></a>00191     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_mesh.html#aba3016461ab9934887d5170ddd896280">setVertexData</a>(<span class="keywordtype">void</span>* vertexData, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> vertexStart = 0, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> vertexCount = 0);
+<a name="l00133"></a>00133     <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classgameplay_1_1_mesh.html#a417e32c7c939456238831ed426521b46">getUrl</a>() <span class="keyword">const</span>;
+<a name="l00134"></a>00134 
+<a name="l00140"></a>00140     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>&amp; <a class="code" href="classgameplay_1_1_mesh.html#ac9fca007f149de6607dc1b2e9c52515c">getVertexFormat</a>() <span class="keyword">const</span>;
+<a name="l00141"></a>00141 
+<a name="l00147"></a>00147     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_mesh.html#a494b6ac9f634dfbb3b970017341f0c74">getVertexCount</a>() <span class="keyword">const</span>;
+<a name="l00148"></a>00148 
+<a name="l00154"></a>00154     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_mesh.html#a3501ead2128e9cb3890f4fc043aa5abf">getVertexSize</a>() <span class="keyword">const</span>;
+<a name="l00155"></a>00155 
+<a name="l00161"></a>00161     VertexBufferHandle <a class="code" href="classgameplay_1_1_mesh.html#adbb9ba9503e14358cfbb91050c095322">getVertexBuffer</a>() <span class="keyword">const</span>;
+<a name="l00162"></a>00162 
+<a name="l00168"></a>00168     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_mesh.html#ad3891cfdea5c84c0b329fbdcca183746">isDynamic</a>() <span class="keyword">const</span>;
+<a name="l00169"></a>00169 
+<a name="l00179"></a>00179     <a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">PrimitiveType</a> <a class="code" href="classgameplay_1_1_mesh.html#a13b315bcb5960238eba0c178ba14e069">getPrimitiveType</a>() <span class="keyword">const</span>;
+<a name="l00180"></a>00180 
+<a name="l00191"></a>00191     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_mesh.html#a2115babdcc1cc60461beeb39f967d6bc">setPrimitiveType</a>(<a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">Mesh::PrimitiveType</a> type);
 <a name="l00192"></a>00192 
-<a name="l00203"></a>00203     <a class="code" href="classgameplay_1_1_mesh_part.html">MeshPart</a>* <a class="code" href="classgameplay_1_1_mesh.html#ac7939ac49da148123f50c4f03d1a9023">addPart</a>(<a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">PrimitiveType</a> primitiveType, <a class="code" href="classgameplay_1_1_mesh.html#a865d9e14d59471e8773694faa8656db1">Mesh::IndexFormat</a> indexFormat, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> indexCount, <span class="keywordtype">bool</span> dynamic = <span class="keyword">false</span>);
-<a name="l00204"></a>00204 
-<a name="l00210"></a>00210     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_mesh.html#a1265b40eb16a1315b339021358f25c15">getPartCount</a>() <span class="keyword">const</span>;
-<a name="l00211"></a>00211 
-<a name="l00219"></a>00219     <a class="code" href="classgameplay_1_1_mesh_part.html">MeshPart</a>* <a class="code" href="classgameplay_1_1_mesh.html#a69af9297131fc7ebcc1e24e7b65cc8e8">getPart</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
+<a name="l00200"></a>00200     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_mesh.html#aba3016461ab9934887d5170ddd896280">setVertexData</a>(<span class="keywordtype">void</span>* vertexData, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> vertexStart = 0, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> vertexCount = 0);
+<a name="l00201"></a>00201 
+<a name="l00212"></a>00212     <a class="code" href="classgameplay_1_1_mesh_part.html">MeshPart</a>* <a class="code" href="classgameplay_1_1_mesh.html#ac7939ac49da148123f50c4f03d1a9023">addPart</a>(<a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">PrimitiveType</a> primitiveType, <a class="code" href="classgameplay_1_1_mesh.html#a865d9e14d59471e8773694faa8656db1">Mesh::IndexFormat</a> indexFormat, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> indexCount, <span class="keywordtype">bool</span> dynamic = <span class="keyword">false</span>);
+<a name="l00213"></a>00213 
+<a name="l00219"></a>00219     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_mesh.html#a1265b40eb16a1315b339021358f25c15">getPartCount</a>() <span class="keyword">const</span>;
 <a name="l00220"></a>00220 
-<a name="l00241"></a>00241     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_box.html">BoundingBox</a>&amp; <a class="code" href="classgameplay_1_1_mesh.html#a516dc8fb43669fb7252dca9fde829f2d">getBoundingBox</a>() <span class="keyword">const</span>;
-<a name="l00242"></a>00242 
-<a name="l00248"></a>00248     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_mesh.html#aebf1b48813d42fa6f66ec4c99577e94a">setBoundingBox</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_box.html">BoundingBox</a>&amp; box);
-<a name="l00249"></a>00249 
-<a name="l00270"></a>00270     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a>&amp; <a class="code" href="classgameplay_1_1_mesh.html#aedb15ace17b6f915fd9c3ab9af0c78d1">getBoundingSphere</a>() <span class="keyword">const</span>;
-<a name="l00271"></a>00271 
-<a name="l00277"></a>00277     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_mesh.html#a4645b47d3c9a2392380549ac6fff928b">setBoundingSphere</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a>&amp; sphere);
-<a name="l00278"></a>00278 
-<a name="l00282"></a>00282     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_mesh.html#a233dc8f6cbc2a5cb86c4a4b5c67ade62">~Mesh</a>();
-<a name="l00283"></a>00283 
-<a name="l00284"></a>00284 <span class="keyword">private</span>:
-<a name="l00285"></a>00285 
-<a name="l00289"></a>00289     <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>&amp; vertexFormat);
-<a name="l00290"></a>00290 
-<a name="l00296"></a>00296     <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>&amp; copy);
-<a name="l00297"></a>00297 
-<a name="l00298"></a>00298     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> _vertexFormat;
-<a name="l00299"></a>00299     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _vertexCount;
-<a name="l00300"></a>00300     VertexBufferHandle _vertexBuffer;
-<a name="l00301"></a>00301     <a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">PrimitiveType</a> _primitiveType;
-<a name="l00302"></a>00302     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _partCount;
-<a name="l00303"></a>00303     <a class="code" href="classgameplay_1_1_mesh_part.html">MeshPart</a>** _parts;
-<a name="l00304"></a>00304     <span class="keywordtype">bool</span> _dynamic;
-<a name="l00305"></a>00305     <a class="code" href="classgameplay_1_1_bounding_box.html">BoundingBox</a> _boundingBox;
-<a name="l00306"></a>00306     <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> _boundingSphere;
-<a name="l00307"></a>00307 };
-<a name="l00308"></a>00308 
-<a name="l00309"></a>00309 }
-<a name="l00310"></a>00310 
-<a name="l00311"></a>00311 <span class="preprocessor">#endif</span>
+<a name="l00228"></a>00228     <a class="code" href="classgameplay_1_1_mesh_part.html">MeshPart</a>* <a class="code" href="classgameplay_1_1_mesh.html#a69af9297131fc7ebcc1e24e7b65cc8e8">getPart</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
+<a name="l00229"></a>00229 
+<a name="l00250"></a>00250     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_box.html">BoundingBox</a>&amp; <a class="code" href="classgameplay_1_1_mesh.html#a516dc8fb43669fb7252dca9fde829f2d">getBoundingBox</a>() <span class="keyword">const</span>;
+<a name="l00251"></a>00251 
+<a name="l00257"></a>00257     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_mesh.html#aebf1b48813d42fa6f66ec4c99577e94a">setBoundingBox</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_box.html">BoundingBox</a>&amp; box);
+<a name="l00258"></a>00258 
+<a name="l00279"></a>00279     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a>&amp; <a class="code" href="classgameplay_1_1_mesh.html#aedb15ace17b6f915fd9c3ab9af0c78d1">getBoundingSphere</a>() <span class="keyword">const</span>;
+<a name="l00280"></a>00280 
+<a name="l00286"></a>00286     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_mesh.html#a4645b47d3c9a2392380549ac6fff928b">setBoundingSphere</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a>&amp; sphere);
+<a name="l00287"></a>00287 
+<a name="l00291"></a>00291     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_mesh.html#a233dc8f6cbc2a5cb86c4a4b5c67ade62">~Mesh</a>();
+<a name="l00292"></a>00292 
+<a name="l00293"></a>00293 <span class="keyword">private</span>:
+<a name="l00294"></a>00294 
+<a name="l00298"></a>00298     <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>&amp; vertexFormat);
+<a name="l00299"></a>00299 
+<a name="l00305"></a>00305     <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_mesh.html">Mesh</a>&amp; copy);
+<a name="l00306"></a>00306 
+<a name="l00307"></a>00307     std::string _url;
+<a name="l00308"></a>00308     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> _vertexFormat;
+<a name="l00309"></a>00309     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _vertexCount;
+<a name="l00310"></a>00310     VertexBufferHandle _vertexBuffer;
+<a name="l00311"></a>00311     <a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">PrimitiveType</a> _primitiveType;
+<a name="l00312"></a>00312     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _partCount;
+<a name="l00313"></a>00313     <a class="code" href="classgameplay_1_1_mesh_part.html">MeshPart</a>** _parts;
+<a name="l00314"></a>00314     <span class="keywordtype">bool</span> _dynamic;
+<a name="l00315"></a>00315     <a class="code" href="classgameplay_1_1_bounding_box.html">BoundingBox</a> _boundingBox;
+<a name="l00316"></a>00316     <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> _boundingSphere;
+<a name="l00317"></a>00317 };
+<a name="l00318"></a>00318 
+<a name="l00319"></a>00319 }
+<a name="l00320"></a>00320 
+<a name="l00321"></a>00321 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -218,7 +222,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:05:57 for gameplay by
+    <li class="footer">Generated on Tue Feb 28 2012 11:07:41 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

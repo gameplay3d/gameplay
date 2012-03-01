@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -200,36 +201,38 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00299"></a>00299     <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
 <a name="l00300"></a>00300     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">renderOnce</a>(T* instance, <span class="keywordtype">void</span> (T::*method)(<span class="keywordtype">void</span>*), <span class="keywordtype">void</span>* cookie);
 <a name="l00301"></a>00301 
-<a name="l00302"></a>00302 <span class="keyword">private</span>:
-<a name="l00303"></a>00303 
-<a name="l00309"></a>00309     <a class="code" href="classgameplay_1_1_game.html#ac8e478eb88e8f9d42030f6c7e4cc5639">Game</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_game.html">Game</a>&amp; copy);
+<a name="l00309"></a>00309     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_game.html#abff1327e3158e34922d8ecb8f01d9960">updateOnce</a>();
 <a name="l00310"></a>00310 
-<a name="l00314"></a>00314     <span class="keywordtype">bool</span> startup();
-<a name="l00315"></a>00315 
-<a name="l00319"></a>00319     <span class="keywordtype">void</span> shutdown();
-<a name="l00320"></a>00320 
-<a name="l00321"></a>00321     <span class="keywordtype">bool</span> _initialized;                          <span class="comment">// If game has initialized yet.</span>
-<a name="l00322"></a>00322     <a class="code" href="classgameplay_1_1_game.html#ab92abc94a6896257f0155f42533cda4c">State</a> _state;                               <span class="comment">// The game state.</span>
-<a name="l00323"></a>00323     <span class="keyword">static</span> <span class="keywordtype">long</span> _pausedTimeLast;                <span class="comment">// The last time paused.</span>
-<a name="l00324"></a>00324     <span class="keyword">static</span> <span class="keywordtype">long</span> _pausedTimeTotal;               <span class="comment">// The total time paused.</span>
-<a name="l00325"></a>00325     <span class="keywordtype">long</span> _frameLastFPS;                         <span class="comment">// The last time the frame count was updated.</span>
-<a name="l00326"></a>00326     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _frameCount;                   <span class="comment">// The current frame count.</span>
-<a name="l00327"></a>00327     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _frameRate;                    <span class="comment">// The current frame rate.</span>
-<a name="l00328"></a>00328     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _width;                        <span class="comment">// The game&#39;s display width.</span>
-<a name="l00329"></a>00329     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _height;                       <span class="comment">// The game&#39;s display height.</span>
-<a name="l00330"></a>00330     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _clearColor;                        <span class="comment">// The clear color value last used for clearing the color buffer.</span>
-<a name="l00331"></a>00331     <span class="keywordtype">float</span> _clearDepth;                          <span class="comment">// The clear depth value last used for clearing the depth buffer.</span>
-<a name="l00332"></a>00332     <span class="keywordtype">int</span> _clearStencil;                          <span class="comment">// The clear stencil value last used for clearing the stencil buffer.</span>
-<a name="l00333"></a>00333     <a class="code" href="classgameplay_1_1_animation_controller.html">AnimationController</a>* _animationController;  <span class="comment">// Controls the scheduling and running of animations.</span>
-<a name="l00334"></a>00334     <a class="code" href="classgameplay_1_1_audio_controller.html">AudioController</a>* _audioController;          <span class="comment">// Controls audio sources that are playing in the game.</span>
-<a name="l00335"></a>00335     <a class="code" href="classgameplay_1_1_physics_controller.html">PhysicsController</a>* _physicsController;      <span class="comment">// Controls the simulation of a physics scene and entities.</span>
-<a name="l00336"></a>00336 };
-<a name="l00337"></a>00337 
-<a name="l00338"></a>00338 }
-<a name="l00339"></a>00339 
-<a name="l00340"></a>00340 <span class="preprocessor">#include &quot;Game.inl&quot;</span>
-<a name="l00341"></a>00341 
-<a name="l00342"></a>00342 <span class="preprocessor">#endif</span>
+<a name="l00311"></a>00311 <span class="keyword">private</span>:
+<a name="l00312"></a>00312 
+<a name="l00318"></a>00318     <a class="code" href="classgameplay_1_1_game.html#ac8e478eb88e8f9d42030f6c7e4cc5639">Game</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_game.html">Game</a>&amp; copy);
+<a name="l00319"></a>00319 
+<a name="l00323"></a>00323     <span class="keywordtype">bool</span> startup();
+<a name="l00324"></a>00324 
+<a name="l00328"></a>00328     <span class="keywordtype">void</span> shutdown();
+<a name="l00329"></a>00329 
+<a name="l00330"></a>00330     <span class="keywordtype">bool</span> _initialized;                          <span class="comment">// If game has initialized yet.</span>
+<a name="l00331"></a>00331     <a class="code" href="classgameplay_1_1_game.html#ab92abc94a6896257f0155f42533cda4c">State</a> _state;                               <span class="comment">// The game state.</span>
+<a name="l00332"></a>00332     <span class="keyword">static</span> <span class="keywordtype">long</span> _pausedTimeLast;                <span class="comment">// The last time paused.</span>
+<a name="l00333"></a>00333     <span class="keyword">static</span> <span class="keywordtype">long</span> _pausedTimeTotal;               <span class="comment">// The total time paused.</span>
+<a name="l00334"></a>00334     <span class="keywordtype">long</span> _frameLastFPS;                         <span class="comment">// The last time the frame count was updated.</span>
+<a name="l00335"></a>00335     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _frameCount;                   <span class="comment">// The current frame count.</span>
+<a name="l00336"></a>00336     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _frameRate;                    <span class="comment">// The current frame rate.</span>
+<a name="l00337"></a>00337     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _width;                        <span class="comment">// The game&#39;s display width.</span>
+<a name="l00338"></a>00338     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _height;                       <span class="comment">// The game&#39;s display height.</span>
+<a name="l00339"></a>00339     <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a> _clearColor;                        <span class="comment">// The clear color value last used for clearing the color buffer.</span>
+<a name="l00340"></a>00340     <span class="keywordtype">float</span> _clearDepth;                          <span class="comment">// The clear depth value last used for clearing the depth buffer.</span>
+<a name="l00341"></a>00341     <span class="keywordtype">int</span> _clearStencil;                          <span class="comment">// The clear stencil value last used for clearing the stencil buffer.</span>
+<a name="l00342"></a>00342     <a class="code" href="classgameplay_1_1_animation_controller.html">AnimationController</a>* _animationController;  <span class="comment">// Controls the scheduling and running of animations.</span>
+<a name="l00343"></a>00343     <a class="code" href="classgameplay_1_1_audio_controller.html">AudioController</a>* _audioController;          <span class="comment">// Controls audio sources that are playing in the game.</span>
+<a name="l00344"></a>00344     <a class="code" href="classgameplay_1_1_physics_controller.html">PhysicsController</a>* _physicsController;      <span class="comment">// Controls the simulation of a physics scene and entities.</span>
+<a name="l00345"></a>00345 };
+<a name="l00346"></a>00346 
+<a name="l00347"></a>00347 }
+<a name="l00348"></a>00348 
+<a name="l00349"></a>00349 <span class="preprocessor">#include &quot;Game.inl&quot;</span>
+<a name="l00350"></a>00350 
+<a name="l00351"></a>00351 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -250,7 +253,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:05:57 for gameplay by
+    <li class="footer">Generated on Tue Feb 28 2012 11:07:41 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

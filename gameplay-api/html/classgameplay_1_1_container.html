@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -139,12 +140,12 @@ std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> 
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>drawSprites</b> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;position)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad9caaae121521ed1eb758cd817b64e6d"></a><!-- doxytag: member="gameplay::Container::drawText" ref="ad9caaae121521ed1eb758cd817b64e6d" args="(const Vector2 &amp;position)" -->
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>drawText</b> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;position)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#abe565fbd6bbdba8b260a8e1ef8f8a6bd">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ae935b049536c2d7dc437df5488288a95">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d3a762ef3400d3ff53068e6856f9840"></a><!-- doxytag: member="gameplay::Container::keyEvent" ref="a7d3a762ef3400d3ff53068e6856f9840" args="(Keyboard::KeyEvent evt, int key)" -->
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>keyEvent</b> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ad4226ebd1ccaed4d8f40c563c5a275d1">create</a> (const char *id, Layout::Type type)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a3ae262039403c4ac89c33a832cd7ff02">create</a> (Layout::Type type)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aadad4de9fc282190ef293ab38b8f6ebc"></a><!-- doxytag: member="gameplay::Container::create" ref="aadad4de9fc282190ef293ab38b8f6ebc" args="(Theme::Style *style, Properties *properties, Theme *theme)" -->
 static <a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties, <a class="el" href="classgameplay_1_1_theme.html">Theme</a> *theme)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a963dd7e62b0fbe98dec5311f00185463"></a><!-- doxytag: member="gameplay::Container::getContainer" ref="a963dd7e62b0fbe98dec5311f00185463" args="(const char *id)" -->
@@ -193,26 +194,16 @@ std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> 
 
 </div>
 </div>
-<a class="anchor" id="ad4226ebd1ccaed4d8f40c563c5a275d1"></a><!-- doxytag: member="gameplay::Container::create" ref="ad4226ebd1ccaed4d8f40c563c5a275d1" args="(const char *id, Layout::Type type)" -->
+<a class="anchor" id="a3ae262039403c4ac89c33a832cd7ff02"></a><!-- doxytag: member="gameplay::Container::create" ref="a3ae262039403c4ac89c33a832cd7ff02" args="(Layout::Type type)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classgameplay_1_1_container.html">Container</a> * gameplay::Container::create </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">Layout::Type&#160;</td>
-          <td class="paramname"><em>type</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [static]</code></td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td><code> [static]</code></td>
         </tr>
       </table>
 </div>
@@ -324,12 +315,12 @@ std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> 
 
 </div>
 </div>
-<a class="anchor" id="abe565fbd6bbdba8b260a8e1ef8f8a6bd"></a><!-- doxytag: member="gameplay::Container::touchEvent" ref="abe565fbd6bbdba8b260a8e1ef8f8a6bd" args="(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)" -->
+<a class="anchor" id="ae935b049536c2d7dc437df5488288a95"></a><!-- doxytag: member="gameplay::Container::touchEvent" ref="ae935b049536c2d7dc437df5488288a95" args="(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void gameplay::Container::touchEvent </td>
+          <td class="memname">bool gameplay::Container::touchEvent </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a>&#160;</td>
           <td class="paramname"><em>evt</em>, </td>
@@ -362,7 +353,7 @@ std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> 
 <div class="memdoc">
 <p>Defaults to empty stub. </p>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#ad1ffebe740b4c6846297fd222a96720e">gameplay::Control</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#ab1e9f30350403437d01e86a610dba8a5">gameplay::Control</a>.</p>
 
 </div>
 </div>
@@ -411,7 +402,7 @@ std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> 
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:05:59 for gameplay by
+    <li class="footer">Generated on Tue Feb 28 2012 11:07:43 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

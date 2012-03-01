@@ -17,7 +17,9 @@ public:
     static RadioButton* create(Theme::Style* style, Properties* properties);
     static RadioButton* getRadioButton(const char* id);
 
-    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+    bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    void update(const Vector2& position);
 
     void drawSprites(SpriteBatch* spriteBatch, const Vector2& position);
     void drawText(const Vector2& position);
@@ -30,6 +32,7 @@ private:
 
     std::string _groupId;
     bool _selected;
+    Vector2 _iconSize;
 };
 
 }

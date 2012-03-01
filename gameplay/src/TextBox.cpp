@@ -21,23 +21,9 @@ TextBox::~TextBox()
 TextBox* TextBox::create(Theme::Style* style, Properties* properties)
 {
     TextBox* textBox = new TextBox();
-    textBox->_style = style;
-    properties->getVector2("position", &textBox->_position);
-    properties->getVector2("size", &textBox->_size);
-
-    const char* id = properties->getId();
-    if (id)
-    {
-        textBox->_id = id;
-    }
-
-    const char* text = properties->getString("text");
-    if (text)
-    {
-        textBox->_text = text;
-    }
-
+    textBox->init(style, properties);
     __textBoxes.push_back(textBox);
+
     return textBox;
 }
 
@@ -71,44 +57,55 @@ void TextBox::setCursorLocation(int x, int y)
                        y - border.top - padding.top + _viewport.y);
 }
 
-void TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {   
-    if (_state != STATE_DISABLED)
+    if (!isEnabled())
     {
-        switch (evt)
-        {
-        case Touch::TOUCH_PRESS: 
-            if (_state == STATE_NORMAL)
-            {
-                _state = STATE_ACTIVE;
-                Game::getInstance()->displayKeyboard(true);
-            }
-            break;
-        case Touch::TOUCH_MOVE:
-            if (_state == STATE_FOCUS &&
-                x > 0 && x <= _size.x &&
-                y > 0 && y <= _size.y)
-            {
-                setCursorLocation(x, y);
-                _dirty = true;
-            }
-            break;
-        case Touch::TOUCH_RELEASE:
-            if (x > 0 && x <= _size.x &&
-                y > 0 && y <= _size.y)
-            {
-                setCursorLocation(x, y);
-                _state = STATE_FOCUS;
-                _dirty = true;
-            }
-            else
-            {
-                _state = STATE_NORMAL;
-                Game::getInstance()->displayKeyboard(false);
-            }
-            break;
-        }
+        return false;
     }
+
+    switch (evt)
+    {
+    case Touch::TOUCH_PRESS: 
+        if (_state == STATE_NORMAL)
+        {
+            _state = STATE_ACTIVE;
+            Game::getInstance()->displayKeyboard(true);
+            _dirty = true;
+            return _consumeTouchEvents;
+        }
+        else if (!(x > 0 && x <= _size.x &&
+                    y > 0 && y <= _size.y))
+        {
+            _state = STATE_NORMAL;
+            Game::getInstance()->displayKeyboard(false);
+            _dirty = true;
+            return _consumeTouchEvents;
+        }
+        break;
+    case Touch::TOUCH_MOVE:
+        if (_state == STATE_FOCUS &&
+            x > 0 && x <= _size.x &&
+            y > 0 && y <= _size.y)
+        {
+            setCursorLocation(x, y);
+            _dirty = true;
+            return _consumeTouchEvents;
+        }
+        break;
+    case Touch::TOUCH_RELEASE:
+        if (x > 0 && x <= _size.x &&
+            y > 0 && y <= _size.y)
+        {
+            setCursorLocation(x, y);
+            _state = STATE_FOCUS;
+            _dirty = true;
+            return _consumeTouchEvents;
+        }
+        break;
+    }
+
+    return _consumeTouchEvents;
 }
 
 void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
@@ -274,8 +271,6 @@ void TextBox::update(const Vector2& position)
         font->getIndexAtLocation(_text.c_str(), _viewport, overlay->getFontSize(), _cursorLocation, &_cursorLocation,
             overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
     }
-
-    _dirty = false;
 }
 
 void TextBox::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
@@ -302,6 +297,8 @@ void TextBox::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
             spriteBatch->draw(_cursorLocation.x - (size.x / 2.0f), _cursorLocation.y, size.x, fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
         }
     }
+
+    _dirty = false;
 }
 
 }

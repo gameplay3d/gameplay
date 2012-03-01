@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -114,6 +115,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#aa3c6882485399085d7276e7d62c9969a">createAnimationFromTo</a> (const char *id, <a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a> *target, int propertyId, float *from, float *to, <a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">Curve::InterpolationType</a> type, unsigned long duration)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#afe9607971679caaa67a8012aa5168cad">createAnimationFromBy</a> (const char *id, <a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a> *target, int propertyId, float *from, float *by, <a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">Curve::InterpolationType</a> type, unsigned long duration)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#a9f28490ed5db01bc5136918adbdbedbe">getAnimation</a> (const char *id) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#a00c32dd4b50b4b06d8690fa272ffa010">getAnimation</a> (<a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a> *target) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#ae4ef23f5c0108eb158f055e0b61cba3a">stopAllAnimations</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#ab93a70181657e128518c2ecddd1b9e80">destroyAnimation</a> (<a class="el" href="classgameplay_1_1_animation.html">Animation</a> *animation)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_controller.html#a2baceb4ec07bb6980ea758d97dfe3d37">destroyAllAnimations</a> ()</td></tr>
@@ -532,6 +534,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>SceneLoader</b></td>
 
 </div>
 </div>
+<a class="anchor" id="a00c32dd4b50b4b06d8690fa272ffa010"></a><!-- doxytag: member="gameplay::AnimationController::getAnimation" ref="a00c32dd4b50b4b06d8690fa272ffa010" args="(AnimationTarget *target) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> * gameplay::AnimationController::getAnimation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a> *&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the first animation that targets the given <a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a>. </p>
+
+</div>
+</div>
 <a class="anchor" id="ae4ef23f5c0108eb158f055e0b61cba3a"></a><!-- doxytag: member="gameplay::AnimationController::stopAllAnimations" ref="ae4ef23f5c0108eb158f055e0b61cba3a" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -574,7 +594,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>SceneLoader</b></td>
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:05:58 for gameplay by
+    <li class="footer">Generated on Tue Feb 28 2012 11:07:42 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
