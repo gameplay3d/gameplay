@@ -79,3 +79,7 @@
 #include "AbsoluteLayout.h"
 #include "Label.h"
 #include "Button.h"
+#include "CheckBox.h"
+#include "TextBox.h"
+#include "RadioButton.h"
+#include "Slider.h"

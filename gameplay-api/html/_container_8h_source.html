@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -107,8 +108,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00010"></a><a class="code" href="classgameplay_1_1_container.html">00010</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_container.html">Container</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_control.html">Control</a>
 <a name="l00011"></a>00011 {
 <a name="l00012"></a>00012 <span class="keyword">public</span>:
-<a name="l00016"></a>00016     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_container.html">Container</a>* <a class="code" href="classgameplay_1_1_container.html#ad4226ebd1ccaed4d8f40c563c5a275d1">create</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>, Layout::Type type);
-<a name="l00017"></a>00017     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_container.html">Container</a>* <a class="code" href="classgameplay_1_1_container.html#ad4226ebd1ccaed4d8f40c563c5a275d1">create</a>(<a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* style, <a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties, <a class="code" href="classgameplay_1_1_theme.html">Theme</a>* theme);
+<a name="l00016"></a>00016     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_container.html">Container</a>* <a class="code" href="classgameplay_1_1_container.html#a3ae262039403c4ac89c33a832cd7ff02">create</a>(Layout::Type type);
+<a name="l00017"></a>00017     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_container.html">Container</a>* <a class="code" href="classgameplay_1_1_container.html#a3ae262039403c4ac89c33a832cd7ff02">create</a>(<a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* style, <a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties, <a class="code" href="classgameplay_1_1_theme.html">Theme</a>* theme);
 <a name="l00018"></a>00018     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_container.html">Container</a>* getContainer(<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keywordtype">id</span>);
 <a name="l00019"></a>00019 
 <a name="l00020"></a>00020     <a class="code" href="classgameplay_1_1_layout.html">Layout</a>* getLayout();
@@ -133,7 +134,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00069"></a>00069     <span class="keyword">virtual</span> <span class="keywordtype">void</span> drawSprites(<a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* spriteBatch, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; position);
 <a name="l00070"></a>00070     <span class="keyword">virtual</span> <span class="keywordtype">void</span> drawText(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; position);
 <a name="l00071"></a>00071 
-<a name="l00072"></a>00072     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_container.html#abe565fbd6bbdba8b260a8e1ef8f8a6bd">touchEvent</a>(<a class="code" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> contactIndex);
+<a name="l00072"></a>00072     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_container.html#ae935b049536c2d7dc437df5488288a95">touchEvent</a>(<a class="code" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> contactIndex);
 <a name="l00073"></a>00073 
 <a name="l00074"></a>00074     <span class="keyword">virtual</span> <span class="keywordtype">void</span> keyEvent(<a class="code" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, <span class="keywordtype">int</span> key);
 <a name="l00075"></a>00075 
@@ -174,7 +175,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:05:57 for gameplay by
+    <li class="footer">Generated on Tue Feb 28 2012 11:07:41 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
