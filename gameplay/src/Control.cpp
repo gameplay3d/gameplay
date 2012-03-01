@@ -4,7 +4,7 @@
 namespace gameplay
 {
     Control::Control()
-        : _id(""), _state(Control::STATE_NORMAL), _size(Vector2::zero()), _position(Vector2::zero()), _border(Vector2::zero()), _padding(Vector2::zero()),
+        : _id(""), _state(Control::NORMAL), _position(Vector2::zero()), _size(Vector2::zero()), _bounds(Rectangle::empty()), _clip(Rectangle::empty()),
           _autoWidth(true), _autoHeight(true), _dirty(true), _consumeTouchEvents(true)
     {
     }
@@ -33,15 +33,9 @@ namespace gameplay
         }
     }
 
-    const char* Control::getID()
+    const char* Control::getID() const
     {
         return _id.c_str();
-    }
-
-    const Rectangle Control::getBounds(bool includePadding) const
-    {
-        // TODO
-        return Rectangle();
     }
 
     void Control::setPosition(float x, float y)
@@ -62,6 +56,16 @@ namespace gameplay
     const Vector2& Control::getSize() const
     {
         return _size;
+    }
+
+    const Rectangle& Control::getBounds() const
+    {
+        return _bounds;
+    }
+
+    const Rectangle& Control::getClip() const
+    {
+        return _clip;
     }
 
     void Control::setAutoSize(bool width, bool height)
@@ -92,30 +96,30 @@ namespace gameplay
 
     void Control::disable()
     {
-        _state = STATE_DISABLED;
+        _state = DISABLED;
     }
 
     void Control::enable()
     {
-        _state = STATE_NORMAL;
+        _state = NORMAL;
     }
 
     bool Control::isEnabled()
     {
-        return _state != STATE_DISABLED;
+        return _state != DISABLED;
     }
 
     Theme::Style::OverlayType Control::getOverlayType() const
     {
         switch (_state)
         {
-        case Control::STATE_NORMAL:
+        case Control::NORMAL:
             return Theme::Style::OVERLAY_NORMAL;
-        case Control::STATE_FOCUS:
+        case Control::FOCUS:
             return Theme::Style::OVERLAY_FOCUS;
-        case Control::STATE_ACTIVE:
+        case Control::ACTIVE:
             return Theme::Style::OVERLAY_ACTIVE;
-        case Control::STATE_DISABLED:
+        case Control::DISABLED:
             return Theme::Style::OVERLAY_DISABLED;
         default:
             return Theme::Style::OVERLAY_NORMAL;
@@ -142,13 +146,65 @@ namespace gameplay
     {
     }
 
-    void Control::update(const Vector2& position)
+    void Control::update(const Rectangle& clip)
     {
+        // Calculate the bounds.
+        float x = clip.x + _position.x;
+        float y = clip.y + _position.y;
+        float width = _size.x;
+        float height = _size.y;
+
+        float clipX2 = clip.x + clip.width;
+        float x2 = x + width;
+        if (x2 > clipX2)
+        {
+            width = clipX2 - x;
+        }
+
+        float clipY2 = clip.y + clip.height;
+        float y2 = y + height;
+        if (y2 > clipY2)
+        {
+            height = clipY2 - y;
+        }
+
+        _bounds.set(_position.x, _position.y, width, height);
+
+        // Calculate the clipping viewport.
+        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+        Theme::Border border;
+        Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
+        if (containerRegion)
+        {
+            border = overlay->getContainerRegion()->getBorder();
+        }
+        Theme::Padding padding = _style->getPadding();
+
+        x +=  border.left + padding.left;
+        y +=  border.top + padding.top;
+        width = _size.x - border.left - padding.left - border.right - padding.right;
+        height = _size.y - border.top - padding.top - border.bottom - padding.bottom;
+
+        clipX2 = clip.x + clip.width;
+        x2 = x + width;
+        if (x2 > clipX2)
+        {
+            width = clipX2 - x;
+        }
+
+        clipY2 = clip.y + clip.height;
+        y2 = y + height;
+        if (y2 > clipY2)
+        {
+            height = clipY2 - y;
+        }
+
+        _clip.set(x, y, width, height);
     }
 
-    void Control::drawBorder(SpriteBatch* spriteBatch, const Vector2& position)
+    void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
-        Vector2 pos(position.x + _position.x, position.y + _position.y);
+        Vector2 pos(clip.x + _position.x, clip.y + _position.y);
 
         // Get the border and background images for this control's current state.
         Theme::ContainerRegion* containerRegion = _style->getOverlay(getOverlayType())->getContainerRegion();
@@ -182,38 +238,38 @@ namespace gameplay
             if (!border.left && !border.right && !border.top && !border.bottom)
             {
                 // No border, just draw the image.
-                spriteBatch->draw(pos.x, pos.y, _size.x, _size.y, center.u1, center.v1, center.u2, center.v2, borderColor);
+                spriteBatch->draw(pos.x, pos.y, _size.x, _size.y, center.u1, center.v1, center.u2, center.v2, borderColor, clip);
             }
             else
             {
                 if (border.left && border.top)
-                    spriteBatch->draw(pos.x, pos.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, borderColor);
+                    spriteBatch->draw(pos.x, pos.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, borderColor, clip);
                 if (border.top)
-                    spriteBatch->draw(pos.x + border.left, pos.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, borderColor);
+                    spriteBatch->draw(pos.x + border.left, pos.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, borderColor, clip);
                 if (border.right && border.top)
-                    spriteBatch->draw(rightX, pos.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, borderColor);
+                    spriteBatch->draw(rightX, pos.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, borderColor, clip);
                 if (border.left)
-                    spriteBatch->draw(pos.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, borderColor);
+                    spriteBatch->draw(pos.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, borderColor, clip);
                 if (border.left && border.right && border.top && border.bottom)
                     spriteBatch->draw(pos.x + border.left, pos.y + border.top, _size.x - border.left - border.right, _size.y - border.top - border.bottom,
-                        center.u1, center.v1, center.u2, center.v2, borderColor);
+                        center.u1, center.v1, center.u2, center.v2, borderColor, clip);
                 if (border.right)
-                    spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, borderColor);
+                    spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, borderColor, clip);
                 if (border.bottom && border.left)
-                    spriteBatch->draw(pos.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, borderColor);
+                    spriteBatch->draw(pos.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, borderColor, clip);
                 if (border.bottom)
-                    spriteBatch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, borderColor);
+                    spriteBatch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, borderColor, clip);
                 if (border.bottom && border.right)
-                    spriteBatch->draw(rightX, bottomY, border.right, border.bottom, bottomRight.u1, bottomRight.v1, bottomRight.u2, bottomRight.v2, borderColor);
+                    spriteBatch->draw(rightX, bottomY, border.right, border.bottom, bottomRight.u1, bottomRight.v1, bottomRight.u2, bottomRight.v2, borderColor, clip);
             }
         }
     }
 
-    void Control::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
+    void Control::drawSprites(SpriteBatch* spriteBatch, const Rectangle& position)
     {
     }
 
-    void Control::drawText(const Vector2& position)
+    void Control::drawText(const Rectangle& position)
     {
     }
 
@@ -222,30 +278,35 @@ namespace gameplay
         return _dirty;
     }
 
+    bool Control::isContainer()
+    {
+        return false;
+    }
+
     Control::State Control::getStateFromString(const char* state)
     {
         if (!state)
         {
-            return STATE_NORMAL;
+            return NORMAL;
         }
 
-        if (strcmp(state, "STATE_NORMAL") == 0)
+        if (strcmp(state, "NORMAL") == 0)
         {
-            return STATE_NORMAL;
+            return NORMAL;
         }
-        else if (strcmp(state, "STATE_ACTIVE") == 0)
+        else if (strcmp(state, "ACTIVE") == 0)
         {
-            return STATE_ACTIVE;
+            return ACTIVE;
         }
-        else if (strcmp(state, "STATE_FOCUS") == 0)
+        else if (strcmp(state, "FOCUS") == 0)
         {
-            return STATE_FOCUS;
+            return FOCUS;
         }
-        else if (strcmp(state, "STATE_DISABLED") == 0)
+        else if (strcmp(state, "DISABLED") == 0)
         {
-            return STATE_DISABLED;
+            return DISABLED;
         }
 
-        return STATE_NORMAL;
+        return NORMAL;
     }
 }

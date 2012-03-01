@@ -12,31 +12,38 @@
 namespace gameplay
 {
 
+/**
+ * Base class for UI controls.
+ */
 class Control : public Ref
 {
-public:
+    friend class Form;
+    friend class Container;
+    friend class Layout;
+    friend class AbsoluteLayout;
+    friend class VerticalLayout;
 
+public:
+    /**
+     * The possible states a control can be in.
+     */
     enum State
     {
-        STATE_NORMAL,
-        STATE_FOCUS,
-        STATE_ACTIVE,
-        STATE_DISABLED
+        NORMAL,
+        FOCUS,
+        ACTIVE,
+        DISABLED
     };
 
-    const char* getID();
-
     /**
-     * Get the actual bounding box of this Control, local to its Container,
-     * after any calculations performed due to the Container's Layout or settings of auto-size.
-     * Always includes the Control's border.
-     * Can optionally include the Control's padding.
-     * Query getPosition() and getSize() to learn the bounds without border or padding.
+     * Get this control's ID string.
+     *
+     * @return This control's ID.
      */
-    const Rectangle getBounds(bool includePadding) const;
+    const char* getID() const;
 
     /**
-     * Set the position of this Control relative to its parent Container.
+     * Set the position of this control relative to its parent container.
      *
      * @param x The x coordinate.
      * @param y The y coordinate.
@@ -44,14 +51,14 @@ public:
     void setPosition(float x, float y);
 
     /**
-     * Get the position of this Control relative to its parent Container.
+     * Get the position of this control relative to its parent container.
      *
-     * @return The position vector.
+     * @return The position of this control relative to its parent container.
      */
     const Vector2& getPosition() const;
 
     /**
-     * Set the size of this Control, including its border and padding.
+     * Set the desired size of this control, including its border and padding, before clipping.
      *
      * @param width The width.
      * @param height The height.
@@ -59,11 +66,25 @@ public:
     void setSize(float width, float height);
 
     /**
-     * Get the size of this Control, including its border and padding.
+     * Get the desired size of this control, including its border and padding, before clipping.
      *
-     * @return The size vector.
+     * @return The size of this control.
      */
     const Vector2& getSize() const;
+
+    /**
+     * Get the bounds of this control, relative to its parent container, after clipping.
+     *
+     * @return The bounds of this control.
+     */
+    const Rectangle& getBounds() const;
+
+    /**
+     * Get the content area of this control, in screen coordinates, after clipping.
+     *
+     * @return The clipping area of this control.
+     */
+    const Rectangle& getClip() const;
 
     /**
      * Set width and/or height to auto-size to size a Control to tightly fit
@@ -77,64 +98,168 @@ public:
      */
     void setAutoSize(bool width, bool height);
 
+    /**
+     * Change this control's state.
+     *
+     * @param state The state to switch this control to.
+     */
     void setState(State state);
+
+    /**
+     * Get this control's current state.
+     *
+     * @return This control's current state.
+     */
     State getState();
 
+    /**
+     * Disable this control.
+     */
     void disable();
+
+    /**
+     * Enable this control.
+     */
     void enable();
+
+    /**
+     * Get whether this control is currently enabled.
+     *
+     * @return Whether this control is currently enabled.
+     */
     bool isEnabled();
 
-    Theme::Style::OverlayType getOverlayType() const;
-
+    /**
+     * Set whether this control consumes touch events,
+     * preventing them from being passed to the game.
+     *
+     * @param consume Whether this control consumes touch events.
+     */
     void setConsumeTouchEvents(bool consume);
+
+    /**
+     * Get whether this control consumes touch events.
+     *
+     * @return Whether this control consumes touch events.
+     */
     bool getConsumeTouchEvents();
 
     /**
-     * Defaults to empty stub.
+     * Set the style this control will use when rendering.
+     *
+     * @param style The style this control will use when rendering.
      */
-    virtual bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-
-    virtual void keyEvent(Keyboard::KeyEvent evt, int key);
-
-    virtual void update(const Vector2& position);
+    void setStyle(Theme::Style* style);
 
     /**
-     * Draws the themed border and background of a control.
+     * Get this control's style.
+     *
+     * @return This control's style.
      */
-    void drawBorder(SpriteBatch* spriteBatch, const Vector2& position);
-    virtual void drawSprites(SpriteBatch* spriteBatch, const Vector2& position);
-    virtual void drawText(const Vector2& position);
-
-    /**
-     * Returns whether this Control has been modified since the last time
-     * isDirty() was called, and resets its dirty flag.
-     */
-    virtual bool isDirty();
-
-    void setStyle(Theme::Style* Style);
     Theme::Style* getStyle() const;
-
-    static State getStateFromString(const char* state);
 
 protected:
     Control();
-    Control(const Control& copy);
     virtual ~Control();
 
-    // Set properties common to all Controls.
+    /**
+     * Get the overlay type corresponding to this control's current state.
+     *
+     * @return The overlay type corresponding to this control's current state.
+     */
+    Theme::Style::OverlayType getOverlayType() const;
+
+    /**
+     * Touch callback on touch events.  Controls return true if they consume the touch event.
+     *
+     * @param evt The touch event that occurred.
+     * @param x The x position of the touch in pixels. Left edge is zero.
+     * @param y The y position of the touch in pixels. Top edge is zero.
+     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     *
+     * @return Whether the touch event was consumed by this control.
+     *
+     * @see Touch::TouchEvent
+     */
+    virtual bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    /**
+     * Keyboard callback on key events.
+     *
+     * @param evt The key event that occured.
+     * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
+     *            If evt is KEY_CHAR then key is the unicode value of the character.
+     * 
+     * @see Keyboard::KeyEvent
+     * @see Keyboard::Key
+     */
+    virtual void keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * Called when a control's properties change.  Updates this control's internal rendering
+     * properties, such as its text viewport.
+     *
+     * @param clip The clipping rectangle of this control's parent container.
+     */
+    virtual void update(const Rectangle& clip);
+
+    /**
+     * Draws the themed border and background of a control.
+     *
+     * @param spriteBatch The sprite batch containing this control's border images.
+     * @param clip The clipping rectangle of this control's parent container.
+     */
+    virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
+
+    /**
+     * Draw the icons associated with this control.
+     *
+     * @param spriteBatch The sprite batch containing this control's icons.
+     * @param clip The clipping rectangle of this control's parent container.
+     */
+    virtual void drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip);
+
+    /**
+     * Draw this control's text.
+     *
+     * @param clip The clipping rectangle of this control's parent container.
+     */
+    virtual void drawText(const Rectangle& clip);
+
+    /**
+     * Initialize properties common to all Controls.
+     */
     virtual void init(Theme::Style* style, Properties* properties);
+
+    /**
+     * Container and classes that extend it should implement this and return true.
+     */
+    virtual bool isContainer();
+
+    /**
+     * Returns whether this control has been modified and requires an update.
+     */
+    virtual bool isDirty();
+
+    /**
+     * Get a Control::State enum from a matching string.
+     */
+    static State getStateFromString(const char* state);
 
     std::string _id;
     State _state;           // Determines overlay used during draw().
-    Vector2 _size;
-    Vector2 _position;
-    Vector2 _border;
-    Vector2 _padding;
+    Vector2 _position;      // Position, relative to parent container's clipping window.
+    Vector2 _size;          // Desired size.  Will be clipped.
+    Rectangle _bounds;      // The position and size of this control, relative to parent container's bounds, including border and padding, after clipping.
+    Rectangle _clip;        // Clipping window of this control's content.
     bool _autoWidth;
     bool _autoHeight;
     bool _dirty;
     bool _consumeTouchEvents;
     Theme::Style* _style;
+
+private:
+    Control(const Control& copy);
 };
 
 }
