@@ -3,8 +3,6 @@
 namespace gameplay
 {
 
-static std::vector<Slider*> __sliders;
-
 Slider::Slider()
 {
 }
@@ -23,31 +21,7 @@ Slider* Slider::create(Theme::Style* style, Properties* properties)
     slider->_value = properties->getFloat("value");
     slider->_step = properties->getFloat("step");
 
-    __sliders.push_back(slider);
-
     return slider;
-}
-
-Slider* Slider::create(const char* id, float min, float max, float defaultPosition, float step)
-{
-    Slider* slider = new Slider();
-
-    return slider;
-}
-
-Slider* Slider::getSlider(const char* id)
-{
-    std::vector<Slider*>::const_iterator it;
-    for (it = __sliders.begin(); it < __sliders.end(); it++)
-    {
-        Slider* slider = *it;
-        if (strcmp(id, slider->getID()) == 0)
-        {
-            return slider;
-        }
-    }
-
-    return NULL;
 }
 
 void Slider::setMin(float min)
@@ -87,7 +61,7 @@ float Slider::getValue()
 
 void Slider::setValue(float value)
 {
-    _value = value;
+    _value = MATH_CLAMP(value, _min, _max);
 }
 
 bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -102,15 +76,15 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
-        _state = Control::STATE_ACTIVE;
+        _state = Control::ACTIVE;
         _dirty = true;
         // Fall through to calculate new value.
 
     case Touch::TOUCH_MOVE:
     case Touch::TOUCH_RELEASE:
-        if (_state == STATE_ACTIVE &&
-            x > 0 && x <= _size.x &&
-            y > 0 && y <= _size.y)
+        if (_state == ACTIVE &&
+            x > 0 && x <= _bounds.width &&
+            y > 0 && y <= _bounds.height)
         {
             // Horizontal case.
             Theme::Border border;
@@ -128,7 +102,7 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
             const Vector2 maxCapSize = icon->getMaxCapSize();
 
             float markerPosition = ((float)x - maxCapSize.x - border.left - padding.left) /
-                                    (_size.x - border.left - border.right - padding.left - padding.right - minCapSize.x - maxCapSize.x);
+                                    (_bounds.width - border.left - border.right - padding.left - padding.right - minCapSize.x - maxCapSize.x);
             if (markerPosition > 1.0f)
             {
                 markerPosition = 1.0f;
@@ -161,7 +135,7 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     return consumeEvent;
 }
 
-void Slider::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
+void Slider::drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     // TODO: Vertical slider.
 
@@ -193,21 +167,21 @@ void Slider::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
         const Vector4 color = icon->getColor();
 
         // Draw order: track, caps, marker.
-        float midY = position.y + _position.y + (_size.y - border.bottom - padding.bottom) / 2.0f;
-        Vector2 pos(position.x + _position.x + border.left + padding.left, midY - trackSize.y / 2.0f);
-        spriteBatch->draw(pos.x, pos.y, _size.x, trackSize.y, track.u1, track.v1, track.u2, track.v2, color);
+        float midY = clip.y + _bounds.y + (_bounds.height - border.bottom - padding.bottom) / 2.0f;
+        Vector2 pos(clip.x + _bounds.x + border.left + padding.left, midY - trackSize.y / 2.0f);
+        spriteBatch->draw(pos.x, pos.y, _bounds.width, trackSize.y, track.u1, track.v1, track.u2, track.v2, color);
 
         pos.y = midY - minCapSize.y * 0.5f;
         pos.x -= minCapSize.x * 0.5f;
         spriteBatch->draw(pos.x, pos.y, minCapSize.x, minCapSize.y, minCap.u1, minCap.v1, minCap.u2, minCap.v2, color);
         
-        pos.x = position.x + _position.x + _size.x - border.right - padding.right - maxCapSize.x * 0.5f;
+        pos.x = clip.x + _bounds.x + _bounds.width - border.right - padding.right - maxCapSize.x * 0.5f;
         spriteBatch->draw(pos.x, pos.y, maxCapSize.x, maxCapSize.y, maxCap.u1, maxCap.v1, maxCap.u2, maxCap.v2, color);
 
         // Percent across.
         float markerPosition = _value / (_max - _min);
-        markerPosition *= _size.x - border.left - padding.left - border.right - padding.right - minCapSize.x * 0.5f - maxCapSize.x * 0.5f - markerSize.x;
-        pos.x = position.x + _position.x + border.left + padding.left + minCapSize.x * 0.5f + markerPosition;
+        markerPosition *= _bounds.width - border.left - padding.left - border.right - padding.right - minCapSize.x * 0.5f - maxCapSize.x * 0.5f - markerSize.x;
+        pos.x = clip.x + _bounds.x + border.left + padding.left + minCapSize.x * 0.5f + markerPosition;
         pos.y = midY - markerSize.y / 2.0f;
         spriteBatch->draw(pos.x, pos.y, markerSize.x, markerSize.y, marker.u1, marker.v1, marker.u2, marker.v2, color);
     }

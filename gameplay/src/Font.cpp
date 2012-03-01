@@ -297,6 +297,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
     const char* token = text;
     const int length = strlen(text);
     int yPos = area.y;
+    const float areaHeight = area.height - size;
 
     Justify vAlign = static_cast<Justify>(justify & 0xF0);
     if (vAlign == 0)
@@ -417,7 +418,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
 
             // Final calculation of vertical position.
             int textHeight = yPos - area.y;
-            int vWhiteSpace = area.height - textHeight;
+            int vWhiteSpace = areaHeight - textHeight;
             if (vAlign == ALIGN_VCENTER)
             {
                 yPos = area.y + vWhiteSpace / 2;
@@ -456,7 +457,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             }
 
             int textHeight = yPos - area.y;
-            int vWhiteSpace = area.height - textHeight;
+            int vWhiteSpace = areaHeight - textHeight;
             if (vAlign == ALIGN_VCENTER)
             {
                 yPos = area.y + vWhiteSpace / 2;
@@ -550,7 +551,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             // Skip drawing until line break or wrap.
             draw = false;
         }
-        else if (yPos > area.y + area.height)
+        else if (yPos > area.y + areaHeight)
         {
             // Truncate below area's vertical limit.
             break;
@@ -702,6 +703,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
 
     unsigned int lineWidth = 0;
     int yPos = viewport.y;
+    const float viewportHeight = viewport.height - size;
 
     if (wrap)
     {
@@ -891,7 +893,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
     int height = yPos - viewport.y;
 
     // Calculate top of text without clipping.
-    int vWhitespace = viewport.height - height;
+    int vWhitespace = viewportHeight - height;
     if (vAlign == ALIGN_VCENTER)
     {
         y += vWhitespace / 2;
@@ -909,7 +911,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
         if (y >= viewport.y)
         {
             // Text goes off the bottom of the viewport.
-            clippedBottom = (height - viewport.height) / size + 1;
+            clippedBottom = (height - viewportHeight) / size + 1;
             if (clippedBottom > 0)
             {
                 // Also need to crop empty lines above non-empty lines that have been clipped.
@@ -948,7 +950,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
             if (vAlign == ALIGN_VCENTER)
             {
                 // In this case lines may be clipped off the bottom as well.
-                clippedBottom = (height - viewport.height + vWhitespace/2 + 0.01) / size + 1;
+                clippedBottom = (height - viewportHeight + vWhitespace/2 + 0.01) / size + 1;
                 if (clippedBottom > 0)
                 {
                     emptyIndex = emptyLines.size() - clippedBottom;
@@ -990,7 +992,7 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
         out->x = (x >= viewport.x)? x : viewport.x;
         out->y = (y >= viewport.y)? y : viewport.y;
         out->width = (width <= viewport.width)? width : viewport.width;
-        out->height = (height <= viewport.height)? height : viewport.height;
+        out->height = (height <= viewportHeight)? height : viewportHeight;
     }
     else
     {
@@ -1023,6 +1025,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
     const char* token = text;
     const int length = strlen(text);
     int yPos = area.y;
+    const float areaHeight = area.height - size;
 
     Justify vAlign = static_cast<Justify>(justify & 0xF0);
     if (vAlign == 0)
@@ -1143,7 +1146,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
 
             // Final calculation of vertical position.
             int textHeight = yPos - area.y;
-            int vWhiteSpace = area.height - textHeight;
+            int vWhiteSpace = areaHeight - textHeight;
             if (vAlign == ALIGN_VCENTER)
             {
                 yPos = area.y + vWhiteSpace / 2;
@@ -1182,7 +1185,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
             }
 
             int textHeight = yPos - area.y;
-            int vWhiteSpace = area.height - textHeight;
+            int vWhiteSpace = areaHeight - textHeight;
             if (vAlign == ALIGN_VCENTER)
             {
                 yPos = area.y + vWhiteSpace / 2;
@@ -1299,7 +1302,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
             }
         }
 
-        if (yPos > area.y + area.height)
+        if (yPos > area.y + areaHeight)
         {
             // Truncate below area's vertical limit.
             break;
