@@ -36,6 +36,7 @@
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
     <author>Research In Motion</author>
+    <platformVersion>2.0.0.7971</platformVersion>
     
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
     <!-- <authorId>ABC1234YjsnUk235h</authorId> -->
@@ -63,11 +64,6 @@
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.fsh}">res/shaders/diffuse-specular.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.vsh}">res/shaders/diffuse-specular.vsh</asset>
     
-    <!-- BlackBerry NDK 1.0
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
-    -->
     <configuration id="com.qnx.qcc.configuration.exe.debug.417937691" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Debug/sample03-character" entry="true" type="Qnx/Elf">sample03-character</asset>
