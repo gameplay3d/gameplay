@@ -44,6 +44,12 @@ void Rectangle::set(const Rectangle& r)
     set(r.x, r.y, r.width, r.height);
 }
 
+void Rectangle::set(float x, float y)
+{
+    this->x = x;
+    this->y = y;
+}
+
 void Rectangle::set(float x, float y, float width, float height)
 {
     this->x = x;
