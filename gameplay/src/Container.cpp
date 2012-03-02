@@ -320,7 +320,7 @@ namespace gameplay
 
         if (!isEnabled())
         {
-            return (_consumeTouchEvents & eventConsumed);
+            return (_consumeTouchEvents | eventConsumed);
         }
 
         switch (evt)
@@ -333,7 +333,7 @@ namespace gameplay
             break;
         }
 
-        return (_consumeTouchEvents & eventConsumed);
+        return (_consumeTouchEvents | eventConsumed);
     }
 
     void Container::keyEvent(Keyboard::KeyEvent evt, int key)
