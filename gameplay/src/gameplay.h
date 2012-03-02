@@ -66,9 +66,9 @@
 #include "PhysicsHingeConstraint.h"
 #include "PhysicsSocketConstraint.h"
 #include "PhysicsSpringConstraint.h"
+#include "PhysicsCollisionObject.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsCharacter.h"
-
 
 // UI
 #include "Theme.h"
