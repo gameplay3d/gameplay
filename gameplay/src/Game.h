@@ -1,6 +1,8 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+#include <queue>
+
 #include "Keyboard.h"
 #include "Touch.h"
 #include "Mouse.h"
@@ -8,6 +10,7 @@
 #include "AnimationController.h"
 #include "PhysicsController.h"
 #include "Vector4.h"
+#include "TimeListener.h"
 
 namespace gameplay
 {
@@ -254,6 +257,16 @@ public:
      */
     inline void getAccelerometerValues(float* pitch, float* roll);
 
+    /**
+     * Schedules a time event to be sent to the given TimeListener a given of game milliseconds from now.
+     * Game time stops while the game is paused. A time offset of zero will fire the time event in the next frame.
+     * 
+     * @param timeOffset The number of game milliseconds in the future to schedule the event to be fired.
+     * @param timeListener The TimeListener that will receive the event.
+     * @param cookie The cookie data that the time event will contain.
+     */
+    void schedule(long timeOffset, TimeListener* timeListener, void* cookie = 0);
+
 protected:
 
     /**
@@ -311,6 +324,27 @@ protected:
 private:
 
     /**
+     * TimeEvent represents the event that is sent to TimeListeners as a result of 
+     * calling Game::schedule().
+     */
+    class TimeEvent
+    {
+    public:
+
+        TimeEvent(long time, TimeListener* timeListener, void* cookie);
+        // The comparator is used to determine the order of time events in the priority queue.
+        bool operator<(const TimeEvent& v) const;
+        
+        /**
+         * The game time.
+         * @see Game::getGameTime()
+         */
+        long time;
+        TimeListener* listener;
+        void* cookie;
+    };
+
+    /**
      * Constructor.
      *
      * @param copy The game to copy.
@@ -327,6 +361,13 @@ private:
      */
     void shutdown();
 
+    /**
+     * Fires the time events that were scheduled to be called.
+     * 
+     * @param frameTime The current game frame time. Used to determine which time events need to be fired.
+     */
+    void fireTimeEvents(long frameTime);
+
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
     static long _pausedTimeLast;                // The last time paused.
@@ -342,6 +383,7 @@ private:
     AnimationController* _animationController;  // Controls the scheduling and running of animations.
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
+    std::priority_queue<TimeEvent> _timeEvents; // Contains the scheduled time events.
 };
 
 }

@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -147,6 +148,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_n
   <tr bgcolor="#f0f0f0"><td><b>dirty</b>() (defined in <a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a>)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a0f15381ed7a448f5ca1e7433a07a645c">findNode</a>(const char *id, bool recursive=true, bool exactMatch=true)</td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#ada059d9da4693a29d3a35daf8f9e51f0">findNodes</a>(const char *id, std::vector&lt; Node * &gt; &amp;nodes, bool recursive=true, bool exactMatch=true)</td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a1703ad8be4b10d3792ecb5cc3da7425e">getActiveCameraTranslationView</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#aef6bfae445794ad6c6b401cd36a2ac1d">getActiveCameraTranslationWorld</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a842ce88c27aaedb5b43e0ac675ba7b1f">getAnimationPropertyComponentCount</a>(int propertyId) const </td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#aa511e1efa7282723e0bfbe38742ec410">getAnimationPropertyValue</a>(int propertyId, AnimationValue *value)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td><code> [virtual]</code></td></tr>
@@ -165,6 +167,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_n
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#af45441b2780e2f9ffc46f8da5bfc72ed">getForwardVectorView</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a5703a1e0a4569290aa8d90a25ebf5771">getForwardVectorWorld</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a46560582234f547970a18ae691fd44fc">getId</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a71f9d55207e716b6f6f7936b401ed3df">getInverseTransposeWorldMatrix</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#ab41ebdcc12616a93079fedd50d167879">getInverseTransposeWorldViewMatrix</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#ab396c23990679f45dcf5bd3477d53f8d">getInverseViewMatrix</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a50f1144b114d222a9ad5bea75cd3428b">getInverseViewProjectionMatrix</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
@@ -268,11 +271,11 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_n
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#af73db060e39b2d539d1b0084f7fc42e2">setTranslationY</a>(float ty)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a2a6e188c33ad030d97391b7fc3b1fc2c">setTranslationZ</a>(float tz)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>TargetType</b> enum name (defined in <a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a>)</td><td><a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td><td><code> [protected]</code></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>TRANSFORM</b> enum value (defined in <a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a>)</td><td><a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#adadaab71b46aa28a497f4a224f871f2c">Transform</a>()</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a9412c4f8d03dca4599ab96060d38459b">Transform</a>(const Vector3 &amp;scale, const Quaternion &amp;rotation, const Vector3 &amp;translation)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a3c0074dcfc275d6d3376c0b8cdcbb92c">Transform</a>(const Vector3 &amp;scale, const Matrix &amp;rotation, const Vector3 &amp;translation)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a9d2055030c5d50431e7569d78479e500">Transform</a>(const Transform &amp;copy)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>TRANSFORM</b> enum value (defined in <a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a>)</td><td><a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a7d9e0a5ff4b151d540ef2cddf0e1cb7e">transformChanged</a>()</td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td><code> [protected, virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a4667c774f027b6e650ed88deabb5428b">transformPoint</a>(Vector3 *point)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a57c8c04c7ee458c7b390ba9b0716d665">transformPoint</a>(const Vector3 &amp;point, Vector3 *dst)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
@@ -311,7 +314,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_n
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:06:00 for gameplay by
+    <li class="footer">Generated on Thu Mar 1 2012 18:34:55 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

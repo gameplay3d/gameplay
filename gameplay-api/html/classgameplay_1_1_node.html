@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -146,6 +147,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a52dbe8d9d6858f5cc95125e9e346497c">getRootNode</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ac5a80241a7ead3f80a3184c683cc644a">getWorldMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a8009fcd6e1a4ebcae7ff6a16ca4d3205">getWorldViewMatrix</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a71f9d55207e716b6f6f7936b401ed3df">getInverseTransposeWorldMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ab41ebdcc12616a93079fedd50d167879">getInverseTransposeWorldViewMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a425203605e6aba0838fee6057623cd03">getViewMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ab396c23990679f45dcf5bd3477d53f8d">getInverseViewMatrix</a> () const </td></tr>
@@ -158,6 +160,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a5703a1e0a4569290aa8d90a25ebf5771">getForwardVectorWorld</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#af45441b2780e2f9ffc46f8da5bfc72ed">getForwardVectorView</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aef6bfae445794ad6c6b401cd36a2ac1d">getActiveCameraTranslationWorld</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a1703ad8be4b10d3792ecb5cc3da7425e">getActiveCameraTranslationView</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_camera.html">Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a1d08bcf6f919dc10dc1bd53779f21b9b">getCamera</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aa92e79f39c36188912c7288356cbb340">setCamera</a> (<a class="el" href="classgameplay_1_1_camera.html">Camera</a> *camera)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_light.html">Light</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a0e778ccc1ecc36978cf43342435cde9d">getLight</a> () const </td></tr>
@@ -453,6 +456,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MeshSkin</b></td></t
 
 </div>
 </div>
+<a class="anchor" id="a1703ad8be4b10d3792ecb5cc3da7425e"></a><!-- doxytag: member="gameplay::Node::getActiveCameraTranslationView" ref="a1703ad8be4b10d3792ecb5cc3da7425e" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> gameplay::Node::getActiveCameraTranslationView </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the view-space translation vector of the currently active camera for this node's scene.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The translation vector of the scene's active camera, in view-space. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="aef6bfae445794ad6c6b401cd36a2ac1d"></a><!-- doxytag: member="gameplay::Node::getActiveCameraTranslationWorld" ref="aef6bfae445794ad6c6b401cd36a2ac1d" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -616,6 +637,25 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MeshSkin</b></td></t
 
 </div>
 </div>
+<a class="anchor" id="a71f9d55207e716b6f6f7936b401ed3df"></a><!-- doxytag: member="gameplay::Node::getInverseTransposeWorldMatrix" ref="a71f9d55207e716b6f6f7936b401ed3df" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp; gameplay::Node::getInverseTransposeWorldMatrix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the inverse transpose world matrix corresponding to this node.</p>
+<p>This matrix is typically used to transform normal vectors into world space.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The inverse world matrix of this node. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ab41ebdcc12616a93079fedd50d167879"></a><!-- doxytag: member="gameplay::Node::getInverseTransposeWorldViewMatrix" ref="ab41ebdcc12616a93079fedd50d167879" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -630,7 +670,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MeshSkin</b></td></t
 </div>
 <div class="memdoc">
 <p>Gets the inverse transpose world view matrix corresponding to this node.</p>
-<p>This matrix is typically used to transform normal vectors.</p>
+<p>This matrix is typically used to transform normal vectors into view space.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The inverse world view matrix of this node. </dd></dl>
 
 </div>
@@ -1377,7 +1417,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MeshSkin</b></td></t
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:06:00 for gameplay by
+    <li class="footer">Generated on Thu Mar 1 2012 18:34:55 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

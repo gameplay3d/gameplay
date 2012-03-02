@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -135,9 +136,11 @@ Public Types</h2></td></tr>
 &#160;&#160;<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017affc42be9b34ab81b119e40393af52f12">WORLD_VIEW_MATRIX</a>, 
 <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017ad4493886553d11e2ee264e00f40fe89a">VIEW_PROJECTION_MATRIX</a>, 
 <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a3370e5491e60fe679cbdace4340ba898">WORLD_VIEW_PROJECTION_MATRIX</a>, 
-<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a73e903b7e3d4b348eed13d495310e488">INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX</a>, 
+<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a6cc9dbe788ada1d2205c304dec79ed6f">INVERSE_TRANSPOSE_WORLD_MATRIX</a>, 
 <br/>
-&#160;&#160;<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017abc793c81555aeab2c8aa37c62e1f559a">CAMERA_WORLD_POSITION</a>, 
+&#160;&#160;<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a73e903b7e3d4b348eed13d495310e488">INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX</a>, 
+<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017abc793c81555aeab2c8aa37c62e1f559a">CAMERA_WORLD_POSITION</a>, 
+<a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017aecd0d4615dd274ac6055203f31677264">CAMERA_VIEW_POSITION</a>, 
 <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a41afd51c64cc5826c61a4df659596600">MATRIX_PALETTE</a>
 <br/>
  }</td></tr>
@@ -237,11 +240,17 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Model</b></td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017a3370e5491e60fe679cbdace4340ba898"></a><!-- doxytag: member="WORLD_VIEW_PROJECTION_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017a3370e5491e60fe679cbdace4340ba898" args="" -->WORLD_VIEW_PROJECTION_MATRIX</em>&nbsp;</td><td>
 <p>Binds a node's WorldViewProjection matrix. </p>
 </td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017a6cc9dbe788ada1d2205c304dec79ed6f"></a><!-- doxytag: member="INVERSE_TRANSPOSE_WORLD_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017a6cc9dbe788ada1d2205c304dec79ed6f" args="" -->INVERSE_TRANSPOSE_WORLD_MATRIX</em>&nbsp;</td><td>
+<p>Binds a node's InverseTransposeWorl matrix. </p>
+</td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017a73e903b7e3d4b348eed13d495310e488"></a><!-- doxytag: member="INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX" ref="a1c6aa43f58130b0e447129e39ea36017a73e903b7e3d4b348eed13d495310e488" args="" -->INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX</em>&nbsp;</td><td>
 <p>Binds a node's InverseTransposeWorldView matrix. </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017abc793c81555aeab2c8aa37c62e1f559a"></a><!-- doxytag: member="CAMERA_WORLD_POSITION" ref="a1c6aa43f58130b0e447129e39ea36017abc793c81555aeab2c8aa37c62e1f559a" args="" -->CAMERA_WORLD_POSITION</em>&nbsp;</td><td>
 <p>Binds the position (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>) of the active camera for the node's scene. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017aecd0d4615dd274ac6055203f31677264"></a><!-- doxytag: member="CAMERA_VIEW_POSITION" ref="a1c6aa43f58130b0e447129e39ea36017aecd0d4615dd274ac6055203f31677264" args="" -->CAMERA_VIEW_POSITION</em>&nbsp;</td><td>
+<p>Binds the view-space position (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>) of the active camera for the node's scene. </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a1c6aa43f58130b0e447129e39ea36017a41afd51c64cc5826c61a4df659596600"></a><!-- doxytag: member="MATRIX_PALETTE" ref="a1c6aa43f58130b0e447129e39ea36017a41afd51c64cc5826c61a4df659596600" args="" -->MATRIX_PALETTE</em>&nbsp;</td><td>
 <p>Binds the matrix palette of <a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> attached to a node's model. </p>
@@ -610,7 +619,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Model</b></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:06:01 for gameplay by
+    <li class="footer">Generated on Thu Mar 1 2012 18:34:57 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

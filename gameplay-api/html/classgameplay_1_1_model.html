@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -124,6 +125,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a7289df77e1f3b99ac3a2d83851e07338">setMaterial</a> (<a class="el" href="classgameplay_1_1_material.html">Material</a> *material, int partIndex=-1)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a6621db9db0c7147bb0609caa8187c05d">setMaterial</a> (const char *vshPath, const char *fshPath, const char *defines=NULL, int partIndex=-1)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#ab8bf10c2110d5971f0d251a403b59baa">setMaterial</a> (const char *materialPath, int partIndex=-1)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#ab9b85be71a8bd3f9f0c897238917ba45">hasPartMaterial</a> (unsigned int partIndex) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a4cab1294b4c8af527eaeeb3becd6d2d9">getSkin</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a517bf759ba37a433b9c636ca92500828">getNode</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a7929f7632ad8a6bf63af04e98b030e40">draw</a> (bool wireframe=false)</td></tr>
@@ -283,6 +285,31 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 
 </div>
 </div>
+<a class="anchor" id="ab9b85be71a8bd3f9f0c897238917ba45"></a><!-- doxytag: member="gameplay::Model::hasPartMaterial" ref="ab9b85be71a8bd3f9f0c897238917ba45" args="(unsigned int partIndex) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool gameplay::Model::hasPartMaterial </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>partIndex</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if a custom (non-shared) material is set for the specified part index.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">partIndex</td><td><a class="el" href="classgameplay_1_1_mesh_part.html">MeshPart</a> index.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if a custom <a class="el" href="classgameplay_1_1_mesh_part.html">MeshPart</a> material is set for the specified index, false otherwise. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a7289df77e1f3b99ac3a2d83851e07338"></a><!-- doxytag: member="gameplay::Model::setMaterial" ref="a7289df77e1f3b99ac3a2d83851e07338" args="(Material *material, int partIndex=&#45;1)" -->
 <div class="memitem">
 <div class="memproto">
@@ -435,7 +462,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:05:59 for gameplay by
+    <li class="footer">Generated on Thu Mar 1 2012 18:34:55 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

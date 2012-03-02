@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -148,6 +149,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a167e968bcc68c5efc49788a608336942">getNode</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a63bdd9c197aa504a0261db516a8dcf0a">getRestitution</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a638a4d1cef27927a0351871296fdcf50">isKinematic</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a7ce7a6c03c7f515b1954ce7c4fdd7f39">isStatic</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#ab6df2e2c178a29728ed3055fd21df7a9">isDynamic</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#ae7a6f21702a5cabf0e84d6a53f11f410">setAngularVelocity</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;velocity)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a9d7eafea64a5e9189b4a65a1853052f7">setAnisotropicFriction</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;friction)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a693639ad16f5c35ed773402204c26f09">setDamping</a> (float linearDamping, float angularDamping)</td></tr>
@@ -160,6 +163,8 @@ Public Member Functions</h2></td></tr>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6db9d28bd448a131448276ee03de1e6d"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::Node" ref="a6db9d28bd448a131448276ee03de1e6d" args="" -->
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af360cdaf6a9c69eb52b51ce74d51bb09"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::PhysicsCharacter" ref="af360cdaf6a9c69eb52b51ce74d51bb09" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsCharacter</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa59c958a66870f0d251ec0dd477d2eff"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::PhysicsConstraint" ref="aa59c958a66870f0d251ec0dd477d2eff" args="" -->
 class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsConstraint</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad018280e085823e2e430f6afdd26000c"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::PhysicsController" ref="ad018280e085823e2e430f6afdd26000c" args="" -->
@@ -570,6 +575,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsSpringConstra
 
 </div>
 </div>
+<a class="anchor" id="ab6df2e2c178a29728ed3055fd21df7a9"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::isDynamic" ref="ab6df2e2c178a29728ed3055fd21df7a9" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool gameplay::PhysicsRigidBody::isDynamic </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets whether the rigid body is a dynamic rigid body or not.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Whether the rigid body is dynamic. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a638a4d1cef27927a0351871296fdcf50"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::isKinematic" ref="a638a4d1cef27927a0351871296fdcf50" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -585,6 +608,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsSpringConstra
 <div class="memdoc">
 <p>Gets whether the rigid body is a kinematic rigid body or not.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>Whether the rigid body is kinematic or not. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7ce7a6c03c7f515b1954ce7c4fdd7f39"></a><!-- doxytag: member="gameplay::PhysicsRigidBody::isStatic" ref="a7ce7a6c03c7f515b1954ce7c4fdd7f39" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool gameplay::PhysicsRigidBody::isStatic </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets whether the rigid body is a static rigid body or not.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Whether the rigid body is static. </dd></dl>
 
 </div>
 </div>
@@ -817,7 +858,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsSpringConstra
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:06:00 for gameplay by
+    <li class="footer">Generated on Thu Mar 1 2012 18:34:56 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

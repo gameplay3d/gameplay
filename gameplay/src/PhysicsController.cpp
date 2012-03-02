@@ -5,6 +5,8 @@
 #include "PhysicsMotionState.h"
 #include "Package.h"
 
+#include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
+
 // The initial capacity of the Bullet debug drawer's vertex batch.
 #define INITIAL_CAPACITY 280
 
@@ -685,6 +687,13 @@ btCollisionShape* PhysicsController::createMesh(PhysicsRigidBody* body, const Ve
     // Free the temporary mesh data now that it's stored in physics system
     SAFE_DELETE(data);
 
+    return shape;
+}
+
+btCollisionShape* PhysicsController::createHeightfield(int width, int height, void* heightfieldData, float minHeight, float maxHeight)
+{
+    btCollisionShape* shape = bullet_new<btHeightfieldTerrainShape>(width, height, heightfieldData, 1.0f, minHeight, maxHeight, 1, PHY_FLOAT, false);
+    _shapes.push_back(new PhysicsCollisionShape(shape));
     return shape;
 }
 

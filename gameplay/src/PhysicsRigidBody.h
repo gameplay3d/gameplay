@@ -139,8 +139,10 @@ public:
      * Gets the node that the rigid body is attached to.
      * 
      * @return The node.
+     *
+     * @see PhysicsCollisionObject::getNode.
      */
-    inline Node* getNode();
+    Node* getNode() const;
 
     /**
      * Gets the rigid body's restitution.

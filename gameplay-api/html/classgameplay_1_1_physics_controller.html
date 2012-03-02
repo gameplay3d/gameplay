@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -117,6 +118,8 @@ Classes</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a9c9c7800807569809a677be38873170a">addStatusListener</a> (<a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">PhysicsController::Listener</a> *listener)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#abb41ce0cc30c4b705cc0f691f19b9568">createCharacter</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node, float radius, float height, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;center=Vector3::zero())</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ae016e9546156a0ea2297a7188699c3bd">destroyCharacter</a> (<a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> *character)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_fixed_constraint.html">PhysicsFixedConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ad418fdf90f310e24e4277e1c78dcc7ff">createFixedConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b=NULL)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_generic_constraint.html">PhysicsGenericConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ac39232277d236de4947a116c1232837c">createGenericConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b=NULL)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_generic_constraint.html">PhysicsGenericConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#afbbb421f300c7b2310c2d6b34c1230cf">createGenericConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;rotationOffsetA, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translationOffsetA, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b=NULL, const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;rotationOffsetB=<a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a>(), const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translationOffsetB=<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>())</td></tr>
@@ -125,10 +128,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_socket_constraint.html">PhysicsSocketConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#af11560d811706e1a893056b88cabd44e">createSocketConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translationOffsetA, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b=NULL, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translationOffsetB=<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>())</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_spring_constraint.html">PhysicsSpringConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a6d7adfe3979171e7a3399e1020cb1042">createSpringConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_spring_constraint.html">PhysicsSpringConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a08247ecdea429e6430877414eccfbaae">createSpringConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;rotationOffsetA, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translationOffsetA, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b, const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;rotationOffsetB, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translationOffsetB)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ae5fce39a6a72c120d51e97b1ef5d429c">getGravity</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;gravity) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a53ed5e8eb707b63966a468aa55327257">getGravity</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ab085ecda3423f445960150208e5ba1c9">setGravity</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;gravity)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ae2089a6dababa097ef955d1105c4bd6d">drawDebug</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;viewProjection)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a4177f272a5f9e0374d6e5f8dc50e60d7">rayTest</a> (const <a class="el" href="classgameplay_1_1_ray.html">Ray</a> &amp;ray)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a0d6480f675d4ad568b4dbf6da8f2cc29">rayTest</a> (const <a class="el" href="classgameplay_1_1_ray.html">Ray</a> &amp;ray, float distance, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *hitPoint=NULL, float *hitFraction=NULL)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">btScalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a44243d5391f18bc002ed35a9dade2544">addSingleResult</a> (btManifoldPoint &amp;cp, const btCollisionObject *a, int partIdA, int indexA, const btCollisionObject *b, int partIdB, int indexB)</td></tr>
@@ -140,6 +143,8 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Game</b></td></tr>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsConstraint</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c7aa887ecde6200e42d2abcaba2597b"></a><!-- doxytag: member="gameplay::PhysicsController::PhysicsRigidBody" ref="a3c7aa887ecde6200e42d2abcaba2597b" args="" -->
 class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af360cdaf6a9c69eb52b51ce74d51bb09"></a><!-- doxytag: member="gameplay::PhysicsController::PhysicsCharacter" ref="af360cdaf6a9c69eb52b51ce74d51bb09" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsCharacter</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a class for controlling game physics. </p>
@@ -220,6 +225,59 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">listener</td><td>The listener to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="abb41ce0cc30c4b705cc0f691f19b9568"></a><!-- doxytag: member="gameplay::PhysicsController::createCharacter" ref="abb41ce0cc30c4b705cc0f691f19b9568" args="(Node *node, float radius, float height, const Vector3 &amp;center=Vector3::zero())" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> * gameplay::PhysicsController::createCharacter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>radius</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>height</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>center</em> = <code>Vector3::zero()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Creates a new <a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a>.</p>
+<p>The created character is added to the physics world and automatically receives physics updates to handle interactions and collisions between the character and other physics objects in the world. The character will continue to receive updates until it is destroyed via the <a class="el" href="classgameplay_1_1_physics_controller.html#ae016e9546156a0ea2297a7188699c3bd">destroyCharacter(PhysicsCharacter*)</a> method.</p>
+<p>The node may point to any node in the scene that you wish to control as a character. When a <a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> is created for a particular node, the game will normally perform all movement directly through the <a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> interface and not through the node itself.</p>
+<p>The radius, height and center parameters define a capsule volume that is used to represent the character in the physics world. All collision handling is performed using this capsule.</p>
+<p>Note that <a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> should not be mixed with rigid bodies. Therefore, you should ensure that the node (and any of its children) used to create the <a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> does not have any rigid bodies assigned. Doing so will cause unexpected results.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td><a class="el" href="classgameplay_1_1_scene.html">Scene</a> node that represents the character. </td></tr>
+    <tr><td class="paramname">radius</td><td>Radius of capsule volume used for character collisions. </td></tr>
+    <tr><td class="paramname">height</td><td>Height of the capsule volume used for character collisions. </td></tr>
+    <tr><td class="paramname">center</td><td>Center point of the capsule volume for the character. </td></tr>
   </table>
   </dd>
 </dl>
@@ -604,6 +662,30 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 
 </div>
 </div>
+<a class="anchor" id="ae016e9546156a0ea2297a7188699c3bd"></a><!-- doxytag: member="gameplay::PhysicsController::destroyCharacter" ref="ae016e9546156a0ea2297a7188699c3bd" args="(PhysicsCharacter *character)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::PhysicsController::destroyCharacter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> *&#160;</td>
+          <td class="paramname"><em>character</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Destroys a <a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> and removes it from the physics world.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">character</td><td><a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> to destroy. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ae2089a6dababa097ef955d1105c4bd6d"></a><!-- doxytag: member="gameplay::PhysicsController::drawDebug" ref="ae2089a6dababa097ef955d1105c4bd6d" args="(const Matrix &amp;viewProjection)" -->
 <div class="memitem">
 <div class="memproto">
@@ -628,15 +710,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 
 </div>
 </div>
-<a class="anchor" id="ae5fce39a6a72c120d51e97b1ef5d429c"></a><!-- doxytag: member="gameplay::PhysicsController::getGravity" ref="ae5fce39a6a72c120d51e97b1ef5d429c" args="(const Vector3 &amp;gravity) const " -->
+<a class="anchor" id="a53ed5e8eb707b63966a468aa55327257"></a><!-- doxytag: member="gameplay::PhysicsController::getGravity" ref="a53ed5e8eb707b63966a468aa55327257" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp; gameplay::PhysicsController::getGravity </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
-          <td class="paramname"><em>gravity</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -647,7 +728,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 
 </div>
 </div>
-<a class="anchor" id="a4177f272a5f9e0374d6e5f8dc50e60d7"></a><!-- doxytag: member="gameplay::PhysicsController::rayTest" ref="a4177f272a5f9e0374d6e5f8dc50e60d7" args="(const Ray &amp;ray)" -->
+<a class="anchor" id="a0d6480f675d4ad568b4dbf6da8f2cc29"></a><!-- doxytag: member="gameplay::PhysicsController::rayTest" ref="a0d6480f675d4ad568b4dbf6da8f2cc29" args="(const Ray &amp;ray, float distance, Vector3 *hitPoint=NULL, float *hitFraction=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -655,8 +736,30 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
           <td class="memname"><a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> * gameplay::PhysicsController::rayTest </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_ray.html">Ray</a> &amp;&#160;</td>
-          <td class="paramname"><em>ray</em></td><td>)</td>
+          <td class="paramname"><em>ray</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>distance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *&#160;</td>
+          <td class="paramname"><em>hitPoint</em> = <code>NULL</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>hitFraction</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div>
@@ -665,10 +768,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">ray</td><td>The ray to test intersection with. </td></tr>
+    <tr><td class="paramname">distance</td><td>How far along the given ray to test for intersections. </td></tr>
+    <tr><td class="paramname">hitPoint</td><td>Optional <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> point that is populated with the world-space point of intersection. </td></tr>
+    <tr><td class="paramname">hitFraction</td><td>Optional float pointer that is populated with the distance along the ray (as a fraction between 0-1) where the intersection occurred. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The first rigid body that the ray intersects. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The first rigid body that the ray intersects, or NULL if no intersection was found. </dd></dl>
 
 </div>
 </div>
@@ -721,7 +827,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:06:00 for gameplay by
+    <li class="footer">Generated on Thu Mar 1 2012 18:34:56 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

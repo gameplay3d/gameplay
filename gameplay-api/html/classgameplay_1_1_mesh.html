@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -134,6 +135,7 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a417e32c7c939456238831ed426521b46">getUrl</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#ac9fca007f149de6607dc1b2e9c52515c">getVertexFormat</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a494b6ac9f634dfbb3b970017341f0c74">getVertexCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a3501ead2128e9cb3890f4fc043aa5abf">getVertexSize</a> () const </td></tr>
@@ -595,6 +597,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 
 </div>
 </div>
+<a class="anchor" id="a417e32c7c939456238831ed426521b46"></a><!-- doxytag: member="gameplay::Mesh::getUrl" ref="a417e32c7c939456238831ed426521b46" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * gameplay::Mesh::getUrl </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a URL from which the mesh was loaded from.</p>
+<p>For meshes loaded from a <a class="el" href="classgameplay_1_1_package.html">Package</a>, this URL will point to the file and ID of the mesh within the package. For all other meshes, an empty string will be returned. </p>
+
+</div>
+</div>
 <a class="anchor" id="adbb9ba9503e14358cfbb91050c095322"></a><!-- doxytag: member="gameplay::Mesh::getVertexBuffer" ref="adbb9ba9503e14358cfbb91050c095322" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -825,7 +845,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:05:59 for gameplay by
+    <li class="footer">Generated on Thu Mar 1 2012 18:34:55 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

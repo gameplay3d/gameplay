@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -97,7 +98,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Theme::Style Class Reference</div>  </div>
 </div>
@@ -114,21 +116,24 @@ Classes</h2></td></tr>
 Public Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>OverlayType</b> { <b>OVERLAY_NORMAL</b>, 
 <b>OVERLAY_FOCUS</b>, 
-<b>OVERLAY_ACTIVE</b>
+<b>OVERLAY_ACTIVE</b>, 
+<b>OVERLAY_DISABLED</b>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4292ddf6cfc4bff88903f88ef94e6098"></a><!-- doxytag: member="gameplay::Theme::Style::Style" ref="a4292ddf6cfc4bff88903f88ef94e6098" args="(const char *id, const Theme::Margin &amp;margin, const Theme::Padding &amp;padding, Theme::Style::Overlay *normal, Theme::Style::Overlay *focus, Theme::Style::Overlay *active)" -->
-&#160;</td><td class="memItemRight" valign="bottom"><b>Style</b> (const char *id, const <a class="el" href="structgameplay_1_1_theme_1_1padding.html">Theme::Margin</a> &amp;margin, const <a class="el" href="structgameplay_1_1_theme_1_1padding.html">Theme::Padding</a> &amp;<a class="el" href="structgameplay_1_1_theme_1_1padding.html">padding</a>, <a class="el" href="classgameplay_1_1_theme_1_1_style_1_1_overlay.html">Theme::Style::Overlay</a> *normal, <a class="el" href="classgameplay_1_1_theme_1_1_style_1_1_overlay.html">Theme::Style::Overlay</a> *focus, <a class="el" href="classgameplay_1_1_theme_1_1_style_1_1_overlay.html">Theme::Style::Overlay</a> *active)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme_1_1_style.html#ad6e7224281b7819c0d590c61251a04ae">getId</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_style_1_1_overlay.html">Theme::Style::Overlay</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme_1_1_style.html#a4dc7fbd021c1b0515b4d810bc0495eb7">getOverlay</a> (OverlayType overlayType) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structgameplay_1_1_theme_1_1padding.html">Theme::Padding</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme_1_1_style.html#a93addda8215f9ac3cf70c597fe4956b2">getPadding</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structgameplay_1_1_theme_1_1padding.html">Theme::Margin</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme_1_1_style.html#a17311a3f7e39ef86b401518e6298bc8f">getMargin</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme_1_1_style.html#a6e4ed22d96ab998bb85e8e4dc84018b3">setPadding</a> (float top, float bottom, float left, float right)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme_1_1_style.html#aa11d56bc92d8bd115a405b0f07cf406b">setMargin</a> (float top, float bottom, float left, float right)</td></tr>
+<tr><td colspan="2"><h2><a name="friends"></a>
+Friends</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d4da0b1a762cb62a3f360569d315adc"></a><!-- doxytag: member="gameplay::Theme::Style::Theme" ref="a1d4da0b1a762cb62a3f360569d315adc" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Theme</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>This class represents the apperance of a control's style. </p>
+<div class="textblock"><p>This class represents the apperance of a control. </p>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="ad6e7224281b7819c0d590c61251a04ae"></a><!-- doxytag: member="gameplay::Theme::Style::getId" ref="ad6e7224281b7819c0d590c61251a04ae" args="() const " -->
 <div class="memitem">
@@ -307,7 +312,7 @@ Public Member Functions</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:06:01 for gameplay by
+    <li class="footer">Generated on Thu Mar 1 2012 18:34:57 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

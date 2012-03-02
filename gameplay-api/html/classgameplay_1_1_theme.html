@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -97,8 +98,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
+<a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Theme Class Reference</div>  </div>
 </div>
@@ -139,71 +139,18 @@ typedef struct <br class="typebreak"/>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7fa3ec2157a2d2d9d10dbeda0dc1b12e"></a><!-- doxytag: member="gameplay::Theme::Padding" ref="a7fa3ec2157a2d2d9d10dbeda0dc1b12e" args="" -->
 typedef struct <br class="typebreak"/>
 <a class="el" href="structgameplay_1_1_theme_1_1padding.html">gameplay::Theme::padding</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Padding</b></td></tr>
-<tr><td colspan="2"><h2><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme.html#a22970ef24808caf600b90c6479335aed">getStyle</a> (const char *id) const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a025917f7085b32e56047411c575b6317"></a><!-- doxytag: member="gameplay::Theme::setProjectionMatrix" ref="a025917f7085b32e56047411c575b6317" args="(const Matrix &amp;matrix)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setProjectionMatrix</b> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;matrix)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad5f9f4250e30f658b118b9f843f6f7bd"></a><!-- doxytag: member="gameplay::Theme::getSpriteBatch" ref="ad5f9f4250e30f658b118b9f843f6f7bd" args="() const " -->
-<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getSpriteBatch</b> () const </td></tr>
-<tr><td colspan="2"><h2><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_theme.html">Theme</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme.html#adef10ed2fffc8e73bf77575b7e81544a">create</a> (const char *path)</td></tr>
+<tr><td colspan="2"><h2><a name="friends"></a>
+Friends</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9adf7c444a8611024541177662d4716a"></a><!-- doxytag: member="gameplay::Theme::Control" ref="a9adf7c444a8611024541177662d4716a" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Control</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75f6d4e61f8386b6958279e02d9e38ea"></a><!-- doxytag: member="gameplay::Theme::Form" ref="a75f6d4e61f8386b6958279e02d9e38ea" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Form</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee29d97f7e87f0263024133085c28e3d"></a><!-- doxytag: member="gameplay::Theme::Container" ref="aee29d97f7e87f0263024133085c28e3d" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>This class represents the appearance of an UI form described in a theme file. A theme file, at its simplest, contains a source texture atlas, the texture coordinates of each control in its different mode. Once loaded, the appearance properties can be retrieved using a style id and set on a UI control. </p>
-</div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="adef10ed2fffc8e73bf77575b7e81544a"></a><!-- doxytag: member="gameplay::Theme::create" ref="adef10ed2fffc8e73bf77575b7e81544a" args="(const char *path)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_theme.html">Theme</a> * gameplay::Theme::create </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>path</em></td><td>)</td>
-          <td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Creates an instance of a <a class="el" href="classgameplay_1_1_theme.html">Theme</a> from a theme file.</p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">path</td><td>Path to a theme file.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>A new <a class="el" href="classgameplay_1_1_theme.html">Theme</a>. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a22970ef24808caf600b90c6479335aed"></a><!-- doxytag: member="gameplay::Theme::getStyle" ref="a22970ef24808caf600b90c6479335aed" args="(const char *id) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> * gameplay::Theme::getStyle </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns style with the given name.</p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">id</td><td>ID of the style (as specified in the <a class="el" href="classgameplay_1_1_theme.html">Theme</a> file).</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>Instance of the <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Style</a>. </dd></dl>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_theme_8h_source.html">Theme.h</a></li>
 <li>gameplay/src/Theme.cpp</li>
 </ul>
@@ -228,7 +175,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Sat Feb 18 2012 17:06:01 for gameplay by
+    <li class="footer">Generated on Thu Mar 1 2012 18:34:57 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

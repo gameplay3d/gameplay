@@ -116,6 +116,7 @@ PhysicsCharacter::~PhysicsCharacter()
 
     _node->removeListener(this);
     SAFE_RELEASE(_node);
+    SAFE_DELETE(_motionState);
 }
 
 PhysicsCollisionObject::Type PhysicsCharacter::getType() const
@@ -170,6 +171,20 @@ void PhysicsCharacter::addAnimation(const char* name, AnimationClip* clip, float
     a.animationFlags = ANIMATION_STOP;
     a.prev = NULL;
     _animations[name] = a;
+}
+
+AnimationClip* PhysicsCharacter::getAnimation(const char* name)
+{
+    if (name)
+    {
+        // Lookup the specified animation
+        std::map<const char*, CharacterAnimation>::iterator aitr = _animations.find(name);
+        if (aitr != _animations.end())
+        {
+            return aitr->second.clip;
+        }
+    }
+    return NULL;
 }
 
 void PhysicsCharacter::play(const char* name, AnimationFlags flags, float speed, unsigned int blendDuration, unsigned int layer)
