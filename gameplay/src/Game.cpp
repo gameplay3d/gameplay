@@ -177,6 +177,9 @@ void Game::frame()
 
         // Update the scheduled and running animations.
         _animationController->update(elapsedTime);
+
+        // Fire time events to scheduled TimeListeners
+        fireTimeEvents(frameTime);
     
         // Update the physics.
         _physicsController->update(elapsedTime);
@@ -262,6 +265,13 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 {
 }
 
+void Game::schedule(long timeOffset, TimeListener* timeListener, void* cookie)
+{
+    assert(timeListener);
+    TimeEvent timeEvent(getGameTime() + timeOffset, timeListener, cookie);
+    _timeEvents.push(timeEvent);
+}
+
 bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
     return false;
@@ -279,6 +289,31 @@ void Game::updateOnce()
     _animationController->update(elapsedTime);
     _physicsController->update(elapsedTime);
     _audioController->update(elapsedTime);
+}
+
+void Game::fireTimeEvents(long frameTime)
+{
+    while (!_timeEvents.empty())
+    {
+        TimeEvent* timeEvent = &_timeEvents.top();
+        if (timeEvent->time > frameTime)
+        {
+            break;
+        }
+        timeEvent->listener->timeEvent(frameTime - timeEvent->time, timeEvent->cookie);
+        _timeEvents.pop();
+    }
+}
+
+Game::TimeEvent::TimeEvent(long time, TimeListener* timeListener, void* cookie)
+            : time(time), listener(timeListener), cookie(cookie)
+{
+}
+
+bool Game::TimeEvent::operator<(const TimeEvent& v) const
+{
+    // The first element of std::priority_queue is the greatest.
+    return time > v.time;
 }
 
 }
