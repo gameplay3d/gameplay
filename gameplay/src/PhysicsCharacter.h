@@ -111,7 +111,7 @@ public:
      *
      * @return The specified animation clip.
      */
-    AnimationClip* getAnimation(const char* name) const;
+    AnimationClip* getAnimation(const char* name);
 
     /**
      * Plays the specified animation.
