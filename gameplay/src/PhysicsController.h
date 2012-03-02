@@ -335,6 +335,9 @@ private:
     // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
     btCollisionShape* createMesh(PhysicsRigidBody* body, const Vector3& scale);
 
+    // Creates a heightfield collision shape to be used in the creation of a rigid body.
+    btCollisionShape* createHeightfield(int width, int height, void* heightfieldData, float minHeight, float maxHeight);
+
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
 

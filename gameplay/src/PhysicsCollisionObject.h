@@ -6,6 +6,8 @@
 namespace gameplay
 {
 
+class Node;
+
 /**
  * Base class for all gameplay physics objects that support collision events.
  */
@@ -111,6 +113,11 @@ public:
      * Returns the type of the collision object.
      */
     virtual PhysicsCollisionObject::Type getType() const = 0;
+
+    /**
+     * Returns the node associated with this collision object.
+     */
+    virtual Node* getNode() const = 0;
 
     /**
      * Adds a collision listener for this collision object.

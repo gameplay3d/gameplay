@@ -3,7 +3,6 @@
 
 namespace gameplay
 {
-
 static std::vector<RadioButton*> __radioButtons;
 
 RadioButton::RadioButton() : _selected(false)
@@ -17,7 +16,12 @@ RadioButton::RadioButton(const RadioButton& copy)
 
 RadioButton::~RadioButton()
 {
-
+    // Remove this RadioButton from the global list.
+    std::vector<RadioButton*>::iterator it = std::find(__radioButtons.begin(), __radioButtons.end(), this);
+    if (it != __radioButtons.end())
+    {
+        __radioButtons.erase(it);
+    }
 }
 
 RadioButton* RadioButton::create(Theme::Style* style, Properties* properties)
@@ -44,50 +48,48 @@ RadioButton* RadioButton::create(Theme::Style* style, Properties* properties)
     return radioButton;
 }
 
-RadioButton* RadioButton::getRadioButton(const char* id)
+void RadioButton::setIconSize(float width, float height)
 {
-    std::vector<RadioButton*>::const_iterator it;
-    for (it = __radioButtons.begin(); it < __radioButtons.end(); it++)
+    _iconSize.set(width, height);
+}
+
+const Vector2& RadioButton::getIconSize() const
+{
+    Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+    Theme::Icon* icon = overlay->getCheckBoxIcon();
+    if (_iconSize.isZero() && icon)
     {
-        RadioButton* radioButton = *it;
-        if (strcmp(id, radioButton->getID()) == 0)
-        {
-            return radioButton;
-        }
+        return icon->getSize();
     }
 
-    return NULL;
+    return _iconSize;
 }
 
 bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    if (isEnabled())
+    if (!isEnabled())
     {
-        switch (evt)
-        {
-        case Touch::TOUCH_RELEASE:
-            {
-                if (_state == Control::STATE_ACTIVE)
-                {
-                    if (x > 0 && x <= _size.x &&
-                        y > 0 && y <= _size.y)
-                    {
-                        if (_callback)
-                        {
-                            _callback->trigger(this);
-                        }
-                        RadioButton::clearSelected(_groupId);
-                        _selected = true;
-                    }
-                }
-            }
-            break;
-        }
-
-        return Button::touchEvent(evt, x, y, contactIndex);
+        return false;
     }
 
-    return false;
+    switch (evt)
+    {
+    case Touch::TOUCH_RELEASE:
+        {
+            if (_state == Control::ACTIVE)
+            {
+                if (x > 0 && x <= _bounds.width &&
+                    y > 0 && y <= _bounds.height)
+                {
+                    RadioButton::clearSelected(_groupId);
+                    _selected = true;
+                }
+            }
+        }
+        break;
+    }
+
+    return Button::touchEvent(evt, x, y, contactIndex);
 }
 
 void RadioButton::clearSelected(const std::string& groupId)
@@ -99,11 +101,12 @@ void RadioButton::clearSelected(const std::string& groupId)
         if (groupId == radioButton->_groupId)
         {
             radioButton->_selected = false;
+            radioButton->_dirty = true;
         }
     }
 }
 
-void RadioButton::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
+void RadioButton::drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     // Left, v-center.
     // TODO: Set an alignment for icons.
@@ -126,8 +129,8 @@ void RadioButton::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
         }
         const Vector4 color = icon->getColor();
 
-        Vector2 pos(position.x + _position.x + border.left + padding.left,
-            position.y + _position.y + (_size.y - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
+        Vector2 pos(clip.x + _position.x + border.left + padding.left,
+            clip.y + _position.y + (_bounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
 
         if (_selected)
         {
@@ -142,35 +145,24 @@ void RadioButton::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
     }
 }
 
-void RadioButton::update(const Vector2& position)
+void RadioButton::update(const Rectangle& clip)
 {
+    Control::update(clip);
+
     Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
     Theme::Icon* icon = overlay->getCheckBoxIcon();
-    Theme::Border border;
-    Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
-    if (containerRegion)
+    Vector2& size = _iconSize;
+    if (_iconSize.isZero() && icon)
     {
-        border = overlay->getContainerRegion()->getBorder();
+        size = icon->getSize();
     }
-    Theme::Padding padding = _style->getPadding();
+    float iconWidth = size.x;
 
-    // Set up the text viewport.
-    float iconWidth = 0.0f;
-    if (icon)
-    {
-        iconWidth = icon->getSize().x;
-    }
-
-    Font* font = overlay->getFont();
-    Vector2 pos(position.x + _position.x + border.left + padding.left + iconWidth,
-            position.y + _position.y + border.top + padding.top);
-
-    _viewport.set(pos.x, pos.y,
-        _size.x - border.left - padding.left - border.right - padding.right - iconWidth,
-        _size.y - border.top - padding.top - border.bottom - padding.bottom - overlay->getFontSize());
+    _clip.x += iconWidth;
+    _clip.width -= iconWidth;
 }
 
-void RadioButton::drawText(const Vector2& position)
+void RadioButton::drawText(const Rectangle& clip)
 {
     // TODO: Batch all labels that use the same font.
     Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
@@ -178,7 +170,7 @@ void RadioButton::drawText(const Vector2& position)
     
     // Draw the text.
     font->begin();
-    font->drawText(_text.c_str(), _viewport, overlay->getTextColor(), overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+    font->drawText(_text.c_str(), _clip, overlay->getTextColor(), overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
     font->end();
 
     _dirty = false;

@@ -63,7 +63,7 @@ namespace gameplay
         const char* layoutString = formProperties->getString("layout");
         Form* form = Form::create(themeFile, getLayoutType(layoutString));
 
-        Theme* theme = form->getTheme();
+        Theme* theme = form->_theme;
         const char* styleName = formProperties->getString("style");
         form->init(theme->getStyle(styleName), formProperties);
 
@@ -118,16 +118,6 @@ namespace gameplay
         return NULL;
     }
 
-    void Form::setTheme(Theme* theme)
-    {
-        _theme = theme;
-    }
-
-    Theme* Form::getTheme() const
-    {
-        return _theme;
-    }
-
     void Form::setQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4)
     {
         Mesh* mesh = Mesh::createQuad(p1, p2, p3, p4);
@@ -145,7 +135,11 @@ namespace gameplay
     void Form::setNode(Node* node)
     {
         // Set this Form up to be 3D by initializing a quad, projection matrix and viewport.
-        setQuad(0.0f, 0.0f, _size.x, _size.y);
+        if (!_quad)
+        {
+            setQuad(0.0f, 0.0f, _size.x, _size.y);
+        }
+
         Matrix::createOrthographicOffCenter(0, _size.x, _size.y, 0, 0, 1, &_projectionMatrix);
         _theme->setProjectionMatrix(_projectionMatrix);
         _viewport = new Viewport(0, 0, _size.x, _size.y);
@@ -160,39 +154,33 @@ namespace gameplay
 
     void Form::update()
     {
-        Container::update(Vector2::zero());
+        Container::update(Rectangle(0, 0, _size.x, _size.y));
     }
 
     void Form::draw()
     {
-        // If this Form has a Node then it's a 3D Form.  The contents will be rendered
-        // into a FrameBuffer which will be used to texture a quad.  The quad will be
+        // If this form has a node then it's a 3D form.  The contents will be rendered
+        // into a framebuffer which will be used to texture a quad.  The quad will be
         // given the same dimensions as the form and must be transformed appropriately
-        // by the user (or they can call setQuad() themselves).
-        // "Billboard mode" should also be allowed for 3D Forms.
+        // by the user, unless they call setQuad() themselves.
 
-        // On the other hand, if this Form has not been set on a Node it will render
+        // On the other hand, if this form has not been set on a node it will render
         // directly to the display.
 
-
-        // Check whether this Form has changed since the last call to draw()
-        // and if so, render into the FrameBuffer.
         if (_node)
         {
+            // Check whether this form has changed since the last call to draw()
+            // and if so, render into the framebuffer.
             if (isDirty())
             {
                 _frameBuffer->bind();
                 _viewport->bind();
 
-                Game* game = Game::getInstance();
+                draw(_theme->getSpriteBatch(), _clip);
 
-                // Clear form background color.
-                //game->clear(Game::CLEAR_COLOR, _style->getOverlay(getOverlayType())->getBorderColor(), 1.0f, 0);
-
-                draw(_theme->getSpriteBatch(), _position);
+                // Rebind the default framebuffer and game viewport.
                 FrameBuffer::bindDefault();
-
-                // Rebind the game viewport.
+                Game* game = Game::getInstance();
                 GL_ASSERT( glViewport(0, 0, game->getWidth(), game->getHeight()) );
             }
 
@@ -200,11 +188,11 @@ namespace gameplay
         }
         else
         {
-            draw(_theme->getSpriteBatch(), _position);
+            draw(_theme->getSpriteBatch(), _clip);
         }
     }
 
-    void Form::draw(SpriteBatch* spriteBatch, const Vector2& position)
+    void Form::draw(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
         std::vector<Control*>::const_iterator it;
 
@@ -213,7 +201,7 @@ namespace gameplay
 
         // Draw the form's border and background.
         // We don't pass the form's position to itself or it will be applied twice!
-        drawBorder(spriteBatch, Vector2::zero());
+        Control::drawBorder(spriteBatch, Rectangle(0, 0, _size.x, _size.y));
 
         // Draw each control's border and background.
         for (it = _controls.begin(); it < _controls.end(); it++)
@@ -222,10 +210,10 @@ namespace gameplay
 
             //if (!_node || (*it)->isDirty())
             {
-                control->drawBorder(spriteBatch, position);
+                control->drawBorder(spriteBatch, clip);
 
                 // Add all themed foreground sprites (checkboxes etc.) to the same batch.
-                control->drawSprites(spriteBatch, position);
+                control->drawSprites(spriteBatch, clip);
             }
         }
         spriteBatch->end();
@@ -237,7 +225,7 @@ namespace gameplay
 
             //if (!_node || (*it)->isDirty())
             {
-                control->drawText(position);
+                control->drawText(clip);
             }
         }
 
@@ -309,7 +297,6 @@ namespace gameplay
                     {
                         // Get info about the form's position.
                         Matrix m = node->getMatrix();
-                        const Vector2& size = form->getSize();
                         Vector3 min(0, 0, 0);
                         m.transformPoint(&min);
 
@@ -343,17 +330,15 @@ namespace gameplay
                             m.transformPoint(&point);
 
                             // Pass the touch event on.
-                            const Vector2& size = form->getSize();
-                            const Vector2& position = form->getPosition();
-
-                            if (form->getState() == Control::STATE_FOCUS ||
+                            const Rectangle& bounds = form->getBounds();
+                            if (form->getState() == Control::FOCUS ||
                                 (evt == Touch::TOUCH_PRESS &&
-                                 point.x >= position.x &&
-                                 point.x <= position.x + size.x &&
-                                 point.y >= position.y &&
-                                 point.y <= position.y + size.y))
+                                 point.x >= bounds.x &&
+                                 point.x <= bounds.x + bounds.width &&
+                                 point.y >= bounds.y &&
+                                 point.y <= bounds.y + bounds.height))
                             {
-                               if (form->touchEvent(evt, point.x, size.y - point.y, contactIndex))
+                               if (form->touchEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, contactIndex))
                                {
                                    return true;
                                }
@@ -364,18 +349,16 @@ namespace gameplay
                 else
                 {
                     // Simply compare with the form's bounds.
-                    const Vector2& size = form->getSize();
-                    const Vector2& position = form->getPosition();
-
-                    if (form->getState() == Control::STATE_FOCUS ||
+                    const Rectangle& bounds = form->getBounds();
+                    if (form->getState() == Control::FOCUS ||
                         (evt == Touch::TOUCH_PRESS &&
-                         x >= position.x &&
-                         x <= position.x + size.x &&
-                         y >= position.y &&
-                         y <= position.y + size.y))
+                         x >= bounds.x &&
+                         x <= bounds.x + bounds.width &&
+                         y >= bounds.y &&
+                         y <= bounds.y + bounds.height))
                     {
                         // Pass on the event's position relative to the form.
-                        if (form->touchEvent(evt, x - position.x, y - position.y, contactIndex))
+                        if (form->touchEvent(evt, x - bounds.x, y - bounds.y, contactIndex))
                         {
                             return true;
                         }
@@ -393,7 +376,10 @@ namespace gameplay
         for (it = __forms.begin(); it < __forms.end(); it++)
         {
             Form* form = *it;
-            form->keyEvent(evt, key);
+            if (form->isEnabled())
+            {
+                form->keyEvent(evt, key);
+            }
         }
     }
 }

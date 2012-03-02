@@ -60,6 +60,8 @@ public:
      * Returns the character node for this PhysicsCharacter.
      *
      * @return The character Node.
+     *
+     * @see PhysicsCollisionObject::getNode.
      */
     Node* getNode() const;
 
@@ -114,7 +116,7 @@ public:
      *
      * @return The specified animation clip.
      */
-    AnimationClip* getAnimation(const char* name) const;
+    AnimationClip* getAnimation(const char* name);
 
     /**
      * Plays the specified animation.

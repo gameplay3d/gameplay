@@ -12,8 +12,6 @@
 
 namespace gameplay
 {
-    static std::vector<Container*> __containers;
-
     Container::Container() : _layout(NULL)
     {
     }
@@ -50,8 +48,6 @@ namespace gameplay
 
         Container* container = new Container();
         container->_layout = layout;
-
-        __containers.push_back(container);
 
         return container;
     }
@@ -123,21 +119,6 @@ namespace gameplay
         }
     }
 
-    Container* Container::getContainer(const char* id)
-    {
-        std::vector<Container*>::const_iterator it;
-        for (it = __containers.begin(); it < __containers.end(); it++)
-        {
-            Container* c = *it;
-            if (strcmp(id, c->getID()) == 0)
-            {
-                return c;
-            }
-        }
-
-        return NULL;
-    }
-
     Layout* Container::getLayout()
     {
         return _layout;
@@ -203,6 +184,14 @@ namespace gameplay
             {
                 return c;
             }
+            else if (c->isContainer())
+            {
+                Control* cc = ((Container*)c)->getControl(id);
+                if (cc)
+                {
+                    return cc;
+                }
+            }
         }
 
         return NULL;
@@ -213,36 +202,54 @@ namespace gameplay
         return _controls;
     }
 
-    void Container::update(const Vector2& position)
+    void Container::update(const Rectangle& clip)
     {
-        // Should probably have sizeChanged() for this.
+        // Update this container's viewport.
+        Control::update(clip);
+
         if (isDirty())
         {
             _layout->update(this);
         }
     }
 
-    void Container::drawSprites(SpriteBatch* spriteBatch, const Vector2& position)
+    void Container::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
-        Vector2 pos(position.x + _position.x, position.y + _position.y);
+        // First draw our own border.
+        Control::drawBorder(spriteBatch, clip);
+
+        // Now call drawBorder on all controls within this container.
+        //Vector2 pos(clip.x + _position.x, clip.y + _position.y);
+        //const Rectangle newClip(clip.x + _position.x, clip.y + _position.y, _size.x, _size.y);
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
-            control->drawSprites(spriteBatch, pos);
+            control->drawBorder(spriteBatch, _clip);
+        }
+    }
+
+    void Container::drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip)
+    {
+        //const Rectangle newClip(clip.x + _position.x, clip.y + _position.y, _size.x, _size.y);
+        std::vector<Control*>::const_iterator it;
+        for (it = _controls.begin(); it < _controls.end(); it++)
+        {
+            Control* control = *it;
+            control->drawSprites(spriteBatch, _clip);
         }
 
         _dirty = false;
     }
 
-    void Container::drawText(const Vector2& position)
+    void Container::drawText(const Rectangle& clip)
     {
-        Vector2 pos(position.x + _position.x, position.y + _position.y);
+        //const Rectangle newClip(clip.x + _position.x, clip.y + _position.y, _size.x, _size.y);
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
-            control->drawText(pos);
+            control->drawText(_clip);
         }
 
         _dirty = false;
@@ -278,32 +285,51 @@ namespace gameplay
 
         bool eventConsumed = false;
 
+        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
+        Theme::Border border;
+        Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
+        if (containerRegion)
+        {
+            border = overlay->getContainerRegion()->getBorder();
+        }
+        Theme::Padding padding = _style->getPadding();
+        float xPos = border.left + padding.left;
+        float yPos = border.top + padding.top;
+
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
-            const Vector2& size = control->getSize();
-            const Vector2& position = control->getPosition();
-            
-            if (control->getState() != Control::STATE_NORMAL ||
-                (evt == Touch::TOUCH_PRESS &&
-                 x >= position.x &&
-                 x <= position.x + size.x &&
-                 y >= position.y &&
-                 y <= position.y + size.y))
+            if (!control->isEnabled())
             {
-                // Pass on the event's position relative to the control.
-                eventConsumed |= control->touchEvent(evt, x - position.x, y - position.y, contactIndex);
+                continue;
             }
+
+            const Rectangle& bounds = control->getBounds();
+            if (control->getState() != Control::NORMAL ||
+                (evt == Touch::TOUCH_PRESS &&
+                 x >= xPos + bounds.x &&
+                 x <= xPos + bounds.x + bounds.width &&
+                 y >= yPos + bounds.y &&
+                 y <= yPos + bounds.y + bounds.height))
+            {
+                // Pass on the event's clip relative to the control.
+                eventConsumed |= control->touchEvent(evt, x - xPos - bounds.x, y - yPos - bounds.y, contactIndex);
+            }
+        }
+
+        if (!isEnabled())
+        {
+            return (_consumeTouchEvents | eventConsumed);
         }
 
         switch (evt)
         {
         case Touch::TOUCH_PRESS:
-            setState(Control::STATE_FOCUS);
+            setState(Control::FOCUS);
             break;
         case Touch::TOUCH_RELEASE:
-            setState(Control::STATE_NORMAL);
+            setState(Control::NORMAL);
             break;
         }
 
@@ -316,8 +342,21 @@ namespace gameplay
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
-            control->keyEvent(evt, key);
+            if (!control->isEnabled())
+            {
+                continue;
+            }
+
+            if (control->isContainer() || control->getState() == Control::FOCUS)
+            {
+                control->keyEvent(evt, key);
+            }
         }
+    }
+
+    bool Container::isContainer()
+    {
+        return true;
     }
 
     Layout::Type Container::getLayoutType(const char* layoutString)

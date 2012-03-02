@@ -59,11 +59,6 @@ inline const Vector3& PhysicsRigidBody::getLinearVelocity() const
     return *_linearVelocity;
 }
 
-inline Node* PhysicsRigidBody::getNode()
-{
-    return _node;
-}
-
 inline float PhysicsRigidBody::getRestitution() const
 {
     return _body->getRestitution();
