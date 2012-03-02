@@ -10,6 +10,16 @@
 #include "Game.h"
 #include "PhysicsController.h"
 
+// Amount to walk collision normal when attempting to repair a collision.
+// To small a value will result in inefficient collision repairs (several iterations
+// to fix a collision and slow resolution), whereas larger values will result
+// in less accurate collision resolution.
+//#define COLLISION_REPAIR_INCREMENT 0.2f
+#define COLLISION_REPAIR_MARGIN 1.0f
+
+// Maximum number of iterations used to perform perform collision repair each update.
+#define COLLISION_REPAIR_MAX_ITERATIONS 4
+
 namespace gameplay
 {
 
@@ -76,36 +86,52 @@ PhysicsCharacter::PhysicsCharacter(Node* node, float radius, float height, const
     // Set initial transform
     _motionState->getWorldTransform(_ghostObject->getWorldTransform());
 
-    // Create a capsule collision shape
-    _collisionShape = bullet_new<btCapsuleShape>((btScalar)radius, (btScalar)(height - radius*2));
+    PhysicsController* pc = Game::getInstance()->getPhysicsController();
+
+    // Create a capsule collision shape (this is automatically deleted by PhysicsController when our collision object is removed)
+    _collisionShape = static_cast<btConvexShape*>(pc->createCapsule(radius, height - radius*2.0f));
 
     // Set the collision shape on the ghost object (get it from the node's rigid body)
     _ghostObject->setCollisionShape(_collisionShape);
     _ghostObject->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 
-    btDynamicsWorld* world = Game::getInstance()->getPhysicsController()->_world;
-    
-    // Register the ghost object for collisions with the world.
-    // For now specify static flag only, so character does not interact with dynamic objects
-    world->addCollisionObject(_ghostObject, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter);
+    // Add the collision object to the physics system
+    pc->addCollisionObject(this);
 
     // Register ourselves as an action on the physics world so we are called back during physics ticks
-    world->addAction(this);
+    pc->_world->addAction(this);
 }
 
 PhysicsCharacter::~PhysicsCharacter()
 {
-    // Unregister ourself with world
-    btDynamicsWorld* world = Game::getInstance()->getPhysicsController()->_world;
-    world->removeCollisionObject(_ghostObject);
-    world->removeAction(this);
+    // Remove ourself from physics system
+    PhysicsController* pc = Game::getInstance()->getPhysicsController();
+
+    pc->removeCollisionObject(this);
+
+    // Unregister ourselves as action from world
+    pc->_world->removeAction(this);
 
     SAFE_DELETE(_ghostObject);
-    SAFE_DELETE(_collisionShape);
 
     _node->removeListener(this);
     SAFE_RELEASE(_node);
     SAFE_DELETE(_motionState);
+}
+
+PhysicsCollisionObject::Type PhysicsCharacter::getType() const
+{
+    return PhysicsCollisionObject::CHARACTER;
+}
+
+btCollisionObject* PhysicsCharacter::getCollisionObject() const
+{
+    return _ghostObject;
+}
+
+btCollisionShape* PhysicsCharacter::getCollisionShape() const
+{
+    return _collisionShape;
 }
 
 Node* PhysicsCharacter::getNode() const
@@ -354,19 +380,22 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
     // the following steps (movement) start from a clean slate, where the character
     // is not colliding with anything. Also, this step handles collision between
     // dynamic objects (i.e. objects that moved and now intersect the character).
-    _colliding = false;
+    _colliding = fixCollision(collisionWorld);
+    /*_colliding = false;
     int stepCount = 0;
 	while (fixCollision(collisionWorld))
 	{
         _colliding = true;
 
-        // After a small number of attempts to fix a collision/penetration, give up...
-        if (++stepCount > 4)
+        // After a small number of attempts to fix a collision/penetration, give up.
+        // This hanldes the case where we are deeply penetrating some object and attempting
+        // to step out of it (by COLLISION_REPAIR_INCREMENT units) does not fix the collision.
+        if (++stepCount > COLLISION_REPAIR_MAX_ITERATIONS)
 		{
             WARN_VARG("Character '%s' could not recover from collision.", _node->getId());
 			break;
 		}
-	}
+	}*/
 
     // Update current and target world positions
     btTransform transform = _ghostObject->getWorldTransform();
@@ -440,12 +469,6 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 
     updateCurrentVelocity();
 
-    if (_currentVelocity.isZero())
-    {
-        // No velocity, so we aren't moving
-        return;
-    }
-
     // Calculate final velocity
     btVector3 velocity(_currentVelocity);
     if (animationCount > 0)
@@ -453,6 +476,12 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
         velocity *= animationMoveSpeed;
     }
     velocity *= time; // since velocity is in meters per second
+
+    if (velocity.isZero())
+    {
+        // No velocity, so we aren't moving
+        return;
+    }
 
     // Translate the target position by the velocity vector (already scaled by t)
     btVector3 targetPosition = _currentPosition + velocity;
@@ -593,7 +622,7 @@ btVector3 perpindicularComponent(const btVector3& direction, const btVector3& no
 void PhysicsCharacter::updateTargetPositionFromCollision(btVector3& targetPosition, const btVector3& collisionNormal)
 {
     //btScalar tangentMag = 0.0;
-    btScalar normalMag = 1.0;
+    //btScalar normalMag = 1.0;
 
 	btVector3 movementDirection = targetPosition - _currentPosition;
 	btScalar movementLength = movementDirection.length();
@@ -605,10 +634,8 @@ void PhysicsCharacter::updateTargetPositionFromCollision(btVector3& targetPositi
 		btVector3 reflectDir = computeReflectionDirection(movementDirection, collisionNormal);
 		reflectDir.normalize();
 
-		btVector3 parallelDir, perpindicularDir;
-
-		parallelDir = parallelComponent(reflectDir, collisionNormal);
-		perpindicularDir = perpindicularComponent(reflectDir, collisionNormal);
+		//btVector3 parallelDir = parallelComponent(reflectDir, collisionNormal);
+		btVector3 perpindicularDir = perpindicularComponent(reflectDir, collisionNormal);
 
 		targetPosition = _currentPosition;
 		/*if (tangentMag != 0.0)
@@ -617,11 +644,11 @@ void PhysicsCharacter::updateTargetPositionFromCollision(btVector3& targetPositi
 			targetPosition +=  parComponent;
 		}*/
 
-		if (normalMag != 0.0)
-		{
-			btVector3 perpComponent = perpindicularDir * btScalar (normalMag * movementLength);
+		//if (normalMag != 0.0)
+		//{
+			btVector3 perpComponent = perpindicularDir * btScalar (/*normalMag **/ movementLength);
 			targetPosition += perpComponent;
-		}
+		//}
 	}
 }
 
@@ -654,8 +681,8 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
 		{
 			btPersistentManifold* manifold = _manifoldArray[j];
 
-            // Get the direction of the contact points (used to scale normal vector in the correct direction)
-			btScalar directionSign = manifold->getBody0() == _ghostObject ? btScalar(-1.0) : btScalar(1.0);
+            // Get the direction of the contact points (used to scale normal vector in the correct direction).
+            btScalar directionSign = manifold->getBody0() == _ghostObject ? -1.0f : 1.0f;
 
 			for (int p = 0, contactCount = manifold->getNumContacts(); p < contactCount; ++p)
 			{
@@ -666,6 +693,7 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
 
 				if (dist < 0.0)
 				{
+                    // A negative distance means the objects are overlapping
 					if (dist < maxPenetration)
 					{
                         // Store collision normal for this point
@@ -674,7 +702,9 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
 					}
 
                     // Calculate new position for object, which is translated back along the collision normal
-					currentPosition += pt.m_normalWorldOnB * directionSign * dist * btScalar(0.2);
+                    btVector3 n(pt.m_normalWorldOnB);
+                    n.normalize();
+					currentPosition += /*pt.m_normalWorldOnB*/n * directionSign * dist * COLLISION_REPAIR_MARGIN;// + _collisionShape->getMargin());// * COLLISION_REPAIR_INCREMENT;
 					collision = true;
 				}
 			}
