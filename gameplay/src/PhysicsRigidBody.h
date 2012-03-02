@@ -5,6 +5,7 @@
 #include "PhysicsConstraint.h"
 #include "Transform.h"
 #include "Vector3.h"
+#include "PhysicsCollisionObject.h"
 
 namespace gameplay
 {
@@ -15,7 +16,7 @@ class PhysicsConstraint;
 /**
  * Defines a class for physics rigid bodies.
  */
-class PhysicsRigidBody : public Transform::Listener
+class PhysicsRigidBody : public PhysicsCollisionObject, public Transform::Listener
 {
     friend class Node;
     friend class PhysicsCharacter;
@@ -32,7 +33,7 @@ public:
     /**
      * Represents the different types of rigid bodies.
      */
-    enum Type
+    enum ShapeType
     {
         SHAPE_BOX,
         SHAPE_SPHERE,
@@ -40,81 +41,10 @@ public:
         SHAPE_MAX = 10
     };
 
-    /** 
-     * Defines a pair of rigid bodies that collided (or may collide).
-     */
-    class CollisionPair
-    {
-    public:
-
-        /**
-         * Constructor.
-         */
-        CollisionPair(PhysicsRigidBody* rigidBodyA, PhysicsRigidBody* rigidBodyB);
-
-        /**
-         * Less than operator (needed for use as a key in map).
-         * 
-         * @param collisionPair The collision pair to compare.
-         * @return True if this pair is "less than" the given pair; false otherwise.
-         */
-        bool operator<(const CollisionPair& collisionPair) const;
-
-        /** The first rigid body in the collision. */
-        PhysicsRigidBody* rigidBodyA;
-
-        /** The second rigid body in the collision. */
-        PhysicsRigidBody* rigidBodyB;
-    };
-
     /**
-     * Collision listener interface.
+     * @see PhysicsCollisionObject#getType
      */
-    class Listener
-    {
-        friend class PhysicsRigidBody;
-        friend class PhysicsController;
-
-    public:
-        /**
-         * The type of collision event.
-         */
-        enum EventType
-        {
-            /**
-             * Event fired when the two rigid bodies start colliding.
-             */
-            COLLIDING,
-
-            /**
-             * Event fired when the two rigid bodies no longer collide.
-             */
-            NOT_COLLIDING
-        };
-
-        /**
-         * Destructor.
-         */
-        virtual ~Listener();
-
-        /**
-         * Handles when a collision starts or stops occurring for the rigid body where this listener is registered.
-         * 
-         * @param type The type of collision event.
-         * @param collisionPair The two rigid bodies involved in the collision.
-         * @param contactPointA The contact point with the first rigid body (in world space).
-         * @param contactPointB The contact point with the second rigid body (in world space).
-         */
-        virtual void collisionEvent(EventType type, const CollisionPair& collisionPair, const Vector3& contactPointA = Vector3(), const Vector3& contactPointB = Vector3()) = 0;
-    };
-
-    /**
-     * Adds a collision listener for this rigid body.
-     * 
-     * @param listener The listener to add.
-     * @param body Specifies that only collisions with the given rigid body should trigger a notification.
-     */
-    void addCollisionListener(Listener* listener, PhysicsRigidBody* body = NULL);
+    PhysicsCollisionObject::Type getType() const;
 
     /**
      * Applies the given force to the rigid body (optionally, from the given relative position).
@@ -145,14 +75,6 @@ public:
      * @param torque The torque impulse to be applied.
      */
     void applyTorqueImpulse(const Vector3& torque);
-    
-    /**
-     * Checks if this rigid body collides with the given rigid body.
-     * 
-     * @param body The rigid body to test collision with.
-     * @return True if this rigid body collides with the given rigid body; false otherwise.
-     */
-    bool collidesWith(PhysicsRigidBody* body);
 
     /**
      * Gets the rigid body's angular damping.
@@ -305,6 +227,18 @@ public:
      */
     inline void setRestitution(float restitution);
 
+protected:
+
+    /**
+     * @see PhysicsCollisionObject::getCollisionObject
+     */
+    btCollisionObject* getCollisionObject() const;
+
+    /**
+     * @see PhysicsCollisionObject::getCollisionShape
+     */
+    btCollisionShape* getCollisionShape() const;
+
 private:
 
     /**
@@ -320,7 +254,7 @@ private:
      * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
      * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
      */
-    PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, float mass, float friction = 0.5,
+    PhysicsRigidBody(Node* node, PhysicsRigidBody::ShapeType type, float mass, float friction = 0.5,
         float restitution = 0.0, float linearDamping = 0.0, float angularDamping = 0.0);
 
     /**
@@ -404,21 +338,10 @@ private:
     // Used for implementing getHeight() when the heightfield has a transform that can change.
     void transformChanged(Transform* transform, long cookie);
 
-    // Internal class used to implement the collidesWith(PhysicsRigidBody*) function.
-    struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
-    {
-        btScalar addSingleResult(btManifoldPoint& cp, 
-                                 const btCollisionObject* a, int partIdA, int indexA, 
-                                 const btCollisionObject* b, int partIdB, int indexB);
-
-        bool result;
-    };
-
     btCollisionShape* _shape;
     btRigidBody* _body;
     Node* _node;
     std::vector<PhysicsConstraint*> _constraints;
-    std::vector<Listener*>* _listeners;
     mutable Vector3* _angularVelocity;
     mutable Vector3* _anisotropicFriction;
     mutable Vector3* _gravity;

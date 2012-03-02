@@ -23,10 +23,8 @@ namespace gameplay
  * This class can also be used to control animations for a character. Animation
  * clips can be setup for typical character animations, such as walk, run, jump,
  * etc; and the controller will handle blending between these animations as needed.
- *
- * @todo Add support for collision listeners.
  */
-class PhysicsCharacter : public Transform::Listener, public btActionInterface
+class PhysicsCharacter : public PhysicsCollisionObject, public Transform::Listener, public btActionInterface
 {
     friend class PhysicsController;
 
@@ -52,6 +50,11 @@ public:
          */
          ANIMATION_REPEAT
     };
+
+    /**
+     * @see PhysicsCollisionObject#getType
+     */
+    PhysicsCollisionObject::Type getType() const;
 
     /**
      * Returns the character node for this PhysicsCharacter.
@@ -247,6 +250,18 @@ public:
      */
 	void debugDraw(btIDebugDraw* debugDrawer);
 
+protected:
+
+    /**
+     * @see PhysicsCollisionObject::getCollisionObject
+     */
+    btCollisionObject* getCollisionObject() const;
+
+    /**
+     * @see PhysicsCollisionObject::getCollisionShape
+     */
+    btCollisionShape* getCollisionShape() const;
+
 private:
 
     struct CharacterAnimation
@@ -264,6 +279,8 @@ private:
     /**
      * Creates a new PhysicsCharacter.
      *
+     * Use PhysicsController::createCharacter to create physics characters.
+     *
      * @param node Scene node that represents the character.
      * @param radius Radius of capsule volume used for character collisions.
      * @param height Height of the capsule volume used for character collisions.
@@ -273,6 +290,8 @@ private:
 
     /**
      * Destructor.
+     *
+     * Use PhysicsController::destroyCharacter to destroy physics characters.
      */
     virtual ~PhysicsCharacter();
 
