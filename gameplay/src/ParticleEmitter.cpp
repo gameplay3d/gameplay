@@ -895,14 +895,17 @@ void ParticleEmitter::draw()
         Vector2 pivot(0.5f, 0.5f);
 
         // 3D Rotation so that particles always face the camera.
-        Vector3 right = _node->getScene()->getActiveCamera()->getNode()->getRightVector();
-        Vector3 forward = _node->getScene()->getActiveCamera()->getNode()->getUpVector();
+        const Matrix& cameraWorldMatrix = _node->getScene()->getActiveCamera()->getNode()->getWorldMatrix();
+        Vector3 right;
+        cameraWorldMatrix.getRightVector(&right);
+        Vector3 up;
+        cameraWorldMatrix.getUpVector(&up);
 
         for (unsigned int i = 0; i < _particleCount; i++)
         {
             Particle* p = &_particles[i];
 
-            _spriteBatch->draw(p->_position, right, forward, p->_size, p->_size,
+            _spriteBatch->draw(p->_position, right, up, p->_size, p->_size,
                                _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3],
                                p->_color, pivot, p->_angle);
         }
