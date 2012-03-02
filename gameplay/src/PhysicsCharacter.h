@@ -66,6 +66,29 @@ public:
     Node* getNode() const;
 
     /**
+     * Returns whether physics simulation is enabled for the physics character.
+     *
+     * @return true if physics simulation is enabled, false otherwise.
+     *
+     * @see setPhysicsEnabled(bool)
+     */
+    bool isPhysicsEnabled() const;
+
+    /**
+     * Enables or disables phyiscs simulation for the character.
+     *
+     * When physics simulation is enabled (default), the physics character automatically
+     * responds to collisions in the physics world. For example, the character will
+     * automatically slide along walls, step up stairs, react to gravity, etc.
+     *
+     * When disabled, the character will not have any physics applied on it and will
+     * therefore be allowed to walk through walls, ceiling, floors, other objects, etc.
+     *
+     * @param enabled true to enable physics simulation, false otherwise.
+     */
+    void setPhysicsEnabled(bool enabled);
+
+    /**
      * Returns the maximum step height for the character.
      *
      * @return The maximum step height.
@@ -331,6 +354,7 @@ private:
     float _stepHeight;
     float _slopeAngle;
     float _cosSlopeAngle;
+    bool _physicsEnabled;
 };
 
 }
