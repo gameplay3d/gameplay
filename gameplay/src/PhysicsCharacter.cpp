@@ -68,7 +68,7 @@ PhysicsCharacter::PhysicsCharacter(Node* node, float radius, float height, const
     _fallVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
     _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0),
     _ghostObject(NULL), _collisionShape(NULL), _ignoreTransformChanged(0),
-    _stepHeight(0.2f), _slopeAngle(0.0f), _cosSlopeAngle(0.0f)
+    _stepHeight(0.2f), _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true)
 {
     setMaxSlopeAngle(45.0f);
 
@@ -127,6 +127,16 @@ PhysicsCollisionObject::Type PhysicsCharacter::getType() const
 btCollisionObject* PhysicsCharacter::getCollisionObject() const
 {
     return _ghostObject;
+}
+
+bool PhysicsCharacter::isPhysicsEnabled() const
+{
+    return _physicsEnabled;
+}
+
+void PhysicsCharacter::setPhysicsEnabled(bool enabled)
+{
+    _physicsEnabled = enabled;
 }
 
 btCollisionShape* PhysicsCharacter::getCollisionShape() const
@@ -380,35 +390,40 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
     // the following steps (movement) start from a clean slate, where the character
     // is not colliding with anything. Also, this step handles collision between
     // dynamic objects (i.e. objects that moved and now intersect the character).
-    _colliding = fixCollision(collisionWorld);
-    /*_colliding = false;
-    int stepCount = 0;
-	while (fixCollision(collisionWorld))
-	{
-        _colliding = true;
+    if (_physicsEnabled)
+    {
+        _colliding = fixCollision(collisionWorld);
+        /*_colliding = false;
+        int stepCount = 0;
+	    while (fixCollision(collisionWorld))
+	    {
+            _colliding = true;
 
-        // After a small number of attempts to fix a collision/penetration, give up.
-        // This hanldes the case where we are deeply penetrating some object and attempting
-        // to step out of it (by COLLISION_REPAIR_INCREMENT units) does not fix the collision.
-        if (++stepCount > COLLISION_REPAIR_MAX_ITERATIONS)
-		{
-            WARN_VARG("Character '%s' could not recover from collision.", _node->getId());
-			break;
-		}
-	}*/
+            // After a small number of attempts to fix a collision/penetration, give up.
+            // This hanldes the case where we are deeply penetrating some object and attempting
+            // to step out of it (by COLLISION_REPAIR_INCREMENT units) does not fix the collision.
+            if (++stepCount > COLLISION_REPAIR_MAX_ITERATIONS)
+		    {
+                WARN_VARG("Character '%s' could not recover from collision.", _node->getId());
+			    break;
+		    }
+	    }*/
+    }
 
     // Update current and target world positions
     btTransform transform = _ghostObject->getWorldTransform();
     _currentPosition = transform.getOrigin();
 
     // Process movement in the up direction
-    stepUp(collisionWorld, deltaTimeStep);
+    if (_physicsEnabled)
+        stepUp(collisionWorld, deltaTimeStep);
 
     // Process horizontal movement
     stepForwardAndStrafe(collisionWorld, deltaTimeStep);
 
     // Process movement in the down direction
-    stepDown(collisionWorld, deltaTimeStep);
+    if (_physicsEnabled)
+        stepDown(collisionWorld, deltaTimeStep);
 
     // Set new position
     transform.setOrigin(_currentPosition);
@@ -485,6 +500,13 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 
     // Translate the target position by the velocity vector (already scaled by t)
     btVector3 targetPosition = _currentPosition + velocity;
+
+    // If physics is disabled, simply update current position without checking collisions
+    if (!_physicsEnabled)
+    {
+        _currentPosition = targetPosition;
+        return;
+    }
 
     // Check for collisions by performing a bullet convex sweep test
     btTransform start, end;
