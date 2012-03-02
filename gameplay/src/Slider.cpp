@@ -71,8 +71,6 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
         return false;
     }
 
-    bool consumeEvent = false;
-
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
@@ -132,7 +130,7 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
         }
     }
 
-    return consumeEvent;
+    return _consumeTouchEvents;
 }
 
 void Slider::drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip)
