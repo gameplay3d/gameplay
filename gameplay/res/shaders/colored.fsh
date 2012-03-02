@@ -21,7 +21,7 @@ void lighting(vec3 normalVector, vec3 lightDirection, float attenuation)
     _ambientColor = _baseColor.rgb * u_ambientColor;
 
     // Diffuse
-	float ddot = dot(normalVector, lightDirection);
+    float ddot = dot(normalVector, lightDirection);
     float diffuseIntensity = attenuation * ddot;
     diffuseIntensity = max(0.0, diffuseIntensity);
     _diffuseColor = u_lightColor * _baseColor.rgb * diffuseIntensity;

@@ -12,7 +12,7 @@ scene
 
     node BoyShadow
     {
-        material = res/scene.material#BoyShadow
+        //material = res/scene.material#BoyShadow
     }
 
     node Table

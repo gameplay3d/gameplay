@@ -11,16 +11,16 @@ namespace gameplay
 {
 
 // Internal values used for creating mesh, heightfield, and capsule rigid bodies.
-#define SHAPE_MESH ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 1))
-#define SHAPE_HEIGHTFIELD ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 2))
-#define SHAPE_CAPSULE ((PhysicsRigidBody::Type)(PhysicsRigidBody::SHAPE_NONE + 3))
+#define SHAPE_MESH ((PhysicsRigidBody::ShapeType)(PhysicsRigidBody::SHAPE_NONE + 1))
+#define SHAPE_HEIGHTFIELD ((PhysicsRigidBody::ShapeType)(PhysicsRigidBody::SHAPE_NONE + 2))
+#define SHAPE_CAPSULE ((PhysicsRigidBody::ShapeType)(PhysicsRigidBody::SHAPE_NONE + 3))
 
 // Helper function for calculating heights from heightmap (image) or heightfield data.
 static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
 
-PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, float mass, 
+PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::ShapeType type, float mass, 
     float friction, float restitution, float linearDamping, float angularDamping)
-        : _shape(NULL), _body(NULL), _node(node), _listeners(NULL), _angularVelocity(NULL),
+        : _shape(NULL), _body(NULL), _node(node), _angularVelocity(NULL),
         _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL), _vertexData(NULL),
         _indexData(NULL), _heightfieldData(NULL), _inverse(NULL), _inverseIsDirty(true)
 {
@@ -63,12 +63,12 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, PhysicsRigidBody::Type type, floa
         _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
 
     // Add the rigid body to the physics world.
-    Game::getInstance()->getPhysicsController()->addRigidBody(this);
+    Game::getInstance()->getPhysicsController()->addCollisionObject(this);
 }
 
 PhysicsRigidBody::PhysicsRigidBody(Node* node, Image* image, float mass,
     float friction, float restitution, float linearDamping, float angularDamping)
-        : _shape(NULL), _body(NULL), _node(node), _listeners(NULL), _angularVelocity(NULL),
+        : _shape(NULL), _body(NULL), _node(node), _angularVelocity(NULL),
         _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL), _vertexData(NULL),
         _indexData(NULL), _heightfieldData(NULL), _inverse(NULL), _inverseIsDirty(true)
 {
@@ -142,7 +142,7 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, Image* image, float mass,
         _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
 
     // Add the rigid body to the physics world.
-    Game::getInstance()->getPhysicsController()->addRigidBody(this);
+    Game::getInstance()->getPhysicsController()->addCollisionObject(this);
 
     // Add the rigid body as a listener on the node's transform.
     _node->addListener(this);
@@ -150,7 +150,7 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, Image* image, float mass,
 
 PhysicsRigidBody::PhysicsRigidBody(Node* node, float radius, float height, float mass, float friction,
     float restitution, float linearDamping, float angularDamping)
-        : _shape(NULL), _body(NULL), _node(node), _listeners(NULL), _angularVelocity(NULL),
+        : _shape(NULL), _body(NULL), _node(node), _angularVelocity(NULL),
         _anisotropicFriction(NULL), _gravity(NULL), _linearVelocity(NULL), _vertexData(NULL),
         _indexData(NULL), _heightfieldData(NULL), _inverse(NULL), _inverseIsDirty(true)
 {
@@ -175,7 +175,7 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, float radius, float height, float
         _body = createRigidBodyInternal(_shape, mass, node, friction, restitution, linearDamping, angularDamping);
 
     // Add the rigid body to the physics world.
-    Game::getInstance()->getPhysicsController()->addRigidBody(this);
+    Game::getInstance()->getPhysicsController()->addCollisionObject(this);
 }
 
 PhysicsRigidBody::~PhysicsRigidBody()
@@ -189,17 +189,16 @@ PhysicsRigidBody::~PhysicsRigidBody()
         SAFE_DELETE(ptr);
     }
 
+    Game::getInstance()->getPhysicsController()->removeCollisionObject(this);
+
     // Clean up the rigid body and its related objects.
     if (_body)
     {
         if (_body->getMotionState())
             delete _body->getMotionState();
-
-        Game::getInstance()->getPhysicsController()->removeRigidBody(this);
         SAFE_DELETE(_body);
     }
 
-    SAFE_DELETE(_listeners);
     SAFE_DELETE(_angularVelocity);
     SAFE_DELETE(_anisotropicFriction);
     SAFE_DELETE(_gravity);
@@ -209,13 +208,30 @@ PhysicsRigidBody::~PhysicsRigidBody()
     {
         SAFE_DELETE_ARRAY(_indexData[i]);
     }
-    SAFE_DELETE_ARRAY(_heightfieldData);
     SAFE_DELETE(_inverse);
+
+    // Special case: For heightfield rigid bodies, we need to delete the collision
+    // shape here since it is not stored and managed by the PhysicsController.
+    if (_heightfieldData)
+    {
+        SAFE_DELETE(_shape);
+        SAFE_DELETE_ARRAY(_heightfieldData);
+    }
 }
 
-void PhysicsRigidBody::addCollisionListener(Listener* listener, PhysicsRigidBody* body)
+PhysicsCollisionObject::Type PhysicsRigidBody::getType() const
 {
-    Game::getInstance()->getPhysicsController()->addCollisionListener(listener, this, body);
+    return PhysicsCollisionObject::RIGID_BODY;
+}
+
+btCollisionObject* PhysicsRigidBody::getCollisionObject() const
+{
+    return _body;
+}
+
+btCollisionShape* PhysicsRigidBody::getCollisionShape() const
+{
+    return _shape;
 }
 
 void PhysicsRigidBody::applyForce(const Vector3& force, const Vector3* relativePosition)
@@ -271,15 +287,6 @@ void PhysicsRigidBody::applyTorqueImpulse(const Vector3& torque)
     }
 }
 
-bool PhysicsRigidBody::collidesWith(PhysicsRigidBody* body)
-{
-    static CollidesWithCallback callback;
-
-    callback.result = false;
-    Game::getInstance()->getPhysicsController()->_world->contactPairTest(_body, body->_body, callback);
-    return callback.result;
-}
-
 PhysicsRigidBody* PhysicsRigidBody::create(Node* node, const char* filePath)
 {
     assert(filePath);
@@ -310,7 +317,7 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     }
 
     // Set values to their defaults.
-    PhysicsRigidBody::Type type = PhysicsRigidBody::SHAPE_NONE;
+    PhysicsRigidBody::ShapeType type = PhysicsRigidBody::SHAPE_NONE;
     float mass = 0.0;
     float friction = 0.5;
     float restitution = 0.0;
@@ -558,25 +565,6 @@ bool PhysicsRigidBody::supportsConstraints()
 void PhysicsRigidBody::transformChanged(Transform* transform, long cookie)
 {
     _inverseIsDirty = true;
-}
-
-PhysicsRigidBody::CollisionPair::CollisionPair(PhysicsRigidBody* rigidBodyA, PhysicsRigidBody* rigidBodyB)
-    : rigidBodyA(rigidBodyA), rigidBodyB(rigidBodyB)
-{
-    // Unused
-}
-
-PhysicsRigidBody::Listener::~Listener()
-{
-    // Unused
-}
-
-btScalar PhysicsRigidBody::CollidesWithCallback::addSingleResult(btManifoldPoint& cp, 
-                                                                 const btCollisionObject* a, int partIdA, int indexA, 
-                                                                 const btCollisionObject* b, int partIdB, int indexB)
-{
-    result = true;
-    return 0.0f;
 }
 
 float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y)
