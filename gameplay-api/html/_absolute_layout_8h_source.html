@@ -104,24 +104,28 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00006"></a>00006 <span class="keyword">namespace </span>gameplay
 <a name="l00007"></a>00007 {
 <a name="l00008"></a>00008 
-<a name="l00009"></a><a class="code" href="classgameplay_1_1_absolute_layout.html">00009</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_absolute_layout.html">AbsoluteLayout</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_layout.html">Layout</a>
-<a name="l00010"></a>00010 {
-<a name="l00011"></a>00011 <span class="keyword">public</span>:
-<a name="l00012"></a>00012     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_absolute_layout.html">AbsoluteLayout</a>* create();
-<a name="l00013"></a>00013 
-<a name="l00014"></a>00014     Layout::Type getType();
-<a name="l00015"></a>00015 
-<a name="l00016"></a>00016     <span class="keywordtype">void</span> update(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_container.html">Container</a>* container);
+<a name="l00013"></a><a class="code" href="classgameplay_1_1_absolute_layout.html">00013</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_absolute_layout.html">AbsoluteLayout</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_layout.html">Layout</a>
+<a name="l00014"></a>00014 {
+<a name="l00015"></a>00015     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_form.html">Form</a>;
+<a name="l00016"></a>00016     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_container.html">Container</a>;
 <a name="l00017"></a>00017 
-<a name="l00018"></a>00018 <span class="keyword">private</span>:
-<a name="l00019"></a>00019     <a class="code" href="classgameplay_1_1_absolute_layout.html">AbsoluteLayout</a>();
-<a name="l00020"></a>00020     <a class="code" href="classgameplay_1_1_absolute_layout.html">AbsoluteLayout</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_absolute_layout.html">AbsoluteLayout</a>&amp; copy);
-<a name="l00021"></a>00021     <span class="keyword">virtual</span> ~<a class="code" href="classgameplay_1_1_absolute_layout.html">AbsoluteLayout</a>();
-<a name="l00022"></a>00022 };
-<a name="l00023"></a>00023 
-<a name="l00024"></a>00024 }
+<a name="l00018"></a>00018 <span class="keyword">public</span>:
+<a name="l00024"></a>00024     <a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a> <a class="code" href="classgameplay_1_1_absolute_layout.html#aa1f8d16d48ebae25be09c1d52ca8fbc6">getType</a>();
 <a name="l00025"></a>00025 
-<a name="l00026"></a>00026 <span class="preprocessor">#endif</span>
+<a name="l00026"></a>00026 <span class="keyword">protected</span>:
+<a name="l00032"></a>00032     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_absolute_layout.html">AbsoluteLayout</a>* <a class="code" href="classgameplay_1_1_absolute_layout.html#a9178a7a3c1a881ac02f5f5bcec050745">create</a>();
+<a name="l00033"></a>00033 
+<a name="l00042"></a>00042     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_absolute_layout.html#a8a8b87fc78384d2c27c07df046277e00">update</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_container.html">Container</a>* container);
+<a name="l00043"></a>00043 
+<a name="l00044"></a>00044 <span class="keyword">private</span>:
+<a name="l00045"></a>00045     <a class="code" href="classgameplay_1_1_absolute_layout.html">AbsoluteLayout</a>();
+<a name="l00046"></a>00046     <a class="code" href="classgameplay_1_1_absolute_layout.html">AbsoluteLayout</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_absolute_layout.html">AbsoluteLayout</a>&amp; copy);
+<a name="l00047"></a>00047     <span class="keyword">virtual</span> ~<a class="code" href="classgameplay_1_1_absolute_layout.html">AbsoluteLayout</a>();
+<a name="l00048"></a>00048 };
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050 }
+<a name="l00051"></a>00051 
+<a name="l00052"></a>00052 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -142,7 +146,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Tue Feb 28 2012 11:07:41 for gameplay by
+    <li class="footer">Generated on Thu Mar 1 2012 18:34:52 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

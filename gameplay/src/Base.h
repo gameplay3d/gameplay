@@ -203,8 +203,11 @@ extern void printError(const char* format, ...);
     #define OPENGL_ES
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
+	#define GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG                      0x8C00
+	#define GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG                      0x8C01
+	#define GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG                     0x8C02
+	#define GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG                     0x8C03
     #include <GL/glew.h>
-	#define GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG		0x8C02
 #elif __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR

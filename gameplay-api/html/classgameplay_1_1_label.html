@@ -97,14 +97,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a>  </div>
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Label Class Reference</div>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="gameplay::Label" --><!-- doxytag: inherits="gameplay::Control" --><div class="dynheader">
+<!-- doxytag: class="gameplay::Label" --><!-- doxytag: inherits="gameplay::Control" -->
+<p><code>#include &lt;<a class="el" href="_label_8h_source.html">Label.h</a>&gt;</code></p>
+<div class="dynheader">
 Inheritance diagram for gameplay::Label:</div>
 <div class="dyncontent">
  <div class="center">
@@ -124,33 +127,167 @@ Inheritance diagram for gameplay::Label:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a29f916c4b4afab37d6bdaa467720d3c7"></a><!-- doxytag: member="gameplay::Label::setText" ref="a29f916c4b4afab37d6bdaa467720d3c7" args="(const char *text)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setText</b> (const char *text)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2c8d17a8867a73bb4d7a629e980355f"></a><!-- doxytag: member="gameplay::Label::getText" ref="ae2c8d17a8867a73bb4d7a629e980355f" args="()" -->
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>getText</b> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75d58b09d1011a9ce8dca2f53f7f2510"></a><!-- doxytag: member="gameplay::Label::update" ref="a75d58b09d1011a9ce8dca2f53f7f2510" args="(const Vector2 &amp;position)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;position)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d38e84f76be84908cd96779772d647e"></a><!-- doxytag: member="gameplay::Label::drawText" ref="a8d38e84f76be84908cd96779772d647e" args="(const Vector2 &amp;position)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawText</b> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;position)</td></tr>
-<tr><td colspan="2"><h2><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58a98173ef1d8ce78bb89375fb89fd0e"></a><!-- doxytag: member="gameplay::Label::create" ref="a58a98173ef1d8ce78bb89375fb89fd0e" args="(Theme::Style *style, Properties *properties)" -->
-static <a class="el" href="classgameplay_1_1_label.html">Label</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a588dba9afc8bd643e04fcc6f06f023af"></a><!-- doxytag: member="gameplay::Label::getLabel" ref="a588dba9afc8bd643e04fcc6f06f023af" args="(const char *id)" -->
-static <a class="el" href="classgameplay_1_1_label.html">Label</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getLabel</b> (const char *id)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a29f916c4b4afab37d6bdaa467720d3c7">setText</a> (const char *text)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#ae2c8d17a8867a73bb4d7a629e980355f">getText</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa1e458fdb8520d26998ccdb1b71696c1"></a><!-- doxytag: member="gameplay::Label::Label" ref="aa1e458fdb8520d26998ccdb1b71696c1" args="(const Label &amp;copy)" -->
-&#160;</td><td class="memItemRight" valign="bottom"><b>Label</b> (const <a class="el" href="classgameplay_1_1_label.html">Label</a> &amp;copy)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae7118d7172bea3effe120de0a38e1c66"></a><!-- doxytag: member="gameplay::Label::init" ref="ae7118d7172bea3effe120de0a38e1c66" args="(Theme::Style *style, Properties *properties)" -->
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#ae7118d7172bea3effe120de0a38e1c66">init</a> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a83ccd932008b95c7ca74751fb1b1d27b">drawText</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
+<tr><td colspan="2"><h2><a name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_label.html">Label</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a58a98173ef1d8ce78bb89375fb89fd0e">create</a> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5bf6bfb1335b826775daecf044dd76ef"></a><!-- doxytag: member="gameplay::Label::_text" ref="a5bf6bfb1335b826775daecf044dd76ef" args="" -->
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>_text</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="add21a22b668c54c407c9188bae1b73a8"></a><!-- doxytag: member="gameplay::Label::_viewport" ref="add21a22b668c54c407c9188bae1b73a8" args="" -->
-<a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_viewport</b></td></tr>
+<tr><td colspan="2"><h2><a name="friends"></a>
+Friends</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee29d97f7e87f0263024133085c28e3d"></a><!-- doxytag: member="gameplay::Label::Container" ref="aee29d97f7e87f0263024133085c28e3d" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></tr>
 </table>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>A label is the most basic type of control, capable only of rendering text within its border.</p>
+<p>The following properties are available for labels:</p>
+<p>label &lt;Label id&gt;=""&gt; { style = &lt;Style id&gt;=""&gt; position = &lt;x, y&gt; size = &lt;width, height&gt; text = &lt;string&gt; } </p>
+</div><hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a58a98173ef1d8ce78bb89375fb89fd0e"></a><!-- doxytag: member="gameplay::Label::create" ref="a58a98173ef1d8ce78bb89375fb89fd0e" args="(Theme::Style *style, Properties *properties)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_label.html">Label</a> * gameplay::Label::create </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td>
+          <td class="paramname"><em>style</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td>
+          <td class="paramname"><em>properties</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Create a label with a given style and properties.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">style</td><td>The style to apply to this label. </td></tr>
+    <tr><td class="paramname">properties</td><td>The properties to set on this label.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The new label. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a2e6237b0fd43ece484c280b9d8d3b04f">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a147c7d4594a4f74b9459b73ea7519d97">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a76d7d28f653086a6d611efa7349c0117">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_button.html#a8acf3264b5f8d00c78e930e7aed6f5ee">gameplay::Button</a>, and <a class="el" href="classgameplay_1_1_text_box.html#a35f275644c9f8470d744e1f2222bbe00">gameplay::TextBox</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a83ccd932008b95c7ca74751fb1b1d27b"></a><!-- doxytag: member="gameplay::Label::drawText" ref="a83ccd932008b95c7ca74751fb1b1d27b" args="(const Rectangle &amp;clip)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Label::drawText </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
+          <td class="paramname"><em>clip</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Draw this label's text.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clip</td><td>The clipping rectangle of this label's parent container. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#aaa46855f4262228aecc56cab27e2f307">gameplay::Control</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_check_box.html#a1e2ee547819ace7b701f2c1881a11761">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_radio_button.html#a917000ae155654d766b3f153b7e087cb">gameplay::RadioButton</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae2c8d17a8867a73bb4d7a629e980355f"></a><!-- doxytag: member="gameplay::Label::getText" ref="ae2c8d17a8867a73bb4d7a629e980355f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * gameplay::Label::getText </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Get the text displayed by this label.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The text displayed by this label. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae7118d7172bea3effe120de0a38e1c66"></a><!-- doxytag: member="gameplay::Label::init" ref="ae7118d7172bea3effe120de0a38e1c66" args="(Theme::Style *style, Properties *properties)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Label::init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td>
+          <td class="paramname"><em>style</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td>
+          <td class="paramname"><em>properties</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Initialize this label. </p>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#ad41388a4b39ba3ba80c639edefc02c1c">gameplay::Control</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a29f916c4b4afab37d6bdaa467720d3c7"></a><!-- doxytag: member="gameplay::Label::setText" ref="a29f916c4b4afab37d6bdaa467720d3c7" args="(const char *text)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Label::setText </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Set the text for this label to display.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">text</td><td>The text to display. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_label_8h_source.html">Label.h</a></li>
 <li>gameplay/src/Label.cpp</li>
@@ -176,7 +313,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>_text</b></td>
 </div>
 
 
-    <li class="footer">Generated on Tue Feb 28 2012 11:07:43 for gameplay by
+    <li class="footer">Generated on Thu Mar 1 2012 18:34:55 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
