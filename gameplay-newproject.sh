@@ -20,7 +20,7 @@ echo "   This name will be given to the project"
 echo "   executable and a folder with this name"
 echo "   will be created to store all project files."
 echo
-read -p "Project Name: " "" projName 
+read -p "Project Name: " projName 
 if [[ "$projName" == "" ]]; then
 	echo
 	echo "ERROR: No project name specified."
@@ -36,7 +36,7 @@ echo "   On some platforms, this title is used to"
 echo "   identify the game during installation and"
 echo "   on shortcuts/icons."
 echo
-read -p "Title: " "" title 
+read -p "Title: " title 
 if [[ "$title" == "" ]]; then
 	echo
 	echo "ERROR: No game title specified."
@@ -48,7 +48,7 @@ echo
 echo
 echo "3. Enter a short game description."
 echo
-read -p "Description: " "" desc
+read -p "Description: " desc
 if [[ "$desc" == "" ]]; then
 	desc=$title
 fi
@@ -61,7 +61,7 @@ echo "   This should be a human readable package name,"
 echo "   containing at least two words separated by a"
 echo "   period (eg. com.surname.gamename)."
 echo
-read -p "Unique ID: " "" uuid
+read -p "Unique ID: " uuid
 if [[ "$uuid" == "" ]]; then
 	echo
 	echo "ERROR: No uuid specified."
@@ -77,7 +77,7 @@ echo "   On BlackBerry targets, this is used for"
 echo "   signing and must match the developer name"
 echo "   of your development certificate."
 echo
-read -p "Author: " "" author
+read -p "Author: " author
 if [[ "$author" == "" ]]; then
 	echo
 	echo "ERROR: No author specified."
@@ -93,7 +93,7 @@ echo "   Your initial game header and source file"
 echo "   will be given this name and a class with"
 echo "   this name will be created in these files."
 echo
-read -p "Class name: " "" className
+read -p "Class name: " className
 if [[ "$className" == "" ]]; then
 	echo
 	echo "ERROR: No class name specified."
@@ -110,14 +110,13 @@ echo "   or empty for the current folder. Note that"
 echo "   a project folder named $projName will also"
 echo "   be created inside this folder."
 echo
-read -p "Path: " "" location
+read -p "Path: " location
 if [[ "$location" == "" ]]; then
 	projPath=$projName
 else
 	projPath="$location/$projName"
 fi
 echo
-
 
 # Verify Path and eliminate double '//'
 projPath=`echo "$projPath" | sed 's_//_/_g'`
@@ -129,14 +128,18 @@ if [ -e $projPath ]; then
 fi
 
 # Generate relative path from project folder to gameplay folder
-gpPathAbs=`pwd`
-common_path=$projPath
-back=
-while [ "${gpPathAbs#$common_path}" = "${gpPathAbs}" ]; do
-	common_path=$(dirname $common_path)
-	back="../${back}"
-done
-gpPath=${back}${gpPathAbs#$common_path/}
+if [[ ${projPath:0:1} == "/" ]]; then
+	gpPathAbs=`pwd`
+	common_path=$projPath
+	back=
+	while [ "${gpPathAbs#$common_path}" = "${gpPathAbs}" ]; do
+		common_path=$(dirname $common_path)
+		back="../${back}"
+	done
+	gpPath=${back}${gpPathAbs#$common_path/}
+else
+	gpPath=$projPath
+fi
 
 # Make required source folder directories
 mkdir -p "$projPath/src"
