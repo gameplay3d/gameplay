@@ -62,6 +62,7 @@
     <ClCompile Include="src\Package.cpp" />
     <ClCompile Include="src\ParticleEmitter.cpp" />
     <ClCompile Include="src\PhysicsCharacter.cpp" />
+    <ClCompile Include="src\PhysicsCollisionObject.cpp" />
     <ClCompile Include="src\PhysicsConstraint.cpp" />
     <ClCompile Include="src\PhysicsController.cpp" />
     <ClCompile Include="src\PhysicsFixedConstraint.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="src\Package.h" />
     <ClInclude Include="src\ParticleEmitter.h" />
     <ClInclude Include="src\PhysicsCharacter.h" />
+    <ClInclude Include="src\PhysicsCollisionObject.h" />
     <ClInclude Include="src\PhysicsConstraint.h" />
     <ClInclude Include="src\PhysicsController.h" />
     <ClInclude Include="src\PhysicsFixedConstraint.h" />
@@ -177,6 +179,7 @@
     <ClInclude Include="src\TextBox.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Theme.h" />
+    <ClInclude Include="src\TimeListener.h" />
     <ClInclude Include="src\Touch.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\Vector2.h" />

@@ -754,7 +754,7 @@ PhysicsRigidBody* Node::getRigidBody() const
     return _physicsRigidBody;
 }
 
-void Node::setRigidBody(PhysicsRigidBody::Type type, float mass, float friction,
+void Node::setRigidBody(PhysicsRigidBody::ShapeType type, float mass, float friction,
         float restitution, float linearDamping, float angularDamping)
 {
     SAFE_DELETE(_physicsRigidBody);

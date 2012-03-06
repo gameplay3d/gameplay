@@ -295,6 +295,68 @@ void SpriteBatch::draw(float x, float y, float width, float height, float u1, fl
     draw(x, y, 0, width, height, u1, v1, u2, v2, color);
 }
 
+void SpriteBatch::draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip)
+{
+    // Need to clip the rectangle given by { x, y, width, height } into clip by potentially:
+    //  - Moving x to the right.
+    //  - Moving y down.
+    //  - Moving width to the left.
+    //  - Moving height up.
+    //  - A combination of the above.
+    //  - Not drawing at all.
+    //
+    // We need to scale the uvs accordingly as we do this.
+
+    // First check to see if we need to draw at all.
+    if (x + width < clip.x || x > clip.x + clip.width ||
+        y + height < clip.y || y > clip.y + clip.height)
+    {
+        return;
+    }
+
+    const float uvWidth = u2 - u1;
+    const float uvHeight = v2 - v1;
+
+    // Moving x to the right.
+    if (x < clip.x)
+    {
+        const float percent = (clip.x - x) / width;
+        x = clip.x;
+        u1 += uvWidth * percent;
+    }
+
+    // Moving y down.
+    if (y < clip.y)
+    {
+        const float percent = (clip.y - y) / height;
+        y = clip.y;
+        v1 += uvHeight * percent;
+    }
+
+    // Moving width to the left.
+    const float clipX2 = clip.x + clip.width;
+    float x2 = x + width;
+    if (x2 > clipX2)
+    {
+        const float percent = (x2 - clipX2) / width;
+        width = clipX2 - x;
+        u2 -= uvWidth * percent;
+    }
+
+    // Moving height up.
+    const float clipY2 = clip.y + clip.height;
+    float y2 = y + height;
+    if (y2 > clipY2)
+    {
+        const float percent = (y2 - clipY2) / height;
+        height = clipY2 - y;
+        v2 -= uvHeight * percent;
+    }
+
+    // Now we can perform a normal draw call.
+    draw(x, y, 0, width, height, u1, v1, u2, v2, color);
+}
+
 void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, bool positionIsCenter)
 {
     // Treat the given position as the center if the user specified it as such.
@@ -305,8 +367,8 @@ void SpriteBatch::draw(float x, float y, float z, float width, float height, flo
     }
 
     // Write sprite vertex data.
-    float x2 = x + width;
-    float y2 = y + height;
+    const float x2 = x + width;
+    const float y2 = y + height;
     static SpriteVertex v[4];
     ADD_SPRITE_VERTEX(v[0], x, y, z, u1, v1, color.x, color.y, color.z, color.w);
     ADD_SPRITE_VERTEX(v[1], x, y2, z, u1, v2, color.x, color.y, color.z, color.w);

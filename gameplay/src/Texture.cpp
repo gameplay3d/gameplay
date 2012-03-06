@@ -152,6 +152,7 @@ Texture* Texture::createCompressedPVR(const char* path)
 	    PVRTextureFlagTypePVRTC_2 = 24,
 	    PVRTextureFlagTypePVRTC_4
 	};
+
 	struct pvr_file_header
 	{
 		unsigned int size;          		// size of the structure
@@ -198,6 +199,7 @@ Texture* Texture::createCompressedPVR(const char* path)
 		fclose(file);
 	    return NULL;
 	}
+
 	// Format flags for GLenum format
 	GLenum format;
 	unsigned int formatFlags = header.formatflags & 0xff;
@@ -254,32 +256,12 @@ Texture* Texture::createCompressedPVR(const char* path)
 	{
 		if (formatFlags == PVRTextureFlagTypePVRTC_4)
 		{
-			/*
-			blockSize = 4 * 4; 		// Pixel by pixel block size for 4bpp
-			widthBlocks = width / 4;
-			heightBlocks = height / 4;
-			bpp = 4;
-			*/
 			dataSize = ( max((int)width, 8) * max((int)height, 8) * 4 + 7) / 8;
 		}
 		else
 		{
-			/*
-			blockSize = 8 * 4; 		// Pixel by pixel block size for 2bpp
-			widthBlocks = width / 8;
-			heightBlocks = height / 4;
-			bpp = 2;
-			*/
 			dataSize = ( max((int)width, 16) * max((int)height, 8) * 2 + 7) / 8;
 		}
-
-		/* Clamp to minimum number of blocks
-		if (widthBlocks < 2)
-			widthBlocks = 2;
-		if (heightBlocks < 2)
-			heightBlocks = 2;
-*/
-		//dataSize = widthBlocks * heightBlocks * ((blockSize * bpp) / 8);
 
 		GL_ASSERT( glCompressedTexImage2D(GL_TEXTURE_2D, level, (GLenum)format, width, height, 0, dataSize, dataOffset) );
 

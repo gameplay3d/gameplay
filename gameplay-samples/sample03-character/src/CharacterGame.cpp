@@ -31,6 +31,7 @@ void CharacterGame::initialize()
 
     // Store character node.
     _character = getPhysicsController()->createCharacter(_scene->findNode("BoyCharacter"), 1.2f, 5.0f, Vector3(0, 2.25f, 0));
+    _character->addCollisionListener(this);
 
     // Ensure that the camera's view is unobstructed (for 16 units in front of the camera).
     //_scene->getActiveCamera()->setOcclusionRange(16.0f);
@@ -244,6 +245,22 @@ void CharacterGame::loadAnimationClips()
     _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT);
 }
 
+void CharacterGame::collisionEvent(
+    PhysicsCollisionObject::CollisionListener::EventType type,
+    const PhysicsCollisionObject::CollisionPair& collisionPair,
+    const Vector3& contactPointA, const Vector3& contactPointB)
+{
+    if (collisionPair.objectA == _character)
+    {
+        if (collisionPair.objectB == _scene->findNode("PlayTable")->getRigidBody())
+        {
+            int i = 0;
+            i = 1;
+            ++i;
+        }
+    }
+}
+
 void CharacterGame::fixCamera(long elapsedTime)
 {
     static float cameraOffset = 0.0f;
@@ -263,7 +280,7 @@ void CharacterGame::fixCamera(long elapsedTime)
     float d = cameraRay.getOrigin().distanceSquared(focalPoint);
 
     Vector3 collisionPoint;
-    PhysicsRigidBody* cameraOcclusion = Game::getInstance()->getPhysicsController()->rayTest(cameraRay, CAMERA_FOCUS_RANGE, &collisionPoint);
+    PhysicsCollisionObject* cameraOcclusion = Game::getInstance()->getPhysicsController()->rayTest(cameraRay, CAMERA_FOCUS_RANGE, &collisionPoint);
     bool cameraCollision = false;
     if (cameraOcclusion)
     {

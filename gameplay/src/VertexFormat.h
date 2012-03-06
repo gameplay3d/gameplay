@@ -141,6 +141,11 @@ public:
      */
     bool operator != (const VertexFormat& f) const;
 
+    /**
+     * Returns a string representation of a Usage enumeration value.
+     */
+    static const char* toString(Usage usage);
+
 private:
 
     std::vector<Element> _elements;

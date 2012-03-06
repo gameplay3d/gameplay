@@ -37,7 +37,7 @@ namespace gameplay
         {
             if (controls[i]->isDirty())
             {
-                controls[i]->update(container->getPosition());
+                controls[i]->update(container->getClip());
             }
         }
     }

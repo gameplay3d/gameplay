@@ -6,13 +6,39 @@
 namespace gameplay
 {
 
+/**
+ * Defines a Layout for forms and containers that requires the user
+ * to specify absolute positions for all contained controls.
+ */
 class AbsoluteLayout : public Layout
 {
-public:
-    static AbsoluteLayout* create();
+    friend class Form;
+    friend class Container;
 
+public:
+    /**
+     * Get the type of this Layout.
+     *
+     * @return Layout::LAYOUT_ABSOLUTE
+     */
     Layout::Type getType();
 
+protected:
+    /**
+     * Create an AbsoluteLayout.
+     *
+     * @return an AbsoluteLayout object.
+     */
+    static AbsoluteLayout* create();
+
+    /**
+     * Update the controls contained by the specified container.
+     *
+     * An AbsoluteLayout does nothing to modify the layout of controls.
+     * It simply calls update() on any control that is dirty.
+     *
+     * @param container The container to update.
+     */
     void update(const Container* container);
 
 private:
