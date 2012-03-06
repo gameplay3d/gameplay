@@ -678,10 +678,13 @@ void Platform::displayKeyboard(bool display)
 {
     // Do nothing.
 }
+
 void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-    Form::touchEventInternal(evt, x, y, contactIndex);
+    if (!Form::touchEventInternal(evt, x, y, contactIndex))
+    {
+        Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+    }
 }
 
 }
