@@ -306,6 +306,67 @@
 		5B5ADD2F14C2439700AC6109 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5ADD2E14C2439700AC6109 /* Foundation.framework */; };
 		5BB0823D14C6FEC40019975F /* Mouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB0823C14C6FEC40019975F /* Mouse.h */; };
 		5BB0823E14C6FEC40019975F /* Mouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB0823C14C6FEC40019975F /* Mouse.h */; };
+		5BC4E73F150F843D00CBE1C0 /* AbsoluteLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52634150F822A004C9099 /* AbsoluteLayout.cpp */; };
+		5BC4E740150F843D00CBE1C0 /* AbsoluteLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52635150F822A004C9099 /* AbsoluteLayout.h */; };
+		5BC4E741150F843D00CBE1C0 /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52636150F822A004C9099 /* Button.cpp */; };
+		5BC4E742150F843D00CBE1C0 /* Button.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52637150F822A004C9099 /* Button.h */; };
+		5BC4E743150F843D00CBE1C0 /* CheckBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52638150F822A004C9099 /* CheckBox.cpp */; };
+		5BC4E744150F843D00CBE1C0 /* CheckBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52639150F822A004C9099 /* CheckBox.h */; };
+		5BC4E745150F843D00CBE1C0 /* Container.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5263A150F822A004C9099 /* Container.cpp */; };
+		5BC4E746150F843D00CBE1C0 /* Container.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5263B150F822A004C9099 /* Container.h */; };
+		5BC4E747150F843D00CBE1C0 /* Control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5263C150F822A004C9099 /* Control.cpp */; };
+		5BC4E748150F843D00CBE1C0 /* Control.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5263D150F822A004C9099 /* Control.h */; };
+		5BC4E749150F843D00CBE1C0 /* FlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5263E150F822A004C9099 /* FlowLayout.h */; };
+		5BC4E74A150F843D00CBE1C0 /* Form.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5263F150F822A004C9099 /* Form.cpp */; };
+		5BC4E74B150F843D00CBE1C0 /* Form.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52640150F822A004C9099 /* Form.h */; };
+		5BC4E74C150F843D00CBE1C0 /* Label.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52641150F822A004C9099 /* Label.cpp */; };
+		5BC4E74D150F843D00CBE1C0 /* Label.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52642150F822A004C9099 /* Label.h */; };
+		5BC4E74E150F843D00CBE1C0 /* Layout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52643150F822A004C9099 /* Layout.h */; };
+		5BC4E74F150F843D00CBE1C0 /* RadioButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52644150F822A004C9099 /* RadioButton.cpp */; };
+		5BC4E750150F843D00CBE1C0 /* RadioButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52645150F822A004C9099 /* RadioButton.h */; };
+		5BC4E751150F843D00CBE1C0 /* Slider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52646150F822A004C9099 /* Slider.cpp */; };
+		5BC4E752150F843D00CBE1C0 /* Slider.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52647150F822A004C9099 /* Slider.h */; };
+		5BC4E753150F843D00CBE1C0 /* TextBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52648150F822A004C9099 /* TextBox.cpp */; };
+		5BC4E754150F843D00CBE1C0 /* TextBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52649150F822A004C9099 /* TextBox.h */; };
+		5BC4E755150F843D00CBE1C0 /* Theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5264A150F822A004C9099 /* Theme.cpp */; };
+		5BC4E756150F843D00CBE1C0 /* Theme.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5264B150F822A004C9099 /* Theme.h */; };
+		5BC4E757150F843D00CBE1C0 /* VerticalLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5264D150F822A004C9099 /* VerticalLayout.cpp */; };
+		5BC4E758150F843D00CBE1C0 /* VerticalLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5264E150F822A004C9099 /* VerticalLayout.h */; };
+		5BD5264F150F822A004C9099 /* AbsoluteLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52634150F822A004C9099 /* AbsoluteLayout.cpp */; };
+		5BD52650150F822A004C9099 /* AbsoluteLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52635150F822A004C9099 /* AbsoluteLayout.h */; };
+		5BD52651150F822A004C9099 /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52636150F822A004C9099 /* Button.cpp */; };
+		5BD52652150F822A004C9099 /* Button.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52637150F822A004C9099 /* Button.h */; };
+		5BD52653150F822A004C9099 /* CheckBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52638150F822A004C9099 /* CheckBox.cpp */; };
+		5BD52654150F822A004C9099 /* CheckBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52639150F822A004C9099 /* CheckBox.h */; };
+		5BD52655150F822A004C9099 /* Container.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5263A150F822A004C9099 /* Container.cpp */; };
+		5BD52656150F822A004C9099 /* Container.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5263B150F822A004C9099 /* Container.h */; };
+		5BD52657150F822A004C9099 /* Control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5263C150F822A004C9099 /* Control.cpp */; };
+		5BD52658150F822A004C9099 /* Control.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5263D150F822A004C9099 /* Control.h */; };
+		5BD52659150F822A004C9099 /* FlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5263E150F822A004C9099 /* FlowLayout.h */; };
+		5BD5265A150F822A004C9099 /* Form.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5263F150F822A004C9099 /* Form.cpp */; };
+		5BD5265B150F822A004C9099 /* Form.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52640150F822A004C9099 /* Form.h */; };
+		5BD5265C150F822A004C9099 /* Label.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52641150F822A004C9099 /* Label.cpp */; };
+		5BD5265D150F822A004C9099 /* Label.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52642150F822A004C9099 /* Label.h */; };
+		5BD5265E150F822A004C9099 /* Layout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52643150F822A004C9099 /* Layout.h */; };
+		5BD5265F150F822A004C9099 /* RadioButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52644150F822A004C9099 /* RadioButton.cpp */; };
+		5BD52660150F822A004C9099 /* RadioButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52645150F822A004C9099 /* RadioButton.h */; };
+		5BD52661150F822A004C9099 /* Slider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52646150F822A004C9099 /* Slider.cpp */; };
+		5BD52662150F822A004C9099 /* Slider.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52647150F822A004C9099 /* Slider.h */; };
+		5BD52663150F822A004C9099 /* TextBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52648150F822A004C9099 /* TextBox.cpp */; };
+		5BD52664150F822A004C9099 /* TextBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52649150F822A004C9099 /* TextBox.h */; };
+		5BD52665150F822A004C9099 /* Theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5264A150F822A004C9099 /* Theme.cpp */; };
+		5BD52666150F822A004C9099 /* Theme.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5264B150F822A004C9099 /* Theme.h */; };
+		5BD52667150F822A004C9099 /* TimeListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5264C150F822A004C9099 /* TimeListener.h */; };
+		5BD52668150F822A004C9099 /* VerticalLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5264D150F822A004C9099 /* VerticalLayout.cpp */; };
+		5BD52669150F822A004C9099 /* VerticalLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5264E150F822A004C9099 /* VerticalLayout.h */; };
+		5BD5266F150F8258004C9099 /* PhysicsCharacter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5266B150F8257004C9099 /* PhysicsCharacter.cpp */; };
+		5BD52670150F8258004C9099 /* PhysicsCharacter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5266B150F8257004C9099 /* PhysicsCharacter.cpp */; };
+		5BD52671150F8258004C9099 /* PhysicsCharacter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5266C150F8257004C9099 /* PhysicsCharacter.h */; };
+		5BD52672150F8258004C9099 /* PhysicsCharacter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5266C150F8257004C9099 /* PhysicsCharacter.h */; };
+		5BD52673150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */; };
+		5BD52674150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */; };
+		5BD52675150F8258004C9099 /* PhysicsCollisionObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */; };
+		5BD52676150F8258004C9099 /* PhysicsCollisionObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */; };
 		5BD776FD14C77E1F001CADA0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BD776FC14C77E1F001CADA0 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
@@ -500,6 +561,38 @@
 		5BB0823814C6FEB10019975F /* gameplay-main-android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-android.cpp"; path = "src/gameplay-main-android.cpp"; sourceTree = SOURCE_ROOT; };
 		5BB0823914C6FEB10019975F /* PlatformAndroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformAndroid.cpp; path = src/PlatformAndroid.cpp; sourceTree = SOURCE_ROOT; };
 		5BB0823C14C6FEC40019975F /* Mouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mouse.h; path = src/Mouse.h; sourceTree = SOURCE_ROOT; };
+		5BD52634150F822A004C9099 /* AbsoluteLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbsoluteLayout.cpp; path = src/AbsoluteLayout.cpp; sourceTree = SOURCE_ROOT; };
+		5BD52635150F822A004C9099 /* AbsoluteLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AbsoluteLayout.h; path = src/AbsoluteLayout.h; sourceTree = SOURCE_ROOT; };
+		5BD52636150F822A004C9099 /* Button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Button.cpp; path = src/Button.cpp; sourceTree = SOURCE_ROOT; };
+		5BD52637150F822A004C9099 /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Button.h; path = src/Button.h; sourceTree = SOURCE_ROOT; };
+		5BD52638150F822A004C9099 /* CheckBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CheckBox.cpp; path = src/CheckBox.cpp; sourceTree = SOURCE_ROOT; };
+		5BD52639150F822A004C9099 /* CheckBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CheckBox.h; path = src/CheckBox.h; sourceTree = SOURCE_ROOT; };
+		5BD5263A150F822A004C9099 /* Container.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Container.cpp; path = src/Container.cpp; sourceTree = SOURCE_ROOT; };
+		5BD5263B150F822A004C9099 /* Container.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Container.h; path = src/Container.h; sourceTree = SOURCE_ROOT; };
+		5BD5263C150F822A004C9099 /* Control.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Control.cpp; path = src/Control.cpp; sourceTree = SOURCE_ROOT; };
+		5BD5263D150F822A004C9099 /* Control.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Control.h; path = src/Control.h; sourceTree = SOURCE_ROOT; };
+		5BD5263E150F822A004C9099 /* FlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlowLayout.h; path = src/FlowLayout.h; sourceTree = SOURCE_ROOT; };
+		5BD5263F150F822A004C9099 /* Form.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Form.cpp; path = src/Form.cpp; sourceTree = SOURCE_ROOT; };
+		5BD52640150F822A004C9099 /* Form.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Form.h; path = src/Form.h; sourceTree = SOURCE_ROOT; };
+		5BD52641150F822A004C9099 /* Label.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Label.cpp; path = src/Label.cpp; sourceTree = SOURCE_ROOT; };
+		5BD52642150F822A004C9099 /* Label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Label.h; path = src/Label.h; sourceTree = SOURCE_ROOT; };
+		5BD52643150F822A004C9099 /* Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Layout.h; path = src/Layout.h; sourceTree = SOURCE_ROOT; };
+		5BD52644150F822A004C9099 /* RadioButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RadioButton.cpp; path = src/RadioButton.cpp; sourceTree = SOURCE_ROOT; };
+		5BD52645150F822A004C9099 /* RadioButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RadioButton.h; path = src/RadioButton.h; sourceTree = SOURCE_ROOT; };
+		5BD52646150F822A004C9099 /* Slider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Slider.cpp; path = src/Slider.cpp; sourceTree = SOURCE_ROOT; };
+		5BD52647150F822A004C9099 /* Slider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Slider.h; path = src/Slider.h; sourceTree = SOURCE_ROOT; };
+		5BD52648150F822A004C9099 /* TextBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextBox.cpp; path = src/TextBox.cpp; sourceTree = SOURCE_ROOT; };
+		5BD52649150F822A004C9099 /* TextBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextBox.h; path = src/TextBox.h; sourceTree = SOURCE_ROOT; };
+		5BD5264A150F822A004C9099 /* Theme.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Theme.cpp; path = src/Theme.cpp; sourceTree = SOURCE_ROOT; };
+		5BD5264B150F822A004C9099 /* Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Theme.h; path = src/Theme.h; sourceTree = SOURCE_ROOT; };
+		5BD5264C150F822A004C9099 /* TimeListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeListener.h; path = src/TimeListener.h; sourceTree = SOURCE_ROOT; };
+		5BD5264D150F822A004C9099 /* VerticalLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VerticalLayout.cpp; path = src/VerticalLayout.cpp; sourceTree = SOURCE_ROOT; };
+		5BD5264E150F822A004C9099 /* VerticalLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerticalLayout.h; path = src/VerticalLayout.h; sourceTree = SOURCE_ROOT; };
+		5BD5266A150F8257004C9099 /* gameplay.dox */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = gameplay.dox; path = src/gameplay.dox; sourceTree = SOURCE_ROOT; };
+		5BD5266B150F8257004C9099 /* PhysicsCharacter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsCharacter.cpp; path = src/PhysicsCharacter.cpp; sourceTree = SOURCE_ROOT; };
+		5BD5266C150F8257004C9099 /* PhysicsCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCharacter.h; path = src/PhysicsCharacter.h; sourceTree = SOURCE_ROOT; };
+		5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsCollisionObject.cpp; path = src/PhysicsCollisionObject.cpp; sourceTree = SOURCE_ROOT; };
+		5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCollisionObject.h; path = src/PhysicsCollisionObject.h; sourceTree = SOURCE_ROOT; };
 		5BD776FC14C77E1F001CADA0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
@@ -567,7 +660,7 @@
 		4234D9A314686C52003031B3 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				5B43D19714C35347008A5D9D /* gameplay */,
+				5B43D19714C35347008A5D9D /* GamePlay */,
 				5B43D19614C35344008A5D9D /* platform */,
 			);
 			name = src;
@@ -641,28 +734,11 @@
 			name = platform;
 			sourceTree = "<group>";
 		};
-		5B43D19714C35347008A5D9D /* gameplay */ = {
+		5B43D19714C35347008A5D9D /* GamePlay */ = {
 			isa = PBXGroup;
 			children = (
-				5BB0823C14C6FEC40019975F /* Mouse.h */,
-				42CD0DB1147D8FF50000361E /* Animation.cpp */,
-				42CD0DB2147D8FF50000361E /* Animation.h */,
-				42CD0DB3147D8FF50000361E /* AnimationClip.cpp */,
-				42CD0DB4147D8FF50000361E /* AnimationClip.h */,
-				42CD0DB5147D8FF50000361E /* AnimationController.cpp */,
-				42CD0DB6147D8FF50000361E /* AnimationController.h */,
-				42CD0DB7147D8FF50000361E /* AnimationTarget.cpp */,
-				42CD0DB8147D8FF50000361E /* AnimationTarget.h */,
-				42CD0DB9147D8FF50000361E /* AnimationValue.cpp */,
-				42CD0DBA147D8FF50000361E /* AnimationValue.h */,
-				42CD0DBB147D8FF50000361E /* AudioBuffer.cpp */,
-				42CD0DBC147D8FF50000361E /* AudioBuffer.h */,
-				42CD0DBD147D8FF50000361E /* AudioController.cpp */,
-				42CD0DBE147D8FF50000361E /* AudioController.h */,
-				42CD0DBF147D8FF50000361E /* AudioListener.cpp */,
-				42CD0DC0147D8FF50000361E /* AudioListener.h */,
-				42CD0DC1147D8FF50000361E /* AudioSource.cpp */,
-				42CD0DC2147D8FF50000361E /* AudioSource.h */,
+				5BD52677150F828A004C9099 /* Animation */,
+				5BD52678150F829F004C9099 /* Audio */,
 				42CD0DC3147D8FF50000361E /* Base.h */,
 				42CD0DC4147D8FF50000361E /* BoundingBox.cpp */,
 				42CD0DC5147D8FF50000361E /* BoundingBox.h */,
@@ -692,6 +768,7 @@
 				42CD0DDC147D8FF50000361E /* Game.cpp */,
 				42CD0DDD147D8FF50000361E /* Game.h */,
 				42C932AF14919FD10098216A /* Game.inl */,
+				5BD5266A150F8257004C9099 /* gameplay.dox */,
 				42CD0DE1147D8FF50000361E /* gameplay.h */,
 				4208DEE614A4079F00D3C511 /* Image.cpp */,
 				4208DEE714A4079F00D3C511 /* Image.h */,
@@ -719,6 +796,7 @@
 				42CD0DF4147D8FF50000361E /* MeshSkin.h */,
 				42CD0DF5147D8FF50000361E /* Model.cpp */,
 				42CD0DF6147D8FF50000361E /* Model.h */,
+				5BB0823C14C6FEC40019975F /* Mouse.h */,
 				42CD0DF7147D8FF50000361E /* Node.cpp */,
 				42CD0DF8147D8FF50000361E /* Node.h */,
 				42CD0DF9147D8FF50000361E /* Package.cpp */,
@@ -727,32 +805,10 @@
 				42CD0DFC147D8FF50000361E /* ParticleEmitter.h */,
 				42CD0DFD147D8FF50000361E /* Pass.cpp */,
 				42CD0DFE147D8FF50000361E /* Pass.h */,
-				42CD0DFF147D8FF50000361E /* PhysicsConstraint.cpp */,
-				42CD0E00147D8FF50000361E /* PhysicsConstraint.h */,
-				42CD0E01147D8FF50000361E /* PhysicsConstraint.inl */,
-				42CD0E02147D8FF50000361E /* PhysicsController.cpp */,
-				42CD0E03147D8FF50000361E /* PhysicsController.h */,
-				42CD0E04147D8FF50000361E /* PhysicsFixedConstraint.cpp */,
-				42CD0E05147D8FF50000361E /* PhysicsFixedConstraint.h */,
-				42CD0E06147D8FF50000361E /* PhysicsFixedConstraint.inl */,
-				42CD0E07147D8FF50000361E /* PhysicsGenericConstraint.cpp */,
-				42CD0E08147D8FF50000361E /* PhysicsGenericConstraint.h */,
-				42CD0E09147D8FF50000361E /* PhysicsGenericConstraint.inl */,
-				42CD0E0A147D8FF50000361E /* PhysicsHingeConstraint.cpp */,
-				42CD0E0B147D8FF50000361E /* PhysicsHingeConstraint.h */,
-				42CD0E0C147D8FF50000361E /* PhysicsMotionState.cpp */,
-				42CD0E0D147D8FF50000361E /* PhysicsMotionState.h */,
-				42CD0E0E147D8FF50000361E /* PhysicsRigidBody.cpp */,
-				42CD0E0F147D8FF50000361E /* PhysicsRigidBody.h */,
-				42CD0E10147D8FF50000361E /* PhysicsRigidBody.inl */,
-				42CD0E11147D8FF50000361E /* PhysicsSocketConstraint.cpp */,
-				42CD0E12147D8FF50000361E /* PhysicsSocketConstraint.h */,
-				42CD0E13147D8FF50000361E /* PhysicsSpringConstraint.cpp */,
-				42CD0E14147D8FF50000361E /* PhysicsSpringConstraint.h */,
-				42CD0E15147D8FF50000361E /* PhysicsSpringConstraint.inl */,
 				42CD0E16147D8FF50000361E /* Plane.cpp */,
 				42CD0E17147D8FF50000361E /* Plane.h */,
 				42CD0E18147D8FF50000361E /* Plane.inl */,
+				5BD52679150F82C0004C9099 /* Physics */,
 				42CD0E1D147D8FF50000361E /* Properties.cpp */,
 				42CD0E1E147D8FF50000361E /* Properties.h */,
 				42CD0E1F147D8FF50000361E /* Quaternion.cpp */,
@@ -779,6 +835,7 @@
 				42CD0E32147D8FF50000361E /* Technique.h */,
 				42CD0E33147D8FF50000361E /* Texture.cpp */,
 				42CD0E34147D8FF50000361E /* Texture.h */,
+				5BD5264C150F822A004C9099 /* TimeListener.h */,
 				4208DEED14A407D500D3C511 /* Touch.h */,
 				42CD0E35147D8FF50000361E /* Transform.cpp */,
 				42CD0E36147D8FF50000361E /* Transform.h */,
@@ -797,8 +854,9 @@
 				42CD0E43147D8FF50000361E /* VertexFormat.h */,
 				42CD0E44147D8FF50000361E /* Viewport.cpp */,
 				42CD0E45147D8FF50000361E /* Viewport.h */,
+				5BD52633150F81F7004C9099 /* UI */,
 			);
-			name = gameplay;
+			name = GamePlay;
 			sourceTree = "<group>";
 		};
 		5B5ADCE014C22DBE00AC6109 /* iOS */ = {
@@ -821,6 +879,105 @@
 				5B5ADCE214C22DF900AC6109 /* libz.dylib */,
 			);
 			name = "Mac OS X";
+			sourceTree = "<group>";
+		};
+		5BD52633150F81F7004C9099 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				5BD52634150F822A004C9099 /* AbsoluteLayout.cpp */,
+				5BD52635150F822A004C9099 /* AbsoluteLayout.h */,
+				5BD52636150F822A004C9099 /* Button.cpp */,
+				5BD52637150F822A004C9099 /* Button.h */,
+				5BD52638150F822A004C9099 /* CheckBox.cpp */,
+				5BD52639150F822A004C9099 /* CheckBox.h */,
+				5BD5263A150F822A004C9099 /* Container.cpp */,
+				5BD5263B150F822A004C9099 /* Container.h */,
+				5BD5263C150F822A004C9099 /* Control.cpp */,
+				5BD5263D150F822A004C9099 /* Control.h */,
+				5BD5263E150F822A004C9099 /* FlowLayout.h */,
+				5BD5263F150F822A004C9099 /* Form.cpp */,
+				5BD52640150F822A004C9099 /* Form.h */,
+				5BD52641150F822A004C9099 /* Label.cpp */,
+				5BD52642150F822A004C9099 /* Label.h */,
+				5BD52643150F822A004C9099 /* Layout.h */,
+				5BD52644150F822A004C9099 /* RadioButton.cpp */,
+				5BD52645150F822A004C9099 /* RadioButton.h */,
+				5BD52646150F822A004C9099 /* Slider.cpp */,
+				5BD52647150F822A004C9099 /* Slider.h */,
+				5BD52648150F822A004C9099 /* TextBox.cpp */,
+				5BD52649150F822A004C9099 /* TextBox.h */,
+				5BD5264A150F822A004C9099 /* Theme.cpp */,
+				5BD5264B150F822A004C9099 /* Theme.h */,
+				5BD5264D150F822A004C9099 /* VerticalLayout.cpp */,
+				5BD5264E150F822A004C9099 /* VerticalLayout.h */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		5BD52677150F828A004C9099 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				42CD0DB1147D8FF50000361E /* Animation.cpp */,
+				42CD0DB2147D8FF50000361E /* Animation.h */,
+				42CD0DB3147D8FF50000361E /* AnimationClip.cpp */,
+				42CD0DB4147D8FF50000361E /* AnimationClip.h */,
+				42CD0DB5147D8FF50000361E /* AnimationController.cpp */,
+				42CD0DB6147D8FF50000361E /* AnimationController.h */,
+				42CD0DB7147D8FF50000361E /* AnimationTarget.cpp */,
+				42CD0DB8147D8FF50000361E /* AnimationTarget.h */,
+				42CD0DB9147D8FF50000361E /* AnimationValue.cpp */,
+				42CD0DBA147D8FF50000361E /* AnimationValue.h */,
+			);
+			name = Animation;
+			sourceTree = "<group>";
+		};
+		5BD52678150F829F004C9099 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				42CD0DBB147D8FF50000361E /* AudioBuffer.cpp */,
+				42CD0DBC147D8FF50000361E /* AudioBuffer.h */,
+				42CD0DBD147D8FF50000361E /* AudioController.cpp */,
+				42CD0DBE147D8FF50000361E /* AudioController.h */,
+				42CD0DBF147D8FF50000361E /* AudioListener.cpp */,
+				42CD0DC0147D8FF50000361E /* AudioListener.h */,
+				42CD0DC1147D8FF50000361E /* AudioSource.cpp */,
+				42CD0DC2147D8FF50000361E /* AudioSource.h */,
+			);
+			name = Audio;
+			sourceTree = "<group>";
+		};
+		5BD52679150F82C0004C9099 /* Physics */ = {
+			isa = PBXGroup;
+			children = (
+				5BD5266B150F8257004C9099 /* PhysicsCharacter.cpp */,
+				5BD5266C150F8257004C9099 /* PhysicsCharacter.h */,
+				5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */,
+				5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */,
+				42CD0DFF147D8FF50000361E /* PhysicsConstraint.cpp */,
+				42CD0E00147D8FF50000361E /* PhysicsConstraint.h */,
+				42CD0E01147D8FF50000361E /* PhysicsConstraint.inl */,
+				42CD0E02147D8FF50000361E /* PhysicsController.cpp */,
+				42CD0E03147D8FF50000361E /* PhysicsController.h */,
+				42CD0E04147D8FF50000361E /* PhysicsFixedConstraint.cpp */,
+				42CD0E05147D8FF50000361E /* PhysicsFixedConstraint.h */,
+				42CD0E06147D8FF50000361E /* PhysicsFixedConstraint.inl */,
+				42CD0E07147D8FF50000361E /* PhysicsGenericConstraint.cpp */,
+				42CD0E08147D8FF50000361E /* PhysicsGenericConstraint.h */,
+				42CD0E09147D8FF50000361E /* PhysicsGenericConstraint.inl */,
+				42CD0E0A147D8FF50000361E /* PhysicsHingeConstraint.cpp */,
+				42CD0E0B147D8FF50000361E /* PhysicsHingeConstraint.h */,
+				42CD0E0C147D8FF50000361E /* PhysicsMotionState.cpp */,
+				42CD0E0D147D8FF50000361E /* PhysicsMotionState.h */,
+				42CD0E0E147D8FF50000361E /* PhysicsRigidBody.cpp */,
+				42CD0E0F147D8FF50000361E /* PhysicsRigidBody.h */,
+				42CD0E10147D8FF50000361E /* PhysicsRigidBody.inl */,
+				42CD0E11147D8FF50000361E /* PhysicsSocketConstraint.cpp */,
+				42CD0E12147D8FF50000361E /* PhysicsSocketConstraint.h */,
+				42CD0E13147D8FF50000361E /* PhysicsSpringConstraint.cpp */,
+				42CD0E14147D8FF50000361E /* PhysicsSpringConstraint.h */,
+				42CD0E15147D8FF50000361E /* PhysicsSpringConstraint.inl */,
+			);
+			name = Physics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -901,6 +1058,23 @@
 				4208DEEE14A407D500D3C511 /* Touch.h in Headers */,
 				4201819114A41B18008C3F56 /* MeshBatch.h in Headers */,
 				5BB0823D14C6FEC40019975F /* Mouse.h in Headers */,
+				5BD52650150F822A004C9099 /* AbsoluteLayout.h in Headers */,
+				5BD52652150F822A004C9099 /* Button.h in Headers */,
+				5BD52654150F822A004C9099 /* CheckBox.h in Headers */,
+				5BD52656150F822A004C9099 /* Container.h in Headers */,
+				5BD52658150F822A004C9099 /* Control.h in Headers */,
+				5BD52659150F822A004C9099 /* FlowLayout.h in Headers */,
+				5BD5265B150F822A004C9099 /* Form.h in Headers */,
+				5BD5265D150F822A004C9099 /* Label.h in Headers */,
+				5BD5265E150F822A004C9099 /* Layout.h in Headers */,
+				5BD52660150F822A004C9099 /* RadioButton.h in Headers */,
+				5BD52662150F822A004C9099 /* Slider.h in Headers */,
+				5BD52664150F822A004C9099 /* TextBox.h in Headers */,
+				5BD52666150F822A004C9099 /* Theme.h in Headers */,
+				5BD52667150F822A004C9099 /* TimeListener.h in Headers */,
+				5BD52669150F822A004C9099 /* VerticalLayout.h in Headers */,
+				5BD52671150F8258004C9099 /* PhysicsCharacter.h in Headers */,
+				5BD52675150F8258004C9099 /* PhysicsCollisionObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -979,6 +1153,22 @@
 				5B04C5C514BFCFE100EB0071 /* Touch.h in Headers */,
 				5B04C5C614BFCFE100EB0071 /* MeshBatch.h in Headers */,
 				5BB0823E14C6FEC40019975F /* Mouse.h in Headers */,
+				5BD52672150F8258004C9099 /* PhysicsCharacter.h in Headers */,
+				5BD52676150F8258004C9099 /* PhysicsCollisionObject.h in Headers */,
+				5BC4E740150F843D00CBE1C0 /* AbsoluteLayout.h in Headers */,
+				5BC4E742150F843D00CBE1C0 /* Button.h in Headers */,
+				5BC4E744150F843D00CBE1C0 /* CheckBox.h in Headers */,
+				5BC4E746150F843D00CBE1C0 /* Container.h in Headers */,
+				5BC4E748150F843D00CBE1C0 /* Control.h in Headers */,
+				5BC4E749150F843D00CBE1C0 /* FlowLayout.h in Headers */,
+				5BC4E74B150F843D00CBE1C0 /* Form.h in Headers */,
+				5BC4E74D150F843D00CBE1C0 /* Label.h in Headers */,
+				5BC4E74E150F843D00CBE1C0 /* Layout.h in Headers */,
+				5BC4E750150F843D00CBE1C0 /* RadioButton.h in Headers */,
+				5BC4E752150F843D00CBE1C0 /* Slider.h in Headers */,
+				5BC4E754150F843D00CBE1C0 /* TextBox.h in Headers */,
+				5BC4E756150F843D00CBE1C0 /* Theme.h in Headers */,
+				5BC4E758150F843D00CBE1C0 /* VerticalLayout.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1117,6 +1307,20 @@
 				428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */,
 				4208DEE914A4079F00D3C511 /* Image.cpp in Sources */,
 				4201819014A41B18008C3F56 /* MeshBatch.cpp in Sources */,
+				5BD5264F150F822A004C9099 /* AbsoluteLayout.cpp in Sources */,
+				5BD52651150F822A004C9099 /* Button.cpp in Sources */,
+				5BD52653150F822A004C9099 /* CheckBox.cpp in Sources */,
+				5BD52655150F822A004C9099 /* Container.cpp in Sources */,
+				5BD52657150F822A004C9099 /* Control.cpp in Sources */,
+				5BD5265A150F822A004C9099 /* Form.cpp in Sources */,
+				5BD5265C150F822A004C9099 /* Label.cpp in Sources */,
+				5BD5265F150F822A004C9099 /* RadioButton.cpp in Sources */,
+				5BD52661150F822A004C9099 /* Slider.cpp in Sources */,
+				5BD52663150F822A004C9099 /* TextBox.cpp in Sources */,
+				5BD52665150F822A004C9099 /* Theme.cpp in Sources */,
+				5BD52668150F822A004C9099 /* VerticalLayout.cpp in Sources */,
+				5BD5266F150F8258004C9099 /* PhysicsCharacter.cpp in Sources */,
+				5BD52673150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1191,6 +1395,20 @@
 				5B04C57314BFCFE100EB0071 /* MeshBatch.cpp in Sources */,
 				5B04C5CD14BFD48500EB0071 /* gameplay-main-ios.mm in Sources */,
 				5B04C5CE14BFD48500EB0071 /* PlatformiOS.mm in Sources */,
+				5BD52670150F8258004C9099 /* PhysicsCharacter.cpp in Sources */,
+				5BD52674150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */,
+				5BC4E73F150F843D00CBE1C0 /* AbsoluteLayout.cpp in Sources */,
+				5BC4E741150F843D00CBE1C0 /* Button.cpp in Sources */,
+				5BC4E743150F843D00CBE1C0 /* CheckBox.cpp in Sources */,
+				5BC4E745150F843D00CBE1C0 /* Container.cpp in Sources */,
+				5BC4E747150F843D00CBE1C0 /* Control.cpp in Sources */,
+				5BC4E74A150F843D00CBE1C0 /* Form.cpp in Sources */,
+				5BC4E74C150F843D00CBE1C0 /* Label.cpp in Sources */,
+				5BC4E74F150F843D00CBE1C0 /* RadioButton.cpp in Sources */,
+				5BC4E751150F843D00CBE1C0 /* Slider.cpp in Sources */,
+				5BC4E753150F843D00CBE1C0 /* TextBox.cpp in Sources */,
+				5BC4E755150F843D00CBE1C0 /* Theme.cpp in Sources */,
+				5BC4E757150F843D00CBE1C0 /* VerticalLayout.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
