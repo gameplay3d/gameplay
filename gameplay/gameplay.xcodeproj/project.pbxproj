@@ -561,6 +561,7 @@
 		5BB0823814C6FEB10019975F /* gameplay-main-android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-android.cpp"; path = "src/gameplay-main-android.cpp"; sourceTree = SOURCE_ROOT; };
 		5BB0823914C6FEB10019975F /* PlatformAndroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformAndroid.cpp; path = src/PlatformAndroid.cpp; sourceTree = SOURCE_ROOT; };
 		5BB0823C14C6FEC40019975F /* Mouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mouse.h; path = src/Mouse.h; sourceTree = SOURCE_ROOT; };
+		5BC4E7D4150F8C3C00CBE1C0 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		5BD52634150F822A004C9099 /* AbsoluteLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbsoluteLayout.cpp; path = src/AbsoluteLayout.cpp; sourceTree = SOURCE_ROOT; };
 		5BD52635150F822A004C9099 /* AbsoluteLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AbsoluteLayout.h; path = src/AbsoluteLayout.h; sourceTree = SOURCE_ROOT; };
 		5BD52636150F822A004C9099 /* Button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Button.cpp; path = src/Button.cpp; sourceTree = SOURCE_ROOT; };
@@ -641,6 +642,7 @@
 		4234D98A14686BB6003031B3 = {
 			isa = PBXGroup;
 			children = (
+				5BC4E7D4150F8C3C00CBE1C0 /* res */,
 				4234D9A314686C52003031B3 /* src */,
 				427D4F42147DC8DE0076760E /* Libraries */,
 				42CCD4AF146D811D00353661 /* Frameworks */,
@@ -661,7 +663,7 @@
 			isa = PBXGroup;
 			children = (
 				5B43D19714C35347008A5D9D /* GamePlay */,
-				5B43D19614C35344008A5D9D /* platform */,
+				5B43D19614C35344008A5D9D /* Platform */,
 			);
 			name = src;
 			path = gameplay;
@@ -716,7 +718,7 @@
 			name = "Mac OS X";
 			sourceTree = "<group>";
 		};
-		5B43D19614C35344008A5D9D /* platform */ = {
+		5B43D19614C35344008A5D9D /* Platform */ = {
 			isa = PBXGroup;
 			children = (
 				5BB0823814C6FEB10019975F /* gameplay-main-android.cpp */,
@@ -731,7 +733,7 @@
 				5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */,
 				42CD0E1B147D8FF50000361E /* PlatformQNX.cpp */,
 			);
-			name = platform;
+			name = Platform;
 			sourceTree = "<group>";
 		};
 		5B43D19714C35347008A5D9D /* GamePlay */ = {
