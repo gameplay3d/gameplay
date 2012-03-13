@@ -117,7 +117,7 @@ public:
      *
      * @param display true when virtual keyboard needs to be displayed and false otherwise.
      */
-     static void displayKeyboard(bool display);
+    static void displayKeyboard(bool display);
 
     static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
