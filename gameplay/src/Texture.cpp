@@ -75,8 +75,12 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
             }
 			else if (tolower(ext[1]) == 'p' && tolower(ext[2]) == 'v' && tolower(ext[3]) == 'r')
 			{
+#ifdef OPENGL_ES_PVR
             	// PowerVR Compressed RGBA
 				texture = createCompressedPVR(path);
+#else
+                texture = NULL; // Cannot handle PVR if not supported on platform
+#endif
 			}
             break;
         }
@@ -143,6 +147,7 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     return texture;
 }
 
+#ifdef OPENGL_ES_PVR
 Texture* Texture::createCompressedPVR(const char* path)
 {
 	char PVRTexIdentifier[] = "PVR!";
@@ -274,7 +279,8 @@ Texture* Texture::createCompressedPVR(const char* path)
 
 	return texture;
 }
-
+#endif
+    
 unsigned int Texture::getWidth() const
 {
     return _width;
