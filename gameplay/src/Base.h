@@ -201,6 +201,7 @@ extern void printError(const char* format, ...);
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
+    #define OPENGL_ES_PVR    
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
 	#define GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG                      0x8C00
@@ -219,6 +220,7 @@ extern void printError(const char* format, ...);
         #define glIsVertexArray glIsVertexArrayOES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
+        #define OPENGL_ES_PVR    
     #elif TARGET_OS_MAC
         #include <OpenGL/gl.h>
         #include <OpenGL/glext.h>
