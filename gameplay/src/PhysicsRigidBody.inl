@@ -59,11 +59,6 @@ inline const Vector3& PhysicsRigidBody::getLinearVelocity() const
     return *_linearVelocity;
 }
 
-inline Node* PhysicsRigidBody::getNode()
-{
-    return _node;
-}
-
 inline float PhysicsRigidBody::getRestitution() const
 {
     return _body->getRestitution();
@@ -131,23 +126,6 @@ inline void PhysicsRigidBody::setLinearVelocity(const Vector3& velocity)
 inline void PhysicsRigidBody::setRestitution(float restitution)
 {
     _body->setRestitution(restitution);
-}
-
-inline bool PhysicsRigidBody::CollisionPair::operator<(const CollisionPair& collisionPair) const
-{
-    // If the pairs are equal, then return false.
-    if ((rigidBodyA == collisionPair.rigidBodyA && rigidBodyB == collisionPair.rigidBodyB) || (rigidBodyA == collisionPair.rigidBodyB && rigidBodyB == collisionPair.rigidBodyA))
-        return false;
-    else
-    {
-        // We choose to compare based on rigidBodyA arbitrarily.
-        if (rigidBodyA < collisionPair.rigidBodyA)
-            return true;
-        else if (rigidBodyA == collisionPair.rigidBodyA)
-            return rigidBodyB < collisionPair.rigidBodyB;
-        else
-            return false;
-    }
 }
 
 }

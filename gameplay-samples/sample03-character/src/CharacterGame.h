@@ -8,7 +8,7 @@ using namespace gameplay;
 /**
  * This is a mesh demo game for rendering Mesh.
  */
-class CharacterGame: public Game
+class CharacterGame: public Game, public PhysicsCollisionObject::CollisionListener
 {
 public:
 
@@ -31,6 +31,13 @@ public:
      * @see Game::keyEvent
      */
     void keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * @see PhysicsCollisionObject::CollisionListener::collisionEvent
+     */
+    void collisionEvent(PhysicsCollisionObject::CollisionListener::EventType type,
+        const PhysicsCollisionObject::CollisionPair& collisionPair,
+        const Vector3& contactPointA, const Vector3& contactPointB);
 
 protected:
 

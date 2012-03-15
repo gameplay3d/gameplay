@@ -845,7 +845,7 @@ void Platform::swapBuffers()
         [__view swapBuffers];
 }
 
-void displayKeyboard(bool display) 
+void Platform::displayKeyboard(bool display) 
 {
     if(__view) 
     {

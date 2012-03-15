@@ -293,9 +293,9 @@ void Game::updateOnce()
 
 void Game::fireTimeEvents(long frameTime)
 {
-    while (!_timeEvents.empty())
+    while (_timeEvents.size() > 0)
     {
-        TimeEvent* timeEvent = &_timeEvents.top();
+        const TimeEvent* timeEvent = &_timeEvents.top();
         if (timeEvent->time > frameTime)
         {
             break;
