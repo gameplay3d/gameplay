@@ -70,6 +70,11 @@ private:
      */
     void buildGradient();
 
+    /**
+     * Draws the default "gameplay powered" loading screen.
+     */
+    void drawLoadScreen(void* param);
+
     // Ground
     Model* _ground;
     Matrix _groundWorldMatrix;

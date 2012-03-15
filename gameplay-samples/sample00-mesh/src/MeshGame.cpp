@@ -14,6 +14,9 @@ MeshGame::~MeshGame()
 
 void MeshGame::initialize()
 {
+    // Draw loading screen.
+    renderOnce(this, &MeshGame::drawLoadScreen, NULL);
+
     // Load font
     _font = Font::create("res/arial40.gpb");
 
@@ -105,3 +108,12 @@ void MeshGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, u
     font->end();
 }
 
+void MeshGame::drawLoadScreen(void* param)
+{
+    clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
+    SpriteBatch* batch = SpriteBatch::create("res/gameplay_loading.png");
+    batch->begin();
+    batch->draw(Rectangle(0, 0, this->getWidth(), this->getHeight()), Rectangle(0, 0, 1920, 1080), Vector4::one());
+    batch->end();
+    SAFE_DELETE(batch);
+}

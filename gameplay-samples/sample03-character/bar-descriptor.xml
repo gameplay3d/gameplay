@@ -53,14 +53,27 @@
     
     <asset path="icon.png">icon.png</asset>
     <asset path="res/arial40.gpb">res/arial40.gpb</asset>
-    <asset path="res/floor.material">res/floor.material</asset>
-    <asset path="res/floor.png">res/floor.png</asset>
-    <asset path="res/seymour.gpb">res/seymour.gpb</asset>
-    <asset path="res/seymour.material">res/seymour.material</asset>
-    <asset path="res/seymour-clips.animation">res/seymour-clips.animation</asset>
-    <asset path="res/seymour-diffuse.png">res/seymour-diffuse.png</asset>
+    <asset path="res/backboard.png">res/backboard.png</asset>
+    <asset path="res/bball.png">res/bball.png</asset>
+    <asset path="res/boy.animation">res/boy.animation</asset>
+    <asset path="res/decals.png">res/decals.png</asset>
+    <asset path="res/gameplay_loading.png">res/gameplay_loading.png</asset>
+    <asset path="res/rainbow.png">res/rainbow.png</asset>
+    <asset path="res/scene.gpb">res/scene.gpb</asset>
+    <asset path="res/scene.material">res/scene.material</asset>
+    <asset path="res/scene.physics">res/scene.physics</asset>
+    <asset path="res/scene.scene">res/scene.scene</asset>
+    <asset path="res/shadow.png">res/shadow.png</asset>
+    <asset path="res/tiles.png">res/tiles.png</asset>
+    <asset path="res/tilesn.png">res/tilesn.png</asset>
+    <asset path="res/wood.png">res/wood.png</asset>
+    <asset path="res/woodn.png">res/woodn.png</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/colored.fsh}">res/shaders/colored.fsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/colored.vsh}">res/shaders/colored.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.fsh}">res/shaders/colored-specular.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.vsh}">res/shaders/colored-specular.vsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.fsh}">res/shaders/diffuse.fsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.vsh}">res/shaders/diffuse.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.fsh}">res/shaders/diffuse-specular.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.vsh}">res/shaders/diffuse-specular.vsh</asset>
     
