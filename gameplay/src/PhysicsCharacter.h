@@ -23,10 +23,8 @@ namespace gameplay
  * This class can also be used to control animations for a character. Animation
  * clips can be setup for typical character animations, such as walk, run, jump,
  * etc; and the controller will handle blending between these animations as needed.
- *
- * @todo Add support for collision listeners.
  */
-class PhysicsCharacter : public Transform::Listener, public btActionInterface
+class PhysicsCharacter : public PhysicsCollisionObject, public Transform::Listener, public btActionInterface
 {
     friend class PhysicsController;
 
@@ -54,11 +52,41 @@ public:
     };
 
     /**
+     * @see PhysicsCollisionObject#getType
+     */
+    PhysicsCollisionObject::Type getType() const;
+
+    /**
      * Returns the character node for this PhysicsCharacter.
      *
      * @return The character Node.
+     *
+     * @see PhysicsCollisionObject::getNode.
      */
     Node* getNode() const;
+
+    /**
+     * Returns whether physics simulation is enabled for the physics character.
+     *
+     * @return true if physics simulation is enabled, false otherwise.
+     *
+     * @see setPhysicsEnabled(bool)
+     */
+    bool isPhysicsEnabled() const;
+
+    /**
+     * Enables or disables phyiscs simulation for the character.
+     *
+     * When physics simulation is enabled (default), the physics character automatically
+     * responds to collisions in the physics world. For example, the character will
+     * automatically slide along walls, step up stairs, react to gravity, etc.
+     *
+     * When disabled, the character will not have any physics applied on it and will
+     * therefore be allowed to walk through walls, ceiling, floors, other objects, etc.
+     *
+     * @param enabled true to enable physics simulation, false otherwise.
+     */
+    void setPhysicsEnabled(bool enabled);
 
     /**
      * Returns the maximum step height for the character.
@@ -247,6 +275,18 @@ public:
      */
 	void debugDraw(btIDebugDraw* debugDrawer);
 
+protected:
+
+    /**
+     * @see PhysicsCollisionObject::getCollisionObject
+     */
+    btCollisionObject* getCollisionObject() const;
+
+    /**
+     * @see PhysicsCollisionObject::getCollisionShape
+     */
+    btCollisionShape* getCollisionShape() const;
+
 private:
 
     struct CharacterAnimation
@@ -264,6 +304,8 @@ private:
     /**
      * Creates a new PhysicsCharacter.
      *
+     * Use PhysicsController::createCharacter to create physics characters.
+     *
      * @param node Scene node that represents the character.
      * @param radius Radius of capsule volume used for character collisions.
      * @param height Height of the capsule volume used for character collisions.
@@ -273,6 +315,8 @@ private:
 
     /**
      * Destructor.
+     *
+     * Use PhysicsController::destroyCharacter to destroy physics characters.
      */
     virtual ~PhysicsCharacter();
 
@@ -310,6 +354,7 @@ private:
     float _stepHeight;
     float _slopeAngle;
     float _cosSlopeAngle;
+    bool _physicsEnabled;
 };
 
 }

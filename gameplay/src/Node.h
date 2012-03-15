@@ -387,7 +387,7 @@ public:
      * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
      * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
      */
-    void setRigidBody(PhysicsRigidBody::Type type, float mass = 0.0f, float friction = 0.5f,
+    void setRigidBody(PhysicsRigidBody::ShapeType type, float mass = 0.0f, float friction = 0.5f,
         float restitution = 0.0f, float linearDamping = 0.0f, float angularDamping = 0.0f);
 
     /**
