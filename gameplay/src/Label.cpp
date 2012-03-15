@@ -33,6 +33,23 @@ namespace gameplay
             _text = text;
         }
     }
+
+    void Label::addListener(Control::Listener* listener, int eventFlags)
+    {
+        if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
+        {
+            WARN("TEXT_CHANGED event is not applicable to this control.");
+            eventFlags &= ~Listener::TEXT_CHANGED;
+        }
+
+        if ((eventFlags & Listener::VALUE_CHANGED) == Listener::VALUE_CHANGED)
+        {
+            WARN("VALUE_CHANGED event is not applicable to this control.");
+            eventFlags &= ~Listener::VALUE_CHANGED;
+        }
+
+        Control::addListener(listener, eventFlags);
+    }
     
     void Label::setText(const char* text)
     {
@@ -58,7 +75,7 @@ namespace gameplay
 
         // Draw the text.
         font->begin();
-        font->drawText(_text.c_str(), _clip, overlay->getTextColor(), overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+        font->drawText(_text.c_str(), _textBounds, overlay->getTextColor(), overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft(), &_clip);
         font->end();
 
         _dirty = false;

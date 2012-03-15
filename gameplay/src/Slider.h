@@ -27,7 +27,7 @@ namespace gameplay
  *      text        = <string>                  // Text to display above, below or alongside the slider (depending on the style).
  *  }
  */
-class Slider : public Button
+class Slider : public Label
 {
     friend class Container;
 
@@ -89,6 +89,8 @@ public:
      * @return This slider's current value.
      */
     float getValue();
+
+    void addListener(Control::Listener* listener, int eventFlags);
 
 protected:
     Slider();
