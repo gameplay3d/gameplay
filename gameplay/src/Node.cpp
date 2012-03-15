@@ -36,12 +36,15 @@ Node::~Node()
         _audioSource->setNode(NULL);
     if (_particleEmitter)
         _particleEmitter->setNode(NULL);
+    if (_form)
+        _form->setNode(NULL);
 
     SAFE_RELEASE(_camera);
     SAFE_RELEASE(_light);
     SAFE_RELEASE(_model);
     SAFE_RELEASE(_audioSource);
     SAFE_RELEASE(_particleEmitter);
+    SAFE_RELEASE(_form);
     SAFE_DELETE(_physicsRigidBody);
 }
 
