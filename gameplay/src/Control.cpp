@@ -85,6 +85,11 @@ namespace gameplay
 
     void Control::setStyle(Theme::Style* style)
     {
+        if (style != _style)
+        {
+            _dirty = true;
+        }
+
         _style = style;
     }
 
