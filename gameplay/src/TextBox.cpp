@@ -4,9 +4,7 @@
 namespace gameplay
 {
 
-static std::vector<TextBox*> __textBoxes;
-
-TextBox::TextBox()
+TextBox::TextBox() : _lastKeypress(0)
 {
 }
 
@@ -22,24 +20,13 @@ TextBox* TextBox::create(Theme::Style* style, Properties* properties)
 {
     TextBox* textBox = new TextBox();
     textBox->init(style, properties);
-    __textBoxes.push_back(textBox);
 
     return textBox;
 }
 
-TextBox* TextBox::getTextBox(const char* id)
+int TextBox::getLastKeypress()
 {
-    std::vector<TextBox*>::const_iterator it;
-    for (it = __textBoxes.begin(); it < __textBoxes.end(); it++)
-    {
-        TextBox* t = *it;
-        if (strcmp(id, t->getID()) == 0)
-        {
-            return t;
-        }
-    }
-
-    return NULL;
+    return _lastKeypress;
 }
 
 void TextBox::setCursorLocation(int x, int y)
@@ -55,6 +42,17 @@ void TextBox::setCursorLocation(int x, int y)
 
     _cursorLocation.set(x - border.left - padding.left + _clip.x,
                        y - border.top - padding.top + _clip.y);
+}
+
+void TextBox::addListener(Control::Listener* listener, int eventFlags)
+{
+    if ((eventFlags & Listener::VALUE_CHANGED) == Listener::VALUE_CHANGED)
+    {
+        WARN("VALUE_CHANGED event is not applicable to TextBox.");
+        eventFlags &= ~Listener::VALUE_CHANGED;
+    }
+
+    Control::addListener(listener, eventFlags);
 }
 
 bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -144,6 +142,7 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                         font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_cursorLocation, textIndex,
                             overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
                         _dirty = true;
+                        alertListeners(Listener::TEXT_CHANGED);
                         break;
                     }
                     case Keyboard::KEY_LEFT_ARROW:
@@ -241,9 +240,13 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
             
                     break;
                 }
+
+                alertListeners(Listener::TEXT_CHANGED);
             }
         }
     }
+
+    _lastKeypress = key;
 }
 
 void TextBox::update(const Rectangle& clip)
