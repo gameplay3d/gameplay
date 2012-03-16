@@ -1378,6 +1378,7 @@
 		4234D99114686BB6003031B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "iphonesimulator macosx iphoneos";
 				VALID_ARCHS = "armv7 armv6 i386 x86_64";
 			};
@@ -1386,6 +1387,7 @@
 		4234D99214686BB6003031B3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "iphonesimulator macosx iphoneos";
 				VALID_ARCHS = "armv7 armv6 i386 x86_64";
 			};
@@ -1431,7 +1433,6 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = gameplay;
-				SDKROOT = "";
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = macosx;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1472,7 +1473,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = gameplay;
-				SDKROOT = "";
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = macosx;
 				USER_HEADER_SEARCH_PATHS = "";
