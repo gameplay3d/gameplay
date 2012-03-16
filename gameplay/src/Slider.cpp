@@ -68,7 +68,7 @@ void Slider::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
     {
-        WARN("TEXT_CHANGED event is not applicable to Slider.");
+        assert("TEXT_CHANGED event is not applicable to Slider.");
         eventFlags &= ~Listener::TEXT_CHANGED;
     }
 
@@ -133,7 +133,7 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
             // Call the callback if our value changed.
             if (_value != oldValue)
             {
-                alertListeners(Listener::VALUE_CHANGED);
+                notifyListeners(Listener::VALUE_CHANGED);
             }
 
             _dirty = true;
