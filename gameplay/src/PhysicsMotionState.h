@@ -17,6 +17,7 @@ class PhysicsMotionState : public btMotionState
     friend class PhysicsRigidBody;
     friend class PhysicsCharacter;
     friend class PhysicsConstraint;
+    friend class PhysicsGhostObject;
 
 protected:
 
