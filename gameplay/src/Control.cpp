@@ -206,18 +206,18 @@ namespace gameplay
         switch (evt)
         {
         case Touch::TOUCH_PRESS:
-            alertListeners(Listener::PRESS);
+            notifyListeners(Listener::PRESS);
             break;
             
         case Touch::TOUCH_RELEASE:
             // Always trigger Listener::RELEASE
-            alertListeners(Listener::RELEASE);
+            notifyListeners(Listener::RELEASE);
 
             // Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
             if (x > 0 && x <= _bounds.width &&
                 y > 0 && y <= _bounds.height)
             {
-                alertListeners(Listener::CLICK);
+                notifyListeners(Listener::CLICK);
             }
             break;
         }
@@ -229,7 +229,7 @@ namespace gameplay
     {
     }
 
-    void Control::alertListeners(Listener::EventType eventType)
+    void Control::notifyListeners(Listener::EventType eventType)
     {
         if (_listeners)
         {

@@ -44,9 +44,7 @@ public:
             RELEASE         = 0x02,
             CLICK           = 0x04,
             VALUE_CHANGED   = 0x08,
-            TEXT_CHANGED    = 0x10,
-            //MOUSE           = PRESS | RELEASE | CLICK,
-            //ALL             = MOUSE | VALUE_CHANGED | TEXT_CHANGED 
+            TEXT_CHANGED    = 0x10
         };
 
         virtual void controlEvent(Control* control, EventType evt) = 0;
@@ -276,9 +274,9 @@ protected:
     static State getStateFromString(const char* state);
 
     /**
-     * Alert all listeners of a specific event.
+     * Notify all listeners of a specific event.
      */
-    void alertListeners(Listener::EventType eventType);
+    void notifyListeners(Listener::EventType eventType);
 
     void addSpecificListener(Control::Listener* listener, Listener::EventType eventType);
 
