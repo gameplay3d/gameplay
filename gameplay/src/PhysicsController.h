@@ -23,6 +23,7 @@ class PhysicsController : public btCollisionWorld::ContactResultCallback
     friend class PhysicsRigidBody;
     friend class PhysicsCharacter;
     friend class PhysicsCollisionObject;
+    friend class PhysicsGhostObject;
 
 public:
 
