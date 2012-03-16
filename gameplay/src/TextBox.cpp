@@ -48,7 +48,7 @@ void TextBox::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Listener::VALUE_CHANGED) == Listener::VALUE_CHANGED)
     {
-        WARN("VALUE_CHANGED event is not applicable to TextBox.");
+        assert("VALUE_CHANGED event is not applicable to TextBox.");
         eventFlags &= ~Listener::VALUE_CHANGED;
     }
 
@@ -142,7 +142,7 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                         font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_cursorLocation, textIndex,
                             overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
                         _dirty = true;
-                        alertListeners(Listener::TEXT_CHANGED);
+                        notifyListeners(Listener::TEXT_CHANGED);
                         break;
                     }
                     case Keyboard::KEY_LEFT_ARROW:
@@ -241,7 +241,7 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     break;
                 }
 
-                alertListeners(Listener::TEXT_CHANGED);
+                notifyListeners(Listener::TEXT_CHANGED);
             }
         }
     }

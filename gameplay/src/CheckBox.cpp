@@ -54,7 +54,7 @@ void CheckBox::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
     {
-        WARN("TEXT_CHANGED event is not applicable to CheckBox.");
+        assert("TEXT_CHANGED event is not applicable to CheckBox.");
         eventFlags &= ~Listener::TEXT_CHANGED;
     }
 
@@ -78,7 +78,7 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
                     y > 0 && y <= _bounds.height)
                 {
                     _checked = !_checked;
-                    alertListeners(Listener::VALUE_CHANGED);
+                    notifyListeners(Listener::VALUE_CHANGED);
                 }
             }
         }
