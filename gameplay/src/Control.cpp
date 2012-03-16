@@ -5,7 +5,7 @@ namespace gameplay
 {
     Control::Control()
         : _id(""), _state(Control::NORMAL), _position(Vector2::zero()), _size(Vector2::zero()), _bounds(Rectangle::empty()), _clip(Rectangle::empty()),
-          _autoWidth(true), _autoHeight(true), _dirty(true), _consumeTouchEvents(true)
+          _autoWidth(true), _autoHeight(true), _dirty(true), _consumeTouchEvents(true), _listeners(NULL)
     {
     }
 
@@ -15,6 +15,15 @@ namespace gameplay
 
     Control::~Control()
     {
+        if (_listeners)
+        {
+            for (ListenerMap::const_iterator itr = _listeners->begin(); itr != _listeners->end(); itr++)
+            {
+                std::list<Listener*>* list = itr->second;
+                SAFE_DELETE(list);
+            }
+            SAFE_DELETE(_listeners);
+        }
     }
 
     void Control::init(Theme::Style* style, Properties* properties)
@@ -76,6 +85,11 @@ namespace gameplay
 
     void Control::setStyle(Theme::Style* style)
     {
+        if (style != _style)
+        {
+            _dirty = true;
+        }
+
         _style = style;
     }
 
@@ -136,14 +150,99 @@ namespace gameplay
         return _consumeTouchEvents;
     }
 
+    void Control::addListener(Control::Listener* listener, int eventFlags)
+    {
+        if ((eventFlags & Listener::PRESS) == Listener::PRESS)
+        {
+            addSpecificListener(listener, Listener::PRESS);
+        }
+
+        if ((eventFlags & Listener::RELEASE) == Listener::RELEASE)
+        {
+            addSpecificListener(listener, Listener::RELEASE);
+        }
+
+        if ((eventFlags & Listener::CLICK) == Listener::CLICK)
+        {
+            addSpecificListener(listener, Listener::CLICK);
+        }
+
+        if ((eventFlags & Listener::VALUE_CHANGED) == Listener::VALUE_CHANGED)
+        {
+            addSpecificListener(listener, Listener::VALUE_CHANGED);
+        }
+
+        if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
+        {
+            addSpecificListener(listener, Listener::TEXT_CHANGED);
+        }
+    }
+
+    void Control::addSpecificListener(Control::Listener* listener, Listener::EventType eventType)
+    {
+        if (!_listeners)
+        {
+            _listeners = new std::map<Listener::EventType, std::list<Listener*>*>();
+        }
+
+        ListenerMap::const_iterator itr = _listeners->find(eventType);
+        if (itr == _listeners->end())
+        {
+            _listeners->insert(std::make_pair(eventType, new std::list<Listener*>()));
+            itr = _listeners->find(eventType);
+        }
+
+        std::list<Listener*>* listenerList = itr->second;
+        listenerList->push_back(listener);
+    }
+
     bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
     {
-        // Empty stub to be implemented by Button and its descendents.
+        if (!isEnabled())
+        {
+            return false;
+        }
+
+        switch (evt)
+        {
+        case Touch::TOUCH_PRESS:
+            notifyListeners(Listener::PRESS);
+            break;
+            
+        case Touch::TOUCH_RELEASE:
+            // Always trigger Listener::RELEASE
+            notifyListeners(Listener::RELEASE);
+
+            // Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
+            if (x > 0 && x <= _bounds.width &&
+                y > 0 && y <= _bounds.height)
+            {
+                notifyListeners(Listener::CLICK);
+            }
+            break;
+        }
+
         return _consumeTouchEvents;
     }
 
     void Control::keyEvent(Keyboard::KeyEvent evt, int key)
     {
+    }
+
+    void Control::notifyListeners(Listener::EventType eventType)
+    {
+        if (_listeners)
+        {
+            ListenerMap::const_iterator itr = _listeners->find(eventType);
+            if (itr != _listeners->end())
+            {
+                std::list<Listener*>* listenerList = itr->second;
+                for (std::list<Listener*>::iterator listenerItr = listenerList->begin(); listenerItr != listenerList->end(); listenerItr++)
+                {
+                    (*listenerItr)->controlEvent(this, eventType);
+                }
+            }
+        }
     }
 
     void Control::update(const Rectangle& clip)
@@ -185,6 +284,8 @@ namespace gameplay
         width = _size.x - border.left - padding.left - border.right - padding.right;
         height = _size.y - border.top - padding.top - border.bottom - padding.bottom;
 
+        _textBounds.set(x, y, width, height);
+
         clipX2 = clip.x + clip.width;
         x2 = x + width;
         if (x2 > clipX2)
@@ -197,6 +298,16 @@ namespace gameplay
         if (y2 > clipY2)
         {
             height = clipY2 - y;
+        }
+
+        if (x < clip.x)
+        {
+            x = clip.x;
+        }
+
+        if (y < clip.y)
+        {
+            y = clip.y;
         }
 
         _clip.set(x, y, width, height);

@@ -417,6 +417,10 @@ void PhysicsController::addCollisionObject(PhysicsCollisionObject* object)
         _world->addCollisionObject(object->getCollisionObject(), btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter);
         break;
 
+    case PhysicsCollisionObject::GHOST_OBJECT:
+        _world->addCollisionObject(object->getCollisionObject(), btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::AllFilter);
+        break;
+
     default:
         assert(0); // unexpected (new type?)
         break;
@@ -435,6 +439,7 @@ void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object)
             break;
 
         case PhysicsCollisionObject::CHARACTER:
+        case PhysicsCollisionObject::GHOST_OBJECT:
             _world->removeCollisionObject(object->getCollisionObject());
             break;
 

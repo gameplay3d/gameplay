@@ -35,6 +35,21 @@ public:
         DISABLED
     };
 
+    class Listener
+    {
+    public:
+        enum EventType
+        {
+            PRESS           = 0x01,
+            RELEASE         = 0x02,
+            CLICK           = 0x04,
+            VALUE_CHANGED   = 0x08,
+            TEXT_CHANGED    = 0x10
+        };
+
+        virtual void controlEvent(Control* control, EventType evt) = 0;
+    };
+
     /**
      * Get this control's ID string.
      *
@@ -158,6 +173,18 @@ public:
      */
     Theme::Style* getStyle() const;
 
+    /**
+     * Add a listener to be notified of specific events affecting
+     * this control.  Event types can be OR'ed together.
+     * E.g. To listen to touch-press and touch-release events,
+     * pass <code>Control::Listener::TOUCH | Control::Listener::RELEASE</code>
+     * as the second parameter.
+     *
+     * @param listener The listener to add.
+     * @param eventFlags The events to listen for.
+     */
+    virtual void addListener(Control::Listener* listener, int eventFlags);
+
 protected:
     Control();
     virtual ~Control();
@@ -246,17 +273,27 @@ protected:
      */
     static State getStateFromString(const char* state);
 
+    /**
+     * Notify all listeners of a specific event.
+     */
+    void notifyListeners(Listener::EventType eventType);
+
+    void addSpecificListener(Control::Listener* listener, Listener::EventType eventType);
+
     std::string _id;
     State _state;           // Determines overlay used during draw().
     Vector2 _position;      // Position, relative to parent container's clipping window.
     Vector2 _size;          // Desired size.  Will be clipped.
     Rectangle _bounds;      // The position and size of this control, relative to parent container's bounds, including border and padding, after clipping.
-    Rectangle _clip;        // Clipping window of this control's content.
+    Rectangle _textBounds;  // The position and size of this control's content, before clipping.  Used for text alignment.
+    Rectangle _clip;        // Clipping window of this control's content, after clipping.
     bool _autoWidth;
     bool _autoHeight;
     bool _dirty;
     bool _consumeTouchEvents;
     Theme::Style* _style;
+    typedef std::map<Listener::EventType, std::list<Listener*>*> ListenerMap;
+    ListenerMap* _listeners;
 
 private:
     Control(const Control& copy);

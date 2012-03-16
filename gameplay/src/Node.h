@@ -8,6 +8,7 @@
 #include "Form.h"
 #include "AudioSource.h"
 #include "ParticleEmitter.h"
+#include "PhysicsGhostObject.h"
 #include "PhysicsRigidBody.h"
 #include "BoundingBox.h"
 
@@ -391,6 +392,23 @@ public:
         float restitution = 0.0f, float linearDamping = 0.0f, float angularDamping = 0.0f);
 
     /**
+     * Returns the pointer to this node's physics ghost object or NULL.
+     * 
+     * @return The pointer to this node's physics ghost object or NULL.
+     */
+    PhysicsGhostObject* getGhostObject();
+
+    /**
+     * Sets (or disables) the physics ghost object for this node.
+     * 
+     * Note: This is only allowed for nodes that have a model attached to them.
+     *
+     * @param type The type of physics ghost object to set; to disable the physics ghost
+     *      object, pass PhysicsRigidBody#SHAPE_NONE.
+     */
+    void setGhostObject(PhysicsRigidBody::ShapeType type);
+
+    /**
      * Sets the physics rigid body for this node using the rigid body definition in the given file.
      * 
      * @param filePath The path to the file that contains the rigid body definition.
@@ -473,6 +491,7 @@ protected:
     AudioSource* _audioSource;
     ParticleEmitter* _particleEmitter;
     PhysicsRigidBody* _physicsRigidBody;
+    PhysicsGhostObject* _ghostObject;
     mutable Matrix _world;
     mutable int _dirtyBits;
     bool _notifyHierarchyChanged;
