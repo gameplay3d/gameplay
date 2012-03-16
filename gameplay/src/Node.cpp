@@ -13,7 +13,7 @@ namespace gameplay
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
     _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL), 
-    _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true)
+    _ghostObject(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true)
 {
     if (id)
     {
@@ -46,6 +46,7 @@ Node::~Node()
     SAFE_RELEASE(_particleEmitter);
     SAFE_RELEASE(_form);
     SAFE_DELETE(_physicsRigidBody);
+    SAFE_DELETE(_ghostObject);
 }
 
 Node* Node::create(const char* id)
@@ -778,6 +779,19 @@ void Node::setRigidBody(Properties* properties)
     SAFE_DELETE(_physicsRigidBody);
 
     _physicsRigidBody = PhysicsRigidBody::create(this, properties);
+}
+
+PhysicsGhostObject* Node::getGhostObject()
+{
+    return _ghostObject;
+}
+
+void Node::setGhostObject(PhysicsRigidBody::ShapeType type)
+{
+    SAFE_DELETE(_ghostObject);
+    
+    if (type != PhysicsRigidBody::SHAPE_NONE)
+        _ghostObject = new PhysicsGhostObject(this, type);
 }
 
 }
