@@ -39,6 +39,18 @@ public:
      */
     const char* getText();
 
+    /**
+     * Add a listener to be notified of specific events affecting
+     * this control.  Event types can be OR'ed together.
+     * E.g. To listen to touch-press and touch-release events,
+     * pass <code>Control::Listener::TOUCH | Control::Listener::RELEASE</code>
+     * as the second parameter.
+     *
+     * @param listener The listener to add.
+     * @param eventFlags The events to listen for.
+     */
+    virtual void addListener(Control::Listener* listener, int eventFlags);
+
 protected:
     Label();
     virtual ~Label();
@@ -65,7 +77,7 @@ protected:
      */
     void drawText(const Rectangle& clip);
 
-    std::string _text;  // The text displayed by this label.
+    std::string _text;      // The text displayed by this label.
 
 private:
     Label(const Label& copy);
