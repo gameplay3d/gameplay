@@ -32,13 +32,13 @@
 		5B04C5E114BFE1A200EB0071 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42A3C5DD146C96640091C1E4 /* res */; };
 		5B04C5E214BFE1A200EB0071 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD4B3146D914B00353661 /* icon.png */; };
 		5B04C5EB14BFE25C00EB0071 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5EA14BFE25C00EB0071 /* libgameplay.a */; };
-		5B04C5EC14BFE27400EB0071 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5EA14BFE25C00EB0071 /* libgameplay.a */; };
 		5B2BC7811512527E00D176CD /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7751512523A00D176CD /* CoreMotion.framework */; };
 		5B2BC7821512527E00D176CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7761512523A00D176CD /* Foundation.framework */; };
 		5B2BC7831512527E00D176CD /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7771512523A00D176CD /* OpenAL.framework */; };
 		5B2BC7841512527E00D176CD /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7781512523A00D176CD /* OpenGLES.framework */; };
 		5B2BC7851512527E00D176CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7791512523A00D176CD /* QuartzCore.framework */; };
 		5B2BC7861512527E00D176CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC77A1512523A00D176CD /* UIKit.framework */; };
+		5B928C6C1513E9960095E677 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5EA14BFE25C00EB0071 /* libgameplay.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,7 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B04C5EC14BFE27400EB0071 /* libgameplay.a in Frameworks */,
+				5B928C6C1513E9960095E677 /* libgameplay.a in Frameworks */,
 				42CD0EE7147D92E60000361E /* libbullet.a in Frameworks */,
 				42CD0EE8147D92E60000361E /* libogg.a in Frameworks */,
 				42CD0EE9147D92E60000361E /* libvorbis.a in Frameworks */,
@@ -403,7 +403,6 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				PRODUCT_NAME = "sample00-mesh";
@@ -435,7 +434,6 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				PRODUCT_NAME = "sample00-mesh";
