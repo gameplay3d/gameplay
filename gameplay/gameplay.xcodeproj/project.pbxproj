@@ -308,6 +308,10 @@
 		5B2BC773151251EB00D176CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC76C151251EB00D176CD /* UIKit.framework */; };
 		5BB0823D14C6FEC40019975F /* Mouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB0823C14C6FEC40019975F /* Mouse.h */; };
 		5BB0823E14C6FEC40019975F /* Mouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB0823C14C6FEC40019975F /* Mouse.h */; };
+		5BBE143E1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBE143C1513E400003FB362 /* PhysicsGhostObject.cpp */; };
+		5BBE143F1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBE143C1513E400003FB362 /* PhysicsGhostObject.cpp */; };
+		5BBE14401513E400003FB362 /* PhysicsGhostObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBE143D1513E400003FB362 /* PhysicsGhostObject.h */; };
+		5BBE14411513E400003FB362 /* PhysicsGhostObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBE143D1513E400003FB362 /* PhysicsGhostObject.h */; };
 		5BC4E73F150F843D00CBE1C0 /* AbsoluteLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52634150F822A004C9099 /* AbsoluteLayout.cpp */; };
 		5BC4E740150F843D00CBE1C0 /* AbsoluteLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52635150F822A004C9099 /* AbsoluteLayout.h */; };
 		5BC4E741150F843D00CBE1C0 /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52636150F822A004C9099 /* Button.cpp */; };
@@ -565,6 +569,8 @@
 		5BB0823814C6FEB10019975F /* gameplay-main-android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-android.cpp"; path = "src/gameplay-main-android.cpp"; sourceTree = SOURCE_ROOT; };
 		5BB0823914C6FEB10019975F /* PlatformAndroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformAndroid.cpp; path = src/PlatformAndroid.cpp; sourceTree = SOURCE_ROOT; };
 		5BB0823C14C6FEC40019975F /* Mouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mouse.h; path = src/Mouse.h; sourceTree = SOURCE_ROOT; };
+		5BBE143C1513E400003FB362 /* PhysicsGhostObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsGhostObject.cpp; path = src/PhysicsGhostObject.cpp; sourceTree = SOURCE_ROOT; };
+		5BBE143D1513E400003FB362 /* PhysicsGhostObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsGhostObject.h; path = src/PhysicsGhostObject.h; sourceTree = SOURCE_ROOT; };
 		5BC4E7D4150F8C3C00CBE1C0 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		5BD52634150F822A004C9099 /* AbsoluteLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbsoluteLayout.cpp; path = src/AbsoluteLayout.cpp; sourceTree = SOURCE_ROOT; };
 		5BD52635150F822A004C9099 /* AbsoluteLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AbsoluteLayout.h; path = src/AbsoluteLayout.h; sourceTree = SOURCE_ROOT; };
@@ -791,6 +797,8 @@
 				42CD0E09147D8FF50000361E /* PhysicsGenericConstraint.inl */,
 				42CD0E0A147D8FF50000361E /* PhysicsHingeConstraint.cpp */,
 				42CD0E0B147D8FF50000361E /* PhysicsHingeConstraint.h */,
+				5BBE143C1513E400003FB362 /* PhysicsGhostObject.cpp */,
+				5BBE143D1513E400003FB362 /* PhysicsGhostObject.h */,
 				42CD0E0C147D8FF50000361E /* PhysicsMotionState.cpp */,
 				42CD0E0D147D8FF50000361E /* PhysicsMotionState.h */,
 				42CD0E0E147D8FF50000361E /* PhysicsRigidBody.cpp */,
@@ -1035,6 +1043,7 @@
 				5BD52669150F822A004C9099 /* VerticalLayout.h in Headers */,
 				5BD52671150F8258004C9099 /* PhysicsCharacter.h in Headers */,
 				5BD52675150F8258004C9099 /* PhysicsCollisionObject.h in Headers */,
+				5BBE14401513E400003FB362 /* PhysicsGhostObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1129,6 +1138,7 @@
 				5BC4E754150F843D00CBE1C0 /* TextBox.h in Headers */,
 				5BC4E756150F843D00CBE1C0 /* Theme.h in Headers */,
 				5BC4E758150F843D00CBE1C0 /* VerticalLayout.h in Headers */,
+				5BBE14411513E400003FB362 /* PhysicsGhostObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1281,6 +1291,7 @@
 				5BD52668150F822A004C9099 /* VerticalLayout.cpp in Sources */,
 				5BD5266F150F8258004C9099 /* PhysicsCharacter.cpp in Sources */,
 				5BD52673150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */,
+				5BBE143E1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1369,6 +1380,7 @@
 				5BC4E753150F843D00CBE1C0 /* TextBox.cpp in Sources */,
 				5BC4E755150F843D00CBE1C0 /* Theme.cpp in Sources */,
 				5BC4E757150F843D00CBE1C0 /* VerticalLayout.cpp in Sources */,
+				5BBE143F1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

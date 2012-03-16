@@ -37,8 +37,8 @@
 		5B43D1D114C35F4C008A5D9D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A7146EC5DE00353661 /* libz.dylib */; };
 		5B43D1D814C35F4C008A5D9D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD5B0146EC62A00353661 /* icon.png */; };
 		5B43D1D914C35F4C008A5D9D /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD5B3146EC65F00353661 /* res */; };
-		5B43D1E414C35F71008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1E314C35F71008A5D9D /* libgameplay.a */; };
 		5B43D1E514C36034008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1E314C35F71008A5D9D /* libgameplay.a */; };
+		5BBE144E1513E599003FB362 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BBE144D1513E599003FB362 /* libgameplay.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +68,7 @@
 		5B3439C315125329005F5571 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5B43D1DD14C35F4C008A5D9D /* sample03-character.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B43D1E314C35F71008A5D9D /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
+		5BBE144D1513E599003FB362 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../../Library/Developer/Xcode/DerivedData/gameplay-dgducuinylsxnzaligppcfvwekvh/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B43D1E414C35F71008A5D9D /* libgameplay.a in Frameworks */,
+				5BBE144E1513E599003FB362 /* libgameplay.a in Frameworks */,
 				42CD0EFF147D93560000361E /* libbullet.a in Frameworks */,
 				42CD0F00147D93560000361E /* libogg.a in Frameworks */,
 				42CD0F01147D93560000361E /* libvorbis.a in Frameworks */,
@@ -132,6 +133,7 @@
 		42CCD561146EC4B300353661 = {
 			isa = PBXGroup;
 			children = (
+				5BBE144D1513E599003FB362 /* libgameplay.a */,
 				42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */,
 				42C932E61491A1AC0098216A /* sample03-character-macos.plist */,
 				42CCD5B0146EC62A00353661 /* icon.png */,
@@ -395,6 +397,7 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/gameplay-dgducuinylsxnzaligppcfvwekvh/Build/Products/Debug\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample03-character";
@@ -422,6 +425,7 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/gameplay-dgducuinylsxnzaligppcfvwekvh/Build/Products/Debug\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample03-character";

@@ -38,7 +38,7 @@
 		5B43D1AF14C35A0E008A5D9D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD55D146EC24F00353661 /* icon.png */; };
 		5B43D1B014C35A0E008A5D9D /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD55F146EC27A00353661 /* res */; };
 		5B43D1B814C35A65008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1B714C35A65008A5D9D /* libgameplay.a */; };
-		5B43D1C314C35C18008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1B714C35A65008A5D9D /* libgameplay.a */; };
+		5BBE144B1513E590003FB362 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BBE144A1513E590003FB362 /* libgameplay.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +68,7 @@
 		5B3439B6151252FB005F5571 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5B43D1B414C35A0E008A5D9D /* sample02-spaceship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample02-spaceship.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B43D1B714C35A65008A5D9D /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
+		5BBE144A1513E590003FB362 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../../Library/Developer/Xcode/DerivedData/gameplay-dgducuinylsxnzaligppcfvwekvh/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,10 +76,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B43D1C314C35C18008A5D9D /* libgameplay.a in Frameworks */,
 				42CD0EF3147D932B0000361E /* libbullet.a in Frameworks */,
 				42CD0EF4147D932B0000361E /* libogg.a in Frameworks */,
 				42CD0EF5147D932B0000361E /* libvorbis.a in Frameworks */,
+				5BBE144B1513E590003FB362 /* libgameplay.a in Frameworks */,
 				42CD0EF6147D932B0000361E /* libvorbisenc.a in Frameworks */,
 				42CD0EF7147D932B0000361E /* libvorbisfile.a in Frameworks */,
 				42CCD55A146EC23C00353661 /* libpng.a in Frameworks */,
@@ -132,6 +133,7 @@
 		42CCD50B146EBF3600353661 = {
 			isa = PBXGroup;
 			children = (
+				5BBE144A1513E590003FB362 /* libgameplay.a */,
 				42458CBA14C3AB4D00EFFB61 /* sample02-spaceship-ios.plist */,
 				42C932E31491A18F0098216A /* sample02-spaceship-macos.plist */,
 				42CCD55D146EC24F00353661 /* icon.png */,
@@ -396,6 +398,7 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/gameplay-dgducuinylsxnzaligppcfvwekvh/Build/Products/Debug\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -424,6 +427,7 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/gameplay-dgducuinylsxnzaligppcfvwekvh/Build/Products/Debug\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
