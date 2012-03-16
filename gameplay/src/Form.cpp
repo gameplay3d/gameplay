@@ -134,20 +134,17 @@ namespace gameplay
 
     void Form::setNode(Node* node)
     {
-        // Set this Form up to be 3D by initializing a quad, projection matrix and viewport.
-        if (!_quad)
-        {
-            setQuad(0.0f, 0.0f, _size.x, _size.y);
-        }
-
-        Matrix::createOrthographicOffCenter(0, _size.x, _size.y, 0, 0, 1, &_projectionMatrix);
-        _theme->setProjectionMatrix(_projectionMatrix);
-        _viewport = new Viewport(0, 0, _size.x, _size.y);
-
-        // Connect the new node.
         _node = node;
-        if (_node)
+
+        if (_node && !_quad)
         {
+            // Set this Form up to be 3D by initializing a quad, projection matrix and viewport.
+            setQuad(0.0f, 0.0f, _size.x, _size.y);
+
+            Matrix::createOrthographicOffCenter(0, _size.x, _size.y, 0, 0, 1, &_projectionMatrix);
+            _theme->setProjectionMatrix(_projectionMatrix);
+            _viewport = new Viewport(0, 0, _size.x, _size.y);
+            
             _node->setModel(_quad);
         }
     }

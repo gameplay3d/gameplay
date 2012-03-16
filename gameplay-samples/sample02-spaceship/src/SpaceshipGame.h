@@ -85,9 +85,9 @@ private:
     void resetGame();
 
     /**
-     * Draw the splash screen
+     * Draws the default "gameplay powered" loading screen.
      */
-    void drawSplash(void* cookie);
+    void drawLoadScreen(void* param);
 
     /**
      * Draws the scene

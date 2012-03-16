@@ -26,20 +26,6 @@ class Button : public Label
 {
     friend class Container;
 
-    class Callback;
-
-public:
-    /**
-     * Set a callback method on this button.  The callback will be triggered when the button is
-     * clicked -- i.e. consecutive TOUCH_PRESS and TOUCH_RELEASE events that both fall within
-     * the bounds of the button.  
-     *
-     * @param instance The object to call the method on.
-     * @param callbackMethod The method to call.
-     */
-    template <class ClassType>
-    void setCallback(ClassType* instance, void (ClassType::*callbackMethod)(Control*));
-
 protected:
     /**
      * Create a button with a given style and properties.
@@ -68,54 +54,9 @@ protected:
     Button();
     virtual ~Button();
 
-    Callback* _callback;    // The callback method pointer interface.
-
 private:
     Button(const Button& copy);
-
-    /**
-     * Abstract callback interface.
-     */
-    class Callback
-    {
-    public:
-        virtual ~Callback() { }
-        virtual void trigger(Control* button) = 0;
-    };
-
-    /**
-     * Implementation of the callback interface for a specific class.
-     */
-    template <class ClassType>
-    class CallbackImpl : public Callback
-    {
-        typedef void (ClassType::*CallbackMethod)(Control*);
-    public:
-        CallbackImpl(ClassType* instance, CallbackMethod method);
-        void trigger(Control* control);
-    private:
-        ClassType* _instance;
-        CallbackMethod _method;
-    };
 };
-
-template <class ClassType>
-Button::CallbackImpl<ClassType>::CallbackImpl(ClassType* instance, CallbackMethod method)
-    : _instance(instance), _method(method)
-{
-}
-
-template <class ClassType>
-void Button::setCallback(ClassType* instance, void (ClassType::*callbackMethod)(Control*))
-{
-    _callback = new CallbackImpl<ClassType>(instance, callbackMethod);
-}
-
-template <class ClassType>
-void Button::CallbackImpl<ClassType>::trigger(Control* control)
-{
-    (_instance->*_method)(control);
-}
 
 }
 

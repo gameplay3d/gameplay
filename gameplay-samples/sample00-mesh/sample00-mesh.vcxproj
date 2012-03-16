@@ -171,6 +171,7 @@
     <None Include="res\duck.dae" />
     <None Include="res\duck.gpb" />
     <None Include="res\duck.material" />
+    <None Include="res\gameplay_loading.png" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshGame.cpp" />

@@ -5,6 +5,8 @@
 
 namespace gameplay
 {
+    static AbsoluteLayout* __instance;
+
     AbsoluteLayout::AbsoluteLayout()
     {
     }
@@ -19,8 +21,16 @@ namespace gameplay
 
     AbsoluteLayout* AbsoluteLayout::create()
     {
-        AbsoluteLayout* al = new AbsoluteLayout();
-        return al;
+        if (!__instance)
+        {
+            __instance = new AbsoluteLayout();
+        }
+        else
+        {
+            __instance->addRef();
+        }
+
+        return __instance;
     }
 
     Layout::Type AbsoluteLayout::getType()

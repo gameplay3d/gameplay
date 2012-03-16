@@ -53,6 +53,18 @@ public:
      */
     const Vector2& getIconSize() const;
 
+    /**
+     * Add a listener to be notified of specific events affecting
+     * this control.  Event types can be OR'ed together.
+     * E.g. To listen to touch-press and touch-release events,
+     * pass <code>Control::Listener::TOUCH | Control::Listener::RELEASE</code>
+     * as the second parameter.
+     *
+     * @param listener The listener to add.
+     * @param eventFlags The events to listen for.
+     */
+    virtual void addListener(Control::Listener* listener, int eventFlags);
+
 protected:
     RadioButton();
     virtual ~RadioButton();
@@ -72,8 +84,6 @@ protected:
     void update(const Rectangle& clip);
 
     void drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    void drawText(const Rectangle& clip);
 
     // Clear the _selected flag of all radio buttons in the given group.
     static void clearSelected(const std::string& groupId);

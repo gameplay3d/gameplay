@@ -64,6 +64,17 @@ void Slider::setValue(float value)
     _value = MATH_CLAMP(value, _min, _max);
 }
 
+void Slider::addListener(Control::Listener* listener, int eventFlags)
+{
+    if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
+    {
+        assert("TEXT_CHANGED event is not applicable to Slider.");
+        eventFlags &= ~Listener::TEXT_CHANGED;
+    }
+
+    Control::addListener(listener, eventFlags);
+}
+
 bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!isEnabled())
@@ -75,7 +86,6 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     {
     case Touch::TOUCH_PRESS:
         _state = Control::ACTIVE;
-        _dirty = true;
         // Fall through to calculate new value.
 
     case Touch::TOUCH_MOVE:
@@ -121,16 +131,16 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
             }
 
             // Call the callback if our value changed.
-            if (_callback && _value != oldValue)
+            if (_value != oldValue)
             {
-                _callback->trigger(this);
+                notifyListeners(Listener::VALUE_CHANGED);
             }
 
             _dirty = true;
         }
     }
 
-    return _consumeTouchEvents;
+    return Control::touchEvent(evt, x, y, contactIndex);
 }
 
 void Slider::drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip)

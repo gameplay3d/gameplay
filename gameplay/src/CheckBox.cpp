@@ -50,6 +50,17 @@ const Vector2& CheckBox::getIconSize() const
     return _iconSize;
 }
 
+void CheckBox::addListener(Control::Listener* listener, int eventFlags)
+{
+    if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
+    {
+        assert("TEXT_CHANGED event is not applicable to CheckBox.");
+        eventFlags &= ~Listener::TEXT_CHANGED;
+    }
+
+    Control::addListener(listener, eventFlags);
+}
+
 bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!isEnabled())
@@ -67,6 +78,7 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
                     y > 0 && y <= _bounds.height)
                 {
                     _checked = !_checked;
+                    notifyListeners(Listener::VALUE_CHANGED);
                 }
             }
         }
@@ -89,8 +101,8 @@ void CheckBox::update(const Rectangle& clip)
     }
     float iconWidth = size.x;
 
-    _clip.x += iconWidth;
-    _clip.width -= iconWidth;
+    _textBounds.x += iconWidth;
+    _textBounds.width -= iconWidth;
 }
 
 void CheckBox::drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip)
@@ -123,28 +135,14 @@ void CheckBox::drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip)
         if (_checked)
         {
             const Theme::UVs on = icon->getOnUVs();
-            spriteBatch->draw(pos.x, pos.y, size.x, size.y, on.u1, on.v1, on.u2, on.v2, color);
+            spriteBatch->draw(pos.x, pos.y, size.x, size.y, on.u1, on.v1, on.u2, on.v2, color, _clip);
         }
         else
         {
             const Theme::UVs off = icon->getOffUVs();
-            spriteBatch->draw(pos.x, pos.y, size.x, size.y, off.u1, off.v1, off.u2, off.v2, color);
+            spriteBatch->draw(pos.x, pos.y, size.x, size.y, off.u1, off.v1, off.u2, off.v2, color, _clip);
         }
     }
-}
-
-void CheckBox::drawText(const Rectangle& clip)
-{
-    // TODO: Batch all labels that use the same font.
-    Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-    Font* font = overlay->getFont();
-    
-    // Draw the text.
-    font->begin();
-    font->drawText(_text.c_str(), _clip, overlay->getTextColor(), overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
-    font->end();
-
-    _dirty = false;
 }
 
 }
