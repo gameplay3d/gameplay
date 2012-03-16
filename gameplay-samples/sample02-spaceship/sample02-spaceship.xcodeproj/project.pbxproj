@@ -38,7 +38,7 @@
 		5B43D1AF14C35A0E008A5D9D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD55D146EC24F00353661 /* icon.png */; };
 		5B43D1B014C35A0E008A5D9D /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD55F146EC27A00353661 /* res */; };
 		5B43D1B814C35A65008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1B714C35A65008A5D9D /* libgameplay.a */; };
-		5B43D1C314C35C18008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1B714C35A65008A5D9D /* libgameplay.a */; };
+		5B928C6E1513E9AD0095E677 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1B714C35A65008A5D9D /* libgameplay.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,7 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B43D1C314C35C18008A5D9D /* libgameplay.a in Frameworks */,
+				5B928C6E1513E9AD0095E677 /* libgameplay.a in Frameworks */,
 				42CD0EF3147D932B0000361E /* libbullet.a in Frameworks */,
 				42CD0EF4147D932B0000361E /* libogg.a in Frameworks */,
 				42CD0EF5147D932B0000361E /* libvorbis.a in Frameworks */,
@@ -396,6 +396,8 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/gameplay-dgducuinylsxnzaligppcfvwekvh/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -424,6 +426,8 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/gameplay-dgducuinylsxnzaligppcfvwekvh/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
