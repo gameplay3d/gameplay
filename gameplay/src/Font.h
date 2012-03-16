@@ -141,15 +141,16 @@ public:
      * Clips text outside the viewport.  Optionally wraps text to fit within the width of the viewport.
      *
      * @param text The text to draw.
-     * @param clip The viewport area to draw within.  Text will be clipped outside this rectangle.
+     * @param area The viewport area to draw within.  Text will be clipped outside this rectangle.
      * @param color The color of text.
      * @param size The size to draw text (0 for default size).
      * @param justify Justification of text within the viewport.
      * @param wrap Wraps text to fit within the width of the viewport if true.
-     * @param rightToLeft
+     * @param rightToLeft Whether to draw text from right to left.
+     * @param clip A region to clip text within after applying justification to the viewport area.
      */
-    void drawText(const char* text, const Rectangle& clip, const Vector4& color,
-        unsigned int size = 0, Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
+    void drawText(const char* text, const Rectangle& area, const Vector4& color,
+        unsigned int size = 0, Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false, const Rectangle* clip = NULL);
 
     /**
      * Measures a string's width and height without alignment, wrapping or clipping.

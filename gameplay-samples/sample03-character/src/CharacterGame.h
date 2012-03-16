@@ -62,6 +62,11 @@ protected:
     void render(long elapsedTime);
 
 private:
+    
+    /**
+     * Draws the default "gameplay powered" loading screen.
+     */
+    void drawLoadScreen(void* param);
 
     bool initScene(Node* node, void* cookie);
     bool drawScene(Node* node, void* cookie);

@@ -51,6 +51,18 @@ public:
      */
     const Vector2& getIconSize() const;
 
+    /**
+     * Add a listener to be notified of specific events affecting
+     * this control.  Event types can be OR'ed together.
+     * E.g. To listen to touch-press and touch-release events,
+     * pass <code>Control::Listener::TOUCH | Control::Listener::RELEASE</code>
+     * as the second parameter.
+     *
+     * @param listener The listener to add.
+     * @param eventFlags The events to listen for.
+     */
+    virtual void addListener(Control::Listener* listener, int eventFlags);
+
 protected:
     CheckBox();
     ~CheckBox();
@@ -94,13 +106,6 @@ protected:
      * @param position The container position this control is relative to.
      */
     void drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    /**
-     * Draw this control's text.
-     *
-     * @param position The container position this control is relative to.
-     */
-    void drawText(const Rectangle& clip);
 
     bool _checked;      // Whether this checkbox is currently checked.
     Vector2 _iconSize;  // The size to draw the checkbox icon, if different from its size in the texture.

@@ -159,12 +159,12 @@
     <None Include="res\airstrip28.gpb" />
     <None Include="res\background.ogg" />
     <None Include="res\background.png" />
+    <None Include="res\gameplay_loading.png" />
     <None Include="res\propulsion_glow.png" />
     <None Include="res\spaceship.dae" />
     <None Include="res\spaceship.gpb" />
     <None Include="res\spaceship.mb" />
     <None Include="res\spaceship.wav" />
-    <None Include="res\splash.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SpaceshipGame.h" />
