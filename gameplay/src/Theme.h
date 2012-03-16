@@ -1,7 +1,3 @@
-/*
- * Theme.h
- */
-
 #ifndef THEME_H_
 #define THEME_H_
 
@@ -19,10 +15,107 @@ static const unsigned int MAX_OVERLAYS = 4;
 static const unsigned int MAX_OVERLAY_REGIONS = 9;
 
 /**
- * This class represents the appearance of an UI form described in a 
- * theme file. A theme file, at its simplest, contains a source texture atlas,
- * the texture coordinates of each control in its different mode. Once loaded,
- * the appearance properties can be retrieved using a style id and set on a UI control.
+ * A theme is created and stored as part of a form and represents its appearance.
+ * Once loaded, the appearance properties can be retrieved from their style IDs and set on other
+ * UI controls.  A Theme has one property, 'texture', which points to an image containing
+ * all the Icon, Cursor, Slider, and Container sprites used by the theme.  Each set of sprites within
+ * the texture is described in its own namespace.  The rest of the Theme consists of Style namespaces.
+ * A Style describes the border, margin, and padding of a Control, what icons and cursors (if any) are
+ * associated with a Control, and Font properties to apply to a Control's text.
+ *
+ * Below is an explanation of the properties that can be set within themes:
+ *
+ * theme
+ * {
+ *    texture = <Path to texture>
+ *
+ *    // Describes the images used for CheckBox and RadioButton icons.
+ *    icon <iconID>
+ *    {
+ *        size            =   <width, height>     // Size of this icon.
+ *        offPosition     =   <x, y>              // Position of the unchecked / unselected image.
+ *        onPosition      =   <x, y>              // Position of the checked / selected image.
+ *        color           =   <#ffffffff>         // Tint to apply to icon.
+ *    }
+ *   
+ *    cursor <cursorID>
+ *    {
+ *        region  =   <x, y, width, height>   // Region within the texture of cursor sprite.
+ *        color   =   <#ffffffff>             // Tint to apply to cursor.
+ *    }
+ *   
+ *    slider <sliderID>
+ *    {
+ *        minCapRegion    =   <x, y, width, height>   // Left / bottom slider cap.
+ *        maxCapRegion    =   <x, y, width, height>   // Right / top slider cap.
+ *        markerRegion    =   <x, y, width, height>   // Shows the slider's current position.
+ *        trackRegion     =   <x, y, width, height>   // Track the marker slides along.
+ *        color           =   <#ffffffff>             // Tint to apply to slider sprites.
+ *    }
+ *   
+ *    // Defines the border and background of a Control.
+ *    container <containerID>
+ *    {
+ *        // The corners and edges of the given region will be used as border sprites.
+ *        border
+ *        {
+ *            top     =   <int>   // Height of top border, top corners.
+ *            bottom  =   <int>   // Height of bottom border, bottom corners.
+ *            left    =   <int>   // Width of left border, left corners.
+ *            right   =   <int>   // Width of right border, right corners.
+ *        }
+ *       
+ *        region  =   <x, y, width, height>   // Total container region including entire border.
+ *        color   =   <#ffffffff>             // Tint to apply to container sprites.
+ *    }
+ *   
+ *    style <styleID>
+ *    {
+ *        // Layouts may make use of a style's margin to put space between adjacent controls.
+ *        margin
+ *        {
+ *            top     =   <int>
+ *            bottom  =   <int>
+ *            left    =   <int>
+ *            right   =   <int>        
+ *        }
+ *       
+ *        // Padding is the space between a control's border and its content.
+ *        padding
+ *        {
+ *            top     =   <int>
+ *            bottom  =   <int>
+ *            left    =   <int>
+ *            right   =   <int>        
+ *        }
+ *       
+ *        // This overlay is used when a control is enabled but not active or focused.
+ *        normal
+ *        {
+ *            container   =   <containerID>               // Container to use for border and background sprites.
+ *            checkBox    =   <iconID>                    // Icon to use for checkbox sprites.
+ *            radioButton =   <iconID>                    // Icon to use for radioButton sprites.
+ *            slider      =   <sliderID>                  // Slider to use for slider sprites.
+ *            mouseCursor =   <cursorID>                  // Cursor to use when the mouse is over this control.
+ *            textCursor  =   <cursorID>                  // Cursor to use within a textBox.
+ *            font        =   <Path to font>              // Font to use for rendering text.
+ *            fontSize    =   <int>                       // Size of text.
+ *            textColor   =   <#ffffffff>                 // Color of text.
+ *            alignment   =   <Text alignment constant>   // Member of Font::Justify enum.
+ *            rightToLeft =   <bool>                      // Whether to draw text from right to left.
+ *        }
+ *       
+ *        // This overlay is used when the control is in focus.
+ *        // If not specified, the 'normal' overlay will be used.
+ *        focus{}
+ *       
+ *        // This overlay is used when the control is active.
+ *        // (Touch or mouse is down within the control.)
+ *        // If not specified, the 'normal' overlay will be used.
+ *        active{}
+ *    }
+ * }
+ *
  */
 class Theme: public Ref
 {
@@ -58,6 +151,9 @@ private:
     SpriteBatch* getSpriteBatch() const;
 
 public:
+    /**
+     * Struct representing the UV coordinates of a rectangular image.
+     */
     typedef struct UVs
     {
         float u1;
@@ -66,6 +162,10 @@ public:
         float v2;
     } UVs;
 
+    /**
+     * Struct representing margin, border, and padding areas by
+     * the width or height of each side.
+     */
     typedef struct padding
     {
         float top;
@@ -76,15 +176,46 @@ public:
         padding() : top(0), bottom(0), left(0), right(0) {}
     } Margin, Border, Padding;
 
+    /**
+     * An icon with two images representing "on" and "off" states.
+     */
     class Icon : public Ref
     {
         friend class Theme;
 
     public:
+        /**
+         * Get this icon's ID.
+         *
+         * @return This icon's ID.
+         */
         const char* getId() const;
+
+        /**
+         * Get this icon's size.
+         *
+         * @return This icon's size.
+         */
         const Vector2& getSize() const;
+        /**
+         * Get this icon's color.
+         *
+         * @return This icon's color.
+         */
         const Vector4& getColor() const;
+
+        /**
+         * Get the UVs for this icon's off-state image.
+         *
+         * @return The UVs for this icon's off-state image.
+         */
         const Theme::UVs& getOffUVs() const;
+
+        /**
+         * Get the UVs for this icon's on-state image.
+         *
+         * @return The UVs for this icon's on-state image.
+         */
         const Theme::UVs& getOnUVs() const;
 
     private:
@@ -102,20 +233,83 @@ public:
         UVs _on;
     };
 
+    /**
+     * A set of four icons that make up a slider:
+     * two end-caps, a track, and a marker to be placed along the track.
+     */
     class SliderIcon : public Ref
     {
         friend class Theme;
 
     public:
+        /**
+         * Get this slider icon's ID.
+         *
+         * @return This slider icon's ID.
+         */
         const char* getId() const;
+
+        /**
+         * Get the UVs for this slider's min-cap image.
+         *
+         * @return The UVs for this slider's min-cap image.
+         */
         const Theme::UVs& getMinCapUVs() const;
+
+        /**
+         * Get the UVs for this slider's max-cap image.
+         *
+         * @return The UVs for this slider's max-cap image.
+         */
         const Theme::UVs& getMaxCapUVs() const;
+
+        /**
+         * Get the UVs for this slider's marker image.
+         *
+         * @return The UVs for this slider's marker image.
+         */
         const Theme::UVs& getMarkerUVs() const;
+
+        /**
+         * Get the UVs for this slider's track image.
+         *
+         * @return The UVs for this slider's track image.
+         */
         const Theme::UVs& getTrackUVs() const;
+
+        /**
+         * Get this slider's min-cap size.
+         *
+         * @return This slider's min-cap size.
+         */
         const Vector2& getMinCapSize() const;
+
+        /**
+         * Get this slider's max-cap size.
+         *
+         * @return This slider's max-cap size.
+         */
         const Vector2& getMaxCapSize() const;
+
+        /**
+         * Get this slider's marker size.
+         *
+         * @return This slider's marker size.
+         */
         const Vector2& getMarkerSize() const;
+
+        /**
+         * Get this slider's track size.
+         *
+         * @return This slider's track size.
+         */
         const Vector2& getTrackSize() const;
+
+        /**
+         * Get this slider's color.
+         *
+         * @return This slider's color.
+         */
         const Vector4& getColor() const;
 
     private:
@@ -149,16 +343,30 @@ public:
     public:
        /**
         * Returns the Id of this Cursor.
+        *
+        * @return This cursor's ID.
         */
         const char* getId() const;
 
        /**
         * Gets a UV coordinates computed from the texture region.
+        *
+        * @return This cursor's UVs.
         */
         const Theme::UVs& getUVs() const;
 
+        /**
+         * Gets this cursor's size.
+         *
+         * @return This cursor's size.
+         */
         const Vector2& getSize() const;
 
+        /**
+         * Gets this cursor's color.
+         *
+         * @return This cursor's color.
+         */
         const Vector4& getColor() const;
     
     private:
@@ -174,6 +382,9 @@ public:
         Vector4 _color;
     };
 
+    /**
+     * A container region defines the border and background of a control.
+     */
     class ContainerRegion : public Ref
     {
         friend class Theme;
@@ -186,19 +397,33 @@ public:
             BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT
         };
 
-        const char* getId() const;
-        const Theme::Border& getBorder() const;
-        const Theme::UVs& getUVs(ContainerArea area) const;
-        const Vector4& getColor() const;
-        
         /**
-         * Set the size of this ContainerRegion's border.
+         * Gets this container area's ID.
          *
-         * When auto-size is set on width and/or height:
-         * Space added to the calculated (tightly bound) width and height.
-         *
+         * @return This container area's ID.
          */
-        //void setBorder(float top, float bottom, float left, float right);
+        const char* getId() const;
+
+        /**
+         * Gets this container area's border.
+         *
+         * @return This container area's border.
+         */
+        const Theme::Border& getBorder() const;
+
+        /**
+         * Gets this container area's UVs.
+         *
+         * @return This container area's UVs.
+         */
+        const Theme::UVs& getUVs(ContainerArea area) const;
+
+        /**
+         * Gets this container area's color.
+         *
+         * @return This container area's color.
+         */
+        const Vector4& getColor() const;
 
     private:
         ContainerRegion(const Texture& texture, const Rectangle& region, const Theme::Border& border, const Vector4& color);
@@ -214,7 +439,10 @@ public:
     };
     
     /**
-     * This class represents the apperance of a control.
+     * This class represents the appearance of a control.  A style can have padding and margin values,
+     * as well as overlays for each of the control's states.  Each overlay in turn can reference
+     * the above classes to determine the border, background, cursor, and icon settings to use for
+     * a particular state.
      */
     class Style
     {

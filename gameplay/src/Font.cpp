@@ -289,7 +289,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
     }
 }
 
-void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify, bool wrap, bool rightToLeft)
+void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify, bool wrap, bool rightToLeft, const Rectangle* clip)
 {
     if (size == 0)
         size = _size;
@@ -577,7 +577,14 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                     // Draw this character.
                     if (draw)
                     {
-                        _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
+                        if (clip)
+                        {
+                            _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color, *clip);
+                        }
+                        else
+                        {
+                            _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
+                        }
                     }
                 }
                 xPos += g.width*scale + ((float)size*0.125f);

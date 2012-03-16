@@ -3,6 +3,8 @@
 
 namespace gameplay
 {
+    static VerticalLayout* __instance;
+
     VerticalLayout::VerticalLayout() : _bottomToTop(false)
     {
     }
@@ -17,8 +19,16 @@ namespace gameplay
 
     VerticalLayout* VerticalLayout::create()
     {
-        VerticalLayout* al = new VerticalLayout();
-        return al;
+        if (!__instance)
+        {
+            __instance = new VerticalLayout();
+        }
+        else
+        {
+            __instance->addRef();
+        }
+
+        return __instance;
     }
 
     void VerticalLayout::setBottomToTop(bool bottomToTop)
