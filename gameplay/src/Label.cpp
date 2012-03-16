@@ -38,13 +38,13 @@ namespace gameplay
     {
         if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
         {
-            WARN("TEXT_CHANGED event is not applicable to this control.");
+            assert("TEXT_CHANGED event is not applicable to this control.");
             eventFlags &= ~Listener::TEXT_CHANGED;
         }
 
         if ((eventFlags & Listener::VALUE_CHANGED) == Listener::VALUE_CHANGED)
         {
-            WARN("VALUE_CHANGED event is not applicable to this control.");
+            assert("VALUE_CHANGED event is not applicable to this control.");
             eventFlags &= ~Listener::VALUE_CHANGED;
         }
 

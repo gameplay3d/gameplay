@@ -69,7 +69,7 @@ void RadioButton::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
     {
-        WARN("TEXT_CHANGED event is not applicable to RadioButton.");
+        assert("TEXT_CHANGED event is not applicable to RadioButton.");
         eventFlags &= ~Listener::TEXT_CHANGED;
     }
 
@@ -96,7 +96,7 @@ bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
                     {
                         RadioButton::clearSelected(_groupId);
                         _selected = true;
-                        alertListeners(Listener::VALUE_CHANGED);
+                        notifyListeners(Listener::VALUE_CHANGED);
                     }
                 }
             }
