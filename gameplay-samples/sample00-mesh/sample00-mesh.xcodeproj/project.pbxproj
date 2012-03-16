@@ -353,7 +353,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				SDKROOT = "";
+				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				VALID_ARCHS = "armv7 i386 x86_64 armv6";
@@ -376,7 +376,7 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				SDKROOT = "";
+				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				VALID_ARCHS = "armv7 i386 x86_64 armv6";
