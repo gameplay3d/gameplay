@@ -349,7 +349,7 @@
 		42475CDD147208A000610A6A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 42475CE0147208A000610A6A /* Build configuration list for PBXProject "gameplay-encoder" */;
 			compatibilityVersion = "Xcode 3.2";
