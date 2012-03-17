@@ -240,7 +240,7 @@
 		42CCD485146D80DA00353661 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 42CCD488146D80DA00353661 /* Build configuration list for PBXProject "sample01-longboard" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -398,7 +398,6 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample01-longboard";
@@ -429,7 +428,6 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample01-longboard";
