@@ -403,7 +403,6 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				PRODUCT_NAME = "sample00-mesh";
 				SHARED_PRECOMPS_DIR = "";
@@ -434,7 +433,6 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				PRODUCT_NAME = "sample00-mesh";
 				SHARED_PRECOMPS_DIR = "";
