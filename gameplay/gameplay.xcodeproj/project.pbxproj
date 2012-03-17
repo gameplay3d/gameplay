@@ -1434,6 +1434,7 @@
 					"../external-deps/libpng/include",
 					"../external-deps/bullet/include",
 					"../external-deps/oggvorbis/include",
+					./gameplay,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1475,6 +1476,7 @@
 					"../external-deps/libpng/include",
 					"../external-deps/bullet/include",
 					"../external-deps/oggvorbis/include",
+					./gameplay,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
