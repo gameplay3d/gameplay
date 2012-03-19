@@ -30,7 +30,12 @@ public:
         /**
          * PhysicsCharacter type.
          */
-        CHARACTER
+        CHARACTER,
+
+        /** 
+         * PhysicsGhostObject type.
+         */
+        GHOST_OBJECT
     };
 
     /** 
