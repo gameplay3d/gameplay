@@ -240,7 +240,7 @@
 		4217005514697FF100A45C02 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 4217005814697FF100A45C02 /* Build configuration list for PBXProject "sample00-mesh" */;
 			compatibilityVersion = "Xcode 3.2";

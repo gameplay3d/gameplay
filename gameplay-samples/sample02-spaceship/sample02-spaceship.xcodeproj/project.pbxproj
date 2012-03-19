@@ -240,7 +240,7 @@
 		42CCD50D146EBF3600353661 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 42CCD510146EBF3600353661 /* Build configuration list for PBXProject "sample02-spaceship" */;
 			compatibilityVersion = "Xcode 3.2";
