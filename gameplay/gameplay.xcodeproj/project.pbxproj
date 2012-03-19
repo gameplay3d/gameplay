@@ -1185,7 +1185,7 @@
 		4234D98C14686BB6003031B3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 4234D98F14686BB6003031B3 /* Build configuration list for PBXProject "gameplay" */;
 			compatibilityVersion = "Xcode 3.2";
