@@ -448,7 +448,6 @@
 					"\"GAMEPLAY_PATH/external-deps/oggvorbis/lib/macos\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = "";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -475,7 +474,6 @@
 					"\"GAMEPLAY_PATH/external-deps/oggvorbis/lib/macos\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = "";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
