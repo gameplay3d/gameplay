@@ -65,6 +65,17 @@ const Vector2& RadioButton::getIconSize() const
     return _iconSize;
 }
 
+void RadioButton::addListener(Control::Listener* listener, int eventFlags)
+{
+    if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
+    {
+        assert("TEXT_CHANGED event is not applicable to RadioButton.");
+        eventFlags &= ~Listener::TEXT_CHANGED;
+    }
+
+    Control::addListener(listener, eventFlags);
+}
+
 bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!isEnabled())
@@ -81,8 +92,12 @@ bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
                 if (x > 0 && x <= _bounds.width &&
                     y > 0 && y <= _bounds.height)
                 {
-                    RadioButton::clearSelected(_groupId);
-                    _selected = true;
+                    if (!_selected)
+                    {
+                        RadioButton::clearSelected(_groupId);
+                        _selected = true;
+                        notifyListeners(Listener::VALUE_CHANGED);
+                    }
                 }
             }
         }
@@ -158,22 +173,8 @@ void RadioButton::update(const Rectangle& clip)
     }
     float iconWidth = size.x;
 
-    _clip.x += iconWidth;
-    _clip.width -= iconWidth;
-}
-
-void RadioButton::drawText(const Rectangle& clip)
-{
-    // TODO: Batch all labels that use the same font.
-    Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-    Font* font = overlay->getFont();
-    
-    // Draw the text.
-    font->begin();
-    font->drawText(_text.c_str(), _clip, overlay->getTextColor(), overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
-    font->end();
-
-    _dirty = false;
+    _textBounds.x += iconWidth;
+    _textBounds.width -= iconWidth;
 }
 
 }

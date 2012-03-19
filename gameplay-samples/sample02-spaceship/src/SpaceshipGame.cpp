@@ -73,7 +73,8 @@ SpaceshipGame::~SpaceshipGame()
 void SpaceshipGame::initialize()
 {
     // TODO: Not working on iOS
-    renderOnce(this, &SpaceshipGame::drawSplash, 0);
+    // Draw loading screen.
+    renderOnce(this, &SpaceshipGame::drawLoadScreen, NULL);
 
     // Create our render state block that will be reused across all materials
     _stateBlock = RenderState::StateBlock::create();
@@ -463,12 +464,12 @@ void SpaceshipGame::render(long elapsedTime)
     drawText();
 }
 
-void SpaceshipGame::drawSplash(void* coookie)
+void SpaceshipGame::drawLoadScreen(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
-    SpriteBatch* batch = SpriteBatch::create("res/splash.png");
+    SpriteBatch* batch = SpriteBatch::create("res/gameplay_loading.png");
     batch->begin();
-    batch->draw(Rectangle(0, 0, this->getWidth(), this->getHeight()), Rectangle(0, 0, 1024, 600), Vector4::one());
+    batch->draw(Rectangle(0, 0, this->getWidth(), this->getHeight()), Rectangle(0, 0, 1920, 1080), Vector4::one());
     batch->end();
     SAFE_DELETE(batch);
 }

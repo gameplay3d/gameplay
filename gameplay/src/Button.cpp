@@ -3,13 +3,12 @@
 
 namespace gameplay
 {
-    Button::Button() : _callback(NULL)
+    Button::Button()
     {
     }
 
     Button::~Button()
     {
-        SAFE_DELETE(_callback);
     }
 
     Button* Button::create(Theme::Style* style, Properties* properties)
@@ -32,23 +31,13 @@ namespace gameplay
         case Touch::TOUCH_PRESS:
             _state = Control::ACTIVE;
             _dirty = true;
-            return _consumeTouchEvents;
+            break;
         case Touch::TOUCH_RELEASE:
-            if (_callback &&
-                x > 0 && x <= _bounds.width &&
-                y > 0 && y <= _bounds.height)
-            {
-                // Button-clicked callback.
-                _callback->trigger(this);
-                setState(Control::NORMAL);
-                _dirty = true;
-                return _consumeTouchEvents;
-            }
             _dirty = true;
             setState(Control::NORMAL);
             break;
         }
 
-        return _consumeTouchEvents;
+        return Control::touchEvent(evt, x, y, contactIndex);
     }
 }
