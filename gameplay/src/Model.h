@@ -116,7 +116,7 @@ public:
      *
      * @return True if a custom MeshPart material is set for the specified index, false otherwise.
      */
-    bool hasPartMaterial(unsigned int partIndex) const;
+    bool hasMaterial(unsigned int partIndex) const;
 
     /**
      * Returns the MeshSkin.

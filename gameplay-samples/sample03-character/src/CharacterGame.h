@@ -36,8 +36,8 @@ public:
      * @see PhysicsCollisionObject::CollisionListener::collisionEvent
      */
     void collisionEvent(PhysicsCollisionObject::CollisionListener::EventType type,
-        const PhysicsCollisionObject::CollisionPair& collisionPair,
-        const Vector3& contactPointA, const Vector3& contactPointB);
+                        const PhysicsCollisionObject::CollisionPair& collisionPair,
+                        const Vector3& contactPointA, const Vector3& contactPointB);
 
 protected:
 
@@ -67,7 +67,8 @@ private:
      * Draws the default "gameplay powered" loading screen.
      */
     void drawLoadScreen(void* param);
-
+    
+    void initMaterial(Scene* scene, Node* node, Material* material);
     bool initScene(Node* node, void* cookie);
     bool drawScene(Node* node, void* cookie);
     void loadAnimationClips();
