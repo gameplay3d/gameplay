@@ -190,9 +190,9 @@ Material* Model::setMaterial(const char* materialPath, int partIndex)
     return material;
 }
 
-bool Model::hasPartMaterial(unsigned int partIndex) const
+bool Model::hasMaterial(unsigned int partIndex) const
 {
-    return (partIndex >= 0 && partIndex < _partCount && _partMaterials && _partMaterials[partIndex]);
+    return (partIndex < _partCount && _partMaterials && _partMaterials[partIndex]);
 }
 
 MeshSkin* Model::getSkin()
