@@ -46,7 +46,7 @@ void CharacterGame::initialize()
     loadAnimationClips();
 }
 
-void initMaterial(Scene* scene, Node* node, Material* material)
+void CharacterGame::initMaterial(Scene* scene, Node* node, Material* material)
 {
     if (material)
     {
@@ -69,7 +69,7 @@ bool CharacterGame::initScene(Node* node, void* cookie)
         }
         for (unsigned int i = 0; i < model->getMeshPartCount(); ++i)
         {
-            if (model->hasPartMaterial(i))
+            if (model->hasMaterial(i))
             {
                 initMaterial(_scene, node, model->getMaterial(i));
             }
@@ -303,7 +303,7 @@ void CharacterGame::fixCamera(long elapsedTime)
             if (cameraRay.getOrigin().distanceSquared(focalPoint) < (RAY_STEP_SIZE*RAY_STEP_SIZE))
                 break;
         }
-        while (cameraOcclusion = Game::getInstance()->getPhysicsController()->rayTest(cameraRay, CAMERA_FOCUS_RANGE, &collisionPoint));
+        while ((cameraOcclusion = Game::getInstance()->getPhysicsController()->rayTest(cameraRay, CAMERA_FOCUS_RANGE, &collisionPoint)));
     }
 
     if (cameraCollision)
