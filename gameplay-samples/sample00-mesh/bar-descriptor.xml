@@ -35,11 +35,11 @@
     <!-- <copyright></copyright> -->
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
-    <author>Research In Motion</author>
+    <author>RIM Canada</author>
     <platformVersion>2.0.0.7971</platformVersion>
     
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
-    <!-- <authorId>ABC1234YjsnUk235h</authorId> -->
+    <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
    
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>
