@@ -64,9 +64,9 @@ protected:
 private:
     
     /**
-     * Draws the default "gameplay powered" loading screen.
+     * Draws the default "gameplay powered" splash screen.
      */
-    void drawLoadScreen(void* param);
+    void drawSplash(void* param);
     
     void initMaterial(Scene* scene, Node* node, Material* material);
     bool initScene(Node* node, void* cookie);

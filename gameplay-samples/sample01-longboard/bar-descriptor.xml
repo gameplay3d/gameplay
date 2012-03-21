@@ -53,6 +53,7 @@
  
     <asset path="icon.png">icon.png</asset>
     <asset path="res">res</asset>
+    <asset path="${workspace_loc:/gameplay/res/logo_powered_white.png}">res/logo_powered_white.png</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
