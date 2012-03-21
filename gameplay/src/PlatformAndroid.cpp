@@ -848,6 +848,11 @@ void Platform::displayKeyboard(bool display)
         __displayKeyboard = false;
 }
 
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
+}
+
 }
 
 #endif
