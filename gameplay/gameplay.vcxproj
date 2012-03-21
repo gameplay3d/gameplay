@@ -193,6 +193,10 @@
     <ClInclude Include="src\Viewport.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\logo_black.png" />
+    <None Include="res\logo_powered_black.png" />
+    <None Include="res\logo_powered_white.png" />
+    <None Include="res\logo_white.png" />
     <None Include="res\shaders\bumped-specular.fsh" />
     <None Include="res\shaders\bumped-specular.vsh" />
     <None Include="res\shaders\bumped.fsh" />

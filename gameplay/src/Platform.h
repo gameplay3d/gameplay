@@ -123,6 +123,13 @@ public:
 
     static void keyEventInternal(Keyboard::KeyEvent evt, int key);
 
+    /**
+     * Sleeps synchronously for the given amount of time (in milliseconds).
+     *
+     * @param ms How long to sleep (in milliseconds).
+     */
+    static void sleep(long ms);
+
 private:
 
     /**

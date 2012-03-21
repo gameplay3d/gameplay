@@ -628,6 +628,18 @@
     <None Include="src\PlatformiOS.mm">
       <Filter>src</Filter>
     </None>
+    <None Include="res\logo_black.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\logo_powered_black.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\logo_powered_white.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\logo_white.png">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\PhysicsFixedConstraint.inl">

@@ -14,8 +14,8 @@ MeshGame::~MeshGame()
 
 void MeshGame::initialize()
 {
-    // Draw loading screen.
-    renderOnce(this, &MeshGame::drawLoadScreen, NULL);
+    // Display the gameplay splash screen for at least 2.4 seconds.
+    displaySplash(this, &MeshGame::drawSplash, NULL, 2400L);
 
     // Load font
     _font = Font::create("res/arial40.gpb");
@@ -93,7 +93,7 @@ void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
 
 bool MeshGame::drawScene(Node* node, void* cookie)
 {
-    Model* model = node->getModel(); 
+    Model* model = node->getModel();
     if (model)
         model->draw();
     return true;
@@ -108,12 +108,12 @@ void MeshGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, u
     font->end();
 }
 
-void MeshGame::drawLoadScreen(void* param)
+void MeshGame::drawSplash(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
-    SpriteBatch* batch = SpriteBatch::create("res/gameplay_loading.png");
+    SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
     batch->begin();
-    batch->draw(Rectangle(0, 0, this->getWidth(), this->getHeight()), Rectangle(0, 0, 1920, 1080), Vector4::one());
+    batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
     batch->end();
     SAFE_DELETE(batch);
 }

@@ -57,7 +57,6 @@
     <asset path="res/bball.png">res/bball.png</asset>
     <asset path="res/boy.animation">res/boy.animation</asset>
     <asset path="res/decals.png">res/decals.png</asset>
-    <asset path="res/gameplay_loading.png">res/gameplay_loading.png</asset>
     <asset path="res/rainbow.png">res/rainbow.png</asset>
     <asset path="res/scene.gpb">res/scene.gpb</asset>
     <asset path="res/scene.material">res/scene.material</asset>
@@ -68,6 +67,7 @@
     <asset path="res/tilesn.png">res/tilesn.png</asset>
     <asset path="res/wood.png">res/wood.png</asset>
     <asset path="res/woodn.png">res/woodn.png</asset>
+    <asset path="${workspace_loc:/gameplay/res/logo_powered_white.png}">res/logo_powered_white.png</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored.fsh}">res/shaders/colored.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored.vsh}">res/shaders/colored.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.fsh}">res/shaders/colored-specular.fsh</asset>

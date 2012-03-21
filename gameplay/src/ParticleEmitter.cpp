@@ -53,7 +53,7 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
     if (!texture)
     {
         // Use default texture.
-        texture = Texture::create("../gameplay/res/textures/particle-default.png", true);
+        texture = Texture::create("res/particle-default.png", true);
     }
     assert(texture);
 
