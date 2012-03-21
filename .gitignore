@@ -44,6 +44,7 @@ Thumbs.db
 /gameplay-samples/sample00-mesh/Device-Profile
 /gameplay-samples/sample00-mesh/Device-Release
 /gameplay-samples/sample00-mesh/res/shaders
+/gameplay-samples/sample00-mesh/res/logo_powered_white.png
 /gameplay-samples/sample00-mesh/sample00-mesh.xcodeproj/xcuserdata
 /gameplay-samples/sample01-longboard/Debug
 /gameplay-samples/sample01-longboard/DebugMem
@@ -56,6 +57,7 @@ Thumbs.db
 /gameplay-samples/sample01-longboard/Device-Profile
 /gameplay-samples/sample01-longboard/Device-Release
 /gameplay-samples/sample01-longboard/res/shaders
+/gameplay-samples/sample01-longboard/res/logo_powered_white.png
 /gameplay-samples/sample01-longboard/sample01-longboard.xcodeproj/xcuserdata
 /gameplay-samples/sample02-spaceship/Debug
 /gameplay-samples/sample02-spaceship/DebugMem
@@ -68,6 +70,7 @@ Thumbs.db
 /gameplay-samples/sample02-spaceship/Device-Profile
 /gameplay-samples/sample02-spaceship/Device-Release
 /gameplay-samples/sample02-spaceship/res/shaders
+/gameplay-samples/sample02-spaceship/res/logo_powered_white.png
 /gameplay-samples/sample02-spaceship/sample02-spaceship.xcodeproj/xcuserdata
 /gameplay-samples/sample03-character/Debug
 /gameplay-samples/sample03-character/DebugMem
@@ -80,10 +83,16 @@ Thumbs.db
 /gameplay-samples/sample03-character/Device-Profile
 /gameplay-samples/sample03-character/Device-Release
 /gameplay-samples/sample03-character/res/shaders
+/gameplay-samples/sample03-character/res/logo_powered_white.png
 /gameplay-samples/sample03-character/sample03-character.xcodeproj/xcuserdata
 
 /gameplay-android/obj
 /gameplay-android/NUL
+/gameplay/android/NUL
+/gameplay/android/proguard.cfg
+/gameplay/android/local.properties
+/gameplay/android/project.properties
+/gameplay/android/obj
 /gameplay-samples/sample00-mesh/android/src
 /gameplay-samples/sample00-mesh/android/assets
 /gameplay-samples/sample00-mesh/android/bin
@@ -129,10 +138,4 @@ Thumbs.db
 /gameplay-samples/sample03-character/android/obj
 /gameplay-samples/sample03-character/android/NUL
 /gameplay-samples/sample01-longboard/NUL
-
-/gameplay/android/NUL
-/gameplay/android/proguard.cfg
-/gameplay/android/local.properties
-/gameplay/android/project.properties
-/gameplay/android/obj
 
