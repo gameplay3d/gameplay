@@ -118,6 +118,34 @@ void AnimationTarget::deleteChannel(Animation::Channel* channel)
     }
 }
 
+void AnimationTarget::cloneInto(AnimationTarget* target, CloneContext &context) const
+{
+    if (_animationChannels)
+    {
+        for (std::vector<Animation::Channel*>::const_iterator it = _animationChannels->begin(); it != _animationChannels->end(); ++it)
+        {
+            Animation::Channel* channel = *it;
+            assert(channel->_animation);
+
+            bool animationCloned = false;
+
+            // Don't clone the Animaton if it is already in the CloneContext.
+            Animation* animation = context.findClonedAnimation(channel->_animation);
+            if (animation == NULL)
+            {
+                animation = channel->_animation->clone();
+                animationCloned = true;
+            }
+            assert(animation);
+
+            context.registerClonedAnimation(channel->_animation, animation);
+            
+            Animation::Channel* channelCopy = new Animation::Channel(*channel, animation, target);
+            animation->addChannel(channelCopy);
+        }
+    }
+}
+
 }
 
 

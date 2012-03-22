@@ -737,6 +737,7 @@ protected:
 
     void dirty();
     virtual void transformChanged();
+    void cloneInto(Transform* transform, CloneContext &context) const;
 
     Vector3 _scale;
     Quaternion _rotation;

@@ -26,37 +26,37 @@ AudioSource::AudioSource(AudioBuffer* buffer, const SLObjectItf& player)
 {
     // Get the different interfaces for the OpenSL audio player that we need.
     SLresult result = (*_playerObject)->GetInterface(_playerObject, SL_IID_3DDOPPLER, &_playerDoppler);
-    if(result != SL_RESULT_SUCCESS)
+    if (result != SL_RESULT_SUCCESS)
     {
         WARN("AudioSource::AudioSource() - Failed to get 3D doppler interface for OpenSL audio player.");
     }
     
     result = (*_playerObject)->GetInterface(_playerObject, SL_IID_3DLOCATION, &_playerLocation);
-    if(result != SL_RESULT_SUCCESS)
+    if (result != SL_RESULT_SUCCESS)
     {
         WARN("AudioSource::AudioSource() - Failed to get 3D location interface for OpenSL audio player.");
     }
 
     result = (*_playerObject)->GetInterface(_playerObject, SL_IID_PLAY, &_playerPlay);
-    if(result != SL_RESULT_SUCCESS)
+    if (result != SL_RESULT_SUCCESS)
     {
         WARN("AudioSource::AudioSource() - Failed to get play interface for OpenSL audio player.");
     }
 
     result = (*_playerObject)->GetInterface(_playerObject, SL_IID_PITCH, &_playerPitch);
-    if(result != SL_RESULT_SUCCESS)
+    if (result != SL_RESULT_SUCCESS)
     {
         WARN("AudioSource::AudioSource() - Failed to get rate pitch interface for OpenSL audio player.");
     }
 
     result = (*_playerObject)->GetInterface(_playerObject, SL_IID_SEEK, &_playerSeek);
-    if(result != SL_RESULT_SUCCESS)
+    if (result != SL_RESULT_SUCCESS)
     {
         WARN("AudioSource::AudioSource() - Failed to get seek interface for OpenSL audio player.");
     }
 
     result = (*_playerObject)->GetInterface(_playerObject, SL_IID_VOLUME, &_playerVolume);
-    if(result != SL_RESULT_SUCCESS)
+    if (result != SL_RESULT_SUCCESS)
     {
         WARN("AudioSource::AudioSource() - Failed to get volume interface for OpenSL audio player.");
     }
@@ -159,7 +159,7 @@ AudioSource* AudioSource::create(const char* path)
     }
 
     result = (*player)->Realize(player, SL_BOOLEAN_FALSE);
-    if(result != SL_RESULT_SUCCESS)
+    if (result != SL_RESULT_SUCCESS)
     {
         WARN("AudioSource::create - Failed to realize OpenSL audio player.");
     }

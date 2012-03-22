@@ -171,14 +171,16 @@ private:
     /**
      * Interface implemented by templated method bindings for simple storage and iteration.
      */
-    class MethodBinding
+    class MethodBinding : public Ref
     {
     public:
+        virtual void setValue(Effect* effect) = 0;
+
+    protected:
         /**
          * Destructor.
          */
         virtual ~MethodBinding() { }
-        virtual void setValue(Effect* effect) = 0;
     };
 
     /**
@@ -256,6 +258,8 @@ private:
     static const char ANIMATION_UNIFORM_BIT = 0x01;
 
     void applyAnimationValue(AnimationValue* value, float blendWeight, int components);
+
+    void cloneInto(MaterialParameter* materialParameter) const;
 
     unsigned int _count;
     bool _dynamic;

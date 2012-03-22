@@ -32,7 +32,7 @@ void MaterialParameter::clearValue()
             SAFE_DELETE_ARRAY(_value.intPtrValue);
             break;
         case MaterialParameter::METHOD:
-            SAFE_DELETE(_value.method);
+            SAFE_RELEASE(_value.method);
             break;
         }
 
@@ -294,7 +294,7 @@ unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyI
     {
         case ANIMATE_UNIFORM:
         {
-            switch(_type)
+            switch (_type)
             {
                 // These types don't support animation.
                 case NONE:
@@ -475,6 +475,84 @@ void MaterialParameter::applyAnimationValue(AnimationValue* value, float blendWe
     {
         for (unsigned int i = 0; i < count; i++)
             _value.floatPtrValue[i] = Curve::lerp(blendWeight, _value.floatPtrValue[i], value->getFloat(i));
+    }
+}
+
+void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
+{
+    materialParameter->_type = _type;
+    materialParameter->_count = _count;
+    materialParameter->_dynamic = _dynamic;
+    materialParameter->_uniform = _uniform;
+    switch (_type)
+    {
+    case NONE:
+        break;
+    case FLOAT:
+        materialParameter->setValue(_value.floatValue);
+        break;
+    case INT:
+        materialParameter->setValue(_value.intValue);
+        break;
+    case VECTOR2:
+    {
+        Vector2* value = reinterpret_cast<Vector2*>(_value.floatPtrValue);
+        if (_count == 1)
+        {
+            materialParameter->setValue(*value);
+        }
+        else
+        {
+            materialParameter->setValue(value, _count);
+        }
+        break;
+    }   
+    case VECTOR3:
+    {
+        Vector3* value = reinterpret_cast<Vector3*>(_value.floatPtrValue);
+        if (_count == 1)
+        {
+            materialParameter->setValue(*value);
+        }
+        else
+        {
+            materialParameter->setValue(value, _count);
+        }
+        break;
+    }
+    case VECTOR4:
+    {
+        Vector4* value = reinterpret_cast<Vector4*>(_value.floatPtrValue);
+        if (_count == 1)
+        {
+            materialParameter->setValue(*value);
+        }
+        else
+        {
+            materialParameter->setValue(value, _count);
+        }
+        break;
+    }
+    case MATRIX:
+    {
+        Matrix* value = reinterpret_cast<Matrix*>(_value.floatPtrValue);
+        if (_count == 1)
+        {
+            materialParameter->setValue(*value);
+        }
+        else
+        {
+            materialParameter->setValue(value, _count);
+        }
+        break;
+    }
+    case SAMPLER:
+        materialParameter->setValue(_value.samplerValue);
+        break;
+    case METHOD:
+        materialParameter->_value.method = _value.method;
+        materialParameter->_value.method->addRef();
+        break;
     }
 }
 

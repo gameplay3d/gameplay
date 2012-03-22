@@ -2,6 +2,7 @@
 #define RENDERSTATE_H_
 
 #include "Ref.h"
+#include "CloneContext.h"
 
 namespace gameplay
 {
@@ -290,11 +291,6 @@ protected:
     RenderState();
 
     /**
-     * Hidden copy constructor.
-     */
-    RenderState(const RenderState& copy);
-
-    /**
      * Destructor.
      */
     virtual ~RenderState();
@@ -335,6 +331,22 @@ protected:
      * Returns the topmost RenderState in the hierarchy below the given RenderState.
      */
     RenderState* getTopmost(RenderState* below);
+
+    void cloneInto(RenderState* renderState, CloneContext& context) const;
+
+private:
+
+    /**
+     * Hidden copy constructor.
+     */
+    RenderState(const RenderState& copy);
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    RenderState& operator=(const RenderState&);
+
+protected:
 
     mutable std::vector<MaterialParameter*> _parameters;
     std::map<std::string, AutoBinding> _autoBindings;

@@ -780,6 +780,14 @@ void Transform::transformChanged()
     }
 }
 
+void Transform::cloneInto(Transform* transform, CloneContext &context) const
+{
+    AnimationTarget::cloneInto(transform, context);
+    transform->_scale.set(_scale);
+    transform->_rotation.set(_rotation);
+    transform->_translation.set(_translation);
+}
+
 void Transform::applyAnimationValueScaleX(float sx, float blendWeight)
 {
     if ((_animationPropertyBitFlag & ANIMATION_SCALE_X_BIT) != ANIMATION_SCALE_X_BIT)

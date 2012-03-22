@@ -123,7 +123,7 @@ public:
      * 
      * @return The MeshSkin, or NULL if one is not set.
      */
-    MeshSkin* getSkin();
+    MeshSkin* getSkin() const;
 
     /**
      * Returns the node that is associated with this model.
@@ -176,6 +176,15 @@ private:
     void setMaterialNodeBinding(Material *m);
 
     void validatePartCount();
+
+    /**
+     * Clones the model and returns a new model.
+     * 
+     * @param context The CloneContext.
+     * 
+     * @return The new cloned model.
+     */
+    Model* clone(CloneContext &context);
 
     Mesh* _mesh;
     Material* _material;
