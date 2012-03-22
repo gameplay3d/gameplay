@@ -30,17 +30,18 @@
     <!-- Description, displayed in the BlackBerry Tablet OS application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
     <description>Longboard Sample</description>
-    
+
     <!-- Copyright information. Optional. -->
     <!-- <copyright></copyright> -->
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
     <author>RIM Canada</author>
-    <platformVersion>2.0.0.7971</platformVersion>
-    
+
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
     <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
-   
+
+    <platformVersion>2.0.0.7971</platformVersion>
+
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>
         <autoOrients>false</autoOrients>
