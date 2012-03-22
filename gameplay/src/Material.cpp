@@ -125,6 +125,24 @@ Material* Material::create(const char* vshPath, const char* fshPath, const char*
     return material;
 }
 
+Material* Material::clone(CloneContext &context) const
+{
+    Material* material = new Material();
+    RenderState::cloneInto(material, context);
+
+    for (std::vector<Technique*>::const_iterator it = _techniques.begin(); it != _techniques.end(); ++it)
+    {
+        const Technique* technique = *it;
+        Technique* techniqueClone = technique->clone(material, context);
+        material->_techniques.push_back(techniqueClone);
+        if (_currentTechnique == technique)
+        {
+            material->_currentTechnique = techniqueClone;
+        }
+    }
+    return material;
+}
+
 unsigned int Material::getTechniqueCount() const
 {
     return _techniques.size();

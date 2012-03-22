@@ -51,12 +51,19 @@ private:
     /**
      * Hidden copy constructor.
      */
-    Technique(const Technique& t);
+    Technique(const Technique&);
 
     /**
      * Destructor.
      */
     ~Technique();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Technique& operator=(const Technique&);
+
+    Technique* clone(Material* material, CloneContext &context) const;
 
     std::string _id;
     Material* _material;

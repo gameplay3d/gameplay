@@ -229,7 +229,7 @@ Animation* AnimationController::createAnimation(const char* id, AnimationTarget*
     
     const char* keyOutStr = animationProperties->getString("keyOut");
     float* keyOut = NULL;
-    if(keyOutStr)
+    if (keyOutStr)
     {   
         keyOut = new float[components];
         startOffset = 0;

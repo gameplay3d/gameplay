@@ -273,6 +273,9 @@
     <ClCompile Include="src\PhysicsGhostObject.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\CloneContext.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -537,6 +540,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PhysicsGhostObject.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CloneContext.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
