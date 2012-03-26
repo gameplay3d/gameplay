@@ -332,6 +332,12 @@ protected:
      */
     RenderState* getTopmost(RenderState* below);
 
+    /**
+     * Copies the data from this RenderState into the given RenderState.
+     * 
+     * @param renderState The RenderState to copy the data to.
+     * @param context The clone context.
+     */
     void cloneInto(RenderState* renderState, CloneContext& context) const;
 
 private:

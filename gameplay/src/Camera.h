@@ -246,6 +246,15 @@ private:
     virtual ~Camera();
 
     /**
+     * Clones the camera and returns a new camera.
+     * 
+     * @param context The clone context.
+     * 
+     * @return The newly created camera.
+     */
+    Camera* clone(CloneContext &context) const;
+
+    /**
      * @see Transform::Listener::transformChanged
      */
     void transformChanged(Transform* transform, long cookie);

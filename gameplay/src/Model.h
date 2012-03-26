@@ -180,7 +180,7 @@ private:
     /**
      * Clones the model and returns a new model.
      * 
-     * @param context The CloneContext.
+     * @param context The clone context.
      * 
      * @return The new cloned model.
      */

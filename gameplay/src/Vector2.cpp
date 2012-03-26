@@ -165,9 +165,10 @@ void Vector2::negate()
     y = -y;
 }
 
-void Vector2::normalize()
+Vector2& Vector2::normalize()
 {
     normalize(this);
+    return *this;
 }
 
 void Vector2::normalize(Vector2* dst)
