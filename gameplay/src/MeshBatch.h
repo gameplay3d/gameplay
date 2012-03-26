@@ -54,7 +54,7 @@ public:
     /**
      * Explicitly sets a new capacity for the batch.
      *
-     * @param The new batch capacity.
+     * @param capacity The new batch capacity.
      */
     void setCapacity(unsigned int capacity);
 

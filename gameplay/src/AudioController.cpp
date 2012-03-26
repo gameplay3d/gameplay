@@ -170,7 +170,7 @@ void AudioController::update(long elapsedTime)
     {
 #ifndef __ANDROID__
         alListenerf(AL_GAIN, listener->getGain());
-        alListenerfv(AL_ORIENTATION, (ALfloat*)&listener->getOrientationForward());
+        alListenerfv(AL_ORIENTATION, (ALfloat*)listener->getOrientation());
         alListenerfv(AL_VELOCITY, (ALfloat*)&listener->getVelocity());
         alListenerfv(AL_POSITION, (ALfloat*)&listener->getPosition());
 #else
