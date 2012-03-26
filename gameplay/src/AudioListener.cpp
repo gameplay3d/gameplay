@@ -21,6 +21,8 @@ AudioListener::~AudioListener()
 
 AudioListener* AudioListener::getInstance()
 {
+    if (!__audioListenerInstance)
+        new AudioListener();
     return __audioListenerInstance;
 }
 
@@ -52,6 +54,11 @@ const Vector3& AudioListener::getVelocity() const
 void AudioListener::setVelocity(const Vector3& velocity)
 {
     _velocity = velocity;
+}
+
+const float* AudioListener::getOrientation() const
+{
+    return (const float*)&_orientation[0];
 }
 
 const Vector3& AudioListener::getOrientationForward() const 
@@ -106,8 +113,12 @@ void AudioListener::transformChanged(Transform* transform, long cookie)
 {
     if (transform)
     {
-        setPosition(transform->getTranslation());
-        setOrientation(transform->getForwardVector(), transform->getUpVector());
+        Node* node = static_cast<Node*>(transform);
+        setPosition(node->getTranslationWorld());
+        
+        Vector3 up;
+        node->getWorldMatrix().getUpVector(&up);
+        setOrientation(node->getForwardVectorWorld(), up);
     }
 }
 

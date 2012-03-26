@@ -69,6 +69,15 @@ public:
     static Material* create(const char* vshPath, const char* fshPath, const char* defines = NULL);
 
     /**
+     * Clones this material.
+     * 
+     * @param context The clone context.
+     * 
+     * @return The newly created material.
+     */
+    Material* clone(CloneContext &context) const;
+
+    /**
      * Returns the number of techniques in the material.
      *
      * @return The technique count.

@@ -87,6 +87,21 @@ private:
      */
     static Pass* create(const char* id, Technique* technique, const char* vshPath, const char* fshPath, const char* defines);
 
+    /**
+     * Hidden copy assignment operator.
+     */
+    Pass& operator=(const Pass&);
+
+    /**
+     * Clones the Pass and assigns it the given Technique.
+     * 
+     * @param technique The technique to assign to the new Pass.
+     * @param context The clone context.
+     * 
+     * @return The newly created Pass.
+     */
+    Pass* clone(Technique* technique, CloneContext &context) const;
+
     std::string _id;
     Technique* _technique;
     Effect* _effect;

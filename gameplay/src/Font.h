@@ -157,8 +157,8 @@ public:
      *
      * @param text The text to measure.
      * @param size
-     * @param width Destination for the text's width.
-     * @param height Destination for the text's height.
+     * @param widthOut Destination for the text's width.
+     * @param heightOut Destination for the text's height.
      */
     void measureText(const char* text, unsigned int size, unsigned int* widthOut, unsigned int* heightOut);
 
@@ -177,11 +177,15 @@ public:
     void measureText(const char* text, const Rectangle& clip, unsigned int size, Rectangle* out,
                      Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool ignoreClip = false);
 
-    // Get an index into a string corresponding to the character nearest the given location within the clip region.
+    /**
+     * Get an index into a string corresponding to the character nearest the given location within the clip region.
+     */
     unsigned int getIndexAtLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
                                     Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
 
-    // Get the location of the character at the given index.
+    /**
+     * Get the location of the character at the given index.
+     */
     void getLocationAtIndex(const char* text, const Rectangle& clip, unsigned int size, Vector2* outLocation, const unsigned int destIndex,
                             Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
 

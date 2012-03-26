@@ -176,6 +176,15 @@ private:
      */
     void transformChanged(Transform* transform, long cookie);
 
+    /**
+     * Clones the audio source and returns a new audio source.
+     * 
+     * @param context The clone context.
+     * 
+     * @return The newly created audio source.
+     */
+    AudioSource* clone(CloneContext &context) const;
+
 #ifndef __ANDROID__
     ALuint _alSource;
 #else

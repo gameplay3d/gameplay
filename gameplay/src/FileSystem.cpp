@@ -110,7 +110,7 @@ bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
             filename.assign(wfilename.begin(), wfilename.end());
             files.push_back(filename);
         }
-    } while(FindNextFile(hFind, &FindFileData) != 0);
+    } while (FindNextFile(hFind, &FindFileData) != 0);
 
     FindClose(hFind);
     return true;
