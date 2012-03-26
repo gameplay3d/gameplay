@@ -192,6 +192,7 @@ public:
      * @param u2 Texture coordinate.
      * @param v2 Texture coordinate.
      * @param color The color to tint the sprite. Use white for no tint.
+     * @param clip The clip rectangle.
      */
     void draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip);
 

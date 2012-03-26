@@ -96,7 +96,7 @@ private:
      * Clones the Pass and assigns it the given Technique.
      * 
      * @param technique The technique to assign to the new Pass.
-     * @param context The CloneContext.
+     * @param context The clone context.
      * 
      * @return The newly created Pass.
      */

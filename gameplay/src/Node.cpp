@@ -3,7 +3,6 @@
 #include "Scene.h"
 #include "Joint.h"
 #include "Game.h"
-#include "CloneContext.h"
 
 #define NODE_DIRTY_WORLD 1
 #define NODE_DIRTY_BOUNDS 2
@@ -735,11 +734,28 @@ void Node::cloneInto(Node* node, CloneContext &context) const
     // TODO: Clone the rest of the node data.
     //node->setCamera(getCamera());
     //node->setLight(getLight());
-    //node->setModel(getModel());
 
-    if (getModel())
+    if (Camera* camera = getCamera())
     {
-        Model* modelClone = getModel()->clone(context);
+        Camera* cameraClone = camera->clone(context);
+        node->setCamera(cameraClone);
+        cameraClone->release();
+    }
+    if (Light* light = getLight())
+    {
+        Light* lightClone = lightClone = light->clone(context);
+        node->setLight(lightClone);
+        lightClone->release();
+    }
+    if (AudioSource* audio = getAudioSource())
+    {
+        AudioSource* audioClone = audio->clone(context);
+        node->setAudioSource(audioClone);
+        audioClone->release();
+    }
+    if (Model* model = getModel())
+    {
+        Model* modelClone = model->clone(context);
         node->setModel(modelClone);
         modelClone->release();
     }

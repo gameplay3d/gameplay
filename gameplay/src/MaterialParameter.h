@@ -259,6 +259,11 @@ private:
 
     void applyAnimationValue(AnimationValue* value, float blendWeight, int components);
 
+    /**
+     * Copies the data from this MaterialParameter into the given MaterialParameter.
+     * 
+     * @param materialParameter The MaterialParameter to copy the data to.
+     */
     void cloneInto(MaterialParameter* materialParameter) const;
 
     unsigned int _count;

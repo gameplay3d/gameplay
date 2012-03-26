@@ -483,7 +483,7 @@ protected:
     /**
      * Copies the data from this node into the given node.
      * 
-     * @param The node to copy the data to.
+     * @param node The node to copy the data to.
      * @param context The clone context.
      */
     void cloneInto(Node* node, CloneContext &context) const;
@@ -498,6 +498,9 @@ protected:
      */
     void transformChanged();
 
+    /**
+     * Called when this Node's hierarchy changes.
+     */
     void hierarchyChanged();
 
     /**

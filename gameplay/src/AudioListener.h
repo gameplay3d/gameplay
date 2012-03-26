@@ -68,6 +68,14 @@ public:
     void setVelocity(const Vector3& velocity);
 
     /**
+     * Gets the float pointer to the orientation of the audio listener.
+     * Orientation is represented as 6 floats. (forward.x, forward.y, forward.z, up.x, up.y, up.z).
+     * 
+     * @return Pointer to the 6 orientation float values.
+     */
+    const float* getOrientation() const;
+
+    /**
      * Gets the forward orientation vector of the audio listener.
      *
      * @return The forward vector.

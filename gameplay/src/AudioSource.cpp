@@ -454,6 +454,8 @@ void AudioSource::setNode(Node* node)
         if (_node)
         {
             _node->addListener(this);
+            // Update the audio source position.
+            transformChanged(_node, 0);
         }
     }
 }
@@ -461,7 +463,8 @@ void AudioSource::setNode(Node* node)
 void AudioSource::transformChanged(Transform* transform, long cookie)
 {
 #ifndef __ANDROID__
-    alSourcefv(_alSource, AL_POSITION, (const ALfloat*)&transform->getTranslation());
+    if (_node)
+        alSourcefv(_alSource, AL_POSITION, (const ALfloat*)&_node->getTranslationWorld());
 #else
     if (_playerLocation)
     {
@@ -476,6 +479,38 @@ void AudioSource::transformChanged(Transform* transform, long cookie)
         }
     }
 #endif
+}
+
+AudioSource* AudioSource::clone(CloneContext &context) const
+{
+#ifndef __ANDROID__
+    ALuint alSource = 0;
+    alGenSources(1, &alSource);
+    if (alGetError() != AL_NO_ERROR)
+    {
+        LOG_ERROR("AudioSource::createAudioSource - Error generating audio source.");
+        return NULL;
+    }
+    AudioSource* audioClone = new AudioSource(_buffer, alSource);
+#else
+    // TODO: Implement cloning audio source for Android
+    AudioSource* audioClone = new AudioSource(AudioBuffer* buffer, const SLObjectItf& player);
+
+#endif
+
+    audioClone->setLooped(isLooped());
+    audioClone->setGain(getGain());
+    audioClone->setPitch(getPitch());
+    audioClone->setVelocity(getVelocity());
+    if (Node* node = audioClone->getNode())
+    {
+        Node* clonedNode = context.findClonedNode(node);
+        if (clonedNode)
+        {
+            audioClone->setNode(clonedNode);
+        }
+    }
+    return audioClone;
 }
 
 }
