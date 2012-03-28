@@ -497,12 +497,12 @@ AudioSource* AudioSource::clone(CloneContext &context) const
     AudioSource* audioClone = new AudioSource(AudioBuffer* buffer, const SLObjectItf& player);
 
 #endif
-
+    _buffer->addRef();
     audioClone->setLooped(isLooped());
     audioClone->setGain(getGain());
     audioClone->setPitch(getPitch());
     audioClone->setVelocity(getVelocity());
-    if (Node* node = audioClone->getNode())
+    if (Node* node = getNode())
     {
         Node* clonedNode = context.findClonedNode(node);
         if (clonedNode)
