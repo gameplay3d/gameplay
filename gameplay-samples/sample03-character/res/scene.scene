@@ -12,12 +12,11 @@ scene
 
     node BoyShadow
     {
-        //material = res/scene.material#BoyShadow
+        material = res/scene.material#BoyShadow
     }
 
     node Table
     {
-        url = Table*
         material = res/scene.material#TableGreen
         rigidbody = res/scene.physics#Table
     }
@@ -47,7 +46,7 @@ scene
     node Easel
     {
         material = res/scene.material#Easel
-        rigidbody = res/scene.physics#StaticBox
+        //rigidbody = res/scene.physics#StaticBox
     }
 
     node StorageOrganizer

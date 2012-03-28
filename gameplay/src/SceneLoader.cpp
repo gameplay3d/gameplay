@@ -288,18 +288,24 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                         WARN_VARG("Node '%s' does not have a model; attempting to use its model for rigid body creation.", name);
                     else
                     {
-                        // Set the specified model during physics rigid body creation.
+                        // Temporarily set rigidbody model on model to it's used during rigid body creation.
                         Model* model = node->getModel();
+						model->addRef(); // up ref count to prevent node from releasing the model when we swap it
                         node->setModel(modelNode->getModel());
-                        node->setRigidBody(p);
+
+						// Create collision object with new rigidbodymodel set.
+						node->setCollisionObject(p);
+
+						// Restore original model
                         node->setModel(model);
+						model->release(); // decrement temporarily added reference
                     }
                 }
             }
             else if (!node->getModel())
                 WARN_VARG("Attempting to set a rigid body on node '%s', which has no model.", sceneNode._nodeID);
             else
-                node->setRigidBody(p);
+				node->setCollisionObject(p);
             break;
         }
         default:
@@ -768,12 +774,12 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
                 WARN_VARG("Node '%s' to be used as 'rigidBodyA' for constraint %s cannot be found.", name, constraint->getId());
                 continue;
             }
-            PhysicsRigidBody* rbA = rbANode->getRigidBody();
-            if (!rbA)
+			if (!rbANode->getCollisionObject() || rbANode->getCollisionObject()->getType() != PhysicsCollisionObject::RIGID_BODY)
             {
                 WARN_VARG("Node '%s' to be used as 'rigidBodyA' does not have a rigid body.", name);
                 continue;
             }
+			PhysicsRigidBody* rbA = static_cast<PhysicsRigidBody*>(rbANode->getCollisionObject());
 
             // Attempt to load the second rigid body. If the second rigid body is not
             // specified, that is usually okay (only spring constraints require both and
@@ -789,12 +795,12 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
                     WARN_VARG("Node '%s' to be used as 'rigidBodyB' for constraint %s cannot be found.", name, constraint->getId());
                     continue;
                 }
-                rbB = rbBNode->getRigidBody();
-                if (!rbB)
+				if (!rbBNode->getCollisionObject() || rbBNode->getCollisionObject()->getType() != PhysicsCollisionObject::RIGID_BODY)
                 {
                     WARN_VARG("Node '%s' to be used as 'rigidBodyB' does not have a rigid body.", name);
                     continue;
                 }
+				rbB = static_cast<PhysicsRigidBody*>(rbBNode->getCollisionObject());
             }
 
             PhysicsConstraint* physicsConstraint = NULL;

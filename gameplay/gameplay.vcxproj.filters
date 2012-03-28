@@ -273,6 +273,9 @@
     <ClCompile Include="src\PhysicsGhostObject.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\PhysicsCollisionShape.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\CloneContext.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -540,6 +543,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PhysicsGhostObject.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsCollisionShape.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\CloneContext.h">

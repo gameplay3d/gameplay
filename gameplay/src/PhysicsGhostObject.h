@@ -16,7 +16,6 @@ class PhysicsMotionState;
 class PhysicsGhostObject : public PhysicsCollisionObject, public Transform::Listener
 {
     friend class Node;
-    friend class PhysicsController;
 
 public:
 
@@ -25,10 +24,10 @@ public:
      */
     PhysicsCollisionObject::Type getType() const;
 
-    /**
-     * @see PhysicsCollisionObject#getNode
+	/**
+     * Used to synchronize the transform between GamePlay and Bullet.
      */
-    Node* getNode() const;
+    void transformChanged(Transform* transform, long cookie);
 
 protected:
 
@@ -37,35 +36,22 @@ protected:
      */
     btCollisionObject* getCollisionObject() const;
 
-    /**
-     * @see PhysicsCollisionObject::getCollisionShape
-     */
-    btCollisionShape* getCollisionShape() const;
-
-private:
+protected:
 
     /**
      * Constructor.
      * 
      * @param node The node to attach the ghost object to.
-     * @param type The type of ghost object (collision shape type).
+     * @param shape The collision shape definition for the ghost object.
      */
-    PhysicsGhostObject(Node* node, PhysicsRigidBody::ShapeType type);
-    
+	PhysicsGhostObject(Node* node, const PhysicsCollisionShape::Definition& shape);
+
     /**
      * Destructor.
      */
-    ~PhysicsGhostObject();
+    virtual ~PhysicsGhostObject();
 
-    /**
-     * Used to synchronize the transform between GamePlay and Bullet.
-     */
-    void transformChanged(Transform* transform, long cookie);
-
-    Node* _node;
-    PhysicsMotionState* _motionState;
-    btCollisionShape* _shape;
-    btGhostObject* _ghostObject;
+    btPairCachingGhostObject* _ghostObject;
 };
 
 }
