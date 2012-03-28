@@ -63,60 +63,25 @@ protected:
 	btScalar _minSlopeDot;
 };
 
-PhysicsCharacter::PhysicsCharacter(Node* node, float radius, float height, const Vector3 center)
-    : _node(node), _motionState(NULL), _moveVelocity(0,0,0), _forwardVelocity(0.0f), _rightVelocity(0.0f),
+PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape)
+    : PhysicsGhostObject(node, shape), _moveVelocity(0,0,0), _forwardVelocity(0.0f), _rightVelocity(0.0f),
     _fallVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
     _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0),
-    _ghostObject(NULL), _collisionShape(NULL), _ignoreTransformChanged(0),
     _stepHeight(0.2f), _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true)
 {
-    setMaxSlopeAngle(45.0f);
+	setMaxSlopeAngle(45.0f);
 
-    node->addRef();
-    node->addListener(this);
-
-    // Create physics motion state for syncing transform between gameplay and bullet
-    Vector3 centerOfMassOffset(-center);
-    _motionState = new PhysicsMotionState(node, &centerOfMassOffset);
-
-    // Create ghost object, which is used as an efficient way to detect
-    // collisions between pairs of objects.
-    _ghostObject = bullet_new<btPairCachingGhostObject>();
-
-    // Set initial transform
-    _motionState->getWorldTransform(_ghostObject->getWorldTransform());
-
-    PhysicsController* pc = Game::getInstance()->getPhysicsController();
-
-    // Create a capsule collision shape (this is automatically deleted by PhysicsController when our collision object is removed)
-    _collisionShape = static_cast<btConvexShape*>(pc->createCapsule(radius, height - radius*2.0f));
-
-    // Set the collision shape on the ghost object (get it from the node's rigid body)
-    _ghostObject->setCollisionShape(_collisionShape);
-    _ghostObject->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-
-    // Add the collision object to the physics system
-    pc->addCollisionObject(this);
+    // Set the collision flags on the ghost object to indicate it's a character
+    //_ghostObject->setCollisionFlags(_ghostObject->getCollisionFlags() | btCollisionObject::CF_CHARACTER_OBJECT);
 
     // Register ourselves as an action on the physics world so we are called back during physics ticks
-    pc->_world->addAction(this);
+    Game::getInstance()->getPhysicsController()->_world->addAction(this);
 }
 
 PhysicsCharacter::~PhysicsCharacter()
 {
-    // Remove ourself from physics system
-    PhysicsController* pc = Game::getInstance()->getPhysicsController();
-
-    pc->removeCollisionObject(this);
-
     // Unregister ourselves as action from world
-    pc->_world->removeAction(this);
-
-    SAFE_DELETE(_ghostObject);
-
-    _node->removeListener(this);
-    SAFE_RELEASE(_node);
-    SAFE_DELETE(_motionState);
+    Game::getInstance()->getPhysicsController()->_world->removeAction(this);
 }
 
 PhysicsCollisionObject::Type PhysicsCharacter::getType() const
@@ -137,16 +102,6 @@ bool PhysicsCharacter::isPhysicsEnabled() const
 void PhysicsCharacter::setPhysicsEnabled(bool enabled)
 {
     _physicsEnabled = enabled;
-}
-
-btCollisionShape* PhysicsCharacter::getCollisionShape() const
-{
-    return _collisionShape;
-}
-
-Node* PhysicsCharacter::getNode() const
-{
-    return _node;
 }
 
 float PhysicsCharacter::getMaxStepHeight() const
@@ -370,18 +325,6 @@ void PhysicsCharacter::updateCurrentVelocity()
     }
 }
 
-void PhysicsCharacter::transformChanged(Transform* transform, long cookie)
-{
-    if (!_ignoreTransformChanged)
-    {
-        // Update motion state with transform from node
-        _motionState->updateTransformFromNode();
-
-        // Update transform on ghost object
-        _motionState->getWorldTransform(_ghostObject->getWorldTransform());
-    }
-}
-
 void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
 {
     // First check for existing collisions and attempt to respond/fix them.
@@ -392,7 +335,7 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
     // dynamic objects (i.e. objects that moved and now intersect the character).
     if (_physicsEnabled)
     {
-        _colliding = fixCollision(collisionWorld);
+        //_colliding = fixCollision(collisionWorld);
         /*_colliding = false;
         int stepCount = 0;
 	    while (fixCollision(collisionWorld))
@@ -411,8 +354,9 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
     }
 
     // Update current and target world positions
-    btTransform transform = _ghostObject->getWorldTransform();
-    _currentPosition = transform.getOrigin();
+	Vector3 startPosition;
+	_node->getWorldMatrix().getTranslation(&startPosition);
+    _currentPosition = BV(startPosition);
 
     // Process movement in the up direction
     if (_physicsEnabled)
@@ -422,19 +366,11 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
     stepForwardAndStrafe(collisionWorld, deltaTimeStep);
 
     // Process movement in the down direction
-    if (_physicsEnabled)
-        stepDown(collisionWorld, deltaTimeStep);
+	if (_physicsEnabled)
+		stepDown(collisionWorld, deltaTimeStep);
 
     // Set new position
-    transform.setOrigin(_currentPosition);
-
-    // Update world transform
-    ++_ignoreTransformChanged;
-    _motionState->setWorldTransform(transform);
-    --_ignoreTransformChanged;
-
-    // Update ghost object transform
-    _motionState->getWorldTransform(_ghostObject->getWorldTransform());
+	_node->translate(Vector3(_currentPosition.x(), _currentPosition.y(), _currentPosition.z()) - startPosition);
 }
 
 void PhysicsCharacter::stepUp(btCollisionWorld* collisionWorld, btScalar time)
@@ -509,12 +445,11 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
     }
 
     // Check for collisions by performing a bullet convex sweep test
-    btTransform start, end;
-	start.setIdentity();
-	end.setIdentity();
+    btTransform start = _ghostObject->getWorldTransform();
+	btTransform end = _ghostObject->getWorldTransform();
 
 	btScalar fraction = 1.0;
-	btScalar distance2 = (_currentPosition-targetPosition).length2();
+	btScalar distance2;
 
 	if (_colliding && (_normalizedVelocity.dot(_collisionNormal) > btScalar(0.0)))
 	{
@@ -530,16 +465,10 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 		btVector3 sweepDirNegative(_currentPosition - targetPosition);
 
 		ClosestNotMeConvexResultCallback callback(_ghostObject, sweepDirNegative, btScalar(0.0));
-		callback.m_collisionFilterGroup = _ghostObject->getBroadphaseHandle()->m_collisionFilterGroup;
-		callback.m_collisionFilterMask = _ghostObject->getBroadphaseHandle()->m_collisionFilterMask;
+		callback.m_collisionFilterGroup = btBroadphaseProxy::CharacterFilter;
+		callback.m_collisionFilterMask = btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter;
 
-        // Temporarily increase collision margin by a bit
-        //btScalar margin = _collisionShape->getMargin();
-        //_collisionShape->setMargin(margin + m_addedMargin);
-
-        _ghostObject->convexSweepTest(_collisionShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
-
-		//m_convexShape->setMargin(margin);
+		_ghostObject->convexSweepTest(_collisionShape->getShape<btConvexShape>(), start, end, callback, 0.01f/*collisionWorld->getDispatchInfo().m_allowedCcdPenetration*/);
 
 		fraction -= callback.m_closestHitFraction;
 
@@ -548,7 +477,12 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 			// We hit something so can move only a fraction
 			//btScalar hitDistance = (callback.m_hitPointWorld - _currentPosition).length();
 
-            //_currentPosition.setInterpolate3(_currentPosition, targetPosition, callback.m_closestHitFraction);
+            //targetPosition = _currentPosition;
+			//targetPosition.setInterpolate3(_currentPosition, targetPosition, callback.m_closestHitFraction * 0.1f);
+
+			//btVector3 normalDir = callback.m_hitNormalWorld;
+			//normalDir.normalize();
+			//targetPosition = callback.m_hitPointWorld + (normalDir * 0.2f);
 
 			updateTargetPositionFromCollision(targetPosition, callback.m_hitNormalWorld);
 			btVector3 currentDir = targetPosition - _currentPosition;
@@ -600,7 +534,7 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
     ClosestNotMeConvexResultCallback callback(_ghostObject, btVector3(0, 1, 0), _cosSlopeAngle);
 	callback.m_collisionFilterGroup = _ghostObject->getBroadphaseHandle()->m_collisionFilterGroup;
 	callback.m_collisionFilterMask = _ghostObject->getBroadphaseHandle()->m_collisionFilterMask;
-    _ghostObject->convexSweepTest(_collisionShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+	_ghostObject->convexSweepTest(_collisionShape->getShape<btConvexShape>(), start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
 	if (callback.hasHit())
 	{
         // Collision detected, fix it
