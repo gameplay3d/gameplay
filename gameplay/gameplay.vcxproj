@@ -30,6 +30,7 @@
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CheckBox.cpp" />
+    <ClCompile Include="src\CloneContext.cpp" />
     <ClCompile Include="src\Container.cpp" />
     <ClCompile Include="src\Control.cpp" />
     <ClCompile Include="src\Curve.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\CheckBox.h" />
+    <ClInclude Include="src\CloneContext.h" />
     <ClInclude Include="src\Container.h" />
     <ClInclude Include="src\Control.h" />
     <ClInclude Include="src\Curve.h" />
@@ -195,6 +197,10 @@
     <ClInclude Include="src\Viewport.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\logo_black.png" />
+    <None Include="res\logo_powered_black.png" />
+    <None Include="res\logo_powered_white.png" />
+    <None Include="res\logo_white.png" />
     <None Include="res\shaders\bumped-specular.fsh" />
     <None Include="res\shaders\bumped-specular.vsh" />
     <None Include="res\shaders\bumped.fsh" />

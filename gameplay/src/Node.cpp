@@ -5,6 +5,7 @@
 #include "PhysicsRigidBody.h"
 #include "PhysicsGhostObject.h"
 #include "PhysicsCharacter.h"
+#include "Game.h"
 
 #define NODE_DIRTY_WORLD 1
 #define NODE_DIRTY_BOUNDS 2
@@ -22,11 +23,6 @@ Node::Node(const char* id)
     {
         _id = id;
     }
-}
-
-Node::Node(const Node& node)
-{
-    // hidden
 }
 
 Node::~Node()
@@ -204,7 +200,7 @@ unsigned int Node::getChildCount() const
     return _childCount;
 }
 
-Node* Node::findNode(const char* id, bool recursive, bool exactMatch)
+Node* Node::findNode(const char* id, bool recursive, bool exactMatch) const
 {
     assert(id);
     
@@ -234,7 +230,7 @@ Node* Node::findNode(const char* id, bool recursive, bool exactMatch)
     return NULL;
 }   
 
-unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool recursive, bool exactMatch)
+unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool recursive, bool exactMatch) const
 {
     assert(id);
     
@@ -703,6 +699,70 @@ const BoundingSphere& Node::getBoundingSphere() const
     }
 
     return _bounds;
+}
+
+
+Node* Node::clone() const
+{
+    CloneContext context;
+    return cloneRecursive(context);
+}
+
+Node* Node::cloneSingleNode(CloneContext &context) const
+{
+    Node* copy = Node::create(getId());
+    context.registerClonedNode(this, copy);
+    cloneInto(copy, context);
+    return copy;
+}
+
+Node* Node::cloneRecursive(CloneContext &context) const
+{
+    Node* copy = cloneSingleNode(context);
+
+    for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
+    {
+        Node* childCopy = child->cloneRecursive(context);
+        copy->addChild(childCopy); // TODO: Does child order matter?
+        childCopy->release();
+    }
+    return copy;
+}
+
+void Node::cloneInto(Node* node, CloneContext &context) const
+{
+    Transform::cloneInto(node, context);
+
+    // TODO: Clone the rest of the node data.
+    //node->setCamera(getCamera());
+    //node->setLight(getLight());
+
+    if (Camera* camera = getCamera())
+    {
+        Camera* cameraClone = camera->clone(context);
+        node->setCamera(cameraClone);
+        cameraClone->release();
+    }
+    if (Light* light = getLight())
+    {
+        Light* lightClone = lightClone = light->clone(context);
+        node->setLight(lightClone);
+        lightClone->release();
+    }
+    if (AudioSource* audio = getAudioSource())
+    {
+        AudioSource* audioClone = audio->clone(context);
+        node->setAudioSource(audioClone);
+        audioClone->release();
+    }
+    if (Model* model = getModel())
+    {
+        Model* modelClone = model->clone(context);
+        node->setModel(modelClone);
+        modelClone->release();
+    }
+    node->_world = _world;
+    node->_bounds = _bounds;
 }
 
 AudioSource* Node::getAudioSource() const

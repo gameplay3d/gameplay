@@ -123,18 +123,18 @@ public:
     /**
      * Returns the first child node that matches the given ID.
      *
-     * This method checks the specified ID against its own ID, as well as its 
-     * immediate children nodes. If recursive is true, it also traverses the
-     * Node's hierarchy.
+     * This method checks the specified ID against its immediate child nodes 
+     * but does not check the ID against itself.
+     * If recursive is true, it also traverses the Node's hierarchy with a breadth first search.
      *
      * @param id The ID of the child to find.
-     * @param recursive true to search recursively all the node's children, false for only direct children.
+     * @param recursive True to search recursively all the node's children, false for only direct children.
      * @param exactMatch true if only nodes whose ID exactly matches the specified ID are returned,
      *        or false if nodes that start with the given ID are returned.
      * 
      * @return The Node found or NULL if not found.
      */
-    Node* findNode(const char* id, bool recursive = true, bool exactMatch = true);
+    Node* findNode(const char* id, bool recursive = true, bool exactMatch = true) const;
 
     /**
      * Returns all child nodes that match the given ID.
@@ -147,7 +147,7 @@ public:
      * 
      * @return The number of matches found.
      */
-    unsigned int findNodes(const char* id, std::vector<Node*>& nodes, bool recursive = true, bool exactMatch = true);
+    unsigned int findNodes(const char* id, std::vector<Node*>& nodes, bool recursive = true, bool exactMatch = true) const;
 
     /**
      * Gets the scene.
@@ -451,6 +451,13 @@ public:
      */
     const BoundingSphere& getBoundingSphere() const;
 
+    /**
+     * Clones the node and all of its child nodes.
+     * 
+     * @return A new node.
+     */
+    Node* clone() const;
+
 protected:
 
     /**
@@ -459,14 +466,35 @@ protected:
     Node(const char* id);
 
     /**
-     * Copy constructor.
-     */
-    Node(const Node& copy);
-
-    /**
      * Destructor.
      */
     virtual ~Node();
+
+    /**
+     * Clones a single node and its data but not its children.
+     * 
+     * @param context The clone context.
+     * 
+     * @return Pointer to the newly created node.
+     */
+    virtual Node* cloneSingleNode(CloneContext &context) const;
+
+    /**
+     * Recursively clones this node and its children.
+     * 
+     * @param context The clone context.
+     * 
+     * @return The newly created node.
+     */
+    Node* cloneRecursive(CloneContext &context) const;
+
+    /**
+     * Copies the data from this node into the given node.
+     * 
+     * @param node The node to copy the data to.
+     * @param context The clone context.
+     */
+    void cloneInto(Node* node, CloneContext &context) const;
 
     /**
      * Removes this node from its parent.
@@ -478,12 +506,29 @@ protected:
      */
     void transformChanged();
 
+    /**
+     * Called when this Node's hierarchy changes.
+     */
     void hierarchyChanged();
 
     /**
      * Marks the bounding volume of the node as dirty.
      */
     void setBoundsDirty();
+
+private:
+
+    /**
+     * Hidden copy constructor.
+     */
+    Node(const Node& copy);
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Node& operator=(const Node&);
+
+protected:
 
     Scene* _scene;
     std::string _id;

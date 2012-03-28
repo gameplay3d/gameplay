@@ -34,7 +34,7 @@ namespace gameplay
     Container* Container::create(Layout::Type type)
     {
         Layout* layout = NULL;
-        switch(type)
+        switch (type)
         {
         case Layout::LAYOUT_ABSOLUTE:
             layout = AbsoluteLayout::create();
