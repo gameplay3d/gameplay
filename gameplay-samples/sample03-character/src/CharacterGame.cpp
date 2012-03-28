@@ -6,6 +6,7 @@ CharacterGame game;
 unsigned int keyFlags = 0;
 float _rotateY = 0.0f;
 #define WALK_SPEED  7.5f
+#define RUN_SPEED 10.0f
 #define ANIM_SPEED 10.0f
 #define BLEND_DURATION 150.0f
 #define CAMERA_FOCUS_RANGE 16.0f
@@ -14,7 +15,7 @@ bool drawDebug = false;
 bool moveBall = false;
 
 CharacterGame::CharacterGame()
-    : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _animationState(0), _rotateX(0)
+    : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _animationState(0), _rotateX(0), _gamepad(NULL)
 {
 }
 
@@ -48,6 +49,20 @@ void CharacterGame::initialize()
 
     // Load animations clips.
     loadAnimationClips();
+
+	Node* ambientLightNode = _scene->findNode("AmbientLight");
+	Light* ambientLight = ambientLightNode->getLight();
+
+	Node* sunlightNode = _scene->findNode("SunLight");
+	Light* sunLight = sunlightNode->getLight();
+
+	// Initialize the gamepad.
+	_gamepad = new Gamepad("res/gamepad.png", 1, 2);
+	Gamepad::Rect innerRegion = {};
+	Gamepad::Rect innerTexRegion = {};
+	Gamepad::Rect outerRegion = {};
+	Gamepad::Rect outerTexRegion = {};
+	_gamepad->setJoystick(JOYSTICK, innerRegion, innerTexRegion, outerRegion, outerTexRegion, 64.0f);
 }
 
 void CharacterGame::initMaterial(Scene* scene, Node* node, Material* material)
@@ -297,7 +312,7 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
             _rotateX = x;
             _rotateY = y;
             _character->getNode()->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
-            //_scene->findNode("Camera")->rotateX(-MATH_DEG_TO_RAD(deltaY * 0.5f));
+			//_scene->findNode("Camera")->rotateX(-MATH_DEG_TO_RAD(deltaY * 0.5f));
             //_character->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
         }
         break;
@@ -308,11 +323,14 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
 
 void CharacterGame::loadAnimationClips()
 {
-    _animation = Game::getInstance()->getAnimationController()->getAnimation("movements");
+	AnimationController* controller = Game::getInstance()->getAnimationController();
+    _animation = controller->getAnimation("movements");
     _animation->createClips("res/boy.animation");
 
     _character->addAnimation("idle", _animation->getClip("idle"), 0.0f);
     _character->addAnimation("walk", _animation->getClip("walk"), WALK_SPEED);
+	_character->addAnimation("run", _animation->getClip("run"), RUN_SPEED);
+	_character->addAnimation("jump", _animation->getClip("jump"), 0.0f);
 
     _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT);
 }

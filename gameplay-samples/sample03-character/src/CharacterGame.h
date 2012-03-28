@@ -2,6 +2,7 @@
 #define CHARACTERGAME_H_
 
 #include "gameplay.h"
+#include "Gamepad.h"
 
 using namespace gameplay;
 
@@ -11,6 +12,11 @@ using namespace gameplay;
 class CharacterGame: public Game, public PhysicsCollisionObject::CollisionListener
 {
 public:
+
+	static const unsigned int JOYSTICK = 0;
+
+	static const unsigned int BUTTON_1 = 0;
+	static const unsigned int BUTTON_2 = 1;
 
     /**
      * Constructor.
@@ -80,6 +86,8 @@ private:
     Animation* _animation;
     unsigned int _animationState;
     int _rotateX;
+	Gamepad* _gamepad;
+
 };
 
 #endif
