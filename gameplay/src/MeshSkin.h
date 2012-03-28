@@ -2,7 +2,7 @@
 #define MESHSKIN_H_
 
 #include "Matrix.h"
-#include "Node.h"
+#include "Transform.h"
 
 namespace gameplay
 {
@@ -10,6 +10,7 @@ namespace gameplay
 class Package;
 class Model;
 class Joint;
+class Node;
 
 /**
  * Represents the skin for a mesh.

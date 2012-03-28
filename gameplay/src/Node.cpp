@@ -2,6 +2,9 @@
 #include "Node.h"
 #include "Scene.h"
 #include "Joint.h"
+#include "PhysicsRigidBody.h"
+#include "PhysicsGhostObject.h"
+#include "PhysicsCharacter.h"
 #include "Game.h"
 
 #define NODE_DIRTY_WORLD 1
@@ -13,8 +16,8 @@ namespace gameplay
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
-    _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL), 
-    _ghostObject(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true)
+    _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
+	_collisionObject(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true)
 {
     if (id)
     {
@@ -41,8 +44,7 @@ Node::~Node()
     SAFE_RELEASE(_audioSource);
     SAFE_RELEASE(_particleEmitter);
     SAFE_RELEASE(_form);
-    SAFE_DELETE(_physicsRigidBody);
-    SAFE_DELETE(_ghostObject);
+    SAFE_DELETE(_collisionObject);
 }
 
 Node* Node::create(const char* id)
@@ -292,7 +294,7 @@ const Matrix& Node::getWorldMatrix() const
         // If we have a parent, multiply our parent world transform by our local
         // transform to obtain our final resolved world transform.
         Node* parent = getParent();
-        if (parent && (!_physicsRigidBody || _physicsRigidBody->isKinematic()) )
+		if (parent && (!_collisionObject || _collisionObject->isKinematic()))
         {
             Matrix::multiply(parent->getWorldMatrix(), getMatrix(), &_world);
         }
@@ -813,45 +815,56 @@ void Node::setParticleEmitter(ParticleEmitter* emitter)
     }
 }
 
-PhysicsRigidBody* Node::getRigidBody() const
+PhysicsCollisionObject* Node::getCollisionObject() const
 {
-    return _physicsRigidBody;
+    return _collisionObject;
 }
 
-void Node::setRigidBody(PhysicsRigidBody::ShapeType type, float mass, float friction,
-        float restitution, float linearDamping, float angularDamping)
+PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters)
 {
-    SAFE_DELETE(_physicsRigidBody);
-    
-    if (type != PhysicsRigidBody::SHAPE_NONE)
-        _physicsRigidBody = new PhysicsRigidBody(this, type, mass, friction, restitution, linearDamping, angularDamping);
+	SAFE_DELETE(_collisionObject);
+
+	switch (type)
+	{
+	case PhysicsCollisionObject::RIGID_BODY:
+		{
+			_collisionObject = new PhysicsRigidBody(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters());
+		}
+		break;
+
+	case PhysicsCollisionObject::GHOST_OBJECT:
+		{
+			_collisionObject = new PhysicsGhostObject(this, shape);
+		}
+		break;
+
+	case PhysicsCollisionObject::CHARACTER:
+		{
+			_collisionObject = new PhysicsCharacter(this, shape);
+		}
+		break;
+	}
+
+	return _collisionObject;
 }
 
-void Node::setRigidBody(const char* filePath)
+PhysicsCollisionObject* Node::setCollisionObject(const char* filePath)
 {
-    SAFE_DELETE(_physicsRigidBody);
+    SAFE_DELETE(_collisionObject);
 
-    _physicsRigidBody = PhysicsRigidBody::create(this, filePath);
+	// TODO: Support other collision object types from file
+    _collisionObject = PhysicsRigidBody::create(this, filePath);
+
+	return _collisionObject;
 }
 
-void Node::setRigidBody(Properties* properties)
+PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
 {
-    SAFE_DELETE(_physicsRigidBody);
+    SAFE_DELETE(_collisionObject);
 
-    _physicsRigidBody = PhysicsRigidBody::create(this, properties);
-}
+    _collisionObject = PhysicsRigidBody::create(this, properties);
 
-PhysicsGhostObject* Node::getGhostObject()
-{
-    return _ghostObject;
-}
-
-void Node::setGhostObject(PhysicsRigidBody::ShapeType type)
-{
-    SAFE_DELETE(_ghostObject);
-    
-    if (type != PhysicsRigidBody::SHAPE_NONE)
-        _ghostObject = new PhysicsGhostObject(this, type);
+	return _collisionObject;
 }
 
 }
