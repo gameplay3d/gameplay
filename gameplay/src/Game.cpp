@@ -17,7 +17,7 @@ Game::Game()
     : _initialized(false), _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
       _clearDepth(1.0f), _clearStencil(0),
-      _animationController(NULL), _audioController(NULL)
+      _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL)
 {
     assert(__gameInstance == NULL);
     __gameInstance = this;
@@ -123,6 +123,8 @@ void Game::shutdown()
 
         _physicsController->finalize();
         SAFE_DELETE(_physicsController);
+
+        SAFE_DELETE(_audioListener);
 
         RenderState::finalize();
     }
@@ -251,6 +253,15 @@ void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, 
         bits |= GL_STENCIL_BUFFER_BIT;
     }
     glClear(bits);
+}
+
+AudioListener* Game::getAudioListener()
+{
+    if (_audioListener == NULL)
+    {
+        _audioListener = new AudioListener();
+    }
+    return _audioListener;
 }
 
 void Game::menu()
