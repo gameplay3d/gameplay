@@ -4,13 +4,13 @@
 #include "Mesh.h"
 #include "MeshSkin.h"
 #include "Material.h"
-#include "Node.h"
 
 namespace gameplay
 {
 
 class Package;
 class MeshSkin;
+class Node;
 
 /**
  * Defines a Model which is an instance of a Mesh that can be drawn

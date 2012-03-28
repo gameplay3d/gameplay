@@ -7,12 +7,12 @@
 #include "PhysicsHingeConstraint.h"
 #include "PhysicsSocketConstraint.h"
 #include "PhysicsSpringConstraint.h"
-#include "PhysicsRigidBody.h"
-#include "PhysicsCharacter.h"
+#include "PhysicsCollisionObject.h"
+#include "MeshBatch.h"
 
 namespace gameplay
 {
-    
+
 /**
  * Defines a class for controlling game physics.
  */
@@ -62,42 +62,6 @@ public:
      * @param listener The listener to add.
      */
     void addStatusListener(PhysicsController::Listener* listener);
-
-    /**
-     * Creates a new PhysicsCharacter.
-     *
-     * The created character is added to the physics world and automatically receives
-     * physics updates to handle interactions and collisions between the character
-     * and other physics objects in the world. The character will continue to receive
-     * updates until it is destroyed via the destroyCharacter(PhysicsCharacter*) method.
-     *
-     * The node may point to any node in the scene that you wish to control as a character.
-     * When a PhysicsCharacter is created for a particular node, the game will normally
-     * perform all movement directly through the PhysicsCharacter interface and not through
-     * the node itself.
-     *
-     * The radius, height and center parameters define a capsule volume that is used
-     * to represent the character in the physics world. All collision handling is 
-     * performed using this capsule.
-     *
-     * Note that PhysicsCharacter should not be mixed with rigid bodies. Therefore, you 
-     * should ensure that the node (and any of its children) used to create the
-     * PhysicsCharacter does not have any rigid bodies assigned. Doing so will cause
-     * unexpected results.
-     *
-     * @param node Scene node that represents the character.
-     * @param radius Radius of capsule volume used for character collisions.
-     * @param height Height of the capsule volume used for character collisions.
-     * @param center Center point of the capsule volume for the character.
-     */
-    PhysicsCharacter* createCharacter(Node* node, float radius, float height, const Vector3& center = Vector3::zero());
-
-    /**
-     * Destroys a PhysicsCharacter and removes it from the physics world.
-     *
-     * @param character PhysicsCharacter to destroy.
-     */
-    void destroyCharacter(PhysicsCharacter* character);
 
     /**
      * Creates a fixed constraint.
@@ -265,16 +229,7 @@ private:
         int _status;
     };
 
-    // Wraps Bullet collision shapes (used for implementing shape caching).
-    struct PhysicsCollisionShape : public Ref
-    {
-        PhysicsCollisionShape(btCollisionShape* shape);
-        ~PhysicsCollisionShape();
-
-        btCollisionShape* _shape;
-    };
-
-    /**
+	/**
      * Constructor.
      */
     PhysicsController();
@@ -323,21 +278,31 @@ private:
     
     // Gets the corresponding GamePlay object for the given Bullet object.
     PhysicsCollisionObject* getCollisionObject(const btCollisionObject* collisionObject) const;
+
+	// Creates a collision shape for the given node and gameplay shape definition.
+	// Populates 'centerOfMassOffset' with the correct calculated center of mass offset.
+	PhysicsCollisionShape* createShape(Node* node, const PhysicsCollisionShape::Definition& shape, Vector3* centerOfMassOffset);
     
-    // Creates a box collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createBox(const Vector3& min, const Vector3& max, const Vector3& scale);
+    // Creates a box collision shape.
+    PhysicsCollisionShape* createBox(const Vector3& extents, const Vector3& scale);
 
-    // Creates a capsule collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createCapsule(float radius, float height);
+	// Creates a sphere collision shape.
+    PhysicsCollisionShape* createSphere(float radius, const Vector3& scale);
 
-    // Creates a sphere collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createSphere(float radius, const Vector3& scale);
+    // Creates a capsule collision shape.
+    PhysicsCollisionShape* createCapsule(float radius, float height, const Vector3& scale);
 
-    // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createMesh(PhysicsRigidBody* body, const Vector3& scale);
+	// Creates a heightfield collision shape.
+    PhysicsCollisionShape* createHeightfield(Node* node, Image* image, Vector3* centerOfMassOffset);
 
-    // Creates a heightfield collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createHeightfield(int width, int height, void* heightfieldData, float minHeight, float maxHeight);
+    // Creates a triangle mesh collision shape.
+    PhysicsCollisionShape* createMesh(Mesh* mesh, const Vector3& scale);
+
+	// Destroys a collision shape created through PhysicsController
+	void destroyShape(PhysicsCollisionShape* shape);
+
+	// Helper function for calculating heights from heightmap (image) or heightfield data.
+	static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
 
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);

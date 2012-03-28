@@ -4,6 +4,7 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include "Form.h"
 #include <GL/wglew.h>
 
 // Default to 720p

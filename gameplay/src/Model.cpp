@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Technique.h"
 #include "Pass.h"
+#include "Node.h"
 
 namespace gameplay
 {
