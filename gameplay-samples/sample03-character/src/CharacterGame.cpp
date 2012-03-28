@@ -52,7 +52,10 @@ void CharacterGame::initialize()
 
 void CharacterGame::initMaterial(Scene* scene, Node* node, Material* material)
 {
-    if (material)
+    std::string id = node->getId();
+    if (material &&
+        (id == "Basketball" || id.find("GreenChair") != id.npos || id.find("BlueChair") != id.npos || 
+        id == "Easel" || id == "BoyMesh" || id == "BoyShadow" || id == "Rainbow"))
     {
         Node* lightNode = scene->findNode("SunLight");
 
