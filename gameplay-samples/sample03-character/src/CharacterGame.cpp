@@ -24,8 +24,8 @@ CharacterGame::~CharacterGame()
 
 void CharacterGame::initialize()
 {
-    // Draw loading screen.
-    renderOnce(this, &CharacterGame::drawLoadScreen, NULL);
+    // Display the gameplay splash screen for at least 2.4 seconds.
+    displaySplash(this, &CharacterGame::drawSplash, NULL, 2400L);
 
     // Load the font.
     _font = Font::create("res/arial40.gpb");
@@ -50,7 +50,7 @@ void CharacterGame::initialize()
     loadAnimationClips();
 }
 
-void initMaterial(Scene* scene, Node* node, Material* material)
+void CharacterGame::initMaterial(Scene* scene, Node* node, Material* material)
 {
     if (material)
     {
@@ -73,7 +73,7 @@ bool CharacterGame::initScene(Node* node, void* cookie)
         }
         for (unsigned int i = 0; i < model->getMeshPartCount(); ++i)
         {
-            if (model->hasPartMaterial(i))
+            if (model->hasMaterial(i))
             {
                 initMaterial(_scene, node, model->getMaterial(i));
             }
@@ -369,7 +369,7 @@ void CharacterGame::fixCamera(long elapsedTime)
             if (cameraRay.getOrigin().distanceSquared(focalPoint) < (RAY_STEP_SIZE*RAY_STEP_SIZE))
                 break;
         }
-        while (cameraOcclusion = Game::getInstance()->getPhysicsController()->rayTest(cameraRay, CAMERA_FOCUS_RANGE, &collisionPoint));
+        while ((cameraOcclusion = Game::getInstance()->getPhysicsController()->rayTest(cameraRay, CAMERA_FOCUS_RANGE, &collisionPoint)));
     }
 
     if (cameraCollision)
@@ -395,12 +395,12 @@ void CharacterGame::fixCamera(long elapsedTime)
     }
 }
 
-void CharacterGame::drawLoadScreen(void* param)
+void CharacterGame::drawSplash(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
-    SpriteBatch* batch = SpriteBatch::create("res/gameplay_loading.png");
+    SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
     batch->begin();
-    batch->draw(Rectangle(0, 0, this->getWidth(), this->getHeight()), Rectangle(0, 0, 1920, 1080), Vector4::one());
+    batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
     batch->end();
     SAFE_DELETE(batch);
 }

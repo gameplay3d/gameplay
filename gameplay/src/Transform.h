@@ -674,7 +674,7 @@ public:
      * Transforms the specified vector and stores the
      * result in the original vector.
      *
-     * @param normal The vector to transform.
+     * @param vector The vector to transform.
      */
     void transformVector(Vector3* vector);
 
@@ -737,6 +737,7 @@ protected:
 
     void dirty();
     virtual void transformChanged();
+    void cloneInto(Transform* transform, CloneContext &context) const;
 
     Vector3 _scale;
     Quaternion _rotation;

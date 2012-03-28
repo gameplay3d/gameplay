@@ -116,14 +116,14 @@ public:
      *
      * @return True if a custom MeshPart material is set for the specified index, false otherwise.
      */
-    bool hasPartMaterial(unsigned int partIndex) const;
+    bool hasMaterial(unsigned int partIndex) const;
 
     /**
      * Returns the MeshSkin.
      * 
      * @return The MeshSkin, or NULL if one is not set.
      */
-    MeshSkin* getSkin();
+    MeshSkin* getSkin() const;
 
     /**
      * Returns the node that is associated with this model.
@@ -176,6 +176,15 @@ private:
     void setMaterialNodeBinding(Material *m);
 
     void validatePartCount();
+
+    /**
+     * Clones the model and returns a new model.
+     * 
+     * @param context The clone context.
+     * 
+     * @return The new cloned model.
+     */
+    Model* clone(CloneContext &context);
 
     Mesh* _mesh;
     Material* _material;

@@ -384,7 +384,41 @@ private:
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> > _timeEvents; // Contains the scheduled time events.
+
+    friend class SplashDisplayer;
 };
+
+/**
+ * Used for displaying splash screens.
+ */
+class SplashDisplayer
+{
+public:
+
+    /**
+     * Displays a splash screen using the {@link Game#renderOnce} mechanism for at least the given amount of time.
+     * 
+     * @param instance See {@link Game#renderOnce}.
+     * @param method See {@link Game#renderOnce}.
+     * @param cookie See {@link Game#renderOnce}.
+     * @param time The minimum amount of time to display the splash screen (in milliseconds).
+     */
+    template <typename T> void run(T* instance, void (T::*method) (void*), void* cookie, long time);
+
+    /**
+     * Destructor.
+     */
+    ~SplashDisplayer();
+
+private:
+
+    long _time;
+    long _startTime;
+};
+
+#define displaySplash(instance, method, cookie, time) \
+    SplashDisplayer __##instance##SplashDisplayer; \
+    __##instance##SplashDisplayer.run(instance, method, cookie, time)
 
 }
 

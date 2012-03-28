@@ -233,9 +233,10 @@ void Vector4::negate()
     w = -w;
 }
 
-void Vector4::normalize()
+Vector4& Vector4::normalize()
 {
     normalize(this);
+    return *this;
 }
 
 void Vector4::normalize(Vector4* dst)

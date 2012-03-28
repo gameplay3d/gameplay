@@ -682,6 +682,11 @@ void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
     Form::keyEventInternal(evt, key);
 }
 
+void Platform::sleep(long ms)
+{
+    Sleep(ms);
+}
+
 }
 
 #endif

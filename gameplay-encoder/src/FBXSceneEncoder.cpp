@@ -250,6 +250,12 @@ void FBXSceneEncoder::loadScene(KFbxScene* fbxScene)
     KFbxColor ambientColor = fbxScene->GetGlobalSettings().GetAmbientColor();
     scene->setAmbientColor((float)ambientColor.mRed, (float)ambientColor.mGreen, (float)ambientColor.mBlue);
 
+	// Assign the first camera node (if there is one) in the scene as the active camera
+	// This ensures that if there's a camera in the scene that it is assigned as the 
+	// active camera.
+	// TODO: add logic to find the "active" camera node in the fbxScene
+	scene->setActiveCameraNode(scene->getFirstCameraNode());
+
     _gamePlayFile.addScene(scene);
 }
 

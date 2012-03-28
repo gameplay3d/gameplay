@@ -14,10 +14,6 @@ Pass::Pass(const char* id, Technique* technique, Effect* effect) :
     RenderState::_parent = _technique;
 }
 
-Pass::Pass(const Pass& copy)
-{
-}
-
 Pass::~Pass()
 {
     SAFE_RELEASE(_effect);
@@ -81,6 +77,15 @@ void Pass::unbind()
     {
         _vaBinding->unbind();
     }
+}
+
+Pass* Pass::clone(Technique* technique, CloneContext &context) const
+{
+    Effect* effect = getEffect();
+    effect->addRef();
+    Pass* pass = new Pass(getId(), technique, effect);
+    RenderState::cloneInto(pass, context);
+    return pass;
 }
 
 }

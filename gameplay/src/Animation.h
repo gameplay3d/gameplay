@@ -3,6 +3,7 @@
 
 #include "Ref.h"
 #include "Properties.h"
+#include "Curve.h"
 
 namespace gameplay
 {
@@ -10,7 +11,6 @@ namespace gameplay
 class AnimationTarget;
 class AnimationController;
 class AnimationClip;
-class Curve;
 
 /**
  * Defines a generic property animation.
@@ -97,6 +97,26 @@ public:
 private:
 
     /**
+     * Defines a reference counted Curve wrapper.
+     * 
+     * Multiple channels can share the same Curve.
+     */
+    class CurveRef : public Ref
+    {
+    public:
+        static CurveRef* create(Curve* curve);
+        Curve* getCurve() const;
+
+    private:
+        CurveRef(Curve* curve);
+        CurveRef(const CurveRef&); // Hidden copy constructor.
+        ~CurveRef();
+        CurveRef& operator=(const CurveRef&); // Hidden copy assignment operator.
+
+        Curve* _curve;
+    };
+
+    /**
      * Defines a channel which holds the target, target property, curve values, and duration.
      *
      * An animation can have 1 or more channels. All typical simple property animations
@@ -112,23 +132,21 @@ private:
     private:
 
         Channel(Animation* animation, AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration);
-        Channel(const Channel& copy);
+        Channel(const Channel& copy, Animation* animation, AnimationTarget* target);
+        Channel(const Channel&); // Hidden copy constructor.
         ~Channel();
+        Channel& operator=(const Channel&); // Hidden copy assignment operator.
+        Curve* getCurve() const;
 
         Animation* _animation;                // Reference to the animation this channel belongs to.
         AnimationTarget* _target;             // The target of this channel.
         int _propertyId;                      // The target property this channel targets.
-        Curve* _curve;                        // The curve used to represent the animation data.
+        CurveRef* _curveRef;                  // The curve used to represent the animation data.
         unsigned long _duration;              // The length of the animation (in milliseconds).
     };
 
     /**
-     * Constructor.
-     */
-    Animation();
-
-    /**
-     * Constructor.
+     * Hidden copy constructor.
      */
     Animation(const Animation& copy);
 
@@ -143,9 +161,19 @@ private:
     Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type);
 
     /**
+     * Constructor.
+     */
+    Animation(const char* id);
+
+    /**
      * Destructor.
      */
     ~Animation();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Animation& operator=(const Animation&);
 
     /**
      * Creates the default clip.
@@ -191,6 +219,13 @@ private:
      * Sets the rotation offset in a Curve representing a Transform's animation data.
      */
     void setTransformRotationOffset(Curve* curve, unsigned int propertyId);
+
+    /**
+     * Clones this animation.
+     * 
+     * @return The newly created animation.
+     */
+    Animation* clone();
     
     AnimationController* _controller;       // The AnimationController that this Animation will run on.
     std::string _id;                        // The Animation's ID.

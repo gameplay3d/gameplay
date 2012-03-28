@@ -153,13 +153,13 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\..\gameplay\res\logo_powered_white.png" />
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
     <None Include="res\airstrip.ttf" />
     <None Include="res\airstrip28.gpb" />
     <None Include="res\background.ogg" />
     <None Include="res\background.png" />
-    <None Include="res\gameplay_loading.png" />
     <None Include="res\propulsion_glow.png" />
     <None Include="res\spaceship.dae" />
     <None Include="res\spaceship.gpb" />

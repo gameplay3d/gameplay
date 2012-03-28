@@ -66,4 +66,18 @@ inline void Game::displayKeyboard(bool display)
     Platform::displayKeyboard(display);
 }
 
+template <typename T> void SplashDisplayer::run(T* instance, void (T::*method) (void*), void* cookie, long time)
+{
+    _time = time;
+    Game::getInstance()->renderOnce(instance, method, cookie);
+    _startTime = Game::getInstance()->getGameTime();
+}
+
+inline SplashDisplayer::~SplashDisplayer()
+{
+    long elapsedTime = Game::getInstance()->getGameTime() - _startTime;
+    if (elapsedTime < _time)
+        Platform::sleep(_time - (Game::getInstance()->getGameTime() - _startTime));
+}
+
 }
