@@ -143,7 +143,7 @@ extern void printError(const char* format, ...);
 #define MATH_LOG2E                  1.442695040888963387f
 #define MATH_PI                     3.14159265358979323846f
 #define MATH_PIOVER2                1.57079632679489661923f
-#define MATH_PIOVER4                M_PI_4
+#define MATH_PIOVER4                0.785398163397448309616f
 #define MATH_PIX2                   6.28318530717958647693f
 #define MATH_EPSILON                0.000001f
 #define MATH_CLAMP(x, lo, hi)       ((x < lo) ? lo : ((x > hi) ? hi : x))
