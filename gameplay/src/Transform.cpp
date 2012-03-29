@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "Transform.h"
 #include "Game.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -780,7 +781,7 @@ void Transform::transformChanged()
     }
 }
 
-void Transform::cloneInto(Transform* transform, CloneContext &context) const
+void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const
 {
     AnimationTarget::cloneInto(transform, context);
     transform->_scale.set(_scale);

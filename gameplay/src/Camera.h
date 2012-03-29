@@ -10,6 +10,7 @@ namespace gameplay
 {
 
 class Node;
+class NodeCloneContext;
 
 /**
  * Defines a camera which acts as a view of a scene to be rendered.
@@ -252,7 +253,7 @@ private:
      * 
      * @return The newly created camera.
      */
-    Camera* clone(CloneContext &context) const;
+    Camera* clone(NodeCloneContext &context) const;
 
     /**
      * @see Transform::Listener::transformChanged

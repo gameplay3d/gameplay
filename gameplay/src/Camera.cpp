@@ -343,7 +343,7 @@ void Camera::pickRay(const Viewport* viewport, float x, float y, Ray* dst)
     dst->set(nearPoint, direction);
 }
 
-Camera* Camera::clone(CloneContext &context) const
+Camera* Camera::clone(NodeCloneContext &context) const
 {
     Camera* cameraClone = NULL;
     if (getCameraType() == PERSPECTIVE)
