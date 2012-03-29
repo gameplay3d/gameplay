@@ -61,7 +61,7 @@ protected:
      * 
      * @return Pointer to the newly created joint.
      */
-    virtual Node* cloneSingleNode(CloneContext &context) const;
+    virtual Node* cloneSingleNode(NodeCloneContext &context) const;
 
     /**
      * Sets the inverse bind pose matrix.
