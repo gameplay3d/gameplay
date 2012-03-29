@@ -195,6 +195,11 @@ private:
 	 */
 	PhysicsCollisionShape(Type type, btCollisionShape* shape);
 
+	/** 
+	 * Hidden copy constructor.
+	 */
+	PhysicsCollisionShape(const PhysicsCollisionShape& copy);
+
 	/**
 	 * Destructor.
 	 */
