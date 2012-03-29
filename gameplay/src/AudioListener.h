@@ -15,6 +15,7 @@ class Camera;
 class AudioListener : public Transform::Listener
 {
     friend class AudioController;
+    friend class Game;
 
 public:
 
