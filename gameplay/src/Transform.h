@@ -12,6 +12,7 @@ namespace gameplay
 
 class BoundingBox;
 class BoundingSphere;
+class NodeCloneContext;
 
 /**
  * Defines a 3-dimensional transformation.
@@ -737,7 +738,7 @@ protected:
 
     void dirty();
     virtual void transformChanged();
-    void cloneInto(Transform* transform, CloneContext &context) const;
+    void cloneInto(Transform* transform, NodeCloneContext &context) const;
 
     Vector3 _scale;
     Quaternion _rotation;

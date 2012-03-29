@@ -5,6 +5,7 @@
 #include "Technique.h"
 #include "Pass.h"
 #include "Properties.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -125,7 +126,7 @@ Material* Material::create(const char* vshPath, const char* fshPath, const char*
     return material;
 }
 
-Material* Material::clone(CloneContext &context) const
+Material* Material::clone(NodeCloneContext &context) const
 {
     Material* material = new Material();
     RenderState::cloneInto(material, context);
