@@ -10,7 +10,7 @@ float _rotateY = 0.0f;
 #define BLEND_DURATION 150.0f
 #define CAMERA_FOCUS_RANGE 16.0f
 
-bool drawDebug = false;
+int drawDebug = 0;
 bool moveBall = false;
 
 CharacterGame::CharacterGame()
@@ -39,9 +39,9 @@ void CharacterGame::initialize()
 	_character = static_cast<PhysicsCharacter*>(node->getCollisionObject());
     _character->addCollisionListener(this);
 
-	//node = _scene->findNode("Easel");
-	//node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule());
-	//static_cast<PhysicsCharacter*>(node->getCollisionObject())->setPhysicsEnabled(false);
+	node = _scene->findNode("Easel");
+	static_cast<PhysicsCharacter*>(node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule()));
+	static_cast<PhysicsCharacter*>(node->getCollisionObject())->setPhysicsEnabled(false);
 
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initScene);
@@ -175,9 +175,18 @@ void CharacterGame::render(long elapsedTime)
     // Draw our scene
     _scene->visit(this, &CharacterGame::drawScene);
 
-    if (drawDebug)
+	switch (drawDebug)
+	{
+	case 1:
+		Game::getInstance()->getPhysicsController()->drawDebug(_scene->getActiveCamera()->getViewProjectionMatrix());
+		break;
+	case 2:
 		_scene->drawDebug(Scene::DEBUG_BOXES);
-        //Game::getInstance()->getPhysicsController()->drawDebug(_scene->getActiveCamera()->getViewProjectionMatrix());
+		break;
+	case 3:
+		_scene->drawDebug(Scene::DEBUG_SPHERES);
+		break;
+	}
 
     _font->begin();
     char fps[32];
@@ -244,7 +253,9 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             keyFlags |= 8;
             break;
         case Keyboard::KEY_P:
-            drawDebug = !drawDebug;
+            drawDebug++;
+			if (drawDebug > 3)
+				drawDebug = 0;
             break;
 		case Keyboard::KEY_B:
 			moveBall = !moveBall;
@@ -321,11 +332,10 @@ void CharacterGame::collisionEvent(
 {
     if (collisionPair.objectA == _character)
     {
-		if (collisionPair.objectB == _scene->findNode("PlayTable")->getCollisionObject())
+		if (collisionPair.objectB->getType() == PhysicsCollisionObject::RIGID_BODY)
         {
-            int i = 0;
-            i = 1;
-            ++i;
+			PhysicsCharacter* c = static_cast<PhysicsCharacter*>(collisionPair.objectA);
+			//c->setve
         }
     }
 }

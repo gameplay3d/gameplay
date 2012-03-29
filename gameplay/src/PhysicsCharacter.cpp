@@ -71,9 +71,6 @@ PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Defi
 {
 	setMaxSlopeAngle(45.0f);
 
-    // Set the collision flags on the ghost object to indicate it's a character
-    //_ghostObject->setCollisionFlags(_ghostObject->getCollisionFlags() | btCollisionObject::CF_CHARACTER_OBJECT);
-
     // Register ourselves as an action on the physics world so we are called back during physics ticks
     Game::getInstance()->getPhysicsController()->_world->addAction(this);
 }
@@ -432,7 +429,7 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
     {
         // No velocity, so we aren't moving
         return;
-    }
+	}
 
     // Translate the target position by the velocity vector (already scaled by t)
     btVector3 targetPosition = _currentPosition + velocity;
@@ -474,15 +471,14 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 
 		if (callback.hasHit())
         {
-			// We hit something so can move only a fraction
-			//btScalar hitDistance = (callback.m_hitPointWorld - _currentPosition).length();
-
-            //targetPosition = _currentPosition;
-			//targetPosition.setInterpolate3(_currentPosition, targetPosition, callback.m_closestHitFraction * 0.1f);
-
-			//btVector3 normalDir = callback.m_hitNormalWorld;
-			//normalDir.normalize();
-			//targetPosition = callback.m_hitPointWorld + (normalDir * 0.2f);
+			Vector3 normal(callback.m_hitNormalWorld.x(), callback.m_hitNormalWorld.y(), callback.m_hitNormalWorld.z());
+			PhysicsCollisionObject* o = Game::getInstance()->getPhysicsController()->getCollisionObject(callback.m_hitCollisionObject);
+			if (o->getType() == PhysicsCollisionObject::RIGID_BODY && o->isDynamic())
+			{
+				PhysicsRigidBody* rb = static_cast<PhysicsRigidBody*>(o);
+				normal.normalize();
+				rb->applyImpulse(-normal);
+			}
 
 			updateTargetPositionFromCollision(targetPosition, callback.m_hitNormalWorld);
 			btVector3 currentDir = targetPosition - _currentPosition;
@@ -501,7 +497,6 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
         else
         {
             // Nothing in our way
-            //_currentPosition = targetPosition;
             break;
         }
     }
