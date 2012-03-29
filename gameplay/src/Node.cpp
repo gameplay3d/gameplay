@@ -704,11 +704,11 @@ const BoundingSphere& Node::getBoundingSphere() const
 
 Node* Node::clone() const
 {
-    CloneContext context;
+    NodeCloneContext context;
     return cloneRecursive(context);
 }
 
-Node* Node::cloneSingleNode(CloneContext &context) const
+Node* Node::cloneSingleNode(NodeCloneContext &context) const
 {
     Node* copy = Node::create(getId());
     context.registerClonedNode(this, copy);
@@ -716,7 +716,7 @@ Node* Node::cloneSingleNode(CloneContext &context) const
     return copy;
 }
 
-Node* Node::cloneRecursive(CloneContext &context) const
+Node* Node::cloneRecursive(NodeCloneContext &context) const
 {
     Node* copy = cloneSingleNode(context);
 
@@ -729,7 +729,7 @@ Node* Node::cloneRecursive(CloneContext &context) const
     return copy;
 }
 
-void Node::cloneInto(Node* node, CloneContext &context) const
+void Node::cloneInto(Node* node, NodeCloneContext &context) const
 {
     Transform::cloneInto(node, context);
 
@@ -865,6 +865,38 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
     _collisionObject = PhysicsRigidBody::create(this, properties);
 
 	return _collisionObject;
+}
+
+NodeCloneContext::NodeCloneContext()
+{
+    
+}
+
+NodeCloneContext::~NodeCloneContext()
+{
+
+}
+
+Animation* NodeCloneContext::findClonedAnimation(const Animation* animation)
+{
+    AnimationMap::iterator it = _clonedAnimations.find(animation);
+    return it != _clonedAnimations.end() ? it->second : NULL;
+}
+
+void NodeCloneContext::registerClonedAnimation(const Animation* original, Animation* clone)
+{
+    _clonedAnimations[original] = clone;
+}
+
+Node* NodeCloneContext::findClonedNode(const Node* node)
+{
+    NodeMap::iterator it = _clonedNodes.find(node);
+    return it != _clonedNodes.end() ? it->second : NULL;
+}
+
+void NodeCloneContext::registerClonedNode(const Node* original, Node* clone)
+{
+    _clonedNodes[original] = clone;
 }
 
 }

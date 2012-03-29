@@ -2,6 +2,7 @@
 #include "AnimationTarget.h"
 #include "Animation.h"
 #include "Game.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -118,7 +119,7 @@ void AnimationTarget::deleteChannel(Animation::Channel* channel)
     }
 }
 
-void AnimationTarget::cloneInto(AnimationTarget* target, CloneContext &context) const
+void AnimationTarget::cloneInto(AnimationTarget* target, NodeCloneContext &context) const
 {
     if (_animationChannels)
     {
@@ -129,7 +130,7 @@ void AnimationTarget::cloneInto(AnimationTarget* target, CloneContext &context) 
 
             bool animationCloned = false;
 
-            // Don't clone the Animaton if it is already in the CloneContext.
+            // Don't clone the Animaton if it is already in the clone context.
             Animation* animation = context.findClonedAnimation(channel->_animation);
             if (animation == NULL)
             {

@@ -276,9 +276,6 @@
     <ClCompile Include="src\PhysicsCollisionShape.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\CloneContext.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -546,9 +543,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PhysicsCollisionShape.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CloneContext.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
