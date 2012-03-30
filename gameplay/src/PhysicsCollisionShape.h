@@ -55,13 +55,17 @@ public:
 		PhysicsCollisionShape::Type type;
 
 		// Shape data.
+		struct BoxData { float center[3], extents[3]; };
+		struct SphereData { float center[3]; float radius; };
+		struct CapsuleData { float center[3]; float radius, height; };
+
 		union
 		{
-			struct { Vector3 boxExtents, boxCenter; };
-			struct { Vector3 sphereCenter; float sphereRadius; };
-			struct { Vector3 capsuleCenter; float capsuleRadius, capsuleHeight; };
-			struct { Image* heightfield; };
-			struct { Mesh* mesh; };
+			BoxData box;
+			SphereData sphere;
+			CapsuleData capsule;
+			Image* heightfield;
+			Mesh* mesh;
 		} data;
 
 		// Whether the shape definition is explicit, or if it is inherited from node bounds.
@@ -83,17 +87,7 @@ public:
 	 *
 	 * @return The bullet shape object.
 	 */
-	template <class T> T* getShape() const
-	{
-		return static_cast<T*>(_shape);
-	}
-
-	/**
-	 * Returns the internal bullet physics shape object.
-	 *
-	 * @return The bullet shape object.
-	 */
-	template <> btCollisionShape* getShape<btCollisionShape>() const
+	btCollisionShape* getShape() const
 	{
 		return _shape;
 	}
@@ -194,6 +188,11 @@ private:
 	 * Constructor.
 	 */
 	PhysicsCollisionShape(Type type, btCollisionShape* shape);
+
+	/** 
+	 * Hidden copy constructor.
+	 */
+	PhysicsCollisionShape(const PhysicsCollisionShape& copy);
 
 	/**
 	 * Destructor.

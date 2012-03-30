@@ -14,7 +14,7 @@ Vector2::Vector2(float x, float y)
     set(x, y);
 }
 
-Vector2::Vector2(float* array)
+Vector2::Vector2(const float* array)
 {
     set(array);
 }
@@ -235,7 +235,7 @@ void Vector2::set(float x, float y)
     this->y = y;
 }
 
-void Vector2::set(float* array)
+void Vector2::set(const float* array)
 {
     assert(array);
 

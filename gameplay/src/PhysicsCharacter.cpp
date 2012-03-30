@@ -32,7 +32,7 @@ public:
 	{
 	}
 
-	virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+	btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 	{
 		if (convexResult.m_hitCollisionObject == _me)
 			return btScalar(1.0);
@@ -72,7 +72,7 @@ PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Defi
 	setMaxSlopeAngle(45.0f);
 
     // Set the collision flags on the ghost object to indicate it's a character
-    //_ghostObject->setCollisionFlags(_ghostObject->getCollisionFlags() | btCollisionObject::CF_CHARACTER_OBJECT);
+    _ghostObject->setCollisionFlags(_ghostObject->getCollisionFlags() | btCollisionObject::CF_CHARACTER_OBJECT);
 
     // Register ourselves as an action on the physics world so we are called back during physics ticks
     Game::getInstance()->getPhysicsController()->_world->addAction(this);
@@ -432,7 +432,7 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
     {
         // No velocity, so we aren't moving
         return;
-    }
+	}
 
     // Translate the target position by the velocity vector (already scaled by t)
     btVector3 targetPosition = _currentPosition + velocity;
@@ -455,7 +455,7 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 	{
         updateTargetPositionFromCollision(targetPosition, _collisionNormal);
 	}
-
+ 
 	int maxIter = 10;
 
 	while (fraction > btScalar(0.01) && maxIter-- > 0)
@@ -465,24 +465,25 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 		btVector3 sweepDirNegative(_currentPosition - targetPosition);
 
 		ClosestNotMeConvexResultCallback callback(_ghostObject, sweepDirNegative, btScalar(0.0));
-		callback.m_collisionFilterGroup = btBroadphaseProxy::CharacterFilter;
-		callback.m_collisionFilterMask = btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter;
+		callback.m_collisionFilterGroup = _ghostObject->getBroadphaseHandle()->m_collisionFilterGroup;
+		callback.m_collisionFilterMask = _ghostObject->getBroadphaseHandle()->m_collisionFilterMask;
+		//callback.m_collisionFilterGroup = btBroadphaseProxy::CharacterFilter;
+		//callback.m_collisionFilterMask = btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter;
 
-		_ghostObject->convexSweepTest(_collisionShape->getShape<btConvexShape>(), start, end, callback, 0.01f/*collisionWorld->getDispatchInfo().m_allowedCcdPenetration*/);
+		_ghostObject->convexSweepTest(static_cast<btConvexShape*>(_collisionShape->getShape()), start, end, callback, 0.0f);//collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
 
 		fraction -= callback.m_closestHitFraction;
 
 		if (callback.hasHit())
         {
-			// We hit something so can move only a fraction
-			//btScalar hitDistance = (callback.m_hitPointWorld - _currentPosition).length();
-
-            //targetPosition = _currentPosition;
-			//targetPosition.setInterpolate3(_currentPosition, targetPosition, callback.m_closestHitFraction * 0.1f);
-
-			//btVector3 normalDir = callback.m_hitNormalWorld;
-			//normalDir.normalize();
-			//targetPosition = callback.m_hitPointWorld + (normalDir * 0.2f);
+			/*Vector3 normal(callback.m_hitNormalWorld.x(), callback.m_hitNormalWorld.y(), callback.m_hitNormalWorld.z());
+			PhysicsCollisionObject* o = Game::getInstance()->getPhysicsController()->getCollisionObject(callback.m_hitCollisionObject);
+			if (o->getType() == PhysicsCollisionObject::RIGID_BODY && o->isDynamic())
+			{
+				PhysicsRigidBody* rb = static_cast<PhysicsRigidBody*>(o);
+				normal.normalize();
+				rb->applyImpulse(-normal);
+			}*/
 
 			updateTargetPositionFromCollision(targetPosition, callback.m_hitNormalWorld);
 			btVector3 currentDir = targetPosition - _currentPosition;
@@ -501,7 +502,6 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
         else
         {
             // Nothing in our way
-            //_currentPosition = targetPosition;
             break;
         }
     }
@@ -521,9 +521,8 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
     btVector3 targetPosition = _currentPosition + _fallVelocity;
 
     // Perform a convex sweep test between current and target position
-    btTransform start, end;
-    start.setIdentity();
-    end.setIdentity();
+	btTransform start = _ghostObject->getWorldTransform();
+	btTransform end = _ghostObject->getWorldTransform();
     start.setOrigin(_currentPosition);
     end.setOrigin(targetPosition);
 
@@ -534,7 +533,11 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
     ClosestNotMeConvexResultCallback callback(_ghostObject, btVector3(0, 1, 0), _cosSlopeAngle);
 	callback.m_collisionFilterGroup = _ghostObject->getBroadphaseHandle()->m_collisionFilterGroup;
 	callback.m_collisionFilterMask = _ghostObject->getBroadphaseHandle()->m_collisionFilterMask;
-	_ghostObject->convexSweepTest(_collisionShape->getShape<btConvexShape>(), start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+	//callback.m_collisionFilterGroup = btBroadphaseProxy::CharacterFilter;
+	//callback.m_collisionFilterMask = btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter;
+
+	_ghostObject->convexSweepTest(static_cast<btConvexShape*>(_collisionShape->getShape()), start, end, callback, 0.0f);//collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+
 	if (callback.hasHit())
 	{
         // Collision detected, fix it
@@ -618,7 +621,9 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
 	world->getDispatcher()->dispatchAllCollisionPairs(pairCache, world->getDispatchInfo(), world->getDispatcher());
 
     // Store our current world position
-    btVector3 currentPosition = _ghostObject->getWorldTransform().getOrigin();
+    Vector3 startPosition;
+	_node->getWorldMatrix().getTranslation(&startPosition);
+	btVector3 currentPosition = BV(startPosition);
 
     // Handle all collisions/overlappign pairs
 	btScalar maxPenetration = btScalar(0.0);
@@ -668,10 +673,8 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
 		}
 	}
 
-    // Set the new world transformation to apply to fix the collision
-	btTransform newTransform = _ghostObject->getWorldTransform();
-	newTransform.setOrigin(currentPosition);
-	_ghostObject->setWorldTransform(newTransform);
+	// Set the new world transformation to apply to fix the collision
+	_node->translate(Vector3(currentPosition.x(), currentPosition.y(), currentPosition.z()) - startPosition);
 
 	return collision;
 }

@@ -10,6 +10,11 @@ PhysicsCollisionShape::PhysicsCollisionShape(Type type, btCollisionShape* shape)
 	memset(&_shapeData, 0, sizeof(_shapeData));
 }
 
+PhysicsCollisionShape::PhysicsCollisionShape(const PhysicsCollisionShape& copy)
+{
+	// hidden
+}
+
 PhysicsCollisionShape::~PhysicsCollisionShape()
 {
 	if (_shape)
@@ -80,8 +85,8 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::box(const Vector3& exte
 {
 	Definition d;
 	d.type = SHAPE_BOX;
-	d.data.boxExtents = extents;
-	d.data.boxCenter = center;
+	memcpy(d.data.box.extents, &extents.x, sizeof(float) * 3);
+	memcpy(d.data.box.center, &center.x, sizeof(float) * 3);
 	d.isExplicit = true;
 	d.centerAbsolute = absolute;
 	return d;
@@ -100,8 +105,8 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::sphere(float radius, co
 {
 	Definition d;
 	d.type = SHAPE_SPHERE;
-	d.data.sphereRadius = radius;
-	d.data.sphereCenter = center;
+	d.data.sphere.radius = radius;
+	memcpy(d.data.sphere.center, &center.x, sizeof(float) * 3);
 	d.isExplicit  = true;
 	d.centerAbsolute = absolute;
 	return d;
@@ -120,9 +125,9 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::capsule(float radius, f
 {
 	Definition d;
 	d.type = SHAPE_CAPSULE;
-	d.data.capsuleRadius = radius;
-	d.data.capsuleHeight = height;
-	d.data.capsuleCenter = center;
+	d.data.capsule.radius = radius;
+	d.data.capsule.height = height;
+	memcpy(d.data.capsule.center, &center.x, sizeof(float) * 3);
 	d.isExplicit = true;
 	d.centerAbsolute = absolute;
 	return d;

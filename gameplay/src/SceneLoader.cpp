@@ -164,7 +164,7 @@ void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* scen
             for (unsigned int j = 0, pcount = sceneNode._properties.size(); j < pcount; ++j)
             {
                 SceneNodeProperty& snp = sceneNode._properties[j];
-                if ((typeFlags & snp._type) == snp._type)
+                if (typeFlags & snp._type)
                     applyNodeProperty(sceneNode, node, sceneProperties, snp);
             }
         }
@@ -481,7 +481,7 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
     // Go through the child namespaces of the scene.
     Properties* ns;
     const char* name = NULL;
-    while (ns = sceneProperties->getNextNamespace())
+    while ((ns = sceneProperties->getNextNamespace()) != NULL)
     {
         if (strcmp(ns->getNamespace(), "node") == 0)
         {
@@ -496,7 +496,7 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
             SceneNode& sceneNode = _sceneNodes[_sceneNodes.size()-1];
             sceneNode._nodeID = ns->getId();
 
-            while (name = ns->getNextProperty())
+            while ((name = ns->getNextProperty()) != NULL)
             {
                 if (strcmp(name, "url") == 0)
                 {
@@ -552,7 +552,7 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
         {
             // Load all the animations.
             Properties* animation;
-            while (animation = ns->getNextNamespace())
+            while ((animation = ns->getNextNamespace()) != NULL)
             {
                 if (strcmp(animation->getNamespace(), "animation") == 0)
                 {
@@ -753,7 +753,7 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
 
     Properties* constraint;
     const char* name;
-    while (constraint = physics->getNextNamespace())
+    while ((constraint = physics->getNextNamespace()) != NULL)
     {
         if (strcmp(constraint->getNamespace(), "constraint") == 0)
         {
