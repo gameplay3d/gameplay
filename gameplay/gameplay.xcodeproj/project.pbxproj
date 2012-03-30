@@ -308,6 +308,10 @@
 		5B2BC773151251EB00D176CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC76C151251EB00D176CD /* UIKit.framework */; };
 		5BB0823D14C6FEC40019975F /* Mouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB0823C14C6FEC40019975F /* Mouse.h */; };
 		5BB0823E14C6FEC40019975F /* Mouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB0823C14C6FEC40019975F /* Mouse.h */; };
+		5BBE143E1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBE143C1513E400003FB362 /* PhysicsGhostObject.cpp */; };
+		5BBE143F1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBE143C1513E400003FB362 /* PhysicsGhostObject.cpp */; };
+		5BBE14401513E400003FB362 /* PhysicsGhostObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBE143D1513E400003FB362 /* PhysicsGhostObject.h */; };
+		5BBE14411513E400003FB362 /* PhysicsGhostObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBE143D1513E400003FB362 /* PhysicsGhostObject.h */; };
 		5BC4E73F150F843D00CBE1C0 /* AbsoluteLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52634150F822A004C9099 /* AbsoluteLayout.cpp */; };
 		5BC4E740150F843D00CBE1C0 /* AbsoluteLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52635150F822A004C9099 /* AbsoluteLayout.h */; };
 		5BC4E741150F843D00CBE1C0 /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52636150F822A004C9099 /* Button.cpp */; };
@@ -542,18 +546,18 @@
 		5B04C5CA14BFCFE100EB0071 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-ios.mm"; path = "src/gameplay-main-ios.mm"; sourceTree = SOURCE_ROOT; };
 		5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformiOS.mm; path = src/PlatformiOS.mm; sourceTree = SOURCE_ROOT; };
-		5B2BC7561512507500D176CD /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC7561512507500D176CD /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		5B2BC75D1512514500D176CD /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		5B2BC75E1512514500D176CD /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B2BC7611512514D00D176CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5B2BC7631512516B00D176CD /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
-		5B2BC766151251EB00D176CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
-		5B2BC767151251EB00D176CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		5B2BC768151251EB00D176CD /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
-		5B2BC769151251EB00D176CD /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		5B2BC76A151251EB00D176CD /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		5B2BC76B151251EB00D176CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		5B2BC76C151251EB00D176CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC766151251EB00D176CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC767151251EB00D176CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC768151251EB00D176CD /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
+		5B2BC769151251EB00D176CD /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC76A151251EB00D176CD /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC76B151251EB00D176CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC76C151251EB00D176CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5B5ADCE214C22DF900AC6109 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = SDKs/MacOSX10.7.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5B5ADCE414C22E1F00AC6109 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5B5DB92D14C25B7B007755DB /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../external-deps/bullet/lib/ios/i386/libbullet.a"; sourceTree = "<group>"; };
@@ -565,6 +569,8 @@
 		5BB0823814C6FEB10019975F /* gameplay-main-android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-android.cpp"; path = "src/gameplay-main-android.cpp"; sourceTree = SOURCE_ROOT; };
 		5BB0823914C6FEB10019975F /* PlatformAndroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformAndroid.cpp; path = src/PlatformAndroid.cpp; sourceTree = SOURCE_ROOT; };
 		5BB0823C14C6FEC40019975F /* Mouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mouse.h; path = src/Mouse.h; sourceTree = SOURCE_ROOT; };
+		5BBE143C1513E400003FB362 /* PhysicsGhostObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsGhostObject.cpp; path = src/PhysicsGhostObject.cpp; sourceTree = SOURCE_ROOT; };
+		5BBE143D1513E400003FB362 /* PhysicsGhostObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsGhostObject.h; path = src/PhysicsGhostObject.h; sourceTree = SOURCE_ROOT; };
 		5BC4E7D4150F8C3C00CBE1C0 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		5BD52634150F822A004C9099 /* AbsoluteLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbsoluteLayout.cpp; path = src/AbsoluteLayout.cpp; sourceTree = SOURCE_ROOT; };
 		5BD52635150F822A004C9099 /* AbsoluteLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AbsoluteLayout.h; path = src/AbsoluteLayout.h; sourceTree = SOURCE_ROOT; };
@@ -791,6 +797,8 @@
 				42CD0E09147D8FF50000361E /* PhysicsGenericConstraint.inl */,
 				42CD0E0A147D8FF50000361E /* PhysicsHingeConstraint.cpp */,
 				42CD0E0B147D8FF50000361E /* PhysicsHingeConstraint.h */,
+				5BBE143C1513E400003FB362 /* PhysicsGhostObject.cpp */,
+				5BBE143D1513E400003FB362 /* PhysicsGhostObject.h */,
 				42CD0E0C147D8FF50000361E /* PhysicsMotionState.cpp */,
 				42CD0E0D147D8FF50000361E /* PhysicsMotionState.h */,
 				42CD0E0E147D8FF50000361E /* PhysicsRigidBody.cpp */,
@@ -876,7 +884,7 @@
 				42CD0DA9147D8EA80000361E /* libvorbisenc.a */,
 				42CD0DAA147D8EA80000361E /* libvorbisfile.a */,
 				42CCD555146EC1EB00353661 /* libpng.a */,
-				5B5ADCE114C22DC700AC6109 /* Mac OS X */,
+				5B5ADCE114C22DC700AC6109 /* MacOSX */,
 				5B5ADCE014C22DBE00AC6109 /* iOS */,
 			);
 			name = Libraries;
@@ -885,8 +893,8 @@
 		42CCD4AF146D811D00353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B04C5FE14BFE52F00EB0071 /* Mac OS X */,
 				5B04C5FD14BFE52300EB0071 /* iOS */,
+				5B04C5FE14BFE52F00EB0071 /* MacOSX */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -906,7 +914,7 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		5B04C5FE14BFE52F00EB0071 /* Mac OS X */ = {
+		5B04C5FE14BFE52F00EB0071 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
 				5B2BC7631512516B00D176CD /* libz.dylib */,
@@ -915,7 +923,7 @@
 				5B2BC75E1512514500D176CD /* OpenGL.framework */,
 				4234D99D14686C52003031B3 /* Cocoa.framework */,
 			);
-			name = "Mac OS X";
+			name = MacOSX;
 			sourceTree = "<group>";
 		};
 		5B5ADCE014C22DBE00AC6109 /* iOS */ = {
@@ -932,12 +940,12 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		5B5ADCE114C22DC700AC6109 /* Mac OS X */ = {
+		5B5ADCE114C22DC700AC6109 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
 				5B5ADCE214C22DF900AC6109 /* libz.dylib */,
 			);
-			name = "Mac OS X";
+			name = MacOSX;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1035,6 +1043,7 @@
 				5BD52669150F822A004C9099 /* VerticalLayout.h in Headers */,
 				5BD52671150F8258004C9099 /* PhysicsCharacter.h in Headers */,
 				5BD52675150F8258004C9099 /* PhysicsCollisionObject.h in Headers */,
+				5BBE14401513E400003FB362 /* PhysicsGhostObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1129,6 +1138,7 @@
 				5BC4E754150F843D00CBE1C0 /* TextBox.h in Headers */,
 				5BC4E756150F843D00CBE1C0 /* Theme.h in Headers */,
 				5BC4E758150F843D00CBE1C0 /* VerticalLayout.h in Headers */,
+				5BBE14411513E400003FB362 /* PhysicsGhostObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1175,7 +1185,7 @@
 		4234D98C14686BB6003031B3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 4234D98F14686BB6003031B3 /* Build configuration list for PBXProject "gameplay" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1281,6 +1291,7 @@
 				5BD52668150F822A004C9099 /* VerticalLayout.cpp in Sources */,
 				5BD5266F150F8258004C9099 /* PhysicsCharacter.cpp in Sources */,
 				5BD52673150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */,
+				5BBE143E1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1369,6 +1380,7 @@
 				5BC4E753150F843D00CBE1C0 /* TextBox.cpp in Sources */,
 				5BC4E755150F843D00CBE1C0 /* Theme.cpp in Sources */,
 				5BC4E757150F843D00CBE1C0 /* VerticalLayout.cpp in Sources */,
+				5BBE143F1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1422,6 +1434,7 @@
 					"../external-deps/libpng/include",
 					"../external-deps/bullet/include",
 					"../external-deps/oggvorbis/include",
+					./gameplay,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1463,6 +1476,7 @@
 					"../external-deps/libpng/include",
 					"../external-deps/bullet/include",
 					"../external-deps/oggvorbis/include",
+					./gameplay,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

@@ -78,7 +78,7 @@ namespace gameplay
     Form* Form::create(const char* themeFile, Layout::Type type)
     {
         Layout* layout;
-        switch(type)
+        switch (type)
         {
         case Layout::LAYOUT_ABSOLUTE:
             layout = AbsoluteLayout::create();

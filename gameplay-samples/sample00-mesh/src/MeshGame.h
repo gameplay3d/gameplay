@@ -55,7 +55,7 @@ private:
 
     void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 
-    void drawLoadScreen(void* param);
+    void drawSplash(void* param);
 
     Font* _font;
     Scene* _scene;

@@ -12,13 +12,36 @@ scene
 
     node BoyShadow
     {
-        //material = res/scene.material#BoyShadow
+        material = res/scene.material#BoyShadow
     }
 
-    node Table
+    node TableTop
     {
-        url = Table*
-        material = res/scene.material#TableGreen
+        material = res/scene.material#TableTop
+        rigidbody = res/scene.physics#Table
+    }
+    
+    node TableLeg1
+    {
+        material = res/scene.material#TableLeg1
+        rigidbody = res/scene.physics#Table
+    }
+    
+    node TableLeg2
+    {
+        material = res/scene.material#TableLeg2
+        rigidbody = res/scene.physics#Table
+    }
+    
+    node TableLeg3
+    {
+        material = res/scene.material#TableLeg3
+        rigidbody = res/scene.physics#Table
+    }
+    
+    node TableLeg4
+    {
+        material = res/scene.material#TableLeg4
         rigidbody = res/scene.physics#Table
     }
 
@@ -38,9 +61,7 @@ scene
 
     node PlayTable
     {
-        material[0] = res/scene.material#PlayTableTopMaterial
-        material[1] = res/scene.material#PlayTableMaterial1
-        material[2] = res/scene.material#PlayTableMaterial2
+        material = res/scene.material#PlayTable
         rigidbody = res/scene.physics#StaticBox
     }
 
@@ -52,38 +73,71 @@ scene
 
     node StorageOrganizer
     {
-        material = res/scene.material#White
+        material = res/scene.material#StorageOrganizer
         rigidbody = res/scene.physics#StaticBox
     }
 
     node Ground
     {
-        material = res/scene.material#Ground
+        material = res/scene.material#Floor
         rigidbody = res/scene.physics#StaticBox
     }
 
-    node Wall
+    node Wall1
     {
-        url = Wall*
-        material = res/scene.material#Wall
+        material = res/scene.material#Wall1
         rigidbody = res/scene.physics#StaticBox
+    }
+    
+    node Wall2
+    {
+        material = res/scene.material#Wall2
+        rigidbody = res/scene.physics#StaticBox
+    }
+    
+    node Wall3
+    {
+        material = res/scene.material#Wall3
+        rigidbody = res/scene.physics#StaticBox
+    }
+    
+    node Wall4
+    {
+        material = res/scene.material#Wall4
+        rigidbody = res/scene.physics#StaticBox
+    }
+    
+    node WallOverhang
+    {
+        material = res/scene.material#WallOverhang
+        rigidbody = res/scene.physics#StaticBox
+    }
+    
+    node Ceiling
+    {
+        material = res/scene.material#Ceiling
     }
 
     node WindowLedge
     {
-        material = res/scene.material#White
+        material = res/scene.material#WindowLedge
     }
 
     node Door
     {
-        url = Door*
-        material = res/scene.material#White
+        material = res/scene.material#Door
+        rigidbody = res/scene.physics#StaticBox
+    }
+    
+    node DoorFrame
+    {
+        material = res/scene.material#DoorFrame
         rigidbody = res/scene.physics#StaticBox
     }
 
     node Bookshelf
     {
-        material = res/scene.material#White
+        material = res/scene.material#Bookshelf
         rigidbody = res/scene.physics#StaticBox
     }
 
@@ -111,12 +165,13 @@ scene
 
     node BasketballNet
     {
-        material[0] = res/scene.material#Black
-        material[1] = res/scene.material#BasketballPost
-        material[2] = res/scene.material#BasketballRim
-        material[3] = res/scene.material#White
-        material[4] = res/scene.material#Backboard
+        material = res/scene.material#BasketballNet
         rigidbody = res/scene.physics#StaticBox
+    }
+    
+    node BasketballBackboard
+    {
+        material = res/scene.material#BasketballBackboard
     }
 
     physics

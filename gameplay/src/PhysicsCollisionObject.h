@@ -2,6 +2,8 @@
 #define PHYSICSCOLLISIONOBJECT_H_
 
 #include "Vector3.h"
+#include "PhysicsCollisionShape.h"
+#include "PhysicsMotionState.h"
 
 namespace gameplay
 {
@@ -14,11 +16,12 @@ class Node;
 class PhysicsCollisionObject
 {
     friend class PhysicsController;
+	friend class PhysicsConstraint;
 
 public:
 
     /**
-     * Enumeration of all possible collision object types.
+     * Represents the different types of collision objects.
      */
     enum Type
     {
@@ -30,7 +33,17 @@ public:
         /**
          * PhysicsCharacter type.
          */
-        CHARACTER
+        CHARACTER,
+
+        /** 
+         * PhysicsGhostObject type.
+         */
+        GHOST_OBJECT,
+
+		/**
+		 * No collision object.
+		 */
+		NONE
     };
 
     /** 
@@ -109,15 +122,52 @@ public:
                                     const Vector3& contactPointB = Vector3::zero()) = 0;
     };
 
+	/**
+     * Virtual destructor.
+     */
+    virtual ~PhysicsCollisionObject();
+
     /**
      * Returns the type of the collision object.
      */
     virtual PhysicsCollisionObject::Type getType() const = 0;
 
+	/**
+	 * Returns the type of the shape for this collision object.
+	 */
+	PhysicsCollisionShape::Type getShapeType() const;
+
     /**
      * Returns the node associated with this collision object.
      */
-    virtual Node* getNode() const = 0;
+    Node* getNode() const;
+
+	/**
+     * Returns the collision shape.
+     *
+     * @return The collision shape.
+     */
+    PhysicsCollisionShape* getCollisionShape() const;
+
+	/**
+	 * Returns whether this collision object is kinematic.
+	 *
+	 * A kinematic collision object is an object that is not simulated by
+	 * the physics system and instead has its transform driven manually.
+	 *
+	 * @return Whether the collision object is kinematic.
+	 */
+	bool isKinematic() const;
+
+    /**
+     * Returns whether this collision object is dynamic.
+	 *
+	 * A dynamic collision object is simulated entirely by the physics system,
+	 * such as with dynamic rigid bodies. 
+     *
+     * @return Whether the collision object is dynamic.
+     */
+    bool isDynamic() const;
 
     /**
      * Adds a collision listener for this collision object.
@@ -148,12 +198,7 @@ protected:
     /**
      * Constructor.
      */
-    PhysicsCollisionObject();
-
-    /**
-     * Virtual destructor.
-     */
-    virtual ~PhysicsCollisionObject();
+    PhysicsCollisionObject(Node* node);
 
     /**
      * Returns the Bullet Physics collision object.
@@ -162,24 +207,17 @@ protected:
      */
     virtual btCollisionObject* getCollisionObject() const = 0;
 
-    /**
-     * Returns the Bullet Physics collision shape.
-     *
-     * @return The Bullet collision shape.
-     */
-    virtual btCollisionShape* getCollisionShape() const = 0;
+	/**
+	 * Returns the physics motion state.
+	 *
+	 * @return The motion state object.
+	 */
+	PhysicsMotionState* getMotionState() const;
 
-private:
-
-    // Internal class used to implement the collidesWith(PhysicsRigidBody*) function.
-    struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
-    {
-        btScalar addSingleResult(btManifoldPoint& cp, 
-                                 const btCollisionObject* a, int partIdA, int indexA, 
-                                 const btCollisionObject* b, int partIdB, int indexB);
-
-        bool result;
-    };
+	// Common member variables
+	Node* _node;
+    PhysicsMotionState* _motionState;
+    PhysicsCollisionShape* _collisionShape;
 
 };
 

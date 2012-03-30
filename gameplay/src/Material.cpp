@@ -5,6 +5,7 @@
 #include "Technique.h"
 #include "Pass.h"
 #include "Properties.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -122,6 +123,24 @@ Material* Material::create(const char* vshPath, const char* fshPath, const char*
 
     material->_currentTechnique = technique;
 
+    return material;
+}
+
+Material* Material::clone(NodeCloneContext &context) const
+{
+    Material* material = new Material();
+    RenderState::cloneInto(material, context);
+
+    for (std::vector<Technique*>::const_iterator it = _techniques.begin(); it != _techniques.end(); ++it)
+    {
+        const Technique* technique = *it;
+        Technique* techniqueClone = technique->clone(material, context);
+        material->_techniques.push_back(techniqueClone);
+        if (_currentTechnique == technique)
+        {
+            material->_currentTechnique = techniqueClone;
+        }
+    }
     return material;
 }
 

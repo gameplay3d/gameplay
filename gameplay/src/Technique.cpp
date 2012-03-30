@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "Technique.h"
 #include "Material.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -11,10 +12,6 @@ Technique::Technique(const char* id, Material* material)
     assert(material);
 
     RenderState::_parent = material;
-}
-
-Technique::Technique(const Technique& m)
-{
 }
 
 Technique::~Technique()
@@ -55,6 +52,20 @@ Pass* Technique::getPass(const char* id) const
     }
 
     return NULL;
+}
+
+Technique* Technique::clone(Material* material, NodeCloneContext &context) const
+{
+    Technique* technique = new Technique(getId(), material);
+    technique->_material = material;
+    for (std::vector<Pass*>::const_iterator it = _passes.begin(); it != _passes.end(); ++it)
+    {
+        Pass* pass = *it;
+        Pass* passCopy = pass->clone(technique, context);
+        technique->_passes.push_back(passCopy);
+    }
+    RenderState::cloneInto(technique, context);
+    return technique;
 }
 
 }

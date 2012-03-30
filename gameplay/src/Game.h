@@ -9,6 +9,7 @@
 #include "AudioController.h"
 #include "AnimationController.h"
 #include "PhysicsController.h"
+#include "AudioListener.h"
 #include "Vector4.h"
 #include "TimeListener.h"
 
@@ -183,6 +184,13 @@ public:
      * @return The physics controller for this game.
      */
     inline PhysicsController* getPhysicsController() const;
+
+    /**
+     * Gets the audio listener for 3D audio.
+     * 
+     * @return The audio listener for this game.
+     */
+    AudioListener* getAudioListener();
 
     /**
      * Menu callback on menu events.
@@ -383,8 +391,43 @@ private:
     AnimationController* _animationController;  // Controls the scheduling and running of animations.
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
+    AudioListener* _audioListener;              // The audio listener in 3D space.
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> > _timeEvents; // Contains the scheduled time events.
+
+    friend class SplashDisplayer;
 };
+
+/**
+ * Used for displaying splash screens.
+ */
+class SplashDisplayer
+{
+public:
+
+    /**
+     * Displays a splash screen using the {@link Game#renderOnce} mechanism for at least the given amount of time.
+     * 
+     * @param instance See {@link Game#renderOnce}.
+     * @param method See {@link Game#renderOnce}.
+     * @param cookie See {@link Game#renderOnce}.
+     * @param time The minimum amount of time to display the splash screen (in milliseconds).
+     */
+    template <typename T> void run(T* instance, void (T::*method) (void*), void* cookie, long time);
+
+    /**
+     * Destructor.
+     */
+    ~SplashDisplayer();
+
+private:
+
+    long _time;
+    long _startTime;
+};
+
+#define displaySplash(instance, method, cookie, time) \
+    SplashDisplayer __##instance##SplashDisplayer; \
+    __##instance##SplashDisplayer.run(instance, method, cookie, time)
 
 }
 

@@ -3,6 +3,7 @@
 #include "Node.h"
 #include "Pass.h"
 #include "Technique.h"
+#include "Node.h"
 
 // Render state override bits
 #define RS_BLEND 1
@@ -18,10 +19,6 @@ RenderState::StateBlock* RenderState::StateBlock::_defaultState = NULL;
 
 RenderState::RenderState()
     : _nodeBinding(NULL), _state(NULL), _parent(NULL)
-{
-}
-
-RenderState::RenderState(const RenderState& copy)
 {
 }
 
@@ -309,6 +306,32 @@ RenderState* RenderState::getTopmost(RenderState* below)
     }
 
     return NULL;
+}
+
+void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context) const
+{
+    for (std::map<std::string, AutoBinding>::const_iterator it = _autoBindings.begin(); it != _autoBindings.end(); ++it)
+    {
+        renderState->setParameterAutoBinding(it->first.c_str(), it->second);
+    }
+    for (std::vector<MaterialParameter*>::const_iterator it = _parameters.begin(); it != _parameters.end(); ++it)
+    {
+        const MaterialParameter* param = *it;
+
+        MaterialParameter* paramCopy = new MaterialParameter(param->getName());
+        param->cloneInto(paramCopy);
+
+        renderState->_parameters.push_back(paramCopy);
+    }
+    renderState->_parent = _parent;
+    if (Node* node = context.findClonedNode(_nodeBinding))
+    {
+        renderState->setNodeBinding(node);
+    }
+    if (_state)
+    {
+        renderState->setStateBlock(_state);
+    }
 }
 
 RenderState::StateBlock::StateBlock()

@@ -27,6 +27,11 @@ Animation::Animation(const char* id, AnimationTarget* target, int propertyId, un
     createChannel(target, propertyId, keyCount, keyTimes, keyValues, keyInValue, keyOutValue, type);
 }
 
+Animation::Animation(const char* id)
+    : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0), _defaultClip(NULL), _clips(NULL)
+{
+}
+
 Animation::~Animation()
 {
     if (_defaultClip)
@@ -54,8 +59,9 @@ Animation::~Animation()
 }
 
 Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration)
-    : _animation(animation), _target(target), _propertyId(propertyId), _curve(curve), _duration(duration)
+    : _animation(animation), _target(target), _propertyId(propertyId), _duration(duration)
 {
+    _curveRef = Animation::CurveRef::create(curve);
     // get property component count, and ensure the property exists on the AnimationTarget by getting the property component count.
     assert(_target->getAnimationPropertyComponentCount(propertyId));
 
@@ -64,10 +70,45 @@ Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int p
     _target->addChannel(this);
 }
 
+Animation::Channel::Channel(const Channel& copy, Animation* animation, AnimationTarget* target)
+    : _animation(animation), _target(target), _propertyId(copy._propertyId), _duration(copy._duration)
+{
+    _curveRef = copy._curveRef;
+    _curveRef->addRef();
+
+    _animation->addRef();
+    _target->addChannel(this);
+}
+
 Animation::Channel::~Channel()
 {
-    SAFE_DELETE(_curve);
+    SAFE_RELEASE(_curveRef);
     SAFE_RELEASE(_animation);
+}
+
+Curve* Animation::Channel::getCurve() const
+{
+    return _curveRef->getCurve();
+}
+
+Animation::CurveRef* Animation::CurveRef::create(Curve* curve)
+{
+    return new CurveRef(curve);
+}
+
+Curve* Animation::CurveRef::getCurve() const
+{
+    return _curve;
+}
+
+Animation::CurveRef::CurveRef(Curve* curve)
+    : _curve(curve)
+{
+}
+
+Animation::CurveRef::~CurveRef()
+{
+    SAFE_DELETE(_curve);
 }
 
 const char* Animation::getId() const
@@ -370,6 +411,13 @@ void Animation::setTransformRotationOffset(Curve* curve, unsigned int propertyId
     }
 
     return;
+}
+
+Animation* Animation::clone()
+{
+    Animation* animation = new Animation(getId());
+    _controller->addAnimation(animation);
+    return animation;
 }
 
 }

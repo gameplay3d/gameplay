@@ -38,7 +38,7 @@
 		5B43D1AF14C35A0E008A5D9D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD55D146EC24F00353661 /* icon.png */; };
 		5B43D1B014C35A0E008A5D9D /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD55F146EC27A00353661 /* res */; };
 		5B43D1B814C35A65008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1B714C35A65008A5D9D /* libgameplay.a */; };
-		5B43D1C314C35C18008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1B714C35A65008A5D9D /* libgameplay.a */; };
+		5B928C6E1513E9AD0095E677 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1B714C35A65008A5D9D /* libgameplay.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,12 +60,12 @@
 		42CD0EF0147D932B0000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbis.a"; sourceTree = "<group>"; };
 		42CD0EF1147D932B0000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisenc.a"; sourceTree = "<group>"; };
 		42CD0EF2147D932B0000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisfile.a"; sourceTree = "<group>"; };
-		5B3439B1151252FB005F5571 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
-		5B3439B2151252FB005F5571 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		5B3439B3151252FB005F5571 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		5B3439B4151252FB005F5571 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		5B3439B5151252FB005F5571 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		5B3439B6151252FB005F5571 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		5B3439B1151252FB005F5571 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		5B3439B2151252FB005F5571 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5B3439B3151252FB005F5571 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		5B3439B4151252FB005F5571 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		5B3439B5151252FB005F5571 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		5B3439B6151252FB005F5571 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5B43D1B414C35A0E008A5D9D /* sample02-spaceship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample02-spaceship.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B43D1B714C35A65008A5D9D /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -75,7 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B43D1C314C35C18008A5D9D /* libgameplay.a in Frameworks */,
+				5B928C6E1513E9AD0095E677 /* libgameplay.a in Frameworks */,
 				42CD0EF3147D932B0000361E /* libbullet.a in Frameworks */,
 				42CD0EF4147D932B0000361E /* libogg.a in Frameworks */,
 				42CD0EF5147D932B0000361E /* libvorbis.a in Frameworks */,
@@ -155,8 +155,8 @@
 		42CCD519146EBF3600353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B43D1BA14C35A81008A5D9D /* Mac OS X */,
 				5B43D1B914C35A7A008A5D9D /* iOS */,
+				5B43D1BA14C35A81008A5D9D /* MacOSX */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -184,7 +184,7 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		5B43D1BA14C35A81008A5D9D /* Mac OS X */ = {
+		5B43D1BA14C35A81008A5D9D /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
 				42CCD51A146EBF3600353661 /* Cocoa.framework */,
@@ -192,7 +192,7 @@
 				42CCD54E146EC11600353661 /* OpenGL.framework */,
 				42CCD54C146EC10E00353661 /* OpenAL.framework */,
 			);
-			name = "Mac OS X";
+			name = MacOSX;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,7 +240,7 @@
 		42CCD50D146EBF3600353661 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 42CCD510146EBF3600353661 /* Build configuration list for PBXProject "sample02-spaceship" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -293,7 +293,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 		5B43D1AD14C35A0E008A5D9D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -306,7 +306,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 

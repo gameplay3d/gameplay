@@ -8,6 +8,7 @@ namespace gameplay
 {
 
 class Node;
+class NodeCloneContext;
 
 /**
  * Defines a light.
@@ -54,8 +55,8 @@ public:
      * 
      * @param color The light's color.
      * @param range The light's range.
-     * @param innerCosAngle The light's inner angle (in radians).
-     * @param outerCosAngle The light's outer angle (in radians).
+     * @param innerAngle The light's inner angle (in radians).
+     * @param outerAngle The light's outer angle (in radians).
      * 
      * @return The new spot light.
      */
@@ -104,7 +105,7 @@ public:
     /**
      * Sets the range of point or spot light.
      *
-     * @param range of point or spot light.
+     * @param range The range of point or spot light.
      */
     void setRange(float range);
 
@@ -125,7 +126,7 @@ public:
     /**
      * Sets the inner angle of a spot light (in radians).
      *
-     * @param inner angle of spot light (in radians).
+     * @param innerAngle The angle of spot light (in radians).
      */
     void setInnerAngle(float innerAngle);
 
@@ -139,7 +140,7 @@ public:
     /**
      * Sets the outer angle of a spot light (in radians).
      *
-     * @param outer angle of spot light (in radians).
+     * @param outerAngle The angle of spot light (in radians).
      */
     void setOuterAngle(float outerAngle);
 
@@ -222,6 +223,15 @@ private:
      * @param node The node to be associated with this light.
      */
     void setNode(Node* node);
+
+    /**
+     * Clones the light and returns a new light.
+     * 
+     * @param context The clone context.
+     * 
+     * @return The newly created light.
+     */
+    Light* clone(NodeCloneContext &context) const;
 
     Light::Type _type;
     union
