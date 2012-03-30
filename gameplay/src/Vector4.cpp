@@ -14,7 +14,7 @@ Vector4::Vector4(float x, float y, float z, float w)
     set(x, y, z, w);
 }
 
-Vector4::Vector4(float* src)
+Vector4::Vector4(const float* src)
 {
     set(src);
 }
@@ -284,7 +284,7 @@ void Vector4::set(float x, float y, float z, float w)
     this->w = w;
 }
 
-void Vector4::set(float* array)
+void Vector4::set(const float* array)
 {
     assert(array);
 
