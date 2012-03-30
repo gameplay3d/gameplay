@@ -105,7 +105,7 @@ namespace gameplay
             
             if (strcmp(spacename, "image") == 0)
             {
-                theme->_images.push_back(Image::create(tw, th, space));
+                theme->_images.push_back(Image::create(tw, th, space, Vector4::one()));
             }
             else if (strcmp(spacename, "imageList") == 0)
             {
@@ -479,16 +479,20 @@ namespace gameplay
     {
     }
 
-    Theme::Image* Theme::Image::create(float tw, float th, Properties* properties)
+    Theme::Image* Theme::Image::create(float tw, float th, Properties* properties, const Vector4& defaultColor)
     {
         Vector4 regionVector;                
         properties->getVector4("region", &regionVector);
         const Rectangle region(regionVector.x, regionVector.y, regionVector.z, regionVector.w);
 
-        Vector4 color(1, 1, 1, 1);
+        Vector4 color;
         if (properties->exists("color"))
         {
             properties->getColor("color", &color);
+        }
+        else
+        {
+            color.set(defaultColor);
         }
 
         Image* image = new Image(tw, th, region, color);
@@ -570,7 +574,7 @@ namespace gameplay
         Properties* space = properties->getNextNamespace();
         while (space != NULL)
         {
-            Image* image = Image::create(tw, th, space);
+            Image* image = Image::create(tw, th, space, color);
             imageList->_images.push_back(image);
             space = properties->getNextNamespace();
         }

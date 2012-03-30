@@ -43,7 +43,7 @@ const Vector2& CheckBox::getImageSize() const
 {
     return _imageSize;
 }
-/*
+
 void CheckBox::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Control::Listener::TEXT_CHANGED) == Control::Listener::TEXT_CHANGED)
@@ -53,7 +53,7 @@ void CheckBox::addListener(Control::Listener* listener, int eventFlags)
     }
 
     Control::addListener(listener, eventFlags);
-}*/
+}
 
 bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {

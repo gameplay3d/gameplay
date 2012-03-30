@@ -204,7 +204,7 @@ public:
         Image(float tw, float th, const Rectangle& region, const Vector4& color);
         ~Image();
 
-        static Image* create(float tw, float th, Properties* properties);
+        static Image* create(float tw, float th, Properties* properties, const Vector4& defaultColor);
 
         std::string _id;
         UVs _uvs;
