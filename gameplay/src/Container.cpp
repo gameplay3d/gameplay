@@ -219,8 +219,6 @@ namespace gameplay
         Control::drawBorder(spriteBatch, clip);
 
         // Now call drawBorder on all controls within this container.
-        //Vector2 pos(clip.x + _position.x, clip.y + _position.y);
-        //const Rectangle newClip(clip.x + _position.x, clip.y + _position.y, _size.x, _size.y);
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
@@ -229,14 +227,13 @@ namespace gameplay
         }
     }
 
-    void Container::drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip)
+    void Container::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
-        //const Rectangle newClip(clip.x + _position.x, clip.y + _position.y, _size.x, _size.y);
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
-            control->drawSprites(spriteBatch, _clip);
+            control->drawImages(spriteBatch, _clip);
         }
 
         _dirty = false;
@@ -244,7 +241,6 @@ namespace gameplay
 
     void Container::drawText(const Rectangle& clip)
     {
-        //const Rectangle newClip(clip.x + _position.x, clip.y + _position.y, _size.x, _size.y);
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
@@ -285,14 +281,8 @@ namespace gameplay
 
         bool eventConsumed = false;
 
-        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-        Theme::Border border;
-        Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
-        if (containerRegion)
-        {
-            border = overlay->getContainerRegion()->getBorder();
-        }
-        Theme::Padding padding = _style->getPadding();
+        const Theme::Border& border = getBorder(_state);
+        const Theme::Padding& padding = getPadding();
         float xPos = border.left + padding.left;
         float yPos = border.top + padding.top;
 
