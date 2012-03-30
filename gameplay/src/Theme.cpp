@@ -823,7 +823,7 @@ namespace gameplay
 
     Theme::Style::~Style()
     {
-        for (int i = 0; i < MAX_OVERLAYS; i++)
+        for (unsigned int i = 0; i < MAX_OVERLAYS; i++)
         {
             SAFE_RELEASE(_overlays[i]);
         }
