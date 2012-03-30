@@ -17,7 +17,7 @@ PhysicsGhostObject::PhysicsGhostObject(Node* node, const PhysicsCollisionShape::
 
 	// Create the ghost object.
     _ghostObject = bullet_new<btPairCachingGhostObject>();
-	_ghostObject->setCollisionShape(_collisionShape->getShape<btCollisionShape>());
+	_ghostObject->setCollisionShape(_collisionShape->getShape());
 
     // Initialize a physics motion state object for syncing the transform.
 	_motionState = new PhysicsMotionState(_node, &centerOfMassOffset);
