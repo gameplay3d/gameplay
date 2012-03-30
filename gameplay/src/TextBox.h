@@ -60,7 +60,7 @@ protected:
     void update(const Rectangle& clip);
 
     // Draw the cursor.
-    void drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip);
+    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
     Vector2 _cursorLocation;
     unsigned int textIndex;
