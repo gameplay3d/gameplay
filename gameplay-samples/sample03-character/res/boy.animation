@@ -1,28 +1,16 @@
 animation boyAnimation
 {
-    frameCount = 474
+    frameCount = 143
+    clip walk
+    {
+        begin = 3
+        end = 143
+        repeatCount = INDEFINITE
+    }
     clip idle
     {
-        begin = 474
-        end = 474
+        begin = 3
+        end = 4
         repeatCount = INDEFINITE
     }
-	clip walk
-    {
-        begin = 1
-        end = 130
-        repeatCount = INDEFINITE
-    }
-	clip run
-	{
-		begin = 133
-        end = 221
-        repeatCount = INDEFINITE
-	}
-	clip jump
-	{
-		begin = 226
-        end = 474
-        repeatCount = 1
-	}
 }
