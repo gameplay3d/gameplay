@@ -146,24 +146,21 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NO_BOOST;USE_FBX;NO_ZAE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../external-deps/freetype2/include;../external-deps/collada-dom/include;../external-deps/collada-dom/include/1.4;../external-deps/libpng/include;../external-deps/zlib/include;C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NO_BOOST;NO_ZAE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../external-deps/freetype2/include;../external-deps/collada-dom/include;../external-deps/collada-dom/include/1.4;../external-deps/libpng/include;../external-deps/zlib/include</AdditionalIncludeDirectories>
       <DisableLanguageExtensions>
       </DisableLanguageExtensions>
-      <AdditionalOptions> %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../external-deps/freetype2/lib/win32;../external-deps/collada-dom/lib/win32;../external-deps/libpng/lib/win32;../external-deps/zlib/lib/win32;C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\lib\vs2010\x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype245.lib;libcollada14dom22-d.lib;libpng14.lib;zlib.lib;fbxsdk-2012.2-mdd.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../external-deps/freetype2/lib/win32;../external-deps/collada-dom/lib/win32;../external-deps/libpng/lib/win32;../external-deps/zlib/lib/win32</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetype245.lib;libcollada14dom22-d.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
-      <AdditionalOptions> %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)..\external-deps\collada-dom\lib\win32\*.dll" "$(TargetDir)"
 copy /Y "$(ProjectDir)..\external-deps\zlib\lib\win32\*.dll" "$(TargetDir)"
-copy /Y "C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\lib\vs2010\x86\fbxsdk-2012.2d.dll" "$(TargetDir)"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
