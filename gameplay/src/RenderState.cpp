@@ -3,6 +3,7 @@
 #include "Node.h"
 #include "Pass.h"
 #include "Technique.h"
+#include "Node.h"
 
 // Render state override bits
 #define RS_BLEND 1
@@ -307,7 +308,7 @@ RenderState* RenderState::getTopmost(RenderState* below)
     return NULL;
 }
 
-void RenderState::cloneInto(RenderState* renderState, CloneContext& context) const
+void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context) const
 {
     for (std::map<std::string, AutoBinding>::const_iterator it = _autoBindings.begin(); it != _autoBindings.end(); ++it)
     {

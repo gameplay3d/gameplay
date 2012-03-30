@@ -1,29 +1,24 @@
 #include "Base.h"
 #include "Node.h"
 #include "AudioListener.h"
+#include "Game.h"
 
 namespace gameplay
 {
 
-static AudioListener* __audioListenerInstance = NULL;
-
 AudioListener::AudioListener()
     : _gain(1.0f), _camera(NULL)
-
 {
-    assert(__audioListenerInstance == NULL);
-    __audioListenerInstance = this;
 }
 
 AudioListener::~AudioListener()
 {
+    SAFE_RELEASE(_camera);
 }
 
 AudioListener* AudioListener::getInstance()
 {
-    if (!__audioListenerInstance)
-        new AudioListener();
-    return __audioListenerInstance;
+    return Game::getInstance()->getAudioListener();
 }
 
 float AudioListener::getGain() const 
