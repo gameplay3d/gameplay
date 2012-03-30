@@ -8,6 +8,7 @@ namespace gameplay
 
 class MaterialParameter;
 class Node;
+class NodeCloneContext;
 class Pass;
 
 class RenderState : public Ref
@@ -290,11 +291,6 @@ protected:
     RenderState();
 
     /**
-     * Hidden copy constructor.
-     */
-    RenderState(const RenderState& copy);
-
-    /**
      * Destructor.
      */
     virtual ~RenderState();
@@ -335,6 +331,28 @@ protected:
      * Returns the topmost RenderState in the hierarchy below the given RenderState.
      */
     RenderState* getTopmost(RenderState* below);
+
+    /**
+     * Copies the data from this RenderState into the given RenderState.
+     * 
+     * @param renderState The RenderState to copy the data to.
+     * @param context The clone context.
+     */
+    void cloneInto(RenderState* renderState, NodeCloneContext& context) const;
+
+private:
+
+    /**
+     * Hidden copy constructor.
+     */
+    RenderState(const RenderState& copy);
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    RenderState& operator=(const RenderState&);
+
+protected:
 
     mutable std::vector<MaterialParameter*> _parameters;
     std::map<std::string, AutoBinding> _autoBindings;

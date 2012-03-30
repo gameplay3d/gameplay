@@ -4,6 +4,7 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include <unistd.h>
 #include <sys/keycodes.h>
 #include <screen/screen.h>
 #include <input/screen_helpers.h>
@@ -1096,6 +1097,11 @@ void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
     gameplay::Game::getInstance()->keyEvent(evt, key);
     Form::keyEventInternal(evt, key);
+}
+
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
 }
 
 }

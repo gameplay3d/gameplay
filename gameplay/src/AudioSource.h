@@ -10,6 +10,7 @@ namespace gameplay
 
 class AudioBuffer;
 class Node;
+class NodeCloneContext;
 
 /**
  *  Declares an audio source in 3D space.
@@ -175,6 +176,15 @@ private:
      * @see Transform::Listener::transformChanged
      */
     void transformChanged(Transform* transform, long cookie);
+
+    /**
+     * Clones the audio source and returns a new audio source.
+     * 
+     * @param context The clone context.
+     * 
+     * @return The newly created audio source.
+     */
+    AudioSource* clone(NodeCloneContext &context) const;
 
 #ifndef __ANDROID__
     ALuint _alSource;

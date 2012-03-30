@@ -102,6 +102,7 @@ if [[ "$className" == "" ]]; then
 fi
 echo 
 
+
 echo
 echo "7. Enter the project path."
 echo
@@ -127,23 +128,30 @@ if [ -e $projPath ]; then
 	exit -2
 fi
 
-# Generate relative path from project folder to gameplay folder
-if [[ ${projPath:0:1} == "/" ]]; then
-	gpPathAbs=`pwd`
-	common_path=$projPath
-	back=
-	while [ "${gpPathAbs#$common_path}" = "${gpPathAbs}" ]; do
-		common_path=$(dirname $common_path)
-		back="../${back}"
-	done
-	gpPath=${back}${gpPathAbs#$common_path/}
-else
-	gpPath=$projPath
-fi
-
 # Make required source folder directories
+mkdir -p "$projPath"
 mkdir -p "$projPath/src"
 mkdir -p "$projPath/res"
+
+if [[ ${projPath:0:1} != "/" ]]; then
+	currPwd=`pwd`
+	projPath=`cd $projPath; pwd`
+	`cd $currPwd`	
+fi
+
+# Generate relative path from project folder to gameplay folder
+gpPathAbs=`pwd`
+common_path=$projPath
+back=
+while [ "${gpPathAbs#$common_path}" = "${gpPathAbs}" ]; do
+	common_path=$(dirname $common_path)
+	back="../${back}"
+done
+gpPath=${back}${gpPathAbs#$common_path/}
+if [[ ${gpPathAbs} == ${common_path} ]]; then
+	gpPath=${back}
+fi
+
 
 # Below does copy, then uses 'sed' with -i for inplace editing
 # Alternative below uses sed to do a input then output skipping the copy

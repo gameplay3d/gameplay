@@ -5,6 +5,8 @@
 #include "FileSystem.h"
 #include "Game.h"
 
+#include <unistd.h>
+
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import <CoreMotion/CoreMotion.h>
@@ -852,6 +854,11 @@ void Platform::displayKeyboard(bool display)
         if(display) [__view showKeyboard];
         else [__view dismissKeyboard];
     }
+}
+
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
 }
     
 }

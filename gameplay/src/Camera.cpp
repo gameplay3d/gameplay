@@ -343,6 +343,26 @@ void Camera::pickRay(const Viewport* viewport, float x, float y, Ray* dst)
     dst->set(nearPoint, direction);
 }
 
+Camera* Camera::clone(NodeCloneContext &context) const
+{
+    Camera* cameraClone = NULL;
+    if (getCameraType() == PERSPECTIVE)
+    {
+        cameraClone = createPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
+    }
+    else if (getCameraType() == ORTHOGRAPHIC)
+    {
+        cameraClone = createOrthographic(getZoomX(), getZoomY(), getAspectRatio(), _nearPlane, _farPlane);
+    }
+    assert(cameraClone);
+
+    if (Node* node = context.findClonedNode(getNode()))
+    {
+        cameraClone->setNode(node);
+    }
+    return cameraClone;
+}
+
 void Camera::transformChanged(Transform* transform, long cookie)
 {
     _dirtyBits |= CAMERA_DIRTY_VIEW | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;

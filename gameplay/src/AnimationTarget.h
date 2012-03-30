@@ -9,6 +9,7 @@ namespace gameplay
 
 class Animation;
 class AnimationValue;
+class NodeCloneContext;
 
 /**
  * Defines an interface allowing animation to target
@@ -44,6 +45,7 @@ public:
      * 
      * @param propertyId The ID of the property on the AnimationTarget to set the animation property value on.
      * @param value The container to set the animation property value in.
+     * @param blendWeight The blend weight.
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f) = 0;
 
@@ -65,9 +67,27 @@ protected:
      */
     virtual ~AnimationTarget();
 
-    void addChannel(Animation::Channel* animation);
+    /**
+     * Adds the given animation channel to this animation target.
+     * 
+     * @param channel The animation channel to add.
+     */
+    void addChannel(Animation::Channel* channel);
 
+    /**
+     * Deletes the given animation channel from this animation target.
+     * 
+     * @param channel The animation channel to delete.
+     */
     void deleteChannel(Animation::Channel* channel);
+
+    /**
+     * Copies data from this animation target into the given target for the purpose of cloning.
+     * 
+     * @param target The target to copy into.
+     * @param context The clone context.
+     */
+    void cloneInto(AnimationTarget* target, NodeCloneContext &context) const;
 
     TargetType _targetType;             // The type of target this is.
 

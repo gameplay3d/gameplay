@@ -270,6 +270,12 @@
     <ClCompile Include="src\PhysicsCollisionObject.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\PhysicsGhostObject.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsCollisionShape.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -533,6 +539,12 @@
     <ClInclude Include="src\TimeListener.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\PhysicsGhostObject.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsCollisionShape.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\bumped-specular.vsh">
@@ -621,6 +633,18 @@
     </None>
     <None Include="src\PlatformiOS.mm">
       <Filter>src</Filter>
+    </None>
+    <None Include="res\logo_black.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\logo_powered_black.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\logo_powered_white.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\logo_white.png">
+      <Filter>res</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
