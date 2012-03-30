@@ -210,7 +210,7 @@ namespace gameplay
                 control->drawBorder(spriteBatch, clip);
 
                 // Add all themed foreground sprites (checkboxes etc.) to the same batch.
-                control->drawSprites(spriteBatch, clip);
+                control->drawImages(spriteBatch, clip);
             }
         }
         spriteBatch->end();
