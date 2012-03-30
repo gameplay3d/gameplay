@@ -25,10 +25,10 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Defi
     // inertia since Bullet doesn't currently support this.
     btVector3 localInertia(0.0, 0.0, 0.0);
 	if (parameters.mass != 0.0 && _collisionShape->getType() != PhysicsCollisionShape::SHAPE_MESH)
-		_collisionShape->getShape<btCollisionShape>()->calculateLocalInertia(parameters.mass, localInertia);
+		_collisionShape->getShape()->calculateLocalInertia(parameters.mass, localInertia);
 
     // Create the Bullet physics rigid body object.
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(parameters.mass, _motionState, _collisionShape->getShape<btCollisionShape>(), localInertia);
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(parameters.mass, _motionState, _collisionShape->getShape(), localInertia);
     rbInfo.m_friction = parameters.friction;
     rbInfo.m_restitution = parameters.restitution;
     rbInfo.m_linearDamping = parameters.linearDamping;
@@ -182,7 +182,7 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     // Load the defined properties.
     properties->rewind();
     const char* name;
-    while (name = properties->getNextProperty())
+    while ((name = properties->getNextProperty()) != NULL)
     {
         if (strcmp(name, "type") == 0)
         {

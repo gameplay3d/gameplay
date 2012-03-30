@@ -356,6 +356,7 @@ void drawDebugLine(MeshBatch* batch, const Vector3& point1, const Vector3& point
 }
 
 #define DEBUG_BOX_COLOR Vector3(0, 1, 0)
+#define DEBUG_SPHERE_COLOR Vector3(0, 1, 0)
 
 void drawDebugBox(MeshBatch* batch, const BoundingBox& box, const Matrix& matrix)
 {
@@ -384,6 +385,49 @@ void drawDebugBox(MeshBatch* batch, const BoundingBox& box, const Matrix& matrix
 
 void drawDebugSphere(MeshBatch* batch, const BoundingSphere& sphere)
 {
+	// Draw three rings for the sphere (one for the x, y and z axes)
+	Vector3 pos1, pos2;
+	float step = MATH_PI * 0.2f;
+	float max = MATH_PIX2 + step;
+
+	// X ring
+	for (float r = 0.0f; r < max; r += step)
+	{
+		pos2.x = sphere.center.x;
+		pos2.y = sphere.center.y + std::cos(r) * sphere.radius;
+		pos2.z = sphere.center.z + std::sin(r) * sphere.radius;
+
+		if (r > 0)
+			drawDebugLine(batch, pos1, pos2, DEBUG_SPHERE_COLOR);
+
+		pos1 = pos2;
+	}
+
+	// Y ring
+	for (float r = 0.0f; r < max; r += step)
+	{
+		pos2.x = sphere.center.x + std::cos(r) * sphere.radius;
+		pos2.y = sphere.center.y;
+		pos2.z = sphere.center.z + std::sin(r) * sphere.radius;
+
+		if (r > 0)
+			drawDebugLine(batch, pos1, pos2, DEBUG_SPHERE_COLOR);
+
+		pos1 = pos2;
+	}
+
+	// Z ring
+	for (float r = 0.0f; r < max; r += step)
+	{
+		pos2.x = sphere.center.x + std::cos(r) * sphere.radius;
+		pos2.y = sphere.center.y + std::sin(r) * sphere.radius;
+		pos2.z = sphere.center.z;
+
+		if (r > 0)
+			drawDebugLine(batch, pos1, pos2, DEBUG_SPHERE_COLOR);
+
+		pos1 = pos2;
+	}
 }
 
 void drawDebugNode(MeshBatch* batch, Node* node, unsigned int debugFlags)
@@ -406,7 +450,7 @@ void drawDebugNode(MeshBatch* batch, Node* node, unsigned int debugFlags)
 		}
 	}
 
-	if ((debugFlags & Scene::DEBUG_SPHERES) && !node->getBoundingSphere().isEmpty())
+	if ((debugFlags & Scene::DEBUG_SPHERES) && model)
 	{
 		drawDebugSphere(batch, node->getBoundingSphere());
 	}

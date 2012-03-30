@@ -745,7 +745,7 @@ void Node::cloneInto(Node* node, NodeCloneContext &context) const
     }
     if (Light* light = getLight())
     {
-        Light* lightClone = lightClone = light->clone(context);
+        Light* lightClone = light->clone(context);
         node->setLight(lightClone);
         lightClone->release();
     }
