@@ -275,7 +275,7 @@ void PhysicsController::update(long elapsedTime)
     {
         Listener::EventType oldStatus = _status;
 
-        if (_status = Listener::DEACTIVATED)
+        if (_status == Listener::DEACTIVATED)
         {
             for (int i = 0; i < _world->getNumCollisionObjects(); i++)
             {
@@ -402,15 +402,15 @@ void PhysicsController::addCollisionObject(PhysicsCollisionObject* object)
     switch (object->getType())
     {
     case PhysicsCollisionObject::RIGID_BODY:
-		_world->addRigidBody(static_cast<btRigidBody*>(object->getCollisionObject()));//, btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
+		_world->addRigidBody(static_cast<btRigidBody*>(object->getCollisionObject()), btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
         break;
 
     case PhysicsCollisionObject::CHARACTER:
-		_world->addCollisionObject(object->getCollisionObject());//, btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);//, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::CharacterFilter );// | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter*/ 0);
+		_world->addCollisionObject(object->getCollisionObject(), btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
         break;
 
     case PhysicsCollisionObject::GHOST_OBJECT:
-		_world->addCollisionObject(object->getCollisionObject());//, btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);//, btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter);
+		_world->addCollisionObject(object->getCollisionObject(), btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
         break;
 
     default:
@@ -523,17 +523,17 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
 			if (shape.isExplicit)
 			{
 				// Use the passed in box information
-				collisionShape = createBox(shape.data.boxExtents, Vector3::one());
+				collisionShape = createBox(Vector3(shape.data.box.extents), Vector3::one());
 
 				if (shape.centerAbsolute)
 				{
-					computeCenterOfMass(shape.data.boxCenter, scale, centerOfMassOffset);
+					computeCenterOfMass(Vector3(shape.data.box.center), scale, centerOfMassOffset);
 				}
 				else
 				{
 					BoundingBox box;
 					getBoundingBox(node, &box);
-					computeCenterOfMass(box.getCenter() + shape.data.boxCenter, scale, centerOfMassOffset);
+					computeCenterOfMass(box.getCenter() + Vector3(shape.data.box.center), scale, centerOfMassOffset);
 				}
 			}
 			else
@@ -553,17 +553,17 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
 			if (shape.isExplicit)
 			{
 				// Use the passed in sphere information
-				collisionShape = createSphere(shape.data.sphereRadius, Vector3::one());
+				collisionShape = createSphere(shape.data.sphere.radius, Vector3::one());
 
 				if (shape.centerAbsolute)
 				{
-					computeCenterOfMass(shape.data.sphereCenter, scale, centerOfMassOffset);
+					computeCenterOfMass(Vector3(shape.data.sphere.center), scale, centerOfMassOffset);
 				}
 				else
 				{
 					BoundingSphere sphere;
 					getBoundingSphere(node, &sphere);
-					computeCenterOfMass(sphere.center + shape.data.sphereCenter, scale, centerOfMassOffset);
+					computeCenterOfMass(sphere.center + Vector3(shape.data.sphere.center), scale, centerOfMassOffset);
 				}
 			}
 			else
@@ -583,17 +583,17 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
 			if (shape.isExplicit)
 			{
 				// Use the passed in capsule information
-				collisionShape = createCapsule(shape.data.capsuleRadius, shape.data.capsuleHeight, Vector3::one());
+				collisionShape = createCapsule(shape.data.capsule.radius, shape.data.capsule.height, Vector3::one());
 
 				if (shape.centerAbsolute)
 				{
-					computeCenterOfMass(shape.data.capsuleCenter, scale, centerOfMassOffset);
+					computeCenterOfMass(Vector3(shape.data.capsule.center), scale, centerOfMassOffset);
 				}
 				else
 				{
 					BoundingBox box;
 					getBoundingBox(node, &box);
-					computeCenterOfMass(box.getCenter() + shape.data.capsuleCenter, scale, centerOfMassOffset);
+					computeCenterOfMass(box.getCenter() + Vector3(shape.data.capsule.center), scale, centerOfMassOffset);
 				}
 			}
 			else

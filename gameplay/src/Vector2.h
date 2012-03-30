@@ -41,7 +41,7 @@ public:
      *
      * @param array An array containing the elements of the vector in the order x, y.
      */
-    Vector2(float* array);
+    Vector2(const float* array);
 
     /**
      * Constructs a vector that describes the direction between the specified points.
@@ -282,7 +282,7 @@ public:
      *
      * @param array An array containing the elements of the vector in the order x, y.
      */
-    void set(float* array);
+    void set(const float* array);
 
     /**
      * Sets the elements of this vector to those in the specified vector.

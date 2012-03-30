@@ -14,7 +14,7 @@ Vector3::Vector3(float x, float y, float z)
     set(x, y, z);
 }
 
-Vector3::Vector3(float* array)
+Vector3::Vector3(const float* array)
 {
     set(array);
 }
@@ -277,7 +277,7 @@ void Vector3::set(float x, float y, float z)
     this->z = z;
 }
 
-void Vector3::set(float* array)
+void Vector3::set(const float* array)
 {
     assert(array);
 
