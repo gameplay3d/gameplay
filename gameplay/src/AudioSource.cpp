@@ -4,6 +4,7 @@
 #include "AudioController.h"
 #include "AudioSource.h"
 #include "Game.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -481,7 +482,7 @@ void AudioSource::transformChanged(Transform* transform, long cookie)
 #endif
 }
 
-AudioSource* AudioSource::clone(CloneContext &context) const
+AudioSource* AudioSource::clone(NodeCloneContext &context) const
 {
 #ifndef __ANDROID__
     ALuint alSource = 0;
@@ -497,12 +498,12 @@ AudioSource* AudioSource::clone(CloneContext &context) const
     AudioSource* audioClone = new AudioSource(AudioBuffer* buffer, const SLObjectItf& player);
 
 #endif
-
+    _buffer->addRef();
     audioClone->setLooped(isLooped());
     audioClone->setGain(getGain());
     audioClone->setPitch(getPitch());
     audioClone->setVelocity(getVelocity());
-    if (Node* node = audioClone->getNode())
+    if (Node* node = getNode())
     {
         Node* clonedNode = context.findClonedNode(node);
         if (clonedNode)

@@ -2,13 +2,13 @@
 #define RENDERSTATE_H_
 
 #include "Ref.h"
-#include "CloneContext.h"
 
 namespace gameplay
 {
 
 class MaterialParameter;
 class Node;
+class NodeCloneContext;
 class Pass;
 
 class RenderState : public Ref
@@ -338,7 +338,7 @@ protected:
      * @param renderState The RenderState to copy the data to.
      * @param context The clone context.
      */
-    void cloneInto(RenderState* renderState, CloneContext& context) const;
+    void cloneInto(RenderState* renderState, NodeCloneContext& context) const;
 
 private:
 
