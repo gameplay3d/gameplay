@@ -1,7 +1,3 @@
-/*
- * Theme.cpp
- */
-
 #include "Base.h"
 #include "Theme.h"
 
@@ -26,28 +22,22 @@ namespace gameplay
             SAFE_DELETE(style);
         }
 
-        for (unsigned int i = 0, count = _cursors.size(); i < count; ++i)
+        for (unsigned int i = 0, count = _images.size(); i < count; ++i)
         {
-            Cursor* cursor = _cursors[i];
-            SAFE_RELEASE(cursor);
+            Image* image = _images[i];
+            SAFE_RELEASE(image);
         }
 
-        for (unsigned int i = 0, count = _icons.size(); i < count; ++i)
+        for (unsigned int i = 0, count = _imageLists.size(); i < count; ++i)
         {
-            Icon* icon = _icons[i];
-            SAFE_RELEASE(icon);
+            ImageList* imageList = _imageLists[i];
+            SAFE_RELEASE(imageList);
         }
 
-        for (unsigned int i = 0, count = _sliders.size(); i < count; ++i)
+        for (unsigned int i = 0, count = _skins.size(); i < count; ++i)
         {
-            SliderIcon* slider = _sliders[i];
-            SAFE_RELEASE(slider);
-        }
-
-        for (unsigned int i = 0, count = _containers.size(); i < count; ++i)
-        {
-            ContainerRegion* container = _containers[i];
-            SAFE_RELEASE(container);
+            Skin* skin = _skins[i];
+            SAFE_RELEASE(skin);
         }
 
         SAFE_DELETE(_spriteBatch);
@@ -104,80 +94,24 @@ namespace gameplay
         theme->_texture = Texture::create(textureFile, false);
         theme->_spriteBatch = SpriteBatch::create(theme->_texture);
 
+        float tw = 1.0f / theme->_texture->getWidth();
+        float th = 1.0f / theme->_texture->getHeight();
+
         Properties* space = themeProperties->getNextNamespace();
         while (space != NULL)
         {
             // First load all cursors, checkboxes etc. that can be referred to by styles.
             const char* spacename = space->getNamespace();
-            if (strcmp(spacename, "cursor") == 0)
+            
+            if (strcmp(spacename, "image") == 0)
             {
-                Vector4 regionVector;                
-                space->getVector4("region", &regionVector);
-                const Rectangle region(regionVector.x, regionVector.y, regionVector.z, regionVector.w);
-
-                Vector4 color(1, 1, 1, 1);
-                if (space->exists("color"))
-                {
-                    space->getColor("color", &color);
-                }
-
-                Theme::Cursor* c = Theme::Cursor::create(space->getId(), *theme->_texture, region, color);
-                theme->_cursors.push_back(c);
+                theme->_images.push_back(Image::create(tw, th, space));
             }
-            else if (strcmp(spacename, "icon") == 0)
+            else if (strcmp(spacename, "imageList") == 0)
             {
-                Vector2 offVec;
-                Vector2 onVec;
-                Vector2 size;
-                space->getVector2("offPosition", &offVec);
-                space->getVector2("onPosition", &onVec);
-                space->getVector2("size", &size);
-                
-                Vector4 color(1, 1, 1, 1);
-                if (space->exists("color"))
-                {
-                    space->getColor("color", &color);
-                }
-
-                Icon* icon = Icon::create(space->getId(), *theme->_texture, size, offVec, onVec, color);
-                theme->_icons.push_back(icon);
+                theme->_imageLists.push_back(ImageList::create(tw, th, space));
             }
-            else if (strcmp(spacename, "slider") == 0)
-            {
-                Vector4 minCapRegion;
-                Vector4 maxCapRegion;
-                Vector4 trackRegion;
-                Vector4 markerRegion;
-                space->getVector4("minCapRegion", &minCapRegion);
-                space->getVector4("maxCapRegion", &maxCapRegion);
-                space->getVector4("trackRegion", &trackRegion);
-                space->getVector4("markerRegion", &markerRegion);
-                
-                Vector4 color(1, 1, 1, 1);
-                if (space->exists("color"))
-                {
-                    space->getColor("color", &color);
-                }
-
-                SliderIcon* sliderIcon = SliderIcon::create(space->getId(), *theme->_texture, minCapRegion, maxCapRegion, markerRegion, trackRegion, color);
-                theme->_sliders.push_back(sliderIcon);
-            }
-            else if (strcmp(spacename, "cursor") == 0)
-            {
-                Vector4 regionVector;
-                space->getVector4("region", &regionVector);
-                const Rectangle region(regionVector.x, regionVector.y, regionVector.z, regionVector.w);
-
-                Vector4 color(1, 1, 1, 1);
-                if (space->exists("color"))
-                {
-                    space->getColor("color", &color);
-                }
-
-                Cursor* cursor = Cursor::create(space->getId(), *theme->_texture, region, color);
-                theme->_cursors.push_back(cursor);
-            }
-            else if (strcmp(spacename, "container") == 0)
+            else if (strcmp(spacename, "skin") == 0)
             {
                 Theme::Border border;
                 Properties* innerSpace = space->getNextNamespace();
@@ -203,8 +137,8 @@ namespace gameplay
                     space->getColor("color", &color);
                 }
 
-                ContainerRegion* container = ContainerRegion::create(space->getId(), *theme->_texture, region, border, color);
-                theme->_containers.push_back(container);
+                Skin* skin = Skin::create(space->getId(), tw, th, region, border, color);
+                theme->_skins.push_back(skin);
             }
 
             space = themeProperties->getNextNamespace();
@@ -231,7 +165,7 @@ namespace gameplay
                 while (innerSpace != NULL)
                 {
                     const char* innerSpacename = innerSpace->getNamespace();
-                    if (strcmp(innerSpacename, "normal") == 0)
+                    if (strcmp(innerSpacename, "stateNormal") == 0)
                     {
                         Vector4 textColor(0, 0, 0, 1);
                         if (innerSpace->exists("textColor"))
@@ -254,26 +188,27 @@ namespace gameplay
                         }
                         bool rightToLeft = innerSpace->getBool("rightToLeft");
 
-                        Icon* checkBoxIcon = NULL;
-                        Icon* radioButtonIcon = NULL;
-                        SliderIcon* sliderIcon = NULL;
-                        Cursor* textCursor = NULL;
-                        Cursor* mouseCursor = NULL;
-                        ContainerRegion* containerRegion = NULL;
-                        theme->lookUpSprites(innerSpace, &checkBoxIcon, &radioButtonIcon, &sliderIcon, &textCursor, &mouseCursor, &containerRegion);
+                        float opacity = 1.0f;
+                        if (innerSpace->exists("opacity"))
+                        {
+                            opacity = innerSpace->getFloat("opacity");
+                        }
+
+                        ImageList* imageList = NULL;
+                        Image* cursor = NULL;
+                        Skin* skin = NULL;
+                        theme->lookUpSprites(innerSpace, &imageList, &cursor, &skin);
 
                         normal = Theme::Style::Overlay::create();
-                        normal->setContainerRegion(containerRegion);
-                        normal->setTextCursor(textCursor);
-                        normal->setMouseCursor(mouseCursor);
-                        normal->setCheckBoxIcon(checkBoxIcon);
-                        normal->setRadioButtonIcon(radioButtonIcon);
-                        normal->setSliderIcon(sliderIcon);
+                        normal->setSkin(skin);
+                        normal->setCursor(cursor);
+                        normal->setImageList(imageList);
                         normal->setTextColor(textColor);
                         normal->setFont(font);
                         normal->setFontSize(fontSize);
                         normal->setTextAlignment(alignment);
                         normal->setTextRightToLeft(rightToLeft);
+                        normal->setOpacity(opacity);
 
                         theme->_fonts.insert(font);
 
@@ -308,7 +243,7 @@ namespace gameplay
                         padding.left = innerSpace->getFloat("left");
                         padding.right = innerSpace->getFloat("right");
                     }
-                    else if (strcmp(innerSpacename, "normal") != 0)
+                    else if (strcmp(innerSpacename, "stateNormal") != 0)
                     {
                         // Either OVERLAY_FOCUS or OVERLAY_ACTIVE.
                         // If a property isn't specified, it inherits from OVERLAY_NORMAL.
@@ -360,94 +295,78 @@ namespace gameplay
                             rightToLeft = normal->getTextRightToLeft();
                         }
 
-
-                        Icon* checkBoxIcon = NULL;
-                        Icon* radioButtonIcon = NULL;
-                        SliderIcon* sliderIcon = NULL;
-                        Cursor* textCursor = NULL;
-                        Cursor* mouseCursor = NULL;
-                        ContainerRegion* containerRegion = NULL;
-                        theme->lookUpSprites(innerSpace, &checkBoxIcon, &radioButtonIcon, &sliderIcon, &textCursor, &mouseCursor, &containerRegion);
-
-                        if (!checkBoxIcon)
+                        float opacity;
+                        if (innerSpace->exists("opacity"))
                         {
-                            checkBoxIcon = normal->getCheckBoxIcon();
+                            opacity = innerSpace->getFloat("opacity");
+                        }
+                        else
+                        {
+                            opacity = normal->getOpacity();
+                        }
+
+                        ImageList* imageList = NULL;
+                        Image* cursor = NULL;
+                        Skin* skin = NULL;
+                        theme->lookUpSprites(innerSpace, &imageList, &cursor, &skin);
+
+                        if (!imageList)
+                        {
+                            imageList = normal->getImageList();
+                        }
+
+                        if (!cursor)
+                        {
+                            cursor = normal->getCursor();
                         }
                         
-                        if (!radioButtonIcon)
+                        if (!skin)
                         {
-                            radioButtonIcon = normal->getRadioButtonIcon();
-                        }
-                        
-                        if (!sliderIcon)
-                        {
-                            sliderIcon = normal->getSliderIcon();
+                            skin = normal->getSkin();
                         }
 
-                        if (!textCursor)
-                        {
-                            textCursor = normal->getTextCursor();
-                        }
-
-                        if (!mouseCursor)
-                        {
-                            mouseCursor = normal->getMouseCursor();
-                        }
-                        
-                        if (!containerRegion)
-                        {
-                            containerRegion = normal->getContainerRegion();
-                        }
-
-                        if (strcmp(innerSpacename, "focus") == 0)
+                        if (strcmp(innerSpacename, "stateFocus") == 0)
                         {
                             focus = Theme::Style::Overlay::create();
-                            focus->setContainerRegion(containerRegion);
-                            focus->setCheckBoxIcon(checkBoxIcon);
-                            focus->setTextCursor(textCursor);
-                            focus->setMouseCursor(mouseCursor);
-                            focus->setCheckBoxIcon(checkBoxIcon);
-                            focus->setRadioButtonIcon(radioButtonIcon);
-                            focus->setSliderIcon(sliderIcon);
+                            focus->setSkin(skin);
+                            focus->setCursor(cursor);
+                            focus->setImageList(imageList);
                             focus->setTextColor(textColor);
                             focus->setFont(font);
                             focus->setFontSize(fontSize);
                             focus->setTextAlignment(alignment);
                             focus->setTextRightToLeft(rightToLeft);
+                            focus->setOpacity(opacity);
 
                             theme->_fonts.insert(font);
                         }
-                        else if (strcmp(innerSpacename, "active") == 0)
+                        else if (strcmp(innerSpacename, "stateActive") == 0)
                         {
                             active = Theme::Style::Overlay::create();
-                            active->setContainerRegion(containerRegion);
-                            active->setTextCursor(textCursor);
-                            active->setMouseCursor(mouseCursor);
-                            active->setCheckBoxIcon(checkBoxIcon);
-                            active->setRadioButtonIcon(radioButtonIcon);
-                            active->setSliderIcon(sliderIcon);
+                            active->setSkin(skin);
+                            active->setCursor(cursor);
+                            active->setImageList(imageList);
                             active->setTextColor(textColor);
                             active->setFont(font);
                             active->setFontSize(fontSize);
                             active->setTextAlignment(alignment);
                             active->setTextRightToLeft(rightToLeft);
+                            active->setOpacity(opacity);
 
                             theme->_fonts.insert(font);
                         }
-                        else if (strcmp(innerSpacename, "disabled") == 0)
+                        else if (strcmp(innerSpacename, "stateDisabled") == 0)
                         {
                             disabled = Theme::Style::Overlay::create();
-                            disabled->setContainerRegion(containerRegion);
-                            disabled->setTextCursor(textCursor);
-                            disabled->setMouseCursor(mouseCursor);
-                            disabled->setCheckBoxIcon(checkBoxIcon);
-                            disabled->setRadioButtonIcon(radioButtonIcon);
-                            disabled->setSliderIcon(sliderIcon);
+                            disabled->setSkin(skin);
+                            disabled->setCursor(cursor);
+                            disabled->setImageList(imageList);
                             disabled->setTextColor(textColor);
                             disabled->setFont(font);
                             disabled->setFontSize(fontSize);
                             disabled->setTextAlignment(alignment);
                             disabled->setTextRightToLeft(rightToLeft);
+                            disabled->setOpacity(opacity);
 
                             theme->_fonts.insert(font);
                         }
@@ -474,7 +393,7 @@ namespace gameplay
                     disabled->addRef();
                 }
 
-                Theme::Style* s = new Theme::Style(space->getId(), margin, padding, normal, focus, active, disabled);
+                Theme::Style* s = new Theme::Style(space->getId(), tw, th, margin, padding, normal, focus, active, disabled);
                 theme->_styles.push_back(s);
             }
 
@@ -519,223 +438,218 @@ namespace gameplay
         return _spriteBatch;
     }
 
-    /***************
-     * Theme::Icon *
-     ***************/
-    Theme::Icon* Theme::Icon::create(const char* id, const Texture& texture, const Vector2& size,
-                                     const Vector2& offPosition, const Vector2& onPosition, const Vector4& color)
+    /**************
+     * Theme::UVs *
+     **************/
+    Theme::UVs::UVs()
+        : u1(0), v1(0), u2(0), v2(0)
     {
-        Icon* icon = new Icon(texture, size, offPosition, onPosition, color);
+    }
 
-        if (id)
+    Theme::UVs::UVs(float u1, float v1, float u2, float v2)
+        : u1(u1), v1(v1), u2(u2), v2(v2)
+    {
+    }
+
+    const Theme::UVs& Theme::UVs::empty()
+    {
+        static UVs empty(0, 0, 0, 0);
+        return empty;
+    }
+
+    /**********************
+     * Theme::SideRegions *
+     **********************/
+    const Theme::SideRegions& Theme::SideRegions::empty()
+    {
+        static SideRegions empty;
+        return empty;
+    }
+
+    /****************
+     * Theme::Image *
+     ****************/
+    Theme::Image::Image(float tw, float th, const Rectangle& region, const Vector4& color)
+        : _region(region), _color(color)
+    {
+        generateUVs(tw, th, region.x, region.y, region.width, region.height, &_uvs);
+    }
+
+    Theme::Image::~Image()
+    {
+    }
+
+    Theme::Image* Theme::Image::create(float tw, float th, Properties* properties)
+    {
+        Vector4 regionVector;                
+        properties->getVector4("region", &regionVector);
+        const Rectangle region(regionVector.x, regionVector.y, regionVector.z, regionVector.w);
+
+        Vector4 color(1, 1, 1, 1);
+        if (properties->exists("color"))
         {
-            icon->_id = id;
+            properties->getColor("color", &color);
         }
 
-        return icon;
+        Image* image = new Image(tw, th, region, color);
+        const char* id = properties->getId();
+        if (id)
+        {
+            image->_id = id;
+        }
+
+        return image;
     }
 
-    Theme::Icon::Icon(const Texture& texture, const Vector2& size,
-                      const Vector2& offPosition, const Vector2& onPosition, const Vector4& color)
-                      : _size(size), _color(color)
-    {
-        generateUVs(texture, offPosition.x, offPosition.y, size.x, size.y, &_off);
-        generateUVs(texture, onPosition.x, onPosition.y, size.x, size.y, &_on);
-    }
-
-    Theme::Icon::~Icon()
-    {
-    }
-
-    const char* Theme::Icon::getId() const
+    const char* Theme::Image::getId() const
     {
         return _id.c_str();
     }
 
-    const Vector2& Theme::Icon::getSize() const
-    {
-        return _size;
-    }
-
-    const Vector4& Theme::Icon::getColor() const
-    {
-        return _color;
-    }
-
-    const Theme::UVs& Theme::Icon::getOffUVs() const
-    {
-        return _off;
-    }
-
-    const Theme::UVs& Theme::Icon::getOnUVs() const
-    {
-        return _on;
-    }
-
-
-    /*********************
-     * Theme::SliderIcon *
-     *********************/
-    Theme::SliderIcon* Theme::SliderIcon::create(const char* id, const Texture& texture, const Vector4& minCapRegion,
-            const Vector4& maxCapRegion, const Vector4& markerRegion, const Vector4& trackRegion, const Vector4& color)
-    {
-        SliderIcon* sliderIcon = new SliderIcon(texture, minCapRegion, maxCapRegion, markerRegion, trackRegion, color);
-
-        if (id)
-        {
-            sliderIcon->_id = id;
-        }
-
-        return sliderIcon;
-    }
-
-    Theme::SliderIcon::SliderIcon(const Texture& texture, const Vector4& minCapRegion, const Vector4& maxCapRegion,
-                                  const Vector4& markerRegion, const Vector4& trackRegion, const Vector4& color)
-                                  : _color(color)
-    {
-        _minCapSize.set(minCapRegion.z, minCapRegion.w);
-        _maxCapSize.set(maxCapRegion.z, maxCapRegion.w);
-        _markerSize.set(markerRegion.z, markerRegion.w);
-        _trackSize.set(trackRegion.z, trackRegion.w);
-
-        generateUVs(texture, minCapRegion.x, minCapRegion.y, minCapRegion.z, minCapRegion.w, &_minCap);
-        generateUVs(texture, maxCapRegion.x, maxCapRegion.y, maxCapRegion.z, maxCapRegion.w, &_maxCap);
-        generateUVs(texture, markerRegion.x, markerRegion.y, markerRegion.z, markerRegion.w, &_marker);
-        generateUVs(texture, trackRegion.x, trackRegion.y, trackRegion.z, trackRegion.w, &_track);
-    }
-
-    Theme::SliderIcon::~SliderIcon()
-    {
-    }
-
-    const char* Theme::SliderIcon::getId() const
-    {
-        return _id.c_str();
-    }
-
-    const Theme::UVs& Theme::SliderIcon::getMinCapUVs() const
-    {
-        return _minCap;
-    }
-
-    const Theme::UVs& Theme::SliderIcon::getMaxCapUVs() const
-    {
-        return _maxCap;
-    }
-    
-    const Theme::UVs& Theme::SliderIcon::getMarkerUVs() const
-    {
-        return _marker;
-    }
-    
-    const Theme::UVs& Theme::SliderIcon::getTrackUVs() const
-    {
-        return _track;
-    }
-
-    const Vector2& Theme::SliderIcon::getMinCapSize() const
-    {
-        return _minCapSize;
-    }
-
-    const Vector2& Theme::SliderIcon::getMaxCapSize() const
-    {
-        return _maxCapSize;
-    }
-
-    const Vector2& Theme::SliderIcon::getMarkerSize() const
-    {
-        return _markerSize;
-    }
-
-    const Vector2& Theme::SliderIcon::getTrackSize() const
-    {
-        return _trackSize;
-    }
-
-    const Vector4& Theme::SliderIcon::getColor() const
-    {
-        return _color;
-    }
-
-    /*****************
-     * Theme::Cursor *
-     *****************/
-    Theme::Cursor* Theme::Cursor::create(const char* id, const Texture& texture, const Rectangle& region, const Vector4& color)
-    {
-        Cursor* cursor = new Cursor(texture, region, color);
-        
-        if (id)
-        {
-            cursor->_id = id;
-        }
-
-        return cursor;
-    }
-
-    Theme::Cursor::Cursor(const Texture& texture, const Rectangle& region, const Vector4& color)
-        : _color(color)
-    {
-        _size.set(region.width, region.height);
-        generateUVs(texture, region.x, region.y, region.width, region.height, &_uvs);
-    }
-
-    Theme::Cursor::~Cursor()
-    {
-    }
-
-    const char* Theme::Cursor::getId() const
-    {
-        return _id.data();
-    }
-
-    const Theme::UVs& Theme::Cursor::getUVs() const
+    const Theme::UVs& Theme::Image::getUVs() const
     {
         return _uvs;
     }
 
-    const Vector2& Theme::Cursor::getSize() const
+    const Rectangle& Theme::Image::getRegion() const
     {
-        return _size;
+        return _region;
     }
 
-    const Vector4& Theme::Cursor::getColor() const
+    const Vector4& Theme::Image::getColor() const
     {
         return _color;
     }
 
-    /**************************
-     * Theme::ContainerRegion *
-     **************************/
-    Theme::ContainerRegion* Theme::ContainerRegion::create(const char* id, const Texture& texture, const Rectangle& region, const Theme::Border& border, const Vector4& color)
+    /********************
+     * Theme::ImageList *
+     ********************/
+    Theme::ImageList::ImageList(const Vector4& color) : _color(color)
     {
-        ContainerRegion* containerRegion = new ContainerRegion(texture, region, border, color);
+    }
+
+    Theme::ImageList::ImageList(const ImageList& copy)
+    {
+        _id = copy._id;
+        _color = copy._color;
+
+        std::vector<Image*>::const_iterator it;
+        for (it = copy._images.begin(); it != copy._images.end(); it++)
+        {
+            Image* image = *it;
+            _images.push_back(new Image(*image));
+        }
+    }
+
+    Theme::ImageList::~ImageList()
+    {
+        std::vector<Image*>::const_iterator it;
+        for (it = _images.begin(); it != _images.end(); it++)
+        {
+            Image* image = *it;
+            SAFE_RELEASE(image);
+        }
+    }
+
+    Theme::ImageList* Theme::ImageList::create(float tw, float th, Properties* properties)
+    {
+        Vector4 color(1, 1, 1, 1);
+        if (properties->exists("color"))
+        {
+            properties->getColor("color", &color);
+        }
+
+        ImageList* imageList = new ImageList(color);
+
+        const char* id = properties->getId();
+        if (id)
+        {
+            imageList->_id = id;
+        }
+
+        Properties* space = properties->getNextNamespace();
+        while (space != NULL)
+        {
+            Image* image = Image::create(tw, th, space);
+            imageList->_images.push_back(image);
+            space = properties->getNextNamespace();
+        }
+
+        return imageList;
+    }
+
+    const char* Theme::ImageList::getId() const
+    {
+        return _id.c_str();
+    }
+
+    Theme::Image* Theme::ImageList::getImage(const char* imageId) const
+    {
+        std::vector<Image*>::const_iterator it;
+        for (it = _images.begin(); it != _images.end(); it++)
+        {
+            Image* image = *it;
+            if (strcmp(image->getId(), imageId) == 0)
+            {
+                return image;
+            }
+        }
+
+        return NULL;
+    }
+
+    /***************
+     * Theme::Skin *
+     ***************/
+    Theme::Skin* Theme::Skin::create(const char* id, float tw, float th, const Rectangle& region, const Theme::Border& border, const Vector4& color)
+    {
+        Skin* skin = new Skin(tw, th, region, border, color);
 
         if (id)
         {
-            containerRegion->_id = id;
+            skin->_id = id;
         }
 
-        return containerRegion;
+        return skin;
     }
 
-    Theme::ContainerRegion::ContainerRegion(const Texture& texture, const Rectangle& region, const Theme::Border& border, const Vector4& color)
-        : _border(border), _color(color)
+    Theme::Skin::Skin(float tw, float th, const Rectangle& region, const Theme::Border& border, const Vector4& color)
+        : _border(border), _color(color), _region(region)
     {
-        // Need to convert pixel coords to unit space by dividing by texture size.
-        float tw = 1.0f / (float)texture.getWidth();
-        float th = 1.0f / (float)texture.getHeight();
+        setRegion(region, tw, th);
+    }
 
+    Theme::Skin::~Skin()
+    {
+    }
+
+    const char* Theme::Skin::getId() const
+    {
+        return _id.c_str();
+    }
+
+    const Theme::Border& Theme::Skin::getBorder() const
+    {
+        return _border;
+    }
+
+    const Rectangle& Theme::Skin::getRegion() const
+    {
+        return _region;
+    }
+
+    void Theme::Skin::setRegion(const Rectangle& region, float tw, float th)
+    {
         // Can calculate all measurements in advance.
         float leftEdge = region.x * tw;
         float rightEdge = (region.x + region.width) * tw;
-        float leftBorder = (region.x + border.left) * tw;
-        float rightBorder = (region.x + region.width - border.right) * tw;
+        float leftBorder = (region.x + _border.left) * tw;
+        float rightBorder = (region.x + region.width - _border.right) * tw;
 
         float topEdge = 1.0f - (region.y * th);
         float bottomEdge = 1.0f - ((region.y + region.height) * th);
-        float topBorder = 1.0f - ((region.y + border.top) * th);
-        float bottomBorder = 1.0f - ((region.y + region.height - border.bottom) * th);
+        float topBorder = 1.0f - ((region.y + _border.top) * th);
+        float bottomBorder = 1.0f - ((region.y + region.height - _border.bottom) * th);
 
         // There are 9 sets of UVs to set.
         _uvs[TOP_LEFT].u1 = leftEdge;
@@ -784,26 +698,12 @@ namespace gameplay
         _uvs[BOTTOM_RIGHT].v2 = bottomEdge;
     }
 
-    Theme::ContainerRegion::~ContainerRegion()
-    {
-    }
-
-    const char* Theme::ContainerRegion::getId() const
-    {
-        return _id.c_str();
-    }
-
-    const Theme::Border& Theme::ContainerRegion::getBorder() const
-    {
-        return _border;
-    }
-
-    const Theme::UVs& Theme::ContainerRegion::getUVs(ContainerArea area) const
+    const Theme::UVs& Theme::Skin::getUVs(SkinArea area) const
     {
         return _uvs[area];
     }
 
-    const Vector4& Theme::ContainerRegion::getColor() const
+    const Vector4& Theme::Skin::getColor() const
     {
         return _color;
     }
@@ -811,14 +711,29 @@ namespace gameplay
     /****************
      * Theme::Style *
      ****************/
-    Theme::Style::Style(const char* id, const Theme::Margin& margin, const Theme::Padding& padding,
+    Theme::Style::Style(const char* id, float tw, float th,
+            const Theme::Margin& margin, const Theme::Padding& padding,
             Theme::Style::Overlay* normal, Theme::Style::Overlay* focus, Theme::Style::Overlay* active, Theme::Style::Overlay* disabled)
-        : _id(id), _margin(margin), _padding(padding)
+        : _id(id), _tw(tw), _th(th), _margin(margin), _padding(padding)
     {
         _overlays[OVERLAY_NORMAL] = normal;
         _overlays[OVERLAY_FOCUS] = focus;
         _overlays[OVERLAY_ACTIVE] = active;
         _overlays[OVERLAY_DISABLED] = disabled;
+    }
+
+    Theme::Style::Style(const Style& copy)
+    {
+        _id = copy._id;
+        _margin = copy._margin;
+        _padding = copy._padding;
+        _tw = copy._tw;
+        _th = copy._th;
+
+        for (int i = 0; i < MAX_OVERLAYS; i++)
+        {
+            _overlays[i] = new Theme::Style::Overlay(*copy._overlays[i]);
+        }
     }
 
     Theme::Style::~Style()
@@ -839,16 +754,32 @@ namespace gameplay
         return _overlays[overlayType];
     }
 
+    void Theme::Style::setMargin(float top, float bottom, float left, float right)
+    {
+        _margin.top = top;
+        _margin.bottom = bottom;
+        _margin.left = left;
+        _margin.right = right;
+    }
+
     const Theme::Margin& Theme::Style::getMargin() const
     {
         return _margin;
+    }
+
+    void Theme::Style::setPadding(float top, float bottom, float left, float right)
+    {
+        _padding.top = top;
+        _padding.bottom = bottom;
+        _padding.left = left;
+        _padding.right = right;
     }
 
     const Theme::Padding& Theme::Style::getPadding() const
     {
         return _padding;
     }
-
+    
     /*************************
      * Theme::Style::Overlay *
      *************************/
@@ -858,19 +789,121 @@ namespace gameplay
         return overlay;
     }
 
-    Theme::Style::Overlay::Overlay() : _container(NULL), _textCursor(NULL), _mouseCursor(NULL), _checkBoxIcon(NULL), _radioButtonIcon(NULL), _sliderIcon(NULL), _font(NULL)
+    Theme::Style::Overlay::Overlay() : _skin(NULL), _cursor(NULL), _imageList(NULL), _font(NULL)
     {
+    }
+
+    Theme::Style::Overlay::Overlay(const Overlay& copy) : _skin(NULL), _cursor(NULL), _imageList(NULL), _font(NULL)
+    {
+        if (copy._skin)
+        {
+            _skin = new Skin(*copy._skin);
+        }
+        if (copy._cursor)
+        {
+            _cursor = new Image(*copy._cursor);
+        }
+        if (copy._imageList)
+        {
+            _imageList = new ImageList(*copy._imageList);
+        }
+
+        _font = copy._font;
+        _fontSize = copy._fontSize;
+        _alignment = copy._alignment;
+        _textRightToLeft = copy._textRightToLeft;
+        _textColor = Vector4(copy._textColor);
+        _opacity = copy._opacity;
+
+        if (_font)
+        {
+            _font->addRef();
+        }
     }
 
     Theme::Style::Overlay::~Overlay()
     {
-        SAFE_RELEASE(_container);
-        SAFE_RELEASE(_checkBoxIcon);
-        SAFE_RELEASE(_radioButtonIcon);
-        SAFE_RELEASE(_sliderIcon);
-        SAFE_RELEASE(_mouseCursor);
-        SAFE_RELEASE(_textCursor);
+        SAFE_RELEASE(_skin);
+        SAFE_RELEASE(_imageList);
+        SAFE_RELEASE(_cursor);
         SAFE_RELEASE(_font);
+    }
+
+    float Theme::Style::Overlay::getOpacity() const
+    {
+        return _opacity;
+    }
+
+    void Theme::Style::Overlay::setOpacity(float opacity)
+    {
+        _opacity = opacity;
+    }
+
+    void Theme::Style::Overlay::setBorder(float top, float bottom, float left, float right)
+    {
+        if (_skin)
+        {
+            _skin->_border.top = top;
+            _skin->_border.bottom = bottom;
+            _skin->_border.left = left;
+            _skin->_border.right = right;
+        }
+    }
+
+    const Theme::Border& Theme::Style::Overlay::getBorder() const
+    {
+        if (_skin)
+        {
+            return _skin->getBorder();
+        }
+        else
+        {
+            return Theme::Border::empty();
+        }
+    }
+
+    void Theme::Style::Overlay::setSkinColor(const Vector4& color)
+    {
+        if (_skin)
+        {
+            _skin->_color.set(color);
+        }
+    }
+
+    const Vector4& Theme::Style::Overlay::getSkinColor() const
+    {
+        if (_skin)
+        {
+            return _skin->getColor();
+        }
+
+        return Vector4::one();
+    }
+
+    void Theme::Style::Overlay::setSkinRegion(const Rectangle& region, float tw, float th)
+    {
+        assert(_skin);
+        _skin->setRegion(region, tw, th);
+    }
+
+    const Rectangle& Theme::Style::Overlay::getSkinRegion() const
+    {
+        if (_skin)
+        {
+            return _skin->getRegion();
+        }
+
+        return Rectangle::empty();
+    }
+
+    const Theme::UVs& Theme::Style::Overlay::getSkinUVs(Theme::Skin::SkinArea area) const
+    {
+        if (_skin)
+        {
+            return _skin->_uvs[area];
+        }
+
+        return UVs::empty();
     }
 
     Font* Theme::Style::Overlay::getFont() const
@@ -933,19 +966,135 @@ namespace gameplay
         _textColor = color;
     }
 
-    Theme::Cursor* Theme::Style::Overlay::getTextCursor() const
+    const Rectangle& Theme::Style::Overlay::getImageRegion(const char* id) const
     {
-        return _textCursor;
+        Image* image = _imageList->getImage(id);
+        if (image)
+        {
+            return image->getRegion();
+        }
+        else
+        {
+            return Rectangle::empty();
+        }
+    }
+    
+    void Theme::Style::Overlay::setImageRegion(const char* id, const Rectangle& region, float tw, float th)
+    {
+        Image* image = _imageList->getImage(id);
+        assert(image);
+        image->_region.set(region);
+        generateUVs(tw, th, region.x, region.y, region.width, region.height, &(image->_uvs));
     }
 
-    void Theme::Style::Overlay::setTextCursor(Theme::Cursor* cursor)
+    const Vector4& Theme::Style::Overlay::getImageColor(const char* id) const
     {
-        if (_textCursor != cursor)
+        Image* image = _imageList->getImage(id);
+        if (image)
         {
-            SAFE_RELEASE(_textCursor);
+            return image->getColor();
+        }
+        else
+        {
+            return Vector4::zero();
+        }
+    }
 
-            _textCursor = cursor;
-            
+    void Theme::Style::Overlay::setImageColor(const char* id, const Vector4& color)
+    {
+        Image* image = _imageList->getImage(id);
+        assert(image);
+        image->_color.set(color);
+    }
+
+    const Theme::UVs& Theme::Style::Overlay::getImageUVs(const char* id) const
+    {
+        Image* image = _imageList->getImage(id);
+        if (image)
+        {
+            return image->getUVs();
+        }
+        else
+        {
+            return UVs::empty();
+        }
+    }
+
+    const Rectangle& Theme::Style::Overlay::getCursorRegion() const
+    {
+        if (_cursor)
+        {
+            return _cursor->getRegion();
+        }
+        else
+        {
+            return Rectangle::empty();
+        }
+    }
+    
+    void Theme::Style::Overlay::setCursorRegion(const Rectangle& region, float tw, float th)
+    {
+        assert(_cursor);
+        _cursor->_region.set(region);
+        generateUVs(tw, th, region.x, region.y, region.width, region.height, &(_cursor->_uvs));
+    }
+
+    const Vector4& Theme::Style::Overlay::getCursorColor() const
+    {
+        if (_cursor)
+        {
+            return _cursor->getColor();
+        }
+        else
+        {
+            return Vector4::zero();
+        }
+    }
+
+    void Theme::Style::Overlay::setCursorColor(const Vector4& color)
+    {
+        assert(_cursor);
+        _cursor->_color.set(color);
+    }
+
+    const Theme::UVs Theme::Style::Overlay::getCursorUVs() const
+    {
+        if (_cursor)
+        {
+            return _cursor->getUVs();
+        }
+        else
+        {
+            return UVs::empty();
+        }
+    }
+
+    void Theme::Style::Overlay::setSkin(Skin* skin)
+    {
+        if (_skin != skin)
+        {
+            SAFE_RELEASE(_skin);
+            _skin = skin;
+
+            if (skin)
+            {
+                skin->addRef();
+            }
+        }
+    }
+
+    Theme::Skin* Theme::Style::Overlay::getSkin() const
+    {
+        return _skin;
+    }
+
+    void Theme::Style::Overlay::setCursor(Image* cursor)
+    {
+        if (_cursor != cursor)
+        {
+            SAFE_RELEASE(_cursor);
+            _cursor = cursor;
+
             if (cursor)
             {
                 cursor->addRef();
@@ -953,193 +1102,124 @@ namespace gameplay
         }
     }
 
-    Theme::Cursor* Theme::Style::Overlay::getMouseCursor() const
+    Theme::Image* Theme::Style::Overlay::getCursor() const
     {
-        return _mouseCursor;
+        return _cursor;
     }
-
-    void Theme::Style::Overlay::setMouseCursor(Theme::Cursor* cursor)
-    {
-        if (_mouseCursor != cursor)
-        {
-            SAFE_RELEASE(_mouseCursor);
-
-            _mouseCursor = cursor;
             
-            if (cursor)
-            {
-                cursor->addRef();
-            }
-        }
-    }
-
-    void Theme::Style::Overlay::setCheckBoxIcon(Icon* icon)
+    void Theme::Style::Overlay::setImageList(ImageList* imageList)
     {
-        if (_checkBoxIcon != icon)
+        if (_imageList != imageList)
         {
-            SAFE_RELEASE(_checkBoxIcon);
+            SAFE_RELEASE(_imageList);
+            _imageList = imageList;
 
-            _checkBoxIcon = icon;
-            
-            if (icon)
+            if (imageList)
             {
-                icon->addRef();
+                imageList->addRef();
             }
         }
     }
-
-    Theme::Icon* Theme::Style::Overlay::getCheckBoxIcon() const
+    
+    Theme::ImageList* Theme::Style::Overlay::getImageList() const
     {
-        return _checkBoxIcon;
+        return _imageList;
     }
 
-    void Theme::Style::Overlay::setRadioButtonIcon(Icon* icon)
+    // Implementation of AnimationHandler
+    unsigned int Theme::Style::Overlay::getAnimationPropertyComponentCount(int propertyId) const
     {
-        if (_radioButtonIcon != icon)
+        switch(propertyId)
         {
-            SAFE_RELEASE(_radioButtonIcon);
-
-            _radioButtonIcon = icon;
-
-            if (icon)
-            {
-                icon->addRef();
-            }
+        case Theme::Style::Overlay::ANIMATE_OPACITY:
+            return 1;
+        default:
+            return -1;
         }
     }
 
-    Theme::Icon* Theme::Style::Overlay::getRadioButtonIcon() const
+    void Theme::Style::Overlay::getAnimationPropertyValue(int propertyId, AnimationValue* value)
     {
-        return _radioButtonIcon;
-    }
-
-    void Theme::Style::Overlay::setSliderIcon(SliderIcon* slider)
-    {
-        if (_sliderIcon != slider)
+        switch(propertyId)
         {
-            SAFE_RELEASE(_sliderIcon);
-
-            _sliderIcon = slider;
-
-            if (slider)
-            {
-                slider->addRef();
-            }
+        case ANIMATE_OPACITY:
+            value->setFloat(0, _opacity);
+            break;
+        default:
+            break;
         }
     }
 
-    Theme::SliderIcon* Theme::Style::Overlay::getSliderIcon() const
+    void Theme::Style::Overlay::setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight)
     {
-        return _sliderIcon;
-    }
-
-    void Theme::Style::Overlay::setContainerRegion(ContainerRegion* container)
-    {
-        if (_container != container)
+        switch(propertyId)
         {
-            SAFE_RELEASE(_container);
-
-            _container = container;
-
-            if (container)
+            case ANIMATE_OPACITY:
             {
-                container->addRef();
+                float opacity = value->getFloat(0);
+                if ((_animationPropertyBitFlag & ANIMATION_OPACITY_BIT) != ANIMATION_OPACITY_BIT)
+                {
+                    _animationPropertyBitFlag |= ANIMATION_OPACITY_BIT;
+                }
+                else
+                {
+                    opacity = Curve::lerp(blendWeight, _opacity, opacity);
+                }
+                _opacity = opacity;
+                break;
             }
+            default:
+                break;
         }
     }
-
-    Theme::ContainerRegion* Theme::Style::Overlay::getContainerRegion() const
+    
+    /**
+     * Theme utility methods.
+     */
+    void Theme::generateUVs(float tw, float th, float x, float y, float width, float height, UVs* uvs)
     {
-        return _container;
-    }
-
-    void Theme::generateUVs(const Texture& texture, float x, float y, float width, float height, UVs* uvs)
-    {
-        float tw = 1.0f / texture.getWidth();
-        float th = 1.0f / texture.getHeight();
-
         uvs->u1 = x * tw;
         uvs->u2 = (x + width) * tw;
         uvs->v1 = 1.0f - (y * th);
         uvs->v2 = 1.0f - ((y + height) * th);
     }
 
-    void Theme::lookUpSprites(const Properties* overlaySpace, Icon** checkBoxIcon, Icon** radioButtonIcon, SliderIcon** sliderIcon,
-                              Cursor** textCursor, Cursor** mouseCursor, ContainerRegion** containerRegion)
+    void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList, Image** cursor, Skin** Skin)
     {
-        const char* checkBoxString = overlaySpace->getString("checkBox");
-        if (checkBoxString)
+        const char* imageListString = overlaySpace->getString("imageList");
+        if (imageListString)
         {
-            for (unsigned int i = 0; i < _icons.size(); i++)
+            for (unsigned int i = 0; i < _imageLists.size(); ++i)
             {
-                if (strcmp(_icons[i]->getId(), checkBoxString) == 0)
+                if (strcmp(_imageLists[i]->getId(), imageListString) == 0)
                 {
-                    *checkBoxIcon = _icons[i];
+                    *imageList = _imageLists[i];
                     break;
                 }
             }
         }
 
-        const char* radioButtonString = overlaySpace->getString("radioButton");
-        if (radioButtonString)
+        const char* cursorString = overlaySpace->getString("cursor");
+        if (cursorString)
         {
-            for (unsigned int i = 0; i < _icons.size(); i++)
+            for (unsigned int i = 0; i < _images.size(); ++i)
             {
-                if (strcmp(_icons[i]->getId(), radioButtonString) == 0)
+                if (strcmp(_images[i]->getId(), cursorString) == 0)
                 {
-                    *radioButtonIcon = _icons[i];
+                    *cursor = _images[i];
                     break;
                 }
             }
         }
 
-        const char* sliderString = overlaySpace->getString("slider");
-        if (sliderString)
+        const char* skinString = overlaySpace->getString("skin");
+        if (skinString)
         {
-            for (unsigned int i = 0; i < _sliders.size(); ++i)
+            for (unsigned int i = 0; i < _skins.size(); ++i)
             {
-                if (strcmp(_sliders[i]->getId(), sliderString) == 0)
+                if (strcmp(_skins[i]->getId(), skinString) == 0)
                 {
-                    *sliderIcon = _sliders[i];
-                    break;
-                }
-            }
-        }
-
-        const char* textCursorString = overlaySpace->getString("textCursor");
-        if (textCursorString)
-        {
-            for (unsigned int i = 0; i < _cursors.size(); ++i)
-            {
-                if (strcmp(_cursors[i]->getId(), textCursorString) == 0)
-                {
-                    *textCursor = _cursors[i];
-                    break;
-                }
-            }
-        }
-
-        const char* mouseCursorString = overlaySpace->getString("mouseCursor");
-        if (mouseCursorString)
-        {
-            for (unsigned int i = 0; i < _cursors.size(); ++i)
-            {
-                if (strcmp(_cursors[i]->getId(), mouseCursorString) == 0)
-                {
-                    *mouseCursor = _cursors[i];
-                    break;
-                }
-            }
-        }
-
-        const char* containerString = overlaySpace->getString("container");
-        if (containerString)
-        {
-            for (unsigned int i = 0; i < _containers.size(); ++i)
-            {
-                if (strcmp(_containers[i]->getId(), containerString) == 0)
-                {
-                    *containerRegion = _containers[i];
+                    *Skin = _skins[i];
                     break;
                 }
             }
