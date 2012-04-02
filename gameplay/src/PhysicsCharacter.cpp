@@ -84,6 +84,31 @@ PhysicsCharacter::~PhysicsCharacter()
     Game::getInstance()->getPhysicsController()->_world->removeAction(this);
 }
 
+PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
+{
+    // Check if the properties is valid and has a valid namespace.
+    assert(properties);
+    if (!properties || !(strcmp(properties->getNamespace(), "character") == 0))
+    {
+        WARN("Failed to load physics character from properties object: must be non-null object and have namespace equal to \'character\'.");
+        return NULL;
+    }
+
+    // Load the physics collision shape definition.
+    PhysicsCollisionShape::Definition* shape = PhysicsCollisionShape::Definition::create(node, properties);
+    if (shape == NULL)
+    {
+        WARN("Failed to create collision shape during physics character creation.");
+        return NULL;
+    }
+
+    // Create the physics character.
+    PhysicsCharacter* character = new PhysicsCharacter(node, *shape);
+    SAFE_DELETE(shape);
+
+    return character;
+}
+
 PhysicsCollisionObject::Type PhysicsCharacter::getType() const
 {
     return PhysicsCollisionObject::CHARACTER;
