@@ -290,16 +290,6 @@ private:
     PhysicsRigidBody(const PhysicsRigidBody& body);
 
     /**
-     * Creates a rigid body from the rigid body file at the given path.
-     * 
-     * @param node The node to create a rigid body for; note that the node must have
-     *      a model attached to it prior to creating a rigid body for it.
-     * @param filePath The path to the rigid body file.
-     * @return The rigid body or <code>NULL</code> if the rigid body could not be loaded.
-     */
-    static PhysicsRigidBody* create(Node* node, const char* filePath);
-
-    /**
      * Creates a rigid body from the specified properties object.
      * 
      * @param node The node to create a rigid body for; note that the node must have
