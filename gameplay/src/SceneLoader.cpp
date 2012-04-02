@@ -51,9 +51,9 @@ Scene* SceneLoader::load(const char* filePath)
 
     // First apply the node url properties. Following that,
     // apply the normal node properties and create the animations.
-    // We apply rigid body properties after all other node properties
+    // We apply physics properties after all other node properties
     // so that the transform (SRT) properties get applied before
-    // processing rigid bodies.
+    // processing physics collision objects.
     applyNodeUrls(scene);
     applyNodeProperties(scene, sceneProperties, 
         SceneNodeProperty::AUDIO | 
@@ -62,7 +62,7 @@ Scene* SceneLoader::load(const char* filePath)
         SceneNodeProperty::ROTATE |
         SceneNodeProperty::SCALE |
         SceneNodeProperty::TRANSLATE);
-    applyNodeProperties(scene, sceneProperties, SceneNodeProperty::RIGIDBODY);
+    applyNodeProperties(scene, sceneProperties, SceneNodeProperty::CHARACTER | SceneNodeProperty::GHOST | SceneNodeProperty::RIGIDBODY);
     createAnimations(scene);
 
     // Find the physics properties object.
@@ -194,6 +194,8 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
     if (snp._type == SceneNodeProperty::AUDIO ||
         snp._type == SceneNodeProperty::MATERIAL ||
         snp._type == SceneNodeProperty::PARTICLE ||
+        snp._type == SceneNodeProperty::CHARACTER ||
+        snp._type == SceneNodeProperty::GHOST ||
         snp._type == SceneNodeProperty::RIGIDBODY)
     {
         // Check to make sure the referenced properties object was loaded properly.
@@ -247,6 +249,8 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             SAFE_RELEASE(particleEmitter);
             break;
         }
+        case SceneNodeProperty::CHARACTER:
+        case SceneNodeProperty::GHOST:
         case SceneNodeProperty::RIGIDBODY:
         {
             // Check to make sure the referenced properties object was loaded properly.
@@ -274,38 +278,56 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                 p = p->getNextNamespace();
             }
 
-            // If the scene file specifies a rigid body model, use it for creating the rigid body.
-            Properties* np = sceneProperties->getNamespace(sceneNode._nodeID);
-            const char* name = NULL;
-            if (np && (name = np->getString("rigidbodymodel")))
+            // Check to make sure the type of the namespace used to load the physics collision object is correct.
+            if (snp._type == SceneNodeProperty::CHARACTER && strcmp(p->getNamespace(), "character") != 0)
             {
-                Node* modelNode = node->getScene()->findNode(name);
-                if (!modelNode)
-                    WARN_VARG("Node '%s' does not exist; attempting to use its model for rigid body creation.", name);
-                else
+                WARN_VARG("Attempting to set a 'character' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
+            }
+            else if (snp._type == SceneNodeProperty::GHOST && strcmp(p->getNamespace(), "ghost") != 0)
+            {
+                WARN_VARG("Attempting to set a 'ghost' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
+            }
+            else if (snp._type == SceneNodeProperty::RIGIDBODY && strcmp(p->getNamespace(), "rigidbody") != 0)
+            {
+                WARN_VARG("Attempting to set a 'rigidbody' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
+            }
+            else
+            {
+                // If the scene file specifies a rigid body model, use it for creating the collision object.
+                Properties* np = sceneProperties->getNamespace(sceneNode._nodeID);
+                const char* name = NULL;
+                if (np && (name = np->getString("rigidbodymodel")))
                 {
-                    if (!modelNode->getModel())
-                        WARN_VARG("Node '%s' does not have a model; attempting to use its model for rigid body creation.", name);
+                    Node* modelNode = node->getScene()->findNode(name);
+                    if (!modelNode)
+                        WARN_VARG("Node '%s' does not exist; attempting to use its model for collision object creation.", name);
                     else
                     {
-                        // Temporarily set rigidbody model on model to it's used during rigid body creation.
-                        Model* model = node->getModel();
-						model->addRef(); // up ref count to prevent node from releasing the model when we swap it
-                        node->setModel(modelNode->getModel());
+                        if (!modelNode->getModel())
+                            WARN_VARG("Node '%s' does not have a model; attempting to use its model for collision object creation.", name);
+                        else
+                        {
+                            // Temporarily set rigidbody model on model so it's used during collision object creation.
+                            Model* model = node->getModel();
+                        
+                            // Up ref count to prevent node from releasing the model when we swap it.
+						    model->addRef(); 
+                        
+						    // Create collision object with new rigidbodymodel set.
+                            node->setModel(modelNode->getModel());
+						    node->setCollisionObject(p);
 
-						// Create collision object with new rigidbodymodel set.
-						node->setCollisionObject(p);
-
-						// Restore original model
-                        node->setModel(model);
-						model->release(); // decrement temporarily added reference
+						    // Restore original model.
+                            node->setModel(model);
+						
+                            // Decrement temporarily added reference.
+                            model->release();
+                        }
                     }
                 }
+                else
+				    node->setCollisionObject(p);
             }
-            else if (!node->getModel())
-                WARN_VARG("Attempting to set a rigid body on node '%s', which has no model.", sceneNode._nodeID);
-            else
-				node->setCollisionObject(p);
             break;
         }
         default:
@@ -521,6 +543,14 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                 else if (strcmp(name, "particle") == 0)
                 {
                     addSceneNodeProperty(sceneNode, SceneNodeProperty::PARTICLE, ns->getString());
+                }
+                else if (strcmp(name, "character") == 0)
+                {
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::CHARACTER, ns->getString());
+                }
+                else if (strcmp(name, "ghost") == 0)
+                {
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::GHOST, ns->getString());
                 }
                 else if (strcmp(name, "rigidbody") == 0)
                 {

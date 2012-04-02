@@ -24,7 +24,7 @@ public:
      */
     PhysicsCollisionObject::Type getType() const;
 
-	/**
+    /**
      * Used to synchronize the transform between GamePlay and Bullet.
      */
     void transformChanged(Transform* transform, long cookie);
@@ -44,12 +44,22 @@ protected:
      * @param node The node to attach the ghost object to.
      * @param shape The collision shape definition for the ghost object.
      */
-	PhysicsGhostObject(Node* node, const PhysicsCollisionShape::Definition& shape);
+    PhysicsGhostObject(Node* node, const PhysicsCollisionShape::Definition& shape);
 
     /**
      * Destructor.
      */
     virtual ~PhysicsGhostObject();
+
+    /**
+     * Creates a ghost object from the specified properties object.
+     * 
+     * @param node The node to create a ghost object for; note that the node must have
+     *      a model attached to it prior to creating a ghost object for it.
+     * @param properties The properties object defining the ghost object (must have namespace equal to 'ghost').
+     * @return The newly created ghost object, or <code>NULL</code> if the ghost object failed to load.
+     */
+    static PhysicsGhostObject* create(Node* node, Properties* properties);
 
     btPairCachingGhostObject* _ghostObject;
 };
