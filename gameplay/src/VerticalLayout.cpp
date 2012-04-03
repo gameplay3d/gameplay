@@ -46,13 +46,6 @@ namespace gameplay
         // Need border, padding.
         Theme::Style* style = container->getStyle();
         Theme::Border border = container->getBorder(container->getState());
-        /*
-        Theme::Skin* skin = style->getOverlay(container->getOverlayType())->getSkin();
-        if (skin)
-        {
-            border = skin->getBorder();
-        }
-        */
         Theme::Padding padding = style->getPadding();
 
         float yPosition = 0;
