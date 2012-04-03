@@ -235,6 +235,8 @@ void PhysicsController::initialize()
     _ghostPairCallback = bullet_new<btGhostPairCallback>();
     _world->getPairCache()->setInternalGhostPairCallback(_ghostPairCallback);
 
+	_world->getDispatchInfo().m_allowedCcdPenetration = 0.0001f;
+
     // Set up debug drawing.
     _debugDrawer = new DebugDrawer();
     _world->setDebugDrawer(_debugDrawer);
@@ -527,7 +529,7 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
 
 				if (shape.centerAbsolute)
 				{
-					computeCenterOfMass(Vector3(shape.data.box.center), scale, centerOfMassOffset);
+					computeCenterOfMass(Vector3(shape.data.box.center), Vector3::one(), centerOfMassOffset);
 				}
 				else
 				{
@@ -557,7 +559,7 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
 
 				if (shape.centerAbsolute)
 				{
-					computeCenterOfMass(Vector3(shape.data.sphere.center), scale, centerOfMassOffset);
+					computeCenterOfMass(Vector3(shape.data.sphere.center), Vector3::one(), centerOfMassOffset);
 				}
 				else
 				{
@@ -587,7 +589,7 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
 
 				if (shape.centerAbsolute)
 				{
-					computeCenterOfMass(Vector3(shape.data.capsule.center), scale, centerOfMassOffset);
+					computeCenterOfMass(Vector3(shape.data.capsule.center), Vector3::one(), centerOfMassOffset);
 				}
 				else
 				{
@@ -602,7 +604,7 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
 				BoundingBox box;
 				getBoundingBox(node, &box);
 				float radius = std::max((box.max.x - box.min.x) * 0.5f, (box.max.z - box.min.z) * 0.5f);
-				float height = (box.max.y - box.min.y) - radius * 2.0f;
+				float height = box.max.y - box.min.y;
 				collisionShape = createCapsule(radius, height, scale);
 
 				computeCenterOfMass(box.getCenter(), scale, centerOfMassOffset);
@@ -698,7 +700,7 @@ PhysicsCollisionShape* PhysicsController::createCapsule(float radius, float heig
 	if (girthScale < scale.z)
 		girthScale = scale.z;
 	float scaledRadius = radius * girthScale;
-	float scaledHeight = height * scale.y;
+	float scaledHeight = height * scale.y - radius * 2;
 
 	PhysicsCollisionShape* shape;
 

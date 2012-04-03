@@ -53,7 +53,8 @@ private:
             TRANSLATE = 16,
             ROTATE = 32,
             SCALE = 64,
-            URL = 128
+            URL = 128,
+            TRANSPARENT = 256
         };
 
         SceneNodeProperty(Type type, std::string file, std::string id, int index) : _type(type), _file(file), _id(id), _index(index) { }
