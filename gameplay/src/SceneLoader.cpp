@@ -61,7 +61,8 @@ Scene* SceneLoader::load(const char* filePath)
         SceneNodeProperty::PARTICLE |
         SceneNodeProperty::ROTATE |
         SceneNodeProperty::SCALE |
-        SceneNodeProperty::TRANSLATE);
+        SceneNodeProperty::TRANSLATE | 
+        SceneNodeProperty::TRANSPARENT);
     applyNodeProperties(scene, sceneProperties, SceneNodeProperty::RIGIDBODY);
     createAnimations(scene);
 
@@ -342,6 +343,11 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                 node->setScale(s);
             break;
         }
+        case SceneNodeProperty::TRANSPARENT:
+        {
+            node->setTransparent(true);
+            break;
+        }
         default:
             WARN_VARG("Unsupported node property type: %d.", snp._type);
             break;
@@ -541,6 +547,10 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                 else if (strcmp(name, "scale") == 0)
                 {
                     addSceneNodeProperty(sceneNode, SceneNodeProperty::SCALE);
+                }
+                else if (strcmp(name, "transparent") == 0)
+                {
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::TRANSPARENT);
                 }
                 else
                 {

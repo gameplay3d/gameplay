@@ -7,16 +7,20 @@
 #include "PhysicsCharacter.h"
 #include "Game.h"
 
+// Node dirty flags
 #define NODE_DIRTY_WORLD 1
 #define NODE_DIRTY_BOUNDS 2
 #define NODE_DIRTY_ALL (NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS)
+
+// Node property flags
+#define NODE_FLAG_TRANSPARENT 1
 
 namespace gameplay
 {
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
-    _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
+    _nodeFlags(0), _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
 	_collisionObject(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true)
 {
     if (id)
@@ -193,6 +197,20 @@ Node* Node::getPreviousSibling() const
 Node* Node::getParent() const
 {
     return _parent;
+}
+
+bool Node::isTransparent() const
+{
+    return ((_nodeFlags & NODE_FLAG_TRANSPARENT) == NODE_FLAG_TRANSPARENT);
+}
+
+
+void Node::setTransparent(bool flag)
+{
+    if (flag)
+        _nodeFlags |= NODE_FLAG_TRANSPARENT;
+    else
+        _nodeFlags &= ~NODE_FLAG_TRANSPARENT;
 }
 
 unsigned int Node::getChildCount() const

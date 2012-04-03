@@ -114,6 +114,27 @@ public:
     Node* getParent() const;
 
     /**
+     * Returns whether this node is transparent.
+     *
+     * All nodes are opaque by default, unless otherwise set as
+     * transparent using the setTransparent method. These methods
+     * can be used to flag nodes as transparent and then query the
+     * property during game execution, for example to render all
+     * opaque objects first, followed by transparent objects with
+     * alpha blending enabled.
+     *
+     * @return Whether the node is transparent.
+     */
+    bool isTransparent() const;
+
+    /**
+     * Sets whether this node is transparent.
+     *
+     * @param flag Whether the node is transparent.
+     */
+    void setTransparent(bool flag);
+
+    /**
      * Returns the number of direct children of this item.
      *
      * @return The number of children.
@@ -537,6 +558,7 @@ protected:
     Node* _prevSibling;
     Node* _parent;
     unsigned int _childCount;
+    unsigned int _nodeFlags;
     Camera* _camera;
     Light* _light;
     Model* _model;
