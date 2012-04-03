@@ -270,16 +270,6 @@ void Scene::bindAudioListenerToCamera(bool bind)
     }
 }
 
-const Viewport& Scene::getViewport() const
-{
-    return _viewport;
-}
-
-void Scene::setViewport(const Viewport& viewport)
-{
-    _viewport = viewport;
-}
-
 const Vector3& Scene::getAmbientColor() const
 {
     return _ambientColor;

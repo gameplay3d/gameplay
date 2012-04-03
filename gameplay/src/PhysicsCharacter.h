@@ -1,7 +1,9 @@
 #ifndef PHYSICSCHARACTER_H_
 #define PHYSICSCHARACTER_H_
 
+#include "Node.h"
 #include "PhysicsGhostObject.h"
+#include "Properties.h"
 
 namespace gameplay
 {
@@ -295,6 +297,16 @@ private:
      * Use PhysicsController::destroyCharacter to destroy physics characters.
      */
     virtual ~PhysicsCharacter();
+
+    /**
+     * Creates a physics character from the specified properties object.
+     * 
+     * @param node The node to create a physics character for; note that the node must have
+     *      a model attached to it prior to creating a physics character for it.
+     * @param properties The properties object defining the physics character (must have namespace equal to 'character').
+     * @return The newly created physics character, or <code>NULL</code> if the physics character failed to load.
+     */
+    static PhysicsCharacter* create(Node* node, Properties* properties);
 
     void updateCurrentVelocity();
 

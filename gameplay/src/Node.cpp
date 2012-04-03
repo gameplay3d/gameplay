@@ -850,20 +850,47 @@ PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type ty
 
 PhysicsCollisionObject* Node::setCollisionObject(const char* filePath)
 {
-    SAFE_DELETE(_collisionObject);
+    // Load the collision object properties from file.
+    Properties* properties = Properties::create(filePath);
+    assert(properties);
+    if (properties == NULL)
+    {
+        WARN_VARG("Failed to load collision object file: %s", filePath);
+        return NULL;
+    }
 
-	// TODO: Support other collision object types from file
-    _collisionObject = PhysicsRigidBody::create(this, filePath);
+    PhysicsCollisionObject* collisionObject = setCollisionObject(properties->getNextNamespace());
+    SAFE_DELETE(properties);
 
-	return _collisionObject;
+    return collisionObject;
 }
 
 PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
 {
     SAFE_DELETE(_collisionObject);
 
-    _collisionObject = PhysicsRigidBody::create(this, properties);
+    // Check if the properties is valid.
+    if (!properties || 
+        !(strcmp(properties->getNamespace(), "character") == 0 || 
+        strcmp(properties->getNamespace(), "ghost") == 0 || 
+        strcmp(properties->getNamespace(), "rigidbody") == 0))
+    {
+        WARN("Failed to load collision object from properties object: must be non-null object and have namespace equal to \'character\', \'ghost\', or \'rigidbody\'.");
+        return NULL;
+    }
 
+    if (strcmp(properties->getNamespace(), "character") == 0)
+    {
+        _collisionObject = PhysicsCharacter::create(this, properties);
+    }
+    else if (strcmp(properties->getNamespace(), "ghost") == 0)
+    {
+        _collisionObject = PhysicsGhostObject::create(this, properties);
+    }
+    else if (strcmp(properties->getNamespace(), "rigidbody") == 0)
+    {
+        _collisionObject = PhysicsRigidBody::create(this, properties);
+    }
 	return _collisionObject;
 }
 
