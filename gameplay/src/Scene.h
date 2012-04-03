@@ -143,20 +143,6 @@ public:
     void bindAudioListenerToCamera(bool bind);
 
     /**
-     * Gets the viewport for the scene.
-     *
-     * @return The scene's viewport.
-     */
-    const Viewport& getViewport() const;
-
-    /**
-     * Sets the scene's viewport.
-     *
-     * @param viewport The viewport to be set for this scene.
-     */
-    void setViewport(const Viewport& viewport);
-
-    /**
      * Returns the ambient color of the scene. Black is the default color.
      * 
      * @return The ambient color of the scene.
@@ -223,7 +209,6 @@ private:
 
     std::string _id;
     Camera* _activeCamera;
-    Viewport _viewport;
     Node* _firstNode;
     Node* _lastNode;
     unsigned int _nodeCount;
