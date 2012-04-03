@@ -498,7 +498,7 @@ AudioSource* AudioSource::clone(NodeCloneContext &context) const
     AudioSource* audioClone = new AudioSource(_buffer, alSource);
 #else
     // TODO: Implement cloning audio source for Android
-    AudioSource* audioClone = new AudioSource(AudioBuffer* buffer, const SLObjectItf& player);
+    AudioSource* audioClone = new AudioSource(_buffer, _playerObject);
 
 #endif
     _buffer->addRef();
