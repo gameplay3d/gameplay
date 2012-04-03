@@ -10,6 +10,7 @@
 #include "AnimationController.h"
 #include "PhysicsController.h"
 #include "AudioListener.h"
+#include "Rectangle.h"
 #include "Vector4.h"
 #include "TimeListener.h"
 
@@ -150,6 +151,22 @@ public:
      * @return The game window height.
      */
     inline unsigned int getHeight() const;
+
+	/**
+	 * Gets the game current viewport.
+	 *
+	 * The default viewport is Rectangle(0, 0, Game::getWidth(), Game::getHeight()).
+	 */
+	inline const Rectangle& getViewport() const;
+
+	/**
+	 * Set the game current viewport.
+	 *
+	 * The x, y, width and height of the viewport must all be positive.
+	 *
+	 * viewport The custom viewport to be set on the game.
+	 */
+	void setViewport(const Rectangle& viewport);
 
     /**
      * Clears the specified resource buffers to the specified clear values. 
@@ -385,6 +402,7 @@ private:
     unsigned int _frameRate;                    // The current frame rate.
     unsigned int _width;                        // The game's display width.
     unsigned int _height;                       // The game's display height.
+	Rectangle _viewport;						// the games's current viewport.
     Vector4 _clearColor;                        // The clear color value last used for clearing the color buffer.
     float _clearDepth;                          // The clear depth value last used for clearing the depth buffer.
     int _clearStencil;                          // The clear stencil value last used for clearing the stencil buffer.
