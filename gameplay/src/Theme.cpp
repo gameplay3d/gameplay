@@ -44,7 +44,7 @@ namespace gameplay
         SAFE_RELEASE(_texture);
 
         // Remove ourself from the theme cache.
-        std::vector<Theme*>::iterator itr = find(__themeCache.begin(), __themeCache.end(), this);
+        std::vector<Theme*>::iterator itr = std::find(__themeCache.begin(), __themeCache.end(), this);
         if (itr != __themeCache.end())
         {
             __themeCache.erase(itr);
