@@ -181,7 +181,7 @@ void AudioController::update(long elapsedTime)
             SLresult result = (*_engineEngine)->CreateListener(_engineEngine, &_listenerObject, 2, interfaces, required);
             if (result != SL_RESULT_SUCCESS)
             {
-                WARN("AudioController: failed to create listener.");
+                WARN_VARG("AudioController: failed to create listener (%u).", result);
                 return;
             }
 

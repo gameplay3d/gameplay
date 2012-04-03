@@ -10,6 +10,7 @@
 #include "AnimationController.h"
 #include "PhysicsController.h"
 #include "AudioListener.h"
+#include "Rectangle.h"
 #include "Vector4.h"
 #include "TimeListener.h"
 
@@ -150,6 +151,22 @@ public:
      * @return The game window height.
      */
     inline unsigned int getHeight() const;
+
+	/**
+	 * Gets the game current viewport.
+	 *
+	 * The default viewport is Rectangle(0, 0, Game::getWidth(), Game::getHeight()).
+	 */
+	inline const Rectangle& getViewport() const;
+
+	/**
+	 * Set the game current viewport.
+	 *
+	 * The x, y, width and height of the viewport must all be positive.
+	 *
+	 * viewport The custom viewport to be set on the game.
+	 */
+	void setViewport(const Rectangle& viewport);
 
     /**
      * Clears the specified resource buffers to the specified clear values. 
@@ -385,6 +402,7 @@ private:
     unsigned int _frameRate;                    // The current frame rate.
     unsigned int _width;                        // The game's display width.
     unsigned int _height;                       // The game's display height.
+	Rectangle _viewport;						// the games's current viewport.
     Vector4 _clearColor;                        // The clear color value last used for clearing the color buffer.
     float _clearDepth;                          // The clear depth value last used for clearing the depth buffer.
     int _clearStencil;                          // The clear stencil value last used for clearing the stencil buffer.
@@ -392,7 +410,9 @@ private:
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
     AudioListener* _audioListener;              // The audio listener in 3D space.
-    std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> > _timeEvents; // Contains the scheduled time events.
+    std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents; // Contains the scheduled time events.
+
+    // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.
 
     friend class SplashDisplayer;
 };
@@ -425,6 +445,17 @@ private:
     long _startTime;
 };
 
+/**
+ * Displays a splash screen using the {@link Game#renderOnce} mechanism for at least the given amount
+ * of time. This function is intended to be called at the beginning of a block of code that is be 
+ * executed while the splash screen is displayed (i.e. Game#initialize). This function will block 
+ * at the end of the block of code in which it is called for the amount of time that has not yet elapsed.
+ * 
+ * @param instance See {@link Game#renderOnce}.
+ * @param method See {@link Game#renderOnce}.
+ * @param cookie See {@link Game#renderOnce}.
+ * @param time The minimum amount of time to display the splash screen (in milliseconds).
+ */
 #define displaySplash(instance, method, cookie, time) \
     SplashDisplayer __##instance##SplashDisplayer; \
     __##instance##SplashDisplayer.run(instance, method, cookie, time)

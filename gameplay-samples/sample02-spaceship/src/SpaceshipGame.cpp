@@ -260,7 +260,7 @@ void SpaceshipGame::update(long elapsedTime)
     {
         // Get the center point of the space ship in screen coordinates
         Vector3 shipCenterScreen;
-        _scene->getActiveCamera()->project(NULL, _shipGroupNode->getBoundingSphere().center, &shipCenterScreen.x, &shipCenterScreen.y);
+        _scene->getActiveCamera()->project(getViewport(), _shipGroupNode->getBoundingSphere().center, &shipCenterScreen.x, &shipCenterScreen.y);
 
         // Compute a screen-space vector between the center point of the ship and the touch point.
         // We will use this vector to apply a "pushing" force to the space ship, similar to what

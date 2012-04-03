@@ -8,6 +8,8 @@
 namespace gameplay
 {
 
+class NodeCloneContext;
+
 /**
  * Defines a material for an object to be rendered.
  *
@@ -75,7 +77,7 @@ public:
      * 
      * @return The newly created material.
      */
-    Material* clone(CloneContext &context) const;
+    Material* clone(NodeCloneContext &context) const;
 
     /**
      * Returns the number of techniques in the material.

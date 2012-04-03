@@ -25,12 +25,12 @@ public:
     /**
      * Specifies the width of the rectangle.
      */
-    float width;
+    unsigned int width;
 
     /**
      * Specifies the height of the rectangle.
      */
-    float height;
+    unsigned int height;
 
     /**
      * Constructs a new rectangle initialized to all zeros.
@@ -43,7 +43,7 @@ public:
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    Rectangle(float width, float height);
+    Rectangle(unsigned int width, unsigned int height);
 
     /**
      * Constructs a new rectangle with the specified x, y, width and height.
@@ -53,7 +53,7 @@ public:
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    Rectangle(float x, float y, float width, float height);
+    Rectangle(float x, float y, unsigned int width, unsigned int height);
 
     /**
      * Constructs a new rectangle that is a copy of the specified rectangle.
@@ -89,15 +89,7 @@ public:
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    void set(float x, float y, float width, float height);
-
-    /**
-     * Sets the x-coordinate and y-coordinate values of this rectangle to the specified values.
-     *
-     * @param x The x-coordinate of the rectangle.
-     * @param y The y-coordinate of the rectangle.
-     */
-    void set(float x, float y);
+    void set(float x, float y, unsigned int width, unsigned int height);
 
     /**
      * Sets the values of this rectangle to those in the specified rectangle.
@@ -105,6 +97,14 @@ public:
      * @param r The rectangle to copy.
      */
     void set(const Rectangle& r);
+
+    /**
+     * Sets the x-coordinate and y-coordinate values of this rectangle to the specified values.
+     *
+     * @param x The x-coordinate of the rectangle.
+     * @param y The y-coordinate of the rectangle.
+     */
+    void setPosition(float x, float y);
 
     /**
      * Returns the x-coordinate of the left side of the rectangle.
@@ -155,7 +155,7 @@ public:
      * @return true if the rectangle contains the specified rectangle, false
      * otherwise.
      */
-    bool contains(float x, float y, float width, float height) const;
+    bool contains(float x, float y, unsigned int width, unsigned int height) const;
 
     /**
      * Determines whether this rectangle contains a specified rectangle.
@@ -177,7 +177,7 @@ public:
      * 
      * @return true if the specified Rectangle intersects with this one, false otherwise.
      */
-    bool intersects(float x, float y, float width, float height) const;
+    bool intersects(float x, float y, unsigned int width, unsigned int height) const;
 
     /**
      * Determines whether a specified rectangle intersects with this rectangle.

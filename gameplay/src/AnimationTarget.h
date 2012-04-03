@@ -3,13 +3,13 @@
 
 #include "Curve.h"
 #include "AnimationController.h"
-#include "CloneContext.h"
 
 namespace gameplay
 {
 
 class Animation;
 class AnimationValue;
+class NodeCloneContext;
 
 /**
  * Defines an interface allowing animation to target
@@ -87,11 +87,11 @@ protected:
      * @param target The target to copy into.
      * @param context The clone context.
      */
-    void cloneInto(AnimationTarget* target, CloneContext &context) const;
+    void cloneInto(AnimationTarget* target, NodeCloneContext &context) const;
 
     TargetType _targetType;             // The type of target this is.
 
-    char _animationPropertyBitFlag;     // Bit flag used to indicate which properties on the AnimationTarget are currently animating.
+    unsigned char _animationPropertyBitFlag;     // Bit flag used to indicate which properties on the AnimationTarget are currently animating.
 
 private:
 

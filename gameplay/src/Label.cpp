@@ -73,9 +73,12 @@ namespace gameplay
         Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
         Font* font = overlay->getFont();
 
+        Vector4 textColor = overlay->getTextColor();
+        textColor.w *= overlay->getOpacity();
+
         // Draw the text.
         font->begin();
-        font->drawText(_text.c_str(), _textBounds, overlay->getTextColor(), overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft(), &_clip);
+        font->drawText(_text.c_str(), _textBounds, textColor, overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft(), &_clip);
         font->end();
 
         _dirty = false;

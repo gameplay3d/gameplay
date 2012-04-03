@@ -722,11 +722,11 @@ const BoundingSphere& Node::getBoundingSphere() const
 
 Node* Node::clone() const
 {
-    CloneContext context;
+    NodeCloneContext context;
     return cloneRecursive(context);
 }
 
-Node* Node::cloneSingleNode(CloneContext &context) const
+Node* Node::cloneSingleNode(NodeCloneContext &context) const
 {
     Node* copy = Node::create(getId());
     context.registerClonedNode(this, copy);
@@ -734,7 +734,7 @@ Node* Node::cloneSingleNode(CloneContext &context) const
     return copy;
 }
 
-Node* Node::cloneRecursive(CloneContext &context) const
+Node* Node::cloneRecursive(NodeCloneContext &context) const
 {
     Node* copy = cloneSingleNode(context);
 
@@ -747,7 +747,7 @@ Node* Node::cloneRecursive(CloneContext &context) const
     return copy;
 }
 
-void Node::cloneInto(Node* node, CloneContext &context) const
+void Node::cloneInto(Node* node, NodeCloneContext &context) const
 {
     Transform::cloneInto(node, context);
 
@@ -868,21 +868,80 @@ PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type ty
 
 PhysicsCollisionObject* Node::setCollisionObject(const char* filePath)
 {
-    SAFE_DELETE(_collisionObject);
+    // Load the collision object properties from file.
+    Properties* properties = Properties::create(filePath);
+    assert(properties);
+    if (properties == NULL)
+    {
+        WARN_VARG("Failed to load collision object file: %s", filePath);
+        return NULL;
+    }
 
-	// TODO: Support other collision object types from file
-    _collisionObject = PhysicsRigidBody::create(this, filePath);
+    PhysicsCollisionObject* collisionObject = setCollisionObject(properties->getNextNamespace());
+    SAFE_DELETE(properties);
 
-	return _collisionObject;
+    return collisionObject;
 }
 
 PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
 {
     SAFE_DELETE(_collisionObject);
 
-    _collisionObject = PhysicsRigidBody::create(this, properties);
+    // Check if the properties is valid.
+    if (!properties || 
+        !(strcmp(properties->getNamespace(), "character") == 0 || 
+        strcmp(properties->getNamespace(), "ghost") == 0 || 
+        strcmp(properties->getNamespace(), "rigidbody") == 0))
+    {
+        WARN("Failed to load collision object from properties object: must be non-null object and have namespace equal to \'character\', \'ghost\', or \'rigidbody\'.");
+        return NULL;
+    }
 
+    if (strcmp(properties->getNamespace(), "character") == 0)
+    {
+        _collisionObject = PhysicsCharacter::create(this, properties);
+    }
+    else if (strcmp(properties->getNamespace(), "ghost") == 0)
+    {
+        _collisionObject = PhysicsGhostObject::create(this, properties);
+    }
+    else if (strcmp(properties->getNamespace(), "rigidbody") == 0)
+    {
+        _collisionObject = PhysicsRigidBody::create(this, properties);
+    }
 	return _collisionObject;
+}
+
+NodeCloneContext::NodeCloneContext()
+{
+    
+}
+
+NodeCloneContext::~NodeCloneContext()
+{
+
+}
+
+Animation* NodeCloneContext::findClonedAnimation(const Animation* animation)
+{
+    AnimationMap::iterator it = _clonedAnimations.find(animation);
+    return it != _clonedAnimations.end() ? it->second : NULL;
+}
+
+void NodeCloneContext::registerClonedAnimation(const Animation* original, Animation* clone)
+{
+    _clonedAnimations[original] = clone;
+}
+
+Node* NodeCloneContext::findClonedNode(const Node* node)
+{
+    NodeMap::iterator it = _clonedNodes.find(node);
+    return it != _clonedNodes.end() ? it->second : NULL;
+}
+
+void NodeCloneContext::registerClonedNode(const Node* original, Node* clone)
+{
+    _clonedNodes[original] = clone;
 }
 
 }
