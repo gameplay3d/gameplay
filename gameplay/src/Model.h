@@ -11,6 +11,7 @@ namespace gameplay
 class Package;
 class MeshSkin;
 class Node;
+class NodeCloneContext;
 
 /**
  * Defines a Model which is an instance of a Mesh that can be drawn
@@ -184,7 +185,7 @@ private:
      * 
      * @return The new cloned model.
      */
-    Model* clone(CloneContext &context);
+    Model* clone(NodeCloneContext &context);
 
     Mesh* _mesh;
     Material* _material;

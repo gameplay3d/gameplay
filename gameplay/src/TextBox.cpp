@@ -31,14 +31,8 @@ int TextBox::getLastKeypress()
 
 void TextBox::setCursorLocation(int x, int y)
 {
-    Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-    Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
-    Theme::Border border;
-    if (containerRegion)
-    {
-        border = containerRegion->getBorder();
-    }
-    Theme::Padding padding = _style->getPadding();
+    Theme::Border border = getBorder(_state);
+    Theme::Padding padding = getPadding();
 
     _cursorLocation.set(x - border.left - padding.left + _clip.x,
                        y - border.top - padding.top + _clip.y);
@@ -251,26 +245,6 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
 
 void TextBox::update(const Rectangle& clip)
 {
-    /*
-    Vector2 pos(clip.x + _position.x, clip.y + _position.y);
-    Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-    Theme::Border border;
-    Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
-    if (containerRegion)
-    {
-        border = containerRegion->getBorder();
-    }
-    Theme::Padding padding = _style->getPadding();
-
-    // Set up the text viewport.
-    Font* font = overlay->getFont();
-    _clip.set(pos.x + border.left + padding.left,
-                  pos.y + border.top + padding.top,
-                  _size.x - border.left - padding.left - border.right - padding.right,
-                  _size.y - border.top - padding.top - border.bottom - padding.bottom - overlay->getFontSize());
-
-                  */
-
     Control::update(clip);
 
     // Get index into string and cursor location from the last recorded touch location.
@@ -283,28 +257,19 @@ void TextBox::update(const Rectangle& clip)
     }
 }
 
-void TextBox::drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip)
+void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     if (_state == FOCUS)
     {
         // Draw the cursor at its current location.
-        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-        Theme::Cursor* cursor = overlay->getTextCursor();
-        if (cursor)
+        const Rectangle& region = getImageRegion("textCaret", _state);
+        if (!region.isEmpty())
         {
-            Theme::Border border;
-            Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
-            if (containerRegion)
-            {
-                border = containerRegion->getBorder();
-            }
-            const Theme::Padding padding = _style->getPadding();
-            const Vector2 size = cursor->getSize();
-            const Vector4 color = cursor->getColor();
-            const Theme::UVs uvs = cursor->getUVs();
-            unsigned int fontSize = overlay->getFontSize();
+            const Vector4& color = getImageColor("textCaret", _state);
+            const Theme::UVs uvs = getImageUVs("textCaret", _state);
+            unsigned int fontSize = getFontSize(_state);
 
-            spriteBatch->draw(_cursorLocation.x - (size.x / 2.0f), _cursorLocation.y, size.x, fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
+            spriteBatch->draw(_cursorLocation.x - (region.width / 2.0f), _cursorLocation.y, region.width, fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
         }
     }
 

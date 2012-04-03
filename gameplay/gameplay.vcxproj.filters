@@ -126,9 +126,6 @@
     <ClCompile Include="src\VertexFormat.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Viewport.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\AudioController.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -276,9 +273,6 @@
     <ClCompile Include="src\PhysicsCollisionShape.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\CloneContext.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -396,9 +390,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\VertexFormat.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Viewport.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\AudioController.h">
@@ -546,9 +537,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PhysicsCollisionShape.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CloneContext.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

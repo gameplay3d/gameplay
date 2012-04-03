@@ -50,6 +50,8 @@ protected:
      */
     Ref();
 
+    Ref(const Ref& copy);
+
     /**
      * Destructor.
      */

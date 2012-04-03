@@ -45,12 +45,14 @@ namespace gameplay
     {
         // Need border, padding.
         Theme::Style* style = container->getStyle();
-        Theme::Border border;
-        Theme::ContainerRegion* containerRegion = style->getOverlay(container->getOverlayType())->getContainerRegion();
-        if (containerRegion)
+        Theme::Border border = container->getBorder(container->getState());
+        /*
+        Theme::Skin* skin = style->getOverlay(container->getOverlayType())->getSkin();
+        if (skin)
         {
-            border = containerRegion->getBorder();
+            border = skin->getBorder();
         }
+        */
         Theme::Padding padding = style->getPadding();
 
         float yPosition = 0;
@@ -80,7 +82,7 @@ namespace gameplay
 
             yPosition += margin.top;
 
-            control->setPosition(0, yPosition);
+            control->setPosition(0, yPosition, 0L);
             if (control->isDirty())
             {
                 control->update(container->getClip());

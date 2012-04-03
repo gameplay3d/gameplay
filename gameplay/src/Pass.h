@@ -8,6 +8,7 @@ namespace gameplay
 {
 
 class Technique;
+class NodeCloneContext;
 
 /**
  * Defines a pass for an object to be rendered.
@@ -100,7 +101,7 @@ private:
      * 
      * @return The newly created Pass.
      */
-    Pass* clone(Technique* technique, CloneContext &context) const;
+    Pass* clone(Technique* technique, NodeCloneContext &context) const;
 
     std::string _id;
     Technique* _technique;
