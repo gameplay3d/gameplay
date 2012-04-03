@@ -60,6 +60,24 @@ PhysicsCollisionShape::Definition::Definition()
     memset(&data, 0, sizeof(data));
 }
 
+PhysicsCollisionShape::Definition::Definition(const Definition& definition)
+{
+    // Bitwise-copy the definition object (equivalent to default copy constructor).
+    memcpy(this, &definition, sizeof(PhysicsCollisionShape::Definition));
+
+    // Handle the types that have reference-counted members.
+    switch (type)
+    {
+    case PhysicsCollisionShape::SHAPE_HEIGHTFIELD:
+        data.heightfield->addRef();
+        break;
+
+    case PhysicsCollisionShape::SHAPE_MESH:
+        data.mesh->addRef();
+        break;
+    }
+}
+
 PhysicsCollisionShape::Definition::~Definition()
 {
     switch (type)
@@ -72,6 +90,29 @@ PhysicsCollisionShape::Definition::~Definition()
         SAFE_RELEASE(data.mesh);
         break;
     }
+}
+
+PhysicsCollisionShape::Definition& PhysicsCollisionShape::Definition::operator=(const Definition& definition)
+{
+    if (this != &definition)
+    {
+        // Bitwise-copy the definition object (equivalent to default copy constructor).
+        memcpy(this, &definition, sizeof(PhysicsCollisionShape::Definition));
+
+        // Handle the types that have reference-counted members.
+        switch (type)
+        {
+        case PhysicsCollisionShape::SHAPE_HEIGHTFIELD:
+            data.heightfield->addRef();
+            break;
+
+        case PhysicsCollisionShape::SHAPE_MESH:
+            data.mesh->addRef();
+            break;
+        }
+    }
+
+    return *this;
 }
 
 PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Node* node, Properties* properties)
