@@ -54,6 +54,8 @@ public:
     private:
 
         Definition();
+        Definition(const Definition& definition);
+        Definition& operator=(const Definition& definition);
 
         /**
          * Creates a PhysicsCollisionShape#Definition object from the given properties object (for the given node).
