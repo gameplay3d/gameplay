@@ -6,7 +6,7 @@ namespace gameplay
 
 inline float PhysicsRigidBody::getMass() const
 {
-	return _mass;
+    return _mass;
 }
 
 inline float PhysicsRigidBody::getFriction() const
@@ -47,7 +47,7 @@ inline void PhysicsRigidBody::setDamping(float linearDamping, float angularDampi
 inline Vector3 PhysicsRigidBody::getLinearVelocity() const
 {
     const btVector3& v = _body->getLinearVelocity();
-	return Vector3(v.x(), v.y(), v.z());
+    return Vector3(v.x(), v.y(), v.z());
 }
 
 inline void PhysicsRigidBody::setLinearVelocity(const Vector3& velocity)

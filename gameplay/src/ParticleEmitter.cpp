@@ -50,7 +50,7 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
     Texture* texture = NULL;
     texture = Texture::create(textureFile, true);    
 
-	if (!texture)
+    if (!texture)
     {
         LOG_ERROR_VARG("Error creating ParticleEmitter: Could not read texture file: %s", textureFile);
         return NULL;

@@ -114,6 +114,70 @@ public:
     Node* getParent() const;
 
     /**
+     * Returns whether this node is visible (true by default).
+     *
+     * @return Whether the node is visible.
+     */
+    bool isVisible() const;
+
+    /**
+     * Sets whether this node is visible.
+     *
+     * @return Whether this node is visible.
+     */
+    void setVisible(bool visible);
+
+    /**
+     * Returns whether this node is transparent (false by default).
+     *
+     * All nodes are opaque by default, unless otherwise set as
+     * transparent using the setTransparent method. These methods
+     * can be used to flag nodes as transparent and then query the
+     * property during game execution, for example to render all
+     * opaque objects first, followed by transparent objects with
+     * alpha blending enabled.
+     *
+     * @return Whether the node is transparent.
+     */
+    bool isTransparent() const;
+
+    /**
+     * Sets whether this node is transparent.
+     *
+     * @param transparent Whether the node is transparent.
+     */
+    void setTransparent(bool transparent);
+
+    /**
+     * Returns the user pointer for this node.
+     *
+     * @return The user pointer for this node.
+     * @see setUserPointer(void*)
+     */
+    void* getUserPointer() const;
+
+    /**
+     * Sets the user pointer for this node.
+     *
+     * The user pointer is initially NULL and can be set to anything.
+     * This is normally used to store game-specific data, such as 
+     * game state for a particular node.  For example, attributes
+     * for a game character, such as hit points, stamina, etc can
+     * be defined in a game structure and stored in this field.
+     *
+     * When a node is deleted, the (optional) cleanup callback
+     * function passed to this function is called to allow the 
+     * user to free any memory associated with the user pointer.
+     *
+     * @param pointer User pointer.
+     * @param cleanupCallback Optional callback that is called when the
+     *      Node is being destroyed (or when the user pointer changes),
+     *      to allow the user to cleanup any memory associated with the
+     *      user pointer.
+     */
+    void setUserPointer(void* pointer, void (*cleanupCallback)(void*) = NULL);
+
+    /**
      * Returns the number of direct children of this item.
      *
      * @return The number of children.
@@ -367,59 +431,59 @@ public:
      */
     void setParticleEmitter(ParticleEmitter* emitter);
 
-	/**
-	 * Returns the pointer to this node's physics collision object.
-	 *
-	 * The type of the returned collision object can be queried using
-	 * the PhysicsCollisionObject::getType() method.
-	 *
-	 * @return The pointer to this node's physics collision object.
-	 */
-	PhysicsCollisionObject* getCollisionObject() const;
+    /**
+     * Returns the pointer to this node's physics collision object.
+     *
+     * The type of the returned collision object can be queried using
+     * the PhysicsCollisionObject::getType() method.
+     *
+     * @return The pointer to this node's physics collision object.
+     */
+    PhysicsCollisionObject* getCollisionObject() const;
 
-	/**
-	 * Sets (or disables) the physics collision object for this node.
-	 *
-	 * The supported collision object types include rigid bodies, ghost objects and 
-	 * characters.
-	 *
-	 * Rigid bodies are used to represent most physical objects in a game. The important
-	 * feature of rigid bodies is that they can be simulated by the physics system as other
-	 * rigid bodies or collision objects collide with them. To support this physics simulation,
-	 * rigid bodies require additional parameters, such as mass, friction and restitution to
-	 * define their physical features. These parameters can be passed into the
-	 * 'rigidBodyParameters' parameter.
-	 *
-	 * Ghost objects are a simple type of collision object that are not simulated. By default
-	 * they pass through other objects in the scene without affecting them. Ghost objects do
-	 * receive collision events however, which makes them useful for representing non-simulated
-	 * entities in a game that still require collision events, such as volumetric triggers, 
-	 * power-ups, etc.
-	 *
-	 * Characters are an extention of ghost objects which provide a number of additional features
-	 * for animating and moving characters within a game. Characters are represented as ghost
-	 * objects instead of rigid bodies to allow more direct control over character movement,
-	 * since attempting to model a physics character with a simulated rigid body usually results
-	 * in unresponse and unpredictable character movement. Unlike normal ghost objects,
-	 * characters to react to other characters and rigid bodies in the world. Characters react
-	 * to gravity and collide (and respond) with rigid bodies to allow them to walk on the ground,
-	 * slide along walls and walk up/down slopes and stairs.
-	 *
-	 * @param type The type of the collision object to set; to disable the physics
-	 *		collision object, pass PhysicsCollisionObject::NONE.
-	 * @param shape Definition of a physics collision shape to be used for this collision object.
-	 *		Use the static shape methods on the PhysicsCollisionShape class to specificy a shape
-	 *		definition, such as PhysicsCollisionShape::box().
-	 * @param rigidBodyParameters If type is PhysicsCollisionObject::RIGID_BODY, this
-	 *		must point to a valid rigid body parameters object containing information
-	 *		about the rigid body; otherwise, this parmater may be NULL.
-	 */
-	PhysicsCollisionObject* setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters = NULL);
+    /**
+     * Sets (or disables) the physics collision object for this node.
+     *
+     * The supported collision object types include rigid bodies, ghost objects and 
+     * characters.
+     *
+     * Rigid bodies are used to represent most physical objects in a game. The important
+     * feature of rigid bodies is that they can be simulated by the physics system as other
+     * rigid bodies or collision objects collide with them. To support this physics simulation,
+     * rigid bodies require additional parameters, such as mass, friction and restitution to
+     * define their physical features. These parameters can be passed into the
+     * 'rigidBodyParameters' parameter.
+     *
+     * Ghost objects are a simple type of collision object that are not simulated. By default
+     * they pass through other objects in the scene without affecting them. Ghost objects do
+     * receive collision events however, which makes them useful for representing non-simulated
+     * entities in a game that still require collision events, such as volumetric triggers, 
+     * power-ups, etc.
+     *
+     * Characters are an extention of ghost objects which provide a number of additional features
+     * for animating and moving characters within a game. Characters are represented as ghost
+     * objects instead of rigid bodies to allow more direct control over character movement,
+     * since attempting to model a physics character with a simulated rigid body usually results
+     * in unresponse and unpredictable character movement. Unlike normal ghost objects,
+     * characters to react to other characters and rigid bodies in the world. Characters react
+     * to gravity and collide (and respond) with rigid bodies to allow them to walk on the ground,
+     * slide along walls and walk up/down slopes and stairs.
+     *
+     * @param type The type of the collision object to set; to disable the physics
+     *        collision object, pass PhysicsCollisionObject::NONE.
+     * @param shape Definition of a physics collision shape to be used for this collision object.
+     *        Use the static shape methods on the PhysicsCollisionShape class to specificy a shape
+     *        definition, such as PhysicsCollisionShape::box().
+     * @param rigidBodyParameters If type is PhysicsCollisionObject::RIGID_BODY, this
+     *        must point to a valid rigid body parameters object containing information
+     *        about the rigid body; otherwise, this parmater may be NULL.
+     */
+    PhysicsCollisionObject* setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters = NULL);
 
     /**
      * Sets the physics collision object for this node using the definition in the given file.
      * 
-     * @param filePath The path to the file that contains the collision object definition.
+     * @param filePath The path to the file that set the collision object definition.
      */
     PhysicsCollisionObject* setCollisionObject(const char* filePath);
 
@@ -530,6 +594,13 @@ private:
 
 protected:
 
+    struct UserData
+    {
+        UserData() : pointer(NULL), cleanupCallback(NULL) {}
+        void* pointer;
+        void (*cleanupCallback)(void*);
+    };
+
     Scene* _scene;
     std::string _id;
     Node* _firstChild;
@@ -537,6 +608,7 @@ protected:
     Node* _prevSibling;
     Node* _parent;
     unsigned int _childCount;
+    unsigned int _nodeFlags;
     Camera* _camera;
     Light* _light;
     Model* _model;
@@ -548,6 +620,7 @@ protected:
     mutable int _dirtyBits;
     bool _notifyHierarchyChanged;
     mutable BoundingSphere _bounds;
+    UserData* _userData;
 };
 
 /**

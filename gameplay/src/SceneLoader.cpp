@@ -61,7 +61,8 @@ Scene* SceneLoader::load(const char* filePath)
         SceneNodeProperty::PARTICLE |
         SceneNodeProperty::ROTATE |
         SceneNodeProperty::SCALE |
-        SceneNodeProperty::TRANSLATE);
+        SceneNodeProperty::TRANSLATE | 
+        SceneNodeProperty::TRANSPARENT);
     applyNodeProperties(scene, sceneProperties, SceneNodeProperty::CHARACTER | SceneNodeProperty::GHOST | SceneNodeProperty::RIGIDBODY);
     createAnimations(scene);
 
@@ -311,22 +312,22 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                             Model* model = node->getModel();
                         
                             // Up ref count to prevent node from releasing the model when we swap it.
-						    model->addRef(); 
+                            model->addRef(); 
                         
-						    // Create collision object with new rigidbodymodel set.
+                            // Create collision object with new rigidbodymodel set.
                             node->setModel(modelNode->getModel());
-						    node->setCollisionObject(p);
+                            node->setCollisionObject(p);
 
-						    // Restore original model.
+                            // Restore original model.
                             node->setModel(model);
-						
+                        
                             // Decrement temporarily added reference.
                             model->release();
                         }
                     }
                 }
                 else
-				    node->setCollisionObject(p);
+                    node->setCollisionObject(p);
             }
             break;
         }
@@ -362,6 +363,11 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             Vector3 s;
             if (np && np->getVector3("scale", &s))
                 node->setScale(s);
+            break;
+        }
+        case SceneNodeProperty::TRANSPARENT:
+        {
+            node->setTransparent(true);
             break;
         }
         default:
@@ -571,6 +577,10 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                 else if (strcmp(name, "scale") == 0)
                 {
                     addSceneNodeProperty(sceneNode, SceneNodeProperty::SCALE);
+                }
+                else if (strcmp(name, "transparent") == 0)
+                {
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::TRANSPARENT);
                 }
                 else
                 {
@@ -804,12 +814,12 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
                 WARN_VARG("Node '%s' to be used as 'rigidBodyA' for constraint %s cannot be found.", name, constraint->getId());
                 continue;
             }
-			if (!rbANode->getCollisionObject() || rbANode->getCollisionObject()->getType() != PhysicsCollisionObject::RIGID_BODY)
+            if (!rbANode->getCollisionObject() || rbANode->getCollisionObject()->getType() != PhysicsCollisionObject::RIGID_BODY)
             {
                 WARN_VARG("Node '%s' to be used as 'rigidBodyA' does not have a rigid body.", name);
                 continue;
             }
-			PhysicsRigidBody* rbA = static_cast<PhysicsRigidBody*>(rbANode->getCollisionObject());
+            PhysicsRigidBody* rbA = static_cast<PhysicsRigidBody*>(rbANode->getCollisionObject());
 
             // Attempt to load the second rigid body. If the second rigid body is not
             // specified, that is usually okay (only spring constraints require both and
@@ -825,12 +835,12 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
                     WARN_VARG("Node '%s' to be used as 'rigidBodyB' for constraint %s cannot be found.", name, constraint->getId());
                     continue;
                 }
-				if (!rbBNode->getCollisionObject() || rbBNode->getCollisionObject()->getType() != PhysicsCollisionObject::RIGID_BODY)
+                if (!rbBNode->getCollisionObject() || rbBNode->getCollisionObject()->getType() != PhysicsCollisionObject::RIGID_BODY)
                 {
                     WARN_VARG("Node '%s' to be used as 'rigidBodyB' does not have a rigid body.", name);
                     continue;
                 }
-				rbB = static_cast<PhysicsRigidBody*>(rbBNode->getCollisionObject());
+                rbB = static_cast<PhysicsRigidBody*>(rbBNode->getCollisionObject());
             }
 
             PhysicsConstraint* physicsConstraint = NULL;
