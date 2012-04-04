@@ -313,25 +313,27 @@ void MeshSkin::computeBounds()
         if (duration > maxDuration)
             maxDuration = duration;
 
-        // Set curve points
-        float* keyValuesPtr = keyValues;
-        for (unsigned int j = 0; j < keyCount; ++j)
+        if (duration > 0.0f)
         {
-            // Store time normalized, between 0-1
-            float t = (keyTimes[j] - startTime) / duration;
+            // Set curve points
+            float* keyValuesPtr = keyValues;
+            for (unsigned int j = 0; j < keyCount; ++j)
+            {
+                // Store time normalized, between 0-1
+                float t = (keyTimes[j] - startTime) / duration;
 
-            // Set the curve point
-            // TODO: Handle other interpolation types
-            curve->setPoint(j, t, keyValuesPtr, gameplay::Curve::LINEAR);
+                // Set the curve point
+                // TODO: Handle other interpolation types
+                curve->setPoint(j, t, keyValuesPtr, gameplay::Curve::LINEAR);
 
-            // Move to the next point on the curve
-            keyValuesPtr += curve->getComponentCount();
+                // Move to the next point on the curve
+                keyValuesPtr += curve->getComponentCount();
+            }
+            curves.push_back(curve);
         }
 
         delete[] keyValues;
         keyValues = NULL;
-
-        curves.push_back(curve);
 
         DEBUGPRINT_VARG("> %d%%\r", (int)((float)(i+1) / (float)channelCount * 100.0f));
     }

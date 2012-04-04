@@ -4,12 +4,13 @@
 #include "Ref.h"
 #include "Transform.h"
 #include "Frustum.h"
-#include "Viewport.h"
+#include "Rectangle.h"
 
 namespace gameplay
 {
 
 class Node;
+class NodeCloneContext;
 
 /**
  * Defines a camera which acts as a view of a scene to be rendered.
@@ -196,13 +197,13 @@ public:
     /**
      * Projects the specified world position into the viewport coordinates.
      *
-     * @param viewport The viewport to use, or NULL to use a viewport the size of the window.
+     * @param viewport The viewport rectangle to use.
      * @param position The world space position.
      * @param x The returned viewport x coordinate.
      * @param y The returned viewport y coordinate.
      * @param depth The returned pixel depth (can be NULL).
      */
-    void project(const Viewport* viewport, const Vector3& position, float* x, float* y, float* depth = NULL);
+    void project(const Rectangle& viewport, const Vector3& position, float* x, float* y, float* depth = NULL);
 
     /**
      * Converts a viewport-space coordinate to a world-space position for the given depth value.
@@ -210,23 +211,23 @@ public:
      * The depth parameter is a value ranging between 0 and 1, where 0 returns a point on the
      * near clipping plane and 1 returns a point on the far clipping plane.
      *
-     * @param viewport The viewport to use, or NULL to use a viewport the size of the window.
+     * @param viewport The viewport rectangle to use.
      * @param x The viewport-space x coordinate.
      * @param y The viewport-space y coordinate.
      * @param depth The depth range.
      * @param dst The world space position.
      */
-    void unproject(const Viewport* viewport, float x, float y, float depth, Vector3* dst);
+    void unproject(const Rectangle& viewport, float x, float y, float depth, Vector3* dst);
 
     /**
      * Picks a ray that can be used for picking given the specified viewport-space coordinates.
      *
-     * @param viewport The viewport to use, or NULL to use a viewport the size of the window.
+     * @param viewport The viewport rectangle to use.
      * @param x The viewport x-coordinate.
      * @param y The viewport y-coordinate.
      * @param dst The computed pick ray.
      */
-    void pickRay(const Viewport* viewport, float x, float y, Ray* dst);
+    void pickRay(const Rectangle& viewport, float x, float y, Ray* dst);
 
 private:
 
@@ -244,6 +245,15 @@ private:
      * Destructor.
      */
     virtual ~Camera();
+
+    /**
+     * Clones the camera and returns a new camera.
+     * 
+     * @param context The clone context.
+     * 
+     * @return The newly created camera.
+     */
+    Camera* clone(NodeCloneContext &context) const;
 
     /**
      * @see Transform::Listener::transformChanged

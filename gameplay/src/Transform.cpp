@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "Transform.h"
 #include "Game.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -778,6 +779,14 @@ void Transform::transformChanged()
             l.listener->transformChanged(this, l.cookie);
         }
     }
+}
+
+void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const
+{
+    AnimationTarget::cloneInto(transform, context);
+    transform->_scale.set(_scale);
+    transform->_rotation.set(_rotation);
+    transform->_translation.set(_translation);
 }
 
 void Transform::applyAnimationValueScaleX(float sx, float blendWeight)

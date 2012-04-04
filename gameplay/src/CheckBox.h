@@ -24,7 +24,7 @@ namespace gameplay
  *      iconSize    = <width, height>   // The size to draw the checkbox icon, if different from its size in the texture.
  * }
  */
-class CheckBox : public Button
+class CheckBox : public Button //, public AnimationClip::Listener
 {
     friend class Container;
 
@@ -42,14 +42,14 @@ public:
      * @param width The width to draw the checkbox icon.
      * @param height The height to draw the checkbox icon.
      */
-    void setIconSize(float width, float height);
+    void setImageSize(float width, float height);
 
     /**
      * Get the size at which the checkbox icon will be drawn.
      *
      * @return The size of the checkbox icon.
      */
-    const Vector2& getIconSize() const;
+    const Vector2& getImageSize() const;
 
     /**
      * Add a listener to be notified of specific events affecting
@@ -62,6 +62,8 @@ public:
      * @param eventFlags The events to listen for.
      */
     virtual void addListener(Control::Listener* listener, int eventFlags);
+
+  //  virtual void animationEvent(AnimationClip* clip, EventType type);
 
 protected:
     CheckBox();
@@ -105,10 +107,10 @@ protected:
      * @param spriteBatch The sprite batch containing this control's icons.
      * @param position The container position this control is relative to.
      */
-    void drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip);
+    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
     bool _checked;      // Whether this checkbox is currently checked.
-    Vector2 _iconSize;  // The size to draw the checkbox icon, if different from its size in the texture.
+    Vector2 _imageSize;  // The size to draw the checkbox icon, if different from its size in the texture.
 
 private:
     CheckBox(const CheckBox& copy);

@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Technique.h"
 #include "Pass.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -195,7 +196,7 @@ bool Model::hasMaterial(unsigned int partIndex) const
     return (partIndex < _partCount && _partMaterials && _partMaterials[partIndex]);
 }
 
-MeshSkin* Model::getSkin()
+MeshSkin* Model::getSkin() const
 {
     return _skin;
 }
@@ -209,7 +210,8 @@ void Model::setSkin(MeshSkin* skin)
 
         // Assign the new skin
         _skin = skin;
-        _skin->_model = this;
+        if (_skin)
+            _skin->_model = this;
     }
 }
 
@@ -355,6 +357,19 @@ void Model::validatePartCount()
         // Update local part count.
         _partCount = _mesh->getPartCount();
     }
+}
+
+Model* Model::clone(NodeCloneContext &context)
+{
+    Model* model = Model::create(getMesh());
+    if (getSkin())
+    {
+        model->setSkin(getSkin()->clone());
+    }
+    Material* materialClone = getMaterial()->clone(context);
+    model->setMaterial(materialClone); // TODO: Don't forget material parts
+    materialClone->release();
+    return model;
 }
 
 void Model::setMaterialNodeBinding(Material *material)

@@ -170,7 +170,7 @@ void AudioController::update(long elapsedTime)
     {
 #ifndef __ANDROID__
         alListenerf(AL_GAIN, listener->getGain());
-        alListenerfv(AL_ORIENTATION, (ALfloat*)&listener->getOrientationForward());
+        alListenerfv(AL_ORIENTATION, (ALfloat*)listener->getOrientation());
         alListenerfv(AL_VELOCITY, (ALfloat*)&listener->getVelocity());
         alListenerfv(AL_POSITION, (ALfloat*)&listener->getPosition());
 #else
@@ -181,7 +181,7 @@ void AudioController::update(long elapsedTime)
             SLresult result = (*_engineEngine)->CreateListener(_engineEngine, &_listenerObject, 2, interfaces, required);
             if (result != SL_RESULT_SUCCESS)
             {
-                WARN("AudioController: failed to create listener.");
+                WARN_VARG("AudioController: failed to create listener (%u).", result);
                 return;
             }
 

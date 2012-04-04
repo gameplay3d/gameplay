@@ -22,6 +22,7 @@ class Form : public Container
     friend class Platform;
 
 public:
+
     /**
      * Create from properties file.
      * The top-most namespace in the file must be named 'form'.  The following properties are available for forms:
@@ -105,7 +106,9 @@ public:
     void draw();
 
 protected:
-    Form();
+    
+	Form();
+
     virtual ~Form();
 
     static Form* create(const char* textureFile, Layout::Type type);
@@ -115,7 +118,7 @@ protected:
      *
      * @param mesh The mesh to create a model from.
      */
-    void initQuad(Mesh* mesh);
+    void initializeQuad(Mesh* mesh);
 
     /**
      * Draw this form into the current framebuffer.
@@ -142,9 +145,9 @@ protected:
     Node* _node;                // Node for transforming this Form in world-space.
     FrameBuffer* _frameBuffer;  // FBO the Form is rendered into for texturing the quad.
     Matrix _projectionMatrix;   // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
-    Viewport* _viewport;        // Viewport for setting before rendering into the FBO.
 
 private:
+
     Form(const Form& copy);
 };
 
