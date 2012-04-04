@@ -126,9 +126,6 @@
     <ClCompile Include="src\VertexFormat.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Viewport.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\AudioController.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -395,9 +392,6 @@
     <ClInclude Include="src\VertexFormat.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Viewport.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\AudioController.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -543,6 +537,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PhysicsCollisionShape.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ScreenDisplayer.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

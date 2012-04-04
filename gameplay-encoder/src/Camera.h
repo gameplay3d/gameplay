@@ -44,6 +44,7 @@ public:
     };
 
 private:
+    
     unsigned char _cameraType;
     float _fieldOfView;
     float _aspectRatio;

@@ -16,7 +16,7 @@ class Node;
 class PhysicsCollisionObject
 {
     friend class PhysicsController;
-	friend class PhysicsConstraint;
+    friend class PhysicsConstraint;
 
 public:
 
@@ -40,10 +40,10 @@ public:
          */
         GHOST_OBJECT,
 
-		/**
-		 * No collision object.
-		 */
-		NONE
+        /**
+         * No collision object.
+         */
+        NONE
     };
 
     /** 
@@ -122,7 +122,7 @@ public:
                                     const Vector3& contactPointB = Vector3::zero()) = 0;
     };
 
-	/**
+    /**
      * Virtual destructor.
      */
     virtual ~PhysicsCollisionObject();
@@ -132,38 +132,38 @@ public:
      */
     virtual PhysicsCollisionObject::Type getType() const = 0;
 
-	/**
-	 * Returns the type of the shape for this collision object.
-	 */
-	PhysicsCollisionShape::Type getShapeType() const;
+    /**
+     * Returns the type of the shape for this collision object.
+     */
+    PhysicsCollisionShape::Type getShapeType() const;
 
     /**
      * Returns the node associated with this collision object.
      */
     Node* getNode() const;
 
-	/**
+    /**
      * Returns the collision shape.
      *
      * @return The collision shape.
      */
     PhysicsCollisionShape* getCollisionShape() const;
 
-	/**
-	 * Returns whether this collision object is kinematic.
-	 *
-	 * A kinematic collision object is an object that is not simulated by
-	 * the physics system and instead has its transform driven manually.
-	 *
-	 * @return Whether the collision object is kinematic.
-	 */
-	bool isKinematic() const;
+    /**
+     * Returns whether this collision object is kinematic.
+     *
+     * A kinematic collision object is an object that is not simulated by
+     * the physics system and instead has its transform driven manually.
+     *
+     * @return Whether the collision object is kinematic.
+     */
+    bool isKinematic() const;
 
     /**
      * Returns whether this collision object is dynamic.
-	 *
-	 * A dynamic collision object is simulated entirely by the physics system,
-	 * such as with dynamic rigid bodies. 
+     *
+     * A dynamic collision object is simulated entirely by the physics system,
+     * such as with dynamic rigid bodies. 
      *
      * @return Whether the collision object is dynamic.
      */
@@ -207,15 +207,15 @@ protected:
      */
     virtual btCollisionObject* getCollisionObject() const = 0;
 
-	/**
-	 * Returns the physics motion state.
-	 *
-	 * @return The motion state object.
-	 */
-	PhysicsMotionState* getMotionState() const;
+    /**
+     * Returns the physics motion state.
+     *
+     * @return The motion state object.
+     */
+    PhysicsMotionState* getMotionState() const;
 
-	// Common member variables
-	Node* _node;
+    // Common member variables
+    Node* _node;
     PhysicsMotionState* _motionState;
     PhysicsCollisionShape* _collisionShape;
 

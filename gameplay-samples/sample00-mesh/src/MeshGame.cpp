@@ -14,8 +14,8 @@ MeshGame::~MeshGame()
 
 void MeshGame::initialize()
 {
-    // Display the gameplay splash screen for at least 2.4 seconds.
-    displaySplash(this, &MeshGame::drawSplash, NULL, 2400L);
+    // Display the gameplay splash screen for at least 1 second.
+    displayScreen(this, &MeshGame::drawSplash, NULL, 1000L);
 
     // Load font
     _font = Font::create("res/arial40.gpb");
@@ -61,6 +61,19 @@ void MeshGame::render(long elapsedTime)
 
     // Draw the fps
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 5, getFrameRate());
+}
+
+void MeshGame::keyEvent(Keyboard::KeyEvent evt, int key)
+{
+    if (evt == Keyboard::KEY_PRESS)
+    {
+        switch (key)
+        {
+        case Keyboard::KEY_ESCAPE:
+            exit();
+            break;
+        }
+    }
 }
 
 void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)

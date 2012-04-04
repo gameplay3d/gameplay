@@ -24,8 +24,8 @@ CharacterGame::~CharacterGame()
 
 void CharacterGame::initialize()
 {
-    // Display the gameplay splash screen for at least 2.4 seconds.
-    displaySplash(this, &CharacterGame::drawSplash, NULL, 2400L);
+    // Display the gameplay splash screen for at least 1 second.
+    displayScreen(this, &CharacterGame::drawSplash, NULL, 1000L);
 
     // Load the font.
     _font = Font::create("res/arial40.gpb");
@@ -34,14 +34,14 @@ void CharacterGame::initialize()
     _scene = Scene::load("res/scene.scene");
 
     // Store character node.
-	Node* node = _scene->findNode("BoyCharacter");
-	node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule(1.2f, 2.75f, Vector3(0, 2.25f, 0), true));
-	_character = static_cast<PhysicsCharacter*>(node->getCollisionObject());
+    Node* node = _scene->findNode("BoyCharacter");
+    PhysicsRigidBody::Parameters p;
+    p.mass = 20.0f;
+    node->setTranslationY(5.0f);
+    node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule(1.2f, 5.0f, Vector3(0, 2.5, 0), true), &p);
+    _character = static_cast<PhysicsCharacter*>(node->getCollisionObject());
+    _character->setMaxStepHeight(0.0f);
     _character->addCollisionListener(this);
-
-	node = _scene->findNode("Easel");
-	static_cast<PhysicsCharacter*>(node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule()));
-	static_cast<PhysicsCharacter*>(node->getCollisionObject())->setPhysicsEnabled(false);
 
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initScene);
@@ -104,27 +104,27 @@ void CharacterGame::update(long elapsedTime)
         // Forward motion
         if (keyFlags & 1)
         {
-			if (moveBall)
-			{
-				static_cast<PhysicsRigidBody*>(_scene->findNode("Basketball")->getCollisionObject())->applyForce(Vector3(0, 0, -WALK_SPEED));
-			}
-			else
-			{
-				_character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
-				_character->setForwardVelocity(1.0f);
-			}
+            if (moveBall)
+            {
+                static_cast<PhysicsRigidBody*>(_scene->findNode("Basketball")->getCollisionObject())->applyForce(Vector3(0, 0, -WALK_SPEED));
+            }
+            else
+            {
+                _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
+                _character->setForwardVelocity(1.0f);
+            }
         }
         else if (keyFlags & 2)
         {
-			if (moveBall)
-			{
-				static_cast<PhysicsRigidBody*>(_scene->findNode("Basketball")->getCollisionObject())->applyForce(Vector3(0, 0, WALK_SPEED));
-			}
-			else
-			{
-				_character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
-				_character->setForwardVelocity(-1.0f);
-			}
+            if (moveBall)
+            {
+                static_cast<PhysicsRigidBody*>(_scene->findNode("Basketball")->getCollisionObject())->applyForce(Vector3(0, 0, WALK_SPEED));
+            }
+            else
+            {
+                _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
+                _character->setForwardVelocity(-1.0f);
+            }
         }
         else
         {
@@ -135,27 +135,27 @@ void CharacterGame::update(long elapsedTime)
         // Strafing
         if (keyFlags & 4)
         {
-			if (moveBall)
-			{
-				static_cast<PhysicsRigidBody*>(_scene->findNode("Basketball")->getCollisionObject())->applyForce(Vector3(-WALK_SPEED, 0, 0));
-			}
-			else
-			{
-				_character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
-				_character->setRightVelocity(1.0f);
-			}
+            if (moveBall)
+            {
+                static_cast<PhysicsRigidBody*>(_scene->findNode("Basketball")->getCollisionObject())->applyForce(Vector3(-WALK_SPEED, 0, 0));
+            }
+            else
+            {
+                _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
+                _character->setRightVelocity(1.0f);
+            }
         }
         else if (keyFlags & 8)
         {
-			if (moveBall)
-			{
-				static_cast<PhysicsRigidBody*>(_scene->findNode("Basketball")->getCollisionObject())->applyForce(Vector3(WALK_SPEED, 0, 0));
-			}
-			else
-			{
-				_character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
-				_character->setRightVelocity(-1.0f);
-			}
+            if (moveBall)
+            {
+                static_cast<PhysicsRigidBody*>(_scene->findNode("Basketball")->getCollisionObject())->applyForce(Vector3(WALK_SPEED, 0, 0));
+            }
+            else
+            {
+                _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
+                _character->setRightVelocity(-1.0f);
+            }
         }
         else
         {
@@ -164,10 +164,10 @@ void CharacterGame::update(long elapsedTime)
         }
     }
 
-	if (!moveBall)
-	{
-		fixCamera(elapsedTime);
-	}
+    if (!moveBall)
+    {
+        fixCamera(elapsedTime);
+    }
 }
 
 void CharacterGame::render(long elapsedTime)
@@ -176,20 +176,21 @@ void CharacterGame::render(long elapsedTime)
     clear(CLEAR_COLOR_DEPTH, Vector4(0.41f, 0.48f, 0.54f, 1.0f), 1.0f, 0);
 
     // Draw our scene
-    _scene->visit(this, &CharacterGame::drawScene);
+    _scene->visit(this, &CharacterGame::drawScene, (void*)0);
+    _scene->visit(this, &CharacterGame::drawScene, (void*)1);
 
-	switch (drawDebug)
-	{
-	case 1:
-		Game::getInstance()->getPhysicsController()->drawDebug(_scene->getActiveCamera()->getViewProjectionMatrix());
-		break;
-	case 2:
-		_scene->drawDebug(Scene::DEBUG_BOXES);
-		break;
-	case 3:
-		_scene->drawDebug(Scene::DEBUG_SPHERES);
-		break;
-	}
+    switch (drawDebug)
+    {
+    case 1:
+        Game::getInstance()->getPhysicsController()->drawDebug(_scene->getActiveCamera()->getViewProjectionMatrix());
+        break;
+    case 2:
+        _scene->drawDebug(Scene::DEBUG_BOXES);
+        break;
+    case 3:
+        _scene->drawDebug(Scene::DEBUG_SPHERES);
+        break;
+    }
 
     _font->begin();
     char fps[32];
@@ -198,40 +199,23 @@ void CharacterGame::render(long elapsedTime)
     _font->end();
 }
 
-void drawBoundingSphere(Scene* scene, const BoundingSphere& sphere)
-{
-    // Draw sphere
-    static Model* boundsModel = NULL;
-    if (boundsModel == NULL)
-    {
-        Package* pkg = Package::create("res/sphere.gpb");
-        Mesh* mesh = pkg->loadMesh("sphereShape");
-        SAFE_RELEASE(pkg);
-        boundsModel = Model::create(mesh);
-        SAFE_RELEASE(mesh);
-        boundsModel->setMaterial("res/shaders/solid.vsh", "res/shaders/solid.fsh");
-        boundsModel->getMaterial()->getParameter("u_diffuseColor")->setValue(Vector4(0, 1, 0, 1));
-        boundsModel->getMaterial()->getStateBlock()->setCullFace(false);
-        boundsModel->getMaterial()->getStateBlock()->setDepthTest(true);
-        boundsModel->getMaterial()->getStateBlock()->setDepthWrite(true);
-    }
-
-    static Matrix m;
-    Matrix::createTranslation(sphere.center, &m);
-    m.scale(sphere.radius / 0.5f);
-    Matrix::multiply(scene->getActiveCamera()->getViewProjectionMatrix(), m, &m);
-    boundsModel->getMaterial()->getParameter("u_worldViewProjectionMatrix")->setValue(m);
-    boundsModel->draw(true);
-}
-
 bool CharacterGame::drawScene(Node* node, void* cookie)
 {
     Model* model = node->getModel();
     if (model)
     {
-        model->draw(false);
+        switch ((int)cookie)
+        {
+        case 0: // opaque objects
+            if (!node->isTransparent())
+                model->draw();
+            break;
 
-		//drawBoundingSphere(_scene, node->getBoundingSphere());
+        case 1: // transparent objects
+            if (node->isTransparent())
+                model->draw();
+            break;
+        }
     }
 
     return true;
@@ -257,12 +241,15 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         case Keyboard::KEY_P:
             drawDebug++;
-			if (drawDebug > 3)
-				drawDebug = 0;
+            if (drawDebug > 3)
+                drawDebug = 0;
             break;
-		case Keyboard::KEY_B:
-			moveBall = !moveBall;
-			break;
+        case Keyboard::KEY_B:
+            moveBall = !moveBall;
+            break;
+        case Keyboard::KEY_ESCAPE:
+            exit();
+            break;
         }
     }
     else if (evt == Keyboard::KEY_RELEASE)
@@ -335,10 +322,10 @@ void CharacterGame::collisionEvent(
 {
     if (collisionPair.objectA == _character)
     {
-		if (collisionPair.objectB->getType() == PhysicsCollisionObject::RIGID_BODY)
+        if (collisionPair.objectB->getType() == PhysicsCollisionObject::RIGID_BODY)
         {
-			PhysicsCharacter* c = static_cast<PhysicsCharacter*>(collisionPair.objectA);
-			//c->setve
+            PhysicsCharacter* c = static_cast<PhysicsCharacter*>(collisionPair.objectA);
+            //c->setve
         }
     }
 }

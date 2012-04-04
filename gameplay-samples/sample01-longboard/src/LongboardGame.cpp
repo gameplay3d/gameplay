@@ -35,8 +35,8 @@ LongboardGame::~LongboardGame()
 
 void LongboardGame::initialize()
 {
-    // Display the gameplay splash screen for at least 2.4 seconds.
-    displaySplash(this, &LongboardGame::drawSplash, NULL, 2400L);
+    // Display the gameplay splash screen for at least 1 second.
+    displayScreen(this, &LongboardGame::drawSplash, NULL, 1000L);
 
     // Create our render state block that will be reused across all materials
     _stateBlock = RenderState::StateBlock::create();
@@ -244,6 +244,19 @@ void LongboardGame::update(long elapsedTime)
     if (_groundUVTransform.y >= 1.0f)
     {
         _groundUVTransform.y = 1.0f - _groundUVTransform.y;
+    }
+}
+
+void LongboardGame::keyEvent(Keyboard::KeyEvent evt, int key)
+{
+    if (evt == Keyboard::KEY_PRESS)
+    {
+        switch (key)
+        {
+        case Keyboard::KEY_ESCAPE:
+            exit();
+            break;
+        }
     }
 }
 
