@@ -10,16 +10,6 @@
 #include "Game.h"
 #include "PhysicsController.h"
 
-// Amount to walk collision normal when attempting to repair a collision.
-// To small a value will result in inefficient collision repairs (several iterations
-// to fix a collision and slow resolution), whereas larger values will result
-// in less accurate collision resolution.
-//#define COLLISION_REPAIR_INCREMENT 0.2f
-#define COLLISION_REPAIR_MARGIN 1.0f
-
-// Maximum number of iterations used to perform perform collision repair each update.
-#define COLLISION_REPAIR_MAX_ITERATIONS 4
-
 namespace gameplay
 {
 
@@ -37,6 +27,7 @@ public:
 		if (convexResult.m_hitCollisionObject == _me)
 			return btScalar(1.0);
 
+        /*
 		btVector3 hitNormalWorld;
 		if (normalInWorldSpace)
 		{
@@ -52,8 +43,9 @@ public:
         {
 			return btScalar(1.0);
 		}
+        */
 
-		return ClosestConvexResultCallback::addSingleResult (convexResult, normalInWorldSpace);
+		return ClosestConvexResultCallback::addSingleResult(convexResult, normalInWorldSpace);
 	}
 
 protected:
@@ -67,7 +59,7 @@ PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Defi
     : PhysicsGhostObject(node, shape), _moveVelocity(0,0,0), _forwardVelocity(0.0f), _rightVelocity(0.0f),
     _fallVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
     _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0),
-    _stepHeight(0.2f), _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true)
+    _stepHeight(0.1f), _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true)
 {
 	setMaxSlopeAngle(45.0f);
 
@@ -288,6 +280,7 @@ void PhysicsCharacter::setRotation(const Quaternion& rotation)
 {
     _node->setRotation(rotation);
 }
+
 void PhysicsCharacter::setForwardVelocity(float velocity)
 {
     _forwardVelocity = velocity;
@@ -361,27 +354,23 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
     if (_physicsEnabled)
     {
         //_colliding = fixCollision(collisionWorld);
-        /*_colliding = false;
+        _colliding = false;
         int stepCount = 0;
 	    while (fixCollision(collisionWorld))
 	    {
             _colliding = true;
 
-            // After a small number of attempts to fix a collision/penetration, give up.
-            // This hanldes the case where we are deeply penetrating some object and attempting
-            // to step out of it (by COLLISION_REPAIR_INCREMENT units) does not fix the collision.
-            if (++stepCount > COLLISION_REPAIR_MAX_ITERATIONS)
+            if (++stepCount > 4)
 		    {
-                WARN_VARG("Character '%s' could not recover from collision.", _node->getId());
+                // Most likely we are wedged between a number of different collision objects
 			    break;
 		    }
-	    }*/
+	    }
     }
 
     // Update current and target world positions
-	Vector3 startPosition;
-	_node->getWorldMatrix().getTranslation(&startPosition);
-    _currentPosition = BV(startPosition);
+	btVector3 startPosition = _ghostObject->getWorldTransform().getOrigin();
+	_currentPosition = startPosition;
 
     // Process movement in the up direction
     if (_physicsEnabled)
@@ -395,7 +384,8 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
 		stepDown(collisionWorld, deltaTimeStep);
 
     // Set new position
-	_node->translate(Vector3(_currentPosition.x(), _currentPosition.y(), _currentPosition.z()) - startPosition);
+	btVector3 translation = _currentPosition - startPosition;
+	_node->translate(translation.x(), translation.y(), translation.z());
 }
 
 void PhysicsCharacter::stepUp(btCollisionWorld* collisionWorld, btScalar time)
@@ -408,6 +398,7 @@ void PhysicsCharacter::stepUp(btCollisionWorld* collisionWorld, btScalar time)
     // 
     // Note that stepDown() will be called right after this, so the character will move back
     // down to collide with the ground so that he smoothly steps up stairs.
+	_currentPosition += btVector3(0, _stepHeight, 0);
 }
 
 void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, float time)
@@ -470,8 +461,10 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
     }
 
     // Check for collisions by performing a bullet convex sweep test
-    btTransform start = _ghostObject->getWorldTransform();
-	btTransform end = _ghostObject->getWorldTransform();
+    btTransform start;
+	btTransform end;
+	start.setIdentity();
+	end.setIdentity();
 
 	btScalar fraction = 1.0;
 	btScalar distance2;
@@ -480,22 +473,21 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 	{
         updateTargetPositionFromCollision(targetPosition, _collisionNormal);
 	}
- 
+
 	int maxIter = 10;
 
 	while (fraction > btScalar(0.01) && maxIter-- > 0)
 	{
 		start.setOrigin(_currentPosition);
 		end.setOrigin(targetPosition);
+
 		btVector3 sweepDirNegative(_currentPosition - targetPosition);
 
 		ClosestNotMeConvexResultCallback callback(_ghostObject, sweepDirNegative, btScalar(0.0));
 		callback.m_collisionFilterGroup = _ghostObject->getBroadphaseHandle()->m_collisionFilterGroup;
 		callback.m_collisionFilterMask = _ghostObject->getBroadphaseHandle()->m_collisionFilterMask;
-		//callback.m_collisionFilterGroup = btBroadphaseProxy::CharacterFilter;
-		//callback.m_collisionFilterMask = btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter;
 
-		_ghostObject->convexSweepTest(static_cast<btConvexShape*>(_collisionShape->getShape()), start, end, callback, 0.0f);//collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+		_ghostObject->convexSweepTest(static_cast<btConvexShape*>(_collisionShape->getShape()), start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
 
 		fraction -= callback.m_closestHitFraction;
 
@@ -510,7 +502,8 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 				rb->applyImpulse(-normal);
 			}*/
 
-			updateTargetPositionFromCollision(targetPosition, callback.m_hitNormalWorld);
+            updateTargetPositionFromCollision(targetPosition, callback.m_hitNormalWorld);
+
 			btVector3 currentDir = targetPosition - _currentPosition;
 			distance2 = currentDir.length2();
 			if (distance2 > FLT_EPSILON)
@@ -536,32 +529,26 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 
 void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
 {
-    // Contribute gravity to fall velocity.
-    // TODO: This simple formula assumes no air friction, which is completely unrealistic
-    // (characters fall way too fast). We should consider how to support this without much
-    // added complexity.
-    btVector3 gravity = Game::getInstance()->getPhysicsController()->_world->getGravity();
+    // Contribute basic gravity to fall velocity.
+	btVector3 gravity = Game::getInstance()->getPhysicsController()->_world->getGravity();
     _fallVelocity += (gravity * time);
 
-    btVector3 targetPosition = _currentPosition + _fallVelocity;
+    btVector3 targetPosition = _currentPosition + (_fallVelocity * time);
+	targetPosition -= btVector3(0, _stepHeight, 0);
 
     // Perform a convex sweep test between current and target position
-	btTransform start = _ghostObject->getWorldTransform();
-	btTransform end = _ghostObject->getWorldTransform();
-    start.setOrigin(_currentPosition);
-    end.setOrigin(targetPosition);
+	btTransform start;
+	btTransform end;
+	start.setIdentity();
+	end.setIdentity();
+	start.setOrigin(_currentPosition);
+	end.setOrigin(targetPosition);
 
-    // TODO: We probably have to perform sweep tests separately in stepForward and stepDown (and stepUp) since
-    // combining the full move into a single targetPosition and computing sweep test between currentPosition and targetPosition
-    // is ALYWAYS going to result in a collision at almost exactly currentPosition... this is because, when you are already
-    // on the floor and applying gravity, 
     ClosestNotMeConvexResultCallback callback(_ghostObject, btVector3(0, 1, 0), _cosSlopeAngle);
 	callback.m_collisionFilterGroup = _ghostObject->getBroadphaseHandle()->m_collisionFilterGroup;
 	callback.m_collisionFilterMask = _ghostObject->getBroadphaseHandle()->m_collisionFilterMask;
-	//callback.m_collisionFilterGroup = btBroadphaseProxy::CharacterFilter;
-	//callback.m_collisionFilterMask = btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter;
 
-	_ghostObject->convexSweepTest(static_cast<btConvexShape*>(_collisionShape->getShape()), start, end, callback, 0.0f);//collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+	_ghostObject->convexSweepTest(static_cast<btConvexShape*>(_collisionShape->getShape()), start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
 
 	if (callback.hasHit())
 	{
@@ -687,10 +674,10 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
                         _collisionNormal = pt.m_normalWorldOnB * directionSign;
 					}
 
+					//Node* node = Game::getInstance()->getPhysicsController()->getCollisionObject((btCollisionObject*)(manifold->getBody0() == _ghostObject ? manifold->getBody1() : manifold->getBody0()))->getNode();
+
                     // Calculate new position for object, which is translated back along the collision normal
-                    btVector3 n(pt.m_normalWorldOnB);
-                    n.normalize();
-					currentPosition += /*pt.m_normalWorldOnB*/n * directionSign * dist * COLLISION_REPAIR_MARGIN;// + _collisionShape->getMargin());// * COLLISION_REPAIR_INCREMENT;
+					currentPosition += pt.m_normalWorldOnB * directionSign * dist * 0.2f;
 					collision = true;
 				}
 			}
