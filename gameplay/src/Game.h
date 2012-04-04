@@ -414,51 +414,8 @@ private:
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.
 
-    friend class SplashDisplayer;
+    friend class ScreenDisplayer;
 };
-
-/**
- * Used for displaying splash screens.
- */
-class SplashDisplayer
-{
-public:
-
-    /**
-     * Displays a splash screen using the {@link Game#renderOnce} mechanism for at least the given amount of time.
-     * 
-     * @param instance See {@link Game#renderOnce}.
-     * @param method See {@link Game#renderOnce}.
-     * @param cookie See {@link Game#renderOnce}.
-     * @param time The minimum amount of time to display the splash screen (in milliseconds).
-     */
-    template <typename T> void run(T* instance, void (T::*method) (void*), void* cookie, long time);
-
-    /**
-     * Destructor.
-     */
-    ~SplashDisplayer();
-
-private:
-
-    long _time;
-    long _startTime;
-};
-
-/**
- * Displays a splash screen using the {@link Game#renderOnce} mechanism for at least the given amount
- * of time. This function is intended to be called at the beginning of a block of code that is be 
- * executed while the splash screen is displayed (i.e. Game#initialize). This function will block 
- * at the end of the block of code in which it is called for the amount of time that has not yet elapsed.
- * 
- * @param instance See {@link Game#renderOnce}.
- * @param method See {@link Game#renderOnce}.
- * @param cookie See {@link Game#renderOnce}.
- * @param time The minimum amount of time to display the splash screen (in milliseconds).
- */
-#define displaySplash(instance, method, cookie, time) \
-    SplashDisplayer __##instance##SplashDisplayer; \
-    __##instance##SplashDisplayer.run(instance, method, cookie, time)
 
 }
 
