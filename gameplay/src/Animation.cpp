@@ -59,9 +59,9 @@ Animation::~Animation()
 }
 
 Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration)
-    : _animation(animation), _target(target), _propertyId(propertyId), _duration(duration)
+    : _animation(animation), _target(target), _propertyId(propertyId), _curve(curve), _duration(duration)
 {
-    _curveRef = Animation::CurveRef::create(curve);
+    _curve->addRef();
     // get property component count, and ensure the property exists on the AnimationTarget by getting the property component count.
     assert(_target->getAnimationPropertyComponentCount(propertyId));
 
@@ -71,44 +71,22 @@ Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int p
 }
 
 Animation::Channel::Channel(const Channel& copy, Animation* animation, AnimationTarget* target)
-    : _animation(animation), _target(target), _propertyId(copy._propertyId), _duration(copy._duration)
+    : _animation(animation), _target(target), _propertyId(copy._propertyId), _curve(copy._curve), _duration(copy._duration)
 {
-    _curveRef = copy._curveRef;
-    _curveRef->addRef();
-
+    _curve->addRef();
     _animation->addRef();
     _target->addChannel(this);
 }
 
 Animation::Channel::~Channel()
 {
-    SAFE_RELEASE(_curveRef);
+    SAFE_RELEASE(_curve);
     SAFE_RELEASE(_animation);
 }
 
 Curve* Animation::Channel::getCurve() const
 {
-    return _curveRef->getCurve();
-}
-
-Animation::CurveRef* Animation::CurveRef::create(Curve* curve)
-{
-    return new CurveRef(curve);
-}
-
-Curve* Animation::CurveRef::getCurve() const
-{
     return _curve;
-}
-
-Animation::CurveRef::CurveRef(Curve* curve)
-    : _curve(curve)
-{
-}
-
-Animation::CurveRef::~CurveRef()
-{
-    SAFE_DELETE(_curve);
 }
 
 const char* Animation::getId() const
@@ -301,7 +279,7 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
     unsigned int propertyComponentCount = target->getAnimationPropertyComponentCount(propertyId);
     assert(propertyComponentCount > 0);
 
-    Curve* curve = new Curve(keyCount, propertyComponentCount);
+    Curve* curve = Curve::create(keyCount, propertyComponentCount);
     if (target->_targetType == AnimationTarget::TRANSFORM)
         setTransformRotationOffset(curve, propertyId);
 
@@ -328,6 +306,7 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
     SAFE_DELETE(normalizedKeyTimes);
 
     Channel* channel = new Channel(this, target, propertyId, curve, duration);
+    curve->release();
     addChannel(channel);
     return channel;
 }
@@ -337,7 +316,7 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
     unsigned int propertyComponentCount = target->getAnimationPropertyComponentCount(propertyId);
     assert(propertyComponentCount > 0);
 
-    Curve* curve = new Curve(keyCount, propertyComponentCount);
+    Curve* curve = Curve::create(keyCount, propertyComponentCount);
     if (target->_targetType == AnimationTarget::TRANSFORM)
         setTransformRotationOffset(curve, propertyId);
     
@@ -364,6 +343,7 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
     SAFE_DELETE(normalizedKeyTimes);
 
     Channel* channel = new Channel(this, target, propertyId, curve, duration);
+    curve->release();
     addChannel(channel);
     return channel;
 }

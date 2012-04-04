@@ -6,7 +6,7 @@
 #include "GPBFile.h"
 #include "Animations.h"
 #include "Transform.h"
-#include "../../gameplay/src/Curve.h"
+#include "Curve.h"
 #include "Matrix.h"
 
 namespace gameplay
