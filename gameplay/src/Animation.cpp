@@ -34,6 +34,8 @@ Animation::Animation(const char* id)
 
 Animation::~Animation()
 {
+    _channels.clear();
+
     if (_defaultClip)
     {
         if (_defaultClip->isClipStateBitSet(AnimationClip::CLIP_IS_PLAYING_BIT))
@@ -61,11 +63,8 @@ Animation::~Animation()
 Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration)
     : _animation(animation), _target(target), _propertyId(propertyId), _curve(curve), _duration(duration)
 {
-    _curve->addRef();
     // get property component count, and ensure the property exists on the AnimationTarget by getting the property component count.
     assert(_target->getAnimationPropertyComponentCount(propertyId));
-
-    _animation->addRef();
 
     _target->addChannel(this);
 }
@@ -73,8 +72,6 @@ Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int p
 Animation::Channel::Channel(const Channel& copy, Animation* animation, AnimationTarget* target)
     : _animation(animation), _target(target), _propertyId(copy._propertyId), _curve(copy._curve), _duration(copy._duration)
 {
-    _curve->addRef();
-    _animation->addRef();
     _target->addChannel(this);
 }
 
@@ -209,7 +206,7 @@ void Animation::createDefaultClip()
 }
 
 void Animation::createClips(Properties* animationProperties, unsigned int frameCount)
-{   
+{
     assert(animationProperties);
     
     Properties* pClip = animationProperties->getNextNamespace();
@@ -306,7 +303,6 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
     SAFE_DELETE(normalizedKeyTimes);
 
     Channel* channel = new Channel(this, target, propertyId, curve, duration);
-    curve->release();
     addChannel(channel);
     return channel;
 }
@@ -343,7 +339,6 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
     SAFE_DELETE(normalizedKeyTimes);
 
     Channel* channel = new Channel(this, target, propertyId, curve, duration);
-    curve->release();
     addChannel(channel);
     return channel;
 }
@@ -365,16 +360,13 @@ void Animation::removeChannel(Channel* channel)
         if (channel == chan) 
         {
             _channels.erase(itr);
-            itr = _channels.end();
+            return;
         }
         else
         {
             itr++;
         }
     }
-
-    if (_channels.empty())
-        _controller->destroyAnimation(this);
 }
 
 void Animation::setTransformRotationOffset(Curve* curve, unsigned int propertyId)
@@ -396,7 +388,6 @@ void Animation::setTransformRotationOffset(Curve* curve, unsigned int propertyId
 Animation* Animation::clone()
 {
     Animation* animation = new Animation(getId());
-    _controller->addAnimation(animation);
     return animation;
 }
 

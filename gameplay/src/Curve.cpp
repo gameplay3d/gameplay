@@ -151,8 +151,9 @@ void Curve::evaluate(float time, float* dst) const
 {
     assert(dst && time >= 0 && time <= 1.0f);
 
+    // Check if the point count is 1.
     // Check if we are at or beyond the bounds of the curve.
-    if (time <= _points[0].time)
+    if (_pointCount == 1 || time <= _points[0].time)
     {
         memcpy(dst, _points[0].value, _componentSize);
         return;

@@ -11,6 +11,7 @@ namespace gameplay
  */
 class Curve : public Ref
 {
+    friend class AnimationTarget;
     friend class Animation;
     friend class AnimationClip;
     friend class AnimationController;
