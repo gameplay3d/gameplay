@@ -466,7 +466,7 @@ void AudioSource::transformChanged(Transform* transform, long cookie)
 #ifndef __ANDROID__
     if (_node)
     {
-    	Vector3 translation = _node->getTranslationWorld();
+        Vector3 translation = _node->getTranslationWorld();
         alSourcefv(_alSource, AL_POSITION, (const ALfloat*)&translation.x);
     }
 #else
