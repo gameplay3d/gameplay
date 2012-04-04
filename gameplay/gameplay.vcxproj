@@ -63,6 +63,7 @@
     <ClCompile Include="src\ParticleEmitter.cpp" />
     <ClCompile Include="src\PhysicsCharacter.cpp" />
     <ClCompile Include="src\PhysicsCollisionObject.cpp" />
+    <ClCompile Include="src\PhysicsCollisionShape.cpp" />
     <ClCompile Include="src\PhysicsConstraint.cpp" />
     <ClCompile Include="src\PhysicsController.cpp" />
     <ClCompile Include="src\PhysicsFixedConstraint.cpp" />
@@ -100,7 +101,6 @@
     <ClCompile Include="src\VertexAttributeBinding.cpp" />
     <ClCompile Include="src\VertexFormat.cpp" />
     <ClCompile Include="src\VerticalLayout.cpp" />
-    <ClCompile Include="src\Viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AbsoluteLayout.h" />
@@ -153,6 +153,7 @@
     <ClInclude Include="src\ParticleEmitter.h" />
     <ClInclude Include="src\PhysicsCharacter.h" />
     <ClInclude Include="src\PhysicsCollisionObject.h" />
+    <ClInclude Include="src\PhysicsCollisionShape.h" />
     <ClInclude Include="src\PhysicsConstraint.h" />
     <ClInclude Include="src\PhysicsController.h" />
     <ClInclude Include="src\PhysicsFixedConstraint.h" />
@@ -190,9 +191,12 @@
     <ClInclude Include="src\VertexAttributeBinding.h" />
     <ClInclude Include="src\VertexFormat.h" />
     <ClInclude Include="src\VerticalLayout.h" />
-    <ClInclude Include="src\Viewport.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\logo_black.png" />
+    <None Include="res\logo_powered_black.png" />
+    <None Include="res\logo_powered_white.png" />
+    <None Include="res\logo_white.png" />
     <None Include="res\shaders\bumped-specular.fsh" />
     <None Include="res\shaders\bumped-specular.vsh" />
     <None Include="res\shaders\bumped.fsh" />

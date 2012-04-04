@@ -53,6 +53,15 @@ public:
      */
     static const BoundingBox& empty();
 
+	/**
+     * Gets the center point of the bounding box.
+     *
+     * This method computes the center point of the box from its min and max.
+     *
+     * @return The center point of the bounding box.
+     */
+    Vector3 getCenter() const;
+
     /**
      * Gets the center point of the bounding box.
      *
@@ -71,7 +80,7 @@ public:
      * specify the far face starting at the upper left point when looking towards the origin from the negative
      * z-axis in a counter-clockwise fashion.
      *
-     * @param dst The array to store the corners in. Must be size 6.
+     * @param dst The array to store the corners in. Must be size 8.
      */
     void getCorners(Vector3* dst) const;
 

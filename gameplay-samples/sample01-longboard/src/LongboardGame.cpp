@@ -35,8 +35,8 @@ LongboardGame::~LongboardGame()
 
 void LongboardGame::initialize()
 {
-    // Draw loading screen.
-    renderOnce(this, &LongboardGame::drawLoadScreen, NULL);
+    // Display the gameplay splash screen for at least 2.4 seconds.
+    displaySplash(this, &LongboardGame::drawSplash, NULL, 2400L);
 
     // Create our render state block that will be reused across all materials
     _stateBlock = RenderState::StateBlock::create();
@@ -259,12 +259,12 @@ void LongboardGame::render(long elapsedTime)
     _gradient->draw();
 }
 
-void LongboardGame::drawLoadScreen(void* param)
+void LongboardGame::drawSplash(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
-    SpriteBatch* batch = SpriteBatch::create("res/gameplay_loading.png");
+    SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
     batch->begin();
-    batch->draw(Rectangle(0, 0, this->getWidth(), this->getHeight()), Rectangle(0, 0, 1920, 1080), Vector4::one());
+    batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
     batch->end();
     SAFE_DELETE(batch);
 }

@@ -100,7 +100,7 @@ protected:
 
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
-    void drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip);
+    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
     float _min;
     float _max;

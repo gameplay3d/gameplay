@@ -146,7 +146,7 @@ protected:
      * @param spriteBatch The sprite batch containing this control's icons.
      * @param clip The clipping rectangle of this container's parent container.
      */
-    virtual void drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip);
+    virtual void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
     /**
      * Draws the text of all controls within this container.

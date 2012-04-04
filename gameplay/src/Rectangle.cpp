@@ -44,18 +44,18 @@ void Rectangle::set(const Rectangle& r)
     set(r.x, r.y, r.width, r.height);
 }
 
-void Rectangle::set(float x, float y)
-{
-    this->x = x;
-    this->y = y;
-}
-
 void Rectangle::set(float x, float y, float width, float height)
 {
     this->x = x;
     this->y = y;
     this->width = width;
     this->height = height;
+}
+
+void Rectangle::setPosition(float x, float y)
+{
+    this->x = x;
+    this->y = y;
 }
 
 float Rectangle::left() const

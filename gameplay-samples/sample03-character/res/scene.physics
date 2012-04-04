@@ -11,7 +11,7 @@ rigidbody Basketball
 rigidbody Chair
 {
     type = BOX
-    mass = 100.0
+    mass = 5.0
     friction = 1.0
     restitution = 0.0
     linearDamping = 0.9
@@ -21,9 +21,9 @@ rigidbody Chair
 rigidbody Table
 {
     type = BOX
-    mass = 1.0
+    mass = 0.0
     friction = 0.5
-    restitution = 0.0
+    restitution = 0.75
     linearDamping = 0.1
     angularDamping = 0.5
 }

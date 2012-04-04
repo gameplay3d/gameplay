@@ -4,6 +4,8 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include "Form.h"
+#include <unistd.h>
 #include <sys/keycodes.h>
 #include <screen/screen.h>
 #include <input/screen_helpers.h>
@@ -941,7 +943,7 @@ int Platform::enterMessagePump()
                         if ((flags & KEY_REPEAT) == 0)
                         {
                             keyEventInternal(evt, getKey(value));
-                            if (evt == gameplay::Keyboard::KEY_PRESS && flags & KEY_SYM_VALID)
+                            if (evt == gameplay::Keyboard::KEY_PRESS && (flags & KEY_SYM_VALID))
                             {
                                 int unicode = getUnicode(value);
                                 if (unicode)
@@ -1096,6 +1098,11 @@ void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
     gameplay::Game::getInstance()->keyEvent(evt, key);
     Form::keyEventInternal(evt, key);
+}
+
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
 }
 
 }

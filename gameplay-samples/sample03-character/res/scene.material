@@ -287,7 +287,7 @@ material White : ColoredSpecular
     }
 }
 
-material TableGreen : ColoredSpecular
+material Green : ColoredSpecular
 {
     technique
     {
@@ -299,7 +299,7 @@ material TableGreen : ColoredSpecular
     }
 }
 
-material TableBlue : ColoredSpecular
+material LightBlue : ColoredSpecular
 {
     technique
     {
@@ -379,6 +379,18 @@ material Easel : TexturedSpecular
                 wrapS = CLAMP
                 wrapT = CLAMP
             }
+        }
+    }
+}
+
+material DoorHandle : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0.31, 0.25, 0.07, 1
         }
     }
 }
