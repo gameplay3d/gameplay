@@ -74,7 +74,7 @@ void SpaceshipGame::initialize()
 {
     // TODO: Not working on iOS
     // Display the gameplay splash screen for at least 2.4 seconds.
-    displaySplash(this, &SpaceshipGame::drawSplash, NULL, 2400L);
+    displayScreen(this, &SpaceshipGame::drawSplash, NULL, 2400L);
 
     // Create our render state block that will be reused across all materials
     _stateBlock = RenderState::StateBlock::create();
