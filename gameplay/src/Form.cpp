@@ -136,9 +136,9 @@ namespace gameplay
         if (_node && !_quad)
         {
             // Set this Form up to be 3D by initializing a quad, projection matrix and viewport.
-            setQuad(0.0f, 0.0f, _size.x, _size.y);
+            setQuad(0.0f, 0.0f, _bounds.width, _bounds.height);
 
-            Matrix::createOrthographicOffCenter(0, _size.x, _size.y, 0, 0, 1, &_projectionMatrix);
+            Matrix::createOrthographicOffCenter(0, _bounds.width, _bounds.height, 0, 0, 1, &_projectionMatrix);
             _theme->setProjectionMatrix(_projectionMatrix);
             
             _node->setModel(_quad);
@@ -147,7 +147,7 @@ namespace gameplay
 
     void Form::update()
     {
-        Container::update(Rectangle(0, 0, _size.x, _size.y));
+        Container::update(Rectangle(0, 0, _bounds.width, _bounds.height));
     }
 
     void Form::draw()
@@ -171,7 +171,7 @@ namespace gameplay
                 Game* game = Game::getInstance();
                 Rectangle prevViewport = game->getViewport();
                 
-                game->setViewport(Rectangle(_position.x, _position.y, _size.x, _size.y));
+                game->setViewport(Rectangle(_bounds.x, _bounds.y, _bounds.width, _bounds.height));
 
                 draw(_theme->getSpriteBatch(), _clip);
 
@@ -199,7 +199,7 @@ namespace gameplay
 
         // Draw the form's border and background.
         // We don't pass the form's position to itself or it will be applied twice!
-        Control::drawBorder(spriteBatch, Rectangle(0, 0, _size.x, _size.y));
+        Control::drawBorder(spriteBatch, Rectangle(0, 0, _bounds.width, _bounds.height));
 
         // Draw each control's border and background.
         for (it = _controls.begin(); it < _controls.end(); it++)
@@ -244,7 +244,6 @@ namespace gameplay
         // Set the common render state block for the material
         RenderState::StateBlock* stateBlock = _theme->getSpriteBatch()->getStateBlock();
         stateBlock->setDepthWrite(true);
-        //material->setStateBlock(_theme->getSpriteBatch()->getStateBlock());
         material->setStateBlock(stateBlock);
 
         // Bind the WorldViewProjection matrix
@@ -259,7 +258,7 @@ namespace gameplay
         // Use the FrameBuffer to texture the quad.
         if (!_frameBuffer->getRenderTarget())
         {
-            RenderTarget* rt = RenderTarget::create(_id.c_str(), _size.x, _size.y);
+            RenderTarget* rt = RenderTarget::create(_id.c_str(), _bounds.width, _bounds.height);
             _frameBuffer->setRenderTarget(rt);
             SAFE_RELEASE(rt);
         }
@@ -327,7 +326,7 @@ namespace gameplay
                             m.transformPoint(&point);
 
                             // Pass the touch event on.
-                            const Rectangle& bounds = form->getBounds();
+                            const Rectangle& bounds = form->getClipBounds();
                             if (form->getState() == Control::FOCUS ||
                                 (evt == Touch::TOUCH_PRESS &&
                                  point.x >= bounds.x &&
@@ -346,7 +345,7 @@ namespace gameplay
                 else
                 {
                     // Simply compare with the form's bounds.
-                    const Rectangle& bounds = form->getBounds();
+                    const Rectangle& bounds = form->getClipBounds();
                     if (form->getState() == Control::FOCUS ||
                         (evt == Touch::TOUCH_PRESS &&
                          x >= bounds.x &&
