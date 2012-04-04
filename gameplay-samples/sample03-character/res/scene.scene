@@ -12,27 +12,27 @@ scene
 
     node BoyShadow
     {
-        //material = res/scene.material#BoyShadow
+        material = res/scene.material#BoyShadow
+        transparent = true
     }
 
     node Table
     {
-        url = Table*
-        material = res/scene.material#TableGreen
+        material = res/scene.material#Green
         rigidbody = res/scene.physics#Table
     }
 
     node GreenChair
     {
         url = GreenChair*
-        material = res/scene.material#TableGreen
+        material = res/scene.material#Green
         rigidbody = res/scene.physics#Chair
     }
 
     node BlueChair
     {
         url = BlueChair*
-        material = res/scene.material#TableBlue
+        material = res/scene.material#LightBlue
         rigidbody = res/scene.physics#Chair
     }
 
@@ -76,7 +76,13 @@ scene
 
     node Door
     {
-        url = Door*
+        material[0] = res/scene.material#White
+        material[1] = res/scene.material#DoorHandle
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node DoorFrame
+    {
         material = res/scene.material#White
         rigidbody = res/scene.physics#StaticBox
     }
@@ -85,6 +91,11 @@ scene
     {
         material = res/scene.material#White
         rigidbody = res/scene.physics#StaticBox
+    }
+
+    node Book
+    {
+        material = res/scene.material#LightBlue
     }
 
     node Toybox

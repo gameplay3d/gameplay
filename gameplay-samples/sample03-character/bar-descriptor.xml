@@ -36,11 +36,12 @@
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
     <author>RIM Canada</author>
-    <platformVersion>2.0.0.7971</platformVersion>
-    
+
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
     <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
-   
+
+   <platformVersion>2.0.0.7971</platformVersion>
+
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>
         <autoOrients>false</autoOrients>
@@ -53,21 +54,38 @@
     
     <asset path="icon.png">icon.png</asset>
     <asset path="res/arial40.gpb">res/arial40.gpb</asset>
-    <asset path="res/backboard.png">res/backboard.png</asset>
+    <asset path="res/basketballbackboard.png">res/basketballbackboard.png</asset>
+    <asset path="res/basketballhoop.png">res/basketballhoop.png</asset>
     <asset path="res/bball.png">res/bball.png</asset>
+    <asset path="res/bookshelf.png">res/bookshelf.png</asset>
     <asset path="res/boy.animation">res/boy.animation</asset>
+    <asset path="res/ceiling.png">res/ceiling.png</asset>
     <asset path="res/decals.png">res/decals.png</asset>
-    <asset path="res/gameplay_loading.png">res/gameplay_loading.png</asset>
+    <asset path="res/door.png">res/door.png</asset>
+    <asset path="res/doorframe.png">res/doorframe.png</asset>
+    <asset path="res/floor.png">res/floor.png</asset>
+    <asset path="res/floortiles.png">res/floortiles.png</asset>
+    <asset path="res/playtable.png">res/playtable.png</asset>
     <asset path="res/rainbow.png">res/rainbow.png</asset>
     <asset path="res/scene.gpb">res/scene.gpb</asset>
     <asset path="res/scene.material">res/scene.material</asset>
     <asset path="res/scene.physics">res/scene.physics</asset>
     <asset path="res/scene.scene">res/scene.scene</asset>
     <asset path="res/shadow.png">res/shadow.png</asset>
-    <asset path="res/tiles.png">res/tiles.png</asset>
-    <asset path="res/tilesn.png">res/tilesn.png</asset>
-    <asset path="res/wood.png">res/wood.png</asset>
-    <asset path="res/woodn.png">res/woodn.png</asset>
+    <asset path="res/storageorganizer.png">res/storageorganizer.png</asset>
+    <asset path="res/tableleg1.png">res/tableleg1.png</asset>
+    <asset path="res/tableleg2.png">res/tableleg2.png</asset>
+    <asset path="res/tableleg3.png">res/tableleg3.png</asset>
+    <asset path="res/tableleg4.png">res/tableleg4.png</asset>
+    <asset path="res/tabletop.png">res/tabletop.png</asset>
+    <asset path="res/toybox.png">res/toybox.png</asset>
+    <asset path="res/wall1.png">res/wall1.png</asset>
+    <asset path="res/wall2.png">res/wall2.png</asset>
+    <asset path="res/wall3.png">res/wall3.png</asset>
+    <asset path="res/wall4.png">res/wall4.png</asset>
+    <asset path="res/walloverhang.png">res/walloverhang.png</asset>
+    <asset path="res/windowledge.png">res/windowledge.png</asset>
+    <asset path="${workspace_loc:/gameplay/res/logo_powered_white.png}">res/logo_powered_white.png</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored.fsh}">res/shaders/colored.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored.vsh}">res/shaders/colored.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.fsh}">res/shaders/colored-specular.fsh</asset>
@@ -76,6 +94,8 @@
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.vsh}">res/shaders/diffuse.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.fsh}">res/shaders/diffuse-specular.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.vsh}">res/shaders/diffuse-specular.vsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/textured.fsh}">res/shaders/textured.fsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/textured.vsh}">res/shaders/textured.vsh</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.417937691" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

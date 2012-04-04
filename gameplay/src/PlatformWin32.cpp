@@ -4,6 +4,7 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include "Form.h"
 #include <GL/wglew.h>
 
 // Default to 720p
@@ -679,6 +680,11 @@ void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
     gameplay::Game::getInstance()->keyEvent(evt, key);
     Form::keyEventInternal(evt, key);
+}
+
+void Platform::sleep(long ms)
+{
+    Sleep(ms);
 }
 
 }

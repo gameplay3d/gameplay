@@ -117,10 +117,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\..\gameplay\res\logo_powered_white.png" />
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
     <None Include="res\asphalt.png" />
-    <None Include="res\gameplay_loading.png" />
     <None Include="res\longboard.png" />
     <None Include="res\longboard.wav" />
     <None Include="res\longboard_wheels.png" />

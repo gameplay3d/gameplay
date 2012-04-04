@@ -19,7 +19,7 @@ AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long
     unsigned int channelCount = _animation->_channels.size();    
     for (unsigned int i = 0; i < channelCount; i++)
     {
-        _values.push_back(new AnimationValue(_animation->_channels[i]->_curve->getComponentCount()));
+        _values.push_back(new AnimationValue(_animation->_channels[i]->getCurve()->getComponentCount()));
     }
 }
 
@@ -446,7 +446,7 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
             activeTargets->push_front(target);
 
         // Evaluate the point on Curve
-        channel->_curve->evaluate(percentComplete, value->_value);
+        channel->getCurve()->evaluate(percentComplete, value->_value);
         // Set the animation value on the target property.
         target->setAnimationPropertyValue(channel->_propertyId, value, _blendWeight);
     }

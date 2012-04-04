@@ -4,6 +4,8 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include "Form.h"
+#include <unistd.h>
 
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
@@ -685,6 +687,11 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
     {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
     }
+}
+
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
 }
 
 }
