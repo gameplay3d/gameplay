@@ -14,7 +14,7 @@ PhysicsCollisionShape::PhysicsCollisionShape(Type type, btCollisionShape* shape)
 
 PhysicsCollisionShape::PhysicsCollisionShape(const PhysicsCollisionShape& copy)
 {
-	// hidden
+    // hidden
 }
 
 PhysicsCollisionShape::~PhysicsCollisionShape()
@@ -331,13 +331,13 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::box()
 
 PhysicsCollisionShape::Definition PhysicsCollisionShape::box(const Vector3& extents, const Vector3& center, bool absolute)
 {
-	Definition d;
-	d.type = SHAPE_BOX;
-	memcpy(d.data.box.extents, &extents.x, sizeof(float) * 3);
-	memcpy(d.data.box.center, &center.x, sizeof(float) * 3);
-	d.isExplicit = true;
-	d.centerAbsolute = absolute;
-	return d;
+    Definition d;
+    d.type = SHAPE_BOX;
+    memcpy(d.data.box.extents, &extents.x, sizeof(float) * 3);
+    memcpy(d.data.box.center, &center.x, sizeof(float) * 3);
+    d.isExplicit = true;
+    d.centerAbsolute = absolute;
+    return d;
 }
 
 PhysicsCollisionShape::Definition PhysicsCollisionShape::sphere()
@@ -351,13 +351,13 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::sphere()
 
 PhysicsCollisionShape::Definition PhysicsCollisionShape::sphere(float radius, const Vector3& center, bool absolute)
 {
-	Definition d;
-	d.type = SHAPE_SPHERE;
-	d.data.sphere.radius = radius;
-	memcpy(d.data.sphere.center, &center.x, sizeof(float) * 3);
-	d.isExplicit  = true;
-	d.centerAbsolute = absolute;
-	return d;
+    Definition d;
+    d.type = SHAPE_SPHERE;
+    d.data.sphere.radius = radius;
+    memcpy(d.data.sphere.center, &center.x, sizeof(float) * 3);
+    d.isExplicit  = true;
+    d.centerAbsolute = absolute;
+    return d;
 }
 
 PhysicsCollisionShape::Definition PhysicsCollisionShape::capsule()
@@ -371,14 +371,14 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::capsule()
 
 PhysicsCollisionShape::Definition PhysicsCollisionShape::capsule(float radius, float height, const Vector3& center, bool absolute)
 {
-	Definition d;
-	d.type = SHAPE_CAPSULE;
-	d.data.capsule.radius = radius;
-	d.data.capsule.height = height;
-	memcpy(d.data.capsule.center, &center.x, sizeof(float) * 3);
-	d.isExplicit = true;
-	d.centerAbsolute = absolute;
-	return d;
+    Definition d;
+    d.type = SHAPE_CAPSULE;
+    d.data.capsule.radius = radius;
+    d.data.capsule.height = height;
+    memcpy(d.data.capsule.center, &center.x, sizeof(float) * 3);
+    d.isExplicit = true;
+    d.centerAbsolute = absolute;
+    return d;
 }
 
 PhysicsCollisionShape::Definition PhysicsCollisionShape::heightfield(Image* image)
