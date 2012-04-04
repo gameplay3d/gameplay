@@ -539,6 +539,9 @@
     <ClInclude Include="src\PhysicsCollisionShape.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\ScreenDisplayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\bumped-specular.vsh">

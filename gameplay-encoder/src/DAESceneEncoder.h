@@ -190,6 +190,7 @@ private:
     static int getVertexUsageType(const std::string& semantic);
     
 private:
+    
     DAE* _collada;        // Collada datastore in memory to read from.
     domCOLLADA* _dom;
     FILE* file;        // Output file to write to.

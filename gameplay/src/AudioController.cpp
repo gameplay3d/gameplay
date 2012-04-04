@@ -38,9 +38,9 @@ void AudioController::initialize()
         return;  
     }
         
-	_alcContext = alcCreateContext(_alcDevice, NULL);
+    _alcContext = alcCreateContext(_alcDevice, NULL);
     ALCenum alcErr = alcGetError(_alcDevice);
-	if (!_alcContext || alcErr != ALC_NO_ERROR)
+    if (!_alcContext || alcErr != ALC_NO_ERROR)
     {
         alcCloseDevice (_alcDevice);
         LOG_ERROR_VARG("AudioController::initialize() error. Unable to create OpenAL context. Error: %d\n", alcErr);
@@ -181,7 +181,7 @@ void AudioController::update(long elapsedTime)
             SLresult result = (*_engineEngine)->CreateListener(_engineEngine, &_listenerObject, 2, interfaces, required);
             if (result != SL_RESULT_SUCCESS)
             {
-                WARN("AudioController: failed to create listener.");
+                WARN_VARG("AudioController: failed to create listener (%u).", result);
                 return;
             }
 

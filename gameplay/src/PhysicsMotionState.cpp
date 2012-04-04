@@ -23,7 +23,7 @@ PhysicsMotionState::~PhysicsMotionState()
 
 void PhysicsMotionState::getWorldTransform(btTransform &transform) const
 {
-	if (_node->getCollisionObject() && _node->getCollisionObject()->isKinematic())
+    if (_node->getCollisionObject() && _node->getCollisionObject()->isKinematic())
         updateTransformFromNode();
 
     transform = _centerOfMassOffset.inverse() * _worldTransform;

@@ -235,6 +235,8 @@ void PhysicsController::initialize()
     _ghostPairCallback = bullet_new<btGhostPairCallback>();
     _world->getPairCache()->setInternalGhostPairCallback(_ghostPairCallback);
 
+    _world->getDispatchInfo().m_allowedCcdPenetration = 0.0001f;
+
     // Set up debug drawing.
     _debugDrawer = new DebugDrawer();
     _world->setDebugDrawer(_debugDrawer);
@@ -402,15 +404,15 @@ void PhysicsController::addCollisionObject(PhysicsCollisionObject* object)
     switch (object->getType())
     {
     case PhysicsCollisionObject::RIGID_BODY:
-		_world->addRigidBody(static_cast<btRigidBody*>(object->getCollisionObject()), btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
+        _world->addRigidBody(static_cast<btRigidBody*>(object->getCollisionObject()), btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
         break;
 
     case PhysicsCollisionObject::CHARACTER:
-		_world->addCollisionObject(object->getCollisionObject(), btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
+        _world->addCollisionObject(object->getCollisionObject(), btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
         break;
 
     case PhysicsCollisionObject::GHOST_OBJECT:
-		_world->addCollisionObject(object->getCollisionObject(), btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
+        _world->addCollisionObject(object->getCollisionObject(), btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
         break;
 
     default:
@@ -458,199 +460,199 @@ PhysicsCollisionObject* PhysicsController::getCollisionObject(const btCollisionO
 
 void getBoundingBox(Node* node, BoundingBox* out, bool merge = false)
 {
-	if (node->getModel())
-	{
-		if (merge)
-			out->merge(node->getModel()->getMesh()->getBoundingBox());
-		else
-		{
-			out->set(node->getModel()->getMesh()->getBoundingBox());
-			merge = true;
-		}
-	}
+    if (node->getModel())
+    {
+        if (merge)
+            out->merge(node->getModel()->getMesh()->getBoundingBox());
+        else
+        {
+            out->set(node->getModel()->getMesh()->getBoundingBox());
+            merge = true;
+        }
+    }
 
-	Node* child = node->getFirstChild();
-	while (child)
-	{
-		getBoundingBox(child, out, merge);
-		child = child->getNextSibling();
-	}
+    Node* child = node->getFirstChild();
+    while (child)
+    {
+        getBoundingBox(child, out, merge);
+        child = child->getNextSibling();
+    }
 }
 
 void getBoundingSphere(Node* node, BoundingSphere* out, bool merge = false)
 {
-	if (node->getModel())
-	{
-		if (merge)
-			out->merge(node->getModel()->getMesh()->getBoundingSphere());
-		else
-		{
-			out->set(node->getModel()->getMesh()->getBoundingSphere());
-			merge = true;
-		}
-	}
+    if (node->getModel())
+    {
+        if (merge)
+            out->merge(node->getModel()->getMesh()->getBoundingSphere());
+        else
+        {
+            out->set(node->getModel()->getMesh()->getBoundingSphere());
+            merge = true;
+        }
+    }
 
-	Node* child = node->getFirstChild();
-	while (child)
-	{
-		getBoundingSphere(child, out, merge);
-		child = child->getNextSibling();
-	}
+    Node* child = node->getFirstChild();
+    while (child)
+    {
+        getBoundingSphere(child, out, merge);
+        child = child->getNextSibling();
+    }
 }
 
 void computeCenterOfMass(const Vector3& center, const Vector3& scale, Vector3* centerOfMassOffset)
 {
-	// Update center of mass offset
-	*centerOfMassOffset = center;
-	centerOfMassOffset->x *= scale.x;
-	centerOfMassOffset->y *= scale.y;
-	centerOfMassOffset->z *= scale.z;
-	centerOfMassOffset->negate();
+    // Update center of mass offset
+    *centerOfMassOffset = center;
+    centerOfMassOffset->x *= scale.x;
+    centerOfMassOffset->y *= scale.y;
+    centerOfMassOffset->z *= scale.z;
+    centerOfMassOffset->negate();
 }
 
 PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsCollisionShape::Definition& shape, Vector3* centerOfMassOffset)
 {
-	PhysicsCollisionShape* collisionShape = NULL;
+    PhysicsCollisionShape* collisionShape = NULL;
 
     // Get the node's world scale (we need to apply this during creation since rigid bodies don't scale dynamically).
     Vector3 scale;
     node->getWorldMatrix().getScale(&scale);
 
-	switch (shape.type)
+    switch (shape.type)
     {
-	case PhysicsCollisionShape::SHAPE_BOX:
+    case PhysicsCollisionShape::SHAPE_BOX:
         {
-			if (shape.isExplicit)
-			{
-				// Use the passed in box information
-				collisionShape = createBox(Vector3(shape.data.box.extents), Vector3::one());
+            if (shape.isExplicit)
+            {
+                // Use the passed in box information
+                collisionShape = createBox(Vector3(shape.data.box.extents), Vector3::one());
 
-				if (shape.centerAbsolute)
-				{
-					computeCenterOfMass(Vector3(shape.data.box.center), scale, centerOfMassOffset);
-				}
-				else
-				{
-					BoundingBox box;
-					getBoundingBox(node, &box);
-					computeCenterOfMass(box.getCenter() + Vector3(shape.data.box.center), scale, centerOfMassOffset);
-				}
-			}
-			else
-			{
-				// Automatically compute bounding box from mesh's bounding box
-				BoundingBox box;
-				getBoundingBox(node, &box);
-				collisionShape = createBox(Vector3(std::abs(box.max.x - box.min.x), std::abs(box.max.y - box.min.y), std::abs(box.max.z - box.min.z)), scale);
+                if (shape.centerAbsolute)
+                {
+                    computeCenterOfMass(Vector3(shape.data.box.center), Vector3::one(), centerOfMassOffset);
+                }
+                else
+                {
+                    BoundingBox box;
+                    getBoundingBox(node, &box);
+                    computeCenterOfMass(box.getCenter() + Vector3(shape.data.box.center), scale, centerOfMassOffset);
+                }
+            }
+            else
+            {
+                // Automatically compute bounding box from mesh's bounding box
+                BoundingBox box;
+                getBoundingBox(node, &box);
+                collisionShape = createBox(Vector3(std::abs(box.max.x - box.min.x), std::abs(box.max.y - box.min.y), std::abs(box.max.z - box.min.z)), scale);
 
-				computeCenterOfMass(box.getCenter(), scale, centerOfMassOffset);
-			}
+                computeCenterOfMass(box.getCenter(), scale, centerOfMassOffset);
+            }
         }
-		break;
+        break;
 
-	case PhysicsCollisionShape::SHAPE_SPHERE:
+    case PhysicsCollisionShape::SHAPE_SPHERE:
         {
-			if (shape.isExplicit)
-			{
-				// Use the passed in sphere information
-				collisionShape = createSphere(shape.data.sphere.radius, Vector3::one());
+            if (shape.isExplicit)
+            {
+                // Use the passed in sphere information
+                collisionShape = createSphere(shape.data.sphere.radius, Vector3::one());
 
-				if (shape.centerAbsolute)
-				{
-					computeCenterOfMass(Vector3(shape.data.sphere.center), scale, centerOfMassOffset);
-				}
-				else
-				{
-					BoundingSphere sphere;
-					getBoundingSphere(node, &sphere);
-					computeCenterOfMass(sphere.center + Vector3(shape.data.sphere.center), scale, centerOfMassOffset);
-				}
-			}
-			else
-			{
-				// Automatically compute bounding sphere from mesh's bounding sphere
-				BoundingSphere sphere;
-				getBoundingSphere(node, &sphere);
-				collisionShape = createSphere(sphere.radius, scale);
+                if (shape.centerAbsolute)
+                {
+                    computeCenterOfMass(Vector3(shape.data.sphere.center), Vector3::one(), centerOfMassOffset);
+                }
+                else
+                {
+                    BoundingSphere sphere;
+                    getBoundingSphere(node, &sphere);
+                    computeCenterOfMass(sphere.center + Vector3(shape.data.sphere.center), scale, centerOfMassOffset);
+                }
+            }
+            else
+            {
+                // Automatically compute bounding sphere from mesh's bounding sphere
+                BoundingSphere sphere;
+                getBoundingSphere(node, &sphere);
+                collisionShape = createSphere(sphere.radius, scale);
 
-				computeCenterOfMass(sphere.center, scale, centerOfMassOffset);
-			}
+                computeCenterOfMass(sphere.center, scale, centerOfMassOffset);
+            }
         }
-		break;
+        break;
 
-	case PhysicsCollisionShape::SHAPE_CAPSULE:
-		{
-			if (shape.isExplicit)
-			{
-				// Use the passed in capsule information
-				collisionShape = createCapsule(shape.data.capsule.radius, shape.data.capsule.height, Vector3::one());
-
-				if (shape.centerAbsolute)
-				{
-					computeCenterOfMass(Vector3(shape.data.capsule.center), scale, centerOfMassOffset);
-				}
-				else
-				{
-					BoundingBox box;
-					getBoundingBox(node, &box);
-					computeCenterOfMass(box.getCenter() + Vector3(shape.data.capsule.center), scale, centerOfMassOffset);
-				}
-			}
-			else
-			{
-				// Compute a capsule shape that roughly matches the bounding box of the mesh
-				BoundingBox box;
-				getBoundingBox(node, &box);
-				float radius = std::max((box.max.x - box.min.x) * 0.5f, (box.max.z - box.min.z) * 0.5f);
-				float height = (box.max.y - box.min.y) - radius * 2.0f;
-				collisionShape = createCapsule(radius, height, scale);
-
-				computeCenterOfMass(box.getCenter(), scale, centerOfMassOffset);
-			}
-		}
-		break;
-
-	case PhysicsCollisionShape::SHAPE_HEIGHTFIELD:
-		{
-			// Build heightfield rigid body from the passed in shape
-			collisionShape = createHeightfield(node, shape.data.heightfield, centerOfMassOffset);
-		}
-		break;
-
-	case PhysicsCollisionShape::SHAPE_MESH:
+    case PhysicsCollisionShape::SHAPE_CAPSULE:
         {
-			// Build mesh from passed in shape
-			collisionShape = createMesh(shape.data.mesh, scale);
+            if (shape.isExplicit)
+            {
+                // Use the passed in capsule information
+                collisionShape = createCapsule(shape.data.capsule.radius, shape.data.capsule.height, Vector3::one());
+
+                if (shape.centerAbsolute)
+                {
+                    computeCenterOfMass(Vector3(shape.data.capsule.center), Vector3::one(), centerOfMassOffset);
+                }
+                else
+                {
+                    BoundingBox box;
+                    getBoundingBox(node, &box);
+                    computeCenterOfMass(box.getCenter() + Vector3(shape.data.capsule.center), scale, centerOfMassOffset);
+                }
+            }
+            else
+            {
+                // Compute a capsule shape that roughly matches the bounding box of the mesh
+                BoundingBox box;
+                getBoundingBox(node, &box);
+                float radius = std::max((box.max.x - box.min.x) * 0.5f, (box.max.z - box.min.z) * 0.5f);
+                float height = box.max.y - box.min.y;
+                collisionShape = createCapsule(radius, height, scale);
+
+                computeCenterOfMass(box.getCenter(), scale, centerOfMassOffset);
+            }
         }
-		break;
+        break;
+
+    case PhysicsCollisionShape::SHAPE_HEIGHTFIELD:
+        {
+            // Build heightfield rigid body from the passed in shape
+            collisionShape = createHeightfield(node, shape.data.heightfield, centerOfMassOffset);
+        }
+        break;
+
+    case PhysicsCollisionShape::SHAPE_MESH:
+        {
+            // Build mesh from passed in shape
+            collisionShape = createMesh(shape.data.mesh, scale);
+        }
+        break;
     }
 
-	return collisionShape;
+    return collisionShape;
 }
 
 PhysicsCollisionShape* PhysicsController::createBox(const Vector3& extents, const Vector3& scale)
 {
     btVector3 halfExtents(scale.x * 0.5 * extents.x, scale.y * 0.5 * extents.y, scale.z * 0.5 * extents.z);
 
-	PhysicsCollisionShape* shape;
+    PhysicsCollisionShape* shape;
 
     // Return the box shape from the cache if it already exists.
     for (unsigned int i = 0; i < _shapes.size(); ++i)
     {
-		shape = _shapes[i];
-		if (shape->getType() == PhysicsCollisionShape::SHAPE_BOX)
+        shape = _shapes[i];
+        if (shape->getType() == PhysicsCollisionShape::SHAPE_BOX)
         {
-			btBoxShape* box = static_cast<btBoxShape*>(shape->_shape);
+            btBoxShape* box = static_cast<btBoxShape*>(shape->_shape);
             if (box->getHalfExtentsWithMargin() == halfExtents)
             {
-				shape->addRef();
+                shape->addRef();
                 return shape;
             }
         }
     }
 
     // Create the box shape and add it to the cache.
-	shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_BOX, bullet_new<btBoxShape>(halfExtents));
+    shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_BOX, bullet_new<btBoxShape>(halfExtents));
     _shapes.push_back(shape);
 
     return shape;
@@ -666,15 +668,15 @@ PhysicsCollisionShape* PhysicsController::createSphere(float radius, const Vecto
     if (uniformScale < scale.z)
         uniformScale = scale.z;
 
-	float scaledRadius = radius * uniformScale;
+    float scaledRadius = radius * uniformScale;
 
-	PhysicsCollisionShape* shape;
+    PhysicsCollisionShape* shape;
 
     // Return the sphere shape from the cache if it already exists.
     for (unsigned int i = 0; i < _shapes.size(); ++i)
     {
-		shape = _shapes[i];
-		if (shape->getType() == PhysicsCollisionShape::SHAPE_SPHERE)
+        shape = _shapes[i];
+        if (shape->getType() == PhysicsCollisionShape::SHAPE_SPHERE)
         {
             btSphereShape* sphere = static_cast<btSphereShape*>(shape->_shape);
             if (sphere->getRadius() == scaledRadius)
@@ -686,7 +688,7 @@ PhysicsCollisionShape* PhysicsController::createSphere(float radius, const Vecto
     }
 
     // Create the sphere shape and add it to the cache.
-	shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_SPHERE, bullet_new<btSphereShape>(scaledRadius));
+    shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_SPHERE, bullet_new<btSphereShape>(scaledRadius));
     _shapes.push_back(shape);
 
     return shape;
@@ -694,19 +696,19 @@ PhysicsCollisionShape* PhysicsController::createSphere(float radius, const Vecto
 
 PhysicsCollisionShape* PhysicsController::createCapsule(float radius, float height, const Vector3& scale)
 {
-	float girthScale = scale.x;
-	if (girthScale < scale.z)
-		girthScale = scale.z;
-	float scaledRadius = radius * girthScale;
-	float scaledHeight = height * scale.y;
+    float girthScale = scale.x;
+    if (girthScale < scale.z)
+        girthScale = scale.z;
+    float scaledRadius = radius * girthScale;
+    float scaledHeight = height * scale.y - radius * 2;
 
-	PhysicsCollisionShape* shape;
+    PhysicsCollisionShape* shape;
 
     // Return the capsule shape from the cache if it already exists.
     for (unsigned int i = 0; i < _shapes.size(); i++)
     {
-		shape = _shapes[i];
-		if (shape->getType() == PhysicsCollisionShape::SHAPE_CAPSULE)
+        shape = _shapes[i];
+        if (shape->getType() == PhysicsCollisionShape::SHAPE_CAPSULE)
         {
             btCapsuleShape* capsule = static_cast<btCapsuleShape*>(shape->_shape);
             if (capsule->getRadius() == scaledRadius && capsule->getHalfHeight() == 0.5f * scaledHeight)
@@ -718,7 +720,7 @@ PhysicsCollisionShape* PhysicsController::createCapsule(float radius, float heig
     }
 
     // Create the capsule shape and add it to the cache.
-	shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_CAPSULE, bullet_new<btCapsuleShape>(scaledRadius, scaledHeight));
+    shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_CAPSULE, bullet_new<btCapsuleShape>(scaledRadius, scaledHeight));
     _shapes.push_back(shape);
 
     return shape;
@@ -726,25 +728,25 @@ PhysicsCollisionShape* PhysicsController::createCapsule(float radius, float heig
 
 PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* image, Vector3* centerOfMassOffset)
 {
-	// Get the dimensions of the heightfield.
-	// If the node has a mesh defined, use the dimensions of the bounding box for the mesh.
-	// Otherwise simply use the image dimensions (with a max height of 255).
-	float width, length, minHeight, maxHeight;
-	if (node->getModel() && node->getModel()->getMesh())
-	{
-		const BoundingBox& box = node->getModel()->getMesh()->getBoundingBox();
-		width = box.max.x - box.min.x;
-		length = box.max.z - box.min.z;
-		minHeight = box.min.y;
-		maxHeight = box.max.y;
-	}
-	else
-	{
-		width = image->getWidth();
-		length = image->getHeight();
-		minHeight = 0.0f;
-		maxHeight = 255.0f;
-	}
+    // Get the dimensions of the heightfield.
+    // If the node has a mesh defined, use the dimensions of the bounding box for the mesh.
+    // Otherwise simply use the image dimensions (with a max height of 255).
+    float width, length, minHeight, maxHeight;
+    if (node->getModel() && node->getModel()->getMesh())
+    {
+        const BoundingBox& box = node->getModel()->getMesh()->getBoundingBox();
+        width = box.max.x - box.min.x;
+        length = box.max.z - box.min.z;
+        minHeight = box.min.y;
+        maxHeight = box.max.y;
+    }
+    else
+    {
+        width = image->getWidth();
+        length = image->getHeight();
+        minHeight = 0.0f;
+        maxHeight = 255.0f;
+    }
 
     // Get the size in bytes of a pixel (we ensure that the image's
     // pixel format is actually supported before calling this constructor).
@@ -757,14 +759,14 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
         case Image::RGBA:
             pixelSize = 4;
             break;
-		default:
-			LOG_ERROR("Unsupported pixel format for heightmap image.");
-			return NULL;
+        default:
+            LOG_ERROR("Unsupported pixel format for heightmap image.");
+            return NULL;
     }
 
     // Calculate the heights for each pixel.
     float* heights = new float[image->getWidth() * image->getHeight()];
-	unsigned char* data = image->getData();
+    unsigned char* data = image->getData();
     for (unsigned int x = 0, w = image->getWidth(); x < w; ++x)
     {
         for (unsigned int y = 0, h = image->getHeight(); y < h; ++y)
@@ -775,16 +777,16 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
         }
     }
 
-	PhysicsCollisionShape::HeightfieldData* heightfieldData = new PhysicsCollisionShape::HeightfieldData();
-	heightfieldData->heightData = NULL;
-	heightfieldData->inverseIsDirty = true;
+    PhysicsCollisionShape::HeightfieldData* heightfieldData = new PhysicsCollisionShape::HeightfieldData();
+    heightfieldData->heightData = NULL;
+    heightfieldData->inverseIsDirty = true;
 
     // Generate the heightmap data needed for physics (one height per world unit).
     unsigned int sizeWidth = width;
     unsigned int sizeHeight = length;
-	heightfieldData->width = sizeWidth + 1;
+    heightfieldData->width = sizeWidth + 1;
     heightfieldData->height = sizeHeight + 1;
-	heightfieldData->heightData = new float[heightfieldData->width * heightfieldData->height];
+    heightfieldData->heightData = new float[heightfieldData->width * heightfieldData->height];
     unsigned int heightIndex = 0;
     float widthImageFactor = (float)(image->getWidth() - 1) / sizeWidth;
     float heightImageFactor = (float)(image->getHeight() - 1) / sizeHeight;
@@ -794,8 +796,8 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
     {
         for (unsigned int col = 0, x = 0.0f; col <= sizeWidth; col++, x += 1.0f)
         {
-			heightIndex = row * heightfieldData->width + col;
-			heightfieldData->heightData[heightIndex] = calculateHeight(heights, image->getWidth(), image->getHeight(), x * widthImageFactor, (sizeHeight - z) * heightImageFactor);
+            heightIndex = row * heightfieldData->width + col;
+            heightfieldData->heightData[heightIndex] = calculateHeight(heights, image->getWidth(), image->getHeight(), x * widthImageFactor, (sizeHeight - z) * heightImageFactor);
         }
     }
     SAFE_DELETE_ARRAY(heights);
@@ -804,15 +806,15 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
     // of its heightfield collision shape; see documentation for the btHeightfieldTerrainShape for more info.
     Vector3 s;
     node->getWorldMatrix().getScale(&s);
-	centerOfMassOffset->set(0.0f, -(maxHeight - (0.5f * (maxHeight - minHeight))) / s.y, 0.0f);
+    centerOfMassOffset->set(0.0f, -(maxHeight - (0.5f * (maxHeight - minHeight))) / s.y, 0.0f);
 
-	// Create the bullet terrain shape
-	btHeightfieldTerrainShape* terrainShape = bullet_new<btHeightfieldTerrainShape>(
-		heightfieldData->width, heightfieldData->height, heightfieldData->heightData, 1.0f, minHeight, maxHeight, 1, PHY_FLOAT, false);
+    // Create the bullet terrain shape
+    btHeightfieldTerrainShape* terrainShape = bullet_new<btHeightfieldTerrainShape>(
+        heightfieldData->width, heightfieldData->height, heightfieldData->heightData, 1.0f, minHeight, maxHeight, 1, PHY_FLOAT, false);
 
-	// Create our collision shape object and store heightfieldData in it
-	PhysicsCollisionShape* shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_HEIGHTFIELD, terrainShape);
-	shape->_shapeData.heightfieldData = heightfieldData;
+    // Create our collision shape object and store heightfieldData in it
+    PhysicsCollisionShape* shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_HEIGHTFIELD, terrainShape);
+    shape->_shapeData.heightfieldData = heightfieldData;
 
     _shapes.push_back(shape);
 
@@ -823,29 +825,29 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
 {
     assert(mesh);
 
-	// Only support meshes with triangle list primitive types
-	bool triMesh = true;
-	if (mesh->getPartCount() > 0)
-	{
-		for (unsigned int i = 0; i < mesh->getPartCount(); ++i)
-		{
-			if (mesh->getPart(i)->getPrimitiveType() != Mesh::TRIANGLES)
-			{
-				triMesh = false;
-				break;
-			}
-		}
-	}
-	else
-	{
-		triMesh = mesh->getPrimitiveType() == Mesh::TRIANGLES;
-	}
+    // Only support meshes with triangle list primitive types
+    bool triMesh = true;
+    if (mesh->getPartCount() > 0)
+    {
+        for (unsigned int i = 0; i < mesh->getPartCount(); ++i)
+        {
+            if (mesh->getPart(i)->getPrimitiveType() != Mesh::TRIANGLES)
+            {
+                triMesh = false;
+                break;
+            }
+        }
+    }
+    else
+    {
+        triMesh = mesh->getPrimitiveType() == Mesh::TRIANGLES;
+    }
 
-	if (!triMesh)
-	{
-		LOG_ERROR("Mesh rigid bodies are currently only supported on meshes with TRIANGLES primitive type.");
-		return NULL;
-	}
+    if (!triMesh)
+    {
+        LOG_ERROR("Mesh rigid bodies are currently only supported on meshes with TRIANGLES primitive type.");
+        return NULL;
+    }
 
     // The mesh must have a valid URL (i.e. it must have been loaded from a Package)
     // in order to fetch mesh data for computing mesh rigid body.
@@ -861,15 +863,15 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
         return NULL;
     }
 
-	// Create mesh data to be populated and store in returned collision shape
-	PhysicsCollisionShape::MeshData* shapeMeshData = new PhysicsCollisionShape::MeshData();
-	shapeMeshData->vertexData = NULL;
+    // Create mesh data to be populated and store in returned collision shape
+    PhysicsCollisionShape::MeshData* shapeMeshData = new PhysicsCollisionShape::MeshData();
+    shapeMeshData->vertexData = NULL;
 
     // Copy the scaled vertex position data to the rigid body's local buffer.
     Matrix m;
     Matrix::createScale(scale, &m);
     unsigned int vertexCount = data->vertexCount;
-	shapeMeshData->vertexData = new float[vertexCount * 3];
+    shapeMeshData->vertexData = new float[vertexCount * 3];
     Vector3 v;
     int vertexStride = data->vertexFormat.getVertexSize();
     for (unsigned int i = 0; i < data->vertexCount; i++)
@@ -878,7 +880,7 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
               *((float*)&data->vertexData[i * vertexStride + 1 * sizeof(float)]),
               *((float*)&data->vertexData[i * vertexStride + 2 * sizeof(float)]));
         v *= m;
-		memcpy(&(shapeMeshData->vertexData[i * 3]), &v, sizeof(float) * 3);
+        memcpy(&(shapeMeshData->vertexData[i * 3]), &v, sizeof(float) * 3);
     }
 
     btTriangleIndexVertexArray* meshInterface = bullet_new<btTriangleIndexVertexArray>();
@@ -911,7 +913,7 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
 
             // Move the index data into the rigid body's local buffer.
             // Set it to NULL in the MeshPartData so it is not released when the data is freed.
-			shapeMeshData->indexData.push_back(meshPart->indexData);
+            shapeMeshData->indexData.push_back(meshPart->indexData);
             meshPart->indexData = NULL;
 
             // Create a btIndexedMesh object for the current mesh part.
@@ -919,9 +921,9 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
             indexedMesh.m_indexType = indexType;
             indexedMesh.m_numTriangles = meshPart->indexCount / 3; // assume TRIANGLES primitive type
             indexedMesh.m_numVertices = meshPart->indexCount;
-			indexedMesh.m_triangleIndexBase = (const unsigned char*)shapeMeshData->indexData[i];
+            indexedMesh.m_triangleIndexBase = (const unsigned char*)shapeMeshData->indexData[i];
             indexedMesh.m_triangleIndexStride = indexStride*3;
-			indexedMesh.m_vertexBase = (const unsigned char*)shapeMeshData->vertexData;
+            indexedMesh.m_vertexBase = (const unsigned char*)shapeMeshData->vertexData;
             indexedMesh.m_vertexStride = sizeof(float)*3;
             indexedMesh.m_vertexType = PHY_FLOAT;
 
@@ -954,9 +956,9 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
         meshInterface->addIndexedMesh(indexedMesh, indexedMesh.m_indexType);
     }
 
-	// Create our collision shape object and store shapeMeshData in it
-	PhysicsCollisionShape* shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_MESH, bullet_new<btBvhTriangleMeshShape>(meshInterface, true));
-	shape->_shapeData.meshData = shapeMeshData;
+    // Create our collision shape object and store shapeMeshData in it
+    PhysicsCollisionShape* shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_MESH, bullet_new<btBvhTriangleMeshShape>(meshInterface, true));
+    shape->_shapeData.meshData = shapeMeshData;
 
     _shapes.push_back(shape);
 
@@ -972,14 +974,14 @@ void PhysicsController::destroyShape(PhysicsCollisionShape* shape)
     {
         if (shape->getRefCount() == 1)
         {
-			// Remove shape from shape cache
+            // Remove shape from shape cache
             std::vector<PhysicsCollisionShape*>::iterator shapeItr = std::find(_shapes.begin(), _shapes.end(), shape);
             if (shapeItr != _shapes.end())
                 _shapes.erase(shapeItr);
         }
 
-		// Release the shape
-		shape->release();
+        // Release the shape
+        shape->release();
     }
 }
 
@@ -1167,7 +1169,7 @@ void PhysicsController::DebugDrawer::setDebugMode(int mode)
     _mode = mode;
 }
 
-int	PhysicsController::DebugDrawer::getDebugMode() const
+int PhysicsController::DebugDrawer::getDebugMode() const
 {
     return _mode;
 }

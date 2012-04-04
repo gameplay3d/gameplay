@@ -176,6 +176,7 @@
     <ClInclude Include="src\RenderTarget.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SceneLoader.h" />
+    <ClInclude Include="src\ScreenDisplayer.h" />
     <ClInclude Include="src\Slider.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />
