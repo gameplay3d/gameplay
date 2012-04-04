@@ -36,7 +36,7 @@ public:
      *
      * @return Whether this radio button is currently selected.
      */
-    bool isSelected();
+    bool isSelected() const;
 
     /**
      * Set the size to draw the radio button icon.
