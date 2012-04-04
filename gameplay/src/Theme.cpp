@@ -1061,7 +1061,7 @@ namespace gameplay
         _cursor->_color.set(color);
     }
 
-    const Theme::UVs Theme::Style::Overlay::getCursorUVs() const
+    const Theme::UVs& Theme::Style::Overlay::getCursorUVs() const
     {
         if (_cursor)
         {

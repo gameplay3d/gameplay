@@ -4,7 +4,7 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
-
+#include "Form.h"
 #include <unistd.h>
 
 #import <Cocoa/Cocoa.h>

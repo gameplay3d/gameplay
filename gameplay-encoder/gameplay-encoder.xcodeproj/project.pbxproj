@@ -503,7 +503,7 @@
 		42475CF1147208A100610A6A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -524,7 +524,6 @@
 					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macos\"",
 					"\"$(SRCROOT)/../external-deps/pcre/lib/macos\"",
 					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
-					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBXSDK20122/lib/gcc4/ub\"",
 					"\"$(SRCROOT)/../external-deps/libpng/lib/macos\"",
 				);
 				MACH_O_TYPE = mh_execute;
@@ -536,7 +535,7 @@
 		42475CF2147208A100610A6A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -557,7 +556,6 @@
 					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macos\"",
 					"\"$(SRCROOT)/../external-deps/pcre/lib/macos\"",
 					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug\"",
-					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBXSDK20122/lib/gcc4/ub\"",
 					"\"$(SRCROOT)/../external-deps/libpng/lib/macos\"",
 				);
 				MACH_O_TYPE = mh_execute;
