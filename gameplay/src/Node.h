@@ -114,7 +114,21 @@ public:
     Node* getParent() const;
 
     /**
-     * Returns whether this node is transparent.
+     * Returns whether this node is visible (true by default).
+     *
+     * @return Whether the node is visible.
+     */
+    bool isVisible() const;
+
+    /**
+     * Sets whether this node is visible.
+     *
+     * @return Whether this node is visible.
+     */
+    void setVisible(bool visible);
+
+    /**
+     * Returns whether this node is transparent (false by default).
      *
      * All nodes are opaque by default, unless otherwise set as
      * transparent using the setTransparent method. These methods
@@ -130,9 +144,38 @@ public:
     /**
      * Sets whether this node is transparent.
      *
-     * @param flag Whether the node is transparent.
+     * @param transparent Whether the node is transparent.
      */
-    void setTransparent(bool flag);
+    void setTransparent(bool transparent);
+
+    /**
+     * Returns the user pointer for this node.
+     *
+     * @return The user pointer for this node.
+     * @see setUserPointer(void*)
+     */
+    void* getUserPointer() const;
+
+    /**
+     * Sets the user pointer for this node.
+     *
+     * The user pointer is initially NULL and can be set to anything.
+     * This is normally used to store game-specific data, such as 
+     * game state for a particular node.  For example, attributes
+     * for a game character, such as hit points, stamina, etc can
+     * be defined in a game structure and stored in this field.
+     *
+     * When a node is deleted, the (optional) cleanup callback
+     * function passed to this function is called to allow the 
+     * user to free any memory associated with the user pointer.
+     *
+     * @param pointer User pointer.
+     * @param cleanupCallback Optional callback that is called when the
+     *      Node is being destroyed (or when the user pointer changes),
+     *      to allow the user to cleanup any memory associated with the
+     *      user pointer.
+     */
+    void setUserPointer(void* pointer, void (*cleanupCallback)(void*) = NULL);
 
     /**
      * Returns the number of direct children of this item.
@@ -551,6 +594,12 @@ private:
 
 protected:
 
+    struct UserData
+    {
+        void* pointer;
+        void (*cleanupCallback)(void*);
+    };
+
     Scene* _scene;
     std::string _id;
     Node* _firstChild;
@@ -570,6 +619,7 @@ protected:
     mutable int _dirtyBits;
     bool _notifyHierarchyChanged;
     mutable BoundingSphere _bounds;
+    UserData* _userData;
 };
 
 /**
