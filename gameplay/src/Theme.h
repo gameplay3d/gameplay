@@ -422,7 +422,7 @@ public:
             const Vector4& getCursorColor() const;
             void setCursorColor(const Vector4& color);
 
-            const Theme::UVs getCursorUVs() const;
+            const Theme::UVs& getCursorUVs() const;
 
             /**
              * @see AnimationTarget#getAnimationPropertyComponentCount
