@@ -35,7 +35,10 @@ void CharacterGame::initialize()
 
     // Store character node.
     Node* node = _scene->findNode("BoyCharacter");
-    node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule(1.2f, 5.0f, Vector3(0, 2.5, 0), true));
+    PhysicsRigidBody::Parameters p;
+    p.mass = 20.0f;
+    node->setTranslationY(5.0f);
+    node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule(1.2f, 5.0f, Vector3(0, 2.5, 0), true), &p);
     _character = static_cast<PhysicsCharacter*>(node->getCollisionObject());
     _character->setMaxStepHeight(0.0f);
     _character->addCollisionListener(this);

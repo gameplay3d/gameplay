@@ -909,7 +909,7 @@ PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type ty
 
     case PhysicsCollisionObject::CHARACTER:
         {
-            _collisionObject = new PhysicsCharacter(this, shape);
+            _collisionObject = new PhysicsCharacter(this, shape, rigidBodyParameters ? rigidBodyParameters->mass : 1.0f);
         }
         break;
     }
