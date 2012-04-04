@@ -25,6 +25,11 @@ public:
      */
     virtual ~LongboardGame();
 
+    /**
+     * @see Game::keyEvent
+     */
+    void keyEvent(Keyboard::KeyEvent evt, int key);
+
 protected:
 
     /**

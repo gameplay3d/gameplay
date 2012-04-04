@@ -24,8 +24,8 @@ CharacterGame::~CharacterGame()
 
 void CharacterGame::initialize()
 {
-    // Display the gameplay splash screen for at least 2.4 seconds.
-    displayScreen(this, &CharacterGame::drawSplash, NULL, 2400L);
+    // Display the gameplay splash screen for at least 1 second.
+    displayScreen(this, &CharacterGame::drawSplash, NULL, 1000L);
 
     // Load the font.
     _font = Font::create("res/arial40.gpb");
@@ -243,6 +243,9 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         case Keyboard::KEY_B:
             moveBall = !moveBall;
+            break;
+        case Keyboard::KEY_ESCAPE:
+            exit();
             break;
         }
     }

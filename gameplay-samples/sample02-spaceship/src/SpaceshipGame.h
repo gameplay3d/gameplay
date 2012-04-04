@@ -23,6 +23,11 @@ public:
     virtual ~SpaceshipGame();
 
     /**
+     * @see Game::keyEvent
+     */
+    void keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
      * @see Game::touchEvent
      */
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
