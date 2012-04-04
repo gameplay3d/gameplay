@@ -295,7 +295,7 @@ namespace gameplay
                 continue;
             }
 
-            const Rectangle& bounds = control->getBounds();
+            const Rectangle& bounds = control->getClipBounds();
             if (control->getState() != Control::NORMAL ||
                 (evt == Touch::TOUCH_PRESS &&
                  x >= xPos + bounds.x &&
