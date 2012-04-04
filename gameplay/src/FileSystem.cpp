@@ -117,9 +117,9 @@ bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
 #else
     std::string path(FileSystem::getResourcePath());
     if (dirPath && strlen(dirPath) > 0)
-	{
-		path.append(dirPath);
-	}
+    {
+        path.append(dirPath);
+    }
     path.append("/.");
     struct dirent* dp;
     DIR* dir = opendir(path.c_str());
@@ -127,23 +127,23 @@ bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
     {
         return false;
     }
-	while ((dp = readdir(dir)) != NULL)
-	{
-		std::string filepath(path);
-		filepath.append("/");
-		filepath.append(dp->d_name);
+    while ((dp = readdir(dir)) != NULL)
+    {
+        std::string filepath(path);
+        filepath.append("/");
+        filepath.append(dp->d_name);
 
-		struct stat buf;
-		if (!stat(filepath.c_str(), &buf))
-		{
+        struct stat buf;
+        if (!stat(filepath.c_str(), &buf))
+        {
             // Add to the list if this is not a directory
-			if (!S_ISDIR(buf.st_mode))
-			{
-				files.push_back(dp->d_name);
-			}
-		}
-	}
-	closedir(dir);
+            if (!S_ISDIR(buf.st_mode))
+            {
+                files.push_back(dp->d_name);
+            }
+        }
+    }
+    closedir(dir);
     return true;
 #endif
 }

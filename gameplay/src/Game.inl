@@ -26,7 +26,7 @@ inline unsigned int Game::getHeight() const
 
 inline const Rectangle& Game::getViewport() const
 {
-	return _viewport;
+    return _viewport;
 }
 
 inline AnimationController* Game::getAnimationController() const

@@ -22,7 +22,7 @@ namespace gameplay
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
     _nodeFlags(NODE_FLAG_VISIBLE), _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
-	_collisionObject(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
+    _collisionObject(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
     if (id)
     {
@@ -363,7 +363,7 @@ const Matrix& Node::getWorldMatrix() const
         // If we have a parent, multiply our parent world transform by our local
         // transform to obtain our final resolved world transform.
         Node* parent = getParent();
-		if (parent && (!_collisionObject || _collisionObject->isKinematic()))
+        if (parent && (!_collisionObject || _collisionObject->isKinematic()))
         {
             Matrix::multiply(parent->getWorldMatrix(), getMatrix(), &_world);
         }
@@ -891,30 +891,30 @@ PhysicsCollisionObject* Node::getCollisionObject() const
 
 PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters)
 {
-	SAFE_DELETE(_collisionObject);
+    SAFE_DELETE(_collisionObject);
 
-	switch (type)
-	{
-	case PhysicsCollisionObject::RIGID_BODY:
-		{
-			_collisionObject = new PhysicsRigidBody(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters());
-		}
-		break;
+    switch (type)
+    {
+    case PhysicsCollisionObject::RIGID_BODY:
+        {
+            _collisionObject = new PhysicsRigidBody(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters());
+        }
+        break;
 
-	case PhysicsCollisionObject::GHOST_OBJECT:
-		{
-			_collisionObject = new PhysicsGhostObject(this, shape);
-		}
-		break;
+    case PhysicsCollisionObject::GHOST_OBJECT:
+        {
+            _collisionObject = new PhysicsGhostObject(this, shape);
+        }
+        break;
 
-	case PhysicsCollisionObject::CHARACTER:
-		{
-			_collisionObject = new PhysicsCharacter(this, shape);
-		}
-		break;
-	}
+    case PhysicsCollisionObject::CHARACTER:
+        {
+            _collisionObject = new PhysicsCharacter(this, shape);
+        }
+        break;
+    }
 
-	return _collisionObject;
+    return _collisionObject;
 }
 
 PhysicsCollisionObject* Node::setCollisionObject(const char* filePath)
@@ -960,7 +960,7 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
     {
         _collisionObject = PhysicsRigidBody::create(this, properties);
     }
-	return _collisionObject;
+    return _collisionObject;
 }
 
 NodeCloneContext::NodeCloneContext()

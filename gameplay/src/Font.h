@@ -150,7 +150,7 @@ public:
      * @param clip A region to clip text within after applying justification to the viewport area.
      */
     void drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size = 0, 
-				  Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false, const Rectangle* clip = NULL);
+                  Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false, const Rectangle* clip = NULL);
 
     /**
      * Measures a string's width and height without alignment, wrapping or clipping.
@@ -237,7 +237,7 @@ private:
     unsigned int _glyphCount;
     Texture* _texture;
     SpriteBatch* _batch;
-	Rectangle _viewport;
+    Rectangle _viewport;
 };
 
 }
