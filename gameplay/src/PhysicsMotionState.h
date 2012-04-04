@@ -1,11 +1,12 @@
 #ifndef PHYSICSMOTIONSTATE_H_
 #define PHYSICSMOTIONSTATE_H_
 
-#include "Node.h"
-#include "PhysicsRigidBody.h"
+#include "Vector3.h"
 
 namespace gameplay
 {
+
+class Node;
 
 /**
  * Interface between GamePlay and Bullet to keep object transforms synchronized properly.
@@ -14,10 +15,11 @@ namespace gameplay
  */
 class PhysicsMotionState : public btMotionState
 {
+    friend class PhysicsCollisionObject;
     friend class PhysicsRigidBody;
+    friend class PhysicsGhostObject;
     friend class PhysicsCharacter;
     friend class PhysicsConstraint;
-    friend class PhysicsGhostObject;
 
 protected:
 

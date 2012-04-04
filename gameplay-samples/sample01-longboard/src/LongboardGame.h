@@ -71,9 +71,9 @@ private:
     void buildGradient();
 
     /**
-     * Draws the default "gameplay powered" loading screen.
+     * Draws the default "gameplay powered" splash screen.
      */
-    void drawLoadScreen(void* param);
+    void drawSplash(void* param);
 
     // Ground
     Model* _ground;

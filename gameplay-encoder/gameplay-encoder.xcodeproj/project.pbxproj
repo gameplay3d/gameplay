@@ -169,7 +169,7 @@
 		42C8EE3A1472DAAE00E43619 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
 		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macos/libpcre.a"; sourceTree = "<group>"; };
 		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macos/libpcrecpp.a"; sourceTree = "<group>"; };
-		5BCD0624152CF4000071FAB5 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
+		42DDE88415191CDA00D9B550 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +177,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42DDE88515191CDA00D9B550 /* libpng.a in Frameworks */,
 				42D277591472EFA700D867A4 /* libpcre.a in Frameworks */,
 				42D2775A1472EFA700D867A4 /* libpcrecpp.a in Frameworks */,
 				42C8EE351472B60100E43619 /* libfreetype.a in Frameworks */,
@@ -314,6 +315,7 @@
 				42C8EE361472D7E700E43619 /* libxml2.dylib */,
 				42C8EE341472B60100E43619 /* libfreetype.a */,
 				42475D7B14720ECE00610A6A /* libdom.a */,
+				42DDE88415191CDA00D9B550 /* libpng.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -452,6 +454,7 @@
 					"../external-deps/freetype/include",
 					"../external-deps/collada-dom/include",
 					"../external-deps/collada-dom/include/1.4",
+					"../external-deps/libpng/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -459,7 +462,7 @@
 				OTHER_TEST_FLAGS = "";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4 ./external-deps/libpng/include";
 				WARNING_CFLAGS = "";
 			};
 			name = Debug;
@@ -487,13 +490,14 @@
 					"../external-deps/freetype/include",
 					"../external-deps/collada-dom/include",
 					"../external-deps/collada-dom/include/1.4",
+					"../external-deps/libpng/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_TEST_FLAGS = "";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4 ./external-deps/libpng/include";
 				WARNING_CFLAGS = "";
 			};
 			name = Release;
@@ -501,7 +505,7 @@
 		42475CF1147208A100610A6A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -526,14 +530,14 @@
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4 /Applications/Autodesk/FBXSDK20122/include";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4 ../external-deps/libpng/include";
 			};
 			name = Debug;
 		};
 		42475CF2147208A100610A6A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -558,7 +562,7 @@
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4 /Applications/Autodesk/FBXSDK20122/include";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4 ../external-deps/libpng/include";
 			};
 			name = Release;
 		};

@@ -432,8 +432,8 @@ public:
      * Gets the maximum rotation speed of each emitted particle.
      * This determines the speed of rotation of each particle's screen-facing billboard.
      *
-     * @param min The minimum rotation speed (per particle).
-     * @param max The maximum rotation speed (per particle).
+     * @param speedMin The minimum rotation speed (per particle).
+     * @param speedMax The maximum rotation speed (per particle).
      */
     void setRotationPerParticle(float speedMin, float speedMax);
 
@@ -494,7 +494,7 @@ public:
     /**
      * Sets whether particles cycle through the sprite frames.
      *
-     * @param animating Whether to animate particles through the sprite frames.
+     * @param animated Whether to animate particles through the sprite frames.
      */
     void setSpriteAnimated(bool animated);
 

@@ -14,6 +14,10 @@
 		4208DEEC14A407B900D3C511 /* Keyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEEB14A407B900D3C511 /* Keyboard.h */; };
 		4208DEEE14A407D500D3C511 /* Touch.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEED14A407D500D3C511 /* Touch.h */; };
 		4234D99E14686C52003031B3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4234D99D14686C52003031B3 /* Cocoa.framework */; };
+		42554EA1152BC35C000ED910 /* PhysicsCollisionShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42554E9F152BC35C000ED910 /* PhysicsCollisionShape.cpp */; };
+		42554EA2152BC35C000ED910 /* PhysicsCollisionShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42554E9F152BC35C000ED910 /* PhysicsCollisionShape.cpp */; };
+		42554EA3152BC35C000ED910 /* PhysicsCollisionShape.h in Headers */ = {isa = PBXBuildFile; fileRef = 42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */; };
+		42554EA4152BC35C000ED910 /* PhysicsCollisionShape.h in Headers */ = {isa = PBXBuildFile; fileRef = 42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */; };
 		428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 428390971489D6E800E2B2F5 /* SceneLoader.cpp */; };
 		4283909A1489D6E800E2B2F5 /* SceneLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 428390981489D6E800E2B2F5 /* SceneLoader.h */; };
 		42CCD556146EC1EB00353661 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD555146EC1EB00353661 /* libpng.a */; };
@@ -149,8 +153,6 @@
 		42CD0EC8147D8FF60000361E /* VertexAttributeBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E41147D8FF50000361E /* VertexAttributeBinding.h */; };
 		42CD0EC9147D8FF60000361E /* VertexFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E42147D8FF50000361E /* VertexFormat.cpp */; };
 		42CD0ECA147D8FF60000361E /* VertexFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E43147D8FF50000361E /* VertexFormat.h */; };
-		42CD0ECB147D8FF60000361E /* Viewport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E44147D8FF50000361E /* Viewport.cpp */; };
-		42CD0ECC147D8FF60000361E /* Viewport.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E45147D8FF50000361E /* Viewport.h */; };
 		5B04C52D14BFCFE100EB0071 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DB1147D8FF50000361E /* Animation.cpp */; };
 		5B04C52E14BFCFE100EB0071 /* AnimationClip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DB3147D8FF50000361E /* AnimationClip.cpp */; };
 		5B04C52F14BFCFE100EB0071 /* AnimationController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DB5147D8FF50000361E /* AnimationController.cpp */; };
@@ -212,7 +214,6 @@
 		5B04C56D14BFCFE100EB0071 /* Vector4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E3D147D8FF50000361E /* Vector4.cpp */; };
 		5B04C56E14BFCFE100EB0071 /* VertexAttributeBinding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E40147D8FF50000361E /* VertexAttributeBinding.cpp */; };
 		5B04C56F14BFCFE100EB0071 /* VertexFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E42147D8FF50000361E /* VertexFormat.cpp */; };
-		5B04C57014BFCFE100EB0071 /* Viewport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E44147D8FF50000361E /* Viewport.cpp */; };
 		5B04C57114BFCFE100EB0071 /* SceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 428390971489D6E800E2B2F5 /* SceneLoader.cpp */; };
 		5B04C57214BFCFE100EB0071 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4208DEE614A4079F00D3C511 /* Image.cpp */; };
 		5B04C57314BFCFE100EB0071 /* MeshBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4201818D14A41B18008C3F56 /* MeshBatch.cpp */; };
@@ -286,7 +287,6 @@
 		5B04C5BE14BFCFE100EB0071 /* Vector4.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E3E147D8FF50000361E /* Vector4.h */; };
 		5B04C5BF14BFCFE100EB0071 /* VertexAttributeBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E41147D8FF50000361E /* VertexAttributeBinding.h */; };
 		5B04C5C014BFCFE100EB0071 /* VertexFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E43147D8FF50000361E /* VertexFormat.h */; };
-		5B04C5C114BFCFE100EB0071 /* Viewport.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E45147D8FF50000361E /* Viewport.h */; };
 		5B04C5C214BFCFE100EB0071 /* SceneLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 428390981489D6E800E2B2F5 /* SceneLoader.h */; };
 		5B04C5C314BFCFE100EB0071 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEE714A4079F00D3C511 /* Image.h */; };
 		5B04C5C414BFCFE100EB0071 /* Keyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEEB14A407B900D3C511 /* Keyboard.h */; };
@@ -387,6 +387,8 @@
 		4208DEED14A407D500D3C511 /* Touch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Touch.h; path = src/Touch.h; sourceTree = SOURCE_ROOT; };
 		4234D99A14686C52003031B3 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4234D99D14686C52003031B3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		42554E9F152BC35C000ED910 /* PhysicsCollisionShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsCollisionShape.cpp; path = src/PhysicsCollisionShape.cpp; sourceTree = SOURCE_ROOT; };
+		42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCollisionShape.h; path = src/PhysicsCollisionShape.h; sourceTree = SOURCE_ROOT; };
 		428390971489D6E800E2B2F5 /* SceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLoader.cpp; path = src/SceneLoader.cpp; sourceTree = SOURCE_ROOT; };
 		428390981489D6E800E2B2F5 /* SceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneLoader.h; path = src/SceneLoader.h; sourceTree = SOURCE_ROOT; };
 		42C932AF14919FD10098216A /* Game.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Game.inl; path = src/Game.inl; sourceTree = SOURCE_ROOT; };
@@ -541,23 +543,21 @@
 		42CD0E41147D8FF50000361E /* VertexAttributeBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexAttributeBinding.h; path = src/VertexAttributeBinding.h; sourceTree = SOURCE_ROOT; };
 		42CD0E42147D8FF50000361E /* VertexFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexFormat.cpp; path = src/VertexFormat.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0E43147D8FF50000361E /* VertexFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexFormat.h; path = src/VertexFormat.h; sourceTree = SOURCE_ROOT; };
-		42CD0E44147D8FF50000361E /* Viewport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Viewport.cpp; path = src/Viewport.cpp; sourceTree = SOURCE_ROOT; };
-		42CD0E45147D8FF50000361E /* Viewport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Viewport.h; path = src/Viewport.h; sourceTree = SOURCE_ROOT; };
 		5B04C5CA14BFCFE100EB0071 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-ios.mm"; path = "src/gameplay-main-ios.mm"; sourceTree = SOURCE_ROOT; };
 		5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformiOS.mm; path = src/PlatformiOS.mm; sourceTree = SOURCE_ROOT; };
-		5B2BC7561512507500D176CD /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC7561512507500D176CD /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		5B2BC75D1512514500D176CD /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		5B2BC75E1512514500D176CD /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B2BC7611512514D00D176CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5B2BC7631512516B00D176CD /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
-		5B2BC766151251EB00D176CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
-		5B2BC767151251EB00D176CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		5B2BC768151251EB00D176CD /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
-		5B2BC769151251EB00D176CD /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		5B2BC76A151251EB00D176CD /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		5B2BC76B151251EB00D176CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		5B2BC76C151251EB00D176CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC766151251EB00D176CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC767151251EB00D176CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC768151251EB00D176CD /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
+		5B2BC769151251EB00D176CD /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC76A151251EB00D176CD /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC76B151251EB00D176CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		5B2BC76C151251EB00D176CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5B5ADCE214C22DF900AC6109 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = SDKs/MacOSX10.7.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5B5ADCE414C22E1F00AC6109 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5B5DB92D14C25B7B007755DB /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../external-deps/bullet/lib/ios/i386/libbullet.a"; sourceTree = "<group>"; };
@@ -784,6 +784,8 @@
 				5BD5266C150F8257004C9099 /* PhysicsCharacter.h */,
 				5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */,
 				5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */,
+				42554E9F152BC35C000ED910 /* PhysicsCollisionShape.cpp */,
+				42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */,
 				42CD0DFF147D8FF50000361E /* PhysicsConstraint.cpp */,
 				42CD0E00147D8FF50000361E /* PhysicsConstraint.h */,
 				42CD0E01147D8FF50000361E /* PhysicsConstraint.inl */,
@@ -868,8 +870,6 @@
 				42CD0E43147D8FF50000361E /* VertexFormat.h */,
 				5BD5264D150F822A004C9099 /* VerticalLayout.cpp */,
 				5BD5264E150F822A004C9099 /* VerticalLayout.h */,
-				42CD0E44147D8FF50000361E /* Viewport.cpp */,
-				42CD0E45147D8FF50000361E /* Viewport.h */,
 			);
 			name = src;
 			path = gameplay;
@@ -884,7 +884,7 @@
 				42CD0DA9147D8EA80000361E /* libvorbisenc.a */,
 				42CD0DAA147D8EA80000361E /* libvorbisfile.a */,
 				42CCD555146EC1EB00353661 /* libpng.a */,
-				5B5ADCE114C22DC700AC6109 /* Mac OS X */,
+				5B5ADCE114C22DC700AC6109 /* MacOSX */,
 				5B5ADCE014C22DBE00AC6109 /* iOS */,
 			);
 			name = Libraries;
@@ -893,8 +893,8 @@
 		42CCD4AF146D811D00353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B04C5FE14BFE52F00EB0071 /* Mac OS X */,
 				5B04C5FD14BFE52300EB0071 /* iOS */,
+				5B04C5FE14BFE52F00EB0071 /* MacOSX */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -914,7 +914,7 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		5B04C5FE14BFE52F00EB0071 /* Mac OS X */ = {
+		5B04C5FE14BFE52F00EB0071 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
 				5B2BC7631512516B00D176CD /* libz.dylib */,
@@ -923,7 +923,7 @@
 				5B2BC75E1512514500D176CD /* OpenGL.framework */,
 				4234D99D14686C52003031B3 /* Cocoa.framework */,
 			);
-			name = "Mac OS X";
+			name = MacOSX;
 			sourceTree = "<group>";
 		};
 		5B5ADCE014C22DBE00AC6109 /* iOS */ = {
@@ -940,12 +940,12 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		5B5ADCE114C22DC700AC6109 /* Mac OS X */ = {
+		5B5ADCE114C22DC700AC6109 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
 				5B5ADCE214C22DF900AC6109 /* libz.dylib */,
 			);
-			name = "Mac OS X";
+			name = MacOSX;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1019,7 +1019,6 @@
 				42CD0EC6147D8FF60000361E /* Vector4.h in Headers */,
 				42CD0EC8147D8FF60000361E /* VertexAttributeBinding.h in Headers */,
 				42CD0ECA147D8FF60000361E /* VertexFormat.h in Headers */,
-				42CD0ECC147D8FF60000361E /* Viewport.h in Headers */,
 				4283909A1489D6E800E2B2F5 /* SceneLoader.h in Headers */,
 				4208DEEA14A4079F00D3C511 /* Image.h in Headers */,
 				4208DEEC14A407B900D3C511 /* Keyboard.h in Headers */,
@@ -1044,6 +1043,7 @@
 				5BD52671150F8258004C9099 /* PhysicsCharacter.h in Headers */,
 				5BD52675150F8258004C9099 /* PhysicsCollisionObject.h in Headers */,
 				5BBE14401513E400003FB362 /* PhysicsGhostObject.h in Headers */,
+				42554EA3152BC35C000ED910 /* PhysicsCollisionShape.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1115,7 +1115,6 @@
 				5B04C5BE14BFCFE100EB0071 /* Vector4.h in Headers */,
 				5B04C5BF14BFCFE100EB0071 /* VertexAttributeBinding.h in Headers */,
 				5B04C5C014BFCFE100EB0071 /* VertexFormat.h in Headers */,
-				5B04C5C114BFCFE100EB0071 /* Viewport.h in Headers */,
 				5B04C5C214BFCFE100EB0071 /* SceneLoader.h in Headers */,
 				5B04C5C314BFCFE100EB0071 /* Image.h in Headers */,
 				5B04C5C414BFCFE100EB0071 /* Keyboard.h in Headers */,
@@ -1139,6 +1138,7 @@
 				5BC4E756150F843D00CBE1C0 /* Theme.h in Headers */,
 				5BC4E758150F843D00CBE1C0 /* VerticalLayout.h in Headers */,
 				5BBE14411513E400003FB362 /* PhysicsGhostObject.h in Headers */,
+				42554EA4152BC35C000ED910 /* PhysicsCollisionShape.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1273,7 +1273,6 @@
 				42CD0EC5147D8FF60000361E /* Vector4.cpp in Sources */,
 				42CD0EC7147D8FF60000361E /* VertexAttributeBinding.cpp in Sources */,
 				42CD0EC9147D8FF60000361E /* VertexFormat.cpp in Sources */,
-				42CD0ECB147D8FF60000361E /* Viewport.cpp in Sources */,
 				428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */,
 				4208DEE914A4079F00D3C511 /* Image.cpp in Sources */,
 				4201819014A41B18008C3F56 /* MeshBatch.cpp in Sources */,
@@ -1292,6 +1291,7 @@
 				5BD5266F150F8258004C9099 /* PhysicsCharacter.cpp in Sources */,
 				5BD52673150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */,
 				5BBE143E1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */,
+				42554EA1152BC35C000ED910 /* PhysicsCollisionShape.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1360,7 +1360,6 @@
 				5B04C56D14BFCFE100EB0071 /* Vector4.cpp in Sources */,
 				5B04C56E14BFCFE100EB0071 /* VertexAttributeBinding.cpp in Sources */,
 				5B04C56F14BFCFE100EB0071 /* VertexFormat.cpp in Sources */,
-				5B04C57014BFCFE100EB0071 /* Viewport.cpp in Sources */,
 				5B04C57114BFCFE100EB0071 /* SceneLoader.cpp in Sources */,
 				5B04C57214BFCFE100EB0071 /* Image.cpp in Sources */,
 				5B04C57314BFCFE100EB0071 /* MeshBatch.cpp in Sources */,
@@ -1381,6 +1380,7 @@
 				5BC4E755150F843D00CBE1C0 /* Theme.cpp in Sources */,
 				5BC4E757150F843D00CBE1C0 /* VerticalLayout.cpp in Sources */,
 				5BBE143F1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */,
+				42554EA2152BC35C000ED910 /* PhysicsCollisionShape.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

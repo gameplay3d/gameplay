@@ -143,10 +143,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\..\gameplay\res\logo_powered_white.png" />
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
     <None Include="res\boy.animation" />
-    <None Include="res\gameplay_loading.png" />
     <None Include="res\scene.dae" />
     <None Include="res\scene.material" />
     <None Include="res\scene.physics" />

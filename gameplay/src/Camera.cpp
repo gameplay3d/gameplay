@@ -243,24 +243,13 @@ const Frustum& Camera::getFrustum() const
     return _bounds;
 }
 
-void Camera::project(const Viewport* viewport, const Vector3& position, float* x, float* y, float* depth)
+void Camera::project(const Rectangle& viewport, const Vector3& position, float* x, float* y, float* depth)
 {
     // Determine viewport coords to use.
-    float vpx, vpy, vpw, vph;
-    if (viewport)
-    {
-        vpx = viewport->getX();
-        vpy = viewport->getY();
-        vpw = viewport->getWidth();
-        vph = viewport->getHeight();
-    }
-    else
-    {
-        vpx = 0;
-        vpy = 0;
-        vpw = Game::getInstance()->getWidth();
-        vph = Game::getInstance()->getHeight();
-    }
+    float vpx = viewport.x;
+    float vpy = viewport.y;
+    float vpw = viewport.width;
+    float vph = viewport.height;
 
     // Transform the point to clip-space.
     Vector4 clipPos;
@@ -280,24 +269,13 @@ void Camera::project(const Viewport* viewport, const Vector3& position, float* x
     }
 }
 
-void Camera::unproject(const Viewport* viewport, float x, float y, float depth, Vector3* dst)
+void Camera::unproject(const Rectangle& viewport, float x, float y, float depth, Vector3* dst)
 {
     // Determine viewport coords to use.
-    float vpx, vpy, vpw, vph;
-    if (viewport)
-    {
-        vpx = viewport->getX();
-        vpy = viewport->getY();
-        vpw = viewport->getWidth();
-        vph = viewport->getHeight();
-    }
-    else
-    {
-        vpx = 0;
-        vpy = 0;
-        vpw = Game::getInstance()->getWidth();
-        vph = Game::getInstance()->getHeight();
-    }
+    float vpx = viewport.x;
+    float vpy = viewport.y;
+    float vpw = viewport.width;
+    float vph = viewport.height;
     
     // Create our screen space position in NDC.
     Vector4 screen(
@@ -325,7 +303,7 @@ void Camera::unproject(const Viewport* viewport, float x, float y, float depth, 
     dst->set(screen.x, screen.y, screen.z);
 }
 
-void Camera::pickRay(const Viewport* viewport, float x, float y, Ray* dst)
+void Camera::pickRay(const Rectangle& viewport, float x, float y, Ray* dst)
 {
     // Get the world-space position at the near clip plane.
     Vector3 nearPoint;
@@ -341,6 +319,26 @@ void Camera::pickRay(const Viewport* viewport, float x, float y, Ray* dst)
     direction.normalize();
 
     dst->set(nearPoint, direction);
+}
+
+Camera* Camera::clone(NodeCloneContext &context) const
+{
+    Camera* cameraClone = NULL;
+    if (getCameraType() == PERSPECTIVE)
+    {
+        cameraClone = createPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
+    }
+    else if (getCameraType() == ORTHOGRAPHIC)
+    {
+        cameraClone = createOrthographic(getZoomX(), getZoomY(), getAspectRatio(), _nearPlane, _farPlane);
+    }
+    assert(cameraClone);
+
+    if (Node* node = context.findClonedNode(getNode()))
+    {
+        cameraClone->setNode(node);
+    }
+    return cameraClone;
 }
 
 void Camera::transformChanged(Transform* transform, long cookie)

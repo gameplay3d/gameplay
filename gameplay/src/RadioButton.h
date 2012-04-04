@@ -44,14 +44,14 @@ public:
      * @param width The width to draw the radio button icon.
      * @param height The height to draw the radio button icon.
      */
-    void setIconSize(float width, float height);
+    void setImageSize(float width, float height);
 
     /**
      * Get the size at which the radio button icon will be drawn.
      *
      * @return The size of the radio button icon.
      */
-    const Vector2& getIconSize() const;
+    const Vector2& getImageSize() const;
 
     /**
      * Add a listener to be notified of specific events affecting
@@ -83,14 +83,14 @@ protected:
 
     void update(const Rectangle& clip);
 
-    void drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip);
+    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
     // Clear the _selected flag of all radio buttons in the given group.
     static void clearSelected(const std::string& groupId);
 
     std::string _groupId;
     bool _selected;
-    Vector2 _iconSize;
+    Vector2 _imageSize;
 
 private:
     RadioButton(const RadioButton& copy);

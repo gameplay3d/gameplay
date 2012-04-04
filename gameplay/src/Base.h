@@ -98,7 +98,6 @@ extern void printError(const char* format, ...);
 #endif
 #define WARN(x) printError(x)
 #define WARN_VARG(x, ...) printError(x, __VA_ARGS__)
-
 #endif
 
 // Bullet Physics
@@ -144,7 +143,7 @@ extern void printError(const char* format, ...);
 #define MATH_LOG2E                  1.442695040888963387f
 #define MATH_PI                     3.14159265358979323846f
 #define MATH_PIOVER2                1.57079632679489661923f
-#define MATH_PIOVER4                M_PI_4
+#define MATH_PIOVER4                0.785398163397448309616f
 #define MATH_PIX2                   6.28318530717958647693f
 #define MATH_EPSILON                0.000001f
 #define MATH_CLAMP(x, lo, hi)       ((x < lo) ? lo : ((x > hi) ? hi : x))
@@ -204,10 +203,10 @@ extern void printError(const char* format, ...);
     #define OPENGL_ES_PVR    
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
-	#define GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG                      0x8C00
-	#define GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG                      0x8C01
-	#define GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG                     0x8C02
-	#define GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG                     0x8C03
+    #define GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG                      0x8C00
+    #define GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG                      0x8C01
+    #define GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG                     0x8C02
+    #define GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG                     0x8C03
     #include <GL/glew.h>
 #elif __APPLE__
     #include "TargetConditionals.h"
@@ -320,6 +319,25 @@ extern GLenum __gl_error_code;
 #ifdef __ANDROID__
 #include <android_native_app_glue.h>
 extern void amain(struct android_app* state);
+#endif
+
+
+// Assert has special behavior on Windows (for Visual Studio).
+#ifdef WIN32
+#ifdef assert
+#undef assert
+#endif
+#ifdef _DEBUG
+#define assert(expression) do { \
+    if (!(expression)) \
+    { \
+        printError("Assertion \'" #expression "\' failed."); \
+        __debugbreak(); \
+    } } while (0)
+
+#else
+#define assert(expression) do { (void)sizeof(expression); } while (0)
+#endif
 #endif
 
 #endif

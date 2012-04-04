@@ -2,9 +2,8 @@
 #define PHYSICSCHARACTER_H_
 
 #include "Node.h"
-#include "PhysicsRigidBody.h"
-#include "PhysicsMotionState.h"
-#include "Vector3.h"
+#include "PhysicsGhostObject.h"
+#include "Properties.h"
 
 namespace gameplay
 {
@@ -24,9 +23,9 @@ namespace gameplay
  * clips can be setup for typical character animations, such as walk, run, jump,
  * etc; and the controller will handle blending between these animations as needed.
  */
-class PhysicsCharacter : public PhysicsCollisionObject, public Transform::Listener, public btActionInterface
+class PhysicsCharacter : public PhysicsGhostObject, public btActionInterface
 {
-    friend class PhysicsController;
+    friend class Node;
 
 public:
 
@@ -55,15 +54,6 @@ public:
      * @see PhysicsCollisionObject#getType
      */
     PhysicsCollisionObject::Type getType() const;
-
-    /**
-     * Returns the character node for this PhysicsCharacter.
-     *
-     * @return The character Node.
-     *
-     * @see PhysicsCollisionObject::getNode.
-     */
-    Node* getNode() const;
 
     /**
      * Returns whether physics simulation is enabled for the physics character.
@@ -261,11 +251,6 @@ public:
     void jump(float height);
 
     /**
-     * @see Transform::Listener::transformChanged
-     */
-    void transformChanged(Transform* transform, long cookie);
-
-    /**
      * @see btActionInterface::updateAction
      */
     void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
@@ -273,7 +258,7 @@ public:
     /**
      * @see btActionInterface::debugDraw
      */
-	void debugDraw(btIDebugDraw* debugDrawer);
+    void debugDraw(btIDebugDraw* debugDrawer);
 
 protected:
 
@@ -281,11 +266,6 @@ protected:
      * @see PhysicsCollisionObject::getCollisionObject
      */
     btCollisionObject* getCollisionObject() const;
-
-    /**
-     * @see PhysicsCollisionObject::getCollisionShape
-     */
-    btCollisionShape* getCollisionShape() const;
 
 private:
 
@@ -307,11 +287,9 @@ private:
      * Use PhysicsController::createCharacter to create physics characters.
      *
      * @param node Scene node that represents the character.
-     * @param radius Radius of capsule volume used for character collisions.
-     * @param height Height of the capsule volume used for character collisions.
-     * @param center Center point of the capsule volume for the character.
+     * @param shape Physis collision shape definition.
      */
-    PhysicsCharacter(Node* node, float radius, float height, const Vector3 center = Vector3::zero());
+    PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape);
 
     /**
      * Destructor.
@@ -319,6 +297,16 @@ private:
      * Use PhysicsController::destroyCharacter to destroy physics characters.
      */
     virtual ~PhysicsCharacter();
+
+    /**
+     * Creates a physics character from the specified properties object.
+     * 
+     * @param node The node to create a physics character for; note that the node must have
+     *      a model attached to it prior to creating a physics character for it.
+     * @param properties The properties object defining the physics character (must have namespace equal to 'character').
+     * @return The newly created physics character, or <code>NULL</code> if the physics character failed to load.
+     */
+    static PhysicsCharacter* create(Node* node, Properties* properties);
 
     void updateCurrentVelocity();
 
@@ -334,8 +322,6 @@ private:
 
     bool fixCollision(btCollisionWorld* world);
 
-    Node* _node;
-    PhysicsMotionState* _motionState;
     btVector3 _moveVelocity;
     float _forwardVelocity;
     float _rightVelocity;
@@ -347,10 +333,7 @@ private:
     btVector3 _currentPosition;
     std::map<const char*, CharacterAnimation> _animations;
     std::map<unsigned int, CharacterAnimation*> _layers;
-    btPairCachingGhostObject* _ghostObject;
-    btConvexShape* _collisionShape;
-    btManifoldArray	_manifoldArray;
-    int _ignoreTransformChanged;
+    btManifoldArray _manifoldArray;
     float _stepHeight;
     float _slopeAngle;
     float _cosSlopeAngle;

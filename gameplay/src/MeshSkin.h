@@ -10,6 +10,7 @@ namespace gameplay
 class Package;
 class Model;
 class Joint;
+class Node;
 
 /**
  * Represents the skin for a mesh.
@@ -116,9 +117,26 @@ private:
     MeshSkin();
 
     /**
+     * Hidden copy constructor.
+     */
+    MeshSkin(const MeshSkin&);
+
+    /**
      * Destructor.
      */
     ~MeshSkin();
+    
+    /**
+     * Hidden copy assignment operator.
+     */
+    MeshSkin& operator=(const MeshSkin&);
+
+    /**
+     * Clones the MeshSkin and the joints that it references.
+     * 
+     * @return The newly created MeshSkin.
+     */
+    MeshSkin* clone() const;
 
     /**
      * Sets the number of joints that can be stored in this skin.
@@ -137,6 +155,13 @@ private:
     void setJoint(Joint* joint, unsigned int index);
 
     /**
+     * Sets the root node of this mesh skin.
+     * 
+     * @param node The node to set as the root node, may be NULL.
+     */
+    void setRootNode(Node* node);
+
+    /**
      * Clears the list of joints and releases each joint.
      */
     void clearJoints();
@@ -144,6 +169,10 @@ private:
     Matrix _bindShape;
     std::vector<Joint*> _joints;
     Joint* _rootJoint;
+    // Pointer to the root node of the mesh skin.
+    // The purpose is so that the joint hierarchy doesn't need to be in the scene.
+    // If the joints are not in the scene then something has to hold a reference to it.
+    Node* _rootNode;
 
     // Pointer to the array of palette matrices.
     // This array is passed to the vertex shader as a uniform.

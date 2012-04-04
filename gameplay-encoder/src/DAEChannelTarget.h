@@ -55,6 +55,7 @@ public:
     void getPropertyName(size_t index, std::string* str);
 
 private:
+    
     /**
      * The channel element.
      */

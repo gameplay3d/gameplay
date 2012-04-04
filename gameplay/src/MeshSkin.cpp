@@ -9,7 +9,7 @@ namespace gameplay
 {
 
 MeshSkin::MeshSkin()
-    : _rootJoint(NULL), _matrixPalette(NULL), _model(NULL)
+    : _rootJoint(NULL), _rootNode(NULL), _matrixPalette(NULL), _model(NULL)
 {
 }
 
@@ -55,6 +55,37 @@ Joint* MeshSkin::getJoint(const char* id) const
     }
 
     return NULL;
+}
+
+MeshSkin* MeshSkin::clone() const
+{
+    MeshSkin* skin = new MeshSkin();
+    skin->_bindShape = _bindShape;
+    if (_rootNode && _rootJoint)
+    {
+        const unsigned int jointCount = getJointCount();
+        skin->setJointCount(jointCount);
+
+        assert(skin->_rootNode == NULL);
+        skin->_rootNode = _rootNode->clone();
+        Node* node = skin->_rootNode->findNode(_rootJoint->getId());
+        assert(node);
+        skin->_rootJoint = static_cast<Joint*>(node);
+        for (unsigned int i = 0; i < jointCount; ++i)
+        {
+            Joint* oldJoint = getJoint(i);
+            
+            Joint* newJoint = static_cast<Joint*>(skin->_rootJoint->findNode(oldJoint->getId()));
+            if (!newJoint)
+            {
+                if (strcmp(skin->_rootJoint->getId(), oldJoint->getId()) == 0)
+                    newJoint = static_cast<Joint*>(skin->_rootJoint);
+            }
+            assert(newJoint);
+            skin->setJoint(newJoint, i);
+        }
+    }
+    return skin;
 }
 
 void MeshSkin::setJointCount(unsigned int jointCount)
@@ -145,6 +176,21 @@ void MeshSkin::setRootJoint(Joint* joint)
     {
         _rootJoint->getParent()->addListener(this, 1);
     }
+
+    Node* newRootNode = _rootJoint;
+    if (newRootNode)
+    {
+        // Find the top level parent node of the root joint
+        for (Node* node = newRootNode->getParent(); node != NULL; node = node->getParent())
+        {
+            if (node->getParent() == NULL)
+            {
+                newRootNode = node;
+                break;
+            }
+        }
+    }
+    setRootNode(newRootNode);
 }
 
 void MeshSkin::transformChanged(Transform* transform, long cookie)
@@ -177,6 +223,19 @@ int MeshSkin::getJointIndex(Joint* joint) const
     }
 
     return -1;
+}
+
+void MeshSkin::setRootNode(Node* node)
+{
+    if (_rootNode != node)
+    {
+        SAFE_RELEASE(_rootNode);
+        _rootNode = node;
+        if (_rootNode)
+        {
+            _rootNode->addRef();
+        }
+    }
 }
 
 void MeshSkin::clearJoints()

@@ -70,6 +70,7 @@
         <copy file="../res/quad.vsh" tofile="assets/res/quad.vsh"/>
 		<copy file="../res/textured.fsh" tofile="assets/res/textured.fsh"/>
         <copy file="../res/textured.vsh" tofile="assets/res/textured.vsh"/>
+        <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
     </target>
 
 
