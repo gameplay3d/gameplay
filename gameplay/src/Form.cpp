@@ -168,18 +168,18 @@ namespace gameplay
             {
                 _frameBuffer->bind();
 
-				Game* game = Game::getInstance();
-				Rectangle prevViewport = game->getViewport();
+                Game* game = Game::getInstance();
+                Rectangle prevViewport = game->getViewport();
                 
-				game->setViewport(Rectangle(_position.x, _position.y, _size.x, _size.y));
+                game->setViewport(Rectangle(_position.x, _position.y, _size.x, _size.y));
 
                 draw(_theme->getSpriteBatch(), _clip);
 
                 // Rebind the default framebuffer and game viewport.
                 FrameBuffer::bindDefault();
 
-				// restore the previous game viewport
-				game->setViewport(prevViewport);
+                // restore the previous game viewport
+                game->setViewport(prevViewport);
             }
 
             _quad->draw();
@@ -299,7 +299,7 @@ namespace gameplay
 
                         // Unproject point into world space.
                         Ray ray;
-						camera->pickRay(Game::getInstance()->getViewport(), x, y, &ray);
+                        camera->pickRay(Game::getInstance()->getViewport(), x, y, &ray);
 
                         // Find the quad's plane.
                         // We know its normal is the quad's forward vector.
