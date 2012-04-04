@@ -41,7 +41,7 @@ public:
      *
      * @param array An array containing the elements of the vector in the order x, y.
      */
-    Vector2(float* array);
+    Vector2(const float* array);
 
     /**
      * Constructs a vector that describes the direction between the specified points.
@@ -231,8 +231,10 @@ public:
      * after calling this method will be 1.0f). If the vector
      * already has unit length or if the length of the vector
      * is zero, this method does nothing.
+     * 
+     * @return This vector, after the normalization occurs.
      */
-    void normalize();
+    Vector2& normalize();
 
     /**
      * Normalizes this vector and stores the result in dst.
@@ -280,7 +282,7 @@ public:
      *
      * @param array An array containing the elements of the vector in the order x, y.
      */
-    void set(float* array);
+    void set(const float* array);
 
     /**
      * Sets the elements of this vector to those in the specified vector.

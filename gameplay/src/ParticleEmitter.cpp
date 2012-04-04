@@ -52,10 +52,9 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
 
     if (!texture)
     {
-        // Use default texture.
-        texture = Texture::create("../gameplay/res/textures/particle-default.png", true);
+        LOG_ERROR_VARG("Error creating ParticleEmitter: Could not read texture file: %s", textureFile);
+        return NULL;
     }
-    assert(texture);
 
     // Use default SpriteBatch material.
     SpriteBatch* batch =  SpriteBatch::create(texture, NULL, particleCountMax);

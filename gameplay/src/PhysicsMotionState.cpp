@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "PhysicsMotionState.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -22,7 +23,7 @@ PhysicsMotionState::~PhysicsMotionState()
 
 void PhysicsMotionState::getWorldTransform(btTransform &transform) const
 {
-    if (_node->getRigidBody() && _node->getRigidBody()->isKinematic())
+    if (_node->getCollisionObject() && _node->getCollisionObject()->isKinematic())
         updateTransformFromNode();
 
     transform = _centerOfMassOffset.inverse() * _worldTransform;

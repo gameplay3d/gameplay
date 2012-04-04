@@ -12,6 +12,12 @@ namespace gameplay
 
 /**
  * Helper class for loading scenes from .scene files.
+ *
+ * @todo Add support for loading ghost objects and characters for nodes.
+ * @todo Add support for explicitly specifying collision shapes for rigid bodies/ghost objects/characters.
+ * @todo Consider supporting 'rigidbodymodel' on models/meshes that are not part of the scene to allow
+ *        mesh data to be exported from a modelling tool for the sole purpose of representing a physics
+ *        rigid body, but not have it get loaded into the scene and rendering context.
  */
 class SceneLoader
 {
@@ -43,11 +49,14 @@ private:
             AUDIO = 1,
             MATERIAL = 2,
             PARTICLE = 4,
-            RIGIDBODY = 8,
-            TRANSLATE = 16,
-            ROTATE = 32,
-            SCALE = 64,
-            URL = 128
+            CHARACTER = 8,
+            GHOST = 16,
+            RIGIDBODY = 32,
+            TRANSLATE = 64,
+            ROTATE = 128,
+            SCALE = 256,
+            URL = 512,
+            TRANSPARENT = 1024
         };
 
         SceneNodeProperty(Type type, std::string file, std::string id, int index) : _type(type), _file(file), _id(id), _index(index) { }

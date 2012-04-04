@@ -54,6 +54,16 @@ protected:
     static Joint* create(const char* id);
 
     /**
+     * Clones a single node and its data but not its children.
+     * This method returns a node pointer but actually creates a Joint.
+     * 
+     * @param context The clone context.
+     * 
+     * @return Pointer to the newly created joint.
+     */
+    virtual Node* cloneSingleNode(NodeCloneContext &context) const;
+
+    /**
      * Sets the inverse bind pose matrix.
      * 
      * @param m Matrix representing the inverse bind pose for this Joint.
@@ -63,6 +73,20 @@ protected:
     void updateJointMatrix(const Matrix& bindShape, Vector4* matrixPalette);
 
     void transformChanged();
+
+private:
+
+    /**
+     * Hidden copy constructor.
+     */
+    Joint(const Joint& copy);
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Joint& operator=(const Joint&);
+
+protected:
 
     Matrix _bindPose;
     bool _jointMatrixDirty;

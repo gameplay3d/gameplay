@@ -6,12 +6,60 @@
 namespace gameplay
 {
 
-PhysicsCollisionObject::PhysicsCollisionObject()
+// Internal class used to implement the collidesWith(PhysicsCollisionObject*) function.
+struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
+{
+    btScalar addSingleResult(btManifoldPoint& cp, 
+        const btCollisionObject* a, int partIdA, int indexA, 
+        const btCollisionObject* b, int partIdB, int indexB)
+    {
+        result = true;
+        return 0.0f;
+    }
+
+    bool result;
+};
+
+PhysicsCollisionObject::PhysicsCollisionObject(Node* node)
+    : _node(node), _motionState(NULL), _collisionShape(NULL)
 {
 }
 
 PhysicsCollisionObject::~PhysicsCollisionObject()
 {
+    SAFE_DELETE(_motionState);
+
+    Game::getInstance()->getPhysicsController()->destroyShape(_collisionShape);
+}
+
+PhysicsCollisionShape::Type PhysicsCollisionObject::getShapeType() const
+{
+    return getCollisionShape()->getType();
+}
+
+Node* PhysicsCollisionObject::getNode() const
+{
+    return _node;
+}
+
+PhysicsCollisionShape* PhysicsCollisionObject::getCollisionShape() const
+{
+    return _collisionShape;
+}
+
+PhysicsMotionState* PhysicsCollisionObject::getMotionState() const
+{
+    return _motionState;
+}
+
+bool PhysicsCollisionObject::isKinematic() const
+{
+    return getCollisionObject()->isKinematicObject();
+}
+
+bool PhysicsCollisionObject::isDynamic() const
+{
+    return !getCollisionObject()->isStaticOrKinematicObject();
 }
 
 void PhysicsCollisionObject::addCollisionListener(CollisionListener* listener, PhysicsCollisionObject* object)
@@ -53,14 +101,6 @@ bool PhysicsCollisionObject::CollisionPair::operator < (const CollisionPair& col
         return objectB < collisionPair.objectB;
 
     return false;
-}
-
-btScalar PhysicsCollisionObject::CollidesWithCallback::addSingleResult(btManifoldPoint& cp,
-    const btCollisionObject* a, int partIdA, int indexA, 
-    const btCollisionObject* b, int partIdB, int indexB)
-{
-    result = true;
-    return 0.0f;
 }
 
 }
