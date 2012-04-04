@@ -36,7 +36,7 @@ LongboardGame::~LongboardGame()
 void LongboardGame::initialize()
 {
     // Display the gameplay splash screen for at least 2.4 seconds.
-    displaySplash(this, &LongboardGame::drawSplash, NULL, 2400L);
+    displayScreen(this, &LongboardGame::drawSplash, NULL, 2400L);
 
     // Create our render state block that will be reused across all materials
     _stateBlock = RenderState::StateBlock::create();
