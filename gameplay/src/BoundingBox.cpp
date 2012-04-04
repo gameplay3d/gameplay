@@ -57,9 +57,9 @@ void BoundingBox::getCorners(Vector3* dst) const
 
 Vector3 BoundingBox::getCenter() const
 {
-	Vector3 center;
-	getCenter(&center);
-	return center;
+    Vector3 center;
+    getCenter(&center);
+    return center;
 }
 
 void BoundingBox::getCenter(Vector3* dst) const

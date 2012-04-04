@@ -107,7 +107,7 @@ public:
 
 protected:
     
-	Form();
+    Form();
 
     virtual ~Form();
 

@@ -258,7 +258,7 @@ public:
     /**
      * @see btActionInterface::debugDraw
      */
-	void debugDraw(btIDebugDraw* debugDrawer);
+    void debugDraw(btIDebugDraw* debugDrawer);
 
 protected:
 
@@ -287,9 +287,9 @@ private:
      * Use PhysicsController::createCharacter to create physics characters.
      *
      * @param node Scene node that represents the character.
-	 * @param shape Physis collision shape definition.
+     * @param shape Physis collision shape definition.
      */
-	PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape);
+    PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape);
 
     /**
      * Destructor.
@@ -333,7 +333,7 @@ private:
     btVector3 _currentPosition;
     std::map<const char*, CharacterAnimation> _animations;
     std::map<unsigned int, CharacterAnimation*> _layers;
-    btManifoldArray	_manifoldArray;
+    btManifoldArray _manifoldArray;
     float _stepHeight;
     float _slopeAngle;
     float _cosSlopeAngle;

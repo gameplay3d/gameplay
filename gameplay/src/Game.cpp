@@ -93,7 +93,7 @@ bool Game::startup()
     if (_state != UNINITIALIZED)
         return false;
 
-	setViewport(Rectangle(0.0f, 0.0f, (float)_width, (float)_height));
+    setViewport(Rectangle(0.0f, 0.0f, (float)_width, (float)_height));
 
     RenderState::initialize();
 
@@ -217,8 +217,8 @@ void Game::frame()
 
 void Game::setViewport(const Rectangle& viewport)
 {
-	_viewport = viewport;
-	glViewport((GLuint)viewport.x, (GLuint)viewport.y, (GLuint)viewport.width, (GLuint)viewport.height); 
+    _viewport = viewport;
+    glViewport((GLuint)viewport.x, (GLuint)viewport.y, (GLuint)viewport.width, (GLuint)viewport.height); 
 }
 
 void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil)
