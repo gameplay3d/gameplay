@@ -288,8 +288,9 @@ private:
      *
      * @param node Scene node that represents the character.
      * @param shape Physis collision shape definition.
+     * @param mass The mass of the character.
      */
-    PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape);
+    PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape, float mass);
 
     /**
      * Destructor.
@@ -338,6 +339,7 @@ private:
     float _slopeAngle;
     float _cosSlopeAngle;
     bool _physicsEnabled;
+    float _mass;
 };
 
 }

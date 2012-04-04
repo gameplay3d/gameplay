@@ -7,6 +7,7 @@
 #include "Mouse.h"
 #include "FileSystem.h"
 #include "Package.h"
+#include "ScreenDisplayer.h"
 
 // Math
 #include "Rectangle.h"
@@ -69,6 +70,8 @@
 #include "PhysicsCollisionObject.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsCharacter.h"
+#include "PhysicsCollisionShape.h"
+#include "PhysicsGhostObject.h"
 
 // UI
 #include "Theme.h"

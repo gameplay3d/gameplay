@@ -1,6 +1,9 @@
 #ifndef FILEIO_H_
 #define FILEIO_H_
 
+#include <cstdio>
+#include <list>
+#include <vector>
 
 #include "Vector2.h"
 #include "Vector3.h"

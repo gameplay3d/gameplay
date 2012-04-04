@@ -73,8 +73,8 @@ SpaceshipGame::~SpaceshipGame()
 void SpaceshipGame::initialize()
 {
     // TODO: Not working on iOS
-    // Display the gameplay splash screen for at least 2.4 seconds.
-    displaySplash(this, &SpaceshipGame::drawSplash, NULL, 2400L);
+    // Display the gameplay splash screen for at least 1 second.
+    displayScreen(this, &SpaceshipGame::drawSplash, NULL, 1000L);
 
     // Create our render state block that will be reused across all materials
     _stateBlock = RenderState::StateBlock::create();
@@ -501,6 +501,19 @@ void SpaceshipGame::drawText()
         _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one(), _font->getSize());
     }
     _font->end();
+}
+
+void SpaceshipGame::keyEvent(Keyboard::KeyEvent evt, int key)
+{
+    if (evt == Keyboard::KEY_PRESS)
+    {
+        switch (key)
+        {
+        case Keyboard::KEY_ESCAPE:
+            end();
+            break;
+        }
+    }
 }
 
 void SpaceshipGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
