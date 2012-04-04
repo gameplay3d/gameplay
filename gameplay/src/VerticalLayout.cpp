@@ -44,9 +44,10 @@ namespace gameplay
     void VerticalLayout::update(const Container* container)
     {
         // Need border, padding.
-        Theme::Style* style = container->getStyle();
+        //Theme::Style* style = container->getStyle();
         Theme::Border border = container->getBorder(container->getState());
-        Theme::Padding padding = style->getPadding();
+        //Theme::Padding padding = style->getPadding();
+        Theme::Padding padding = container->getPadding();
 
         float yPosition = 0;
 
@@ -70,12 +71,12 @@ namespace gameplay
         {
             Control* control = controls.at(i);
 
-            const Rectangle& bounds = control->getBounds();
-            const Theme::Margin& margin = control->getStyle()->getMargin();
+            const Rectangle& bounds = control->getClipBounds();
+            const Theme::Margin& margin = control->getMargin();
 
             yPosition += margin.top;
 
-            control->setPosition(0, yPosition, 0L);
+            control->setPosition(0, yPosition);
             if (control->isDirty())
             {
                 control->update(container->getClip());

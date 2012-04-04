@@ -14,9 +14,9 @@ namespace gameplay
  *
  * The following properties are available for buttons:
  *
- * button <Button ID>
+ * button <buttonID>
  * {
- *      style       = <Style ID>
+ *      style       = <styleID>
  *      position    = <x, y>
  *      size        = <width, height>
  *      text        = <string>
@@ -27,6 +27,7 @@ class Button : public Label
     friend class Container;
 
 protected:
+
     /**
      * Create a button with a given style and properties.
      *
@@ -52,9 +53,11 @@ protected:
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     Button();
+
     virtual ~Button();
 
 private:
+
     Button(const Button& copy);
 };
 

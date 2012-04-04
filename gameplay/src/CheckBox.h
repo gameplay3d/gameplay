@@ -14,7 +14,7 @@ namespace gameplay
  *
  * The following properties are available for checkboxes:
  *
- * checkBox <CheckBox ID>
+ * checkBox <checkBoxID>
  * {
  *      style       = <Style ID>
  *      position    = <x, y>
@@ -24,7 +24,7 @@ namespace gameplay
  *      iconSize    = <width, height>   // The size to draw the checkbox icon, if different from its size in the texture.
  * }
  */
-class CheckBox : public Button //, public AnimationClip::Listener
+class CheckBox : public Button
 {
     friend class Container;
 
