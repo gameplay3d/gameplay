@@ -55,10 +55,9 @@ namespace gameplay
     {
         if (duration > 0L)
         {
-            AnimationController* animationController = Game::getInstance()->getAnimationController();
             float from[2] = { _position.x, _position.y };
             float to[2] = { x, y };
-            Animation* moveAnimation = animationController->createAnimationFromTo("Control::setPosition", this, Control::ANIMATE_POSITION,
+            Animation* moveAnimation = this->createAnimationFromTo("Control::setPosition", Control::ANIMATE_POSITION,
                 from, to, gameplay::Curve::QUADRATIC_IN_OUT, duration);
             AnimationClip* clip = moveAnimation->getClip();
             clip->play();
@@ -80,10 +79,9 @@ namespace gameplay
     {
         if (duration > 0L)
         {
-            AnimationController* animationController = Game::getInstance()->getAnimationController();
             float from[2] = { _size.x, _size.y };
             float to[2] = { width, height };
-            Animation* resizeAnimation = animationController->createAnimationFromTo("Control::setSize", this, Control::ANIMATE_SIZE,
+            Animation* resizeAnimation = this->createAnimationFromTo("Control::setSize", Control::ANIMATE_SIZE,
                 from, to, gameplay::Curve::QUADRATIC_IN_OUT, duration);
             AnimationClip* clip = resizeAnimation->getClip();
             clip->play();
@@ -115,7 +113,7 @@ namespace gameplay
                 float to[1] = { opacity };
 
                 // Fun with chaining.
-                Game::getInstance()->getAnimationController()->createAnimationFromTo("Overlay::setOpacity", overlays[i], Theme::Style::Overlay::ANIMATE_OPACITY,
+                overlays[i]->createAnimationFromTo("Overlay::setOpacity", Theme::Style::Overlay::ANIMATE_OPACITY,
                     from, to, gameplay::Curve::QUADRATIC_IN_OUT, duration)->getClip()->play();
             }
             else
@@ -130,7 +128,7 @@ namespace gameplay
             float from[1] = { 0.0f };
             float to[1] = { 1.0f };
 
-            Game::getInstance()->getAnimationController()->createAnimationFromTo("Control::setOpacity", this, Control::ANIMATE_OPACITY,
+            this->createAnimationFromTo("Control::setOpacity", Control::ANIMATE_OPACITY,
                 from, to, gameplay::Curve::QUADRATIC_IN_OUT, duration)->getClip()->play();
         }
         
