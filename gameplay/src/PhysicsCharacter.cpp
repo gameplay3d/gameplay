@@ -55,11 +55,11 @@ protected:
     btScalar _minSlopeDot;
 };
 
-PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape)
+PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape, float mass)
     : PhysicsGhostObject(node, shape), _moveVelocity(0,0,0), _forwardVelocity(0.0f), _rightVelocity(0.0f),
     _fallVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
     _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0),
-    _stepHeight(0.1f), _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true)
+    _stepHeight(0.1f), _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true), _mass(mass)
 {
     setMaxSlopeAngle(45.0f);
 
@@ -94,8 +94,20 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
         return NULL;
     }
 
+    // Load the character's parameters.
+    properties->rewind();
+    float mass = 1.0f;
+    const char* name = NULL;
+    while ((name = properties->getNextProperty()) != NULL)
+    {
+        if (strcmp(name, "mass") == 0)
+        {
+            mass = properties->getFloat();
+        }
+    }
+
     // Create the physics character.
-    PhysicsCharacter* character = new PhysicsCharacter(node, *shape);
+    PhysicsCharacter* character = new PhysicsCharacter(node, *shape, mass);
     SAFE_DELETE(shape);
 
     return character;
@@ -493,14 +505,14 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 
         if (callback.hasHit())
         {
-            /*Vector3 normal(callback.m_hitNormalWorld.x(), callback.m_hitNormalWorld.y(), callback.m_hitNormalWorld.z());
+            Vector3 normal(callback.m_hitNormalWorld.x(), callback.m_hitNormalWorld.y(), callback.m_hitNormalWorld.z());
             PhysicsCollisionObject* o = Game::getInstance()->getPhysicsController()->getCollisionObject(callback.m_hitCollisionObject);
             if (o->getType() == PhysicsCollisionObject::RIGID_BODY && o->isDynamic())
             {
                 PhysicsRigidBody* rb = static_cast<PhysicsRigidBody*>(o);
                 normal.normalize();
-                rb->applyImpulse(-normal);
-            }*/
+                rb->applyImpulse(_mass * -normal * velocity.length());
+            }
 
             updateTargetPositionFromCollision(targetPosition, callback.m_hitNormalWorld);
 
@@ -592,9 +604,6 @@ btVector3 perpindicularComponent(const btVector3& direction, const btVector3& no
 
 void PhysicsCharacter::updateTargetPositionFromCollision(btVector3& targetPosition, const btVector3& collisionNormal)
 {
-    //btScalar tangentMag = 0.0;
-    //btScalar normalMag = 1.0;
-
     btVector3 movementDirection = targetPosition - _currentPosition;
     btScalar movementLength = movementDirection.length();
 
@@ -605,21 +614,16 @@ void PhysicsCharacter::updateTargetPositionFromCollision(btVector3& targetPositi
         btVector3 reflectDir = computeReflectionDirection(movementDirection, collisionNormal);
         reflectDir.normalize();
 
-        //btVector3 parallelDir = parallelComponent(reflectDir, collisionNormal);
         btVector3 perpindicularDir = perpindicularComponent(reflectDir, collisionNormal);
-
         targetPosition = _currentPosition;
-        /*if (tangentMag != 0.0)
-        {
-            btVector3 parComponent = parallelDir * btScalar (tangentMag*movementLength);
-            targetPosition +=  parComponent;
-        }*/
 
-        //if (normalMag != 0.0)
-        //{
-            btVector3 perpComponent = perpindicularDir * btScalar (/*normalMag **/ movementLength);
+        // Disallow the character from moving up during collision recovery (using an arbitrary reasonable epsilon).
+        // Note that this will need to be generalized to allow for an arbitrary up axis.
+        if (perpindicularDir.y() < _stepHeight + 0.001)
+        {
+            btVector3 perpComponent = perpindicularDir * movementLength;
             targetPosition += perpComponent;
-        //}
+        }
     }
 }
 

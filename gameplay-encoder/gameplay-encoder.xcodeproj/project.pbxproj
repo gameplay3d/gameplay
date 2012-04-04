@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		42475D7C14720ECE00610A6A /* libdom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42475D7B14720ECE00610A6A /* libdom.a */; };
+		4251B12C152D044B002F6199 /* Curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4251B128152D044B002F6199 /* Curve.cpp */; };
 		42783423148D6F7500A6E27F /* FBXSceneEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4278341E148D6F7500A6E27F /* FBXSceneEncoder.cpp */; };
 		4283905914896E6C00E2B2F5 /* BoundingVolume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4283905714896E6C00E2B2F5 /* BoundingVolume.cpp */; };
-		4283906314896F1600E2B2F5 /* Curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4283906114896F1600E2B2F5 /* Curve.cpp */; };
 		42C8EE0A14724CD700E43619 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDB714724CD700E43619 /* Animation.cpp */; };
 		42C8EE0B14724CD700E43619 /* AnimationChannel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDB914724CD700E43619 /* AnimationChannel.cpp */; };
 		42C8EE0C14724CD700E43619 /* Animations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDBB14724CD700E43619 /* Animations.cpp */; };
@@ -75,6 +75,10 @@
 /* Begin PBXFileReference section */
 		42475CE6147208A000610A6A /* gameplay-encoder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "gameplay-encoder"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42475D7B14720ECE00610A6A /* libdom.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdom.a; path = "../external-deps/collada-dom/lib/macos/libdom.a"; sourceTree = "<group>"; };
+		4251B128152D044B002F6199 /* Curve.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Curve.cpp; path = src/Curve.cpp; sourceTree = SOURCE_ROOT; };
+		4251B129152D044B002F6199 /* Curve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Curve.h; path = src/Curve.h; sourceTree = SOURCE_ROOT; };
+		4251B12A152D044B002F6199 /* Curve.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Curve.inl; path = src/Curve.inl; sourceTree = SOURCE_ROOT; };
+		4251B12B152D044B002F6199 /* Quaternion.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Quaternion.inl; path = src/Quaternion.inl; sourceTree = SOURCE_ROOT; };
 		4278341E148D6F7500A6E27F /* FBXSceneEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FBXSceneEncoder.cpp; path = src/FBXSceneEncoder.cpp; sourceTree = SOURCE_ROOT; };
 		4278341F148D6F7500A6E27F /* FBXSceneEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBXSceneEncoder.h; path = src/FBXSceneEncoder.h; sourceTree = SOURCE_ROOT; };
 		42783420148D6F7500A6E27F /* Vector2.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Vector2.inl; path = src/Vector2.inl; sourceTree = SOURCE_ROOT; };
@@ -82,8 +86,6 @@
 		42783422148D6F7500A6E27F /* Vector4.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Vector4.inl; path = src/Vector4.inl; sourceTree = SOURCE_ROOT; };
 		4283905714896E6C00E2B2F5 /* BoundingVolume.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BoundingVolume.cpp; path = src/BoundingVolume.cpp; sourceTree = SOURCE_ROOT; };
 		4283905814896E6C00E2B2F5 /* BoundingVolume.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BoundingVolume.h; path = src/BoundingVolume.h; sourceTree = SOURCE_ROOT; };
-		4283906114896F1600E2B2F5 /* Curve.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Curve.cpp; path = ../gameplay/src/Curve.cpp; sourceTree = "<group>"; };
-		4283906214896F1600E2B2F5 /* Curve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Curve.h; path = ../gameplay/src/Curve.h; sourceTree = "<group>"; };
 		42C8EDB714724CD700E43619 /* Animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Animation.cpp; path = src/Animation.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDB814724CD700E43619 /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Animation.h; path = src/Animation.h; sourceTree = SOURCE_ROOT; };
 		42C8EDB914724CD700E43619 /* AnimationChannel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AnimationChannel.cpp; path = src/AnimationChannel.cpp; sourceTree = SOURCE_ROOT; };
@@ -194,7 +196,6 @@
 		42475CDB147208A000610A6A = {
 			isa = PBXGroup;
 			children = (
-				4283906414896F3000E2B2F5 /* gameplay */,
 				42475CE9147208A000610A6A /* src */,
 				427D4F44147DC9080076760E /* Libraries */,
 				42475CE7147208A000610A6A /* Products */,
@@ -224,6 +225,9 @@
 				4283905814896E6C00E2B2F5 /* BoundingVolume.h */,
 				42C8EDBF14724CD700E43619 /* Camera.cpp */,
 				42C8EDC014724CD700E43619 /* Camera.h */,
+				4251B128152D044B002F6199 /* Curve.cpp */,
+				4251B129152D044B002F6199 /* Curve.h */,
+				4251B12A152D044B002F6199 /* Curve.inl */,
 				42C8EDC314724CD700E43619 /* DAEChannelTarget.cpp */,
 				42C8EDC414724CD700E43619 /* DAEChannelTarget.h */,
 				42C8EDC514724CD700E43619 /* DAEOptimizer.cpp */,
@@ -273,6 +277,7 @@
 				42C8EDF114724CD700E43619 /* Object.h */,
 				42C8EDF214724CD700E43619 /* Quaternion.cpp */,
 				42C8EDF314724CD700E43619 /* Quaternion.h */,
+				4251B12B152D044B002F6199 /* Quaternion.inl */,
 				42C8EDF414724CD700E43619 /* Reference.cpp */,
 				42C8EDF514724CD700E43619 /* Reference.h */,
 				42C8EDF614724CD700E43619 /* ReferenceTable.cpp */,
@@ -316,15 +321,6 @@
 				42475D7B14720ECE00610A6A /* libdom.a */,
 			);
 			name = Libraries;
-			sourceTree = "<group>";
-		};
-		4283906414896F3000E2B2F5 /* gameplay */ = {
-			isa = PBXGroup;
-			children = (
-				4283906114896F1600E2B2F5 /* Curve.cpp */,
-				4283906214896F1600E2B2F5 /* Curve.h */,
-			);
-			name = gameplay;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -418,8 +414,8 @@
 				42C8EE3214724CD700E43619 /* Vertex.cpp in Sources */,
 				42C8EE3314724CD700E43619 /* VertexElement.cpp in Sources */,
 				4283905914896E6C00E2B2F5 /* BoundingVolume.cpp in Sources */,
-				4283906314896F1600E2B2F5 /* Curve.cpp in Sources */,
 				42783423148D6F7500A6E27F /* FBXSceneEncoder.cpp in Sources */,
+				4251B12C152D044B002F6199 /* Curve.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
