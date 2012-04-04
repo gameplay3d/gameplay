@@ -54,6 +54,8 @@ public:
     private:
 
         Definition();
+        Definition(const Definition& definition);
+        Definition& operator=(const Definition& definition);
 
         /**
          * Creates a PhysicsCollisionShape#Definition object from the given properties object (for the given node).
@@ -67,19 +69,19 @@ public:
         // Shape type.
         PhysicsCollisionShape::Type type;
 
-		// Shape data.
-		struct BoxData { float center[3], extents[3]; };
-		struct SphereData { float center[3]; float radius; };
-		struct CapsuleData { float center[3]; float radius, height; };
+        // Shape data.
+        struct BoxData { float center[3], extents[3]; };
+        struct SphereData { float center[3]; float radius; };
+        struct CapsuleData { float center[3]; float radius, height; };
 
         union
         {
-			BoxData box;
-			SphereData sphere;
-			CapsuleData capsule;
-			Image* heightfield;
-			Mesh* mesh;
-		} data;
+            BoxData box;
+            SphereData sphere;
+            CapsuleData capsule;
+            Image* heightfield;
+            Mesh* mesh;
+        } data;
 
         // Whether the shape definition is explicit, or if it is inherited from node bounds.
         bool isExplicit;
@@ -95,15 +97,15 @@ public:
      */
     PhysicsCollisionShape::Type getType() const;
 
-	/**
-	 * Returns the internal bullet physics shape object.
-	 *
-	 * @return The bullet shape object.
-	 */
-	btCollisionShape* getShape() const
-	{
-		return _shape;
-	}
+    /**
+     * Returns the internal bullet physics shape object.
+     *
+     * @return The bullet shape object.
+     */
+    btCollisionShape* getShape() const
+    {
+        return _shape;
+    }
 
     /**
      * Defines a box shape, using the bounding volume of the node it is attached to.
@@ -118,8 +120,8 @@ public:
      * @param extents Extents of the box shape along the x, y and z axes.
      * @param center Center point of the box.
      * @param absolute True to specifiy that the given center point is an absolute position.
-     *		By default the center point is treated as relative to the location of the node
-     *		that the shape is attached to.
+     *        By default the center point is treated as relative to the location of the node
+     *        that the shape is attached to.
      *
      * @return Definition of a box shape.
      */
@@ -138,8 +140,8 @@ public:
      * @param radius Radius of the sphere.
      * @param center Center point of the sphere.
      * @param absolute True to specifiy that the given center point is an absolute position.
-     *		By default the center point is treated as relative to the location of the node
-     *		that the shape is attached to.
+     *        By default the center point is treated as relative to the location of the node
+     *        that the shape is attached to.
      *
      * @return Definition of a sphere shape.
      */
@@ -159,8 +161,8 @@ public:
      * @param height Height of the capsule.
      * @param center Center point of the capsule.
      * @param absolute True to specifiy that the given center point is an absolute position.
-     *		By default the center point is treated as relative to the location of the node
-     *		that the shape is attached to.
+     *        By default the center point is treated as relative to the location of the node
+     *        that the shape is attached to.
      *
      * @return Definition of a capsule shape.
      */
@@ -202,15 +204,15 @@ private:
      */
     PhysicsCollisionShape(Type type, btCollisionShape* shape);
 
-	/** 
-	 * Hidden copy constructor.
-	 */
-	PhysicsCollisionShape(const PhysicsCollisionShape& copy);
+    /** 
+     * Hidden copy constructor.
+     */
+    PhysicsCollisionShape(const PhysicsCollisionShape& copy);
 
-	/**
-	 * Destructor.
-	 */
-	~PhysicsCollisionShape();
+    /**
+     * Destructor.
+     */
+    ~PhysicsCollisionShape();
 
 
     // Shape type

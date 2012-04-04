@@ -43,9 +43,7 @@ namespace gameplay
 
         const char* id = properties->getId();
         if (id)
-        {
             _id = id;
-        }
     }
 
     const char* Control::getID() const
