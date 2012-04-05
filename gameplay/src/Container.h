@@ -104,10 +104,24 @@ public:
      */
     std::vector<Control*> getControls() const;
 
+    /**
+     * Gets the first animation in the control with the specified ID.
+     *
+     * @param id The ID of the animation to get. Returns the first animation if ID is NULL.
+     * @return The first animation with the specified ID.
+     */
+    Animation* getAnimation(const char* id = NULL) const;
+
 protected:
 
+    /**
+     * Constructor.
+     */
     Container();
 
+    /**
+     * Destructor.
+     */
     virtual ~Container();
 
     /**

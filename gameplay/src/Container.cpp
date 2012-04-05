@@ -56,7 +56,7 @@ namespace gameplay
     {
         const char* layoutString = properties->getString("layout");
         Container* container = Container::create(getLayoutType(layoutString));
-        container->init(style, properties);
+        container->initialize(style, properties);
         container->addControls(theme, properties);
 
         return container;
@@ -200,6 +200,30 @@ namespace gameplay
     std::vector<Control*> Container::getControls() const
     {
         return _controls;
+    }
+
+    Animation* Container::getAnimation(const char* id) const
+    {
+        std::vector<Control*>::const_iterator itr = _controls.begin();
+        std::vector<Control*>::const_iterator end = _controls.end();
+        
+        Control* control = NULL;
+        for (; itr != end; itr++)
+        {
+            control = *itr;
+            Animation* animation = control->getAnimation(id);
+            if (animation)
+                return animation;
+
+            if (control->isContainer())
+            {
+                animation = ((Container*)control)->getAnimation(id);
+                if (animation)
+                    return animation;
+            }
+        }
+
+        return NULL;
     }
 
     void Container::update(const Rectangle& clip)
