@@ -25,12 +25,12 @@ public:
     /**
      * Specifies the width of the rectangle.
      */
-    unsigned int width;
+    float width;
 
     /**
      * Specifies the height of the rectangle.
      */
-    unsigned int height;
+    float height;
 
     /**
      * Constructs a new rectangle initialized to all zeros.
@@ -43,7 +43,7 @@ public:
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    Rectangle(unsigned int width, unsigned int height);
+    Rectangle(float width, float height);
 
     /**
      * Constructs a new rectangle with the specified x, y, width and height.
@@ -53,7 +53,7 @@ public:
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    Rectangle(float x, float y, unsigned int width, unsigned int height);
+    Rectangle(float x, float y, float width, float height);
 
     /**
      * Constructs a new rectangle that is a copy of the specified rectangle.
@@ -89,7 +89,7 @@ public:
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    void set(float x, float y, unsigned int width, unsigned int height);
+    void set(float x, float y, float width, float height);
 
     /**
      * Sets the values of this rectangle to those in the specified rectangle.
@@ -155,7 +155,7 @@ public:
      * @return true if the rectangle contains the specified rectangle, false
      * otherwise.
      */
-    bool contains(float x, float y, unsigned int width, unsigned int height) const;
+    bool contains(float x, float y, float width, float height) const;
 
     /**
      * Determines whether this rectangle contains a specified rectangle.
@@ -177,7 +177,7 @@ public:
      * 
      * @return true if the specified Rectangle intersects with this one, false otherwise.
      */
-    bool intersects(float x, float y, unsigned int width, unsigned int height) const;
+    bool intersects(float x, float y, float width, float height) const;
 
     /**
      * Determines whether a specified rectangle intersects with this rectangle.

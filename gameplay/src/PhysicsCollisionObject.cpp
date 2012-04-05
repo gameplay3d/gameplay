@@ -10,46 +10,46 @@ namespace gameplay
 struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
 {
     btScalar addSingleResult(btManifoldPoint& cp, 
-		const btCollisionObject* a, int partIdA, int indexA, 
-		const btCollisionObject* b, int partIdB, int indexB)
-	{
-		result = true;
-		return 0.0f;
-	}
+        const btCollisionObject* a, int partIdA, int indexA, 
+        const btCollisionObject* b, int partIdB, int indexB)
+    {
+        result = true;
+        return 0.0f;
+    }
 
     bool result;
 };
 
 PhysicsCollisionObject::PhysicsCollisionObject(Node* node)
-	: _node(node), _motionState(NULL), _collisionShape(NULL)
+    : _node(node), _motionState(NULL), _collisionShape(NULL)
 {
 }
 
 PhysicsCollisionObject::~PhysicsCollisionObject()
 {
-	SAFE_DELETE(_motionState);
+    SAFE_DELETE(_motionState);
 
-	Game::getInstance()->getPhysicsController()->destroyShape(_collisionShape);
+    Game::getInstance()->getPhysicsController()->destroyShape(_collisionShape);
 }
 
 PhysicsCollisionShape::Type PhysicsCollisionObject::getShapeType() const
 {
-	return getCollisionShape()->getType();
+    return getCollisionShape()->getType();
 }
 
 Node* PhysicsCollisionObject::getNode() const
 {
-	return _node;
+    return _node;
 }
 
 PhysicsCollisionShape* PhysicsCollisionObject::getCollisionShape() const
 {
-	return _collisionShape;
+    return _collisionShape;
 }
 
 PhysicsMotionState* PhysicsCollisionObject::getMotionState() const
 {
-	return _motionState;
+    return _motionState;
 }
 
 bool PhysicsCollisionObject::isKinematic() const
@@ -62,12 +62,11 @@ bool PhysicsCollisionObject::isKinematic() const
     default:
         return getCollisionObject()->isKinematicObject();
     }
-	
 }
 
 bool PhysicsCollisionObject::isDynamic() const
 {
-	return !getCollisionObject()->isStaticOrKinematicObject();
+    return !getCollisionObject()->isStaticOrKinematicObject();
 }
 
 void PhysicsCollisionObject::addCollisionListener(CollisionListener* listener, PhysicsCollisionObject* object)

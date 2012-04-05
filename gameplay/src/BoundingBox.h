@@ -53,7 +53,7 @@ public:
      */
     static const BoundingBox& empty();
 
-	/**
+    /**
      * Gets the center point of the bounding box.
      *
      * This method computes the center point of the box from its min and max.

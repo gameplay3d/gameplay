@@ -14,7 +14,7 @@ Slider::~Slider()
 Slider* Slider::create(Theme::Style* style, Properties* properties)
 {
     Slider* slider = new Slider();
-    slider->init(style, properties);
+    slider->initialize(style, properties);
 
     slider->_min = properties->getFloat("min");
     slider->_max = properties->getFloat("max");
@@ -91,8 +91,8 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     case Touch::TOUCH_MOVE:
     case Touch::TOUCH_RELEASE:
         if (_state == ACTIVE &&
-            x > 0 && x <= _bounds.width &&
-            y > 0 && y <= _bounds.height)
+            x > 0 && x <= _clipBounds.width &&
+            y > 0 && y <= _clipBounds.height)
         {
             // Horizontal case.
             const Theme::Border& border = getBorder(_state);
@@ -101,7 +101,7 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
             const Rectangle& maxCapRegion = getImageRegion("maxCap", _state);
 
             float markerPosition = ((float)x - maxCapRegion.width - border.left - padding.left) /
-                (_bounds.width - border.left - border.right - padding.left - padding.right - minCapRegion.width - maxCapRegion.width);
+                (_clipBounds.width - border.left - border.right - padding.left - padding.right - minCapRegion.width - maxCapRegion.width);
             
             if (markerPosition > 1.0f)
             {
@@ -113,7 +113,7 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
             }
 
             float oldValue = _value;
-            _value = markerPosition * _max;
+            _value = (markerPosition * (_max - _min)) + _min;
             if (_step > 0.0f)
             {
                 float stepDistance = _step / (_max - _min);
@@ -167,23 +167,23 @@ void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     trackColor.w *= opacity;
 
     // Draw order: track, caps, marker.
-    float midY = clip.y + _bounds.y + (_bounds.height - border.bottom - padding.bottom) / 2.0f;
-    Vector2 pos(clip.x + _bounds.x + border.left + padding.left, midY - trackRegion.height / 2.0f);
-    spriteBatch->draw(pos.x, pos.y, _bounds.width, trackRegion.height, track.u1, track.v1, track.u2, track.v2, trackColor);
+    float midY = clip.y + _clipBounds.y + (_clipBounds.height - border.bottom - padding.bottom) / 2.0f;
+    Vector2 pos(clip.x + _clipBounds.x + border.left + padding.left, midY - trackRegion.height / 2.0f);
+    spriteBatch->draw(pos.x, pos.y, _clipBounds.width, trackRegion.height, track.u1, track.v1, track.u2, track.v2, trackColor, _clip);
 
     pos.y = midY - minCapRegion.height * 0.5f;
     pos.x -= minCapRegion.width * 0.5f;
-    spriteBatch->draw(pos.x, pos.y, minCapRegion.width, minCapRegion.height, minCap.u1, minCap.v1, minCap.u2, minCap.v2, minCapColor);
+    spriteBatch->draw(pos.x, pos.y, minCapRegion.width, minCapRegion.height, minCap.u1, minCap.v1, minCap.u2, minCap.v2, minCapColor, _clip);
         
-    pos.x = clip.x + _bounds.x + _bounds.width - border.right - padding.right - maxCapRegion.width * 0.5f;
-    spriteBatch->draw(pos.x, pos.y, maxCapRegion.width, maxCapRegion.height, maxCap.u1, maxCap.v1, maxCap.u2, maxCap.v2, maxCapColor);
+    pos.x = clip.x + _clipBounds.x + _clipBounds.width - border.right - padding.right - maxCapRegion.width * 0.5f;
+    spriteBatch->draw(pos.x, pos.y, maxCapRegion.width, maxCapRegion.height, maxCap.u1, maxCap.v1, maxCap.u2, maxCap.v2, maxCapColor, _clip);
 
     // Percent across.
-    float markerPosition = _value / (_max - _min);
-    markerPosition *= _bounds.width - border.left - padding.left - border.right - padding.right - minCapRegion.width * 0.5f - maxCapRegion.width * 0.5f - markerRegion.width;
-    pos.x = clip.x + _bounds.x + border.left + padding.left + minCapRegion.width * 0.5f + markerPosition;
+    float markerPosition = (_value - _min) / (_max - _min);
+    markerPosition *= _clipBounds.width - border.left - padding.left - border.right - padding.right - minCapRegion.width * 0.5f - maxCapRegion.width * 0.5f - markerRegion.width;
+    pos.x = clip.x + _clipBounds.x + border.left + padding.left + minCapRegion.width * 0.5f + markerPosition;
     pos.y = midY - markerRegion.height / 2.0f;
-    spriteBatch->draw(pos.x, pos.y, markerRegion.width, markerRegion.height, marker.u1, marker.v1, marker.u2, marker.v2, markerColor);
+    spriteBatch->draw(pos.x, pos.y, markerRegion.width, markerRegion.height, marker.u1, marker.v1, marker.u2, marker.v2, markerColor, _clip);
 }
 
 }

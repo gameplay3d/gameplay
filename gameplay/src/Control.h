@@ -6,13 +6,9 @@
 #include "Vector2.h"
 #include "SpriteBatch.h"
 #include "Theme.h"
+#include "ThemeStyle.h"
 #include "Touch.h"
 #include "Keyboard.h"
-
-/**
- * Default duration of UI animations.
- */
-#define DEFAULT_UI_ANIMATION_DURATION 200L
 
 namespace gameplay
 {
@@ -29,32 +25,82 @@ class Control : public Ref, public AnimationTarget
     friend class VerticalLayout;
 
 public:
+
     /**
      * The possible states a control can be in.
      */
     enum State
     {
+        /**
+         * State of an enabled but inactive control.
+         */
         NORMAL = 0x01,
+
+        /**
+         * State of a control currently in focus.
+         */
         FOCUS = 0x02,
+
+        /**
+         * State of a control that is currently being acted on,
+         * e.g. through touch or mouse-click events.
+         */
         ACTIVE = 0x04,
+
+        /**
+         * State of a control that has been disabled.
+         */
         DISABLED = 0x08,
     };
 
-    // Only for setting control states
+    /**
+     * A constant used for setting themed attributes on all control states simultaneously.
+     */
     static const unsigned char STATE_ALL = NORMAL | FOCUS | ACTIVE | DISABLED;
 
+    /**
+     * Implement Control::Listener and call Control::addListener()
+     * in order to listen for events on controls.
+     */
     class Listener
     {
     public:
         enum EventType
         {
+            /**
+             * Mouse-down or touch-press event.
+             */
             PRESS           = 0x01,
+
+            /**
+             * Mouse-up or touch-release event.
+             */
             RELEASE         = 0x02,
+
+            /**
+             * Event triggered after consecutive PRESS and RELEASE events take place
+             * within the bounds of a control.
+             */
             CLICK           = 0x04,
+
+            /**
+             * Event triggered when the value of a slider, check box, or radio button
+             * changes.
+             */
             VALUE_CHANGED   = 0x08,
+
+            /**
+             * Event triggered when the contents of a text box are modified.
+             */
             TEXT_CHANGED    = 0x10
         };
 
+        /**
+         * Method called by controls when an event is triggered.
+         * 
+         * @param control The control triggering the event.
+         * @param evt The event triggered.
+         */
         virtual void controlEvent(Control* control, EventType evt) = 0;
     };
 
@@ -106,14 +152,7 @@ public:
      * @param x The x coordinate.
      * @param y The y coordinate.
      */
-    void setPosition(float x, float y, unsigned long duration = DEFAULT_UI_ANIMATION_DURATION);
-
-    /**
-     * Get the position of this control relative to its parent container.
-     *
-     * @return The position of this control relative to its parent container.
-     */
-    const Vector2& getPosition() const;
+    void setPosition(float x, float y);
 
     /**
      * Set the desired size of this control, including its border and padding, before clipping.
@@ -121,18 +160,52 @@ public:
      * @param width The width.
      * @param height The height.
      */
-    void setSize(float width, float height, unsigned long duration = DEFAULT_UI_ANIMATION_DURATION);
+    void setSize(float width, float height);
 
     /**
-     * Get the desired size of this control, including its border and padding, before clipping.
+     * Set the bounds of this control, relative to its parent container and including its
+     * border and padding, before clipping.
      *
-     * @return The size of this control.
+     * @param bounds The new bounds to set.
      */
-    const Vector2& getSize() const;
+    void setBounds(const Rectangle& bounds);
 
-    // Themed properties.
+    /**
+     * Get the bounds of this control, relative to its parent container and including its
+     * border and padding, before clipping.
+     *
+     * @return The bounds of this control.
+     */
+    const Rectangle& getBounds() const;
+
+    /**
+     * Get the x coordinate of this control's bounds.
+     *
+     * @return The x coordinate of this control's bounds.
+     */
+    float getX() const;
     
-    //void setBorder(const Theme::Border& border, unsigned char states = STATE_ALL);
+    /**
+     * Get the y coordinate of this control's bounds.
+     *
+     * @return The y coordinate of this control's bounds.
+     */
+    float getY() const;
+
+    /**
+     * Get the width of this control's bounds.
+     *
+     * @return The width of this control's bounds.
+     */
+    float getWidth() const;
+
+    /**
+     * Get the height of this control's bounds.
+     *
+     * @return The height of this control's bounds.
+     */
+    float getHeight() const;
+
     /**
      * Set the size of this control's border.
      *
@@ -420,9 +493,8 @@ public:
      * @param opacity The new opacity.
      * @param states The states to set this property on.
      *               One or more members of the Control::State enum, ORed together.
-     * @param duration The duration to animate opacity by.
      */
-    void setOpacity(float opacity, unsigned char states = STATE_ALL, unsigned long duration = DEFAULT_UI_ANIMATION_DURATION);
+    void setOpacity(float opacity, unsigned char states = STATE_ALL);
 
     /**
      * Get the opacity of this control for a given state. 
@@ -433,17 +505,12 @@ public:
      */
     float getOpacity(State state = NORMAL) const;
 
-    // TODO
-    // Controls must state the names of the images they use, for the purposes of a future UI editor.
-    //virtual std::vector<std::string> getImageNames() = 0;
-
-    // Control state.
     /**
      * Get the bounds of this control, relative to its parent container, after clipping.
      *
      * @return The bounds of this control.
      */
-    const Rectangle& getBounds() const;
+    const Rectangle& getClipBounds() const;
 
     /**
      * Get the content area of this control, in screen coordinates, after clipping.
@@ -451,18 +518,6 @@ public:
      * @return The clipping area of this control.
      */
     const Rectangle& getClip() const;
-
-    /**
-     * Set width and/or height to auto-size to size a Control to tightly fit
-     * its text and themed visual elements (CheckBox / RadioButton toggle etc.).
-     *
-     * Similarly set this on the width and/or height of a Container to tightly fit
-     * the Container around STATE_ALL its children.
-     *
-     * @param width Whether to automatically determine this Control's width.
-     * @param height Whether to automatically determine this Control's height.
-     */
-    void setAutoSize(bool width, bool height);
 
     /**
      * Change this control's state.
@@ -552,7 +607,15 @@ public:
     void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 protected:
+
+    /**
+     * Constructor.
+     */
     Control();
+
+    /**
+     * Destructor.
+     */
     virtual ~Control();
 
     /**
@@ -596,16 +659,6 @@ protected:
      */
     virtual void update(const Rectangle& clip);
 
-private:
-    /**
-     * Draws the themed border and background of a control.
-     *
-     * @param spriteBatch The sprite batch containing this control's border images.
-     * @param clip The clipping rectangle of this control's parent container.
-     */
-    virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-protected:
     /**
      * Draw the images associated with this control.
      *
@@ -624,46 +677,51 @@ protected:
     /**
      * Initialize properties common to STATE_ALL Controls.
      */
-    virtual void init(Theme::Style* style, Properties* properties);
+    virtual void initialize(Theme::Style* style, Properties* properties);
 
     /**
      * Container and classes that extend it should implement this and return true.
+     *
+     * @return true if this object is of class Container, false otherwise.
      */
     virtual bool isContainer();
 
     /**
      * Returns whether this control has been modified and requires an update.
+     *
+     * @return Whether this control has been modified and requires an update.
      */
     virtual bool isDirty();
 
     /**
      * Get a Control::State enum from a matching string.
+     *
+     * @param state The string to match.
+     *
+     * @return The Control::State enum that matches the given string.
      */
-    static State getStateFromString(const char* state);
+    static State getState(const char* state);
 
     /**
-     * Notify STATE_ALL listeners of a specific event.
+     * Notify this control's listeners of a specific event.
+     *
+     * @param eventType The event to trigger.
      */
     void notifyListeners(Listener::EventType eventType);
 
-    void addSpecificListener(Control::Listener* listener, Listener::EventType eventType);
-
     std::string _id;
     State _state;           // Determines overlay used during draw().
-    Vector2 _position;      // Position, relative to parent container's clipping window.
-    Vector2 _size;          // Desired size.  Will be clipped.
-    Rectangle _bounds;      // The position and size of this control, relative to parent container's bounds, including border and padding, after clipping.
+    Rectangle _bounds;      // Position, relative to parent container's clipping window, and desired size.
+    Rectangle _clipBounds;  // The position and size of this control, relative to parent container's bounds, including border and padding, after clipping.
     Rectangle _textBounds;  // The position and size of this control's text area, before clipping.  Used for text alignment.
     Rectangle _clip;        // Clipping window of this control's content, after clipping.
-    bool _autoWidth;
-    bool _autoHeight;
     bool _dirty;
     bool _consumeTouchEvents;
     Theme::Style* _style;
-    typedef std::map<Listener::EventType, std::list<Listener*>*> ListenerMap;
-    ListenerMap* _listeners;
+    std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
 
 private:
+
     // Animation blending bits.
     static const char ANIMATION_POSITION_X_BIT = 0x01;
     static const char ANIMATION_POSITION_Y_BIT = 0x02;
@@ -679,6 +737,18 @@ private:
     void applyAnimationValueSizeHeight(float height, float blendWeight);
     void applyAnimationValueOpacity();
 
+    Control(const Control& copy);
+
+    /**
+     * Draws the themed border and background of a control.
+     *
+     * @param spriteBatch The sprite batch containing this control's border images.
+     * @param clip The clipping rectangle of this control's parent container.
+     */
+    virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
+
+    void addSpecificListener(Control::Listener* listener, Listener::EventType eventType);
+
     // Gets the overlays requested in the overlayTypes bitflag.
     Theme::Style::Overlay** getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays);
 
@@ -689,8 +759,6 @@ private:
 
     // Ensures that this control has a copy of its style so that it can override it without affecting other controls.
     void overrideStyle();
-
-    Control(const Control& copy);
 };
 
 }

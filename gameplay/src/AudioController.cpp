@@ -38,9 +38,9 @@ void AudioController::initialize()
         return;  
     }
         
-	_alcContext = alcCreateContext(_alcDevice, NULL);
+    _alcContext = alcCreateContext(_alcDevice, NULL);
     ALCenum alcErr = alcGetError(_alcDevice);
-	if (!_alcContext || alcErr != ALC_NO_ERROR)
+    if (!_alcContext || alcErr != ALC_NO_ERROR)
     {
         alcCloseDevice (_alcDevice);
         LOG_ERROR_VARG("AudioController::initialize() error. Unable to create OpenAL context. Error: %d\n", alcErr);

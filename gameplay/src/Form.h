@@ -37,13 +37,13 @@ public:
      *      size     = <width, height>      // Size of the form, measured in pixels.
      *   
      *      // All the controls within this form.
-     *      container{}
-     *      label{}
-     *      textBox{}
-     *      button{}
-     *      checkBox{}
-     *      radioButton{}
-     *      slider{}
+     *      container { }
+     *      label { }
+     *      textBox { }
+     *      button { }
+     *      checkBox { }
+     *      radioButton { }
+     *      slider { }
      * }
      *
      * @param path Path to the properties file to create a new form from.
@@ -105,13 +105,22 @@ public:
      */
     void draw();
 
-protected:
+private:
     
-	Form();
+    /**
+     * Constructor.
+     */
+    Form();
 
+    /**
+     * Constructor.
+     */
+    Form(const Form& copy);
+
+    /**
+     * Destructor.
+     */
     virtual ~Form();
-
-    static Form* create(const char* textureFile, Layout::Type type);
 
     /**
      * Initialize a quad for this form in order to draw it in 3D.
@@ -145,10 +154,6 @@ protected:
     Node* _node;                // Node for transforming this Form in world-space.
     FrameBuffer* _frameBuffer;  // FBO the Form is rendered into for texturing the quad.
     Matrix _projectionMatrix;   // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
-
-private:
-
-    Form(const Form& copy);
 };
 
 }

@@ -265,7 +265,7 @@ private:
         int _status;
     };
 
-	/**
+    /**
      * Constructor.
      */
     PhysicsController();
@@ -315,30 +315,30 @@ private:
     // Gets the corresponding GamePlay object for the given Bullet object.
     PhysicsCollisionObject* getCollisionObject(const btCollisionObject* collisionObject) const;
 
-	// Creates a collision shape for the given node and gameplay shape definition.
-	// Populates 'centerOfMassOffset' with the correct calculated center of mass offset.
-	PhysicsCollisionShape* createShape(Node* node, const PhysicsCollisionShape::Definition& shape, Vector3* centerOfMassOffset);
+    // Creates a collision shape for the given node and gameplay shape definition.
+    // Populates 'centerOfMassOffset' with the correct calculated center of mass offset.
+    PhysicsCollisionShape* createShape(Node* node, const PhysicsCollisionShape::Definition& shape, Vector3* centerOfMassOffset);
     
     // Creates a box collision shape.
     PhysicsCollisionShape* createBox(const Vector3& extents, const Vector3& scale);
 
-	// Creates a sphere collision shape.
+    // Creates a sphere collision shape.
     PhysicsCollisionShape* createSphere(float radius, const Vector3& scale);
 
     // Creates a capsule collision shape.
     PhysicsCollisionShape* createCapsule(float radius, float height, const Vector3& scale);
 
-	// Creates a heightfield collision shape.
+    // Creates a heightfield collision shape.
     PhysicsCollisionShape* createHeightfield(Node* node, Image* image, Vector3* centerOfMassOffset);
 
     // Creates a triangle mesh collision shape.
     PhysicsCollisionShape* createMesh(Mesh* mesh, const Vector3& scale);
 
-	// Destroys a collision shape created through PhysicsController
-	void destroyShape(PhysicsCollisionShape* shape);
+    // Destroys a collision shape created through PhysicsController
+    void destroyShape(PhysicsCollisionShape* shape);
 
-	// Helper function for calculating heights from heightmap (image) or heightfield data.
-	static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
+    // Helper function for calculating heights from heightmap (image) or heightfield data.
+    static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
 
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
@@ -373,7 +373,7 @@ private:
         void reportErrorWarning(const char* warningString);
         void draw3dText(const btVector3& location, const char* textString);        
         void setDebugMode(int mode);        
-        int	getDebugMode() const;
+        int    getDebugMode() const;
         
     private:
         

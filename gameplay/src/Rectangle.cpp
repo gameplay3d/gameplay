@@ -9,12 +9,12 @@ Rectangle::Rectangle()
 {
 }
 
-Rectangle::Rectangle(unsigned int width, unsigned int height) :
+Rectangle::Rectangle(float width, float height) :
     x(0), y(0), width(width), height(height)
 {
 }
 
-Rectangle::Rectangle(float x, float y, unsigned int width, unsigned int height) :
+Rectangle::Rectangle(float x, float y, float width, float height) :
     x(x), y(y), width(width), height(height)
 {
 }
@@ -44,7 +44,7 @@ void Rectangle::set(const Rectangle& r)
     set(r.x, r.y, r.width, r.height);
 }
 
-void Rectangle::set(float x, float y, unsigned int width, unsigned int height)
+void Rectangle::set(float x, float y, float width, float height)
 {
     this->x = x;
     this->y = y;
@@ -70,22 +70,22 @@ float Rectangle::top() const
 
 float Rectangle::right() const
 {
-    return x + (float)width;
+    return x + width;
 }
 
 float Rectangle::bottom() const
 {
-    return y + (float)height;
+    return y + height;
 }
 
 bool Rectangle::contains(float x, float y) const
 {
-    return (x >= x && x <= (x + (float)width) && y >= y && y <= (y + (float)height));
+    return (x >= x && x <= (x + width) && y >= y && y <= (y + height));
 }
 
-bool Rectangle::contains(float x, float y, unsigned int width, unsigned int height) const
+bool Rectangle::contains(float x, float y, float width, float height) const
 {
-    return (contains(x, y) && contains(x + (float)width, y + (float)height));
+    return (contains(x, y) && contains(x + width, y + height));
 }
 
 bool Rectangle::contains(const Rectangle& r) const
@@ -93,12 +93,12 @@ bool Rectangle::contains(const Rectangle& r) const
     return contains(r.x, r.y, r.width, r.height);
 }
 
-bool Rectangle::intersects(float x, float y, unsigned int width, unsigned int height) const
+bool Rectangle::intersects(float x, float y, float width, float height) const
 {
     const float left   = max(this->x, x);
     const float top    = max(this->y, y);
-    const float right  = min(x + (float)width, x + (float)width);
-    const float bottom = min(y + (float)height, y + (float)height);
+    const float right  = min(x + width, x + width);
+    const float bottom = min(y + height, y + height);
 
     return (right > left && bottom > top);
 }

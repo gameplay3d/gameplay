@@ -1,5 +1,5 @@
-#ifndef REF_H_
-#define REF_H_
+#ifndef REFERENCE_H_
+#define REFERENCE_H_
 
 #include "Object.h"
 
