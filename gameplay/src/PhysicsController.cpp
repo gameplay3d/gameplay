@@ -134,22 +134,100 @@ void PhysicsController::drawDebug(const Matrix& viewProjection)
     _debugDrawer->end();
 }
 
-PhysicsCollisionObject* PhysicsController::rayTest(const Ray& ray, float distance, Vector3* hitPoint, float* hitFraction)
+bool PhysicsController::rayTest(const Ray& ray, float distance, PhysicsController::HitResult* result)
 {
     btCollisionWorld::ClosestRayResultCallback callback(BV(ray.getOrigin()), BV(distance * ray.getDirection()));
     _world->rayTest(BV(ray.getOrigin()), BV(distance * ray.getDirection()), callback);
     if (callback.hasHit())
     {
-        if (hitPoint)
-            hitPoint->set(callback.m_hitPointWorld.x(), callback.m_hitPointWorld.y(), callback.m_hitPointWorld.z());
+        if (result)
+        {
+            result->object = getCollisionObject(callback.m_collisionObject);
+            result->point.set(callback.m_hitPointWorld.x(), callback.m_hitPointWorld.y(), callback.m_hitPointWorld.z());
+            result->fraction = callback.m_closestHitFraction;
+            result->normal.set(callback.m_hitNormalWorld.x(), callback.m_hitNormalWorld.y(), callback.m_hitNormalWorld.z());
+        }
 
-        if (hitFraction)
-            *hitFraction = callback.m_closestHitFraction;
-
-        return getCollisionObject(callback.m_collisionObject);
+        return true;
     }
 
-    return NULL;
+    return false;
+}
+
+bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3& endPosition, PhysicsController::HitResult* result)
+{
+    class SweepTestCallback : public btCollisionWorld::ClosestConvexResultCallback
+    {
+    public:
+
+	    SweepTestCallback(PhysicsCollisionObject* me)
+            : btCollisionWorld::ClosestConvexResultCallback(btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0)), me(me)
+	    {
+	    }
+
+	    btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+	    {
+            PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(convexResult.m_hitCollisionObject->getUserPointer());
+
+		    if (object == me)
+			    return 1.0f;
+
+		    return ClosestConvexResultCallback::addSingleResult(convexResult, normalInWorldSpace);
+	    }
+
+	    PhysicsCollisionObject* me;
+    };
+
+    PhysicsCollisionShape* shape = object->getCollisionShape();
+    PhysicsCollisionShape::Type type = shape->getType();
+    if (type != PhysicsCollisionShape::SHAPE_BOX && type != PhysicsCollisionShape::SHAPE_SPHERE && type != PhysicsCollisionShape::SHAPE_CAPSULE)
+        return false; // unsupported type
+
+    // Define the start transform
+    btTransform start;
+    if (object->getNode())
+        start.setFromOpenGLMatrix(object->getNode()->getWorldMatrix().m);
+    else
+        start.setIdentity();
+
+    // Define the end transform
+    btTransform end(start);
+    end.setOrigin(BV(endPosition));
+
+    // Perform bullet convex sweep test
+    SweepTestCallback callback(object);
+
+    // If the object is represented by a ghost object, use the ghost object's convex sweep test
+    // since it is much faster than the world's version.
+    /*switch (object->getType())
+    {
+    case PhysicsCollisionObject::GHOST_OBJECT:
+    case PhysicsCollisionObject::CHARACTER:
+        static_cast<PhysicsGhostObject*>(object)->_ghostObject->convexSweepTest(static_cast<btConvexShape*>(shape->getShape()), start, end, callback, _world->getDispatchInfo().m_allowedCcdPenetration);
+        break;
+
+    default:
+        _world->convexSweepTest(static_cast<btConvexShape*>(shape->getShape()), start, end, callback, _world->getDispatchInfo().m_allowedCcdPenetration);
+        break;
+    }
+    */
+    _world->convexSweepTest(static_cast<btConvexShape*>(shape->getShape()), start, end, callback, _world->getDispatchInfo().m_allowedCcdPenetration);
+
+    // Check for hits and store results
+    if (callback.hasHit())
+    {
+        if (result)
+        {
+            result->object = getCollisionObject(callback.m_hitCollisionObject);
+            result->point.set(callback.m_hitPointWorld.x(), callback.m_hitPointWorld.y(), callback.m_hitPointWorld.z());
+            result->fraction = callback.m_closestHitFraction;
+            result->normal.set(callback.m_hitNormalWorld.x(), callback.m_hitNormalWorld.y(), callback.m_hitNormalWorld.z());
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, 
