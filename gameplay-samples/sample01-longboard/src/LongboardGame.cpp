@@ -254,7 +254,7 @@ void LongboardGame::keyEvent(Keyboard::KeyEvent evt, int key)
         switch (key)
         {
         case Keyboard::KEY_ESCAPE:
-            exit();
+            end();
             break;
         }
     }

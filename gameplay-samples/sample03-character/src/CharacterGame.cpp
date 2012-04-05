@@ -315,7 +315,7 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             moveBall = !moveBall;
             break;
         case Keyboard::KEY_ESCAPE:
-            exit();
+            end();
             break;
         }
     }

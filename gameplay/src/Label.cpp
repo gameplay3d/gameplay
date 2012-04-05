@@ -69,16 +69,13 @@ namespace gameplay
         if (_text.size() <= 0)
             return;
 
-        // TODO: Batch all labels that use the same font.
-        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-        Font* font = overlay->getFont();
-
-        Vector4 textColor = overlay->getTextColor();
-        textColor.w *= overlay->getOpacity();
+        Font* font = getFont(_state);
+        Vector4 textColor = getTextColor(_state);
+        textColor.w *= getOpacity(_state);
 
         // Draw the text.
         font->begin();
-        font->drawText(_text.c_str(), _textBounds, textColor, overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft(), &_clip);
+        font->drawText(_text.c_str(), _textBounds, textColor, getFontSize(_state), getTextAlignment(_state), true, getTextRightToLeft(_state), &_clip);
         font->end();
 
         _dirty = false;
