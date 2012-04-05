@@ -16,7 +16,7 @@ namespace gameplay
  *
  * checkBox <checkBoxID>
  * {
- *      style       = <Style ID>
+ *      style       = <styleID>
  *      position    = <x, y>
  *      size        = <width, height>
  *      text        = <string>
@@ -121,6 +121,9 @@ protected:
 
 private:
 
+    /*
+     * Constructor.
+     */
     CheckBox(const CheckBox& copy);
 };
 

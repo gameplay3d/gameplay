@@ -134,14 +134,14 @@ private:
     Material();
 
     /**
+     * Constructor.
+     */
+    Material(const Material& m);
+    
+    /**
      * Destructor.
      */
     ~Material();
-
-    /**
-     * Hidden copy constructor.
-     */
-    Material(const Material& m);
 
     /**
      * Loads a technique from the given properties object into the specified material.

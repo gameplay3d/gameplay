@@ -73,6 +73,9 @@ protected:
 
 private:
 
+    /**
+     * Constructor.
+     */
     VerticalLayout(const VerticalLayout& copy);
 };
 
