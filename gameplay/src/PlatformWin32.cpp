@@ -589,7 +589,7 @@ int Platform::enterMessagePump()
 
             if (msg.message == WM_QUIT)
             {
-                _game->end();
+                _game->exit();
                 break;
             }
         }
