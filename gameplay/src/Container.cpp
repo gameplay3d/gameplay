@@ -202,6 +202,30 @@ namespace gameplay
         return _controls;
     }
 
+    Animation* Container::getAnimation(const char* id) const
+    {
+        std::vector<Control*>::const_iterator itr = _controls.begin();
+        std::vector<Control*>::const_iterator end = _controls.end();
+        
+        Control* control = NULL;
+        for (; itr != end; itr++)
+        {
+            control = *itr;
+            Animation* animation = control->getAnimation(id);
+            if (animation)
+                return animation;
+
+            if (control->isContainer())
+            {
+                animation = ((Container*)control)->getAnimation(id);
+                if (animation)
+                    return animation;
+            }
+        }
+
+        return NULL;
+    }
+
     void Container::update(const Rectangle& clip)
     {
         // Update this container's viewport.

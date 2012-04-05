@@ -2,7 +2,7 @@
 #define CHARACTERGAME_H_
 
 #include "gameplay.h"
-
+#include "Gamepad.h"
 using namespace gameplay;
 
 /**
@@ -11,7 +11,7 @@ using namespace gameplay;
 class CharacterGame: public Game, public PhysicsCollisionObject::CollisionListener
 {
 public:
-
+    
     /**
      * Constructor.
      */
@@ -63,6 +63,9 @@ protected:
 
 private:
     
+    static const unsigned int JOYSTICK = 0;
+    static const unsigned int BUTTON_1 = 0;
+
     /**
      * Draws the default "gameplay powered" splash screen.
      */
@@ -71,7 +74,7 @@ private:
     void initMaterial(Scene* scene, Node* node, Material* material);
     bool initScene(Node* node, void* cookie);
     bool drawScene(Node* node, void* cookie);
-    void loadAnimationClips();
+    void loadAnimationClips(Node* node);
     void fixCamera(long elapsedTime);
 
     Font* _font;
@@ -80,6 +83,7 @@ private:
     Animation* _animation;
     unsigned int _animationState;
     int _rotateX;
+    Gamepad* _gamepad;
 };
 
 #endif
