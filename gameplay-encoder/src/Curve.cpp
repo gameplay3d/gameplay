@@ -54,11 +54,6 @@ using std::strcmp;
 namespace gameplay
 {
 
-Curve* Curve::create(unsigned int pointCount, unsigned int componentCount)
-{
-    return new Curve(pointCount, componentCount);
-}
-
 Curve::Curve(unsigned int pointCount, unsigned int componentCount)
     : _pointCount(pointCount), _componentCount(componentCount), _componentSize(sizeof(float)*componentCount), _quaternionOffset(NULL), _points(NULL)
 {
@@ -151,9 +146,8 @@ void Curve::evaluate(float time, float* dst) const
 {
     assert(dst && time >= 0 && time <= 1.0f);
 
-    // Check if the point count is 1.
     // Check if we are at or beyond the bounds of the curve.
-    if (_pointCount == 1 || time <= _points[0].time)
+    if (time <= _points[0].time)
     {
         memcpy(dst, _points[0].value, _componentSize);
         return;
