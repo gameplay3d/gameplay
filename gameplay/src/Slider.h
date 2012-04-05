@@ -81,7 +81,7 @@ public:
      * Set this slider's value.  The new value will be clamped to fit within
      * the slider's minimum and maximum values.
      *
-     * @param The new value.
+     * @param value The new value.
      */
     void setValue(float value);
 
