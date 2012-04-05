@@ -70,7 +70,7 @@ void MeshGame::keyEvent(Keyboard::KeyEvent evt, int key)
         switch (key)
         {
         case Keyboard::KEY_ESCAPE:
-            end();
+            exit();
             break;
         }
     }
