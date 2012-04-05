@@ -37,6 +37,8 @@ public:
      */
     bool isChecked();
 
+    void setChecked(bool checked);
+
     /**
      * Set the size to draw the checkbox icon.
      *
