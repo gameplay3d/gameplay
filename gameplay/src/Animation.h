@@ -97,26 +97,6 @@ public:
 private:
 
     /**
-     * Defines a reference counted Curve wrapper.
-     * 
-     * Multiple channels can share the same Curve.
-     */
-    class CurveRef : public Ref
-    {
-    public:
-        static CurveRef* create(Curve* curve);
-        Curve* getCurve() const;
-
-    private:
-        CurveRef(Curve* curve);
-        CurveRef(const CurveRef&); // Hidden copy constructor.
-        ~CurveRef();
-        CurveRef& operator=(const CurveRef&); // Hidden copy assignment operator.
-
-        Curve* _curve;
-    };
-
-    /**
      * Defines a channel which holds the target, target property, curve values, and duration.
      *
      * An animation can have 1 or more channels. All typical simple property animations
@@ -141,7 +121,7 @@ private:
         Animation* _animation;                // Reference to the animation this channel belongs to.
         AnimationTarget* _target;             // The target of this channel.
         int _propertyId;                      // The target property this channel targets.
-        CurveRef* _curveRef;                  // The curve used to represent the animation data.
+        Curve* _curve;                        // The curve used to represent the animation data.
         unsigned long _duration;              // The length of the animation (in milliseconds).
     };
 
