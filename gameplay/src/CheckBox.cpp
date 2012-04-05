@@ -22,7 +22,7 @@ CheckBox::~CheckBox()
 CheckBox* CheckBox::create(Theme::Style* style, Properties* properties)
 {
     CheckBox* checkBox = new CheckBox();
-    checkBox->init(style, properties);
+    checkBox->initialize(style, properties);
     properties->getVector2("iconSize", &checkBox->_imageSize);
     checkBox->_checked = properties->getBool("checked");
 

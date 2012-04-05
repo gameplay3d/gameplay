@@ -29,6 +29,16 @@ class Button : public Label
 protected:
 
     /**
+     * Constructor.
+     */
+    Button();
+
+    /**
+     * Destructor.
+     */
+    virtual ~Button();
+
+    /**
      * Create a button with a given style and properties.
      *
      * @param style The style to apply to this button.
@@ -51,10 +61,6 @@ protected:
      * @see Touch::TouchEvent
      */
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-
-    Button();
-
-    virtual ~Button();
 
 private:
 

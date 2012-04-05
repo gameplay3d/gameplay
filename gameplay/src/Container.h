@@ -106,8 +106,14 @@ public:
 
 protected:
 
+    /**
+     * Constructor.
+     */
     Container();
 
+    /**
+     * Destructor.
+     */
     virtual ~Container();
 
     /**

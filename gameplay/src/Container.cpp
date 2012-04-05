@@ -56,7 +56,7 @@ namespace gameplay
     {
         const char* layoutString = properties->getString("layout");
         Container* container = Container::create(getLayoutType(layoutString));
-        container->init(style, properties);
+        container->initialize(style, properties);
         container->addControls(theme, properties);
 
         return container;
