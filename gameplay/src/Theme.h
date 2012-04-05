@@ -14,103 +14,119 @@ namespace gameplay
 /**
  * A theme is created and stored as part of a form and represents its appearance.
  * Once loaded, the appearance properties can be retrieved from their style IDs and set on other
- * UI controls.  A Theme has one property, 'texture', which points to an image containing
- * all the Icon, Cursor, Slider, and Skin sprites used by the theme.  Each set of sprites within
- * the texture is described in its own namespace.  The rest of the Theme consists of Style namespaces.
- * A Style describes the border, margin, and padding of a Control, what icons and cursors (if any) are
- * associated with a Control, and Font properties to apply to a Control's text.
+ * UI controls.  A Theme has one property, 'texture', which points to a texture atlas containing
+ * all the images used by the theme.  Cursor images, skins, and lists of images used by controls
+ * are defined in their own namespaces.  The rest of the Theme consists of Style namespaces.
+ * A Style describes the border, margin, and padding of a Control, what images, skins, and cursors
+ * are associated with a Control, and Font properties to apply to a Control's text.
  *
  * Below is an explanation of the properties that can be set within themes:
  *
  * theme
  * {
- *    texture = <Path to texture>
- *
- *    // Describes the images used for CheckBox and RadioButton icons.
- *    icon <iconID>
- *    {
- *        size            =   <width, height>     // Size of this icon.
- *        offPosition     =   <x, y>              // Position of the unchecked / unselected image.
- *        onPosition      =   <x, y>              // Position of the checked / selected image.
- *        color           =   <#ffffffff>         // Tint to apply to icon.
- *    }
- *   
- *    cursor <cursorID>
- *    {
- *        region  =   <x, y, width, height>   // Region within the texture of cursor sprite.
- *        color   =   <#ffffffff>             // Tint to apply to cursor.
- *    }
- *   
- *    slider <sliderID>
- *    {
- *        minCapRegion    =   <x, y, width, height>   // Left / bottom slider cap.
- *        maxCapRegion    =   <x, y, width, height>   // Right / top slider cap.
- *        markerRegion    =   <x, y, width, height>   // Shows the slider's current position.
- *        trackRegion     =   <x, y, width, height>   // Track the marker slides along.
- *        color           =   <#ffffffff>             // Tint to apply to slider sprites.
- *    }
- *   
- *    // Defines the border and background of a Control.
- *    Skin <skinID>
- *    {
- *        // The corners and edges of the given region will be used as border sprites.
- *        border
- *        {
- *            top     =   <int>   // Height of top border, top corners.
- *            bottom  =   <int>   // Height of bottom border, bottom corners.
- *            left    =   <int>   // Width of left border, left corners.
- *            right   =   <int>   // Width of right border, right corners.
- *        }
- *       
- *        region  =   <x, y, width, height>   // Total Skin region including entire border.
- *        color   =   <#ffffffff>             // Tint to apply to Skin sprites.
- *    }
- *   
- *    style <styleID>
- *    {
- *        // Layouts may make use of a style's margin to put space between adjacent controls.
- *        margin
- *        {
- *            top     =   <int>
- *            bottom  =   <int>
- *            left    =   <int>
- *            right   =   <int>        
- *        }
- *       
- *        // Padding is the space between a control's border and its content.
- *        padding
- *        {
- *            top     =   <int>
- *            bottom  =   <int>
- *            left    =   <int>
- *            right   =   <int>        
- *        }
- *       
- *        // This overlay is used when a control is enabled but not active or focused.
- *        normal
- *        {
- *            Skin   =   <SkinID>               // Skin to use for border and background sprites.
- *            checkBox    =   <iconID>                    // Icon to use for checkbox sprites.
- *            radioButton =   <iconID>                    // Icon to use for radioButton sprites.
- *            slider      =   <sliderID>                  // Slider to use for slider sprites.
- *            mouseCursor =   <cursorID>                  // Cursor to use when the mouse is over this control.
- *            textCursor  =   <cursorID>                  // Cursor to use within a textBox.
- *            font        =   <Path to font>              // Font to use for rendering text.
- *            fontSize    =   <int>                       // Size of text.
- *            textColor   =   <#ffffffff>                 // Color of text.
- *            alignment   =   <Text alignment constant>   // Member of Font::Justify enum.
- *            rightToLeft =   <bool>                      // Whether to draw text from right to left.
- *        }
- *       
- *        // This overlay is used when the control is in focus.
- *        // If not specified, the 'normal' overlay will be used.
- *        focus{}
- *       
- *        // This overlay is used when the control is active.
- *        // (Touch or mouse is down within the control.)
- *        // If not specified, the 'normal' overlay will be used.
- *        active{}
- *    }
+ *     texture = <Path to texture>
+ * 
+ *     // Describes a single image, to be used as a cursor.
+ *     cursor <Cursor ID>
+ *     {
+ *         region = <x, y, width, height>
+ *         color = <#ffffffff>
+ *     }
+ * 
+ *     // Describes all the images used by a control for one or more states.
+ *     imageList <ImageList ID>
+ *     {
+ *         image checked
+ *         {
+ *             region = <x, y, width, height>
+ *         }
+ * 
+ *         image unchecked
+ *         {
+ *             region = <x, y, width, height>
+ *             color = <#fffffffff>            // Optionally override image-list color.
+ *         }
+ * 
+ *         color = <#fffffffff>    // Default blend color for images that don't specify their own.
+ *     }
+ *     
+ *     // Defines the border and background of a Control.
+ *     skin <Skin ID>
+ *     {
+ *         // The corners and edges of the given region will be used as border sprites.
+ *         border
+ *         {
+ *             top     =   <int>   // Height of top border, top corners.
+ *             bottom  =   <int>   // Height of bottom border, bottom corners.
+ *             left    =   <int>   // Width of left border, left corners.
+ *             right   =   <int>   // Width of right border, right corners.
+ *         }
+ *         
+ *         region  =   <x, y, width, height>   // Total container region including entire border.
+ *         color   =   <#ffffffff>             // Tint to apply to skin.
+ *     }
+ *     
+ *     style <Style ID>
+ *     {
+ *         // Layouts may make use of a style's margin to put space between adjacent controls.
+ *         margin
+ *         {
+ *             top     =   <int>
+ *             bottom  =   <int>
+ *             left    =   <int>
+ *             right   =   <int>        
+ *         }
+ *         
+ *         // Padding is the space between a control's border and its content.
+ *         padding
+ *         {
+ *             top     =   <int>
+ *             bottom  =   <int>
+ *             left    =   <int>
+ *             right   =   <int>        
+ *         }
+ *         
+ *         // Properties used when in control is in the normal state.
+ *         stateNormal
+ *         {
+ *             skin   =   <Skin ID>             // Skin to use for border and background sprites.
+ *             imageList = <ImageList ID>
+ * 
+ *             cursor      =   <Cursor ID>                 // Cursor to use when the mouse is over this control.
+ *             font        =   <Path to font>              // Font to use for rendering text.
+ *             fontSize    =   <int>                       // Size of text.
+ *             textColor   =   <#ffffffff>                 // Color of text.
+ *             alignment   =   <Text alignment constant>   // Member of Font::Justify enum.
+ *             rightToLeft =   <bool>                      // Whether to draw text from right to left.
+ *             opacity     =   <float>                     // Opacity to apply to all text/border/icon colors.
+ *         }
+ *         
+ *         // Properties used when in control is in the focus state
+ *         // If not specified, the 'normal' overlay will be used.
+ *         stateFocus
+ *         {
+ *             skin   =   <Skin ID>             // Skin to use for border and background sprites.
+ *             ...
+ *         }
+ *         
+ *         // Properties used when in control is in the focus. 
+ *         // This is when a touch/mouse is down within the control.
+ *         // If not specified, the 'normal' overlay will be used.
+ *         stateActive
+ *         {
+ *             skin   =   <Skin ID>             // Skin to use for border and background sprites.
+ *             ...
+ *         }
+ * 
+ *         // Properties used when in control is in the focus. 
+ *         // This is when a touch/mouse is down within the control.
+ *         // If not specified, the 'normal' overlay will be used.
+ *         state-disabled
+ *         {
+ *             skin   =   <Skin ID>             // Skin to use for border and background sprites.
+ *             ...        
+ *         }
+ *     }
  * }
  *
  */

@@ -668,7 +668,7 @@ void SceneLoader::createAnimations(const Scene* scene)
             }
         }
 
-        Game::getInstance()->getAnimationController()->createAnimation(_animations[i]._animationID, node, p);
+        node->createAnimation(_animations[i]._animationID, p);
     }
 }
 

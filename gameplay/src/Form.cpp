@@ -58,24 +58,9 @@ namespace gameplay
         // Create new form with given ID, theme and layout.
         const char* themeFile = formProperties->getString("theme");
         const char* layoutString = formProperties->getString("layout");
-        Form* form = Form::create(themeFile, getLayoutType(layoutString));
-
-        Theme* theme = form->_theme;
-        const char* styleName = formProperties->getString("style");
-        form->init(theme->getStyle(styleName), formProperties);
-
-        // Add all the controls to the form.
-        form->addControls(theme, formProperties);
-
-        SAFE_DELETE(properties);
-
-        return form;
-    }
-
-    Form* Form::create(const char* themeFile, Layout::Type type)
-    {
+        
         Layout* layout;
-        switch (type)
+        switch (getLayoutType(layoutString))
         {
         case Layout::LAYOUT_ABSOLUTE:
             layout = AbsoluteLayout::create();
@@ -94,6 +79,15 @@ namespace gameplay
         Form* form = new Form();
         form->_layout = layout;
         form->_theme = theme;
+
+        //Theme* theme = form->_theme;
+        const char* styleName = formProperties->getString("style");
+        form->initialize(theme->getStyle(styleName), formProperties);
+
+        // Add all the controls to the form.
+        form->addControls(theme, formProperties);
+
+        SAFE_DELETE(properties);
 
         __forms.push_back(form);
 

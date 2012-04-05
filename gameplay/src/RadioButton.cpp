@@ -27,7 +27,7 @@ RadioButton::~RadioButton()
 RadioButton* RadioButton::create(Theme::Style* style, Properties* properties)
 {
     RadioButton* radioButton = new RadioButton();
-    radioButton->init(style, properties);
+    radioButton->initialize(style, properties);
 
     properties->getVector2("imageSize", &radioButton->_imageSize);
 

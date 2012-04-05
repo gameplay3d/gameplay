@@ -594,6 +594,69 @@ void Node::setBoundsDirty()
         _parent->setBoundsDirty();
 }
 
+Animation* Node::getAnimation(const char* id) const
+{
+    Animation* animation = ((AnimationTarget*)this)->getAnimation(id);
+    if (animation)
+        return animation;
+    
+    // See if this node has a model, then drill down.
+    Model* model = this->getModel();
+    if (model)
+    {
+        // Check to see if there's any animations with the ID on the joints.
+        MeshSkin* skin = model->getSkin();
+        if (skin)
+        {
+            Joint* rootJoint = skin->getRootJoint();
+            if (rootJoint)
+            {
+                animation = rootJoint->getAnimation(id);
+                if (animation)
+                    return animation;
+            }
+        }
+
+        // Check to see if any of the model's material parameter's has an animation
+        // with the given ID.
+        Material* material = model->getMaterial();
+        if (material)
+        {
+            // How to access material parameters? hidden on the Material::RenderState.
+            std::vector<MaterialParameter*>::iterator itr = material->_parameters.begin();
+            for (; itr != material->_parameters.end(); itr++)
+            {
+                animation = ((MaterialParameter*)(*itr))->getAnimation(id);
+                if (animation)
+                    return animation;
+            }
+        }
+    }
+
+    // look through form for animations.
+    Form* form = this->getForm();
+    if (form)
+    {
+        animation = form->getAnimation(id);
+        if (animation)
+            return animation;
+    }
+
+    // Look through this node's children for an animation with the specified ID.
+    unsigned int childCount = this->getChildCount();
+    Node* child = this->getFirstChild();
+    for (unsigned int i = 0; i < childCount; i++)
+    {
+        animation = child->getAnimation(id);
+        if (animation)
+            return animation;
+
+        child = child->getNextSibling();
+    }
+    
+    return NULL;
+}
+
 Camera* Node::getCamera() const
 {
     return _camera;
