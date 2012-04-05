@@ -117,7 +117,7 @@ private:
     MeshSkin();
 
     /**
-     * Hidden copy constructor.
+     * Constructor.
      */
     MeshSkin(const MeshSkin&);
 
@@ -127,7 +127,7 @@ private:
     ~MeshSkin();
     
     /**
-     * Hidden copy assignment operator.
+     * Copy assignment operator.
      */
     MeshSkin& operator=(const MeshSkin&);
 
@@ -169,6 +169,7 @@ private:
     Matrix _bindShape;
     std::vector<Joint*> _joints;
     Joint* _rootJoint;
+    
     // Pointer to the root node of the mesh skin.
     // The purpose is so that the joint hierarchy doesn't need to be in the scene.
     // If the joints are not in the scene then something has to hold a reference to it.

@@ -168,7 +168,6 @@ extern void printError(const char* format, ...);
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
 #else
-
 #ifdef __QNX__
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -179,7 +178,6 @@ extern void printError(const char* format, ...);
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #endif
-
 #include <vorbis/vorbisfile.h>
 #endif
 
