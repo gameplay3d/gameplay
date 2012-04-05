@@ -122,19 +122,8 @@ void CharacterGame::update(long elapsedTime)
     {
 	    keyFlags = 0;
 
-        float angle = atan2(joystickVec.x, -joystickVec.y);
-		_character->setRotation(Vector3::unitY(), angle);
-
-	    if (joystickVec.x > 0)
-	    {
-		    keyFlags |= 8;
-	    }
-	    else if (joystickVec.x < 0)
-	    {
-		    keyFlags |= 4;
-	    }
-	
-	    if (joystickVec.y > 0)
+        // Calculate forward/backward movement.
+        if (joystickVec.y > 0)
 	    {
 		    keyFlags |= 1;
 	    }
@@ -142,6 +131,10 @@ void CharacterGame::update(long elapsedTime)
 	    {
 		    keyFlags |= 2;
 	    }
+
+        // Calculate rotation
+        float angle = joystickVec.x * MATH_PI * -0.02;
+        _character->rotate(Vector3::unitY(), angle);
     }
 
     // Update character animation and movement
@@ -330,11 +323,19 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
 
 void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
+    // Get the joystick's current state.
+    bool wasActive = _gamepad->isJoystickActive(JOYSTICK);
+
     _gamepad->touch(x, y, evt, contactIndex);
 
-    Vector2 joystickVec = _gamepad->getJoystickState(JOYSTICK);
-    if (joystickVec.isZero())
+    // See if the joystick is still active.
+    bool isActive = _gamepad->isJoystickActive(JOYSTICK);
+    if (!isActive)
     {
+        // If it was active before, reset the joystick's influence on the keyflags.
+        if (wasActive)
+            keyFlags = 0;
+    
         switch (evt)
         {
         case Touch::TOUCH_PRESS:
