@@ -6,7 +6,6 @@
 namespace gameplay
 {
 
-// Static member variables.
 std::map<std::string, Properties*> SceneLoader::_propertiesFromFile;
 std::vector<SceneLoader::SceneAnimation> SceneLoader::_animations;
 std::vector<SceneLoader::SceneNode> SceneLoader::_sceneNodes;
