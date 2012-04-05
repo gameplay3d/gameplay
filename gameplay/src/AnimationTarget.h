@@ -28,7 +28,6 @@ public:
      * Cannot use Curve::BEZIER or CURVE::HERMITE as the interpolation type since they require tangents/control points.
      * 
      * @param id The ID of the animation.
-     * @param target The animation target.
      * @param propertyId The property on this target to animate.
      * @param keyCount The number of keyframes in the animation. Must be greater than one.
      * @param keyTimes The list of key times for the animation (in milliseconds).
@@ -43,7 +42,6 @@ public:
      * Creates an animation on this target from a set of key value and key time pairs.
      * 
      * @param id The ID of the animation.
-     * @param target The animation target.
      * @param propertyId The property on this target to animate.
      * @param keyCount The number of keyframes in the animation. Must be greater than one.
      * @param keyTimes The list of key times for the animation (in milliseconds).
@@ -60,7 +58,6 @@ public:
      * Creates an animation on this target using the data from the given properties object. 
      * 
      * @param id The ID of the animation.
-     * @param target The animation target.
      * @param animationFile The animation file defining the animation data.
      *
      * @return The newly created animation.
@@ -71,8 +68,7 @@ public:
      * Creates an animation on this target using the data from the given properties object. 
      * 
      * @param id The ID of the animation.
-     * @param target The animation target.
-     * @param properties The properties object defining the animation data.
+     * @param animationProperties The properties object defining the animation data.
      *
      * @return The newly created animation.
      */
@@ -83,7 +79,6 @@ public:
      * Cannot use Curve::BEZIER or CURVE::HERMITE as the interpolation type since they require tangents/control points.
      *
      * @param id The ID of the animation.
-     * @param target The animation target.
      * @param propertyId The property on this target to animate.
      * @param from The values to animate from.
      * @param to The values to animate to.
@@ -99,7 +94,6 @@ public:
      * Cannot use Curve::BEZIER or CURVE::HERMITE as the interpolation type since they require tangents/control points.
      *
      * @param id The ID of the animation.
-     * @param target The animation target.
      * @param propertyId The property on this target to animate.
      * @param from The values to animate from.
      * @param by The values to animate by.
@@ -113,7 +107,7 @@ public:
     /**
      * Destroys the animation with the specified ID. Destroys the first animation if ID is NULL.
      *
-     * @param The animation to destroy.
+     * @param id The ID of the animation to destroy.
      */ 
     void destroyAnimation(const char* id = NULL);
 

@@ -402,7 +402,18 @@ public:
      */
     void setModel(Model* model);
 
+    /**
+     * Returns the pointer to this node's form.
+     * 
+     * @return The pointer to this node's form or NULL.
+     */
     Form* getForm() const;
+
+    /**
+     * Assigns a form to this node.
+     * 
+     * @param form The form pointer. May be NULL.
+     */
     void setForm(Form* form);
 
     /**
