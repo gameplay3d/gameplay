@@ -1,6 +1,6 @@
 animation boyAnimation
 {
-    frameCount = 483
+    frameCount = 482
 	clip idle
     {
         begin = 29
@@ -15,7 +15,7 @@ animation boyAnimation
     }
     clip run
     {
-        begin = 4108
+        begin = 108
         end = 123
         repeatCount = INDEFINITE
     }
