@@ -119,9 +119,9 @@ public:
     void resume();
 
     /**
-     * Ends the game.
+     * Exits the game.
      */
-    void end();
+    void exit();
 
     /**
      * Platform frame delagate.

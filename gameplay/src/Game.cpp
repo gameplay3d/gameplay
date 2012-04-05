@@ -159,7 +159,7 @@ void Game::resume()
     }
 }
 
-void Game::end()
+void Game::exit()
 {
     shutdown();
 }
