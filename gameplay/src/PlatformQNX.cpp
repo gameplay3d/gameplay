@@ -962,7 +962,7 @@ int Platform::enterMessagePump()
                     _game->menu();
                     break;
                 case NAVIGATOR_EXIT:
-                    _game->end();
+                    _game->exit();
                     break;
                 }
             }
@@ -990,7 +990,7 @@ int Platform::enterMessagePump()
         rc = eglSwapBuffers(__eglDisplay, __eglSurface);
         if (rc != EGL_TRUE)
         {
-            _game->end();
+            _game->exit();
             perror("eglSwapBuffers");
             break;
         }
