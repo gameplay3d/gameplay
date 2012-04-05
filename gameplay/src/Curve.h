@@ -11,6 +11,7 @@ namespace gameplay
  */
 class Curve : public Ref
 {
+    friend class AnimationTarget;
     friend class Animation;
     friend class AnimationClip;
     friend class AnimationController;
@@ -400,7 +401,7 @@ private:
     Curve(unsigned int pointCount, unsigned int componentCount);
 
     /**
-     * Hidden copy constructor.
+     * Constructor.
      */
     Curve(const Curve& copy);
 
@@ -410,7 +411,7 @@ private:
     ~Curve();
 
     /**
-     * Hidden copy assignment operator.
+     * Copy assignment operator.
      */
     Curve& operator=(const Curve&);
 

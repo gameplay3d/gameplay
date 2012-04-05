@@ -722,23 +722,35 @@ protected:
 
 private:
 
-    // Animation blending bits.
     static const char ANIMATION_POSITION_X_BIT = 0x01;
     static const char ANIMATION_POSITION_Y_BIT = 0x02;
     static const char ANIMATION_SIZE_WIDTH_BIT = 0x04;
     static const char ANIMATION_SIZE_HEIGHT_BIT = 0x08;
     static const char ANIMATION_OPACITY_BIT = 0x10;
 
-    bool _styleOverridden;
-
+    /*
+     * Constructor.
+     */    
+    Control(const Control& copy);
+    
     void applyAnimationValuePositionX(float x, float blendWeight);
+    
     void applyAnimationValuePositionY(float y, float blendWeight);
+    
     void applyAnimationValueSizeWidth(float width, float blendWeight);
+    
     void applyAnimationValueSizeHeight(float height, float blendWeight);
+    
     void applyAnimationValueOpacity();
 
-    Control(const Control& copy);
+    Theme::Style::Overlay** getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays);
 
+    Theme::Style::Overlay* getOverlay(Control::State state) const;
+
+    void overrideStyle();
+    
+    void addSpecificListener(Control::Listener* listener, Listener::EventType eventType);
+    
     /**
      * Draws the themed border and background of a control.
      *
@@ -746,19 +758,8 @@ private:
      * @param clip The clipping rectangle of this control's parent container.
      */
     virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    void addSpecificListener(Control::Listener* listener, Listener::EventType eventType);
-
-    // Gets the overlays requested in the overlayTypes bitflag.
-    Theme::Style::Overlay** getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays);
-
-    /**
-     * Gets an overlay from a control state.
-     */
-    Theme::Style::Overlay* getOverlay(Control::State state) const;
-
-    // Ensures that this control has a copy of its style so that it can override it without affecting other controls.
-    void overrideStyle();
+    
+    bool _styleOverridden;
 };
 
 }

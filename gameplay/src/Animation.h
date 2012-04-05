@@ -22,7 +22,6 @@ class AnimationClip;
  */
 class Animation : public Ref
 {
-    friend class AnimationController;
     friend class AnimationClip;
     friend class AnimationTarget;
     friend class Package;
@@ -93,7 +92,7 @@ public:
      * Returns true if this animation targets the given AnimationTarget.
      */
     bool targets(AnimationTarget* target) const;
-
+    
 private:
 
     /**
@@ -104,7 +103,6 @@ private:
      */
     class Channel
     {
-        friend class AnimationController;
         friend class AnimationClip;
         friend class Animation;
         friend class AnimationTarget;
@@ -149,12 +147,12 @@ private:
      * Destructor.
      */
     ~Animation();
-
+    
     /**
      * Hidden copy assignment operator.
      */
     Animation& operator=(const Animation&);
-
+    
     /**
      * Creates the default clip.
      */

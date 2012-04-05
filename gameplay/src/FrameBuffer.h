@@ -99,10 +99,13 @@ public:
      
 private:
  
+    /**
+     * Constructor.
+     */
     FrameBuffer(const char* id);
 
     /**
-     * Destructor.  Removes this FrameBuffer from the list of available FrameBuffers.
+     * Destructor.
      */
     ~FrameBuffer();
 
