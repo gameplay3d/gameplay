@@ -214,7 +214,6 @@ private:
      */
     ~PhysicsCollisionShape();
 
-
     // Shape type
     Type _type;
 
