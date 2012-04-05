@@ -29,6 +29,7 @@ class CheckBox : public Button
     friend class Container;
 
 public:
+
     /**
      * Gets whether this checkbox is checked.
      *
@@ -63,10 +64,16 @@ public:
      */
     virtual void addListener(Control::Listener* listener, int eventFlags);
 
-  //  virtual void animationEvent(AnimationClip* clip, EventType type);
-
 protected:
+
+    /**
+     * Constructor.
+     */
     CheckBox();
+
+    /**
+     * Destructor.
+     */
     ~CheckBox();
 
     /**
@@ -97,7 +104,7 @@ protected:
      * Called when a control's properties change.  Updates this control's internal rendering
      * properties, such as its text viewport.
      *
-     * @param position The control's position within its container.
+     * @param clip The clipping rectangle of this control's parent container.
      */
     void update(const Rectangle& clip);
 
@@ -113,6 +120,7 @@ protected:
     Vector2 _imageSize;  // The size to draw the checkbox icon, if different from its size in the texture.
 
 private:
+
     CheckBox(const CheckBox& copy);
 };
 

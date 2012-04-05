@@ -15,8 +15,8 @@ namespace gameplay
 /**
  * This class represents the appearance of a control.  A style can have padding and margin values,
  * as well as overlays for each of the control's states.  Each overlay in turn can reference
- * the above classes to determine the border, background, cursor, and icon settings to use for
- * a particular state.
+ * other theme classes to determine the border, background, cursor, and image settings to use for
+ * a particular state, as well as color and font settings, etcetera.
  */
 class Theme::Style
 {
@@ -160,6 +160,23 @@ private:
     };
 
     /**
+     * Constructor.
+     */
+    Style(const char* id, float tw, float th,
+          const Theme::Margin& margin, const Theme::Padding& padding,
+          Overlay* normal, Overlay* focus, Overlay* active, Overlay* disabled);
+
+    /**
+     * Constructor.
+     */
+    Style(const Style& style);
+
+    /**
+     * Destructor.
+     */
+    ~Style();
+
+    /**
      * Returns the Id of this Style.
      */
     const char* getId() const;
@@ -192,25 +209,6 @@ private:
      * The margin is used by Layouts other than AbsoluteLayout to put space between Controls.
      */
     void setMargin(float top, float bottom, float left, float right);
-
-private:
-
-    /**
-     * Constructor.
-     */
-    Style(const char* id, float tw, float th,
-          const Theme::Margin& margin, const Theme::Padding& padding,
-          Overlay* normal, Overlay* focus, Overlay* active, Overlay* disabled);
-
-    /**
-     * Constructor.
-     */
-    Style(const Style& style);
-
-    /**
-     * Destructor.
-     */
-    ~Style();
         
     std::string _id;
     float _tw;

@@ -14,7 +14,7 @@ Slider::~Slider()
 Slider* Slider::create(Theme::Style* style, Properties* properties)
 {
     Slider* slider = new Slider();
-    slider->init(style, properties);
+    slider->initialize(style, properties);
 
     slider->_min = properties->getFloat("min");
     slider->_max = properties->getFloat("max");
