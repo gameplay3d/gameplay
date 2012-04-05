@@ -335,7 +335,6 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     Vector2 joystickVec = _gamepad->getJoystickState(JOYSTICK);
     if (joystickVec.isZero())
     {
-        keyFlags = 0;
         switch (evt)
         {
         case Touch::TOUCH_PRESS:
