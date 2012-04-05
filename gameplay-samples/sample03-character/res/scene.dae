@@ -15,8 +15,8 @@
 		</comments>
       <source_data>file:///C:/Code/GamePlay/gameplay-samples/sample03-character/res/scene.mb</source_data>
     </contributor>
-    <created>2012-04-04T22:51:24</created>
-    <modified>2012-04-04T22:51:24</modified>
+    <created>2012-04-05T15:20:47</created>
+    <modified>2012-04-05T15:20:47</modified>
     <unit name="centimeter" meter="0.01"/>
     <up_axis>Y_UP</up_axis>
   </asset>
@@ -5322,15 +5322,15 @@
         </extra>
       </node>
       <node id="HIKCharacterNode_Boy_Reference" name="HIKCharacterNode_Boy_Reference" sid="HIKCharacterNode_Boy_Reference" type="JOINT">
-        <matrix sid="transform">0.9995796 0.02838136 -0.005932558 0.01293671 -0.02850516 0.9993527 -0.02194417 -0.0220004 0.005305913 0.02210405 0.9997416 -0.6251013 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 0 0 1 0 0.05718264 0 0 1 -0.04096636 0 0 0 1</matrix>
         <node id="HIKCharacterNode1_Hips" name="HIKCharacterNode1_Hips" sid="HIKCharacterNode1_Hips" type="JOINT">
           <matrix sid="transform">0.9999998 0 0 0 0 0.9999998 0 18.54874 0 0 0.9999998 0 0 0 0 1</matrix>
           <node id="HIKCharacterNode1_LeftUpLeg" name="HIKCharacterNode1_LeftUpLeg" sid="HIKCharacterNode1_LeftUpLeg" type="JOINT">
-            <matrix sid="transform">0.9819558 0.07126158 0.1751706 2.111593 -0.09765817 0.9843012 0.1470175 -2.267056 -0.161944 -0.1614715 0.9734995 0 0 0 0 1</matrix>
+            <matrix sid="transform">0.9953932 0.09585755 0.001962641 2.111593 -0.09586386 0.9953887 0.003420656 -2.267056 -0.001625695 -0.003593044 0.9999923 0 0 0 0 1</matrix>
             <node id="HIKCharacterNode1_LeftLeg" name="HIKCharacterNode1_LeftLeg" sid="HIKCharacterNode1_LeftLeg" type="JOINT">
-              <matrix sid="transform">0.9779403 -0.0160404 -0.208268 0.7981163 -0.06075485 0.9321004 -0.3570682 -6.056325 0.1998542 0.3618446 0.910564 0 0 0 0 1</matrix>
+              <matrix sid="transform">0.9999887 2.71136e-4 0.004751355 0.7981163 0 0.9970163 -0.07719069 -6.056325 -0.004758108 0.07719027 0.997005 0 0 0 0 1</matrix>
               <node id="HIKCharacterNode1_LeftFoot" name="HIKCharacterNode1_LeftFoot" sid="HIKCharacterNode1_LeftFoot" type="JOINT">
-                <matrix sid="transform">0.9857674 -0.1679585 -0.007253137 0.6185404 0.1662309 0.9673711 0.1912079 -8.617527 -0.02509851 -0.1896922 0.9815228 0.1714302 0 0 0 1</matrix>
+                <matrix sid="transform">0.9953862 -0.09585622 -0.004236806 0.6185404 0.0959409 0.9937216 0.05755655 -8.617527 -0.001306948 -0.05769748 0.9983333 0.1714302 0 0 0 1</matrix>
                 <node id="HIKCharacterNode1_LeftToeBase" name="HIKCharacterNode1_LeftToeBase" sid="HIKCharacterNode1_LeftToeBase" type="JOINT">
                   <matrix sid="transform">1 0 0 0.07245186 0 1 0 -1.093292 0 0 1 4.506884 0 0 0 1</matrix>
                   <extra>
@@ -5358,11 +5358,11 @@
             </extra>
           </node>
           <node id="HIKCharacterNode1_RightUpLeg" name="HIKCharacterNode1_RightUpLeg" sid="HIKCharacterNode1_RightUpLeg" type="JOINT">
-            <matrix sid="transform">0.9857807 -0.03784383 -0.1637206 -2.111593 0.1173593 0.8523634 0.5096112 -2.267056 0.1202638 -0.521579 0.8446847 0 0 0 0 1</matrix>
+            <matrix sid="transform">0.9953648 -0.09615225 -0.001969867 -2.111593 0.09615869 0.99536 0.003491081 -2.267056 0.001625051 -0.003664319 0.9999921 0 0 0 0 1</matrix>
             <node id="HIKCharacterNode1_RightLeg" name="HIKCharacterNode1_RightLeg" sid="HIKCharacterNode1_RightLeg" type="JOINT">
-              <matrix sid="transform">0.9883423 -0.0200556 -0.1509212 -0.7981164 -0.122301 0.4857974 -0.8654729 -6.056325 0.09067471 0.8738413 0.4776813 0 0 0 0 1</matrix>
+              <matrix sid="transform">0.9999886 -2.72036e-4 -0.004765448 -0.7981164 0 0.997007 -0.07731075 -6.056325 0.004772217 0.07731034 0.9969957 0 0 0 0 1</matrix>
               <node id="HIKCharacterNode1_RightFoot" name="HIKCharacterNode1_RightFoot" sid="HIKCharacterNode1_RightFoot" type="JOINT">
-                <matrix sid="transform">0.9689727 0.2415875 0.05222506 -0.6185404 -0.2466592 0.9586958 0.1416387 -8.617527 -0.01584979 -0.1501259 0.9885398 0.1714302 0 0 0 1</matrix>
+                <matrix sid="transform">0.9953577 0.09615082 0.004245489 -0.6185404 -0.09623545 0.9936902 0.05760627 -8.617527 0.001320189 -0.05774741 0.9983304 0.1714302 0 0 0 1</matrix>
                 <node id="HIKCharacterNode1_RightToeBase" name="HIKCharacterNode1_RightToeBase" sid="HIKCharacterNode1_RightToeBase" type="JOINT">
                   <matrix sid="transform">1 0 0 -0.07245187 0 1 0 -1.093292 0 0 1 4.506884 0 0 0 1</matrix>
                   <extra>
@@ -5390,19 +5390,19 @@
             </extra>
           </node>
           <node id="HIKCharacterNode1_Spine" name="HIKCharacterNode1_Spine" sid="HIKCharacterNode1_Spine" type="JOINT">
-            <matrix sid="transform">0.9999966 -0.001438356 -0.002153319 0 0.001432337 0.9999951 -0.002793805 3.454724 0.002157327 0.002790711 0.9999938 0 0 0 0 1</matrix>
+            <matrix sid="transform">1 0 0 0 0 1 0 3.454724 0 0 1 0 0 0 0 1</matrix>
             <node id="HIKCharacterNode1_LeftShoulder" name="HIKCharacterNode1_LeftShoulder" sid="HIKCharacterNode1_LeftShoulder" type="JOINT">
-              <matrix sid="transform">0.947849 0.1439111 -0.2843796 1.132064 -0.1534401 0.9880922 -0.0113954 8.383684 0.2793534 0.05443637 0.958644 0 0 0 0 1</matrix>
+              <matrix sid="transform">0.9878383 -0.155485 0 1.132064 0.155485 0.9878383 0 8.383684 0 0 1 0 0 0 0 1</matrix>
               <node id="HIKCharacterNode1_LeftArm" name="HIKCharacterNode1_LeftArm" sid="HIKCharacterNode1_LeftArm" type="JOINT">
-                <matrix sid="transform">0.9269944 0.3341108 0.1704451 1.866206 -0.3334632 0.9421756 -0.03328074 -0.4241983 -0.1717086 -0.02598608 0.9848051 0 0 0 0 1</matrix>
+                <matrix sid="transform">0.8112782 -0.584623 0.006627118 1.866206 0.5846411 0.8112915 -0.001043489 -0.4241983 -0.004766476 0.004721045 0.9999776 0 0 0 0 1</matrix>
                 <node id="HIKCharacterNode1_LeftForeArm" name="HIKCharacterNode1_LeftForeArm" sid="HIKCharacterNode1_LeftForeArm" type="JOINT">
-                  <matrix sid="transform">0.8425578 0.125264 -0.5238368 4.024535 -0.05823033 0.9880638 0.1426138 -3.928348 0.5354486 -0.08965723 0.8397952 0 0 0 0 1</matrix>
+                  <matrix sid="transform">0.9999628 0 -0.008599773 4.024535 1.1172e-4 0.9999626 0.008619112 -3.928348 0.00859913 -0.008619754 0.9999257 0 0 0 0 1</matrix>
                   <node id="HIKCharacterNode1_LeftHand" name="HIKCharacterNode1_LeftHand" sid="HIKCharacterNode1_LeftHand" type="JOINT">
-                    <matrix sid="transform">0.9958995 0.07125627 0.05573768 4.87481 -0.04386452 0.9191916 -0.3913602 -4.88591 -0.07912047 0.3873105 0.9185481 -0.04220572 0 0 0 1</matrix>
+                    <matrix sid="transform">0.9806898 0.1168134 0.1568505 4.87481 -0.08939878 0.9810845 -0.1717004 -4.88591 -0.1739405 0.1543626 0.9725826 -0.04220572 0 0 0 1</matrix>
                     <node id="HIKCharacterNode1_LeftFingerBase" name="HIKCharacterNode1_LeftFingerBase" sid="HIKCharacterNode1_LeftFingerBase" type="JOINT">
-                      <matrix sid="transform">0.6046787 0.7582869 -0.2436488 1.473258 -0.7378988 0.6484966 0.1869691 -1.178237 0.2997816 0.0667319 0.9516711 0.4395612 0 0 0 1</matrix>
+                      <matrix sid="transform">0.9889754 -0.1277158 -0.07494178 1.473258 0.1342305 0.9868992 0.08951055 -1.178237 0.06252808 -0.09858321 0.9931624 0.4395612 0 0 0 1</matrix>
                       <node id="HIKCharacterNode_Boy_LeftHandIndex1" name="HIKCharacterNode_Boy_LeftHandIndex1" sid="HIKCharacterNode_Boy_LeftHandIndex1" type="JOINT">
-                        <matrix sid="transform">0.1673512 0.981331 -0.09477876 0.7055098 -0.9807375 0.1755269 0.08569836 -0.7416054 0.1007347 0.07861136 0.9918028 0.1173587 0 0 0 1</matrix>
+                        <matrix sid="transform">0.9894085 -0.1288289 -0.06688767 0.7055098 0.1341401 0.9875523 0.0821397 -0.7416054 0.05547311 -0.09024203 0.9943737 0.1173587 0 0 0 1</matrix>
                         <node id="HIKCharacterNode_Boy_LeftHandIndex2" name="HIKCharacterNode_Boy_LeftHandIndex2" sid="HIKCharacterNode_Boy_LeftHandIndex2" type="JOINT">
                           <matrix sid="transform">1 0 0 0.6236414 0 1 0 -0.8593706 0 0 1 0.008861788 0 0 0 1</matrix>
                           <extra>
@@ -5424,7 +5424,7 @@
                       </extra>
                     </node>
                     <node id="HIKCharacterNode_Boy_LeftHandThumb1" name="HIKCharacterNode_Boy_LeftHandThumb1" sid="HIKCharacterNode_Boy_LeftHandThumb1" type="JOINT">
-                      <matrix sid="transform">0.9769806 0.08428991 0.1959697 0.3797347 -0.06928775 0.9942044 -0.08219947 -1.242319 -0.2017626 0.06672898 0.9771587 0.8735037 0 0 0 1</matrix>
+                      <matrix sid="transform">0.9989266 -0.04494302 0.01121395 0.3797347 0.04396081 0.9961196 0.07624389 -1.242319 -0.01459707 -0.07566907 0.9970261 0.8735037 0 0 0 1</matrix>
                       <node id="HIKCharacterNode_Boy_LeftHandThumb2" name="HIKCharacterNode_Boy_LeftHandThumb2" sid="HIKCharacterNode_Boy_LeftHandThumb2" type="JOINT">
                         <matrix sid="transform">1 0 0 0.1905273 0 1 0 -0.8055549 0 0 1 0.5593742 0 0 0 1</matrix>
                         <extra>
@@ -5464,17 +5464,17 @@
               </extra>
             </node>
             <node id="HIKCharacterNode1_RightShoulder" name="HIKCharacterNode1_RightShoulder" sid="HIKCharacterNode1_RightShoulder" type="JOINT">
-              <matrix sid="transform">0.9853254 -0.1421608 0.0944681 -1.132064 0.1466083 0.9883068 -0.0419019 8.383684 -0.08740666 0.05513681 0.9946457 0 0 0 0 1</matrix>
+              <matrix sid="transform">0.9878383 0.155485 0 -1.132064 -0.155485 0.9878383 0 8.383684 0 0 1 0 0 0 0 1</matrix>
               <node id="HIKCharacterNode1_RightArm" name="HIKCharacterNode1_RightArm" sid="HIKCharacterNode1_RightArm" type="JOINT">
-                <matrix sid="transform">0.887597 -0.4488305 -0.1035517 -1.866206 0.4467579 0.8935859 -0.04372375 -0.4241983 0.1121569 -0.00745349 0.9936627 0 0 0 0 1</matrix>
+                <matrix sid="transform">0.8112782 0.584623 -0.006627118 -1.866206 -0.5846411 0.8112915 -0.001043489 -0.4241983 0.004766476 0.004721045 0.9999776 0 0 0 0 1</matrix>
                 <node id="HIKCharacterNode1_RightForeArm" name="HIKCharacterNode1_RightForeArm" sid="HIKCharacterNode1_RightForeArm" type="JOINT">
-                  <matrix sid="transform">0.9070238 0.02439615 0.4203717 -4.024535 -0.0557747 0.9964843 0.06251276 -3.928348 -0.4173688 -0.08014668 0.9051958 0 0 0 0 1</matrix>
+                  <matrix sid="transform">0.9999628 0 0.008599773 -4.024535 -1.1172e-4 0.9999626 0.008619112 -3.928348 -0.00859913 -0.008619754 0.9999257 0 0 0 0 1</matrix>
                   <node id="HIKCharacterNode1_RightHand" name="HIKCharacterNode1_RightHand" sid="HIKCharacterNode1_RightHand" type="JOINT">
-                    <matrix sid="transform">0.9804608 0.1898841 0.05138672 -4.87481 -0.1865775 0.9804217 -0.06294517 -4.88591 -0.06233294 0.05212766 0.9966932 -0.04220572 0 0 0 1</matrix>
+                    <matrix sid="transform">0.9806898 -0.1168134 -0.1568505 -4.87481 0.08939878 0.9810845 -0.1717004 -4.88591 0.1739405 0.1543626 0.9725826 -0.04220572 0 0 0 1</matrix>
                     <node id="HIKCharacterNode1_RightFingerBase" name="HIKCharacterNode1_RightFingerBase" sid="HIKCharacterNode1_RightFingerBase" type="JOINT">
-                      <matrix sid="transform">0.5985673 -0.7836915 0.1659664 -1.473258 0.7855961 0.6147949 0.06975734 -1.178237 -0.1567035 0.08862809 0.9836611 0.4395612 0 0 0 1</matrix>
+                      <matrix sid="transform">0.9889754 0.1277158 0.07494178 -1.473258 -0.1342305 0.9868992 0.08951055 -1.178237 -0.06252808 -0.09858321 0.9931624 0.4395612 0 0 0 1</matrix>
                       <node id="HIKCharacterNode_Boy_RightHandIndex1" name="HIKCharacterNode_Boy_RightHandIndex1" sid="HIKCharacterNode_Boy_RightHandIndex1" type="JOINT">
-                        <matrix sid="transform">0.2337823 -0.9714936 0.03932077 -0.7055098 0.9699829 0.2358207 0.0593446 -0.7416054 -0.06692554 0.02426676 0.9974628 0.1173587 0 0 0 1</matrix>
+                        <matrix sid="transform">0.9894085 0.1288289 0.06688767 -0.7055098 -0.1341401 0.9875523 0.0821397 -0.7416054 -0.05547311 -0.09024203 0.9943737 0.1173587 0 0 0 1</matrix>
                         <node id="HIKCharacterNode_Boy_RightHandIndex2" name="HIKCharacterNode_Boy_RightHandIndex2" sid="HIKCharacterNode_Boy_RightHandIndex2" type="JOINT">
                           <matrix sid="transform">1 0 0 -0.6236414 0 1 0 -0.8593706 0 0 1 0.008861791 0 0 0 1</matrix>
                           <extra>
@@ -5496,7 +5496,7 @@
                       </extra>
                     </node>
                     <node id="HIKCharacterNode_Boy_RightHandThumb1" name="HIKCharacterNode_Boy_RightHandThumb1" sid="HIKCharacterNode_Boy_RightHandThumb1" type="JOINT">
-                      <matrix sid="transform">0.9648554 0.04952529 -0.2580723 -0.3797347 -0.02398519 0.9945779 0.1011907 -1.242319 0.2616845 -0.09144446 0.9608117 0.8735037 0 0 0 1</matrix>
+                      <matrix sid="transform">0.9989266 0.04494302 -0.01121395 -0.3797347 -0.04396081 0.9961196 0.07624389 -1.242319 0.01459707 -0.07566907 0.9970261 0.8735037 0 0 0 1</matrix>
                       <node id="HIKCharacterNode_Boy_RightHandThumb2" name="HIKCharacterNode_Boy_RightHandThumb2" sid="HIKCharacterNode_Boy_RightHandThumb2" type="JOINT">
                         <matrix sid="transform">1 0 0 -0.1905273 0 1 0 -0.8055549 0 0 1 0.5593741 0 0 0 1</matrix>
                         <extra>
@@ -5536,7 +5536,7 @@
               </extra>
             </node>
             <node id="HIKCharacterNode1_Neck" name="HIKCharacterNode1_Neck" sid="HIKCharacterNode1_Neck" type="JOINT">
-              <matrix sid="transform">0.9999191 0.01116876 -0.006089497 0 -0.01134688 0.9994841 -0.03004623 8.672291 0.005750777 0.0301129 0.99953 0 0 0 0 1</matrix>
+              <matrix sid="transform">1 0 0 0 0 1 0 8.672291 0 0 1 0 0 0 0 1</matrix>
               <node id="HIKCharacterNode1_Head" name="HIKCharacterNode1_Head" sid="HIKCharacterNode1_Head" type="JOINT">
                 <matrix sid="transform">1 0 0 0 0 1 0 8.183182 0 0 1 0 0 0 0 1</matrix>
                 <extra>
@@ -5566,606 +5566,6 @@
         <extra>
           <technique profile="OpenCOLLADAMaya">
             <originalMayaNodeId>HIKCharacterNode_Boy_Reference</originalMayaNodeId>
-          </technique>
-        </extra>
-      </node>
-      <node id="HIKCharacterNode_Boy_Ctrl_Reference" name="HIKCharacterNode_Boy_Ctrl_Reference" sid="HIKCharacterNode_Boy_Ctrl_Reference" type="JOINT">
-        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-        <node id="HIKCharacterNode_Boy_Ctrl_HipsEffector" name="HIKCharacterNode_Boy_Ctrl_HipsEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 16.2817 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_HipsEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftAnkleEffector" name="HIKCharacterNode_Boy_Ctrl_LeftAnkleEffector" type="NODE">
-          <matrix sid="transform">1 0 0 3.528251 0 1 0 1.607832 0 0 1 0.1714303 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftAnkleEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightAnkleEffector" name="HIKCharacterNode_Boy_Ctrl_RightAnkleEffector" type="NODE">
-          <matrix sid="transform">1 0 0 -3.528251 0 1 0 1.607832 0 0 1 0.1714303 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightAnkleEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftWristEffector" name="HIKCharacterNode_Boy_Ctrl_LeftWristEffector" type="NODE">
-          <matrix sid="transform">1 0 0 11.89762 0 1 0 21.14871 0 0 1 -0.04220573 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftWristEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightWristEffector" name="HIKCharacterNode_Boy_Ctrl_RightWristEffector" type="NODE">
-          <matrix sid="transform">1 0 0 -11.89762 0 1 0 21.14871 0 0 1 -0.04220573 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightWristEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftKneeEffector" name="HIKCharacterNode_Boy_Ctrl_LeftKneeEffector" type="NODE">
-          <matrix sid="transform">1 0 0 2.90971 0 1 0 10.22537 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftKneeEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightKneeEffector" name="HIKCharacterNode_Boy_Ctrl_RightKneeEffector" type="NODE">
-          <matrix sid="transform">1 0 0 -2.90971 0 1 0 10.22537 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightKneeEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftElbowEffector" name="HIKCharacterNode_Boy_Ctrl_LeftElbowEffector" type="NODE">
-          <matrix sid="transform">1 0 0 7.022809 0 1 0 26.03462 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftElbowEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightElbowEffector" name="HIKCharacterNode_Boy_Ctrl_RightElbowEffector" type="NODE">
-          <matrix sid="transform">1 0 0 -7.022809 0 1 0 26.03462 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightElbowEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_ChestOriginEffector" name="HIKCharacterNode_Boy_Ctrl_ChestOriginEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 22.00348 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_ChestOriginEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_ChestEndEffector" name="HIKCharacterNode_Boy_Ctrl_ChestEndEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 30.38717 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_ChestEndEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftFootEffector" name="HIKCharacterNode_Boy_Ctrl_LeftFootEffector" type="NODE">
-          <matrix sid="transform">1 0 0 3.600703 0 1 0 0.5145395 0 0 1 4.678315 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftFootEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightFootEffector" name="HIKCharacterNode_Boy_Ctrl_RightFootEffector" type="NODE">
-          <matrix sid="transform">1 0 0 -3.600703 0 1 0 0.5145395 0 0 1 4.678315 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightFootEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftShoulderEffector" name="HIKCharacterNode_Boy_Ctrl_LeftShoulderEffector" type="NODE">
-          <matrix sid="transform">1 0 0 2.99827 0 1 0 29.96297 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftShoulderEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightShoulderEffector" name="HIKCharacterNode_Boy_Ctrl_RightShoulderEffector" type="NODE">
-          <matrix sid="transform">1 0 0 -2.99827 0 1 0 29.96297 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightShoulderEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_HeadEffector" name="HIKCharacterNode_Boy_Ctrl_HeadEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 38.85897 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_HeadEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftHipEffector" name="HIKCharacterNode_Boy_Ctrl_LeftHipEffector" type="NODE">
-          <matrix sid="transform">1 0 0 2.111593 0 1 0 16.2817 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHipEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightHipEffector" name="HIKCharacterNode_Boy_Ctrl_RightHipEffector" type="NODE">
-          <matrix sid="transform">1 0 0 -2.111593 0 1 0 16.2817 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHipEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftHandEffector" name="HIKCharacterNode_Boy_Ctrl_LeftHandEffector" type="NODE">
-          <matrix sid="transform">1 0 0 13.37088 0 1 0 19.97047 0 0 1 0.3973557 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHandEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightHandEffector" name="HIKCharacterNode_Boy_Ctrl_RightHandEffector" type="NODE">
-          <matrix sid="transform">1 0 0 -13.37088 0 1 0 19.97047 0 0 1 0.3973557 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHandEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftHandThumbEffector" name="HIKCharacterNode_Boy_Ctrl_LeftHandThumbEffector" type="NODE">
-          <matrix sid="transform">1 0 0 12.46788 0 1 0 19.10083 0 0 1 1.390672 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHandThumbEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftHandIndexEffector" name="HIKCharacterNode_Boy_Ctrl_LeftHandIndexEffector" type="NODE">
-          <matrix sid="transform">1 0 0 14.70003 0 1 0 18.36949 0 0 1 0.5235762 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHandIndexEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftHandMiddleEffector" name="HIKCharacterNode_Boy_Ctrl_LeftHandMiddleEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHandMiddleEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftHandRingEffector" name="HIKCharacterNode_Boy_Ctrl_LeftHandRingEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHandRingEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftHandPinkyEffector" name="HIKCharacterNode_Boy_Ctrl_LeftHandPinkyEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHandPinkyEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftHandExtraFingerEffector" name="HIKCharacterNode_Boy_Ctrl_LeftHandExtraFingerEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHandExtraFingerEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightHandThumbEffector" name="HIKCharacterNode_Boy_Ctrl_RightHandThumbEffector" type="NODE">
-          <matrix sid="transform">1 0 0 -12.46788 0 1 0 19.10083 0 0 1 1.390672 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHandThumbEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightHandIndexEffector" name="HIKCharacterNode_Boy_Ctrl_RightHandIndexEffector" type="NODE">
-          <matrix sid="transform">1 0 0 -14.70003 0 1 0 18.36949 0 0 1 0.5235762 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHandIndexEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightHandMiddleEffector" name="HIKCharacterNode_Boy_Ctrl_RightHandMiddleEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHandMiddleEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightHandRingEffector" name="HIKCharacterNode_Boy_Ctrl_RightHandRingEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHandRingEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightHandPinkyEffector" name="HIKCharacterNode_Boy_Ctrl_RightHandPinkyEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHandPinkyEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightHandExtraFingerEffector" name="HIKCharacterNode_Boy_Ctrl_RightHandExtraFingerEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHandExtraFingerEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftFootThumbEffector" name="HIKCharacterNode_Boy_Ctrl_LeftFootThumbEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftFootThumbEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftFootIndexEffector" name="HIKCharacterNode_Boy_Ctrl_LeftFootIndexEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftFootIndexEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftFootMiddleEffector" name="HIKCharacterNode_Boy_Ctrl_LeftFootMiddleEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftFootMiddleEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftFootRingEffector" name="HIKCharacterNode_Boy_Ctrl_LeftFootRingEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftFootRingEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftFootPinkyEffector" name="HIKCharacterNode_Boy_Ctrl_LeftFootPinkyEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftFootPinkyEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_LeftFootExtraFingerEffector" name="HIKCharacterNode_Boy_Ctrl_LeftFootExtraFingerEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftFootExtraFingerEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightFootThumbEffector" name="HIKCharacterNode_Boy_Ctrl_RightFootThumbEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightFootThumbEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightFootIndexEffector" name="HIKCharacterNode_Boy_Ctrl_RightFootIndexEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightFootIndexEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightFootMiddleEffector" name="HIKCharacterNode_Boy_Ctrl_RightFootMiddleEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightFootMiddleEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightFootRingEffector" name="HIKCharacterNode_Boy_Ctrl_RightFootRingEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightFootRingEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightFootPinkyEffector" name="HIKCharacterNode_Boy_Ctrl_RightFootPinkyEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightFootPinkyEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_RightFootExtraFingerEffector" name="HIKCharacterNode_Boy_Ctrl_RightFootExtraFingerEffector" type="NODE">
-          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightFootExtraFingerEffector</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <node id="HIKCharacterNode_Boy_Ctrl_Hips" name="HIKCharacterNode_Boy_Ctrl_Hips" sid="HIKCharacterNode_Boy_Ctrl_Hips" type="JOINT">
-          <matrix sid="transform">1 0 0 0 0 1 0 18.54876 0 0 1 0 0 0 0 1</matrix>
-          <node id="HIKCharacterNode_Boy_Ctrl_LeftUpLeg" name="HIKCharacterNode_Boy_Ctrl_LeftUpLeg" sid="HIKCharacterNode_Boy_Ctrl_LeftUpLeg" type="JOINT">
-            <matrix sid="transform">1 0 0 2.111594 0 1 0 -2.267058 0 0 1 0 0 0 0 1</matrix>
-            <node id="HIKCharacterNode_Boy_Ctrl_LeftLeg" name="HIKCharacterNode_Boy_Ctrl_LeftLeg" sid="HIKCharacterNode_Boy_Ctrl_LeftLeg" type="JOINT">
-              <matrix sid="transform">1 0 0 0.7981171 0 1 0 -6.056331 0 0 1 0 0 0 0 1</matrix>
-              <node id="HIKCharacterNode_Boy_Ctrl_LeftFoot" name="HIKCharacterNode_Boy_Ctrl_LeftFoot" sid="HIKCharacterNode_Boy_Ctrl_LeftFoot" type="JOINT">
-                <matrix sid="transform">1 0 0 0.6185407 0 1 0 -8.617538 0 0 1 0.1714303 0 0 0 1</matrix>
-                <node id="HIKCharacterNode_Boy_Ctrl_LeftToeBase" name="HIKCharacterNode_Boy_Ctrl_LeftToeBase" sid="HIKCharacterNode_Boy_Ctrl_LeftToeBase" type="JOINT">
-                  <matrix sid="transform">1 0 0 0.07245185 0 1 0 -1.093293 0 0 1 4.506885 0 0 0 1</matrix>
-                  <extra>
-                    <technique profile="OpenCOLLADAMaya">
-                      <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftToeBase</originalMayaNodeId>
-                    </technique>
-                  </extra>
-                </node>
-                <extra>
-                  <technique profile="OpenCOLLADAMaya">
-                    <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftFoot</originalMayaNodeId>
-                  </technique>
-                </extra>
-              </node>
-              <extra>
-                <technique profile="OpenCOLLADAMaya">
-                  <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftLeg</originalMayaNodeId>
-                </technique>
-              </extra>
-            </node>
-            <extra>
-              <technique profile="OpenCOLLADAMaya">
-                <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftUpLeg</originalMayaNodeId>
-              </technique>
-            </extra>
-          </node>
-          <node id="HIKCharacterNode_Boy_Ctrl_RightUpLeg" name="HIKCharacterNode_Boy_Ctrl_RightUpLeg" sid="HIKCharacterNode_Boy_Ctrl_RightUpLeg" type="JOINT">
-            <matrix sid="transform">1 0 0 -2.111594 0 1 0 -2.267058 0 0 1 0 0 0 0 1</matrix>
-            <node id="HIKCharacterNode_Boy_Ctrl_RightLeg" name="HIKCharacterNode_Boy_Ctrl_RightLeg" sid="HIKCharacterNode_Boy_Ctrl_RightLeg" type="JOINT">
-              <matrix sid="transform">1 0 0 -0.7981171 0 1 0 -6.056331 0 0 1 0 0 0 0 1</matrix>
-              <node id="HIKCharacterNode_Boy_Ctrl_RightFoot" name="HIKCharacterNode_Boy_Ctrl_RightFoot" sid="HIKCharacterNode_Boy_Ctrl_RightFoot" type="JOINT">
-                <matrix sid="transform">1 0 0 -0.6185407 0 1 0 -8.617538 0 0 1 0.1714303 0 0 0 1</matrix>
-                <node id="HIKCharacterNode_Boy_Ctrl_RightToeBase" name="HIKCharacterNode_Boy_Ctrl_RightToeBase" sid="HIKCharacterNode_Boy_Ctrl_RightToeBase" type="JOINT">
-                  <matrix sid="transform">1 0 0 -0.07245185 0 1 0 -1.093293 0 0 1 4.506885 0 0 0 1</matrix>
-                  <extra>
-                    <technique profile="OpenCOLLADAMaya">
-                      <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightToeBase</originalMayaNodeId>
-                    </technique>
-                  </extra>
-                </node>
-                <extra>
-                  <technique profile="OpenCOLLADAMaya">
-                    <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightFoot</originalMayaNodeId>
-                  </technique>
-                </extra>
-              </node>
-              <extra>
-                <technique profile="OpenCOLLADAMaya">
-                  <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightLeg</originalMayaNodeId>
-                </technique>
-              </extra>
-            </node>
-            <extra>
-              <technique profile="OpenCOLLADAMaya">
-                <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightUpLeg</originalMayaNodeId>
-              </technique>
-            </extra>
-          </node>
-          <node id="HIKCharacterNode_Boy_Ctrl_Spine" name="HIKCharacterNode_Boy_Ctrl_Spine" sid="HIKCharacterNode_Boy_Ctrl_Spine" type="JOINT">
-            <matrix sid="transform">1 0 0 0 0 1 0 3.454726 0 0 1 0 0 0 0 1</matrix>
-            <node id="HIKCharacterNode_Boy_Ctrl_LeftShoulder" name="HIKCharacterNode_Boy_Ctrl_LeftShoulder" sid="HIKCharacterNode_Boy_Ctrl_LeftShoulder" type="JOINT">
-              <matrix sid="transform">1 0 0 1.132064 0 1 0 8.383686 0 0 1 0 0 0 0 1</matrix>
-              <node id="HIKCharacterNode_Boy_Ctrl_LeftArm" name="HIKCharacterNode_Boy_Ctrl_LeftArm" sid="HIKCharacterNode_Boy_Ctrl_LeftArm" type="JOINT">
-                <matrix sid="transform">1 0 0 1.866206 0 1 0 -0.4241983 0 0 1 0 0 0 0 1</matrix>
-                <node id="HIKCharacterNode_Boy_Ctrl_LeftForeArm" name="HIKCharacterNode_Boy_Ctrl_LeftForeArm" sid="HIKCharacterNode_Boy_Ctrl_LeftForeArm" type="JOINT">
-                  <matrix sid="transform">1 0 0 4.02454 0 1 0 -3.928348 0 0 1 0 0 0 0 1</matrix>
-                  <node id="HIKCharacterNode_Boy_Ctrl_LeftHand" name="HIKCharacterNode_Boy_Ctrl_LeftHand" sid="HIKCharacterNode_Boy_Ctrl_LeftHand" type="JOINT">
-                    <matrix sid="transform">1 0 0 4.874813 0 1 0 -4.885915 0 0 1 -0.04220574 0 0 0 1</matrix>
-                    <node id="HIKCharacterNode_Boy_Ctrl_LeftFingerBase" name="HIKCharacterNode_Boy_Ctrl_LeftFingerBase" sid="HIKCharacterNode_Boy_Ctrl_LeftFingerBase" type="JOINT">
-                      <matrix sid="transform">1 0 0 1.473259 0 1 0 -1.178236 0 0 1 0.4395615 0 0 0 1</matrix>
-                      <node id="HIKCharacterNode_Boy_Ctrl_LeftHandIndex1" name="HIKCharacterNode_Boy_Ctrl_LeftHandIndex1" sid="HIKCharacterNode_Boy_Ctrl_LeftHandIndex1" type="JOINT">
-                        <matrix sid="transform">1 0 0 0.7055094 0 1 0 -0.7416059 0 0 1 0.1173588 0 0 0 1</matrix>
-                        <node id="HIKCharacterNode_Boy_Ctrl_LeftHandIndex2" name="HIKCharacterNode_Boy_Ctrl_LeftHandIndex2" sid="HIKCharacterNode_Boy_Ctrl_LeftHandIndex2" type="JOINT">
-                          <matrix sid="transform">1 0 0 0.6236421 0 1 0 -0.8593714 0 0 1 0.008861782 0 0 0 1</matrix>
-                          <extra>
-                            <technique profile="OpenCOLLADAMaya">
-                              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHandIndex2</originalMayaNodeId>
-                            </technique>
-                          </extra>
-                        </node>
-                        <extra>
-                          <technique profile="OpenCOLLADAMaya">
-                            <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHandIndex1</originalMayaNodeId>
-                          </technique>
-                        </extra>
-                      </node>
-                      <extra>
-                        <technique profile="OpenCOLLADAMaya">
-                          <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftFingerBase</originalMayaNodeId>
-                        </technique>
-                      </extra>
-                    </node>
-                    <node id="HIKCharacterNode_Boy_Ctrl_LeftHandThumb1" name="HIKCharacterNode_Boy_Ctrl_LeftHandThumb1" sid="HIKCharacterNode_Boy_Ctrl_LeftHandThumb1" type="JOINT">
-                      <matrix sid="transform">1 0 0 0.3797351 0 1 0 -1.242317 0 0 1 0.8735038 0 0 0 1</matrix>
-                      <node id="HIKCharacterNode_Boy_Ctrl_LeftHandThumb2" name="HIKCharacterNode_Boy_Ctrl_LeftHandThumb2" sid="HIKCharacterNode_Boy_Ctrl_LeftHandThumb2" type="JOINT">
-                        <matrix sid="transform">1 0 0 0.190527 0 1 0 -0.8055555 0 0 1 0.5593741 0 0 0 1</matrix>
-                        <extra>
-                          <technique profile="OpenCOLLADAMaya">
-                            <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHandThumb2</originalMayaNodeId>
-                          </technique>
-                        </extra>
-                      </node>
-                      <extra>
-                        <technique profile="OpenCOLLADAMaya">
-                          <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHandThumb1</originalMayaNodeId>
-                        </technique>
-                      </extra>
-                    </node>
-                    <extra>
-                      <technique profile="OpenCOLLADAMaya">
-                        <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftHand</originalMayaNodeId>
-                      </technique>
-                    </extra>
-                  </node>
-                  <extra>
-                    <technique profile="OpenCOLLADAMaya">
-                      <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftForeArm</originalMayaNodeId>
-                    </technique>
-                  </extra>
-                </node>
-                <extra>
-                  <technique profile="OpenCOLLADAMaya">
-                    <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftArm</originalMayaNodeId>
-                  </technique>
-                </extra>
-              </node>
-              <extra>
-                <technique profile="OpenCOLLADAMaya">
-                  <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_LeftShoulder</originalMayaNodeId>
-                </technique>
-              </extra>
-            </node>
-            <node id="HIKCharacterNode_Boy_Ctrl_RightShoulder" name="HIKCharacterNode_Boy_Ctrl_RightShoulder" sid="HIKCharacterNode_Boy_Ctrl_RightShoulder" type="JOINT">
-              <matrix sid="transform">1 0 0 -1.132064 0 1 0 8.383686 0 0 1 0 0 0 0 1</matrix>
-              <node id="HIKCharacterNode_Boy_Ctrl_RightArm" name="HIKCharacterNode_Boy_Ctrl_RightArm" sid="HIKCharacterNode_Boy_Ctrl_RightArm" type="JOINT">
-                <matrix sid="transform">1 0 0 -1.866206 0 1 0 -0.4241983 0 0 1 0 0 0 0 1</matrix>
-                <node id="HIKCharacterNode_Boy_Ctrl_RightForeArm" name="HIKCharacterNode_Boy_Ctrl_RightForeArm" sid="HIKCharacterNode_Boy_Ctrl_RightForeArm" type="JOINT">
-                  <matrix sid="transform">1 0 0 -4.02454 0 1 0 -3.928348 0 0 1 0 0 0 0 1</matrix>
-                  <node id="HIKCharacterNode_Boy_Ctrl_RightHand" name="HIKCharacterNode_Boy_Ctrl_RightHand" sid="HIKCharacterNode_Boy_Ctrl_RightHand" type="JOINT">
-                    <matrix sid="transform">1 0 0 -4.874813 0 1 0 -4.885915 0 0 1 -0.04220574 0 0 0 1</matrix>
-                    <node id="HIKCharacterNode_Boy_Ctrl_RightFingerBase" name="HIKCharacterNode_Boy_Ctrl_RightFingerBase" sid="HIKCharacterNode_Boy_Ctrl_RightFingerBase" type="JOINT">
-                      <matrix sid="transform">1 0 0 -1.473259 0 1 0 -1.178236 0 0 1 0.4395615 0 0 0 1</matrix>
-                      <node id="HIKCharacterNode_Boy_Ctrl_RightHandIndex1" name="HIKCharacterNode_Boy_Ctrl_RightHandIndex1" sid="HIKCharacterNode_Boy_Ctrl_RightHandIndex1" type="JOINT">
-                        <matrix sid="transform">1 0 0 -0.7055094 0 1 0 -0.7416059 0 0 1 0.1173588 0 0 0 1</matrix>
-                        <node id="HIKCharacterNode_Boy_Ctrl_RightHandIndex2" name="HIKCharacterNode_Boy_Ctrl_RightHandIndex2" sid="HIKCharacterNode_Boy_Ctrl_RightHandIndex2" type="JOINT">
-                          <matrix sid="transform">1 0 0 -0.6236421 0 1 0 -0.8593714 0 0 1 0.008861782 0 0 0 1</matrix>
-                          <extra>
-                            <technique profile="OpenCOLLADAMaya">
-                              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHandIndex2</originalMayaNodeId>
-                            </technique>
-                          </extra>
-                        </node>
-                        <extra>
-                          <technique profile="OpenCOLLADAMaya">
-                            <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHandIndex1</originalMayaNodeId>
-                          </technique>
-                        </extra>
-                      </node>
-                      <extra>
-                        <technique profile="OpenCOLLADAMaya">
-                          <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightFingerBase</originalMayaNodeId>
-                        </technique>
-                      </extra>
-                    </node>
-                    <node id="HIKCharacterNode_Boy_Ctrl_RightHandThumb1" name="HIKCharacterNode_Boy_Ctrl_RightHandThumb1" sid="HIKCharacterNode_Boy_Ctrl_RightHandThumb1" type="JOINT">
-                      <matrix sid="transform">1 0 0 -0.3797351 0 1 0 -1.242317 0 0 1 0.8735038 0 0 0 1</matrix>
-                      <node id="HIKCharacterNode_Boy_Ctrl_RightHandThumb2" name="HIKCharacterNode_Boy_Ctrl_RightHandThumb2" sid="HIKCharacterNode_Boy_Ctrl_RightHandThumb2" type="JOINT">
-                        <matrix sid="transform">1 0 0 -0.190527 0 1 0 -0.8055555 0 0 1 0.5593741 0 0 0 1</matrix>
-                        <extra>
-                          <technique profile="OpenCOLLADAMaya">
-                            <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHandThumb2</originalMayaNodeId>
-                          </technique>
-                        </extra>
-                      </node>
-                      <extra>
-                        <technique profile="OpenCOLLADAMaya">
-                          <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHandThumb1</originalMayaNodeId>
-                        </technique>
-                      </extra>
-                    </node>
-                    <extra>
-                      <technique profile="OpenCOLLADAMaya">
-                        <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightHand</originalMayaNodeId>
-                      </technique>
-                    </extra>
-                  </node>
-                  <extra>
-                    <technique profile="OpenCOLLADAMaya">
-                      <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightForeArm</originalMayaNodeId>
-                    </technique>
-                  </extra>
-                </node>
-                <extra>
-                  <technique profile="OpenCOLLADAMaya">
-                    <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightArm</originalMayaNodeId>
-                  </technique>
-                </extra>
-              </node>
-              <extra>
-                <technique profile="OpenCOLLADAMaya">
-                  <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_RightShoulder</originalMayaNodeId>
-                </technique>
-              </extra>
-            </node>
-            <node id="HIKCharacterNode_Boy_Ctrl_Neck" name="HIKCharacterNode_Boy_Ctrl_Neck" sid="HIKCharacterNode_Boy_Ctrl_Neck" type="JOINT">
-              <matrix sid="transform">1 0 0 0 0 1 0 8.672297 0 0 1 0 0 0 0 1</matrix>
-              <node id="HIKCharacterNode_Boy_Ctrl_Head" name="HIKCharacterNode_Boy_Ctrl_Head" sid="HIKCharacterNode_Boy_Ctrl_Head" type="JOINT">
-                <matrix sid="transform">1 0 0 0 0 1 0 8.183197 0 0 1 0 0 0 0 1</matrix>
-                <extra>
-                  <technique profile="OpenCOLLADAMaya">
-                    <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_Head</originalMayaNodeId>
-                  </technique>
-                </extra>
-              </node>
-              <extra>
-                <technique profile="OpenCOLLADAMaya">
-                  <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_Neck</originalMayaNodeId>
-                </technique>
-              </extra>
-            </node>
-            <extra>
-              <technique profile="OpenCOLLADAMaya">
-                <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_Spine</originalMayaNodeId>
-              </technique>
-            </extra>
-          </node>
-          <extra>
-            <technique profile="OpenCOLLADAMaya">
-              <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_Hips</originalMayaNodeId>
-            </technique>
-          </extra>
-        </node>
-        <extra>
-          <technique profile="OpenCOLLADAMaya">
-            <originalMayaNodeId>HIKCharacterNode_Boy_Ctrl_Reference</originalMayaNodeId>
           </technique>
         </extra>
       </node>
