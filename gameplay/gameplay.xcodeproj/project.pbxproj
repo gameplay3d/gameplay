@@ -328,7 +328,6 @@
 		5BC4E746150F843D00CBE1C0 /* Container.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5263B150F822A004C9099 /* Container.h */; };
 		5BC4E747150F843D00CBE1C0 /* Control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5263C150F822A004C9099 /* Control.cpp */; };
 		5BC4E748150F843D00CBE1C0 /* Control.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5263D150F822A004C9099 /* Control.h */; };
-		5BC4E749150F843D00CBE1C0 /* FlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5263E150F822A004C9099 /* FlowLayout.h */; };
 		5BC4E74A150F843D00CBE1C0 /* Form.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5263F150F822A004C9099 /* Form.cpp */; };
 		5BC4E74B150F843D00CBE1C0 /* Form.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52640150F822A004C9099 /* Form.h */; };
 		5BC4E74C150F843D00CBE1C0 /* Label.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52641150F822A004C9099 /* Label.cpp */; };
@@ -354,7 +353,6 @@
 		5BD52656150F822A004C9099 /* Container.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5263B150F822A004C9099 /* Container.h */; };
 		5BD52657150F822A004C9099 /* Control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5263C150F822A004C9099 /* Control.cpp */; };
 		5BD52658150F822A004C9099 /* Control.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5263D150F822A004C9099 /* Control.h */; };
-		5BD52659150F822A004C9099 /* FlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5263E150F822A004C9099 /* FlowLayout.h */; };
 		5BD5265A150F822A004C9099 /* Form.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5263F150F822A004C9099 /* Form.cpp */; };
 		5BD5265B150F822A004C9099 /* Form.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD52640150F822A004C9099 /* Form.h */; };
 		5BD5265C150F822A004C9099 /* Label.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD52641150F822A004C9099 /* Label.cpp */; };
@@ -589,7 +587,6 @@
 		5BD5263B150F822A004C9099 /* Container.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Container.h; path = src/Container.h; sourceTree = SOURCE_ROOT; };
 		5BD5263C150F822A004C9099 /* Control.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Control.cpp; path = src/Control.cpp; sourceTree = SOURCE_ROOT; };
 		5BD5263D150F822A004C9099 /* Control.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Control.h; path = src/Control.h; sourceTree = SOURCE_ROOT; };
-		5BD5263E150F822A004C9099 /* FlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlowLayout.h; path = src/FlowLayout.h; sourceTree = SOURCE_ROOT; };
 		5BD5263F150F822A004C9099 /* Form.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Form.cpp; path = src/Form.cpp; sourceTree = SOURCE_ROOT; };
 		5BD52640150F822A004C9099 /* Form.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Form.h; path = src/Form.h; sourceTree = SOURCE_ROOT; };
 		5BD52641150F822A004C9099 /* Label.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Label.cpp; path = src/Label.cpp; sourceTree = SOURCE_ROOT; };
@@ -727,7 +724,6 @@
 				42CD0DD3147D8FF50000361E /* Effect.h */,
 				42CD0DD4147D8FF50000361E /* FileSystem.cpp */,
 				42CD0DD5147D8FF50000361E /* FileSystem.h */,
-				5BD5263E150F822A004C9099 /* FlowLayout.h */,
 				42CD0DD6147D8FF50000361E /* Font.cpp */,
 				42CD0DD7147D8FF50000361E /* Font.h */,
 				5BD5263F150F822A004C9099 /* Form.cpp */,
@@ -1038,7 +1034,6 @@
 				5BD52654150F822A004C9099 /* CheckBox.h in Headers */,
 				5BD52656150F822A004C9099 /* Container.h in Headers */,
 				5BD52658150F822A004C9099 /* Control.h in Headers */,
-				5BD52659150F822A004C9099 /* FlowLayout.h in Headers */,
 				5BD5265B150F822A004C9099 /* Form.h in Headers */,
 				5BD5265D150F822A004C9099 /* Label.h in Headers */,
 				5BD5265E150F822A004C9099 /* Layout.h in Headers */,
@@ -1138,7 +1133,6 @@
 				5BC4E744150F843D00CBE1C0 /* CheckBox.h in Headers */,
 				5BC4E746150F843D00CBE1C0 /* Container.h in Headers */,
 				5BC4E748150F843D00CBE1C0 /* Control.h in Headers */,
-				5BC4E749150F843D00CBE1C0 /* FlowLayout.h in Headers */,
 				5BC4E74B150F843D00CBE1C0 /* Form.h in Headers */,
 				5BC4E74D150F843D00CBE1C0 /* Label.h in Headers */,
 				5BC4E74E150F843D00CBE1C0 /* Layout.h in Headers */,

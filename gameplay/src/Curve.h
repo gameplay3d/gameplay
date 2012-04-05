@@ -401,7 +401,7 @@ private:
     Curve(unsigned int pointCount, unsigned int componentCount);
 
     /**
-     * Hidden copy constructor.
+     * Constructor.
      */
     Curve(const Curve& copy);
 
@@ -411,7 +411,7 @@ private:
     ~Curve();
 
     /**
-     * Hidden copy assignment operator.
+     * Copy assignment operator.
      */
     Curve& operator=(const Curve&);
 

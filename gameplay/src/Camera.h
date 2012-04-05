@@ -250,7 +250,6 @@ private:
      * Clones the camera and returns a new camera.
      * 
      * @param context The clone context.
-     * 
      * @return The newly created camera.
      */
     Camera* clone(NodeCloneContext &context) const;

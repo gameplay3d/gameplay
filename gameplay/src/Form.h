@@ -27,17 +27,20 @@ public:
      * Create from properties file.
      * The top-most namespace in the file must be named 'form'.  The following properties are available for forms:
      *
-     * form <Form ID>
+     * form <formID>
      * {
      *      // Form properties.
-     *      theme    = <Path to Theme File> // See Theme.h.
-     *      layout   = <Layout Type>        // A value from the Layout::Type enum.  E.g.: LAYOUT_VERTICAL
-     *      style    = <Style ID>           // A style from the referenced theme.
-     *      position = <x, y>               // Position of the form on-screen, measured in pixels.
-     *      size     = <width, height>      // Size of the form, measured in pixels.
+     *      theme    = <Path to .theme File>    // See Theme.h.
+     *      layout   = <Layout::Type>           // A value from the Layout::Type enum.  e.g.: LAYOUT_VERTICAL
+     *      style    = <styleID>                // A style from the referenced theme.
+     *      position = <x, y>                   // Position of the form on-screen, measured in pixels.
+     *      size     = <width, height>          // Size of the form, measured in pixels.
      *   
-     *      // All the controls within this form.
-     *      container { }
+     *      // All the nested controls within this form.
+     *      container 
+     *      {
+     *          ...
+     *      }
      *      label { }
      *      textBox { }
      *      button { }

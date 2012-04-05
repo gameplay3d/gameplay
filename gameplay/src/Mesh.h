@@ -299,8 +299,6 @@ private:
 
     /**
      * Constructor.
-     *
-     * @param copy The mesh to copy from.
      */
     Mesh(const Mesh& copy);
 
