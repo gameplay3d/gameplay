@@ -130,9 +130,9 @@ void Game::shutdown()
         SAFE_DELETE(_audioListener);
 
         RenderState::finalize();
+        
+        _state = UNINITIALIZED;
     }
-
-    _state = UNINITIALIZED;
 }
 
 void Game::pause()
@@ -159,7 +159,7 @@ void Game::resume()
     }
 }
 
-void Game::exit()
+void Game::end()
 {
     shutdown();
 }

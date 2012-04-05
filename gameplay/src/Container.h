@@ -20,10 +20,11 @@ namespace gameplay
  *      position = <x, y>               // Position of the container on-screen, measured in pixels.
  *      size     = <width, height>      // Size of the container, measured in pixels.
  *   
- *      // All the controls within this container.
- *      container{}
- *      label{}
- *      textBox{}
+ *      // All the nested controls within this container.
+ *      container { }
+
+ *      label { }
+ *      textBox { }
  *      button{}
  *      checkBox{}
  *      radioButton{}
@@ -33,6 +34,7 @@ namespace gameplay
 class Container : public Control
 {
 public:
+
     /**
      * Get this container's layout.
      *
@@ -111,7 +113,9 @@ public:
     Animation* getAnimation(const char* id = NULL) const;
 
 protected:
+
     Container();
+
     virtual ~Container();
 
     /**
@@ -215,6 +219,7 @@ protected:
     std::vector<Control*> _controls;    // List of controls within this container.
 
 private:
+
     Container(const Container& copy);
 };
 

@@ -5,8 +5,8 @@
 namespace gameplay
 {
     Control::Control()
-        : _id(""), _state(Control::NORMAL), _position(Vector2::zero()), _size(Vector2::zero()), _bounds(Rectangle::empty()), _clip(Rectangle::empty()),
-            _autoWidth(true), _autoHeight(true), _dirty(true), _consumeTouchEvents(true), _listeners(NULL), _styleOverridden(false)
+        : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _clip(Rectangle::empty()),
+            _dirty(true), _consumeTouchEvents(true), _listeners(NULL), _styleOverridden(false)
     {
     }
 
@@ -18,7 +18,7 @@ namespace gameplay
     {
         if (_listeners)
         {
-            for (ListenerMap::const_iterator itr = _listeners->begin(); itr != _listeners->end(); itr++)
+            for (std::map<Listener::EventType, std::list<Listener*>*>::const_iterator itr = _listeners->begin(); itr != _listeners->end(); itr++)
             {
                 std::list<Listener*>* list = itr->second;
                 SAFE_DELETE(list);
@@ -36,8 +36,11 @@ namespace gameplay
     {
         _style = style;
 
-        properties->getVector2("position", &_position);
-        properties->getVector2("size", &_size);
+        Vector2 position;
+        Vector2 size;
+        properties->getVector2("position", &position);
+        properties->getVector2("size", &size);
+        _bounds.set(position.x, position.y, size.x, size.y);
 
         _state = Control::getStateFromString(properties->getString("state"));
 
@@ -51,85 +54,59 @@ namespace gameplay
         return _id.c_str();
     }
 
-    void Control::setPosition(float x, float y, unsigned long duration)
+    void Control::setPosition(float x, float y)
     {
-        if (duration > 0L)
-        {
-            float from[2] = { _position.x, _position.y };
-            float to[2] = { x, y };
-            Animation* moveAnimation = this->createAnimationFromTo("Control::setPosition", Control::ANIMATE_POSITION,
-                from, to, gameplay::Curve::QUADRATIC_IN_OUT, duration);
-            AnimationClip* clip = moveAnimation->getClip();
-            clip->play();
-        }
-        else
-        {
-            _position.set(x, y);
-        }
-
+        _bounds.x = x;
+        _bounds.y = y;
         _dirty = true;
     }
 
-    const Vector2& Control::getPosition() const
+    void Control::setSize(float width, float height)
     {
-        return _position;
-    }
-
-    void Control::setSize(float width, float height, unsigned long duration)
-    {
-        if (duration > 0L)
-        {
-            float from[2] = { _size.x, _size.y };
-            float to[2] = { width, height };
-            Animation* resizeAnimation = this->createAnimationFromTo("Control::setSize", Control::ANIMATE_SIZE,
-                from, to, gameplay::Curve::QUADRATIC_IN_OUT, duration);
-            AnimationClip* clip = resizeAnimation->getClip();
-            clip->play();
-        }
-        else
-        {
-            _size.set(width, height);
-        }
-
+        _bounds.width = width;
+        _bounds.height = height;
         _dirty = true;
     }
 
-    const Vector2& Control::getSize() const
+    void Control::setBounds(const Rectangle& bounds)
     {
-        return _size;
+        _bounds.set(bounds);
     }
 
-    void Control::setOpacity(float opacity, unsigned char states, unsigned long duration)
+    const Rectangle& Control::getBounds() const
+    {
+        return _bounds;
+    }
+
+    float Control::getX() const
+    {
+        return _bounds.x;
+    }
+
+    float Control::getY() const
+    {
+        return _bounds.y;
+    }
+
+    float Control::getWidth() const
+    {
+        return _bounds.width;
+    }
+
+    float Control::getHeight() const
+    {
+        return _bounds.height;
+    }
+
+    void Control::setOpacity(float opacity, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
-            if (duration > 0L)
-            {
-                float from[1] = { overlays[i]->getOpacity() };
-                float to[1] = { opacity };
-
-                // Fun with chaining.
-                overlays[i]->createAnimationFromTo("Overlay::setOpacity", Theme::Style::Overlay::ANIMATE_OPACITY,
-                    from, to, gameplay::Curve::QUADRATIC_IN_OUT, duration)->getClip()->play();
-            }
-            else
-            {
-                overlays[i]->setOpacity(opacity);
-            }
-        }
-        
-        if (duration > 0L)
-        {
-            // All this animation does is make sure this control sets its dirty flag during the animation.
-            float from[1] = { 0.0f };
-            float to[1] = { 1.0f };
-
-            this->createAnimationFromTo("Control::setOpacity", Control::ANIMATE_OPACITY,
-                from, to, gameplay::Curve::QUADRATIC_IN_OUT, duration)->getClip()->play();
+            overlays[i]->setOpacity(opacity);
         }
         
         _dirty = true;
@@ -143,10 +120,10 @@ namespace gameplay
     void Control::setBorder(float top, float bottom, float left, float right, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
             overlays[i]->setBorder(top, bottom, left, right);
         }
@@ -162,10 +139,10 @@ namespace gameplay
     void Control::setSkinRegion(const Rectangle& region, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
             overlays[i]->setSkinRegion(region, _style->_tw, _style->_th);
         }
@@ -186,10 +163,10 @@ namespace gameplay
     void Control::setSkinColor(const Vector4& color, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
             overlays[i]->setSkinColor(color);
         }
@@ -227,10 +204,10 @@ namespace gameplay
     void Control::setImageRegion(const char* id, const Rectangle& region, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
             overlays[i]->setImageRegion(id, region, _style->_tw, _style->_th);
         }
@@ -246,10 +223,10 @@ namespace gameplay
     void Control::setImageColor(const char* id, const Vector4& color, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
             overlays[i]->setImageColor(id, color);
         }
@@ -270,10 +247,10 @@ namespace gameplay
     void Control::setCursorRegion(const Rectangle& region, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
             overlays[i]->setCursorRegion(region, _style->_tw, _style->_th);
         }
@@ -289,10 +266,10 @@ namespace gameplay
     void Control::setCursorColor(const Vector4& color, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
             overlays[i]->setCursorColor(color);
         }
@@ -313,10 +290,10 @@ namespace gameplay
     void Control::setFont(Font* font, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
             overlays[i]->setFont(font);
         }
@@ -332,10 +309,10 @@ namespace gameplay
     void Control::setFontSize(unsigned int fontSize, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
             overlays[i]->setFontSize(fontSize);
         }
@@ -351,10 +328,10 @@ namespace gameplay
     void Control::setTextColor(const Vector4& color, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
             overlays[i]->setTextColor(color);
         }
@@ -370,10 +347,10 @@ namespace gameplay
     void Control::setTextAlignment(Font::Justify alignment, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
             overlays[i]->setTextAlignment(alignment);
         }
@@ -389,10 +366,10 @@ namespace gameplay
     void Control::setTextRightToLeft(bool rightToLeft, unsigned char states)
     {
         overrideStyle();
-        Theme::Style::Overlay* overlays[MAX_OVERLAYS] = { 0 };
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
         getOverlays(states, overlays);
 
-        for (int i = 0; i < MAX_OVERLAYS - 1 && overlays[i]; ++i)
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
         {
             overlays[i]->setTextRightToLeft(rightToLeft);
         }
@@ -405,21 +382,14 @@ namespace gameplay
         return getOverlay(state)->getTextRightToLeft();
     }
 
-    const Rectangle& Control::getBounds() const
+    const Rectangle& Control::getClipBounds() const
     {
-        return _bounds;
+        return _clipBounds;
     }
 
     const Rectangle& Control::getClip() const
     {
         return _clip;
-    }
-
-    void Control::setAutoSize(bool width, bool height)
-    {
-        _autoWidth = width;
-        _autoHeight = height;
-        _dirty = true;
     }
 
     void Control::setStyle(Theme::Style* style)
@@ -527,7 +497,7 @@ namespace gameplay
             _listeners = new std::map<Listener::EventType, std::list<Listener*>*>();
         }
 
-        ListenerMap::const_iterator itr = _listeners->find(eventType);
+        std::map<Listener::EventType, std::list<Listener*>*>::const_iterator itr = _listeners->find(eventType);
         if (itr == _listeners->end())
         {
             _listeners->insert(std::make_pair(eventType, new std::list<Listener*>()));
@@ -556,8 +526,8 @@ namespace gameplay
             notifyListeners(Listener::RELEASE);
 
             // Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
-            if (x > 0 && x <= _bounds.width &&
-                y > 0 && y <= _bounds.height)
+            if (x > 0 && x <= _clipBounds.width &&
+                y > 0 && y <= _clipBounds.height)
             {
                 notifyListeners(Listener::CLICK);
             }
@@ -575,7 +545,7 @@ namespace gameplay
     {
         if (_listeners)
         {
-            ListenerMap::const_iterator itr = _listeners->find(eventType);
+            std::map<Listener::EventType, std::list<Listener*>*>::const_iterator itr = _listeners->find(eventType);
             if (itr != _listeners->end())
             {
                 std::list<Listener*>* listenerList = itr->second;
@@ -590,10 +560,10 @@ namespace gameplay
     void Control::update(const Rectangle& clip)
     {
         // Calculate the bounds.
-        float x = clip.x + _position.x;
-        float y = clip.y + _position.y;
-        float width = _size.x;
-        float height = _size.y;
+        float x = clip.x + _bounds.x;
+        float y = clip.y + _bounds.y;
+        float width = _bounds.width;
+        float height = _bounds.height;
 
         float clipX2 = clip.x + clip.width;
         float x2 = x + width;
@@ -609,7 +579,7 @@ namespace gameplay
             height = clipY2 - y;
         }
 
-        _bounds.set(_position.x, _position.y, width, height);
+        _clipBounds.set(_bounds.x, _bounds.y, width, height);
 
         // Calculate the clipping viewport.
         const Theme::Border& border = getBorder(_state);
@@ -617,8 +587,8 @@ namespace gameplay
 
         x +=  border.left + padding.left;
         y +=  border.top + padding.top;
-        width = _size.x - border.left - padding.left - border.right - padding.right;
-        height = _size.y - border.top - padding.top - border.bottom - padding.bottom;
+        width = _bounds.width - border.left - padding.left - border.right - padding.right;
+        height = _bounds.height - border.top - padding.top - border.bottom - padding.bottom;
 
         _textBounds.set(x, y, width, height);
 
@@ -651,7 +621,7 @@ namespace gameplay
 
     void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
-        Vector2 pos(clip.x + _position.x, clip.y + _position.y);
+        Vector2 pos(clip.x + _bounds.x, clip.y + _bounds.y);
 
         // Get the border and background images for this control's current state.
         //Theme::UVs topLeft, top, topRight, left, center, right, bottomLeft, bottom, bottomRight;
@@ -671,18 +641,18 @@ namespace gameplay
         Vector4 skinColor = getSkinColor(_state);
         skinColor.w *= getOpacity(_state);
 
-        float midWidth = _size.x - border.left - border.right;
-        float midHeight = _size.y - border.top - border.bottom;
+        float midWidth = _bounds.width - border.left - border.right;
+        float midHeight = _bounds.height - border.top - border.bottom;
         float midX = pos.x + border.left;
         float midY = pos.y + border.top;
-        float rightX = pos.x + _size.x - border.right;
-        float bottomY = pos.y + _size.y - border.bottom;
+        float rightX = pos.x + _bounds.width - border.right;
+        float bottomY = pos.y + _bounds.height - border.bottom;
 
         // Draw themed border sprites.
         if (!border.left && !border.right && !border.top && !border.bottom)
         {
             // No border, just draw the image.
-            spriteBatch->draw(pos.x, pos.y, _size.x, _size.y, center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+            spriteBatch->draw(pos.x, pos.y, _bounds.width, _bounds.height, center.u1, center.v1, center.u2, center.v2, skinColor, clip);
         }
         else
         {
@@ -695,7 +665,7 @@ namespace gameplay
             if (border.left)
                 spriteBatch->draw(pos.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, skinColor, clip);
             if (border.left && border.right && border.top && border.bottom)
-                spriteBatch->draw(pos.x + border.left, pos.y + border.top, _size.x - border.left - border.right, _size.y - border.top - border.bottom,
+                spriteBatch->draw(pos.x + border.left, pos.y + border.top, _bounds.width - border.left - border.right, _bounds.height - border.top - border.bottom,
                     center.u1, center.v1, center.u2, center.v2, skinColor, clip);
             if (border.right)
                 spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, skinColor, clip);
@@ -779,24 +749,24 @@ namespace gameplay
         switch(propertyId)
         {
         case ANIMATE_POSITION:
-            value->setFloat(0, _position.x);
-            value->setFloat(1, _position.y);
+            value->setFloat(0, _bounds.x);
+            value->setFloat(1, _bounds.y);
             break;
         case ANIMATE_SIZE:
-            value->setFloat(0, _size.x);
-            value->setFloat(1, _size.y);
+            value->setFloat(0, _clipBounds.width);
+            value->setFloat(1, _clipBounds.height);
             break;
         case ANIMATE_POSITION_X:
-            value->setFloat(0, _position.x);
+            value->setFloat(0, _bounds.x);
             break;
         case ANIMATE_POSITION_Y:
-            value->setFloat(0, _position.y);
+            value->setFloat(0, _bounds.y);
             break;
         case ANIMATE_SIZE_WIDTH:
-            value->setFloat(0, _size.x);
+            value->setFloat(0, _clipBounds.width);
             break;
         case ANIMATE_SIZE_HEIGHT:
-            value->setFloat(0, _size.y);
+            value->setFloat(0, _clipBounds.height);
             break;
         case ANIMATE_OPACITY:
         default:
@@ -843,9 +813,9 @@ namespace gameplay
         }
         else
         {
-            x = Curve::lerp(blendWeight, _position.x, x);
+            x = Curve::lerp(blendWeight, _bounds.x, x);
         }
-        _position.x = x;
+        _bounds.x = x;
         _dirty = true;
     }
     
@@ -857,9 +827,9 @@ namespace gameplay
         }
         else
         {
-            y = Curve::lerp(blendWeight, _position.y, y);
+            y = Curve::lerp(blendWeight, _bounds.y, y);
         }
-        _position.y = y;
+        _bounds.y = y;
         _dirty = true;
     }
     
@@ -871,9 +841,9 @@ namespace gameplay
         }
         else
         {
-            width = Curve::lerp(blendWeight, _size.x, width);
+            width = Curve::lerp(blendWeight, _clipBounds.width, width);
         }
-        _size.x = width;
+        _clipBounds.width = width;
         _dirty = true;
     }
 
@@ -885,9 +855,9 @@ namespace gameplay
         }
         else
         {
-            height = Curve::lerp(blendWeight, _size.y, height);
+            height = Curve::lerp(blendWeight, _clipBounds.height, height);
         }
-        _size.y = height;
+        _clipBounds.height = height;
         _dirty = true;
     }
 
