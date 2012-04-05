@@ -17,6 +17,7 @@ class VerticalLayout : public Layout
     friend class Container;
 
 public:
+
     /**
      * Set whether this layout will start laying out controls from the bottom of the container.
      * This setting defaults to 'false', meaning controls will start at the top.
@@ -40,16 +41,38 @@ public:
     Layout::Type getType();
 
 protected:
+
+    /**
+     * Constructor.
+     */
     VerticalLayout();
+
+    /**
+     * Destructor.
+     */
     virtual ~VerticalLayout();
 
+    /**
+     * Create a VerticalLayout.
+     *
+     * @return a VerticalLayout object.
+     */
     static VerticalLayout* create();
 
+    /**
+     * Update the controls contained by the specified container.
+     *
+     * Controls are placed next to one another vertically until
+     * the bottom-most edge of the container is reached.
+     *
+     * @param container The container to update.
+     */
     void update(const Container* container);
 
     bool _bottomToTop;
 
 private:
+
     VerticalLayout(const VerticalLayout& copy);
 };
 

@@ -32,7 +32,7 @@ namespace gameplay
         }
     }
 
-    void Control::init(Theme::Style* style, Properties* properties)
+    void Control::initialize(Theme::Style* style, Properties* properties)
     {
         _style = style;
 
@@ -42,7 +42,7 @@ namespace gameplay
         properties->getVector2("size", &size);
         _bounds.set(position.x, position.y, size.x, size.y);
 
-        _state = Control::getStateFromString(properties->getString("state"));
+        _state = Control::getState(properties->getString("state"));
 
         const char* id = properties->getId();
         if (id)
@@ -696,7 +696,7 @@ namespace gameplay
         return false;
     }
 
-    Control::State Control::getStateFromString(const char* state)
+    Control::State Control::getState(const char* state)
     {
         if (!state)
         {

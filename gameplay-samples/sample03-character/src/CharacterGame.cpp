@@ -47,7 +47,21 @@ void CharacterGame::initialize()
     _scene->visit(this, &CharacterGame::initScene);
 
     // Load animations clips.
-    loadAnimationClips();
+    loadAnimationClips(node);
+
+    // Initialize the gamepad.
+	_gamepad = new Gamepad("res/gamepad.png", 1, 1);
+
+	Gamepad::Rect leftRegionInner = {130.0f, this->getHeight() - 130.0f, 47.0f, 47.0f};
+    Gamepad::Rect leftTexRegionInner = {10.0f, 188.0f, 47.0f, 47.0f};
+    Gamepad::Rect leftRegionOuter = {120.0f, this->getHeight() - 130.0f, 170.0f, 170.0f};
+    Gamepad::Rect leftTexRegionOuter = {0.0f, 0.0f, 170.0f, 170.0f};
+    _gamepad->setJoystick(JOYSTICK, &leftRegionInner, &leftTexRegionInner, &leftRegionOuter, &leftTexRegionOuter, 45.0f);
+
+	Gamepad::Rect regionOnScreen = {this->getWidth() - 120.0f, this->getHeight() - 130.0f, 47.0f, 47.0f};
+	Gamepad::Rect defaultRegion = {10.0f, 188.0f, 50.0f, 47.0f};
+	Gamepad::Rect focusRegion = {69.0f, 188.0f, 50.0f, 47.0f};
+	_gamepad->setButton(BUTTON_1, &regionOnScreen, &defaultRegion, &focusRegion);
 }
 
 void CharacterGame::initMaterial(Scene* scene, Node* node, Material* material)
@@ -94,13 +108,64 @@ void CharacterGame::finalize()
 
 void CharacterGame::update(long elapsedTime)
 {
+    Gamepad::ButtonState buttonOneState = _gamepad->getButtonState(BUTTON_1);
+	Vector2 joystickVec = _gamepad->getJoystickState(JOYSTICK);
+	keyFlags = 0;
+
+	if (joystickVec.x > 0)
+	{
+		keyFlags |= 8;
+	}
+	else if (joystickVec.x < 0)
+	{
+		keyFlags |= 4;
+	}
+	
+	if (joystickVec.y > 0)
+	{
+		keyFlags |= 1;
+	}
+	else if (joystickVec.y < 0)
+	{
+		keyFlags |= 2;
+	}	
+	
+	/*
+	switch (key)
+        {
+        case Keyboard::KEY_W:
+            keyFlags |= 1;
+            break;
+        case Keyboard::KEY_S:
+            keyFlags |= 2;
+            break;
+        case Keyboard::KEY_A:
+            keyFlags |= 4;
+            break;
+        case Keyboard::KEY_D:
+            keyFlags |= 8;
+            break;
+        case Keyboard::KEY_P:
+            drawDebug = !drawDebug;
+            break;
+		case Keyboard::KEY_B:
+			moveBall = !moveBall;
+			break;
+        }
+	*/
     // Update character animation and movement
-    if (keyFlags == 0)
+    if (joystickVec.isZero())
     {
         _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT, 1.0f, BLEND_DURATION);
+		_character->setForwardVelocity(0.0f);
     }
     else
     {
+		float angle = atan2(joystickVec.x, joystickVec.y);
+		_character->setRotation(Vector3::unitY(), angle);
+
+		_character->setForwardVelocity(joystickVec.length());
+
         // Forward motion
         if (keyFlags & 1)
         {
@@ -191,6 +256,8 @@ void CharacterGame::render(long elapsedTime)
         _scene->drawDebug(Scene::DEBUG_SPHERES);
         break;
     }
+
+    _gamepad->draw();
 
     _font->begin();
     char fps[32];
@@ -304,9 +371,9 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     };
 }
 
-void CharacterGame::loadAnimationClips()
+void CharacterGame::loadAnimationClips(Node* node)
 {
-    _animation = Game::getInstance()->getAnimationController()->getAnimation("movements");
+    _animation = node->getAnimation("movements");
     _animation->createClips("res/boy.animation");
 
     _character->addAnimation("idle", _animation->getClip("idle"), 0.0f);

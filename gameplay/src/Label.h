@@ -25,6 +25,7 @@ class Label : public Control
     friend class Container;
 
 public:
+
     /**
      * Set the text for this label to display.
      *
@@ -52,7 +53,15 @@ public:
     virtual void addListener(Control::Listener* listener, int eventFlags);
 
 protected:
+
+    /**
+     * Constructor.
+     */
     Label();
+
+    /**
+     * Destructor.
+     */
     virtual ~Label();
 
     /**
@@ -68,7 +77,7 @@ protected:
     /**
      * Initialize this label.
      */
-    virtual void init(Theme::Style* style, Properties* properties);
+    virtual void initialize(Theme::Style* style, Properties* properties);
 
     /**
      * Draw this label's text.
@@ -80,6 +89,7 @@ protected:
     std::string _text;      // The text displayed by this label.
 
 private:
+
     Label(const Label& copy);
 };
 

@@ -23,6 +23,7 @@ class Material : public RenderState
     friend class Technique;
     friend class Pass;
     friend class RenderState;
+    friend class Node;
 
 public:
 
