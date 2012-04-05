@@ -115,6 +115,30 @@ material Colored
     }
 }
 
+material ColoredTransparent
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/colored.vsh
+            fragmentShader = res/colored-transparent.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+                blend = true
+                srcBlend = SRC_ALPHA
+                dstBlend = ONE_MINUS_SRC_ALPHA
+            }
+        }
+    }
+}
+
 material ColoredSpecular
 {
     technique
@@ -139,7 +163,7 @@ material ColoredSpecular
     }
 }
 
-material BoySkin : Colored
+material Boy : ColoredTransparent
 {
     technique
     {
@@ -147,46 +171,54 @@ material BoySkin : Colored
         {
             defines = SKINNING;SKINNING_JOINT_COUNT 31
             u_matrixPalette = MATRIX_PALETTE
-            u_diffuseColor = 0.84, 0.76, 0.67, 1
         }
     }
 }
 
-material BoyShirt : Colored
+material BoySkin : Boy
 {
     technique
     {
         pass
         {
-            defines = SKINNING;SKINNING_JOINT_COUNT 31
-            u_matrixPalette = MATRIX_PALETTE
-            u_diffuseColor = 0.27, 0.46, 0.82, 1
+            u_diffuseColor = 0.84, 0.76, 0.67
+            u_alpha = 1.0
         }
     }
 }
 
-material BoyShorts : Colored
+material BoyShirt : Boy
 {
     technique
     {
         pass
         {
-            defines = SKINNING;SKINNING_JOINT_COUNT 31
-            u_matrixPalette = MATRIX_PALETTE
-            u_diffuseColor = 0.96, 0.47, 0.47, 1
+            u_diffuseColor = 0.27, 0.46, 0.82
+            u_alpha = 1.0
         }
     }
 }
 
-material BoyShoes : Colored
+material BoyShorts : Boy
 {
     technique
     {
         pass
         {
-            defines = SKINNING;SKINNING_JOINT_COUNT 31
-            u_matrixPalette = MATRIX_PALETTE
-            u_diffuseColor = 0.25, 0.19, 0.06, 1
+            u_diffuseColor = 0.96, 0.47, 0.47
+            u_alpha = 1.0
+        }
+    }
+}
+
+material BoyShoes : Boy
+{
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 0.25, 0.19, 0.06
+            u_alpha = 1.0
         }
     }
 }

@@ -17,15 +17,17 @@ class ClosestNotMeConvexResultCallback : public btCollisionWorld::ClosestConvexR
 {
 public:
 
-    ClosestNotMeConvexResultCallback(btCollisionObject* me, const btVector3& up, btScalar minSlopeDot)
+    ClosestNotMeConvexResultCallback(PhysicsCollisionObject* me, const btVector3& up, btScalar minSlopeDot)
         : btCollisionWorld::ClosestConvexResultCallback(btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0)), _me(me), _up(up), _minSlopeDot(minSlopeDot)
     {
     }
 
     btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
     {
-        if (convexResult.m_hitCollisionObject == _me)
-            return btScalar(1.0);
+        PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(convexResult.m_hitCollisionObject->getUserPointer());
+
+        if (object == _me || object->getType() == PhysicsCollisionObject::GHOST_OBJECT)
+            return 1.0f;
 
         /*
         btVector3 hitNormalWorld;
@@ -50,7 +52,7 @@ public:
 
 protected:
 
-    btCollisionObject* _me;
+    PhysicsCollisionObject* _me;
     const btVector3 _up;
     btScalar _minSlopeDot;
 };
@@ -64,7 +66,7 @@ PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Defi
     setMaxSlopeAngle(45.0f);
 
     // Set the collision flags on the ghost object to indicate it's a character
-    _ghostObject->setCollisionFlags(_ghostObject->getCollisionFlags() | btCollisionObject::CF_CHARACTER_OBJECT);
+    _ghostObject->setCollisionFlags(_ghostObject->getCollisionFlags() | btCollisionObject::CF_CHARACTER_OBJECT | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
     // Register ourselves as an action on the physics world so we are called back during physics ticks
     Game::getInstance()->getPhysicsController()->_world->addAction(this);
@@ -365,7 +367,6 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
     // dynamic objects (i.e. objects that moved and now intersect the character).
     if (_physicsEnabled)
     {
-        //_colliding = fixCollision(collisionWorld);
         _colliding = false;
         int stepCount = 0;
         while (fixCollision(collisionWorld))
@@ -495,7 +496,7 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 
         btVector3 sweepDirNegative(_currentPosition - targetPosition);
 
-        ClosestNotMeConvexResultCallback callback(_ghostObject, sweepDirNegative, btScalar(0.0));
+        ClosestNotMeConvexResultCallback callback(this, sweepDirNegative, btScalar(0.0));
         callback.m_collisionFilterGroup = _ghostObject->getBroadphaseHandle()->m_collisionFilterGroup;
         callback.m_collisionFilterMask = _ghostObject->getBroadphaseHandle()->m_collisionFilterMask;
 
@@ -556,7 +557,7 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
     start.setOrigin(_currentPosition);
     end.setOrigin(targetPosition);
 
-    ClosestNotMeConvexResultCallback callback(_ghostObject, btVector3(0, 1, 0), _cosSlopeAngle);
+    ClosestNotMeConvexResultCallback callback(this, btVector3(0, 1, 0), _cosSlopeAngle);
     callback.m_collisionFilterGroup = _ghostObject->getBroadphaseHandle()->m_collisionFilterGroup;
     callback.m_collisionFilterMask = _ghostObject->getBroadphaseHandle()->m_collisionFilterMask;
 
@@ -661,6 +662,12 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
             // Get the direction of the contact points (used to scale normal vector in the correct direction).
             btScalar directionSign = manifold->getBody0() == _ghostObject ? -1.0f : 1.0f;
 
+            // Skip ghost objects
+            PhysicsCollisionObject* object = Game::getInstance()->getPhysicsController()->getCollisionObject(
+                (btCollisionObject*)(manifold->getBody0() == _ghostObject ? manifold->getBody1() : manifold->getBody0()));
+            if (!object || object->getType() == PhysicsCollisionObject::GHOST_OBJECT)
+                continue;
+
             for (int p = 0, contactCount = manifold->getNumContacts(); p < contactCount; ++p)
             {
                 const btManifoldPoint& pt = manifold->getContactPoint(p);
@@ -678,14 +685,11 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
                         _collisionNormal = pt.m_normalWorldOnB * directionSign;
                     }
 
-                    //Node* node = Game::getInstance()->getPhysicsController()->getCollisionObject((btCollisionObject*)(manifold->getBody0() == _ghostObject ? manifold->getBody1() : manifold->getBody0()))->getNode();
-
                     // Calculate new position for object, which is translated back along the collision normal
                     currentPosition += pt.m_normalWorldOnB * directionSign * dist * 0.2f;
                     collision = true;
                 }
             }
-            //manifold->clearManifold();
         }
     }
 
