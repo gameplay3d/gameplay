@@ -1,6 +1,6 @@
 animation boyAnimation
 {
-    frameCount = 482
+    frameCount = 380
 	clip idle
     {
         begin = 29
