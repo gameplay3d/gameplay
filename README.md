@@ -1,9 +1,9 @@
-## GamePlay v1.2.0
-GamePlay is a open-source, cross-platform 3D native gaming framework making it easy to learn and write mobile and desktop games. 
+## gameplay v1.2.0
+An open-source, cross-platform 3D native game framework making it easy to learn and write mobile and desktop games. 
 
 ## Supported Mobile Platforms
 - BlackBerry PlayBook 2 (using BlackBerry Native SDK 2)
-- Google Android 4 (using Google Android NDK 7)
+- Google Android 2.3+ (using Google Android NDK 7)
 - Apple iOS 5 (using Apple XCode 4.3)
 
 ## Supported Desktop Platforms
@@ -11,9 +11,8 @@ GamePlay is a open-source, cross-platform 3D native gaming framework making it e
 - Apple MacOS X (using Apple XCode 4.3)
 
 ## Roadmap for 'next' branch
-- Lua script bindings
-- Terrain and Water
-- Lighting enhancements
+- Lua Scripting
+- Terrain
 - Editor
 
 ## Licence
