@@ -112,6 +112,7 @@ void CharacterGame::finalize()
 {
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_font);
+    SAFE_DELETE(_gamepad);
 }
 
 void CharacterGame::update(long elapsedTime)
