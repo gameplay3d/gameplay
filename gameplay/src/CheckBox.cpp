@@ -34,6 +34,15 @@ bool CheckBox::isChecked()
     return _checked;
 }
 
+void CheckBox::setChecked(bool checked)
+{
+    if (_checked != checked)
+    {
+        _checked = checked;
+        notifyListeners(Control::Listener::VALUE_CHANGED);
+    }
+}
+
 void CheckBox::setImageSize(float width, float height)
 {
     _imageSize.set(width, height);
