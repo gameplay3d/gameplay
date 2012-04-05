@@ -12,12 +12,6 @@ namespace gameplay
 
 /**
  * Helper class for loading scenes from .scene files.
- *
- * @todo Add support for loading ghost objects and characters for nodes.
- * @todo Add support for explicitly specifying collision shapes for rigid bodies/ghost objects/characters.
- * @todo Consider supporting 'rigidbodymodel' on models/meshes that are not part of the scene to allow
- *        mesh data to be exported from a modelling tool for the sole purpose of representing a physics
- *        rigid body, but not have it get loaded into the scene and rendering context.
  */
 class SceneLoader
 {
@@ -25,12 +19,14 @@ class SceneLoader
 
 private:
 
-    // Main interface to Scene::load(const char*).
+    /**
+     * Loads a scene file file.
+     */
     static Scene* load(const char* filePath);
     
-    // ------------------------------------------------------------------------
-    // Helper structures and functions for SceneLoader::load(const char*).
-
+    /**
+     * Helper structures and functions for SceneLoader::load(const char*).
+     */
     struct SceneAnimation
     {
         SceneAnimation(const char* animationID, const char* targetID, std::string file, std::string id)
@@ -77,36 +73,42 @@ private:
     };
 
     static void addSceneAnimation(const char* animationID, const char* targetID, const char* url);
+
     static void addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::Type type, const char* url = NULL, int index = 0);
+
     static void applyNodeProperties(const Scene* scene, const Properties* sceneProperties, unsigned int typeFlags);
+
     static void applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp);
+
     static void applyNodeUrls(Scene* scene);
+
     static void buildReferenceTables(Properties* sceneProperties);
+
     static void calculateNodesWithMeshRigidBodies(const Properties* sceneProperties);
+
     static void createAnimations(const Scene* scene);
+
     static PhysicsConstraint* loadGenericConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+
     static PhysicsConstraint* loadHingeConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+
     static Scene* loadMainSceneData(const Properties* sceneProperties);
+
     static void loadPhysics(Properties* physics, Scene* scene);
+
     static void loadReferencedFiles();
+
     static PhysicsConstraint* loadSocketConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+
     static PhysicsConstraint* loadSpringConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+
     static void splitURL(const char* url, std::string* file, std::string* id);
     
-    // ------------------------------------------------------------------------
-
-    // Holds the properties object for a given file path.
-    static std::map<std::string, Properties*> _propertiesFromFile;
-
-    // Holds the animations declared in the .scene file.
-    static std::vector<SceneAnimation> _animations;
-
-    // Holds all the nodes+properties declared in the .scene file.
-    static std::vector<SceneNode> _sceneNodes;
-
-
-    // The path of the main GPB for the scene being loaded.
-    static std::string _path;
+    
+    static std::map<std::string, Properties*> _propertiesFromFile;      // Holds the properties object for a given file path.
+    static std::vector<SceneAnimation> _animations;                     // Holds the animations declared in the .scene file.
+    static std::vector<SceneNode> _sceneNodes;                          // Holds all the nodes+properties declared in the .scene file.
+    static std::string _path;                                           // The path of the main GPB for the scene being loaded.
 };
 
 }
