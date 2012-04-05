@@ -8,7 +8,8 @@ float _rotateY = 0.0f;
 #define WALK_SPEED  7.5f
 #define ANIM_SPEED 10.0f
 #define BLEND_DURATION 150.0f
-#define CAMERA_FOCUS_RANGE 16.0f
+
+float cameraFocusDistance = 16.0f;
 
 int drawDebug = 0;
 bool moveBall = false;
@@ -40,6 +41,12 @@ void CharacterGame::initialize()
     _character->setMaxStepHeight(0.0f);
     _character->addCollisionListener(this);
 
+    // Store character mesh node.
+    _characterMeshNode = node->findNode("BoyMesh");
+
+    // Set a ghost object on our camera node to assist in camera occlusion adjustments
+    _scene->findNode("Camera")->setCollisionObject(PhysicsCollisionObject::GHOST_OBJECT, PhysicsCollisionShape::sphere(0.5f));
+
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initScene);
 
@@ -49,10 +56,11 @@ void CharacterGame::initialize()
 
 void CharacterGame::initMaterial(Scene* scene, Node* node, Material* material)
 {
+    // Bind light shader parameters to dynamic objects only
     std::string id = node->getId();
-    if (material &&
-        (id == "Basketball" || id.find("GreenChair") != id.npos || id.find("BlueChair") != id.npos || 
-        id == "Easel" || id == "BoyMesh" || id == "BoyShadow" || id == "Rainbow"))
+    if (material)// &&
+        //(id == "Basketball" || id.find("GreenChair") != id.npos || id.find("BlueChair") != id.npos || 
+        //id == "Easel" || id == "BoyMesh" || id == "BoyShadow" || id == "Rainbow"))
     {
         Node* lightNode = scene->findNode("SunLight");
 
@@ -163,7 +171,7 @@ void CharacterGame::update(long elapsedTime)
 
 	if (!moveBall)
 	{
-		fixCamera(elapsedTime);
+		adjustCamera(elapsedTime);
 	}
 }
 
@@ -191,7 +199,7 @@ void CharacterGame::render(long elapsedTime)
 
     _font->begin();
     char fps[32];
-    sprintf(fps, "%d", getFrameRate());
+    sprintf(fps, "FPS: %d\nCamera Focus: %d", getFrameRate(), (int)cameraFocusDistance);
     _font->drawText(fps, 5, 5, Vector4(1,1,0,1), 20);
     _font->end();
 }
@@ -243,7 +251,14 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
 		case Keyboard::KEY_B:
 			moveBall = !moveBall;
-			break;
+            break;
+        case Keyboard::KEY_EQUAL:
+        case Keyboard::KEY_PLUS:
+            cameraFocusDistance++;
+            break;
+        case Keyboard::KEY_MINUS:
+            cameraFocusDistance--;
+            break;
         }
     }
     else if (evt == Keyboard::KEY_RELEASE)
@@ -289,8 +304,6 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
             _rotateX = x;
             _rotateY = y;
             _character->getNode()->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
-            //_scene->findNode("Camera")->rotateX(-MATH_DEG_TO_RAD(deltaY * 0.5f));
-            //_character->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
         }
         break;
     default:
@@ -318,73 +331,74 @@ void CharacterGame::collisionEvent(
     {
 		if (collisionPair.objectB->getType() == PhysicsCollisionObject::RIGID_BODY)
         {
-			PhysicsCharacter* c = static_cast<PhysicsCharacter*>(collisionPair.objectA);
-			//c->setve
+			//PhysicsCharacter* c = static_cast<PhysicsCharacter*>(collisionPair.objectA);
         }
     }
 }
 
-void CharacterGame::fixCamera(long elapsedTime)
+void CharacterGame::adjustCamera(long elapsedTime)
 {
     static float cameraOffset = 0.0f;
 
-#define RAY_STEP_SIZE 0.1f
+    PhysicsController* physics = Game::getInstance()->getPhysicsController();
+    Node* cameraNode = _scene->getActiveCamera()->getNode();
 
-    Node* node = _scene->getActiveCamera()->getNode();
-    
-    Vector3 cameraForward = node->getForwardVectorWorld();
-    cameraForward.normalize();
-
-    Vector3 cameraPosition = node->getTranslationWorld();
-    Vector3 focalPoint = cameraPosition + (cameraForward * CAMERA_FOCUS_RANGE);
-
-    Ray cameraRay(cameraPosition, cameraPosition - focalPoint);
-
-    float d = cameraRay.getOrigin().distanceSquared(focalPoint);
-
-    Vector3 collisionPoint;
-    PhysicsCollisionObject* cameraOcclusion = Game::getInstance()->getPhysicsController()->rayTest(cameraRay, CAMERA_FOCUS_RANGE, &collisionPoint);
-    bool cameraCollision = false;
-    if (cameraOcclusion)
+    // Reset camera
+    if (cameraOffset != 0.0f)
     {
-        Vector3 rayStep = cameraRay.getDirection() * RAY_STEP_SIZE;
+        cameraNode->translateForward(-cameraOffset);
+        cameraOffset = 0.0f;
+    }
+
+    Vector3 cameraPosition = cameraNode->getTranslationWorld();
+    Vector3 cameraDirection = cameraNode->getForwardVectorWorld();
+    cameraDirection.normalize();
+
+    // Get focal point of camera (use the resolved world location of the head joint as a focal point)
+    Vector3 focalPoint(cameraPosition + (cameraDirection * cameraFocusDistance));
+
+    PhysicsController::HitResult result;
+    PhysicsCollisionObject* occlusion = NULL;
+    do
+    {
+        // Perform a ray test to check for camera collisions
+        if (!physics->sweepTest(cameraNode->getCollisionObject(), focalPoint, &result) || result.object == _character)
+            break;
+
+        occlusion = result.object;
+
+        // Step the camera closer to the focal point to resolve the occlusion
         do
         {
-            float d2 = cameraRay.getOrigin().distanceSquared(collisionPoint);
-            if (d2 > d)
-                break; // collision point is past the character (not obstructing the view)
+            // Prevent the camera from getting too close to the character.
+            // Without this check, it's possible for the camera to fly past the character
+            // and essentially end up in an infinite loop here.
+            if (cameraNode->getTranslationWorld().distanceSquared(focalPoint) <= 2.0f)
+                return;
 
-            cameraCollision = true;
+            cameraNode->translateForward(0.1f);
+            cameraOffset += 0.1f;
 
-            // Step along the camera ray closer to the character
-            cameraRay.setOrigin(cameraRay.getOrigin() - rayStep);
+        } while (physics->sweepTest(cameraNode->getCollisionObject(), focalPoint, &result) && result.object == occlusion);
 
-            // Prevent camera from moving past character
-            if (cameraRay.getOrigin().distanceSquared(focalPoint) < (RAY_STEP_SIZE*RAY_STEP_SIZE))
-                break;
-        }
-        while ((cameraOcclusion = Game::getInstance()->getPhysicsController()->rayTest(cameraRay, CAMERA_FOCUS_RANGE, &collisionPoint)));
-    }
+    } while (true);
 
-    if (cameraCollision)
+    if (occlusion)
     {
-        // Move camera
-        float moveDistance = cameraPosition.distance(cameraRay.getOrigin());
-        //node->setTranslation(0, 0, 0);
-        node->translateForward(moveDistance);
-        cameraOffset += moveDistance;
-    }
-    else
-    {
-        // Reset camera
-        if (cameraOffset != 0.0f)
+        // TODO: When we change the character over to use a single material+texture, this code will be much cleaner (no material parts and can store MaterialParameter)
+        float d = _scene->getActiveCamera()->getNode()->getTranslationWorld().distance(_characterMeshNode->getTranslationWorld());
+        if (d < 10)
         {
-            node->translateForward(-cameraOffset);
-            cameraOffset = 0.0f;
-
-            // Call updateCamera again to ensure that moving back didn't cause a different
-            // object to obstruct the view.
-            fixCamera(elapsedTime);
+            float alpha = d / 10.0f;
+            _characterMeshNode->setTransparent(true);
+            for (unsigned int i = 0; i < 4; i++)
+                _characterMeshNode->getModel()->getMaterial(i)->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_alpha")->setValue(alpha);
+        }
+        else
+        {
+            _characterMeshNode->setTransparent(false);
+            for (unsigned int i = 0; i < 4; i++)
+                _characterMeshNode->getModel()->getMaterial(i)->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_alpha")->setValue(1.0f);
         }
     }
 }
