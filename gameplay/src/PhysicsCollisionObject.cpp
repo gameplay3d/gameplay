@@ -54,7 +54,14 @@ PhysicsMotionState* PhysicsCollisionObject::getMotionState() const
 
 bool PhysicsCollisionObject::isKinematic() const
 {
-    return getCollisionObject()->isKinematicObject();
+    switch (getType())
+    {
+    case GHOST_OBJECT:
+    case CHARACTER:
+        return true;
+    default:
+        return getCollisionObject()->isKinematicObject();
+    }
 }
 
 bool PhysicsCollisionObject::isDynamic() const
