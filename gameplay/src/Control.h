@@ -25,6 +25,7 @@ class Control : public Ref, public AnimationTarget
     friend class VerticalLayout;
 
 public:
+
     /**
      * The possible states a control can be in.
      */
@@ -57,6 +58,10 @@ public:
      */
     static const unsigned char STATE_ALL = NORMAL | FOCUS | ACTIVE | DISABLED;
 
+    /**
+     * Implement Control::Listener and call Control::addListener()
+     * in order to listen for events on controls.
+     */
     class Listener
     {
     public:
@@ -201,7 +206,6 @@ public:
      */
     float getHeight() const;
 
-    // Themed properties.
     /**
      * Set the size of this control's border.
      *
@@ -489,7 +493,6 @@ public:
      * @param opacity The new opacity.
      * @param states The states to set this property on.
      *               One or more members of the Control::State enum, ORed together.
-     * @param duration The duration to animate opacity by.
      */
     void setOpacity(float opacity, unsigned char states = STATE_ALL);
 
@@ -501,10 +504,6 @@ public:
      * @return The opacity of this control for a given state.
      */
     float getOpacity(State state = NORMAL) const;
-
-    // TODO
-    // Controls must state the names of the images they use, for the purposes of a future UI editor.
-    //virtual std::vector<std::string> getImageNames() = 0;
 
     /**
      * Get the bounds of this control, relative to its parent container, after clipping.
@@ -608,7 +607,15 @@ public:
     void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 protected:
+
+    /**
+     * Constructor.
+     */
     Control();
+
+    /**
+     * Destructor.
+     */
     virtual ~Control();
 
     /**
@@ -652,16 +659,6 @@ protected:
      */
     virtual void update(const Rectangle& clip);
 
-private:
-    /**
-     * Draws the themed border and background of a control.
-     *
-     * @param spriteBatch The sprite batch containing this control's border images.
-     * @param clip The clipping rectangle of this control's parent container.
-     */
-    virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-protected:
     /**
      * Draw the images associated with this control.
      *
@@ -680,29 +677,37 @@ protected:
     /**
      * Initialize properties common to STATE_ALL Controls.
      */
-    virtual void init(Theme::Style* style, Properties* properties);
+    virtual void initialize(Theme::Style* style, Properties* properties);
 
     /**
      * Container and classes that extend it should implement this and return true.
+     *
+     * @return true if this object is of class Container, false otherwise.
      */
     virtual bool isContainer();
 
     /**
      * Returns whether this control has been modified and requires an update.
+     *
+     * @return Whether this control has been modified and requires an update.
      */
     virtual bool isDirty();
 
     /**
      * Get a Control::State enum from a matching string.
+     *
+     * @param state The string to match.
+     *
+     * @return The Control::State enum that matches the given string.
      */
-    static State getStateFromString(const char* state);
+    static State getState(const char* state);
 
     /**
-     * Notify STATE_ALL listeners of a specific event.
+     * Notify this control's listeners of a specific event.
+     *
+     * @param eventType The event to trigger.
      */
     void notifyListeners(Listener::EventType eventType);
-
-    void addSpecificListener(Control::Listener* listener, Listener::EventType eventType);
 
     std::string _id;
     State _state;           // Determines overlay used during draw().
@@ -716,6 +721,7 @@ protected:
     std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
 
 private:
+
     // Animation blending bits.
     static const char ANIMATION_POSITION_X_BIT = 0x01;
     static const char ANIMATION_POSITION_Y_BIT = 0x02;
@@ -731,6 +737,18 @@ private:
     void applyAnimationValueSizeHeight(float height, float blendWeight);
     void applyAnimationValueOpacity();
 
+    Control(const Control& copy);
+
+    /**
+     * Draws the themed border and background of a control.
+     *
+     * @param spriteBatch The sprite batch containing this control's border images.
+     * @param clip The clipping rectangle of this control's parent container.
+     */
+    virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
+
+    void addSpecificListener(Control::Listener* listener, Listener::EventType eventType);
+
     // Gets the overlays requested in the overlayTypes bitflag.
     Theme::Style::Overlay** getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays);
 
@@ -741,8 +759,6 @@ private:
 
     // Ensures that this control has a copy of its style so that it can override it without affecting other controls.
     void overrideStyle();
-
-    Control(const Control& copy);
 };
 
 }

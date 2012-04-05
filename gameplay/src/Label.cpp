@@ -18,14 +18,14 @@ namespace gameplay
     Label* Label::create(Theme::Style* style, Properties* properties)
     {
         Label* label = new Label();
-        label->init(style, properties);
+        label->initialize(style, properties);
 
         return label;
     }
 
-    void Label::init(Theme::Style* style, Properties* properties)
+    void Label::initialize(Theme::Style* style, Properties* properties)
     {
-        Control::init(style, properties);
+        Control::initialize(style, properties);
 
         const char* text = properties->getString("text");
         if (text)
