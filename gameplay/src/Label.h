@@ -12,9 +12,9 @@ namespace gameplay
  *
  * The following properties are available for labels:
  *
- * label <Label ID>
+ * label <labelID>
  * {
- *      style       = <Style ID>
+ *      style       = <styleID>
  *      position    = <x, y>
  *      size        = <width, height>
  *      text        = <string>
@@ -90,6 +90,9 @@ protected:
 
 private:
 
+    /**
+     * Constructor.
+     */
     Label(const Label& copy);
 };
 
