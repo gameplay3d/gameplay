@@ -19,7 +19,7 @@ TextBox::~TextBox()
 TextBox* TextBox::create(Theme::Style* style, Properties* properties)
 {
     TextBox* textBox = new TextBox();
-    textBox->init(style, properties);
+    textBox->initialize(style, properties);
 
     return textBox;
 }
@@ -27,15 +27,6 @@ TextBox* TextBox::create(Theme::Style* style, Properties* properties)
 int TextBox::getLastKeypress()
 {
     return _lastKeypress;
-}
-
-void TextBox::setCursorLocation(int x, int y)
-{
-    Theme::Border border = getBorder(_state);
-    Theme::Padding padding = getPadding();
-
-    _cursorLocation.set(x - border.left - padding.left + _clip.x,
-                       y - border.top - padding.top + _clip.y);
 }
 
 void TextBox::addListener(Control::Listener* listener, int eventFlags)
@@ -66,8 +57,8 @@ bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
             _dirty = true;
             return _consumeTouchEvents;
         }
-        else if (!(x > 0 && x <= _bounds.width &&
-                    y > 0 && y <= _bounds.height))
+        else if (!(x > 0 && x <= _clipBounds.width &&
+                    y > 0 && y <= _clipBounds.height))
         {
             _state = NORMAL;
             Game::getInstance()->displayKeyboard(false);
@@ -77,19 +68,19 @@ bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
         break;
     case Touch::TOUCH_MOVE:
         if (_state == FOCUS &&
-            x > 0 && x <= _bounds.width &&
-            y > 0 && y <= _bounds.height)
+            x > 0 && x <= _clipBounds.width &&
+            y > 0 && y <= _clipBounds.height)
         {
-            setCursorLocation(x, y);
+            setCaretLocation(x, y);
             _dirty = true;
             return _consumeTouchEvents;
         }
         break;
     case Touch::TOUCH_RELEASE:
-        if (x > 0 && x <= _bounds.width &&
-            y > 0 && y <= _bounds.height)
+        if (x > 0 && x <= _clipBounds.width &&
+            y > 0 && y <= _clipBounds.height)
         {
-            setCursorLocation(x, y);
+            setCaretLocation(x, y);
             _state = FOCUS;
             _dirty = true;
             return _consumeTouchEvents;
@@ -115,7 +106,7 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                         // TODO: Move cursor to beginning of line.
                         // This only works for left alignment...
                         
-                        //_cursorLocation.x = _clip.x;
+                        //_caretLocation.x = _clip.x;
                         //_dirty = true;
                         break;
                     }
@@ -126,66 +117,71 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     }
                     case Keyboard::KEY_DELETE:
                     {
-                        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-                        Font* font = overlay->getFont();
-                        unsigned int fontSize = overlay->getFontSize();
-                        unsigned int textIndex = font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _cursorLocation, &_cursorLocation,
-                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        Font* font = getFont(_state);
+                        unsigned int fontSize = getFontSize(_state);
+                        Font::Justify textAlignment = getTextAlignment(_state);
+                        bool rightToLeft = getTextRightToLeft(_state);
 
+                        unsigned int textIndex = font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _caretLocation, &_caretLocation,
+                            textAlignment, true, rightToLeft);
                         _text.erase(textIndex, 1);
-                        font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_cursorLocation, textIndex,
-                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_caretLocation, textIndex,
+                            textAlignment, true, rightToLeft);
                         _dirty = true;
                         notifyListeners(Listener::TEXT_CHANGED);
                         break;
                     }
                     case Keyboard::KEY_LEFT_ARROW:
                     {
-                        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-                        Font* font = overlay->getFont();
-                        unsigned int fontSize = overlay->getFontSize();
-                        unsigned int textIndex = font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _cursorLocation, &_cursorLocation,
-                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        Font* font = getFont(_state);
+                        unsigned int fontSize = getFontSize(_state);
+                        Font::Justify textAlignment = getTextAlignment(_state);
+                        bool rightToLeft = getTextRightToLeft(_state);
 
-                        font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_cursorLocation, textIndex - 1,
-                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        unsigned int textIndex = font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _caretLocation, &_caretLocation,
+                            textAlignment, true, rightToLeft);
+                        font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_caretLocation, textIndex - 1,
+                            textAlignment, true, rightToLeft);
                         _dirty = true;
                         break;
                     }
                     case Keyboard::KEY_RIGHT_ARROW:
                     {
-                        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-                        Font* font = overlay->getFont();
-                        unsigned int fontSize = overlay->getFontSize();
-                        unsigned int textIndex = font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _cursorLocation, &_cursorLocation,
-                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        Font* font = getFont(_state);
+                        unsigned int fontSize = getFontSize(_state);
+                        Font::Justify textAlignment = getTextAlignment(_state);
+                        bool rightToLeft = getTextRightToLeft(_state);
 
-                        font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_cursorLocation, textIndex + 1,
-                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        unsigned int textIndex = font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _caretLocation, &_caretLocation,
+                            textAlignment, true, rightToLeft);
+                        font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_caretLocation, textIndex + 1,
+                            textAlignment, true, rightToLeft);
                         _dirty = true;
                         break;
                     }
                     case Keyboard::KEY_UP_ARROW:
                     {
-                        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-                        Font* font = overlay->getFont();
-                        unsigned int fontSize = overlay->getFontSize();
+                        Font* font = getFont(_state);
+                        unsigned int fontSize = getFontSize(_state);
+                        Font::Justify textAlignment = getTextAlignment(_state);
+                        bool rightToLeft = getTextRightToLeft(_state);
 
-                        _cursorLocation.y -= fontSize;
-                        font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _cursorLocation, &_cursorLocation,
-                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        _caretLocation.y -= fontSize;
+                        font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _caretLocation, &_caretLocation,
+                            textAlignment, true, rightToLeft);
                         _dirty = true;
                         break;
                     }
                     case Keyboard::KEY_DOWN_ARROW:
                     {
-                        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-                        Font* font = overlay->getFont();
-                        unsigned int fontSize = overlay->getFontSize();
+                        Font* font = getFont(_state);
+                        unsigned int fontSize = getFontSize(_state);
+                        Font::Justify textAlignment = getTextAlignment(_state);
+                        bool rightToLeft = getTextRightToLeft(_state);
 
-                        _cursorLocation.y += fontSize;
-                        font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _cursorLocation, &_cursorLocation,
-                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        _caretLocation.y += fontSize;
+                        font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _caretLocation, &_caretLocation,
+                            textAlignment, true, rightToLeft);
                         _dirty = true;
                         break;
                     }
@@ -195,11 +191,13 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
 
             case Keyboard::KEY_CHAR:
             {
-                Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-                Font* font = overlay->getFont();
-                unsigned int fontSize = overlay->getFontSize();
-                unsigned int textIndex = font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _cursorLocation, &_cursorLocation,
-                    overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                Font* font = getFont(_state);
+                unsigned int fontSize = getFontSize(_state);
+                Font::Justify textAlignment = getTextAlignment(_state);
+                bool rightToLeft = getTextRightToLeft(_state);
+
+                unsigned int textIndex = font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _caretLocation, &_caretLocation,
+                    textAlignment, true, rightToLeft);
 
                 switch (key)
                 {
@@ -209,8 +207,8 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                         {
                             --textIndex;
                             _text.erase(textIndex, 1);
-                            font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_cursorLocation, textIndex,
-                                overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                            font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_caretLocation, textIndex,
+                                textAlignment, true, rightToLeft);
 
                             _dirty = true;
                         }
@@ -225,8 +223,8 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                         _text.insert(textIndex, 1, (char)key);
 
                         // Get new location of cursor.
-                        font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_cursorLocation, textIndex + 1,
-                            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+                        font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_caretLocation, textIndex + 1,
+                            textAlignment, true, rightToLeft);
                 
                         _dirty = true;
                         break;
@@ -250,10 +248,13 @@ void TextBox::update(const Rectangle& clip)
     // Get index into string and cursor location from the last recorded touch location.
     if (_state == FOCUS)
     {
-        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-        Font* font = overlay->getFont();
-        font->getIndexAtLocation(_text.c_str(), _clip, overlay->getFontSize(), _cursorLocation, &_cursorLocation,
-            overlay->getTextAlignment(), true, overlay->getTextRightToLeft());
+        Font* font = getFont(_state);
+        unsigned int fontSize = getFontSize(_state);
+        Font::Justify textAlignment = getTextAlignment(_state);
+        bool rightToLeft = getTextRightToLeft(_state);
+
+        font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _caretLocation, &_caretLocation,
+            textAlignment, true, rightToLeft);
     }
 }
 
@@ -269,11 +270,20 @@ void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
             const Theme::UVs uvs = getImageUVs("textCaret", _state);
             unsigned int fontSize = getFontSize(_state);
 
-            spriteBatch->draw(_cursorLocation.x - (region.width / 2.0f), _cursorLocation.y, region.width, fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
+            spriteBatch->draw(_caretLocation.x - (region.width / 2.0f), _caretLocation.y, region.width, fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
         }
     }
 
     _dirty = false;
+}
+
+void TextBox::setCaretLocation(int x, int y)
+{
+    Theme::Border border = getBorder(_state);
+    Theme::Padding padding = getPadding();
+
+    _caretLocation.set(x - border.left - padding.left + _clip.x,
+                       y - border.top - padding.top + _clip.y);
 }
 
 }

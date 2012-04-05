@@ -94,6 +94,7 @@
     <ClCompile Include="src\TextBox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Theme.cpp" />
+    <ClCompile Include="src\ThemeStyle.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\Vector2.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
@@ -176,12 +177,14 @@
     <ClInclude Include="src\RenderTarget.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SceneLoader.h" />
+    <ClInclude Include="src\ScreenDisplayer.h" />
     <ClInclude Include="src\Slider.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />
     <ClInclude Include="src\TextBox.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Theme.h" />
+    <ClInclude Include="src\ThemeStyle.h" />
     <ClInclude Include="src\TimeListener.h" />
     <ClInclude Include="src\Touch.h" />
     <ClInclude Include="src\Transform.h" />

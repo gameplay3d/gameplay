@@ -4,7 +4,7 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
-
+#include "Form.h"
 #include <unistd.h>
 
 #import <Cocoa/Cocoa.h>
@@ -67,7 +67,7 @@ static View* __view = NULL;
 -(void)windowWillClose:(NSNotification*)note 
 {
     [lock lock];
-    _game->exit();
+    _game->end();
     [lock unlock];
     [[NSApplication sharedApplication] terminate:self];
 }
@@ -88,10 +88,9 @@ static View* __view = NULL;
     [lock lock];
 
     [[self openGLContext] makeCurrentContext];
-    
     CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
     
-    if (_game && _game->getState() == Game::RUNNING)       
+    if (_game && _game->getState() == Game::RUNNING)  
         _game->frame();
     
     CGLFlushDrawable((CGLContextObj)[[self openGLContext] CGLContextObj]);
@@ -176,7 +175,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CVDisplayLinkStop(displayLink);
     CVDisplayLinkRelease(displayLink);
     
-    _game->exit();
+    _game->end();
     
     [lock unlock];
 

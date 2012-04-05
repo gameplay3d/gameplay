@@ -16,8 +16,8 @@ namespace gameplay
  * @todo Add support for loading ghost objects and characters for nodes.
  * @todo Add support for explicitly specifying collision shapes for rigid bodies/ghost objects/characters.
  * @todo Consider supporting 'rigidbodymodel' on models/meshes that are not part of the scene to allow
- *		mesh data to be exported from a modelling tool for the sole purpose of representing a physics
- *		rigid body, but not have it get loaded into the scene and rendering context.
+ *        mesh data to be exported from a modelling tool for the sole purpose of representing a physics
+ *        rigid body, but not have it get loaded into the scene and rendering context.
  */
 class SceneLoader
 {

@@ -15,10 +15,10 @@ class Node;
  */
 class PhysicsMotionState : public btMotionState
 {
-	friend class PhysicsCollisionObject;
-	friend class PhysicsRigidBody;
-	friend class PhysicsGhostObject;
-	friend class PhysicsCharacter;
+    friend class PhysicsCollisionObject;
+    friend class PhysicsRigidBody;
+    friend class PhysicsGhostObject;
+    friend class PhysicsCharacter;
     friend class PhysicsConstraint;
 
 protected:

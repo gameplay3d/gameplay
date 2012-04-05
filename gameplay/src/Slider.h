@@ -32,6 +32,7 @@ class Slider : public Label
     friend class Container;
 
 public:
+
     /**
      * Set the minimum value that can be set on this slider.
      *
@@ -90,16 +91,60 @@ public:
      */
     float getValue();
 
+    /**
+     * Add a listener to be notified of specific events affecting
+     * this control.  Event types can be OR'ed together.
+     * E.g. To listen to touch-press and touch-release events,
+     * pass <code>Control::Listener::TOUCH | Control::Listener::RELEASE</code>
+     * as the second parameter.
+     *
+     * @param listener The listener to add.
+     * @param eventFlags The events to listen for.
+     */
     void addListener(Control::Listener* listener, int eventFlags);
 
 protected:
+
+    /**
+     * Constructor.
+     */
     Slider();
+
+    /**
+     * Destructor.
+     */
     ~Slider();
 
+    /**
+     * Create a slider with a given style and properties.
+     *
+     * @param style The style to apply to this slider.
+     * @param properties The properties to set on this slider.
+     *
+     * @return The new slider.
+     */
     static Slider* create(Theme::Style* style, Properties* properties);
 
+    /**
+     * Touch callback on touch events.  Controls return true if they consume the touch event.
+     *
+     * @param evt The touch event that occurred.
+     * @param x The x position of the touch in pixels. Left edge is zero.
+     * @param y The y position of the touch in pixels. Top edge is zero.
+     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     *
+     * @return Whether the touch event was consumed by the control.
+     *
+     * @see Touch::TouchEvent
+     */
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    /**
+     * Draw the images associated with this control.
+     *
+     * @param spriteBatch The sprite batch containing this control's icons.
+     * @param clip The clipping rectangle of this control's parent container.
+     */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
     float _min;
@@ -108,6 +153,7 @@ protected:
     float _value;
 
 private:
+
     Slider(const Slider& copy);
 };
 

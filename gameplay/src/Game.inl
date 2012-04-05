@@ -26,7 +26,7 @@ inline unsigned int Game::getHeight() const
 
 inline const Rectangle& Game::getViewport() const
 {
-	return _viewport;
+    return _viewport;
 }
 
 inline AnimationController* Game::getAnimationController() const
@@ -69,20 +69,6 @@ inline void Game::getAccelerometerValues(float* pitch, float* roll)
 inline void Game::displayKeyboard(bool display)
 {
     Platform::displayKeyboard(display);
-}
-
-template <typename T> void SplashDisplayer::run(T* instance, void (T::*method) (void*), void* cookie, long time)
-{
-    _time = time;
-    Game::getInstance()->renderOnce(instance, method, cookie);
-    _startTime = Game::getInstance()->getGameTime();
-}
-
-inline SplashDisplayer::~SplashDisplayer()
-{
-    long elapsedTime = Game::getInstance()->getGameTime() - _startTime;
-    if (elapsedTime < _time)
-        Platform::sleep(_time - (Game::getInstance()->getGameTime() - _startTime));
 }
 
 }

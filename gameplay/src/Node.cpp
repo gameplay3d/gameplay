@@ -22,7 +22,7 @@ namespace gameplay
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
     _nodeFlags(NODE_FLAG_VISIBLE), _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
-	_collisionObject(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
+    _collisionObject(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
     if (id)
     {
@@ -363,7 +363,7 @@ const Matrix& Node::getWorldMatrix() const
         // If we have a parent, multiply our parent world transform by our local
         // transform to obtain our final resolved world transform.
         Node* parent = getParent();
-		if (parent && (!_collisionObject || _collisionObject->isKinematic()))
+        if (parent && (!_collisionObject || _collisionObject->isKinematic()))
         {
             Matrix::multiply(parent->getWorldMatrix(), getMatrix(), &_world);
         }
@@ -592,6 +592,69 @@ void Node::setBoundsDirty()
     // Mark our parent bounds as dirty as well
     if (_parent)
         _parent->setBoundsDirty();
+}
+
+Animation* Node::getAnimation(const char* id) const
+{
+    Animation* animation = ((AnimationTarget*)this)->getAnimation(id);
+    if (animation)
+        return animation;
+    
+    // See if this node has a model, then drill down.
+    Model* model = this->getModel();
+    if (model)
+    {
+        // Check to see if there's any animations with the ID on the joints.
+        MeshSkin* skin = model->getSkin();
+        if (skin)
+        {
+            Joint* rootJoint = skin->getRootJoint();
+            if (rootJoint)
+            {
+                animation = rootJoint->getAnimation(id);
+                if (animation)
+                    return animation;
+            }
+        }
+
+        // Check to see if any of the model's material parameter's has an animation
+        // with the given ID.
+        Material* material = model->getMaterial();
+        if (material)
+        {
+            // How to access material parameters? hidden on the Material::RenderState.
+            std::vector<MaterialParameter*>::iterator itr = material->_parameters.begin();
+            for (; itr != material->_parameters.end(); itr++)
+            {
+                animation = ((MaterialParameter*)(*itr))->getAnimation(id);
+                if (animation)
+                    return animation;
+            }
+        }
+    }
+
+    // look through form for animations.
+    Form* form = this->getForm();
+    if (form)
+    {
+        animation = form->getAnimation(id);
+        if (animation)
+            return animation;
+    }
+
+    // Look through this node's children for an animation with the specified ID.
+    unsigned int childCount = this->getChildCount();
+    Node* child = this->getFirstChild();
+    for (unsigned int i = 0; i < childCount; i++)
+    {
+        animation = child->getAnimation(id);
+        if (animation)
+            return animation;
+
+        child = child->getNextSibling();
+    }
+    
+    return NULL;
 }
 
 Camera* Node::getCamera() const
@@ -891,30 +954,30 @@ PhysicsCollisionObject* Node::getCollisionObject() const
 
 PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters)
 {
-	SAFE_DELETE(_collisionObject);
+    SAFE_DELETE(_collisionObject);
 
-	switch (type)
-	{
-	case PhysicsCollisionObject::RIGID_BODY:
-		{
-			_collisionObject = new PhysicsRigidBody(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters());
-		}
-		break;
+    switch (type)
+    {
+    case PhysicsCollisionObject::RIGID_BODY:
+        {
+            _collisionObject = new PhysicsRigidBody(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters());
+        }
+        break;
 
-	case PhysicsCollisionObject::GHOST_OBJECT:
-		{
-			_collisionObject = new PhysicsGhostObject(this, shape);
-		}
-		break;
+    case PhysicsCollisionObject::GHOST_OBJECT:
+        {
+            _collisionObject = new PhysicsGhostObject(this, shape);
+        }
+        break;
 
-	case PhysicsCollisionObject::CHARACTER:
-		{
-			_collisionObject = new PhysicsCharacter(this, shape);
-		}
-		break;
-	}
+    case PhysicsCollisionObject::CHARACTER:
+        {
+            _collisionObject = new PhysicsCharacter(this, shape, rigidBodyParameters ? rigidBodyParameters->mass : 1.0f);
+        }
+        break;
+    }
 
-	return _collisionObject;
+    return _collisionObject;
 }
 
 PhysicsCollisionObject* Node::setCollisionObject(const char* filePath)
@@ -960,7 +1023,7 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
     {
         _collisionObject = PhysicsRigidBody::create(this, properties);
     }
-	return _collisionObject;
+    return _collisionObject;
 }
 
 NodeCloneContext::NodeCloneContext()

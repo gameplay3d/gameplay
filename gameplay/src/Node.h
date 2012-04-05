@@ -344,6 +344,14 @@ public:
     Vector3 getActiveCameraTranslationView() const;
 
     /**
+     * Gets the first animation in the node hierarchy with the specified ID.
+     *
+     * @param id The ID of the animation to get. Returns the first animation if ID is NULL.
+     * @return The first animation with the specified ID.
+     */
+    Animation* getAnimation(const char* id = NULL) const;
+
+    /**
      * Returns the pointer to this node's camera.
      *
      * @return The pointer to this node's camera or NULL.
@@ -431,59 +439,59 @@ public:
      */
     void setParticleEmitter(ParticleEmitter* emitter);
 
-	/**
-	 * Returns the pointer to this node's physics collision object.
-	 *
-	 * The type of the returned collision object can be queried using
-	 * the PhysicsCollisionObject::getType() method.
-	 *
-	 * @return The pointer to this node's physics collision object.
-	 */
-	PhysicsCollisionObject* getCollisionObject() const;
+    /**
+     * Returns the pointer to this node's physics collision object.
+     *
+     * The type of the returned collision object can be queried using
+     * the PhysicsCollisionObject::getType() method.
+     *
+     * @return The pointer to this node's physics collision object.
+     */
+    PhysicsCollisionObject* getCollisionObject() const;
 
-	/**
-	 * Sets (or disables) the physics collision object for this node.
-	 *
-	 * The supported collision object types include rigid bodies, ghost objects and 
-	 * characters.
-	 *
-	 * Rigid bodies are used to represent most physical objects in a game. The important
-	 * feature of rigid bodies is that they can be simulated by the physics system as other
-	 * rigid bodies or collision objects collide with them. To support this physics simulation,
-	 * rigid bodies require additional parameters, such as mass, friction and restitution to
-	 * define their physical features. These parameters can be passed into the
-	 * 'rigidBodyParameters' parameter.
-	 *
-	 * Ghost objects are a simple type of collision object that are not simulated. By default
-	 * they pass through other objects in the scene without affecting them. Ghost objects do
-	 * receive collision events however, which makes them useful for representing non-simulated
-	 * entities in a game that still require collision events, such as volumetric triggers, 
-	 * power-ups, etc.
-	 *
-	 * Characters are an extention of ghost objects which provide a number of additional features
-	 * for animating and moving characters within a game. Characters are represented as ghost
-	 * objects instead of rigid bodies to allow more direct control over character movement,
-	 * since attempting to model a physics character with a simulated rigid body usually results
-	 * in unresponse and unpredictable character movement. Unlike normal ghost objects,
-	 * characters to react to other characters and rigid bodies in the world. Characters react
-	 * to gravity and collide (and respond) with rigid bodies to allow them to walk on the ground,
-	 * slide along walls and walk up/down slopes and stairs.
-	 *
-	 * @param type The type of the collision object to set; to disable the physics
-	 *		collision object, pass PhysicsCollisionObject::NONE.
-	 * @param shape Definition of a physics collision shape to be used for this collision object.
-	 *		Use the static shape methods on the PhysicsCollisionShape class to specificy a shape
-	 *		definition, such as PhysicsCollisionShape::box().
-	 * @param rigidBodyParameters If type is PhysicsCollisionObject::RIGID_BODY, this
-	 *		must point to a valid rigid body parameters object containing information
-	 *		about the rigid body; otherwise, this parmater may be NULL.
-	 */
-	PhysicsCollisionObject* setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters = NULL);
+    /**
+     * Sets (or disables) the physics collision object for this node.
+     *
+     * The supported collision object types include rigid bodies, ghost objects and 
+     * characters.
+     *
+     * Rigid bodies are used to represent most physical objects in a game. The important
+     * feature of rigid bodies is that they can be simulated by the physics system as other
+     * rigid bodies or collision objects collide with them. To support this physics simulation,
+     * rigid bodies require additional parameters, such as mass, friction and restitution to
+     * define their physical features. These parameters can be passed into the
+     * 'rigidBodyParameters' parameter.
+     *
+     * Ghost objects are a simple type of collision object that are not simulated. By default
+     * they pass through other objects in the scene without affecting them. Ghost objects do
+     * receive collision events however, which makes them useful for representing non-simulated
+     * entities in a game that still require collision events, such as volumetric triggers, 
+     * power-ups, etc.
+     *
+     * Characters are an extention of ghost objects which provide a number of additional features
+     * for animating and moving characters within a game. Characters are represented as ghost
+     * objects instead of rigid bodies to allow more direct control over character movement,
+     * since attempting to model a physics character with a simulated rigid body usually results
+     * in unresponse and unpredictable character movement. Unlike normal ghost objects,
+     * characters to react to other characters and rigid bodies in the world. Characters react
+     * to gravity and collide (and respond) with rigid bodies to allow them to walk on the ground,
+     * slide along walls and walk up/down slopes and stairs.
+     *
+     * @param type The type of the collision object to set; to disable the physics
+     *        collision object, pass PhysicsCollisionObject::NONE.
+     * @param shape Definition of a physics collision shape to be used for this collision object.
+     *        Use the static shape methods on the PhysicsCollisionShape class to specificy a shape
+     *        definition, such as PhysicsCollisionShape::box().
+     * @param rigidBodyParameters If type is PhysicsCollisionObject::RIGID_BODY, this
+     *        must point to a valid rigid body parameters object containing information
+     *        about the rigid body; otherwise, this parmater may be NULL.
+     */
+    PhysicsCollisionObject* setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters = NULL);
 
     /**
      * Sets the physics collision object for this node using the definition in the given file.
      * 
-     * @param filePath The path to the file that contains the collision object definition.
+     * @param filePath The path to the file that set the collision object definition.
      */
     PhysicsCollisionObject* setCollisionObject(const char* filePath);
 
@@ -596,6 +604,7 @@ protected:
 
     struct UserData
     {
+        UserData() : pointer(NULL), cleanupCallback(NULL) {}
         void* pointer;
         void (*cleanupCallback)(void*);
     };
