@@ -28,6 +28,9 @@ public:
        
 private:
 
+    /**
+     * The states that the AnimationController may be in.
+     */
     enum State
     {
         RUNNING,
