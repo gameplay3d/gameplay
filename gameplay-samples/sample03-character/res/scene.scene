@@ -5,9 +5,12 @@ scene
     node BoyMesh
     {
         material[0] = res/scene.material#BoySkin
-        material[1] = res/scene.material#BoyShorts
-        material[2] = res/scene.material#BoyShirt
-        material[3] = res/scene.material#BoyShoes
+        material[1] = res/scene.material#BoyHair
+        material[2] = res/scene.material#BoyLips
+        material[3] = res/scene.material#BoyShirt
+        material[4] = res/scene.material#BoyShoes
+        material[5] = res/scene.material#BoyShorts
+        material[6] = res/scene.material#BoySocks
     }
 
     node BoyShadow
@@ -77,7 +80,6 @@ scene
     node Door
     {
         material[0] = res/scene.material#White
-        material[1] = res/scene.material#DoorHandle
         rigidbody = res/scene.physics#StaticBox
     }
 

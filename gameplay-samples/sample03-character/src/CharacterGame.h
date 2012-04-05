@@ -75,11 +75,12 @@ private:
     bool initScene(Node* node, void* cookie);
     bool drawScene(Node* node, void* cookie);
     void loadAnimationClips(Node* node);
-    void fixCamera(long elapsedTime);
+    void adjustCamera(long elapsedTime);
 
     Font* _font;
     Scene* _scene;
     PhysicsCharacter* _character;
+    Node* _characterMeshNode;
     Animation* _animation;
     unsigned int _animationState;
     int _rotateX;
