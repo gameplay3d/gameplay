@@ -14,7 +14,7 @@ namespace gameplay
     Button* Button::create(Theme::Style* style, Properties* properties)
     {
         Button* button = new Button();
-        button->init(style, properties);
+        button->initialize(style, properties);
 
         return button;
     }

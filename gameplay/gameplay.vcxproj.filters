@@ -273,6 +273,9 @@
     <ClCompile Include="src\PhysicsCollisionShape.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\ThemeStyle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -540,6 +543,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\ScreenDisplayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ThemeStyle.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

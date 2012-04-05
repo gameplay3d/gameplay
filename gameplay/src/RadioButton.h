@@ -36,7 +36,7 @@ public:
      *
      * @return Whether this radio button is currently selected.
      */
-    bool isSelected();
+    bool isSelected() const;
 
     /**
      * Set the size to draw the radio button icon.
@@ -66,7 +66,15 @@ public:
     virtual void addListener(Control::Listener* listener, int eventFlags);
 
 protected:
+
+    /**
+     * Constructor.
+     */
     RadioButton();
+
+    /**
+     * Destructor.
+     */
     virtual ~RadioButton();
 
     /**
@@ -79,13 +87,41 @@ protected:
      */
     static RadioButton* create(Theme::Style* style, Properties* properties);
 
+    /**
+     * Touch callback on touch events.  Controls return true if they consume the touch event.
+     *
+     * @param evt The touch event that occurred.
+     * @param x The x position of the touch in pixels. Left edge is zero.
+     * @param y The y position of the touch in pixels. Top edge is zero.
+     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     *
+     * @return Whether the touch event was consumed by the control.
+     *
+     * @see Touch::TouchEvent
+     */
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    /**
+     * Called when a control's properties change.  Updates this control's internal rendering
+     * properties, such as its text viewport.
+     *
+     * @param clip The clipping rectangle of this control's parent container.
+     */
     void update(const Rectangle& clip);
 
+    /**
+     * Draw the images associated with this control.
+     *
+     * @param spriteBatch The sprite batch containing this control's icons.
+     * @param clip The clipping rectangle of this control's parent container.
+     */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
-    // Clear the _selected flag of all radio buttons in the given group.
+    /**
+     * Clear the _selected flag of all radio buttons in the given group.
+     *
+     * @param groupID The group to clear.
+     */
     static void clearSelected(const std::string& groupId);
 
     std::string _groupId;
@@ -93,6 +129,7 @@ protected:
     Vector2 _imageSize;
 
 private:
+
     RadioButton(const RadioButton& copy);
 };
 

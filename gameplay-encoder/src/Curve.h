@@ -1,17 +1,14 @@
 #ifndef CURVE_H_
 #define CURVE_H_
 
-#include "Ref.h"
-
 namespace gameplay
 {
 
 /**
  * Represents an n-dimensional curve.
  */
-class Curve : public Ref
+class Curve
 {
-    friend class AnimationTarget;
     friend class Animation;
     friend class AnimationClip;
     friend class AnimationController;
@@ -275,13 +272,19 @@ public:
         BOUNCE_OUT_IN
     };
 
+
     /**
-     * Creates a new curve.
-     * 
+     * Constructs a new curve and the specified parameters.
+     *
      * @param pointCount The number of points in the curve.
      * @param componentCount The number of float component values per key value.
      */
-    static Curve* create(unsigned int pointCount, unsigned int componentCount);
+    Curve(unsigned int pointCount, unsigned int componentCount);
+
+    /**
+     * Destructor.
+     */
+    ~Curve();
 
     /**
      * Gets the number of points in the curve.
@@ -393,27 +396,9 @@ private:
     Curve();
 
     /**
-     * Constructs a new curve and the specified parameters.
-     *
-     * @param pointCount The number of points in the curve.
-     * @param componentCount The number of float component values per key value.
-     */
-    Curve(unsigned int pointCount, unsigned int componentCount);
-
-    /**
-     * Hidden copy constructor.
+     * Constructor.
      */
     Curve(const Curve& copy);
-
-    /**
-     * Destructor.
-     */
-    ~Curve();
-
-    /**
-     * Hidden copy assignment operator.
-     */
-    Curve& operator=(const Curve&);
 
     /**
      * Bezier interpolation function.

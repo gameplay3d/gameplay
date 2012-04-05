@@ -22,7 +22,7 @@ CheckBox::~CheckBox()
 CheckBox* CheckBox::create(Theme::Style* style, Properties* properties)
 {
     CheckBox* checkBox = new CheckBox();
-    checkBox->init(style, properties);
+    checkBox->initialize(style, properties);
     properties->getVector2("iconSize", &checkBox->_imageSize);
     checkBox->_checked = properties->getBool("checked");
 
@@ -68,8 +68,8 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
         {
             if (_state == Control::ACTIVE)
             {
-                if (x > 0 && x <= _bounds.width &&
-                    y > 0 && y <= _bounds.height)
+                if (x > 0 && x <= _clipBounds.width &&
+                    y > 0 && y <= _clipBounds.height)
                 {
                     _checked = !_checked;
                     notifyListeners(Control::Listener::VALUE_CHANGED);
@@ -123,7 +123,7 @@ void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     // Left, v-center.
     // TODO: Set an alignment for icons.
     const Theme::Border border = getBorder(_state);
-    const Theme::Padding padding = _style->getPadding();
+    const Theme::Padding padding = getPadding();
     float opacity = getOpacity(_state);
 
     if (_checked)
@@ -143,8 +143,8 @@ void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
             size.set(_imageSize);
         }
 
-        Vector2 pos(clip.x + _position.x + border.left + padding.left,
-            clip.y + _position.y + (_bounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
+        Vector2 pos(clip.x + _bounds.x + border.left + padding.left,
+            clip.y + _bounds.y + (_clipBounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
 
         spriteBatch->draw(pos.x, pos.y, size.x, size.y, selected.u1, selected.v1, selected.u2, selected.v2, selectedColor, _clip);
     }
@@ -165,8 +165,8 @@ void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
             size.set(_imageSize);
         }
 
-        Vector2 pos(clip.x + _position.x + border.left + padding.left,
-            clip.y + _position.y + (_bounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
+        Vector2 pos(clip.x + _bounds.x + border.left + padding.left,
+            clip.y + _bounds.y + (_clipBounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
 
         spriteBatch->draw(pos.x, pos.y, size.x, size.y, unselected.u1, unselected.v1, unselected.u2, unselected.v2, unselectedColor, _clip);
     }

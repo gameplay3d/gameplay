@@ -344,6 +344,14 @@ public:
     Vector3 getActiveCameraTranslationView() const;
 
     /**
+     * Gets the first animation in the node hierarchy with the specified ID.
+     *
+     * @param id The ID of the animation to get. Returns the first animation if ID is NULL.
+     * @return The first animation with the specified ID.
+     */
+    Animation* getAnimation(const char* id = NULL) const;
+
+    /**
      * Returns the pointer to this node's camera.
      *
      * @return The pointer to this node's camera or NULL.
