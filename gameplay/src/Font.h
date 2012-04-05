@@ -133,6 +133,7 @@ public:
      * @param y The viewport y position to draw text at.
      * @param color The color of text.
      * @param size The size to draw text (0 for default size).
+     * @param rightToLeft Whether to draw text from right to left.
      */
     void drawText(const char* text, int x, int y, const Vector4& color, unsigned int size = 0, bool rightToLeft = false);
 
@@ -156,7 +157,7 @@ public:
      * Measures a string's width and height without alignment, wrapping or clipping.
      *
      * @param text The text to measure.
-     * @param size
+     * @param size The font height to scale to.
      * @param widthOut Destination for the text's width.
      * @param heightOut Destination for the text's height.
      */
@@ -166,9 +167,9 @@ public:
      * Measures a string's bounding box after alignment, wrapping and clipping within a viewport.
      *
      * @param text The text to measure.
+     * @param clip The clip rectangle.
+     * @param size The font height to scale to.
      * @param out Destination rectangle to store the bounds in.
-     * @param viewport The viewport area to align, wrap and clip text within while measuring.
-     * @param scale The scaling factor to apply.
      * @param justify Justification of text within the viewport.
      * @param wrap Whether to measure text with wrapping applied.
      * @param ignoreClip Whether to clip 'out' to the viewport.  Set false for the bounds of what would actually be drawn
@@ -189,8 +190,21 @@ public:
     void getLocationAtIndex(const char* text, const Rectangle& clip, unsigned int size, Vector2* outLocation, const unsigned int destIndex,
                             Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
 
-    SpriteBatch* getSpriteBatch();
+    /**
+     * Gets the sprite batch for this Font.
+     * 
+     * @return The sprite batch for this Font.
+     */
+    SpriteBatch* getSpriteBatch() const;
 
+    /**
+     * Gets the Justify value from the given string.
+     * Returns ALIGN_TOP_LEFT if the string is unrecognized.
+     * 
+     * @param justify The string such as "ALIGN_HCENTER" or "ALIGN_VCENTER_RIGHT".
+     * 
+     * @return The Justify value.
+     */
     static Justify getJustifyFromString(const char* justify);
 
 

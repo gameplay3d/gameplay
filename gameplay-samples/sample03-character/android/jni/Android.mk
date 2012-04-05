@@ -51,7 +51,7 @@ LOCAL_PATH := $(SAMPLE_PATH)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := sample03-character
-LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp CharacterGame.cpp
+LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp CharacterGame.cpp Gamepad.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
 LOCAL_CFLAGS    := -D__ANDROID__ -I"../../../external-deps/bullet/include" -I"../../../external-deps/libpng/include" -I"../../../gameplay/src"

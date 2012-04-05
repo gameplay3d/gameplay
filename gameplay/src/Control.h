@@ -213,6 +213,8 @@ public:
      * @param bottom The height of the border's bottom side.
      * @param left The width of the border's left side.
      * @param right The width of the border's right side.
+     * @param states The states to set this property on.
+     *               One or more members of the Control::State enum, ORed together.
      */
     void setBorder(float top, float bottom, float left, float right, unsigned char states = STATE_ALL);
 
@@ -356,6 +358,7 @@ public:
     /**
      * Set the texture region of this control's cursor.
      *
+     * @param region The cursor region.
      * @param states The states to set this property on.
      *               One or more members of the Control::State enum, ORed together.
      */
