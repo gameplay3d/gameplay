@@ -6,7 +6,7 @@ CharacterGame game;
 unsigned int keyFlags = 0;
 float _rotateY = 0.0f;
 #define WALK_SPEED  7.5f
-#define ANIM_SPEED 10.0f
+#define ANIM_SPEED 1.0f
 #define BLEND_DURATION 150.0f
 
 float cameraFocusDistance = 16.0f;
@@ -118,62 +118,39 @@ void CharacterGame::update(long elapsedTime)
 {
     Gamepad::ButtonState buttonOneState = _gamepad->getButtonState(BUTTON_1);
 	Vector2 joystickVec = _gamepad->getJoystickState(JOYSTICK);
-	keyFlags = 0;
+    if (!joystickVec.isZero())
+    {
+	    keyFlags = 0;
 
-	if (joystickVec.x > 0)
-	{
-		keyFlags |= 8;
-	}
-	else if (joystickVec.x < 0)
-	{
-		keyFlags |= 4;
-	}
+        float angle = atan2(joystickVec.x, -joystickVec.y);
+		_character->setRotation(Vector3::unitY(), angle);
+
+	    if (joystickVec.x > 0)
+	    {
+		    keyFlags |= 8;
+	    }
+	    else if (joystickVec.x < 0)
+	    {
+		    keyFlags |= 4;
+	    }
 	
-	if (joystickVec.y > 0)
-	{
-		keyFlags |= 1;
-	}
-	else if (joystickVec.y < 0)
-	{
-		keyFlags |= 2;
-	}	
-	
-	/*
-	switch (key)
-        {
-        case Keyboard::KEY_W:
-            keyFlags |= 1;
-            break;
-        case Keyboard::KEY_S:
-            keyFlags |= 2;
-            break;
-        case Keyboard::KEY_A:
-            keyFlags |= 4;
-            break;
-        case Keyboard::KEY_D:
-            keyFlags |= 8;
-            break;
-        case Keyboard::KEY_P:
-            drawDebug = !drawDebug;
-            break;
-		case Keyboard::KEY_B:
-			moveBall = !moveBall;
-			break;
-        }
-	*/
+	    if (joystickVec.y > 0)
+	    {
+		    keyFlags |= 1;
+	    }
+	    else if (joystickVec.y < 0)
+	    {
+		    keyFlags |= 2;
+	    }
+    }
+
     // Update character animation and movement
-    if (joystickVec.isZero())
+    if (keyFlags == 0)
     {
         _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT, 1.0f, BLEND_DURATION);
-		_character->setForwardVelocity(0.0f);
     }
     else
     {
-		float angle = atan2(joystickVec.x, joystickVec.y);
-		_character->setRotation(Vector3::unitY(), angle);
-
-		_character->setForwardVelocity(joystickVec.length());
-
         // Forward motion
         if (keyFlags & 1)
         {
@@ -353,32 +330,39 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
 
 void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    switch (evt)
+    _gamepad->touch(x, y, evt, contactIndex);
+
+    Vector2 joystickVec = _gamepad->getJoystickState(JOYSTICK);
+    if (joystickVec.isZero())
     {
-    case Touch::TOUCH_PRESS:
+        keyFlags = 0;
+        switch (evt)
         {
-            _rotateX = x;
-            _rotateY = y;
+        case Touch::TOUCH_PRESS:
+            {
+                _rotateX = x;
+                _rotateY = y;
+            }
+            break;
+        case Touch::TOUCH_RELEASE:
+            {
+                _rotateX = 0;
+                _rotateY = 0;
+            }
+            break;
+        case Touch::TOUCH_MOVE:
+            {
+                int deltaX = x - _rotateX;
+                int deltaY = y - _rotateY;
+                _rotateX = x;
+                _rotateY = y;
+                _character->getNode()->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
+            }
+            break;
+        default:
+            break;
         }
-        break;
-    case Touch::TOUCH_RELEASE:
-        {
-            _rotateX = 0;
-            _rotateY = 0;
-        }
-        break;
-    case Touch::TOUCH_MOVE:
-        {
-            int deltaX = x - _rotateX;
-            int deltaY = y - _rotateY;
-            _rotateX = x;
-            _rotateY = y;
-            _character->getNode()->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
-        }
-        break;
-    default:
-        break;
-    };
+    }
 }
 
 void CharacterGame::loadAnimationClips(Node* node)
