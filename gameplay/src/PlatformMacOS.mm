@@ -67,7 +67,7 @@ static View* __view = NULL;
 -(void)windowWillClose:(NSNotification*)note 
 {
     [lock lock];
-    _game->end();
+    _game->exit();
     [lock unlock];
     [[NSApplication sharedApplication] terminate:self];
 }
@@ -175,7 +175,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CVDisplayLinkStop(displayLink);
     CVDisplayLinkRelease(displayLink);
     
-    _game->end();
+    _game->exit();
     
     [lock unlock];
 
