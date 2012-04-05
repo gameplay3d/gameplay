@@ -18,9 +18,9 @@ namespace gameplay
  *
  * The following properties are available for text boxes:
  *
- * label <Label ID>
+ * label <labelID>
  * {
- *      style       = <Style ID>
+ *      style       = <styleID>
  *      position    = <x, y>
  *      size        = <width, height>
  *      text        = <string>
@@ -121,6 +121,9 @@ protected:
 
 private:
 
+    /**
+     * Constructor.
+     */
     TextBox(const TextBox& copy);
 
     void setCaretLocation(int x, int y);

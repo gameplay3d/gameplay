@@ -12,23 +12,26 @@ namespace gameplay
  *
  * The following properties are available for containers:
  *
- * container <Container ID>
+ * container <containerID>
  * {
  *      // Container properties.
- *      layout   = <Layout Type>        // A value from the Layout::Type enum.  E.g.: LAYOUT_VERTICAL
- *      style    = <Style ID>           // A style from the form's theme.
+ *      layout   = <Layout::Type>        // A value from the Layout::Type enum.  E.g.: LAYOUT_VERTICAL
+ *      style    = <styleID>           // A style from the form's theme.
  *      position = <x, y>               // Position of the container on-screen, measured in pixels.
  *      size     = <width, height>      // Size of the container, measured in pixels.
  *   
  *      // All the nested controls within this container.
- *      container { }
-
+ *      container 
+ *      { 
+ *          ...
+ *      }
+ * 
  *      label { }
  *      textBox { }
- *      button{}
- *      checkBox{}
- *      radioButton{}
- *      slider{}
+ *      button { }
+ *      checkBox { }
+ *      radioButton { }
+ *      slider { }
  * }
  */
 class Container : public Control
@@ -103,6 +106,14 @@ public:
      * @return The vector of the controls within this container.
      */
     std::vector<Control*> getControls() const;
+
+    /**
+     * Gets the first animation in the control with the specified ID.
+     *
+     * @param id The ID of the animation to get. Returns the first animation if ID is NULL.
+     * @return The first animation with the specified ID.
+     */
+    Animation* getAnimation(const char* id = NULL) const;
 
 protected:
 

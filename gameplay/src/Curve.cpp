@@ -119,7 +119,7 @@ void Curve::setPoint(unsigned int index, float time, float* value, Interpolation
 
 void Curve::setPoint(unsigned int index, float time, float* value, InterpolationType type, float* inValue, float* outValue)
 {
-    assert(index < _pointCount && time >= 0.0f && time <= 1.0f && !(index == 0 && time != 0.0f) && !(index == _pointCount - 1 && time != 1.0f));
+    //assert(index < _pointCount && time >= 0.0f && time <= 1.0f && !(index == 0 && time != 0.0f) && !(index == _pointCount - 1 && time != 1.0f));
 
     _points[index].time = time;
     _points[index].type = type;
@@ -151,8 +151,9 @@ void Curve::evaluate(float time, float* dst) const
 {
     assert(dst && time >= 0 && time <= 1.0f);
 
+    // Check if the point count is 1.
     // Check if we are at or beyond the bounds of the curve.
-    if (time <= _points[0].time)
+    if (_pointCount == 1 || time <= _points[0].time)
     {
         memcpy(dst, _points[0].value, _componentSize);
         return;

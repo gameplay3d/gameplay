@@ -152,15 +152,12 @@ private:
      * Constructor that takes an AudioBuffer.
      */
     AudioSource(AudioBuffer* buffer, ALuint source);
-
 #else
-
     /**
      * Constructor that takes an AudioBuffer.
      */
     AudioSource(AudioBuffer* buffer, const SLObjectItf& player);
 #endif
-
 
     /**
      * Destructor.

@@ -111,8 +111,14 @@ public:
 
 private:
 
+    /**
+     * Constructor.
+     */
     MeshBatch(const VertexFormat& vertexFormat, Mesh::PrimitiveType primitiveType, Material* material, bool indexed, unsigned int initialCapacity, unsigned int growSize);
 
+    /**
+     * Constructor.
+     */
     MeshBatch(const MeshBatch& copy);
 
     void updateVertexAttributeBinding();

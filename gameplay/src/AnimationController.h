@@ -21,113 +21,16 @@ class AnimationController
 
 public:
 
-    /**
-     * Creates an animation on this target from a set of key value and key time pairs. 
-     * Cannot use Curve::BEZIER or CURVE::HERMITE as the interpolation type since they require tangents/control points.
-     * 
-     * @param id The ID of the animation.
-     * @param target The animation target.
-     * @param propertyId The property on this target to animate.
-     * @param keyCount The number of keyframes in the animation. Must be greater than one.
-     * @param keyTimes The list of key times for the animation (in milliseconds).
-     * @param keyValues The list of key values for the animation.
-     * @param type The curve interpolation type.
-     *
-     * @return The newly created animation.
-     */
-    Animation* createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, Curve::InterpolationType type);
-
-    /**
-     * Creates an animation on this target from a set of key value and key time pairs.
-     * 
-     * @param id The ID of the animation.
-     * @param target The animation target.
-     * @param propertyId The property on this target to animate.
-     * @param keyCount The number of keyframes in the animation. Must be greater than one.
-     * @param keyTimes The list of key times for the animation (in milliseconds).
-     * @param keyValues The list of key values for the animation.
-     * @param keyInValue The list of key in values for the animation.
-     * @param keyOutValue The list of key out values for the animation.
-     * @param type The curve interpolation type.
-     *
-     * @return The newly created animation.
-     */
-    Animation* createAnimation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type);
-
-    /**
-     * Creates an animation on this target using the data from the given properties object. 
-     * 
-     * @param id The ID of the animation.
-     * @param target The animation target.
-     * @param animationFile The animation file defining the animation data.
-     *
-     * @return The newly created animation.
-     */
-    Animation* createAnimation(const char* id, AnimationTarget* target, const char* animationFile);
-
-    /**
-     * Creates a simple two keyframe from-to animation.
-     * Cannot use Curve::BEZIER or CURVE::HERMITE as the interpolation type since they require tangents/control points.
-     *
-     * @param id The ID of the animation.
-     * @param target The animation target.
-     * @param propertyId The property on this target to animate.
-     * @param from The values to animate from.
-     * @param to The values to animate to.
-     * @param type The curve interpolation type.
-     * @param duration The duration of the animation (in milliseconds).
-     *
-     * @return The newly created animation.
-     */
-    Animation* createAnimationFromTo(const char* id, AnimationTarget* target, int propertyId, float* from, float* to, Curve::InterpolationType type, unsigned long duration);
-
-    /**
-     * Creates a simple two keyframe from-by animation.
-     * Cannot use Curve::BEZIER or CURVE::HERMITE as the interpolation type since they require tangents/control points.
-     *
-     * @param id The ID of the animation.
-     * @param target The animation target.
-     * @param propertyId The property on this target to animate.
-     * @param from The values to animate from.
-     * @param by The values to animate by.
-     * @param type The curve interpolation type.
-     * @param duration The duration of the animation (in milliseconds).
-     *
-     * @return The newly created animation.
-     */
-    Animation* createAnimationFromBy(const char* id, AnimationTarget* target, int propertyId, float* from, float* by, Curve::InterpolationType type, unsigned long duration);
-
-    /**
-     * Finds the animation with the given ID.
-     *
-     * @param id The ID of the animation to get. NULL if the Animation is not found.
-     * 
-     * @return The animation, or NULL if not found.
-     */
-    Animation* getAnimation(const char* id) const;
-
-    /**
-     * Returns the first animation that targets the given AnimationTarget.
-     */
-    Animation* getAnimation(AnimationTarget* target) const;
-
     /** 
      * Stops all AnimationClips currently playing on the AnimationController.
      */
     void stopAllAnimations();
-
-    /**
-     * Removes the given animation from this AnimationTarget.
-     */
-    void destroyAnimation(Animation* animation);
-
-    /**
-     * Removes all animations from the AnimationTarget.
-     */ 
-    void destroyAllAnimations();
        
 private:
 
+    /**
+     * The states that the AnimationController may be in.
+     */
     enum State
     {
         RUNNING,
@@ -150,17 +53,6 @@ private:
      * Destructor.
      */
     ~AnimationController();
-    
-    /**
-     * Creates an animation on this target using the data from the given properties object. 
-     * 
-     * @param id The ID of the animation.
-     * @param target The animation target.
-     * @param properties The properties object defining the animation data.
-     *
-     * @return The newly created animation.
-     */
-    Animation* createAnimation(const char* id, AnimationTarget* target, Properties* animationProperties);
 
     /**
      * Gets the controller's state.
@@ -203,16 +95,10 @@ private:
      * Callback for when the controller receives a frame update event.
      */
     void update(long elapsedTime);
-
-    /**
-     * Adds an animation on this AnimationTarget.
-     */ 
-    void addAnimation(Animation* animation);
     
-    State _state;                               // The current state of the AnimationController.
-    std::list<AnimationClip*> _runningClips;    // A list of running AnimationClips.
+    State _state;                                 // The current state of the AnimationController.
+    std::list<AnimationClip*> _runningClips;      // A list of running AnimationClips.
     std::list<AnimationTarget*> _activeTargets;   // A list of animating AnimationTargets.
-    std::vector<Animation*> _animations;        // A list of animations registered with the AnimationController
 };
 
 }
