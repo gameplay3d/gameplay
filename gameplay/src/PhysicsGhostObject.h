@@ -16,6 +16,7 @@ class PhysicsMotionState;
 class PhysicsGhostObject : public PhysicsCollisionObject, public Transform::Listener
 {
     friend class Node;
+    friend class PhysicsController;
 
 public:
 
