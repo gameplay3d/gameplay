@@ -7,7 +7,6 @@
 #include "Mouse.h"
 #include "FileSystem.h"
 #include "Package.h"
-#include "ScreenDisplayer.h"
 
 // Math
 #include "Rectangle.h"
@@ -45,6 +44,7 @@
 #include "FrameBuffer.h"
 #include "RenderTarget.h"
 #include "DepthStencilTarget.h"
+#include "ScreenDisplayer.h"
 
 // Audio
 #include "AudioController.h"

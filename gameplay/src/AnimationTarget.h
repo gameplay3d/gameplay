@@ -152,6 +152,9 @@ public:
 
 protected:
     
+    /**
+     * The type of animation target. 
+     */
     enum TargetType
     {
         SCALAR,
@@ -197,9 +200,8 @@ protected:
      */
     void cloneInto(AnimationTarget* target, NodeCloneContext &context) const;
 
-    TargetType _targetType;             // The type of target this is.
-
-    unsigned char _animationPropertyBitFlag;     // Bit flag used to indicate which properties on the AnimationTarget are currently animating.
+    TargetType _targetType;                     // The type of target this is.
+    unsigned char _animationPropertyBitFlag;    // Bit flag used to indicate which properties on the AnimationTarget are currently animating.
 
 private:
 

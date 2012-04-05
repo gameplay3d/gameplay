@@ -16,15 +16,16 @@ namespace gameplay
  *
  *  slider
  *  {
- *      style       = <Style ID>                // A Style from the Theme.
+ *      style       = <styleID>                 // A Style from the Theme.
  *      position    = <x, y>                    // Position of the Control on-screen, measured in pixels.
  *      size        = <width, height>           // Size of the Control, measured in pixels.
- *      // TODO: orientation = <HORIZONTAL or VERTICAL>  // Determines whether a slider is stretched along its width or its height
  *      min         = <float>                   // The value of the left- / bottom-most point on the slider.
  *      max         = <float>                   // The value of the right- / top-most point on the slider.
  *      value       = <float>                   // The default position of the marker.
  *      step        = <float>                   // If greater than 0, force the marker to snap to discrete multiples of 'step'.
  *      text        = <string>                  // Text to display above, below or alongside the slider (depending on the style).
+ *
+*      // TODO: orientation = <HORIZONTAL or VERTICAL>  // Determines whether a slider is stretched along its width or its height
  *  }
  */
 class Slider : public Label
@@ -154,6 +155,9 @@ protected:
 
 private:
 
+    /**
+     * Constructor.
+     */
     Slider(const Slider& copy);
 };
 
