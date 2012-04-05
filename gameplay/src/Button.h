@@ -10,7 +10,7 @@ namespace gameplay
 {
 
 /**
- * Defines a button UI control.  This is essentially a label that can have a callback method set on it.
+ * Defines a button UI control. This is essentially a label that can have a callback method set on it.
  *
  * The following properties are available for buttons:
  *
@@ -64,6 +64,9 @@ protected:
 
 private:
 
+    /*
+     * Constructor.
+     */
     Button(const Button& copy);
 };
 

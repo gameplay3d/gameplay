@@ -44,9 +44,20 @@ protected:
     void update(const Container* container);
 
 private:
-
+    
+    /*
+     * Constructor.
+     */
     AbsoluteLayout();
+    
+    /*
+     * Constructor.
+     */
     AbsoluteLayout(const AbsoluteLayout& copy);
+    
+    /*
+     * Destructor.
+     */
     virtual ~AbsoluteLayout();
 };
 

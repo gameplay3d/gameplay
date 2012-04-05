@@ -77,12 +77,12 @@ protected:
 private:
 
     /**
-     * Hidden copy constructor.
+     * Constructor.
      */
     Joint(const Joint& copy);
 
     /**
-     * Hidden copy assignment operator.
+     * Copy assignment operator.
      */
     Joint& operator=(const Joint&);
 
