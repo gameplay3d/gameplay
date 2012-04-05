@@ -54,11 +54,6 @@ using std::strcmp;
 namespace gameplay
 {
 
-Curve* Curve::create(unsigned int pointCount, unsigned int componentCount)
-{
-    return new Curve(pointCount, componentCount);
-}
-
 Curve::Curve(unsigned int pointCount, unsigned int componentCount)
     : _pointCount(pointCount), _componentCount(componentCount), _componentSize(sizeof(float)*componentCount), _quaternionOffset(NULL), _points(NULL)
 {
