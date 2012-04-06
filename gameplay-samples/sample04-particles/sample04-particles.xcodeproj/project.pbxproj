@@ -139,7 +139,7 @@
 		42C932BF1491A0DB0098216A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B61613A14CCC3590073B857 /* Mac OS X */,
+				5B61613A14CCC3590073B857 /* MacOSX */,
 				5B61613914CCC3560073B857 /* iOS */,
 			);
 			name = Frameworks;
@@ -181,7 +181,7 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		5B61613A14CCC3590073B857 /* Mac OS X */ = {
+		5B61613A14CCC3590073B857 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
 				42C932C01491A0DB0098216A /* Cocoa.framework */,

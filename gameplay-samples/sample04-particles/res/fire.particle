@@ -2,7 +2,7 @@ particle fire
 {
     sprite
     {
-		path = res/particle_fire.png
+		path = res/fire.png
         width = 256
         height = 256
 	    blending = ADDITIVE
