@@ -41,6 +41,13 @@ public:
     int enterMessagePump();
     
     /**
+     * This method informs the platform that the game is shutting down 
+     * and anything platform specific should be shutdown as well or halted
+     * This function is called automatically when the game shutdown function is called
+     */
+    static void signalShutdown();
+    
+    /**
      * Gets the display width.
      * 
      * @return The display width.
