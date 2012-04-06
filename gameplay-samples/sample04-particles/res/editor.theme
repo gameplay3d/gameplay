@@ -1,6 +1,6 @@
 theme particleEditor
 {
-    texture = res/editor_atlas.png
+    texture = res/editor.png
 
     imageList normalImages
     {

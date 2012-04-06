@@ -50,26 +50,19 @@ protected:
 
 private:
 
-    /**
-     * Draws the scene each frame.
-     */
     bool drawScene(Node* node, void* cookie);
 
-    void loadParticleEmitters();
+    void loadEmitters();
+
     void emitterChanged();
 
-    // Scene.
     Scene* _scene;
     Node* _particleEmitterNode;
     Node* _cameraParent;
     Form* _form;
-
-    // Keyboard and mouse state, for camera movement.
     bool _wDown, _sDown, _aDown, _dDown;
     bool _touched;
     int _prevX, _prevY;
-
-    // Particle emitters.
     std::vector<ParticleEmitter*> _particleEmitters;
     unsigned int _particleEmitterIndex;
 
@@ -90,6 +83,8 @@ private:
     RadioButton* _explosion;
     Slider* _burstSize;
     Container* _position;
+    Label* _particlesCount;
+    Label* _fps;
 };
 
 #endif

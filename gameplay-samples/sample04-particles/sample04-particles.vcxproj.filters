@@ -27,26 +27,28 @@
     <None Include="res\editor.theme">
       <Filter>res</Filter>
     </None>
-    <None Include="res\editorAtlas.png">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\explosion.particle">
       <Filter>res</Filter>
     </None>
     <None Include="res\fire.particle">
       <Filter>res</Filter>
     </None>
-    <None Include="res\particle-fire.png">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\smoke.particle">
       <Filter>res</Filter>
     </None>
-    <None Include="res\particle-explosion.png">
+    <None Include="res\editor.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\particle-smoke.png">
+    <None Include="res\explosion.png">
       <Filter>res</Filter>
     </None>
+    <None Include="res\fire.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\smoke.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="bar-descriptor.xml" />
+    <None Include="icon.png" />
   </ItemGroup>
 </Project>
