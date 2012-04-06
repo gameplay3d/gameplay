@@ -790,6 +790,13 @@ int Platform::enterMessagePump()
     return EXIT_SUCCESS;
 }
     
+void Platform::signalShutdown() {
+    // Cannot 'exit' an iOS Application
+    assert(false);
+    [__view stopUpdating];
+    exit(0);
+}
+    
 unsigned int Platform::getDisplayWidth()
 {
     return WINDOW_WIDTH;
