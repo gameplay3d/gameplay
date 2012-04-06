@@ -120,7 +120,7 @@ protected:
     /**
      * Clear the _selected flag of all radio buttons in the given group.
      *
-     * @param groupID The group to clear.
+     * @param groupId The group to clear.
      */
     static void clearSelected(const std::string& groupId);
 

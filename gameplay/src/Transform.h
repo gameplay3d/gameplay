@@ -736,8 +736,22 @@ protected:
         long cookie;
     };
 
+    /**
+     * Marks this transform as dirty and fires transformChanged().
+     */
     void dirty();
+
+    /**
+     * Called when the transform changes.
+     */
     virtual void transformChanged();
+
+    /**
+     * Copies from data from this node into transform for the purpose of cloning.
+     * 
+     * @param transform The transform to copy into.
+     * @param context The clone context.
+     */
     void cloneInto(Transform* transform, NodeCloneContext &context) const;
 
     Vector3 _scale;

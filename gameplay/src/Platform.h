@@ -126,8 +126,28 @@ public:
      */
     static void displayKeyboard(bool display);
 
+    /**
+     * Touch callback on touch events. This method handles passing the touch event to the form or to the game.
+     *
+     * @param evt The touch event that occurred.
+     * @param x The x position of the touch in pixels. Left edge is zero.
+     * @param y The y position of the touch in pixels. Top edge is zero.
+     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     *
+     * @see Touch::TouchEvent
+     */
     static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    /**
+     * Keyboard callback on keyPress events.
+     *
+     * @param evt The key event that occured.
+     * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
+     *            If evt is KEY_CHAR then key is the unicode value of the character.
+     * 
+     * @see Keyboard::KeyEvent
+     * @see Keyboard::Key
+     */
     static void keyEventInternal(Keyboard::KeyEvent evt, int key);
 
     /**
