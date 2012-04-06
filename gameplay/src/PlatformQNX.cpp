@@ -1003,6 +1003,11 @@ int Platform::enterMessagePump()
     return 0;
 }
     
+void Platform::signalShutdown() 
+{
+    // nothing to do  
+}
+    
 unsigned int Platform::getDisplayWidth()
 {
     return __screenWindowSize[0];
