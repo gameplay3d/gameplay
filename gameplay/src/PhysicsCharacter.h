@@ -155,7 +155,7 @@ public:
      *
      * @param name Animation name, or NULL to stop all character animations on the given layer.
      * @param flags Animation flags from the AnimationFlags enumeration.
-     * @param speed Optional animation speed (default is 1.0).
+     * @param animationSpeed Optional animation speed (default is 1.0).
      * @param blendDuration Optional number of milliseconds to crossfade between the
      *      currently playing animation on the given layer and the new animation.
      * @param layer Optional animation layer.
