@@ -65,13 +65,14 @@ Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int p
 {
     // get property component count, and ensure the property exists on the AnimationTarget by getting the property component count.
     assert(_target->getAnimationPropertyComponentCount(propertyId));
-
+    _curve->addRef();
     _target->addChannel(this);
 }
 
 Animation::Channel::Channel(const Channel& copy, Animation* animation, AnimationTarget* target)
     : _animation(animation), _target(target), _propertyId(copy._propertyId), _curve(copy._curve), _duration(copy._duration)
 {
+    _curve->addRef();
     _target->addChannel(this);
 }
 
@@ -303,6 +304,7 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
     SAFE_DELETE(normalizedKeyTimes);
 
     Channel* channel = new Channel(this, target, propertyId, curve, duration);
+    curve->release();
     addChannel(channel);
     return channel;
 }
@@ -339,6 +341,7 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
     SAFE_DELETE(normalizedKeyTimes);
 
     Channel* channel = new Channel(this, target, propertyId, curve, duration);
+    curve->release();
     addChannel(channel);
     return channel;
 }
