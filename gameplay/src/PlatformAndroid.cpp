@@ -766,6 +766,11 @@ int Platform::enterMessagePump()
         gameplay::displayKeyboard(__state, __displayKeyboard);
     }
 }
+
+void Platform::signalShutdown() 
+{
+    // nothing to do  
+}
    
 unsigned int Platform::getDisplayWidth()
 {

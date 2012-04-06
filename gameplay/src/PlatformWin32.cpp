@@ -602,6 +602,11 @@ int Platform::enterMessagePump()
     return msg.wParam;
 }
 
+void Platform::signalShutdown() 
+{
+    // nothing to do  
+}
+
 unsigned int Platform::getDisplayWidth()
 {
     return WINDOW_WIDTH;

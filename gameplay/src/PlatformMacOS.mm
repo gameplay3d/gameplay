@@ -182,6 +182,17 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     [super dealloc];
 }
 
+- (void)resumeDisplayRenderer {
+    [lock lock];
+    CVDisplayLinkStop(displayLink);
+    [lock unlock]; 
+}
+
+- (void)haltDisplayRenderer {
+    [lock lock];
+    CVDisplayLinkStop(displayLink);
+    [lock unlock];
+}
 
 - (void) mouse: (Mouse::MouseEvent) mouseEvent orTouchEvent: (Touch::TouchEvent) touchEvent atX: (int) x y: (int) y s: (int) s 
 {
@@ -627,6 +638,15 @@ int Platform::enterMessagePump()
     return EXIT_SUCCESS;
 }
 
+void Platform::signalShutdown() {
+    [__view haltDisplayRenderer];
+
+    // Don't perform terminate right away, enqueue to give game object
+    // a chance to cleanup
+    NSApplication* app = [NSApplication sharedApplication];
+    [app performSelectorOnMainThread:@selector(terminate:) withObject:nil waitUntilDone:NO];
+}
+    
 unsigned int Platform::getDisplayWidth()
 {
     return WINDOW_WIDTH;
