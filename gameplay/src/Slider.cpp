@@ -130,6 +130,12 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
 
             _dirty = true;
         }
+
+        if (evt == Touch::TOUCH_RELEASE)
+        {
+            _state = NORMAL;
+        }
+        break;
     }
 
     return Control::touchEvent(evt, x, y, contactIndex);
