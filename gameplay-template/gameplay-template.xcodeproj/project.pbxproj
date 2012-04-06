@@ -33,44 +33,13 @@
 		5B61611F14CCC24C0073B857 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332D1491A7810098216A /* libz.dylib */; };
 		5B61612614CCC24C0073B857 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C932ED1491A4CB0098216A /* icon.png */; };
 		5B61612714CCC24C0073B857 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42C932F21491A53E0098216A /* res */; };
-		5B8D58AB1512584A00DA5991 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8D58A51512584A00DA5991 /* CoreMotion.framework */; };
-		5B8D58AC1512584A00DA5991 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8D58A61512584A00DA5991 /* Foundation.framework */; };
-		5B8D58AD1512584A00DA5991 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8D58A71512584A00DA5991 /* OpenAL.framework */; };
-		5B8D58AE1512584A00DA5991 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8D58A81512584A00DA5991 /* OpenGLES.framework */; };
-		5B8D58AF1512584A00DA5991 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8D58A91512584A00DA5991 /* QuartzCore.framework */; };
-		5B8D58B01512584A00DA5991 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8D58AA1512584A00DA5991 /* UIKit.framework */; };
-		5BC4E84E150F913F00CBE1C0 /* shaders in Copy GamePlay Bundle Resources */ = {isa = PBXBuildFile; fileRef = 5BC4E849150F911D00CBE1C0 /* shaders */; };
-		5BC4E84F150F913F00CBE1C0 /* textures in Copy GamePlay Bundle Resources */ = {isa = PBXBuildFile; fileRef = 5BC4E84A150F911D00CBE1C0 /* textures */; };
-		5BC4E851150F915300CBE1C0 /* shaders in Copy GamePlay Bundle Resources */ = {isa = PBXBuildFile; fileRef = 5BC4E849150F911D00CBE1C0 /* shaders */; };
-		5BC4E852150F915300CBE1C0 /* textures in Copy GamePlay Bundle Resources */ = {isa = PBXBuildFile; fileRef = 5BC4E84A150F911D00CBE1C0 /* textures */; };
+		5BAF206D152F2DDD003E2AC3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2067152F2DDD003E2AC3 /* CoreMotion.framework */; };
+		5BAF206E152F2DDD003E2AC3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2068152F2DDD003E2AC3 /* Foundation.framework */; };
+		5BAF206F152F2DDD003E2AC3 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2069152F2DDD003E2AC3 /* OpenAL.framework */; };
+		5BAF2070152F2DDD003E2AC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */; };
+		5BAF2071152F2DDD003E2AC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */; };
+		5BAF2072152F2DDD003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206C152F2DDD003E2AC3 /* UIKit.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		5BC4E84D150F912B00CBE1C0 /* Copy GamePlay Bundle Resources */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = res;
-			dstSubfolderSpec = 7;
-			files = (
-				5BC4E84E150F913F00CBE1C0 /* shaders in Copy GamePlay Bundle Resources */,
-				5BC4E84F150F913F00CBE1C0 /* textures in Copy GamePlay Bundle Resources */,
-			);
-			name = "Copy GamePlay Bundle Resources";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5BC4E850150F914500CBE1C0 /* Copy GamePlay Bundle Resources */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = res;
-			dstSubfolderSpec = 7;
-			files = (
-				5BC4E851150F915300CBE1C0 /* shaders in Copy GamePlay Bundle Resources */,
-				5BC4E852150F915300CBE1C0 /* textures in Copy GamePlay Bundle Resources */,
-			);
-			name = "Copy GamePlay Bundle Resources";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		42438B521491AD2000D218B8 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
@@ -93,12 +62,12 @@
 		5B61611214CCC2200073B857 /* TEMPLATE_PROJECT-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TEMPLATE_PROJECT-macos.plist"; sourceTree = "<group>"; };
 		5B61612C14CCC24C0073B857 /* TEMPLATE_PROJECT-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TEMPLATE_PROJECT-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B61612E14CCC24D0073B857 /* TEMPLATE_PROJECT-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TEMPLATE_PROJECT-ios.plist"; sourceTree = "<group>"; };
-		5B8D58A51512584A00DA5991 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
-		5B8D58A61512584A00DA5991 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		5B8D58A71512584A00DA5991 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		5B8D58A81512584A00DA5991 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		5B8D58A91512584A00DA5991 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		5B8D58AA1512584A00DA5991 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2067152F2DDD003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2068152F2DDD003E2AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2069152F2DDD003E2AC3 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF206C152F2DDD003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = gameplay.xcodeproj; path = GAMEPLAY_PATH/gameplay/gameplay.xcodeproj; sourceTree = SOURCE_ROOT; };
 		5BC4E849150F911D00CBE1C0 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = text; name = shaders; path = GAMEPLAY_PATH/gameplay/res/shaders; sourceTree = SOURCE_ROOT; };
 		5BC4E84A150F911D00CBE1C0 /* textures */ = {isa = PBXFileReference; lastKnownFileType = text; name = textures; path = GAMEPLAY_PATH/gameplay/res/textures; sourceTree = SOURCE_ROOT; };
@@ -128,12 +97,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B8D58AB1512584A00DA5991 /* CoreMotion.framework in Frameworks */,
-				5B8D58AC1512584A00DA5991 /* Foundation.framework in Frameworks */,
-				5B8D58AD1512584A00DA5991 /* OpenAL.framework in Frameworks */,
-				5B8D58AE1512584A00DA5991 /* OpenGLES.framework in Frameworks */,
-				5B8D58AF1512584A00DA5991 /* QuartzCore.framework in Frameworks */,
-				5B8D58B01512584A00DA5991 /* UIKit.framework in Frameworks */,
+				5BAF206D152F2DDD003E2AC3 /* CoreMotion.framework in Frameworks */,
+				5BAF206E152F2DDD003E2AC3 /* Foundation.framework in Frameworks */,
+				5BAF206F152F2DDD003E2AC3 /* OpenAL.framework in Frameworks */,
+				5BAF2070152F2DDD003E2AC3 /* OpenGLES.framework in Frameworks */,
+				5BAF2071152F2DDD003E2AC3 /* QuartzCore.framework in Frameworks */,
+				5BAF2072152F2DDD003E2AC3 /* UIKit.framework in Frameworks */,
 				5B61611814CCC24C0073B857 /* libgameplay.a in Frameworks */,
 				5B61611914CCC24C0073B857 /* libbullet.a in Frameworks */,
 				5B61611A14CCC24C0073B857 /* libogg.a in Frameworks */,
@@ -208,12 +177,12 @@
 		5B61613914CCC3560073B857 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				5B8D58A51512584A00DA5991 /* CoreMotion.framework */,
-				5B8D58A61512584A00DA5991 /* Foundation.framework */,
-				5B8D58A71512584A00DA5991 /* OpenAL.framework */,
-				5B8D58A81512584A00DA5991 /* OpenGLES.framework */,
-				5B8D58A91512584A00DA5991 /* QuartzCore.framework */,
-				5B8D58AA1512584A00DA5991 /* UIKit.framework */,
+				5BAF2067152F2DDD003E2AC3 /* CoreMotion.framework */,
+				5BAF2068152F2DDD003E2AC3 /* Foundation.framework */,
+				5BAF2069152F2DDD003E2AC3 /* OpenAL.framework */,
+				5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */,
+				5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */,
+				5BAF206C152F2DDD003E2AC3 /* UIKit.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -226,7 +195,7 @@
 				42C933161491A5EB0098216A /* OpenGL.framework */,
 				42C9331E1491A67F0098216A /* OpenAL.framework */,
 			);
-			name = "MacOSX";
+			name = MacOSX;
 			sourceTree = "<group>";
 		};
 		5BC4E825150F8CE600CBE1C0 /* GamePlay */ = {
@@ -250,7 +219,7 @@
 				42C932B91491A0DB0098216A /* Frameworks */,
 				42C933301491A7B50098216A /* ShellScript */,
 				42C932BA1491A0DB0098216A /* Resources */,
-				5BC4E84D150F912B00CBE1C0 /* Copy GamePlay Bundle Resources */,
+				5BAF20D7152F30C3003E2AC3 /* Copy Gameplay Resources - Run Script */,
 			);
 			buildRules = (
 			);
@@ -269,7 +238,7 @@
 				5B61611714CCC24C0073B857 /* Frameworks */,
 				5B61612414CCC24C0073B857 /* ShellScript */,
 				5B61612514CCC24C0073B857 /* Resources */,
-				5BC4E850150F914500CBE1C0 /* Copy GamePlay Bundle Resources */,
+				5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Reousrces Run Script */,
 			);
 			buildRules = (
 			);
@@ -353,6 +322,34 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "touch -cm ${SRCROOT}/res";
+		};
+		5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Reousrces Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Gameplay Reousrces Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -rn GAMEPLAY_PATH/gameplay/res/shaders ${SRCROOT}/res\ncp -rn GAMEPLAY_PATH/gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+		};
+		5BAF20D7152F30C3003E2AC3 /* Copy Gameplay Resources - Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Gameplay Resources - Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -rn GAMEPLAY_PATH/gameplay/res/shaders ${SRCROOT}/res\ncp -rn GAMEPLAY_PATH/gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 
