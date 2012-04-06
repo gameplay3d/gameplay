@@ -313,6 +313,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
