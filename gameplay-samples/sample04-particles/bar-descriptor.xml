@@ -29,8 +29,8 @@
 
     <!-- Description, displayed in the BlackBerry Tablet OS application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
-    <description>Character Sample</description>
-
+    <description>Particles Game</description>
+    
     <!-- Copyright information. Optional. -->
     <!-- <copyright></copyright> -->
 
@@ -39,7 +39,7 @@
 
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
     <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
-
+    
     <platformVersion>2.0.0.7971</platformVersion>
 
     <initialWindow>
@@ -72,11 +72,11 @@
        <asset path="Device-Coverage/sample04-particles" entry="true" type="Qnx/Elf">sample04-particles</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.debug.882133523" name="Simulator">
-       <platformArchitecture>x86</platformArchitecture>
+        <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator/sample04-particles" entry="true" type="Qnx/Elf">sample04-particles</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.profile.400335078" name="Simulator-Profile">
-       <platformArchitecture>x86</platformArchitecture>
+       <platformArchitecture>x86</platformArchitecture> 
        <asset path="Simulator-Profile/sample04-particles" entry="true" type="Qnx/Elf">sample04-particles</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.48235134" name="Simulator-Coverage">

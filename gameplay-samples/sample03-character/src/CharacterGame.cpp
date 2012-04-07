@@ -8,6 +8,8 @@ float _rotateY = 0.0f;
 #define WALK_SPEED  7.5f
 #define ANIM_SPEED 1.0f
 #define BLEND_DURATION 150.0f
+#define OPAQUE_OBJECTS      0
+#define TRANSPARENT_OBJECTS 1
 
 float cameraFocusDistance = 16.0f;
 
@@ -36,10 +38,10 @@ void CharacterGame::initialize()
 
     // Store character node.
     Node* node = _scene->findNode("BoyCharacter");
-    PhysicsRigidBody::Parameters p;
-    p.mass = 20.0f;
+    PhysicsRigidBody::Parameters params;
+    params.mass = 20.0f;
     node->setTranslationY(5.0f);
-    node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule(1.2f, 5.0f, Vector3(0, 2.5, 0), true), &p);
+    node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule(1.2f, 5.0f, Vector3(0, 2.5, 0), true), &params);
     _character = static_cast<PhysicsCharacter*>(node->getCollisionObject());
     _character->setMaxStepHeight(0.0f);
     _character->addCollisionListener(this);
@@ -75,12 +77,9 @@ void CharacterGame::initMaterial(Scene* scene, Node* node, Material* material)
 {
     // Bind light shader parameters to dynamic objects only
     std::string id = node->getId();
-    if (material)// &&
-        //(id == "Basketball" || id.find("GreenChair") != id.npos || id.find("BlueChair") != id.npos || 
-        //id == "Easel" || id == "BoyMesh" || id == "BoyShadow" || id == "Rainbow"))
+    if (material)
     {
         Node* lightNode = scene->findNode("SunLight");
-
         material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
         material->getParameter("u_lightColor")->bindValue(lightNode->getLight(), &Light::getColor);
         material->getParameter("u_ambientColor")->bindValue(scene, &Scene::getAmbientColor);
@@ -250,14 +249,14 @@ bool CharacterGame::drawScene(Node* node, void* cookie)
     Model* model = node->getModel();
     if (model)
     {
-        switch ((int)cookie)
+        switch ((long)cookie)
         {
-        case 0: // opaque objects
+        case OPAQUE_OBJECTS:
             if (!node->isTransparent())
                 model->draw();
             break;
 
-        case 1: // transparent objects
+        case TRANSPARENT_OBJECTS:
             if (node->isTransparent())
                 model->draw();
             break;
@@ -273,6 +272,9 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
     {
         switch (key)
         {
+        case Keyboard::KEY_ESCAPE:
+            exit();
+            break;
         case Keyboard::KEY_W:
             keyFlags |= 1;
             break;
