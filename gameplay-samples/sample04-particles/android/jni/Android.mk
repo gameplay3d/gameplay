@@ -46,12 +46,12 @@ LOCAL_MODULE    := libbullet
 LOCAL_SRC_FILES := libbullet.a
 include $(PREBUILT_STATIC_LIBRARY)
 
-# TEMPLATE_PROJECT
+# sample04-particles
 LOCAL_PATH := $(SAMPLE_PATH)
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := TEMPLATE_PROJECT
-LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp TemplateGame.cpp
+LOCAL_MODULE    := sample04-particles
+LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp ParticlesGame.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
 LOCAL_CFLAGS    := -D__ANDROID__ -I"../../../external-deps/bullet/include" -I"../../../external-deps/libpng/include" -I"../../../gameplay/src"

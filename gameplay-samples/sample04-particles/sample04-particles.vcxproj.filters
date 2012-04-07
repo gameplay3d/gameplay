@@ -3,14 +3,6 @@
   <ItemGroup>
     <Filter Include="src">
     </Filter>
-    <Filter Include="res">
-      <UniqueIdentifier>{58059360-025b-4c88-aca5-192198757427}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\ParticlesGame.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ParticlesGame.h">
@@ -18,37 +10,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\arial40.gpb">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\editor.form">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\editor.theme">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\explosion.particle">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\fire.particle">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\smoke.particle">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\editor.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\explosion.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\fire.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\smoke.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="bar-descriptor.xml" />
-    <None Include="icon.png" />
+    <ClCompile Include="src\ParticlesGame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

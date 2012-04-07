@@ -2,9 +2,6 @@
 <projectDescription>
 	<name>sample04-particles</name>
 	<comment></comment>
-	<projects>
-		<project>gameplay</project>
-	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
@@ -32,7 +29,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>${workspace_loc:/TEMPLATE_PROJECT/Device-Debug}</value>
+					<value>${workspace_loc:/sample04-particles/Device-Debug}</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>
