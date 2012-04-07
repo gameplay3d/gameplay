@@ -19,8 +19,8 @@ using namespace gameplay;
 #define WINDOW_WIDTH    1280
 #define WINDOW_HEIGHT   720
 
-static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
-static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
+static const float ACCELEROMETER_FACTOR_X = 90.0f / WINDOW_WIDTH;
+static const float ACCELEROMETER_FACTOR_Y = 90.0f / WINDOW_HEIGHT;
 
 static long __timeStart;
 static long __timeAbsolute;
@@ -34,6 +34,7 @@ static bool __leftMouseDown = false;
 static bool __rightMouseDown = false;
 static bool __otherMouseDown = false;
 static bool __shiftDown = false;
+
 
 long getMachTimeInMilliseconds()
 {
@@ -59,8 +60,6 @@ long getMachTimeInMilliseconds()
 
 @end
 
-
-static View* __view = NULL;
 
 @implementation View
 
@@ -89,10 +88,10 @@ static View* __view = NULL;
 
     [[self openGLContext] makeCurrentContext];
     CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
-    
-    if (_game && _game->getState() == Game::RUNNING)  
+    if (_game && _game->getState() == Game::RUNNING)
+    {
         _game->frame();
-    
+    }
     CGLFlushDrawable((CGLContextObj)[[self openGLContext] CGLContextObj]);
     CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);  
     
@@ -108,7 +107,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (id) initWithFrame: (NSRect) frame
 {    
-
     NSOpenGLPixelFormatAttribute attrs[] = 
     {
         NSOpenGLPFAAccelerated,
@@ -130,7 +128,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         _game = Game::getInstance();
         __timeStart = getMachTimeInMilliseconds();
     }
-    
     return self;
 }
 
@@ -174,7 +171,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     // Release the display link
     CVDisplayLinkStop(displayLink);
     CVDisplayLinkRelease(displayLink);
-    
     _game->exit();
     
     [lock unlock];
@@ -182,13 +178,15 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     [super dealloc];
 }
 
-- (void)resumeDisplayRenderer {
+- (void)resumeDisplayRenderer 
+{
     [lock lock];
     CVDisplayLinkStop(displayLink);
     [lock unlock]; 
 }
 
-- (void)haltDisplayRenderer {
+- (void)haltDisplayRenderer 
+{
     [lock lock];
     CVDisplayLinkStop(displayLink);
     [lock unlock];
@@ -198,9 +196,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     if (!Game::getInstance()->mouseEvent(mouseEvent, x, y, s))
     {
-        Game::getInstance()->touchEvent(touchEvent, x, y, 0);
+        gameplay::Platform::touchEventInternal(touchEvent, x, y, 0);
     }
-        
 }
 
 - (void) mouseDown: (NSEvent*) event
@@ -208,19 +205,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     NSPoint point = [event locationInWindow];
     __leftMouseDown = true;
     [self mouse: Mouse::MOUSE_PRESS_LEFT_BUTTON orTouchEvent: Touch::TOUCH_PRESS atX: WINDOW_HEIGHT - point.x y: point.y s: 0];
-
     
-    //_game->mouseEvent(Mouse::MOUSE_PRESS_LEFT_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
-   /* 
-    MOUSE_PRESS_LEFT_BUTTON,
-    MOUSE_RELEASE_LEFT_BUTTON,
-    MOUSE_PRESS_MIDDLE_BUTTON,
-    MOUSE_RELEASE_MIDDLE_BUTTON,
-    MOUSE_PRESS_RIGHT_BUTTON,
-    MOUSE_RELEASE_RIGHT_BUTTON,
-    MOUSE_MOVE,
-    MOUSE_WHEEL
-*/
 }
 
 - (void) mouseUp: (NSEvent*) event
@@ -267,8 +252,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     if (__rightMouseDown)
     {
         // Update the pitch and roll by adding the scaled deltas.
-        __roll += -(float)(point.x - __lx) * ACCELEROMETER_X_FACTOR;
-        __pitch -= (float)(point.y - (WINDOW_HEIGHT - __ly)) * ACCELEROMETER_Y_FACTOR;
+        __roll += -(float)(point.x - __lx) * ACCELEROMETER_FACTOR_X;
+        __pitch -= (float)(point.y - (WINDOW_HEIGHT - __ly)) * ACCELEROMETER_FACTOR_Y;
     
         // Clamp the values to the valid range.
         __roll = max(min(__roll, 90.0f), -90.0f);
@@ -532,47 +517,48 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
     switch (keyCode) 
     {
         case 0x39:
-            _game->keyEvent((flags & NSAlphaShiftKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_CAPS_LOCK);
+            gameplay::Platform::keyEventInternal((flags & NSAlphaShiftKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_CAPS_LOCK);
             break;
         case 0x38:
-            _game->keyEvent((flags & NSShiftKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_SHIFT);
+            gameplay::Platform::keyEventInternal((flags & NSShiftKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_SHIFT);
             break;
         case 0x3C:
-            _game->keyEvent((flags & NSShiftKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_SHIFT);
+            gameplay::Platform::keyEventInternal((flags & NSShiftKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_SHIFT);
             break;
         case 0x3A:
-            _game->keyEvent((flags & NSAlternateKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_ALT);
+            gameplay::Platform::keyEventInternal((flags & NSAlternateKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_ALT);
             break;
         case 0x3D:
-            _game->keyEvent((flags & NSAlternateKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_ALT);
+            gameplay::Platform::keyEventInternal((flags & NSAlternateKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_ALT);
             break;
         case 0x3B:
-            _game->keyEvent((flags & NSControlKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_CTRL);
+            gameplay::Platform::keyEventInternal((flags & NSControlKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_CTRL);
             break;
         case 0x3E:
-            _game->keyEvent((flags & NSControlKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_CTRL);
+            gameplay::Platform::keyEventInternal((flags & NSControlKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_CTRL);
             break;
         case 0x37:
-            _game->keyEvent((flags & NSCommandKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_HYPER);
+            gameplay::Platform::keyEventInternal((flags & NSCommandKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_HYPER);
             break;
         case 0x36:
-            _game->keyEvent((flags & NSCommandKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_HYPER);
+            gameplay::Platform::keyEventInternal((flags & NSCommandKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_HYPER);
             break;
     }
 }
 
 - (void) keyDown: (NSEvent*) event
 {    
-    _game->keyEvent(Keyboard::KEY_PRESS, getKey([event keyCode], [event modifierFlags]));
+    gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, getKey([event keyCode], [event modifierFlags]));
 }
 
 - (void) keyUp: (NSEvent*) event
 {    
-    _game->keyEvent(Keyboard::KEY_RELEASE, getKey([event keyCode], [event modifierFlags]));
+    gameplay::Platform::keyEventInternal(Keyboard::KEY_RELEASE, getKey([event keyCode], [event modifierFlags]));
 }
 
 @end
 
+static View* __view = NULL;
 
 namespace gameplay
 {
@@ -593,7 +579,6 @@ Platform::Platform(Game* game)
 
 Platform::Platform(const Platform& copy)
 {
-    // hidden
 }
 
 Platform::~Platform()
@@ -638,7 +623,8 @@ int Platform::enterMessagePump()
     return EXIT_SUCCESS;
 }
 
-void Platform::signalShutdown() {
+void Platform::signalShutdown() 
+{
     [__view haltDisplayRenderer];
 
     // Don't perform terminate right away, enqueue to give game object
@@ -707,6 +693,13 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
     }
 }
+    
+void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Form::keyEventInternal(evt, key);
+}
+    
 
 void Platform::sleep(long ms)
 {
