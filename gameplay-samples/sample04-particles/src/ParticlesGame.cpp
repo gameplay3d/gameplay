@@ -32,8 +32,7 @@ void ParticlesGame::initialize()
     // Create a scene with a camera node.
     // The camera node is a child of a node at the same location as the particle emitter.
     // The camera node is offset from its parent, looking straight at it.
-    // That way, when we rotate the parent node, the camera stays aimed at
-    // the particle emitter.
+    // That way, when we rotate the parent node, the camera stays aimed at the particle emitter.
     _scene = Scene::createScene();
     Node* cameraNode = _scene->addNode("Camera");
     _cameraParent = _scene->addNode("CameraParent");
@@ -254,14 +253,12 @@ void ParticlesGame::update(long elapsedTime)
     ParticleEmitter* emitter = _particleEmitters[_particleEmitterIndex];
     emitter->update(elapsedTime);
 
-    std::string particlesString("Particles: ");
-    char buf[6];
-    particlesString.append(itoa(emitter->getParticlesCount(), buf, 10));
-    _particlesCount->setText(particlesString.c_str());
+    char buffer[16];
+    sprintf(buffer, "Particles: %u", emitter->getParticlesCount());
+    _particlesCount->setText(buffer);
 
-    std::string fpsString("FPS: ");
-    fpsString.append(itoa(getFrameRate(), buf, 10));
-    _fps->setText(fpsString.c_str());
+    sprintf(buffer, "FPS: %u", getFrameRate());
+    _fps->setText(buffer);
 
     _form->update();
 }
@@ -334,6 +331,9 @@ void ParticlesGame::keyEvent(Keyboard::KeyEvent evt, int key)
     case Keyboard::KEY_PRESS:
         switch (key)
         {
+        case Keyboard::KEY_ESCAPE:
+            exit();
+            break;
         case Keyboard::KEY_W:
             _wDown = true;
             break;

@@ -1,5 +1,5 @@
-#ifndef ParticlesGame_H_
-#define ParticlesGame_H_
+#ifndef PARTICLESGAME_H_
+#define PARTICLESGAME_H_
 
 #include "gameplay.h"
 
@@ -18,12 +18,18 @@ public:
     ParticlesGame();
 
     /**
-     * Touch event handler.
+     * @see Game::touchEvent
      */
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-    
+
+    /**
+     * @see Game::keyEvent
+     */
     void keyEvent(Keyboard::KeyEvent evt, int key);
 
+    /**
+     * @see Control::controlEvent
+     */
     void controlEvent(Control* control, EventType evt);
 
 protected:
@@ -65,8 +71,7 @@ private:
     int _prevX, _prevY;
     std::vector<ParticleEmitter*> _particleEmitters;
     unsigned int _particleEmitterIndex;
-
-    // UI controls.
+    
     Slider* _startMin;
     Slider* _startMax;
     Slider* _endMin;
