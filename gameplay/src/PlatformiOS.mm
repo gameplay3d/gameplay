@@ -20,13 +20,9 @@
 using namespace std;
 using namespace gameplay;
 
-// UIScreen bounds are provided as if device was in portrait mode
-// Gameplay defaults to landscape
+// UIScreen bounds are provided as if device was in portrait mode Gameplay defaults to landscape
 extern const int WINDOW_WIDTH  = [[UIScreen mainScreen] bounds].size.height;
 extern const int WINDOW_HEIGHT = [[UIScreen mainScreen] bounds].size.width;
-
-static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
-static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
 
 @class AppDelegate;
 @class View;
@@ -92,7 +88,6 @@ int getKey(unichar keyCode);
 {
     if ((self = [super initWithFrame:frame]))
 	{
-        // Do a sanity check
         // A system version of 3.1 or greater is required to use CADisplayLink. 
 		NSString *reqSysVer = @"3.1";
 		NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
@@ -122,8 +117,10 @@ int getKey(unichar keyCode);
 			return nil;
 		}
 
-            if (!defaultFramebuffer)
-                [self createFramebuffer];
+        if (!defaultFramebuffer)
+        {
+            [self createFramebuffer];
+        }
             
         glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
         glViewport(0, 0, framebufferWidth, framebufferHeight);
@@ -157,7 +154,9 @@ int getKey(unichar keyCode);
     [self deleteFramebuffer];
     
 	if ([EAGLContext currentContext] == context)
+    {
         [EAGLContext setCurrentContext:nil];
+    }
 	[context release];
     [super dealloc];
 }
@@ -203,7 +202,6 @@ int getKey(unichar keyCode);
 
 - (void)deleteFramebuffer
 {
-    // Deleting the framebuffer and all the buffers it contains
     if (context) 
     {
         [EAGLContext setCurrentContext:context];        
@@ -304,9 +302,6 @@ int getKey(unichar keyCode);
     return [self resignFirstResponder];
 }
 
-/*
- * Virtual Keyboard Support
- */
 - (void)insertText:(NSString*)text 
 {
     if([text length] == 0) return;
@@ -328,17 +323,16 @@ int getKey(unichar keyCode);
     return YES;
 }
 
-/*
- * Touch Support
- */
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event 
 {
     unsigned int uniqueTouch = 0;
     for(UITouch *t in touches) 
     {
         CGPoint touchLoc = [t locationInView:self];
-        if(self.multipleTouchEnabled == YES) 
+        if(self.multipleTouchEnabled == YES)
+        {
             uniqueTouch = [t hash];
+        }
         Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.x, touchLoc.y, uniqueTouch);
     }
 }
@@ -520,6 +514,7 @@ int getKey(unichar keyCode);
 }
 
 @end
+
 
 long getMachTimeInMilliseconds()
 {
@@ -761,14 +756,12 @@ extern void printError(const char* format, ...)
     va_end(argptr);
 }
 
-Platform::Platform(Game* game)
-    : _game(game)
+Platform::Platform(Game* game) : _game(game)
 {
 }
 
 Platform::Platform(const Platform& copy)
 {
-    // hidden
 }
 
 Platform::~Platform()
@@ -790,7 +783,8 @@ int Platform::enterMessagePump()
     return EXIT_SUCCESS;
 }
     
-void Platform::signalShutdown() {
+void Platform::signalShutdown() 
+{
     // Cannot 'exit' an iOS Application
     assert(false);
     [__view stopUpdating];
@@ -858,8 +852,14 @@ void Platform::displayKeyboard(bool display)
 {
     if(__view) 
     {
-        if(display) [__view showKeyboard];
-        else [__view dismissKeyboard];
+        if(display)
+        {
+            [__view showKeyboard];
+        }
+        else
+        {
+            [__view dismissKeyboard];
+        }
     }
 }
 
