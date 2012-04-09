@@ -508,7 +508,7 @@
 		42CD0E17147D8FF50000361E /* Plane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Plane.h; path = src/Plane.h; sourceTree = SOURCE_ROOT; };
 		42CD0E18147D8FF50000361E /* Plane.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Plane.inl; path = src/Plane.inl; sourceTree = SOURCE_ROOT; };
 		42CD0E19147D8FF50000361E /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Platform.h; path = src/Platform.h; sourceTree = SOURCE_ROOT; };
-		42CD0E1A147D8FF50000361E /* PlatformMacOSX.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformMacOSX.mm; path = src/PlatformMacOS.mm; sourceTree = SOURCE_ROOT; };
+		42CD0E1A147D8FF50000361E /* PlatformMacOSX.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformMacOSX.mm; path = src/PlatformMacOSX.mm; sourceTree = SOURCE_ROOT; };
 		42CD0E1B147D8FF50000361E /* PlatformQNX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformQNX.cpp; path = src/PlatformQNX.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0E1C147D8FF50000361E /* PlatformWin32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformWin32.cpp; path = src/PlatformWin32.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0E1D147D8FF50000361E /* Properties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Properties.cpp; path = src/Properties.cpp; sourceTree = SOURCE_ROOT; };
@@ -818,7 +818,7 @@
 				42CD0E19147D8FF50000361E /* Platform.h */,
 				5BB0823914C6FEB10019975F /* PlatformAndroid.cpp */,
 				42CD0E1C147D8FF50000361E /* PlatformWin32.cpp */,
-				42CD0E1A147D8FF50000361E /* PlatformMacOS.mm */,
+				42CD0E1A147D8FF50000361E /* PlatformMacOSX.mm */,
 				5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */,
 				42CD0E1B147D8FF50000361E /* PlatformQNX.cpp */,
 				42CD0E1D147D8FF50000361E /* Properties.cpp */,
@@ -1263,7 +1263,7 @@
 				42CD0E9F147D8FF60000361E /* PhysicsSocketConstraint.cpp in Sources */,
 				42CD0EA1147D8FF60000361E /* PhysicsSpringConstraint.cpp in Sources */,
 				42CD0EA3147D8FF60000361E /* Plane.cpp in Sources */,
-				42CD0EA6147D8FF60000361E /* PlatformMacOS.mm in Sources */,
+				42CD0EA6147D8FF60000361E /* PlatformMacOSX.mm in Sources */,
 				42CD0EA9147D8FF60000361E /* Properties.cpp in Sources */,
 				42CD0EAB147D8FF60000361E /* Quaternion.cpp in Sources */,
 				42CD0EAD147D8FF60000361E /* Ray.cpp in Sources */,
