@@ -84,6 +84,16 @@ namespace gameplay
         const char* styleName = formProperties->getString("style");
         form->initialize(theme->getStyle(styleName), formProperties);
 
+        if (form->_autoWidth)
+        {
+            form->_bounds.width = Game::getInstance()->getWidth();
+        }
+
+        if (form->_autoHeight)
+        {
+            form->_bounds.height = Game::getInstance()->getHeight();
+        }
+
         // Add all the controls to the form.
         form->addControls(theme, formProperties);
 

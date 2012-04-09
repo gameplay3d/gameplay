@@ -2,40 +2,53 @@ form particleEd
 {
     theme = res/editor.theme
     style = background
-    size = 1024, 600
+    //size = 1024, 600
+    autoWidth = true
+    autoHeight = true
 
     // Diagnostics
-    // ===========
-
-    // Number of currently alive particles
-    label liveParticlesCount
+    container diagnostics
     {
-        style = iconNoBorder
-        position = 400, 550
-        size = 200, 25
-        text = Particles: 0
-    }
+        style = noBorder
+        size = 200, 50
+        alignment = ALIGN_TOP_HCENTER
+        layout = LAYOUT_VERTICAL
 
-    // FPS
-    label FPS : liveParticlesCount
-    {
-        position = 400, 575
-        text = FPS: 0
+        // Number of currently alive particles
+        label liveParticlesCount
+        {
+            style = iconNoBorder
+            autoWidth = true
+            height = 25
+            text = Particles: 0
+        }
+
+        // FPS
+        label FPS : liveParticlesCount
+        {
+            text = FPS: 0
+        }
     }
 
     // Camera Zoom
-    button zoomIn
+    container zoom
     {
-        style = buttonStyle
-        position = 0, 500
-        size = 100, 50
-        text = Zoom In
-    }
+        style = noBorder
+        size = 100, 100
+        alignment = ALIGN_BOTTOM_RIGHT
+        layout = LAYOUT_VERTICAL
 
-    button zoomOut : zoomIn
-    {
-        position = 0, 550
-        text = Zoom Out
+        button zoomIn
+        {
+            style = buttonStyle
+            size = 100, 50
+            text = Zoom In
+        }
+
+        button zoomOut : zoomIn
+        {
+            text = Zoom Out
+        }
     }
 
     // Presets
@@ -135,7 +148,8 @@ form particleEd
     {
         style = basic
         layout = LAYOUT_VERTICAL
-        position = 854, 0
+        //position = 854, 0
+        alignment = ALIGN_TOP_RIGHT
         size = 170, 380
 
         // Particle Size

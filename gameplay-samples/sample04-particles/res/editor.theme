@@ -120,7 +120,7 @@ theme particleEditor
             font = res/arial40.gpb
             textColor = #ffffffff
             fontSize = 15
-            alignment = ALIGN_VCENTER_HCENTER
+            textAlignment = ALIGN_VCENTER_HCENTER
         }
 
         stateActive
@@ -153,13 +153,13 @@ theme particleEditor
         stateNormal
         {
             skin = empty
-            alignment = ALIGN_VCENTER_HCENTER
+            textAlignment = ALIGN_VCENTER_HCENTER
         }
 
         stateActive
         {
             skin = empty
-            alignment = ALIGN_VCENTER_HCENTER
+            textAlignment = ALIGN_VCENTER_HCENTER
         }
     }
 
@@ -168,13 +168,13 @@ theme particleEditor
         stateNormal
         {
             fontSize = 20
-            alignment = ALIGN_VCENTER_LEFT
+            textAlignment = ALIGN_VCENTER_LEFT
         }
 
         stateActive
         {
             fontSize = 20
-            alignment = ALIGN_VCENTER_LEFT
+            textAlignment = ALIGN_VCENTER_LEFT
         }
     }
 
@@ -192,7 +192,7 @@ theme particleEditor
             textColor = #ffffffff
             font = res/arial40.gpb
             fontSize = 25
-            alignment = ALIGN_TOP_HCENTER
+            textAlignment = ALIGN_TOP_HCENTER
         }
 
         stateActive

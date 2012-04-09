@@ -191,7 +191,7 @@ public:
 
     SpriteBatch* getSpriteBatch();
 
-    static Justify getJustifyFromString(const char* justify);
+    static Justify getJustify(const char* justify);
 
 
 private:

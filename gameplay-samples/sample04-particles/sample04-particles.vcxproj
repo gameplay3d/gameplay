@@ -29,12 +29,12 @@
     <None Include="res\arial40.gpb" />
     <None Include="res\editor.form" />
     <None Include="res\editor.theme" />
-    <None Include="res\editorAtlas.png" />
-    <None Include="res\particle-explosion.png" />
+    <None Include="res\editor_atlas.png" />
+    <None Include="res\particle_explosion.png" />
     <None Include="res\explosion.particle" />
     <None Include="res\fire.particle" />
-    <None Include="res\particle-fire.png" />
-    <None Include="res\particle-smoke.png" />
+    <None Include="res\particle_fire.png" />
+    <None Include="res\particle_smoke.png" />
     <None Include="res\smoke.particle" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

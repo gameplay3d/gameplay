@@ -27,25 +27,25 @@
     <None Include="res\editor.theme">
       <Filter>res</Filter>
     </None>
-    <None Include="res\editorAtlas.png">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\explosion.particle">
       <Filter>res</Filter>
     </None>
     <None Include="res\fire.particle">
       <Filter>res</Filter>
     </None>
-    <None Include="res\particle-fire.png">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\smoke.particle">
       <Filter>res</Filter>
     </None>
-    <None Include="res\particle-explosion.png">
+    <None Include="res\particle_explosion.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\particle-smoke.png">
+    <None Include="res\particle_fire.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\particle_smoke.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\editor_atlas.png">
       <Filter>res</Filter>
     </None>
   </ItemGroup>
