@@ -4,9 +4,8 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
-
+#include "Form.h"
 #include <unistd.h>
-
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import <CoreMotion/CoreMotion.h>
@@ -307,15 +306,15 @@ int getKey(unichar keyCode);
     if([text length] == 0) return;
     assert([text length] == 1);
     unichar c = [text characterAtIndex:0];
-    int gpk = getKey(c);
-    Game::getInstance()->keyEvent(Keyboard::KEY_PRESS, gpk);    
-    Game::getInstance()->keyEvent(Keyboard::KEY_RELEASE, gpk);    
+    int key = getKey(c);
+    Platform::keyEventInternal(Keyboard::KEY_PRESS, key);    
+    Platform::keyEventInternal(Keyboard::KEY_RELEASE, key);    
 }
 
 - (void)deleteBackward 
 {
-    Game::getInstance()->keyEvent(Keyboard::KEY_PRESS, Keyboard::KEY_BACKSPACE);    
-    Game::getInstance()->keyEvent(Keyboard::KEY_RELEASE, Keyboard::KEY_BACKSPACE);    
+    Platform::keyEventInternal(Keyboard::KEY_PRESS, Keyboard::KEY_BACKSPACE);    
+    Platform::keyEventInternal(Keyboard::KEY_RELEASE, Keyboard::KEY_BACKSPACE);    
 }
 
 - (BOOL)hasText 
@@ -333,7 +332,7 @@ int getKey(unichar keyCode);
         {
             uniqueTouch = [t hash];
         }
-        Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.x, touchLoc.y, uniqueTouch);
+        Platform::touchEventInternal(Touch::TOUCH_PRESS, touchLoc.x, touchLoc.y, uniqueTouch);
     }
 }
 
@@ -345,7 +344,7 @@ int getKey(unichar keyCode);
         CGPoint touchLoc = [t locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchLoc.x, touchLoc.y, uniqueTouch);
+        Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchLoc.x, touchLoc.y, uniqueTouch);
     }
 }
 
@@ -363,7 +362,7 @@ int getKey(unichar keyCode);
         CGPoint touchLoc = [t locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchLoc.x, touchLoc.y, uniqueTouch);
+        Platform::touchEventInternal(Touch::TOUCH_MOVE, touchLoc.x, touchLoc.y, uniqueTouch);
     }
 }
 
@@ -394,8 +393,7 @@ int getKey(unichar keyCode);
 
 - (void)didReceiveMemoryWarning
 {
-    [super didReceiveMemoryWarning];    
-    // Release any cached data, images, etc that aren't in use.
+    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - View lifecycle
@@ -862,6 +860,21 @@ void Platform::displayKeyboard(bool display)
         }
     }
 }
+    
+void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    if (!Form::touchEventInternal(evt, x, y, contactIndex))
+    {
+        Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+    }
+}
+
+void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Form::keyEventInternal(evt, key);
+}
+    
 
 void Platform::sleep(long ms)
 {

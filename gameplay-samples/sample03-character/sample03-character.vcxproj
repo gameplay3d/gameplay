@@ -149,6 +149,7 @@
     </None>
     <None Include="icon.png" />
     <None Include="res\boy.animation" />
+    <None Include="res\diffuse-transparent.fsh" />
     <None Include="res\gamepad.png" />
     <None Include="res\scene.dae" />
     <None Include="res\scene.material" />

@@ -9,6 +9,9 @@ uniform float u_specularExponent;               // Specular exponent or shinines
 #if !defined(VERTEX_COLOR)
 uniform vec4 u_diffuseColor;                    // Diffuse color
 #endif
+#if defined(GLOBAL_ALPHA)
+uniform float u_globalAlpha;                    // Global alpha value
+#endif
 
 // Inputs
 varying vec3 v_normalVector;                    // NormalVector in view space
@@ -122,4 +125,8 @@ void main()
     // Light the pixel
     gl_FragColor.a = _baseColor.a;
     gl_FragColor.rgb = _ambientColor + _diffuseColor + _specularColor;
+
+#if defined(GLOBAL_ALPHA)
+    gl_FragColor.a *= u_globalAlpha;
+#endif
 }

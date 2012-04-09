@@ -32,6 +32,15 @@
     <None Include="..\..\gameplay\res\logo_powered_white.png">
       <Filter>res</Filter>
     </None>
+    <None Include="res\grid.material">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\line.fsh">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\line.vsh">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshGame.cpp">
