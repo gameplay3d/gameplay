@@ -36,6 +36,9 @@ void MeshGame::initialize()
 
     // Bind the light node's direction into duck's material.
     _modelNode->getModel()->getMaterial()->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
+
+    // Update the aspect ratio for our scene's camera to match the current device resolution
+    _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
 }
 
 void MeshGame::finalize()
