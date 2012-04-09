@@ -179,9 +179,9 @@ sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.xcodeproj/projec
 sed -i "" "s*TemplateGame*$className*g" "$projPath/$projName.xcodeproj/project.pbxproj"
 sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.xcodeproj/project.pbxproj"
 
-cp "gameplay-template/TEMPLATE_PROJECT-macos.plist" "$projPath/$projName-macos.plist"
-sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-macos.plist"
-sed -i "" "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-macos.plist"
+cp "gameplay-template/TEMPLATE_PROJECT-macosx.plist" "$projPath/$projName-macosx.plist"
+sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-macosx.plist"
+sed -i "" "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-macosx.plist"
 
 cp "gameplay-template/TEMPLATE_PROJECT-ios.plist" "$projPath/$projName-ios.plist"
 sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-ios.plist"

@@ -14,8 +14,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "42C932BB1491A0DB0098216A"
-               BuildableName = "sample04-particles-macos.app"
-               BlueprintName = "sample04-particles-macos"
+               BuildableName = "sample04-particles-macosx.app"
+               BlueprintName = "sample04-particles-macosx"
                ReferencedContainer = "container:sample04-particles.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,8 +32,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42C932BB1491A0DB0098216A"
-            BuildableName = "sample04-particles-macos.app"
-            BlueprintName = "sample04-particles-macos"
+            BuildableName = "sample04-particles-macosx.app"
+            BlueprintName = "sample04-particles-macosx"
             ReferencedContainer = "container:sample04-particles.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -51,8 +51,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42C932BB1491A0DB0098216A"
-            BuildableName = "sample04-particles-macos.app"
-            BlueprintName = "sample04-particles-macos"
+            BuildableName = "sample04-particles-macosx.app"
+            BlueprintName = "sample04-particles-macosx"
             ReferencedContainer = "container:sample04-particles.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
