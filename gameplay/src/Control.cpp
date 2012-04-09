@@ -36,10 +36,31 @@ namespace gameplay
     {
         _style = style;
 
+        _alignment = getAlignment(properties->getString("alignment"));
+        _autoWidth = properties->getBool("autoWidth");
+        _autoHeight = properties->getBool("autoHeight");
+
         Vector2 position;
         Vector2 size;
-        properties->getVector2("position", &position);
-        properties->getVector2("size", &size);
+        if (properties->exists("position"))
+        {
+            properties->getVector2("position", &position);
+        }
+        else
+        {
+            position.x = properties->getFloat("x");
+            position.y = properties->getFloat("y");
+        }
+        
+        if (properties->exists("size"))
+        {
+            properties->getVector2("size", &size);
+        }
+        else
+        {
+            size.x = properties->getFloat("width");
+            size.y = properties->getFloat("height");
+        }
         _bounds.set(position.x, position.y, size.x, size.y);
 
         _state = Control::getState(properties->getString("state"));
@@ -924,5 +945,77 @@ namespace gameplay
         WARN_VARG("%d", sizeof(Theme::Style::Overlay));
         _style = new Theme::Style(*_style);
         _styleOverridden = true;
+    }
+
+    Control::Alignment Control::getAlignment(const char* alignment)
+    {
+        if (!alignment)
+        {
+            return Control::ALIGN_TOP_LEFT;
+        }
+
+        if (strcmp(alignment, "ALIGN_LEFT") == 0)
+        {
+            return Control::ALIGN_LEFT;
+        }
+        else if (strcmp(alignment, "ALIGN_HCENTER") == 0)
+        {
+            return Control::ALIGN_HCENTER;
+        }
+        else if (strcmp(alignment, "ALIGN_RIGHT") == 0)
+        {
+            return Control::ALIGN_RIGHT;
+        }
+        else if (strcmp(alignment, "ALIGN_TOP") == 0)
+        {
+            return Control::ALIGN_TOP;
+        }
+        else if (strcmp(alignment, "ALIGN_VCENTER") == 0)
+        {
+            return Control::ALIGN_VCENTER;
+        }
+        else if (strcmp(alignment, "ALIGN_BOTTOM") == 0)
+        {
+            return Control::ALIGN_BOTTOM;
+        }
+        else if (strcmp(alignment, "ALIGN_TOP_LEFT") == 0)
+        {
+            return Control::ALIGN_TOP_LEFT;
+        }
+        else if (strcmp(alignment, "ALIGN_VCENTER_LEFT") == 0)
+        {
+            return Control::ALIGN_VCENTER_LEFT;
+        }
+        else if (strcmp(alignment, "ALIGN_BOTTOM_LEFT") == 0)
+        {
+            return Control::ALIGN_BOTTOM_LEFT;
+        }
+        else if (strcmp(alignment, "ALIGN_TOP_HCENTER") == 0)
+        {
+            return Control::ALIGN_TOP_HCENTER;
+        }
+        else if (strcmp(alignment, "ALIGN_VCENTER_HCENTER") == 0)
+        {
+            return Control::ALIGN_VCENTER_HCENTER;
+        }
+        else if (strcmp(alignment, "ALIGN_BOTTOM_HCENTER") == 0)
+        {
+            return Control::ALIGN_BOTTOM_HCENTER;
+        }
+        else if (strcmp(alignment, "ALIGN_TOP_RIGHT") == 0)
+        {
+            return Control::ALIGN_TOP_RIGHT;
+        }
+        else if (strcmp(alignment, "ALIGN_VCENTER_RIGHT") == 0)
+        {
+            return Control::ALIGN_VCENTER_RIGHT;
+        }
+        else if (strcmp(alignment, "ALIGN_BOTTOM_RIGHT") == 0)
+        {
+            return Control::ALIGN_BOTTOM_RIGHT;
+        }
+
+        // Default.
+        return Control::ALIGN_TOP_LEFT;
     }
 }

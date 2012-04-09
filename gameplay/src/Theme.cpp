@@ -181,11 +181,11 @@ namespace gameplay
                             font = Font::create(fontPath);
                         }
                         unsigned int fontSize = innerSpace->getInt("fontSize");
-                        const char* alignmentString = innerSpace->getString("alignment");
-                        Font::Justify alignment = Font::ALIGN_TOP_LEFT;
-                        if (alignmentString)
+                        const char* textAlignmentString = innerSpace->getString("textAlignment");
+                        Font::Justify textAlignment = Font::ALIGN_TOP_LEFT;
+                        if (textAlignmentString)
                         {
-                            alignment = Font::getJustifyFromString(alignmentString);
+                            textAlignment = Font::getJustify(textAlignmentString);
                         }
                         bool rightToLeft = innerSpace->getBool("rightToLeft");
 
@@ -207,7 +207,7 @@ namespace gameplay
                         normal->setTextColor(textColor);
                         normal->setFont(font);
                         normal->setFontSize(fontSize);
-                        normal->setTextAlignment(alignment);
+                        normal->setTextAlignment(textAlignment);
                         normal->setTextRightToLeft(rightToLeft);
                         normal->setOpacity(opacity);
 
@@ -275,15 +275,15 @@ namespace gameplay
                             fontSize = normal->getFontSize();
                         }
 
-                        const char* alignmentString = innerSpace->getString("alignment");
-                        Font::Justify alignment;
-                        if (alignmentString)
+                        const char* textAlignmentString = innerSpace->getString("textAlignment");
+                        Font::Justify textAlignment;
+                        if (textAlignmentString)
                         {
-                            alignment = Font::getJustifyFromString(alignmentString);
+                            textAlignment = Font::getJustify(textAlignmentString);
                         }
                         else
                         {
-                            alignment = normal->getTextAlignment();
+                            textAlignment = normal->getTextAlignment();
                         }
 
                         bool rightToLeft;
@@ -335,7 +335,7 @@ namespace gameplay
                             focus->setTextColor(textColor);
                             focus->setFont(font);
                             focus->setFontSize(fontSize);
-                            focus->setTextAlignment(alignment);
+                            focus->setTextAlignment(textAlignment);
                             focus->setTextRightToLeft(rightToLeft);
                             focus->setOpacity(opacity);
 
@@ -350,7 +350,7 @@ namespace gameplay
                             active->setTextColor(textColor);
                             active->setFont(font);
                             active->setFontSize(fontSize);
-                            active->setTextAlignment(alignment);
+                            active->setTextAlignment(textAlignment);
                             active->setTextRightToLeft(rightToLeft);
                             active->setOpacity(opacity);
 
@@ -365,7 +365,7 @@ namespace gameplay
                             disabled->setTextColor(textColor);
                             disabled->setFont(font);
                             disabled->setFontSize(fontSize);
-                            disabled->setTextAlignment(alignment);
+                            disabled->setTextAlignment(textAlignment);
                             disabled->setTextRightToLeft(rightToLeft);
                             disabled->setOpacity(opacity);
 

@@ -69,6 +69,34 @@ namespace gameplay
         {
             Control* control = controls.at(i);
 
+            if (control->_alignment != Control::ALIGN_TOP_LEFT ||
+                control->_autoWidth || control->_autoHeight)
+            {
+                Rectangle controlBounds = control->getBounds();
+                const Rectangle& containerBounds = container->getBounds();
+
+                if (control->_autoWidth)
+                {
+                    controlBounds.width = containerBounds.width;
+                }
+
+                if (control->_autoHeight)
+                {
+                    controlBounds.height = containerBounds.height;
+                }
+
+                if ((control->_alignment & Control::ALIGN_RIGHT) == Control::ALIGN_RIGHT)
+                {
+                    controlBounds.x = containerBounds.width - controlBounds.width;
+                }
+                else if ((control->_alignment & Control::ALIGN_HCENTER) == Control::ALIGN_HCENTER)
+                {
+                    controlBounds.x = containerBounds.width / 2.0f - controlBounds.width / 2.0f;
+                }
+
+                control->setBounds(controlBounds);
+            }
+
             const Rectangle& bounds = control->getClipBounds();
             const Theme::Margin& margin = control->getMargin();
 

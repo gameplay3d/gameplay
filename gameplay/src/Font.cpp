@@ -1568,7 +1568,7 @@ SpriteBatch* Font::getSpriteBatch()
     return _batch;
 }
 
-Font::Justify Font::getJustifyFromString(const char* justify)
+Font::Justify Font::getJustify(const char* justify)
 {
     if (!justify)
     {
