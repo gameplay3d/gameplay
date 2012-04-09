@@ -3,26 +3,22 @@
 // Declare our game instance
 ParticlesGame game;
 
-// Emitter presets.
+
+
 static std::string _particleFiles[] = 
 {
     "fire",
     "smoke",
     "explosion",
 };
+
 const static unsigned int _particleFilesCount = 3;
-
-// Form settings for presets.
 const static float PARTICLE_SIZE_MAX[] = { 5.0f, 30.0f, 30.0f };
-
 const static float EMIT_RATE_MAX[] = { 500, 100, 100 };
-
 const float INPUT_SENSITIVITY = 1.0f;
-
 const Vector4 BACKGROUND_COLOR = Vector4::zero();
 
-ParticlesGame::ParticlesGame()
-    : _scene(NULL)
+ParticlesGame::ParticlesGame() : _scene(NULL)
 {
 }
 
@@ -36,8 +32,7 @@ void ParticlesGame::initialize()
     // Create a scene with a camera node.
     // The camera node is a child of a node at the same location as the particle emitter.
     // The camera node is offset from its parent, looking straight at it.
-    // That way, when we rotate the parent node, the camera stays aimed at
-    // the particle emitter.
+    // That way, when we rotate the parent node, the camera stays aimed at the particle emitter.
     _scene = Scene::createScene();
     Node* cameraNode = _scene->addNode("Camera");
     _cameraParent = _scene->addNode("CameraParent");
@@ -48,8 +43,8 @@ void ParticlesGame::initialize()
     _scene->setActiveCamera(camera);
     SAFE_RELEASE(camera);
 
-    // Load ParticleEmitter presets.
-    loadParticleEmitters();
+    // Load preset emitters.
+    loadEmitters();
 
     // Load the form for editing ParticleEmitters.
     _form = Form::create("res/editor.form");
@@ -70,6 +65,8 @@ void ParticlesGame::initialize()
     _zoomIn = (Button*)_form->getControl("zoomIn");
     _zoomOut = (Button*)_form->getControl("zoomOut");
     _burstSize = (Slider*)_form->getControl("burstSize");
+    _particlesCount = (Label*)_form->getControl("particlesCount");
+    _fps = (Label*)_form->getControl("fps");
 
     _startMin->addListener(this, Listener::VALUE_CHANGED);
     _startMax->addListener(this, Listener::VALUE_CHANGED);
@@ -78,18 +75,15 @@ void ParticlesGame::initialize()
     _energyMin->addListener(this, Listener::VALUE_CHANGED);
     _energyMax->addListener(this, Listener::VALUE_CHANGED);
     _emissionRate->addListener(this, Listener::VALUE_CHANGED);
-
     _started->addListener(this, Listener::VALUE_CHANGED);
     _emit->addListener(this, Listener::CLICK);
     _spiralFlame->addListener(this, Listener::VALUE_CHANGED);
     _smoke->addListener(this, Listener::VALUE_CHANGED);
     _explosion->addListener(this, Listener::VALUE_CHANGED);
-
     _zoomIn->addListener(this, Listener::PRESS);
     _zoomIn->addListener(this, Listener::RELEASE);
     _zoomOut->addListener(this, Listener::PRESS);
     _zoomOut->addListener(this, Listener::RELEASE);
-
     _burstSize->addListener(this, Listener::VALUE_CHANGED);
     
     emitterChanged();
@@ -259,14 +253,12 @@ void ParticlesGame::update(long elapsedTime)
     ParticleEmitter* emitter = _particleEmitters[_particleEmitterIndex];
     emitter->update(elapsedTime);
 
-    std::string liveParticlesString("Particles: ");
-    char buf[6];
-    liveParticlesString.append(itoa(emitter->getParticlesCount(), buf, 10));
-    ((Label*)_form->getControl("liveParticlesCount"))->setText(liveParticlesString.c_str());
+    char buffer[16];
+    sprintf(buffer, "Particles: %u", emitter->getParticlesCount());
+    _particlesCount->setText(buffer);
 
-    std::string fpsString("FPS: ");
-    fpsString.append(itoa(getFrameRate(), buf, 10));
-    ((Label*)_form->getControl("FPS"))->setText(fpsString.c_str());
+    sprintf(buffer, "FPS: %u", getFrameRate());
+    _fps->setText(buffer);
 
     _form->update();
 }
@@ -308,9 +300,11 @@ void ParticlesGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
         _prevX = x;
         _prevY = y;
         break;
+
     case Touch::TOUCH_RELEASE:
         _touched = false;
         break;
+
     case Touch::TOUCH_MOVE:
         {
             if (_touched)
@@ -337,6 +331,9 @@ void ParticlesGame::keyEvent(Keyboard::KeyEvent evt, int key)
     case Keyboard::KEY_PRESS:
         switch (key)
         {
+        case Keyboard::KEY_ESCAPE:
+            exit();
+            break;
         case Keyboard::KEY_W:
             _wDown = true;
             break;
@@ -359,6 +356,7 @@ void ParticlesGame::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         }
         break;
+
     case Keyboard::KEY_RELEASE:
         switch (key)
         {
@@ -379,7 +377,7 @@ void ParticlesGame::keyEvent(Keyboard::KeyEvent evt, int key)
     }
 }
 
-void ParticlesGame::loadParticleEmitters()
+void ParticlesGame::loadEmitters()
 {
     for (unsigned int i = 0; i < _particleFilesCount; i++)
     {

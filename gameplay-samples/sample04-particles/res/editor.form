@@ -1,4 +1,4 @@
-form particleEd
+form particleEditor
 {
     theme = res/editor.theme
     style = background
@@ -15,7 +15,7 @@ form particleEd
         layout = LAYOUT_VERTICAL
 
         // Number of currently alive particles
-        label liveParticlesCount
+        label particlesCount
         {
             style = iconNoBorder
             autoWidth = true
@@ -24,7 +24,7 @@ form particleEd
         }
 
         // FPS
-        label FPS : liveParticlesCount
+        label FPS : particlesCount
         {
             text = FPS: 0
         }
@@ -51,12 +51,6 @@ form particleEd
         }
     }
 
-    // Presets
-    // =======
-
-    // Switch between emitters.
-    // Radio-group for now.
-    // TODO: Dropdown menu!
     container presets
     {
         style = basic
@@ -91,10 +85,6 @@ form particleEd
             text = Explosion
         }
     }
-
-
-    // Emitter settings
-    // ================
 
     // Emission settings
     container emission

@@ -10,7 +10,7 @@
 		42438B531491AD2000D218B8 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42438B521491AD2000D218B8 /* libgameplay.a */; };
 		42C932C11491A0DB0098216A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C932C01491A0DB0098216A /* Cocoa.framework */; };
 		42C932EE1491A4CB0098216A /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C932ED1491A4CB0098216A /* icon.png */; };
-		42C932F11491A5160098216A /* TemplateGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* TemplateGame.cpp */; };
+		42C932F11491A5160098216A /* ParticlesGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* ParticlesGame.cpp */; };
 		42C932F31491A53E0098216A /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42C932F21491A53E0098216A /* res */; };
 		42C933171491A5EB0098216A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933161491A5EB0098216A /* OpenGL.framework */; };
 		42C9331D1491A6750098216A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9331C1491A6750098216A /* QuartzCore.framework */; };
@@ -22,8 +22,7 @@
 		42C933291491A6E50098216A /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933251491A6E50098216A /* libvorbisfile.a */; };
 		42C9332C1491A7680098216A /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332A1491A7390098216A /* libpng.a */; };
 		42C9332F1491A78D0098216A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332D1491A7810098216A /* libz.dylib */; };
-		5B61611314CCC2200073B857 /* TEMPLATE_PROJECT-macos.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B61611214CCC2200073B857 /* TEMPLATE_PROJECT-macos.plist */; };
-		5B61611614CCC24C0073B857 /* TemplateGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* TemplateGame.cpp */; };
+		5B61611614CCC24C0073B857 /* ParticlesGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* ParticlesGame.cpp */; };
 		5B61611814CCC24C0073B857 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42438B521491AD2000D218B8 /* libgameplay.a */; };
 		5B61611914CCC24C0073B857 /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933201491A6C70098216A /* libbullet.a */; };
 		5B61611A14CCC24C0073B857 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933221491A6E50098216A /* libogg.a */; };
@@ -34,40 +33,41 @@
 		5B61611F14CCC24C0073B857 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332D1491A7810098216A /* libz.dylib */; };
 		5B61612614CCC24C0073B857 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C932ED1491A4CB0098216A /* icon.png */; };
 		5B61612714CCC24C0073B857 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42C932F21491A53E0098216A /* res */; };
-		5B61612814CCC24C0073B857 /* TEMPLATE_PROJECT-macos.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B61611214CCC2200073B857 /* TEMPLATE_PROJECT-macos.plist */; };
-		5B61613114CCC33A0073B857 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B61612F14CCC33A0073B857 /* OpenAL.framework */; };
-		5B61613214CCC33A0073B857 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B61613014CCC33A0073B857 /* OpenGLES.framework */; };
-		5B61613414CCC3420073B857 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B61613314CCC3420073B857 /* UIKit.framework */; };
-		5B61613614CCC34A0073B857 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B61613514CCC3490073B857 /* CoreMotion.framework */; };
-		5B61613814CCC3500073B857 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B61613714CCC3500073B857 /* QuartzCore.framework */; };
+		5BAF206D152F2DDD003E2AC3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2067152F2DDD003E2AC3 /* CoreMotion.framework */; };
+		5BAF206E152F2DDD003E2AC3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2068152F2DDD003E2AC3 /* Foundation.framework */; };
+		5BAF206F152F2DDD003E2AC3 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2069152F2DDD003E2AC3 /* OpenAL.framework */; };
+		5BAF2070152F2DDD003E2AC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */; };
+		5BAF2071152F2DDD003E2AC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */; };
+		5BAF2072152F2DDD003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206C152F2DDD003E2AC3 /* UIKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		42438B521491AD2000D218B8 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
-		42C932BC1491A0DB0098216A /* TEMPLATE_PROJECT-MacOSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TEMPLATE_PROJECT-MacOSX.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C932BC1491A0DB0098216A /* sample04-particles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "sample04-particles.app"; path = "sample04-particles-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C932C01491A0DB0098216A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42C932ED1491A4CB0098216A /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		42C932EF1491A5160098216A /* TemplateGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TemplateGame.cpp; path = src/TemplateGame.cpp; sourceTree = SOURCE_ROOT; };
-		42C932F01491A5160098216A /* TemplateGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TemplateGame.h; path = src/TemplateGame.h; sourceTree = SOURCE_ROOT; };
+		42C932EF1491A5160098216A /* ParticlesGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticlesGame.cpp; path = src/ParticlesGame.cpp; sourceTree = SOURCE_ROOT; };
+		42C932F01491A5160098216A /* ParticlesGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticlesGame.h; path = src/ParticlesGame.h; sourceTree = SOURCE_ROOT; };
 		42C932F21491A53E0098216A /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		42C933161491A5EB0098216A /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		42C9331C1491A6750098216A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42C9331E1491A67F0098216A /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
-		42C933201491A6C70098216A /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "GAMEPLAY_PATH/external-deps/bullet/lib/macos/libbullet.a"; sourceTree = "<group>"; };
-		42C933221491A6E50098216A /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "GAMEPLAY_PATH/external-deps/oggvorbis/lib/macos/libogg.a"; sourceTree = "<group>"; };
-		42C933231491A6E50098216A /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "GAMEPLAY_PATH/external-deps/oggvorbis/lib/macos/libvorbis.a"; sourceTree = "<group>"; };
-		42C933241491A6E50098216A /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "GAMEPLAY_PATH/external-deps/oggvorbis/lib/macos/libvorbisenc.a"; sourceTree = "<group>"; };
-		42C933251491A6E50098216A /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "GAMEPLAY_PATH/external-deps/oggvorbis/lib/macos/libvorbisfile.a"; sourceTree = "<group>"; };
-		42C9332A1491A7390098216A /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "GAMEPLAY_PATH/external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
+		42C933201491A6C70098216A /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../..//external-deps/bullet/lib/macosx/libbullet.a"; sourceTree = "<group>"; };
+		42C933221491A6E50098216A /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../..//external-deps/oggvorbis/lib/macosx/libogg.a"; sourceTree = "<group>"; };
+		42C933231491A6E50098216A /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../..//external-deps/oggvorbis/lib/macosx/libvorbis.a"; sourceTree = "<group>"; };
+		42C933241491A6E50098216A /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../..//external-deps/oggvorbis/lib/macosx/libvorbisenc.a"; sourceTree = "<group>"; };
+		42C933251491A6E50098216A /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../..//external-deps/oggvorbis/lib/macosx/libvorbisfile.a"; sourceTree = "<group>"; };
+		42C9332A1491A7390098216A /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../..//external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42C9332D1491A7810098216A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		5B61611214CCC2200073B857 /* TEMPLATE_PROJECT-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TEMPLATE_PROJECT-macos.plist"; sourceTree = "<group>"; };
-		5B61612C14CCC24C0073B857 /* TEMPLATE_PROJECT-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TEMPLATE_PROJECT-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B61612E14CCC24D0073B857 /* TEMPLATE_PROJECT-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "TEMPLATE_PROJECT-ios.plist"; path = "/Users/bslack/src/git/GamePlay/gameplay-template/TEMPLATE_PROJECT-ios.plist"; sourceTree = "<absolute>"; };
-		5B61612F14CCC33A0073B857 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		5B61613014CCC33A0073B857 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		5B61613314CCC3420073B857 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		5B61613514CCC3490073B857 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
-		5B61613714CCC3500073B857 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		5B61611214CCC2200073B857 /* sample04-particles-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample04-particles-macosx.plist"; sourceTree = "<group>"; };
+		5B61612C14CCC24C0073B857 /* sample04-particles-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample04-particles-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B61612E14CCC24D0073B857 /* sample04-particles-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "sample04-particles-ios.plist"; sourceTree = "<group>"; };
+		5BAF2067152F2DDD003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2068152F2DDD003E2AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2069152F2DDD003E2AC3 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF206C152F2DDD003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,11 +94,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B61613814CCC3500073B857 /* QuartzCore.framework in Frameworks */,
-				5B61613614CCC34A0073B857 /* CoreMotion.framework in Frameworks */,
-				5B61613414CCC3420073B857 /* UIKit.framework in Frameworks */,
-				5B61613114CCC33A0073B857 /* OpenAL.framework in Frameworks */,
-				5B61613214CCC33A0073B857 /* OpenGLES.framework in Frameworks */,
+				5BAF206D152F2DDD003E2AC3 /* CoreMotion.framework in Frameworks */,
+				5BAF206E152F2DDD003E2AC3 /* Foundation.framework in Frameworks */,
+				5BAF206F152F2DDD003E2AC3 /* OpenAL.framework in Frameworks */,
+				5BAF2070152F2DDD003E2AC3 /* OpenGLES.framework in Frameworks */,
+				5BAF2071152F2DDD003E2AC3 /* QuartzCore.framework in Frameworks */,
+				5BAF2072152F2DDD003E2AC3 /* UIKit.framework in Frameworks */,
 				5B61611814CCC24C0073B857 /* libgameplay.a in Frameworks */,
 				5B61611914CCC24C0073B857 /* libbullet.a in Frameworks */,
 				5B61611A14CCC24C0073B857 /* libogg.a in Frameworks */,
@@ -116,8 +117,8 @@
 		42C932B11491A0DB0098216A = {
 			isa = PBXGroup;
 			children = (
-				5B61611214CCC2200073B857 /* TEMPLATE_PROJECT-macos.plist */,
-				5B61612E14CCC24D0073B857 /* TEMPLATE_PROJECT-ios.plist */,
+				5B61611214CCC2200073B857 /* sample04-particles-macosx.plist */,
+				5B61612E14CCC24D0073B857 /* sample04-particles-ios.plist */,
 				42C932ED1491A4CB0098216A /* icon.png */,
 				42C932F21491A53E0098216A /* res */,
 				42C932C61491A0DB0098216A /* src */,
@@ -130,8 +131,8 @@
 		42C932BD1491A0DB0098216A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				42C932BC1491A0DB0098216A /* TEMPLATE_PROJECT-MacOSX.app */,
-				5B61612C14CCC24C0073B857 /* TEMPLATE_PROJECT-iOS.app */,
+				42C932BC1491A0DB0098216A /* sample04-particles.app */,
+				5B61612C14CCC24C0073B857 /* sample04-particles-ios.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -139,7 +140,7 @@
 		42C932BF1491A0DB0098216A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B61613A14CCC3590073B857 /* Mac OS X */,
+				5B61613A14CCC3590073B857 /* MacOSX */,
 				5B61613914CCC3560073B857 /* iOS */,
 			);
 			name = Frameworks;
@@ -148,8 +149,8 @@
 		42C932C61491A0DB0098216A /* src */ = {
 			isa = PBXGroup;
 			children = (
-				42C932EF1491A5160098216A /* TemplateGame.cpp */,
-				42C932F01491A5160098216A /* TemplateGame.h */,
+				42C932EF1491A5160098216A /* ParticlesGame.cpp */,
+				42C932F01491A5160098216A /* ParticlesGame.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -172,16 +173,17 @@
 		5B61613914CCC3560073B857 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				5B61613714CCC3500073B857 /* QuartzCore.framework */,
-				5B61613514CCC3490073B857 /* CoreMotion.framework */,
-				5B61613314CCC3420073B857 /* UIKit.framework */,
-				5B61612F14CCC33A0073B857 /* OpenAL.framework */,
-				5B61613014CCC33A0073B857 /* OpenGLES.framework */,
+				5BAF2067152F2DDD003E2AC3 /* CoreMotion.framework */,
+				5BAF2068152F2DDD003E2AC3 /* Foundation.framework */,
+				5BAF2069152F2DDD003E2AC3 /* OpenAL.framework */,
+				5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */,
+				5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */,
+				5BAF206C152F2DDD003E2AC3 /* UIKit.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		5B61613A14CCC3590073B857 /* Mac OS X */ = {
+		5B61613A14CCC3590073B857 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
 				42C932C01491A0DB0098216A /* Cocoa.framework */,
@@ -189,46 +191,48 @@
 				42C933161491A5EB0098216A /* OpenGL.framework */,
 				42C9331E1491A67F0098216A /* OpenAL.framework */,
 			);
-			name = "Mac OS X";
+			name = MacOSX;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		42C932BB1491A0DB0098216A /* TEMPLATE_PROJECT-MacOSX */ = {
+		42C932BB1491A0DB0098216A /* sample04-particles-macosx */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "TEMPLATE_PROJECT-MacOSX" */;
+			buildConfigurationList = 42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "sample04-particles-macosx" */;
 			buildPhases = (
 				42C932B81491A0DB0098216A /* Sources */,
 				42C932B91491A0DB0098216A /* Frameworks */,
 				42C933301491A7B50098216A /* ShellScript */,
 				42C932BA1491A0DB0098216A /* Resources */,
+				5BAF20D7152F30C3003E2AC3 /* Copy Gameplay Resources - Run Script */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "TEMPLATE_PROJECT-MacOSX";
-			productName = TEMPLATE_PROJECT;
-			productReference = 42C932BC1491A0DB0098216A /* TEMPLATE_PROJECT-MacOSX.app */;
+			name = "sample04-particles-macosx";
+			productName = "sample04-particles";
+			productReference = 42C932BC1491A0DB0098216A /* sample04-particles.app */;
 			productType = "com.apple.product-type.application";
 		};
-		5B61611414CCC24C0073B857 /* TEMPLATE_PROJECT-iOS */ = {
+		5B61611414CCC24C0073B857 /* sample04-particles-ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5B61612914CCC24C0073B857 /* Build configuration list for PBXNativeTarget "TEMPLATE_PROJECT-iOS" */;
+			buildConfigurationList = 5B61612914CCC24C0073B857 /* Build configuration list for PBXNativeTarget "sample04-particles-ios" */;
 			buildPhases = (
 				5B61611514CCC24C0073B857 /* Sources */,
 				5B61611714CCC24C0073B857 /* Frameworks */,
 				5B61612414CCC24C0073B857 /* ShellScript */,
 				5B61612514CCC24C0073B857 /* Resources */,
+				5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Reousrces Run Script */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "TEMPLATE_PROJECT-iOS";
-			productName = TEMPLATE_PROJECT;
-			productReference = 5B61612C14CCC24C0073B857 /* TEMPLATE_PROJECT-iOS.app */;
+			name = "sample04-particles-ios";
+			productName = "sample04-particles";
+			productReference = 5B61612C14CCC24C0073B857 /* sample04-particles-ios.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -237,9 +241,9 @@
 		42C932B31491A0DB0098216A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
-			buildConfigurationList = 42C932B61491A0DB0098216A /* Build configuration list for PBXProject "gameplay-template" */;
+			buildConfigurationList = 42C932B61491A0DB0098216A /* Build configuration list for PBXProject "sample04-particles" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -251,8 +255,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42C932BB1491A0DB0098216A /* TEMPLATE_PROJECT-MacOSX */,
-				5B61611414CCC24C0073B857 /* TEMPLATE_PROJECT-iOS */,
+				42C932BB1491A0DB0098216A /* sample04-particles-macosx */,
+				5B61611414CCC24C0073B857 /* sample04-particles-ios */,
 			);
 		};
 /* End PBXProject section */
@@ -264,7 +268,6 @@
 			files = (
 				42C932EE1491A4CB0098216A /* icon.png in Resources */,
 				42C932F31491A53E0098216A /* res in Resources */,
-				5B61611314CCC2200073B857 /* TEMPLATE_PROJECT-macos.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,7 +277,6 @@
 			files = (
 				5B61612614CCC24C0073B857 /* icon.png in Resources */,
 				5B61612714CCC24C0073B857 /* res in Resources */,
-				5B61612814CCC24C0073B857 /* TEMPLATE_PROJECT-macos.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +309,34 @@
 			shellPath = /bin/sh;
 			shellScript = "touch -cm ${SRCROOT}/res";
 		};
+		5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Reousrces Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Gameplay Reousrces Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -rn ../..//gameplay/res/shaders ${SRCROOT}/res\ncp -rn ../..//gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+		};
+		5BAF20D7152F30C3003E2AC3 /* Copy Gameplay Resources - Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Gameplay Resources - Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -rn ../..//gameplay/res/shaders ${SRCROOT}/res\ncp -rn ../..//gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -314,7 +344,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42C932F11491A5160098216A /* TemplateGame.cpp in Sources */,
+				42C932F11491A5160098216A /* ParticlesGame.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,7 +352,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B61611614CCC24C0073B857 /* TemplateGame.cpp in Sources */,
+				5B61611614CCC24C0073B857 /* ParticlesGame.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,9 +378,10 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PKGINFO_FILE = YES;
-				INFOPLIST_FILE = "TEMPLATE_PROJECT-macos.plist";
+				INFOPLIST_FILE = "sample04-particles-macosx.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -371,9 +402,10 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PKGINFO_FILE = YES;
-				INFOPLIST_FILE = "TEMPLATE_PROJECT-macos.plist";
+				INFOPLIST_FILE = "sample04-particles-macosx.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -388,17 +420,17 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
-					GAMEPLAY_PATH/gameplay/src,
-					"GAMEPLAY_PATH/external-deps/libpng/include",
-					"GAMEPLAY_PATH/external-deps/bullet/include",
-					"GAMEPLAY_PATH/external-deps/oggvorbis/include",
+					"../..//gameplay/src",
+					"../..//external-deps/libpng/include",
+					"../..//external-deps/bullet/include",
+					"../..//external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "gameplay-template-macos.plist";
+				INFOPLIST_FILE = "sample04-particles-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"GAMEPLAY_PATH/external-deps/libpng/lib/macos\"",
-					"\"GAMEPLAY_PATH/external-deps/bullet/lib/macos\"",
-					"\"GAMEPLAY_PATH/external-deps/oggvorbis/lib/macos\"",
+					"\"../..//external-deps/libpng/lib/macosx\"",
+					"\"../..//external-deps/bullet/lib/macosx\"",
+					"\"../..//external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -414,17 +446,17 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
-					GAMEPLAY_PATH/gameplay/src,
-					"GAMEPLAY_PATH/external-deps/libpng/include",
-					"GAMEPLAY_PATH/external-deps/bullet/include",
-					"GAMEPLAY_PATH/external-deps/oggvorbis/include",
+					"../..//gameplay/src",
+					"../..//external-deps/libpng/include",
+					"../..//external-deps/bullet/include",
+					"../..//external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "gameplay-template-macos.plist";
+				INFOPLIST_FILE = "sample04-particles-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"GAMEPLAY_PATH/external-deps/libpng/lib/macos\"",
-					"\"GAMEPLAY_PATH/external-deps/bullet/lib/macos\"",
-					"\"GAMEPLAY_PATH/external-deps/oggvorbis/lib/macos\"",
+					"\"../..//external-deps/libpng/lib/macosx\"",
+					"\"../..//external-deps/bullet/lib/macosx\"",
+					"\"../..//external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -435,23 +467,27 @@
 		5B61612A14CCC24C0073B857 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
-					GAMEPLAY_PATH/gameplay/src,
-					"GAMEPLAY_PATH/external-deps/libpng/include",
-					"GAMEPLAY_PATH/external-deps/bullet/include",
-					"GAMEPLAY_PATH/external-deps/oggvorbis/include",
+					"../..//gameplay/src",
+					"../..//external-deps/libpng/include",
+					"../..//external-deps/bullet/include",
+					"../..//external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "gameplay-template-ios.plist";
+				INFOPLIST_FILE = "sample04-particles-ios.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"GAMEPLAY_PATH/external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
-					"\"GAMEPLAY_PATH/external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
-					"\"GAMEPLAY_PATH/external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../..//external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../..//external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../..//external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 				);
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -460,23 +496,27 @@
 		5B61612B14CCC24C0073B857 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
-					GAMEPLAY_PATH/gameplay/src,
-					"GAMEPLAY_PATH/external-deps/libpng/include",
-					"GAMEPLAY_PATH/external-deps/bullet/include",
-					"GAMEPLAY_PATH/external-deps/oggvorbis/include",
+					"../..//gameplay/src",
+					"../..//external-deps/libpng/include",
+					"../..//external-deps/bullet/include",
+					"../..//external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "gameplay-template-ios.plist";
+				INFOPLIST_FILE = "sample04-particles-ios.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"GAMEPLAY_PATH/external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
-					"\"GAMEPLAY_PATH/external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
-					"\"GAMEPLAY_PATH/external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../..//external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../..//external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../..//external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 				);
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -485,7 +525,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		42C932B61491A0DB0098216A /* Build configuration list for PBXProject "gameplay-template" */ = {
+		42C932B61491A0DB0098216A /* Build configuration list for PBXProject "sample04-particles" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				42C932D81491A0DB0098216A /* Debug */,
@@ -494,7 +534,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "TEMPLATE_PROJECT-MacOSX" */ = {
+		42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "sample04-particles-macosx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				42C932DB1491A0DB0098216A /* Debug */,
@@ -503,7 +543,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5B61612914CCC24C0073B857 /* Build configuration list for PBXNativeTarget "TEMPLATE_PROJECT-iOS" */ = {
+		5B61612914CCC24C0073B857 /* Build configuration list for PBXNativeTarget "sample04-particles-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5B61612A14CCC24C0073B857 /* Debug */,

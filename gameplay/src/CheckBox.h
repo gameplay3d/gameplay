@@ -114,7 +114,7 @@ protected:
      * Draw the checkbox icon associated with this control.
      *
      * @param spriteBatch The sprite batch containing this control's icons.
-     * @param position The container position this control is relative to.
+     * @param clip The container position this control is relative to.
      */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 

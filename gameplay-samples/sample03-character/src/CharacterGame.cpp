@@ -6,8 +6,10 @@ CharacterGame game;
 unsigned int keyFlags = 0;
 float _rotateY = 0.0f;
 #define WALK_SPEED  7.5f
-#define ANIM_SPEED 10.0f
+#define ANIM_SPEED 1.0f
 #define BLEND_DURATION 150.0f
+#define OPAQUE_OBJECTS      0
+#define TRANSPARENT_OBJECTS 1
 
 float cameraFocusDistance = 16.0f;
 
@@ -15,7 +17,7 @@ int drawDebug = 0;
 bool moveBall = false;
 
 CharacterGame::CharacterGame()
-    : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _animationState(0), _rotateX(0)
+    : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _animationState(0), _rotateX(0), _materialParameterAlpha(NULL)
 {
 }
 
@@ -34,18 +36,22 @@ void CharacterGame::initialize()
     // Load scene.
     _scene = Scene::load("res/scene.scene");
 
+    // Update the aspect ratio for our scene's camera to match the current device resolution
+    _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
+
     // Store character node.
     Node* node = _scene->findNode("BoyCharacter");
-    PhysicsRigidBody::Parameters p;
-    p.mass = 20.0f;
-    node->setTranslationY(5.0f);
-    node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule(1.2f, 5.0f, Vector3(0, 2.5, 0), true), &p);
+    PhysicsRigidBody::Parameters params(20.0f);
+    node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule(1.2f, 5.0f, Vector3(0, 2.5, 0), true), &params);
     _character = static_cast<PhysicsCharacter*>(node->getCollisionObject());
     _character->setMaxStepHeight(0.0f);
     _character->addCollisionListener(this);
 
     // Store character mesh node.
     _characterMeshNode = node->findNode("BoyMesh");
+
+    // Store the alpha material parameter from the character's model.
+    _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_globalAlpha");
 
     // Set a ghost object on our camera node to assist in camera occlusion adjustments
     _scene->findNode("Camera")->setCollisionObject(PhysicsCollisionObject::GHOST_OBJECT, PhysicsCollisionShape::sphere(0.5f));
@@ -75,12 +81,9 @@ void CharacterGame::initMaterial(Scene* scene, Node* node, Material* material)
 {
     // Bind light shader parameters to dynamic objects only
     std::string id = node->getId();
-    if (material)// &&
-        //(id == "Basketball" || id.find("GreenChair") != id.npos || id.find("BlueChair") != id.npos || 
-        //id == "Easel" || id == "BoyMesh" || id == "BoyShadow" || id == "Rainbow"))
+    if (material)
     {
         Node* lightNode = scene->findNode("SunLight");
-
         material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
         material->getParameter("u_lightColor")->bindValue(lightNode->getLight(), &Light::getColor);
         material->getParameter("u_ambientColor")->bindValue(scene, &Scene::getAmbientColor);
@@ -112,68 +115,39 @@ void CharacterGame::finalize()
 {
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_font);
+    SAFE_DELETE(_gamepad);
 }
 
 void CharacterGame::update(long elapsedTime)
 {
     Gamepad::ButtonState buttonOneState = _gamepad->getButtonState(BUTTON_1);
 	Vector2 joystickVec = _gamepad->getJoystickState(JOYSTICK);
-	keyFlags = 0;
+    if (!joystickVec.isZero())
+    {
+	    keyFlags = 0;
 
-	if (joystickVec.x > 0)
-	{
-		keyFlags |= 8;
-	}
-	else if (joystickVec.x < 0)
-	{
-		keyFlags |= 4;
-	}
-	
-	if (joystickVec.y > 0)
-	{
-		keyFlags |= 1;
-	}
-	else if (joystickVec.y < 0)
-	{
-		keyFlags |= 2;
-	}	
-	
-	/*
-	switch (key)
-        {
-        case Keyboard::KEY_W:
-            keyFlags |= 1;
-            break;
-        case Keyboard::KEY_S:
-            keyFlags |= 2;
-            break;
-        case Keyboard::KEY_A:
-            keyFlags |= 4;
-            break;
-        case Keyboard::KEY_D:
-            keyFlags |= 8;
-            break;
-        case Keyboard::KEY_P:
-            drawDebug = !drawDebug;
-            break;
-		case Keyboard::KEY_B:
-			moveBall = !moveBall;
-			break;
-        }
-	*/
+        // Calculate forward/backward movement.
+        if (joystickVec.y > 0)
+	    {
+		    keyFlags |= 1;
+	    }
+	    else if (joystickVec.y < 0)
+	    {
+		    keyFlags |= 2;
+	    }
+
+        // Calculate rotation
+        float angle = joystickVec.x * MATH_PI * -0.02;
+        _character->rotate(Vector3::unitY(), angle);
+    }
+
     // Update character animation and movement
-    if (joystickVec.isZero())
+    if (keyFlags == 0)
     {
         _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT, 1.0f, BLEND_DURATION);
-		_character->setForwardVelocity(0.0f);
     }
     else
     {
-		float angle = atan2(joystickVec.x, joystickVec.y);
-		_character->setRotation(Vector3::unitY(), angle);
-
-		_character->setForwardVelocity(joystickVec.length());
-
         // Forward motion
         if (keyFlags & 1)
         {
@@ -279,14 +253,14 @@ bool CharacterGame::drawScene(Node* node, void* cookie)
     Model* model = node->getModel();
     if (model)
     {
-        switch ((int)cookie)
+        switch ((long)cookie)
         {
-        case 0: // opaque objects
+        case OPAQUE_OBJECTS:
             if (!node->isTransparent())
                 model->draw();
             break;
 
-        case 1: // transparent objects
+        case TRANSPARENT_OBJECTS:
             if (node->isTransparent())
                 model->draw();
             break;
@@ -302,6 +276,9 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
     {
         switch (key)
         {
+        case Keyboard::KEY_ESCAPE:
+            exit();
+            break;
         case Keyboard::KEY_W:
             keyFlags |= 1;
             break;
@@ -353,32 +330,46 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
 
 void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    switch (evt)
+    // Get the joystick's current state.
+    bool wasActive = _gamepad->isJoystickActive(JOYSTICK);
+
+    _gamepad->touch(x, y, evt, contactIndex);
+
+    // See if the joystick is still active.
+    bool isActive = _gamepad->isJoystickActive(JOYSTICK);
+    if (!isActive)
     {
-    case Touch::TOUCH_PRESS:
+        // If it was active before, reset the joystick's influence on the keyflags.
+        if (wasActive)
+            keyFlags = 0;
+    
+        switch (evt)
         {
-            _rotateX = x;
-            _rotateY = y;
+        case Touch::TOUCH_PRESS:
+            {
+                _rotateX = x;
+                _rotateY = y;
+            }
+            break;
+        case Touch::TOUCH_RELEASE:
+            {
+                _rotateX = 0;
+                _rotateY = 0;
+            }
+            break;
+        case Touch::TOUCH_MOVE:
+            {
+                int deltaX = x - _rotateX;
+                int deltaY = y - _rotateY;
+                _rotateX = x;
+                _rotateY = y;
+                _character->getNode()->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
+            }
+            break;
+        default:
+            break;
         }
-        break;
-    case Touch::TOUCH_RELEASE:
-        {
-            _rotateX = 0;
-            _rotateY = 0;
-        }
-        break;
-    case Touch::TOUCH_MOVE:
-        {
-            int deltaX = x - _rotateX;
-            int deltaY = y - _rotateY;
-            _rotateX = x;
-            _rotateY = y;
-            _character->getNode()->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
-        }
-        break;
-    default:
-        break;
-    };
+    }
 }
 
 void CharacterGame::loadAnimationClips(Node* node)
@@ -453,23 +444,19 @@ void CharacterGame::adjustCamera(long elapsedTime)
 
     } while (true);
 
+    // If the character is closer than 10 world units to the camera, apply transparency to the character
+    // so he does not obstruct the view.
     if (occlusion)
     {
-        // TODO: When we change the character over to use a single material+texture, this code will be much cleaner (no material parts and can store MaterialParameter)
         float d = _scene->getActiveCamera()->getNode()->getTranslationWorld().distance(_characterMeshNode->getTranslationWorld());
-        if (d < 10)
-        {
-            float alpha = d / 10.0f;
-            _characterMeshNode->setTransparent(true);
-            for (unsigned int i = 0; i < 4; i++)
-                _characterMeshNode->getModel()->getMaterial(i)->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_alpha")->setValue(alpha);
-        }
-        else
-        {
-            _characterMeshNode->setTransparent(false);
-            for (unsigned int i = 0; i < 4; i++)
-                _characterMeshNode->getModel()->getMaterial(i)->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_alpha")->setValue(1.0f);
-        }
+        float alpha = d < 10 ? (d * 0.1f) : 1.0f;
+        _characterMeshNode->setTransparent(alpha < 1.0f);
+        _materialParameterAlpha->setValue(alpha);
+    }
+    else
+    {
+        _characterMeshNode->setTransparent(false);
+        _materialParameterAlpha->setValue(1.0f);
     }
 }
 

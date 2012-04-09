@@ -3,14 +3,6 @@
   <ItemGroup>
     <Filter Include="src">
     </Filter>
-    <Filter Include="res">
-      <UniqueIdentifier>{58059360-025b-4c88-aca5-192198757427}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\ParticlesGame.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ParticlesGame.h">

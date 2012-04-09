@@ -3,7 +3,7 @@ particle explosion
     // Sprite properties.
     sprite
     {
-        path = res/particle_explosion.png
+        path = res/explosion.png
         width = 64
         height = 64
         frameCount = 16

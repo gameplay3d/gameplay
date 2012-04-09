@@ -116,6 +116,7 @@ void Game::shutdown()
     // Call user finalization.
     if (_state != UNINITIALIZED)
     {
+        Platform::signalShutdown();
         finalize();
 
         _animationController->finalize();
@@ -159,7 +160,7 @@ void Game::resume()
     }
 }
 
-void Game::end()
+void Game::exit()
 {
     shutdown();
 }

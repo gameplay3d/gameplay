@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "42CCD56B146EC4B300353661"
                BuildableName = "sample03-character.app"
-               BlueprintName = "sample03-character-macos"
+               BlueprintName = "sample03-character-macosx"
                ReferencedContainer = "container:sample03-character.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,14 +34,14 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD56B146EC4B300353661"
             BuildableName = "sample03-character.app"
-            BlueprintName = "sample03-character-macos"
+            BlueprintName = "sample03-character-macosx"
             ReferencedContainer = "container:sample03-character.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Debug"
@@ -53,7 +53,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD56B146EC4B300353661"
             BuildableName = "sample03-character.app"
-            BlueprintName = "sample03-character-macos"
+            BlueprintName = "sample03-character-macosx"
             ReferencedContainer = "container:sample03-character.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -71,7 +71,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD56B146EC4B300353661"
             BuildableName = "sample03-character.app"
-            BlueprintName = "sample03-character-macos"
+            BlueprintName = "sample03-character-macosx"
             ReferencedContainer = "container:sample03-character.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

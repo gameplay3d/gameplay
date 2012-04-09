@@ -1,5 +1,5 @@
-#ifndef ParticlesGame_H_
-#define ParticlesGame_H_
+#ifndef PARTICLESGAME_H_
+#define PARTICLESGAME_H_
 
 #include "gameplay.h"
 
@@ -18,12 +18,18 @@ public:
     ParticlesGame();
 
     /**
-     * Touch event handler.
+     * @see Game::touchEvent
      */
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-    
+
+    /**
+     * @see Game::keyEvent
+     */
     void keyEvent(Keyboard::KeyEvent evt, int key);
 
+    /**
+     * @see Control::controlEvent
+     */
     void controlEvent(Control* control, EventType evt);
 
 protected:
@@ -50,30 +56,22 @@ protected:
 
 private:
 
-    /**
-     * Draws the scene each frame.
-     */
     bool drawScene(Node* node, void* cookie);
 
-    void loadParticleEmitters();
+    void loadEmitters();
+
     void emitterChanged();
 
-    // Scene.
     Scene* _scene;
     Node* _particleEmitterNode;
     Node* _cameraParent;
     Form* _form;
-
-    // Keyboard and mouse state, for camera movement.
     bool _wDown, _sDown, _aDown, _dDown;
     bool _touched;
     int _prevX, _prevY;
-
-    // Particle emitters.
     std::vector<ParticleEmitter*> _particleEmitters;
     unsigned int _particleEmitterIndex;
-
-    // UI controls.
+    
     Slider* _startMin;
     Slider* _startMax;
     Slider* _endMin;
@@ -90,6 +88,8 @@ private:
     RadioButton* _explosion;
     Slider* _burstSize;
     Container* _position;
+    Label* _particlesCount;
+    Label* _fps;
 };
 
 #endif

@@ -85,6 +85,7 @@ private:
     unsigned int _animationState;
     int _rotateX;
     Gamepad* _gamepad;
+    MaterialParameter* _materialParameterAlpha;
 };
 
 #endif
