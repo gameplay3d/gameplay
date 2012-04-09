@@ -139,37 +139,19 @@ material ColoredSpecular
     }
 }
 
-material Boy
+material Boy : TexturedTransparent
 {
     technique
     {
         pass
         {
-            vertexShader = res/shaders/diffuse.vsh
-            fragmentShader = res/diffuse-transparent.fsh
-
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            defines = SKINNING;SKINNING_JOINT_COUNT 31
+            defines = SKINNING;SKINNING_JOINT_COUNT 31;GLOBAL_ALPHA
             u_matrixPalette = MATRIX_PALETTE
-            
+            u_globalAlpha = 1.0
+
             sampler u_diffuseTexture
             {
-                mipmap = true
-                wrapS = CLAMP
-                wrapT = CLAMP
-                minFilter = LINEAR_MIPMAP_LINEAR
-                magFilter = LINEAR
                 path = res/character.png
-            }
-            
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-                blend = true
-                srcBlend = SRC_ALPHA
-                dstBlend = ONE_MINUS_SRC_ALPHA
             }
         }
     }
