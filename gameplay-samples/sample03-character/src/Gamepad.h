@@ -16,12 +16,18 @@ class Gamepad
 {
 public:
 
+    /**
+     * The button state's.
+     */
     enum ButtonState
     {
-        BUTTON_PRESSED,
-        BUTTON_RELEASED
+        BUTTON_RELEASED,
+        BUTTON_PRESSED
     };
 
+    /**
+     * Texture coordinate object.
+     */
     typedef struct texCoord
     {
         float u1;
@@ -30,6 +36,9 @@ public:
         float v2;
     } TexCoord;
 
+    /**
+     * Rectangle object.
+     */
     typedef struct rect
     {
         float x;
@@ -39,17 +48,17 @@ public:
     } Rect;
 
     /**
-     * Represents the maximum number of buttons supported on a gamepad.
+     * The maximum number of buttons supported on a gamepad.
      */
     static const unsigned int MAX_BUTTONS = 16;
 
     /**
-     * Represents the maximum number of joysticks supported on a gamepad.
+     * The maximum number of joysticks supported on a gamepad.
      */
     static const unsigned int MAX_JOYSTICKS = 2;
 
     /**
-     * Represents the maximum number of touch inputs the gamepad supports.
+     * The maximum number of parallel touch inputs the gamepad supports.
      */
     static const unsigned int MAX_TOUCH_INPUTS = 4;
 
@@ -68,51 +77,55 @@ public:
     ~Gamepad();
 
     /**
-     * Creates and sets a button to the gamepad with the specified information.
+     * Sets the screen region and textures to use for the specified button on the gamepad.
      *
-     * @param buttonId unique integer button id between (0 - MAX_BUTTONS).
-     * @param region screen region where the button must be drawn.
-     * @param defaultTextureRegion region in the gamepad's texture atlas that represents default mode.
-     * @param focusTextureRegion region in the gamepad's texture atlas that represents focus mode.
+     * @param buttonId The unique integer ID of the button to set; 0 <= buttonId < MAX_BUTTONS;
+     * @param screenRegion The region on the screen to draw the button.
+     * @param releasedTextureRegion The region on the gamepad's texture atlas to draw as the BUTTON_RELEASED state. 
+     * @param pressedTextureRegion The region on the gamepad's texture atlas to draw as the BUTTON_PRESSED state.
      */
-    void setButton(unsigned int buttonId, Rect* region, Rect* defaultTextureRegion, Rect* focusTextureRegion);
+    void setButton(unsigned int buttonId, Rect* screenRegion, Rect* releasedTextureRegion, Rect* pressedTextureRegion);
 
     /**
-     * Returns a button state.
+     * Returns the current state of the specified button.
      *
-     * @param buttonId Id of the button in the gamepad.
-     * @return BUTTON_PRESSED if the button is pressed; BUTTON_RELEASED otherwise.
+     * @param buttonId The ID of the button on the gamepad.
+     * @return The state of the specified button. BUTTON_PRESSED if the button is pressed; BUTTON_RELEASED otherwise.
      */
     ButtonState getButtonState(unsigned int buttonId) const;
 
     /**
-     * Creates and sets a joystick to the gamepad with the specified information.
-     * @param joystickId unique integer joystick id between (0 - MAX_JOYSTICKS).
-     * @param regionInner region where the inner joggle must be drawn.
-     * @param textureRegionInner region in the gamepad's texture atlas that represents inner joggle.
-     * @param regionOuter region where the outer joggle must be drawn.
-     * @param textureRegionOuter region in the gamepad's texture atlas that represents outer joggle.
+     * Sets the screen region and textures to use for the specified joystick on the gamepad.
+     *
+     * @param joystickId The unique integer ID of the joystick to set; 0 <= joystickId < MAX_JOYSTICKS;
+     * @param thumbScreenRegion The region on the screen to draw the thumb stick of the joystick.
+     * @param thumbTextureRegion The region on the gamepad's texture atlas to draw as the thumb stick of the joystick.
+     * @param dockScreenRegion The region on the screen to draw the dock that the thumb stick sits in.
+     * @param dockTextureRegion The region on the gamepad's texture atlas to draw as the dock for the thumb stick of the joystick.
+     * @param radius The maximum radius that the thumb stick will revolve around the dock region.
      */ 
-    void setJoystick(unsigned int joystickId, Rect* regionInner, Rect* textureRegionInner, Rect* regionOuter, Rect* textureRegionOuter, float radius);
+    void setJoystick(unsigned int joystickId, Rect* thumbScreenRegion, Rect* thumbTextureRegion, Rect* dockScreenRegion, Rect* dockTextureRegion, float radius);
 
     /**
-     * Gets whether the given joystick is active or not.
+     * Gets whether the specified joystick is active or not.
      * 
-     * @param joystickId Id of the joystick.
+     * @param joystickId The unique integer ID of the joystick to set; 0 <= joystickId < MAX_JOYSTICKS;
      * @return Whether the given joystick is active or not.
      */
     bool isJoystickActive(unsigned int joystickId) const;
 
     /**
-     * Returns a joystick state in the specified direction vector.
+     * Returns the specified joystick's state as a Vector2.
      *
-     * @param joystickId Id of the joystick.
-     * @return direction of the joystick movement as Vector3.
+     * @param joystickId The unique integer ID of the joystick to set; 0 <= joystickId < MAX_JOYSTICKS;
+     * @return A Vector2 of the joystick displacement for the specified joystick.
      */
     const Vector2& getJoystickState(unsigned int joystickId) const;
 
     /**
      * Draws the gamepad.
+     *
+     * @param color 
      */
     void draw(const Vector4& color = Vector4::one());
 
@@ -136,7 +149,7 @@ public:
      * 
      * @see Input::TouchEvent
      */
-    void touch(int x, int y, int touchEvent, unsigned int contactIndex);
+    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
 private:
 
@@ -204,15 +217,12 @@ private:
         Vector2 _displacement;
         Vector2 _direction;
         float _radius;
-        
         Rect _regionInner;
         bool _defaultTextureInnerEnabled;
         TexCoord _defaultTexCoordInner;
-        
         Rect _regionOuter;
         bool _defaultTextureOuterEnabled;
         TexCoord _defaultTexCoordOuter;
-
         unsigned int _contactIndex;
     };
 

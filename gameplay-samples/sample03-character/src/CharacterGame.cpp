@@ -4,8 +4,11 @@
 CharacterGame game; 
 
 unsigned int keyFlags = 0;
+float velocityNS = 0.0f;
+float velocityEW = 0.0f;
 float _rotateY = 0.0f;
 #define WALK_SPEED  7.5f
+#define RUN_SPEED 10.0f
 #define ANIM_SPEED 1.0f
 #define BLEND_DURATION 150.0f
 #define OPAQUE_OBJECTS      0
@@ -65,16 +68,23 @@ void CharacterGame::initialize()
     // Initialize the gamepad.
 	_gamepad = new Gamepad("res/gamepad.png", 1, 1);
 
-	Gamepad::Rect leftRegionInner = {130.0f, this->getHeight() - 130.0f, 47.0f, 47.0f};
-    Gamepad::Rect leftTexRegionInner = {10.0f, 188.0f, 47.0f, 47.0f};
-    Gamepad::Rect leftRegionOuter = {120.0f, this->getHeight() - 130.0f, 170.0f, 170.0f};
-    Gamepad::Rect leftTexRegionOuter = {0.0f, 0.0f, 170.0f, 170.0f};
-    _gamepad->setJoystick(JOYSTICK, &leftRegionInner, &leftTexRegionInner, &leftRegionOuter, &leftTexRegionOuter, 45.0f);
+    unsigned int screenWidth = this->getWidth();
+    unsigned int screenHeight = this->getHeight();
 
-	Gamepad::Rect regionOnScreen = {this->getWidth() - 120.0f, this->getHeight() - 130.0f, 47.0f, 47.0f};
-	Gamepad::Rect defaultRegion = {10.0f, 188.0f, 50.0f, 47.0f};
-	Gamepad::Rect focusRegion = {69.0f, 188.0f, 50.0f, 47.0f};
-	_gamepad->setButton(BUTTON_1, &regionOnScreen, &defaultRegion, &focusRegion);
+    float scaleFactor = screenHeight / 720.0f; // determine a scale factor to scale the gamepads position and size by.
+    float thumbSize = 47.0f * scaleFactor; // size of the thumb stick, and also the button which happen to be the same image.
+    float dockSize = 170.0f * scaleFactor; // size of the thumbstick's dock.
+
+    Gamepad::Rect thumbScreenRegion = {120.0f * scaleFactor, screenHeight - 130.0f * scaleFactor, thumbSize, thumbSize};
+    Gamepad::Rect thumbTexRegion = {10.0f, 188.0f, 47.0f, 47.0f};
+    Gamepad::Rect dockScreenRegion = {48.0 * scaleFactor, screenHeight - 191.0f * scaleFactor, dockSize, dockSize};
+    Gamepad::Rect dockTexRegion = {0.0f, 0.0f, 170.0f, 170.0f};
+    _gamepad->setJoystick(JOYSTICK, &thumbScreenRegion, &thumbTexRegion, &dockScreenRegion, &dockTexRegion, 45.0f);
+
+	Gamepad::Rect regionOnScreen = {screenWidth - 120.0f * scaleFactor - thumbSize, screenHeight - 130.0f * scaleFactor, thumbSize, thumbSize};
+	Gamepad::Rect releasedRegion = {10.0f, 188.0f, 50.0f, 47.0f};
+	Gamepad::Rect pressedRegion = {69.0f, 188.0f, 50.0f, 47.0f};
+	_gamepad->setButton(BUTTON_1, &regionOnScreen, &releasedRegion, &pressedRegion);
 }
 
 void CharacterGame::initMaterial(Scene* scene, Node* node, Material* material)
@@ -120,29 +130,30 @@ void CharacterGame::finalize()
 
 void CharacterGame::update(long elapsedTime)
 {
-    Gamepad::ButtonState buttonOneState = _gamepad->getButtonState(BUTTON_1);
 	Vector2 joystickVec = _gamepad->getJoystickState(JOYSTICK);
     if (!joystickVec.isZero())
     {
 	    keyFlags = 0;
 
-        // Calculate forward/backward movement.
-        if (joystickVec.y > 0)
-	    {
-		    keyFlags |= 1;
-	    }
-	    else if (joystickVec.y < 0)
-	    {
-		    keyFlags |= 2;
-	    }
+        velocityNS = joystickVec.y;
 
+        // Calculate forward/backward movement.
+        if (velocityNS > 0)
+		    keyFlags |= 1;
+	    else if (velocityNS < 0)
+		    keyFlags |= 2;
+        
         // Calculate rotation
-        float angle = joystickVec.x * MATH_PI * -0.02;
+        float angle = joystickVec.x * MATH_PI * -0.015;
         _character->rotate(Vector3::unitY(), angle);
     }
 
-    // Update character animation and movement
-    if (keyFlags == 0)
+    Gamepad::ButtonState buttonOneState = _gamepad->getButtonState(BUTTON_1);
+    if (buttonOneState)
+    {
+        _character->play("jump", PhysicsCharacter::ANIMATION_RESUME);
+    }
+    else if (keyFlags == 0) // Update character animation and movement
     {
         _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT, 1.0f, BLEND_DURATION);
     }
@@ -158,7 +169,7 @@ void CharacterGame::update(long elapsedTime)
             else
             {
                 _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
-                _character->setForwardVelocity(1.0f);
+                _character->setForwardVelocity(velocityNS);
             }
         }
         else if (keyFlags & 2)
@@ -170,13 +181,13 @@ void CharacterGame::update(long elapsedTime)
             else
             {
                 _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
-                _character->setForwardVelocity(-1.0f);
+                _character->setForwardVelocity(velocityNS);
             }
         }
         else
         {
             // Cancel forward movement
-            _character->setForwardVelocity(0.0f);
+            _character->setForwardVelocity(velocityNS);
         }
 
         // Strafing
@@ -189,7 +200,7 @@ void CharacterGame::update(long elapsedTime)
             else
             {
                 _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
-                _character->setRightVelocity(1.0f);
+                _character->setRightVelocity(velocityEW);
             }
         }
         else if (keyFlags & 8)
@@ -201,13 +212,13 @@ void CharacterGame::update(long elapsedTime)
             else
             {
                 _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
-                _character->setRightVelocity(-1.0f);
+                _character->setRightVelocity(velocityEW);
             }
         }
         else
         {
             // Cancel right movement
-            _character->setRightVelocity(0.0f);
+            _character->setRightVelocity(velocityEW);
         }
     }
 
@@ -281,15 +292,19 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         case Keyboard::KEY_W:
             keyFlags |= 1;
+            velocityNS = 1.0f;
             break;
         case Keyboard::KEY_S:
             keyFlags |= 2;
+            velocityNS = -1.0f;
             break;
         case Keyboard::KEY_A:
             keyFlags |= 4;
+            velocityEW = -1.0f;
             break;
         case Keyboard::KEY_D:
             keyFlags |= 8;
+            velocityEW = 1.0f;
             break;
         case Keyboard::KEY_P:
             drawDebug++;
@@ -314,15 +329,19 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
         {
         case Keyboard::KEY_W:
             keyFlags &= ~1;
+            velocityNS = 0.0f;
             break;
         case Keyboard::KEY_S:
             keyFlags &= ~2;
+            velocityNS = 0.0f;
             break;
         case Keyboard::KEY_A:
             keyFlags &= ~4;
+            velocityEW = 0.0f;
             break;
         case Keyboard::KEY_D:
             keyFlags &= ~8;
+            velocityEW = 0.0f;
             break;
         }
     }
@@ -333,7 +352,7 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     // Get the joystick's current state.
     bool wasActive = _gamepad->isJoystickActive(JOYSTICK);
 
-    _gamepad->touch(x, y, evt, contactIndex);
+    _gamepad->touchEvent(evt, x, y, contactIndex);
 
     // See if the joystick is still active.
     bool isActive = _gamepad->isJoystickActive(JOYSTICK);
@@ -379,6 +398,8 @@ void CharacterGame::loadAnimationClips(Node* node)
 
     _character->addAnimation("idle", _animation->getClip("idle"), 0.0f);
     _character->addAnimation("walk", _animation->getClip("walk"), WALK_SPEED);
+    _character->addAnimation("run", _animation->getClip("run"), RUN_SPEED);
+    _character->addAnimation("jump", _animation->getClip("jump"), 0.0f);
 
     _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT);
 }
