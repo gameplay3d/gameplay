@@ -247,7 +247,7 @@
         </extra>
       </node>
       <node id="camera1" name="camera1" type="NODE">
-        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 5 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 0 0 0.9807853 0.1950903 1 0 -0.1950903 0.9807853 5 0 0 0 1</matrix>
         <instance_camera url="#cameraShape1"/>
         <extra>
           <technique profile="OpenCOLLADAMaya">
