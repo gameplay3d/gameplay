@@ -47,23 +47,23 @@
 		42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-ios.plist"; sourceTree = "<group>"; };
 		42C56363152DE26000888FBE /* Gamepad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Gamepad.cpp; path = src/Gamepad.cpp; sourceTree = SOURCE_ROOT; };
 		42C56364152DE26000888FBE /* Gamepad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Gamepad.h; path = src/Gamepad.h; sourceTree = SOURCE_ROOT; };
-		42C932E61491A1AC0098216A /* sample03-character-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-macos.plist"; sourceTree = "<group>"; };
+		42C932E61491A1AC0098216A /* sample03-character-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-macosx.plist"; sourceTree = "<group>"; };
 		42CCD56C146EC4B300353661 /* sample03-character.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD570146EC4B300353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42CCD5A1146EC5BF00353661 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		42CCD5A3146EC5C600353661 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		42CCD5A5146EC5CE00353661 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42CCD5A7146EC5DE00353661 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		42CCD5A9146EC5F000353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
+		42CCD5A9146EC5F000353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42CCD5AD146EC62000353661 /* CharacterGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CharacterGame.cpp; path = src/CharacterGame.cpp; sourceTree = SOURCE_ROOT; };
 		42CCD5AE146EC62000353661 /* CharacterGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CharacterGame.h; path = src/CharacterGame.h; sourceTree = SOURCE_ROOT; };
 		42CCD5B0146EC62A00353661 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		42CCD5B3146EC65F00353661 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
-		42CD0EFA147D93560000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macos/libbullet.a"; sourceTree = "<group>"; };
-		42CD0EFB147D93560000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macos/libogg.a"; sourceTree = "<group>"; };
-		42CD0EFC147D93560000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbis.a"; sourceTree = "<group>"; };
-		42CD0EFD147D93560000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisenc.a"; sourceTree = "<group>"; };
-		42CD0EFE147D93560000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisfile.a"; sourceTree = "<group>"; };
+		42CD0EFA147D93560000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macosx/libbullet.a"; sourceTree = "<group>"; };
+		42CD0EFB147D93560000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macosx/libogg.a"; sourceTree = "<group>"; };
+		42CD0EFC147D93560000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbis.a"; sourceTree = "<group>"; };
+		42CD0EFD147D93560000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisenc.a"; sourceTree = "<group>"; };
+		42CD0EFE147D93560000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisfile.a"; sourceTree = "<group>"; };
 		5B43D1DD14C35F4C008A5D9D /* sample03-character.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B43D1E314C35F71008A5D9D /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 		5BAF2055152F2BDB003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
@@ -137,7 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */,
-				42C932E61491A1AC0098216A /* sample03-character-macos.plist */,
+				42C932E61491A1AC0098216A /* sample03-character-macosx.plist */,
 				42CCD5B0146EC62A00353661 /* icon.png */,
 				42CCD5B3146EC65F00353661 /* res */,
 				42CCD576146EC4B300353661 /* src */,
@@ -204,9 +204,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		42CCD56B146EC4B300353661 /* sample03-character-macos */ = {
+		42CCD56B146EC4B300353661 /* sample03-character-macosx */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character-macos" */;
+			buildConfigurationList = 42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character-macosx" */;
 			buildPhases = (
 				42CCD568146EC4B300353661 /* Sources */,
 				42CCD569146EC4B300353661 /* Frameworks */,
@@ -217,7 +217,7 @@
 			);
 			dependencies = (
 			);
-			name = "sample03-character-macos";
+			name = "sample03-character-macosx";
 			productName = "sample03-character";
 			productReference = 42CCD56C146EC4B300353661 /* sample03-character.app */;
 			productType = "com.apple.product-type.application";
@@ -260,7 +260,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42CCD56B146EC4B300353661 /* sample03-character-macos */,
+				42CCD56B146EC4B300353661 /* sample03-character-macosx */,
 				5B43D1C614C35F4C008A5D9D /* sample03-character-ios */,
 			);
 		};
@@ -398,12 +398,12 @@
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "sample03-character-macos.plist";
+				INFOPLIST_FILE = "sample03-character-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample03-character";
@@ -425,12 +425,12 @@
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "sample03-character-macos.plist";
+				INFOPLIST_FILE = "sample03-character-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample03-character";
@@ -457,9 +457,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample03-character";
@@ -489,9 +489,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample03-character";
@@ -514,7 +514,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character-macos" */ = {
+		42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character-macosx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				42CCD58B146EC4B300353661 /* Debug */,

@@ -75,7 +75,7 @@
 		42CD0E6E147D8FF60000361E /* Frustum.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DDB147D8FF50000361E /* Frustum.h */; };
 		42CD0E6F147D8FF60000361E /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DDC147D8FF50000361E /* Game.cpp */; };
 		42CD0E70147D8FF60000361E /* Game.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DDD147D8FF50000361E /* Game.h */; };
-		42CD0E71147D8FF60000361E /* gameplay-main-macos.mm in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DDE147D8FF50000361E /* gameplay-main-macos.mm */; };
+		42CD0E71147D8FF60000361E /* gameplay-main-macosx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DDE147D8FF50000361E /* gameplay-main-macosx.mm */; };
 		42CD0E74147D8FF60000361E /* gameplay.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DE1147D8FF50000361E /* gameplay.h */; };
 		42CD0E77147D8FF60000361E /* Joint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DE4147D8FF50000361E /* Joint.cpp */; };
 		42CD0E78147D8FF60000361E /* Joint.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DE5147D8FF50000361E /* Joint.h */; };
@@ -124,7 +124,7 @@
 		42CD0EA3147D8FF60000361E /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E16147D8FF50000361E /* Plane.cpp */; };
 		42CD0EA4147D8FF60000361E /* Plane.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E17147D8FF50000361E /* Plane.h */; };
 		42CD0EA5147D8FF60000361E /* Platform.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E19147D8FF50000361E /* Platform.h */; };
-		42CD0EA6147D8FF60000361E /* PlatformMacOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E1A147D8FF50000361E /* PlatformMacOS.mm */; };
+		42CD0EA6147D8FF60000361E /* PlatformMacOSX.mm in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E1A147D8FF50000361E /* PlatformMacOSX.mm */; };
 		42CD0EA9147D8FF60000361E /* Properties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E1D147D8FF50000361E /* Properties.cpp */; };
 		42CD0EAA147D8FF60000361E /* Properties.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E1E147D8FF50000361E /* Properties.h */; };
 		42CD0EAB147D8FF60000361E /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E1F147D8FF50000361E /* Quaternion.cpp */; };
@@ -399,12 +399,12 @@
 		428390971489D6E800E2B2F5 /* SceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLoader.cpp; path = src/SceneLoader.cpp; sourceTree = SOURCE_ROOT; };
 		428390981489D6E800E2B2F5 /* SceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneLoader.h; path = src/SceneLoader.h; sourceTree = SOURCE_ROOT; };
 		42C932AF14919FD10098216A /* Game.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Game.inl; path = src/Game.inl; sourceTree = SOURCE_ROOT; };
-		42CCD555146EC1EB00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
-		42CD0DA6147D8EA80000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../external-deps/bullet/lib/macos/libbullet.a"; sourceTree = "<group>"; };
-		42CD0DA7147D8EA80000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../external-deps/oggvorbis/lib/macos/libogg.a"; sourceTree = "<group>"; };
-		42CD0DA8147D8EA80000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/oggvorbis/lib/macos/libvorbis.a"; sourceTree = "<group>"; };
-		42CD0DA9147D8EA80000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../external-deps/oggvorbis/lib/macos/libvorbisenc.a"; sourceTree = "<group>"; };
-		42CD0DAA147D8EA80000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../external-deps/oggvorbis/lib/macos/libvorbisfile.a"; sourceTree = "<group>"; };
+		42CCD555146EC1EB00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		42CD0DA6147D8EA80000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../external-deps/bullet/lib/macosx/libbullet.a"; sourceTree = "<group>"; };
+		42CD0DA7147D8EA80000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../external-deps/oggvorbis/lib/macosx/libogg.a"; sourceTree = "<group>"; };
+		42CD0DA8147D8EA80000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/oggvorbis/lib/macosx/libvorbis.a"; sourceTree = "<group>"; };
+		42CD0DA9147D8EA80000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../external-deps/oggvorbis/lib/macosx/libvorbisenc.a"; sourceTree = "<group>"; };
+		42CD0DAA147D8EA80000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../external-deps/oggvorbis/lib/macosx/libvorbisfile.a"; sourceTree = "<group>"; };
 		42CD0DB1147D8FF50000361E /* Animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Animation.cpp; path = src/Animation.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0DB2147D8FF50000361E /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Animation.h; path = src/Animation.h; sourceTree = SOURCE_ROOT; };
 		42CD0DB3147D8FF50000361E /* AnimationClip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AnimationClip.cpp; path = src/AnimationClip.cpp; sourceTree = SOURCE_ROOT; };
@@ -450,7 +450,7 @@
 		42CD0DDB147D8FF50000361E /* Frustum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Frustum.h; path = src/Frustum.h; sourceTree = SOURCE_ROOT; };
 		42CD0DDC147D8FF50000361E /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = src/Game.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0DDD147D8FF50000361E /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Game.h; path = src/Game.h; sourceTree = SOURCE_ROOT; };
-		42CD0DDE147D8FF50000361E /* gameplay-main-macos.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-macos.mm"; path = "src/gameplay-main-macos.mm"; sourceTree = SOURCE_ROOT; };
+		42CD0DDE147D8FF50000361E /* gameplay-main-macosx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-macosx.mm"; path = "src/gameplay-main-macosx.mm"; sourceTree = SOURCE_ROOT; };
 		42CD0DDF147D8FF50000361E /* gameplay-main-qnx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-qnx.cpp"; path = "src/gameplay-main-qnx.cpp"; sourceTree = SOURCE_ROOT; };
 		42CD0DE0147D8FF50000361E /* gameplay-main-win32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-win32.cpp"; path = "src/gameplay-main-win32.cpp"; sourceTree = SOURCE_ROOT; };
 		42CD0DE1147D8FF50000361E /* gameplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gameplay.h; path = src/gameplay.h; sourceTree = SOURCE_ROOT; };
@@ -508,7 +508,7 @@
 		42CD0E17147D8FF50000361E /* Plane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Plane.h; path = src/Plane.h; sourceTree = SOURCE_ROOT; };
 		42CD0E18147D8FF50000361E /* Plane.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Plane.inl; path = src/Plane.inl; sourceTree = SOURCE_ROOT; };
 		42CD0E19147D8FF50000361E /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Platform.h; path = src/Platform.h; sourceTree = SOURCE_ROOT; };
-		42CD0E1A147D8FF50000361E /* PlatformMacOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformMacOS.mm; path = src/PlatformMacOS.mm; sourceTree = SOURCE_ROOT; };
+		42CD0E1A147D8FF50000361E /* PlatformMacOSX.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformMacOSX.mm; path = src/PlatformMacOSX.mm; sourceTree = SOURCE_ROOT; };
 		42CD0E1B147D8FF50000361E /* PlatformQNX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformQNX.cpp; path = src/PlatformQNX.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0E1C147D8FF50000361E /* PlatformWin32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformWin32.cpp; path = src/PlatformWin32.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0E1D147D8FF50000361E /* Properties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Properties.cpp; path = src/Properties.cpp; sourceTree = SOURCE_ROOT; };
@@ -740,7 +740,7 @@
 				42CD0DE1147D8FF50000361E /* gameplay.h */,
 				5BB0823814C6FEB10019975F /* gameplay-main-android.cpp */,
 				42CD0DE0147D8FF50000361E /* gameplay-main-win32.cpp */,
-				42CD0DDE147D8FF50000361E /* gameplay-main-macos.mm */,
+				42CD0DDE147D8FF50000361E /* gameplay-main-macosx.mm */,
 				5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */,
 				42CD0DDF147D8FF50000361E /* gameplay-main-qnx.cpp */,
 				4208DEE614A4079F00D3C511 /* Image.cpp */,
@@ -818,7 +818,7 @@
 				42CD0E19147D8FF50000361E /* Platform.h */,
 				5BB0823914C6FEB10019975F /* PlatformAndroid.cpp */,
 				42CD0E1C147D8FF50000361E /* PlatformWin32.cpp */,
-				42CD0E1A147D8FF50000361E /* PlatformMacOS.mm */,
+				42CD0E1A147D8FF50000361E /* PlatformMacOSX.mm */,
 				5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */,
 				42CD0E1B147D8FF50000361E /* PlatformQNX.cpp */,
 				42CD0E1D147D8FF50000361E /* Properties.cpp */,
@@ -1153,9 +1153,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4234D99914686C52003031B3 /* gameplay-macos */ = {
+		4234D99914686C52003031B3 /* gameplay-macosx */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4234D9AB14686C52003031B3 /* Build configuration list for PBXNativeTarget "gameplay-macos" */;
+			buildConfigurationList = 4234D9AB14686C52003031B3 /* Build configuration list for PBXNativeTarget "gameplay-macosx" */;
 			buildPhases = (
 				4234D99614686C52003031B3 /* Sources */,
 				4234D99714686C52003031B3 /* Frameworks */,
@@ -1165,7 +1165,7 @@
 			);
 			dependencies = (
 			);
-			name = "gameplay-macos";
+			name = "gameplay-macosx";
 			productName = gameplay;
 			productReference = 4234D99A14686C52003031B3 /* libgameplay.a */;
 			productType = "com.apple.product-type.library.static";
@@ -1207,7 +1207,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4234D99914686C52003031B3 /* gameplay-macos */,
+				4234D99914686C52003031B3 /* gameplay-macosx */,
 				5B04C52B14BFCFE100EB0071 /* gameplay-ios */,
 			);
 		};
@@ -1239,7 +1239,7 @@
 				42CD0E6B147D8FF60000361E /* FrameBuffer.cpp in Sources */,
 				42CD0E6D147D8FF60000361E /* Frustum.cpp in Sources */,
 				42CD0E6F147D8FF60000361E /* Game.cpp in Sources */,
-				42CD0E71147D8FF60000361E /* gameplay-main-macos.mm in Sources */,
+				42CD0E71147D8FF60000361E /* gameplay-main-macosx.mm in Sources */,
 				42CD0E77147D8FF60000361E /* Joint.cpp in Sources */,
 				42CD0E79147D8FF60000361E /* Light.cpp in Sources */,
 				42CD0E7B147D8FF60000361E /* Material.cpp in Sources */,
@@ -1263,7 +1263,7 @@
 				42CD0E9F147D8FF60000361E /* PhysicsSocketConstraint.cpp in Sources */,
 				42CD0EA1147D8FF60000361E /* PhysicsSpringConstraint.cpp in Sources */,
 				42CD0EA3147D8FF60000361E /* Plane.cpp in Sources */,
-				42CD0EA6147D8FF60000361E /* PlatformMacOS.mm in Sources */,
+				42CD0EA6147D8FF60000361E /* PlatformMacOSX.mm in Sources */,
 				42CD0EA9147D8FF60000361E /* Properties.cpp in Sources */,
 				42CD0EAB147D8FF60000361E /* Quaternion.cpp in Sources */,
 				42CD0EAD147D8FF60000361E /* Ray.cpp in Sources */,
@@ -1449,9 +1449,9 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/oggvorbis/lib/macosx\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1491,9 +1491,9 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/oggvorbis/lib/macosx\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
@@ -1610,7 +1610,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4234D9AB14686C52003031B3 /* Build configuration list for PBXNativeTarget "gameplay-macos" */ = {
+		4234D9AB14686C52003031B3 /* Build configuration list for PBXNativeTarget "gameplay-macosx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4234D9A914686C52003031B3 /* Debug */,
