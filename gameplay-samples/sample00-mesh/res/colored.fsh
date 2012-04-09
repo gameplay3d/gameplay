@@ -1,5 +1,5 @@
 #ifdef OPENGL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 varying vec4 v_color;
