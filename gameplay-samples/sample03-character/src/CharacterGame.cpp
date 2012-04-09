@@ -36,6 +36,9 @@ void CharacterGame::initialize()
     // Load scene.
     _scene = Scene::load("res/scene.scene");
 
+    // Update the aspect ratio for our scene's camera to match the current device resolution
+    _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
+
     // Store character node.
     Node* node = _scene->findNode("BoyCharacter");
     PhysicsRigidBody::Parameters params;
