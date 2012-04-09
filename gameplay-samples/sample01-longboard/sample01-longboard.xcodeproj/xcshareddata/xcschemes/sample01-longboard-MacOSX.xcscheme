@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "42CCD48D146D80DA00353661"
                BuildableName = "sample01-longboard.app"
-               BlueprintName = "sample01-longboard-macos"
+               BlueprintName = "sample01-longboard-macosx"
                ReferencedContainer = "container:sample01-longboard.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,7 +34,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD48D146D80DA00353661"
             BuildableName = "sample01-longboard.app"
-            BlueprintName = "sample01-longboard-macos"
+            BlueprintName = "sample01-longboard-macosx"
             ReferencedContainer = "container:sample01-longboard.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -53,7 +53,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD48D146D80DA00353661"
             BuildableName = "sample01-longboard.app"
-            BlueprintName = "sample01-longboard-macos"
+            BlueprintName = "sample01-longboard-macosx"
             ReferencedContainer = "container:sample01-longboard.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -71,7 +71,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD48D146D80DA00353661"
             BuildableName = "sample01-longboard.app"
-            BlueprintName = "sample01-longboard-macos"
+            BlueprintName = "sample01-longboard-macosx"
             ReferencedContainer = "container:sample01-longboard.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

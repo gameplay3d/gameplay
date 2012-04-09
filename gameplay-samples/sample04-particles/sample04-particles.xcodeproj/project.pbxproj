@@ -43,7 +43,7 @@
 
 /* Begin PBXFileReference section */
 		42438B521491AD2000D218B8 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
-		42C932BC1491A0DB0098216A /* sample04-particles-MacOSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "sample04-particles-MacOSX.app"; path = "sample04-particles-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C932BC1491A0DB0098216A /* sample04-particles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "sample04-particles.app"; path = "sample04-particles.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C932C01491A0DB0098216A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42C932ED1491A4CB0098216A /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		42C932EF1491A5160098216A /* ParticlesGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticlesGame.cpp; path = src/ParticlesGame.cpp; sourceTree = SOURCE_ROOT; };
@@ -52,15 +52,15 @@
 		42C933161491A5EB0098216A /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		42C9331C1491A6750098216A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42C9331E1491A67F0098216A /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
-		42C933201491A6C70098216A /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../..//external-deps/bullet/lib/macos/libbullet.a"; sourceTree = "<group>"; };
-		42C933221491A6E50098216A /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../..//external-deps/oggvorbis/lib/macos/libogg.a"; sourceTree = "<group>"; };
-		42C933231491A6E50098216A /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../..//external-deps/oggvorbis/lib/macos/libvorbis.a"; sourceTree = "<group>"; };
-		42C933241491A6E50098216A /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../..//external-deps/oggvorbis/lib/macos/libvorbisenc.a"; sourceTree = "<group>"; };
-		42C933251491A6E50098216A /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../..//external-deps/oggvorbis/lib/macos/libvorbisfile.a"; sourceTree = "<group>"; };
-		42C9332A1491A7390098216A /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../..//external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
+		42C933201491A6C70098216A /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../..//external-deps/bullet/lib/macosx/libbullet.a"; sourceTree = "<group>"; };
+		42C933221491A6E50098216A /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../..//external-deps/oggvorbis/lib/macosx/libogg.a"; sourceTree = "<group>"; };
+		42C933231491A6E50098216A /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../..//external-deps/oggvorbis/lib/macosx/libvorbis.a"; sourceTree = "<group>"; };
+		42C933241491A6E50098216A /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../..//external-deps/oggvorbis/lib/macosx/libvorbisenc.a"; sourceTree = "<group>"; };
+		42C933251491A6E50098216A /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../..//external-deps/oggvorbis/lib/macosx/libvorbisfile.a"; sourceTree = "<group>"; };
+		42C9332A1491A7390098216A /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../..//external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42C9332D1491A7810098216A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		5B61611214CCC2200073B857 /* sample04-particles-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample04-particles-macos.plist"; sourceTree = "<group>"; };
-		5B61612C14CCC24C0073B857 /* sample04-particles-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "sample04-particles-iOS.app"; path = "sample04-particles-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B61611214CCC2200073B857 /* sample04-particles-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample04-particles-macosx.plist"; sourceTree = "<group>"; };
+		5B61612C14CCC24C0073B857 /* sample04-particles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "sample04-particles.app"; path = "sample04-particles.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B61612E14CCC24D0073B857 /* sample04-particles-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "sample04-particles-ios.plist"; sourceTree = "<group>"; };
 		5BAF2067152F2DDD003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF2068152F2DDD003E2AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -117,7 +117,7 @@
 		42C932B11491A0DB0098216A = {
 			isa = PBXGroup;
 			children = (
-				5B61611214CCC2200073B857 /* sample04-particles-macos.plist */,
+				5B61611214CCC2200073B857 /* sample04-particles-macosx.plist */,
 				5B61612E14CCC24D0073B857 /* sample04-particles-ios.plist */,
 				42C932ED1491A4CB0098216A /* icon.png */,
 				42C932F21491A53E0098216A /* res */,
@@ -131,8 +131,8 @@
 		42C932BD1491A0DB0098216A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				42C932BC1491A0DB0098216A /* sample04-particles-MacOSX.app */,
-				5B61612C14CCC24C0073B857 /* sample04-particles-iOS.app */,
+				42C932BC1491A0DB0098216A /* sample04-particles.app */,
+				5B61612C14CCC24C0073B857 /* sample04-particles.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -197,9 +197,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		42C932BB1491A0DB0098216A /* sample04-particles-macos */ = {
+		42C932BB1491A0DB0098216A /* sample04-particles-macosx */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "sample04-particles-macos" */;
+			buildConfigurationList = 42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "sample04-particles-macosx" */;
 			buildPhases = (
 				42C932B81491A0DB0098216A /* Sources */,
 				42C932B91491A0DB0098216A /* Frameworks */,
@@ -211,14 +211,14 @@
 			);
 			dependencies = (
 			);
-			name = "sample04-particles-macos";
+			name = "sample04-particles-macosx";
 			productName = "sample04-particles";
-			productReference = 42C932BC1491A0DB0098216A /* sample04-particles-MacOSX.app */;
+			productReference = 42C932BC1491A0DB0098216A /* sample04-particles.app */;
 			productType = "com.apple.product-type.application";
 		};
 		5B61611414CCC24C0073B857 /* sample04-particles-ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5B61612914CCC24C0073B857 /* Build configuration list for PBXNativeTarget "sample04-particles-ios" */;
+			buildConfigurationList = 5B61612914CCC24C0073B857 /* Build configuration list for PBXNativeTarget "sample04-particles" */;
 			buildPhases = (
 				5B61611514CCC24C0073B857 /* Sources */,
 				5B61611714CCC24C0073B857 /* Frameworks */,
@@ -232,7 +232,7 @@
 			);
 			name = "sample04-particles-ios";
 			productName = "sample04-particles";
-			productReference = 5B61612C14CCC24C0073B857 /* sample04-particles-iOS.app */;
+			productReference = 5B61612C14CCC24C0073B857 /* sample04-particles.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -255,7 +255,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42C932BB1491A0DB0098216A /* sample04-particles-macos */,
+				42C932BB1491A0DB0098216A /* sample04-particles-macosx */,
 				5B61611414CCC24C0073B857 /* sample04-particles-ios */,
 			);
 		};
@@ -381,7 +381,7 @@
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PKGINFO_FILE = YES;
-				INFOPLIST_FILE = "sample04-particles-macos.plist";
+				INFOPLIST_FILE = "sample04-particles-macosx.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -405,7 +405,7 @@
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PKGINFO_FILE = YES;
-				INFOPLIST_FILE = "sample04-particles-macos.plist";
+				INFOPLIST_FILE = "sample04-particles-macosx.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -425,12 +425,12 @@
 					"../..//external-deps/bullet/include",
 					"../..//external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "sample04-particles-macos.plist";
+				INFOPLIST_FILE = "sample04-particles-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"../..//external-deps/libpng/lib/macos\"",
-					"\"../..//external-deps/bullet/lib/macos\"",
-					"\"../..//external-deps/oggvorbis/lib/macos\"",
+					"\"../..//external-deps/libpng/lib/macosx\"",
+					"\"../..//external-deps/bullet/lib/macosx\"",
+					"\"../..//external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -451,12 +451,12 @@
 					"../..//external-deps/bullet/include",
 					"../..//external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "sample04-particles-macos.plist";
+				INFOPLIST_FILE = "sample04-particles-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"../..//external-deps/libpng/lib/macos\"",
-					"\"../..//external-deps/bullet/lib/macos\"",
-					"\"../..//external-deps/oggvorbis/lib/macos\"",
+					"\"../..//external-deps/libpng/lib/macosx\"",
+					"\"../..//external-deps/bullet/lib/macosx\"",
+					"\"../..//external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -526,7 +526,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "sample04-particles-macos" */ = {
+		42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "sample04-particles-macosx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				42C932DB1491A0DB0098216A /* Debug */,
