@@ -17,7 +17,7 @@ int drawDebug = 0;
 bool moveBall = false;
 
 CharacterGame::CharacterGame()
-    : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _animationState(0), _rotateX(0)
+    : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _animationState(0), _rotateX(0), _materialParameterAlpha(NULL)
 {
 }
 
@@ -51,6 +51,10 @@ void CharacterGame::initialize()
 
     // Store character mesh node.
     _characterMeshNode = node->findNode("BoyMesh");
+
+    // Store the alpha material parameter from the character's model.
+    _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_alpha");
+    _materialParameterAlpha->setValue(1.0f);
 
     // Set a ghost object on our camera node to assist in camera occlusion adjustments
     _scene->findNode("Camera")->setCollisionObject(PhysicsCollisionObject::GHOST_OBJECT, PhysicsCollisionShape::sphere(0.5f));
@@ -445,20 +449,17 @@ void CharacterGame::adjustCamera(long elapsedTime)
 
     if (occlusion)
     {
-        // TODO: When we change the character over to use a single material+texture, this code will be much cleaner (no material parts and can store MaterialParameter)
         float d = _scene->getActiveCamera()->getNode()->getTranslationWorld().distance(_characterMeshNode->getTranslationWorld());
         if (d < 10)
         {
             float alpha = d / 10.0f;
             _characterMeshNode->setTransparent(true);
-            for (unsigned int i = 0; i < 4; i++)
-                _characterMeshNode->getModel()->getMaterial(i)->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_alpha")->setValue(alpha);
+            _materialParameterAlpha->setValue(alpha);
         }
         else
         {
             _characterMeshNode->setTransparent(false);
-            for (unsigned int i = 0; i < 4; i++)
-                _characterMeshNode->getModel()->getMaterial(i)->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_alpha")->setValue(1.0f);
+            _materialParameterAlpha->setValue(1.0f);
         }
     }
 }
