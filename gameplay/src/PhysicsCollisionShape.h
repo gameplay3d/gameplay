@@ -49,13 +49,12 @@ public:
 
     public:
 
-        ~Definition();
-
-    private:
-
         Definition();
         Definition(const Definition& definition);
         Definition& operator=(const Definition& definition);
+        ~Definition();
+
+    private:
 
         /**
          * Creates a PhysicsCollisionShape#Definition object from the given properties object (for the given node).

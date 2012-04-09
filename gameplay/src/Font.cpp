@@ -689,7 +689,7 @@ void Font::measureText(const char* text, unsigned int size, unsigned int* width,
     }
 }
 
-void Font::measureText(const char* text, const Rectangle& viewport, unsigned int size, Rectangle* out, Justify justify, bool wrap, bool ignoreClip)
+void Font::measureText(const char* text, const Rectangle& clip, unsigned int size, Rectangle* out, Justify justify, bool wrap, bool ignoreClip)
 {
     float scale = (float)size / _size;
     Justify vAlign = static_cast<Justify>(justify & 0xF0);
@@ -709,8 +709,8 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
     std::vector<Vector2> lines;
 
     unsigned int lineWidth = 0;
-    int yPos = viewport.y;
-    const float viewportHeight = viewport.height - size;
+    int yPos = clip.y;
+    const float viewportHeight = clip.height - size;
 
     if (wrap)
     {
@@ -739,8 +739,8 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
                         if (lineWidth > 0)
                         {
                             // Determine horizontal position and width.
-                            int hWhitespace = viewport.width - lineWidth;
-                            int xPos = viewport.x;
+                            int hWhitespace = clip.width - lineWidth;
+                            int xPos = clip.x;
                             if (hAlign == ALIGN_HCENTER)
                             {
                                 xPos += hWhitespace / 2;
@@ -791,14 +791,14 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
             unsigned int tokenWidth = getTokenWidth(token, tokenLength, size, scale);
 
             // Wrap if necessary.
-            if (lineWidth + tokenWidth + delimWidth > viewport.width)
+            if (lineWidth + tokenWidth + delimWidth > clip.width)
             {
                 // Add line-height to vertical cursor.
                 yPos += size;
 
                 // Determine horizontal position and width.
-                int hWhitespace = viewport.width - lineWidth;
-                int xPos = viewport.x;
+                int hWhitespace = clip.width - lineWidth;
+                int xPos = clip.x;
                 if (hAlign == ALIGN_HCENTER)
                 {
                     xPos += hWhitespace / 2;
@@ -857,8 +857,8 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
             lineWidth = getTokenWidth(token, tokenLength, size, scale);
             
             // Determine horizontal position and width.
-            int xPos = viewport.x;
-            int hWhitespace = viewport.width - lineWidth;
+            int xPos = clip.x;
+            int hWhitespace = clip.width - lineWidth;
             if (hAlign == ALIGN_HCENTER)
             {
                 xPos += hWhitespace / 2;
@@ -880,8 +880,8 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
     if (wrap)
     {
         // Record the size of the last line.
-        int hWhitespace = viewport.width - lineWidth;
-        int xPos = viewport.x;
+        int hWhitespace = clip.width - lineWidth;
+        int xPos = clip.x;
         if (hAlign == ALIGN_HCENTER)
         {
             xPos += hWhitespace / 2;
@@ -895,9 +895,9 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
     }
 
     int x = INT_MAX;
-    int y = viewport.y;
+    int y = clip.y;
     unsigned int width = 0;
-    int height = yPos - viewport.y;
+    int height = yPos - clip.y;
 
     // Calculate top of text without clipping.
     int vWhitespace = viewportHeight - height;
@@ -914,10 +914,10 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
     int clippedBottom = 0;
     if (!ignoreClip)
     {
-        // Trim rect to fit text that would actually be drawn within the given viewport.
-        if (y >= viewport.y)
+        // Trim rect to fit text that would actually be drawn within the given clip.
+        if (y >= clip.y)
         {
-            // Text goes off the bottom of the viewport.
+            // Text goes off the bottom of the clip.
             clippedBottom = (height - viewportHeight) / size + 1;
             if (clippedBottom > 0)
             {
@@ -938,8 +938,8 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
         }
         else
         {
-            // Text goes above the top of the viewport.
-            clippedTop = (viewport.y - y) / size + 1;
+            // Text goes above the top of the clip.
+            clippedTop = (clip.y - y) / size + 1;
             if (clippedTop < 0)
             {
                 clippedTop = 0;
@@ -995,10 +995,10 @@ void Font::measureText(const char* text, const Rectangle& viewport, unsigned int
 
     if (!ignoreClip)
     {
-        // Guarantee that the output rect will fit within the viewport.
-        out->x = (x >= viewport.x)? x : viewport.x;
-        out->y = (y >= viewport.y)? y : viewport.y;
-        out->width = (width <= viewport.width)? width : viewport.width;
+        // Guarantee that the output rect will fit within the clip.
+        out->x = (x >= clip.x)? x : clip.x;
+        out->y = (y >= clip.y)? y : clip.y;
+        out->width = (width <= clip.width)? width : clip.width;
         out->height = (height <= viewportHeight)? height : viewportHeight;
     }
     else
@@ -1563,7 +1563,7 @@ void Font::addLineInfo(const Rectangle& area, int lineWidth, int lineLength, Jus
     }
 }
 
-SpriteBatch* Font::getSpriteBatch()
+SpriteBatch* Font::getSpriteBatch() const
 {
     return _batch;
 }

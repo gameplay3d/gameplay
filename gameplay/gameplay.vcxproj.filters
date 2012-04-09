@@ -610,10 +610,10 @@
     <None Include="res\shaders\bumped-specular.fsh">
       <Filter>res\shaders</Filter>
     </None>
-    <None Include="src\gameplay-main-macos.mm">
+    <None Include="src\gameplay-main-macosx.mm">
       <Filter>src</Filter>
     </None>
-    <None Include="src\PlatformMacOS.mm">
+    <None Include="src\PlatformMacOSX.mm">
       <Filter>src</Filter>
     </None>
     <None Include="res\textures\particle-default.png">

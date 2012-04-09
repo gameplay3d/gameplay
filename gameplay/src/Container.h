@@ -73,7 +73,7 @@ public:
     /**
      * Remove a control with the given ID.
      *
-     * @param ID The ID of the control to remove.
+     * @param id The ID of the control to remove.
      */
     void removeControl(const char* id);
 

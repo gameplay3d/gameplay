@@ -1,6 +1,6 @@
-## GamePlay Encoder
-GamePlay Encoder is a command-line tool for encoding/packaging games assets like fonts and 3D scene files
-into a binary package file format for the GamePlay runtime framework. 
+## gameplay-encoder
+Command-line tool for encoding games assets like true-type fonts and 3D scene files
+into a binary package file format for the gameplay 3D game framework runtime. 
 
 ## TrueType Font Support
 TrueType Fonts conversion is enabled/built-in by default into gameplay-encoder via freetype 2 library.
@@ -42,10 +42,10 @@ You must then rebuild gameplay-encoder with the follow platform/tooling instruct
 - Build gameplay-encoder
 
 ## Binary Format
-The GamePlay binary package format is well defined in the gameplay-encoder/gameplay-binary.txt file.
+The gameplay binary package format is well defined in the gameplay-encoder/gameplay-binary.txt file.
 
 ## Binary Loading
-GamePlay binary package files can easily be loaded using the gameplay/Package.h which is part
+Binary package files can easily be loaded using the gameplay/Package.h which is part
 of the GamePlay runtime framework.
 
 ## Disclaimer
