@@ -60,6 +60,7 @@ long getMachTimeInMilliseconds()
 
 @end
 
+static View* __view = NULL;
 
 @implementation View
 
@@ -192,7 +193,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     [lock unlock];
 }
 
-- (void) mouse: (Mouse::MouseEvent) mouseEvent orTouchEvent: (Touch::TouchEvent) touchEvent atX: (int) x y: (int) y s: (int) s 
+- (void) mouse: (Mouse::MouseEvent) mouseEvent orTouchEvent: (Touch::TouchEvent) touchEvent x: (float) x y: (float) y s: (int) s 
 {
     if (!Game::getInstance()->mouseEvent(mouseEvent, x, y, s))
     {
@@ -202,38 +203,37 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) mouseDown: (NSEvent*) event
 {
-    NSPoint point = [event locationInWindow];
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     __leftMouseDown = true;
-    [self mouse: Mouse::MOUSE_PRESS_LEFT_BUTTON orTouchEvent: Touch::TOUCH_PRESS atX: WINDOW_HEIGHT - point.x y: point.y s: 0];
-    
+    [self mouse: Mouse::MOUSE_PRESS_LEFT_BUTTON orTouchEvent: Touch::TOUCH_PRESS x: point.x y: WINDOW_HEIGHT - point.y s: 0];
 }
 
 - (void) mouseUp: (NSEvent*) event
 {
-    NSPoint point = [event locationInWindow];
+     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     __leftMouseDown = false;
-    [self mouse: Mouse::MOUSE_RELEASE_LEFT_BUTTON orTouchEvent: Touch::TOUCH_RELEASE atX: point.x y: WINDOW_HEIGHT - point.y s: 0];
+    [self mouse: Mouse::MOUSE_RELEASE_LEFT_BUTTON orTouchEvent: Touch::TOUCH_RELEASE x: point.x y: WINDOW_HEIGHT - point.y s: 0];
 }
 
 - (void)mouseMoved:(NSEvent *) event 
 {
-    NSPoint point = [event locationInWindow];
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
 {
-    NSPoint point = [event locationInWindow];
+     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     if (__leftMouseDown)
     {
-        [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE atX: point.x y: WINDOW_HEIGHT - point.y s: 0];
+        [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE x: point.x y: WINDOW_HEIGHT - point.y s: 0];
     }
 }
 
 - (void) rightMouseDown: (NSEvent*) event
 {
     __rightMouseDown = true;
-     NSPoint point = [event locationInWindow];
+     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     __lx = point.x;
     __ly = WINDOW_HEIGHT - point.y;    
     _game->mouseEvent(Mouse::MOUSE_PRESS_RIGHT_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
@@ -248,7 +248,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) rightMouseDragged: (NSEvent*) event
 {
-    NSPoint point = [event locationInWindow];
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     if (__rightMouseDown)
     {
         // Update the pitch and roll by adding the scaled deltas.
@@ -272,20 +272,20 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void)otherMouseDown: (NSEvent *) event 
 {
     __otherMouseDown = true;
-    NSPoint point = [event locationInWindow];
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     _game->mouseEvent(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void)otherMouseUp: (NSEvent *) event 
 {
     __otherMouseDown = false;
-    NSPoint point = [event locationInWindow];
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     _game->mouseEvent(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
 - (void)otherMouseDragged: (NSEvent *) event 
 {
-    NSPoint point = [event locationInWindow];
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     _game->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
 }
 
@@ -296,7 +296,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void)scrollWheel: (NSEvent *) event 
 {
-    NSPoint point = [event locationInWindow];
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     Game::getInstance()->mouseEvent(Mouse::MOUSE_WHEEL, point.x, WINDOW_HEIGHT - point.y, (int)([event deltaY] * 10.0f));
 }
 
@@ -558,7 +558,6 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
 
 @end
 
-static View* __view = NULL;
 
 namespace gameplay
 {
