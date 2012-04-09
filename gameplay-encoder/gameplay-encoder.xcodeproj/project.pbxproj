@@ -74,7 +74,7 @@
 
 /* Begin PBXFileReference section */
 		42475CE6147208A000610A6A /* gameplay-encoder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "gameplay-encoder"; sourceTree = BUILT_PRODUCTS_DIR; };
-		42475D7B14720ECE00610A6A /* libdom.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdom.a; path = "../external-deps/collada-dom/lib/macos/libdom.a"; sourceTree = "<group>"; };
+		42475D7B14720ECE00610A6A /* libdom.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdom.a; path = "../external-deps/collada-dom/lib/macosx/libdom.a"; sourceTree = "<group>"; };
 		4251B128152D044B002F6199 /* Curve.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Curve.cpp; path = src/Curve.cpp; sourceTree = SOURCE_ROOT; };
 		4251B129152D044B002F6199 /* Curve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Curve.h; path = src/Curve.h; sourceTree = SOURCE_ROOT; };
 		4251B12A152D044B002F6199 /* Curve.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Curve.inl; path = src/Curve.inl; sourceTree = SOURCE_ROOT; };
@@ -165,13 +165,13 @@
 		42C8EE0714724CD700E43619 /* Vertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vertex.h; path = src/Vertex.h; sourceTree = SOURCE_ROOT; };
 		42C8EE0814724CD700E43619 /* VertexElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexElement.cpp; path = src/VertexElement.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EE0914724CD700E43619 /* VertexElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexElement.h; path = src/VertexElement.h; sourceTree = SOURCE_ROOT; };
-		42C8EE341472B60100E43619 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = "../external-deps/freetype2/lib/macos/libfreetype.a"; sourceTree = "<group>"; };
+		42C8EE341472B60100E43619 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = "../external-deps/freetype2/lib/macosx/libfreetype.a"; sourceTree = "<group>"; };
 		42C8EE361472D7E700E43619 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		42C8EE381472DAA300E43619 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		42C8EE3A1472DAAE00E43619 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
-		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macos/libpcre.a"; sourceTree = "<group>"; };
-		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macos/libpcrecpp.a"; sourceTree = "<group>"; };
-		5BCD0642152CFC3C0071FAB5 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
+		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macosx/libpcre.a"; sourceTree = "<group>"; };
+		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macosx/libpcrecpp.a"; sourceTree = "<group>"; };
+		5BCD0642152CFC3C0071FAB5 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -516,10 +516,10 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/freetype2/lib/macos\"",
-					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macos\"",
-					"\"$(SRCROOT)/../external-deps/pcre/lib/macos\"",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/macos\"",
+					"\"$(SRCROOT)/../external-deps/freetype2/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/pcre/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
 					"\"$(SRCROOT)\"",
 				);
 				MACH_O_TYPE = mh_execute;
@@ -548,10 +548,10 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/freetype2/lib/macos\"",
-					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macos\"",
-					"\"$(SRCROOT)/../external-deps/pcre/lib/macos\"",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/macos\"",
+					"\"$(SRCROOT)/../external-deps/freetype2/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/pcre/lib/macosx\"",
+					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
 					"\"$(SRCROOT)\"",
 				);
 				MACH_O_TYPE = mh_execute;
