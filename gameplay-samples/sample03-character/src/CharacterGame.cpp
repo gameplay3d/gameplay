@@ -17,7 +17,7 @@ int drawDebug = 0;
 bool moveBall = false;
 
 CharacterGame::CharacterGame()
-    : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _animationState(0), _rotateX(0)
+    : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _animationState(0), _rotateX(0), _materialParameterAlpha(NULL)
 {
 }
 
@@ -41,9 +41,7 @@ void CharacterGame::initialize()
 
     // Store character node.
     Node* node = _scene->findNode("BoyCharacter");
-    PhysicsRigidBody::Parameters params;
-    params.mass = 20.0f;
-    node->setTranslationY(5.0f);
+    PhysicsRigidBody::Parameters params(20.0f);
     node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule(1.2f, 5.0f, Vector3(0, 2.5, 0), true), &params);
     _character = static_cast<PhysicsCharacter*>(node->getCollisionObject());
     _character->setMaxStepHeight(0.0f);
@@ -51,6 +49,9 @@ void CharacterGame::initialize()
 
     // Store character mesh node.
     _characterMeshNode = node->findNode("BoyMesh");
+
+    // Store the alpha material parameter from the character's model.
+    _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_globalAlpha");
 
     // Set a ghost object on our camera node to assist in camera occlusion adjustments
     _scene->findNode("Camera")->setCollisionObject(PhysicsCollisionObject::GHOST_OBJECT, PhysicsCollisionShape::sphere(0.5f));
@@ -443,23 +444,19 @@ void CharacterGame::adjustCamera(long elapsedTime)
 
     } while (true);
 
+    // If the character is closer than 10 world units to the camera, apply transparency to the character
+    // so he does not obstruct the view.
     if (occlusion)
     {
-        // TODO: When we change the character over to use a single material+texture, this code will be much cleaner (no material parts and can store MaterialParameter)
         float d = _scene->getActiveCamera()->getNode()->getTranslationWorld().distance(_characterMeshNode->getTranslationWorld());
-        if (d < 10)
-        {
-            float alpha = d / 10.0f;
-            _characterMeshNode->setTransparent(true);
-            for (unsigned int i = 0; i < 4; i++)
-                _characterMeshNode->getModel()->getMaterial(i)->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_alpha")->setValue(alpha);
-        }
-        else
-        {
-            _characterMeshNode->setTransparent(false);
-            for (unsigned int i = 0; i < 4; i++)
-                _characterMeshNode->getModel()->getMaterial(i)->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_alpha")->setValue(1.0f);
-        }
+        float alpha = d < 10 ? (d * 0.1f) : 1.0f;
+        _characterMeshNode->setTransparent(alpha < 1.0f);
+        _materialParameterAlpha->setValue(alpha);
+    }
+    else
+    {
+        _characterMeshNode->setTransparent(false);
+        _materialParameterAlpha->setValue(1.0f);
     }
 }
 
