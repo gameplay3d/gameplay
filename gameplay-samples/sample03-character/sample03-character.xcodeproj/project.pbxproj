@@ -454,7 +454,7 @@
 					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample03-character-ios.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
@@ -486,7 +486,7 @@
 					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample03-character-ios.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
