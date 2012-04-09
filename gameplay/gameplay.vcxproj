@@ -226,13 +226,13 @@
     <None Include="src\Curve.inl" />
     <None Include="src\Game.inl" />
     <None Include="src\gameplay-main-ios.mm" />
-    <None Include="src\gameplay-main-macos.mm" />
+    <None Include="src\gameplay-main-macosx.mm" />
     <None Include="src\Image.inl" />
     <None Include="src\Matrix.inl" />
     <None Include="src\MeshBatch.inl" />
     <None Include="src\Plane.inl" />
     <None Include="src\PlatformiOS.mm" />
-    <None Include="src\PlatformMacOS.mm" />
+    <None Include="src\PlatformMacOSX.mm" />
     <None Include="src\Quaternion.inl" />
     <None Include="src\Ray.inl" />
     <None Include="src\Vector2.inl" />

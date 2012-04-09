@@ -43,7 +43,7 @@
 
 /* Begin PBXFileReference section */
 		42458CB314C3AAF900EFFB61 /* sample01-longboard-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample01-longboard-ios.plist"; sourceTree = "<group>"; };
-		42C932E01491A1640098216A /* sample01-longboard-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample01-longboard-macos.plist"; sourceTree = "<group>"; };
+		42C932E01491A1640098216A /* sample01-longboard-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample01-longboard-macosx.plist"; sourceTree = "<group>"; };
 		42CCD48E146D80DA00353661 /* sample01-longboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample01-longboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD492146D80DA00353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42CCD4BD146D91D700353661 /* LongboardGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LongboardGame.cpp; path = src/LongboardGame.cpp; sourceTree = SOURCE_ROOT; };
@@ -53,13 +53,13 @@
 		42CCD4D2146D941000353661 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		42CCD4D4146D941A00353661 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		42CCD4D6146D949200353661 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		42CCD4DA146D94AA00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
+		42CCD4DA146D94AA00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42CCD4DC146D950400353661 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
-		42CD0ED8147D92CA0000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macos/libbullet.a"; sourceTree = "<group>"; };
-		42CD0ED9147D92CA0000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macos/libogg.a"; sourceTree = "<group>"; };
-		42CD0EDA147D92CA0000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbis.a"; sourceTree = "<group>"; };
-		42CD0EDB147D92CA0000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisenc.a"; sourceTree = "<group>"; };
-		42CD0EDC147D92CA0000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisfile.a"; sourceTree = "<group>"; };
+		42CD0ED8147D92CA0000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macosx/libbullet.a"; sourceTree = "<group>"; };
+		42CD0ED9147D92CA0000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macosx/libogg.a"; sourceTree = "<group>"; };
+		42CD0EDA147D92CA0000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbis.a"; sourceTree = "<group>"; };
+		42CD0EDB147D92CA0000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisenc.a"; sourceTree = "<group>"; };
+		42CD0EDC147D92CA0000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisfile.a"; sourceTree = "<group>"; };
 		5B04C69314C0EBF900EB0071 /* sample01-longboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample01-longboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B04C69F14C0EC7B00EB0071 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 		5BAF203B152F2B80003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
@@ -133,7 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				42458CB314C3AAF900EFFB61 /* sample01-longboard-ios.plist */,
-				42C932E01491A1640098216A /* sample01-longboard-macos.plist */,
+				42C932E01491A1640098216A /* sample01-longboard-macosx.plist */,
 				42CCD4C1146D91E800353661 /* icon.png */,
 				42CCD4DC146D950400353661 /* res */,
 				42CCD498146D80DA00353661 /* src */,
@@ -198,9 +198,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		42CCD48D146D80DA00353661 /* sample01-longboard-macos */ = {
+		42CCD48D146D80DA00353661 /* sample01-longboard-macosx */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 42CCD4AC146D80DB00353661 /* Build configuration list for PBXNativeTarget "sample01-longboard-macos" */;
+			buildConfigurationList = 42CCD4AC146D80DB00353661 /* Build configuration list for PBXNativeTarget "sample01-longboard-macosx" */;
 			buildPhases = (
 				42CCD48A146D80DA00353661 /* Sources */,
 				42CCD48B146D80DA00353661 /* Frameworks */,
@@ -211,7 +211,7 @@
 			);
 			dependencies = (
 			);
-			name = "sample01-longboard-macos";
+			name = "sample01-longboard-macosx";
 			productName = "sample01-longboard";
 			productReference = 42CCD48E146D80DA00353661 /* sample01-longboard.app */;
 			productType = "com.apple.product-type.application";
@@ -254,7 +254,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42CCD48D146D80DA00353661 /* sample01-longboard-macos */,
+				42CCD48D146D80DA00353661 /* sample01-longboard-macosx */,
 				5B04C67C14C0EBF900EB0071 /* sample01-longboard-ios */,
 			);
 		};
@@ -392,12 +392,12 @@
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "sample01-longboard-macos.plist";
+				INFOPLIST_FILE = "sample01-longboard-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample01-longboard";
@@ -422,12 +422,12 @@
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "sample01-longboard-macos`.plist";
+				INFOPLIST_FILE = "sample01-longboard-macosx`.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample01-longboard";
@@ -519,7 +519,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		42CCD4AC146D80DB00353661 /* Build configuration list for PBXNativeTarget "sample01-longboard-macos" */ = {
+		42CCD4AC146D80DB00353661 /* Build configuration list for PBXNativeTarget "sample01-longboard-macosx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				42CCD4AD146D80DB00353661 /* Debug */,
