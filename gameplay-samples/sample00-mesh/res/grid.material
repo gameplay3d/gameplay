@@ -5,8 +5,8 @@ material grid
         pass 0
         {
             // shaders
-            vertexShader = res/line.vsh
-            fragmentShader = res/line.fsh
+            vertexShader = res/colored.vsh
+            fragmentShader = res/colored.fsh
 
              // uniforms
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX

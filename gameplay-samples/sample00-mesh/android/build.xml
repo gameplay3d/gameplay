@@ -62,13 +62,13 @@
        If this is not done in place, override ${out.dex.input.absolute.dir} */
        -->
     <target name="-post-compile">
+        <copy file="../res/colored.vsh" tofile="assets/res/colored.vsh"/>
+        <copy file="../res/colored.fsh" tofile="assets/res/colored.fsh"/>
         <copy file="../res/duck.gpb" tofile="assets/res/duck.gpb"/>
         <copy file="../res/duck.material" tofile="assets/res/duck.material"/>
         <copy file="../res/duck-diffuse.png" tofile="assets/res/duck-diffuse.png"/>
         <copy file="../res/arial40.gpb" tofile="assets/res/arial40.gpb"/>
         <copy file="../res/grid.material" tofile="assets/res/grid.material"/>
-        <copy file="../res/line.vsh" tofile="assets/res/line.vsh"/>
-        <copy file="../res/line.fsh" tofile="assets/res/line.fsh"/>
         <copy file="../../../gameplay/res/shaders/diffuse-specular.vsh" tofile="assets/res/shaders/diffuse-specular.vsh"/>
         <copy file="../../../gameplay/res/shaders/diffuse-specular.fsh" tofile="assets/res/shaders/diffuse-specular.fsh"/>
         <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
