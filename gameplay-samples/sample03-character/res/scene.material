@@ -115,30 +115,6 @@ material Colored
     }
 }
 
-material ColoredTransparent
-{
-    technique
-    {
-        pass
-        {
-            vertexShader = res/shaders/colored.vsh
-            fragmentShader = res/colored-transparent.fsh
-
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-                blend = true
-                srcBlend = SRC_ALPHA
-                dstBlend = ONE_MINUS_SRC_ALPHA
-            }
-        }
-    }
-}
-
 material ColoredSpecular
 {
     technique
@@ -163,98 +139,20 @@ material ColoredSpecular
     }
 }
 
-material Boy : ColoredTransparent
+material Boy : TexturedTransparent
 {
     technique
     {
         pass
         {
-            defines = SKINNING;SKINNING_JOINT_COUNT 31
+            defines = SKINNING;SKINNING_JOINT_COUNT 31;GLOBAL_ALPHA
             u_matrixPalette = MATRIX_PALETTE
-        }
-    }
-}
+            u_globalAlpha = 1.0
 
-material BoySkin : Boy
-{
-    technique
-    {
-        pass
-        {
-            u_diffuseColor = 0.784, 0.755, 0.661
-            u_alpha = 1.0
-        }
-    }
-}
-
-material BoyHair : Boy
-{
-    technique
-    {
-        pass
-        {
-            u_diffuseColor = 0.122, 0.122, 0.122
-            u_alpha = 1.0
-        }
-    }
-}
-
-material BoyLips : Boy
-{
-    technique
-    {
-        pass
-        {
-            u_diffuseColor = 0.824, 0.755, 0.662
-            u_alpha = 1.0
-        }
-    }
-}
-
-material BoyShirt : Boy
-{
-    technique
-    {
-        pass
-        {
-            u_diffuseColor = 0.549, 0.108, 0.108
-            u_alpha = 1.0
-        }
-    }
-}
-
-material BoyShoes : Boy
-{
-    technique
-    {
-        pass
-        {
-            u_diffuseColor = 0.122, 0.122, 0.122
-            u_alpha = 1.0
-        }
-    }
-}
-
-material BoyShorts : Boy
-{
-    technique
-    {
-        pass
-        {
-            u_diffuseColor = 0.081, 0.145, 0.294
-            u_alpha = 1.0
-        }
-    }
-}
-
-material BoySocks : Boy
-{
-    technique
-    {
-        pass
-        {
-            u_diffuseColor = 1.0, 1.0, 1.0
-            u_alpha = 1.0
+            sampler u_diffuseTexture
+            {
+                path = res/character.png
+            }
         }
     }
 }
