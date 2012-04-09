@@ -6,7 +6,6 @@
 #include "Game.h"
 #include "Form.h"
 #include <unistd.h>
-
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
 #import <OpenGL/OpenGL.h>
