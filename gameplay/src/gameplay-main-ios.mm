@@ -4,7 +4,6 @@
 
 using namespace gameplay;
 
-
 /**
  * Main entry point.
  */
