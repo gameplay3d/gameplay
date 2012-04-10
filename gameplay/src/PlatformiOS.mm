@@ -103,11 +103,15 @@ int getKey(unichar keyCode);
         }
         
         // Configure the CAEAGLLayer and setup out the rendering context
+        CGFloat scale = [[UIScreen mainScreen] scale];
         CAEAGLLayer* layer = (CAEAGLLayer *)self.layer;
         layer.opaque = TRUE;
         layer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, 
                                     kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+        self.contentScaleFactor = scale;
+        layer.contentsScale = scale;
+        
 		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         if (!context || ![EAGLContext setCurrentContext:context])
 		{
@@ -122,7 +126,7 @@ int getKey(unichar keyCode);
             
         glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
         glViewport(0, 0, framebufferWidth, framebufferHeight);
-        
+
         // Initialize Internal Defaults
         displayLink = nil;
         defaultFramebuffer = 0;
