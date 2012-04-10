@@ -15,8 +15,13 @@ namespace gameplay
  * label <labelID>
  * {
  *      style       = <styleID>
+ *      alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
  *      position    = <x, y>
+ *      autoWidth   = <bool>
+ *      autoHeight  = <bool>
  *      size        = <width, height>
+ *      width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
+ *      height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
  *      text        = <string>
  * }
  */

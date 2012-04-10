@@ -35,6 +35,12 @@ public:
      *      style    = <styleID>                // A style from the referenced theme.
      *      position = <x, y>                   // Position of the form on-screen, measured in pixels.
      *      size     = <width, height>          // Size of the form, measured in pixels.
+     *      alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
+     *      autoWidth   = <bool>                // Will result in a form the width of the display.
+     *      autoHeight  = <bool>                // Will result in a form the height of the display.
+     *      size        = <width, height>
+     *      width       = <width>               // Can be used in place of 'size', e.g. with 'autoHeight = true'
+     *      height      = <height>              // Can be used in place of 'size', e.g. with 'autoWidth = true'
      *   
      *      // All the nested controls within this form.
      *      container 
