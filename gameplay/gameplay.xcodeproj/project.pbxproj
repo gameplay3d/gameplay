@@ -24,6 +24,8 @@
 		42554EA2152BC35C000ED910 /* PhysicsCollisionShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42554E9F152BC35C000ED910 /* PhysicsCollisionShape.cpp */; };
 		42554EA3152BC35C000ED910 /* PhysicsCollisionShape.h in Headers */ = {isa = PBXBuildFile; fileRef = 42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */; };
 		42554EA4152BC35C000ED910 /* PhysicsCollisionShape.h in Headers */ = {isa = PBXBuildFile; fileRef = 42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */; };
+		4271C08E15337C8200B89DA7 /* Layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4271C08D15337C8200B89DA7 /* Layout.cpp */; };
+		4271C08F15337C8200B89DA7 /* Layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4271C08D15337C8200B89DA7 /* Layout.cpp */; };
 		428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 428390971489D6E800E2B2F5 /* SceneLoader.cpp */; };
 		4283909A1489D6E800E2B2F5 /* SceneLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 428390981489D6E800E2B2F5 /* SceneLoader.h */; };
 		42CCD556146EC1EB00353661 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD555146EC1EB00353661 /* libpng.a */; };
@@ -396,6 +398,7 @@
 		4251B130152D049B002F6199 /* ThemeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThemeStyle.h; path = src/ThemeStyle.h; sourceTree = SOURCE_ROOT; };
 		42554E9F152BC35C000ED910 /* PhysicsCollisionShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsCollisionShape.cpp; path = src/PhysicsCollisionShape.cpp; sourceTree = SOURCE_ROOT; };
 		42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCollisionShape.h; path = src/PhysicsCollisionShape.h; sourceTree = SOURCE_ROOT; };
+		4271C08D15337C8200B89DA7 /* Layout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Layout.cpp; path = src/Layout.cpp; sourceTree = SOURCE_ROOT; };
 		428390971489D6E800E2B2F5 /* SceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLoader.cpp; path = src/SceneLoader.cpp; sourceTree = SOURCE_ROOT; };
 		428390981489D6E800E2B2F5 /* SceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneLoader.h; path = src/SceneLoader.h; sourceTree = SOURCE_ROOT; };
 		42C932AF14919FD10098216A /* Game.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Game.inl; path = src/Game.inl; sourceTree = SOURCE_ROOT; };
@@ -751,6 +754,7 @@
 				4208DEEB14A407B900D3C511 /* Keyboard.h */,
 				5BD52641150F822A004C9099 /* Label.cpp */,
 				5BD52642150F822A004C9099 /* Label.h */,
+				4271C08D15337C8200B89DA7 /* Layout.cpp */,
 				5BD52643150F822A004C9099 /* Layout.h */,
 				42CD0DE6147D8FF50000361E /* Light.cpp */,
 				42CD0DE7147D8FF50000361E /* Light.h */,
@@ -1301,6 +1305,7 @@
 				5BBE143E1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */,
 				42554EA1152BC35C000ED910 /* PhysicsCollisionShape.cpp in Sources */,
 				4251B133152D049B002F6199 /* ThemeStyle.cpp in Sources */,
+				4271C08E15337C8200B89DA7 /* Layout.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1391,6 +1396,7 @@
 				5BBE143F1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */,
 				42554EA2152BC35C000ED910 /* PhysicsCollisionShape.cpp in Sources */,
 				4251B134152D049B002F6199 /* ThemeStyle.cpp in Sources */,
+				4271C08F15337C8200B89DA7 /* Layout.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

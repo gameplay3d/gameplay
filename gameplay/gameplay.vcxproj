@@ -48,6 +48,7 @@
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Label.cpp" />
+    <ClCompile Include="src\Layout.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MeshBatch.cpp" />

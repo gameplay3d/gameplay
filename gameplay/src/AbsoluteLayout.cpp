@@ -45,9 +45,13 @@ namespace gameplay
         unsigned int controlsCount = controls.size();
         for (unsigned int i = 0; i < controlsCount; i++)
         {
-            if (controls[i]->isDirty())
+            Control* control = controls[i];
+
+            align(control, container);
+
+            if (control->isDirty() || control->isContainer())
             {
-                controls[i]->update(container->getClip());
+                control->update(container->getClip());
             }
         }
     }
