@@ -8,7 +8,7 @@ using namespace gameplay;
 /**
  * This is a mesh demo game for rendering Mesh.
  */
-class CharacterGame: public Game, public PhysicsCollisionObject::CollisionListener
+class CharacterGame: public Game, public PhysicsCollisionObject::CollisionListener, public AnimationClip::Listener
 {
 public:
     
@@ -38,6 +38,8 @@ public:
     void collisionEvent(PhysicsCollisionObject::CollisionListener::EventType type,
                         const PhysicsCollisionObject::CollisionPair& collisionPair,
                         const Vector3& contactPointA, const Vector3& contactPointB);
+
+    void animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type);
 
 protected:
 
