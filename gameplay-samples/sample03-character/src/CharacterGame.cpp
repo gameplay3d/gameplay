@@ -151,6 +151,11 @@ void CharacterGame::update(long elapsedTime)
     Gamepad::ButtonState buttonOneState = _gamepad->getButtonState(BUTTON_1);
     if (buttonOneState)
     {
+        keyFlags = 16;
+    }
+
+    if (keyFlags == 16)
+    {
         _character->play("jump", PhysicsCharacter::ANIMATION_RESUME);
     }
     else if (keyFlags == 0) // Update character animation and movement
@@ -300,11 +305,11 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         case Keyboard::KEY_A:
             keyFlags |= 4;
-            velocityEW = -1.0f;
+            velocityEW = 1.0f;
             break;
         case Keyboard::KEY_D:
             keyFlags |= 8;
-            velocityEW = 1.0f;
+            velocityEW = -1.0f;
             break;
         case Keyboard::KEY_P:
             drawDebug++;
@@ -396,10 +401,13 @@ void CharacterGame::loadAnimationClips(Node* node)
     _animation = node->getAnimation("movements");
     _animation->createClips("res/boy.animation");
 
+    AnimationClip* jump = _animation->getClip("jump");
+    jump->addListener(this, jump->getDuration() - 300L);
+
     _character->addAnimation("idle", _animation->getClip("idle"), 0.0f);
     _character->addAnimation("walk", _animation->getClip("walk"), WALK_SPEED);
     _character->addAnimation("run", _animation->getClip("run"), RUN_SPEED);
-    _character->addAnimation("jump", _animation->getClip("jump"), 0.0f);
+    _character->addAnimation("jump", jump, 0.0f);
 
     _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT);
 }
@@ -489,4 +497,12 @@ void CharacterGame::drawSplash(void* param)
     batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
     batch->end();
     SAFE_DELETE(batch);
+}
+
+void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type)
+{
+    if (std::string(clip->getID()).compare("jump") == 0)
+    {
+        keyFlags = 0;
+    }
 }
