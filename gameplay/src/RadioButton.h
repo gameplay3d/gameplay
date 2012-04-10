@@ -19,8 +19,13 @@ namespace gameplay
  * radioButton <RadioButton ID>
  * {
  *      style       = <Style ID>
+ *      alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
  *      position    = <x, y>
+ *      autoWidth   = <bool>
+ *      autoHeight  = <bool>
  *      size        = <width, height>
+ *      width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
+ *      height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
  *      text        = <string>
  *      group       = <string>
  *      iconSize    = <width, height>   // The size to draw the radio button icon, if different from its size in the texture.
