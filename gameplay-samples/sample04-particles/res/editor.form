@@ -2,37 +2,52 @@ form particleEditor
 {
     theme = res/editor.theme
     style = background
-    size = 1024, 600
+    autoWidth = true
+    autoHeight = true
 
-    // Number of alive particles
-    label particlesCount
+    // Diagnostics
+    container diagnostics
     {
-        style = iconNoBorder
-        position = 400, 550
-        size = 200, 25
-        text = Particles: 0
-    }
+        style = noBorder
+        size = 200, 50
+        alignment = ALIGN_TOP_HCENTER
+        layout = LAYOUT_VERTICAL
 
-    // FPS
-    label fps : particlesCount
-    {
-        position = 400, 575
-        text = FPS: 0
+        // Number of currently alive particles
+        label particlesCount
+        {
+            style = iconNoBorder
+            autoWidth = true
+            height = 25
+            text = Particles: 0
+        }
+
+        // FPS
+        label FPS : particlesCount
+        {
+            text = FPS: 0
+        }
     }
 
     // Camera Zoom
-    button zoomIn
+    container zoom
     {
-        style = buttonStyle
-        position = 0, 500
-        size = 100, 50
-        text = Zoom In
-    }
+        style = noBorder
+        size = 100, 100
+        alignment = ALIGN_BOTTOM_HCENTER
+        layout = LAYOUT_VERTICAL
 
-    button zoomOut : zoomIn
-    {
-        position = 0, 550
-        text = Zoom Out
+        button zoomIn
+        {
+            style = buttonStyle
+            size = 100, 50
+            text = Zoom In
+        }
+
+        button zoomOut : zoomIn
+        {
+            text = Zoom Out
+        }
     }
 
     container presets
@@ -118,69 +133,145 @@ form particleEditor
         }
     }
 
+    button minimize
+    {
+        style = buttonStyle
+        alignment = ALIGN_TOP_RIGHT
+        size = 50, 50
+        text = -
+    }
+
     container particleProperties
     {
         style = basic
-        layout = LAYOUT_VERTICAL
-        position = 854, 0
-        size = 170, 380
+        alignment = ALIGN_TOP_RIGHT
+        size = 340, 480
 
-        // Particle Size
-        label titleSize
-        {
-            style = title
-            size = 150, 30
-            text = Size
-        }
-
-        slider startMin
+        container colorSettings
         {
             style = noBorder
-            size = 150, 50
-            orientation = HORIZONTAL
-            min = 0
-            max = 5
-            value = 1.5
-            step = 0
-            text = Min. Begin Size
+            layout = LAYOUT_VERTICAL
+            alignment = ALIGN_TOP_LEFT
+            size = 150, 460
+
+            label titleStartColor
+            {
+                style = title
+                size = 150, 30
+                text = Start Color
+            }
+
+            slider startRed
+            {
+                style = noBorder
+                size = 150, 50
+                orientation = HORIZONTAL
+                min = 0
+                max = 1
+                text = Red
+            }
+
+            slider startGreen : startRed
+            {
+                text = Green
+            }
+
+            slider startBlue : startRed
+            {
+                text = Blue
+            }
+
+            slider startAlpha : startRed
+            {
+                text = Alpha
+            }
+
+            label titleEndColor : titleStartColor
+            {
+                text = End Color
+            }
+
+            slider endRed : startRed
+            {
+            }
+
+            slider endGreen : startGreen
+            {
+            }
+
+            slider endBlue : startBlue
+            {
+            }
+
+            slider endAlpha : startAlpha
+            {
+            }
         }
 
-        slider startMax : startMin
-        {
-            text = Max. Begin Size
-        }
-
-        slider endMin : startMin
-        {
-            text = Min. End Size
-        }
-
-        slider endMax : startMin
-        {
-            text = Max. End Size
-        }
-
-        // Energy
-        label titleEnergy
-        {
-            style = title
-            size = 150, 30
-            text = Energy
-        }
-
-        slider energyMin
+        container sizeEnergySettings
         {
             style = noBorder
-            size = 150, 50
-            orientation = HORIZONTAL
-            min = 0
-            max = 10000
-            text = Min. Energy
-        }
+            alignment = ALIGN_BOTTOM_RIGHT
+            layout = LAYOUT_VERTICAL
+            size = 150, 360
 
-        slider energyMax : energyMin
-        {
-            text = Max. Energy
-        }
+            // Particle Size
+            label titleSize
+            {
+                style = title
+                size = 150, 30
+                text = Size
+            }
+
+            slider startMin
+            {
+                style = noBorder
+                size = 150, 50
+                orientation = HORIZONTAL
+                min = 0
+                max = 5
+                value = 1.5
+                step = 0
+                text = Min. Begin Size
+            }
+
+            slider startMax : startMin
+            {
+                text = Max. Begin Size
+            }
+
+            slider endMin : startMin
+            {
+                text = Min. End Size
+            }
+
+            slider endMax : startMin
+            {
+                text = Max. End Size
+            }
+
+            // Energy
+            label titleEnergy
+            {
+                style = title
+                size = 150, 30
+                text = Energy
+            }
+
+            slider energyMin
+            {
+                style = noBorder
+                size = 150, 50
+                orientation = HORIZONTAL
+                min = 0
+                max = 10000
+                text = Min. Energy
+            }
+
+            slider energyMax : energyMin
+            {
+                text = Max. Energy
+            }
+        }        
     }
 }
