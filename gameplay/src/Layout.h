@@ -7,6 +7,7 @@ namespace gameplay
 {
 
 class Container;
+class Control;
 
 /**
  * The layout interface for UI containers.
@@ -58,6 +59,14 @@ protected:
      * @param container The container to update.
      */
     virtual void update(const Container* container) = 0;
+
+    /**
+     * Align a control within a container.
+     *
+     * @param control The control to align.
+     * @param container The container to align the control within.
+     */
+    virtual void align(Control* control, const Container* container);
 };
 
 }

@@ -102,7 +102,6 @@ int getKey(unichar keyCode);
             return nil;
         }
         
-        
         // Configure the CAEAGLLayer and setup out the rendering context
         CAEAGLLayer* layer = (CAEAGLLayer *)self.layer;
         layer.opaque = TRUE;
