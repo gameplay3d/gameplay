@@ -69,13 +69,15 @@ namespace gameplay
         {
             Control* control = controls.at(i);
 
+            align(control, container);
+
             const Rectangle& bounds = control->getClipBounds();
             const Theme::Margin& margin = control->getMargin();
 
             yPosition += margin.top;
 
             control->setPosition(0, yPosition);
-            if (control->isDirty())
+            if (control->isDirty() || control->isContainer())
             {
                 control->update(container->getClip());
             }
