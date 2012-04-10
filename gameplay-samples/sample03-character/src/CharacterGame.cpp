@@ -3,18 +3,16 @@
 // Declare our game instance
 CharacterGame game; 
 
-unsigned int keyFlags = 0;
-float _rotateY = 0.0f;
 #define WALK_SPEED  7.5f
 #define ANIM_SPEED 1.0f
 #define BLEND_DURATION 150.0f
 #define OPAQUE_OBJECTS      0
 #define TRANSPARENT_OBJECTS 1
+#define CAMERA_FOCUS_DISTANCE 16.0f
 
-float cameraFocusDistance = 16.0f;
-
-int drawDebug = 0;
-bool moveBall = false;
+unsigned int _keyFlags = 0;
+float _rotateY = 0.0f;
+int _drawDebug = 0;
 
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _animationState(0), _rotateX(0), _materialParameterAlpha(NULL)
@@ -124,16 +122,16 @@ void CharacterGame::update(long elapsedTime)
 	Vector2 joystickVec = _gamepad->getJoystickState(JOYSTICK);
     if (!joystickVec.isZero())
     {
-	    keyFlags = 0;
+	    _keyFlags = 0;
 
         // Calculate forward/backward movement.
         if (joystickVec.y > 0)
 	    {
-		    keyFlags |= 1;
+		    _keyFlags |= 1;
 	    }
 	    else if (joystickVec.y < 0)
 	    {
-		    keyFlags |= 2;
+		    _keyFlags |= 2;
 	    }
 
         // Calculate rotation
@@ -142,36 +140,22 @@ void CharacterGame::update(long elapsedTime)
     }
 
     // Update character animation and movement
-    if (keyFlags == 0)
+    if (_keyFlags == 0)
     {
         _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT, 1.0f, BLEND_DURATION);
     }
     else
     {
         // Forward motion
-        if (keyFlags & 1)
+        if (_keyFlags & 1)
         {
-            if (moveBall)
-            {
-                static_cast<PhysicsRigidBody*>(_scene->findNode("Basketball")->getCollisionObject())->applyForce(Vector3(0, 0, -WALK_SPEED));
-            }
-            else
-            {
-                _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
-                _character->setForwardVelocity(1.0f);
-            }
+            _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
+            _character->setForwardVelocity(1.0f);
         }
-        else if (keyFlags & 2)
+        else if (_keyFlags & 2)
         {
-            if (moveBall)
-            {
-                static_cast<PhysicsRigidBody*>(_scene->findNode("Basketball")->getCollisionObject())->applyForce(Vector3(0, 0, WALK_SPEED));
-            }
-            else
-            {
-                _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
-                _character->setForwardVelocity(-1.0f);
-            }
+            _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
+            _character->setForwardVelocity(-1.0f);
         }
         else
         {
@@ -180,29 +164,15 @@ void CharacterGame::update(long elapsedTime)
         }
 
         // Strafing
-        if (keyFlags & 4)
+        if (_keyFlags & 4)
         {
-            if (moveBall)
-            {
-                static_cast<PhysicsRigidBody*>(_scene->findNode("Basketball")->getCollisionObject())->applyForce(Vector3(-WALK_SPEED, 0, 0));
-            }
-            else
-            {
-                _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
-                _character->setRightVelocity(1.0f);
-            }
+            _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
+            _character->setRightVelocity(1.0f);
         }
-        else if (keyFlags & 8)
+        else if (_keyFlags & 8)
         {
-            if (moveBall)
-            {
-                static_cast<PhysicsRigidBody*>(_scene->findNode("Basketball")->getCollisionObject())->applyForce(Vector3(WALK_SPEED, 0, 0));
-            }
-            else
-            {
-                _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
-                _character->setRightVelocity(-1.0f);
-            }
+            _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
+            _character->setRightVelocity(-1.0f);
         }
         else
         {
@@ -211,10 +181,7 @@ void CharacterGame::update(long elapsedTime)
         }
     }
 
-	if (!moveBall)
-	{
-		adjustCamera(elapsedTime);
-	}
+    adjustCamera(elapsedTime);
 }
 
 void CharacterGame::render(long elapsedTime)
@@ -226,7 +193,8 @@ void CharacterGame::render(long elapsedTime)
     _scene->visit(this, &CharacterGame::drawScene, (void*)0);
     _scene->visit(this, &CharacterGame::drawScene, (void*)1);
 
-    switch (drawDebug)
+    // Draw debug objects
+    switch (_drawDebug)
     {
     case 1:
         Game::getInstance()->getPhysicsController()->drawDebug(_scene->getActiveCamera()->getViewProjectionMatrix());
@@ -239,11 +207,13 @@ void CharacterGame::render(long elapsedTime)
         break;
     }
 
+    // Draw gamepad
     _gamepad->draw();
 
+    // Draw FPS
     _font->begin();
     char fps[32];
-    sprintf(fps, "FPS: %d\nCamera Focus: %d", getFrameRate(), (int)cameraFocusDistance);
+    sprintf(fps, "%d", getFrameRate());
     _font->drawText(fps, 5, 5, Vector4(1,1,0,1), 20);
     _font->end();
 }
@@ -280,31 +250,25 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             exit();
             break;
         case Keyboard::KEY_W:
-            keyFlags |= 1;
+        case Keyboard::KEY_CAPITAL_W:
+            _keyFlags |= 1;
             break;
         case Keyboard::KEY_S:
-            keyFlags |= 2;
+        case Keyboard::KEY_CAPITAL_S:
+            _keyFlags |= 2;
             break;
         case Keyboard::KEY_A:
-            keyFlags |= 4;
+        case Keyboard::KEY_CAPITAL_A:
+            _keyFlags |= 4;
             break;
         case Keyboard::KEY_D:
-            keyFlags |= 8;
-            break;
-        case Keyboard::KEY_P:
-            drawDebug++;
-            if (drawDebug > 3)
-                drawDebug = 0;
+        case Keyboard::KEY_CAPITAL_D:
+            _keyFlags |= 8;
             break;
         case Keyboard::KEY_B:
-            moveBall = !moveBall;
-            break;
-        case Keyboard::KEY_EQUAL:
-        case Keyboard::KEY_PLUS:
-            cameraFocusDistance++;
-            break;
-        case Keyboard::KEY_MINUS:
-            cameraFocusDistance--;
+            _drawDebug++;
+            if (_drawDebug > 3)
+                _drawDebug = 0;
             break;
         }
     }
@@ -313,16 +277,16 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
         switch (key)
         {
         case Keyboard::KEY_W:
-            keyFlags &= ~1;
+            _keyFlags &= ~1;
             break;
         case Keyboard::KEY_S:
-            keyFlags &= ~2;
+            _keyFlags &= ~2;
             break;
         case Keyboard::KEY_A:
-            keyFlags &= ~4;
+            _keyFlags &= ~4;
             break;
         case Keyboard::KEY_D:
-            keyFlags &= ~8;
+            _keyFlags &= ~8;
             break;
         }
     }
@@ -341,7 +305,7 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     {
         // If it was active before, reset the joystick's influence on the keyflags.
         if (wasActive)
-            keyFlags = 0;
+            _keyFlags = 0;
     
         switch (evt)
         {
@@ -415,8 +379,8 @@ void CharacterGame::adjustCamera(long elapsedTime)
     Vector3 cameraDirection = cameraNode->getForwardVectorWorld();
     cameraDirection.normalize();
 
-    // Get focal point of camera (use the resolved world location of the head joint as a focal point)
-    Vector3 focalPoint(cameraPosition + (cameraDirection * cameraFocusDistance));
+    // Get focal point of camera
+    Vector3 focalPoint(cameraPosition + (cameraDirection * CAMERA_FOCUS_DISTANCE));
 
     PhysicsController::HitResult result;
     PhysicsCollisionObject* occlusion = NULL;
