@@ -22,6 +22,7 @@ using namespace gameplay;
 // UIScreen bounds are provided as if device was in portrait mode Gameplay defaults to landscape
 extern const int WINDOW_WIDTH  = [[UIScreen mainScreen] bounds].size.height * [[UIScreen mainScreen] scale];
 extern const int WINDOW_HEIGHT = [[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale];
+extern const int WINDOW_SCALE = [[UIScreen mainScreen] scale];
 
 @class AppDelegate;
 @class View;
@@ -327,27 +328,27 @@ int getKey(unichar keyCode);
 
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event 
 {
-    unsigned int uniqueTouch = 0;
-    for(UITouch *t in touches) 
+    unsigned int touchID = 0;
+    for(UITouch* touch in touches) 
     {
-        CGPoint touchLoc = [t locationInView:self];
+        CGPoint touchPoint = [touch locationInView:self];
         if(self.multipleTouchEnabled == YES)
         {
-            uniqueTouch = [t hash];
+            touchID = [touch hash];
         }
-        Platform::touchEventInternal(Touch::TOUCH_PRESS, touchLoc.x, touchLoc.y, uniqueTouch);
+        Platform::touchEventInternal(Touch::TOUCH_PRESS, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
     }
 }
 
-- (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent *)event 
+- (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event 
 {
-    unsigned int uniqueTouch = 0;
-    for(UITouch* t in touches) 
+    unsigned int touchID = 0;
+    for(UITouch* touch in touches) 
     {
-        CGPoint touchLoc = [t locationInView:self];
+        CGPoint touchPoint = [touch locationInView:self];
         if(self.multipleTouchEnabled == YES) 
-            uniqueTouch = [t hash];
-        Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchLoc.x, touchLoc.y, uniqueTouch);
+            touchID = [touch hash];
+        Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
     }
 }
 
@@ -359,13 +360,13 @@ int getKey(unichar keyCode);
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event 
 {
-    unsigned int uniqueTouch = 0;
-    for(UITouch* t in touches) 
+    unsigned int touchID = 0;
+    for(UITouch* touch in touches) 
     {
-        CGPoint touchLoc = [t locationInView:self];
+        CGPoint touchPoint = [touch locationInView:self];
         if(self.multipleTouchEnabled == YES) 
-            uniqueTouch = [t hash];
-        Platform::touchEventInternal(Touch::TOUCH_MOVE, touchLoc.x, touchLoc.y, uniqueTouch);
+            touchID = [touch hash];
+        Platform::touchEventInternal(Touch::TOUCH_MOVE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
     }
 }
 
