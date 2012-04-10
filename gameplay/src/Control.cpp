@@ -119,6 +119,31 @@ namespace gameplay
         return _bounds.height;
     }
 
+    void Control::setAlignment(Alignment alignment)
+    {
+        _alignment = alignment;
+    }
+
+    Control::Alignment Control::getAlignment() const
+    {
+        return _alignment;
+    }
+
+    void Control::setAutoWidth(bool autoWidth)
+    {
+        _autoWidth = autoWidth;
+    }
+
+    bool Control::getAutoWidth() const
+    {
+        return _autoWidth;
+    }
+
+    void Control::setAutoHeight(bool autoHeight)
+    {
+        _autoHeight = autoHeight;
+    }
+
     void Control::setOpacity(float opacity, unsigned char states)
     {
         overrideStyle();

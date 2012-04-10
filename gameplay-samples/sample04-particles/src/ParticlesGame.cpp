@@ -3,8 +3,6 @@
 // Declare our game instance
 ParticlesGame game;
 
-
-
 static std::string _particleFiles[] = 
 {
     "fire",
@@ -24,6 +22,9 @@ ParticlesGame::ParticlesGame() : _scene(NULL)
 
 void ParticlesGame::initialize()
 {
+    // Display the gameplay splash screen for at least 1 second.
+    displayScreen(this, &ParticlesGame::drawSplash, NULL, 1000L);
+
     // Set keyboard state.
     _wDown = _aDown = _sDown = _dDown = false;
     _touched = false;
@@ -37,7 +38,7 @@ void ParticlesGame::initialize()
     Node* cameraNode = _scene->addNode("Camera");
     _cameraParent = _scene->addNode("CameraParent");
     _cameraParent->addChild(cameraNode);
-    Camera* camera = Camera::createPerspective(45.0f, (float)getWidth() / (float)getHeight(), 0.25f, 100.0f);
+    Camera* camera = Camera::createPerspective(45.0f, (float)getWidth() / (float)getHeight(), 0.25f, 1000.0f);
     cameraNode->setCamera(camera);
     cameraNode->setTranslation(0.0f, 0.0f, 40.0f);
     _scene->setActiveCamera(camera);
@@ -50,6 +51,16 @@ void ParticlesGame::initialize()
     _form = Form::create("res/editor.form");
     _form->setConsumeTouchEvents(false);
 
+    _startRed = (Slider*)_form->getControl("startRed");
+    _startGreen = (Slider*)_form->getControl("startGreen");
+    _startBlue = (Slider*)_form->getControl("startBlue");
+    _startAlpha = (Slider*)_form->getControl("startAlpha");
+    _endRed = (Slider*)_form->getControl("endRed");
+    _endGreen = (Slider*)_form->getControl("endGreen");
+    _endBlue = (Slider*)_form->getControl("endBlue");
+    _endAlpha = (Slider*)_form->getControl("endAlpha");
+    _particleProperties = (Container*)_form->getControl("particleProperties");
+    _minimize = (Button*)_form->getControl("minimize");
     _startMin = (Slider*)_form->getControl("startMin");
     _startMax = (Slider*)_form->getControl("startMax");
     _endMin = (Slider*)_form->getControl("endMin");
@@ -66,8 +77,17 @@ void ParticlesGame::initialize()
     _zoomOut = (Button*)_form->getControl("zoomOut");
     _burstSize = (Slider*)_form->getControl("burstSize");
     _particlesCount = (Label*)_form->getControl("particlesCount");
-    _fps = (Label*)_form->getControl("fps");
+    _fps = (Label*)_form->getControl("FPS");
 
+    _startRed->addListener(this, Listener::VALUE_CHANGED);
+    _startGreen->addListener(this, Listener::VALUE_CHANGED);
+    _startBlue->addListener(this, Listener::VALUE_CHANGED);
+    _startAlpha->addListener(this, Listener::VALUE_CHANGED);
+    _endRed->addListener(this, Listener::VALUE_CHANGED);
+    _endGreen->addListener(this, Listener::VALUE_CHANGED);
+    _endBlue->addListener(this, Listener::VALUE_CHANGED);
+    _endAlpha->addListener(this, Listener::VALUE_CHANGED);
+    _minimize->addListener(this, Listener::CLICK);
     _startMin->addListener(this, Listener::VALUE_CHANGED);
     _startMax->addListener(this, Listener::VALUE_CHANGED);
     _endMin->addListener(this, Listener::VALUE_CHANGED);
@@ -95,7 +115,87 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
     switch(evt)
     {
     case Listener::VALUE_CHANGED:
-        if (control == _startMin)
+        if (control == _startRed)
+        {
+            Vector4 startColor = emitter->getColorStart();
+            startColor.x = _startRed->getValue();
+            emitter->setColor(startColor, emitter->getColorStartVariance(), emitter->getColorEnd(), emitter->getColorEndVariance());
+
+            char txt[15];
+            sprintf(txt, "Red\n\n%.2f", _startRed->getValue());
+            _startRed->setText(txt);
+        }
+        else if (control == _startGreen)
+        {
+            Vector4 startColor = emitter->getColorStart();
+            startColor.y = _startGreen->getValue();
+            emitter->setColor(startColor, emitter->getColorStartVariance(), emitter->getColorEnd(), emitter->getColorEndVariance());
+
+            char txt[15];
+            sprintf(txt, "Green\n\n%.2f", _startGreen->getValue());
+            _startGreen->setText(txt);
+        }
+        else if (control == _startBlue)
+        {
+            Vector4 startColor = emitter->getColorStart();
+            startColor.z = _startBlue->getValue();
+            emitter->setColor(startColor, emitter->getColorStartVariance(), emitter->getColorEnd(), emitter->getColorEndVariance());
+
+            char txt[15];
+            sprintf(txt, "Blue\n\n%.2f", _startBlue->getValue());
+            _startBlue->setText(txt);
+        }
+        else if (control == _startAlpha)
+        {
+            Vector4 startColor = emitter->getColorStart();
+            startColor.w = _startAlpha->getValue();
+            emitter->setColor(startColor, emitter->getColorStartVariance(), emitter->getColorEnd(), emitter->getColorEndVariance());
+
+            char txt[15];
+            sprintf(txt, "Alpha\n\n%.2f", _startAlpha->getValue());
+            _startAlpha->setText(txt);
+        }
+        else if (control == _endRed)
+        {
+            Vector4 endColor = emitter->getColorEnd();
+            endColor.x = _endRed->getValue();
+            emitter->setColor(emitter->getColorStart(), emitter->getColorStartVariance(), endColor, emitter->getColorEndVariance());
+
+            char txt[15];
+            sprintf(txt, "Red\n\n%.2f", _endRed->getValue());
+            _endRed->setText(txt);
+        }
+        else if (control == _endGreen)
+        {
+            Vector4 endColor = emitter->getColorEnd();
+            endColor.y = _endGreen->getValue();
+            emitter->setColor(emitter->getColorStart(), emitter->getColorStartVariance(), endColor, emitter->getColorEndVariance());
+
+            char txt[15];
+            sprintf(txt, "Green\n\n%.2f", _endGreen->getValue());
+            _endGreen->setText(txt);
+        }
+        else if (control == _endBlue)
+        {
+            Vector4 endColor = emitter->getColorEnd();
+            endColor.z = _endBlue->getValue();
+            emitter->setColor(emitter->getColorStart(), emitter->getColorStartVariance(), endColor, emitter->getColorEndVariance());
+
+            char txt[15];
+            sprintf(txt, "Blue\n\n%.2f", _endBlue->getValue());
+            _endBlue->setText(txt);
+        }
+        else if (control == _endAlpha)
+        {
+            Vector4 endColor = emitter->getColorEnd();
+            endColor.w = _endAlpha->getValue();
+            emitter->setColor(emitter->getColorStart(), emitter->getColorStartVariance(), endColor, emitter->getColorEndVariance());
+
+            char txt[15];
+            sprintf(txt, "Alpha\n\n%.2f", _endAlpha->getValue());
+            _endAlpha->setText(txt);
+        }
+        else if (control == _startMin)
         {
             emitter->setSize(_startMin->getValue(), emitter->getSizeStartMax(), emitter->getSizeEndMin(), emitter->getSizeEndMax());
             char txt[25];
@@ -182,6 +282,19 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         {
             unsigned int burstSize = (unsigned int)_burstSize->getValue();
             emitter->emit(burstSize);
+        }
+        else if (control == _minimize)
+        {
+            if (_particleProperties->getWidth() > 0)
+            {
+                _particleProperties->setSize(0, 0);
+                _minimize->setText("+");
+            }
+            else
+            {
+                _particleProperties->setSize(340, 480);
+                _minimize->setText("-");
+            }
         }
         break;
     case Listener::PRESS:
@@ -276,13 +389,6 @@ void ParticlesGame::render(long elapsedTime)
 
 bool ParticlesGame::drawScene(Node* node, void* cookie)
 {
-    // If the node visited contains a model, draw it
-    Model* model = node->getModel();
-    if (model)
-    {
-        model->draw();
-    }
-
     ParticleEmitter* emitter = node->getParticleEmitter();
     if (emitter)
     {
@@ -418,6 +524,38 @@ void ParticlesGame::emitterChanged()
 
     char txt[25];
 
+    _startRed->setValue(emitter->getColorStart().x);
+    sprintf(txt, "Red\n\n%.2f", _startRed->getValue());
+    _startRed->setText(txt);
+
+    _startGreen->setValue(emitter->getColorStart().y);
+    sprintf(txt, "Green\n\n%.2f", _startGreen->getValue());
+    _startGreen->setText(txt);
+
+    _startBlue->setValue(emitter->getColorStart().z);
+    sprintf(txt, "Blue\n\n%.2f", _startBlue->getValue());
+    _startBlue->setText(txt);
+
+    _startAlpha->setValue(emitter->getColorStart().w);
+    sprintf(txt, "Alpha\n\n%.2f", _startAlpha->getValue());
+    _startAlpha->setText(txt);
+
+    _endRed->setValue(emitter->getColorEnd().x);
+    sprintf(txt, "Red\n\n%.2f", _endRed->getValue());
+    _endRed->setText(txt);
+
+    _endGreen->setValue(emitter->getColorEnd().y);
+    sprintf(txt, "Green\n\n%.2f", _endGreen->getValue());
+    _endGreen->setText(txt);
+
+    _endBlue->setValue(emitter->getColorEnd().z);
+    sprintf(txt, "Blue\n\n%.2f", _endBlue->getValue());
+    _endBlue->setText(txt);
+
+    _endAlpha->setValue(emitter->getColorEnd().w);
+    sprintf(txt, "Alpha\n\n%.2f", _endAlpha->getValue());
+    _endAlpha->setText(txt);
+
     _startMin->setMax(PARTICLE_SIZE_MAX[_particleEmitterIndex]);
     _startMin->setValue(emitter->getSizeStartMin());
     sprintf(txt, "Min. Begin Size\n\n%.1f", _startMin->getValue());
@@ -453,4 +591,14 @@ void ParticlesGame::emitterChanged()
 
     sprintf(txt, "Burst Size\n\n%.0f", _burstSize->getValue());
     _burstSize->setText(txt);
+}
+
+void ParticlesGame::drawSplash(void* param)
+{
+    clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
+    SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
+    batch->begin();
+    batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
+    batch->end();
+    SAFE_DELETE(batch);
 }

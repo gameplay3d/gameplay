@@ -234,6 +234,50 @@ public:
     float getHeight() const;
 
     /**
+     * Set the alignment of this control within its parent container.
+     *
+     * @param alignment This control's alignment.
+     */
+    void setAlignment(Alignment alignment);
+
+    /**
+     * Get the alignment of this control within its parent container.
+     *
+     * @return The alignment of this control within its parent container.
+     */
+    Alignment getAlignment() const;
+
+    /**
+     * Set this control to fit horizontally within its parent container.
+     *
+     * @param autoWidth Whether to size this control to fit horizontally within its parent container.
+     */
+    void setAutoWidth(bool autoWidth);
+
+    /**
+     * Get whether this control's width is set to automatically adjust to
+     * fit horizontally within its parent container.
+     *
+     * @return Whether this control's width is set to automatically adjust.
+     */
+    bool getAutoWidth() const;
+
+    /**
+     * Set this control to fit vertically within its parent container.
+     *
+     * @param autoWidth Whether to size this control to fit vertically within its parent container.
+     */
+    void setAutoHeight(bool autoHeight);
+
+    /**
+     * Get whether this control's height is set to automatically adjust to
+     * fit vertically within its parent container.
+     *
+     * @return Whether this control's height is set to automatically adjust.
+     */
+    bool getAutoHeight() const;
+
+    /**
      * Set the size of this control's border.
      *
      * @param top The height of the border's top side.

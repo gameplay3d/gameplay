@@ -28,18 +28,19 @@
   <ItemGroup>
     <None Include="res\arial40.gpb" />
     <None Include="res\editor.form" />
+    <None Include="res\editor.png" />
     <None Include="res\editor.theme" />
-    <None Include="res\editor_atlas.png" />
-    <None Include="res\particle_explosion.png" />
     <None Include="res\explosion.particle" />
+    <None Include="res\explosion.png" />
     <None Include="res\fire.particle" />
-    <None Include="res\particle_fire.png" />
-    <None Include="res\particle_smoke.png" />
+    <None Include="res\fire.png" />
     <None Include="res\smoke.particle" />
+    <None Include="res\smoke.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -182,12 +183,6 @@
       </Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="src\ParticlesGame.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\ParticlesGame.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

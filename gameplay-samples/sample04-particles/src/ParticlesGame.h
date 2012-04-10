@@ -58,6 +58,8 @@ private:
 
     bool drawScene(Node* node, void* cookie);
 
+    void drawSplash(void* param);
+
     void loadEmitters();
 
     void emitterChanged();
@@ -72,6 +74,14 @@ private:
     std::vector<ParticleEmitter*> _particleEmitters;
     unsigned int _particleEmitterIndex;
     
+    Slider* _startRed;
+    Slider* _startGreen;
+    Slider* _startBlue;
+    Slider* _startAlpha;
+    Slider* _endRed;
+    Slider* _endGreen;
+    Slider* _endBlue;
+    Slider* _endAlpha;
     Slider* _startMin;
     Slider* _startMax;
     Slider* _endMin;
@@ -83,11 +93,13 @@ private:
     Button* _emit;
     Button* _zoomIn;
     Button* _zoomOut;
+    Button* _minimize;
     RadioButton* _spiralFlame;
     RadioButton* _smoke;
     RadioButton* _explosion;
     Slider* _burstSize;
     Container* _position;
+    Container* _particleProperties;
     Label* _particlesCount;
     Label* _fps;
 };

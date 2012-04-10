@@ -3,11 +3,19 @@
   <ItemGroup>
     <Filter Include="src">
     </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{439558fd-1ebd-4284-bc2b-ab333c4a13cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ParticlesGame.h">
       <Filter>src</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\ParticlesGame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\arial40.gpb">
@@ -16,28 +24,28 @@
     <None Include="res\editor.form">
       <Filter>res</Filter>
     </None>
-    <None Include="res\editor.theme">
+    <None Include="res\editor.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\explosion.particle">
+    <None Include="res\editor.theme">
       <Filter>res</Filter>
     </None>
     <None Include="res\fire.particle">
       <Filter>res</Filter>
     </None>
+    <None Include="res\fire.png">
+      <Filter>res</Filter>
+    </None>
     <None Include="res\smoke.particle">
       <Filter>res</Filter>
     </None>
-    <None Include="res\particle_explosion.png">
+    <None Include="res\smoke.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\particle_fire.png">
+    <None Include="res\explosion.particle">
       <Filter>res</Filter>
     </None>
-    <None Include="res\particle_smoke.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\editor_atlas.png">
+    <None Include="res\explosion.png">
       <Filter>res</Filter>
     </None>
   </ItemGroup>

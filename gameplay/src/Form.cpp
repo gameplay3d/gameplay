@@ -151,7 +151,10 @@ namespace gameplay
 
     void Form::update()
     {
-        Container::update(Rectangle(0, 0, _bounds.width, _bounds.height));
+        if (isDirty())
+        {
+            Container::update(Rectangle(0, 0, _bounds.width, _bounds.height));
+        }
     }
 
     void Form::draw()
