@@ -231,10 +231,7 @@ namespace gameplay
         // Update this container's viewport.
         Control::update(clip);
 
-        if (isDirty())
-        {
-            _layout->update(this);
-        }
+        _layout->update(this);
     }
 
     void Container::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)

@@ -54,6 +54,33 @@ public:
     };
 
     /**
+     * Defines the set of alignments for positioning controls and justifying text.
+     */
+    enum Alignment
+    {
+        // Specify horizontal alignment, use default vertical alignment (ALIGN_TOP).
+        ALIGN_LEFT = 0x01,
+        ALIGN_HCENTER = 0x02,
+        ALIGN_RIGHT = 0x04,
+    
+        // Specify vertical alignment, use default horizontal alignment (ALIGN_LEFT).
+        ALIGN_TOP = 0x10,
+        ALIGN_VCENTER = 0x20,
+        ALIGN_BOTTOM = 0x40,
+
+        // Specify both vertical and horizontal alignment.
+        ALIGN_TOP_LEFT = ALIGN_TOP | ALIGN_LEFT,
+        ALIGN_VCENTER_LEFT = ALIGN_VCENTER | ALIGN_LEFT,
+        ALIGN_BOTTOM_LEFT = ALIGN_BOTTOM | ALIGN_LEFT,
+        ALIGN_TOP_HCENTER = ALIGN_TOP | ALIGN_HCENTER,
+        ALIGN_VCENTER_HCENTER = ALIGN_VCENTER | ALIGN_HCENTER,
+        ALIGN_BOTTOM_HCENTER = ALIGN_BOTTOM | ALIGN_HCENTER,
+        ALIGN_TOP_RIGHT = ALIGN_TOP | ALIGN_RIGHT,
+        ALIGN_VCENTER_RIGHT = ALIGN_VCENTER | ALIGN_RIGHT,
+        ALIGN_BOTTOM_RIGHT = ALIGN_BOTTOM | ALIGN_RIGHT
+    };
+
+    /**
      * A constant used for setting themed attributes on all control states simultaneously.
      */
     static const unsigned char STATE_ALL = NORMAL | FOCUS | ACTIVE | DISABLED;
@@ -205,6 +232,50 @@ public:
      * @return The height of this control's bounds.
      */
     float getHeight() const;
+
+    /**
+     * Set the alignment of this control within its parent container.
+     *
+     * @param alignment This control's alignment.
+     */
+    void setAlignment(Alignment alignment);
+
+    /**
+     * Get the alignment of this control within its parent container.
+     *
+     * @return The alignment of this control within its parent container.
+     */
+    Alignment getAlignment() const;
+
+    /**
+     * Set this control to fit horizontally within its parent container.
+     *
+     * @param autoWidth Whether to size this control to fit horizontally within its parent container.
+     */
+    void setAutoWidth(bool autoWidth);
+
+    /**
+     * Get whether this control's width is set to automatically adjust to
+     * fit horizontally within its parent container.
+     *
+     * @return Whether this control's width is set to automatically adjust.
+     */
+    bool getAutoWidth() const;
+
+    /**
+     * Set this control to fit vertically within its parent container.
+     *
+     * @param autoWidth Whether to size this control to fit vertically within its parent container.
+     */
+    void setAutoHeight(bool autoHeight);
+
+    /**
+     * Get whether this control's height is set to automatically adjust to
+     * fit vertically within its parent container.
+     *
+     * @return Whether this control's height is set to automatically adjust.
+     */
+    bool getAutoHeight() const;
 
     /**
      * Set the size of this control's border.
@@ -712,6 +783,8 @@ protected:
      */
     void notifyListeners(Listener::EventType eventType);
 
+    static Alignment getAlignment(const char* alignment);
+
     std::string _id;
     State _state;           // Determines overlay used during draw().
     Rectangle _bounds;      // Position, relative to parent container's clipping window, and desired size.
@@ -720,6 +793,9 @@ protected:
     Rectangle _clip;        // Clipping window of this control's content, after clipping.
     bool _dirty;
     bool _consumeTouchEvents;
+    Alignment _alignment;
+    bool _autoWidth;
+    bool _autoHeight;
     Theme::Style* _style;
     std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
 
