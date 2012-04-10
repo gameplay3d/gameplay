@@ -20,8 +20,8 @@ using namespace std;
 using namespace gameplay;
 
 // UIScreen bounds are provided as if device was in portrait mode Gameplay defaults to landscape
-extern const int WINDOW_WIDTH  = [[UIScreen mainScreen] bounds].size.height;
-extern const int WINDOW_HEIGHT = [[UIScreen mainScreen] bounds].size.width;
+extern const int WINDOW_WIDTH  = [[UIScreen mainScreen] bounds].size.height * [[UIScreen mainScreen] scale];
+extern const int WINDOW_HEIGHT = [[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale];
 
 @class AppDelegate;
 @class View;
