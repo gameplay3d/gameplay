@@ -29,33 +29,12 @@ form particleEditor
         }
     }
 
-    // Camera Zoom
-    container zoom
-    {
-        style = noBorder
-        size = 100, 100
-        alignment = ALIGN_BOTTOM_HCENTER
-        layout = LAYOUT_VERTICAL
-
-        button zoomIn
-        {
-            style = buttonStyle
-            size = 100, 50
-            text = Zoom In
-        }
-
-        button zoomOut : zoomIn
-        {
-            text = Zoom Out
-        }
-    }
-
     container presets
     {
         style = basic
         layout = LAYOUT_VERTICAL
         position = 0, 0
-        size = 160, 200
+        size = 160, 220
 
         label title
         {
@@ -69,7 +48,8 @@ form particleEditor
            style = iconNoBorder
            text = Fire
            group = presets
-           size = 140, 50
+           size = 140, 40
+           imageSize = 35, 35
            selected = true
         }
 
@@ -83,15 +63,24 @@ form particleEditor
         {
             text = Explosion
         }
+
+        button reset
+        {
+            style = buttonStyle
+            alignment = ALIGN_BOTTOM
+            autoWidth = true
+            height = 50
+            text = Reset
+        }
     }
 
     // Emission settings
     container emission
     {
         style = basic
-        position = 0, 200
+        position = 0, 220
         layout = LAYOUT_VERTICAL
-        size = 160, 220
+        size = 160, 210
 
         // Burst emission
         button emit
@@ -127,18 +116,32 @@ form particleEditor
         checkBox started
         {
             style = iconNoBorder
-            size = 140, 50
+            size = 140, 40
+            imageSize = 35, 35
             text = Running
             checked = true
         }
     }
 
-    button minimize
+    // Camera Zoom
+    container zoom
     {
-        style = buttonStyle
-        alignment = ALIGN_TOP_RIGHT
-        size = 50, 50
-        text = -
+        style = noBorder
+        size = 160, 50
+        position = 0, 430
+
+        button zoomIn
+        {
+            style = buttonStyle
+            size = 80, 50
+            text = Zoom In
+        }
+
+        button zoomOut : zoomIn
+        {
+            position = 80, 0
+            text = Zoom Out
+        }
     }
 
     container particleProperties
@@ -264,7 +267,7 @@ form particleEditor
                 size = 150, 50
                 orientation = HORIZONTAL
                 min = 0
-                max = 10000
+                max = 5000
                 text = Min. Energy
             }
 
@@ -273,5 +276,13 @@ form particleEditor
                 text = Max. Energy
             }
         }        
+    }
+
+    button minimize
+    {
+        style = buttonStyle
+        alignment = ALIGN_TOP_RIGHT
+        size = 50, 50
+        text = -
     }
 }

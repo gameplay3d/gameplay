@@ -13,7 +13,7 @@ particle chimney-smoke
         frameDuration = 0
     }
 
-    particleCountMax = 10000
+    particleCountMax = 5000
     emissionRate = 20
     ellipsoid = false
     sizeStartMin = 3.5
