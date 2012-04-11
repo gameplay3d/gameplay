@@ -309,6 +309,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                         {
                             // Temporarily set rigidbody model on model so it's used during collision object creation.
                             Model* model = node->getModel();
+                            assert(model);
                         
                             // Up ref count to prevent node from releasing the model when we swap it.
                             model->addRef(); 
