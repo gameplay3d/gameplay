@@ -397,21 +397,18 @@ void AnimationTarget::cloneInto(AnimationTarget* target, NodeCloneContext &conte
             Animation::Channel* channel = *it;
             assert(channel->_animation);
 
-            bool animationCloned = false;
-
-            // Don't clone the Animaton if it is already in the clone context.
             Animation* animation = context.findClonedAnimation(channel->_animation);
-            if (animation == NULL)
+            if (animation != NULL)
             {
-                animation = channel->_animation->clone();
-                animationCloned = true;
+                Animation::Channel* channelCopy = new Animation::Channel(*channel, animation, target);
+                animation->addChannel(channelCopy);
             }
-            assert(animation);
-
-            context.registerClonedAnimation(channel->_animation, animation);
-            
-            Animation::Channel* channelCopy = new Animation::Channel(*channel, animation, target);
-            animation->addChannel(channelCopy);
+            else
+            {
+                // Clone the animation and register it with the context so that it only gets cloned once.
+                animation = channel->_animation->clone(channel, target);
+                context.registerClonedAnimation(channel->_animation, animation);
+            }
         }
     }
 }
