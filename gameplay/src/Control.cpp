@@ -614,16 +614,12 @@ namespace gameplay
         float clipX2 = clip.x + clip.width;
         float x2 = x + width;
         if (x2 > clipX2)
-        {
             width = clipX2 - x;
-        }
 
         float clipY2 = clip.y + clip.height;
         float y2 = y + height;
         if (y2 > clipY2)
-        {
             height = clipY2 - y;
-        }
 
         _clipBounds.set(_bounds.x, _bounds.y, width, height);
 
@@ -641,16 +637,18 @@ namespace gameplay
         clipX2 = clip.x + clip.width;
         x2 = x + width;
         if (x2 > clipX2)
-        {
             width = clipX2 - x;
-        }
 
         clipY2 = clip.y + clip.height;
         y2 = y + height;
         if (y2 > clipY2)
-        {
             height = clipY2 - y;
-        }
+
+        if (x < clip.x)
+            x = clip.x;
+
+        if (y < clip.y)
+            y = clip.y;
 
         _clip.set(x, y, width, height);
     }

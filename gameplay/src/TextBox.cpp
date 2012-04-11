@@ -222,9 +222,40 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                         // Insert character into string.
                         _text.insert(textIndex, 1, (char)key);
 
-                        // Get new location of cursor.
+                        // Get new location of caret.
                         font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_caretLocation, textIndex + 1,
                             textAlignment, true, rightToLeft);
+
+                        if (key == ' ')
+                        {
+                            // If a space was entered, check that caret is still within bounds.
+                            if (_caretLocation.x >= _clip.x + _clip.width ||
+                                _caretLocation.y >= _clip.y + _clip.height)
+                            {
+                                // If not, undo the character insertion.
+                                _text.erase(textIndex, 1);
+                                font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_caretLocation, textIndex,
+                                    textAlignment, true, rightToLeft);
+
+                                // No need to check again.
+                                break;
+                            }
+                        }
+
+                        // Always check that the text still fits within the clip region.
+                        Rectangle textBounds;
+                        font->measureText(_text.c_str(), _clip, fontSize, &textBounds, textAlignment, true, true);
+                        if (textBounds.x <= _clip.x || textBounds.y <= _clip.y ||
+                            textBounds.width >= _clip.width || textBounds.height >= _clip.height)
+                        {
+                            // If not, undo the character insertion.
+                            _text.erase(textIndex, 1);
+                            font->getLocationAtIndex(_text.c_str(), _clip, fontSize, &_caretLocation, textIndex,
+                                textAlignment, true, rightToLeft);
+
+                            // TextBox is not dirty.
+                            break;
+                        }
                 
                         _dirty = true;
                         break;
