@@ -30,75 +30,75 @@ class PhysicsRigidBody : public PhysicsCollisionObject, public Transform::Listen
 
 public:
 
-	/**
-	 * Rigid body construction parameters.
-	 */
-	struct Parameters
-	{
-		/**
-		 * The mass of the rigid body, in kilograms.
-		 */
-		float mass;
+    /**
+     * Rigid body construction parameters.
+     */
+    struct Parameters
+    {
+        /**
+         * The mass of the rigid body, in kilograms.
+         */
+        float mass;
 
-		/**
-		 * The friction of the rigid body (non-zero values give best simulation results).
-		 */
-		float friction;
+        /**
+         * The friction of the rigid body (non-zero values give best simulation results).
+         */
+        float friction;
 
-		/**
-		 * The restitution of the rigid body (this controls the bounciness of
-		 * the rigid body; use zero for best simulation results).
-		 */
+        /**
+         * The restitution of the rigid body (this controls the bounciness of
+         * the rigid body; use zero for best simulation results).
+         */
         float restitution;
 
-		/**
-		 * The percentage of linear velocity lost per second (between 0.0 and 1.0).
-		 */
-		float linearDamping;
+        /**
+         * The percentage of linear velocity lost per second (between 0.0 and 1.0).
+         */
+        float linearDamping;
 
-		/**
-		 * The percentage of angular velocity lost per second (between 0.0 and 1.0).
-		 */
-		float angularDamping;
+        /**
+         * The percentage of angular velocity lost per second (between 0.0 and 1.0).
+         */
+        float angularDamping;
 
-		/**
-		 * Whether the rigid body is kinematic.
-		 */
-		bool kinematic;
+        /**
+         * Whether the rigid body is kinematic.
+         */
+        bool kinematic;
 
-		/**
-		 * The ansitropic friction term for the rigid body.
-		 */
-		Vector3 anisotropicFriction;
+        /**
+         * The ansitropic friction term for the rigid body.
+         */
+        Vector3 anisotropicFriction;
 
-		/**
-		 * The gravity acceleration factor for the rigid body.
-		 */
-		Vector3 gravity;
+        /**
+         * The gravity acceleration factor for the rigid body.
+         */
+        Vector3 gravity;
 
-		/**
-		 * Constructor.
-		 */
-		Parameters(float mass = 0.0f, float friction = 0.5f, float resititution = 0.0f,
-			float linearDamping = 0.0f, float angularDamping = 0.0f, bool kinematic = false,
-			const Vector3& anisotropicFriction = Vector3::one(), const Vector3& gravity = Vector3::zero())
-			: mass(mass), friction(friction), restitution(restitution), linearDamping(linearDamping), angularDamping(angularDamping),
-			  kinematic(kinematic), anisotropicFriction(anisotropicFriction), gravity(gravity)
-		{
-		}
-	};
+        /**
+         * Constructor.
+         */
+        Parameters(float mass = 0.0f, float friction = 0.5f, float resititution = 0.0f,
+            float linearDamping = 0.0f, float angularDamping = 0.0f, bool kinematic = false,
+            const Vector3& anisotropicFriction = Vector3::one(), const Vector3& gravity = Vector3::zero())
+            : mass(mass), friction(friction), restitution(restitution), linearDamping(linearDamping), angularDamping(angularDamping),
+              kinematic(kinematic), anisotropicFriction(anisotropicFriction), gravity(gravity)
+        {
+        }
+    };
 
     /**
      * @see PhysicsCollisionObject#getType
      */
     PhysicsCollisionObject::Type getType() const;
 
-	/**
-	 * Gets the rigid body's mass.
-	 *
-	 * @return The mass.
-	 */
-	inline float getMass() const;
+    /**
+     * Gets the rigid body's mass.
+     *
+     * @return The mass.
+     */
+    inline float getMass() const;
 
     /**
      * Gets the rigid body's friction.
@@ -114,12 +114,12 @@ public:
      */
     inline void setFriction(float friction);
 
-	/**
-	 * Gets the rigid body's restitution.
-	 *
-	 * @return The restitution.
-	 */
-	inline float getRestitution() const;
+    /**
+     * Gets the rigid body's restitution.
+     *
+     * @return The restitution.
+     */
+    inline float getRestitution() const;
 
     /**
      * Sets the rigid body's restitution (or bounciness).
@@ -128,19 +128,19 @@ public:
      */
     inline void setRestitution(float restitution);
 
-	/**
-	 * Gets the rigid body's linear damping.
-	 *
-	 * @return The linear damping.
-	 */
-	inline float getLinearDamping() const;
+    /**
+     * Gets the rigid body's linear damping.
+     *
+     * @return The linear damping.
+     */
+    inline float getLinearDamping() const;
 
-	/**
-	 * Gets the rigid body's angular damping.
-	 *
-	 * @return The angular damping.
-	 */
-	inline float getAngularDamping() const;
+    /**
+     * Gets the rigid body's angular damping.
+     *
+     * @return The angular damping.
+     */
+    inline float getAngularDamping() const;
 
     /**
      * Sets the rigid body's linear and angular damping.
@@ -150,7 +150,7 @@ public:
      */
     inline void setDamping(float linearDamping, float angularDamping);
 
-	/**
+    /**
      * Gets the rigid body's linear velocity.
      * 
      * @return The linear velocity.
@@ -277,7 +277,7 @@ private:
      * @param shape The rigid body shape construction information.
      * @param parameters The rigid body construction parameters.
      */
-	PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Definition& shape, const Parameters& parameters);
+    PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Definition& shape, const Parameters& parameters);
 
     /**
      * Destructor.
@@ -288,16 +288,6 @@ private:
      * Private copy constructor to disallow copying.
      */
     PhysicsRigidBody(const PhysicsRigidBody& body);
-
-    /**
-     * Creates a rigid body from the rigid body file at the given path.
-     * 
-     * @param node The node to create a rigid body for; note that the node must have
-     *      a model attached to it prior to creating a rigid body for it.
-     * @param filePath The path to the rigid body file.
-     * @return The rigid body or <code>NULL</code> if the rigid body could not be loaded.
-     */
-    static PhysicsRigidBody* create(Node* node, const char* filePath);
 
     /**
      * Creates a rigid body from the specified properties object.
@@ -322,8 +312,8 @@ private:
     void transformChanged(Transform* transform, long cookie);
 
     btRigidBody* _body;
-	float _mass;
-	std::vector<PhysicsConstraint*>* _constraints;
+    float _mass;
+    std::vector<PhysicsConstraint*>* _constraints;
 
 };
 

@@ -964,11 +964,12 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
         if (animation == NULL)
         {
             // TODO: This code currently assumes LINEAR only
-            animation = controller->createAnimation(animationId, target, targetAttribute, keyTimesCount, &keyTimes[0], &values[0], Curve::LINEAR);
+            animation = target->createAnimation(animationId, targetAttribute, keyTimesCount, &keyTimes[0], &values[0], Curve::LINEAR);
         }
         else
         {
             animation->createChannel(target, targetAttribute, keyTimesCount, &keyTimes[0], &values[0], Curve::LINEAR);
+            animation->addRef();
         }
     }
 

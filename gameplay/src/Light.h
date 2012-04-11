@@ -3,16 +3,15 @@
 
 #include "Ref.h"
 #include "Vector3.h"
-#include "CloneContext.h"
 
 namespace gameplay
 {
 
 class Node;
+class NodeCloneContext;
 
 /**
  * Defines a light.
- *
  */
 class Light : public Ref
 {
@@ -29,7 +28,6 @@ public:
         POINT = 2,
         SPOT = 3
     };
-
 
     /**
      * Creates a directional light.
@@ -158,7 +156,6 @@ public:
      */
     float getOuterAngleCos() const;
 
-
 private:
 
     /**
@@ -231,9 +228,10 @@ private:
      * 
      * @return The newly created light.
      */
-    Light* clone(CloneContext &context) const;
+    Light* clone(NodeCloneContext &context) const;
 
     Light::Type _type;
+    
     union
     {
         Directional* _directional;

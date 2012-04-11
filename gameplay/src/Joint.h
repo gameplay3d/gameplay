@@ -61,7 +61,7 @@ protected:
      * 
      * @return Pointer to the newly created joint.
      */
-    virtual Node* cloneSingleNode(CloneContext &context) const;
+    virtual Node* cloneSingleNode(NodeCloneContext &context) const;
 
     /**
      * Sets the inverse bind pose matrix.
@@ -70,19 +70,28 @@ protected:
      */
     void setInverseBindPose(const Matrix& m);
 
+    /**
+     * Updates the joint matrix.
+     * 
+     * @param bindShape The bind shape matrix.
+     * @param matrixPalette The matrix palette to update.
+     */
     void updateJointMatrix(const Matrix& bindShape, Vector4* matrixPalette);
 
+    /**
+     * Called when this Joint's transform changes.
+     */
     void transformChanged();
 
 private:
 
     /**
-     * Hidden copy constructor.
+     * Constructor.
      */
     Joint(const Joint& copy);
 
     /**
-     * Hidden copy assignment operator.
+     * Copy assignment operator.
      */
     Joint& operator=(const Joint&);
 

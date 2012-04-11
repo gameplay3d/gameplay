@@ -249,13 +249,13 @@ void FBXSceneEncoder::loadScene(KFbxScene* fbxScene)
     // Find the ambient light of the scene
     KFbxColor ambientColor = fbxScene->GetGlobalSettings().GetAmbientColor();
     scene->setAmbientColor((float)ambientColor.mRed, (float)ambientColor.mGreen, (float)ambientColor.mBlue);
-
-	// Assign the first camera node (if there is one) in the scene as the active camera
-	// This ensures that if there's a camera in the scene that it is assigned as the 
-	// active camera.
-	// TODO: add logic to find the "active" camera node in the fbxScene
-	scene->setActiveCameraNode(scene->getFirstCameraNode());
-
+    
+    // Assign the first camera node (if there is one) in the scene as the active camera
+    // This ensures that if there's a camera in the scene that it is assigned as the 
+    // active camera.
+    // TODO: add logic to find the "active" camera node in the fbxScene
+    scene->setActiveCameraNode(scene->getFirstCameraNode());
+    
     _gamePlayFile.addScene(scene);
 }
 
@@ -652,19 +652,64 @@ void FBXSceneEncoder::loadLight(KFbxNode* fbxNode, Node* node)
     switch (fbxLight->LightType.Get())
     {
     case KFbxLight::ePOINT:
-        light->setPointLight();
-        // TODO: range
+    {
+        KFbxLight::EDecayType decayType = fbxLight->DecayType.Get();
+        switch (decayType)
+        {
+        case KFbxLight::eNONE:
+            // No decay. Can assume we have an ambient light, because ambient lights in the scene are 
+            // converted to point lights with no decay when exporting to FBX.
+            light->setAmbientLight();
+            break;
+        case KFbxLight::eLINEAR:
+            light->setPointLight();
+            light->setLinearAttenuation((float)fbxLight->DecayStart.Get());
+            break;
+        case KFbxLight::eQUADRATIC:
+            light->setPointLight();
+            light->setQuadraticAttenuation((float)fbxLight->DecayStart.Get());
+            break;
+        case KFbxLight::eCUBIC:
+        default:
+            // Not supported..
+            break;
+        }
         break;
+    }
     case KFbxLight::eDIRECTIONAL:
+    {
         light->setDirectionalLight();
         break;
+    }
     case KFbxLight::eSPOT:
+    {
         light->setSpotLight();
-        // TODO: range and angles
+
+        KFbxLight::EDecayType decayType = fbxLight->DecayType.Get();
+        switch (decayType)
+        {
+        case KFbxLight::eNONE:
+            // No decay.
+            break;
+        case KFbxLight::eLINEAR:
+            light->setLinearAttenuation((float)fbxLight->DecayStart.Get());
+            break;  
+        case KFbxLight::eQUADRATIC:
+            light->setQuadraticAttenuation((float)fbxLight->DecayStart.Get());
+            break;
+        case KFbxLight::eCUBIC:
+            // Not supported..
+            break;
+        }
+
+        light->setFalloffAngle(MATH_DEG_TO_RAD((float)fbxLight->ConeAngle.Get())); // fall off angle
         break;
+    }
     default:
+    {
         warning("Unknown light type in node.");
         return;
+    }
     }
 
     _gamePlayFile.addLight(light);

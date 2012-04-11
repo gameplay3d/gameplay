@@ -4,6 +4,7 @@
 #include "AudioController.h"
 #include "AudioSource.h"
 #include "Game.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -464,7 +465,10 @@ void AudioSource::transformChanged(Transform* transform, long cookie)
 {
 #ifndef __ANDROID__
     if (_node)
-        alSourcefv(_alSource, AL_POSITION, (const ALfloat*)&_node->getTranslationWorld());
+    {
+        Vector3 translation = _node->getTranslationWorld();
+        alSourcefv(_alSource, AL_POSITION, (const ALfloat*)&translation.x);
+    }
 #else
     if (_playerLocation)
     {
@@ -481,7 +485,7 @@ void AudioSource::transformChanged(Transform* transform, long cookie)
 #endif
 }
 
-AudioSource* AudioSource::clone(CloneContext &context) const
+AudioSource* AudioSource::clone(NodeCloneContext &context) const
 {
 #ifndef __ANDROID__
     ALuint alSource = 0;
@@ -494,7 +498,7 @@ AudioSource* AudioSource::clone(CloneContext &context) const
     AudioSource* audioClone = new AudioSource(_buffer, alSource);
 #else
     // TODO: Implement cloning audio source for Android
-    AudioSource* audioClone = new AudioSource(AudioBuffer* buffer, const SLObjectItf& player);
+    AudioSource* audioClone = new AudioSource(_buffer, _playerObject);
 
 #endif
     _buffer->addRef();

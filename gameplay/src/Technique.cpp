@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "Technique.h"
 #include "Material.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -53,7 +54,7 @@ Pass* Technique::getPass(const char* id) const
     return NULL;
 }
 
-Technique* Technique::clone(Material* material, CloneContext &context) const
+Technique* Technique::clone(Material* material, NodeCloneContext &context) const
 {
     Technique* technique = new Technique(getId(), material);
     technique->_material = material;

@@ -22,16 +22,9 @@ static HWND __hwnd = 0;
 static HDC __hdc = 0;
 static HGLRC __hrc = 0;
 
-// Gets the gameplay::Keyboard::Key enumeration constant that corresponds
-// to the given key and shift modifier combination.
+
 static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
 {
-    // TODO: Handle the following keys
-    //gameplay::Keyboard::KEY_SYSREQ
-    //gameplay::Keyboard::KEY_BREAK
-    //gameplay::Keyboard::KEY_MENU
-    //gameplay::Keyboard::KEY_KP_ENTER
-
     switch (win32KeyCode)
     {
     case VK_PAUSE:
@@ -290,7 +283,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_LBUTTONDOWN:
         if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0))
         {
-	        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, LOWORD(lParam), HIWORD(lParam), 0);
+            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, LOWORD(lParam), HIWORD(lParam), 0);
         }
         lMouseDown = true;
         return 0;
@@ -299,7 +292,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         lMouseDown = false;
         if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0))
         {
-	        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, LOWORD(lParam), HIWORD(lParam), 0);
+            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, LOWORD(lParam), HIWORD(lParam), 0);
         }
         return 0;
 
@@ -380,7 +373,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
         // Suppress key repeats
         if ((lParam & 0x40000000) == 0)
-	        gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown ^ capsOn));
+            gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown ^ capsOn));
         break;
         
     case WM_KEYUP:
@@ -411,6 +404,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     
     return DefWindowProc(hwnd, msg, wParam, lParam); 
 }
+
 
 namespace gameplay
 {
@@ -452,7 +446,6 @@ Platform::~Platform()
     }
 }
 
-// TODO: Fix Fullscreen + More error handling.
 Platform* Platform::create(Game* game)
 {
     FileSystem::setResourcePath("./");
@@ -552,7 +545,6 @@ Platform* Platform::create(Game* game)
 
 error:
 
-    // TODO: cleanup
     exit(0);
     return NULL;
 }
@@ -600,6 +592,11 @@ int Platform::enterMessagePump()
     }
 
     return msg.wParam;
+}
+
+void Platform::signalShutdown() 
+{
+    // nothing to do  
 }
 
 unsigned int Platform::getDisplayWidth()

@@ -57,6 +57,32 @@ public:
     };
 
     /**
+     * Stucture that stores hit test results for ray and sweep tests.
+     */
+    struct HitResult
+    {
+        /**
+         * The collision object that was hit.
+         */
+        PhysicsCollisionObject* object;
+
+        /**
+         * The point where the collision occurred, in world space.
+         */
+        Vector3 point;
+
+        /**
+         * The fraction (0-1) of the test distance to the collision point.
+         */
+        float fraction;
+
+        /**
+         * The normal vector of the collision surface, in world space.
+         */
+        Vector3 normal;
+    };
+
+    /**
      * Adds a listener to the physics controller.
      * 
      * @param listener The listener to add.
@@ -185,7 +211,7 @@ public:
      * @param gravity The gravity vector.
      */
     void setGravity(const Vector3& gravity);
-   
+
     /**
      * Draws debugging information (rigid body outlines, etc.) using the given view projection matrix.
      * 
@@ -194,16 +220,26 @@ public:
     void drawDebug(const Matrix& viewProjection);
 
     /**
-     * Gets the first rigid body that the given ray intersects.
+     * Performs a ray test on the physics world.
      * 
      * @param ray The ray to test intersection with.
      * @param distance How far along the given ray to test for intersections.
-     * @param hitPoint Optional Vector3 point that is populated with the world-space point of intersection.
-     * @param hitFraction Optional float pointer that is populated with the distance along the ray
-     *      (as a fraction between 0-1) where the intersection occurred.
-     * @return The first rigid body that the ray intersects, or NULL if no intersection was found.
+     * @param result Optioanl pointer to a HitTest structure to store hit test result information in.
+     * @return True if the ray test collided with a physics object, false otherwise.
      */
-    PhysicsCollisionObject* rayTest(const Ray& ray, float distance, Vector3* hitPoint = NULL, float* hitFraction = NULL);
+    bool rayTest(const Ray& ray, float distance, PhysicsController::HitResult* result = NULL);
+
+    /**
+     * Performs a sweep test of the given collision object on the physics world.
+     *
+     * The start position of the sweep test is defined by the current world position
+     * of the specified collision object.
+     *
+     * @param object The collision object to test.
+     * @param endPosition The end position of the sweep test, in world space.
+     * @return True if the object intersects any other physics objects, false otherwise.
+     */
+    bool sweepTest(PhysicsCollisionObject* object, const Vector3& endPosition, PhysicsController::HitResult* result = NULL);
 
 protected:
 
@@ -229,7 +265,7 @@ private:
         int _status;
     };
 
-	/**
+    /**
      * Constructor.
      */
     PhysicsController();
@@ -279,30 +315,30 @@ private:
     // Gets the corresponding GamePlay object for the given Bullet object.
     PhysicsCollisionObject* getCollisionObject(const btCollisionObject* collisionObject) const;
 
-	// Creates a collision shape for the given node and gameplay shape definition.
-	// Populates 'centerOfMassOffset' with the correct calculated center of mass offset.
-	PhysicsCollisionShape* createShape(Node* node, const PhysicsCollisionShape::Definition& shape, Vector3* centerOfMassOffset);
+    // Creates a collision shape for the given node and gameplay shape definition.
+    // Populates 'centerOfMassOffset' with the correct calculated center of mass offset.
+    PhysicsCollisionShape* createShape(Node* node, const PhysicsCollisionShape::Definition& shape, Vector3* centerOfMassOffset);
     
     // Creates a box collision shape.
     PhysicsCollisionShape* createBox(const Vector3& extents, const Vector3& scale);
 
-	// Creates a sphere collision shape.
+    // Creates a sphere collision shape.
     PhysicsCollisionShape* createSphere(float radius, const Vector3& scale);
 
     // Creates a capsule collision shape.
     PhysicsCollisionShape* createCapsule(float radius, float height, const Vector3& scale);
 
-	// Creates a heightfield collision shape.
+    // Creates a heightfield collision shape.
     PhysicsCollisionShape* createHeightfield(Node* node, Image* image, Vector3* centerOfMassOffset);
 
     // Creates a triangle mesh collision shape.
     PhysicsCollisionShape* createMesh(Mesh* mesh, const Vector3& scale);
 
-	// Destroys a collision shape created through PhysicsController
-	void destroyShape(PhysicsCollisionShape* shape);
+    // Destroys a collision shape created through PhysicsController
+    void destroyShape(PhysicsCollisionShape* shape);
 
-	// Helper function for calculating heights from heightmap (image) or heightfield data.
-	static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
+    // Helper function for calculating heights from heightmap (image) or heightfield data.
+    static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
 
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
@@ -337,7 +373,7 @@ private:
         void reportErrorWarning(const char* warningString);
         void draw3dText(const btVector3& location, const char* textString);        
         void setDebugMode(int mode);        
-        int	getDebugMode() const;
+        int    getDebugMode() const;
         
     private:
         

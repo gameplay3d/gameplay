@@ -22,7 +22,6 @@ class AnimationClip;
  */
 class Animation : public Ref
 {
-    friend class AnimationController;
     friend class AnimationClip;
     friend class AnimationTarget;
     friend class Package;
@@ -93,28 +92,8 @@ public:
      * Returns true if this animation targets the given AnimationTarget.
      */
     bool targets(AnimationTarget* target) const;
-
+    
 private:
-
-    /**
-     * Defines a reference counted Curve wrapper.
-     * 
-     * Multiple channels can share the same Curve.
-     */
-    class CurveRef : public Ref
-    {
-    public:
-        static CurveRef* create(Curve* curve);
-        Curve* getCurve() const;
-
-    private:
-        CurveRef(Curve* curve);
-        CurveRef(const CurveRef&); // Hidden copy constructor.
-        ~CurveRef();
-        CurveRef& operator=(const CurveRef&); // Hidden copy assignment operator.
-
-        Curve* _curve;
-    };
 
     /**
      * Defines a channel which holds the target, target property, curve values, and duration.
@@ -124,7 +103,6 @@ private:
      */
     class Channel
     {
-        friend class AnimationController;
         friend class AnimationClip;
         friend class Animation;
         friend class AnimationTarget;
@@ -141,7 +119,7 @@ private:
         Animation* _animation;                // Reference to the animation this channel belongs to.
         AnimationTarget* _target;             // The target of this channel.
         int _propertyId;                      // The target property this channel targets.
-        CurveRef* _curveRef;                  // The curve used to represent the animation data.
+        Curve* _curve;                        // The curve used to represent the animation data.
         unsigned long _duration;              // The length of the animation (in milliseconds).
     };
 
@@ -169,12 +147,12 @@ private:
      * Destructor.
      */
     ~Animation();
-
+    
     /**
      * Hidden copy assignment operator.
      */
     Animation& operator=(const Animation&);
-
+    
     /**
      * Creates the default clip.
      */

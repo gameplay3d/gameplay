@@ -22,27 +22,37 @@ class Form : public Container
     friend class Platform;
 
 public:
+
     /**
      * Create from properties file.
      * The top-most namespace in the file must be named 'form'.  The following properties are available for forms:
      *
-     * form <Form ID>
+     * form <formID>
      * {
      *      // Form properties.
-     *      theme    = <Path to Theme File> // See Theme.h.
-     *      layout   = <Layout Type>        // A value from the Layout::Type enum.  E.g.: LAYOUT_VERTICAL
-     *      style    = <Style ID>           // A style from the referenced theme.
-     *      position = <x, y>               // Position of the form on-screen, measured in pixels.
-     *      size     = <width, height>      // Size of the form, measured in pixels.
+     *      theme    = <Path to .theme File>    // See Theme.h.
+     *      layout   = <Layout::Type>           // A value from the Layout::Type enum.  e.g.: LAYOUT_VERTICAL
+     *      style    = <styleID>                // A style from the referenced theme.
+     *      position = <x, y>                   // Position of the form on-screen, measured in pixels.
+     *      size     = <width, height>          // Size of the form, measured in pixels.
+     *      alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
+     *      autoWidth   = <bool>                // Will result in a form the width of the display.
+     *      autoHeight  = <bool>                // Will result in a form the height of the display.
+     *      size        = <width, height>
+     *      width       = <width>               // Can be used in place of 'size', e.g. with 'autoHeight = true'
+     *      height      = <height>              // Can be used in place of 'size', e.g. with 'autoWidth = true'
      *   
-     *      // All the controls within this form.
-     *      container{}
-     *      label{}
-     *      textBox{}
-     *      button{}
-     *      checkBox{}
-     *      radioButton{}
-     *      slider{}
+     *      // All the nested controls within this form.
+     *      container 
+     *      {
+     *          ...
+     *      }
+     *      label { }
+     *      textBox { }
+     *      button { }
+     *      checkBox { }
+     *      radioButton { }
+     *      slider { }
      * }
      *
      * @param path Path to the properties file to create a new form from.
@@ -104,18 +114,29 @@ public:
      */
     void draw();
 
-protected:
+private:
+    
+    /**
+     * Constructor.
+     */
     Form();
-    virtual ~Form();
 
-    static Form* create(const char* textureFile, Layout::Type type);
+    /**
+     * Constructor.
+     */
+    Form(const Form& copy);
+
+    /**
+     * Destructor.
+     */
+    virtual ~Form();
 
     /**
      * Initialize a quad for this form in order to draw it in 3D.
      *
      * @param mesh The mesh to create a model from.
      */
-    void initQuad(Mesh* mesh);
+    void initializeQuad(Mesh* mesh);
 
     /**
      * Draw this form into the current framebuffer.
@@ -142,10 +163,6 @@ protected:
     Node* _node;                // Node for transforming this Form in world-space.
     FrameBuffer* _frameBuffer;  // FBO the Form is rendered into for texturing the quad.
     Matrix _projectionMatrix;   // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
-    Viewport* _viewport;        // Viewport for setting before rendering into the FBO.
-
-private:
-    Form(const Form& copy);
 };
 
 }

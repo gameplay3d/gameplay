@@ -359,7 +359,7 @@ void Model::validatePartCount()
     }
 }
 
-Model* Model::clone(CloneContext &context)
+Model* Model::clone(NodeCloneContext &context)
 {
     Model* model = Model::create(getMesh());
     if (getSkin())

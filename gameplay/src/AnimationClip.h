@@ -36,6 +36,9 @@ public:
 
     public:
 
+        /*
+         * Constructor.
+         */
         Listener() 
         {
         }
@@ -225,9 +228,7 @@ public:
     void addListener(AnimationClip::Listener* listener, unsigned long eventTime);
 
 private:
-    /**
-     * State bits.
-     */
+    
     static const unsigned char CLIP_IS_PLAYING_BIT = 0x01;             // Bit representing whether AnimationClip is a running clip in AnimationController
     static const unsigned char CLIP_IS_STARTED_BIT = 0x02;             // Bit representing whether the AnimationClip has actually been started (ie: received first call to update())
     static const unsigned char CLIP_IS_FADING_OUT_STARTED_BIT = 0x04;  // Bit representing that a cross fade has started.

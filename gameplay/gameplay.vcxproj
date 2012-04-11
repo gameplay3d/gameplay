@@ -30,7 +30,6 @@
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CheckBox.cpp" />
-    <ClCompile Include="src\CloneContext.cpp" />
     <ClCompile Include="src\Container.cpp" />
     <ClCompile Include="src\Control.cpp" />
     <ClCompile Include="src\Curve.cpp" />
@@ -49,6 +48,7 @@
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Label.cpp" />
+    <ClCompile Include="src\Layout.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MeshBatch.cpp" />
@@ -95,6 +95,7 @@
     <ClCompile Include="src\TextBox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Theme.cpp" />
+    <ClCompile Include="src\ThemeStyle.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\Vector2.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
@@ -102,7 +103,6 @@
     <ClCompile Include="src\VertexAttributeBinding.cpp" />
     <ClCompile Include="src\VertexFormat.cpp" />
     <ClCompile Include="src\VerticalLayout.cpp" />
-    <ClCompile Include="src\Viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AbsoluteLayout.h" />
@@ -121,7 +121,6 @@
     <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\CheckBox.h" />
-    <ClInclude Include="src\CloneContext.h" />
     <ClInclude Include="src\Container.h" />
     <ClInclude Include="src\Control.h" />
     <ClInclude Include="src\Curve.h" />
@@ -179,12 +178,14 @@
     <ClInclude Include="src\RenderTarget.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SceneLoader.h" />
+    <ClInclude Include="src\ScreenDisplayer.h" />
     <ClInclude Include="src\Slider.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />
     <ClInclude Include="src\TextBox.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Theme.h" />
+    <ClInclude Include="src\ThemeStyle.h" />
     <ClInclude Include="src\TimeListener.h" />
     <ClInclude Include="src\Touch.h" />
     <ClInclude Include="src\Transform.h" />
@@ -194,7 +195,6 @@
     <ClInclude Include="src\VertexAttributeBinding.h" />
     <ClInclude Include="src\VertexFormat.h" />
     <ClInclude Include="src\VerticalLayout.h" />
-    <ClInclude Include="src\Viewport.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\logo_black.png" />
@@ -227,13 +227,13 @@
     <None Include="src\Curve.inl" />
     <None Include="src\Game.inl" />
     <None Include="src\gameplay-main-ios.mm" />
-    <None Include="src\gameplay-main-macos.mm" />
+    <None Include="src\gameplay-main-macosx.mm" />
     <None Include="src\Image.inl" />
     <None Include="src\Matrix.inl" />
     <None Include="src\MeshBatch.inl" />
     <None Include="src\Plane.inl" />
     <None Include="src\PlatformiOS.mm" />
-    <None Include="src\PlatformMacOS.mm" />
+    <None Include="src\PlatformMacOSX.mm" />
     <None Include="src\Quaternion.inl" />
     <None Include="src\Ray.inl" />
     <None Include="src\Vector2.inl" />
