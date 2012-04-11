@@ -201,9 +201,12 @@ private:
     /**
      * Clones this animation.
      * 
+     * @param channel The channel to clone and add to the animation.
+     * @param target The target of the animation.
+     * 
      * @return The newly created animation.
      */
-    Animation* clone();
+    Animation* clone(Channel* channel, AnimationTarget* target);
     
     AnimationController* _controller;       // The AnimationController that this Animation will run on.
     std::string _id;                        // The Animation's ID.
