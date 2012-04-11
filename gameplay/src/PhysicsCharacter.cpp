@@ -59,9 +59,9 @@ protected:
 
 PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape, float mass)
     : PhysicsGhostObject(node, shape), _moveVelocity(0,0,0), _forwardVelocity(0.0f), _rightVelocity(0.0f),
-    _fallVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
-    _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0),
-    _stepHeight(0.1f), _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true), _mass(mass)
+    _verticalVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
+    _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0), _stepHeight(0.1f),
+    _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true), _mass(mass)
 {
     setMaxSlopeAngle(45.0f);
 
@@ -307,7 +307,20 @@ void PhysicsCharacter::setRightVelocity(float velocity)
 
 void PhysicsCharacter::jump(float height)
 {
-    // TODO
+    // TODO: Add support for different jump modes (i.e. double jump, changing direction in air, holding down jump button for extra height, etc)
+    if (!_verticalVelocity.isZero())
+        return;
+
+    // v = sqrt(v0^2 + 2 a s)
+    //  v0 == initial velocity (zero for jumping)
+    //  a == acceleration (inverse gravity)
+    //  s == linear displacement (height)
+    Vector3 jumpVelocity = -Game::getInstance()->getPhysicsController()->getGravity() * height * 2.0f;
+    jumpVelocity.set(
+        jumpVelocity.x == 0 ? 0 : std::sqrt(jumpVelocity.x),
+        jumpVelocity.y == 0 ? 0 : std::sqrt(jumpVelocity.y),
+        jumpVelocity.z == 0 ? 0 : std::sqrt(jumpVelocity.z));
+    _verticalVelocity += BV(jumpVelocity);
 }
 
 void PhysicsCharacter::updateCurrentVelocity()
@@ -403,15 +416,18 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
 
 void PhysicsCharacter::stepUp(btCollisionWorld* collisionWorld, btScalar time)
 {
-    // Note: btKinematicCharacterController implements this by always just setting
-    // target position to currentPosition.y + stepHeight, and then checking for collisions.
-    // Don't let the character move up if it hits the ceiling (or something above).
-    // Do this WITHOUT using time in the calculation - this way you are always guarnateed
-    // to step over a step that is stepHeight high.
-    // 
-    // Note that stepDown() will be called right after this, so the character will move back
-    // down to collide with the ground so that he smoothly steps up stairs.
-    _currentPosition += btVector3(0, _stepHeight, 0);
+    btVector3 targetPosition(_currentPosition);
+
+    if (_verticalVelocity.isZero())
+    {
+        // Simply increase our poisiton by step height to enable us
+        // to smoothly move over steps.
+        targetPosition += btVector3(0, _stepHeight, 0);
+    }
+
+    // TODO: Convex sweep test to ensure we didn't hit anything during the step up.
+
+    _currentPosition = targetPosition;
 }
 
 void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, float time)
@@ -542,11 +558,12 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 
 void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
 {
-    // Contribute basic gravity to fall velocity.
+    // Contribute gravity to vertical velocity.
     btVector3 gravity = Game::getInstance()->getPhysicsController()->_world->getGravity();
-    _fallVelocity += (gravity * time);
+    _verticalVelocity += (gravity * time);
 
-    btVector3 targetPosition = _currentPosition + (_fallVelocity * time);
+    // Compute new position from vertical velocity.
+    btVector3 targetPosition = _currentPosition + (_verticalVelocity * time);
     targetPosition -= btVector3(0, _stepHeight, 0);
 
     // Perform a convex sweep test between current and target position
@@ -569,7 +586,7 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
         _currentPosition.setInterpolate3(_currentPosition, targetPosition, callback.m_closestHitFraction);
 
         // Zero out fall velocity when we hit an object
-        _fallVelocity.setZero();
+        _verticalVelocity.setZero();
     }
     else
     {
