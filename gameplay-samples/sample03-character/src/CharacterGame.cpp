@@ -9,11 +9,11 @@ CharacterGame game;
 #define BLEND_DURATION 150.0f
 #define OPAQUE_OBJECTS      0
 #define TRANSPARENT_OBJECTS 1
+#define CAMERA_FOCUS_DISTANCE 16.0f
 
 unsigned int keyFlags = 0;
 float velocityNS = 0.0f;
 float velocityEW = 0.0f;
-float cameraFocusDistance = 16.0f;
 int drawDebug = 0;
 
 CharacterGame::CharacterGame()
@@ -46,6 +46,12 @@ void CharacterGame::initialize()
     _character = static_cast<PhysicsCharacter*>(node->getCollisionObject());
     _character->setMaxStepHeight(0.0f);
     _character->addCollisionListener(this);
+
+    /*Node* shadow = _scene->findNode("BoyShadow");
+    shadow->addRef();
+    shadow->getParent()->removeChild(shadow);
+    _scene->addNode(shadow);
+    shadow->release();*/
 
     // Store character mesh node.
     _characterMeshNode = node->findNode("BoyMesh");
@@ -125,9 +131,17 @@ void CharacterGame::finalize()
     SAFE_DELETE(_gamepad);
 }
 
+void CharacterGame::play(const char* animation, PhysicsCharacter::AnimationFlags flags, float speed, float blendDuration)
+{
+    if (!_character->getAnimation("jump")->isPlaying())
+    {
+        _character->play(animation, flags, speed, BLEND_DURATION, 1);
+    }
+}
+
 void CharacterGame::update(long elapsedTime)
 {
-	Vector2 joystickVec = _gamepad->getJoystickState(JOYSTICK);
+    Vector2 joystickVec = _gamepad->getJoystickState(JOYSTICK);
     if (!joystickVec.isZero())
     {
 	    keyFlags = 0;
@@ -153,23 +167,23 @@ void CharacterGame::update(long elapsedTime)
 
     if (keyFlags == 16)
     {
-        _character->play("jump", PhysicsCharacter::ANIMATION_RESUME);
+        play("jump", PhysicsCharacter::ANIMATION_RESUME, 1.0f, BLEND_DURATION);
     }
     else if (keyFlags == 0) // Update character animation and movement
     {
-        _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT, 1.0f, BLEND_DURATION);
+        play("idle", PhysicsCharacter::ANIMATION_REPEAT, 1.0f, BLEND_DURATION);
     }
     else
     {
         // Forward motion
         if (keyFlags & 1)
         {
-            _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
+            play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
             _character->setForwardVelocity(velocityNS);
         }
         else if (keyFlags & 2)
         {
-            _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
+            play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
             _character->setForwardVelocity(velocityNS);
         }
         else
@@ -181,12 +195,12 @@ void CharacterGame::update(long elapsedTime)
         // Strafing
         if (keyFlags & 4)
         {
-            _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
+            play("walk", PhysicsCharacter::ANIMATION_REPEAT, ANIM_SPEED, BLEND_DURATION);
             _character->setRightVelocity(velocityEW);
         }
         else if (keyFlags & 8)
         {
-            _character->play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
+            play("walk", PhysicsCharacter::ANIMATION_REPEAT, -ANIM_SPEED, BLEND_DURATION);
             _character->setRightVelocity(velocityEW);
         }
         else
@@ -197,6 +211,11 @@ void CharacterGame::update(long elapsedTime)
     }
 
     adjustCamera(elapsedTime);
+
+    PhysicsController::HitResult hitResult;
+    Vector3 v = _character->getNode()->getTranslationWorld();
+    if (getPhysicsController()->rayTest(Ray(Vector3(v.x, v.y + 1.0f, v.z), Vector3(0, -1, 0)), 100.0f, &hitResult))
+        _scene->findNode("BoyShadow")->setTranslation(Vector3(hitResult.point.x, hitResult.point.y + 0.1f, hitResult.point.z));
 }
 
 void CharacterGame::render(long elapsedTime)
@@ -225,7 +244,7 @@ void CharacterGame::render(long elapsedTime)
 
     _font->begin();
     char fps[32];
-    sprintf(fps, "FPS: %d\nCamera Focus: %d", getFrameRate(), (int)cameraFocusDistance);
+    sprintf(fps, "%d", getFrameRate());
     _font->drawText(fps, 5, 5, Vector4(1,1,0,1), 20);
     _font->end();
 }
@@ -286,12 +305,8 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             if (drawDebug > 3)
                 drawDebug = 0;
             break;
-        case Keyboard::KEY_EQUAL:
-        case Keyboard::KEY_PLUS:
-            cameraFocusDistance++;
-            break;
-        case Keyboard::KEY_MINUS:
-            cameraFocusDistance--;
+        case Keyboard::KEY_SPACE:
+            play("jump", PhysicsCharacter::ANIMATION_RESUME, 1.0f, BLEND_DURATION);
             break;
         }
     }
@@ -337,7 +352,7 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
         // If it was active before, reset the joystick's influence on the keyflags.
         if (wasActive)
             keyFlags = 0;
-    
+
         switch (evt)
         {
         case Touch::TOUCH_PRESS:
@@ -369,14 +384,14 @@ void CharacterGame::loadAnimationClips(Node* node)
     _animation->createClips("res/boy.animation");
 
     AnimationClip* jump = _animation->getClip("jump");
-    jump->addListener(this, jump->getDuration() - 300L);
+    jump->addListener(this, (long)((float)jump->getDuration() * 0.30f));
 
     _character->addAnimation("idle", _animation->getClip("idle"), 0.0f);
     _character->addAnimation("walk", _animation->getClip("walk"), WALK_SPEED);
     _character->addAnimation("run", _animation->getClip("run"), RUN_SPEED);
     _character->addAnimation("jump", jump, 0.0f);
 
-    _character->play("idle", PhysicsCharacter::ANIMATION_REPEAT);
+    play("idle", PhysicsCharacter::ANIMATION_REPEAT, 1.0f, 0.0f);
 }
 
 void CharacterGame::collisionEvent(
@@ -412,7 +427,7 @@ void CharacterGame::adjustCamera(long elapsedTime)
     cameraDirection.normalize();
 
     // Get focal point of camera (use the resolved world location of the head joint as a focal point)
-    Vector3 focalPoint(cameraPosition + (cameraDirection * cameraFocusDistance));
+    Vector3 focalPoint(cameraPosition + (cameraDirection * CAMERA_FOCUS_DISTANCE));
 
     PhysicsController::HitResult result;
     PhysicsCollisionObject* occlusion = NULL;
@@ -470,6 +485,7 @@ void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener:
 {
     if (std::string(clip->getID()).compare("jump") == 0)
     {
-        keyFlags = 0;
+        _character->jump(2.0f);
+        //keyFlags = 0;
     }
 }

@@ -326,7 +326,7 @@ private:
     btVector3 _moveVelocity;
     float _forwardVelocity;
     float _rightVelocity;
-    btVector3 _fallVelocity;
+    btVector3 _verticalVelocity;
     btVector3 _currentVelocity;
     btVector3 _normalizedVelocity;
     bool _colliding;

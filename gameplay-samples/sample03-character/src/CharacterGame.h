@@ -78,6 +78,7 @@ private:
     bool drawScene(Node* node, void* cookie);
     void loadAnimationClips(Node* node);
     void adjustCamera(long elapsedTime);
+    void play(const char* animation, PhysicsCharacter::AnimationFlags flags, float speed, float blendDuration);
 
     Font* _font;
     Scene* _scene;

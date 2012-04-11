@@ -59,11 +59,34 @@ scene
         rigidbody = res/scene.physics#StaticBox
     }
 
-    node Wall
+    node Wall1
     {
-        url = Wall*
         material = res/scene.material#Wall
         rigidbody = res/scene.physics#StaticBox
+    }
+
+    node Wall2
+    {
+        material = res/scene.material#Wall
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node Wall3
+    {
+        material = res/scene.material#Wall
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node Wall4
+    {
+        material = res/scene.material#Wall
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node Wall4Overhang
+    {
+        material = res/scene.material#Wall
+        rigidbody = res/scene.physics#StaticMesh
     }
 
     node WindowLedge
@@ -129,6 +152,6 @@ scene
 
     physics
     {
-        gravity = 0.0, -9.8, 0.0
+        gravity = 0.0, -24.5, 0.0
     }
 }
