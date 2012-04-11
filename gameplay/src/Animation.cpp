@@ -19,12 +19,18 @@ Animation::Animation(const char* id, AnimationTarget* target, int propertyId, un
     : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0), _defaultClip(NULL), _clips(NULL)
 {
     createChannel(target, propertyId, keyCount, keyTimes, keyValues, type);
+    // Release the animation because a newly created animation has a ref count of 1 and the channels hold the ref to animation.
+    release();
+    assert(getRefCount() == 1);
 }
 
 Animation::Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type)
     : _controller(Game::getInstance()->getAnimationController()), _id(id), _duration(0), _defaultClip(NULL), _clips(NULL)
 {
     createChannel(target, propertyId, keyCount, keyTimes, keyValues, keyInValue, keyOutValue, type);
+    // Release the animation because a newly created animation has a ref count of 1 and the channels hold the ref to animation.
+    release();
+    assert(getRefCount() == 1);
 }
 
 Animation::Animation(const char* id)
@@ -67,6 +73,7 @@ Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int p
     assert(_target->getAnimationPropertyComponentCount(propertyId));
     _curve->addRef();
     _target->addChannel(this);
+    _animation->addRef();
 }
 
 Animation::Channel::Channel(const Channel& copy, Animation* animation, AnimationTarget* target)
@@ -74,6 +81,7 @@ Animation::Channel::Channel(const Channel& copy, Animation* animation, Animation
 {
     _curve->addRef();
     _target->addChannel(this);
+    _animation->addRef();
 }
 
 Animation::Channel::~Channel()
@@ -388,9 +396,15 @@ void Animation::setTransformRotationOffset(Curve* curve, unsigned int propertyId
     return;
 }
 
-Animation* Animation::clone()
+Animation* Animation::clone(Channel* channel, AnimationTarget* target)
 {
     Animation* animation = new Animation(getId());
+
+    Animation::Channel* channelCopy = new Animation::Channel(*channel, animation, target);
+    animation->addChannel(channelCopy);
+    // Release the animation because a newly created animation has a ref count of 1 and the channels hold the ref to animation.
+    animation->release();
+    assert(animation->getRefCount() == 1);
     return animation;
 }
 
