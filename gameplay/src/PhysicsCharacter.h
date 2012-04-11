@@ -1,7 +1,9 @@
 #ifndef PHYSICSCHARACTER_H_
 #define PHYSICSCHARACTER_H_
 
+#include "Node.h"
 #include "PhysicsGhostObject.h"
+#include "Properties.h"
 
 namespace gameplay
 {
@@ -153,7 +155,7 @@ public:
      *
      * @param name Animation name, or NULL to stop all character animations on the given layer.
      * @param flags Animation flags from the AnimationFlags enumeration.
-     * @param speed Optional animation speed (default is 1.0).
+     * @param animationSpeed Optional animation speed (default is 1.0).
      * @param blendDuration Optional number of milliseconds to crossfade between the
      *      currently playing animation on the given layer and the new animation.
      * @param layer Optional animation layer.
@@ -256,7 +258,7 @@ public:
     /**
      * @see btActionInterface::debugDraw
      */
-	void debugDraw(btIDebugDraw* debugDrawer);
+    void debugDraw(btIDebugDraw* debugDrawer);
 
 protected:
 
@@ -285,9 +287,10 @@ private:
      * Use PhysicsController::createCharacter to create physics characters.
      *
      * @param node Scene node that represents the character.
-	 * @param shape Physis collision shape definition.
+     * @param shape Physis collision shape definition.
+     * @param mass The mass of the character.
      */
-	PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape);
+    PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape, float mass);
 
     /**
      * Destructor.
@@ -295,6 +298,16 @@ private:
      * Use PhysicsController::destroyCharacter to destroy physics characters.
      */
     virtual ~PhysicsCharacter();
+
+    /**
+     * Creates a physics character from the specified properties object.
+     * 
+     * @param node The node to create a physics character for; note that the node must have
+     *      a model attached to it prior to creating a physics character for it.
+     * @param properties The properties object defining the physics character (must have namespace equal to 'character').
+     * @return The newly created physics character, or <code>NULL</code> if the physics character failed to load.
+     */
+    static PhysicsCharacter* create(Node* node, Properties* properties);
 
     void updateCurrentVelocity();
 
@@ -313,7 +326,7 @@ private:
     btVector3 _moveVelocity;
     float _forwardVelocity;
     float _rightVelocity;
-    btVector3 _fallVelocity;
+    btVector3 _verticalVelocity;
     btVector3 _currentVelocity;
     btVector3 _normalizedVelocity;
     bool _colliding;
@@ -321,11 +334,12 @@ private:
     btVector3 _currentPosition;
     std::map<const char*, CharacterAnimation> _animations;
     std::map<unsigned int, CharacterAnimation*> _layers;
-    btManifoldArray	_manifoldArray;
+    btManifoldArray _manifoldArray;
     float _stepHeight;
     float _slopeAngle;
     float _cosSlopeAngle;
     bool _physicsEnabled;
+    float _mass;
 };
 
 }

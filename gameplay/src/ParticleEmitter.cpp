@@ -34,6 +34,11 @@ ParticleEmitter::ParticleEmitter(SpriteBatch* batch, unsigned int particleCountM
 
     _spriteBatch->getStateBlock()->setDepthWrite(false);
     _spriteBatch->getStateBlock()->setDepthTest(true);
+    /*
+    _spriteBatch->getStateBlock()->setBlend(true);
+    _spriteBatch->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
+    _spriteBatch->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
+    */
 }
 
 ParticleEmitter::~ParticleEmitter()
@@ -50,7 +55,7 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
     Texture* texture = NULL;
     texture = Texture::create(textureFile, true);    
 
-	if (!texture)
+    if (!texture)
     {
         LOG_ERROR_VARG("Error creating ParticleEmitter: Could not read texture file: %s", textureFile);
         return NULL;
@@ -524,7 +529,7 @@ void ParticleEmitter::setTextureBlending(TextureBlending textureBlending)
             break;
         case BLEND_ADDITIVE:
             _spriteBatch->getStateBlock()->setBlend(true);
-            _spriteBatch->getStateBlock()->setBlendSrc(RenderState::BLEND_ONE);
+            _spriteBatch->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
             _spriteBatch->getStateBlock()->setBlendDst(RenderState::BLEND_ONE);
             break;
         case BLEND_MULTIPLIED:

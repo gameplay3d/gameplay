@@ -168,6 +168,18 @@ public:
 
 private:
 
+    static const char ANIMATION_UNIFORM_BIT = 0x01;
+    
+    /**
+     * Constructor.
+     */
+    MaterialParameter(const char* name);
+    
+    /**
+     * Destructor.
+     */
+    ~MaterialParameter();
+    
     /**
      * Interface implemented by templated method bindings for simple storage and iteration.
      */
@@ -218,20 +230,14 @@ private:
         CountMethod _countMethod;
     };
 
-    /**
-     * Constructor.
-     */
-    MaterialParameter(const char* name);
-
-    /**
-     * Destructor.
-     */
-    ~MaterialParameter();
-
     void clearValue();
 
     void bind(Effect* effect);
 
+    void applyAnimationValue(AnimationValue* value, float blendWeight, int components);
+
+    void cloneInto(MaterialParameter* materialParameter) const;
+    
     union
     {
         float floatValue;
@@ -241,7 +247,7 @@ private:
         const Texture::Sampler* samplerValue;
         MethodBinding* method;
     } _value;
-
+    
     enum
     {
         NONE,
@@ -254,18 +260,7 @@ private:
         SAMPLER,
         METHOD
     } _type;
-
-    static const char ANIMATION_UNIFORM_BIT = 0x01;
-
-    void applyAnimationValue(AnimationValue* value, float blendWeight, int components);
-
-    /**
-     * Copies the data from this MaterialParameter into the given MaterialParameter.
-     * 
-     * @param materialParameter The MaterialParameter to copy the data to.
-     */
-    void cloneInto(MaterialParameter* materialParameter) const;
-
+    
     unsigned int _count;
     bool _dynamic;
     std::string _name;

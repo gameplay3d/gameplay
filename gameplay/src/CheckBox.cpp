@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "CheckBox.h"
+#include "Game.h"
 
 namespace gameplay
 {
@@ -21,8 +22,8 @@ CheckBox::~CheckBox()
 CheckBox* CheckBox::create(Theme::Style* style, Properties* properties)
 {
     CheckBox* checkBox = new CheckBox();
-    checkBox->init(style, properties);
-    properties->getVector2("iconSize", &checkBox->_iconSize);
+    checkBox->initialize(style, properties);
+    properties->getVector2("iconSize", &checkBox->_imageSize);
     checkBox->_checked = properties->getBool("checked");
 
     return checkBox;
@@ -33,29 +34,31 @@ bool CheckBox::isChecked()
     return _checked;
 }
 
-void CheckBox::setIconSize(float width, float height)
+void CheckBox::setChecked(bool checked)
 {
-    _iconSize.set(width, height);
+    if (_checked != checked)
+    {
+        _checked = checked;
+        notifyListeners(Control::Listener::VALUE_CHANGED);
+    }
 }
 
-const Vector2& CheckBox::getIconSize() const
+void CheckBox::setImageSize(float width, float height)
 {
-    Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-    Theme::Icon* icon = overlay->getCheckBoxIcon();
-    if (_iconSize.isZero() && icon)
-    {
-        return icon->getSize();
-    }
+    _imageSize.set(width, height);
+}
 
-    return _iconSize;
+const Vector2& CheckBox::getImageSize() const
+{
+    return _imageSize;
 }
 
 void CheckBox::addListener(Control::Listener* listener, int eventFlags)
 {
-    if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
+    if ((eventFlags & Control::Listener::TEXT_CHANGED) == Control::Listener::TEXT_CHANGED)
     {
         assert("TEXT_CHANGED event is not applicable to CheckBox.");
-        eventFlags &= ~Listener::TEXT_CHANGED;
+        eventFlags &= ~Control::Listener::TEXT_CHANGED;
     }
 
     Control::addListener(listener, eventFlags);
@@ -74,11 +77,19 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
         {
             if (_state == Control::ACTIVE)
             {
-                if (x > 0 && x <= _bounds.width &&
-                    y > 0 && y <= _bounds.height)
+                if (x > 0 && x <= _clipBounds.width &&
+                    y > 0 && y <= _clipBounds.height)
                 {
                     _checked = !_checked;
-                    notifyListeners(Listener::VALUE_CHANGED);
+                    notifyListeners(Control::Listener::VALUE_CHANGED);
+
+                    // Animate between icons.  Old fades out, then the new fades in.
+                    /*
+                    AnimationController* animationController = Game::getInstance()->getAnimationController();
+                    float from[1] = { 1.0f };
+                    float to[1] = { 0.0f };
+                    animationController->createAnimationFromTo("CheckBox::toggle", this, CheckBox::ANIMATE_SPRITE_ALPHA, from, to, Curve::QUADRATIC_IN_OUT, 200L);
+                    */
                 }
             }
         }
@@ -92,12 +103,23 @@ void CheckBox::update(const Rectangle& clip)
 {
     Control::update(clip);
 
-    Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-    Theme::Icon* icon = overlay->getCheckBoxIcon();
-    Vector2& size = _iconSize;
-    if (_iconSize.isZero() && icon)
+    Vector2 size;
+    if (_imageSize.isZero())
     {
-        size = icon->getSize();
+        if (_checked)
+        {
+            const Rectangle& selectedRegion = getImageRegion("checked", _state);
+            size.set(selectedRegion.width, selectedRegion.height);
+        }
+        else
+        {
+            const Rectangle& unselectedRegion = getImageRegion("unchecked", _state);
+            size.set(unselectedRegion.width, unselectedRegion.height);
+        }
+    }
+    else
+    {
+        size.set(_imageSize);
     }
     float iconWidth = size.x;
 
@@ -105,43 +127,57 @@ void CheckBox::update(const Rectangle& clip)
     _textBounds.width -= iconWidth;
 }
 
-void CheckBox::drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip)
+void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     // Left, v-center.
     // TODO: Set an alignment for icons.
-    Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-    Theme::Icon* icon = overlay->getCheckBoxIcon();
-    if (icon)
+    const Theme::Border border = getBorder(_state);
+    const Theme::Padding padding = getPadding();
+    float opacity = getOpacity(_state);
+
+    if (_checked)
     {
-        const Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
-        Theme::Border border;
-        if (containerRegion)
+        const Rectangle& selectedRegion = getImageRegion("checked", _state);
+        const Theme::UVs& selected = getImageUVs("checked", _state);
+        Vector4 selectedColor = getImageColor("checked", _state);
+        selectedColor.w *= opacity;
+
+        Vector2 size;
+        if (_imageSize.isZero())
         {
-                border = containerRegion->getBorder();
-        }
-        const Theme::Padding padding = _style->getPadding();
-
-        Vector2& size = _iconSize;
-        if (_iconSize.isZero())
-        {
-            size = icon->getSize();
-        }
-
-        const Vector4 color = icon->getColor();
-
-        Vector2 pos(clip.x + _position.x + border.left + padding.left,
-            clip.y + _position.y + (_bounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
-
-        if (_checked)
-        {
-            const Theme::UVs on = icon->getOnUVs();
-            spriteBatch->draw(pos.x, pos.y, size.x, size.y, on.u1, on.v1, on.u2, on.v2, color, _clip);
+            size.set(selectedRegion.width, selectedRegion.height);
         }
         else
         {
-            const Theme::UVs off = icon->getOffUVs();
-            spriteBatch->draw(pos.x, pos.y, size.x, size.y, off.u1, off.v1, off.u2, off.v2, color, _clip);
+            size.set(_imageSize);
         }
+
+        Vector2 pos(clip.x + _bounds.x + border.left + padding.left,
+            clip.y + _bounds.y + (_clipBounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
+
+        spriteBatch->draw(pos.x, pos.y, size.x, size.y, selected.u1, selected.v1, selected.u2, selected.v2, selectedColor, _clip);
+    }
+    else
+    {
+        const Rectangle& unselectedRegion = getImageRegion("unchecked", _state);
+        const Theme::UVs& unselected = getImageUVs("unchecked", _state);
+        Vector4 unselectedColor = getImageColor("unchecked", _state);
+        unselectedColor.w *= opacity;
+
+        Vector2 size;
+        if (_imageSize.isZero())
+        {
+            size.set(unselectedRegion.width, unselectedRegion.height);
+        }
+        else
+        {
+            size.set(_imageSize);
+        }
+
+        Vector2 pos(clip.x + _bounds.x + border.left + padding.left,
+            clip.y + _bounds.y + (_clipBounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
+
+        spriteBatch->draw(pos.x, pos.y, size.x, size.y, unselected.u1, unselected.v1, unselected.u2, unselected.v2, unselectedColor, _clip);
     }
 }
 

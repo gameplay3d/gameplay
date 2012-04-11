@@ -53,7 +53,15 @@
     <category>core.games</category>
  
     <asset path="icon.png">icon.png</asset>
-    <asset path="res">res</asset>
+    <asset path="res/asphalt.png">res/asphalt.png</asset>
+    <asset path="res/longboard.png">res/longboard.png</asset>
+    <asset path="res/longboard.wav">res/longboard.wav</asset>
+    <asset path="res/longboard_wheels.png">res/longboard_wheels.png</asset>
+    <asset path="res/overlay_gradient.png">res/overlay_gradient.png</asset>
+    <asset path="res/quad.fsh">res/quad.fsh</asset>
+    <asset path="res/quad.vsh">res/quad.vsh</asset>
+    <asset path="res/textured.fsh">res/textured.fsh</asset>
+    <asset path="res/textured.vsh">res/textured.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/logo_powered_white.png}">res/logo_powered_white.png</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">

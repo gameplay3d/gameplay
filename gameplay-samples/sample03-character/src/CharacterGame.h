@@ -2,16 +2,16 @@
 #define CHARACTERGAME_H_
 
 #include "gameplay.h"
-
+#include "Gamepad.h"
 using namespace gameplay;
 
 /**
  * This is a mesh demo game for rendering Mesh.
  */
-class CharacterGame: public Game, public PhysicsCollisionObject::CollisionListener
+class CharacterGame: public Game, public PhysicsCollisionObject::CollisionListener, public AnimationClip::Listener
 {
 public:
-
+    
     /**
      * Constructor.
      */
@@ -39,6 +39,8 @@ public:
                         const PhysicsCollisionObject::CollisionPair& collisionPair,
                         const Vector3& contactPointA, const Vector3& contactPointB);
 
+    void animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type);
+
 protected:
 
     /**
@@ -63,6 +65,9 @@ protected:
 
 private:
     
+    static const unsigned int JOYSTICK = 0;
+    static const unsigned int BUTTON_1 = 0;
+
     /**
      * Draws the default "gameplay powered" splash screen.
      */
@@ -71,15 +76,19 @@ private:
     void initMaterial(Scene* scene, Node* node, Material* material);
     bool initScene(Node* node, void* cookie);
     bool drawScene(Node* node, void* cookie);
-    void loadAnimationClips();
-    void fixCamera(long elapsedTime);
+    void loadAnimationClips(Node* node);
+    void adjustCamera(long elapsedTime);
+    void play(const char* animation, PhysicsCharacter::AnimationFlags flags, float speed, float blendDuration);
 
     Font* _font;
     Scene* _scene;
     PhysicsCharacter* _character;
+    Node* _characterMeshNode;
     Animation* _animation;
     unsigned int _animationState;
     int _rotateX;
+    Gamepad* _gamepad;
+    MaterialParameter* _materialParameterAlpha;
 };
 
 #endif

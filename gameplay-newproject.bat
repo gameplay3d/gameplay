@@ -177,9 +177,9 @@ call:replace %projPath%\%projName%.xcodeproj\project.pbxproj GAMEPLAY_PATH "%gpP
 call:replace %projPath%\%projName%.xcodeproj\project.pbxproj TemplateGame "%className%"
 call:replace %projPath%\%projName%.xcodeproj\project.pbxproj TEMPLATE_PROJECT "%projName%"
 
-copy gameplay-template\gameplay-template-macos.plist %projPath%\%projName%-macos.plist
-call:replace %projPath%\%projName%-macos.plist TEMPLATE_UUID "%uuid%"
-call:replace %projPath%\%projName%-macos.plist TEMPLATE_AUTHOR "%author%"
+copy gameplay-template\gameplay-template-macosx.plist %projPath%\%projName%-macosx.plist
+call:replace %projPath%\%projName%-macosx.plist TEMPLATE_UUID "%uuid%"
+call:replace %projPath%\%projName%-macosx.plist TEMPLATE_AUTHOR "%author%"
 
 REM Copy BlackBerry NDK project files
 copy gameplay-template\template.cproject %projPath%\.cproject

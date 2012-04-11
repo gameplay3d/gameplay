@@ -37,3 +37,13 @@ rigidbody StaticBox
     linearDamping = 0.025
     angularDamping = 0.16
 }
+
+rigidbody StaticMesh
+{
+    type = MESH
+    mass = 0.0
+    friction = 0.5
+    restitution = 0.75
+    linearDamping = 0.025
+    angularDamping = 0.16
+}

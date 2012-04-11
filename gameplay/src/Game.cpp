@@ -21,6 +21,7 @@ Game::Game()
 {
     assert(__gameInstance == NULL);
     __gameInstance = this;
+    _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
 }
 
 Game::Game(const Game& copy)
@@ -31,7 +32,7 @@ Game::~Game()
 {
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.
-
+    delete _timeEvents;
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
     Ref::printLeaks();
     printMemoryLeaks();
@@ -92,6 +93,8 @@ bool Game::startup()
     if (_state != UNINITIALIZED)
         return false;
 
+    setViewport(Rectangle(0.0f, 0.0f, (float)_width, (float)_height));
+
     RenderState::initialize();
 
     _animationController = new AnimationController();
@@ -113,6 +116,7 @@ void Game::shutdown()
     // Call user finalization.
     if (_state != UNINITIALIZED)
     {
+        Platform::signalShutdown();
         finalize();
 
         _animationController->finalize();
@@ -127,9 +131,9 @@ void Game::shutdown()
         SAFE_DELETE(_audioListener);
 
         RenderState::finalize();
+        
+        _state = UNINITIALIZED;
     }
-
-    _state = UNINITIALIZED;
 }
 
 void Game::pause()
@@ -212,6 +216,12 @@ void Game::frame()
     }
 }
 
+void Game::setViewport(const Rectangle& viewport)
+{
+    _viewport = viewport;
+    glViewport((GLuint)viewport.x, (GLuint)viewport.y, (GLuint)viewport.width, (GLuint)viewport.height); 
+}
+
 void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil)
 {
     GLbitfield bits = 0;
@@ -280,7 +290,7 @@ void Game::schedule(long timeOffset, TimeListener* timeListener, void* cookie)
 {
     assert(timeListener);
     TimeEvent timeEvent(getGameTime() + timeOffset, timeListener, cookie);
-    _timeEvents.push(timeEvent);
+    _timeEvents->push(timeEvent);
 }
 
 bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
@@ -304,15 +314,15 @@ void Game::updateOnce()
 
 void Game::fireTimeEvents(long frameTime)
 {
-    while (_timeEvents.size() > 0)
+    while (_timeEvents->size() > 0)
     {
-        const TimeEvent* timeEvent = &_timeEvents.top();
+        const TimeEvent* timeEvent = &_timeEvents->top();
         if (timeEvent->time > frameTime)
         {
             break;
         }
         timeEvent->listener->timeEvent(frameTime - timeEvent->time, timeEvent->cookie);
-        _timeEvents.pop();
+        _timeEvents->pop();
     }
 }
 

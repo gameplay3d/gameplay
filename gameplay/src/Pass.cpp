@@ -2,6 +2,7 @@
 #include "Pass.h"
 #include "Technique.h"
 #include "Material.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -79,7 +80,7 @@ void Pass::unbind()
     }
 }
 
-Pass* Pass::clone(Technique* technique, CloneContext &context) const
+Pass* Pass::clone(Technique* technique, NodeCloneContext &context) const
 {
     Effect* effect = getEffect();
     effect->addRef();

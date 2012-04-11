@@ -56,7 +56,7 @@ namespace gameplay
     {
         const char* layoutString = properties->getString("layout");
         Container* container = Container::create(getLayoutType(layoutString));
-        container->init(style, properties);
+        container->initialize(style, properties);
         container->addControls(theme, properties);
 
         return container;
@@ -202,15 +202,36 @@ namespace gameplay
         return _controls;
     }
 
+    Animation* Container::getAnimation(const char* id) const
+    {
+        std::vector<Control*>::const_iterator itr = _controls.begin();
+        std::vector<Control*>::const_iterator end = _controls.end();
+        
+        Control* control = NULL;
+        for (; itr != end; itr++)
+        {
+            control = *itr;
+            Animation* animation = control->getAnimation(id);
+            if (animation)
+                return animation;
+
+            if (control->isContainer())
+            {
+                animation = ((Container*)control)->getAnimation(id);
+                if (animation)
+                    return animation;
+            }
+        }
+
+        return NULL;
+    }
+
     void Container::update(const Rectangle& clip)
     {
         // Update this container's viewport.
         Control::update(clip);
 
-        if (isDirty())
-        {
-            _layout->update(this);
-        }
+        _layout->update(this);
     }
 
     void Container::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
@@ -219,8 +240,6 @@ namespace gameplay
         Control::drawBorder(spriteBatch, clip);
 
         // Now call drawBorder on all controls within this container.
-        //Vector2 pos(clip.x + _position.x, clip.y + _position.y);
-        //const Rectangle newClip(clip.x + _position.x, clip.y + _position.y, _size.x, _size.y);
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
@@ -229,14 +248,13 @@ namespace gameplay
         }
     }
 
-    void Container::drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip)
+    void Container::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
-        //const Rectangle newClip(clip.x + _position.x, clip.y + _position.y, _size.x, _size.y);
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
-            control->drawSprites(spriteBatch, _clip);
+            control->drawImages(spriteBatch, _clip);
         }
 
         _dirty = false;
@@ -244,7 +262,6 @@ namespace gameplay
 
     void Container::drawText(const Rectangle& clip)
     {
-        //const Rectangle newClip(clip.x + _position.x, clip.y + _position.y, _size.x, _size.y);
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
@@ -285,14 +302,8 @@ namespace gameplay
 
         bool eventConsumed = false;
 
-        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-        Theme::Border border;
-        Theme::ContainerRegion* containerRegion = overlay->getContainerRegion();
-        if (containerRegion)
-        {
-            border = overlay->getContainerRegion()->getBorder();
-        }
-        Theme::Padding padding = _style->getPadding();
+        const Theme::Border& border = getBorder(_state);
+        const Theme::Padding& padding = getPadding();
         float xPos = border.left + padding.left;
         float yPos = border.top + padding.top;
 
@@ -305,7 +316,7 @@ namespace gameplay
                 continue;
             }
 
-            const Rectangle& bounds = control->getBounds();
+            const Rectangle& bounds = control->getClipBounds();
             if (control->getState() != Control::NORMAL ||
                 (evt == Touch::TOUCH_PRESS &&
                  x >= xPos + bounds.x &&

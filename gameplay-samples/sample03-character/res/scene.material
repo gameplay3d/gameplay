@@ -4,12 +4,11 @@ material Textured
     {
         pass
         {
-            vertexShader = res/shaders/textured.vsh
-            fragmentShader = res/shaders/textured.fsh
+            vertexShader = res/shaders/diffuse.vsh
+            fragmentShader = res/shaders/diffuse.fsh
 
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            //u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_diffuseColor = 1.0, 1.0, 1.0, 1.0
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             
             sampler u_diffuseTexture
             {
@@ -140,54 +139,20 @@ material ColoredSpecular
     }
 }
 
-material BoySkin : Colored
+material Boy : TexturedTransparent
 {
     technique
     {
         pass
         {
-            defines = SKINNING;SKINNING_JOINT_COUNT 31
+            defines = SKINNING;SKINNING_JOINT_COUNT 31;GLOBAL_ALPHA
             u_matrixPalette = MATRIX_PALETTE
-            u_diffuseColor = 0.84, 0.76, 0.67, 1
-        }
-    }
-}
+            u_globalAlpha = 1.0
 
-material BoyShirt : Colored
-{
-    technique
-    {
-        pass
-        {
-            defines = SKINNING;SKINNING_JOINT_COUNT 31
-            u_matrixPalette = MATRIX_PALETTE
-            u_diffuseColor = 0.27, 0.46, 0.82, 1
-        }
-    }
-}
-
-material BoyShorts : Colored
-{
-    technique
-    {
-        pass
-        {
-            defines = SKINNING;SKINNING_JOINT_COUNT 31
-            u_matrixPalette = MATRIX_PALETTE
-            u_diffuseColor = 0.96, 0.47, 0.47, 1
-        }
-    }
-}
-
-material BoyShoes : Colored
-{
-    technique
-    {
-        pass
-        {
-            defines = SKINNING;SKINNING_JOINT_COUNT 31
-            u_matrixPalette = MATRIX_PALETTE
-            u_diffuseColor = 0.25, 0.19, 0.06, 1
+            sampler u_diffuseTexture
+            {
+                path = res/character.png
+            }
         }
     }
 }
@@ -214,7 +179,7 @@ material FloorTiles : Textured
         {
             sampler u_diffuseTexture
             {
-                path = res/floortiles.png
+                path = res/tiles.png
             }
         }
     }
@@ -234,198 +199,80 @@ material Rainbow : TexturedTransparent
     }
 }
 
-material Floor : Textured
+material Ground : TexturedSpecular
 {
     technique
     {
         pass
         {
+            u_specularExponent = 50
+
             sampler u_diffuseTexture
             {
-                path = res/floor.png
+                path = res/wood.png
+                wrapS = REPEAT
+                wrapT = REPEAT
             }
         }
     }
 }
 
-material Wall1 : Textured
+material Wall : ColoredSpecular
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
-            {
-                path = res/wall1.png
-            }
+            u_specularExponent = 50
+            u_diffuseColor = 0.6, 0.75, 1, 1
         }
     }
 }
 
-material Wall2 : Textured
+material Toybox : ColoredSpecular
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
-            {
-                path = res/wall2.png
-            }
+            u_specularExponent = 50
+            u_diffuseColor = 0.45, 0.1, 0.1, 1
         }
     }
 }
 
-material Wall3 : Textured
+material White : ColoredSpecular
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
-            {
-                path = res/wall3.png
-            }
+            u_specularExponent = 50
+            u_diffuseColor = 1, 1, 1, 1
         }
     }
 }
 
-material Wall4 : Textured
+material Green : ColoredSpecular
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
-            {
-                path = res/wall4.png
-            }
+            u_specularExponent = 50
+            u_diffuseColor = 0.8, 1, 0, 1
         }
     }
 }
 
-material Toybox : Textured
+material LightBlue : ColoredSpecular
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
-            {
-                path = res/toybox.png
-            }
-        }
-    }
-}
-
-material WallOverhang : Textured
-{
-    technique
-    {
-        pass
-        {
-            sampler u_diffuseTexture
-            {
-                path = res/walloverhang.png
-            }
-        }
-    }
-}
-
-material TableTop : Textured
-{
-    technique
-    {
-        pass
-        {
-            sampler u_diffuseTexture
-            {
-                path = res/tabletop.png
-            }
-        }
-    }
-}
-
-material TableLeg1 : Textured
-{
-    technique
-    {
-        pass
-        {
-            sampler u_diffuseTexture
-            {
-                path = res/tableleg1.png
-            }
-        }
-    }
-}
-
-material TableLeg2 : Textured
-{
-    technique
-    {
-        pass
-        {
-            sampler u_diffuseTexture
-            {
-                path = res/tableleg2.png
-            }
-        }
-    }
-}
-
-material TableLeg3 : Textured
-{
-    technique
-    {
-        pass
-        {
-            sampler u_diffuseTexture
-            {
-                path = res/tableleg3.png
-            }
-        }
-    }
-}
-
-material TableLeg4 : Textured
-{
-    technique
-    {
-        pass
-        {
-            sampler u_diffuseTexture
-            {
-                path = res/tableleg4.png
-            }
-        }
-    }
-}
-
-material StorageOrganizer : Textured
-{
-    technique
-    {
-        pass
-        {
-            sampler u_diffuseTexture
-            {
-                path = res/storageorganizer.png
-            }
-        }
-    }
-}
-
-material Bookshelf : Textured
-{
-    technique
-    {
-        pass
-        {
-            sampler u_diffuseTexture
-            {
-                path = res/bookshelf.png
-            }
+            u_specularExponent = 50
+            u_diffuseColor = 0.18, 0.85, 1, 1
         }
     }
 }
@@ -448,54 +295,38 @@ material Basketball : TexturedSpecular
     }
 }
 
-material PlayTable : Textured
-{
-    technique
-    {
-        pass
-        {
-            sampler u_diffuseTexture
-            {
-                path = res/playtable.png
-            }
-        }
-    }
-}
-
-material WindowLedge : Textured
-{
-    technique
-    {
-        pass
-        {
-            sampler u_diffuseTexture
-            {
-                path = res/windowledge.png
-            }
-        }
-    }
-}
-
-material TableGreen : ColoredSpecular
+material PlayTableTopMaterial : ColoredSpecular
 {
     technique
     {
         pass
         {
             u_specularExponent = 50
-            u_diffuseColor = 0.8, 1, 0, 1
+            u_diffuseColor = 1, 0.9, 0.8, 1
         }
     }
 }
 
-material TableBlue : ColoredSpecular
+material PlayTableMaterial1 : ColoredSpecular
 {
     technique
     {
         pass
         {
             u_specularExponent = 50
-            u_diffuseColor = 0.18, 0.85, 1, 1
+            u_diffuseColor = 0.6, 0.1, 0, 1
+        }
+    }
+}
+
+material PlayTableMaterial2 : ColoredSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 50
+            u_diffuseColor = 0, 0.3, 0.58, 1
         }
     }
 }
@@ -518,71 +349,67 @@ material Easel : TexturedSpecular
     }
 }
 
-material Ceiling : Textured
+material DoorHandle : ColoredSpecular
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
-            {
-                path = res/ceiling.png
-            }
+            u_specularExponent = 50
+            u_diffuseColor = 0.31, 0.25, 0.07, 1
         }
     }
 }
 
-material Door : Textured
+material Black : ColoredSpecular
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
-            {
-                path = res/door.png
-            }
+            u_specularExponent = 50
+            u_diffuseColor = 0.13, 0.13, 0.13, 1
         }
     }
 }
 
-material DoorFrame : Textured
+material BasketballPost : ColoredSpecular
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
-            {
-                path = res/doorframe.png
-            }
+            u_specularExponent = 50
+            u_diffuseColor = 0.14, 0.24, 0.8, 1
         }
     }
 }
 
-material BasketballNet : Textured
+material BasketballRim : ColoredSpecular
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
-            {
-                path = res/basketballhoop.png
-            }
+            u_specularExponent = 50
+            u_diffuseColor = 0.7, 0.17, 0.0, 1
         }
     }
 }
 
-material BasketballBackboard : Textured
+material Backboard : TexturedSpecular
 {
     technique
     {
         pass
         {
+            u_specularExponent = 25
+
             sampler u_diffuseTexture
             {
-                path = res/basketballbackboard.png
+                path = res/backboard.png
+                wrapS = CLAMP
+                wrapT = CLAMP
             }
         }
     }

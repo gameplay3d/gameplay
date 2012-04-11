@@ -13,7 +13,7 @@ namespace gameplay
 {
     static std::vector<Form*> __forms;
 
-    Form::Form() : _theme(NULL), _quad(NULL), _node(NULL), _frameBuffer(NULL), _viewport(NULL)
+    Form::Form() : _theme(NULL), _quad(NULL), _node(NULL), _frameBuffer(NULL)
     {
     }
 
@@ -27,7 +27,6 @@ namespace gameplay
         SAFE_RELEASE(_node);
         SAFE_RELEASE(_frameBuffer);
         SAFE_RELEASE(_theme);
-        SAFE_DELETE(_viewport);
 
         // Remove this Form from the global list.
         std::vector<Form*>::iterator it = std::find(__forms.begin(), __forms.end(), this);
@@ -45,9 +44,7 @@ namespace gameplay
         Properties* properties = Properties::create(path);
         assert(properties);
         if (properties == NULL)
-        {
             return NULL;
-        }
 
         // Check if the Properties is valid and has a valid namespace.
         Properties* formProperties = properties->getNextNamespace();
@@ -61,24 +58,9 @@ namespace gameplay
         // Create new form with given ID, theme and layout.
         const char* themeFile = formProperties->getString("theme");
         const char* layoutString = formProperties->getString("layout");
-        Form* form = Form::create(themeFile, getLayoutType(layoutString));
-
-        Theme* theme = form->_theme;
-        const char* styleName = formProperties->getString("style");
-        form->init(theme->getStyle(styleName), formProperties);
-
-        // Add all the controls to the form.
-        form->addControls(theme, formProperties);
-
-        SAFE_DELETE(properties);
-
-        return form;
-    }
-
-    Form* Form::create(const char* themeFile, Layout::Type type)
-    {
+        
         Layout* layout;
-        switch (type)
+        switch (getLayoutType(layoutString))
         {
         case Layout::LAYOUT_ABSOLUTE:
             layout = AbsoluteLayout::create();
@@ -97,6 +79,25 @@ namespace gameplay
         Form* form = new Form();
         form->_layout = layout;
         form->_theme = theme;
+
+        //Theme* theme = form->_theme;
+        const char* styleName = formProperties->getString("style");
+        form->initialize(theme->getStyle(styleName), formProperties);
+
+        if (form->_autoWidth)
+        {
+            form->_bounds.width = Game::getInstance()->getWidth();
+        }
+
+        if (form->_autoHeight)
+        {
+            form->_bounds.height = Game::getInstance()->getHeight();
+        }
+
+        // Add all the controls to the form.
+        form->addControls(theme, formProperties);
+
+        SAFE_DELETE(properties);
 
         __forms.push_back(form);
 
@@ -121,14 +122,14 @@ namespace gameplay
     void Form::setQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4)
     {
         Mesh* mesh = Mesh::createQuad(p1, p2, p3, p4);
-        initQuad(mesh);
+        initializeQuad(mesh);
         SAFE_RELEASE(mesh);
     }
 
     void Form::setQuad(float x, float y, float width, float height)
     {
         Mesh* mesh = Mesh::createQuad(x, y, width, height);
-        initQuad(mesh);
+        initializeQuad(mesh);
         SAFE_RELEASE(mesh);
     }
 
@@ -139,11 +140,10 @@ namespace gameplay
         if (_node && !_quad)
         {
             // Set this Form up to be 3D by initializing a quad, projection matrix and viewport.
-            setQuad(0.0f, 0.0f, _size.x, _size.y);
+            setQuad(0.0f, 0.0f, _bounds.width, _bounds.height);
 
-            Matrix::createOrthographicOffCenter(0, _size.x, _size.y, 0, 0, 1, &_projectionMatrix);
+            Matrix::createOrthographicOffCenter(0, _bounds.width, _bounds.height, 0, 0, 1, &_projectionMatrix);
             _theme->setProjectionMatrix(_projectionMatrix);
-            _viewport = new Viewport(0, 0, _size.x, _size.y);
             
             _node->setModel(_quad);
         }
@@ -151,7 +151,10 @@ namespace gameplay
 
     void Form::update()
     {
-        Container::update(Rectangle(0, 0, _size.x, _size.y));
+        if (isDirty())
+        {
+            Container::update(Rectangle(0, 0, _bounds.width, _bounds.height));
+        }
     }
 
     void Form::draw()
@@ -171,14 +174,19 @@ namespace gameplay
             if (isDirty())
             {
                 _frameBuffer->bind();
-                _viewport->bind();
+
+                Game* game = Game::getInstance();
+                Rectangle prevViewport = game->getViewport();
+                
+                game->setViewport(Rectangle(_bounds.x, _bounds.y, _bounds.width, _bounds.height));
 
                 draw(_theme->getSpriteBatch(), _clip);
 
                 // Rebind the default framebuffer and game viewport.
                 FrameBuffer::bindDefault();
-                Game* game = Game::getInstance();
-                GL_ASSERT( glViewport(0, 0, game->getWidth(), game->getHeight()) );
+
+                // restore the previous game viewport
+                game->setViewport(prevViewport);
             }
 
             _quad->draw();
@@ -198,7 +206,7 @@ namespace gameplay
 
         // Draw the form's border and background.
         // We don't pass the form's position to itself or it will be applied twice!
-        Control::drawBorder(spriteBatch, Rectangle(0, 0, _size.x, _size.y));
+        Control::drawBorder(spriteBatch, Rectangle(0, 0, _bounds.width, _bounds.height));
 
         // Draw each control's border and background.
         for (it = _controls.begin(); it < _controls.end(); it++)
@@ -210,7 +218,7 @@ namespace gameplay
                 control->drawBorder(spriteBatch, clip);
 
                 // Add all themed foreground sprites (checkboxes etc.) to the same batch.
-                control->drawSprites(spriteBatch, clip);
+                control->drawImages(spriteBatch, clip);
             }
         }
         spriteBatch->end();
@@ -229,7 +237,7 @@ namespace gameplay
         _dirty = false;
     }
 
-    void Form::initQuad(Mesh* mesh)
+    void Form::initializeQuad(Mesh* mesh)
     {
         // Release current model.
         SAFE_RELEASE(_quad);
@@ -243,7 +251,6 @@ namespace gameplay
         // Set the common render state block for the material
         RenderState::StateBlock* stateBlock = _theme->getSpriteBatch()->getStateBlock();
         stateBlock->setDepthWrite(true);
-        //material->setStateBlock(_theme->getSpriteBatch()->getStateBlock());
         material->setStateBlock(stateBlock);
 
         // Bind the WorldViewProjection matrix
@@ -258,7 +265,7 @@ namespace gameplay
         // Use the FrameBuffer to texture the quad.
         if (!_frameBuffer->getRenderTarget())
         {
-            RenderTarget* rt = RenderTarget::create(_id.c_str(), _size.x, _size.y);
+            RenderTarget* rt = RenderTarget::create(_id.c_str(), _bounds.width, _bounds.height);
             _frameBuffer->setRenderTarget(rt);
             SAFE_RELEASE(rt);
         }
@@ -266,7 +273,6 @@ namespace gameplay
         Texture::Sampler* sampler = Texture::Sampler::create(_frameBuffer->getRenderTarget()->getTexture());
         sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
         material->getParameter("u_texture")->setValue(sampler);
-
         material->getParameter("u_textureRepeat")->setValue(Vector2::one());
         material->getParameter("u_textureTransform")->setValue(Vector2::zero());
 
@@ -299,7 +305,7 @@ namespace gameplay
 
                         // Unproject point into world space.
                         Ray ray;
-                        camera->pickRay(NULL, x, y, &ray);
+                        camera->pickRay(Game::getInstance()->getViewport(), x, y, &ray);
 
                         // Find the quad's plane.
                         // We know its normal is the quad's forward vector.
@@ -327,7 +333,7 @@ namespace gameplay
                             m.transformPoint(&point);
 
                             // Pass the touch event on.
-                            const Rectangle& bounds = form->getBounds();
+                            const Rectangle& bounds = form->getClipBounds();
                             if (form->getState() == Control::FOCUS ||
                                 (evt == Touch::TOUCH_PRESS &&
                                  point.x >= bounds.x &&
@@ -346,7 +352,7 @@ namespace gameplay
                 else
                 {
                     // Simply compare with the form's bounds.
-                    const Rectangle& bounds = form->getBounds();
+                    const Rectangle& bounds = form->getClipBounds();
                     if (form->getState() == Control::FOCUS ||
                         (evt == Touch::TOUCH_PRESS &&
                          x >= bounds.x &&

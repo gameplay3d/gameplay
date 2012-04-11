@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "42CCD515146EBF3600353661"
-               BuildableName = "sample02-spaceship-macos.app"
-               BlueprintName = "sample02-spaceship-macos"
+               BuildableName = "sample02-spaceship-macosx.app"
+               BlueprintName = "sample02-spaceship-macosx"
                ReferencedContainer = "container:sample02-spaceship.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD515146EBF3600353661"
-            BuildableName = "sample02-spaceship-macos.app"
-            BlueprintName = "sample02-spaceship-macos"
+            BuildableName = "sample02-spaceship-macosx.app"
+            BlueprintName = "sample02-spaceship-macosx"
             ReferencedContainer = "container:sample02-spaceship.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -52,8 +52,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD515146EBF3600353661"
-            BuildableName = "sample02-spaceship-macos.app"
-            BlueprintName = "sample02-spaceship-macos"
+            BuildableName = "sample02-spaceship-macosx.app"
+            BlueprintName = "sample02-spaceship-macosx"
             ReferencedContainer = "container:sample02-spaceship.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -70,8 +70,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD515146EBF3600353661"
-            BuildableName = "sample02-spaceship-macos.app"
-            BlueprintName = "sample02-spaceship-macos"
+            BuildableName = "sample02-spaceship-macosx.app"
+            BlueprintName = "sample02-spaceship-macosx"
             ReferencedContainer = "container:sample02-spaceship.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -16,6 +16,7 @@ class AbsoluteLayout : public Layout
     friend class Container;
 
 public:
+
     /**
      * Get the type of this Layout.
      *
@@ -24,6 +25,7 @@ public:
     Layout::Type getType();
 
 protected:
+
     /**
      * Create an AbsoluteLayout.
      *
@@ -42,8 +44,20 @@ protected:
     void update(const Container* container);
 
 private:
+    
+    /*
+     * Constructor.
+     */
     AbsoluteLayout();
+    
+    /*
+     * Constructor.
+     */
     AbsoluteLayout(const AbsoluteLayout& copy);
+    
+    /*
+     * Destructor.
+     */
     virtual ~AbsoluteLayout();
 };
 

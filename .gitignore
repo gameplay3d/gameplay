@@ -85,6 +85,19 @@ Thumbs.db
 /gameplay-samples/sample03-character/res/shaders
 /gameplay-samples/sample03-character/res/logo_powered_white.png
 /gameplay-samples/sample03-character/sample03-character.xcodeproj/xcuserdata
+/gameplay-samples/sample04-particles/Debug
+/gameplay-samples/sample04-particles/DebugMem
+/gameplay-samples/sample04-particles/Release
+/gameplay-samples/sample04-particles/Simulator
+/gameplay-samples/sample04-particles/Simulator-Coverage
+/gameplay-samples/sample04-particles/Simulator-Profile
+/gameplay-samples/sample04-particles/Device-Debug
+/gameplay-samples/sample04-particles/Device-Coverage
+/gameplay-samples/sample04-particles/Device-Profile
+/gameplay-samples/sample04-particles/Device-Release
+/gameplay-samples/sample04-particles/res/shaders
+/gameplay-samples/sample04-particles/res/logo_powered_white.png
+/gameplay-samples/sample04-particles/sample04-particles.xcodeproj/xcuserdata
 
 /gameplay-android/obj
 /gameplay-android/NUL
@@ -139,3 +152,7 @@ Thumbs.db
 /gameplay-samples/sample03-character/android/NUL
 /gameplay-samples/sample01-longboard/NUL
 
+
+/gameplay-samples/sample04-particles/Device-Debug
+/gameplay-samples/sample04-particles/Debug
+/gameplay-samples/sample04-particles/DebugMem

@@ -14,11 +14,16 @@ namespace gameplay
  *
  * The following properties are available for checkboxes:
  *
- * checkBox <CheckBox ID>
+ * checkBox <checkBoxID>
  * {
- *      style       = <Style ID>
+ *      style       = <styleID>
+ *      alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
  *      position    = <x, y>
+ *      autoWidth   = <bool>
+ *      autoHeight  = <bool>
  *      size        = <width, height>
+ *      width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
+ *      height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
  *      text        = <string>
  *      checked     = <bool>
  *      iconSize    = <width, height>   // The size to draw the checkbox icon, if different from its size in the texture.
@@ -29,6 +34,7 @@ class CheckBox : public Button
     friend class Container;
 
 public:
+
     /**
      * Gets whether this checkbox is checked.
      *
@@ -36,20 +42,22 @@ public:
      */
     bool isChecked();
 
+    void setChecked(bool checked);
+
     /**
      * Set the size to draw the checkbox icon.
      *
      * @param width The width to draw the checkbox icon.
      * @param height The height to draw the checkbox icon.
      */
-    void setIconSize(float width, float height);
+    void setImageSize(float width, float height);
 
     /**
      * Get the size at which the checkbox icon will be drawn.
      *
      * @return The size of the checkbox icon.
      */
-    const Vector2& getIconSize() const;
+    const Vector2& getImageSize() const;
 
     /**
      * Add a listener to be notified of specific events affecting
@@ -64,7 +72,15 @@ public:
     virtual void addListener(Control::Listener* listener, int eventFlags);
 
 protected:
+
+    /**
+     * Constructor.
+     */
     CheckBox();
+
+    /**
+     * Destructor.
+     */
     ~CheckBox();
 
     /**
@@ -95,7 +111,7 @@ protected:
      * Called when a control's properties change.  Updates this control's internal rendering
      * properties, such as its text viewport.
      *
-     * @param position The control's position within its container.
+     * @param clip The clipping rectangle of this control's parent container.
      */
     void update(const Rectangle& clip);
 
@@ -103,14 +119,18 @@ protected:
      * Draw the checkbox icon associated with this control.
      *
      * @param spriteBatch The sprite batch containing this control's icons.
-     * @param position The container position this control is relative to.
+     * @param clip The container position this control is relative to.
      */
-    void drawSprites(SpriteBatch* spriteBatch, const Rectangle& clip);
+    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
     bool _checked;      // Whether this checkbox is currently checked.
-    Vector2 _iconSize;  // The size to draw the checkbox icon, if different from its size in the texture.
+    Vector2 _imageSize;  // The size to draw the checkbox icon, if different from its size in the texture.
 
 private:
+
+    /*
+     * Constructor.
+     */
     CheckBox(const CheckBox& copy);
 };
 

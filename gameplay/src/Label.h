@@ -12,11 +12,16 @@ namespace gameplay
  *
  * The following properties are available for labels:
  *
- * label <Label ID>
+ * label <labelID>
  * {
- *      style       = <Style ID>
+ *      style       = <styleID>
+ *      alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
  *      position    = <x, y>
+ *      autoWidth   = <bool>
+ *      autoHeight  = <bool>
  *      size        = <width, height>
+ *      width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
+ *      height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
  *      text        = <string>
  * }
  */
@@ -25,6 +30,7 @@ class Label : public Control
     friend class Container;
 
 public:
+
     /**
      * Set the text for this label to display.
      *
@@ -52,7 +58,15 @@ public:
     virtual void addListener(Control::Listener* listener, int eventFlags);
 
 protected:
+
+    /**
+     * Constructor.
+     */
     Label();
+
+    /**
+     * Destructor.
+     */
     virtual ~Label();
 
     /**
@@ -68,7 +82,7 @@ protected:
     /**
      * Initialize this label.
      */
-    virtual void init(Theme::Style* style, Properties* properties);
+    virtual void initialize(Theme::Style* style, Properties* properties);
 
     /**
      * Draw this label's text.
@@ -80,6 +94,10 @@ protected:
     std::string _text;      // The text displayed by this label.
 
 private:
+
+    /**
+     * Constructor.
+     */
     Label(const Label& copy);
 };
 

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42C56365152DE26000888FBE /* Gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C56363152DE26000888FBE /* Gamepad.cpp */; };
+		42C56366152DE26000888FBE /* Gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C56363152DE26000888FBE /* Gamepad.cpp */; };
 		42CCD571146EC4B300353661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD570146EC4B300353661 /* Cocoa.framework */; };
 		42CCD5A2146EC5BF00353661 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A1146EC5BF00353661 /* OpenAL.framework */; };
 		42CCD5A4146EC5C600353661 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A3146EC5C600353661 /* OpenGL.framework */; };
@@ -21,12 +23,6 @@
 		42CD0F01147D93560000361E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFC147D93560000361E /* libvorbis.a */; };
 		42CD0F02147D93560000361E /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFD147D93560000361E /* libvorbisenc.a */; };
 		42CD0F03147D93560000361E /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFE147D93560000361E /* libvorbisfile.a */; };
-		5B3439C415125329005F5571 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B3439BE15125329005F5571 /* CoreMotion.framework */; };
-		5B3439C515125329005F5571 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B3439BF15125329005F5571 /* Foundation.framework */; };
-		5B3439C615125329005F5571 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B3439C015125329005F5571 /* OpenAL.framework */; };
-		5B3439C715125329005F5571 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B3439C115125329005F5571 /* OpenGLES.framework */; };
-		5B3439C815125329005F5571 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B3439C215125329005F5571 /* QuartzCore.framework */; };
-		5B3439C915125329005F5571 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B3439C315125329005F5571 /* UIKit.framework */; };
 		5B43D1C814C35F4C008A5D9D /* CharacterGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CCD5AD146EC62000353661 /* CharacterGame.cpp */; };
 		5B43D1CB14C35F4C008A5D9D /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFA147D93560000361E /* libbullet.a */; };
 		5B43D1CC14C35F4C008A5D9D /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFB147D93560000361E /* libogg.a */; };
@@ -39,35 +35,43 @@
 		5B43D1D914C35F4C008A5D9D /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD5B3146EC65F00353661 /* res */; };
 		5B43D1E514C36034008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1E314C35F71008A5D9D /* libgameplay.a */; };
 		5B928C6F1513E9B80095E677 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1E314C35F71008A5D9D /* libgameplay.a */; };
+		5BAF205B152F2BDB003E2AC3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2055152F2BDB003E2AC3 /* CoreMotion.framework */; };
+		5BAF205C152F2BDB003E2AC3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2056152F2BDB003E2AC3 /* Foundation.framework */; };
+		5BAF205D152F2BDB003E2AC3 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2057152F2BDB003E2AC3 /* OpenAL.framework */; };
+		5BAF205E152F2BDB003E2AC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2058152F2BDB003E2AC3 /* OpenGLES.framework */; };
+		5BAF205F152F2BDB003E2AC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2059152F2BDB003E2AC3 /* QuartzCore.framework */; };
+		5BAF2060152F2BDB003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF205A152F2BDB003E2AC3 /* UIKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-ios.plist"; sourceTree = "<group>"; };
-		42C932E61491A1AC0098216A /* sample03-character-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-macos.plist"; sourceTree = "<group>"; };
+		42C56363152DE26000888FBE /* Gamepad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Gamepad.cpp; path = src/Gamepad.cpp; sourceTree = SOURCE_ROOT; };
+		42C56364152DE26000888FBE /* Gamepad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Gamepad.h; path = src/Gamepad.h; sourceTree = SOURCE_ROOT; };
+		42C932E61491A1AC0098216A /* sample03-character-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-macosx.plist"; sourceTree = "<group>"; };
 		42CCD56C146EC4B300353661 /* sample03-character.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD570146EC4B300353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42CCD5A1146EC5BF00353661 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		42CCD5A3146EC5C600353661 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		42CCD5A5146EC5CE00353661 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42CCD5A7146EC5DE00353661 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		42CCD5A9146EC5F000353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
+		42CCD5A9146EC5F000353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42CCD5AD146EC62000353661 /* CharacterGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CharacterGame.cpp; path = src/CharacterGame.cpp; sourceTree = SOURCE_ROOT; };
 		42CCD5AE146EC62000353661 /* CharacterGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CharacterGame.h; path = src/CharacterGame.h; sourceTree = SOURCE_ROOT; };
 		42CCD5B0146EC62A00353661 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		42CCD5B3146EC65F00353661 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
-		42CD0EFA147D93560000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macos/libbullet.a"; sourceTree = "<group>"; };
-		42CD0EFB147D93560000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macos/libogg.a"; sourceTree = "<group>"; };
-		42CD0EFC147D93560000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbis.a"; sourceTree = "<group>"; };
-		42CD0EFD147D93560000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisenc.a"; sourceTree = "<group>"; };
-		42CD0EFE147D93560000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisfile.a"; sourceTree = "<group>"; };
-		5B3439BE15125329005F5571 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
-		5B3439BF15125329005F5571 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		5B3439C015125329005F5571 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		5B3439C115125329005F5571 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		5B3439C215125329005F5571 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		5B3439C315125329005F5571 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		42CD0EFA147D93560000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macosx/libbullet.a"; sourceTree = "<group>"; };
+		42CD0EFB147D93560000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macosx/libogg.a"; sourceTree = "<group>"; };
+		42CD0EFC147D93560000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbis.a"; sourceTree = "<group>"; };
+		42CD0EFD147D93560000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisenc.a"; sourceTree = "<group>"; };
+		42CD0EFE147D93560000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisfile.a"; sourceTree = "<group>"; };
 		5B43D1DD14C35F4C008A5D9D /* sample03-character.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B43D1E314C35F71008A5D9D /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
+		5BAF2055152F2BDB003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2056152F2BDB003E2AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2057152F2BDB003E2AC3 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2058152F2BDB003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2059152F2BDB003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF205A152F2BDB003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,12 +98,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B3439C415125329005F5571 /* CoreMotion.framework in Frameworks */,
-				5B3439C515125329005F5571 /* Foundation.framework in Frameworks */,
-				5B3439C615125329005F5571 /* OpenAL.framework in Frameworks */,
-				5B3439C715125329005F5571 /* OpenGLES.framework in Frameworks */,
-				5B3439C815125329005F5571 /* QuartzCore.framework in Frameworks */,
-				5B3439C915125329005F5571 /* UIKit.framework in Frameworks */,
+				5BAF205B152F2BDB003E2AC3 /* CoreMotion.framework in Frameworks */,
+				5BAF205C152F2BDB003E2AC3 /* Foundation.framework in Frameworks */,
+				5BAF205D152F2BDB003E2AC3 /* OpenAL.framework in Frameworks */,
+				5BAF205E152F2BDB003E2AC3 /* OpenGLES.framework in Frameworks */,
+				5BAF205F152F2BDB003E2AC3 /* QuartzCore.framework in Frameworks */,
+				5BAF2060152F2BDB003E2AC3 /* UIKit.framework in Frameworks */,
 				5B43D1E514C36034008A5D9D /* libgameplay.a in Frameworks */,
 				5B43D1CB14C35F4C008A5D9D /* libbullet.a in Frameworks */,
 				5B43D1CC14C35F4C008A5D9D /* libogg.a in Frameworks */,
@@ -133,7 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */,
-				42C932E61491A1AC0098216A /* sample03-character-macos.plist */,
+				42C932E61491A1AC0098216A /* sample03-character-macosx.plist */,
 				42CCD5B0146EC62A00353661 /* icon.png */,
 				42CCD5B3146EC65F00353661 /* res */,
 				42CCD576146EC4B300353661 /* src */,
@@ -166,6 +170,8 @@
 			children = (
 				42CCD5AD146EC62000353661 /* CharacterGame.cpp */,
 				42CCD5AE146EC62000353661 /* CharacterGame.h */,
+				42C56363152DE26000888FBE /* Gamepad.cpp */,
+				42C56364152DE26000888FBE /* Gamepad.h */,
 			);
 			name = src;
 			path = "sample03-character";
@@ -174,12 +180,12 @@
 		5B43D1F014C36051008A5D9D /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				5B3439BE15125329005F5571 /* CoreMotion.framework */,
-				5B3439BF15125329005F5571 /* Foundation.framework */,
-				5B3439C015125329005F5571 /* OpenAL.framework */,
-				5B3439C115125329005F5571 /* OpenGLES.framework */,
-				5B3439C215125329005F5571 /* QuartzCore.framework */,
-				5B3439C315125329005F5571 /* UIKit.framework */,
+				5BAF2055152F2BDB003E2AC3 /* CoreMotion.framework */,
+				5BAF2056152F2BDB003E2AC3 /* Foundation.framework */,
+				5BAF2057152F2BDB003E2AC3 /* OpenAL.framework */,
+				5BAF2058152F2BDB003E2AC3 /* OpenGLES.framework */,
+				5BAF2059152F2BDB003E2AC3 /* QuartzCore.framework */,
+				5BAF205A152F2BDB003E2AC3 /* UIKit.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -198,9 +204,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		42CCD56B146EC4B300353661 /* sample03-character-macos */ = {
+		42CCD56B146EC4B300353661 /* sample03-character-macosx */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character-macos" */;
+			buildConfigurationList = 42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character-macosx" */;
 			buildPhases = (
 				42CCD568146EC4B300353661 /* Sources */,
 				42CCD569146EC4B300353661 /* Frameworks */,
@@ -211,7 +217,7 @@
 			);
 			dependencies = (
 			);
-			name = "sample03-character-macos";
+			name = "sample03-character-macosx";
 			productName = "sample03-character";
 			productReference = 42CCD56C146EC4B300353661 /* sample03-character.app */;
 			productType = "com.apple.product-type.application";
@@ -254,7 +260,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42CCD56B146EC4B300353661 /* sample03-character-macos */,
+				42CCD56B146EC4B300353661 /* sample03-character-macosx */,
 				5B43D1C614C35F4C008A5D9D /* sample03-character-ios */,
 			);
 		};
@@ -307,6 +313,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -316,6 +323,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42CCD5AF146EC62000353661 /* CharacterGame.cpp in Sources */,
+				42C56365152DE26000888FBE /* Gamepad.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B43D1C814C35F4C008A5D9D /* CharacterGame.cpp in Sources */,
+				42C56366152DE26000888FBE /* Gamepad.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,6 +391,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
@@ -389,12 +399,12 @@
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "sample03-character-macos.plist";
+				INFOPLIST_FILE = "sample03-character-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample03-character";
@@ -409,6 +419,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
@@ -416,12 +427,12 @@
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "sample03-character-macos.plist";
+				INFOPLIST_FILE = "sample03-character-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample03-character";
@@ -437,6 +448,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
@@ -445,12 +457,12 @@
 					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample03-character-ios.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample03-character";
@@ -469,6 +481,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
@@ -477,12 +490,12 @@
 					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample03-character-ios.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "sample03-character";
@@ -505,7 +518,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character-macos" */ = {
+		42CCD58A146EC4B300353661 /* Build configuration list for PBXNativeTarget "sample03-character-macosx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				42CCD58B146EC4B300353661 /* Debug */,

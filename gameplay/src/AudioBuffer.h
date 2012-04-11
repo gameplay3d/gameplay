@@ -11,13 +11,14 @@ class AudioSource;
 /**
  * The actual audio buffer data.
  *
- * Currently only supports OpenAL supported formats: .wav, .au and .raw files.
+ * Currently only supports supported formats: .wav, .au and .raw files.
  */
 class AudioBuffer : public Ref
 {
     friend class AudioSource;
 
 private:
+    
 #ifndef __ANDROID__
     /**
      * Constructor.

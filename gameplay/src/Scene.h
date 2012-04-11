@@ -14,14 +14,14 @@ class Scene : public Ref
 {
 public:
 
-	/**
-	 * Enumeration of supported scene debug flags for debug drawing.
-	 */
-	enum DebugFlags
-	{
-		DEBUG_BOXES = 1,
-		DEBUG_SPHERES = 2
-	};
+    /**
+     * Enumeration of supported scene debug flags for debug drawing.
+     */
+    enum DebugFlags
+    {
+        DEBUG_BOXES = 1,
+        DEBUG_SPHERES = 2
+    };
 
     /**
      * Creates a new empty scene.
@@ -143,20 +143,6 @@ public:
     void bindAudioListenerToCamera(bool bind);
 
     /**
-     * Gets the viewport for the scene.
-     *
-     * @return The scene's viewport.
-     */
-    const Viewport& getViewport() const;
-
-    /**
-     * Sets the scene's viewport.
-     *
-     * @param viewport The viewport to be set for this scene.
-     */
-    void setViewport(const Viewport& viewport);
-
-    /**
      * Returns the ambient color of the scene. Black is the default color.
      * 
      * @return The ambient color of the scene.
@@ -190,13 +176,13 @@ public:
     template <class T>
     void visit(T* instance, bool (T::*visitMethod)(Node*,void*), void* cookie = 0);
 
-	/**
-	 * Draws debugging information (bounding volumes, etc.) for the scene.
-	 *
-	 * @param debugFlags Bitwise combination of debug flags from mthe DebugFlags 
-	 *		enumeration, specifying which debugging information to draw.
-	 */
-	void drawDebug(unsigned int debugFlags);
+    /**
+     * Draws debugging information (bounding volumes, etc.) for the scene.
+     *
+     * @param debugFlags Bitwise combination of debug flags from mthe DebugFlags 
+     *        enumeration, specifying which debugging information to draw.
+     */
+    void drawDebug(unsigned int debugFlags);
 
 private:
 
@@ -223,13 +209,12 @@ private:
 
     std::string _id;
     Camera* _activeCamera;
-    Viewport _viewport;
     Node* _firstNode;
     Node* _lastNode;
     unsigned int _nodeCount;
     Vector3 _ambientColor;
     bool _bindAudioListenerToCamera;
-	MeshBatch* _debugBatch;
+    MeshBatch* _debugBatch;
 };
 
 template <class T>

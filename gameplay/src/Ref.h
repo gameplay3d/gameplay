@@ -51,6 +51,13 @@ protected:
     Ref();
 
     /**
+     * Copy constructor.
+     * 
+     * @param copy The Ref object to copy.
+     */
+    Ref(const Ref& copy);
+
+    /**
      * Destructor.
      */
     virtual ~Ref();

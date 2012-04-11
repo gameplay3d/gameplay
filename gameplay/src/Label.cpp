@@ -18,14 +18,14 @@ namespace gameplay
     Label* Label::create(Theme::Style* style, Properties* properties)
     {
         Label* label = new Label();
-        label->init(style, properties);
+        label->initialize(style, properties);
 
         return label;
     }
 
-    void Label::init(Theme::Style* style, Properties* properties)
+    void Label::initialize(Theme::Style* style, Properties* properties)
     {
-        Control::init(style, properties);
+        Control::initialize(style, properties);
 
         const char* text = properties->getString("text");
         if (text)
@@ -69,13 +69,13 @@ namespace gameplay
         if (_text.size() <= 0)
             return;
 
-        // TODO: Batch all labels that use the same font.
-        Theme::Style::Overlay* overlay = _style->getOverlay(getOverlayType());
-        Font* font = overlay->getFont();
+        Font* font = getFont(_state);
+        Vector4 textColor = getTextColor(_state);
+        textColor.w *= getOpacity(_state);
 
         // Draw the text.
         font->begin();
-        font->drawText(_text.c_str(), _textBounds, overlay->getTextColor(), overlay->getFontSize(), overlay->getTextAlignment(), true, overlay->getTextRightToLeft(), &_clip);
+        font->drawText(_text.c_str(), _textBounds, textColor, getFontSize(_state), getTextAlignment(_state), true, getTextRightToLeft(_state), &_clip);
         font->end();
 
         _dirty = false;

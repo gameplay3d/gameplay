@@ -144,9 +144,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\..\gameplay\res\logo_powered_white.png" />
-    <None Include="bar-descriptor.xml" />
+    <None Include="bar-descriptor.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="icon.png" />
     <None Include="res\boy.animation" />
+    <None Include="res\diffuse-transparent.fsh" />
+    <None Include="res\gamepad.png" />
     <None Include="res\scene.dae" />
     <None Include="res\scene.material" />
     <None Include="res\scene.physics" />
@@ -154,9 +158,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CharacterGame.cpp" />
+    <ClCompile Include="src\Gamepad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CharacterGame.h" />
+    <ClInclude Include="src\Gamepad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

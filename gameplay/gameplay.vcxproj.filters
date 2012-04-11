@@ -126,9 +126,6 @@
     <ClCompile Include="src\VertexFormat.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Viewport.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\AudioController.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -276,7 +273,10 @@
     <ClCompile Include="src\PhysicsCollisionShape.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\CloneContext.cpp">
+    <ClCompile Include="src\ThemeStyle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layout.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -396,9 +396,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\VertexFormat.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Viewport.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\AudioController.h">
@@ -548,7 +545,10 @@
     <ClInclude Include="src\PhysicsCollisionShape.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\CloneContext.h">
+    <ClInclude Include="src\ScreenDisplayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ThemeStyle.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -613,10 +613,10 @@
     <None Include="res\shaders\bumped-specular.fsh">
       <Filter>res\shaders</Filter>
     </None>
-    <None Include="src\gameplay-main-macos.mm">
+    <None Include="src\gameplay-main-macosx.mm">
       <Filter>src</Filter>
     </None>
-    <None Include="src\PlatformMacOS.mm">
+    <None Include="src\PlatformMacOSX.mm">
       <Filter>src</Filter>
     </None>
     <None Include="res\textures\particle-default.png">

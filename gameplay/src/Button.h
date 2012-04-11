@@ -10,15 +10,20 @@ namespace gameplay
 {
 
 /**
- * Defines a button UI control.  This is essentially a label that can have a callback method set on it.
+ * Defines a button UI control. This is essentially a label that can have a callback method set on it.
  *
  * The following properties are available for buttons:
  *
- * button <Button ID>
+ * button <buttonID>
  * {
- *      style       = <Style ID>
+ *      style       = <styleID>
+ *      alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
  *      position    = <x, y>
+ *      autoWidth   = <bool>
+ *      autoHeight  = <bool>
  *      size        = <width, height>
+ *      width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
+ *      height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
  *      text        = <string>
  * }
  */
@@ -27,6 +32,17 @@ class Button : public Label
     friend class Container;
 
 protected:
+
+    /**
+     * Constructor.
+     */
+    Button();
+
+    /**
+     * Destructor.
+     */
+    virtual ~Button();
+
     /**
      * Create a button with a given style and properties.
      *
@@ -51,10 +67,11 @@ protected:
      */
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
-    Button();
-    virtual ~Button();
-
 private:
+
+    /*
+     * Constructor.
+     */
     Button(const Button& copy);
 };
 

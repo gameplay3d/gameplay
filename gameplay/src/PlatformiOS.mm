@@ -4,9 +4,8 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
-
+#include "Form.h"
 #include <unistd.h>
-
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import <CoreMotion/CoreMotion.h>
@@ -20,13 +19,10 @@
 using namespace std;
 using namespace gameplay;
 
-// UIScreen bounds are provided as if device was in portrait mode
-// Gameplay defaults to landscape
-extern const int WINDOW_WIDTH  = [[UIScreen mainScreen] bounds].size.height;
-extern const int WINDOW_HEIGHT = [[UIScreen mainScreen] bounds].size.width;
-
-static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
-static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
+// UIScreen bounds are provided as if device was in portrait mode Gameplay defaults to landscape
+extern const int WINDOW_WIDTH  = [[UIScreen mainScreen] bounds].size.height * [[UIScreen mainScreen] scale];
+extern const int WINDOW_HEIGHT = [[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale];
+extern const int WINDOW_SCALE = [[UIScreen mainScreen] scale];
 
 @class AppDelegate;
 @class View;
@@ -92,7 +88,6 @@ int getKey(unichar keyCode);
 {
     if ((self = [super initWithFrame:frame]))
 	{
-        // Do a sanity check
         // A system version of 3.1 or greater is required to use CADisplayLink. 
 		NSString *reqSysVer = @"3.1";
 		NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
@@ -108,13 +103,16 @@ int getKey(unichar keyCode);
             return nil;
         }
         
-        
         // Configure the CAEAGLLayer and setup out the rendering context
+        CGFloat scale = [[UIScreen mainScreen] scale];
         CAEAGLLayer* layer = (CAEAGLLayer *)self.layer;
         layer.opaque = TRUE;
         layer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, 
                                     kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+        self.contentScaleFactor = scale;
+        layer.contentsScale = scale;
+        
 		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         if (!context || ![EAGLContext setCurrentContext:context])
 		{
@@ -122,12 +120,14 @@ int getKey(unichar keyCode);
 			return nil;
 		}
 
-            if (!defaultFramebuffer)
-                [self createFramebuffer];
+        if (!defaultFramebuffer)
+        {
+            [self createFramebuffer];
+        }
             
         glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
         glViewport(0, 0, framebufferWidth, framebufferHeight);
-        
+
         // Initialize Internal Defaults
         displayLink = nil;
         defaultFramebuffer = 0;
@@ -157,7 +157,9 @@ int getKey(unichar keyCode);
     [self deleteFramebuffer];
     
 	if ([EAGLContext currentContext] == context)
+    {
         [EAGLContext setCurrentContext:nil];
+    }
 	[context release];
     [super dealloc];
 }
@@ -203,7 +205,6 @@ int getKey(unichar keyCode);
 
 - (void)deleteFramebuffer
 {
-    // Deleting the framebuffer and all the buffers it contains
     if (context) 
     {
         [EAGLContext setCurrentContext:context];        
@@ -304,23 +305,20 @@ int getKey(unichar keyCode);
     return [self resignFirstResponder];
 }
 
-/*
- * Virtual Keyboard Support
- */
 - (void)insertText:(NSString*)text 
 {
     if([text length] == 0) return;
     assert([text length] == 1);
     unichar c = [text characterAtIndex:0];
-    int gpk = getKey(c);
-    Game::getInstance()->keyEvent(Keyboard::KEY_PRESS, gpk);    
-    Game::getInstance()->keyEvent(Keyboard::KEY_RELEASE, gpk);    
+    int key = getKey(c);
+    Platform::keyEventInternal(Keyboard::KEY_PRESS, key);    
+    Platform::keyEventInternal(Keyboard::KEY_RELEASE, key);    
 }
 
 - (void)deleteBackward 
 {
-    Game::getInstance()->keyEvent(Keyboard::KEY_PRESS, Keyboard::KEY_BACKSPACE);    
-    Game::getInstance()->keyEvent(Keyboard::KEY_RELEASE, Keyboard::KEY_BACKSPACE);    
+    Platform::keyEventInternal(Keyboard::KEY_PRESS, Keyboard::KEY_BACKSPACE);    
+    Platform::keyEventInternal(Keyboard::KEY_RELEASE, Keyboard::KEY_BACKSPACE);    
 }
 
 - (BOOL)hasText 
@@ -328,30 +326,29 @@ int getKey(unichar keyCode);
     return YES;
 }
 
-/*
- * Touch Support
- */
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event 
 {
-    unsigned int uniqueTouch = 0;
-    for(UITouch *t in touches) 
+    unsigned int touchID = 0;
+    for(UITouch* touch in touches) 
     {
-        CGPoint touchLoc = [t locationInView:self];
-        if(self.multipleTouchEnabled == YES) 
-            uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchLoc.x, touchLoc.y, uniqueTouch);
+        CGPoint touchPoint = [touch locationInView:self];
+        if(self.multipleTouchEnabled == YES)
+        {
+            touchID = [touch hash];
+        }
+        Platform::touchEventInternal(Touch::TOUCH_PRESS, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
     }
 }
 
-- (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent *)event 
+- (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event 
 {
-    unsigned int uniqueTouch = 0;
-    for(UITouch* t in touches) 
+    unsigned int touchID = 0;
+    for(UITouch* touch in touches) 
     {
-        CGPoint touchLoc = [t locationInView:self];
+        CGPoint touchPoint = [touch locationInView:self];
         if(self.multipleTouchEnabled == YES) 
-            uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchLoc.x, touchLoc.y, uniqueTouch);
+            touchID = [touch hash];
+        Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
     }
 }
 
@@ -363,13 +360,13 @@ int getKey(unichar keyCode);
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event 
 {
-    unsigned int uniqueTouch = 0;
-    for(UITouch* t in touches) 
+    unsigned int touchID = 0;
+    for(UITouch* touch in touches) 
     {
-        CGPoint touchLoc = [t locationInView:self];
+        CGPoint touchPoint = [touch locationInView:self];
         if(self.multipleTouchEnabled == YES) 
-            uniqueTouch = [t hash];
-        Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchLoc.x, touchLoc.y, uniqueTouch);
+            touchID = [touch hash];
+        Platform::touchEventInternal(Touch::TOUCH_MOVE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
     }
 }
 
@@ -400,8 +397,7 @@ int getKey(unichar keyCode);
 
 - (void)didReceiveMemoryWarning
 {
-    [super didReceiveMemoryWarning];    
-    // Release any cached data, images, etc that aren't in use.
+    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - View lifecycle
@@ -520,6 +516,7 @@ int getKey(unichar keyCode);
 }
 
 @end
+
 
 long getMachTimeInMilliseconds()
 {
@@ -761,14 +758,12 @@ extern void printError(const char* format, ...)
     va_end(argptr);
 }
 
-Platform::Platform(Game* game)
-    : _game(game)
+Platform::Platform(Game* game) : _game(game)
 {
 }
 
 Platform::Platform(const Platform& copy)
 {
-    // hidden
 }
 
 Platform::~Platform()
@@ -788,6 +783,14 @@ int Platform::enterMessagePump()
     UIApplicationMain(0, nil, NSStringFromClass([AppDelegate class]), NSStringFromClass([AppDelegate class]));
     [pool release];
     return EXIT_SUCCESS;
+}
+    
+void Platform::signalShutdown() 
+{
+    // Cannot 'exit' an iOS Application
+    assert(false);
+    [__view stopUpdating];
+    exit(0);
 }
     
 unsigned int Platform::getDisplayWidth()
@@ -851,10 +854,31 @@ void Platform::displayKeyboard(bool display)
 {
     if(__view) 
     {
-        if(display) [__view showKeyboard];
-        else [__view dismissKeyboard];
+        if(display)
+        {
+            [__view showKeyboard];
+        }
+        else
+        {
+            [__view dismissKeyboard];
+        }
     }
 }
+    
+void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    if (!Form::touchEventInternal(evt, x, y, contactIndex))
+    {
+        Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+    }
+}
+
+void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Form::keyEventInternal(evt, key);
+}
+    
 
 void Platform::sleep(long ms)
 {
