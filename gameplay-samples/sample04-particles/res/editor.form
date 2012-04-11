@@ -144,14 +144,6 @@ form particleEditor
         }
     }
 
-    button minimize
-    {
-        style = buttonStyle
-        alignment = ALIGN_TOP_RIGHT
-        size = 50, 50
-        text = -
-    }
-
     container particleProperties
     {
         style = basic
@@ -284,5 +276,13 @@ form particleEditor
                 text = Max. Energy
             }
         }        
+    }
+
+    button minimize
+    {
+        style = buttonStyle
+        alignment = ALIGN_TOP_RIGHT
+        size = 50, 50
+        text = -
     }
 }
