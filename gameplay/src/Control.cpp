@@ -652,21 +652,14 @@ namespace gameplay
             height = clipY2 - y;
         }
 
-        if (x < clip.x)
-        {
-            x = clip.x;
-        }
-
-        if (y < clip.y)
-        {
-            y = clip.y;
-        }
-
         _clip.set(x, y, width, height);
     }
 
     void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
+        if (_bounds.width <= 0 || _bounds.height <= 0)
+            return;
+
         Vector2 pos(clip.x + _bounds.x, clip.y + _bounds.y);
 
         // Get the border and background images for this control's current state.
