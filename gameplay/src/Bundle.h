@@ -11,7 +11,7 @@ namespace gameplay
 
 /**
  * Represents a gameplay bundle file (.gpb) that contains a
- * collection of game resources that can be loaded.
+ * collection of binary game assets that can be loaded.
  */
 class Bundle : public Ref
 {
