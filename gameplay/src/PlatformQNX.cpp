@@ -804,14 +804,9 @@ int Platform::enterMessagePump()
                 {
                     case SCREEN_EVENT_MTOUCH_TOUCH:
                     {
-                        if (!__multiTouch)
+                        screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
+                        if (__multiTouch || touchEvent.contact_id == 0)
                         {
-                            screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                           gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, position[0], position[1], 0);
-                        }
-                        else
-                        {
-                            screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
                             gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
                         break;
@@ -819,14 +814,9 @@ int Platform::enterMessagePump()
 
                     case SCREEN_EVENT_MTOUCH_RELEASE:
                     {
-                        if (!__multiTouch)
+                        screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
+                        if (__multiTouch || touchEvent.contact_id == 0)
                         {
-                            screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                           gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, position[0], position[1], 0);
-                        }
-                        else
-                        {
-                            screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
                             gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
                         break;
@@ -834,17 +824,11 @@ int Platform::enterMessagePump()
 
                     case SCREEN_EVENT_MTOUCH_MOVE:
                     {
-                        if (!__multiTouch)
+                        screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
+                        if (__multiTouch ||touchEvent.contact_id == 0)
                         {
-                            screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                           gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, position[0], position[1], 0);
-                        }
-                        else
-                        {
-                            screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
                             gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
-                        break;
                         break;
                     }
 

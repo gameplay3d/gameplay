@@ -6,10 +6,34 @@ CharacterGame game;
 #define WALK_SPEED  7.5f
 #define RUN_SPEED 10.0f
 #define ANIM_SPEED 1.0f
-#define BLEND_DURATION 150.0f
+#define BLEND_DURATION 300.0f
 #define OPAQUE_OBJECTS      0
 #define TRANSPARENT_OBJECTS 1
 #define CAMERA_FOCUS_DISTANCE 16.0f
+#define SCREEN_WIDTH getWidth()
+#define SCREEN_HEIGHT getHeight()
+#define SCALE_FACTOR (SCREEN_HEIGHT / 720.0f)
+#define THUMB_WIDTH 47.0f
+#define THUMB_HEIGHT 47.0f
+#define THUMB_X 10.0f
+#define THUMB_Y 188.0f
+#define THUMB_SCREEN_X 120.0f 
+#define THUMB_SCREEN_Y 130.0f
+#define DOCK_WIDTH 170.0f
+#define DOCK_HEIGHT 170.0f
+#define DOCK_X 0.0f
+#define DOCK_Y 0.0f
+#define DOCK_SCREEN_X 48.0f
+#define DOCK_SCREEN_Y 191.0f
+#define BUTTON_WIDTH 47.0f
+#define BUTTON_HEIGHT 47.0f
+#define BUTTON_PRESSED_X 69.0f
+#define BUTTON_PRESSED_Y 188.0f
+#define BUTTON_RELEASED_X 10.0f
+#define BUTTON_RELEASED_Y 188.0f
+#define BUTTON_SCREEN_X 120.0f
+#define BUTTON_SCREEN_Y 130.0f
+#define JOYSTICK_RADIUS 45.0f
 
 unsigned int keyFlags = 0;
 float velocityNS = 0.0f;
@@ -37,7 +61,7 @@ void CharacterGame::initialize()
     _scene = Scene::load("res/scene.scene");
 
     // Update the aspect ratio for our scene's camera to match the current device resolution
-    _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
+    _scene->getActiveCamera()->setAspectRatio((float)SCREEN_WIDTH / (float) SCREEN_HEIGHT);
 
     // Store character node.
     Node* node = _scene->findNode("BoyCharacter");
@@ -71,22 +95,17 @@ void CharacterGame::initialize()
     // Initialize the gamepad.
 	_gamepad = new Gamepad("res/gamepad.png", 1, 1);
 
-    unsigned int screenWidth = this->getWidth();
-    unsigned int screenHeight = this->getHeight();
+    Gamepad::Rect thumbScreenRegion = {THUMB_SCREEN_X * SCALE_FACTOR, SCREEN_HEIGHT - THUMB_SCREEN_Y * SCALE_FACTOR, THUMB_WIDTH * SCALE_FACTOR, THUMB_HEIGHT * SCALE_FACTOR};
+    Gamepad::Rect thumbTexRegion =    {THUMB_X, THUMB_Y, THUMB_WIDTH, THUMB_HEIGHT};
+    Gamepad::Rect dockScreenRegion =  {DOCK_SCREEN_X * SCALE_FACTOR, SCREEN_HEIGHT - DOCK_SCREEN_Y * SCALE_FACTOR, DOCK_WIDTH * SCALE_FACTOR, DOCK_HEIGHT * SCALE_FACTOR};
+    Gamepad::Rect dockTexRegion =     {DOCK_X, DOCK_Y, DOCK_WIDTH, DOCK_HEIGHT};
 
-    float scaleFactor = screenHeight / 720.0f; // determine a scale factor to scale the gamepads position and size by.
-    float thumbSize = 47.0f * scaleFactor; // size of the thumb stick, and also the button which happen to be the same image.
-    float dockSize = 170.0f * scaleFactor; // size of the thumbstick's dock.
+    _gamepad->setJoystick(JOYSTICK, &thumbScreenRegion, &thumbTexRegion, &dockScreenRegion, &dockTexRegion, JOYSTICK_RADIUS);
 
-    Gamepad::Rect thumbScreenRegion = {120.0f * scaleFactor, screenHeight - 130.0f * scaleFactor, thumbSize, thumbSize};
-    Gamepad::Rect thumbTexRegion = {10.0f, 188.0f, 47.0f, 47.0f};
-    Gamepad::Rect dockScreenRegion = {48.0 * scaleFactor, screenHeight - 191.0f * scaleFactor, dockSize, dockSize};
-    Gamepad::Rect dockTexRegion = {0.0f, 0.0f, 170.0f, 170.0f};
-    _gamepad->setJoystick(JOYSTICK, &thumbScreenRegion, &thumbTexRegion, &dockScreenRegion, &dockTexRegion, 45.0f);
+	Gamepad::Rect regionOnScreen = {SCREEN_WIDTH - SCALE_FACTOR * (BUTTON_SCREEN_X + BUTTON_WIDTH), SCREEN_HEIGHT - BUTTON_SCREEN_Y * SCALE_FACTOR, BUTTON_WIDTH * SCALE_FACTOR, BUTTON_HEIGHT * SCALE_FACTOR};
+	Gamepad::Rect releasedRegion = {BUTTON_RELEASED_X, BUTTON_RELEASED_Y, BUTTON_WIDTH, BUTTON_HEIGHT};
+	Gamepad::Rect pressedRegion =  {BUTTON_PRESSED_X, BUTTON_PRESSED_Y, BUTTON_WIDTH, BUTTON_HEIGHT};
 
-	Gamepad::Rect regionOnScreen = {screenWidth - 120.0f * scaleFactor - thumbSize, screenHeight - 130.0f * scaleFactor, thumbSize, thumbSize};
-	Gamepad::Rect releasedRegion = {10.0f, 188.0f, 50.0f, 47.0f};
-	Gamepad::Rect pressedRegion = {69.0f, 188.0f, 50.0f, 47.0f};
 	_gamepad->setButton(BUTTON_1, &regionOnScreen, &releasedRegion, &pressedRegion);
 }
 

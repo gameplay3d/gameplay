@@ -70,7 +70,7 @@
         <copy file="../res/bookshelf.png" tofile="assets/res/bookshelf.png"/>
         <copy file="../res/boy.animation" tofile="assets/res/boy.animation"/>
         <copy file="../res/ceiling.png" tofile="assets/res/ceiling.png"/>
-        <copy file="../res/colored-transparent.fsh" tofile="assets/res/colored-transparent.fsh"/>
+        <copy file="../res/character.png" tofile="assets/res/character.png"/>
         <copy file="../res/decals.png" tofile="assets/res/decals.png"/>
         <copy file="../res/door.png" tofile="assets/res/door.png"/>
         <copy file="../res/doorframe.png" tofile="assets/res/doorframe.png"/>
@@ -101,8 +101,16 @@
         <copy file="../res/windowledge.png" tofile="assets/res/windowledge.png"/>
         <copy file="../res/wood.png" tofile="assets/res/wood.png"/>
         <copy file="../res/woodn.png" tofile="assets/res/woodn.png"/>
-        <copy file="../../../gameplay/res/shaders/diffuse-specular.vsh" tofile="assets/res/shaders/diffuse-specular.vsh"/>
+		<copy file="../../../gameplay/res/shaders/colored.vsh" tofile="assets/res/shaders/colored.vsh"/>
+        <copy file="../../../gameplay/res/shaders/colored.fsh" tofile="assets/res/shaders/colored.fsh"/>
+		<copy file="../../../gameplay/res/shaders/colored-specular.vsh" tofile="assets/res/shaders/colored-specular.vsh"/>
+        <copy file="../../../gameplay/res/shaders/colored-specular.fsh" tofile="assets/res/shaders/colored-specular.fsh"/>
+		<copy file="../../../gameplay/res/shaders/diffuse.vsh" tofile="assets/res/shaders/diffuse.vsh"/>
+        <copy file="../../../gameplay/res/shaders/diffuse.fsh" tofile="assets/res/shaders/diffuse.fsh"/>
+		<copy file="../../../gameplay/res/shaders/diffuse-specular.vsh" tofile="assets/res/shaders/diffuse-specular.vsh"/>
         <copy file="../../../gameplay/res/shaders/diffuse-specular.fsh" tofile="assets/res/shaders/diffuse-specular.fsh"/>
+		<copy file="../../../gameplay/res/shaders/textured.vsh" tofile="assets/res/shaders/textured.vsh"/>
+        <copy file="../../../gameplay/res/shaders/textured.fsh" tofile="assets/res/shaders/textured.fsh"/>
         <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
     </target>
 

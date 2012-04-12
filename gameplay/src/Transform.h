@@ -465,6 +465,11 @@ public:
     void set(const Transform& transform);
 
     /**
+     * Sets this transform to the identity transform.
+     */
+    void setIdentity();
+
+    /**
      * Sets the scale factor along all axes for this transform
      * to the specified value.
      *
@@ -736,10 +741,17 @@ protected:
         long cookie;
     };
 
+    enum MatrixDirtyBits
+    {
+        DIRTY_TRANSLATION = 0x01,
+        DIRTY_SCALE = 0x02,
+        DIRTY_ROTATION = 0x04,
+    };
+
     /**
      * Marks this transform as dirty and fires transformChanged().
      */
-    void dirty();
+    void dirty(char matrixDirtyBits);
 
     /**
      * Called when the transform changes.
@@ -758,7 +770,7 @@ protected:
     Quaternion _rotation;
     Vector3 _translation;
     mutable Matrix _matrix;
-    mutable bool _matrixDirty;
+    mutable char _matrixDirtyBits;
     std::list<TransformListener>* _listeners;
 
 private:

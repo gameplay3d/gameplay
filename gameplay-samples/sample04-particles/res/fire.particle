@@ -13,7 +13,7 @@ particle fire
         frameDuration = 0
     }
 
-    particleCountMax = 10000
+    particleCountMax = 5000
     emissionRate = 300
     ellipsoid = true
     sizeStartMin = 1.5

@@ -969,7 +969,6 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
         else
         {
             animation->createChannel(target, targetAttribute, keyTimesCount, &keyTimes[0], &values[0], Curve::LINEAR);
-            animation->addRef();
         }
     }
 
