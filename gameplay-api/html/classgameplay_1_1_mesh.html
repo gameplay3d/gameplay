@@ -165,8 +165,8 @@ Static Public Member Functions</h2></td></tr>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2bf2a0e9b454c55aa5dcb5aa4698697b"></a><!-- doxytag: member="gameplay::Mesh::Model" ref="a2bf2a0e9b454c55aa5dcb5aa4698697b" args="" -->
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Model</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a305c04df1d8a4683e8bfe85167fcfdab"></a><!-- doxytag: member="gameplay::Mesh::Package" ref="a305c04df1d8a4683e8bfe85167fcfdab" args="" -->
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b8dc7250e74bde2e1a403e1d88c8fac"></a><!-- doxytag: member="gameplay::Mesh::Bundle" ref="a2b8dc7250e74bde2e1a403e1d88c8fac" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Bundle</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a mesh supporting various vertex formats and 1 or more MeshPart(s) to define how the vertices are connected. </p>
@@ -509,7 +509,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 </div>
 <div class="memdoc">
 <p>Returns the bounding box for the points in this mesh.</p>
-<p>Only meshes loaded from package files are imported with valid bounding volumes. Programmatically created meshes will contain empty bounding volumes until the setBoundingBox and/or setBoundingSphere methods are called to specify the mesh's local bounds.</p>
+<p>Only meshes loaded from bundle files are imported with valid bounding volumes. Programmatically created meshes will contain empty bounding volumes until the setBoundingBox and/or setBoundingSphere methods are called to specify the mesh's local bounds.</p>
 <p>Meshes that are attached to a <a class="el" href="classgameplay_1_1_model.html">Model</a> with a <a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> will have a bounding volume that is not neccessarily tight fighting on the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> vertices. Instead, the bounding volume will be an approximation that contains all possible vertex positions in all possible poses after skinning is applied. This is neccessary since skinning vertices result in vertex positions that lie outside the original mesh bounds and could otherwise result in a bounding volume that does not fully contain an animated/skinned mesh.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The bounding box for the mesh. </dd></dl>
 
@@ -529,7 +529,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 </div>
 <div class="memdoc">
 <p>Returns the bounding sphere for the points in the mesh.</p>
-<p>Only meshes loaded from package files are imported with valid bounding volumes. Programmatically created meshes will contain empty bounding volumes until the setBoundingBox and/or setBoundingSphere methods are called to specify the mesh's local bounds.</p>
+<p>Only meshes loaded from bundle files are imported with valid bounding volumes. Programmatically created meshes will contain empty bounding volumes until the setBoundingBox and/or setBoundingSphere methods are called to specify the mesh's local bounds.</p>
 <p>Meshes that are attached to a <a class="el" href="classgameplay_1_1_model.html">Model</a> with a <a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> will have a bounding volume that is not neccessarily tight fighting on the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> vertices. Instead, the bounding volume will be an approximation that contains all possible vertex positions in all possible poses after skinning is applied. This is neccessary since skinning vertices result in vertex positions that lie outside the original mesh bounds and could otherwise result in a bounding volume that does not fully contain an animated/skinned mesh.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The bounding sphere for the mesh. </dd></dl>
 
@@ -612,7 +612,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 </div>
 <div class="memdoc">
 <p>Returns a URL from which the mesh was loaded from.</p>
-<p>For meshes loaded from a <a class="el" href="classgameplay_1_1_package.html">Package</a>, this URL will point to the file and ID of the mesh within the package. For all other meshes, an empty string will be returned. </p>
+<p>For meshes loaded from a <a class="el" href="classgameplay_1_1_bundle.html">Bundle</a>, this URL will point to the file and ID of the mesh within the bundle. For all other meshes, an empty string will be returned. </p>
 
 </div>
 </div>
@@ -846,7 +846,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
 </div>
 
 
-    <li class="footer">Generated on Fri Apr 13 2012 10:54:51 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 13:25:44 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

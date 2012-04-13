@@ -160,9 +160,20 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>A slider consists of a marker that can slide along a track between two end-caps. The following properties are available for sliders:</p>
-<p>slider { style = &lt;styleID&gt; // A Style from the <a class="el" href="classgameplay_1_1_theme.html">Theme</a>. position = &lt;x, y&gt; // Position of the <a class="el" href="classgameplay_1_1_control.html">Control</a> on-screen, measured in pixels. size = &lt;width, height&gt; // Size of the <a class="el" href="classgameplay_1_1_control.html">Control</a>, measured in pixels. min = &lt;float&gt; // The value of the left- / bottom-most point on the slider. max = &lt;float&gt; // The value of the right- / top-most point on the slider. value = &lt;float&gt; // The default position of the marker. step = &lt;float&gt; // If greater than 0, force the marker to snap to discrete multiples of 'step'. text = &lt;string&gt; // Text to display above, below or alongside the slider (depending on the style).</p>
-<p>// TODO: orientation = &lt;HORIZONTAL or="" vertical&gt;=""&gt; // Determines whether a slider is stretched along its width or its height } </p>
-</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<div class="fragment"><pre class="fragment">
+    slider
+    {
+        style       = &lt;styleID&gt;                 // A Style from the Theme.
+        position    = &lt;x, y&gt;                    // Position of the Control on-screen, measured in pixels.
+        size        = &lt;width, height&gt;           // Size of the Control, measured in pixels.
+        min         = &lt;float&gt;                   // The value of the left- / bottom-most point on the slider.
+        max         = &lt;float&gt;                   // The value of the right- / top-most point on the slider.
+        value       = &lt;float&gt;                   // The default position of the marker.
+        step        = &lt;float&gt;                   // If greater than 0, force the marker to snap to discrete multiples of 'step'.
+        text        = &lt;string&gt;                  // Text to display above, below or alongside the slider (depending on the style).
+        // TODO: orientation = &lt;HORIZONTAL or VERTICAL&gt;  // Determines whether a slider is stretched along its width or its height
+    }
+ </pre></div> </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a180e1a81c7c384de48cd28524873f436"></a><!-- doxytag: member="gameplay::Slider::Slider" ref="a180e1a81c7c384de48cd28524873f436" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -556,7 +567,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 </div>
 
 
-    <li class="footer">Generated on Fri Apr 13 2012 10:54:53 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 13:25:45 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

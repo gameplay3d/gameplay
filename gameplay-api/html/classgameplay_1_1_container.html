@@ -162,10 +162,34 @@ std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> 
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>A container is a UI control that can contain other controls.</p>
 <p>The following properties are available for containers:</p>
-<p>container &lt;containerID&gt; { // <a class="el" href="classgameplay_1_1_container.html">Container</a> properties. layout = &lt;<a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a>&gt; // A value from the <a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a> enum. E.g.: LAYOUT_VERTICAL style = &lt;styleID&gt; // A style from the form's theme. alignment = &lt;<a class="el" href="classgameplay_1_1_control.html#a81f7bde0bfab996b044e2dc33aff5d13">Control::Alignment</a> constant&gt; // Note: 'position' will be ignored. position = &lt;x, y&gt; // Position of the container on-screen, measured in pixels. autoWidth = &lt;bool&gt; autoHeight = &lt;bool&gt; size = &lt;width, height&gt; // Size of the container, measured in pixels. width = &lt;width&gt; // Can be used in place of 'size', e.g. with 'autoHeight = true' height = &lt;height&gt; // Can be used in place of 'size', e.g. with 'autoWidth = true'</p>
-<p>// All the nested controls within this container. container { ... }</p>
-<p>label { } textBox { } button { } checkBox { } radioButton { } slider { } } </p>
-</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<div class="fragment"><pre class="fragment">
+    container &lt;containerID&gt;
+    {
+         // Container properties.
+         layout   = &lt;Layout::Type&gt;        // A value from the Layout::Type enum.  E.g.: LAYOUT_VERTICAL
+         style    = &lt;styleID&gt;           // A style from the form's theme.
+         alignment   = &lt;Control::Alignment constant&gt; // Note: 'position' will be ignored.
+         position    = &lt;x, y&gt;    // Position of the container on-screen, measured in pixels.
+         autoWidth   = &lt;bool&gt;
+         autoHeight  = &lt;bool&gt;
+         size        = &lt;width, height&gt;   // Size of the container, measured in pixels.
+         width       = &lt;width&gt;   // Can be used in place of 'size', e.g. with 'autoHeight = true'
+         height      = &lt;height&gt;  // Can be used in place of 'size', e.g. with 'autoWidth = true'
+  
+         // All the nested controls within this container.
+         container 
+         { 
+             ...
+         }
+
+         label { }
+         textBox { }
+         button { }
+         checkBox { }
+         radioButton { }
+         slider { }
+    }
+ </pre></div> </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aaf65bba3cf3e0fe59407bc092a083f74"></a><!-- doxytag: member="gameplay::Container::Container" ref="aaf65bba3cf3e0fe59407bc092a083f74" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -840,7 +864,7 @@ std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> 
 </div>
 
 
-    <li class="footer">Generated on Fri Apr 13 2012 10:54:50 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 13:25:43 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

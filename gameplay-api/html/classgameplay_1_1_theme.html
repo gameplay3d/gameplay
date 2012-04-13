@@ -152,21 +152,114 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Style</b></td></tr>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>A theme is created and stored as part of a form and represents its appearance. Once loaded, the appearance properties can be retrieved from their style IDs and set on other UI controls. A <a class="el" href="classgameplay_1_1_theme.html">Theme</a> has one property, 'texture', which points to a texture atlas containing all the images used by the theme. Cursor images, skins, and lists of images used by controls are defined in their own namespaces. The rest of the <a class="el" href="classgameplay_1_1_theme.html">Theme</a> consists of <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Style</a> namespaces. A <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Style</a> describes the border, margin, and padding of a <a class="el" href="classgameplay_1_1_control.html">Control</a>, what images, skins, and cursors are associated with a <a class="el" href="classgameplay_1_1_control.html">Control</a>, and <a class="el" href="classgameplay_1_1_font.html">Font</a> properties to apply to a Control's text.</p>
 <p>Below is an explanation of the properties that can be set within themes:</p>
-<p>theme { texture = &lt;Path to="" texture&gt;=""&gt;</p>
-<p>// Describes a single image, to be used as a cursor. cursor &lt;Cursor id&gt;=""&gt; { region = &lt;x, y, width, height&gt; color = &lt;#ffffffff&gt; }</p>
-<p>// Describes all the images used by a control for one or more states. imageList &lt;ImageList id&gt;=""&gt; { image checked { region = &lt;x, y, width, height&gt; }</p>
-<p>image unchecked { region = &lt;x, y, width, height&gt; color = &lt;#fffffffff&gt; // Optionally override image-list color. }</p>
-<p>color = &lt;#fffffffff&gt; // Default blend color for images that don't specify their own. }</p>
-<p>// Defines the border and background of a <a class="el" href="classgameplay_1_1_control.html">Control</a>. skin &lt;Skin id&gt;=""&gt; { // The corners and edges of the given region will be used as border sprites. border { top = &lt;int&gt; // Height of top border, top corners. bottom = &lt;int&gt; // Height of bottom border, bottom corners. left = &lt;int&gt; // Width of left border, left corners. right = &lt;int&gt; // Width of right border, right corners. }</p>
-<p>region = &lt;x, y, width, height&gt; // Total container region including entire border. color = &lt;#ffffffff&gt; // Tint to apply to skin. }</p>
-<p>style &lt;Style id&gt;=""&gt; { // Layouts may make use of a style's margin to put space between adjacent controls. margin { top = &lt;int&gt; bottom = &lt;int&gt; left = &lt;int&gt; right = &lt;int&gt; }</p>
-<p>// Padding is the space between a control's border and its content. padding { top = &lt;int&gt; bottom = &lt;int&gt; left = &lt;int&gt; right = &lt;int&gt; }</p>
-<p>// <a class="el" href="classgameplay_1_1_properties.html">Properties</a> used when in control is in the normal state. stateNormal { skin = &lt;Skin id&gt;=""&gt; // Skin to use for border and background sprites. imageList = &lt;ImageList id&gt;=""&gt;</p>
-<p>cursor = &lt;Cursor id&gt;=""&gt; // Cursor to use when the mouse is over this control. font = &lt;Path to="" font&gt;=""&gt; // <a class="el" href="classgameplay_1_1_font.html">Font</a> to use for rendering text. fontSize = &lt;int&gt; // Size of text. textColor = &lt;#ffffffff&gt; // Color of text. alignment = &lt;Text alignment="" constant&gt;=""&gt; // Member of <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Font::Justify</a> enum. rightToLeft = &lt;bool&gt; // Whether to draw text from right to left. opacity = &lt;float&gt; // Opacity to apply to all text/border/icon colors. }</p>
-<p>// <a class="el" href="classgameplay_1_1_properties.html">Properties</a> used when in control is in the focus state // If not specified, the 'normal' overlay will be used. stateFocus { skin = &lt;Skin id&gt;=""&gt; // Skin to use for border and background sprites. ... }</p>
-<p>// <a class="el" href="classgameplay_1_1_properties.html">Properties</a> used when in control is in the focus. // This is when a touch/mouse is down within the control. // If not specified, the 'normal' overlay will be used. stateActive { skin = &lt;Skin id&gt;=""&gt; // Skin to use for border and background sprites. ... }</p>
-<p>// <a class="el" href="classgameplay_1_1_properties.html">Properties</a> used when in control is in the focus. // This is when a touch/mouse is down within the control. // If not specified, the 'normal' overlay will be used. state-disabled { skin = &lt;Skin id&gt;=""&gt; // Skin to use for border and background sprites. ... } } } </p>
-</div><hr/><h2>Member Typedef Documentation</h2>
+<div class="fragment"><pre class="fragment">
+    theme
+    {
+        texture = &lt;Path to texture&gt;
+
+        // Describes a single image, to be used as a cursor.
+        cursor &lt;Cursor ID&gt;
+        {
+            region = &lt;x, y, width, height&gt;
+            color = &lt;#ffffffff&gt;
+        }
+
+        // Describes all the images used by a control for one or more states.
+        imageList &lt;ImageList ID&gt;
+        {
+            image checked
+            {
+                region = &lt;x, y, width, height&gt;
+            }
+
+            image unchecked
+            {
+                region = &lt;x, y, width, height&gt;
+                color = &lt;#fffffffff&gt;            // Optionally override image-list color.
+            }
+
+            color = &lt;#fffffffff&gt;    // Default blend color for images that don't specify their own.
+        }
+    
+        // Defines the border and background of a Control.
+        skin &lt;Skin ID&gt;
+        {
+            // The corners and edges of the given region will be used as border sprites.
+            border
+            {
+                top     =   &lt;int&gt;   // Height of top border, top corners.
+                bottom  =   &lt;int&gt;   // Height of bottom border, bottom corners.
+                left    =   &lt;int&gt;   // Width of left border, left corners.
+                right   =   &lt;int&gt;   // Width of right border, right corners.
+            }
+        
+            region  =   &lt;x, y, width, height&gt;   // Total container region including entire border.
+            color   =   &lt;#ffffffff&gt;             // Tint to apply to skin.
+        }
+    
+        style &lt;Style ID&gt;
+        {
+            // Layouts may make use of a style's margin to put space between adjacent controls.
+            margin
+            {
+                top     =   &lt;int&gt;
+                bottom  =   &lt;int&gt;
+                left    =   &lt;int&gt;
+                right   =   &lt;int&gt;        
+            }
+        
+            // Padding is the space between a control's border and its content.
+            padding
+            {
+                top     =   &lt;int&gt;
+                bottom  =   &lt;int&gt;
+                left    =   &lt;int&gt;
+                right   =   &lt;int&gt;        
+            }
+        
+            // Properties used when in control is in the normal state.
+            stateNormal
+            {
+                skin   =   &lt;Skin ID&gt;             // Skin to use for border and background sprites.
+                imageList = &lt;ImageList ID&gt;
+
+                cursor      =   &lt;Cursor ID&gt;                 // Cursor to use when the mouse is over this control.
+                font        =   &lt;Path to font&gt;              // Font to use for rendering text.
+                fontSize    =   &lt;int&gt;                       // Size of text.
+                textColor   =   &lt;#ffffffff&gt;                 // Color of text.
+                alignment   =   &lt;Text alignment constant&gt;   // Member of Font::Justify enum.
+                rightToLeft =   &lt;bool&gt;                      // Whether to draw text from right to left.
+                opacity     =   &lt;float&gt;                     // Opacity to apply to all text/border/icon colors.
+            }
+        
+            // Properties used when in control is in the focus state
+            // If not specified, the 'normal' overlay will be used.
+            stateFocus
+            {
+                skin   =   &lt;Skin ID&gt;             // Skin to use for border and background sprites.
+                ...
+            }
+        
+            // Properties used when in control is in the focus. 
+            // This is when a touch/mouse is down within the control.
+            // If not specified, the 'normal' overlay will be used.
+            stateActive
+            {
+                skin   =   &lt;Skin ID&gt;             // Skin to use for border and background sprites.
+                ...
+            }
+
+            // Properties used when in control is in the focus. 
+            // This is when a touch/mouse is down within the control.
+            // If not specified, the 'normal' overlay will be used.
+            state-disabled
+            {
+                skin   =   &lt;Skin ID&gt;             // Skin to use for border and background sprites.
+                ...        
+            }
+        }
+    }
+</pre></div> </div><hr/><h2>Member Typedef Documentation</h2>
 <a class="anchor" id="af731901dcbd106db943d8b9c77460670"></a><!-- doxytag: member="gameplay::Theme::Margin" ref="af731901dcbd106db943d8b9c77460670" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -206,7 +299,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Style</b></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Fri Apr 13 2012 10:54:53 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 13:25:46 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

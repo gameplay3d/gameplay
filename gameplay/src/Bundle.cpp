@@ -1,50 +1,50 @@
 #include "Base.h"
-#include "Package.h"
+#include "Bundle.h"
 #include "FileSystem.h"
 #include "MeshPart.h"
 #include "Scene.h"
 #include "Joint.h"
 
-#define GPB_PACKAGE_VERSION_MAJOR 1
-#define GPB_PACKAGE_VERSION_MINOR 1
+#define BUNDLE_VERSION_MAJOR            1
+#define BUNDLE_VERSION_MINOR            1
 
-#define PACKAGE_TYPE_SCENE 1
-#define PACKAGE_TYPE_NODE 2
-#define PACKAGE_TYPE_ANIMATIONS 3
-#define PACKAGE_TYPE_ANIMATION 4
-#define PACKAGE_TYPE_ANIMATION_CHANNEL 5
-#define PACKAGE_TYPE_MMODEL 10
-#define PACKAGE_TYPE_MATERIAL 16
-#define PACKAGE_TYPE_EFFECT 18
-#define PACKAGE_TYPE_CAMERA 32
-#define PACKAGE_TYPE_LIGHT 33
-#define PACKAGE_TYPE_MESH 34
-#define PACKAGE_TYPE_MESHPART 35
-#define PACKAGE_TYPE_MESHSKIN 36
-#define PACKAGE_TYPE_FONT 128
+#define BUNDLE_TYPE_SCENE               1
+#define BUNDLE_TYPE_NODE                2
+#define BUNDLE_TYPE_ANIMATIONS          3
+#define BUNDLE_TYPE_ANIMATION           4
+#define BUNDLE_TYPE_ANIMATION_CHANNEL   5
+#define BUNDLE_TYPE_MODEL               10
+#define BUNDLE_TYPE_MATERIAL            16
+#define BUNDLE_TYPE_EFFECT              18
+#define BUNDLE_TYPE_CAMERA              32
+#define BUNDLE_TYPE_LIGHT               33
+#define BUNDLE_TYPE_MESH                34
+#define BUNDLE_TYPE_MESHPART            35
+#define BUNDLE_TYPE_MESHSKIN            36
+#define BUNDLE_TYPE_FONT                128
 
 // For sanity checking string reads
-#define PACKAGE_MAX_STRING_LENGTH 5000
+#define BUNDLE_MAX_STRING_LENGTH        5000
 
 namespace gameplay
 {
 
-static std::vector<Package*> __packageCache;
+static std::vector<Bundle*> __bundleCache;
 
-Package::Package(const char* path) :
+Bundle::Bundle(const char* path) :
     _path(path), _referenceCount(0), _references(NULL), _file(NULL)
 {
 }
 
-Package::~Package()
+Bundle::~Bundle()
 {
     clearLoadSession();
 
-    // Remove this Package from the cache
-    std::vector<Package*>::iterator itr = std::find(__packageCache.begin(), __packageCache.end(), this);
-    if (itr != __packageCache.end())
+    // Remove this Bundle from the cache
+    std::vector<Bundle*>::iterator itr = std::find(__bundleCache.begin(), __bundleCache.end(), this);
+    if (itr != __bundleCache.end())
     {
-        __packageCache.erase(itr);
+        __bundleCache.erase(itr);
     }
 
     SAFE_DELETE_ARRAY(_references);
@@ -57,7 +57,7 @@ Package::~Package()
 }
 
 template <class T>
-bool Package::readArray(unsigned int* length, T** ptr)
+bool Bundle::readArray(unsigned int* length, T** ptr)
 {
     if (!read(length))
     {
@@ -76,7 +76,7 @@ bool Package::readArray(unsigned int* length, T** ptr)
 }
 
 template <class T>
-bool Package::readArray(unsigned int* length, std::vector<T>* values)
+bool Bundle::readArray(unsigned int* length, std::vector<T>* values)
 {
     if (!read(length))
     {
@@ -94,7 +94,7 @@ bool Package::readArray(unsigned int* length, std::vector<T>* values)
 }
 
 template <class T>
-bool Package::readArray(unsigned int* length, std::vector<T>* values, unsigned int readSize)
+bool Bundle::readArray(unsigned int* length, std::vector<T>* values, unsigned int readSize)
 {
     assert(sizeof(T) >= readSize);
 
@@ -122,7 +122,7 @@ std::string readString(FILE* fp)
     }
 
     // Sanity check to detect if string length is far too big
-    assert(length < PACKAGE_MAX_STRING_LENGTH);
+    assert(length < BUNDLE_MAX_STRING_LENGTH);
 
     std::string str;
     if (length > 0)
@@ -136,12 +136,12 @@ std::string readString(FILE* fp)
     return str;
 }
 
-Package* Package::create(const char* path)
+Bundle* Bundle::create(const char* path)
 {
-    // Search the cache for this package
-    for (unsigned int i = 0, count = __packageCache.size(); i < count; ++i)
+    // Search the cache for this bundle
+    for (unsigned int i = 0, count = __bundleCache.size(); i < count; ++i)
     {
-        Package* p = __packageCache[i];
+        Bundle* p = __bundleCache[i];
         if (p->_path == path)
         {
             // Found a match
@@ -150,7 +150,7 @@ Package* Package::create(const char* path)
         }
     }
 
-    // Open the package
+    // Open the bundle
     FILE* fp = FileSystem::openFile(path, "rb");
     if (!fp)
     {
@@ -162,16 +162,16 @@ Package* Package::create(const char* path)
     char sig[9];
     if (fread(sig, 1, 9, fp) != 9 || memcmp(sig, "«GPB»\r\n\x1A\n", 9) != 0)
     {
-        LOG_ERROR_VARG("Invalid package header: %s", path);
+        LOG_ERROR_VARG("Invalid bundle header: %s", path);
         fclose(fp);
         return NULL;
     }
 
     // Read version
     unsigned char ver[2];
-    if (fread(ver, 1, 2, fp) != 2 || ver[0] != GPB_PACKAGE_VERSION_MAJOR || ver[1] != GPB_PACKAGE_VERSION_MINOR)
+    if (fread(ver, 1, 2, fp) != 2 || ver[0] != BUNDLE_VERSION_MAJOR || ver[1] != BUNDLE_VERSION_MINOR)
     {
-        LOG_ERROR_VARG("Unsupported version (%d.%d) for package: %s (expected %d.%d)", (int)ver[0], (int)ver[1], path, GPB_PACKAGE_VERSION_MAJOR, GPB_PACKAGE_VERSION_MINOR);
+        LOG_ERROR_VARG("Unsupported version (%d.%d) for bundle: %s (expected %d.%d)", (int)ver[0], (int)ver[1], path, BUNDLE_VERSION_MAJOR, BUNDLE_VERSION_MINOR);
         fclose(fp);
         return NULL;
     }
@@ -199,7 +199,7 @@ Package* Package::create(const char* path)
     }
 
     // Keep file open for faster reading later
-    Package* pkg = new Package(path);
+    Bundle* pkg = new Bundle(path);
     pkg->_referenceCount = refCount;
     pkg->_references = refs;
     pkg->_file = fp;
@@ -207,7 +207,7 @@ Package* Package::create(const char* path)
     return pkg;
 }
 
-Package::Reference* Package::find(const char* id) const
+Bundle::Reference* Bundle::find(const char* id) const
 {
     // Search the ref table for the given id (case-sensitive)
     for (unsigned int i = 0; i < _referenceCount; ++i)
@@ -222,7 +222,7 @@ Package::Reference* Package::find(const char* id) const
     return NULL;
 }
 
-void Package::clearLoadSession()
+void Bundle::clearLoadSession()
 {
     for (unsigned int i = 0, count = _meshSkins.size(); i < count; ++i)
     {
@@ -231,12 +231,12 @@ void Package::clearLoadSession()
     _meshSkins.clear();
 }
 
-const char* Package::getIdFromOffset() const
+const char* Bundle::getIdFromOffset() const
 {
     return getIdFromOffset((unsigned int) ftell(_file));
 }
 
-const char* Package::getIdFromOffset(unsigned int offset) const
+const char* Bundle::getIdFromOffset(unsigned int offset) const
 {
     // Search the ref table for the given offset
     if (offset > 0)
@@ -252,32 +252,32 @@ const char* Package::getIdFromOffset(unsigned int offset) const
     return NULL;
 }
 
-Package::Reference* Package::seekTo(const char* id, unsigned int type)
+Bundle::Reference* Bundle::seekTo(const char* id, unsigned int type)
 {
     Reference* ref = find(id);
     if (ref == NULL)
     {
-        LOG_ERROR_VARG("No object with name '%s' in package '%s'.", id, _path.c_str());
+        LOG_ERROR_VARG("No object with name '%s' in bundle '%s'.", id, _path.c_str());
         return NULL;
     }
 
     if (ref->type != type)
     {
-        LOG_ERROR_VARG("Object '%s' in package '%s' has type %d (expected type %d).", id, _path.c_str(), (int)ref->type, (int)type);
+        LOG_ERROR_VARG("Object '%s' in bundle '%s' has type %d (expected type %d).", id, _path.c_str(), (int)ref->type, (int)type);
         return NULL;
     }
 
     // Seek to the offset of this object
     if (fseek(_file, ref->offset, SEEK_SET) != 0)
     {
-        LOG_ERROR_VARG("Failed to seek to object '%s' in package '%s'.", id, _path.c_str());
+        LOG_ERROR_VARG("Failed to seek to object '%s' in bundle '%s'.", id, _path.c_str());
         return NULL;
     }
 
     return ref;
 }
 
-Package::Reference* Package::seekToFirstType(unsigned int type)
+Bundle::Reference* Bundle::seekToFirstType(unsigned int type)
 {
     // for each Reference
     for (unsigned int i = 0; i < _referenceCount; ++i)
@@ -288,7 +288,7 @@ Package::Reference* Package::seekToFirstType(unsigned int type)
             // Found a match
             if (fseek(_file, ref->offset, SEEK_SET) != 0)
             {
-                LOG_ERROR_VARG("Failed to seek to object '%s' in package '%s'.", ref->id.c_str(), _path.c_str());
+                LOG_ERROR_VARG("Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
                 return NULL;
             }
             return ref;
@@ -297,38 +297,38 @@ Package::Reference* Package::seekToFirstType(unsigned int type)
     return NULL;
 }
 
-bool Package::read(unsigned int* ptr)
+bool Bundle::read(unsigned int* ptr)
 {
     return fread(ptr, sizeof(unsigned int), 1, _file) == 1;
 }
 
-bool Package::read(unsigned char* ptr)
+bool Bundle::read(unsigned char* ptr)
 {
     return fread(ptr, sizeof(unsigned char), 1, _file) == 1;
 }
 
-bool Package::read(float* ptr)
+bool Bundle::read(float* ptr)
 {
     return fread(ptr, sizeof(float), 1, _file) == 1;
 }
 
-bool Package::readMatrix(float* m)
+bool Bundle::readMatrix(float* m)
 {
     return (fread(m, sizeof(float), 16, _file) == 16);
 }
 
-Scene* Package::loadScene(const char* id)
+Scene* Bundle::loadScene(const char* id)
 {
     clearLoadSession();
 
     Reference* ref = NULL;
     if (id)
     {
-        ref = seekTo(id, PACKAGE_TYPE_SCENE);
+        ref = seekTo(id, BUNDLE_TYPE_SCENE);
     }
     else
     {
-        ref = seekToFirstType(PACKAGE_TYPE_SCENE);
+        ref = seekToFirstType(BUNDLE_TYPE_SCENE);
     }
     if (!ref)
     {
@@ -393,12 +393,12 @@ Scene* Package::loadScene(const char* id)
     for (unsigned int i = 0; i < _referenceCount; ++i)
     {
         Reference* ref = &_references[i];
-        if (ref->type == PACKAGE_TYPE_ANIMATIONS)
+        if (ref->type == BUNDLE_TYPE_ANIMATIONS)
         {
             // Found a match
             if (fseek(_file, ref->offset, SEEK_SET) != 0)
             {
-                LOG_ERROR_VARG("Failed to seek to object '%s' in package '%s'.", ref->id.c_str(), _path.c_str());
+                LOG_ERROR_VARG("Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
                 return NULL;
             }
             readAnimations(scene);
@@ -410,7 +410,7 @@ Scene* Package::loadScene(const char* id)
     return scene;
 }
 
-Node* Package::loadNode(const char* id)
+Node* Bundle::loadNode(const char* id)
 {
     assert(id);
 
@@ -426,7 +426,7 @@ Node* Package::loadNode(const char* id)
     return node;
 }
 
-Node* Package::loadNode(const char* id, Scene* sceneContext, Node* nodeContext)
+Node* Bundle::loadNode(const char* id, Scene* sceneContext, Node* nodeContext)
 {
     assert(id);
 
@@ -446,7 +446,7 @@ Node* Package::loadNode(const char* id, Scene* sceneContext, Node* nodeContext)
     if (node == NULL)
     {
         // If not yet found, search the ref table and read
-        Reference* ref = seekTo(id, PACKAGE_TYPE_NODE);
+        Reference* ref = seekTo(id, BUNDLE_TYPE_NODE);
         if (ref == NULL)
         {
             return NULL;
@@ -458,7 +458,7 @@ Node* Package::loadNode(const char* id, Scene* sceneContext, Node* nodeContext)
     return node;
 }
 
-Node* Package::readNode(Scene* sceneContext, Node* nodeContext)
+Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
 {
     const char* id = getIdFromOffset();
 
@@ -545,12 +545,12 @@ Node* Package::readNode(Scene* sceneContext, Node* nodeContext)
     return node;
 }
 
-Camera* Package::readCamera()
+Camera* Bundle::readCamera()
 {
     unsigned char cameraType;
     if (!read(&cameraType))
     {
-        LOG_ERROR_VARG("Failed to load camera type in package '%s'.", _path.c_str());
+        LOG_ERROR_VARG("Failed to load camera type in bundle '%s'.", _path.c_str());
     }
 
     if (cameraType == 0)
@@ -562,21 +562,21 @@ Camera* Package::readCamera()
     float aspectRatio;
     if (!read(&aspectRatio))
     {
-        LOG_ERROR_VARG("Failed to load camera aspectRatio in package '%s'.", _path.c_str());
+        LOG_ERROR_VARG("Failed to load camera aspectRatio in bundle '%s'.", _path.c_str());
     }
 
     // near plane
     float nearPlane;
     if (!read(&nearPlane))
     {
-        LOG_ERROR_VARG("Failed to load camera near plane in package '%s'.", _path.c_str());
+        LOG_ERROR_VARG("Failed to load camera near plane in bundle '%s'.", _path.c_str());
     }
 
     // far plane
     float farPlane;
     if (!read(&farPlane))
     {
-        LOG_ERROR_VARG("Failed to load camera far plane in package '%s'.", _path.c_str());
+        LOG_ERROR_VARG("Failed to load camera far plane in bundle '%s'.", _path.c_str());
     }
 
     Camera* camera = NULL;
@@ -586,7 +586,7 @@ Camera* Package::readCamera()
         float fieldOfView;
         if (!read(&fieldOfView))
         {
-            LOG_ERROR_VARG("Failed to load camera field of view in package '%s'.", _path.c_str());
+            LOG_ERROR_VARG("Failed to load camera field of view in bundle '%s'.", _path.c_str());
         }
 
         camera = Camera::createPerspective(fieldOfView, aspectRatio, nearPlane, farPlane);
@@ -597,30 +597,30 @@ Camera* Package::readCamera()
         float zoomX;
         if (!read(&zoomX))
         {
-            LOG_ERROR_VARG("Failed to load camera zoomX in package '%s'.", _path.c_str());
+            LOG_ERROR_VARG("Failed to load camera zoomX in bundle '%s'.", _path.c_str());
         }
 
         float zoomY;
         if (!read(&zoomY))
         {
-            LOG_ERROR_VARG("Failed to load camera zoomY in package '%s'.", _path.c_str());
+            LOG_ERROR_VARG("Failed to load camera zoomY in bundle '%s'.", _path.c_str());
         }
 
         camera = Camera::createOrthographic(zoomX, zoomY, aspectRatio, nearPlane, farPlane);
     }
     else
     {
-        LOG_ERROR_VARG("Failed to load camera type in package '%s'. Invalid camera type.", _path.c_str());
+        LOG_ERROR_VARG("Failed to load camera type in bundle '%s'. Invalid camera type.", _path.c_str());
     }
     return camera;
 }
 
-Light* Package::readLight()
+Light* Bundle::readLight()
 {
     unsigned char type;
     if (!read(&type))
     {
-        LOG_ERROR_VARG("Failed to load light %s in package '%s'.", "type", _path.c_str());
+        LOG_ERROR_VARG("Failed to load light %s in bundle '%s'.", "type", _path.c_str());
     }
 
     if (type == 0)
@@ -632,7 +632,7 @@ Light* Package::readLight()
     float red, blue, green;
     if (!read(&red) || !read(&blue) || !read(&green))
     {
-        LOG_ERROR_VARG("Failed to load light %s in package '%s'.", "color", _path.c_str());
+        LOG_ERROR_VARG("Failed to load light %s in bundle '%s'.", "color", _path.c_str());
     }
     Vector3 color(red, blue, green);
 
@@ -646,7 +646,7 @@ Light* Package::readLight()
         float range;
         if (!read(&range))
         {
-            LOG_ERROR_VARG("Failed to load point light %s in package '%s'.", "point", _path.c_str());
+            LOG_ERROR_VARG("Failed to load point light %s in bundle '%s'.", "point", _path.c_str());
         }
         light = Light::createPoint(color, range);
     }
@@ -655,18 +655,18 @@ Light* Package::readLight()
         float range, innerAngle, outerAngle;
         if (!read(&range) || !read(&innerAngle) || !read(&outerAngle))
         {
-            LOG_ERROR_VARG("Failed to load spot light %s in package '%s'.", "spot", _path.c_str());
+            LOG_ERROR_VARG("Failed to load spot light %s in bundle '%s'.", "spot", _path.c_str());
         }
         light = Light::createSpot(color, range, innerAngle, outerAngle);
     }
     else
     {
-        LOG_ERROR_VARG("Failed to load light %s in package '%s'.", "type", _path.c_str());
+        LOG_ERROR_VARG("Failed to load light %s in bundle '%s'.", "type", _path.c_str());
     }
     return light;
 }
 
-Model* Package::readModel(Scene* sceneContext, Node* nodeContext, const char* nodeId)
+Model* Bundle::readModel(Scene* sceneContext, Node* nodeContext, const char* nodeId)
 {
     // Read mesh
     Mesh* mesh = NULL;
@@ -683,7 +683,7 @@ Model* Package::readModel(Scene* sceneContext, Node* nodeContext, const char* no
             unsigned char hasSkin;
             if (!read(&hasSkin))
             {
-                LOG_ERROR_VARG("Failed to load hasSkin in package '%s'.", _path.c_str());
+                LOG_ERROR_VARG("Failed to load hasSkin in bundle '%s'.", _path.c_str());
                 return NULL;
             }
             if (hasSkin)
@@ -698,7 +698,7 @@ Model* Package::readModel(Scene* sceneContext, Node* nodeContext, const char* no
             unsigned int materialCount;
             if (!read(&materialCount))
             {
-                LOG_ERROR_VARG("Failed to load materialCount in package '%s'.", _path.c_str());
+                LOG_ERROR_VARG("Failed to load materialCount in bundle '%s'.", _path.c_str());
                 return NULL;
             }
             if (materialCount > 0)
@@ -712,7 +712,7 @@ Model* Package::readModel(Scene* sceneContext, Node* nodeContext, const char* no
     return NULL;
 }
 
-MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
+MeshSkin* Bundle::readMeshSkin(Scene* sceneContext, Node* nodeContext)
 {
     MeshSkin* meshSkin = new MeshSkin();
 
@@ -720,7 +720,7 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
     float bindShape[16];
     if (!readMatrix(bindShape))
     {
-        LOG_ERROR_VARG("Failed to load MeshSkin in package '%s'.", _path.c_str());
+        LOG_ERROR_VARG("Failed to load MeshSkin in bundle '%s'.", _path.c_str());
         SAFE_DELETE(meshSkin);
         return NULL;
     }
@@ -733,7 +733,7 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
     unsigned int jointCount;
     if (!read(&jointCount))
     {
-        LOG_ERROR_VARG("Failed to load MeshSkin in package '%s'.", _path.c_str());
+        LOG_ERROR_VARG("Failed to load MeshSkin in bundle '%s'.", _path.c_str());
         SAFE_DELETE(meshSkin);
         SAFE_DELETE(skinData);
         return NULL;
@@ -756,7 +756,7 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
     unsigned int jointsBindPosesCount;
     if (!read(&jointsBindPosesCount))
     {
-        LOG_ERROR_VARG("Failed to load MeshSkin in package '%s'.", _path.c_str());
+        LOG_ERROR_VARG("Failed to load MeshSkin in bundle '%s'.", _path.c_str());
         SAFE_DELETE(meshSkin);
         SAFE_DELETE(skinData);
         return NULL;
@@ -769,7 +769,7 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
         {
             if (!readMatrix(m))
             {
-                LOG_ERROR_VARG("Failed to load MeshSkin in package '%s'.", _path.c_str());
+                LOG_ERROR_VARG("Failed to load MeshSkin in bundle '%s'.", _path.c_str());
                 SAFE_DELETE(meshSkin);
                 SAFE_DELETE(skinData);
                 return NULL;
@@ -784,7 +784,7 @@ MeshSkin* Package::readMeshSkin(Scene* sceneContext, Node* nodeContext)
     return meshSkin;
 }
 
-void Package::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
+void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
 {
     const unsigned int skinCount = _meshSkins.size();
     for (unsigned int i = 0; i < skinCount; ++i)
@@ -834,7 +834,7 @@ void Package::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
     _meshSkins.clear();
 }
 
-void Package::readAnimation(Scene* scene)
+void Bundle::readAnimation(Scene* scene)
 {
     const std::string animationId = readString(_file);
 
@@ -854,7 +854,7 @@ void Package::readAnimation(Scene* scene)
     }
 }
 
-void Package::readAnimations(Scene* scene)
+void Bundle::readAnimations(Scene* scene)
 {
     // read the number of animations in this object
     unsigned int animationCount;
@@ -870,7 +870,7 @@ void Package::readAnimations(Scene* scene)
     }
 }
 
-Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, const char* animationId)
+Animation* Bundle::readAnimationChannel(Scene* scene, Animation* animation, const char* animationId)
 {
     const char* id = animationId;
 
@@ -975,18 +975,18 @@ Animation* Package::readAnimationChannel(Scene* scene, Animation* animation, con
     return animation;
 }
 
-Mesh* Package::loadMesh(const char* id)
+Mesh* Bundle::loadMesh(const char* id)
 {
     return loadMesh(id, false);
 }
 
-Mesh* Package::loadMesh(const char* id, const char* nodeId)
+Mesh* Bundle::loadMesh(const char* id, const char* nodeId)
 {
     // Save the file position
     long position = ftell(_file);
 
     // Seek to the specified Mesh
-    Reference* ref = seekTo(id, PACKAGE_TYPE_MESH);
+    Reference* ref = seekTo(id, BUNDLE_TYPE_MESH);
     if (ref == NULL)
     {
         return NULL;
@@ -1040,7 +1040,7 @@ Mesh* Package::loadMesh(const char* id, const char* nodeId)
     return mesh;
 }
 
-Package::MeshData* Package::readMeshData()
+Bundle::MeshData* Bundle::readMeshData()
 {
     // Read vertex format/elements
     unsigned int vertexElementCount;
@@ -1145,7 +1145,7 @@ Package::MeshData* Package::readMeshData()
     return meshData;
 }
 
-Package::MeshData* Package::readMeshData(const char* url)
+Bundle::MeshData* Bundle::readMeshData(const char* url)
 {
     assert(url);
 
@@ -1153,7 +1153,7 @@ Package::MeshData* Package::readMeshData(const char* url)
     if (len == 0)
         return NULL;
 
-    // Parse URL (formatted as 'package#id')
+    // Parse URL (formatted as 'bundle#id')
     std::string urlstring(url);
     unsigned int pos = urlstring.find('#');
     if (pos == std::string::npos)
@@ -1162,13 +1162,13 @@ Package::MeshData* Package::readMeshData(const char* url)
     std::string file = urlstring.substr(0, pos);
     std::string id = urlstring.substr(pos + 1);
 
-    // Load package
-    Package* pkg = Package::create(file.c_str());
+    // Load bundle
+    Bundle* pkg = Bundle::create(file.c_str());
     if (pkg == NULL)
         return NULL;
 
-    // Seek to mesh with specified ID in package
-    Reference* ref = pkg->seekTo(id.c_str(), PACKAGE_TYPE_MESH);
+    // Seek to mesh with specified ID in bundle
+    Reference* ref = pkg->seekTo(id.c_str(), BUNDLE_TYPE_MESH);
     if (ref == NULL)
         return NULL;
 
@@ -1180,10 +1180,10 @@ Package::MeshData* Package::readMeshData(const char* url)
     return meshData;
 }
 
-Font* Package::loadFont(const char* id)
+Font* Bundle::loadFont(const char* id)
 {
     // Seek to the specified Font
-    Reference* ref = seekTo(id, PACKAGE_TYPE_FONT);
+    Reference* ref = seekTo(id, BUNDLE_TYPE_FONT);
     if (ref == NULL)
     {
         return NULL;
@@ -1280,7 +1280,7 @@ Font* Package::loadFont(const char* id)
     return font;
 }
 
-void Package::setTransform(const float* values, Transform* transform)
+void Bundle::setTransform(const float* values, Transform* transform)
 {
     // Load array into transform
     Matrix matrix(values);
@@ -1292,46 +1292,46 @@ void Package::setTransform(const float* values, Transform* transform)
     transform->setRotation(rotation);
 }
 
-bool Package::contains(const char* id) const
+bool Bundle::contains(const char* id) const
 {
     return (find(id) != NULL);
 }
 
-unsigned int Package::getObjectCount() const
+unsigned int Bundle::getObjectCount() const
 {
     return _referenceCount;
 }
 
-const char* Package::getObjectID(unsigned int index) const
+const char* Bundle::getObjectID(unsigned int index) const
 {
     return (index >= _referenceCount ? NULL : _references[index].id.c_str());
 }
 
-Package::Reference::Reference()
+Bundle::Reference::Reference()
     : type(0), offset(0)
 {
 }
 
-Package::Reference::~Reference()
+Bundle::Reference::~Reference()
 {
 }
 
-Package::MeshPartData::MeshPartData() :
+Bundle::MeshPartData::MeshPartData() :
     indexCount(0), indexData(NULL)
 {
 }
 
-Package::MeshPartData::~MeshPartData()
+Bundle::MeshPartData::~MeshPartData()
 {
     SAFE_DELETE_ARRAY(indexData);
 }
 
-Package::MeshData::MeshData(const VertexFormat& vertexFormat)
+Bundle::MeshData::MeshData(const VertexFormat& vertexFormat)
     : vertexFormat(vertexFormat), vertexCount(0), vertexData(NULL)
 {
 }
 
-Package::MeshData::~MeshData()
+Bundle::MeshData::~MeshData()
 {
     SAFE_DELETE_ARRAY(vertexData);
 

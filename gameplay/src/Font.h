@@ -11,7 +11,7 @@ namespace gameplay
  */
 class Font : public Ref
 {
-    friend class Package;
+    friend class Bundle;
     friend class TextBox;
 
 public:
@@ -77,17 +77,17 @@ public:
     };
 
     /**
-     * Creates a font from the given package.
+     * Creates a font from the given bundle.
      *
-     * If the 'id' parameter is NULL, it is assumed that the Package at 'path'
-     * contains exactly one Font resource. If the Package does not meet this criteria,
+     * If the 'id' parameter is NULL, it is assumed that the Bundle at 'path'
+     * contains exactly one Font resource. If the Bundle does not meet this criteria,
      * NULL is returned.
      *
      * If a font for the given path has already been loaded, the existing font will be
      * returned with its reference count increased.
      *
-     * @param path The path to a package file containing a font resource.
-     * @param id An optional ID of the font resource within the package (NULL for the first/only resource).
+     * @param path The path to a bundle file containing a font resource.
+     * @param id An optional ID of the font resource within the bundle (NULL for the first/only resource).
      * 
      * @return The specified font.
      */

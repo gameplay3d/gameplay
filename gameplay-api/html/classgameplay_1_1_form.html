@@ -155,9 +155,31 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Platform</b></td></t
 </div>
 <div class="memdoc">
 <p>Create from properties file. The top-most namespace in the file must be named 'form'. The following properties are available for forms:</p>
-<p>form &lt;formID&gt; { // <a class="el" href="classgameplay_1_1_form.html">Form</a> properties. theme = &lt;Path to .theme File&gt; // See <a class="el" href="_theme_8h_source.html">Theme.h</a>. layout = &lt;<a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a>&gt; // A value from the <a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a> enum. e.g.: LAYOUT_VERTICAL style = &lt;styleID&gt; // A style from the referenced theme. position = &lt;x, y&gt; // Position of the form on-screen, measured in pixels. size = &lt;width, height&gt; // Size of the form, measured in pixels. alignment = &lt;<a class="el" href="classgameplay_1_1_control.html#a81f7bde0bfab996b044e2dc33aff5d13">Control::Alignment</a> constant&gt; // Note: 'position' will be ignored. autoWidth = &lt;bool&gt; // Will result in a form the width of the display. autoHeight = &lt;bool&gt; // Will result in a form the height of the display. size = &lt;width, height&gt; width = &lt;width&gt; // Can be used in place of 'size', e.g. with 'autoHeight = true' height = &lt;height&gt; // Can be used in place of 'size', e.g. with 'autoWidth = true'</p>
-<p>// All the nested controls within this form. container { ... } label { } textBox { } button { } checkBox { } radioButton { } slider { } }</p>
-<dl><dt><b>Parameters:</b></dt><dd>
+<div class="fragment"><pre class="fragment">
+    form &lt;formID&gt;
+    {
+        // Form properties.
+        theme       = &lt;Path to .theme File&gt; // See Theme.h.
+        layout      = &lt;Layout::Type&gt;        // A value from the Layout::Type enum.  e.g.: LAYOUT_VERTICAL
+        style       = &lt;styleID&gt;             // A style from the referenced theme.
+        position   = &lt;x, y&gt;                // Position of the form on-screen, measured in pixels.
+        alignment  = &lt;Control::Alignment&gt;  // Note: 'position' will be ignored.
+        autoWidth  = &lt;bool&gt;                // Will result in a form the width of the display.
+        autoHeight = &lt;bool&gt;                // Will result in a form the height of the display.
+        size       = &lt;width, height&gt;       // Size of the form, measured in pixels.
+        width      = &lt;width&gt;               // Can be used in place of 'size', e.g. with 'autoHeight = true'
+        height     = &lt;height&gt;              // Can be used in place of 'size', e.g. with 'autoWidth = true'
+      
+        // All the nested controls within this form.
+        container { }
+        label { }
+        textBox { }
+        button { }
+        checkBox { }
+        radioButton { }
+        slider { }
+    }
+ </pre></div><dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">path</td><td>Path to the properties file to create a new form from. </td></tr>
   </table>
@@ -374,7 +396,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Platform</b></td></t
 </div>
 
 
-    <li class="footer">Generated on Fri Apr 13 2012 10:54:50 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 13:25:43 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

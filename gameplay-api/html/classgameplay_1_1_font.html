@@ -170,8 +170,8 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a1575d5cdaba1ce09b03e973fa9bf3fab">getJustify</a> (const char *justify)</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a305c04df1d8a4683e8bfe85167fcfdab"></a><!-- doxytag: member="gameplay::Font::Package" ref="a305c04df1d8a4683e8bfe85167fcfdab" args="" -->
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b8dc7250e74bde2e1a403e1d88c8fac"></a><!-- doxytag: member="gameplay::Font::Bundle" ref="a2b8dc7250e74bde2e1a403e1d88c8fac" args="" -->
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Bundle</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a49a006ccde64bc5c84c518e49415ebd9"></a><!-- doxytag: member="gameplay::Font::TextBox" ref="a49a006ccde64bc5c84c518e49415ebd9" args="" -->
 class&#160;</td><td class="memItemRight" valign="bottom"><b>TextBox</b></td></tr>
 </table>
@@ -248,13 +248,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>TextBox</b></td></tr
       </table>
 </div>
 <div class="memdoc">
-<p>Creates a font from the given package.</p>
-<p>If the 'id' parameter is NULL, it is assumed that the <a class="el" href="classgameplay_1_1_package.html">Package</a> at 'path' contains exactly one <a class="el" href="classgameplay_1_1_font.html">Font</a> resource. If the <a class="el" href="classgameplay_1_1_package.html">Package</a> does not meet this criteria, NULL is returned.</p>
+<p>Creates a font from the given bundle.</p>
+<p>If the 'id' parameter is NULL, it is assumed that the <a class="el" href="classgameplay_1_1_bundle.html">Bundle</a> at 'path' contains exactly one <a class="el" href="classgameplay_1_1_font.html">Font</a> resource. If the <a class="el" href="classgameplay_1_1_bundle.html">Bundle</a> does not meet this criteria, NULL is returned.</p>
 <p>If a font for the given path has already been loaded, the existing font will be returned with its reference count increased.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">path</td><td>The path to a package file containing a font resource. </td></tr>
-    <tr><td class="paramname">id</td><td>An optional ID of the font resource within the package (NULL for the first/only resource).</td></tr>
+    <tr><td class="paramname">path</td><td>The path to a bundle file containing a font resource. </td></tr>
+    <tr><td class="paramname">id</td><td>An optional ID of the font resource within the bundle (NULL for the first/only resource).</td></tr>
   </table>
   </dd>
 </dl>
@@ -816,7 +816,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>TextBox</b></td></tr
 </div>
 
 
-    <li class="footer">Generated on Fri Apr 13 2012 10:54:50 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 13:25:43 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

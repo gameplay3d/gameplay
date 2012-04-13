@@ -106,40 +106,40 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00007"></a>00007 <span class="keyword">namespace </span>gameplay
 <a name="l00008"></a>00008 {
 <a name="l00009"></a>00009 
-<a name="l00028"></a><a class="code" href="classgameplay_1_1_label.html">00028</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_label.html">Label</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_control.html">Control</a>
-<a name="l00029"></a>00029 {
-<a name="l00030"></a>00030     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_container.html">Container</a>;
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032 <span class="keyword">public</span>:
+<a name="l00030"></a><a class="code" href="classgameplay_1_1_label.html">00030</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_label.html">Label</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_control.html">Control</a>
+<a name="l00031"></a>00031 {
+<a name="l00032"></a>00032     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_container.html">Container</a>;
 <a name="l00033"></a>00033 
-<a name="l00039"></a>00039     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_label.html#a29f916c4b4afab37d6bdaa467720d3c7">setText</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text);
-<a name="l00040"></a>00040 
-<a name="l00046"></a>00046     <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classgameplay_1_1_label.html#ae2c8d17a8867a73bb4d7a629e980355f">getText</a>();
-<a name="l00047"></a>00047 
-<a name="l00058"></a>00058     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_label.html#acbc5cabccdac743e7b9fd642091dae97">addListener</a>(<a class="code" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a>* listener, <span class="keywordtype">int</span> eventFlags);
-<a name="l00059"></a>00059 
-<a name="l00060"></a>00060 <span class="keyword">protected</span>:
+<a name="l00034"></a>00034 <span class="keyword">public</span>:
+<a name="l00035"></a>00035 
+<a name="l00041"></a>00041     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_label.html#a29f916c4b4afab37d6bdaa467720d3c7">setText</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text);
+<a name="l00042"></a>00042 
+<a name="l00048"></a>00048     <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classgameplay_1_1_label.html#ae2c8d17a8867a73bb4d7a629e980355f">getText</a>();
+<a name="l00049"></a>00049 
+<a name="l00060"></a>00060     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_label.html#acbc5cabccdac743e7b9fd642091dae97">addListener</a>(<a class="code" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a>* listener, <span class="keywordtype">int</span> eventFlags);
 <a name="l00061"></a>00061 
-<a name="l00065"></a>00065     <a class="code" href="classgameplay_1_1_label.html#a1b85fc1bebe9cd82da2f5b8891fbd452">Label</a>();
-<a name="l00066"></a>00066 
-<a name="l00070"></a>00070     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_label.html#aa6caa5b781195d98f126888b723de002">~Label</a>();
-<a name="l00071"></a>00071 
-<a name="l00080"></a>00080     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_label.html">Label</a>* <a class="code" href="classgameplay_1_1_label.html#a58a98173ef1d8ce78bb89375fb89fd0e">create</a>(<a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* style, <a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties);
-<a name="l00081"></a>00081 
-<a name="l00085"></a>00085     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_label.html#aa0095e48c83ba77a6338eb239a24f5d0">initialize</a>(<a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* style, <a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties);
-<a name="l00086"></a>00086 
-<a name="l00092"></a>00092     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_label.html#a83ccd932008b95c7ca74751fb1b1d27b">drawText</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; clip);
-<a name="l00093"></a>00093 
-<a name="l00094"></a>00094     std::string _text;      <span class="comment">// The text displayed by this label.</span>
+<a name="l00062"></a>00062 <span class="keyword">protected</span>:
+<a name="l00063"></a>00063 
+<a name="l00067"></a>00067     <a class="code" href="classgameplay_1_1_label.html#a1b85fc1bebe9cd82da2f5b8891fbd452">Label</a>();
+<a name="l00068"></a>00068 
+<a name="l00072"></a>00072     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_label.html#aa6caa5b781195d98f126888b723de002">~Label</a>();
+<a name="l00073"></a>00073 
+<a name="l00082"></a>00082     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_label.html">Label</a>* <a class="code" href="classgameplay_1_1_label.html#a58a98173ef1d8ce78bb89375fb89fd0e">create</a>(<a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* style, <a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties);
+<a name="l00083"></a>00083 
+<a name="l00087"></a>00087     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_label.html#aa0095e48c83ba77a6338eb239a24f5d0">initialize</a>(<a class="code" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a>* style, <a class="code" href="classgameplay_1_1_properties.html">Properties</a>* properties);
+<a name="l00088"></a>00088 
+<a name="l00094"></a>00094     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_label.html#a83ccd932008b95c7ca74751fb1b1d27b">drawText</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; clip);
 <a name="l00095"></a>00095 
-<a name="l00096"></a>00096 <span class="keyword">private</span>:
+<a name="l00096"></a>00096     std::string _text;      <span class="comment">// The text displayed by this label.</span>
 <a name="l00097"></a>00097 
-<a name="l00101"></a>00101     <a class="code" href="classgameplay_1_1_label.html#a1b85fc1bebe9cd82da2f5b8891fbd452">Label</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_label.html">Label</a>&amp; copy);
-<a name="l00102"></a>00102 };
-<a name="l00103"></a>00103 
-<a name="l00104"></a>00104 }
+<a name="l00098"></a>00098 <span class="keyword">private</span>:
+<a name="l00099"></a>00099 
+<a name="l00103"></a>00103     <a class="code" href="classgameplay_1_1_label.html#a1b85fc1bebe9cd82da2f5b8891fbd452">Label</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_label.html">Label</a>&amp; copy);
+<a name="l00104"></a>00104 };
 <a name="l00105"></a>00105 
-<a name="l00106"></a>00106 <span class="preprocessor">#endif</span>
+<a name="l00106"></a>00106 }
+<a name="l00107"></a>00107 
+<a name="l00108"></a>00108 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -160,7 +160,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Fri Apr 13 2012 10:54:47 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 13:25:41 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

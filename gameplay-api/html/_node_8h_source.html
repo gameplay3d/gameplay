@@ -115,14 +115,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00016"></a>00016 <span class="keyword">namespace </span>gameplay
 <a name="l00017"></a>00017 {
 <a name="l00018"></a>00018 
-<a name="l00019"></a>00019 <span class="keyword">class </span>Package;
+<a name="l00019"></a>00019 <span class="keyword">class </span>Bundle;
 <a name="l00020"></a>00020 <span class="keyword">class </span>Scene;
 <a name="l00021"></a>00021 <span class="keyword">class </span>Form;
 <a name="l00022"></a>00022 
 <a name="l00026"></a><a class="code" href="classgameplay_1_1_node.html">00026</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_node.html">Node</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_transform.html">Transform</a>, <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_ref.html">Ref</a>
 <a name="l00027"></a>00027 {
 <a name="l00028"></a>00028     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_scene.html">Scene</a>;
-<a name="l00029"></a>00029     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_package.html">Package</a>;
+<a name="l00029"></a>00029     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_bundle.html">Bundle</a>;
 <a name="l00030"></a>00030     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>;
 <a name="l00031"></a>00031 
 <a name="l00032"></a>00032 <span class="keyword">public</span>:
@@ -275,68 +275,68 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00613"></a>00613 
 <a name="l00614"></a>00614 <span class="keyword">protected</span>:
 <a name="l00615"></a>00615 
-<a name="l00616"></a><a class="code" href="structgameplay_1_1_node_1_1_user_data.html">00616</a>     <span class="keyword">struct </span><a class="code" href="structgameplay_1_1_node_1_1_user_data.html">UserData</a>
-<a name="l00617"></a>00617     {
-<a name="l00618"></a>00618         <a class="code" href="structgameplay_1_1_node_1_1_user_data.html">UserData</a>() : pointer(NULL), cleanupCallback(NULL) {}
-<a name="l00619"></a>00619         <span class="keywordtype">void</span>* pointer;
-<a name="l00620"></a>00620         void (*cleanupCallback)(<span class="keywordtype">void</span>*);
-<a name="l00621"></a>00621     };
-<a name="l00622"></a>00622 
-<a name="l00623"></a>00623     <a class="code" href="classgameplay_1_1_scene.html">Scene</a>* _scene;
-<a name="l00624"></a>00624     std::string _id;
-<a name="l00625"></a>00625     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _firstChild;
-<a name="l00626"></a>00626     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _nextSibling;
-<a name="l00627"></a>00627     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _prevSibling;
-<a name="l00628"></a>00628     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _parent;
-<a name="l00629"></a>00629     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _childCount;
-<a name="l00630"></a>00630     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _nodeFlags;
-<a name="l00631"></a>00631     <a class="code" href="classgameplay_1_1_camera.html">Camera</a>* _camera;
-<a name="l00632"></a>00632     <a class="code" href="classgameplay_1_1_light.html">Light</a>* _light;
-<a name="l00633"></a>00633     <a class="code" href="classgameplay_1_1_model.html">Model</a>* _model;
-<a name="l00634"></a>00634     <a class="code" href="classgameplay_1_1_form.html">Form</a>* _form;
-<a name="l00635"></a>00635     <a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>* _audioSource;
-<a name="l00636"></a>00636     <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* _particleEmitter;
-<a name="l00637"></a>00637     <a class="code" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a>* _collisionObject;
-<a name="l00638"></a>00638     <span class="keyword">mutable</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a> _world;
-<a name="l00639"></a>00639     <span class="keyword">mutable</span> <span class="keywordtype">int</span> _dirtyBits;
-<a name="l00640"></a>00640     <span class="keywordtype">bool</span> _notifyHierarchyChanged;
-<a name="l00641"></a>00641     <span class="keyword">mutable</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> _bounds;
-<a name="l00642"></a>00642     <a class="code" href="structgameplay_1_1_node_1_1_user_data.html">UserData</a>* _userData;
-<a name="l00643"></a>00643 };
-<a name="l00644"></a>00644 
-<a name="l00650"></a><a class="code" href="classgameplay_1_1_node_clone_context.html">00650</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a>
-<a name="l00651"></a>00651 {
-<a name="l00652"></a>00652 <span class="keyword">public</span>:
-<a name="l00653"></a>00653 
-<a name="l00657"></a>00657     <a class="code" href="classgameplay_1_1_node_clone_context.html#a98e316d4905ca7d8d0d585300450d4b5">NodeCloneContext</a>();
-<a name="l00658"></a>00658 
-<a name="l00662"></a>00662     <a class="code" href="classgameplay_1_1_node_clone_context.html#a47bbbc68f29b7bf169099f80b26f1f36">~NodeCloneContext</a>();
-<a name="l00663"></a>00663 
-<a name="l00671"></a>00671     <a class="code" href="classgameplay_1_1_animation.html">Animation</a>* <a class="code" href="classgameplay_1_1_node_clone_context.html#a182cc28fa4c6cc17f36a4669b238b7a8">findClonedAnimation</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_animation.html">Animation</a>* animation);
-<a name="l00672"></a>00672 
-<a name="l00679"></a>00679     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node_clone_context.html#a81e2f74240d6827fc671f9ea45b9fac8">registerClonedAnimation</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_animation.html">Animation</a>* original, <a class="code" href="classgameplay_1_1_animation.html">Animation</a>* clone);
-<a name="l00680"></a>00680 
-<a name="l00688"></a>00688     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node_clone_context.html#a336c31d5af9d323a72a20ad513ee412f">findClonedNode</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_node.html">Node</a>* node);
-<a name="l00689"></a>00689 
-<a name="l00696"></a>00696     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node_clone_context.html#a343fc161a33eb0c24fd94242fea60414">registerClonedNode</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_node.html">Node</a>* original, <a class="code" href="classgameplay_1_1_node.html">Node</a>* clone);
-<a name="l00697"></a>00697 
-<a name="l00698"></a>00698 <span class="keyword">private</span>:
-<a name="l00699"></a>00699     
-<a name="l00703"></a>00703     <a class="code" href="classgameplay_1_1_node_clone_context.html#a98e316d4905ca7d8d0d585300450d4b5">NodeCloneContext</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a>&amp;);
-<a name="l00704"></a>00704 
-<a name="l00708"></a>00708     <a class="code" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a>&amp;);
-<a name="l00709"></a>00709 
-<a name="l00710"></a>00710 <span class="keyword">private</span>:
-<a name="l00711"></a>00711     <span class="keyword">typedef</span> std::map&lt;const Animation*, Animation*&gt; AnimationMap;
-<a name="l00712"></a>00712     <span class="keyword">typedef</span> std::map&lt;const Node*, Node*&gt; NodeMap;
-<a name="l00713"></a>00713 
-<a name="l00714"></a>00714     AnimationMap _clonedAnimations;
-<a name="l00715"></a>00715     NodeMap _clonedNodes;
-<a name="l00716"></a>00716 };
-<a name="l00717"></a>00717 
-<a name="l00718"></a>00718 }
-<a name="l00719"></a>00719 
-<a name="l00720"></a>00720 <span class="preprocessor">#endif</span>
+<a name="l00619"></a><a class="code" href="structgameplay_1_1_node_1_1_user_data.html">00619</a>     <span class="keyword">struct </span><a class="code" href="structgameplay_1_1_node_1_1_user_data.html">UserData</a>
+<a name="l00620"></a>00620     {
+<a name="l00621"></a>00621         <a class="code" href="structgameplay_1_1_node_1_1_user_data.html">UserData</a>() : pointer(NULL), cleanupCallback(NULL) {}
+<a name="l00622"></a>00622         <span class="keywordtype">void</span>* pointer;
+<a name="l00623"></a>00623         void (*cleanupCallback)(<span class="keywordtype">void</span>*);
+<a name="l00624"></a>00624     };
+<a name="l00625"></a>00625 
+<a name="l00626"></a>00626     <a class="code" href="classgameplay_1_1_scene.html">Scene</a>* _scene;
+<a name="l00627"></a>00627     std::string _id;
+<a name="l00628"></a>00628     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _firstChild;
+<a name="l00629"></a>00629     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _nextSibling;
+<a name="l00630"></a>00630     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _prevSibling;
+<a name="l00631"></a>00631     <a class="code" href="classgameplay_1_1_node.html">Node</a>* _parent;
+<a name="l00632"></a>00632     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _childCount;
+<a name="l00633"></a>00633     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _nodeFlags;
+<a name="l00634"></a>00634     <a class="code" href="classgameplay_1_1_camera.html">Camera</a>* _camera;
+<a name="l00635"></a>00635     <a class="code" href="classgameplay_1_1_light.html">Light</a>* _light;
+<a name="l00636"></a>00636     <a class="code" href="classgameplay_1_1_model.html">Model</a>* _model;
+<a name="l00637"></a>00637     <a class="code" href="classgameplay_1_1_form.html">Form</a>* _form;
+<a name="l00638"></a>00638     <a class="code" href="classgameplay_1_1_audio_source.html">AudioSource</a>* _audioSource;
+<a name="l00639"></a>00639     <a class="code" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* _particleEmitter;
+<a name="l00640"></a>00640     <a class="code" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a>* _collisionObject;
+<a name="l00641"></a>00641     <span class="keyword">mutable</span> <a class="code" href="classgameplay_1_1_matrix.html">Matrix</a> _world;
+<a name="l00642"></a>00642     <span class="keyword">mutable</span> <span class="keywordtype">int</span> _dirtyBits;
+<a name="l00643"></a>00643     <span class="keywordtype">bool</span> _notifyHierarchyChanged;
+<a name="l00644"></a>00644     <span class="keyword">mutable</span> <a class="code" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> _bounds;
+<a name="l00645"></a>00645     <a class="code" href="structgameplay_1_1_node_1_1_user_data.html">UserData</a>* _userData;
+<a name="l00646"></a>00646 };
+<a name="l00647"></a>00647 
+<a name="l00653"></a><a class="code" href="classgameplay_1_1_node_clone_context.html">00653</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a>
+<a name="l00654"></a>00654 {
+<a name="l00655"></a>00655 <span class="keyword">public</span>:
+<a name="l00656"></a>00656 
+<a name="l00660"></a>00660     <a class="code" href="classgameplay_1_1_node_clone_context.html#a98e316d4905ca7d8d0d585300450d4b5">NodeCloneContext</a>();
+<a name="l00661"></a>00661 
+<a name="l00665"></a>00665     <a class="code" href="classgameplay_1_1_node_clone_context.html#a47bbbc68f29b7bf169099f80b26f1f36">~NodeCloneContext</a>();
+<a name="l00666"></a>00666 
+<a name="l00674"></a>00674     <a class="code" href="classgameplay_1_1_animation.html">Animation</a>* <a class="code" href="classgameplay_1_1_node_clone_context.html#a182cc28fa4c6cc17f36a4669b238b7a8">findClonedAnimation</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_animation.html">Animation</a>* animation);
+<a name="l00675"></a>00675 
+<a name="l00682"></a>00682     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node_clone_context.html#a81e2f74240d6827fc671f9ea45b9fac8">registerClonedAnimation</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_animation.html">Animation</a>* original, <a class="code" href="classgameplay_1_1_animation.html">Animation</a>* clone);
+<a name="l00683"></a>00683 
+<a name="l00691"></a>00691     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_node_clone_context.html#a336c31d5af9d323a72a20ad513ee412f">findClonedNode</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_node.html">Node</a>* node);
+<a name="l00692"></a>00692 
+<a name="l00699"></a>00699     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_node_clone_context.html#a343fc161a33eb0c24fd94242fea60414">registerClonedNode</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_node.html">Node</a>* original, <a class="code" href="classgameplay_1_1_node.html">Node</a>* clone);
+<a name="l00700"></a>00700 
+<a name="l00701"></a>00701 <span class="keyword">private</span>:
+<a name="l00702"></a>00702     
+<a name="l00706"></a>00706     <a class="code" href="classgameplay_1_1_node_clone_context.html#a98e316d4905ca7d8d0d585300450d4b5">NodeCloneContext</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a>&amp;);
+<a name="l00707"></a>00707 
+<a name="l00711"></a>00711     <a class="code" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a>&amp;);
+<a name="l00712"></a>00712 
+<a name="l00713"></a>00713 <span class="keyword">private</span>:
+<a name="l00714"></a>00714     <span class="keyword">typedef</span> std::map&lt;const Animation*, Animation*&gt; AnimationMap;
+<a name="l00715"></a>00715     <span class="keyword">typedef</span> std::map&lt;const Node*, Node*&gt; NodeMap;
+<a name="l00716"></a>00716 
+<a name="l00717"></a>00717     AnimationMap _clonedAnimations;
+<a name="l00718"></a>00718     NodeMap _clonedNodes;
+<a name="l00719"></a>00719 };
+<a name="l00720"></a>00720 
+<a name="l00721"></a>00721 }
+<a name="l00722"></a>00722 
+<a name="l00723"></a>00723 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
@@ -357,7 +357,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 
-    <li class="footer">Generated on Fri Apr 13 2012 10:54:47 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 13:25:41 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

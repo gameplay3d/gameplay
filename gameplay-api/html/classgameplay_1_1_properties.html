@@ -192,7 +192,7 @@ Static Public Member Functions</h2></td></tr>
         vector3Property = 1.0, 5.0, 3.55
         colorProperty = 1.0, 0.4, 0.0, 1.0
     }
-</pre></div><p>Retrieving information out of a file like this could be done in two ways. If the available namespaces and name/value pairs are known in advance they can be queried by ID or name. For example, if the namespace "spriteTexture" and its properties are required then they can be retrieved with a call to <a class="el" href="classgameplay_1_1_properties.html#a524131493746464a6354bfee94a99560">getNamespace()</a> followed by calls to <a class="el" href="classgameplay_1_1_properties.html#aa684e793fd755acf2611079ea4e56b96">getString()</a> and <a class="el" href="classgameplay_1_1_properties.html#ac475d236fe4e23192fa19b8d5dbca7e4">getInt()</a>. A namespace is stored and retrieved as a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object. Reading the spriteTexture properties out of the file above in this way could be done with the following code:</p>
+ </pre></div><p>Retrieving information out of a file like this could be done in two ways. If the available namespaces and name/value pairs are known in advance they can be queried by ID or name. For example, if the namespace "spriteTexture" and its properties are required then they can be retrieved with a call to <a class="el" href="classgameplay_1_1_properties.html#a524131493746464a6354bfee94a99560">getNamespace()</a> followed by calls to <a class="el" href="classgameplay_1_1_properties.html#aa684e793fd755acf2611079ea4e56b96">getString()</a> and <a class="el" href="classgameplay_1_1_properties.html#ac475d236fe4e23192fa19b8d5dbca7e4">getInt()</a>. A namespace is stored and retrieved as a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object. Reading the spriteTexture properties out of the file above in this way could be done with the following code:</p>
 <div class="fragment"><pre class="fragment">
     // Create the top-level Properties object.
     Properties* properties = Properties::create("example.properties");
@@ -206,7 +206,7 @@ Static Public Member Functions</h2></td></tr>
  
     // Deleting the top-level Properties object will clean up all nested namespaces.
     SAFE_DELETE(properties);
-</pre></div><p>On the other hand, if the structure of the file is not known in advance its namespaces and name/value pairs can be retrieved one by one using the <a class="el" href="classgameplay_1_1_properties.html#a75aca7c32447c266425aeb5c1635be31">getNextNamespace()</a> and <a class="el" href="classgameplay_1_1_properties.html#a666b05652f9d3d2b3c3ca8b4bc331bae">getNextProperty()</a> methods. The following method prints the contents of any properties file to the console:</p>
+ </pre></div><p>On the other hand, if the structure of the file is not known in advance its namespaces and name/value pairs can be retrieved one by one using the <a class="el" href="classgameplay_1_1_properties.html#a75aca7c32447c266425aeb5c1635be31">getNextNamespace()</a> and <a class="el" href="classgameplay_1_1_properties.html#a666b05652f9d3d2b3c3ca8b4bc331bae">getNextProperty()</a> methods. The following method prints the contents of any properties file to the console:</p>
 <div class="fragment"><pre class="fragment">
     void printProperties(Properties* properties)
     {
@@ -234,7 +234,7 @@ Static Public Member Functions</h2></td></tr>
             space = properties-&gt;getNextNamespace();
         }
     }
-</pre></div><p>Note that this method does not keep track of the namespace hierarchy, but could be modified to do so. Also note that nothing in a properties file indicates the type of a property. If the type is unknown, its string can be retrieved and interpreted as necessary. </p>
+ </pre></div><p>Note that this method does not keep track of the namespace hierarchy, but could be modified to do so. Also note that nothing in a properties file indicates the type of a property. If the type is unknown, its string can be retrieved and interpreted as necessary. </p>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="ac50e4923355951650946c9f6dc5b2628"></a><!-- doxytag: member="gameplay::Properties::Type" ref="ac50e4923355951650946c9f6dc5b2628" args="" -->
 <div class="memitem">
@@ -865,7 +865,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Fri Apr 13 2012 10:54:52 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 13:25:45 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>
