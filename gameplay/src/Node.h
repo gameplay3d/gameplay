@@ -613,6 +613,9 @@ private:
 
 protected:
 
+    /**
+     * Defines a pointer and cleanup callback to custom user data that can be store in a Node.
+     */
     struct UserData
     {
         UserData() : pointer(NULL), cleanupCallback(NULL) {}
