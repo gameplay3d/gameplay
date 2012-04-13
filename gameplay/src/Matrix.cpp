@@ -554,18 +554,18 @@ void Matrix::getLeftVector(Vector3* dst) const
 {
     assert(dst);
 
-    dst->x = -m[0];
-    dst->y = -m[1];
-    dst->z = -m[2];
+    dst->x = m[0];
+    dst->y = m[1];
+    dst->z = m[2];
 }
 
 void Matrix::getRightVector(Vector3* dst) const
 {
     assert(dst);
 
-    dst->x = m[0];
-    dst->y = m[1];
-    dst->z = m[2];
+    dst->x = -m[0];
+    dst->y = -m[1];
+    dst->z = -m[2];
 }
 
 void Matrix::getForwardVector(Vector3* dst) const
