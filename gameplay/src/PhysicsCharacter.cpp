@@ -59,9 +59,9 @@ protected:
 
 PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape, float mass)
     : PhysicsGhostObject(node, shape), _moveVelocity(0,0,0), _forwardVelocity(0.0f), _rightVelocity(0.0f),
-    _fallVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
-    _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0),
-    _stepHeight(0.1f), _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true), _mass(mass)
+    _verticalVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
+    _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0), _stepHeight(0.1f),
+    _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true), _mass(mass)
 {
     setMaxSlopeAngle(45.0f);
 
@@ -99,6 +99,8 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
     // Load the character's parameters.
     properties->rewind();
     float mass = 1.0f;
+    float maxStepHeight = 0.1f;
+    float maxSlopeAngle = 0.0f;
     const char* name = NULL;
     while ((name = properties->getNextProperty()) != NULL)
     {
@@ -106,10 +108,20 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
         {
             mass = properties->getFloat();
         }
+        else if (strcmp(name, "maxStepHeight") == 0)
+        {
+            maxStepHeight = properties->getFloat();
+        }
+        else if (strcmp(name, "maxSlopeAngle") == 0)
+        {
+            maxSlopeAngle = properties->getFloat();
+        }
     }
 
     // Create the physics character.
     PhysicsCharacter* character = new PhysicsCharacter(node, *shape, mass);
+    character->setMaxStepHeight(maxStepHeight);
+    character->setMaxSlopeAngle(maxSlopeAngle);
     SAFE_DELETE(shape);
 
     return character;
@@ -156,120 +168,6 @@ void PhysicsCharacter::setMaxSlopeAngle(float angle)
     _cosSlopeAngle = std::cos(MATH_DEG_TO_RAD(angle));
 }
 
-void PhysicsCharacter::addAnimation(const char* name, AnimationClip* clip, float moveSpeed)
-{
-    CharacterAnimation a;
-    a.name = name;
-    a.clip = clip;
-    a.moveSpeed = moveSpeed;
-    a.layer = 0;
-    a.playing = false;
-    a.animationFlags = ANIMATION_STOP;
-    a.prev = NULL;
-    _animations[name] = a;
-}
-
-AnimationClip* PhysicsCharacter::getAnimation(const char* name)
-{
-    if (name)
-    {
-        // Lookup the specified animation
-        std::map<const char*, CharacterAnimation>::iterator aitr = _animations.find(name);
-        if (aitr != _animations.end())
-        {
-            return aitr->second.clip;
-        }
-    }
-    return NULL;
-}
-
-void PhysicsCharacter::play(const char* name, AnimationFlags flags, float speed, unsigned int blendDuration, unsigned int layer)
-{
-    CharacterAnimation* animation = NULL;
-    if (name)
-    {
-        // Lookup the specified animation
-        std::map<const char*, CharacterAnimation>::iterator aitr = _animations.find(name);
-        if (aitr == _animations.end())
-            return; // invalid animation name
-
-        animation = &(aitr->second);
-
-        // Set animation flags
-        animation->clip->setRepeatCount(flags & ANIMATION_REPEAT ? AnimationClip::REPEAT_INDEFINITE : 1);
-        animation->clip->setSpeed(speed);
-        animation->animationFlags = flags;
-        animation->layer = layer;
-        animation->blendDuration = blendDuration;
-        animation->prev = NULL;
-
-        // If the animation is already marked playing, do nothing more
-        if (animation->playing)
-            return;
-    }
-
-    play(animation, layer);
-}
-
-void PhysicsCharacter::play(CharacterAnimation* animation, unsigned int layer)
-{
-    // Is there already an animation playing on this layer?
-    std::map<unsigned int, CharacterAnimation*>::iterator litr = _layers.find(layer);
-    CharacterAnimation* prevAnimation = (litr == _layers.end() ? NULL : litr->second);
-    if (prevAnimation && prevAnimation->playing)
-    {
-        // An animation is already playing on this layer
-        if (animation)
-        {
-            if (animation->animationFlags == ANIMATION_RESUME)
-                animation->prev = prevAnimation;
-
-            if (animation->blendDuration > 0L)
-            {
-                // Crossfade from current animation into the new one
-                prevAnimation->clip->crossFade(animation->clip, animation->blendDuration);
-            }
-            else
-            {
-                // Stop the previous animation (no blending)
-                prevAnimation->clip->stop();
-
-                // Play the new animation
-                animation->clip->play();
-            }
-        }
-        else
-        {
-            // No new animaton specified - stop current animation on this layer
-            prevAnimation->clip->stop();
-        }
-
-        prevAnimation->playing = false;
-    }
-    else if (animation)
-    {
-        // No animations currently playing - just play the new one
-        animation->clip->play();
-    }
-
-    // Update animaton and layers
-    if (animation)
-    {
-        animation->playing = true;
-
-        // Update layer to point to the new animation
-        if (litr != _layers.end())
-            litr->second = animation;
-        else
-            _layers[layer] = animation;
-    }
-    else if (litr != _layers.end())
-    {
-        // Remove layer sine we stopped the animation previously on it
-        _layers.erase(litr);
-    }
-}
-
 void PhysicsCharacter::setVelocity(const Vector3& velocity)
 {
     _moveVelocity.setValue(velocity.x, velocity.y, velocity.z);
@@ -307,7 +205,20 @@ void PhysicsCharacter::setRightVelocity(float velocity)
 
 void PhysicsCharacter::jump(float height)
 {
-    // TODO
+    // TODO: Add support for different jump modes (i.e. double jump, changing direction in air, holding down jump button for extra height, etc)
+    if (!_verticalVelocity.isZero())
+        return;
+
+    // v = sqrt(v0^2 + 2 a s)
+    //  v0 == initial velocity (zero for jumping)
+    //  a == acceleration (inverse gravity)
+    //  s == linear displacement (height)
+    Vector3 jumpVelocity = -Game::getInstance()->getPhysicsController()->getGravity() * height * 2.0f;
+    jumpVelocity.set(
+        jumpVelocity.x == 0 ? 0 : std::sqrt(jumpVelocity.x),
+        jumpVelocity.y == 0 ? 0 : std::sqrt(jumpVelocity.y),
+        jumpVelocity.z == 0 ? 0 : std::sqrt(jumpVelocity.z));
+    _verticalVelocity += BV(jumpVelocity);
 }
 
 void PhysicsCharacter::updateCurrentVelocity()
@@ -403,58 +314,26 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
 
 void PhysicsCharacter::stepUp(btCollisionWorld* collisionWorld, btScalar time)
 {
-    // Note: btKinematicCharacterController implements this by always just setting
-    // target position to currentPosition.y + stepHeight, and then checking for collisions.
-    // Don't let the character move up if it hits the ceiling (or something above).
-    // Do this WITHOUT using time in the calculation - this way you are always guarnateed
-    // to step over a step that is stepHeight high.
-    // 
-    // Note that stepDown() will be called right after this, so the character will move back
-    // down to collide with the ground so that he smoothly steps up stairs.
-    _currentPosition += btVector3(0, _stepHeight, 0);
+    btVector3 targetPosition(_currentPosition);
+
+    if (_verticalVelocity.isZero())
+    {
+        // Simply increase our poisiton by step height to enable us
+        // to smoothly move over steps.
+        targetPosition += btVector3(0, _stepHeight, 0);
+    }
+
+    // TODO: Convex sweep test to ensure we didn't hit anything during the step up.
+
+    _currentPosition = targetPosition;
 }
 
 void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, float time)
 {
-    // Process currently playing movements+animations and determine final move location
-    float animationMoveSpeed = 0.0f;
-    unsigned int animationCount = 0;
-    for (std::map<unsigned int, CharacterAnimation*>::iterator itr = _layers.begin(); itr != _layers.end(); ++itr)
-    {
-        CharacterAnimation* animation = itr->second;
-
-        // If the animation is not playing, ignore it
-        if (!animation->playing)
-            continue;
-
-        AnimationClip* clip = animation->clip;
-
-        // Did the clip finish playing (but we still have it marked playing)?
-        if (!clip->isPlaying())
-        {
-            // If the animaton was flaged the ANIMATION_RESUME bit, start the previously playing animation
-            if ((animation->animationFlags == ANIMATION_RESUME) && animation->prev)
-            {
-                play(animation->prev, animation->prev->layer);
-            }
-
-            animation->playing = false;
-
-            continue;
-        }
-
-        animationMoveSpeed += animation->moveSpeed;
-        ++animationCount;
-    }
-
     updateCurrentVelocity();
 
     // Calculate final velocity
     btVector3 velocity(_currentVelocity);
-    if (animationCount > 0)
-    {
-        velocity *= animationMoveSpeed;
-    }
     velocity *= time; // since velocity is in meters per second
 
     if (velocity.isZero())
@@ -542,11 +421,12 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 
 void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
 {
-    // Contribute basic gravity to fall velocity.
+    // Contribute gravity to vertical velocity.
     btVector3 gravity = Game::getInstance()->getPhysicsController()->_world->getGravity();
-    _fallVelocity += (gravity * time);
+    _verticalVelocity += (gravity * time);
 
-    btVector3 targetPosition = _currentPosition + (_fallVelocity * time);
+    // Compute new position from vertical velocity.
+    btVector3 targetPosition = _currentPosition + (_verticalVelocity * time);
     targetPosition -= btVector3(0, _stepHeight, 0);
 
     // Perform a convex sweep test between current and target position
@@ -569,7 +449,7 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
         _currentPosition.setInterpolate3(_currentPosition, targetPosition, callback.m_closestHitFraction);
 
         // Zero out fall velocity when we hit an object
-        _fallVelocity.setZero();
+        _verticalVelocity.setZero();
     }
     else
     {
