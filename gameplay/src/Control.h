@@ -23,6 +23,7 @@ class Control : public Ref, public AnimationTarget
     friend class Layout;
     friend class AbsoluteLayout;
     friend class VerticalLayout;
+    friend class FlowLayout;
 
 public:
 
@@ -827,6 +828,14 @@ private:
     Theme::Style::Overlay* getOverlay(Control::State state) const;
 
     void overrideStyle();
+
+    void overrideThemedProperties(Properties* properties, unsigned char states);
+
+    void setImageList(Theme::ImageList* imageList, unsigned char states = STATE_ALL);
+
+    void setCursor(Theme::Image* cursor, unsigned char states = STATE_ALL);
+
+    void setSkin(Theme::Skin* skin, unsigned char states = STATE_ALL);
     
     void addSpecificListener(Control::Listener* listener, Listener::EventType eventType);
     

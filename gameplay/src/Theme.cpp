@@ -394,7 +394,7 @@ namespace gameplay
                     disabled->addRef();
                 }
 
-                Theme::Style* s = new Theme::Style(space->getId(), tw, th, margin, padding, normal, focus, active, disabled);
+                Theme::Style* s = new Theme::Style(theme, space->getId(), tw, th, margin, padding, normal, focus, active, disabled);
                 theme->_styles.push_back(s);
             }
 
