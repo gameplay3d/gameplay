@@ -15,17 +15,7 @@ namespace gameplay
 class Theme;
 
 /**
- * Top-level container of UI controls.
- */
-class Form : public Container
-{
-    friend class Platform;
-
-public:
-
-    /**
-     * Create from properties file.
-     * The top-most namespace in the file must be named 'form'.  The following properties are available for forms:
+ * Top-level container of UI controls.  The following properties are available for forms:
 
  @verbatim
     form <formID>
@@ -52,7 +42,16 @@ public:
         slider { }
     }
  @endverbatim
+ */
+class Form : public Container
+{
+    friend class Platform;
 
+public:
+
+    /**
+     * Create from properties file.
+     *
      * @param path Path to the properties file to create a new form from.
      */
     static Form* create(const char* path);

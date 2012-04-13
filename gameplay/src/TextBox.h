@@ -125,6 +125,8 @@ protected:
     Vector2 _caretLocation;
     unsigned int textIndex;
     int _lastKeypress;
+    unsigned int _fontSize;
+    Theme::ThemeImage* _caretImage;
 
 private:
 
