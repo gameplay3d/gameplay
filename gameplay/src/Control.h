@@ -777,6 +777,8 @@ protected:
      */
     static State getState(const char* state);
 
+    Theme::ThemeImage* getImage(const char* id, State state);
+
     /**
      * Notify this control's listeners of a specific event.
      *
@@ -799,6 +801,8 @@ protected:
     bool _autoHeight;
     Theme::Style* _style;
     std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
+
+    float _opacity;         // Current opacity.
 
 private:
 
@@ -833,10 +837,12 @@ private:
 
     void setImageList(Theme::ImageList* imageList, unsigned char states = STATE_ALL);
 
-    void setCursor(Theme::Image* cursor, unsigned char states = STATE_ALL);
+    void setCursor(Theme::ThemeImage* cursor, unsigned char states = STATE_ALL);
 
     void setSkin(Theme::Skin* skin, unsigned char states = STATE_ALL);
-    
+
+    Theme::Skin* getSkin(State state);
+
     void addSpecificListener(Control::Listener* listener, Listener::EventType eventType);
     
     /**
@@ -848,6 +854,7 @@ private:
     virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
     
     bool _styleOverridden;
+    Theme::Skin* _skin;
 };
 
 }

@@ -134,6 +134,7 @@ protected:
     std::string _groupId;
     bool _selected;
     Vector2 _imageSize;
+    Theme::ThemeImage* _image;
 
 private:
 
