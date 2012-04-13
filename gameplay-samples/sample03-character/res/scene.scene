@@ -2,128 +2,174 @@ scene
 {
     path = res/scene.gpb
 
-    node BoyMesh
+    node boymesh
     {
-        material = res/scene.material#Boy
+        material = res/scene.material#boy
     }
 
-    node BoyShadow
+    node boyshadow
     {
-        material = res/scene.material#BoyShadow
+        material = res/scene.material#boyshadow
         transparent = true
     }
 
-    node Table
+    node tabletop
     {
-        material = res/scene.material#Green
+        material = res/scene.material#tabletop
         rigidbody = res/scene.physics#Table
     }
 
-    node GreenChair
+    node tableleg1
     {
-        url = GreenChair*
-        material = res/scene.material#Green
+        material = res/scene.material#tableleg1
+        rigidbody = res/scene.physics#Table
+    }
+
+    node tableleg2
+    {
+        material = res/scene.material#tableleg2
+        rigidbody = res/scene.physics#Table
+    }
+
+    node tableleg3
+    {
+        material = res/scene.material#tableleg3
+        rigidbody = res/scene.physics#Table
+    }
+
+    node tableleg4
+    {
+        material = res/scene.material#tableleg4
+        rigidbody = res/scene.physics#Table
+    }
+
+    node greenchair
+    {
+        url = greenchair*
+        material = res/scene.material#green
         rigidbody = res/scene.physics#Chair
     }
 
-    node BlueChair
+    node bluechair
     {
-        url = BlueChair*
-        material = res/scene.material#LightBlue
+        url = bluechair*
+        material = res/scene.material#lightblue
         rigidbody = res/scene.physics#Chair
     }
 
-    node PlayTable
+    node playtable
     {
-        material[0] = res/scene.material#PlayTableTopMaterial
-        material[1] = res/scene.material#PlayTableMaterial1
-        material[2] = res/scene.material#PlayTableMaterial2
+        material = res/scene.material#playtable
         rigidbody = res/scene.physics#StaticBox
     }
 
-    node Easel
+    node easel
     {
-        material = res/scene.material#Easel
+        material = res/scene.material#easel
         rigidbody = res/scene.physics#StaticBox
     }
 
-    node StorageOrganizer
+    node storageorganizer
     {
-        material = res/scene.material#White
+        material = res/scene.material#storageorganizer
         rigidbody = res/scene.physics#StaticBox
     }
 
-    node Ground
+    node floor
     {
-        material = res/scene.material#Ground
+        material = res/scene.material#floor
         rigidbody = res/scene.physics#StaticBox
     }
 
-    node Wall
+    node wallwest
     {
-        url = Wall*
-        material = res/scene.material#Wall
+        material = res/scene.material#wallwest
         rigidbody = res/scene.physics#StaticBox
     }
 
-    node WindowLedge
+    node walleast
     {
-        material = res/scene.material#White
-    }
-
-    node Door
-    {
-        material[0] = res/scene.material#DoorHandle
-        material[1] = res/scene.material#White
+        material = res/scene.material#walleast
         rigidbody = res/scene.physics#StaticBox
     }
 
-    node DoorFrame
+    node wallnorth
     {
-        material = res/scene.material#White
+        material = res/scene.material#wallnorth
         rigidbody = res/scene.physics#StaticBox
     }
 
-    node Bookshelf
+    node wallsouth
     {
-        material = res/scene.material#White
+        material = res/scene.material#wallsouth
         rigidbody = res/scene.physics#StaticBox
     }
 
-    node Book
+    node walloverhang
     {
-        material = res/scene.material#LightBlue
-    }
-
-    node Toybox
-    {
-        material = res/scene.material#Toybox
+        material = res/scene.material#walloverhang
         rigidbody = res/scene.physics#StaticBox
     }
 
-    node FloorTiles
+    node windowledge
     {
-        material = res/scene.material#FloorTiles
+        material = res/scene.material#windowledge
     }
 
-    node Rainbow
+    node door
     {
-        material = res/scene.material#Rainbow
+        material = res/scene.material#door
+        rigidbody = res/scene.physics#StaticBox
     }
 
-    node Basketball
+    node doorframe
     {
-        material = res/scene.material#Basketball
+        material = res/scene.material#doorframe
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node bookshelf
+    {
+        material = res/scene.material#bookshelf
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node book
+    {
+        material = res/scene.material#book
+    }
+
+    node toybox
+    {
+        material = res/scene.material#toybox
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node floortiles
+    {
+        material = res/scene.material#floortiles
+    }
+
+    node rainbow
+    {
+        material = res/scene.material#rainbow
+    }
+
+    node basketball
+    {
+        material = res/scene.material#basketball
         rigidbody = res/scene.physics#Basketball
     }
 
-    node BasketballNet
+    node basketballnet
     {
-        material[0] = res/scene.material#Black
-        material[1] = res/scene.material#BasketballPost
-        material[2] = res/scene.material#BasketballRim
-        material[3] = res/scene.material#White
-        material[4] = res/scene.material#Backboard
+        material = res/scene.material#basketballnet
+        rigidbody = res/scene.physics#StaticBox
+    }
+
+    node backboard
+    {
+        material = res/scene.material#backboard
         rigidbody = res/scene.physics#StaticBox
     }
 
