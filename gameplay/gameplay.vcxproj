@@ -61,7 +61,7 @@
     <ClCompile Include="src\MeshSkin.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Node.cpp" />
-    <ClCompile Include="src\Package.cpp" />
+    <ClCompile Include="src\Bundle.cpp" />
     <ClCompile Include="src\ParticleEmitter.cpp" />
     <ClCompile Include="src\PhysicsCharacter.cpp" />
     <ClCompile Include="src\PhysicsCollisionObject.cpp" />
@@ -153,7 +153,7 @@
     <ClInclude Include="src\MeshSkin.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Node.h" />
-    <ClInclude Include="src\Package.h" />
+    <ClInclude Include="src\Bundle.h" />
     <ClInclude Include="src\ParticleEmitter.h" />
     <ClInclude Include="src\PhysicsCharacter.h" />
     <ClInclude Include="src\PhysicsCollisionObject.h" />
@@ -223,7 +223,6 @@
     <None Include="res\shaders\solid.vsh" />
     <None Include="res\shaders\textured.fsh" />
     <None Include="res\shaders\textured.vsh" />
-    <None Include="res\textures\particle-default.png" />
     <None Include="src\BoundingBox.inl" />
     <None Include="src\BoundingSphere.inl" />
     <None Include="src\Curve.inl" />

@@ -13,19 +13,21 @@ namespace gameplay
  * Defines a button UI control. This is essentially a label that can have a callback method set on it.
  *
  * The following properties are available for buttons:
- *
- * button <buttonID>
- * {
- *      style       = <styleID>
- *      alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
- *      position    = <x, y>
- *      autoWidth   = <bool>
- *      autoHeight  = <bool>
- *      size        = <width, height>
- *      width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
- *      height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
- *      text        = <string>
- * }
+
+ @verbatim
+    button <buttonID>
+    {
+         style       = <styleID>
+         alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
+         position    = <x, y>
+         autoWidth   = <bool>
+         autoHeight  = <bool>
+         size        = <width, height>
+         width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
+         height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
+         text        = <string>
+    }
+ @endverbatim
  */
 class Button : public Label
 {
