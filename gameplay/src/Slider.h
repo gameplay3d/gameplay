@@ -149,9 +149,24 @@ protected:
      */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
+    /**
+     * The minimum value for the Slider.
+     */
     float _min;
+    
+    /**
+     * The maximum value for the Slider
+     */
     float _max;
+    
+    /**
+     * The Slider's step size.
+     */
     float _step;
+    
+    /**
+     * The Slider's current value.
+     */
     float _value;
 
 private:

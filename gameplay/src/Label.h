@@ -93,7 +93,10 @@ protected:
      */
     void drawText(const Rectangle& clip);
 
-    std::string _text;      // The text displayed by this label.
+    /**
+     * The text displayed by this label.
+     */
+    std::string _text;
 
 private:
 
