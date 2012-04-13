@@ -73,7 +73,7 @@ void CharacterGame::initialize()
     initializeCharacter();
 
     // Set a ghost object on our camera node to assist in camera occlusion adjustments
-    _scene->findNode("Camera")->setCollisionObject(PhysicsCollisionObject::GHOST_OBJECT, PhysicsCollisionShape::sphere(0.5f));
+    //_scene->findNode("camera")->setCollisionObject(PhysicsCollisionObject::GHOST_OBJECT, PhysicsCollisionShape::sphere(0.5f));
 
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initScene);
@@ -98,7 +98,7 @@ void CharacterGame::initialize()
 void CharacterGame::initializeMaterial(Scene* scene, Node* node, Material* material)
 {
     // Bind light shader parameters to dynamic objects only
-    if (material)
+    if (node->isDynamic())
     {
         Node* lightNode = scene->findNode("sun");
         material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
@@ -110,22 +110,9 @@ void CharacterGame::initializeMaterial(Scene* scene, Node* node, Material* mater
 bool CharacterGame::initScene(Node* node, void* cookie)
 {
     Model* model = node->getModel();
-    std::string id(node->getId());
-    if (model)
+    if (model && model->getMaterial())
     {
-        if (model->getMaterial() &&
-            id.find("wall") == id.npos &&
-            id.find("basketballnet") == id.npos &&
-            id.find("backboard") == id.npos &&
-            id.find("easel") == id.npos &&
-            id.find("floor") == id.npos &&
-            id.find("storageorganizer") == id.npos &&
-            id.find("book") == id.npos &&
-            id.find("toybox") == id.npos &&
-            id.find("table") == id.npos)
-        {
-            initializeMaterial(_scene, node, model->getMaterial());
-        }
+        initializeMaterial(_scene, node, model->getMaterial());
     }
 
     return true;

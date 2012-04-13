@@ -4,116 +4,125 @@ scene
 
     node boycharacter
     {
-        character = res/scene.physics#Boy
+        character = res/scene.physics#boy
     }
 
     node boymesh
     {
         material = res/scene.material#boy
+        dynamic = true
     }
 
     node boyshadow
     {
         material = res/scene.material#boyshadow
         transparent = true
+        dynamic = true
+    }
+
+    node camera
+    {
+        ghostObject = res/scene.physics#camera
     }
 
     node tabletop
     {
         material = res/scene.material#tabletop
-        rigidbody = res/scene.physics#Table
+        rigidBody = res/scene.physics#table
     }
 
     node tableleg1
     {
         material = res/scene.material#tableleg1
-        rigidbody = res/scene.physics#Table
+        rigidBody = res/scene.physics#table
     }
 
     node tableleg2
     {
         material = res/scene.material#tableleg2
-        rigidbody = res/scene.physics#Table
+        rigidBody = res/scene.physics#table
     }
 
     node tableleg3
     {
         material = res/scene.material#tableleg3
-        rigidbody = res/scene.physics#Table
+        rigidBody = res/scene.physics#table
     }
 
     node tableleg4
     {
         material = res/scene.material#tableleg4
-        rigidbody = res/scene.physics#Table
+        rigidBody = res/scene.physics#table
     }
 
     node greenchair
     {
         url = greenchair*
         material = res/scene.material#green
-        rigidbody = res/scene.physics#Chair
+        rigidBody = res/scene.physics#chair
+        dynamic = true
     }
 
     node bluechair
     {
         url = bluechair*
         material = res/scene.material#lightblue
-        rigidbody = res/scene.physics#Chair
+        rigidBody = res/scene.physics#chair
+        dynamic = true
     }
 
     node playtable
     {
         material = res/scene.material#playtable
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node easel
     {
         material = res/scene.material#easel
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node storageorganizer
     {
         material = res/scene.material#storageorganizer
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node floor
     {
         material = res/scene.material#floor
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node wallwest
     {
         material = res/scene.material#wallwest
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node walleast
     {
         material = res/scene.material#walleast
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node wallnorth
     {
         material = res/scene.material#wallnorth
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node wallsouth
     {
         material = res/scene.material#wallsouth
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node walloverhang
     {
         material = res/scene.material#walloverhang
-        rigidbody = res/scene.physics#StaticMesh
+        rigidBody = res/scene.physics#staticMesh
     }
 
     node windowledge
@@ -124,19 +133,19 @@ scene
     node door
     {
         material = res/scene.material#door
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node doorframe
     {
         material = res/scene.material#doorframe
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node bookshelf
     {
         material = res/scene.material#bookshelf
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node book
@@ -147,7 +156,7 @@ scene
     node toybox
     {
         material = res/scene.material#toybox
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node floortiles
@@ -158,28 +167,31 @@ scene
     node rainbow
     {
         material = res/scene.material#rainbow
+        transparent = true
     }
 
     node basketball
     {
         material = res/scene.material#basketball
-        rigidbody = res/scene.physics#Basketball
+        rigidBody = res/scene.physics#basketball
+        dynamic = true
     }
 
     node basketballnet
     {
         material = res/scene.material#basketballnet
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     node backboard
     {
         material = res/scene.material#backboard
-        rigidbody = res/scene.physics#StaticBox
+        rigidBody = res/scene.physics#staticBox
     }
 
     physics
     {
-        gravity = 0.0, -9.8, 0.0
+        // Note: Gravity is set to 3x normal gravity to compenate for larger scale of scene.
+        gravity = 0.0, -29.4, 0.0
     }
 }
