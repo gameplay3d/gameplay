@@ -127,6 +127,7 @@ protected:
 
     bool _checked;      // Whether this checkbox is currently checked.
     Vector2 _imageSize;  // The size to draw the checkbox icon, if different from its size in the texture.
+    Theme::ThemeImage* _image;
 
 private:
 
