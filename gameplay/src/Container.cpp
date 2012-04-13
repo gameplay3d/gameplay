@@ -76,6 +76,7 @@ namespace gameplay
             {
                  controlStyle = theme->getStyle(controlStyleName);
             }
+            assert(controlStyle);
 
             std::string controlName(controlSpace->getNamespace());
             std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
