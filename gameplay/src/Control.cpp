@@ -688,13 +688,12 @@ namespace gameplay
 
     void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
-        if (_bounds.width <= 0 || _bounds.height <= 0)
+        if (!_skin || _bounds.width <= 0 || _bounds.height <= 0)
             return;
 
         Vector2 pos(clip.x + _bounds.x, clip.y + _bounds.y);
 
         // Get the border and background images for this control's current state.
-        //Theme::UVs topLeft, top, topRight, left, center, right, bottomLeft, bottom, bottomRight;
         const Theme::UVs& topLeft = _skin->getUVs(Theme::Skin::TOP_LEFT);
         const Theme::UVs& top = _skin->getUVs(Theme::Skin::TOP);
         const Theme::UVs& topRight = _skin->getUVs(Theme::Skin::TOP_RIGHT);
