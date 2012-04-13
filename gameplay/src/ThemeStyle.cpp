@@ -6,10 +6,10 @@ namespace gameplay
 /****************
  * Theme::Style *
  ****************/
-Theme::Style::Style(const char* id, float tw, float th,
+Theme::Style::Style(Theme* theme, const char* id, float tw, float th,
         const Theme::Margin& margin, const Theme::Padding& padding,
         Theme::Style::Overlay* normal, Theme::Style::Overlay* focus, Theme::Style::Overlay* active, Theme::Style::Overlay* disabled)
-    : _id(id), _tw(tw), _th(th), _margin(margin), _padding(padding)
+    : _theme(theme), _id(id), _tw(tw), _th(th), _margin(margin), _padding(padding)
 {
     _overlays[OVERLAY_NORMAL] = normal;
     _overlays[OVERLAY_FOCUS] = focus;
@@ -76,8 +76,8 @@ const Theme::Padding& Theme::Style::getPadding() const
 }
     
 /*************************
-    * Theme::Style::Overlay *
-    *************************/
+ * Theme::Style::Overlay *
+ *************************/
 Theme::Style::Overlay* Theme::Style::Overlay::create()
 {
     Overlay* overlay = new Overlay();

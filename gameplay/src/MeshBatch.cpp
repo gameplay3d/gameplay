@@ -151,7 +151,7 @@ bool MeshBatch::resize(unsigned int capacity)
 
     return true;
 }
-
+    
 void MeshBatch::begin()
 {
     _vertexCount = 0;
@@ -193,5 +193,6 @@ void MeshBatch::draw()
         pass->unbind();
     }
 }
+    
 
 }

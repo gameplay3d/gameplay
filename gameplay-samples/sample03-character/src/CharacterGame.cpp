@@ -98,10 +98,9 @@ void CharacterGame::initialize()
 void CharacterGame::initializeMaterial(Scene* scene, Node* node, Material* material)
 {
     // Bind light shader parameters to dynamic objects only
-    std::string id = node->getId();
     if (material)
     {
-        Node* lightNode = scene->findNode("SunLight");
+        Node* lightNode = scene->findNode("sun");
         material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
         material->getParameter("u_lightColor")->bindValue(lightNode->getLight(), &Light::getColor);
         material->getParameter("u_ambientColor")->bindValue(scene, &Scene::getAmbientColor);
@@ -111,18 +110,21 @@ void CharacterGame::initializeMaterial(Scene* scene, Node* node, Material* mater
 bool CharacterGame::initScene(Node* node, void* cookie)
 {
     Model* model = node->getModel();
+    std::string id(node->getId());
     if (model)
     {
-        if (model->getMaterial())
+        if (model->getMaterial() &&
+            id.find("wall") == id.npos &&
+            id.find("basketballnet") == id.npos &&
+            id.find("backboard") == id.npos &&
+            id.find("easel") == id.npos &&
+            id.find("floor") == id.npos &&
+            id.find("storageorganizer") == id.npos &&
+            id.find("book") == id.npos &&
+            id.find("toybox") == id.npos &&
+            id.find("table") == id.npos)
         {
             initializeMaterial(_scene, node, model->getMaterial());
-        }
-        for (unsigned int i = 0; i < model->getMeshPartCount(); ++i)
-        {
-            if (model->hasMaterial(i))
-            {
-                initializeMaterial(_scene, node, model->getMaterial(i));
-            }
         }
     }
 
@@ -131,13 +133,13 @@ bool CharacterGame::initScene(Node* node, void* cookie)
 
 void CharacterGame::initializeCharacter()
 {
-    Node* node = _scene->findNode("BoyCharacter");
+    Node* node = _scene->findNode("boycharacter");
 
     // Store the physics character object.
     _character = static_cast<PhysicsCharacter*>(node->getCollisionObject());
 
     // Store character mesh node.
-    _characterMeshNode = node->findNode("BoyMesh");
+    _characterMeshNode = node->findNode("boymesh");
 
     // Store the alpha material parameter from the character's model.
     _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_globalAlpha");
@@ -301,7 +303,7 @@ void CharacterGame::update(long elapsedTime)
     PhysicsController::HitResult hitResult;
     Vector3 v = _character->getNode()->getTranslationWorld();
     if (getPhysicsController()->rayTest(Ray(Vector3(v.x, v.y + 1.0f, v.z), Vector3(0, -1, 0)), 100.0f, &hitResult))
-        _scene->findNode("BoyShadow")->setTranslation(Vector3(hitResult.point.x, hitResult.point.y + 0.1f, hitResult.point.z));
+        _scene->findNode("boyshadow")->setTranslation(Vector3(hitResult.point.x, hitResult.point.y + 0.1f, hitResult.point.z));
 }
 
 void CharacterGame::render(long elapsedTime)
