@@ -121,8 +121,8 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
     assert(properties);
     if (!properties || 
         !(strcmp(properties->getNamespace(), "character") == 0 || 
-        strcmp(properties->getNamespace(), "ghost") == 0 || 
-        strcmp(properties->getNamespace(), "rigidbody") == 0))
+        strcmp(properties->getNamespace(), "ghostObject") == 0 || 
+        strcmp(properties->getNamespace(), "rigidBody") == 0))
     {
         WARN("Failed to load physics collision shape from properties object: must be non-null object and have namespace equal to \'character\', \'ghost\', or \'rigidbody\'.");
         return NULL;

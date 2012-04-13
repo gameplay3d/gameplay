@@ -149,6 +149,26 @@ public:
     void setTransparent(bool transparent);
 
     /**
+     * Returns whether this node is dynamic.
+     *
+     * The dynamic propery can be used to flag nodes as being non-static.
+     * This can be useful for modifying behavior or rendering/material
+     * logic at runtime for static vs dynamic (moving) objects. An
+     * example would be determing whether to use static or  dyanmic
+     * lighting materials for node models during loading.
+     *
+     * @return Whether this node is dynamic (false by default).
+     */
+    bool isDynamic() const;
+
+    /**
+     * Sets whether this node is dynamic.
+     *
+     * @param dynamic Whether the node is dynamic.
+     */
+    void setDynamic(bool dynamic);
+
+    /**
      * Returns the user pointer for this node.
      *
      * @return The user pointer for this node.
