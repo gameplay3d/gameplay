@@ -439,14 +439,14 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                 // An external file was referenced, so load the node from file and then insert it into the scene with the new ID.
 
                 // TODO: Revisit this to determine if we should cache Bundle objects for the duration of the scene
-                // load to prevent constantly creating/destroying the same externally referenced packages each time
+                // load to prevent constantly creating/destroying the same externally referenced bundles each time
                 // a url with a file is encountered.
-                Bundle* tmpPackage = Bundle::create(snp._file.c_str());
-                if (tmpPackage)
+                Bundle* tmpBundle = Bundle::create(snp._file.c_str());
+                if (tmpBundle)
                 {
                     if (sceneNode._exactMatch)
                     {
-                        Node* node = tmpPackage->loadNode(snp._id.c_str());
+                        Node* node = tmpBundle->loadNode(snp._id.c_str());
                         if (node)
                         {
                             node->setId(sceneNode._nodeID);
@@ -462,16 +462,16 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                     {
                         // Search for nodes in the bundle using a partial match
                         std::string partialMatch = snp._id;
-                        unsigned int objectCount = tmpPackage->getObjectCount();
+                        unsigned int objectCount = tmpBundle->getObjectCount();
                         unsigned int matchCount = 0;
                         for (unsigned int k = 0; k < objectCount; ++k)
                         {
-                            const char* objid = tmpPackage->getObjectID(k);
+                            const char* objid = tmpBundle->getObjectID(k);
                             if (strstr(objid, snp._id.c_str()) == objid)
                             {
                                 // This object ID matches (starts with).
                                 // Try to load this object as a Node.
-                                Node* node = tmpPackage->loadNode(objid);
+                                Node* node = tmpBundle->loadNode(objid);
                                 if (node)
                                 {
                                     // Construct a new node ID using _nodeID plus the remainder of the partial match.
@@ -490,7 +490,7 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                         }
                     }
 
-                    SAFE_RELEASE(tmpPackage);
+                    SAFE_RELEASE(tmpBundle);
                 }
                 else
                 {
