@@ -7,6 +7,10 @@
 namespace gameplay
 {
 
+/**
+ * Represents a linear area of display memory and usually reside 
+ * in the display memory of the display card.
+ */
 class RenderTarget : public Ref
 {
 public:
