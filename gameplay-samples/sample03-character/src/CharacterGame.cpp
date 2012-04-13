@@ -64,7 +64,7 @@ void CharacterGame::initialize()
     _scene->getActiveCamera()->setAspectRatio((float)SCREEN_WIDTH / (float) SCREEN_HEIGHT);
 
     // Store character node.
-    Node* node = _scene->findNode("BoyCharacter");
+    Node* node = _scene->findNode("boycharacter");
     PhysicsRigidBody::Parameters params(20.0f);
     node->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule(1.2f, 5.0f, Vector3(0, 2.5, 0), true), &params);
     _character = static_cast<PhysicsCharacter*>(node->getCollisionObject());
@@ -72,13 +72,13 @@ void CharacterGame::initialize()
     _character->addCollisionListener(this);
 
     // Store character mesh node.
-    _characterMeshNode = node->findNode("BoyMesh");
+    _characterMeshNode = node->findNode("boymesh");
 
     // Store the alpha material parameter from the character's model.
     _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_globalAlpha");
 
     // Set a ghost object on our camera node to assist in camera occlusion adjustments
-    _scene->findNode("Camera")->setCollisionObject(PhysicsCollisionObject::GHOST_OBJECT, PhysicsCollisionShape::sphere(0.5f));
+    _scene->findNode("camera")->setCollisionObject(PhysicsCollisionObject::GHOST_OBJECT, PhysicsCollisionShape::sphere(0.5f));
 
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initScene);
@@ -109,7 +109,7 @@ void CharacterGame::initMaterial(Scene* scene, Node* node, Material* material)
     std::string id = node->getId();
     if (material)
     {
-        Node* lightNode = scene->findNode("SunLight");
+        Node* lightNode = scene->findNode("sun");
         material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
         material->getParameter("u_lightColor")->bindValue(lightNode->getLight(), &Light::getColor);
         material->getParameter("u_ambientColor")->bindValue(scene, &Scene::getAmbientColor);
@@ -119,9 +119,19 @@ void CharacterGame::initMaterial(Scene* scene, Node* node, Material* material)
 bool CharacterGame::initScene(Node* node, void* cookie)
 {
     Model* model = node->getModel();
+    std::string id = node->getId();
     if (model)
     {
-        if (model->getMaterial())
+        if (model->getMaterial() && 
+            id.find("wall") == id.npos &&
+            id.find("basketballnet") == id.npos &&
+            id.find("backboard") == id.npos &&
+            id.find("easel") == id.npos &&
+            id.find("floor") == id.npos &&
+            id.find("storageorganizer") == id.npos &&
+            id.find("book") == id.npos &&
+            id.find("toybox") == id.npos &&
+            id.find("table") == id.npos)
         {
             initMaterial(_scene, node, model->getMaterial());
         }
