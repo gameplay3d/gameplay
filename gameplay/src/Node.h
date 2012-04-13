@@ -16,7 +16,7 @@
 namespace gameplay
 {
 
-class Package;
+class Bundle;
 class Scene;
 class Form;
 
@@ -26,7 +26,7 @@ class Form;
 class Node : public Transform, public Ref
 {
     friend class Scene;
-    friend class Package;
+    friend class Bundle;
     friend class MeshSkin;
 
 public:

@@ -74,9 +74,7 @@ namespace gameplay
         textColor.w *= getOpacity(_state);
 
         // Draw the text.
-        font->begin();
         font->drawText(_text.c_str(), _textBounds, textColor, getFontSize(_state), getTextAlignment(_state), true, getTextRightToLeft(_state), &_clip);
-        font->end();
 
         _dirty = false;
     }

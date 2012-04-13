@@ -1,5 +1,5 @@
-#ifndef PACKAGE_H_
-#define PACKAGE_H_
+#ifndef BUNDLE_H_
+#define BUNDLE_H_
 
 #include "Mesh.h"
 #include "Font.h"
@@ -10,29 +10,29 @@ namespace gameplay
 {
 
 /**
- * Represents a gameplay binary package file (.gpb) that contains a
- * collection of game resources that can be loaded.
+ * Represents a gameplay bundle file (.gpb) that contains a
+ * collection of binary game assets that can be loaded.
  */
-class Package : public Ref
+class Bundle : public Ref
 {
     friend class PhysicsController;
 
 public:
 
     /**
-     * Returns a Package for the given resource path.
+     * Returns a Bundle for the given resource path.
      *
-     * The specified path must reference a valid gameplay binary file.
-     * If the package is already loaded, the existing package is returned
+     * The specified path must reference a valid gameplay bundle file.
+     * If the bundle is already loaded, the existing bundle is returned
      * with its reference count incremented. When no longer needed, the
      * release() method must be called. Note that calling release() does
-     * NOT free any actual game objects created/returned from the Package
+     * NOT free any actual game objects created/returned from the Bundle
      * instance and those objects must be released separately.
      */
-    static Package* create(const char* path);
+    static Bundle* create(const char* path);
 
     /**
-     * Loads the scene with the specified ID from the package.
+     * Loads the scene with the specified ID from the bundle.
      * If id is NULL then the first scene found is loaded.
      * 
      * @param id The ID of the scene to load (NULL to load the first scene).
@@ -42,16 +42,16 @@ public:
     Scene* loadScene(const char* id = NULL);
 
     /**
-     * Loads a node with the specified ID from the package.
+     * Loads a node with the specified ID from the bundle.
      *
-     * @param id The ID of the node to load in the package.
+     * @param id The ID of the node to load in the bundle.
      * 
      * @return The loaded node, or NULL if the node could not be loaded.
      */
     Node* loadNode(const char* id);
 
     /**
-     * Loads a mesh with the specified ID from the package.
+     * Loads a mesh with the specified ID from the bundle.
      *
      * @param id The ID of the mesh to load.
      * 
@@ -60,7 +60,7 @@ public:
     Mesh* loadMesh(const char* id);
 
     /**
-     * Loads a font with the specified ID from the package.
+     * Loads a font with the specified ID from the bundle.
      *
      * @param id The ID of the font to load.
      * 
@@ -69,7 +69,7 @@ public:
     Font* loadFont(const char* id);
 
     /**
-     * Determines if this package contains a top-level object with the given ID.
+     * Determines if this bundle contains a top-level object with the given ID.
      *
      * This method performs a case-sensitive comparison.
      *
@@ -78,12 +78,12 @@ public:
     bool contains(const char* id) const;
 
     /**
-     * Returns the number of top-level objects in this package.
+     * Returns the number of top-level objects in this bundle.
      */
     unsigned int getObjectCount() const;
 
     /**
-     * Returns the unique identifier of the top-level object at the specified index in this package.
+     * Returns the unique identifier of the top-level object at the specified index in this bundle.
      *
      * @param index The index of the object.
      * 
@@ -143,12 +143,12 @@ private:
         std::vector<MeshPartData*> parts;
     };
 
-    Package(const char* path);
+    Bundle(const char* path);
 
     /**
      * Destructor.
      */
-    ~Package();
+    ~Bundle();
 
     /**
      * Finds a reference by ID.
@@ -156,7 +156,7 @@ private:
     Reference* find(const char* id) const;
 
     /**
-     * Resets any load session specific state for the package.
+     * Resets any load session specific state for the bundle.
      */
     void clearLoadSession();
 
@@ -206,7 +206,7 @@ private:
     Node* loadNode(const char* id, Scene* sceneContext, Node* nodeContext);
 
     /**
-     * Loads a mesh with the specified ID from the package.
+     * Loads a mesh with the specified ID from the bundle.
      *
      * @param id The ID of the mesh to load.
      * @param nodeId The id of the mesh's model's parent node.
@@ -331,8 +331,8 @@ private:
     /**
      * Reads mesh data for the specified URL.
      *
-     * The specified URL should be formatted as 'package#id', where
-     * 'package' is the package file containing the mesh and 'id' is the ID
+     * The specified URL should be formatted as 'bundle#id', where
+     * 'bundle' is the bundle file containing the mesh and 'id' is the ID
      * of the mesh to read data for.
      *
      * @param url The URL to read mesh data from.
