@@ -24,7 +24,7 @@ class Animation : public Ref
 {
     friend class AnimationClip;
     friend class AnimationTarget;
-    friend class Package;
+    friend class Bundle;
 
 public:
     
