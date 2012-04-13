@@ -22,48 +22,45 @@ namespace gameplay
  * Here's an example of a simple
  * file that uses all the available features of the markup language:
  
-\verbatim
---- File Start: example.properties ---
+@verbatim
+    // This is a comment.
  
-// This is a comment.
+    // This property is in the default namespace:
+    integerProperty = 5
  
-// This property is in the default namespace:
-integerProperty = 5
- 
-// This line defines a namespace of type "mynamespace" without an ID:
-mynamespace
-{
-    // This namespace can be retrieved by searching for its ID, "spriteTexture":
-    texture spriteTexture 
+    // This line defines a namespace of type "mynamespace" without an ID:
+    mynamespace
     {
-        fileName = sprite.png
-        width = 64
-        height = 64
+        // This namespace can be retrieved by searching for its ID, "spriteTexture":
+        texture spriteTexture 
+        {
+            fileName = sprite.png
+            width = 64
+            height = 64
+        }
+ 
+        // This property is in the "space" namespace:
+        booleanProperty = true
+ 
+        // It's legal to have a name without a value if you leave out the '=' character:
+        foo
+ 
+        // In fact, the '=' character is optional if you'd rather write:
+        bar 23
+ 
+        // But don't write this or you'll get an error:
+        // illegalProperty =
+ 
+        // Or this:
+        // = 15
+ 
+        // Properties objects let you retrieve values as various types.
+        floatProperty = 3.333
+        stringProperty = This is a string.
+        vector3Property = 1.0, 5.0, 3.55
+        colorProperty = 1.0, 0.4, 0.0, 1.0
     }
- 
-    // This property is in the "space" namespace:
-    booleanProperty = true
- 
-    // It's legal to have a name without a value if you leave out the '=' character:
-    foo
- 
-    // In fact, the '=' character is optional if you'd rather write:
-    bar 23
- 
-    // But don't write this or you'll get an error:
-    // illegalProperty =
- 
-    // Or this:
-    // = 15
- 
-    // Properties objects let you retrieve values as various types.
-    floatProperty = 3.333
-    stringProperty = This is a string.
-    vector3Property = 1.0, 5.0, 3.55
-    colorProperty = 1.0, 0.4, 0.0, 1.0
-}
---- File End ---
-\endverbatim
+@endverbatim
  
  * Retrieving information out of a file like this could be done in two ways.  If the
  * available namespaces and name/value pairs are known in advance they can be queried by ID or name.
@@ -72,54 +69,54 @@ mynamespace
  * A namespace is stored and retrieved as a Properties object.
  * Reading the spriteTexture properties out of the file above in this way could be done with the following code:
  
-\verbatim
-// Create the top-level Properties object.
-Properties* properties = Properties::create("example.properties");
-// Retrieve the "spriteTexture" namespace.
-Properties* spriteTexture = properties->getNamespace("spriteTexture");
+@verbatim
+    // Create the top-level Properties object.
+    Properties* properties = Properties::create("example.properties");
+    // Retrieve the "spriteTexture" namespace.
+    Properties* spriteTexture = properties->getNamespace("spriteTexture");
  
-// Get the values of known texture properties out of the namespace.
-const char* fileName = spriteTexture->getString("fileName");
-int width = spriteTexture->getInt("width");
-int height = spriteTexture->getInt("height");
+    // Get the values of known texture properties out of the namespace.
+    const char* fileName = spriteTexture->getString("fileName");
+    int width = spriteTexture->getInt("width");
+    int height = spriteTexture->getInt("height");
  
-// Deleting the top-level Properties object will clean up all nested namespaces.
-SAFE_DELETE(properties);
-\endverbatim
+    // Deleting the top-level Properties object will clean up all nested namespaces.
+    SAFE_DELETE(properties);
+@endverbatim
 
  * On the other hand, if the structure of the file is not known in advance its 
  * namespaces and name/value pairs can be retrieved one by one using the getNextNamespace()
  * and getNextProperty() methods.  The following method prints the contents of any properties file
  * to the console:
  
-\verbatim
-void printProperties(Properties* properties)
-{
-    // Print the name and ID of the current namespace.
-    const char* spacename = properties->getNamespace();
-    const char* id = properties->getId();
-    WARN_VARG("Namespace: %s  ID: %s\n{", spacename, id);
- 
-    // Print all properties in this namespace.
-    const char* name = properties->getNextProperty();
-    const char* value = NULL;
-    while (name != NULL)
+@verbatim
+    void printProperties(Properties* properties)
     {
-        value = properties->getString(name);
-        WARN_VARG("%s = %s", name, value);
-        name = properties->getNextProperty();
-    }
-    WARN("}\n");
+        // Print the name and ID of the current namespace.
+        const char* spacename = properties->getNamespace();
+        const char* id = properties->getId();
+        WARN_VARG("Namespace: %s  ID: %s\n{", spacename, id);
  
-    // Print the properties of every namespace within this one.
-    Properties* space = properties->getNextNamespace();
-    while (space != NULL)
-    {
-        printProperties(space);
-        space = properties->getNextNamespace();
+        // Print all properties in this namespace.
+        const char* name = properties->getNextProperty();
+        const char* value = NULL;
+        while (name != NULL)
+        {
+            value = properties->getString(name);
+            WARN_VARG("%s = %s", name, value);
+            name = properties->getNextProperty();
+        }
+        WARN("}\n");
+ 
+        // Print the properties of every namespace within this one.
+        Properties* space = properties->getNextNamespace();
+        while (space != NULL)
+        {
+            printProperties(space);
+            space = properties->getNextNamespace();
+        }
     }
-}
-\endverbatim
+@endverbatim
 
  * Note that this method does not keep track of the namespace hierarchy, but could be
  * modified to do so.  Also note that nothing in a properties file indicates the type

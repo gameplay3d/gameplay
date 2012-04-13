@@ -37,6 +37,7 @@
     <ClCompile Include="src\DepthStencilTarget.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
+    <ClCompile Include="src\FlowLayout.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\Form.cpp" />
     <ClCompile Include="src\FrameBuffer.cpp" />
@@ -128,6 +129,7 @@
     <ClInclude Include="src\DepthStencilTarget.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FileSystem.h" />
+    <ClInclude Include="src\FlowLayout.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Form.h" />
     <ClInclude Include="src\FrameBuffer.h" />
