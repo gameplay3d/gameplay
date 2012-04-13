@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 class MeshSkin;
-class Package;
+class Bundle;
 
 /**
  * Defines a basic hierachial structure of transformation spaces.
@@ -16,7 +16,7 @@ class Joint : public Node
 {
     friend class Node;
     friend class MeshSkin;
-    friend class Package;
+    friend class Bundle;
 
 public:
 

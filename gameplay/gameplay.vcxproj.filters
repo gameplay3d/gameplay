@@ -10,9 +10,6 @@
     <Filter Include="res\shaders">
       <UniqueIdentifier>{be0b36f1-49ed-4a06-9f1f-57c654a554fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="res\textures">
-      <UniqueIdentifier>{7c4ef2fb-63f2-4d5a-b31e-0dc78329abfd}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp">
@@ -73,9 +70,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Node.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Package.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Plane.cpp">
@@ -279,6 +273,9 @@
     <ClCompile Include="src\Layout.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Bundle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -348,9 +345,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Node.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Package.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Plane.h">
@@ -551,6 +545,9 @@
     <ClInclude Include="src\ThemeStyle.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Bundle.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\bumped-specular.vsh">
@@ -618,9 +615,6 @@
     </None>
     <None Include="src\PlatformMacOSX.mm">
       <Filter>src</Filter>
-    </None>
-    <None Include="res\textures\particle-default.png">
-      <Filter>res\textures</Filter>
     </None>
     <None Include="src\Curve.inl">
       <Filter>src</Filter>
