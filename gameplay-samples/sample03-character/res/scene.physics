@@ -47,3 +47,15 @@ rigidbody StaticMesh
     linearDamping = 0.025
     angularDamping = 0.16
 }
+
+character Boy
+{
+    type = CAPSULE  
+    radius = 1.2
+    height = 6.0
+    center = 0, 3.0, 0
+    center-absolute = true
+    mass = 20.0
+    maxStepHeight = 0
+    maxSlopeAngle = 0
+}

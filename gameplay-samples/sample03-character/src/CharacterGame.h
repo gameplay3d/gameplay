@@ -8,7 +8,7 @@ using namespace gameplay;
 /**
  * This is a mesh demo game for rendering Mesh.
  */
-class CharacterGame: public Game, public PhysicsCollisionObject::CollisionListener, public AnimationClip::Listener
+class CharacterGame: public Game
 {
 public:
     
@@ -31,15 +31,6 @@ public:
      * @see Game::keyEvent
      */
     void keyEvent(Keyboard::KeyEvent evt, int key);
-
-    /**
-     * @see PhysicsCollisionObject::CollisionListener::collisionEvent
-     */
-    void collisionEvent(PhysicsCollisionObject::CollisionListener::EventType type,
-                        const PhysicsCollisionObject::CollisionPair& collisionPair,
-                        const Vector3& contactPointA, const Vector3& contactPointB);
-
-    void animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type);
 
 protected:
 
@@ -73,19 +64,21 @@ private:
      */
     void drawSplash(void* param);
     
-    void initMaterial(Scene* scene, Node* node, Material* material);
+    void initializeCharacter();
+    void initializeMaterial(Scene* scene, Node* node, Material* material);
     bool initScene(Node* node, void* cookie);
     bool drawScene(Node* node, void* cookie);
     void loadAnimationClips(Node* node);
     void adjustCamera(long elapsedTime);
-    void play(const char* animation, PhysicsCharacter::AnimationFlags flags, float speed, float blendDuration);
+    void play(const char* id, bool repeat);
+    bool isJumping() const;
 
     Font* _font;
     Scene* _scene;
     PhysicsCharacter* _character;
     Node* _characterMeshNode;
     Animation* _animation;
-    unsigned int _animationState;
+    AnimationClip* _currentClip;
     int _rotateX;
     Gamepad* _gamepad;
     MaterialParameter* _materialParameterAlpha;

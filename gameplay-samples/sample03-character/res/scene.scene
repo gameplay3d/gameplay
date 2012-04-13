@@ -2,6 +2,11 @@ scene
 {
     path = res/scene.gpb
 
+    node BoyCharacter
+    {
+        character = res/scene.physics#Boy
+    }
+
     node BoyMesh
     {
         material = res/scene.material#Boy
