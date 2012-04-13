@@ -13,6 +13,10 @@
 		4208DEEA14A4079F00D3C511 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEE714A4079F00D3C511 /* Image.h */; };
 		4208DEEC14A407B900D3C511 /* Keyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEEB14A407B900D3C511 /* Keyboard.h */; };
 		4208DEEE14A407D500D3C511 /* Touch.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEED14A407D500D3C511 /* Touch.h */; };
+		422260D61537790F0011E3AB /* Bundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422260D41537790F0011E3AB /* Bundle.cpp */; };
+		422260D71537790F0011E3AB /* Bundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422260D41537790F0011E3AB /* Bundle.cpp */; };
+		422260D81537790F0011E3AB /* Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 422260D51537790F0011E3AB /* Bundle.h */; };
+		422260D91537790F0011E3AB /* Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 422260D51537790F0011E3AB /* Bundle.h */; };
 		4234D99E14686C52003031B3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4234D99D14686C52003031B3 /* Cocoa.framework */; };
 		4251B131152D049B002F6199 /* ScreenDisplayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4251B12E152D049B002F6199 /* ScreenDisplayer.h */; };
 		4251B132152D049B002F6199 /* ScreenDisplayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4251B12E152D049B002F6199 /* ScreenDisplayer.h */; };
@@ -99,8 +103,6 @@
 		42CD0E88147D8FF60000361E /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DF6147D8FF50000361E /* Model.h */; };
 		42CD0E89147D8FF60000361E /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DF7147D8FF50000361E /* Node.cpp */; };
 		42CD0E8A147D8FF60000361E /* Node.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DF8147D8FF50000361E /* Node.h */; };
-		42CD0E8B147D8FF60000361E /* Package.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DF9147D8FF50000361E /* Package.cpp */; };
-		42CD0E8C147D8FF60000361E /* Package.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DFA147D8FF50000361E /* Package.h */; };
 		42CD0E8D147D8FF60000361E /* ParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DFB147D8FF50000361E /* ParticleEmitter.cpp */; };
 		42CD0E8E147D8FF60000361E /* ParticleEmitter.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DFC147D8FF50000361E /* ParticleEmitter.h */; };
 		42CD0E8F147D8FF60000361E /* Pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DFD147D8FF50000361E /* Pass.cpp */; };
@@ -192,7 +194,6 @@
 		5B04C54C14BFCFE100EB0071 /* MeshSkin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DF3147D8FF50000361E /* MeshSkin.cpp */; };
 		5B04C54D14BFCFE100EB0071 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DF5147D8FF50000361E /* Model.cpp */; };
 		5B04C54E14BFCFE100EB0071 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DF7147D8FF50000361E /* Node.cpp */; };
-		5B04C54F14BFCFE100EB0071 /* Package.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DF9147D8FF50000361E /* Package.cpp */; };
 		5B04C55014BFCFE100EB0071 /* ParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DFB147D8FF50000361E /* ParticleEmitter.cpp */; };
 		5B04C55114BFCFE100EB0071 /* Pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DFD147D8FF50000361E /* Pass.cpp */; };
 		5B04C55214BFCFE100EB0071 /* PhysicsConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DFF147D8FF50000361E /* PhysicsConstraint.cpp */; };
@@ -264,7 +265,6 @@
 		5B04C59F14BFCFE100EB0071 /* MeshSkin.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DF4147D8FF50000361E /* MeshSkin.h */; };
 		5B04C5A014BFCFE100EB0071 /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DF6147D8FF50000361E /* Model.h */; };
 		5B04C5A114BFCFE100EB0071 /* Node.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DF8147D8FF50000361E /* Node.h */; };
-		5B04C5A214BFCFE100EB0071 /* Package.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DFA147D8FF50000361E /* Package.h */; };
 		5B04C5A314BFCFE100EB0071 /* ParticleEmitter.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DFC147D8FF50000361E /* ParticleEmitter.h */; };
 		5B04C5A414BFCFE100EB0071 /* Pass.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DFE147D8FF50000361E /* Pass.h */; };
 		5B04C5A514BFCFE100EB0071 /* PhysicsConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E00147D8FF50000361E /* PhysicsConstraint.h */; };
@@ -391,6 +391,8 @@
 		4208DEE814A4079F00D3C511 /* Image.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Image.inl; path = src/Image.inl; sourceTree = SOURCE_ROOT; };
 		4208DEEB14A407B900D3C511 /* Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Keyboard.h; path = src/Keyboard.h; sourceTree = SOURCE_ROOT; };
 		4208DEED14A407D500D3C511 /* Touch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Touch.h; path = src/Touch.h; sourceTree = SOURCE_ROOT; };
+		422260D41537790F0011E3AB /* Bundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Bundle.cpp; path = src/Bundle.cpp; sourceTree = SOURCE_ROOT; };
+		422260D51537790F0011E3AB /* Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bundle.h; path = src/Bundle.h; sourceTree = SOURCE_ROOT; };
 		4234D99A14686C52003031B3 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4234D99D14686C52003031B3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4251B12E152D049B002F6199 /* ScreenDisplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScreenDisplayer.h; path = src/ScreenDisplayer.h; sourceTree = SOURCE_ROOT; };
@@ -478,8 +480,6 @@
 		42CD0DF6147D8FF50000361E /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Model.h; path = src/Model.h; sourceTree = SOURCE_ROOT; };
 		42CD0DF7147D8FF50000361E /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Node.cpp; path = src/Node.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0DF8147D8FF50000361E /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Node.h; path = src/Node.h; sourceTree = SOURCE_ROOT; };
-		42CD0DF9147D8FF50000361E /* Package.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Package.cpp; path = src/Package.cpp; sourceTree = SOURCE_ROOT; };
-		42CD0DFA147D8FF50000361E /* Package.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Package.h; path = src/Package.h; sourceTree = SOURCE_ROOT; };
 		42CD0DFB147D8FF50000361E /* ParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleEmitter.cpp; path = src/ParticleEmitter.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0DFC147D8FF50000361E /* ParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleEmitter.h; path = src/ParticleEmitter.h; sourceTree = SOURCE_ROOT; };
 		42CD0DFD147D8FF50000361E /* Pass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Pass.cpp; path = src/Pass.cpp; sourceTree = SOURCE_ROOT; };
@@ -707,6 +707,8 @@
 				42CD0DC7147D8FF50000361E /* BoundingSphere.cpp */,
 				42CD0DC8147D8FF50000361E /* BoundingSphere.h */,
 				42CD0DC9147D8FF50000361E /* BoundingSphere.inl */,
+				422260D41537790F0011E3AB /* Bundle.cpp */,
+				422260D51537790F0011E3AB /* Bundle.h */,
 				5BD52636150F822A004C9099 /* Button.cpp */,
 				5BD52637150F822A004C9099 /* Button.h */,
 				42CD0DCA147D8FF50000361E /* Camera.cpp */,
@@ -779,8 +781,6 @@
 				5BB0823C14C6FEC40019975F /* Mouse.h */,
 				42CD0DF7147D8FF50000361E /* Node.cpp */,
 				42CD0DF8147D8FF50000361E /* Node.h */,
-				42CD0DF9147D8FF50000361E /* Package.cpp */,
-				42CD0DFA147D8FF50000361E /* Package.h */,
 				42CD0DFB147D8FF50000361E /* ParticleEmitter.cpp */,
 				42CD0DFC147D8FF50000361E /* ParticleEmitter.h */,
 				42CD0DFD147D8FF50000361E /* Pass.cpp */,
@@ -998,7 +998,6 @@
 				42CD0E86147D8FF60000361E /* MeshSkin.h in Headers */,
 				42CD0E88147D8FF60000361E /* Model.h in Headers */,
 				42CD0E8A147D8FF60000361E /* Node.h in Headers */,
-				42CD0E8C147D8FF60000361E /* Package.h in Headers */,
 				42CD0E8E147D8FF60000361E /* ParticleEmitter.h in Headers */,
 				42CD0E90147D8FF60000361E /* Pass.h in Headers */,
 				42CD0E92147D8FF60000361E /* PhysicsConstraint.h in Headers */,
@@ -1055,6 +1054,7 @@
 				42554EA3152BC35C000ED910 /* PhysicsCollisionShape.h in Headers */,
 				4251B131152D049B002F6199 /* ScreenDisplayer.h in Headers */,
 				4251B135152D049B002F6199 /* ThemeStyle.h in Headers */,
+				422260D81537790F0011E3AB /* Bundle.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1095,7 +1095,6 @@
 				5B04C59F14BFCFE100EB0071 /* MeshSkin.h in Headers */,
 				5B04C5A014BFCFE100EB0071 /* Model.h in Headers */,
 				5B04C5A114BFCFE100EB0071 /* Node.h in Headers */,
-				5B04C5A214BFCFE100EB0071 /* Package.h in Headers */,
 				5B04C5A314BFCFE100EB0071 /* ParticleEmitter.h in Headers */,
 				5B04C5A414BFCFE100EB0071 /* Pass.h in Headers */,
 				5B04C5A514BFCFE100EB0071 /* PhysicsConstraint.h in Headers */,
@@ -1151,6 +1150,7 @@
 				42554EA4152BC35C000ED910 /* PhysicsCollisionShape.h in Headers */,
 				4251B132152D049B002F6199 /* ScreenDisplayer.h in Headers */,
 				4251B136152D049B002F6199 /* ThemeStyle.h in Headers */,
+				422260D91537790F0011E3AB /* Bundle.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1254,7 +1254,6 @@
 				42CD0E85147D8FF60000361E /* MeshSkin.cpp in Sources */,
 				42CD0E87147D8FF60000361E /* Model.cpp in Sources */,
 				42CD0E89147D8FF60000361E /* Node.cpp in Sources */,
-				42CD0E8B147D8FF60000361E /* Package.cpp in Sources */,
 				42CD0E8D147D8FF60000361E /* ParticleEmitter.cpp in Sources */,
 				42CD0E8F147D8FF60000361E /* Pass.cpp in Sources */,
 				42CD0E91147D8FF60000361E /* PhysicsConstraint.cpp in Sources */,
@@ -1306,6 +1305,7 @@
 				42554EA1152BC35C000ED910 /* PhysicsCollisionShape.cpp in Sources */,
 				4251B133152D049B002F6199 /* ThemeStyle.cpp in Sources */,
 				4271C08E15337C8200B89DA7 /* Layout.cpp in Sources */,
+				422260D61537790F0011E3AB /* Bundle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1344,7 +1344,6 @@
 				5B04C54C14BFCFE100EB0071 /* MeshSkin.cpp in Sources */,
 				5B04C54D14BFCFE100EB0071 /* Model.cpp in Sources */,
 				5B04C54E14BFCFE100EB0071 /* Node.cpp in Sources */,
-				5B04C54F14BFCFE100EB0071 /* Package.cpp in Sources */,
 				5B04C55014BFCFE100EB0071 /* ParticleEmitter.cpp in Sources */,
 				5B04C55114BFCFE100EB0071 /* Pass.cpp in Sources */,
 				5B04C55214BFCFE100EB0071 /* PhysicsConstraint.cpp in Sources */,
@@ -1397,6 +1396,7 @@
 				42554EA2152BC35C000ED910 /* PhysicsCollisionShape.cpp in Sources */,
 				4251B134152D049B002F6199 /* ThemeStyle.cpp in Sources */,
 				4271C08F15337C8200B89DA7 /* Layout.cpp in Sources */,
+				422260D71537790F0011E3AB /* Bundle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

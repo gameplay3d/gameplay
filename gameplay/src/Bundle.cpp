@@ -5,26 +5,26 @@
 #include "Scene.h"
 #include "Joint.h"
 
-#define GPB_PACKAGE_VERSION_MAJOR 1
-#define GPB_PACKAGE_VERSION_MINOR 1
+#define BUNDLE_VERSION_MAJOR            1
+#define BUNDLE_VERSION_MINOR            1
 
-#define PACKAGE_TYPE_SCENE 1
-#define PACKAGE_TYPE_NODE 2
-#define PACKAGE_TYPE_ANIMATIONS 3
-#define PACKAGE_TYPE_ANIMATION 4
-#define PACKAGE_TYPE_ANIMATION_CHANNEL 5
-#define PACKAGE_TYPE_MMODEL 10
-#define PACKAGE_TYPE_MATERIAL 16
-#define PACKAGE_TYPE_EFFECT 18
-#define PACKAGE_TYPE_CAMERA 32
-#define PACKAGE_TYPE_LIGHT 33
-#define PACKAGE_TYPE_MESH 34
-#define PACKAGE_TYPE_MESHPART 35
-#define PACKAGE_TYPE_MESHSKIN 36
-#define PACKAGE_TYPE_FONT 128
+#define BUNDLE_TYPE_SCENE               1
+#define BUNDLE_TYPE_NODE                2
+#define BUNDLE_TYPE_ANIMATIONS          3
+#define BUNDLE_TYPE_ANIMATION           4
+#define BUNDLE_TYPE_ANIMATION_CHANNEL   5
+#define BUNDLE_TYPE_MODEL               10
+#define BUNDLE_TYPE_MATERIAL            16
+#define BUNDLE_TYPE_EFFECT              18
+#define BUNDLE_TYPE_CAMERA              32
+#define BUNDLE_TYPE_LIGHT               33
+#define BUNDLE_TYPE_MESH                34
+#define BUNDLE_TYPE_MESHPART            35
+#define BUNDLE_TYPE_MESHSKIN            36
+#define BUNDLE_TYPE_FONT                128
 
 // For sanity checking string reads
-#define PACKAGE_MAX_STRING_LENGTH 5000
+#define BUNDLE_MAX_STRING_LENGTH        5000
 
 namespace gameplay
 {
@@ -122,7 +122,7 @@ std::string readString(FILE* fp)
     }
 
     // Sanity check to detect if string length is far too big
-    assert(length < PACKAGE_MAX_STRING_LENGTH);
+    assert(length < BUNDLE_MAX_STRING_LENGTH);
 
     std::string str;
     if (length > 0)
@@ -169,9 +169,9 @@ Bundle* Bundle::create(const char* path)
 
     // Read version
     unsigned char ver[2];
-    if (fread(ver, 1, 2, fp) != 2 || ver[0] != GPB_PACKAGE_VERSION_MAJOR || ver[1] != GPB_PACKAGE_VERSION_MINOR)
+    if (fread(ver, 1, 2, fp) != 2 || ver[0] != BUNDLE_VERSION_MAJOR || ver[1] != BUNDLE_VERSION_MINOR)
     {
-        LOG_ERROR_VARG("Unsupported version (%d.%d) for bundle: %s (expected %d.%d)", (int)ver[0], (int)ver[1], path, GPB_PACKAGE_VERSION_MAJOR, GPB_PACKAGE_VERSION_MINOR);
+        LOG_ERROR_VARG("Unsupported version (%d.%d) for bundle: %s (expected %d.%d)", (int)ver[0], (int)ver[1], path, BUNDLE_VERSION_MAJOR, BUNDLE_VERSION_MINOR);
         fclose(fp);
         return NULL;
     }
@@ -324,11 +324,11 @@ Scene* Bundle::loadScene(const char* id)
     Reference* ref = NULL;
     if (id)
     {
-        ref = seekTo(id, PACKAGE_TYPE_SCENE);
+        ref = seekTo(id, BUNDLE_TYPE_SCENE);
     }
     else
     {
-        ref = seekToFirstType(PACKAGE_TYPE_SCENE);
+        ref = seekToFirstType(BUNDLE_TYPE_SCENE);
     }
     if (!ref)
     {
@@ -393,7 +393,7 @@ Scene* Bundle::loadScene(const char* id)
     for (unsigned int i = 0; i < _referenceCount; ++i)
     {
         Reference* ref = &_references[i];
-        if (ref->type == PACKAGE_TYPE_ANIMATIONS)
+        if (ref->type == BUNDLE_TYPE_ANIMATIONS)
         {
             // Found a match
             if (fseek(_file, ref->offset, SEEK_SET) != 0)
@@ -446,7 +446,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext, Node* nodeContext)
     if (node == NULL)
     {
         // If not yet found, search the ref table and read
-        Reference* ref = seekTo(id, PACKAGE_TYPE_NODE);
+        Reference* ref = seekTo(id, BUNDLE_TYPE_NODE);
         if (ref == NULL)
         {
             return NULL;
@@ -986,7 +986,7 @@ Mesh* Bundle::loadMesh(const char* id, const char* nodeId)
     long position = ftell(_file);
 
     // Seek to the specified Mesh
-    Reference* ref = seekTo(id, PACKAGE_TYPE_MESH);
+    Reference* ref = seekTo(id, BUNDLE_TYPE_MESH);
     if (ref == NULL)
     {
         return NULL;
@@ -1168,7 +1168,7 @@ Bundle::MeshData* Bundle::readMeshData(const char* url)
         return NULL;
 
     // Seek to mesh with specified ID in bundle
-    Reference* ref = pkg->seekTo(id.c_str(), PACKAGE_TYPE_MESH);
+    Reference* ref = pkg->seekTo(id.c_str(), BUNDLE_TYPE_MESH);
     if (ref == NULL)
         return NULL;
 
@@ -1183,7 +1183,7 @@ Bundle::MeshData* Bundle::readMeshData(const char* url)
 Font* Bundle::loadFont(const char* id)
 {
     // Seek to the specified Font
-    Reference* ref = seekTo(id, PACKAGE_TYPE_FONT);
+    Reference* ref = seekTo(id, BUNDLE_TYPE_FONT);
     if (ref == NULL)
     {
         return NULL;
