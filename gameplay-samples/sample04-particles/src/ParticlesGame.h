@@ -90,6 +90,7 @@ private:
     Slider* _energyMax;
     Slider* _emissionRate;
     CheckBox* _started;
+    Button* _reset;
     Button* _emit;
     Button* _zoomIn;
     Button* _zoomOut;

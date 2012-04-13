@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="sample04-particles" default="help">
+<project name="Particles" default="help">
 
     <!-- The local.properties file is created and updated by the 'android' tool.
          It contains the path to the SDK. It should *NOT* be checked into
@@ -62,10 +62,17 @@
        If this is not done in place, override ${out.dex.input.absolute.dir} */
        -->
     <target name="-post-compile">
-        <copy file="../res/box.gpb" tofile="assets/res/box.gpb"/>
-        <copy file="../res/box.material" tofile="assets/res/box.material"/>
-        <copy file="../../../gameplay/res/shaders/colored.vsh" tofile="assets/res/shaders/colored.vsh"/>
-        <copy file="../../../gameplay/res/shaders/colored.fsh" tofile="assets/res/shaders/colored.fsh"/>
+		<copy file="../res/arial40.gpb" tofile="assets/res/arial40.gpb"/>
+        <copy file="../res/editor.form" tofile="assets/res/editor.form"/>
+        <copy file="../res/editor.png" tofile="assets/res/editor.png"/>
+        <copy file="../res/editor.theme" tofile="assets/res/editor.theme"/>
+        <copy file="../res/explosion.particle" tofile="assets/res/explosion.particle"/>
+        <copy file="../res/explosion.png" tofile="assets/res/explosion.png"/>
+        <copy file="../res/fire.particle" tofile="assets/res/fire.particle"/>
+        <copy file="../res/fire.png" tofile="assets/res/fire.png"/>
+        <copy file="../res/smoke.particle" tofile="assets/res/smoke.particle"/>
+        <copy file="../res/smoke.png" tofile="assets/res/smoke.png"/>
+		<copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
     </target>
 
     <!-- Import the actual build file.

@@ -85,7 +85,7 @@ void SpaceshipGame::initialize()
     _stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 
     // Load our scene from file
-    Package* pkg = Package::create("res/spaceship.gpb");
+    Bundle* pkg = Bundle::create("res/spaceship.gpb");
     _scene = pkg->loadScene();
     SAFE_RELEASE(pkg);
 

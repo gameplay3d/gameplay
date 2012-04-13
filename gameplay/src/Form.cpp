@@ -201,36 +201,46 @@ namespace gameplay
     {
         std::vector<Control*>::const_iterator it;
 
-        // Batch all themed border and background sprites.
+        // Batch for all themed border and background sprites.
         spriteBatch->begin();
+
+        // Batch each font individually.
+        std::set<Font*>::const_iterator fontIter;
+        for (fontIter = _theme->_fonts.begin(); fontIter != _theme->_fonts.end(); fontIter++)
+        {
+            Font* font = *fontIter;
+            if (font)
+            {
+                font->begin();
+            }
+        }
 
         // Draw the form's border and background.
         // We don't pass the form's position to itself or it will be applied twice!
         Control::drawBorder(spriteBatch, Rectangle(0, 0, _bounds.width, _bounds.height));
 
-        // Draw each control's border and background.
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
 
-            //if (!_node || (*it)->isDirty())
-            {
-                control->drawBorder(spriteBatch, clip);
+            // Draw this control's border and background.
+            control->drawBorder(spriteBatch, clip);
 
-                // Add all themed foreground sprites (checkboxes etc.) to the same batch.
-                control->drawImages(spriteBatch, clip);
-            }
+            // Add all themed foreground sprites (checkboxes etc.) to the same batch.
+            control->drawImages(spriteBatch, clip);
+
+            control->drawText(clip);
         }
+
+        // Done all batching.
         spriteBatch->end();
 
-        // Draw all control foregrounds / text.
-        for (it = _controls.begin(); it < _controls.end(); it++)
+        for (fontIter = _theme->_fonts.begin(); fontIter != _theme->_fonts.end(); fontIter++)
         {
-            Control* control = *it;
-
-            //if (!_node || (*it)->isDirty())
+            Font* font = *fontIter;
+            if (font)
             {
-                control->drawText(clip);
+                font->end();
             }
         }
 
