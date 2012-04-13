@@ -1,16 +1,16 @@
-gameplay Binary file format
+gameplay Bundle File Format (.gpb)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 File Description
 ================
-A sample binary file format supporting definition of primitve and builtin objects.
+A simple binary bundle file format supporting definition of primitve and builtin objects.
 
 File Extension and Mime Type
 ============================
-File extension is '.bbb' and the mime type is 'application/bbb'
+File extension is '.gpb' and the mime type is 'application/gpb'
 
 File Structure
-===============
+==============
 
 Section      Name            Type
 ------------------------------------------------------------------------------------------------------
@@ -22,31 +22,31 @@ Data
              Objects         Object[]
 
 Objects
-===========
+=======
 Supported object types are defined in the table below. Object with unique ids are included
 in the Reference table (see below).
 
 References
-===========
+==========
 A Reference is an Object that has a unique id. The Reference contains the unique id of the
 object, a uint for the TypeID a uint for the offset into the package for the object definition.
 
 ID's
-===========
+====
 Object ID's are represented as a string which is guaranteed to be unique per file.
 Any object which host an object id should be added to the header Reference table so that it can
 be consumed by reference internally and externally.
 
 Xrefs
-===========
+=====
 Xrefs are string with a specific format used for referencing objects internal and external to
 a package. An xref with the format "#id" references an object within the current package with
 the given ID. Xrefs can also have the format "file#id", where "file" is the name of package file
 (relative to the locaiton of the current package) and "id" is the unique identifier of an object
-in that package.
+in that bundle.
 
 Primitives
-===========
+==========
 
 Name            Description
 ------------------------------------------------------------------------------------------------------

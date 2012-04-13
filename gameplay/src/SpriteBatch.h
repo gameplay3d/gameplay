@@ -24,7 +24,7 @@ namespace gameplay
  */
 class SpriteBatch
 {
-    friend class Package;
+    friend class Bundle;
 
 public:
 

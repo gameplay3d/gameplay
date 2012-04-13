@@ -29,7 +29,7 @@ protected:
     /**
      * Create an AbsoluteLayout.
      *
-     * @return an AbsoluteLayout object.
+     * @return An AbsoluteLayout object.
      */
     static AbsoluteLayout* create();
 

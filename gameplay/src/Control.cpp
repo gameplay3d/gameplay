@@ -36,6 +36,7 @@ namespace gameplay
     {
         _style = style;
 
+        // Properties not defined by the style.
         _alignment = getAlignment(properties->getString("alignment"));
         _autoWidth = properties->getBool("autoWidth");
         _autoHeight = properties->getBool("autoHeight");
@@ -68,6 +69,35 @@ namespace gameplay
         const char* id = properties->getId();
         if (id)
             _id = id;
+
+        // Potentially override themed properties for all states.
+        overrideThemedProperties(properties, STATE_ALL);
+
+        // Override themed properties on specific states.
+        Properties* stateSpace = properties->getNextNamespace();
+        while (stateSpace != NULL)
+        {
+            std::string stateName(stateSpace->getNamespace());
+            std::transform(stateName.begin(), stateName.end(), stateName.begin(), (int(*)(int))toupper);
+            if (stateName == "STATENORMAL")
+            {
+                overrideThemedProperties(stateSpace, NORMAL);
+            }
+            else if (stateName == "STATEFOCUS")
+            {
+                overrideThemedProperties(stateSpace, FOCUS);
+            }
+            else if (stateName == "STATEACTIVE")
+            {
+                overrideThemedProperties(stateSpace, ACTIVE);
+            }
+            else if (stateName == "STATEDISABLED")
+            {
+                overrideThemedProperties(stateSpace, DISABLED);
+            }
+
+            stateSpace = properties->getNextNamespace();
+        }
     }
 
     const char* Control::getID() const
@@ -961,6 +991,105 @@ namespace gameplay
         WARN_VARG("%d", sizeof(Theme::Style::Overlay));
         _style = new Theme::Style(*_style);
         _styleOverridden = true;
+    }
+
+    void Control::overrideThemedProperties(Properties* properties, unsigned char states)
+    {
+        Theme::ImageList* imageList = NULL;
+        Theme::Image* cursor = NULL;
+        Theme::Skin* skin = NULL;
+        _style->_theme->lookUpSprites(properties, &imageList, &cursor, &skin);
+
+        if (imageList)
+        {
+            setImageList(imageList, states);
+        }
+
+        if (cursor)
+        {
+            setCursor(cursor, states);
+        }
+
+        if (skin)
+        {
+            setSkin(skin, states);
+        }
+
+        if (properties->exists("font"))
+        {
+            Font* font = Font::create(properties->getString("font"));
+            setFont(font, states);
+            font->release();
+        }
+
+        if (properties->exists("fontSize"))
+        {
+            setFontSize(properties->getInt("fontSize"), states);
+        }
+
+        if (properties->exists("textColor"))
+        {
+            Vector4 textColor(0, 0, 0, 1);
+            properties->getColor("textColor", &textColor);
+            setTextColor(textColor, states);
+        }
+
+        if (properties->exists("textAlignment"))
+        {
+            setTextAlignment(Font::getJustify(properties->getString("textAlignment")), states);
+        }
+
+        if (properties->exists("rightToLeft"))
+        {
+            setTextRightToLeft(properties->getBool("rightToLeft"), states);
+        }
+
+        if (properties->exists("opacity"))
+        {
+            setOpacity(properties->getFloat("opacity"), states);
+        }
+    }
+
+    void Control::setImageList(Theme::ImageList* imageList, unsigned char states)
+    {
+        overrideStyle();
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
+        getOverlays(states, overlays);
+
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
+        {
+            overlays[i]->setImageList(imageList);
+        }
+
+        _dirty = true;
+    }
+
+    void Control::setCursor(Theme::Image* cursor, unsigned char states)
+    {
+        overrideStyle();
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
+        getOverlays(states, overlays);
+
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
+        {
+            overlays[i]->setCursor(cursor);
+        }
+
+        _dirty = true;
+    }
+
+    void Control::setSkin(Theme::Skin* skin, unsigned char states)
+    {
+        overrideStyle();
+        Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
+        getOverlays(states, overlays);
+
+        for (int i = 0; i < Theme::Style::OVERLAY_MAX - 1 && overlays[i]; ++i)
+        {
+            overlays[i]->setSkin(skin);
+        }
+
+        _dirty = true;
     }
 
     Control::Alignment Control::getAlignment(const char* alignment)

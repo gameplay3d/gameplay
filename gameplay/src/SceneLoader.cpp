@@ -1,6 +1,6 @@
 #include "Base.h"
 #include "Game.h"
-#include "Package.h"
+#include "Bundle.h"
 #include "SceneLoader.h"
 
 namespace gameplay
@@ -438,15 +438,15 @@ void SceneLoader::applyNodeUrls(Scene* scene)
             {
                 // An external file was referenced, so load the node from file and then insert it into the scene with the new ID.
 
-                // TODO: Revisit this to determine if we should cache Package objects for the duration of the scene
-                // load to prevent constantly creating/destroying the same externally referenced packages each time
+                // TODO: Revisit this to determine if we should cache Bundle objects for the duration of the scene
+                // load to prevent constantly creating/destroying the same externally referenced bundles each time
                 // a url with a file is encountered.
-                Package* tmpPackage = Package::create(snp._file.c_str());
-                if (tmpPackage)
+                Bundle* tmpBundle = Bundle::create(snp._file.c_str());
+                if (tmpBundle)
                 {
                     if (sceneNode._exactMatch)
                     {
-                        Node* node = tmpPackage->loadNode(snp._id.c_str());
+                        Node* node = tmpBundle->loadNode(snp._id.c_str());
                         if (node)
                         {
                             node->setId(sceneNode._nodeID);
@@ -460,18 +460,18 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                     }
                     else
                     {
-                        // Search for nodes in the package using a partial match
+                        // Search for nodes in the bundle using a partial match
                         std::string partialMatch = snp._id;
-                        unsigned int objectCount = tmpPackage->getObjectCount();
+                        unsigned int objectCount = tmpBundle->getObjectCount();
                         unsigned int matchCount = 0;
                         for (unsigned int k = 0; k < objectCount; ++k)
                         {
-                            const char* objid = tmpPackage->getObjectID(k);
+                            const char* objid = tmpBundle->getObjectID(k);
                             if (strstr(objid, snp._id.c_str()) == objid)
                             {
                                 // This object ID matches (starts with).
                                 // Try to load this object as a Node.
-                                Node* node = tmpPackage->loadNode(objid);
+                                Node* node = tmpBundle->loadNode(objid);
                                 if (node)
                                 {
                                     // Construct a new node ID using _nodeID plus the remainder of the partial match.
@@ -490,7 +490,7 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                         }
                     }
 
-                    SAFE_RELEASE(tmpPackage);
+                    SAFE_RELEASE(tmpBundle);
                 }
                 else
                 {
@@ -755,19 +755,19 @@ PhysicsConstraint* SceneLoader::loadHingeConstraint(const Properties* constraint
 Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
 {
     // Load the main scene from the specified path.
-    Package* package = Package::create(_path.c_str());
-    if (!package)
+    Bundle* bundle = Bundle::create(_path.c_str());
+    if (!bundle)
     {
         WARN_VARG("Failed to load scene GPB file '%s'.", _path.c_str());
         return NULL;
     }
 
     const char* sceneID = strlen(sceneProperties->getId()) == 0 ? NULL : sceneProperties->getId();
-    Scene* scene = package->loadScene(sceneID);
+    Scene* scene = bundle->loadScene(sceneID);
     if (!scene)
     {
         WARN_VARG("Failed to load scene from '%s'.", _path.c_str());
-        SAFE_RELEASE(package);
+        SAFE_RELEASE(bundle);
         return NULL;
     }
 
@@ -780,7 +780,7 @@ Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
             scene->setActiveCamera(camera->getCamera());
     }
 
-    SAFE_RELEASE(package);
+    SAFE_RELEASE(bundle);
     return scene;
 }
 
