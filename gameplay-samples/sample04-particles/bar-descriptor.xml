@@ -53,7 +53,17 @@
     <category>core.games</category>
 
     <asset path="icon.png">icon.png</asset>
-    <asset path="res">res</asset>
+    <asset path="res/arial40.gpb">res/arial40.gpb</asset>
+    <asset path="res/editor.form">res/editor.form</asset>
+    <asset path="res/editor.png">res/editor.png</asset>
+    <asset path="res/editor.theme">res/editor.theme</asset>
+    <asset path="res/explosion.particle">res/explosion.particle</asset>
+    <asset path="res/explosion.png">res/explosion.png</asset>
+    <asset path="res/fire.particle">res/fire.particle</asset>
+    <asset path="res/fire.png">res/fire.png</asset>
+    <asset path="res/smoke.particle">res/smoke.particle</asset>
+    <asset path="res/smoke.png">res/smoke.png</asset>
+    <asset path="${workspace_loc:/gameplay/res/logo_powered_white.png}">res/logo_powered_white.png</asset>
 
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

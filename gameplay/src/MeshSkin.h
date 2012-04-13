@@ -7,7 +7,7 @@
 namespace gameplay
 {
 
-class Package;
+class Bundle;
 class Model;
 class Joint;
 class Node;
@@ -17,7 +17,7 @@ class Node;
  */
 class MeshSkin : public Transform::Listener
 {
-    friend class Package;
+    friend class Bundle;
     friend class Model;
     friend class Joint;
 

@@ -5,7 +5,7 @@
 #include "PhysicsMotionState.h"
 #include "Game.h"
 #include "MeshPart.h"
-#include "Package.h"
+#include "Bundle.h"
 
 #include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 
@@ -927,7 +927,7 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
         return NULL;
     }
 
-    // The mesh must have a valid URL (i.e. it must have been loaded from a Package)
+    // The mesh must have a valid URL (i.e. it must have been loaded from a Bundle)
     // in order to fetch mesh data for computing mesh rigid body.
     if (strlen(mesh->getUrl()) == 0)
     {
@@ -935,7 +935,7 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
         return NULL;
     }
 
-    Package::MeshData* data = Package::readMeshData(mesh->getUrl());
+    Bundle::MeshData* data = Bundle::readMeshData(mesh->getUrl());
     if (data == NULL)
     {
         return NULL;
@@ -968,7 +968,7 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
     {
         PHY_ScalarType indexType = PHY_UCHAR;
         int indexStride = 0;
-        Package::MeshPartData* meshPart = NULL;
+        Bundle::MeshPartData* meshPart = NULL;
         for (unsigned int i = 0; i < partCount; i++)
         {
             meshPart = data->parts[i];

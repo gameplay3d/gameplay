@@ -69,6 +69,7 @@ void ParticlesGame::initialize()
     _energyMax = (Slider*)_form->getControl("energyMax");
     _emissionRate = (Slider*)_form->getControl("emissionRate");
     _started = (CheckBox*)_form->getControl("started");
+    _reset = (Button*)_form->getControl("reset");
     _emit = (Button*)_form->getControl("emit");
     _spiralFlame = (RadioButton*)_form->getControl("spiralFlame");
     _smoke = (RadioButton*)_form->getControl("smoke");
@@ -96,6 +97,7 @@ void ParticlesGame::initialize()
     _energyMax->addListener(this, Listener::VALUE_CHANGED);
     _emissionRate->addListener(this, Listener::VALUE_CHANGED);
     _started->addListener(this, Listener::VALUE_CHANGED);
+    _reset->addListener(this, Listener::CLICK);
     _emit->addListener(this, Listener::CLICK);
     _spiralFlame->addListener(this, Listener::VALUE_CHANGED);
     _smoke->addListener(this, Listener::VALUE_CHANGED);
@@ -278,7 +280,14 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         }
         break;
     case Listener::CLICK:
-        if (control == _emit)
+        if (control == _reset)
+        {
+            _particleEmitterNode->setParticleEmitter(NULL);
+            SAFE_RELEASE(emitter);
+            emitter = _particleEmitters[_particleEmitterIndex] = ParticleEmitter::create(_particleFiles[_particleEmitterIndex].c_str());
+            emitterChanged();
+        }
+        else if (control == _emit)
         {
             unsigned int burstSize = (unsigned int)_burstSize->getValue();
             emitter->emit(burstSize);
@@ -490,6 +499,7 @@ void ParticlesGame::loadEmitters()
         std::string s = "res/";
         s += _particleFiles[i].c_str();
         s += ".particle";
+        _particleFiles[i] = s;
         ParticleEmitter* emitter = ParticleEmitter::create(s.c_str());
         _particleEmitters.push_back(emitter);
     }
@@ -505,7 +515,6 @@ void ParticlesGame::emitterChanged()
     if (prevEmitter)
     {
         prevEmitter->stop();
-        prevEmitter->addRef();
     }
 
     ParticleEmitter* emitter = _particleEmitters[_particleEmitterIndex];
@@ -521,6 +530,10 @@ void ParticlesGame::emitterChanged()
         _started->setChecked(true);
         emitter->start();
     }
+
+    // Reset camera view and zoom.
+    _scene->getActiveCamera()->getNode()->setTranslation(0.0f, 0.0f, 40.0f);
+    _cameraParent->setIdentity();
 
     char txt[25];
 

@@ -73,7 +73,8 @@ scene
 
     node Door
     {
-        material[0] = res/scene.material#White
+        material[0] = res/scene.material#DoorHandle
+        material[1] = res/scene.material#White
         rigidbody = res/scene.physics#StaticBox
     }
 
