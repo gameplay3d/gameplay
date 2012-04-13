@@ -199,12 +199,12 @@ Bundle* Bundle::create(const char* path)
     }
 
     // Keep file open for faster reading later
-    Bundle* pkg = new Bundle(path);
-    pkg->_referenceCount = refCount;
-    pkg->_references = refs;
-    pkg->_file = fp;
+    Bundle* bundle = new Bundle(path);
+    bundle->_referenceCount = refCount;
+    bundle->_references = refs;
+    bundle->_file = fp;
 
-    return pkg;
+    return bundle;
 }
 
 Bundle::Reference* Bundle::find(const char* id) const
@@ -1163,19 +1163,19 @@ Bundle::MeshData* Bundle::readMeshData(const char* url)
     std::string id = urlstring.substr(pos + 1);
 
     // Load bundle
-    Bundle* pkg = Bundle::create(file.c_str());
-    if (pkg == NULL)
+    Bundle* bundle = Bundle::create(file.c_str());
+    if (bundle == NULL)
         return NULL;
 
     // Seek to mesh with specified ID in bundle
-    Reference* ref = pkg->seekTo(id.c_str(), BUNDLE_TYPE_MESH);
+    Reference* ref = bundle->seekTo(id.c_str(), BUNDLE_TYPE_MESH);
     if (ref == NULL)
         return NULL;
 
     // Read mesh data from current file position
-    MeshData* meshData = pkg->readMeshData();
+    MeshData* meshData = bundle->readMeshData();
 
-    SAFE_RELEASE(pkg);
+    SAFE_RELEASE(bundle);
 
     return meshData;
 }
