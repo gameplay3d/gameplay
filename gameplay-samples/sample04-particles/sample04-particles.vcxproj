@@ -22,7 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\gameplay\gameplay.vcxproj">
-      <Project>{1032ba4b-57eb-4348-9e03-29dd63e80e4a}</Project>
+      <Project>{1032BA4B-57EB-4348-9E03-29DD63E80E4A}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -38,6 +38,7 @@
     <None Include="res\smoke.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
+    <ProjectGuid>{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>
     </RootNamespace>
