@@ -96,7 +96,7 @@ Theme::Style::Overlay::Overlay(const Overlay& copy) : _skin(NULL), _cursor(NULL)
     }
     if (copy._cursor)
     {
-        _cursor = new Image(*copy._cursor);
+        _cursor = new ThemeImage(*copy._cursor);
     }
     if (copy._imageList)
     {
@@ -263,7 +263,7 @@ void Theme::Style::Overlay::setTextColor(const Vector4& color)
 
 const Rectangle& Theme::Style::Overlay::getImageRegion(const char* id) const
 {
-    Image* image = _imageList->getImage(id);
+    ThemeImage* image = _imageList->getImage(id);
     if (image)
     {
         return image->getRegion();
@@ -276,7 +276,7 @@ const Rectangle& Theme::Style::Overlay::getImageRegion(const char* id) const
     
 void Theme::Style::Overlay::setImageRegion(const char* id, const Rectangle& region, float tw, float th)
 {
-    Image* image = _imageList->getImage(id);
+    ThemeImage* image = _imageList->getImage(id);
     assert(image);
     image->_region.set(region);
     generateUVs(tw, th, region.x, region.y, region.width, region.height, &(image->_uvs));
@@ -284,7 +284,7 @@ void Theme::Style::Overlay::setImageRegion(const char* id, const Rectangle& regi
 
 const Vector4& Theme::Style::Overlay::getImageColor(const char* id) const
 {
-    Image* image = _imageList->getImage(id);
+    ThemeImage* image = _imageList->getImage(id);
     if (image)
     {
         return image->getColor();
@@ -297,14 +297,14 @@ const Vector4& Theme::Style::Overlay::getImageColor(const char* id) const
 
 void Theme::Style::Overlay::setImageColor(const char* id, const Vector4& color)
 {
-    Image* image = _imageList->getImage(id);
+    ThemeImage* image = _imageList->getImage(id);
     assert(image);
     image->_color.set(color);
 }
 
 const Theme::UVs& Theme::Style::Overlay::getImageUVs(const char* id) const
 {
-    Image* image = _imageList->getImage(id);
+    ThemeImage* image = _imageList->getImage(id);
     if (image)
     {
         return image->getUVs();
@@ -383,7 +383,7 @@ Theme::Skin* Theme::Style::Overlay::getSkin() const
     return _skin;
 }
 
-void Theme::Style::Overlay::setCursor(Image* cursor)
+void Theme::Style::Overlay::setCursor(ThemeImage* cursor)
 {
     if (_cursor != cursor)
     {
@@ -397,7 +397,7 @@ void Theme::Style::Overlay::setCursor(Image* cursor)
     }
 }
 
-Theme::Image* Theme::Style::Overlay::getCursor() const
+Theme::ThemeImage* Theme::Style::Overlay::getCursor() const
 {
     return _cursor;
 }

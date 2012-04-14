@@ -138,9 +138,9 @@ private:
 
         Theme::Skin* getSkin() const;
 
-        void setCursor(Theme::Image* cursor);
+        void setCursor(Theme::ThemeImage* cursor);
             
-        Theme::Image* getCursor() const;
+        Theme::ThemeImage* getCursor() const;
             
         void setImageList(Theme::ImageList* imageList);
             
@@ -149,7 +149,7 @@ private:
         void applyAnimationValueOpacity(float opacity, float blendWeight);
 
         Skin* _skin;
-        Theme::Image* _cursor;
+        Theme::ThemeImage* _cursor;
         Theme::ImageList* _imageList;
         Font* _font;
         unsigned int _fontSize;

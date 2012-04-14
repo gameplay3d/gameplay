@@ -681,32 +681,34 @@ namespace gameplay
             y = clip.y;
 
         _clip.set(x, y, width, height);
+
+        _skin = getSkin(_state);
+        _opacity = getOpacity(_state);
     }
 
     void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
-        if (_bounds.width <= 0 || _bounds.height <= 0)
+        if (!_skin || _bounds.width <= 0 || _bounds.height <= 0)
             return;
 
         Vector2 pos(clip.x + _bounds.x, clip.y + _bounds.y);
 
         // Get the border and background images for this control's current state.
-        //Theme::UVs topLeft, top, topRight, left, center, right, bottomLeft, bottom, bottomRight;
-        const Theme::UVs& topLeft = getSkinUVs(Theme::Skin::TOP_LEFT, _state);
-        const Theme::UVs& top = getSkinUVs(Theme::Skin::TOP, _state);
-        const Theme::UVs& topRight = getSkinUVs(Theme::Skin::TOP_RIGHT, _state);
-        const Theme::UVs& left = getSkinUVs(Theme::Skin::LEFT, _state);
-        const Theme::UVs& center = getSkinUVs(Theme::Skin::CENTER, _state);
-        const Theme::UVs& right = getSkinUVs(Theme::Skin::RIGHT, _state);
-        const Theme::UVs& bottomLeft = getSkinUVs(Theme::Skin::BOTTOM_LEFT, _state);
-        const Theme::UVs& bottom = getSkinUVs(Theme::Skin::BOTTOM, _state);
-        const Theme::UVs& bottomRight = getSkinUVs(Theme::Skin::BOTTOM_RIGHT, _state);
+        const Theme::UVs& topLeft = _skin->getUVs(Theme::Skin::TOP_LEFT);
+        const Theme::UVs& top = _skin->getUVs(Theme::Skin::TOP);
+        const Theme::UVs& topRight = _skin->getUVs(Theme::Skin::TOP_RIGHT);
+        const Theme::UVs& left = _skin->getUVs(Theme::Skin::LEFT);
+        const Theme::UVs& center = _skin->getUVs(Theme::Skin::CENTER);
+        const Theme::UVs& right = _skin->getUVs(Theme::Skin::RIGHT);
+        const Theme::UVs& bottomLeft = _skin->getUVs(Theme::Skin::BOTTOM_LEFT);
+        const Theme::UVs& bottom = _skin->getUVs(Theme::Skin::BOTTOM);
+        const Theme::UVs& bottomRight = _skin->getUVs(Theme::Skin::BOTTOM_RIGHT);
 
         // Calculate screen-space positions.
         const Theme::Border& border = getBorder(_state);
         const Theme::Padding& padding = getPadding();
-        Vector4 skinColor = getSkinColor(_state);
-        skinColor.w *= getOpacity(_state);
+        Vector4 skinColor = _skin->getColor();
+        skinColor.w *= _opacity;
 
         float midWidth = _bounds.width - border.left - border.right;
         float midHeight = _bounds.height - border.top - border.bottom;
@@ -788,6 +790,11 @@ namespace gameplay
         }
 
         return NORMAL;
+    }
+
+    Theme::ThemeImage* Control::getImage(const char* id, State state)
+    {
+        return getOverlay(state)->getImageList()->getImage(id);
     }
 
     // Implementation of AnimationHandler
@@ -996,7 +1003,7 @@ namespace gameplay
     void Control::overrideThemedProperties(Properties* properties, unsigned char states)
     {
         Theme::ImageList* imageList = NULL;
-        Theme::Image* cursor = NULL;
+        Theme::ThemeImage* cursor = NULL;
         Theme::Skin* skin = NULL;
         _style->_theme->lookUpSprites(properties, &imageList, &cursor, &skin);
 
@@ -1064,7 +1071,7 @@ namespace gameplay
         _dirty = true;
     }
 
-    void Control::setCursor(Theme::Image* cursor, unsigned char states)
+    void Control::setCursor(Theme::ThemeImage* cursor, unsigned char states)
     {
         overrideStyle();
         Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
@@ -1090,6 +1097,11 @@ namespace gameplay
         }
 
         _dirty = true;
+    }
+
+    Theme::Skin* Control::getSkin(State state)
+    {
+        return getOverlay(state)->getSkin();
     }
 
     Control::Alignment Control::getAlignment(const char* alignment)

@@ -86,6 +86,8 @@ protected:
      */
     virtual void initialize(Theme::Style* style, Properties* properties);
 
+    void update(const Rectangle& clip);
+
     /**
      * Draw this label's text.
      *
@@ -94,6 +96,8 @@ protected:
     void drawText(const Rectangle& clip);
 
     std::string _text;      // The text displayed by this label.
+    Font* _font;
+    Vector4 _textColor;
 
 private:
 

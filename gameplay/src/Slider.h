@@ -149,10 +149,17 @@ protected:
      */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
+    void update(const Rectangle& clip);
+
     float _min;
     float _max;
     float _step;
     float _value;
+
+    Theme::ThemeImage* _minImage;
+    Theme::ThemeImage* _maxImage;
+    Theme::ThemeImage* _trackImage;
+    Theme::ThemeImage* _markerImage;
 
 private:
 
