@@ -2,7 +2,7 @@
 #include "Font.h"
 #include "Game.h"
 #include "FileSystem.h"
-#include "Package.h"
+#include "Bundle.h"
 
 // Default font vertex shader
 #define FONT_VSH \
@@ -78,9 +78,9 @@ Font* Font::create(const char* path, const char* id)
         }
     }
 
-    // Load the package.
-    Package* pkg = Package::create(path);
-    if (pkg == NULL)
+    // Load the bundle.
+    Bundle* bundle = Bundle::create(path);
+    if (bundle == NULL)
     {
         return NULL;
     }
@@ -89,20 +89,20 @@ Font* Font::create(const char* path, const char* id)
 
     if (id == NULL)
     {
-        // Get the ID of the first/only object in the package (assume it's a Font).
+        // Get the ID of the first/only object in the bundle (assume it's a Font).
         const char* id;
-        if (pkg->getObjectCount() != 1 || (id = pkg->getObjectID(0)) == NULL)
+        if (bundle->getObjectCount() != 1 || (id = bundle->getObjectID(0)) == NULL)
         {
             return NULL;
         }
 
-        // Load the font using the ID of the first object in the package.
-        font = pkg->loadFont(pkg->getObjectID(0));
+        // Load the font using the ID of the first object in the bundle.
+        font = bundle->loadFont(bundle->getObjectID(0));
     }
     else
     {
         // Load the font with the given ID.
-        font = pkg->loadFont(id);
+        font = bundle->loadFont(id);
     }
 
     if (font)
@@ -111,7 +111,7 @@ Font* Font::create(const char* path, const char* id)
         __fontCache.push_back(font);
     }
 
-    SAFE_RELEASE(pkg);
+    SAFE_RELEASE(bundle);
 
     return font;
 }

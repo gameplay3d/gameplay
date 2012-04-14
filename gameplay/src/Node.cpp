@@ -15,6 +15,7 @@
 // Node property flags
 #define NODE_FLAG_VISIBLE 1
 #define NODE_FLAG_TRANSPARENT 2
+#define NODE_FLAG_DYNAMIC 4
 
 namespace gameplay
 {
@@ -233,6 +234,19 @@ void Node::setTransparent(bool transparent)
         _nodeFlags |= NODE_FLAG_TRANSPARENT;
     else
         _nodeFlags &= ~NODE_FLAG_TRANSPARENT;
+}
+
+bool Node::isDynamic() const
+{
+    return ((_nodeFlags & NODE_FLAG_DYNAMIC) == NODE_FLAG_DYNAMIC);
+}
+
+void Node::setDynamic(bool dynamic)
+{
+    if (dynamic)
+        _nodeFlags |= NODE_FLAG_DYNAMIC;
+    else
+        _nodeFlags &= ~NODE_FLAG_DYNAMIC;
 }
 
 void* Node::getUserPointer() const
@@ -1004,8 +1018,8 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
     // Check if the properties is valid.
     if (!properties || 
         !(strcmp(properties->getNamespace(), "character") == 0 || 
-        strcmp(properties->getNamespace(), "ghost") == 0 || 
-        strcmp(properties->getNamespace(), "rigidbody") == 0))
+        strcmp(properties->getNamespace(), "ghostObject") == 0 || 
+        strcmp(properties->getNamespace(), "rigidBody") == 0))
     {
         WARN("Failed to load collision object from properties object: must be non-null object and have namespace equal to \'character\', \'ghost\', or \'rigidbody\'.");
         return NULL;
@@ -1015,11 +1029,11 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
     {
         _collisionObject = PhysicsCharacter::create(this, properties);
     }
-    else if (strcmp(properties->getNamespace(), "ghost") == 0)
+    else if (strcmp(properties->getNamespace(), "ghostObject") == 0)
     {
         _collisionObject = PhysicsGhostObject::create(this, properties);
     }
-    else if (strcmp(properties->getNamespace(), "rigidbody") == 0)
+    else if (strcmp(properties->getNamespace(), "rigidBody") == 0)
     {
         _collisionObject = PhysicsRigidBody::create(this, properties);
     }

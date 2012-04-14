@@ -16,7 +16,7 @@
 namespace gameplay
 {
 
-class Package;
+class Bundle;
 class Scene;
 class Form;
 
@@ -26,7 +26,7 @@ class Form;
 class Node : public Transform, public Ref
 {
     friend class Scene;
-    friend class Package;
+    friend class Bundle;
     friend class MeshSkin;
 
 public:
@@ -147,6 +147,26 @@ public:
      * @param transparent Whether the node is transparent.
      */
     void setTransparent(bool transparent);
+
+    /**
+     * Returns whether this node is dynamic.
+     *
+     * The dynamic propery can be used to flag nodes as being non-static.
+     * This can be useful for modifying behavior or rendering/material
+     * logic at runtime for static vs dynamic (moving) objects. An
+     * example would be determing whether to use static or  dyanmic
+     * lighting materials for node models during loading.
+     *
+     * @return Whether this node is dynamic (false by default).
+     */
+    bool isDynamic() const;
+
+    /**
+     * Sets whether this node is dynamic.
+     *
+     * @param dynamic Whether the node is dynamic.
+     */
+    void setDynamic(bool dynamic);
 
     /**
      * Returns the user pointer for this node.
@@ -613,6 +633,9 @@ private:
 
 protected:
 
+    /**
+     * Defines a pointer and cleanup callback to custom user data that can be store in a Node.
+     */
     struct UserData
     {
         UserData() : pointer(NULL), cleanupCallback(NULL) {}

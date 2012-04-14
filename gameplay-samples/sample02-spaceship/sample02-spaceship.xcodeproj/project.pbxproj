@@ -44,7 +44,7 @@
 /* Begin PBXFileReference section */
 		42458CBA14C3AB4D00EFFB61 /* sample02-spaceship-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample02-spaceship-ios.plist"; sourceTree = "<group>"; };
 		42C932E31491A18F0098216A /* sample02-spaceship-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample02-spaceship-macosx.plist"; sourceTree = "<group>"; };
-		42CCD516146EBF3600353661 /* sample02-spaceship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample02-spaceship.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample02-spaceship-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD51A146EBF3600353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42CCD547146EC0AE00353661 /* SpaceshipGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SpaceshipGame.cpp; path = src/SpaceshipGame.cpp; sourceTree = SOURCE_ROOT; };
 		42CCD548146EC0AE00353661 /* SpaceshipGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpaceshipGame.h; path = src/SpaceshipGame.h; sourceTree = SOURCE_ROOT; };
@@ -146,7 +146,7 @@
 		42CCD517146EBF3600353661 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				42CCD516146EBF3600353661 /* sample02-spaceship.app */,
+				42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */,
 				5B43D1B414C35A0E008A5D9D /* sample02-spaceship.app */,
 			);
 			name = Products;
@@ -213,7 +213,7 @@
 			);
 			name = "sample02-spaceship-macosx";
 			productName = "sample02-spaceship";
-			productReference = 42CCD516146EBF3600353661 /* sample02-spaceship.app */;
+			productReference = 42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */;
 			productType = "com.apple.product-type.application";
 		};
 		5B43D19D14C35A0E008A5D9D /* sample02-spaceship-ios */ = {
@@ -378,7 +378,7 @@
 		42CCD535146EBF3600353661 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -406,7 +406,7 @@
 		42CCD536146EBF3600353661 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -434,7 +434,7 @@
 		5B43D1B214C35A0E008A5D9D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
@@ -467,7 +467,7 @@
 		5B43D1B314C35A0E008A5D9D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
