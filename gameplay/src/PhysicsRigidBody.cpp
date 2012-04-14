@@ -145,9 +145,9 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
 {
     // Check if the properties is valid and has a valid namespace.
     assert(properties);
-    if (!properties || !(strcmp(properties->getNamespace(), "rigidbody") == 0))
+    if (!properties || !(strcmp(properties->getNamespace(), "rigidBody") == 0))
     {
-        WARN("Failed to load rigid body from properties object: must be non-null object and have namespace equal to \'rigidbody\'.");
+        WARN("Failed to load rigid body from properties object: must be non-null object and have namespace equal to \'rigidBody\'.");
         return NULL;
     }
 

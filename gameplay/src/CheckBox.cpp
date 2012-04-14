@@ -101,7 +101,7 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
 
 void CheckBox::update(const Rectangle& clip)
 {
-    Control::update(clip);
+    Label::update(clip);
 
     Vector2 size;
     if (_imageSize.isZero())
@@ -125,60 +125,43 @@ void CheckBox::update(const Rectangle& clip)
 
     _textBounds.x += iconWidth + 5;
     _textBounds.width -= iconWidth + 5;
+
+    if (_checked)
+    {
+        _image = getImage("checked", _state);
+    }
+    else
+    {
+        _image = getImage("unchecked", _state);
+    }
 }
 
 void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     // Left, v-center.
     // TODO: Set an alignment for icons.
-    const Theme::Border border = getBorder(_state);
+    const Theme::Border& border = getBorder(_state);
     const Theme::Padding padding = getPadding();
-    float opacity = getOpacity(_state);
+    
+    const Rectangle& region = _image->getRegion();
+    const Theme::UVs& uvs = _image->getUVs();
+    Vector4 color = _image->getColor();
+    color.w *= _opacity;
 
-    if (_checked)
+    Vector2 size;
+    if (_imageSize.isZero())
     {
-        const Rectangle& selectedRegion = getImageRegion("checked", _state);
-        const Theme::UVs& selected = getImageUVs("checked", _state);
-        Vector4 selectedColor = getImageColor("checked", _state);
-        selectedColor.w *= opacity;
-
-        Vector2 size;
-        if (_imageSize.isZero())
-        {
-            size.set(selectedRegion.width, selectedRegion.height);
-        }
-        else
-        {
-            size.set(_imageSize);
-        }
-
-        Vector2 pos(clip.x + _bounds.x + border.left + padding.left,
-            clip.y + _bounds.y + (_clipBounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
-
-        spriteBatch->draw(pos.x, pos.y, size.x, size.y, selected.u1, selected.v1, selected.u2, selected.v2, selectedColor, _clip);
+        size.set(region.width, region.height);
     }
     else
     {
-        const Rectangle& unselectedRegion = getImageRegion("unchecked", _state);
-        const Theme::UVs& unselected = getImageUVs("unchecked", _state);
-        Vector4 unselectedColor = getImageColor("unchecked", _state);
-        unselectedColor.w *= opacity;
-
-        Vector2 size;
-        if (_imageSize.isZero())
-        {
-            size.set(unselectedRegion.width, unselectedRegion.height);
-        }
-        else
-        {
-            size.set(_imageSize);
-        }
-
-        Vector2 pos(clip.x + _bounds.x + border.left + padding.left,
-            clip.y + _bounds.y + (_clipBounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
-
-        spriteBatch->draw(pos.x, pos.y, size.x, size.y, unselected.u1, unselected.v1, unselected.u2, unselected.v2, unselectedColor, _clip);
+        size.set(_imageSize);
     }
+
+    Vector2 pos(clip.x + _bounds.x + border.left + padding.left,
+        clip.y + _bounds.y + (_clipBounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
+
+    spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _clip);
 }
 
 }

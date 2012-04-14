@@ -13,21 +13,23 @@ namespace gameplay
  * Defines a checkbox UI control.  This is a button that toggles between two icons when clicked.
  *
  * The following properties are available for checkboxes:
- *
- * checkBox <checkBoxID>
- * {
- *      style       = <styleID>
- *      alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
- *      position    = <x, y>
- *      autoWidth   = <bool>
- *      autoHeight  = <bool>
- *      size        = <width, height>
- *      width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
- *      height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
- *      text        = <string>
- *      checked     = <bool>
- *      iconSize    = <width, height>   // The size to draw the checkbox icon, if different from its size in the texture.
- * }
+
+ @verbatim
+    checkBox <checkBoxID>
+    {
+         style       = <styleID>
+         alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
+         position    = <x, y>
+         autoWidth   = <bool>
+         autoHeight  = <bool>
+         size        = <width, height>
+         width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
+         height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
+         text        = <string>
+         checked     = <bool>
+         iconSize    = <width, height>   // The size to draw the checkbox icon, if different from its size in the texture.
+    }
+ @endverbatim
  */
 class CheckBox : public Button
 {
@@ -125,6 +127,7 @@ protected:
 
     bool _checked;      // Whether this checkbox is currently checked.
     Vector2 _imageSize;  // The size to draw the checkbox icon, if different from its size in the texture.
+    Theme::ThemeImage* _image;
 
 private:
 

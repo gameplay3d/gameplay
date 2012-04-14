@@ -46,13 +46,14 @@ private:
             MATERIAL = 2,
             PARTICLE = 4,
             CHARACTER = 8,
-            GHOST = 16,
+            GHOSTOBJECT = 16,
             RIGIDBODY = 32,
             TRANSLATE = 64,
             ROTATE = 128,
             SCALE = 256,
             URL = 512,
-            TRANSPARENT = 1024
+            TRANSPARENT = 1024,
+            DYNAMIC = 2048
         };
 
         SceneNodeProperty(Type type, std::string file, std::string id, int index) : _type(type), _file(file), _id(id), _index(index) { }

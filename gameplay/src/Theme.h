@@ -21,113 +21,115 @@ namespace gameplay
  * are associated with a Control, and Font properties to apply to a Control's text.
  *
  * Below is an explanation of the properties that can be set within themes:
- *
- * theme
- * {
- *     texture = <Path to texture>
- * 
- *     // Describes a single image, to be used as a cursor.
- *     cursor <Cursor ID>
- *     {
- *         region = <x, y, width, height>
- *         color = <#ffffffff>
- *     }
- * 
- *     // Describes all the images used by a control for one or more states.
- *     imageList <ImageList ID>
- *     {
- *         image checked
- *         {
- *             region = <x, y, width, height>
- *         }
- * 
- *         image unchecked
- *         {
- *             region = <x, y, width, height>
- *             color = <#fffffffff>            // Optionally override image-list color.
- *         }
- * 
- *         color = <#fffffffff>    // Default blend color for images that don't specify their own.
- *     }
- *     
- *     // Defines the border and background of a Control.
- *     skin <Skin ID>
- *     {
- *         // The corners and edges of the given region will be used as border sprites.
- *         border
- *         {
- *             top     =   <int>   // Height of top border, top corners.
- *             bottom  =   <int>   // Height of bottom border, bottom corners.
- *             left    =   <int>   // Width of left border, left corners.
- *             right   =   <int>   // Width of right border, right corners.
- *         }
- *         
- *         region  =   <x, y, width, height>   // Total container region including entire border.
- *         color   =   <#ffffffff>             // Tint to apply to skin.
- *     }
- *     
- *     style <Style ID>
- *     {
- *         // Layouts may make use of a style's margin to put space between adjacent controls.
- *         margin
- *         {
- *             top     =   <int>
- *             bottom  =   <int>
- *             left    =   <int>
- *             right   =   <int>        
- *         }
- *         
- *         // Padding is the space between a control's border and its content.
- *         padding
- *         {
- *             top     =   <int>
- *             bottom  =   <int>
- *             left    =   <int>
- *             right   =   <int>        
- *         }
- *         
- *         // Properties used when in control is in the normal state.
- *         stateNormal
- *         {
- *             skin   =   <Skin ID>             // Skin to use for border and background sprites.
- *             imageList = <ImageList ID>
- * 
- *             cursor      =   <Cursor ID>                 // Cursor to use when the mouse is over this control.
- *             font        =   <Path to font>              // Font to use for rendering text.
- *             fontSize    =   <int>                       // Size of text.
- *             textColor   =   <#ffffffff>                 // Color of text.
- *             alignment   =   <Text alignment constant>   // Member of Font::Justify enum.
- *             rightToLeft =   <bool>                      // Whether to draw text from right to left.
- *             opacity     =   <float>                     // Opacity to apply to all text/border/icon colors.
- *         }
- *         
- *         // Properties used when in control is in the focus state
- *         // If not specified, the 'normal' overlay will be used.
- *         stateFocus
- *         {
- *             skin   =   <Skin ID>             // Skin to use for border and background sprites.
- *             ...
- *         }
- *         
- *         // Properties used when in control is in the focus. 
- *         // This is when a touch/mouse is down within the control.
- *         // If not specified, the 'normal' overlay will be used.
- *         stateActive
- *         {
- *             skin   =   <Skin ID>             // Skin to use for border and background sprites.
- *             ...
- *         }
- * 
- *         // Properties used when in control is in the focus. 
- *         // This is when a touch/mouse is down within the control.
- *         // If not specified, the 'normal' overlay will be used.
- *         state-disabled
- *         {
- *             skin   =   <Skin ID>             // Skin to use for border and background sprites.
- *             ...        
- *         }
- *     }
- * }
+
+@verbatim
+    theme
+    {
+        texture = <Path to texture>
+
+        // Describes a single image, to be used as a cursor.
+        cursor <Cursor ID>
+        {
+            region = <x, y, width, height>
+            color = <#ffffffff>
+        }
+
+        // Describes all the images used by a control for one or more states.
+        imageList <ImageList ID>
+        {
+            image checked
+            {
+                region = <x, y, width, height>
+            }
+
+            image unchecked
+            {
+                region = <x, y, width, height>
+                color = <#fffffffff>            // Optionally override image-list color.
+            }
+
+            color = <#fffffffff>    // Default blend color for images that don't specify their own.
+        }
+    
+        // Defines the border and background of a Control.
+        skin <Skin ID>
+        {
+            // The corners and edges of the given region will be used as border sprites.
+            border
+            {
+                top     =   <int>   // Height of top border, top corners.
+                bottom  =   <int>   // Height of bottom border, bottom corners.
+                left    =   <int>   // Width of left border, left corners.
+                right   =   <int>   // Width of right border, right corners.
+            }
+        
+            region  =   <x, y, width, height>   // Total container region including entire border.
+            color   =   <#ffffffff>             // Tint to apply to skin.
+        }
+    
+        style <Style ID>
+        {
+            // Layouts may make use of a style's margin to put space between adjacent controls.
+            margin
+            {
+                top     =   <int>
+                bottom  =   <int>
+                left    =   <int>
+                right   =   <int>        
+            }
+        
+            // Padding is the space between a control's border and its content.
+            padding
+            {
+                top     =   <int>
+                bottom  =   <int>
+                left    =   <int>
+                right   =   <int>        
+            }
+        
+            // Properties used when in control is in the normal state.
+            stateNormal
+            {
+                skin   =   <Skin ID>             // Skin to use for border and background sprites.
+                imageList = <ImageList ID>
+
+                cursor      =   <Cursor ID>                 // Cursor to use when the mouse is over this control.
+                font        =   <Path to font>              // Font to use for rendering text.
+                fontSize    =   <int>                       // Size of text.
+                textColor   =   <#ffffffff>                 // Color of text.
+                alignment   =   <Text alignment constant>   // Member of Font::Justify enum.
+                rightToLeft =   <bool>                      // Whether to draw text from right to left.
+                opacity     =   <float>                     // Opacity to apply to all text/border/icon colors.
+            }
+        
+            // Properties used when in control is in the focus state
+            // If not specified, the 'normal' overlay will be used.
+            stateFocus
+            {
+                skin   =   <Skin ID>             // Skin to use for border and background sprites.
+                ...
+            }
+        
+            // Properties used when in control is in the focus. 
+            // This is when a touch/mouse is down within the control.
+            // If not specified, the 'normal' overlay will be used.
+            stateActive
+            {
+                skin   =   <Skin ID>             // Skin to use for border and background sprites.
+                ...
+            }
+
+            // Properties used when in control is in the focus. 
+            // This is when a touch/mouse is down within the control.
+            // If not specified, the 'normal' overlay will be used.
+            state-disabled
+            {
+                skin   =   <Skin ID>             // Skin to use for border and background sprites.
+                ...        
+            }
+        }
+    }
+@endverbatim
  *
  */
 class Theme: public Ref
@@ -181,14 +183,12 @@ public:
         float right;
     } Margin, Border, Padding;
 
-private:
-
     /**
      * Class representing an image within the theme's texture atlas.
      * An image has a region and a blend color in addition to an ID.
      * UV coordinates are calculated from the region and can be retrieved.
      */
-    class Image : public Ref
+    class ThemeImage : public Ref
     {
         friend class Theme;
         friend class Control;
@@ -205,17 +205,19 @@ private:
 
     private:
 
-        Image(float tw, float th, const Rectangle& region, const Vector4& color);
+        ThemeImage(float tw, float th, const Rectangle& region, const Vector4& color);
 
-        ~Image();
+        ~ThemeImage();
 
-        static Image* create(float tw, float th, Properties* properties, const Vector4& defaultColor);
+        static ThemeImage* create(float tw, float th, Properties* properties, const Vector4& defaultColor);
 
         std::string _id;
         UVs _uvs;
         Rectangle _region;
         Vector4 _color;
     };
+
+private:
 
     /**
      * Class representing a collection of theme images.  An image list
@@ -231,7 +233,7 @@ private:
 
         const char* getId() const;
 
-        Image* getImage(const char* imageId) const;
+        ThemeImage* getImage(const char* imageId) const;
 
     private:
 
@@ -244,7 +246,7 @@ private:
         static ImageList* create(float tw, float th, Properties* properties);
 
         std::string _id;
-        std::vector<Image*> _images;
+        std::vector<ThemeImage*> _images;
         Vector4 _color;
     };
 
@@ -344,13 +346,13 @@ private:
 
     static void generateUVs(float tw, float th, float x, float y, float width, float height, UVs* uvs);
 
-    void lookUpSprites(const Properties* overlaySpace, ImageList** imageList, Image** mouseCursor, Skin** skin);
+    void lookUpSprites(const Properties* overlaySpace, ImageList** imageList, ThemeImage** mouseCursor, Skin** skin);
 
     std::string _path;
     Texture* _texture;
     SpriteBatch* _spriteBatch;
     std::vector<Style*> _styles;
-    std::vector<Image*> _images;
+    std::vector<ThemeImage*> _images;
     std::vector<ImageList*> _imageLists;
     std::vector<Skin*> _skins;
     std::set<Font*> _fonts;

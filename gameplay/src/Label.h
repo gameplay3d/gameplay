@@ -11,19 +11,21 @@ namespace gameplay
  * A label is the most basic type of control, capable only of rendering text within its border.
  *
  * The following properties are available for labels:
- *
- * label <labelID>
- * {
- *      style       = <styleID>
- *      alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
- *      position    = <x, y>
- *      autoWidth   = <bool>
- *      autoHeight  = <bool>
- *      size        = <width, height>
- *      width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
- *      height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
- *      text        = <string>
- * }
+
+ @verbatim
+    label <labelID>
+    {
+         style       = <styleID>
+         alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
+         position    = <x, y>
+         autoWidth   = <bool>
+         autoHeight  = <bool>
+         size        = <width, height>
+         width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
+         height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
+         text        = <string>
+    }
+ @endverbatim
  */
 class Label : public Control
 {
@@ -84,6 +86,8 @@ protected:
      */
     virtual void initialize(Theme::Style* style, Properties* properties);
 
+    void update(const Rectangle& clip);
+
     /**
      * Draw this label's text.
      *
@@ -92,6 +96,8 @@ protected:
     void drawText(const Rectangle& clip);
 
     std::string _text;      // The text displayed by this label.
+    Font* _font;
+    Vector4 _textColor;
 
 private:
 
