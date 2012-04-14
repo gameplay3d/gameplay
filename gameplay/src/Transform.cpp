@@ -7,28 +7,28 @@ namespace gameplay
 {
 
 Transform::Transform()
-    : _matrixDirty(false), _listeners(NULL)
+    : _matrixDirtyBits(0), _listeners(NULL)
 {
     _targetType = AnimationTarget::TRANSFORM;
     _scale.set(Vector3::one());
 }
 
 Transform::Transform(const Vector3& scale, const Quaternion& rotation, const Vector3& translation)
-    : _matrixDirty(false), _listeners(NULL)
+    : _matrixDirtyBits(0), _listeners(NULL)
 {
     _targetType = AnimationTarget::TRANSFORM;
     set(scale, rotation, translation);
 }
 
 Transform::Transform(const Vector3& scale, const Matrix& rotation, const Vector3& translation)
-    : _matrixDirty(false), _listeners(NULL)
+    : _matrixDirtyBits(0), _listeners(NULL)
 {
     _targetType = AnimationTarget::TRANSFORM;
     set(scale, rotation, translation);
 }
 
 Transform::Transform(const Transform& copy)
-    : _matrixDirty(false), _listeners(NULL)
+    : _matrixDirtyBits(0), _listeners(NULL)
 {
     _targetType = AnimationTarget::TRANSFORM;
     set(copy);
@@ -41,40 +41,40 @@ Transform::~Transform()
 
 const Matrix& Transform::getMatrix() const
 {
-    if (_matrixDirty)
+    if (_matrixDirtyBits)
     {
-        _matrixDirty = false;
-
         bool hasTranslation = !_translation.isZero();
         bool hasScale = !_scale.isOne();
         bool hasRotation = !_rotation.isIdentity();
 
         // Compose the matrix in TRS order since we use column-major matrices with column vectors and
         // multiply M*v (as opposed to XNA and DirectX that use row-major matrices with row vectors and multiply v*M).
-        if (hasTranslation)
+        if (hasTranslation || (_matrixDirtyBits & DIRTY_TRANSLATION) == DIRTY_TRANSLATION)
         {
             Matrix::createTranslation(_translation, &_matrix);
-            if (hasRotation)
+            if (hasRotation || (_matrixDirtyBits & DIRTY_ROTATION) == DIRTY_ROTATION)
             {
                 _matrix.rotate(_rotation);
             }
-            if (hasScale)
+            if (hasScale || (_matrixDirtyBits & DIRTY_SCALE) == DIRTY_SCALE)
             {
                 _matrix.scale(_scale);
             }
         }
-        else if (hasRotation)
+        else if (hasRotation || (_matrixDirtyBits & DIRTY_ROTATION) == DIRTY_ROTATION)
         {
             Matrix::createRotation(_rotation, &_matrix);
-            if (hasScale)
+            if (hasScale || (_matrixDirtyBits & DIRTY_SCALE) == DIRTY_SCALE)
             {
                 _matrix.scale(_scale);
             }
         }
-        else if (hasScale)
+        else if (hasScale || (_matrixDirtyBits & DIRTY_SCALE) == DIRTY_SCALE)
         {
             Matrix::createScale(_scale, &_matrix);
         }
+
+        _matrixDirtyBits = 0;
     }
 
     return _matrix;
@@ -231,13 +231,13 @@ void Transform::rotate(float qx, float qy, float qz, float qw)
 {
     Quaternion q(qx, qy, qz, qw);
     _rotation.multiply(q);
-    dirty();
+    dirty(DIRTY_ROTATION);
 }
 
 void Transform::rotate(const Quaternion& rotation)
 {
     _rotation.multiply(rotation);
-    dirty();
+    dirty(DIRTY_ROTATION);
 }
 
 void Transform::rotate(const Vector3& axis, float angle)
@@ -246,7 +246,7 @@ void Transform::rotate(const Vector3& axis, float angle)
     Quaternion::createFromAxisAngle(axis, angle, &rotationQuat);
     _rotation.multiply(rotationQuat);
     _rotation.normalize();
-    dirty();
+    dirty(DIRTY_ROTATION);
 }
 
 void Transform::rotate(const Matrix& rotation)
@@ -254,7 +254,7 @@ void Transform::rotate(const Matrix& rotation)
     Quaternion rotationQuat;
     Quaternion::createFromRotationMatrix(rotation, &rotationQuat);
     _rotation.multiply(rotationQuat);
-    dirty();
+    dirty(DIRTY_ROTATION);
 }
 
 void Transform::rotateX(float angle)
@@ -262,7 +262,7 @@ void Transform::rotateX(float angle)
     Quaternion rotationQuat;
     Quaternion::createFromAxisAngle(Vector3::unitX(), angle, &rotationQuat);
     _rotation.multiply(rotationQuat);
-    dirty();
+    dirty(DIRTY_ROTATION);
 }
 
 void Transform::rotateY(float angle)
@@ -270,7 +270,7 @@ void Transform::rotateY(float angle)
     Quaternion rotationQuat;
     Quaternion::createFromAxisAngle(Vector3::unitY(), angle, &rotationQuat);
     _rotation.multiply(rotationQuat);
-    dirty();
+    dirty(DIRTY_ROTATION);
 }
 
 void Transform::rotateZ(float angle)
@@ -278,13 +278,13 @@ void Transform::rotateZ(float angle)
     Quaternion rotationQuat;
     Quaternion::createFromAxisAngle(Vector3::unitZ(), angle, &rotationQuat);
     _rotation.multiply(rotationQuat);
-    dirty();
+    dirty(DIRTY_ROTATION);
 }
 
 void Transform::scale(float scale)
 {
     _scale.scale(scale);
-    dirty();
+    dirty(DIRTY_SCALE);
 }
 
 void Transform::scale(float sx, float sy, float sz)
@@ -292,7 +292,7 @@ void Transform::scale(float sx, float sy, float sz)
     _scale.x *= sx;
     _scale.y *= sy;
     _scale.z *= sz;
-    dirty();
+    dirty(DIRTY_SCALE);
 }
 
 void Transform::scale(const Vector3& scale)
@@ -300,25 +300,25 @@ void Transform::scale(const Vector3& scale)
     _scale.x *= scale.x;
     _scale.y *= scale.y;
     _scale.z *= scale.z;
-    dirty();
+    dirty(DIRTY_SCALE);
 }
 
 void Transform::scaleX(float sx)
 {
     _scale.x *= sx;
-    dirty();
+    dirty(DIRTY_SCALE);
 }
 
 void Transform::scaleY(float sy)
 {
     _scale.y *= sy;
-    dirty();
+    dirty(DIRTY_SCALE);
 }
 
 void Transform::scaleZ(float sz)
 {
     _scale.z *= sz;
-    dirty();
+    dirty(DIRTY_SCALE);
 }
 
 void Transform::set(const Vector3& scale, const Quaternion& rotation, const Vector3& translation)
@@ -326,7 +326,7 @@ void Transform::set(const Vector3& scale, const Quaternion& rotation, const Vect
     _scale.set(scale);
     _rotation.set(rotation);
     _translation.set(translation);
-    dirty();
+    dirty(DIRTY_TRANSLATION | DIRTY_ROTATION | DIRTY_SCALE);
 }
 
 void Transform::set(const Vector3& scale, const Matrix& rotation, const Vector3& translation)
@@ -336,7 +336,7 @@ void Transform::set(const Vector3& scale, const Matrix& rotation, const Vector3&
     Quaternion::createFromRotationMatrix(rotation, &rotationQuat);
     _rotation.set(rotationQuat);
     _translation.set(translation);
-    dirty();
+    dirty(DIRTY_TRANSLATION | DIRTY_ROTATION | DIRTY_SCALE);
 }
 
 void Transform::set(const Vector3& scale, const Vector3& axis, float angle, const Vector3& translation)
@@ -344,6 +344,7 @@ void Transform::set(const Vector3& scale, const Vector3& axis, float angle, cons
     _scale.set(scale);
     _rotation.set(axis, angle);
     _translation.set(translation);
+    dirty(DIRTY_TRANSLATION | DIRTY_ROTATION | DIRTY_SCALE);
 }
 
 void Transform::set(const Transform& transform)
@@ -351,55 +352,63 @@ void Transform::set(const Transform& transform)
     _scale.set(transform._scale);
     _rotation.set(transform._rotation);
     _translation.set(transform._translation);
-    dirty();
+    dirty(DIRTY_TRANSLATION | DIRTY_ROTATION | DIRTY_SCALE);
+}
+
+void Transform::setIdentity()
+{
+    _scale.set(1.0f, 1.0f, 1.0f);
+    _rotation.setIdentity();
+    _translation.set(0.0f, 0.0f, 0.0f);
+    dirty(DIRTY_TRANSLATION | DIRTY_ROTATION | DIRTY_SCALE);
 }
 
 void Transform::setScale(float scale)
 {
     _scale.set(scale, scale, scale);
-    dirty();
+    dirty(DIRTY_SCALE);
 }
 
 void Transform::setScale(float sx, float sy, float sz)
 {
     _scale.set(sx, sy, sz);
-    dirty();
+    dirty(DIRTY_SCALE);
 }
 
 void Transform::setScale(const Vector3& scale)
 {
     _scale.set(scale);
-    dirty();
+    dirty(DIRTY_SCALE);
 }
 
 void Transform::setScaleX(float sx)
 {
     _scale.x = sx;
-    dirty();
+    dirty(DIRTY_SCALE);
 }
 
 void Transform::setScaleY(float sy)
 {
     _scale.y = sy;
-    dirty();
+    dirty(DIRTY_SCALE);
 }
 
 void Transform::setScaleZ(float sz)
 {
     _scale.z = sz;
-    dirty();
+    dirty(DIRTY_SCALE);
 }
 
 void Transform::setRotation(const Quaternion& rotation)
 {
     _rotation.set(rotation);
-    dirty();
+    dirty(DIRTY_ROTATION);
 }
 
 void Transform::setRotation(float qx, float qy, float qz, float qw)
 {
     _rotation.set(qx, qy, qz, qw);
-    dirty();
+    dirty(DIRTY_ROTATION);
 }
 
 void Transform::setRotation(const Matrix& rotation)
@@ -407,43 +416,43 @@ void Transform::setRotation(const Matrix& rotation)
     Quaternion rotationQuat;
     Quaternion::createFromRotationMatrix(rotation, &rotationQuat);
     _rotation.set(rotationQuat);
-    dirty();
+    dirty(DIRTY_ROTATION);
 }
 
 void Transform::setRotation(const Vector3& axis, float angle)
 {
     _rotation.set(axis, angle);
-    dirty();
+    dirty(DIRTY_ROTATION);
 }
 
 void Transform::setTranslation(const Vector3& translation)
 {
     _translation.set(translation);
-    dirty();
+    dirty(DIRTY_TRANSLATION);
 }
 
 void Transform::setTranslation(float tx, float ty, float tz)
 {
     _translation.set(tx, ty, tz);
-    dirty();
+    dirty(DIRTY_TRANSLATION);
 }
 
 void Transform::setTranslationX(float tx)
 {
     _translation.x = tx;
-    dirty();
+    dirty(DIRTY_TRANSLATION);
 }
 
 void Transform::setTranslationY(float ty)
 {
     _translation.y = ty;
-    dirty();
+    dirty(DIRTY_TRANSLATION);
 }
 
 void Transform::setTranslationZ(float tz)
 {
     _translation.z = tz;
-    dirty();
+    dirty(DIRTY_TRANSLATION);
 }
 
 void Transform::translate(float tx, float ty, float tz)
@@ -451,7 +460,7 @@ void Transform::translate(float tx, float ty, float tz)
     _translation.x += tx;
     _translation.y += ty;
     _translation.z += tz;
-    dirty();
+    dirty(DIRTY_TRANSLATION);
 }
 
 void Transform::translate(const Vector3& translation)
@@ -459,25 +468,25 @@ void Transform::translate(const Vector3& translation)
     _translation.x += translation.x;
     _translation.y += translation.y;
     _translation.z += translation.z;
-    dirty();
+    dirty(DIRTY_TRANSLATION);
 }
 
 void Transform::translateX(float tx)
 {
     _translation.x += tx;
-    dirty();
+    dirty(DIRTY_TRANSLATION);
 }
 
 void Transform::translateY(float ty)
 {
     _translation.y += ty;
-    dirty();
+    dirty(DIRTY_TRANSLATION);
 }
 
 void Transform::translateZ(float tz)
 {
     _translation.z += tz;
-    dirty();
+    dirty(DIRTY_TRANSLATION);
 }
 
 void Transform::translateLeft(float amount)
@@ -737,9 +746,9 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
     }
 }
 
-void Transform::dirty()
+void Transform::dirty(char matrixDirtyBits)
 {
-    _matrixDirty = true;
+    _matrixDirtyBits |= matrixDirtyBits;
     transformChanged();
 }
 

@@ -11,33 +11,35 @@ namespace gameplay
  * A container is a UI control that can contain other controls.
  *
  * The following properties are available for containers:
- *
- * container <containerID>
- * {
- *      // Container properties.
- *      layout   = <Layout::Type>        // A value from the Layout::Type enum.  E.g.: LAYOUT_VERTICAL
- *      style    = <styleID>           // A style from the form's theme.
- *      alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
- *      position    = <x, y>    // Position of the container on-screen, measured in pixels.
- *      autoWidth   = <bool>
- *      autoHeight  = <bool>
- *      size        = <width, height>   // Size of the container, measured in pixels.
- *      width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
- *      height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
- *   
- *      // All the nested controls within this container.
- *      container 
- *      { 
- *          ...
- *      }
- * 
- *      label { }
- *      textBox { }
- *      button { }
- *      checkBox { }
- *      radioButton { }
- *      slider { }
- * }
+
+ @verbatim
+    container <containerID>
+    {
+         // Container properties.
+         layout   = <Layout::Type>        // A value from the Layout::Type enum.  E.g.: LAYOUT_VERTICAL
+         style    = <styleID>           // A style from the form's theme.
+         alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
+         position    = <x, y>    // Position of the container on-screen, measured in pixels.
+         autoWidth   = <bool>
+         autoHeight  = <bool>
+         size        = <width, height>   // Size of the container, measured in pixels.
+         width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
+         height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
+  
+         // All the nested controls within this container.
+         container 
+         { 
+             ...
+         }
+
+         label { }
+         textBox { }
+         button { }
+         checkBox { }
+         radioButton { }
+         slider { }
+    }
+ @endverbatim
  */
 class Container : public Control
 {

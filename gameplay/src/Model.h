@@ -8,7 +8,7 @@
 namespace gameplay
 {
 
-class Package;
+class Bundle;
 class MeshSkin;
 class Node;
 class NodeCloneContext;
@@ -21,7 +21,7 @@ class Model : public Ref
 {
     friend class Node;
     friend class Mesh;
-    friend class Package;
+    friend class Bundle;
 
 public:
 

@@ -198,8 +198,8 @@ void RadioButton::update(const Rectangle& clip)
     }
     float iconWidth = size.x;
 
-    _textBounds.x += iconWidth;
-    _textBounds.width -= iconWidth;
+    _textBounds.x += iconWidth + 5;
+    _textBounds.width -= iconWidth + 5;
 }
 
 }

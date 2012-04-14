@@ -24,7 +24,7 @@ class Animation : public Ref
 {
     friend class AnimationClip;
     friend class AnimationTarget;
-    friend class Package;
+    friend class Bundle;
 
 public:
     
@@ -66,6 +66,18 @@ public:
      * @return The AnimationClip with the specified ID; NULL if an AnimationClip with the given ID is not found.
      */
     AnimationClip* getClip(const char* clipId = NULL);
+
+    /**
+     * Returns the AnimationClip at the given index.
+     *
+     * @param index Index of the clip to return.
+     */
+    AnimationClip* getClip(unsigned int index) const;
+
+    /**
+     * Returns the number of animation clips in this animation.
+     */
+    unsigned int getClipCount() const;
     
     /**
      * Plays the AnimationClip with the specified name. 
@@ -201,9 +213,12 @@ private:
     /**
      * Clones this animation.
      * 
+     * @param channel The channel to clone and add to the animation.
+     * @param target The target of the animation.
+     * 
      * @return The newly created animation.
      */
-    Animation* clone();
+    Animation* clone(Channel* channel, AnimationTarget* target);
     
     AnimationController* _controller;       // The AnimationController that this Animation will run on.
     std::string _id;                        // The Animation's ID.
