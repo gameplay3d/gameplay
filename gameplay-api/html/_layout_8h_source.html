@@ -121,37 +121,40 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00007"></a>00007 {
 <a name="l00008"></a>00008 
 <a name="l00009"></a>00009 <span class="keyword">class </span>Container;
-<a name="l00010"></a>00010 
-<a name="l00017"></a><a class="code" href="classgameplay_1_1_layout.html">00017</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_layout.html">Layout</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_ref.html">Ref</a>
-<a name="l00018"></a>00018 {
-<a name="l00019"></a>00019     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_container.html">Container</a>;
-<a name="l00020"></a>00020 
-<a name="l00021"></a>00021 <span class="keyword">public</span>:
-<a name="l00025"></a><a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">00025</a>     <span class="keyword">enum</span> <a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Type</a>
-<a name="l00026"></a>00026     {
-<a name="l00032"></a><a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7a60afb4b138c8331ad409ee6b0173a54c">00032</a>         <a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7a60afb4b138c8331ad409ee6b0173a54c">LAYOUT_FLOW</a>,
-<a name="l00033"></a>00033 
-<a name="l00038"></a><a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7aefa2a3909bcce5fc0df2c26897c2b342">00038</a>         <a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7aefa2a3909bcce5fc0df2c26897c2b342">LAYOUT_VERTICAL</a>,
-<a name="l00039"></a>00039 
-<a name="l00044"></a><a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7aeb62aeb50e356bf668bfd3af0ae2d0d9">00044</a>         <a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7aeb62aeb50e356bf668bfd3af0ae2d0d9">LAYOUT_ABSOLUTE</a>
-<a name="l00045"></a>00045     };
-<a name="l00046"></a>00046 
-<a name="l00052"></a>00052     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Type</a> <a class="code" href="classgameplay_1_1_layout.html#a0a682d326ce75d0551952b72d37491a2">getType</a>() = 0;
-<a name="l00053"></a>00053 
-<a name="l00054"></a>00054 <span class="keyword">protected</span>:
-<a name="l00060"></a>00060     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_layout.html#a24c2e41aa1d9c22881fbf271dc6e35fa">update</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_container.html">Container</a>* container) = 0;
-<a name="l00061"></a>00061 };
+<a name="l00010"></a>00010 <span class="keyword">class </span>Control;
+<a name="l00011"></a>00011 
+<a name="l00018"></a><a class="code" href="classgameplay_1_1_layout.html">00018</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_layout.html">Layout</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_ref.html">Ref</a>
+<a name="l00019"></a>00019 {
+<a name="l00020"></a>00020     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_container.html">Container</a>;
+<a name="l00021"></a>00021 
+<a name="l00022"></a>00022 <span class="keyword">public</span>:
+<a name="l00026"></a><a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">00026</a>     <span class="keyword">enum</span> <a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Type</a>
+<a name="l00027"></a>00027     {
+<a name="l00033"></a><a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7a60afb4b138c8331ad409ee6b0173a54c">00033</a>         <a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7a60afb4b138c8331ad409ee6b0173a54c">LAYOUT_FLOW</a>,
+<a name="l00034"></a>00034 
+<a name="l00039"></a><a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7aefa2a3909bcce5fc0df2c26897c2b342">00039</a>         <a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7aefa2a3909bcce5fc0df2c26897c2b342">LAYOUT_VERTICAL</a>,
+<a name="l00040"></a>00040 
+<a name="l00045"></a><a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7aeb62aeb50e356bf668bfd3af0ae2d0d9">00045</a>         <a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7aeb62aeb50e356bf668bfd3af0ae2d0d9">LAYOUT_ABSOLUTE</a>
+<a name="l00046"></a>00046     };
+<a name="l00047"></a>00047 
+<a name="l00053"></a>00053     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Type</a> <a class="code" href="classgameplay_1_1_layout.html#a0a682d326ce75d0551952b72d37491a2">getType</a>() = 0;
+<a name="l00054"></a>00054 
+<a name="l00055"></a>00055 <span class="keyword">protected</span>:
+<a name="l00061"></a>00061     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_layout.html#a24c2e41aa1d9c22881fbf271dc6e35fa">update</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_container.html">Container</a>* container) = 0;
 <a name="l00062"></a>00062 
-<a name="l00063"></a>00063 }
-<a name="l00064"></a>00064 
-<a name="l00065"></a>00065 <span class="preprocessor">#endif</span>
+<a name="l00069"></a>00069     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_layout.html#aaaad13cf40bcd08aa5aa79097bfa806a">align</a>(<a class="code" href="classgameplay_1_1_control.html">Control</a>* control, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_container.html">Container</a>* container);
+<a name="l00070"></a>00070 };
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072 }
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><b>Layout.h</b>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:32 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:00 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

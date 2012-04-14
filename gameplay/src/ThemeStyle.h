@@ -138,9 +138,9 @@ private:
 
         Theme::Skin* getSkin() const;
 
-        void setCursor(Theme::Image* cursor);
+        void setCursor(Theme::ThemeImage* cursor);
             
-        Theme::Image* getCursor() const;
+        Theme::ThemeImage* getCursor() const;
             
         void setImageList(Theme::ImageList* imageList);
             
@@ -149,7 +149,7 @@ private:
         void applyAnimationValueOpacity(float opacity, float blendWeight);
 
         Skin* _skin;
-        Theme::Image* _cursor;
+        Theme::ThemeImage* _cursor;
         Theme::ImageList* _imageList;
         Font* _font;
         unsigned int _fontSize;
@@ -162,7 +162,7 @@ private:
     /**
      * Constructor.
      */
-    Style(const char* id, float tw, float th,
+    Style(Theme* theme, const char* id, float tw, float th,
           const Theme::Margin& margin, const Theme::Padding& padding,
           Overlay* normal, Overlay* focus, Overlay* active, Overlay* disabled);
 
@@ -209,7 +209,8 @@ private:
      * The margin is used by Layouts other than AbsoluteLayout to put space between Controls.
      */
     void setMargin(float top, float bottom, float left, float right);
-        
+    
+    Theme* _theme;
     std::string _id;
     float _tw;
     float _th;

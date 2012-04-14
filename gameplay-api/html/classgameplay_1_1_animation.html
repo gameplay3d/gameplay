@@ -143,6 +143,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1bfefc17c62178c2bf79460bbd75336a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation.html#a1bfefc17c62178c2bf79460bbd75336a">createClips</a> (const char *animationFile)</td></tr>
 <tr class="memitem:a6d3bbc2f8f5b895a0ee8a82032e48ee6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation.html#a6d3bbc2f8f5b895a0ee8a82032e48ee6">createClip</a> (const char *id, unsigned long start, unsigned long end)</td></tr>
 <tr class="memitem:a4b991918570fa459f4f75fb7b99617ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation.html#a4b991918570fa459f4f75fb7b99617ef">getClip</a> (const char *clipId=NULL)</td></tr>
+<tr class="memitem:afea32901db12a50b0e7ba6291133e01e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation.html#afea32901db12a50b0e7ba6291133e01e">getClip</a> (unsigned int index) const </td></tr>
+<tr class="memitem:af7cdad144190cfdc9ae25bfe5ec152c7"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation.html#af7cdad144190cfdc9ae25bfe5ec152c7">getClipCount</a> () const </td></tr>
 <tr class="memitem:aa4565774695201df19d3cf2118dffdc0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation.html#aa4565774695201df19d3cf2118dffdc0">play</a> (const char *clipId=NULL)</td></tr>
 <tr class="memitem:aeedb35a423af3a3ba9c3ab038bdf2756"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation.html#aeedb35a423af3a3ba9c3ab038bdf2756">stop</a> (const char *clipId=NULL)</td></tr>
 <tr class="memitem:ad9df1d952ef640c88f965622210c1c76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation.html#ad9df1d952ef640c88f965622210c1c76">pause</a> (const char *clipId=NULL)</td></tr>
@@ -153,8 +155,8 @@ Friends</h2></td></tr>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationClip</b></td></tr>
 <tr class="memitem:a06d0d9c54a4495d127e4d363f4fa3bed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06d0d9c54a4495d127e4d363f4fa3bed"></a>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationTarget</b></td></tr>
-<tr class="memitem:a305c04df1d8a4683e8bfe85167fcfdab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a305c04df1d8a4683e8bfe85167fcfdab"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr>
+<tr class="memitem:a2b8dc7250e74bde2e1a403e1d88c8fac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b8dc7250e74bde2e1a403e1d88c8fac"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Bundle</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a generic property animation.</p>
@@ -243,6 +245,47 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
   </dd>
 </dl>
 <dl class="section return"><dt>Returns:</dt><dd>The <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> with the specified ID; NULL if an <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> with the given ID is not found. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afea32901db12a50b0e7ba6291133e01e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> * <a class="el" href="classgameplay_1_1_animation.html#a4b991918570fa459f4f75fb7b99617ef">gameplay::Animation::getClip</a> </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> at the given index.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Index of the clip to return. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="af7cdad144190cfdc9ae25bfe5ec152c7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_animation.html#af7cdad144190cfdc9ae25bfe5ec152c7">gameplay::Animation::getClipCount</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the number of animation clips in this animation. </p>
 
 </div>
 </div>
@@ -383,7 +426,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_animation.html">Animation</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:32 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:01 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

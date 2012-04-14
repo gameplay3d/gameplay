@@ -13,6 +13,7 @@ var searchData=
   ['depthstenciltarget',['DepthStencilTarget',['../classgameplay_1_1_depth_stencil_target.html',1,'gameplay']]],
   ['destroyanimation',['destroyAnimation',['../classgameplay_1_1_animation_target.html#a7bc288605c05e88521448cae2f21e2bc',1,'gameplay::AnimationTarget']]],
   ['determinant',['determinant',['../classgameplay_1_1_matrix.html#a2f4fc61b659eaedda33077939b648aaf',1,'gameplay::Matrix']]],
+  ['dirty',['dirty',['../classgameplay_1_1_transform.html#a726f6197a310ccfc9a56dbb2b6801456',1,'gameplay::Transform']]],
   ['disable',['disable',['../classgameplay_1_1_control.html#ab6d5add40c4143ddd1d1acdf959f8bca',1,'gameplay::Control']]],
   ['disabled',['DISABLED',['../classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448',1,'gameplay::Control']]],
   ['displaykeyboard',['displayKeyboard',['../classgameplay_1_1_game.html#a092768704d671429dc791304f208c75c',1,'gameplay::Game::displayKeyboard()'],['../classgameplay_1_1_platform.html#aea3bd12f36c33c33824bc1ccdd4f32f3',1,'gameplay::Platform::displayKeyboard()']]],

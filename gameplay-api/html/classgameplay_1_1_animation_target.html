@@ -352,7 +352,6 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">id</td><td>The ID of the animation. </td></tr>
-    <tr><td class="paramname">target</td><td>The animation target. </td></tr>
     <tr><td class="paramname">propertyId</td><td>The property on this target to animate. </td></tr>
     <tr><td class="paramname">keyCount</td><td>The number of keyframes in the animation. Must be greater than one. </td></tr>
     <tr><td class="paramname">keyTimes</td><td>The list of key times for the animation (in milliseconds). </td></tr>
@@ -429,7 +428,6 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">id</td><td>The ID of the animation. </td></tr>
-    <tr><td class="paramname">target</td><td>The animation target. </td></tr>
     <tr><td class="paramname">propertyId</td><td>The property on this target to animate. </td></tr>
     <tr><td class="paramname">keyCount</td><td>The number of keyframes in the animation. Must be greater than one. </td></tr>
     <tr><td class="paramname">keyTimes</td><td>The list of key times for the animation (in milliseconds). </td></tr>
@@ -472,7 +470,6 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">id</td><td>The ID of the animation. </td></tr>
-    <tr><td class="paramname">target</td><td>The animation target. </td></tr>
     <tr><td class="paramname">animationFile</td><td>The animation file defining the animation data.</td></tr>
   </table>
   </dd>
@@ -509,8 +506,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">id</td><td>The ID of the animation. </td></tr>
-    <tr><td class="paramname">target</td><td>The animation target. </td></tr>
-    <tr><td class="paramname">properties</td><td>The properties object defining the animation data.</td></tr>
+    <tr><td class="paramname">animationProperties</td><td>The properties object defining the animation data.</td></tr>
   </table>
   </dd>
 </dl>
@@ -570,7 +566,6 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">id</td><td>The ID of the animation. </td></tr>
-    <tr><td class="paramname">target</td><td>The animation target. </td></tr>
     <tr><td class="paramname">propertyId</td><td>The property on this target to animate. </td></tr>
     <tr><td class="paramname">from</td><td>The values to animate from. </td></tr>
     <tr><td class="paramname">by</td><td>The values to animate by. </td></tr>
@@ -635,7 +630,6 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">id</td><td>The ID of the animation. </td></tr>
-    <tr><td class="paramname">target</td><td>The animation target. </td></tr>
     <tr><td class="paramname">propertyId</td><td>The property on this target to animate. </td></tr>
     <tr><td class="paramname">from</td><td>The values to animate from. </td></tr>
     <tr><td class="paramname">to</td><td>The values to animate to. </td></tr>
@@ -665,7 +659,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
 <p>Destroys the animation with the specified ID. Destroys the first animation if ID is NULL.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">The</td><td>animation to destroy. </td></tr>
+    <tr><td class="paramname">id</td><td>The ID of the animation to destroy. </td></tr>
   </table>
   </dd>
 </dl>
@@ -865,7 +859,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:32 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:01 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

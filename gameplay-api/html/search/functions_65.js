@@ -4,8 +4,9 @@ var searchData=
   ['emit',['emit',['../classgameplay_1_1_particle_emitter.html#afa630f0ad9c29d089469d18b546eafcc',1,'gameplay::ParticleEmitter']]],
   ['empty',['empty',['../classgameplay_1_1_bounding_box.html#a973ecbccb843b42d6644f5a1ce445191',1,'gameplay::BoundingBox::empty()'],['../classgameplay_1_1_bounding_sphere.html#aa42e77cb13ab035f870a1eb0bdc6c223',1,'gameplay::BoundingSphere::empty()'],['../classgameplay_1_1_rectangle.html#aa0d001a67bdbb28a335a7dbd570a7ca1',1,'gameplay::Rectangle::empty()']]],
   ['enable',['enable',['../classgameplay_1_1_control.html#a06b289a449ccdbd9e38d5b982076275a',1,'gameplay::Control']]],
-  ['end',['end',['../classgameplay_1_1_font.html#a3702f26b3ba60db60e73ad6de5198d05',1,'gameplay::Font::end()'],['../classgameplay_1_1_game.html#aed76492a2f0e6eebe58a86b19ed0236e',1,'gameplay::Game::end()'],['../classgameplay_1_1_mesh_batch.html#a496f920ec59e139102ebbbcf69e05056',1,'gameplay::MeshBatch::end()'],['../classgameplay_1_1_sprite_batch.html#aae1b18511d335ed10c027627a5cefe04',1,'gameplay::SpriteBatch::end()']]],
+  ['end',['end',['../classgameplay_1_1_font.html#a3702f26b3ba60db60e73ad6de5198d05',1,'gameplay::Font::end()'],['../classgameplay_1_1_mesh_batch.html#a496f920ec59e139102ebbbcf69e05056',1,'gameplay::MeshBatch::end()'],['../classgameplay_1_1_sprite_batch.html#aae1b18511d335ed10c027627a5cefe04',1,'gameplay::SpriteBatch::end()']]],
   ['entermessagepump',['enterMessagePump',['../classgameplay_1_1_platform.html#ab5379118d7f39805fb7d62820aa36cd6',1,'gameplay::Platform']]],
   ['evaluate',['evaluate',['../classgameplay_1_1_curve.html#ac8e72bf270f5ac3e93c7137bb3e05823',1,'gameplay::Curve']]],
-  ['exists',['exists',['../classgameplay_1_1_properties.html#a7c3020df91523a962369a4a6f8062d51',1,'gameplay::Properties']]]
+  ['exists',['exists',['../classgameplay_1_1_properties.html#a7c3020df91523a962369a4a6f8062d51',1,'gameplay::Properties']]],
+  ['exit',['exit',['../classgameplay_1_1_game.html#a00e505fc1ab4e8e1feceb0cdaf13bf03',1,'gameplay::Game']]]
 ];

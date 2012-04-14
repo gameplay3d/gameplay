@@ -164,6 +164,8 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>_groupId</b></
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>_selected</b></td></tr>
 <tr class="memitem:afcfdd88f16d2a2093b13fc3a6e08438b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afcfdd88f16d2a2093b13fc3a6e08438b"></a>
 <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_imageSize</b></td></tr>
+<tr class="memitem:a6648000e1f5f49c92fd93746abf99bda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6648000e1f5f49c92fd93746abf99bda"></a>
+<a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_image</b></td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:aee29d97f7e87f0263024133085c28e3d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee29d97f7e87f0263024133085c28e3d"></a>
@@ -173,8 +175,20 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 <div class="textblock"><p>Similar to a checkbox, a radio button can be toggled between two states.</p>
 <p>However, a radio button can belong to a group, and only one radio button from a group can be selected at one time.</p>
 <p>The following properties are available for radio buttons:</p>
-<p>radioButton &lt;RadioButton id&gt;=""&gt; { style = &lt;Style id&gt;=""&gt; position = &lt;x, y&gt; size = &lt;width, height&gt; text = &lt;string&gt; group = &lt;string&gt; iconSize = &lt;width, height&gt; // The size to draw the radio button icon, if different from its size in the texture. } </p>
-</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<div class="fragment"><pre class="fragment">    radioButton &lt;RadioButton ID&gt;
+    {
+         style       = &lt;Style ID&gt;
+         alignment   = &lt;Control::Alignment constant&gt; // Note: 'position' will be ignored.
+         position    = &lt;x, y&gt;
+         autoWidth   = &lt;bool&gt;
+         autoHeight  = &lt;bool&gt;
+         size        = &lt;width, height&gt;
+         width       = &lt;width&gt;   // Can be used in place of 'size', e.g. with 'autoHeight = true'
+         height      = &lt;height&gt;  // Can be used in place of 'size', e.g. with 'autoWidth = true'
+         text        = &lt;string&gt;
+         group       = &lt;string&gt;
+         iconSize    = &lt;width, height&gt;   // The size to draw the radio button icon, if different from its size in the texture.
+    }</pre></div> </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ad7377e7512cb8acf6089ed049c4a286f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -264,7 +278,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 <p>Clear the _selected flag of all radio buttons in the given group.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">groupID</td><td>The group to clear. </td></tr>
+    <tr><td class="paramname">groupId</td><td>The group to clear. </td></tr>
   </table>
   </dd>
 </dl>
@@ -492,7 +506,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
   </dd>
 </dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#ab639ca62f48d97463f68ca6ffe22cbb9">gameplay::Control</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a0983974a9862bb5817b9b47ad6da5148">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -507,7 +521,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_radio_button.html">RadioButton</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:33 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:02 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

@@ -13,6 +13,7 @@ var classgameplay_1_1_radio_button =
     [ "update", "classgameplay_1_1_radio_button.html#af3de5063259bbda84c50a819a63dafe7", null ],
     [ "Container", "classgameplay_1_1_radio_button.html#aee29d97f7e87f0263024133085c28e3d", null ],
     [ "_groupId", "classgameplay_1_1_radio_button.html#adaaf56b9918e3a88e7a7713338e9f3ed", null ],
+    [ "_image", "classgameplay_1_1_radio_button.html#a6648000e1f5f49c92fd93746abf99bda", null ],
     [ "_imageSize", "classgameplay_1_1_radio_button.html#afcfdd88f16d2a2093b13fc3a6e08438b", null ],
     [ "_selected", "classgameplay_1_1_radio_button.html#aff60c0b6ada733737058c29d05047b0a", null ]
 ];

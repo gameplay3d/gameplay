@@ -176,7 +176,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Curve</b></td></tr>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a 4-element quaternion that represents the orientation of an object in space.</p>
 <p>Quaternions are typically used as a replacement for euler angles and rotation matrices as a way to achieve smooth interpolation and avoid gimbal lock.</p>
-<p>Note that this quaternion class does not automatically keep the quaternion normalized. Therefore, care must be taken to normalize the quaternion when neccessary, by calling the normalize method. The package provides three methods for doing quaternion interpolation: lerp, slerp, and squad.</p>
+<p>Note that this quaternion class does not automatically keep the quaternion normalized. Therefore, care must be taken to normalize the quaternion when neccessary, by calling the normalize method. This class provides three methods for doing quaternion interpolation: lerp, slerp, and squad.</p>
 <p>lerp (linear interpolation): the interpolation curve gives a straight line in quaternion space. It is simple and fast to compute. The only problem is that it does not provide constant angular velocity. Note that a constant velocity is not necessarily a requirement for a curve; slerp (spherical linear interpolation): the interpolation curve forms a great arc on the quaternion unit sphere. Slerp provides constant angular velocity; squad (spherical spline interpolation): interpolating between a series of rotations using slerp leads to the following problems:</p>
 <ul>
 <li>the curve is not smooth at the control points;</li>
@@ -1207,7 +1207,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Curve</b></td></tr>
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:33 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:02 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

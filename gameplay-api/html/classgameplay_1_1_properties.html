@@ -169,87 +169,81 @@ Static Public Member Functions</h2></td></tr>
 <p>This class is used by <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>, <a class="el" href="classgameplay_1_1_animation.html">Animation</a> and Materials to create objects of these types from text files.</p>
 <p>A properties file has very simple syntax and can contain only namespaces and name/value pairs (the properties of a namespace). The file can have any file extension a user specifies.</p>
 <p>Here's an example of a simple file that uses all the available features of the markup language:</p>
-<div class="fragment"><pre class="fragment">--- File Start: example.properties ---
+<div class="fragment"><pre class="fragment">    // This is a comment.
  
-// This is a comment.
+    // This property is in the default namespace:
+    integerProperty = 5
  
-// This property is in the default namespace:
-integerProperty = 5
- 
-// This line defines a namespace of type "mynamespace" without an ID:
-mynamespace
-{
-    // This namespace can be retrieved by searching for its ID, "spriteTexture":
-    texture spriteTexture 
+    // This line defines a namespace of type "mynamespace" without an ID:
+    mynamespace
     {
-        fileName = sprite.png
-        width = 64
-        height = 64
-    }
+        // This namespace can be retrieved by searching for its ID, "spriteTexture":
+        texture spriteTexture 
+        {
+            fileName = sprite.png
+            width = 64
+            height = 64
+        }
  
-    // This property is in the "space" namespace:
-    booleanProperty = true
+        // This property is in the "space" namespace:
+        booleanProperty = true
  
-    // It's legal to have a name without a value if you leave out the '=' character:
-    foo
+        // It's legal to have a name without a value if you leave out the '=' character:
+        foo
  
-    // In fact, the '=' character is optional if you'd rather write:
-    bar 23
+        // In fact, the '=' character is optional if you'd rather write:
+        bar 23
  
-    // But don't write this or you'll get an error:
-    // illegalProperty =
+        // But don't write this or you'll get an error:
+        // illegalProperty =
  
-    // Or this:
-    // = 15
+        // Or this:
+        // = 15
  
-    // Properties objects let you retrieve values as various types.
-    floatProperty = 3.333
-    stringProperty = This is a string.
-    vector3Property = 1.0, 5.0, 3.55
-    colorProperty = 1.0, 0.4, 0.0, 1.0
-}
---- File End ---
-</pre></div><p>Retrieving information out of a file like this could be done in two ways. If the available namespaces and name/value pairs are known in advance they can be queried by ID or name. For example, if the namespace "spriteTexture" and its properties are required then they can be retrieved with a call to <a class="el" href="classgameplay_1_1_properties.html#a524131493746464a6354bfee94a99560">getNamespace()</a> followed by calls to <a class="el" href="classgameplay_1_1_properties.html#aa684e793fd755acf2611079ea4e56b96">getString()</a> and <a class="el" href="classgameplay_1_1_properties.html#ac475d236fe4e23192fa19b8d5dbca7e4">getInt()</a>. A namespace is stored and retrieved as a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object. Reading the spriteTexture properties out of the file above in this way could be done with the following code:</p>
-<div class="fragment"><pre class="fragment">// Create the top-level Properties object.
-Properties* properties = Properties::create("example.properties");
-// Retrieve the "spriteTexture" namespace.
-Properties* spriteTexture = properties-&gt;getNamespace("spriteTexture");
+        // Properties objects let you retrieve values as various types.
+        floatProperty = 3.333
+        stringProperty = This is a string.
+        vector3Property = 1.0, 5.0, 3.55
+        colorProperty = 1.0, 0.4, 0.0, 1.0
+    }</pre></div><p>Retrieving information out of a file like this could be done in two ways. If the available namespaces and name/value pairs are known in advance they can be queried by ID or name. For example, if the namespace "spriteTexture" and its properties are required then they can be retrieved with a call to <a class="el" href="classgameplay_1_1_properties.html#a524131493746464a6354bfee94a99560">getNamespace()</a> followed by calls to <a class="el" href="classgameplay_1_1_properties.html#aa684e793fd755acf2611079ea4e56b96">getString()</a> and <a class="el" href="classgameplay_1_1_properties.html#ac475d236fe4e23192fa19b8d5dbca7e4">getInt()</a>. A namespace is stored and retrieved as a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object. Reading the spriteTexture properties out of the file above in this way could be done with the following code:</p>
+<div class="fragment"><pre class="fragment">    // Create the top-level Properties object.
+    Properties* properties = Properties::create("example.properties");
+    // Retrieve the "spriteTexture" namespace.
+    Properties* spriteTexture = properties-&gt;getNamespace("spriteTexture");
  
-// Get the values of known texture properties out of the namespace.
-const char* fileName = spriteTexture-&gt;getString("fileName");
-int width = spriteTexture-&gt;getInt("width");
-int height = spriteTexture-&gt;getInt("height");
+    // Get the values of known texture properties out of the namespace.
+    const char* fileName = spriteTexture-&gt;getString("fileName");
+    int width = spriteTexture-&gt;getInt("width");
+    int height = spriteTexture-&gt;getInt("height");
  
-// Deleting the top-level Properties object will clean up all nested namespaces.
-SAFE_DELETE(properties);
-</pre></div><p>On the other hand, if the structure of the file is not known in advance its namespaces and name/value pairs can be retrieved one by one using the <a class="el" href="classgameplay_1_1_properties.html#a75aca7c32447c266425aeb5c1635be31">getNextNamespace()</a> and <a class="el" href="classgameplay_1_1_properties.html#a666b05652f9d3d2b3c3ca8b4bc331bae">getNextProperty()</a> methods. The following method prints the contents of any properties file to the console:</p>
-<div class="fragment"><pre class="fragment">void printProperties(Properties* properties)
-{
-    // Print the name and ID of the current namespace.
-    const char* spacename = properties-&gt;getNamespace();
-    const char* id = properties-&gt;getId();
-    WARN_VARG("Namespace: %s  ID: %s\n{", spacename, id);
- 
-    // Print all properties in this namespace.
-    const char* name = properties-&gt;getNextProperty();
-    const char* value = NULL;
-    while (name != NULL)
+    // Deleting the top-level Properties object will clean up all nested namespaces.
+    SAFE_DELETE(properties);</pre></div><p>On the other hand, if the structure of the file is not known in advance its namespaces and name/value pairs can be retrieved one by one using the <a class="el" href="classgameplay_1_1_properties.html#a75aca7c32447c266425aeb5c1635be31">getNextNamespace()</a> and <a class="el" href="classgameplay_1_1_properties.html#a666b05652f9d3d2b3c3ca8b4bc331bae">getNextProperty()</a> methods. The following method prints the contents of any properties file to the console:</p>
+<div class="fragment"><pre class="fragment">    void printProperties(Properties* properties)
     {
-        value = properties-&gt;getString(name);
-        WARN_VARG("%s = %s", name, value);
-        name = properties-&gt;getNextProperty();
-    }
-    WARN("}\n");
+        // Print the name and ID of the current namespace.
+        const char* spacename = properties-&gt;getNamespace();
+        const char* id = properties-&gt;getId();
+        WARN_VARG("Namespace: %s  ID: %s\n{", spacename, id);
  
-    // Print the properties of every namespace within this one.
-    Properties* space = properties-&gt;getNextNamespace();
-    while (space != NULL)
-    {
-        printProperties(space);
-        space = properties-&gt;getNextNamespace();
-    }
-}
-</pre></div><p>Note that this method does not keep track of the namespace hierarchy, but could be modified to do so. Also note that nothing in a properties file indicates the type of a property. If the type is unknown, its string can be retrieved and interpreted as necessary. </p>
+        // Print all properties in this namespace.
+        const char* name = properties-&gt;getNextProperty();
+        const char* value = NULL;
+        while (name != NULL)
+        {
+            value = properties-&gt;getString(name);
+            WARN_VARG("%s = %s", name, value);
+            name = properties-&gt;getNextProperty();
+        }
+        WARN("}\n");
+ 
+        // Print the properties of every namespace within this one.
+        Properties* space = properties-&gt;getNextNamespace();
+        while (space != NULL)
+        {
+            printProperties(space);
+            space = properties-&gt;getNextNamespace();
+        }
+    }</pre></div><p>Note that this method does not keep track of the namespace hierarchy, but could be modified to do so. Also note that nothing in a properties file indicates the type of a property. If the type is unknown, its string can be retrieved and interpreted as necessary. </p>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="ac50e4923355951650946c9f6dc5b2628"></a>
 <div class="memitem">
@@ -866,7 +860,7 @@ SAFE_DELETE(properties);
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_properties.html">Properties</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:33 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:02 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

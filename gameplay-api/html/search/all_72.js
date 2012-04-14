@@ -10,7 +10,7 @@ var searchData=
   ['rectangle',['Rectangle',['../classgameplay_1_1_rectangle.html#abd94cdf2d9687dcb13a5edd5134c8eae',1,'gameplay::Rectangle::Rectangle()'],['../classgameplay_1_1_rectangle.html#a9ed80697600ee4a151cede861c64933d',1,'gameplay::Rectangle::Rectangle(float width, float height)'],['../classgameplay_1_1_rectangle.html#adb202378a6674e98d06e2cc9a4b1b1c9',1,'gameplay::Rectangle::Rectangle(float x, float y, float width, float height)'],['../classgameplay_1_1_rectangle.html#a2b14fdee39ce673f33900168a7925556',1,'gameplay::Rectangle::Rectangle(const Rectangle &amp;copy)']]],
   ['rectangle',['Rectangle',['../classgameplay_1_1_rectangle.html',1,'gameplay']]],
   ['ref',['Ref',['../classgameplay_1_1_ref.html',1,'gameplay']]],
-  ['ref',['Ref',['../classgameplay_1_1_ref.html#a866a859fcc96f2a48d5ee2f06a8c2a43',1,'gameplay::Ref']]],
+  ['ref',['Ref',['../classgameplay_1_1_ref.html#a866a859fcc96f2a48d5ee2f06a8c2a43',1,'gameplay::Ref::Ref()'],['../classgameplay_1_1_ref.html#a4af6b566116534038e02bfffea72867f',1,'gameplay::Ref::Ref(const Ref &amp;copy)']]],
   ['registerclonedanimation',['registerClonedAnimation',['../classgameplay_1_1_node_clone_context.html#a81e2f74240d6827fc671f9ea45b9fac8',1,'gameplay::NodeCloneContext']]],
   ['registerclonednode',['registerClonedNode',['../classgameplay_1_1_node_clone_context.html#a343fc161a33eb0c24fd94242fea60414',1,'gameplay::NodeCloneContext']]],
   ['release',['RELEASE',['../classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7ba4d6d0d7568cba92935eb52fff947a985',1,'gameplay::Control::Listener::RELEASE()'],['../classgameplay_1_1_ref.html#aafd8a7a7934b33c8bf216756d04cf33b',1,'gameplay::Ref::release()']]],

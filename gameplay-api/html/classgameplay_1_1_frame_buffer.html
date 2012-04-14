@@ -118,6 +118,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">gameplay::FrameBuffer Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_frame_buffer_8h_source.html">FrameBuffer.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for gameplay::FrameBuffer:</div>
 <div class="dyncontent">
@@ -146,7 +148,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a73178dd36383a29febb141d2896f50c7"><td class="memItemLeft" align="right" valign="top">static unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a73178dd36383a29febb141d2896f50c7">getMaxRenderTargets</a> ()</td></tr>
 <tr class="memitem:a9cc853c9cfbf4810521b9f8f109405af"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a9cc853c9cfbf4810521b9f8f109405af">bindDefault</a> ()</td></tr>
 </table>
-<hr/><h2>Member Function Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Defines a video output off all graphics buffer containing a complete frame of data. This consists of a <a class="el" href="classgameplay_1_1_render_target.html">RenderTarget</a> and <a class="el" href="classgameplay_1_1_depth_stencil_target.html">DepthStencilTarget</a> holding the color, depth and stencil data in the rendering frame.</p>
+<p>to change the default <a class="el" href="classgameplay_1_1_game.html">Game</a> framebuffer call Game::setFrameBuffer(myFrameBuffer); To restore back to the default call Game::setFrameBuffer(NULL). This is useful for rendering shadows and other post-processing effects. </p>
+</div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a84e07fb4a32d5cb954ae734e232e5a7f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -423,7 +428,7 @@ Static Public Member Functions</h2></td></tr>
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:32 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:02 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

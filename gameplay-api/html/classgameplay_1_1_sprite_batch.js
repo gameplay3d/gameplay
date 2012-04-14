@@ -16,5 +16,5 @@ var classgameplay_1_1_sprite_batch =
     [ "getMaterial", "classgameplay_1_1_sprite_batch.html#a801483dd03d82ebbbc9fbfb47a77bb0d", null ],
     [ "getStateBlock", "classgameplay_1_1_sprite_batch.html#ac683e1a29357346c2aafa73fd86d81f7", null ],
     [ "setProjectionMatrix", "classgameplay_1_1_sprite_batch.html#a03f381137640f9ad77e73b0c584f0749", null ],
-    [ "Package", "classgameplay_1_1_sprite_batch.html#a305c04df1d8a4683e8bfe85167fcfdab", null ]
+    [ "Bundle", "classgameplay_1_1_sprite_batch.html#a2b8dc7250e74bde2e1a403e1d88c8fac", null ]
 ];

@@ -15,7 +15,33 @@ namespace gameplay
 class Theme;
 
 /**
- * Top-level container of UI controls.
+ * Top-level container of UI controls.  The following properties are available for forms:
+
+ @verbatim
+    form <formID>
+    {
+        // Form properties.
+        theme       = <Path to .theme File> // See Theme.h.
+        layout      = <Layout::Type>        // A value from the Layout::Type enum.  e.g.: LAYOUT_VERTICAL
+        style       = <styleID>             // A style from the referenced theme.
+        position   = <x, y>                // Position of the form on-screen, measured in pixels.
+        alignment  = <Control::Alignment>  // Note: 'position' will be ignored.
+        autoWidth  = <bool>                // Will result in a form the width of the display.
+        autoHeight = <bool>                // Will result in a form the height of the display.
+        size       = <width, height>       // Size of the form, measured in pixels.
+        width      = <width>               // Can be used in place of 'size', e.g. with 'autoHeight = true'
+        height     = <height>              // Can be used in place of 'size', e.g. with 'autoWidth = true'
+      
+        // All the nested controls within this form.
+        container { }
+        label { }
+        textBox { }
+        button { }
+        checkBox { }
+        radioButton { }
+        slider { }
+    }
+ @endverbatim
  */
 class Form : public Container
 {
@@ -25,35 +51,6 @@ public:
 
     /**
      * Create from properties file.
-     * The top-most namespace in the file must be named 'form'.  The following properties are available for forms:
-     *
-     * form <formID>
-     * {
-     *      // Form properties.
-     *      theme    = <Path to .theme File>    // See Theme.h.
-     *      layout   = <Layout::Type>           // A value from the Layout::Type enum.  e.g.: LAYOUT_VERTICAL
-     *      style    = <styleID>                // A style from the referenced theme.
-     *      position = <x, y>                   // Position of the form on-screen, measured in pixels.
-     *      size     = <width, height>          // Size of the form, measured in pixels.
-     *      alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
-     *      autoWidth   = <bool>                // Will result in a form the width of the display.
-     *      autoHeight  = <bool>                // Will result in a form the height of the display.
-     *      size        = <width, height>
-     *      width       = <width>               // Can be used in place of 'size', e.g. with 'autoHeight = true'
-     *      height      = <height>              // Can be used in place of 'size', e.g. with 'autoWidth = true'
-     *   
-     *      // All the nested controls within this form.
-     *      container 
-     *      {
-     *          ...
-     *      }
-     *      label { }
-     *      textBox { }
-     *      button { }
-     *      checkBox { }
-     *      radioButton { }
-     *      slider { }
-     * }
      *
      * @param path Path to the properties file to create a new form from.
      */

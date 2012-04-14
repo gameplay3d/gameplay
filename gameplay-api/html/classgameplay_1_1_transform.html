@@ -115,6 +115,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
@@ -192,6 +193,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5c3fcd53a4ff36d93771e3c1bb397f2a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a5c3fcd53a4ff36d93771e3c1bb397f2a">set</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;<a class="el" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;rotation, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translation)</td></tr>
 <tr class="memitem:a0b008b96cb607c3ffa97deb2d3186d66"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a0b008b96cb607c3ffa97deb2d3186d66">set</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;<a class="el" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;axis, float angle, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translation)</td></tr>
 <tr class="memitem:afd2a8e6df273486c5b49fb91db229879"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#afd2a8e6df273486c5b49fb91db229879">set</a> (const <a class="el" href="classgameplay_1_1_transform.html">Transform</a> &amp;transform)</td></tr>
+<tr class="memitem:aefd67bac8e079e3ce444861f76d99855"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#aefd67bac8e079e3ce444861f76d99855">setIdentity</a> ()</td></tr>
 <tr class="memitem:a62ed140eed43e71fc56acfc11df9d606"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a62ed140eed43e71fc56acfc11df9d606">setScale</a> (float <a class="el" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>)</td></tr>
 <tr class="memitem:aee88a459d07c6df15f6ab087d05c6ef6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#aee88a459d07c6df15f6ab087d05c6ef6">setScale</a> (float sx, float sy, float sz)</td></tr>
 <tr class="memitem:ad0ff7f09a6ecbb5c28072be7b07ae319"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#ad0ff7f09a6ecbb5c28072be7b07ae319">setScale</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;<a class="el" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>)</td></tr>
@@ -239,14 +241,17 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:aa129fc2df5e41f17d2ddad45dea2724a"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#aa129fc2df5e41f17d2ddad45dea2724a">ANIMATE_TRANSLATE_Z</a> = 12</td></tr>
 <tr class="memitem:a64374775dcf7197d9e946b5dd2438b3e"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a64374775dcf7197d9e946b5dd2438b3e">ANIMATE_ROTATE_TRANSLATE</a> = 16</td></tr>
 <tr class="memitem:a261529193110fa83fb8abb30a81bdb85"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a261529193110fa83fb8abb30a81bdb85">ANIMATE_SCALE_ROTATE_TRANSLATE</a> = 17</td></tr>
+<tr><td colspan="2"><h2><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:afb33ec484f82efed700b67b879ec06ff"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>MatrixDirtyBits</b> { <b>DIRTY_TRANSLATION</b> =  0x01, 
+<b>DIRTY_SCALE</b> =  0x02, 
+<b>DIRTY_ROTATION</b> =  0x04
+ }</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a5125224261a0c91a7306de8bedbc3c5d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5125224261a0c91a7306de8bedbc3c5d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>dirty</b> ()</td></tr>
-<tr class="memitem:ab4d6ad715db7bc6b112ffac6be91a7b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab4d6ad715db7bc6b112ffac6be91a7b2"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>transformChanged</b> ()</td></tr>
-<tr class="memitem:a666310b65bf685fd8f5078bf9da7c7f9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a666310b65bf685fd8f5078bf9da7c7f9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>cloneInto</b> (<a class="el" href="classgameplay_1_1_transform.html">Transform</a> *transform, <a class="el" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a> &amp;context) const </td></tr>
+<tr class="memitem:a726f6197a310ccfc9a56dbb2b6801456"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a726f6197a310ccfc9a56dbb2b6801456">dirty</a> (char matrixDirtyBits)</td></tr>
+<tr class="memitem:ab4d6ad715db7bc6b112ffac6be91a7b2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#ab4d6ad715db7bc6b112ffac6be91a7b2">transformChanged</a> ()</td></tr>
+<tr class="memitem:a666310b65bf685fd8f5078bf9da7c7f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a666310b65bf685fd8f5078bf9da7c7f9">cloneInto</a> (<a class="el" href="classgameplay_1_1_transform.html">Transform</a> *transform, <a class="el" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a> &amp;context) const </td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:aeeae1936910e4fd9e76b09428418099f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeeae1936910e4fd9e76b09428418099f"></a>
@@ -257,8 +262,8 @@ Protected Attributes</h2></td></tr>
 <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_translation</b></td></tr>
 <tr class="memitem:ab7566ea33ee9118a77269301d0ff89af"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab7566ea33ee9118a77269301d0ff89af"></a>
 <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_matrix</b></td></tr>
-<tr class="memitem:ad396a9db8c1b2bcbf39a7d884b29b508"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad396a9db8c1b2bcbf39a7d884b29b508"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>_matrixDirty</b></td></tr>
+<tr class="memitem:a8df9659d449c9ff6d4215f574a4593a6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8df9659d449c9ff6d4215f574a4593a6"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>_matrixDirtyBits</b></td></tr>
 <tr class="memitem:a1743c40f9ffd1ae5626ec406494feb29"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1743c40f9ffd1ae5626ec406494feb29"></a>
 std::list&lt; <a class="el" href="structgameplay_1_1_transform_1_1_transform_listener.html">TransformListener</a> &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>_listeners</b></td></tr>
 </table>
@@ -442,6 +447,59 @@ std::list&lt; <a class="el" href="structgameplay_1_1_transform_1_1_transform_lis
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a666310b65bf685fd8f5078bf9da7c7f9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_transform.html#a666310b65bf685fd8f5078bf9da7c7f9">gameplay::Transform::cloneInto</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_transform.html">Transform</a> *&#160;</td>
+          <td class="paramname"><em>transform</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a> &amp;&#160;</td>
+          <td class="paramname"><em>context</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const<code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Copies from data from this node into transform for the purpose of cloning.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>The transform to copy into. </td></tr>
+    <tr><td class="paramname">context</td><td>The clone context. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a726f6197a310ccfc9a56dbb2b6801456"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_transform.html#a726f6197a310ccfc9a56dbb2b6801456">gameplay::Transform::dirty</a> </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>matrixDirtyBits</em></td><td>)</td>
+          <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Marks this transform as dirty and fires <a class="el" href="classgameplay_1_1_transform.html#ab4d6ad715db7bc6b112ffac6be91a7b2">transformChanged()</a>. </p>
 
 </div>
 </div>
@@ -1617,6 +1675,23 @@ std::list&lt; <a class="el" href="structgameplay_1_1_transform_1_1_transform_lis
 
 </div>
 </div>
+<a class="anchor" id="aefd67bac8e079e3ce444861f76d99855"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_transform.html#aefd67bac8e079e3ce444861f76d99855">gameplay::Transform::setIdentity</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets this transform to the identity transform. </p>
+
+</div>
+</div>
 <a class="anchor" id="a7f00cbb086e2323d3fb920e69bbdbeb7"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2046,6 +2121,25 @@ std::list&lt; <a class="el" href="structgameplay_1_1_transform_1_1_transform_lis
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="ab4d6ad715db7bc6b112ffac6be91a7b2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_transform.html#ab4d6ad715db7bc6b112ffac6be91a7b2">gameplay::Transform::transformChanged</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Called when the transform changes. </p>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_node.html#a7d9e0a5ff4b151d540ef2cddf0e1cb7e">gameplay::Node</a>, and <a class="el" href="classgameplay_1_1_joint.html#af0ca30705f3d4ff515f799ab16133151">gameplay::Joint</a>.</p>
 
 </div>
 </div>
@@ -2613,7 +2707,7 @@ std::list&lt; <a class="el" href="structgameplay_1_1_transform_1_1_transform_lis
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_transform.html">Transform</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:33 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:03 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

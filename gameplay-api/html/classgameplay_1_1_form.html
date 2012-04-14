@@ -153,8 +153,30 @@ Friends</h2></td></tr>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Platform</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Top-level container of UI controls. </p>
-</div><hr/><h2>Member Function Documentation</h2>
+<div class="textblock"><p>Top-level container of UI controls. The following properties are available for forms:</p>
+<div class="fragment"><pre class="fragment">    form &lt;formID&gt;
+    {
+        // Form properties.
+        theme       = &lt;Path to .theme File&gt; // See Theme.h.
+        layout      = &lt;Layout::Type&gt;        // A value from the Layout::Type enum.  e.g.: LAYOUT_VERTICAL
+        style       = &lt;styleID&gt;             // A style from the referenced theme.
+        position   = &lt;x, y&gt;                // Position of the form on-screen, measured in pixels.
+        alignment  = &lt;Control::Alignment&gt;  // Note: 'position' will be ignored.
+        autoWidth  = &lt;bool&gt;                // Will result in a form the width of the display.
+        autoHeight = &lt;bool&gt;                // Will result in a form the height of the display.
+        size       = &lt;width, height&gt;       // Size of the form, measured in pixels.
+        width      = &lt;width&gt;               // Can be used in place of 'size', e.g. with 'autoHeight = true'
+        height     = &lt;height&gt;              // Can be used in place of 'size', e.g. with 'autoWidth = true'
+      
+        // All the nested controls within this form.
+        container { }
+        label { }
+        textBox { }
+        button { }
+        checkBox { }
+        radioButton { }
+        slider { }
+    }</pre></div> </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a82c1fcd37c3f786acf14b7686b154f9d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -169,9 +191,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Platform</b></td></t
       </table>
 </div>
 <div class="memdoc">
-<p>Create from properties file. The top-most namespace in the file must be named 'form'. The following properties are available for forms:</p>
-<p>form &lt;formID&gt; { // <a class="el" href="classgameplay_1_1_form.html">Form</a> properties. theme = &lt;Path to .theme File&gt; // See <a class="el" href="_theme_8h_source.html">Theme.h</a>. layout = &lt;<a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a>&gt; // A value from the <a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a> enum. e.g.: LAYOUT_VERTICAL style = &lt;styleID&gt; // A style from the referenced theme. position = &lt;x, y&gt; // Position of the form on-screen, measured in pixels. size = &lt;width, height&gt; // Size of the form, measured in pixels.</p>
-<p>// All the nested controls within this form. container { ... } label { } textBox { } button { } checkBox { } radioButton { } slider { } }</p>
+<p>Create from properties file.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">path</td><td>Path to the properties file to create a new form from. </td></tr>
@@ -375,7 +395,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Platform</b></td></t
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_form.html">Form</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:32 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:02 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

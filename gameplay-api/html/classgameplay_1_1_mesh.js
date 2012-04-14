@@ -25,6 +25,6 @@ var classgameplay_1_1_mesh =
     [ "setBoundingSphere", "classgameplay_1_1_mesh.html#a4645b47d3c9a2392380549ac6fff928b", null ],
     [ "setPrimitiveType", "classgameplay_1_1_mesh.html#a2115babdcc1cc60461beeb39f967d6bc", null ],
     [ "setVertexData", "classgameplay_1_1_mesh.html#aba3016461ab9934887d5170ddd896280", null ],
-    [ "Model", "classgameplay_1_1_mesh.html#a2bf2a0e9b454c55aa5dcb5aa4698697b", null ],
-    [ "Package", "classgameplay_1_1_mesh.html#a305c04df1d8a4683e8bfe85167fcfdab", null ]
+    [ "Bundle", "classgameplay_1_1_mesh.html#a2b8dc7250e74bde2e1a403e1d88c8fac", null ],
+    [ "Model", "classgameplay_1_1_mesh.html#a2bf2a0e9b454c55aa5dcb5aa4698697b", null ]
 ];

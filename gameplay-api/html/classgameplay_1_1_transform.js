@@ -1,5 +1,6 @@
 var classgameplay_1_1_transform =
 [
+    [ "MatrixDirtyBits", "classgameplay_1_1_transform.html#afb33ec484f82efed700b67b879ec06ff", null ],
     [ "Transform", "classgameplay_1_1_transform.html#adadaab71b46aa28a497f4a224f871f2c", null ],
     [ "Transform", "classgameplay_1_1_transform.html#a9412c4f8d03dca4599ab96060d38459b", null ],
     [ "Transform", "classgameplay_1_1_transform.html#a3c0074dcfc275d6d3376c0b8cdcbb92c", null ],
@@ -7,7 +8,7 @@ var classgameplay_1_1_transform =
     [ "~Transform", "classgameplay_1_1_transform.html#a28a07847871b540977d44f4ed1deb15f", null ],
     [ "addListener", "classgameplay_1_1_transform.html#a2a160476a329ff502a5c64a5fa3fdb7a", null ],
     [ "cloneInto", "classgameplay_1_1_transform.html#a666310b65bf685fd8f5078bf9da7c7f9", null ],
-    [ "dirty", "classgameplay_1_1_transform.html#a5125224261a0c91a7306de8bedbc3c5d", null ],
+    [ "dirty", "classgameplay_1_1_transform.html#a726f6197a310ccfc9a56dbb2b6801456", null ],
     [ "getAnimationPropertyComponentCount", "classgameplay_1_1_transform.html#a842ce88c27aaedb5b43e0ac675ba7b1f", null ],
     [ "getAnimationPropertyValue", "classgameplay_1_1_transform.html#aa511e1efa7282723e0bfbe38742ec410", null ],
     [ "getBackVector", "classgameplay_1_1_transform.html#aa8ce31a6e4a9b1a7e94255d673fd69b3", null ],
@@ -56,6 +57,7 @@ var classgameplay_1_1_transform =
     [ "set", "classgameplay_1_1_transform.html#a0b008b96cb607c3ffa97deb2d3186d66", null ],
     [ "set", "classgameplay_1_1_transform.html#afd2a8e6df273486c5b49fb91db229879", null ],
     [ "setAnimationPropertyValue", "classgameplay_1_1_transform.html#a444e7a96105255379d13ac2b0523d5e3", null ],
+    [ "setIdentity", "classgameplay_1_1_transform.html#aefd67bac8e079e3ce444861f76d99855", null ],
     [ "setRotation", "classgameplay_1_1_transform.html#a7f00cbb086e2323d3fb920e69bbdbeb7", null ],
     [ "setRotation", "classgameplay_1_1_transform.html#a6923d64f6569c317bab9bca4c18110f6", null ],
     [ "setRotation", "classgameplay_1_1_transform.html#aac9d5f0c96af926d464a288515b2f23c", null ],
@@ -87,7 +89,7 @@ var classgameplay_1_1_transform =
     [ "translateZ", "classgameplay_1_1_transform.html#a2bc17bb02407e2d368ddf5e18aa03be4", null ],
     [ "_listeners", "classgameplay_1_1_transform.html#a1743c40f9ffd1ae5626ec406494feb29", null ],
     [ "_matrix", "classgameplay_1_1_transform.html#ab7566ea33ee9118a77269301d0ff89af", null ],
-    [ "_matrixDirty", "classgameplay_1_1_transform.html#ad396a9db8c1b2bcbf39a7d884b29b508", null ],
+    [ "_matrixDirtyBits", "classgameplay_1_1_transform.html#a8df9659d449c9ff6d4215f574a4593a6", null ],
     [ "_rotation", "classgameplay_1_1_transform.html#a70f58ed708e4ec192c99ab26a4a47dea", null ],
     [ "_scale", "classgameplay_1_1_transform.html#aeeae1936910e4fd9e76b09428418099f", null ],
     [ "_translation", "classgameplay_1_1_transform.html#ae55de1fa0304d66135e16080f8585400", null ],
