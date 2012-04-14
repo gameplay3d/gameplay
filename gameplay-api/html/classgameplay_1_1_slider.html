@@ -155,6 +155,7 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ad3b4ccc06217743fbb7aa4b8f751ba38"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#ad3b4ccc06217743fbb7aa4b8f751ba38">~Slider</a> ()</td></tr>
 <tr class="memitem:afb17c09c56241d08f2e5d41d739e641c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#afb17c09c56241d08f2e5d41d739e641c">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr class="memitem:a00981e76ee43f7d3481a38adc39b8d40"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a00981e76ee43f7d3481a38adc39b8d40">drawImages</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
+<tr class="memitem:a0b1d707805e2e7df46fd4b38a163f778"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a0b1d707805e2e7df46fd4b38a163f778">update</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
 <tr class="memitem:a2e6237b0fd43ece484c280b9d8d3b04f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_slider.html">Slider</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a2e6237b0fd43ece484c280b9d8d3b04f">create</a> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
@@ -168,6 +169,14 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>_max</b></td></tr>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>_step</b></td></tr>
 <tr class="memitem:aa7b0603bc0506c1d0cb72b3c8219ee2e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7b0603bc0506c1d0cb72b3c8219ee2e"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>_value</b></td></tr>
+<tr class="memitem:ace1e63eabbe3143ef17c53902c4a1cdf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ace1e63eabbe3143ef17c53902c4a1cdf"></a>
+<a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_minImage</b></td></tr>
+<tr class="memitem:a9021365461d3586d5eb71f8a108b8732"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9021365461d3586d5eb71f8a108b8732"></a>
+<a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_maxImage</b></td></tr>
+<tr class="memitem:a0dde79480ac87baed30e237cae89bc7b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0dde79480ac87baed30e237cae89bc7b"></a>
+<a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_trackImage</b></td></tr>
+<tr class="memitem:ad28bda683a14e0affffc06daf0741594"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad28bda683a14e0affffc06daf0741594"></a>
+<a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_markerImage</b></td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:aee29d97f7e87f0263024133085c28e3d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee29d97f7e87f0263024133085c28e3d"></a>
@@ -175,9 +184,18 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>A slider consists of a marker that can slide along a track between two end-caps. The following properties are available for sliders:</p>
-<p>slider { style = &lt;styleID&gt; // A Style from the <a class="el" href="classgameplay_1_1_theme.html">Theme</a>. position = &lt;x, y&gt; // Position of the <a class="el" href="classgameplay_1_1_control.html">Control</a> on-screen, measured in pixels. size = &lt;width, height&gt; // Size of the <a class="el" href="classgameplay_1_1_control.html">Control</a>, measured in pixels. min = &lt;float&gt; // The value of the left- / bottom-most point on the slider. max = &lt;float&gt; // The value of the right- / top-most point on the slider. value = &lt;float&gt; // The default position of the marker. step = &lt;float&gt; // If greater than 0, force the marker to snap to discrete multiples of 'step'. text = &lt;string&gt; // Text to display above, below or alongside the slider (depending on the style).</p>
-<p>// TODO: orientation = &lt;HORIZONTAL or="" vertical&gt;=""&gt; // Determines whether a slider is stretched along its width or its height } </p>
-</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<div class="fragment"><pre class="fragment">    slider
+    {
+        style       = &lt;styleID&gt;                 // A Style from the Theme.
+        position    = &lt;x, y&gt;                    // Position of the Control on-screen, measured in pixels.
+        size        = &lt;width, height&gt;           // Size of the Control, measured in pixels.
+        min         = &lt;float&gt;                   // The value of the left- / bottom-most point on the slider.
+        max         = &lt;float&gt;                   // The value of the right- / top-most point on the slider.
+        value       = &lt;float&gt;                   // The default position of the marker.
+        step        = &lt;float&gt;                   // If greater than 0, force the marker to snap to discrete multiples of 'step'.
+        text        = &lt;string&gt;                  // Text to display above, below or alongside the slider (depending on the style).
+        // TODO: orientation = &lt;HORIZONTAL or VERTICAL&gt;  // Determines whether a slider is stretched along its width or its height
+    }</pre></div> </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a180e1a81c7c384de48cd28524873f436"></a>
 <div class="memitem">
 <div class="memproto">
@@ -486,7 +504,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 <p>Set this slider's value. The new value will be clamped to fit within the slider's minimum and maximum values.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">The</td><td>new value. </td></tr>
+    <tr><td class="paramname">value</td><td>The new value. </td></tr>
   </table>
   </dd>
 </dl>
@@ -546,6 +564,32 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 
 </div>
 </div>
+<a class="anchor" id="a0b1d707805e2e7df46fd4b38a163f778"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_slider.html#a0b1d707805e2e7df46fd4b38a163f778">gameplay::Slider::update</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
+          <td class="paramname"><em>clip</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Called when a control's properties change. Updates this control's internal rendering properties, such as its text viewport.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clip</td><td>The clipping rectangle of this control's parent container. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a0983974a9862bb5817b9b47ad6da5148">gameplay::Label</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>gameplay/src/<a class="el" href="_slider_8h_source.html">Slider.h</a></li>
 <li>gameplay/src/Slider.cpp</li>
@@ -557,7 +601,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_slider.html">Slider</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:33 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:03 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

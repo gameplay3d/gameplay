@@ -11,7 +11,7 @@ var classgameplay_1_1_model =
     [ "setMaterial", "classgameplay_1_1_model.html#a7289df77e1f3b99ac3a2d83851e07338", null ],
     [ "setMaterial", "classgameplay_1_1_model.html#a6621db9db0c7147bb0609caa8187c05d", null ],
     [ "setMaterial", "classgameplay_1_1_model.html#ab8bf10c2110d5971f0d251a403b59baa", null ],
+    [ "Bundle", "classgameplay_1_1_model.html#a2b8dc7250e74bde2e1a403e1d88c8fac", null ],
     [ "Mesh", "classgameplay_1_1_model.html#aa41a130f156b145bffb3f4b5172c4c93", null ],
-    [ "Node", "classgameplay_1_1_model.html#a6db9d28bd448a131448276ee03de1e6d", null ],
-    [ "Package", "classgameplay_1_1_model.html#a305c04df1d8a4683e8bfe85167fcfdab", null ]
+    [ "Node", "classgameplay_1_1_model.html#a6db9d28bd448a131448276ee03de1e6d", null ]
 ];

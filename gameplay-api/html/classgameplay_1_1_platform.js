@@ -15,6 +15,7 @@ var classgameplay_1_1_platform =
     [ "setAbsoluteTime", "classgameplay_1_1_platform.html#a45d449a6b5d17f1ed9d75512de8374a1", null ],
     [ "setMultiTouch", "classgameplay_1_1_platform.html#a3a3f93c158269eb93949ba5d9b550c70", null ],
     [ "setVsync", "classgameplay_1_1_platform.html#acacf35e2782bd3253a231dd0bd459f64", null ],
+    [ "signalShutdown", "classgameplay_1_1_platform.html#abbb42d7ac405bad0db3eb642495c84b3", null ],
     [ "sleep", "classgameplay_1_1_platform.html#abe8674e191630d8f24a1137ce3929e8c", null ],
     [ "swapBuffers", "classgameplay_1_1_platform.html#a52ceea1e71f2c8d99310baa61a69223b", null ],
     [ "touchEventInternal", "classgameplay_1_1_platform.html#a6812cbda855837531c8631eb4763fdb5", null ]

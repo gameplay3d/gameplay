@@ -25,7 +25,7 @@ namespace gameplay
 
         for (unsigned int i = 0, count = _images.size(); i < count; ++i)
         {
-            Image* image = _images[i];
+            ThemeImage* image = _images[i];
             SAFE_RELEASE(image);
         }
 
@@ -106,7 +106,7 @@ namespace gameplay
             
             if (strcmp(spacename, "image") == 0)
             {
-                theme->_images.push_back(Image::create(tw, th, space, Vector4::one()));
+                theme->_images.push_back(ThemeImage::create(tw, th, space, Vector4::one()));
             }
             else if (strcmp(spacename, "imageList") == 0)
             {
@@ -196,7 +196,7 @@ namespace gameplay
                         }
 
                         ImageList* imageList = NULL;
-                        Image* cursor = NULL;
+                        ThemeImage* cursor = NULL;
                         Skin* skin = NULL;
                         theme->lookUpSprites(innerSpace, &imageList, &cursor, &skin);
 
@@ -307,7 +307,7 @@ namespace gameplay
                         }
 
                         ImageList* imageList = NULL;
-                        Image* cursor = NULL;
+                        ThemeImage* cursor = NULL;
                         Skin* skin = NULL;
                         theme->lookUpSprites(innerSpace, &imageList, &cursor, &skin);
 
@@ -394,7 +394,7 @@ namespace gameplay
                     disabled->addRef();
                 }
 
-                Theme::Style* s = new Theme::Style(space->getId(), tw, th, margin, padding, normal, focus, active, disabled);
+                Theme::Style* s = new Theme::Style(theme, space->getId(), tw, th, margin, padding, normal, focus, active, disabled);
                 theme->_styles.push_back(s);
             }
 
@@ -468,19 +468,19 @@ namespace gameplay
     }
 
     /****************
-     * Theme::Image *
+     * Theme::ThemeImage *
      ****************/
-    Theme::Image::Image(float tw, float th, const Rectangle& region, const Vector4& color)
+    Theme::ThemeImage::ThemeImage(float tw, float th, const Rectangle& region, const Vector4& color)
         : _region(region), _color(color)
     {
         generateUVs(tw, th, region.x, region.y, region.width, region.height, &_uvs);
     }
 
-    Theme::Image::~Image()
+    Theme::ThemeImage::~ThemeImage()
     {
     }
 
-    Theme::Image* Theme::Image::create(float tw, float th, Properties* properties, const Vector4& defaultColor)
+    Theme::ThemeImage* Theme::ThemeImage::create(float tw, float th, Properties* properties, const Vector4& defaultColor)
     {
         Vector4 regionVector;                
         properties->getVector4("region", &regionVector);
@@ -496,7 +496,7 @@ namespace gameplay
             color.set(defaultColor);
         }
 
-        Image* image = new Image(tw, th, region, color);
+        ThemeImage* image = new ThemeImage(tw, th, region, color);
         const char* id = properties->getId();
         if (id)
         {
@@ -506,22 +506,22 @@ namespace gameplay
         return image;
     }
 
-    const char* Theme::Image::getId() const
+    const char* Theme::ThemeImage::getId() const
     {
         return _id.c_str();
     }
 
-    const Theme::UVs& Theme::Image::getUVs() const
+    const Theme::UVs& Theme::ThemeImage::getUVs() const
     {
         return _uvs;
     }
 
-    const Rectangle& Theme::Image::getRegion() const
+    const Rectangle& Theme::ThemeImage::getRegion() const
     {
         return _region;
     }
 
-    const Vector4& Theme::Image::getColor() const
+    const Vector4& Theme::ThemeImage::getColor() const
     {
         return _color;
     }
@@ -538,20 +538,20 @@ namespace gameplay
         _id = copy._id;
         _color = copy._color;
 
-        std::vector<Image*>::const_iterator it;
+        std::vector<ThemeImage*>::const_iterator it;
         for (it = copy._images.begin(); it != copy._images.end(); it++)
         {
-            Image* image = *it;
-            _images.push_back(new Image(*image));
+            ThemeImage* image = *it;
+            _images.push_back(new ThemeImage(*image));
         }
     }
 
     Theme::ImageList::~ImageList()
     {
-        std::vector<Image*>::const_iterator it;
+        std::vector<ThemeImage*>::const_iterator it;
         for (it = _images.begin(); it != _images.end(); it++)
         {
-            Image* image = *it;
+            ThemeImage* image = *it;
             SAFE_RELEASE(image);
         }
     }
@@ -575,7 +575,7 @@ namespace gameplay
         Properties* space = properties->getNextNamespace();
         while (space != NULL)
         {
-            Image* image = Image::create(tw, th, space, color);
+            ThemeImage* image = ThemeImage::create(tw, th, space, color);
             imageList->_images.push_back(image);
             space = properties->getNextNamespace();
         }
@@ -588,12 +588,12 @@ namespace gameplay
         return _id.c_str();
     }
 
-    Theme::Image* Theme::ImageList::getImage(const char* imageId) const
+    Theme::ThemeImage* Theme::ImageList::getImage(const char* imageId) const
     {
-        std::vector<Image*>::const_iterator it;
+        std::vector<ThemeImage*>::const_iterator it;
         for (it = _images.begin(); it != _images.end(); it++)
         {
-            Image* image = *it;
+            ThemeImage* image = *it;
             if (strcmp(image->getId(), imageId) == 0)
             {
                 return image;
@@ -724,7 +724,7 @@ namespace gameplay
         uvs->v2 = 1.0f - ((y + height) * th);
     }
 
-    void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList, Image** cursor, Skin** Skin)
+    void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList, ThemeImage** cursor, Skin** Skin)
     {
         const char* imageListString = overlaySpace->getString("imageList");
         if (imageListString)

@@ -11,22 +11,23 @@ namespace gameplay
 {
 
 /**
- *  A slider consists of a marker that can slide along a track between two end-caps.
- *  The following properties are available for sliders:
- *
- *  slider
- *  {
- *      style       = <styleID>                 // A Style from the Theme.
- *      position    = <x, y>                    // Position of the Control on-screen, measured in pixels.
- *      size        = <width, height>           // Size of the Control, measured in pixels.
- *      min         = <float>                   // The value of the left- / bottom-most point on the slider.
- *      max         = <float>                   // The value of the right- / top-most point on the slider.
- *      value       = <float>                   // The default position of the marker.
- *      step        = <float>                   // If greater than 0, force the marker to snap to discrete multiples of 'step'.
- *      text        = <string>                  // Text to display above, below or alongside the slider (depending on the style).
- *
-*      // TODO: orientation = <HORIZONTAL or VERTICAL>  // Determines whether a slider is stretched along its width or its height
- *  }
+ * A slider consists of a marker that can slide along a track between two end-caps.
+ * The following properties are available for sliders:
+
+ @verbatim
+    slider
+    {
+        style       = <styleID>                 // A Style from the Theme.
+        position    = <x, y>                    // Position of the Control on-screen, measured in pixels.
+        size        = <width, height>           // Size of the Control, measured in pixels.
+        min         = <float>                   // The value of the left- / bottom-most point on the slider.
+        max         = <float>                   // The value of the right- / top-most point on the slider.
+        value       = <float>                   // The default position of the marker.
+        step        = <float>                   // If greater than 0, force the marker to snap to discrete multiples of 'step'.
+        text        = <string>                  // Text to display above, below or alongside the slider (depending on the style).
+        // TODO: orientation = <HORIZONTAL or VERTICAL>  // Determines whether a slider is stretched along its width or its height
+    }
+ @endverbatim
  */
 class Slider : public Label
 {
@@ -148,10 +149,17 @@ protected:
      */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
+    void update(const Rectangle& clip);
+
     float _min;
     float _max;
     float _step;
     float _value;
+
+    Theme::ThemeImage* _minImage;
+    Theme::ThemeImage* _maxImage;
+    Theme::ThemeImage* _trackImage;
+    Theme::ThemeImage* _markerImage;
 
 private:
 

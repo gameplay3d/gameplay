@@ -148,8 +148,7 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:aff57a5401dff1677dbc16a735467832f"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#aff57a5401dff1677dbc16a735467832f">~Joint</a> ()</td></tr>
 <tr class="memitem:a4dc61d9fab355044dd2aaa7114af1db1"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#a4dc61d9fab355044dd2aaa7114af1db1">cloneSingleNode</a> (<a class="el" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a> &amp;context) const </td></tr>
 <tr class="memitem:abe0c2175b43f1cbedd5622dc195337a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#abe0c2175b43f1cbedd5622dc195337a0">setInverseBindPose</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;m)</td></tr>
-<tr class="memitem:ad2a8413446720c8f2651f686fb0a6f78"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad2a8413446720c8f2651f686fb0a6f78"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>updateJointMatrix</b> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;bindShape, <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *matrixPalette)</td></tr>
+<tr class="memitem:ad2a8413446720c8f2651f686fb0a6f78"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#ad2a8413446720c8f2651f686fb0a6f78">updateJointMatrix</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;bindShape, <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *matrixPalette)</td></tr>
 <tr class="memitem:af0ca30705f3d4ff515f799ab16133151"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#af0ca30705f3d4ff515f799ab16133151">transformChanged</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -168,8 +167,8 @@ Friends</h2></td></tr>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 <tr class="memitem:afe0a64f7e3808b1762846efaf311bd94"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe0a64f7e3808b1762846efaf311bd94"></a>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>MeshSkin</b></td></tr>
-<tr class="memitem:a305c04df1d8a4683e8bfe85167fcfdab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a305c04df1d8a4683e8bfe85167fcfdab"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr>
+<tr class="memitem:a2b8dc7250e74bde2e1a403e1d88c8fac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b8dc7250e74bde2e1a403e1d88c8fac"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Bundle</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a basic hierachial structure of transformation spaces. </p>
@@ -338,9 +337,44 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
       </table>
 </div>
 <div class="memdoc">
-<p>Called when this <a class="el" href="classgameplay_1_1_node.html">Node</a>'s transform changes. </p>
+<p>Called when this <a class="el" href="classgameplay_1_1_joint.html">Joint</a>'s transform changes. </p>
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_node.html#a7d9e0a5ff4b151d540ef2cddf0e1cb7e">gameplay::Node</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad2a8413446720c8f2651f686fb0a6f78"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_joint.html#ad2a8413446720c8f2651f686fb0a6f78">gameplay::Joint::updateJointMatrix</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>bindShape</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *&#160;</td>
+          <td class="paramname"><em>matrixPalette</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Updates the joint matrix.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bindShape</td><td>The bind shape matrix. </td></tr>
+    <tr><td class="paramname">matrixPalette</td><td>The matrix palette to update. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -355,7 +389,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Package</b></td></tr
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_joint.html">Joint</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:32 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:02 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

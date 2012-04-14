@@ -6,7 +6,7 @@ var classgameplay_1_1_game =
     [ "Game", "classgameplay_1_1_game.html#ac8e478eb88e8f9d42030f6c7e4cc5639", null ],
     [ "clear", "classgameplay_1_1_game.html#aed3bfa9c1cfcdd4eb0729284d5e10a8d", null ],
     [ "displayKeyboard", "classgameplay_1_1_game.html#a092768704d671429dc791304f208c75c", null ],
-    [ "end", "classgameplay_1_1_game.html#aed76492a2f0e6eebe58a86b19ed0236e", null ],
+    [ "exit", "classgameplay_1_1_game.html#a00e505fc1ab4e8e1feceb0cdaf13bf03", null ],
     [ "finalize", "classgameplay_1_1_game.html#a84a8111bf36fa5d631272ac955943b40", null ],
     [ "frame", "classgameplay_1_1_game.html#a7b6ff8a865178e0f091ce550a0134de5", null ],
     [ "getAbsoluteTime", "classgameplay_1_1_game.html#acf6d3b145041cdef23c96b70acf21a25", null ],

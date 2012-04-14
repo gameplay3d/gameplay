@@ -11,6 +11,9 @@ class Node;
 class NodeCloneContext;
 class Pass;
 
+/**
+ * Defines the render state of the graphics device.
+ */
 class RenderState : public Ref
 {
     friend class Game;

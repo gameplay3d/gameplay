@@ -274,7 +274,7 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
 
 void TextBox::update(const Rectangle& clip)
 {
-    Control::update(clip);
+    Label::update(clip);
 
     // Get index into string and cursor location from the last recorded touch location.
     if (_state == FOCUS)
@@ -287,6 +287,9 @@ void TextBox::update(const Rectangle& clip)
         font->getIndexAtLocation(_text.c_str(), _clip, fontSize, _caretLocation, &_caretLocation,
             textAlignment, true, rightToLeft);
     }
+
+    _fontSize = getFontSize(_state);
+    _caretImage = getImage("textCaret", _state);
 }
 
 void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
@@ -294,14 +297,14 @@ void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     if (_state == FOCUS)
     {
         // Draw the cursor at its current location.
-        const Rectangle& region = getImageRegion("textCaret", _state);
+        const Rectangle& region = _caretImage->getRegion();
         if (!region.isEmpty())
         {
-            const Vector4& color = getImageColor("textCaret", _state);
-            const Theme::UVs uvs = getImageUVs("textCaret", _state);
-            unsigned int fontSize = getFontSize(_state);
+            const Theme::UVs uvs = _caretImage->getUVs();
+            Vector4 color = _caretImage->getColor();
+            color.w *= _opacity;
 
-            spriteBatch->draw(_caretLocation.x - (region.width / 2.0f), _caretLocation.y, region.width, fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
+            spriteBatch->draw(_caretLocation.x - (region.width / 2.0f), _caretLocation.y, region.width, _fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
         }
     }
 
@@ -310,7 +313,7 @@ void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 
 void TextBox::setCaretLocation(int x, int y)
 {
-    Theme::Border border = getBorder(_state);
+    const Theme::Border& border = getBorder(_state);
     Theme::Padding padding = getPadding();
 
     _caretLocation.set(x - border.left - padding.left + _clip.x,

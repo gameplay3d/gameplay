@@ -122,7 +122,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00008"></a>00008 
 <a name="l00012"></a><a class="code" href="classgameplay_1_1_font.html">00012</a> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_font.html">Font</a> : <span class="keyword">public</span> <a class="code" href="classgameplay_1_1_ref.html">Ref</a>
 <a name="l00013"></a>00013 {
-<a name="l00014"></a>00014     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_package.html">Package</a>;
+<a name="l00014"></a>00014     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_bundle.html">Bundle</a>;
 <a name="l00015"></a>00015     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgameplay_1_1_text_box.html">TextBox</a>;
 <a name="l00016"></a>00016 
 <a name="l00017"></a>00017 <span class="keyword">public</span>:
@@ -179,71 +179,71 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00122"></a>00122 
 <a name="l00126"></a>00126     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_font.html#a3702f26b3ba60db60e73ad6de5198d05">end</a>();
 <a name="l00127"></a>00127 
-<a name="l00137"></a>00137     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_font.html#a755172c9976d27f46600f58ae539cfc3">drawText</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; color, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size = 0, <span class="keywordtype">bool</span> rightToLeft = <span class="keyword">false</span>);
-<a name="l00138"></a>00138 
-<a name="l00152"></a>00152     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_font.html#a755172c9976d27f46600f58ae539cfc3">drawText</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; area, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; color, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size = 0, 
-<a name="l00153"></a>00153                   <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify = ALIGN_TOP_LEFT, <span class="keywordtype">bool</span> wrap = <span class="keyword">true</span>, <span class="keywordtype">bool</span> rightToLeft = <span class="keyword">false</span>, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>* clip = NULL);
-<a name="l00154"></a>00154 
-<a name="l00163"></a>00163     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_font.html#a15ef90498b3283f8472d8caa0020ef7e">measureText</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* widthOut, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* heightOut);
-<a name="l00164"></a>00164 
-<a name="l00177"></a>00177     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_font.html#a15ef90498b3283f8472d8caa0020ef7e">measureText</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; clip, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>* out,
-<a name="l00178"></a>00178                      <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify = ALIGN_TOP_LEFT, <span class="keywordtype">bool</span> wrap = <span class="keyword">true</span>, <span class="keywordtype">bool</span> ignoreClip = <span class="keyword">false</span>);
-<a name="l00179"></a>00179 
-<a name="l00183"></a>00183     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_font.html#adea588cf12f55a10e73236473d6815ca">getIndexAtLocation</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; clip, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; inLocation, <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>* outLocation,
-<a name="l00184"></a>00184                                     <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify = ALIGN_TOP_LEFT, <span class="keywordtype">bool</span> wrap = <span class="keyword">true</span>, <span class="keywordtype">bool</span> rightToLeft = <span class="keyword">false</span>);
-<a name="l00185"></a>00185 
-<a name="l00189"></a>00189     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_font.html#aaf8f5afae37d25978c8c40baaa550c09">getLocationAtIndex</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; clip, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>* outLocation, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> destIndex,
-<a name="l00190"></a>00190                             <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify = ALIGN_TOP_LEFT, <span class="keywordtype">bool</span> wrap = <span class="keyword">true</span>, <span class="keywordtype">bool</span> rightToLeft = <span class="keyword">false</span>);
-<a name="l00191"></a>00191 
-<a name="l00192"></a>00192     <a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* getSpriteBatch();
-<a name="l00193"></a>00193 
-<a name="l00194"></a>00194     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> getJustifyFromString(<span class="keyword">const</span> <span class="keywordtype">char</span>* justify);
-<a name="l00195"></a>00195 
-<a name="l00196"></a>00196 
-<a name="l00197"></a>00197 <span class="keyword">private</span>:
-<a name="l00198"></a>00198 
-<a name="l00202"></a>00202     <a class="code" href="classgameplay_1_1_font.html">Font</a>();
-<a name="l00203"></a>00203 
-<a name="l00207"></a>00207     <a class="code" href="classgameplay_1_1_font.html">Font</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_font.html">Font</a>&amp; copy);
-<a name="l00208"></a>00208 
-<a name="l00212"></a>00212     ~<a class="code" href="classgameplay_1_1_font.html">Font</a>();
-<a name="l00213"></a>00213 
-<a name="l00214"></a>00214     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getIndexOrLocation(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; clip, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; inLocation, <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>* outLocation,
-<a name="l00215"></a>00215                                     <span class="keyword">const</span> <span class="keywordtype">int</span> destIndex = -1, <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify = ALIGN_TOP_LEFT, <span class="keywordtype">bool</span> wrap = <span class="keyword">true</span>, <span class="keywordtype">bool</span> rightToLeft = <span class="keyword">false</span>);
-<a name="l00216"></a>00216 
-<a name="l00217"></a>00217     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getTokenWidth(<span class="keyword">const</span> <span class="keywordtype">char</span>* token, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> length, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <span class="keywordtype">float</span> scale);
-<a name="l00218"></a>00218 
-<a name="l00219"></a>00219     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getReversedTokenLength(<span class="keyword">const</span> <span class="keywordtype">char</span>* token, <span class="keyword">const</span> <span class="keywordtype">char</span>* bufStart);
-<a name="l00220"></a>00220 
-<a name="l00221"></a>00221     <span class="keywordtype">int</span> handleDelimiters(<span class="keyword">const</span> <span class="keywordtype">char</span>** token, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <span class="keyword">const</span> <span class="keywordtype">int</span> iteration, <span class="keyword">const</span> <span class="keywordtype">int</span> areaX, <span class="keywordtype">int</span>* xPos, <span class="keywordtype">int</span>* yPos, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* lineLength,
-<a name="l00222"></a>00222                          std::vector&lt;int&gt;::const_iterator* xPositionsIt, std::vector&lt;int&gt;::const_iterator xPositionsEnd, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* charIndex = NULL,
-<a name="l00223"></a>00223                          <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>* stopAtPosition = NULL, <span class="keyword">const</span> <span class="keywordtype">int</span> currentIndex = -1, <span class="keyword">const</span> <span class="keywordtype">int</span> destIndex = -1);
-<a name="l00224"></a>00224 
-<a name="l00225"></a>00225     <span class="keywordtype">void</span> addLineInfo(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; area, <span class="keywordtype">int</span> lineWidth, <span class="keywordtype">int</span> lineLength, <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> hAlign,
-<a name="l00226"></a>00226                      std::vector&lt;int&gt;* xPositions, std::vector&lt;unsigned int&gt;* lineLengths, <span class="keywordtype">bool</span> rightToLeft);
+<a name="l00138"></a>00138     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_font.html#a755172c9976d27f46600f58ae539cfc3">drawText</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; color, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size = 0, <span class="keywordtype">bool</span> rightToLeft = <span class="keyword">false</span>);
+<a name="l00139"></a>00139 
+<a name="l00153"></a>00153     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_font.html#a755172c9976d27f46600f58ae539cfc3">drawText</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; area, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector4.html">Vector4</a>&amp; color, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size = 0, 
+<a name="l00154"></a>00154                   <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify = ALIGN_TOP_LEFT, <span class="keywordtype">bool</span> wrap = <span class="keyword">true</span>, <span class="keywordtype">bool</span> rightToLeft = <span class="keyword">false</span>, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>* clip = NULL);
+<a name="l00155"></a>00155 
+<a name="l00164"></a>00164     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_font.html#a15ef90498b3283f8472d8caa0020ef7e">measureText</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* widthOut, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* heightOut);
+<a name="l00165"></a>00165 
+<a name="l00178"></a>00178     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_font.html#a15ef90498b3283f8472d8caa0020ef7e">measureText</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; clip, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>* out,
+<a name="l00179"></a>00179                      <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify = ALIGN_TOP_LEFT, <span class="keywordtype">bool</span> wrap = <span class="keyword">true</span>, <span class="keywordtype">bool</span> ignoreClip = <span class="keyword">false</span>);
+<a name="l00180"></a>00180 
+<a name="l00184"></a>00184     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classgameplay_1_1_font.html#adea588cf12f55a10e73236473d6815ca">getIndexAtLocation</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; clip, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; inLocation, <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>* outLocation,
+<a name="l00185"></a>00185                                     <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify = ALIGN_TOP_LEFT, <span class="keywordtype">bool</span> wrap = <span class="keyword">true</span>, <span class="keywordtype">bool</span> rightToLeft = <span class="keyword">false</span>);
+<a name="l00186"></a>00186 
+<a name="l00190"></a>00190     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_font.html#aaf8f5afae37d25978c8c40baaa550c09">getLocationAtIndex</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; clip, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>* outLocation, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> destIndex,
+<a name="l00191"></a>00191                             <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify = ALIGN_TOP_LEFT, <span class="keywordtype">bool</span> wrap = <span class="keyword">true</span>, <span class="keywordtype">bool</span> rightToLeft = <span class="keyword">false</span>);
+<a name="l00192"></a>00192 
+<a name="l00198"></a>00198     <a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* <a class="code" href="classgameplay_1_1_font.html#aadf3ac4aeabeb2d82585d88772ca5a22">getSpriteBatch</a>() <span class="keyword">const</span>;
+<a name="l00199"></a>00199 
+<a name="l00208"></a>00208     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> <a class="code" href="classgameplay_1_1_font.html#a1575d5cdaba1ce09b03e973fa9bf3fab">getJustify</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* justify);
+<a name="l00209"></a>00209 
+<a name="l00210"></a>00210 
+<a name="l00211"></a>00211 <span class="keyword">private</span>:
+<a name="l00212"></a>00212 
+<a name="l00216"></a>00216     <a class="code" href="classgameplay_1_1_font.html">Font</a>();
+<a name="l00217"></a>00217 
+<a name="l00221"></a>00221     <a class="code" href="classgameplay_1_1_font.html">Font</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_font.html">Font</a>&amp; copy);
+<a name="l00222"></a>00222 
+<a name="l00226"></a>00226     ~<a class="code" href="classgameplay_1_1_font.html">Font</a>();
 <a name="l00227"></a>00227 
-<a name="l00228"></a>00228     std::string _path;
-<a name="l00229"></a>00229     std::string _id;
-<a name="l00230"></a>00230     std::string _family;
-<a name="l00231"></a>00231     <a class="code" href="classgameplay_1_1_font.html#a1a26ebf11d0cb5530c0ba8ef0bcde246">Style</a> _style;
-<a name="l00232"></a>00232     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _size;
-<a name="l00233"></a>00233     <a class="code" href="classgameplay_1_1_font_1_1_glyph.html">Glyph</a>* _glyphs;
-<a name="l00234"></a>00234     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _glyphCount;
-<a name="l00235"></a>00235     <a class="code" href="classgameplay_1_1_texture.html">Texture</a>* _texture;
-<a name="l00236"></a>00236     <a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* _batch;
-<a name="l00237"></a>00237     <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a> _viewport;
-<a name="l00238"></a>00238 };
-<a name="l00239"></a>00239 
-<a name="l00240"></a>00240 }
+<a name="l00228"></a>00228     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getIndexOrLocation(<span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; clip, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; inLocation, <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>* outLocation,
+<a name="l00229"></a>00229                                     <span class="keyword">const</span> <span class="keywordtype">int</span> destIndex = -1, <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify = ALIGN_TOP_LEFT, <span class="keywordtype">bool</span> wrap = <span class="keyword">true</span>, <span class="keywordtype">bool</span> rightToLeft = <span class="keyword">false</span>);
+<a name="l00230"></a>00230 
+<a name="l00231"></a>00231     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getTokenWidth(<span class="keyword">const</span> <span class="keywordtype">char</span>* token, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> length, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <span class="keywordtype">float</span> scale);
+<a name="l00232"></a>00232 
+<a name="l00233"></a>00233     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getReversedTokenLength(<span class="keyword">const</span> <span class="keywordtype">char</span>* token, <span class="keyword">const</span> <span class="keywordtype">char</span>* bufStart);
+<a name="l00234"></a>00234 
+<a name="l00235"></a>00235     <span class="keywordtype">int</span> handleDelimiters(<span class="keyword">const</span> <span class="keywordtype">char</span>** token, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size, <span class="keyword">const</span> <span class="keywordtype">int</span> iteration, <span class="keyword">const</span> <span class="keywordtype">int</span> areaX, <span class="keywordtype">int</span>* xPos, <span class="keywordtype">int</span>* yPos, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* lineLength,
+<a name="l00236"></a>00236                          std::vector&lt;int&gt;::const_iterator* xPositionsIt, std::vector&lt;int&gt;::const_iterator xPositionsEnd, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* charIndex = NULL,
+<a name="l00237"></a>00237                          <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector2.html">Vector2</a>* stopAtPosition = NULL, <span class="keyword">const</span> <span class="keywordtype">int</span> currentIndex = -1, <span class="keyword">const</span> <span class="keywordtype">int</span> destIndex = -1);
+<a name="l00238"></a>00238 
+<a name="l00239"></a>00239     <span class="keywordtype">void</span> addLineInfo(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; area, <span class="keywordtype">int</span> lineWidth, <span class="keywordtype">int</span> lineLength, <a class="code" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> hAlign,
+<a name="l00240"></a>00240                      std::vector&lt;int&gt;* xPositions, std::vector&lt;unsigned int&gt;* lineLengths, <span class="keywordtype">bool</span> rightToLeft);
 <a name="l00241"></a>00241 
-<a name="l00242"></a>00242 <span class="preprocessor">#endif</span>
+<a name="l00242"></a>00242     std::string _path;
+<a name="l00243"></a>00243     std::string _id;
+<a name="l00244"></a>00244     std::string _family;
+<a name="l00245"></a>00245     <a class="code" href="classgameplay_1_1_font.html#a1a26ebf11d0cb5530c0ba8ef0bcde246">Style</a> _style;
+<a name="l00246"></a>00246     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _size;
+<a name="l00247"></a>00247     <a class="code" href="classgameplay_1_1_font_1_1_glyph.html">Glyph</a>* _glyphs;
+<a name="l00248"></a>00248     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _glyphCount;
+<a name="l00249"></a>00249     <a class="code" href="classgameplay_1_1_texture.html">Texture</a>* _texture;
+<a name="l00250"></a>00250     <a class="code" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* _batch;
+<a name="l00251"></a>00251     <a class="code" href="classgameplay_1_1_rectangle.html">Rectangle</a> _viewport;
+<a name="l00252"></a>00252 };
+<a name="l00253"></a>00253 
+<a name="l00254"></a>00254 }
+<a name="l00255"></a>00255 
+<a name="l00256"></a>00256 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><b>Font.h</b>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:32 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:00 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

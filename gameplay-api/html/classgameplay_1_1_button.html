@@ -154,8 +154,18 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a button UI control. This is essentially a label that can have a callback method set on it.</p>
 <p>The following properties are available for buttons:</p>
-<p>button &lt;buttonID&gt; { style = &lt;styleID&gt; position = &lt;x, y&gt; size = &lt;width, height&gt; text = &lt;string&gt; } </p>
-</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<div class="fragment"><pre class="fragment">    button &lt;buttonID&gt;
+    {
+         style       = &lt;styleID&gt;
+         alignment   = &lt;Control::Alignment constant&gt; // Note: 'position' will be ignored.
+         position    = &lt;x, y&gt;
+         autoWidth   = &lt;bool&gt;
+         autoHeight  = &lt;bool&gt;
+         size        = &lt;width, height&gt;
+         width       = &lt;width&gt;   // Can be used in place of 'size', e.g. with 'autoHeight = true'
+         height      = &lt;height&gt;  // Can be used in place of 'size', e.g. with 'autoWidth = true'
+         text        = &lt;string&gt;
+    }</pre></div> </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a0d5ed8952e44fc624ccf67e952041030"></a>
 <div class="memitem">
 <div class="memproto">
@@ -227,7 +237,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a58a98173ef1d8ce78bb89375fb89fd0e">gameplay::Label</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_radio_button.html#a147c7d4594a4f74b9459b73ea7519d97">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_check_box.html#a76d7d28f653086a6d611efa7349c0117">gameplay::CheckBox</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_check_box.html#a76d7d28f653086a6d611efa7349c0117">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_radio_button.html#a147c7d4594a4f74b9459b73ea7519d97">gameplay::RadioButton</a>.</p>
 
 </div>
 </div>
@@ -282,7 +292,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#ab1e9f30350403437d01e86a610dba8a5">gameplay::Control</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_radio_button.html#af22bc32cf3c51611cf61bb99da51ba89">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_check_box.html#a3849a62e5b3895b684592eacd6dd18b2">gameplay::CheckBox</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_check_box.html#a3849a62e5b3895b684592eacd6dd18b2">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_radio_button.html#af22bc32cf3c51611cf61bb99da51ba89">gameplay::RadioButton</a>.</p>
 
 </div>
 </div>
@@ -297,7 +307,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_button.html">Button</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 5 2012 11:46:32 for gameplay by
+    <li class="footer">Generated on Fri Apr 13 2012 21:34:01 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

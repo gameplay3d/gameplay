@@ -12,7 +12,7 @@ var classgameplay_1_1_mesh_skin =
     [ "setBindShape", "classgameplay_1_1_mesh_skin.html#a85df936b1fa0c3168d2ac151f5679c40", null ],
     [ "setRootJoint", "classgameplay_1_1_mesh_skin.html#a54a2c8521df1d2f7513e9836732e2618", null ],
     [ "transformChanged", "classgameplay_1_1_mesh_skin.html#a5f6842c9b498baaf7114af3cfb9a6e45", null ],
+    [ "Bundle", "classgameplay_1_1_mesh_skin.html#a2b8dc7250e74bde2e1a403e1d88c8fac", null ],
     [ "Joint", "classgameplay_1_1_mesh_skin.html#a2b27269e818d7b63995be0e0f812bf54", null ],
-    [ "Model", "classgameplay_1_1_mesh_skin.html#a2bf2a0e9b454c55aa5dcb5aa4698697b", null ],
-    [ "Package", "classgameplay_1_1_mesh_skin.html#a305c04df1d8a4683e8bfe85167fcfdab", null ]
+    [ "Model", "classgameplay_1_1_mesh_skin.html#a2bf2a0e9b454c55aa5dcb5aa4698697b", null ]
 ];

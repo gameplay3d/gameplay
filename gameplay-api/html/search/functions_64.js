@@ -4,6 +4,7 @@ var searchData=
   ['decompose',['decompose',['../classgameplay_1_1_matrix.html#a239cd4f3f6359049b038f8b250085d49',1,'gameplay::Matrix']]],
   ['destroyanimation',['destroyAnimation',['../classgameplay_1_1_animation_target.html#a7bc288605c05e88521448cae2f21e2bc',1,'gameplay::AnimationTarget']]],
   ['determinant',['determinant',['../classgameplay_1_1_matrix.html#a2f4fc61b659eaedda33077939b648aaf',1,'gameplay::Matrix']]],
+  ['dirty',['dirty',['../classgameplay_1_1_transform.html#a726f6197a310ccfc9a56dbb2b6801456',1,'gameplay::Transform']]],
   ['disable',['disable',['../classgameplay_1_1_control.html#ab6d5add40c4143ddd1d1acdf959f8bca',1,'gameplay::Control']]],
   ['displaykeyboard',['displayKeyboard',['../classgameplay_1_1_game.html#a092768704d671429dc791304f208c75c',1,'gameplay::Game::displayKeyboard()'],['../classgameplay_1_1_platform.html#aea3bd12f36c33c33824bc1ccdd4f32f3',1,'gameplay::Platform::displayKeyboard()']]],
   ['distance',['distance',['../classgameplay_1_1_plane.html#afbbd83cf3abd77159c267461b91798e8',1,'gameplay::Plane::distance()'],['../classgameplay_1_1_vector2.html#afb95f01c25e0058b19c32ea4799caf80',1,'gameplay::Vector2::distance()'],['../classgameplay_1_1_vector3.html#ab345e9b6781cfdefcece1e4b9ad87dc5',1,'gameplay::Vector3::distance()'],['../classgameplay_1_1_vector4.html#afcc7362fb98aed6341b1c52e941b4699',1,'gameplay::Vector4::distance()']]],
