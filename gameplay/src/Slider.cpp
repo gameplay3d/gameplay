@@ -141,6 +141,16 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     return Control::touchEvent(evt, x, y, contactIndex);
 }
 
+void Slider::update(const Rectangle& clip)
+{
+    Label::update(clip);
+
+    _minImage = getImage("minCap", _state);
+    _maxImage = getImage("maxCap", _state);
+    _markerImage = getImage("marker", _state);
+    _trackImage = getImage("track", _state);
+}
+
 void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     // TODO: Vertical slider.
@@ -151,26 +161,25 @@ void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     const Theme::Border& border = getBorder(_state);
     const Theme::Padding& padding = getPadding();
 
-    const Rectangle& minCapRegion = getImageRegion("minCap", _state);
-    const Rectangle& maxCapRegion = getImageRegion("maxCap", _state);
-    const Rectangle& markerRegion = getImageRegion("marker", _state);
-    const Rectangle& trackRegion = getImageRegion("track", _state);
+    const Rectangle& minCapRegion = _minImage->getRegion();
+    const Rectangle& maxCapRegion = _maxImage->getRegion();
+    const Rectangle& markerRegion = _markerImage->getRegion();
+    const Rectangle& trackRegion = _trackImage->getRegion();
 
-    const Theme::UVs minCap = getImageUVs("minCap", _state);
-    const Theme::UVs maxCap = getImageUVs("maxCap", _state);
-    const Theme::UVs marker = getImageUVs("marker", _state);
-    const Theme::UVs track = getImageUVs("track", _state);
+    const Theme::UVs minCap = _minImage->getUVs();
+    const Theme::UVs maxCap = _maxImage->getUVs();
+    const Theme::UVs marker = _markerImage->getUVs();
+    const Theme::UVs track = _trackImage->getUVs();
 
-    Vector4 minCapColor = getImageColor("minCap", _state);
-    Vector4 maxCapColor = getImageColor("maxCap", _state);
-    Vector4 markerColor = getImageColor("marker", _state);
-    Vector4 trackColor = getImageColor("track", _state);
+    Vector4 minCapColor = _minImage->getColor();
+    Vector4 maxCapColor = _maxImage->getColor();
+    Vector4 markerColor = _markerImage->getColor();
+    Vector4 trackColor = _trackImage->getColor();
 
-    float opacity = getOpacity(_state);
-    minCapColor.w *= opacity;
-    maxCapColor.w *= opacity;
-    markerColor.w *= opacity;
-    trackColor.w *= opacity;
+    minCapColor.w *= _opacity;
+    maxCapColor.w *= _opacity;
+    markerColor.w *= _opacity;
+    trackColor.w *= _opacity;
 
     // Draw order: track, caps, marker.
     float midY = clip.y + _clipBounds.y + (_clipBounds.height - border.bottom - padding.bottom) / 2.0f;

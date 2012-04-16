@@ -146,6 +146,19 @@ AnimationClip* Animation::getClip(const char* id)
     }
 }
 
+AnimationClip* Animation::getClip(unsigned int index) const
+{
+    if (_clips)
+        return _clips->at(index);
+
+    return NULL;
+}
+
+unsigned int Animation::getClipCount() const
+{
+    return _clips ? _clips->size() : 0;
+}
+
 void Animation::play(const char* clipId)
 {
     // If id is NULL, play the default clip.

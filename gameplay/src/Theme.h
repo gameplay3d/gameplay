@@ -248,14 +248,12 @@ public:
      */
     typedef SideRegions Padding;
 
-private:
-
     /**
      * Class representing an image within the theme's texture atlas.
      * An image has a region and a blend color in addition to an ID.
      * UV coordinates are calculated from the region and can be retrieved.
      */
-    class Image : public Ref
+    class ThemeImage : public Ref
     {
         friend class Theme;
         friend class Control;
@@ -272,17 +270,19 @@ private:
 
     private:
 
-        Image(float tw, float th, const Rectangle& region, const Vector4& color);
+        ThemeImage(float tw, float th, const Rectangle& region, const Vector4& color);
 
-        ~Image();
+        ~ThemeImage();
 
-        static Image* create(float tw, float th, Properties* properties, const Vector4& defaultColor);
+        static ThemeImage* create(float tw, float th, Properties* properties, const Vector4& defaultColor);
 
         std::string _id;
         UVs _uvs;
         Rectangle _region;
         Vector4 _color;
     };
+
+private:
 
     /**
      * Class representing a collection of theme images.  An image list
@@ -298,7 +298,7 @@ private:
 
         const char* getId() const;
 
-        Image* getImage(const char* imageId) const;
+        ThemeImage* getImage(const char* imageId) const;
 
     private:
 
@@ -311,7 +311,7 @@ private:
         static ImageList* create(float tw, float th, Properties* properties);
 
         std::string _id;
-        std::vector<Image*> _images;
+        std::vector<ThemeImage*> _images;
         Vector4 _color;
     };
 
@@ -411,13 +411,13 @@ private:
 
     static void generateUVs(float tw, float th, float x, float y, float width, float height, UVs* uvs);
 
-    void lookUpSprites(const Properties* overlaySpace, ImageList** imageList, Image** mouseCursor, Skin** skin);
+    void lookUpSprites(const Properties* overlaySpace, ImageList** imageList, ThemeImage** mouseCursor, Skin** skin);
 
     std::string _path;
     Texture* _texture;
     SpriteBatch* _spriteBatch;
     std::vector<Style*> _styles;
-    std::vector<Image*> _images;
+    std::vector<ThemeImage*> _images;
     std::vector<ImageList*> _imageLists;
     std::vector<Skin*> _skins;
     std::set<Font*> _fonts;

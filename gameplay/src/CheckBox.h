@@ -130,6 +130,7 @@ protected:
      */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
+<<<<<<< HEAD
     /**
      * Whether this checkbox is currently checked.
      */
@@ -139,6 +140,11 @@ protected:
      * The size to draw the checkbox icon, if different from its size in the texture.
      */
     Vector2 _imageSize;
+=======
+    bool _checked;      // Whether this checkbox is currently checked.
+    Vector2 _imageSize;  // The size to draw the checkbox icon, if different from its size in the texture.
+    Theme::ThemeImage* _image;
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
 
 private:
 
