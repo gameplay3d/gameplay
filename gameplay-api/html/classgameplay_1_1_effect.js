@@ -1,12 +1,12 @@
 var classgameplay_1_1_effect =
 [
     [ "bind", "classgameplay_1_1_effect.html#a3def698055a1e241d308d1626784d404", null ],
-    [ "createFromFile", "classgameplay_1_1_effect.html#aceee3ab2b430aa3471f1fefd06dd8c63", null ],
-    [ "createFromSource", "classgameplay_1_1_effect.html#a72d07cb092a85be0128c08ce0b890941", null ],
-    [ "getCurrentEffect", "classgameplay_1_1_effect.html#afca19efa9d718823f5685693e23847d9", null ],
-    [ "getId", "classgameplay_1_1_effect.html#af07a890eff412ee2aca5dd2b2ab68c72", null ],
-    [ "getUniform", "classgameplay_1_1_effect.html#abef1af436a9ccc1b68ad621f74aa141e", null ],
-    [ "getUniform", "classgameplay_1_1_effect.html#aaa379a79a232f2e40334de3b8bbaed8f", null ],
+    [ "createFromFile", "classgameplay_1_1_effect.html#ae07b2234e8d8315fac9ef303bc891fdd", null ],
+    [ "createFromSource", "classgameplay_1_1_effect.html#a594c1d54dd2a7c50542fcde03f66884b", null ],
+    [ "getCurrentEffect", "classgameplay_1_1_effect.html#a804f7889c5671c1e214e336a7a4188b7", null ],
+    [ "getId", "classgameplay_1_1_effect.html#a3b944b59dd1117b3d2486e18a1144d8e", null ],
+    [ "getUniform", "classgameplay_1_1_effect.html#a87785d89f4dcfc8d938a19e63d2eb9e6", null ],
+    [ "getUniform", "classgameplay_1_1_effect.html#ae6953b49f994c491b9d4e7743c2af0af", null ],
     [ "getUniformCount", "classgameplay_1_1_effect.html#a3526ede59dbfec5bfc8808700853d414", null ],
     [ "getVertexAttribute", "classgameplay_1_1_effect.html#ae93fcc9523040444d4c399fef1871fa4", null ],
     [ "setValue", "classgameplay_1_1_effect.html#aac09b2826588d8feea2474c241db3823", null ],
