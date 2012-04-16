@@ -194,8 +194,18 @@ protected:
      */
     void cloneInto(AnimationTarget* target, NodeCloneContext &context) const;
 
-    TargetType _targetType;                     // The type of target this is.
-    unsigned char _animationPropertyBitFlag;    // Bit flag used to indicate which properties on the AnimationTarget are currently animating.
+    /**
+     * The target's type. 
+     *
+     * @see TargetType::SCALAR
+     * @see TargetType::TRANSFORM
+     */
+    TargetType _targetType;
+
+    /**
+     * Bit flag used to indicate which properties on the AnimationTarget are currently animating.
+     */ 
+    unsigned char _animationPropertyBitFlag;
 
 private:
 
