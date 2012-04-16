@@ -98,17 +98,17 @@ void CharacterGame::initializeGamepad()
 
     // Add a single gamepad joystick
     _gamepad->setJoystick(0,
-        Rectangle(120.0f * scale, getHeight() - 130.0f * scale, 47.0f * scale, 47.0f * scale), 
-        Rectangle(10, 188, 47, 47),
-        Rectangle(48.0f * scale, getHeight() - 191.0f * scale, 170.0f * scale, 170.0f * scale),
-        Rectangle(0, 0, 170, 170),
-        45.0f);
+        Rectangle(48.0f * scale, getHeight() - 248.0f * scale, 200.0f * scale, 200.0f * scale), 
+        Rectangle(256, 0, 256, 256),
+        Rectangle(48.0f * scale, getHeight() - 248.0f * scale, 200.0f * scale, 200.0f * scale),
+        Rectangle(0, 0, 256, 256),
+        64.0f);
 
     // Add a single gamepad button
 	_gamepad->setButton(0,
-        Rectangle(getWidth() - scale * (120.0f + 47.0f), getHeight() - 130.0f * scale, 47.0f * scale, 47.0f * scale),
-        Rectangle(10, 188, 47, 47),
-        Rectangle(69, 188, 47, 47));
+        Rectangle(getWidth() - scale * (176.0f), getHeight() - 176.0f * scale, 128.0f * scale, 128.0f * scale),
+        Rectangle(40, 310, 160, 160),
+        Rectangle(300, 310, 160, 160));
 }
 
 void CharacterGame::drawSplash(void* param)
@@ -282,7 +282,7 @@ void CharacterGame::render(long elapsedTime)
 
     // Draw gamepad for touch devices.
     //if (isMultiTouch())
-        _gamepad->draw();
+        _gamepad->draw(Vector4(1.0f, 1.0f, 1.0f, 0.7f));
 
     // Draw FPS
     _font->begin();

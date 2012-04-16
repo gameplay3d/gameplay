@@ -286,8 +286,8 @@ void Gamepad::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
             {
                 // Activate the joystick only when it is touched inside the
                 // outer joggle.
-                float bx = _joysticks[i]->_regionInner.x;
-                float by = _joysticks[i]->_regionInner.y;
+                float bx = _joysticks[i]->_regionInner.x + _joysticks[i]->_regionInner.width * 0.5f;
+                float by = _joysticks[i]->_regionInner.y + _joysticks[i]->_regionInner.height * 0.5f;
                 float bradius = _joysticks[i]->_radius;
 
                 if ((x >= (bx - bradius)) && (x <= (bx + bradius)) &&
