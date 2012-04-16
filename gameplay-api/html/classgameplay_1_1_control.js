@@ -27,6 +27,10 @@ var classgameplay_1_1_control =
     [ "getFontSize", "classgameplay_1_1_control.html#a4a689feb9a11c360511c67bf844185af", null ],
     [ "getHeight", "classgameplay_1_1_control.html#af51dcb89b1ab5a8e43435eabf66c91fa", null ],
     [ "getID", "classgameplay_1_1_control.html#aca78529953550d9b264ae7cec5029126", null ],
+<<<<<<< HEAD
+=======
+    [ "getImage", "classgameplay_1_1_control.html#af503c83a428b4f51b466e4419d1bd27b", null ],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     [ "getImageColor", "classgameplay_1_1_control.html#a84ca5070f2d84595381060521222c59e", null ],
     [ "getImageRegion", "classgameplay_1_1_control.html#a4c45739c9eb63b2890d4521151c45a15", null ],
     [ "getImageUVs", "classgameplay_1_1_control.html#a3a627d47b2b1554a0d5ee1bff7fa4b71", null ],
@@ -95,6 +99,10 @@ var classgameplay_1_1_control =
     [ "_dirty", "classgameplay_1_1_control.html#a35ed3285594e18f0233a89ad69c8444c", null ],
     [ "_id", "classgameplay_1_1_control.html#a8e38c807b110825f36a77d43ded3d78a", null ],
     [ "_listeners", "classgameplay_1_1_control.html#a5159a7a6a2f42d60aaaee5e445f75ac2", null ],
+<<<<<<< HEAD
+=======
+    [ "_opacity", "classgameplay_1_1_control.html#a1cf80f236ba38ce3d035b5ba62f6454c", null ],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     [ "_state", "classgameplay_1_1_control.html#a08e0c8e34c28edcddc7099281e9b423a", null ],
     [ "_style", "classgameplay_1_1_control.html#a8adea2635b544f38ca34162f11ec903d", null ],
     [ "_textBounds", "classgameplay_1_1_control.html#af32deb6089c5879fe5ee15edd6bd348a", null ],

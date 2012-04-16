@@ -3,6 +3,11 @@ var classgameplay_1_1_animation =
     [ "createClip", "classgameplay_1_1_animation.html#a6d3bbc2f8f5b895a0ee8a82032e48ee6", null ],
     [ "createClips", "classgameplay_1_1_animation.html#a1bfefc17c62178c2bf79460bbd75336a", null ],
     [ "getClip", "classgameplay_1_1_animation.html#a4b991918570fa459f4f75fb7b99617ef", null ],
+<<<<<<< HEAD
+=======
+    [ "getClip", "classgameplay_1_1_animation.html#afea32901db12a50b0e7ba6291133e01e", null ],
+    [ "getClipCount", "classgameplay_1_1_animation.html#af7cdad144190cfdc9ae25bfe5ec152c7", null ],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     [ "getDuration", "classgameplay_1_1_animation.html#a243766189b90b129549757fd4e059f97", null ],
     [ "getId", "classgameplay_1_1_animation.html#acca3a7312c334be7e0dec41e02f02b15", null ],
     [ "pause", "classgameplay_1_1_animation.html#ad9df1d952ef640c88f965622210c1c76", null ],

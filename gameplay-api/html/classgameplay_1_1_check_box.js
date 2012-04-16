@@ -13,5 +13,9 @@ var classgameplay_1_1_check_box =
     [ "update", "classgameplay_1_1_check_box.html#aff06d543ab407b578a129bb711c7477d", null ],
     [ "Container", "classgameplay_1_1_check_box.html#aee29d97f7e87f0263024133085c28e3d", null ],
     [ "_checked", "classgameplay_1_1_check_box.html#ac4fce32c5359aee094b9c197522ef4e0", null ],
+<<<<<<< HEAD
+=======
+    [ "_image", "classgameplay_1_1_check_box.html#af1a5ee559f87f84217f7b9ca8bc67e8f", null ],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     [ "_imageSize", "classgameplay_1_1_check_box.html#a04ec724c78a51d78df82b0c126e61565", null ]
 ];

@@ -4,6 +4,10 @@ var searchData=
   ['textbox',['TextBox',['../classgameplay_1_1_text_box.html',1,'gameplay']]],
   ['texture',['Texture',['../classgameplay_1_1_texture.html',1,'gameplay']]],
   ['theme',['Theme',['../classgameplay_1_1_theme.html',1,'gameplay']]],
+<<<<<<< HEAD
+=======
+  ['themeimage',['ThemeImage',['../classgameplay_1_1_theme_1_1_theme_image.html',1,'gameplay::Theme']]],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['timelistener',['TimeListener',['../classgameplay_1_1_time_listener.html',1,'gameplay']]],
   ['touch',['Touch',['../classgameplay_1_1_touch.html',1,'gameplay']]],
   ['transform',['Transform',['../classgameplay_1_1_transform.html',1,'gameplay']]],

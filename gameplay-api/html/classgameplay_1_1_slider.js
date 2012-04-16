@@ -14,9 +14,21 @@ var classgameplay_1_1_slider =
     [ "setStep", "classgameplay_1_1_slider.html#afc61920ab128f903e416653fbccb3dd1", null ],
     [ "setValue", "classgameplay_1_1_slider.html#ad2410e4eb320a2fdb0062fe3b286c4a7", null ],
     [ "touchEvent", "classgameplay_1_1_slider.html#afb17c09c56241d08f2e5d41d739e641c", null ],
+<<<<<<< HEAD
     [ "Container", "classgameplay_1_1_slider.html#aee29d97f7e87f0263024133085c28e3d", null ],
     [ "_max", "classgameplay_1_1_slider.html#af804f53b2bedc6a2b40fa29a3914ca49", null ],
     [ "_min", "classgameplay_1_1_slider.html#addce95b766915a4f84db1e3a45c3e32f", null ],
     [ "_step", "classgameplay_1_1_slider.html#a774a0cadb40c9b32d787f993fb3ac48f", null ],
+=======
+    [ "update", "classgameplay_1_1_slider.html#a0b1d707805e2e7df46fd4b38a163f778", null ],
+    [ "Container", "classgameplay_1_1_slider.html#aee29d97f7e87f0263024133085c28e3d", null ],
+    [ "_markerImage", "classgameplay_1_1_slider.html#ad28bda683a14e0affffc06daf0741594", null ],
+    [ "_max", "classgameplay_1_1_slider.html#af804f53b2bedc6a2b40fa29a3914ca49", null ],
+    [ "_maxImage", "classgameplay_1_1_slider.html#a9021365461d3586d5eb71f8a108b8732", null ],
+    [ "_min", "classgameplay_1_1_slider.html#addce95b766915a4f84db1e3a45c3e32f", null ],
+    [ "_minImage", "classgameplay_1_1_slider.html#ace1e63eabbe3143ef17c53902c4a1cdf", null ],
+    [ "_step", "classgameplay_1_1_slider.html#a774a0cadb40c9b32d787f993fb3ac48f", null ],
+    [ "_trackImage", "classgameplay_1_1_slider.html#a0dde79480ac87baed30e237cae89bc7b", null ],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     [ "_value", "classgameplay_1_1_slider.html#aa7b0603bc0506c1d0cb72b3c8219ee2e", null ]
 ];

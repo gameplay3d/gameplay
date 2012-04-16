@@ -47,6 +47,10 @@ var classgameplay_1_1_node =
     [ "getWorldViewMatrix", "classgameplay_1_1_node.html#a8009fcd6e1a4ebcae7ff6a16ca4d3205", null ],
     [ "getWorldViewProjectionMatrix", "classgameplay_1_1_node.html#a4e69a0886698b08c91f8c4434b9c172f", null ],
     [ "hierarchyChanged", "classgameplay_1_1_node.html#ad101852cbf54700c3d10c78f69004fe9", null ],
+<<<<<<< HEAD
+=======
+    [ "isDynamic", "classgameplay_1_1_node.html#a76135618254c8bb8ba2c6a33d3c039d9", null ],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     [ "isTransparent", "classgameplay_1_1_node.html#a869dc5430e0eb78e57146b492545282c", null ],
     [ "isVisible", "classgameplay_1_1_node.html#afeaa8f9b2d317d919d369ae995745170", null ],
     [ "remove", "classgameplay_1_1_node.html#a71bec872c8bebe618885caf08843a5f5", null ],
@@ -58,6 +62,10 @@ var classgameplay_1_1_node =
     [ "setCollisionObject", "classgameplay_1_1_node.html#abe1121a7fe65ff92e50458ddc2a25b85", null ],
     [ "setCollisionObject", "classgameplay_1_1_node.html#ab0a336d9b7cf8db4a29802a8908041bf", null ],
     [ "setCollisionObject", "classgameplay_1_1_node.html#a93f276457601016077c1f1a88350fd8b", null ],
+<<<<<<< HEAD
+=======
+    [ "setDynamic", "classgameplay_1_1_node.html#a1cd9f500588d1cc3acc9db30019c70ee", null ],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     [ "setForm", "classgameplay_1_1_node.html#a44bc8c91f74faa7c6ffb02e3b380feae", null ],
     [ "setId", "classgameplay_1_1_node.html#ae211acf4c2b9c326d33dd679d8a2612c", null ],
     [ "setLight", "classgameplay_1_1_node.html#aaf77efed0146acb8fad73497916818f8", null ],

@@ -10,7 +10,13 @@ var classgameplay_1_1_text_box =
     [ "touchEvent", "classgameplay_1_1_text_box.html#ab4365e628465e070baf404047f74dac4", null ],
     [ "update", "classgameplay_1_1_text_box.html#a0e253f67a006e01083bc1e8c53145100", null ],
     [ "Container", "classgameplay_1_1_text_box.html#aee29d97f7e87f0263024133085c28e3d", null ],
+<<<<<<< HEAD
     [ "_caretLocation", "classgameplay_1_1_text_box.html#af93fbc2076568d52e4345e26a6929428", null ],
+=======
+    [ "_caretImage", "classgameplay_1_1_text_box.html#a91075af580c87ed49e82efb273ec9117", null ],
+    [ "_caretLocation", "classgameplay_1_1_text_box.html#af93fbc2076568d52e4345e26a6929428", null ],
+    [ "_fontSize", "classgameplay_1_1_text_box.html#a31b683e30ec48838e8e602e6358f3e05", null ],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     [ "_lastKeypress", "classgameplay_1_1_text_box.html#ab3d8868a7aebc306d8a7de798e3b759d", null ],
     [ "textIndex", "classgameplay_1_1_text_box.html#a5458207d08711da2291be56349156553", null ]
 ];

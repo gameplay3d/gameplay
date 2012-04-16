@@ -149,9 +149,14 @@ protected:
      */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
+<<<<<<< HEAD
     /**
      * The minimum value for the Slider.
      */
+=======
+    void update(const Rectangle& clip);
+
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     float _min;
     
     /**
@@ -168,6 +173,11 @@ protected:
      * The Slider's current value.
      */
     float _value;
+
+    Theme::ThemeImage* _minImage;
+    Theme::ThemeImage* _maxImage;
+    Theme::ThemeImage* _trackImage;
+    Theme::ThemeImage* _markerImage;
 
 private:
 

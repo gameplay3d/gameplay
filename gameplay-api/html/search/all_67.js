@@ -1,8 +1,13 @@
 var searchData=
 [
+<<<<<<< HEAD
   ['g',['g',['../structgameplay_1_1_physics_controller_1_1_debug_drawer_1_1_debug_vertex.html#acbc3a844f45670e7a9d1bfcfdc84e6e0',1,'gameplay::PhysicsController::DebugDrawer::DebugVertex::g()'],['../structgameplay_1_1_debug_vertex.html#a16a242a675e88ba8536ae6e6ffce4473',1,'gameplay::DebugVertex::g()'],['../structgameplay_1_1_sprite_vertex.html#aec7fa4689d00fd37e6a44192e4295c46',1,'gameplay::SpriteVertex::g()']]],
   ['game',['Game',['../classgameplay_1_1_game.html#ac8e478eb88e8f9d42030f6c7e4cc5639',1,'gameplay::Game']]],
   ['game',['Game',['../classgameplay_1_1_game.html',1,'gameplay']]],
+=======
+  ['game',['Game',['../classgameplay_1_1_game.html',1,'gameplay']]],
+  ['game',['Game',['../classgameplay_1_1_game.html#ac8e478eb88e8f9d42030f6c7e4cc5639',1,'gameplay::Game']]],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['generatemipmaps',['generateMipmaps',['../classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf',1,'gameplay::Texture']]],
   ['getabsolutetime',['getAbsoluteTime',['../classgameplay_1_1_game.html#acf6d3b145041cdef23c96b70acf21a25',1,'gameplay::Game::getAbsoluteTime()'],['../classgameplay_1_1_platform.html#aebc82fa22dfec7cc8cba5b28aff04d00',1,'gameplay::Platform::getAbsoluteTime()']]],
   ['getacceleration',['getAcceleration',['../classgameplay_1_1_particle_emitter.html#aa497aef655119f17427c2f1470e3c13c',1,'gameplay::ParticleEmitter']]],
@@ -12,11 +17,19 @@ var searchData=
   ['getactivecameratranslationview',['getActiveCameraTranslationView',['../classgameplay_1_1_node.html#a1703ad8be4b10d3792ecb5cc3da7425e',1,'gameplay::Node']]],
   ['getactivecameratranslationworld',['getActiveCameraTranslationWorld',['../classgameplay_1_1_node.html#aef6bfae445794ad6c6b401cd36a2ac1d',1,'gameplay::Node']]],
   ['getactiveduration',['getActiveDuration',['../classgameplay_1_1_animation_clip.html#ac336294bfed721fecbe9520d103e993f',1,'gameplay::AnimationClip']]],
+<<<<<<< HEAD
   ['getalignment',['getAlignment',['../classgameplay_1_1_control.html#a8311058fcbf9cb65fc0c2d710a0c0c4d',1,'gameplay::Control::getAlignment() const '],['../classgameplay_1_1_control.html#afd995a012479ea9e6b1deb14a3d4fd40',1,'gameplay::Control::getAlignment(const char *alignment)']]],
   ['getambientcolor',['getAmbientColor',['../classgameplay_1_1_scene.html#a05ad41cf1f47a7890edc0f776be54276',1,'gameplay::Scene']]],
   ['getangulardamping',['getAngularDamping',['../classgameplay_1_1_physics_rigid_body.html#a560efbb29f8e6a47837db387e903a414',1,'gameplay::PhysicsRigidBody']]],
   ['getangularvelocity',['getAngularVelocity',['../classgameplay_1_1_physics_rigid_body.html#a6bf71bf3bd25020fc1f652e010eefef8',1,'gameplay::PhysicsRigidBody']]],
   ['getanimation',['getAnimation',['../classgameplay_1_1_animation_clip.html#ad3f3bff739adbb745618f6d2427ed374',1,'gameplay::AnimationClip::getAnimation()'],['../classgameplay_1_1_animation_target.html#a0f53ff4cdee42e66bb7293304f6689ec',1,'gameplay::AnimationTarget::getAnimation()'],['../classgameplay_1_1_container.html#a3b078964b5059c105e375763d421ae32',1,'gameplay::Container::getAnimation()'],['../classgameplay_1_1_node.html#a2c9f15359c1d67c87d2a24748a3929c5',1,'gameplay::Node::getAnimation()'],['../classgameplay_1_1_physics_character.html#a7b0abff933f4d49cc40c400521b754cc',1,'gameplay::PhysicsCharacter::getAnimation()']]],
+=======
+  ['getalignment',['getAlignment',['../classgameplay_1_1_control.html#a8311058fcbf9cb65fc0c2d710a0c0c4d',1,'gameplay::Control']]],
+  ['getambientcolor',['getAmbientColor',['../classgameplay_1_1_scene.html#a05ad41cf1f47a7890edc0f776be54276',1,'gameplay::Scene']]],
+  ['getangulardamping',['getAngularDamping',['../classgameplay_1_1_physics_rigid_body.html#a560efbb29f8e6a47837db387e903a414',1,'gameplay::PhysicsRigidBody']]],
+  ['getangularvelocity',['getAngularVelocity',['../classgameplay_1_1_physics_rigid_body.html#a6bf71bf3bd25020fc1f652e010eefef8',1,'gameplay::PhysicsRigidBody']]],
+  ['getanimation',['getAnimation',['../classgameplay_1_1_animation_clip.html#ad3f3bff739adbb745618f6d2427ed374',1,'gameplay::AnimationClip::getAnimation()'],['../classgameplay_1_1_animation_target.html#a0f53ff4cdee42e66bb7293304f6689ec',1,'gameplay::AnimationTarget::getAnimation()'],['../classgameplay_1_1_container.html#a3b078964b5059c105e375763d421ae32',1,'gameplay::Container::getAnimation()'],['../classgameplay_1_1_node.html#a2c9f15359c1d67c87d2a24748a3929c5',1,'gameplay::Node::getAnimation()']]],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['getanimationcontroller',['getAnimationController',['../classgameplay_1_1_game.html#a8a1c5c8f4f16cb1b21b43faf6cc506d2',1,'gameplay::Game']]],
   ['getanimationpropertycomponentcount',['getAnimationPropertyComponentCount',['../classgameplay_1_1_animation_target.html#a963d6a3f8e77c59cfb9ac2284d961c31',1,'gameplay::AnimationTarget::getAnimationPropertyComponentCount()'],['../classgameplay_1_1_control.html#a50356ff249e9f64a96048109f56a9fed',1,'gameplay::Control::getAnimationPropertyComponentCount()'],['../classgameplay_1_1_material_parameter.html#a6f898406a1e9390d7a26dba04e3b71e0',1,'gameplay::MaterialParameter::getAnimationPropertyComponentCount()'],['../classgameplay_1_1_transform.html#a842ce88c27aaedb5b43e0ac675ba7b1f',1,'gameplay::Transform::getAnimationPropertyComponentCount()']]],
   ['getanimationpropertyvalue',['getAnimationPropertyValue',['../classgameplay_1_1_animation_target.html#a9e29517739e99d940e119dc2ee5a4aae',1,'gameplay::AnimationTarget::getAnimationPropertyValue()'],['../classgameplay_1_1_control.html#aa3a1e95ee04501acf9f0de66cfa9117d',1,'gameplay::Control::getAnimationPropertyValue()'],['../classgameplay_1_1_material_parameter.html#a4128baa81318a61cd6791b0cff9a5ea3',1,'gameplay::MaterialParameter::getAnimationPropertyValue()'],['../classgameplay_1_1_transform.html#aa511e1efa7282723e0bfbe38742ec410',1,'gameplay::Transform::getAnimationPropertyValue()']]],
@@ -45,8 +58,14 @@ var searchData=
   ['getcenter',['getCenter',['../classgameplay_1_1_bounding_box.html#a8d2cc9e3f4d6b4b0fae8ceabfb31a6ab',1,'gameplay::BoundingBox::getCenter() const '],['../classgameplay_1_1_bounding_box.html#a078a7235ffb74ceff58953b0c012afaa',1,'gameplay::BoundingBox::getCenter(Vector3 *dst) const ']]],
   ['getchannel',['getChannel',['../classgameplay_1_1_animation_target.html#ab869c4b842d508c073a820d7412a44bf',1,'gameplay::AnimationTarget']]],
   ['getchildcount',['getChildCount',['../classgameplay_1_1_node.html#a626c00f77bee1120374694edf4d5f6ab',1,'gameplay::Node']]],
+<<<<<<< HEAD
   ['getclip',['getClip',['../classgameplay_1_1_animation.html#a4b991918570fa459f4f75fb7b99617ef',1,'gameplay::Animation::getClip()'],['../classgameplay_1_1_control.html#ac14dea8109ad33a2c0faac935e65ce59',1,'gameplay::Control::getClip()']]],
   ['getclipbounds',['getClipBounds',['../classgameplay_1_1_control.html#ac153b50e2e30cc02e86cf2a806752d30',1,'gameplay::Control']]],
+=======
+  ['getclip',['getClip',['../classgameplay_1_1_animation.html#a4b991918570fa459f4f75fb7b99617ef',1,'gameplay::Animation::getClip(const char *clipId=NULL)'],['../classgameplay_1_1_animation.html#afea32901db12a50b0e7ba6291133e01e',1,'gameplay::Animation::getClip(unsigned int index) const '],['../classgameplay_1_1_control.html#ac14dea8109ad33a2c0faac935e65ce59',1,'gameplay::Control::getClip()']]],
+  ['getclipbounds',['getClipBounds',['../classgameplay_1_1_control.html#ac153b50e2e30cc02e86cf2a806752d30',1,'gameplay::Control']]],
+  ['getclipcount',['getClipCount',['../classgameplay_1_1_animation.html#af7cdad144190cfdc9ae25bfe5ec152c7',1,'gameplay::Animation']]],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['getcollisionobject',['getCollisionObject',['../classgameplay_1_1_node.html#a2738d3f984cd46609cb82850bd17877c',1,'gameplay::Node::getCollisionObject()'],['../classgameplay_1_1_physics_character.html#acc2780f256d58cde1d68d4dc6a1295aa',1,'gameplay::PhysicsCharacter::getCollisionObject()'],['../classgameplay_1_1_physics_collision_object.html#a6b73ee70151c9d46e58620660347aede',1,'gameplay::PhysicsCollisionObject::getCollisionObject()'],['../classgameplay_1_1_physics_ghost_object.html#a0e05539c52f5754cc7993f6050af3dad',1,'gameplay::PhysicsGhostObject::getCollisionObject()'],['../classgameplay_1_1_physics_rigid_body.html#a3af1b4fd504bad6f3b907fbb9c359d49',1,'gameplay::PhysicsRigidBody::getCollisionObject()']]],
   ['getcollisionshape',['getCollisionShape',['../classgameplay_1_1_physics_collision_object.html#af22718d976b78802cf535229e47db650',1,'gameplay::PhysicsCollisionObject']]],
   ['getcolor',['getColor',['../classgameplay_1_1_light.html#a6972d2475715e1d5dc3b402a3dde9fbe',1,'gameplay::Light::getColor()'],['../classgameplay_1_1_properties.html#a6abca23de971ae87e57e29ef4f0bfa21',1,'gameplay::Properties::getColor(const char *name, Vector3 *out) const '],['../classgameplay_1_1_properties.html#af435904c37ba32c1080d76aa23323003',1,'gameplay::Properties::getColor(const char *name, Vector4 *out) const ']]],

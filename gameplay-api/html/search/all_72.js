@@ -1,8 +1,13 @@
 var searchData=
 [
+<<<<<<< HEAD
   ['r',['r',['../structgameplay_1_1_physics_controller_1_1_debug_drawer_1_1_debug_vertex.html#a47df31c095ed857c29bf9d6ea88c7765',1,'gameplay::PhysicsController::DebugDrawer::DebugVertex::r()'],['../structgameplay_1_1_debug_vertex.html#a31e25c24b0fc6d34deb590442493c3b1',1,'gameplay::DebugVertex::r()'],['../structgameplay_1_1_sprite_vertex.html#aa1862dd616a8fd49e96c9caa7e1e3af3',1,'gameplay::SpriteVertex::r()']]],
   ['radiobutton',['RadioButton',['../classgameplay_1_1_radio_button.html#ad7377e7512cb8acf6089ed049c4a286f',1,'gameplay::RadioButton']]],
   ['radiobutton',['RadioButton',['../classgameplay_1_1_radio_button.html',1,'gameplay']]],
+=======
+  ['radiobutton',['RadioButton',['../classgameplay_1_1_radio_button.html',1,'gameplay']]],
+  ['radiobutton',['RadioButton',['../classgameplay_1_1_radio_button.html#ad7377e7512cb8acf6089ed049c4a286f',1,'gameplay::RadioButton']]],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['radius',['radius',['../classgameplay_1_1_bounding_sphere.html#a883878cac5cca35be9c6a48787da0aa3',1,'gameplay::BoundingSphere']]],
   ['ray',['Ray',['../classgameplay_1_1_ray.html',1,'gameplay']]],
   ['ray',['Ray',['../classgameplay_1_1_ray.html#a506fd670dbc3755d37b6a89835a62f76',1,'gameplay::Ray::Ray()'],['../classgameplay_1_1_ray.html#ac15b9c1be4de2788603cd44da69b9010',1,'gameplay::Ray::Ray(const Vector3 &amp;origin, const Vector3 &amp;direction)'],['../classgameplay_1_1_ray.html#ac059c49dbdaefec7215634af844dd613',1,'gameplay::Ray::Ray(const Ray &amp;copy)']]],
@@ -14,7 +19,11 @@ var searchData=
   ['ref',['Ref',['../classgameplay_1_1_ref.html#a866a859fcc96f2a48d5ee2f06a8c2a43',1,'gameplay::Ref::Ref()'],['../classgameplay_1_1_ref.html#a4af6b566116534038e02bfffea72867f',1,'gameplay::Ref::Ref(const Ref &amp;copy)']]],
   ['registerclonedanimation',['registerClonedAnimation',['../classgameplay_1_1_node_clone_context.html#a81e2f74240d6827fc671f9ea45b9fac8',1,'gameplay::NodeCloneContext']]],
   ['registerclonednode',['registerClonedNode',['../classgameplay_1_1_node_clone_context.html#a343fc161a33eb0c24fd94242fea60414',1,'gameplay::NodeCloneContext']]],
+<<<<<<< HEAD
   ['release',['release',['../classgameplay_1_1_ref.html#aafd8a7a7934b33c8bf216756d04cf33b',1,'gameplay::Ref::release()'],['../classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7ba4d6d0d7568cba92935eb52fff947a985',1,'gameplay::Control::Listener::RELEASE()']]],
+=======
+  ['release',['RELEASE',['../classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7ba4d6d0d7568cba92935eb52fff947a985',1,'gameplay::Control::Listener::RELEASE()'],['../classgameplay_1_1_ref.html#aafd8a7a7934b33c8bf216756d04cf33b',1,'gameplay::Ref::release()']]],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['remove',['remove',['../classgameplay_1_1_node.html#a71bec872c8bebe618885caf08843a5f5',1,'gameplay::Node']]],
   ['removeallchildren',['removeAllChildren',['../classgameplay_1_1_node.html#ac2cb7773ec8dcfe1aaa51168b7dca191',1,'gameplay::Node']]],
   ['removeallnodes',['removeAllNodes',['../classgameplay_1_1_scene.html#a6d1aae801439be43f2d8e11edbc4b77f',1,'gameplay::Scene']]],
@@ -31,10 +40,16 @@ var searchData=
   ['rendertarget',['RenderTarget',['../classgameplay_1_1_render_target.html',1,'gameplay']]],
   ['repeat_5findefinite',['REPEAT_INDEFINITE',['../classgameplay_1_1_animation_clip.html#a32c79759c1e6a69d0d10db44579853b6',1,'gameplay::AnimationClip']]],
   ['restitution',['restitution',['../structgameplay_1_1_physics_rigid_body_1_1_parameters.html#aedf3c3e0d4e358d4ec9555f637ab9f70',1,'gameplay::PhysicsRigidBody::Parameters']]],
+<<<<<<< HEAD
   ['result',['result',['../structgameplay_1_1_collides_with_callback.html#afa4d8f825aa0218d3b9b224f4a17b073',1,'gameplay::CollidesWithCallback']]],
   ['resume',['resume',['../classgameplay_1_1_audio_source.html#a895920e4520c05ecbf393806bc2ef9f0',1,'gameplay::AudioSource::resume()'],['../classgameplay_1_1_game.html#a363c5ac0d99fc937dead943351f574c1',1,'gameplay::Game::resume()']]],
   ['rewind',['rewind',['../classgameplay_1_1_audio_source.html#a9974ed052d73d89a7758426ddd1efb98',1,'gameplay::AudioSource::rewind()'],['../classgameplay_1_1_properties.html#ade9fc061db01646ef889838713c8cead',1,'gameplay::Properties::rewind()']]],
   ['right',['right',['../structgameplay_1_1_theme_1_1_side_regions.html#af236740d28db36ba19e5605bd2c1971e',1,'gameplay::Theme::SideRegions::right()'],['../classgameplay_1_1_rectangle.html#a0f7bd5c8bc5c9a1f8a3167daf9f04997',1,'gameplay::Rectangle::right()']]],
+=======
+  ['resume',['resume',['../classgameplay_1_1_audio_source.html#a895920e4520c05ecbf393806bc2ef9f0',1,'gameplay::AudioSource::resume()'],['../classgameplay_1_1_game.html#a363c5ac0d99fc937dead943351f574c1',1,'gameplay::Game::resume()']]],
+  ['rewind',['rewind',['../classgameplay_1_1_audio_source.html#a9974ed052d73d89a7758426ddd1efb98',1,'gameplay::AudioSource::rewind()'],['../classgameplay_1_1_properties.html#ade9fc061db01646ef889838713c8cead',1,'gameplay::Properties::rewind()']]],
+  ['right',['right',['../classgameplay_1_1_rectangle.html#a0f7bd5c8bc5c9a1f8a3167daf9f04997',1,'gameplay::Rectangle']]],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['rigid_5fbody',['RIGID_BODY',['../classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463ea07cc1b95ca294433692b4d81591cff82',1,'gameplay::PhysicsCollisionObject']]],
   ['rotate',['rotate',['../classgameplay_1_1_matrix.html#a2f4ded9528e6782ccf5eb2b8de423d98',1,'gameplay::Matrix::rotate(const Quaternion &amp;q)'],['../classgameplay_1_1_matrix.html#adc6758d21df1845470b9455a30c54967',1,'gameplay::Matrix::rotate(const Quaternion &amp;q, Matrix *dst) const '],['../classgameplay_1_1_matrix.html#ac25b3a478f86c9a64546dc977fd677fb',1,'gameplay::Matrix::rotate(const Vector3 &amp;axis, float angle)'],['../classgameplay_1_1_matrix.html#a2e350409684f2194de8a2823fe141004',1,'gameplay::Matrix::rotate(const Vector3 &amp;axis, float angle, Matrix *dst) const '],['../classgameplay_1_1_physics_character.html#ab46f2970653a9253158553fee1f0d64b',1,'gameplay::PhysicsCharacter::rotate(const Vector3 &amp;axis, float angle)'],['../classgameplay_1_1_physics_character.html#a29996f780c7338659d8ddeb4317851c3',1,'gameplay::PhysicsCharacter::rotate(const Quaternion &amp;rotation)'],['../classgameplay_1_1_transform.html#ae018f48fd978f2a8f96ecee662b9dc19',1,'gameplay::Transform::rotate(float qx, float qy, float qz, float qw)'],['../classgameplay_1_1_transform.html#a5be09c000db9f322169e6ce69b08c438',1,'gameplay::Transform::rotate(const Quaternion &amp;rotation)'],['../classgameplay_1_1_transform.html#a23593622609b64feb6b55724e09d9222',1,'gameplay::Transform::rotate(const Vector3 &amp;axis, float angle)'],['../classgameplay_1_1_transform.html#a8c8c36c06246378a13263b8bc6a7596b',1,'gameplay::Transform::rotate(const Matrix &amp;rotation)'],['../classgameplay_1_1_vector2.html#a5f67a6256c3fe19cff8b7d5155e22950',1,'gameplay::Vector2::rotate()']]],
   ['rotatex',['rotateX',['../classgameplay_1_1_matrix.html#aa639da3d71cbe292af87fd5e701f4424',1,'gameplay::Matrix::rotateX(float angle)'],['../classgameplay_1_1_matrix.html#a3e5141734bcc793a052578871715939f',1,'gameplay::Matrix::rotateX(float angle, Matrix *dst) const '],['../classgameplay_1_1_transform.html#a403968ed9fec4a9ceebd26d3ef5de768',1,'gameplay::Transform::rotateX()']]],

@@ -1,16 +1,23 @@
 var classgameplay_1_1_physics_character =
 [
+<<<<<<< HEAD
     [ "AnimationFlags", "classgameplay_1_1_physics_character.html#ad95f8f06765d313384d25415982f3c90", null ],
     [ "addAnimation", "classgameplay_1_1_physics_character.html#a74fba033e42a59d65d6eca04111f41e3", null ],
     [ "debugDraw", "classgameplay_1_1_physics_character.html#a75ef9f25d4663800e6180b350422a815", null ],
     [ "getAnimation", "classgameplay_1_1_physics_character.html#a7b0abff933f4d49cc40c400521b754cc", null ],
+=======
+    [ "debugDraw", "classgameplay_1_1_physics_character.html#a75ef9f25d4663800e6180b350422a815", null ],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     [ "getCollisionObject", "classgameplay_1_1_physics_character.html#acc2780f256d58cde1d68d4dc6a1295aa", null ],
     [ "getMaxSlopeAngle", "classgameplay_1_1_physics_character.html#a64bdd61fdd5f67a2f9f3a4afe7171cd9", null ],
     [ "getMaxStepHeight", "classgameplay_1_1_physics_character.html#a2d15df47bb023196137c7f7ede3411d7", null ],
     [ "getType", "classgameplay_1_1_physics_character.html#a5de393cc5dc5eadd102b2cc9d366ee04", null ],
     [ "isPhysicsEnabled", "classgameplay_1_1_physics_character.html#aacea3c9523ba79ad9cd7a13e0a61aa53", null ],
     [ "jump", "classgameplay_1_1_physics_character.html#a332f32377672d38a6e5fd3feb6de5615", null ],
+<<<<<<< HEAD
     [ "play", "classgameplay_1_1_physics_character.html#a15530dd283ec9ff077986f14fc90d595", null ],
+=======
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     [ "rotate", "classgameplay_1_1_physics_character.html#ab46f2970653a9253158553fee1f0d64b", null ],
     [ "rotate", "classgameplay_1_1_physics_character.html#a29996f780c7338659d8ddeb4317851c3", null ],
     [ "setForwardVelocity", "classgameplay_1_1_physics_character.html#acb709cbdc29547132ca06dc9e630fbf3", null ],

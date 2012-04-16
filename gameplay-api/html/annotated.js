@@ -98,6 +98,10 @@ var annotated =
     [ "gameplay::TextBox", "classgameplay_1_1_text_box.html", "classgameplay_1_1_text_box" ],
     [ "gameplay::Texture", "classgameplay_1_1_texture.html", "classgameplay_1_1_texture" ],
     [ "gameplay::Theme", "classgameplay_1_1_theme.html", "classgameplay_1_1_theme" ],
+<<<<<<< HEAD
+=======
+    [ "gameplay::Theme::ThemeImage", "classgameplay_1_1_theme_1_1_theme_image.html", "classgameplay_1_1_theme_1_1_theme_image" ],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     [ "gameplay::TimeListener", "classgameplay_1_1_time_listener.html", "classgameplay_1_1_time_listener" ],
     [ "gameplay::Touch", "classgameplay_1_1_touch.html", "classgameplay_1_1_touch" ],
     [ "gameplay::Transform", "classgameplay_1_1_transform.html", "classgameplay_1_1_transform" ],

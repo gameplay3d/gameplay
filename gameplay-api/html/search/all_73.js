@@ -45,7 +45,10 @@ var searchData=
   ['setbreakingimpulse',['setBreakingImpulse',['../classgameplay_1_1_physics_constraint.html#a749d228b9931fc253e7fd78b75ac21f8',1,'gameplay::PhysicsConstraint']]],
   ['setcamera',['setCamera',['../classgameplay_1_1_audio_listener.html#aa8e3fead3ef26f658173b63338293d9f',1,'gameplay::AudioListener::setCamera()'],['../classgameplay_1_1_node.html#aa92e79f39c36188912c7288356cbb340',1,'gameplay::Node::setCamera()']]],
   ['setcapacity',['setCapacity',['../classgameplay_1_1_mesh_batch.html#ad0ed606c294b9cb9924ba18625f0c998',1,'gameplay::MeshBatch']]],
+<<<<<<< HEAD
   ['setchecked',['setChecked',['../classgameplay_1_1_check_box.html#a6ea946f99bd2a1a5fef5b412376b2ff5',1,'gameplay::CheckBox']]],
+=======
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['setcollisionobject',['setCollisionObject',['../classgameplay_1_1_node.html#abe1121a7fe65ff92e50458ddc2a25b85',1,'gameplay::Node::setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition &amp;shape, PhysicsRigidBody::Parameters *rigidBodyParameters=NULL)'],['../classgameplay_1_1_node.html#ab0a336d9b7cf8db4a29802a8908041bf',1,'gameplay::Node::setCollisionObject(const char *filePath)'],['../classgameplay_1_1_node.html#a93f276457601016077c1f1a88350fd8b',1,'gameplay::Node::setCollisionObject(Properties *properties)']]],
   ['setcolor',['setColor',['../classgameplay_1_1_light.html#ac7c707a09770a17acfd4eb315d72e385',1,'gameplay::Light::setColor()'],['../classgameplay_1_1_particle_emitter.html#ac737b476f60a85fa3f9a12074e6b2685',1,'gameplay::ParticleEmitter::setColor()']]],
   ['setconsumetouchevents',['setConsumeTouchEvents',['../classgameplay_1_1_control.html#af6a2ee7b2fcce5dc5f6471318a7025bb',1,'gameplay::Control']]],
@@ -58,6 +61,10 @@ var searchData=
   ['setdepthwrite',['setDepthWrite',['../classgameplay_1_1_render_state_1_1_state_block.html#a15b1a1b7b6879f67917c48a99d855c03',1,'gameplay::RenderState::StateBlock']]],
   ['setdirection',['setDirection',['../classgameplay_1_1_ray.html#a38db137252153c95c20044d14ffc1275',1,'gameplay::Ray']]],
   ['setdistance',['setDistance',['../classgameplay_1_1_plane.html#a5f764a96acf3da0ac80d8e4af11cb841',1,'gameplay::Plane']]],
+<<<<<<< HEAD
+=======
+  ['setdynamic',['setDynamic',['../classgameplay_1_1_node.html#a1cd9f500588d1cc3acc9db30019c70ee',1,'gameplay::Node']]],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['setellipsoid',['setEllipsoid',['../classgameplay_1_1_particle_emitter.html#a11f3889a0737f3dc92a503f6b4f142e5',1,'gameplay::ParticleEmitter']]],
   ['setemissionrate',['setEmissionRate',['../classgameplay_1_1_particle_emitter.html#a287f4ce20f23a544846812e2e684a347',1,'gameplay::ParticleEmitter']]],
   ['setenabled',['setEnabled',['../classgameplay_1_1_physics_constraint.html#ad7ba664ad85f3fd0e1491e8915524728',1,'gameplay::PhysicsConstraint']]],
@@ -177,7 +184,10 @@ var searchData=
   ['setzoomx',['setZoomX',['../classgameplay_1_1_camera.html#adaffdd24f5a806aa3597872d2e50daf6',1,'gameplay::Camera']]],
   ['setzoomy',['setZoomY',['../classgameplay_1_1_camera.html#a314bb88707a6dbf10c48abcb5d7b958d',1,'gameplay::Camera']]],
   ['sideregions',['SideRegions',['../structgameplay_1_1_theme_1_1_side_regions.html',1,'gameplay::Theme']]],
+<<<<<<< HEAD
   ['sideregions',['SideRegions',['../structgameplay_1_1_theme_1_1_side_regions.html#a86cda14ca68219356eec8a4876c586b5',1,'gameplay::Theme::SideRegions']]],
+=======
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['signalshutdown',['signalShutdown',['../classgameplay_1_1_platform.html#abbb42d7ac405bad0db3eb642495c84b3',1,'gameplay::Platform']]],
   ['sine_5fin',['SINE_IN',['../classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1afea34b2469e6c8075c62bc62ecc6fa2c',1,'gameplay::Curve']]],
   ['sine_5fin_5fout',['SINE_IN_OUT',['../classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a5682c182e0141a670980d01fd7dc9638',1,'gameplay::Curve']]],
@@ -186,8 +196,13 @@ var searchData=
   ['size',['size',['../classgameplay_1_1_vertex_format_1_1_element.html#a42d29ad62d81493778d3d196c068ccb2',1,'gameplay::VertexFormat::Element']]],
   ['sleep',['sleep',['../classgameplay_1_1_platform.html#abe8674e191630d8f24a1137ce3929e8c',1,'gameplay::Platform']]],
   ['slerp',['slerp',['../classgameplay_1_1_quaternion.html#a07315337d2b264ff10f3642ccb9b5d44',1,'gameplay::Quaternion']]],
+<<<<<<< HEAD
   ['slider',['Slider',['../classgameplay_1_1_slider.html',1,'gameplay']]],
   ['slider',['Slider',['../classgameplay_1_1_slider.html#a180e1a81c7c384de48cd28524873f436',1,'gameplay::Slider']]],
+=======
+  ['slider',['Slider',['../classgameplay_1_1_slider.html#a180e1a81c7c384de48cd28524873f436',1,'gameplay::Slider']]],
+  ['slider',['Slider',['../classgameplay_1_1_slider.html',1,'gameplay']]],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['smooth',['SMOOTH',['../classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a794f5f497fd5d58375e70e9b12849caa',1,'gameplay::Curve']]],
   ['sphere',['sphere',['../classgameplay_1_1_physics_collision_shape.html#adbae8450fbec9c9cb2c98901db14972a',1,'gameplay::PhysicsCollisionShape::sphere()'],['../classgameplay_1_1_physics_collision_shape.html#a8d381cbf8d4d3406a6545b0bf3cdb7c2',1,'gameplay::PhysicsCollisionShape::sphere(float radius, const Vector3 &amp;center=Vector3::zero(), bool absolute=false)']]],
   ['spritebatch',['SpriteBatch',['../classgameplay_1_1_sprite_batch.html',1,'gameplay']]],

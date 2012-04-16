@@ -7,7 +7,10 @@ var searchData=
   ['debugvertex',['DebugVertex',['../structgameplay_1_1_debug_vertex.html',1,'gameplay']]],
   ['decompose',['decompose',['../classgameplay_1_1_matrix.html#a239cd4f3f6359049b038f8b250085d49',1,'gameplay::Matrix']]],
   ['default',['DEFAULT',['../classgameplay_1_1_animation_clip_1_1_listener.html#ac3f0feda9c3b4c30bf9430e18a119d2aa6729f23a08c36738dea68e78b26bd0a7',1,'gameplay::AnimationClip::Listener']]],
+<<<<<<< HEAD
   ['definition',['Definition',['../structgameplay_1_1_physics_collision_shape_1_1_definition.html#ae12ee1ba52f17494cba4620d5536cd19',1,'gameplay::PhysicsCollisionShape::Definition::Definition()'],['../structgameplay_1_1_physics_collision_shape_1_1_definition.html#a6f3dc5a8516c4a452617cfaaed11f1a4',1,'gameplay::PhysicsCollisionShape::Definition::Definition(const Definition &amp;definition)']]],
+=======
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['definition',['Definition',['../structgameplay_1_1_physics_collision_shape_1_1_definition.html',1,'gameplay::PhysicsCollisionShape']]],
   ['depth24',['DEPTH24',['../classgameplay_1_1_depth_stencil_target.html#a1b64203f776599ea4a838f3000daa7b5a6f5a9a382ccddd3d67b5941577490559',1,'gameplay::DepthStencilTarget']]],
   ['depth24_5fstencil8',['DEPTH24_STENCIL8',['../classgameplay_1_1_depth_stencil_target.html#a1b64203f776599ea4a838f3000daa7b5a398fdf036f7de4cd0c47f09242227864',1,'gameplay::DepthStencilTarget']]],

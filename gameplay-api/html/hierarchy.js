@@ -115,6 +115,10 @@ var hierarchy =
       [ "gameplay::Texture", "classgameplay_1_1_texture.html", null ],
       [ "gameplay::Texture::Sampler", "classgameplay_1_1_texture_1_1_sampler.html", null ],
       [ "gameplay::Theme", "classgameplay_1_1_theme.html", null ],
+<<<<<<< HEAD
+=======
+      [ "gameplay::Theme::ThemeImage", "classgameplay_1_1_theme_1_1_theme_image.html", null ],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
       [ "gameplay::VertexAttributeBinding", "classgameplay_1_1_vertex_attribute_binding.html", null ]
     ] ],
     [ "gameplay::SceneLoader", "classgameplay_1_1_scene_loader.html", null ],

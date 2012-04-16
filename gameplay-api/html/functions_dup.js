@@ -1,7 +1,11 @@
 var functions_dup =
 [
+<<<<<<< HEAD
     [ "_", "functions.html", null ],
     [ "a", "functions_0x61.html", null ],
+=======
+    [ "a", "functions.html", null ],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
     [ "b", "functions_0x62.html", null ],
     [ "c", "functions_0x63.html", null ],
     [ "d", "functions_0x64.html", null ],

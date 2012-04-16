@@ -1,11 +1,17 @@
 var searchData=
 [
+<<<<<<< HEAD
   ['a',['a',['../structgameplay_1_1_physics_controller_1_1_debug_drawer_1_1_debug_vertex.html#a764182ac9b3e7db246dd1d0d8eeda046',1,'gameplay::PhysicsController::DebugDrawer::DebugVertex::a()'],['../structgameplay_1_1_debug_vertex.html#a0de02c2858c427cde4603406da60a605',1,'gameplay::DebugVertex::a()'],['../structgameplay_1_1_sprite_vertex.html#acf92c7d4d8a676a5c401513b45bcf5b2',1,'gameplay::SpriteVertex::a()']]],
+=======
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['absolutelayout',['AbsoluteLayout',['../classgameplay_1_1_absolute_layout.html',1,'gameplay']]],
   ['activated',['ACTIVATED',['../classgameplay_1_1_physics_controller_1_1_listener.html#a18b7daeec71d801c54838d967312a463a317ed2f938ab1439d3a9cf75bdd00477',1,'gameplay::PhysicsController::Listener']]],
   ['active',['ACTIVE',['../classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a3e525c16bca46dd0d7076ff4ebb25a79',1,'gameplay::Control']]],
   ['add',['add',['../classgameplay_1_1_matrix.html#a1d70f82445b0a0a562fcd15c31b82147',1,'gameplay::Matrix::add(float scalar)'],['../classgameplay_1_1_matrix.html#a5ea8a3a20800ae2b773df27ff6beff1a',1,'gameplay::Matrix::add(float scalar, Matrix *dst)'],['../classgameplay_1_1_matrix.html#a5757d6714372ba85280c1715223472b9',1,'gameplay::Matrix::add(const Matrix &amp;m)'],['../classgameplay_1_1_matrix.html#a9c3b8a14513607ec53b4c2538e8a9fb8',1,'gameplay::Matrix::add(const Matrix &amp;m1, const Matrix &amp;m2, Matrix *dst)'],['../classgameplay_1_1_mesh_batch.html#a7413764448e752865cc62ee439414980',1,'gameplay::MeshBatch::add()'],['../classgameplay_1_1_vector2.html#ac76ca7db9f900979d3b561d7a8d43e46',1,'gameplay::Vector2::add(const Vector2 &amp;v)'],['../classgameplay_1_1_vector2.html#aa95e2c61f6a2bb1ea013ed0227ec2ac0',1,'gameplay::Vector2::add(const Vector2 &amp;v1, const Vector2 &amp;v2, Vector2 *dst)'],['../classgameplay_1_1_vector3.html#a072afc4681056591eb523846370844ca',1,'gameplay::Vector3::add(const Vector3 &amp;v)'],['../classgameplay_1_1_vector3.html#a543f6a921235d17452aa6dac0d5f5283',1,'gameplay::Vector3::add(const Vector3 &amp;v1, const Vector3 &amp;v2, Vector3 *dst)'],['../classgameplay_1_1_vector4.html#a54cb3c08057ef90adfb91e59a0ab87ee',1,'gameplay::Vector4::add(const Vector4 &amp;v)'],['../classgameplay_1_1_vector4.html#ac8de3767340b49760860a633c3596926',1,'gameplay::Vector4::add(const Vector4 &amp;v1, const Vector4 &amp;v2, Vector4 *dst)']]],
+<<<<<<< HEAD
   ['addanimation',['addAnimation',['../classgameplay_1_1_physics_character.html#a74fba033e42a59d65d6eca04111f41e3',1,'gameplay::PhysicsCharacter']]],
+=======
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['addbeginlistener',['addBeginListener',['../classgameplay_1_1_animation_clip.html#abf7d596e7960b8dfa7c79ace78aeaf71',1,'gameplay::AnimationClip']]],
   ['addchannel',['addChannel',['../classgameplay_1_1_animation_target.html#a67ef6f7b9d1761e1e9dc97ebdd2a79e1',1,'gameplay::AnimationTarget']]],
   ['addchild',['addChild',['../classgameplay_1_1_node.html#a4b1fb32157481cc1a762a724851989a9',1,'gameplay::Node']]],
@@ -17,7 +23,11 @@ var searchData=
   ['addnode',['addNode',['../classgameplay_1_1_scene.html#a2d6bb99f43a70eea0149d7ca9c3d1f94',1,'gameplay::Scene::addNode(const char *id=NULL)'],['../classgameplay_1_1_scene.html#af1d04119b3d7e2c227e76f7dee68274e',1,'gameplay::Scene::addNode(Node *node)']]],
   ['addpart',['addPart',['../classgameplay_1_1_mesh.html#ac7939ac49da148123f50c4f03d1a9023',1,'gameplay::Mesh']]],
   ['addref',['addRef',['../classgameplay_1_1_ref.html#a66e39f63477efb32cc190f6605ef0c74',1,'gameplay::Ref']]],
+<<<<<<< HEAD
   ['addsingleresult',['addSingleResult',['../structgameplay_1_1_collides_with_callback.html#a3cbffeb1df690178efa10d9c075ba584',1,'gameplay::CollidesWithCallback::addSingleResult()'],['../classgameplay_1_1_physics_controller.html#a44243d5391f18bc002ed35a9dade2544',1,'gameplay::PhysicsController::addSingleResult()']]],
+=======
+  ['addsingleresult',['addSingleResult',['../classgameplay_1_1_physics_controller.html#a44243d5391f18bc002ed35a9dade2544',1,'gameplay::PhysicsController']]],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['addstatuslistener',['addStatusListener',['../classgameplay_1_1_physics_controller.html#a9c9c7800807569809a677be38873170a',1,'gameplay::PhysicsController']]],
   ['align',['align',['../classgameplay_1_1_layout.html#aaaad13cf40bcd08aa5aa79097bfa806a',1,'gameplay::Layout']]],
   ['alignment',['Alignment',['../classgameplay_1_1_control.html#a81f7bde0bfab996b044e2dc33aff5d13',1,'gameplay::Control']]],
@@ -44,6 +54,7 @@ var searchData=
   ['animate_5ftranslate_5fz',['ANIMATE_TRANSLATE_Z',['../classgameplay_1_1_transform.html#aa129fc2df5e41f17d2ddad45dea2724a',1,'gameplay::Transform']]],
   ['animate_5funiform',['ANIMATE_UNIFORM',['../classgameplay_1_1_material_parameter.html#a0846a7aabb77f4efbb3b7038b8479948',1,'gameplay::MaterialParameter']]],
   ['animation',['Animation',['../classgameplay_1_1_animation.html',1,'gameplay']]],
+<<<<<<< HEAD
   ['animation_5frepeat',['ANIMATION_REPEAT',['../classgameplay_1_1_physics_character.html#ad95f8f06765d313384d25415982f3c90a371e785d2232f922ed302722fde06347',1,'gameplay::PhysicsCharacter']]],
   ['animation_5fresume',['ANIMATION_RESUME',['../classgameplay_1_1_physics_character.html#ad95f8f06765d313384d25415982f3c90abc30782a7be5d975f7b8bb987b42f0a0',1,'gameplay::PhysicsCharacter']]],
   ['animation_5fstop',['ANIMATION_STOP',['../classgameplay_1_1_physics_character.html#ad95f8f06765d313384d25415982f3c90aef359579717b6e4ec37b7d3d0e5760a4',1,'gameplay::PhysicsCharacter']]],
@@ -51,6 +62,11 @@ var searchData=
   ['animationcontroller',['AnimationController',['../classgameplay_1_1_animation_controller.html',1,'gameplay']]],
   ['animationevent',['animationEvent',['../classgameplay_1_1_animation_clip_1_1_listener.html#ae46b7010e5e5c64f61dcd55755e9c218',1,'gameplay::AnimationClip::Listener']]],
   ['animationflags',['AnimationFlags',['../classgameplay_1_1_physics_character.html#ad95f8f06765d313384d25415982f3c90',1,'gameplay::PhysicsCharacter']]],
+=======
+  ['animationclip',['AnimationClip',['../classgameplay_1_1_animation_clip.html',1,'gameplay']]],
+  ['animationcontroller',['AnimationController',['../classgameplay_1_1_animation_controller.html',1,'gameplay']]],
+  ['animationevent',['animationEvent',['../classgameplay_1_1_animation_clip_1_1_listener.html#ae46b7010e5e5c64f61dcd55755e9c218',1,'gameplay::AnimationClip::Listener']]],
+>>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
   ['animationtarget',['AnimationTarget',['../classgameplay_1_1_animation_target.html',1,'gameplay']]],
   ['animationtarget',['AnimationTarget',['../classgameplay_1_1_animation_target.html#a03d383afb9045efee09ec661bceedf80',1,'gameplay::AnimationTarget']]],
   ['animationvalue',['AnimationValue',['../classgameplay_1_1_animation_value.html',1,'gameplay']]],
