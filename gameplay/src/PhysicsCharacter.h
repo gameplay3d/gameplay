@@ -152,9 +152,9 @@ public:
     void setRightVelocity(float velocity = 1.0f);
 
     /**
-     * Causes the character to jump with the specified initial upwards velocity.
+     * Causes the character to jump to the specified height.
      *
-     * @param velocity Initial jump velocity.
+     * @param height The amount to jump.
      */
     void jump(float height);
 

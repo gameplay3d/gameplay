@@ -316,10 +316,45 @@ Material* createDebugMaterial()
     return material;
 }
 
+/**
+ * DebugVertex structure.
+ */
 struct DebugVertex
 {
-    float x, y, z;
-    float r, g, b, a;
+    /**
+     * The x coordinate of the vertex.
+     */
+    float x;
+
+    /**
+     * The y coordinate of the vertex.
+     */
+    float y;
+    
+    /**
+     * The z coordinate of the vertex.
+     */
+    float z;
+    
+    /** 
+     * The red color component of the vertex.
+     */
+    float r;
+
+    /** 
+     * The green color component of the vertex.
+     */
+    float g;
+    
+    /** 
+     * The blue color component of the vertex.
+     */
+    float b;
+    
+    /** 
+     * The alpha component of the vertex.
+     */
+    float a;
 };
 
 void drawDebugLine(MeshBatch* batch, const Vector3& point1, const Vector3& point2, const Vector3& color)

@@ -6,9 +6,14 @@
 namespace gameplay
 {
 
-// Internal class used to implement the collidesWith(PhysicsCollisionObject*) function.
+/**
+ * Internal class used to implement the collidesWith(PhysicsCollisionObject*) function.
+ */
 struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
 {
+    /**
+     * Called with each contact. Needed to implement collidesWith(PhysicsCollisionObject*).
+     */
     btScalar addSingleResult(btManifoldPoint& cp, 
         const btCollisionObject* a, int partIdA, int indexA, 
         const btCollisionObject* b, int partIdB, int indexB)
@@ -17,6 +22,9 @@ struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
         return 0.0f;
     }
 
+    /**
+     * The result of the callback.
+     */
     bool result;
 };
 
