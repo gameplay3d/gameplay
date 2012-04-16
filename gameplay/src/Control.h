@@ -781,6 +781,13 @@ protected:
      */
     static State getState(const char* state);
 
+    /**
+     * Get a Theme::ThemeImage from its ID, for a given state.
+     *
+     * @param id The ID of the image to retrieve
+     * @param state The state to get this image from.
+     * @return The requested Theme::ThemeImage, or NULL if none was found.
+     */
     Theme::ThemeImage* getImage(const char* id, State state);
 
     /**
@@ -863,7 +870,10 @@ protected:
      */
     std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
 
-    float _opacity;         // Current opacity.
+    /**
+     * The current opacity of the control.
+     */
+    float _opacity;
 
 private:
 

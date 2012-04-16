@@ -145,6 +145,10 @@ protected:
      * The size at which the RadioButton's icon will be drawn.
      */
     Vector2 _imageSize;
+
+    /**
+     * The ThemeImage to use for the RadioButton.
+     */ 
     Theme::ThemeImage* _image;
 
 private:

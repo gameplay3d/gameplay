@@ -136,7 +136,15 @@ protected:
      * The last character that was entered into the TextBox.
      */
     int _lastKeypress;
+
+    /**
+     * The font size to be used in the TextBox.
+     */
     unsigned int _fontSize;
+    
+    /**
+     * The Theme::Image for the TextBox's caret.
+     */
     Theme::ThemeImage* _caretImage;
 
 private:
