@@ -58,39 +58,6 @@ material TexturedFlat
     }
 }
 
-material TexturedFlatTransparent
-{
-    technique
-    {
-        pass
-        {
-            vertexShader = res/shaders/textured.vsh
-            fragmentShader = res/shaders/textured.fsh
-
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            
-            sampler u_diffuseTexture
-            {
-                mipmap = true
-                wrapS = CLAMP
-                wrapT = CLAMP
-                minFilter = LINEAR_MIPMAP_LINEAR
-                magFilter = LINEAR
-            }
-
-            renderState
-            {
-                blend = true
-                srcBlend = SRC_ALPHA
-                dstBlend = ONE_MINUS_SRC_ALPHA
-                cullFace = true
-                depthTest = true
-            }
-        }
-    }
-}
-
 material TexturedSpecular
 {
     technique
@@ -243,20 +210,6 @@ material floortiles : TexturedFlat
             sampler u_diffuseTexture
             {
                 path = res/floortiles.png
-            }
-        }
-    }
-}
-
-material rainbow : TexturedTransparent
-{
-    technique
-    {
-        pass
-        {
-            sampler u_diffuseTexture
-            {
-                path = res/rainbow.png
             }
         }
     }
