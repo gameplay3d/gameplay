@@ -173,19 +173,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00110"></a>00110 
 <a name="l00119"></a>00119         <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_physics_collision_object_1_1_collision_listener.html#a8a9c5c68b83a925eb0d160e99e683443">collisionEvent</a>(<a class="code" href="classgameplay_1_1_physics_collision_object_1_1_collision_listener.html#ab6781fd21400a84de64a0b87e2fda393">PhysicsCollisionObject::CollisionListener::EventType</a> type,
 <a name="l00120"></a>00120                                     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_physics_collision_object_1_1_collision_pair.html">PhysicsCollisionObject::CollisionPair</a>&amp; collisionPair,
-<a name="l00121"></a>00121                                     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; contactPointA = <a class="code" href="classgameplay_1_1_vector3.html#ab86e046c8160f83fb74ffd6af4818b62">Vector3::zero</a>(),
-<a name="l00122"></a>00122                                     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; contactPointB = <a class="code" href="classgameplay_1_1_vector3.html#ab86e046c8160f83fb74ffd6af4818b62">Vector3::zero</a>()) = 0;
+<a name="l00121"></a>00121                                     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; contactPointA = <a class="code" href="classgameplay_1_1_vector3.html#abe4fe277a0b7db6709dd43ec54493a55">Vector3::zero</a>(),
+<a name="l00122"></a>00122                                     <span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vector3.html">Vector3</a>&amp; contactPointB = <a class="code" href="classgameplay_1_1_vector3.html#abe4fe277a0b7db6709dd43ec54493a55">Vector3::zero</a>()) = 0;
 <a name="l00123"></a>00123     };
 <a name="l00124"></a>00124 
-<a name="l00128"></a>00128     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_physics_collision_object.html#a17a81511455d7fc0b8a7792460be47d1">~PhysicsCollisionObject</a>();
+<a name="l00128"></a>00128     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_physics_collision_object.html#a009146cdded1d56739a43a27a1784a1f">~PhysicsCollisionObject</a>();
 <a name="l00129"></a>00129 
 <a name="l00133"></a>00133     <span class="keyword">virtual</span> <a class="code" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463e">PhysicsCollisionObject::Type</a> <a class="code" href="classgameplay_1_1_physics_collision_object.html#a233b0ebcd96ddb3935bff0b9729bba58">getType</a>() <span class="keyword">const</span> = 0;
 <a name="l00134"></a>00134 
 <a name="l00138"></a>00138     <a class="code" href="classgameplay_1_1_physics_collision_shape.html#a28e23fbc129e2aea492b957bf54a9db4">PhysicsCollisionShape::Type</a> <a class="code" href="classgameplay_1_1_physics_collision_object.html#abfb0539760291aa239e2c081bcb31282">getShapeType</a>() <span class="keyword">const</span>;
 <a name="l00139"></a>00139 
-<a name="l00143"></a>00143     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_physics_collision_object.html#ab9c829cdc37ade48851e49fb929bf195">getNode</a>() <span class="keyword">const</span>;
+<a name="l00143"></a>00143     <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_physics_collision_object.html#a73a730ce9131bf2f04cec61543219b08">getNode</a>() <span class="keyword">const</span>;
 <a name="l00144"></a>00144 
-<a name="l00150"></a>00150     <a class="code" href="classgameplay_1_1_physics_collision_shape.html">PhysicsCollisionShape</a>* <a class="code" href="classgameplay_1_1_physics_collision_object.html#af22718d976b78802cf535229e47db650">getCollisionShape</a>() <span class="keyword">const</span>;
+<a name="l00150"></a>00150     <a class="code" href="classgameplay_1_1_physics_collision_shape.html">PhysicsCollisionShape</a>* <a class="code" href="classgameplay_1_1_physics_collision_object.html#a3b805e66d1a19a1205384401d3765bc9">getCollisionShape</a>() <span class="keyword">const</span>;
 <a name="l00151"></a>00151 
 <a name="l00160"></a>00160     <span class="keywordtype">bool</span> <a class="code" href="classgameplay_1_1_physics_collision_object.html#a74cf7be1b865894bf9a38fb234164f3b">isKinematic</a>() <span class="keyword">const</span>;
 <a name="l00161"></a>00161 
@@ -203,12 +203,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00203"></a>00203 
 <a name="l00209"></a>00209     <span class="keyword">virtual</span> btCollisionObject* <a class="code" href="classgameplay_1_1_physics_collision_object.html#a6b73ee70151c9d46e58620660347aede">getCollisionObject</a>() <span class="keyword">const</span> = 0;
 <a name="l00210"></a>00210 
-<a name="l00216"></a>00216     <a class="code" href="classgameplay_1_1_physics_motion_state.html">PhysicsMotionState</a>* <a class="code" href="classgameplay_1_1_physics_collision_object.html#adeb17822b11cde387c37684e15f546ca">getMotionState</a>() <span class="keyword">const</span>;
+<a name="l00216"></a>00216     <a class="code" href="classgameplay_1_1_physics_motion_state.html">PhysicsMotionState</a>* <a class="code" href="classgameplay_1_1_physics_collision_object.html#a572ad1f7477e96332e3d42d50e2bff1b">getMotionState</a>() <span class="keyword">const</span>;
 <a name="l00217"></a>00217 
 <a name="l00218"></a>00218     <span class="comment">// Common member variables</span>
 <a name="l00222"></a><a class="code" href="classgameplay_1_1_physics_collision_object.html#a4bd75a609b534a04703af2022f073432">00222</a> <span class="comment"></span>    <a class="code" href="classgameplay_1_1_node.html">Node</a>* <a class="code" href="classgameplay_1_1_physics_collision_object.html#a4bd75a609b534a04703af2022f073432">_node</a>;
 <a name="l00223"></a>00223 
-<<<<<<< HEAD
 <a name="l00227"></a><a class="code" href="classgameplay_1_1_physics_collision_object.html#a80a11ff90cb6e633eab481bebc7283cb">00227</a>     <a class="code" href="classgameplay_1_1_physics_motion_state.html">PhysicsMotionState</a>* <a class="code" href="classgameplay_1_1_physics_collision_object.html#a80a11ff90cb6e633eab481bebc7283cb">_motionState</a>;
 <a name="l00228"></a>00228     
 <a name="l00232"></a><a class="code" href="classgameplay_1_1_physics_collision_object.html#ab81c354d53e0cad80b064d5e9ad40bd9">00232</a>     <a class="code" href="classgameplay_1_1_physics_collision_shape.html">PhysicsCollisionShape</a>* <a class="code" href="classgameplay_1_1_physics_collision_object.html#ab81c354d53e0cad80b064d5e9ad40bd9">_collisionShape</a>;
@@ -218,22 +217,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00236"></a>00236 }
 <a name="l00237"></a>00237 
 <a name="l00238"></a>00238 <span class="preprocessor">#endif</span>
-=======
-<a name="l00224"></a>00224 }
-<a name="l00225"></a>00225 
-<a name="l00226"></a>00226 <span class="preprocessor">#endif</span>
->>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><b>PhysicsCollisionObject.h</b>      </li>
 
-<<<<<<< HEAD
-    <li class="footer">Generated on Fri Apr 13 2012 17:27:45 for gameplay by
-=======
-    <li class="footer">Generated on Fri Apr 13 2012 21:34:00 for gameplay by
->>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
+    <li class="footer">Generated on Mon Apr 16 2012 13:05:19 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

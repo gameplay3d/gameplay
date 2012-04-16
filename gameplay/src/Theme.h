@@ -260,12 +260,24 @@ public:
 
     public:
 
+        /**
+         * Gets the ID of the ThemeImage.
+         */
         const char* getId() const;
 
+        /**
+         * Gets the UV coordinates for the ThemeImage.
+         */
         const UVs& getUVs() const;
 
+        /** 
+         * Gets the Rectangle region of the ThemeImage.
+         */
         const Rectangle& getRegion() const;
 
+        /** 
+         * Gets the color of the ThemeImage in a Vector4.
+         */
         const Vector4& getColor() const;
 
     private:

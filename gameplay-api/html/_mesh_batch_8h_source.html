@@ -125,9 +125,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00014"></a>00014 {
 <a name="l00015"></a>00015 <span class="keyword">public</span>:
 <a name="l00016"></a>00016 
-<a name="l00029"></a>00029     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_mesh_batch.html">MeshBatch</a>* <a class="code" href="classgameplay_1_1_mesh_batch.html#a5b32c94de457181271679c889f532fef">create</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>&amp; vertexFormat, <a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">Mesh::PrimitiveType</a> primitiveType, <span class="keyword">const</span> <span class="keywordtype">char</span>* materialPath, <span class="keywordtype">bool</span> indexed, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> initialCapacity = 1024, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> growSize = 1024);
+<a name="l00029"></a>00029     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_mesh_batch.html">MeshBatch</a>* <a class="code" href="classgameplay_1_1_mesh_batch.html#a6fd76da50fcb72efd8b015d79a6d0b29">create</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>&amp; vertexFormat, <a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">Mesh::PrimitiveType</a> primitiveType, <span class="keyword">const</span> <span class="keywordtype">char</span>* materialPath, <span class="keywordtype">bool</span> indexed, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> initialCapacity = 1024, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> growSize = 1024);
 <a name="l00030"></a>00030 
-<a name="l00043"></a>00043     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_mesh_batch.html">MeshBatch</a>* <a class="code" href="classgameplay_1_1_mesh_batch.html#a5b32c94de457181271679c889f532fef">create</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>&amp; vertexFormat, <a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">Mesh::PrimitiveType</a> primitiveType, <a class="code" href="classgameplay_1_1_material.html">Material</a>* material, <span class="keywordtype">bool</span> indexed, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> initialCapacity = 1024, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> growSize = 1024);
+<a name="l00043"></a>00043     <span class="keyword">static</span> <a class="code" href="classgameplay_1_1_mesh_batch.html">MeshBatch</a>* <a class="code" href="classgameplay_1_1_mesh_batch.html#a6fd76da50fcb72efd8b015d79a6d0b29">create</a>(<span class="keyword">const</span> <a class="code" href="classgameplay_1_1_vertex_format.html">VertexFormat</a>&amp; vertexFormat, <a class="code" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">Mesh::PrimitiveType</a> primitiveType, <a class="code" href="classgameplay_1_1_material.html">Material</a>* material, <span class="keywordtype">bool</span> indexed, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> initialCapacity = 1024, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> growSize = 1024);
 <a name="l00044"></a>00044 
 <a name="l00048"></a>00048     <a class="code" href="classgameplay_1_1_mesh_batch.html#ac1d469941995d4165220231aac2b5af5">~MeshBatch</a>();
 <a name="l00049"></a>00049 
@@ -135,7 +135,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00056"></a>00056 
 <a name="l00062"></a>00062     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_mesh_batch.html#ad0ed606c294b9cb9924ba18625f0c998">setCapacity</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> capacity);
 <a name="l00063"></a>00063 
-<a name="l00069"></a>00069     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_material.html">Material</a>* <a class="code" href="classgameplay_1_1_mesh_batch.html#ae5e518b4f8b44ab1fa07c67dedd9dc05">getMaterial</a>() <span class="keyword">const</span>;
+<a name="l00069"></a>00069     <span class="keyword">inline</span> <a class="code" href="classgameplay_1_1_material.html">Material</a>* <a class="code" href="classgameplay_1_1_mesh_batch.html#a76c25f547cd583f5bf94d3dbf16eaeb8">getMaterial</a>() <span class="keyword">const</span>;
 <a name="l00070"></a>00070 
 <a name="l00090"></a>00090     <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
 <a name="l00091"></a>00091     <span class="keywordtype">void</span> <a class="code" href="classgameplay_1_1_mesh_batch.html#a7413764448e752865cc62ee439414980">add</a>(T* vertices, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> vertexCount, <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>* indices = NULL, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> indexCount = 0);
@@ -184,11 +184,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul>
       <li class="navelem"><b>MeshBatch.h</b>      </li>
 
-<<<<<<< HEAD
-    <li class="footer">Generated on Fri Apr 13 2012 17:27:45 for gameplay by
-=======
-    <li class="footer">Generated on Fri Apr 13 2012 21:34:00 for gameplay by
->>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
+    <li class="footer">Generated on Mon Apr 16 2012 13:05:19 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

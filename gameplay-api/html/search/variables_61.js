@@ -1,9 +1,6 @@
 var searchData=
 [
-<<<<<<< HEAD
-  ['a',['a',['../structgameplay_1_1_physics_controller_1_1_debug_drawer_1_1_debug_vertex.html#a764182ac9b3e7db246dd1d0d8eeda046',1,'gameplay::PhysicsController::DebugDrawer::DebugVertex::a()'],['../structgameplay_1_1_debug_vertex.html#a0de02c2858c427cde4603406da60a605',1,'gameplay::DebugVertex::a()'],['../structgameplay_1_1_sprite_vertex.html#acf92c7d4d8a676a5c401513b45bcf5b2',1,'gameplay::SpriteVertex::a()']]],
-=======
->>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
+  ['a',['a',['../structgameplay_1_1_physics_controller_1_1_debug_drawer_1_1_debug_vertex.html#a764182ac9b3e7db246dd1d0d8eeda046',1,'gameplay::PhysicsController::DebugDrawer::DebugVertex']]],
   ['angulardamping',['angularDamping',['../structgameplay_1_1_physics_rigid_body_1_1_parameters.html#aef99ab3434cf6a01bbffc4703328a9fe',1,'gameplay::PhysicsRigidBody::Parameters']]],
   ['animate_5fopacity',['ANIMATE_OPACITY',['../classgameplay_1_1_control.html#a0550cbfcaa518b112c2796a9e7a17777',1,'gameplay::Control']]],
   ['animate_5fposition',['ANIMATE_POSITION',['../classgameplay_1_1_control.html#aefc69c44cc549f575b66faee33af06d6',1,'gameplay::Control']]],

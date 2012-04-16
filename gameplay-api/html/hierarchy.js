@@ -26,12 +26,9 @@ var hierarchy =
     [ "gameplay::AudioController", "classgameplay_1_1_audio_controller.html", null ],
     [ "gameplay::BoundingBox", "classgameplay_1_1_bounding_box.html", null ],
     [ "gameplay::BoundingSphere", "classgameplay_1_1_bounding_sphere.html", null ],
-    [ "gameplay::ClosestNotMeConvexResultCallback", "classgameplay_1_1_closest_not_me_convex_result_callback.html", null ],
-    [ "gameplay::CollidesWithCallback", "structgameplay_1_1_collides_with_callback.html", null ],
     [ "gameplay::PhysicsCollisionObject::CollisionListener", "classgameplay_1_1_physics_collision_object_1_1_collision_listener.html", null ],
     [ "gameplay::PhysicsCollisionObject::CollisionPair", "classgameplay_1_1_physics_collision_object_1_1_collision_pair.html", null ],
     [ "gameplay::PhysicsController::DebugDrawer::DebugVertex", "structgameplay_1_1_physics_controller_1_1_debug_drawer_1_1_debug_vertex.html", null ],
-    [ "gameplay::DebugVertex", "structgameplay_1_1_debug_vertex.html", null ],
     [ "gameplay::PhysicsCollisionShape::Definition", "structgameplay_1_1_physics_collision_shape_1_1_definition.html", null ],
     [ "gameplay::VertexFormat::Element", "classgameplay_1_1_vertex_format_1_1_element.html", null ],
     [ "gameplay::FileSystem", "classgameplay_1_1_file_system.html", null ],
@@ -50,8 +47,8 @@ var hierarchy =
       ] ],
       [ "gameplay::PhysicsRigidBody", "classgameplay_1_1_physics_rigid_body.html", null ]
     ] ],
-    [ "gameplay::AnimationClip::Listener", "classgameplay_1_1_animation_clip_1_1_listener.html", null ],
     [ "gameplay::PhysicsController::Listener", "classgameplay_1_1_physics_controller_1_1_listener.html", null ],
+    [ "gameplay::AnimationClip::Listener", "classgameplay_1_1_animation_clip_1_1_listener.html", null ],
     [ "gameplay::Control::Listener", "classgameplay_1_1_control_1_1_listener.html", null ],
     [ "gameplay::Matrix", "classgameplay_1_1_matrix.html", null ],
     [ "gameplay::MeshBatch", "classgameplay_1_1_mesh_batch.html", null ],
@@ -115,17 +112,13 @@ var hierarchy =
       [ "gameplay::Texture", "classgameplay_1_1_texture.html", null ],
       [ "gameplay::Texture::Sampler", "classgameplay_1_1_texture_1_1_sampler.html", null ],
       [ "gameplay::Theme", "classgameplay_1_1_theme.html", null ],
-<<<<<<< HEAD
-=======
       [ "gameplay::Theme::ThemeImage", "classgameplay_1_1_theme_1_1_theme_image.html", null ],
->>>>>>> 6801051a7fa514d1e25fb44f6c95e075c0bfa8be
       [ "gameplay::VertexAttributeBinding", "classgameplay_1_1_vertex_attribute_binding.html", null ]
     ] ],
     [ "gameplay::SceneLoader", "classgameplay_1_1_scene_loader.html", null ],
     [ "gameplay::ScreenDisplayer", "classgameplay_1_1_screen_displayer.html", null ],
     [ "gameplay::Theme::SideRegions", "structgameplay_1_1_theme_1_1_side_regions.html", null ],
     [ "gameplay::SpriteBatch", "classgameplay_1_1_sprite_batch.html", null ],
-    [ "gameplay::SpriteVertex", "structgameplay_1_1_sprite_vertex.html", null ],
     [ "gameplay::Theme::Style", "classgameplay_1_1_theme_1_1_style.html", null ],
     [ "gameplay::TimeListener", "classgameplay_1_1_time_listener.html", null ],
     [ "gameplay::Touch", "classgameplay_1_1_touch.html", null ],
