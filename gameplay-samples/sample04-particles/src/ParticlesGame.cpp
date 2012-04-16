@@ -391,7 +391,7 @@ void ParticlesGame::render(long elapsedTime)
     clear(CLEAR_COLOR_DEPTH, BACKGROUND_COLOR, 1.0f, 0);
 
     // Visit all the nodes in the scene for drawing
-    _scene->visit(this, &ParticlesGame::drawScene);
+    _scene->visit(this, &ParticlesGame::drawScene, (void*)0);
 
     _form->draw();
 }
