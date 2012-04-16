@@ -62,6 +62,9 @@ protected:
      */
     static PhysicsGhostObject* create(Node* node, Properties* properties);
 
+    /**
+     * Pointer to the Bullet ghost collision object.
+     */
     btPairCachingGhostObject* _ghostObject;
 };
 

@@ -3,7 +3,7 @@ var classgameplay_1_1_slider =
     [ "Slider", "classgameplay_1_1_slider.html#a180e1a81c7c384de48cd28524873f436", null ],
     [ "~Slider", "classgameplay_1_1_slider.html#ad3b4ccc06217743fbb7aa4b8f751ba38", null ],
     [ "addListener", "classgameplay_1_1_slider.html#a9128c7978c37299194abe2c55d80bf93", null ],
-    [ "create", "classgameplay_1_1_slider.html#a2e6237b0fd43ece484c280b9d8d3b04f", null ],
+    [ "create", "classgameplay_1_1_slider.html#a7b159ca5aaa5d75ed41825d8f89e8721", null ],
     [ "drawImages", "classgameplay_1_1_slider.html#a00981e76ee43f7d3481a38adc39b8d40", null ],
     [ "getMax", "classgameplay_1_1_slider.html#a71f5e6d2f3dd4873be1d1192cf5aba04", null ],
     [ "getMin", "classgameplay_1_1_slider.html#a52bdf2fa978dca8f48bfc57228e0280c", null ],
