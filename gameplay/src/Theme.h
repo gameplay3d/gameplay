@@ -155,15 +155,44 @@ public:
      */
     struct UVs
     {
+        /**
+         * Constructor.
+         */
         UVs();
 
+        /**
+         * Constructor
+         *
+         * @param u1 u component of the first UV coordinate.
+         * @param v1 v component of the first UV coordinate.
+         * @param u2 u component of the second UV coordinate.
+         * @param v2 v component of the second UV coordinate.
+         */
         UVs(float u1, float v1, float u2, float v2);
 
+        /**
+         * Get's an empty UVs.
+         */
         static const UVs& empty();
 
+        /**
+         * u component of the first UV coordinate.
+         */
         float u1;
+        
+        /**
+         * v component of the first UV coordinate.
+         */
         float v1;
+        
+        /**
+         * u component of the second UV coordinate.
+         */
         float u2;
+        
+        /**
+         * v component of the second UV coordinate.
+         */
         float v2;
     };
 
@@ -171,17 +200,53 @@ public:
      * Struct representing margin, border, and padding areas by
      * the width or height of each side.
      */
-    typedef struct SideRegions
+    struct SideRegions
     {
+        /** 
+         * Constructor.
+         */
         SideRegions() : top(0), bottom(0), left(0), right(0) {}
 
+        /**
+         * Gets an empty SideRegion.
+         */
         static const SideRegions& empty();
 
+        /**
+         * The top of the SideRegion.
+         */
         float top;
+        
+        /**
+         * The bottom of the SideRegion.
+         */
         float bottom;
+        
+        /**
+         * The left side of the SideRegion.
+         */
         float left;
+        
+        /**
+         * The right side of the SideRegion.
+         */
         float right;
-    } Margin, Border, Padding;
+    };
+    
+    /** 
+     * Struct representing margin areas by the width or height of each side.
+     */
+    typedef SideRegions Margin;
+    
+    /** 
+     * Struct representing border areas by the width or height of each side.
+     */
+    typedef SideRegions Border;
+    
+    /** 
+     * Struct representing padding areas by the width or height of each side.
+     */
+    typedef SideRegions Padding;
 
     /**
      * Class representing an image within the theme's texture atlas.
@@ -195,12 +260,24 @@ public:
 
     public:
 
+        /**
+         * Gets the ID of the ThemeImage.
+         */
         const char* getId() const;
 
+        /**
+         * Gets the UV coordinates for the ThemeImage.
+         */
         const UVs& getUVs() const;
 
+        /** 
+         * Gets the Rectangle region of the ThemeImage.
+         */
         const Rectangle& getRegion() const;
 
+        /** 
+         * Gets the color of the ThemeImage in a Vector4.
+         */
         const Vector4& getColor() const;
 
     private:

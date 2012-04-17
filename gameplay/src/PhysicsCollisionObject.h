@@ -181,6 +181,7 @@ public:
      * Removes a collision listener.
      *
      * @param listener The listener to remove.
+     * @param object Optional collision object used to filter the collision event.
      */
     void removeCollisionListener(CollisionListener* listener, PhysicsCollisionObject* object = NULL);
 
@@ -215,8 +216,19 @@ protected:
     PhysicsMotionState* getMotionState() const;
 
     // Common member variables
+    /**
+     * Pointer to Node contained by this collision object.
+     */ 
     Node* _node;
+
+    /** 
+     * The PhysicsCollisionObject's motion state.
+     */
     PhysicsMotionState* _motionState;
+    
+    /**
+     * The PhysicsCollisionObject's collision shape.
+     */
     PhysicsCollisionShape* _collisionShape;
 
 };
