@@ -142,6 +142,9 @@ class ParticleEmitter : public Ref
 
 public:
 
+    /**
+     * Defines the types of texture blending 
+     */
     enum TextureBlending
     {
         BLEND_OPAQUE,

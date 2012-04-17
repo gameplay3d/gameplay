@@ -17,11 +17,17 @@ class ClosestNotMeConvexResultCallback : public btCollisionWorld::ClosestConvexR
 {
 public:
 
+    /**
+     * @see btCollisionWorld::ClosestConvexResultCallback::ClosestConvexResultCallback
+     */
     ClosestNotMeConvexResultCallback(PhysicsCollisionObject* me, const btVector3& up, btScalar minSlopeDot)
         : btCollisionWorld::ClosestConvexResultCallback(btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0)), _me(me), _up(up), _minSlopeDot(minSlopeDot)
     {
     }
 
+    /**
+     * @see btCollisionWorld::ClosestConvexResultCallback::addSingleResult
+     */
     btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
     {
         PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(convexResult.m_hitCollisionObject->getUserPointer());

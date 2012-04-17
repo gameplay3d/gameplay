@@ -357,10 +357,29 @@ private:
 
 protected:
 
+    /**
+     * Collection of MaterialParameter's to be applied to the gamplay::Effect.
+     */
     mutable std::vector<MaterialParameter*> _parameters;
+    
+    /**
+     * Map of IDs to AutoBindings.
+     */
     std::map<std::string, AutoBinding> _autoBindings;
+
+    /**
+     * The Node bound to the RenderState.
+     */
     Node* _nodeBinding;
+
+    /**
+     * The StateBlock of fixed-function render states that can be applied to the RenderState.
+     */
     mutable StateBlock* _state;
+
+    /**
+     * The RenderState's parent.
+     */
     RenderState* _parent;
 };
 

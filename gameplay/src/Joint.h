@@ -97,8 +97,19 @@ private:
 
 protected:
 
+    /** 
+     * The Matrix representation of the Joint's bind pose.
+     */
     Matrix _bindPose;
+    
+    /** 
+     * Flag used to mark if the Joint's matrix is dirty.
+     */
     bool _jointMatrixDirty;
+    
+    /** 
+     * The number of MeshSkin's influencing the Joint.
+     */
     unsigned int _skinCount;
 };
 

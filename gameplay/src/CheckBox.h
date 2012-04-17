@@ -44,6 +44,11 @@ public:
      */
     bool isChecked();
 
+    /**
+     * Sets whether the checkbox is checked.
+     *
+     * @param checked TRUE if the checkbox is checked; FALSE if the checkbox is not checked.
+     */
     void setChecked(bool checked);
 
     /**
@@ -125,8 +130,19 @@ protected:
      */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
-    bool _checked;      // Whether this checkbox is currently checked.
-    Vector2 _imageSize;  // The size to draw the checkbox icon, if different from its size in the texture.
+    /**
+     * Whether this checkbox is currently checked.
+     */
+    bool _checked;
+
+    /**
+     * The size to draw the checkbox icon, if different from its size in the texture.
+     */
+    Vector2 _imageSize;
+
+    /**
+     * The Theme::ThemeImage to display for the checkbox.
+     */
     Theme::ThemeImage* _image;
 
 private:

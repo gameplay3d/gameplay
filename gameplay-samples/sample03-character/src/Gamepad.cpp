@@ -93,35 +93,26 @@ Gamepad::Joystick::~Joystick()
 {
 }
 
-void Gamepad::setButton(unsigned int buttonId, Rect* screenRegion, Rect* releasedTextureRegion, Rect* pressedTextureRegion)
+void Gamepad::setButton(unsigned int buttonId, const Rectangle& screenRegion, const Rectangle& releasedTextureRegion, const Rectangle& pressedTextureRegion)
 {
     assert(buttonId < _buttonCount);
 
-    if (screenRegion)
-    {
-        _buttons[buttonId]->_region.x = screenRegion->x;
-        _buttons[buttonId]->_region.y = screenRegion->y;
-        _buttons[buttonId]->_region.width = screenRegion->width;
-        _buttons[buttonId]->_region.height = screenRegion->height;
-    }
+    _buttons[buttonId]->_region.x = screenRegion.x;
+    _buttons[buttonId]->_region.y = screenRegion.y;
+    _buttons[buttonId]->_region.width = screenRegion.width;
+    _buttons[buttonId]->_region.height = screenRegion.height;
 
-    if (releasedTextureRegion)
-    {
-        _buttons[buttonId]->_defaultTexCoord.u1 = (releasedTextureRegion->x / _texture->getWidth());
-        _buttons[buttonId]->_defaultTexCoord.v1 = 1.0f - (releasedTextureRegion->y / _texture->getHeight());
-        _buttons[buttonId]->_defaultTexCoord.u2 = _buttons[buttonId]->_defaultTexCoord.u1 + (releasedTextureRegion->width / _texture->getWidth());
-        _buttons[buttonId]->_defaultTexCoord.v2 = _buttons[buttonId]->_defaultTexCoord.v1 - (releasedTextureRegion->height / _texture->getHeight());
-        _buttons[buttonId]->_defaultTextureEnabled = true;
-    }
+    _buttons[buttonId]->_defaultTexCoord.u1 = (releasedTextureRegion.x / _texture->getWidth());
+    _buttons[buttonId]->_defaultTexCoord.v1 = 1.0f - (releasedTextureRegion.y / _texture->getHeight());
+    _buttons[buttonId]->_defaultTexCoord.u2 = _buttons[buttonId]->_defaultTexCoord.u1 + (releasedTextureRegion.width / _texture->getWidth());
+    _buttons[buttonId]->_defaultTexCoord.v2 = _buttons[buttonId]->_defaultTexCoord.v1 - (releasedTextureRegion.height / _texture->getHeight());
+    _buttons[buttonId]->_defaultTextureEnabled = true;
 
-    if (pressedTextureRegion)
-    {
-        _buttons[buttonId]->_focusTexCoord.u1 = (pressedTextureRegion->x / _texture->getWidth());
-        _buttons[buttonId]->_focusTexCoord.v1 = 1.0f - (pressedTextureRegion->y / _texture->getHeight());
-        _buttons[buttonId]->_focusTexCoord.u2 = _buttons[buttonId]->_focusTexCoord.u1 + (pressedTextureRegion->width / _texture->getWidth());
-        _buttons[buttonId]->_focusTexCoord.v2 = _buttons[buttonId]->_focusTexCoord.v1 - (pressedTextureRegion->height / _texture->getHeight());
-        _buttons[buttonId]->_focusTextureEnabled = true;
-    }
+    _buttons[buttonId]->_focusTexCoord.u1 = (pressedTextureRegion.x / _texture->getWidth());
+    _buttons[buttonId]->_focusTexCoord.v1 = 1.0f - (pressedTextureRegion.y / _texture->getHeight());
+    _buttons[buttonId]->_focusTexCoord.u2 = _buttons[buttonId]->_focusTexCoord.u1 + (pressedTextureRegion.width / _texture->getWidth());
+    _buttons[buttonId]->_focusTexCoord.v2 = _buttons[buttonId]->_focusTexCoord.v1 - (pressedTextureRegion.height / _texture->getHeight());
+    _buttons[buttonId]->_focusTextureEnabled = true;
 }
 
 Gamepad::ButtonState Gamepad::getButtonState(unsigned int index) const
@@ -131,45 +122,33 @@ Gamepad::ButtonState Gamepad::getButtonState(unsigned int index) const
     return _buttons[index]->_pressed;
 }
 
-void Gamepad::setJoystick(unsigned int joystickId, Rect* thumbScreenRegion, Rect* thumbTextureRegion, Rect* dockScreenRegion, Rect* dockTextureRegion, float radius)
+void Gamepad::setJoystick(unsigned int joystickId, const Rectangle& thumbScreenRegion, const Rectangle& thumbTextureRegion, const Rectangle& dockScreenRegion, const Rectangle& dockTextureRegion, float radius)
 {
     assert (joystickId < _joystickCount);
-    
+
     _joysticks[joystickId]->_radius = radius;
 
-    if (thumbScreenRegion)
-    {
-        _joysticks[joystickId]->_regionInner.x = thumbScreenRegion->x;
-        _joysticks[joystickId]->_regionInner.y = thumbScreenRegion->y;
-        _joysticks[joystickId]->_regionInner.width = thumbScreenRegion->width;
-        _joysticks[joystickId]->_regionInner.height = thumbScreenRegion->height;
-    }
+    _joysticks[joystickId]->_regionInner.x = thumbScreenRegion.x;
+    _joysticks[joystickId]->_regionInner.y = thumbScreenRegion.y;
+    _joysticks[joystickId]->_regionInner.width = thumbScreenRegion.width;
+    _joysticks[joystickId]->_regionInner.height = thumbScreenRegion.height;
 
-    if (thumbTextureRegion)
-    {
-        _joysticks[joystickId]->_defaultTexCoordInner.u1 = (thumbTextureRegion->x / _texture->getWidth());
-        _joysticks[joystickId]->_defaultTexCoordInner.v1 = 1.0f - (thumbTextureRegion->y / _texture->getHeight());
-        _joysticks[joystickId]->_defaultTexCoordInner.u2 = _joysticks[joystickId]->_defaultTexCoordInner.u1 + (thumbTextureRegion->width / _texture->getWidth());
-        _joysticks[joystickId]->_defaultTexCoordInner.v2 = _joysticks[joystickId]->_defaultTexCoordInner.v1 - (thumbTextureRegion->height / _texture->getHeight());
-        _joysticks[joystickId]->_defaultTextureInnerEnabled = true;
-    }
+    _joysticks[joystickId]->_defaultTexCoordInner.u1 = (thumbTextureRegion.x / _texture->getWidth());
+    _joysticks[joystickId]->_defaultTexCoordInner.v1 = 1.0f - (thumbTextureRegion.y / _texture->getHeight());
+    _joysticks[joystickId]->_defaultTexCoordInner.u2 = _joysticks[joystickId]->_defaultTexCoordInner.u1 + (thumbTextureRegion.width / _texture->getWidth());
+    _joysticks[joystickId]->_defaultTexCoordInner.v2 = _joysticks[joystickId]->_defaultTexCoordInner.v1 - (thumbTextureRegion.height / _texture->getHeight());
+    _joysticks[joystickId]->_defaultTextureInnerEnabled = true;
 
-    if (dockScreenRegion)
-    {
-        _joysticks[joystickId]->_regionOuter.x = dockScreenRegion->x;
-        _joysticks[joystickId]->_regionOuter.y = dockScreenRegion->y;
-        _joysticks[joystickId]->_regionOuter.width = dockScreenRegion->width;
-        _joysticks[joystickId]->_regionOuter.height = dockScreenRegion->height;
-    }
+    _joysticks[joystickId]->_regionOuter.x = dockScreenRegion.x;
+    _joysticks[joystickId]->_regionOuter.y = dockScreenRegion.y;
+    _joysticks[joystickId]->_regionOuter.width = dockScreenRegion.width;
+    _joysticks[joystickId]->_regionOuter.height = dockScreenRegion.height;
 
-    if (dockTextureRegion)
-    {
-        _joysticks[joystickId]->_defaultTexCoordOuter.u1 = (dockTextureRegion->x / _texture->getWidth());
-        _joysticks[joystickId]->_defaultTexCoordOuter.v1 = 1.0f - (dockTextureRegion->y / _texture->getHeight());
-        _joysticks[joystickId]->_defaultTexCoordOuter.u2 = _joysticks[joystickId]->_defaultTexCoordOuter.u1 + (dockTextureRegion->width / _texture->getWidth());
-        _joysticks[joystickId]->_defaultTexCoordOuter.v2 = _joysticks[joystickId]->_defaultTexCoordOuter.v1 - (dockTextureRegion->height / _texture->getHeight());
-        _joysticks[joystickId]->_defaultTextureOuterEnabled = true;
-    }
+    _joysticks[joystickId]->_defaultTexCoordOuter.u1 = (dockTextureRegion.x / _texture->getWidth());
+    _joysticks[joystickId]->_defaultTexCoordOuter.v1 = 1.0f - (dockTextureRegion.y / _texture->getHeight());
+    _joysticks[joystickId]->_defaultTexCoordOuter.u2 = _joysticks[joystickId]->_defaultTexCoordOuter.u1 + (dockTextureRegion.width / _texture->getWidth());
+    _joysticks[joystickId]->_defaultTexCoordOuter.v2 = _joysticks[joystickId]->_defaultTexCoordOuter.v1 - (dockTextureRegion.height / _texture->getHeight());
+    _joysticks[joystickId]->_defaultTextureOuterEnabled = true;
 }
 
 bool Gamepad::isJoystickActive(unsigned int joystickId) const
@@ -226,10 +205,6 @@ void Gamepad::draw(const Vector4& color)
             width = _joysticks[i]->_regionOuter.width;
             height = _joysticks[i]->_regionOuter.height;
 
-            // Adjust outer joggle position to point to top right.
-            //x = x - (width * 0.5f);
-            //y = y - (height * 0.5f);
-
             _spriteBatch->draw(x, y, width,  height, _joysticks[i]->_defaultTexCoordOuter.u1, _joysticks[i]->_defaultTexCoordOuter.v1, _joysticks[i]->_defaultTexCoordOuter.u2, _joysticks[i]->_defaultTexCoordOuter.v2, color);
         }
 
@@ -261,10 +236,6 @@ void Gamepad::draw(const Vector4& color)
                 x += delta.x;
                 y += delta.y;
             }
-        
-            // Adjust inner joggle position to point to top right.
-            //x = x - (width * 0.5f);
-            //y = y - (height * 0.5f);
         
             _spriteBatch->draw(x, y, width, height, _joysticks[i]->_defaultTexCoordInner.u1, _joysticks[i]->_defaultTexCoordInner.v1, _joysticks[i]->_defaultTexCoordInner.u2, _joysticks[i]->_defaultTexCoordInner.v2, color);
         }
@@ -331,8 +302,8 @@ void Gamepad::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
             {
                 if (_joysticks[i]->_contactIndex == contactIndex)
                 {
-                    float displacementX = x - _joysticks[i]->_regionInner.x;
-                    float displacementY = y - _joysticks[i]->_regionInner.y; 
+                    float displacementX = x - (_joysticks[i]->_regionInner.x + _joysticks[i]->_regionInner.width * 0.5f);
+                    float displacementY = y - (_joysticks[i]->_regionInner.y + _joysticks[i]->_regionInner.height * 0.5f);
                     float radius = _joysticks[i]->_radius;
 
                     // Determine the position of the finger. If finger moves beyond the joystick radius,
