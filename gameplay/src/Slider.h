@@ -149,16 +149,52 @@ protected:
      */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
-    void update(const Rectangle& clip);
+    /**
+     * Called when a slider's properties change. Updates this slider's internal rendering
+     * properties, such as its text viewport.
+     *
+     * @param clip The clipping rectangle of this slider's parent container.
+     */
+    void update(const Rectangle& clip); 
 
+    /**
+     * The minimum value for the Slider.
+     */
     float _min;
+    
+    /**
+     * The maximum value for the Slider
+     */
     float _max;
+    
+    /**
+     * The Slider's step size.
+     */
     float _step;
+    
+    /**
+     * The Slider's current value.
+     */
     float _value;
 
+    /**
+     * The image for the minimum slider value.
+     */
     Theme::ThemeImage* _minImage;
+    
+    /**
+     * The image for the maximum slider value.
+     */
     Theme::ThemeImage* _maxImage;
+    
+    /**
+     * The image for the slider track.
+     */
     Theme::ThemeImage* _trackImage;
+    
+    /**
+     * The image for the slider marker.
+     */
     Theme::ThemeImage* _markerImage;
 
 private:

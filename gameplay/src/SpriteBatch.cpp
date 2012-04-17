@@ -45,12 +45,55 @@
 namespace gameplay
 {
 
-// Sprite vertex structured used for batching
+/**
+ * Sprite vertex structure used for batching.
+ */
 struct SpriteVertex
 {
-    float x, y, z;
-    float u, v;
-    float r, g, b, a;
+    /**
+     * The x coordinate of the vertex.
+     */
+    float x;
+    
+    /**
+     * The y coordinate of the vertex.
+     */
+    float y;
+    
+    /**
+     * The z coordinate of the vertex.
+     */
+    float z;
+
+    /**
+     * The u component of the (u, v) texture coordinates for the vertex.
+     */
+    float u;
+    
+    /**
+     * The v component of the (u, v) texture coordinates for the vertex.
+     */
+    float v;
+
+    /**
+     * The red color component of the vertex.
+     */
+    float r;
+    
+    /**
+     * The green color component of the vertex.
+     */
+    float g;
+    
+    /**
+     * The blue color component of the vertex.
+     */
+    float b;
+    
+    /**
+     * The alpha component of the vertex.
+     */
+    float a;
 };
 
 // Shared sprite effects

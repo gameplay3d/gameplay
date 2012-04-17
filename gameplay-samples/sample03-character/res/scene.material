@@ -1,34 +1,4 @@
-material Textured
-{
-    technique
-    {
-        pass
-        {
-            vertexShader = res/shaders/diffuse.vsh
-            fragmentShader = res/shaders/diffuse.fsh
-
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            
-            sampler u_diffuseTexture
-            {
-                mipmap = true
-                wrapS = CLAMP
-                wrapT = CLAMP
-                minFilter = LINEAR_MIPMAP_LINEAR
-                magFilter = LINEAR
-            }
-
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-            }
-        }
-    }
-}
-
-material TexturedFlat
+material texturedflat
 {
     technique
     {
@@ -58,40 +28,7 @@ material TexturedFlat
     }
 }
 
-material TexturedFlatTransparent
-{
-    technique
-    {
-        pass
-        {
-            vertexShader = res/shaders/textured.vsh
-            fragmentShader = res/shaders/textured.fsh
-
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            
-            sampler u_diffuseTexture
-            {
-                mipmap = true
-                wrapS = CLAMP
-                wrapT = CLAMP
-                minFilter = LINEAR_MIPMAP_LINEAR
-                magFilter = LINEAR
-            }
-
-            renderState
-            {
-                blend = true
-                srcBlend = SRC_ALPHA
-                dstBlend = ONE_MINUS_SRC_ALPHA
-                cullFace = true
-                depthTest = true
-            }
-        }
-    }
-}
-
-material TexturedSpecular
+material texturedspecular
 {
     technique
     {
@@ -124,7 +61,7 @@ material TexturedSpecular
     }
 }
 
-material TexturedTransparent
+material texturedtransparent
 {
     technique
     {
@@ -157,7 +94,7 @@ material TexturedTransparent
     }
 }
 
-material Colored
+material colored
 {
     technique
     {
@@ -178,31 +115,7 @@ material Colored
     }
 }
 
-material ColoredSpecular
-{
-    technique
-    {
-        pass
-        {
-            vertexShader = res/shaders/colored-specular.vsh
-            fragmentShader = res/shaders/colored-specular.fsh
-
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_worldMatrix = WORLD_MATRIX
-            u_cameraPosition = CAMERA_WORLD_POSITION
-            u_specularExponent = 50
-            
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-            }
-        }
-    }
-}
-
-material boy : TexturedTransparent
+material boy : texturedtransparent
 {
     technique
     {
@@ -220,7 +133,7 @@ material boy : TexturedTransparent
     }
 }
 
-material boyshadow : TexturedTransparent
+material boyshadow : texturedtransparent
 {
     technique
     {
@@ -234,7 +147,7 @@ material boyshadow : TexturedTransparent
     }
 }
 
-material floortiles : TexturedFlat
+material floortiles : texturedflat
 {
     technique
     {
@@ -248,21 +161,7 @@ material floortiles : TexturedFlat
     }
 }
 
-material rainbow : TexturedTransparent
-{
-    technique
-    {
-        pass
-        {
-            sampler u_diffuseTexture
-            {
-                path = res/rainbow.png
-            }
-        }
-    }
-}
-
-material floor : TexturedFlat
+material floor : texturedflat
 {
     technique
     {
@@ -276,7 +175,7 @@ material floor : TexturedFlat
     }
 }
 
-material wallwest : TexturedFlat
+material wallwest : texturedflat
 {
     technique
     {
@@ -290,7 +189,7 @@ material wallwest : TexturedFlat
     }
 }
 
-material walleast : TexturedFlat
+material walleast : texturedflat
 {
     technique
     {
@@ -304,7 +203,7 @@ material walleast : TexturedFlat
     }
 }
 
-material wallnorth : TexturedFlat
+material wallnorth : texturedflat
 {
     technique
     {
@@ -318,7 +217,7 @@ material wallnorth : TexturedFlat
     }
 }
 
-material wallsouth : TexturedFlat
+material wallsouth : texturedflat
 {
     technique
     {
@@ -332,7 +231,7 @@ material wallsouth : TexturedFlat
     }
 }
 
-material walloverhang : TexturedFlat
+material walloverhang : texturedflat
 {
     technique
     {
@@ -346,7 +245,7 @@ material walloverhang : TexturedFlat
     }
 }
 
-material toybox : TexturedFlat
+material toybox : texturedflat
 {
     technique
     {
@@ -360,49 +259,35 @@ material toybox : TexturedFlat
     }
 }
 
-material white : ColoredSpecular
+material green : colored
 {
     technique
     {
         pass
         {
-            u_specularExponent = 50
-            u_diffuseColor = 1, 1, 1, 1
+            u_diffuseColor = 0.65, 0.7, 0, 1
         }
     }
 }
 
-material green : ColoredSpecular
+material lightblue : colored
 {
     technique
     {
         pass
         {
-            u_specularExponent = 50
-            u_diffuseColor = 0.8, 1, 0, 1
+            u_diffuseColor = 0.38, 0.72, 0.85, 1
         }
     }
 }
 
-material lightblue : ColoredSpecular
+material basketball : texturedspecular
 {
     technique
     {
         pass
         {
-            u_specularExponent = 50
-            u_diffuseColor = 0.18, 0.85, 1, 1
-        }
-    }
-}
-
-material basketball : TexturedSpecular
-{
-    technique
-    {
-        pass
-        {
-            u_specularExponent = 25
+            u_specularExponent = 12
 
             sampler u_diffuseTexture
             {
@@ -414,7 +299,7 @@ material basketball : TexturedSpecular
     }
 }
 
-material playtable : TexturedFlat
+material playtable : texturedflat
 {
     technique
     {
@@ -428,7 +313,7 @@ material playtable : TexturedFlat
     }
 }
 
-material easel : TexturedFlat
+material easel : texturedflat
 {
     technique
     {
@@ -442,7 +327,7 @@ material easel : TexturedFlat
     }
 }
 
-material door : TexturedFlat
+material door : texturedflat
 {
     technique
     {
@@ -456,19 +341,7 @@ material door : TexturedFlat
     }
 }
 
-material black : ColoredSpecular
-{
-    technique
-    {
-        pass
-        {
-            u_specularExponent = 50
-            u_diffuseColor = 0.13, 0.13, 0.13, 1
-        }
-    }
-}
-
-material basketballnet : TexturedFlat
+material basketballnet : texturedflat
 {
     technique
     {
@@ -482,7 +355,7 @@ material basketballnet : TexturedFlat
     }
 }
 
-material backboard : TexturedFlat
+material backboard : texturedflat
 {
     technique
     {
@@ -496,7 +369,7 @@ material backboard : TexturedFlat
     }
 }
 
-material doorframe : TexturedFlat
+material doorframe : texturedflat
 {
     technique
     {
@@ -510,7 +383,7 @@ material doorframe : TexturedFlat
     }
 }
 
-material windowledge : TexturedFlat
+material windowledge : texturedflat
 {
     technique
     {
@@ -524,7 +397,7 @@ material windowledge : TexturedFlat
     }
 }
 
-material bookshelf : TexturedFlat
+material bookshelf : texturedflat
 {
     technique
     {
@@ -538,7 +411,7 @@ material bookshelf : TexturedFlat
     }
 }
 
-material book : TexturedFlat
+material book : texturedflat
 {
     technique
     {
@@ -552,7 +425,7 @@ material book : TexturedFlat
     }
 }
 
-material tabletop : TexturedFlat
+material tabletop : texturedflat
 {
     technique
     {
@@ -566,7 +439,7 @@ material tabletop : TexturedFlat
     }
 }
 
-material tableleg1 : TexturedFlat
+material tableleg1 : texturedflat
 {
     technique
     {
@@ -580,7 +453,7 @@ material tableleg1 : TexturedFlat
     }
 }
 
-material tableleg2 : TexturedFlat
+material tableleg2 : texturedflat
 {
     technique
     {
@@ -594,7 +467,7 @@ material tableleg2 : TexturedFlat
     }
 }
 
-material tableleg3 : TexturedFlat
+material tableleg3 : texturedflat
 {
     technique
     {
@@ -608,7 +481,7 @@ material tableleg3 : TexturedFlat
     }
 }
 
-material tableleg4 : TexturedFlat
+material tableleg4 : texturedflat
 {
     technique
     {
@@ -622,7 +495,7 @@ material tableleg4 : TexturedFlat
     }
 }
 
-material storageorganizer : TexturedFlat
+material storageorganizer : texturedflat
 {
     technique
     {

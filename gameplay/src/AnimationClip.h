@@ -108,7 +108,7 @@ public:
     /**
      * Sets the AnimationClip's repeat count. Overrides repeat duration.
      *
-     * Use ANIMATION_REPEAT_INDEFINITE to play the AnimationClip indefinitely.
+     * Use REPEAT_INDEFINITE to play the AnimationClip indefinitely.
      * 
      * @param repeatCount The repeat count to set on the AnimationClip.
      */
@@ -124,7 +124,7 @@ public:
     /**
      * Sets the AnimationClip's active duration. Overrides repeat count.
      *
-     * Use ANIMATION_REPEAT_INDEFINITE to play the AnimationClip indefinitely.
+     * Use REPEAT_INDEFINITE to play the AnimationClip indefinitely.
      *
      * @param duration The active duration that is set on the AnimationClip.
      */

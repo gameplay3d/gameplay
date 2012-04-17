@@ -2,8 +2,8 @@ var classgameplay_1_1_text_box =
 [
     [ "TextBox", "classgameplay_1_1_text_box.html#aaddcd7390804954af252583c5598649c", null ],
     [ "~TextBox", "classgameplay_1_1_text_box.html#a46fbc10c5b3e4d70c7316b55b71b563b", null ],
-    [ "addListener", "classgameplay_1_1_text_box.html#a36ee197afd797a23e95a1d8aa30b55ed", null ],
-    [ "create", "classgameplay_1_1_text_box.html#a35f275644c9f8470d744e1f2222bbe00", null ],
+    [ "addListener", "classgameplay_1_1_text_box.html#ab45a02444a11fec50d2c8da17bd695b7", null ],
+    [ "create", "classgameplay_1_1_text_box.html#a8a595c015a634c9277411a0bb4a190e4", null ],
     [ "drawImages", "classgameplay_1_1_text_box.html#a5d121ad1ba1a14d8204c61368a09f326", null ],
     [ "getLastKeypress", "classgameplay_1_1_text_box.html#a5e2fba8e822202eb4c0dadeff4dbdbad", null ],
     [ "keyEvent", "classgameplay_1_1_text_box.html#ae6d5b38be56028a1ff5b01e3288e6433", null ],

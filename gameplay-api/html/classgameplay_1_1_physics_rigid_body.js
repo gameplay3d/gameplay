@@ -7,7 +7,7 @@ var classgameplay_1_1_physics_rigid_body =
     [ "getAngularDamping", "classgameplay_1_1_physics_rigid_body.html#a560efbb29f8e6a47837db387e903a414", null ],
     [ "getAngularVelocity", "classgameplay_1_1_physics_rigid_body.html#a6bf71bf3bd25020fc1f652e010eefef8", null ],
     [ "getAnisotropicFriction", "classgameplay_1_1_physics_rigid_body.html#af99967e27218d24c93b55d706772ca4b", null ],
-    [ "getCollisionObject", "classgameplay_1_1_physics_rigid_body.html#a3af1b4fd504bad6f3b907fbb9c359d49", null ],
+    [ "getCollisionObject", "classgameplay_1_1_physics_rigid_body.html#a0542fd62b1949e5f0f49fe94c4917509", null ],
     [ "getFriction", "classgameplay_1_1_physics_rigid_body.html#aac0d3cfe9b879b9b64ea06b2995bae13", null ],
     [ "getGravity", "classgameplay_1_1_physics_rigid_body.html#a153061a1c10fdeec004e2c1e82357f83", null ],
     [ "getHeight", "classgameplay_1_1_physics_rigid_body.html#a11c19c2e9245487eb8de22164c3247ba", null ],

@@ -3,55 +3,22 @@
 // Declare our game instance
 CharacterGame game;
 
+// Input flags
 #define NORTH 1
 #define SOUTH 2
 #define EAST 4
 #define WEST 8
 #define RUNNING 16
 
+// Character defines
 #define WALK_SPEED  5.0f
 #define STRAFE_SPEED 1.5f
 #define RUN_SPEED 15.0f
-#define OPAQUE_OBJECTS      0
-#define TRANSPARENT_OBJECTS 1
 #define CAMERA_FOCUS_DISTANCE 16.0f
 
-#define SCREEN_WIDTH getWidth()
-#define SCREEN_HEIGHT getHeight()
-#define SCALE_FACTOR (SCREEN_HEIGHT / 720.0f)
-#define THUMB_WIDTH 47.0f
-#define THUMB_HEIGHT 47.0f
-#define THUMB_X 10.0f
-#define THUMB_Y 188.0f
-#define THUMB_SCREEN_X 120.0f 
-#define THUMB_SCREEN_Y 130.0f
-#define DOCK_WIDTH 170.0f
-#define DOCK_HEIGHT 170.0f
-#define DOCK_X 0.0f
-#define DOCK_Y 0.0f
-#define DOCK_SCREEN_X 48.0f
-#define DOCK_SCREEN_Y 191.0f
-#define BUTTON_WIDTH 47.0f
-#define BUTTON_HEIGHT 47.0f
-#define BUTTON_PRESSED_X 69.0f
-#define BUTTON_PRESSED_Y 188.0f
-#define BUTTON_RELEASED_X 10.0f
-#define BUTTON_RELEASED_Y 188.0f
-#define BUTTON_SCREEN_X 120.0f
-#define BUTTON_SCREEN_Y 130.0f
-#define JOYSTICK_RADIUS 45.0f
-
-unsigned int inputFlags = 0;
-float velocityNS = 0.0f;
-float velocityEW = 0.0f;
-int drawDebug = 0;
-
 CharacterGame::CharacterGame()
-    : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _currentClip(NULL), _rotateX(0), _materialParameterAlpha(NULL)
-{
-}
-
-CharacterGame::~CharacterGame()
+    : _font(NULL), _scene(NULL), _character(NULL), _animation(NULL), _currentClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
+      _inputFlags(0), _drawDebug(0)
 {
 }
 
@@ -66,33 +33,28 @@ void CharacterGame::initialize()
     // Load scene.
     _scene = Scene::load("res/scene.scene");
 
-    // Update the aspect ratio for our scene's camera to match the current device resolution
-    _scene->getActiveCamera()->setAspectRatio((float)SCREEN_WIDTH / (float) SCREEN_HEIGHT);
+    // Update the aspect ratio for our scene's camera to match the current device resolution.
+    _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
 
-    // Initialize the physics character
+    // Initialize the physics character.
     initializeCharacter();
 
-    // Set a ghost object on our camera node to assist in camera occlusion adjustments
-    //_scene->findNode("camera")->setCollisionObject(PhysicsCollisionObject::GHOST_OBJECT, PhysicsCollisionShape::sphere(0.5f));
+    // Initialize the gamepad.
+    initializeGamepad();
 
     // Initialize scene.
-    _scene->visit(this, &CharacterGame::initScene);
+    _scene->visit(this, &CharacterGame::initializeScene);
+}
 
-    // Initialize the gamepad.
-	_gamepad = new Gamepad("res/gamepad.png", 1, 1);
+bool CharacterGame::initializeScene(Node* node)
+{
+    Model* model = node->getModel();
+    if (model && model->getMaterial())
+    {
+        initializeMaterial(_scene, node, model->getMaterial());
+    }
 
-    Gamepad::Rect thumbScreenRegion = {THUMB_SCREEN_X * SCALE_FACTOR, SCREEN_HEIGHT - THUMB_SCREEN_Y * SCALE_FACTOR, THUMB_WIDTH * SCALE_FACTOR, THUMB_HEIGHT * SCALE_FACTOR};
-    Gamepad::Rect thumbTexRegion =    {THUMB_X, THUMB_Y, THUMB_WIDTH, THUMB_HEIGHT};
-    Gamepad::Rect dockScreenRegion =  {DOCK_SCREEN_X * SCALE_FACTOR, SCREEN_HEIGHT - DOCK_SCREEN_Y * SCALE_FACTOR, DOCK_WIDTH * SCALE_FACTOR, DOCK_HEIGHT * SCALE_FACTOR};
-    Gamepad::Rect dockTexRegion =     {DOCK_X, DOCK_Y, DOCK_WIDTH, DOCK_HEIGHT};
-
-    _gamepad->setJoystick(JOYSTICK, &thumbScreenRegion, &thumbTexRegion, &dockScreenRegion, &dockTexRegion, JOYSTICK_RADIUS);
-
-	Gamepad::Rect regionOnScreen = {SCREEN_WIDTH - SCALE_FACTOR * (BUTTON_SCREEN_X + BUTTON_WIDTH), SCREEN_HEIGHT - BUTTON_SCREEN_Y * SCALE_FACTOR, BUTTON_WIDTH * SCALE_FACTOR, BUTTON_HEIGHT * SCALE_FACTOR};
-	Gamepad::Rect releasedRegion = {BUTTON_RELEASED_X, BUTTON_RELEASED_Y, BUTTON_WIDTH, BUTTON_HEIGHT};
-	Gamepad::Rect pressedRegion =  {BUTTON_PRESSED_X, BUTTON_PRESSED_Y, BUTTON_WIDTH, BUTTON_HEIGHT};
-
-	_gamepad->setButton(BUTTON_1, &regionOnScreen, &releasedRegion, &pressedRegion);
+    return true;
 }
 
 void CharacterGame::initializeMaterial(Scene* scene, Node* node, Material* material)
@@ -105,17 +67,6 @@ void CharacterGame::initializeMaterial(Scene* scene, Node* node, Material* mater
         material->getParameter("u_lightColor")->bindValue(lightNode->getLight(), &Light::getColor);
         material->getParameter("u_ambientColor")->bindValue(scene, &Scene::getAmbientColor);
     }
-}
-
-bool CharacterGame::initScene(Node* node, void* cookie)
-{
-    Model* model = node->getModel();
-    if (model && model->getMaterial())
-    {
-        initializeMaterial(_scene, node, model->getMaterial());
-    }
-
-    return true;
 }
 
 void CharacterGame::initializeCharacter()
@@ -139,12 +90,33 @@ void CharacterGame::initializeCharacter()
     play("idle", true);
 }
 
+void CharacterGame::initializeGamepad()
+{
+    _gamepad = new Gamepad("res/gamepad.png", 1, 1);
+
+    float scale = getHeight() / 720.0f;
+
+    // Add a single gamepad joystick
+    _gamepad->setJoystick(0,
+        Rectangle(48.0f * scale, getHeight() - 248.0f * scale, 200.0f * scale, 200.0f * scale), 
+        Rectangle(256, 0, 256, 256),
+        Rectangle(48.0f * scale, getHeight() - 248.0f * scale, 200.0f * scale, 200.0f * scale),
+        Rectangle(0, 0, 256, 256),
+        64.0f);
+
+    // Add a single gamepad button
+	_gamepad->setButton(0,
+        Rectangle(getWidth() - scale * (176.0f), getHeight() - 176.0f * scale, 128.0f * scale, 128.0f * scale),
+        Rectangle(40, 310, 160, 160),
+        Rectangle(300, 310, 160, 160));
+}
+
 void CharacterGame::drawSplash(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
     SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
     batch->begin();
-    batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
+    batch->draw(getWidth() * 0.5f, getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
     batch->end();
     SAFE_DELETE(batch);
 }
@@ -196,19 +168,11 @@ void CharacterGame::play(const char* id, bool repeat)
 
 void CharacterGame::update(long elapsedTime)
 {
-    Vector2 joystickVec = _gamepad->getJoystickState(JOYSTICK);
+    Vector2 joystickVec = _gamepad->getJoystickState(0);
     if (!joystickVec.isZero())
     {
-	    inputFlags = 0;
+	    _inputFlags = 0;
 
-        velocityNS = joystickVec.y;
-
-        // Calculate forward/backward movement.
-        if (velocityNS > 0)
-		    inputFlags |= 1;
-	    else if (velocityNS < 0)
-		    inputFlags |= 2;
-        
         // Calculate rotation
         float angle = joystickVec.x * MATH_PI * -0.015;
         _character->rotate(Vector3::unitY(), angle);
@@ -217,15 +181,15 @@ void CharacterGame::update(long elapsedTime)
     /*Gamepad::ButtonState buttonOneState = _gamepad->getButtonState(BUTTON_1);
     if (buttonOneState)
     {
-        inputFlags = 16;
+        _inputFlags = 16;
     }
 
-    if (inputFlags == 16)
+    if (_inputFlags == 16)
     {
         play("jump", false);
     }*/
 
-    /*if (inputFlags == 0)
+    /*if (_inputFlags == 0)
     {
         play("idle", true);
         _character->setForwardVelocity(0);
@@ -233,9 +197,9 @@ void CharacterGame::update(long elapsedTime)
     }
     else*/
     {
-        if (inputFlags & NORTH)
+        if (_inputFlags & NORTH)
         {
-            if (inputFlags & RUNNING)
+            if (_inputFlags & RUNNING)
             {
                 play("running", true);
                 _character->setForwardVelocity(RUN_SPEED);
@@ -246,32 +210,32 @@ void CharacterGame::update(long elapsedTime)
                 _character->setForwardVelocity(WALK_SPEED);
             }
 
-            if (inputFlags & EAST)
+            if (_inputFlags & EAST)
                 _character->setRightVelocity(STRAFE_SPEED);
-            else if (inputFlags & WEST)
+            else if (_inputFlags & WEST)
                 _character->setRightVelocity(-STRAFE_SPEED);
             else
                 _character->setRightVelocity(0);
         }
-        else if (inputFlags & SOUTH)
+        else if (_inputFlags & SOUTH)
         {
             play("walking", true);
             _character->setForwardVelocity(-WALK_SPEED);
 
-            if (inputFlags & EAST)
+            if (_inputFlags & EAST)
                 _character->setRightVelocity(STRAFE_SPEED);
-            else if (inputFlags & WEST)
+            else if (_inputFlags & WEST)
                 _character->setRightVelocity(-STRAFE_SPEED);
             else
                 _character->setRightVelocity(0);
         }
-        else if (inputFlags & EAST)
+        else if (_inputFlags & EAST)
         {
             play("strafeRight", true);
             _character->setForwardVelocity(0);
             _character->setRightVelocity(STRAFE_SPEED);
         }
-        else if (inputFlags & WEST)
+        else if (_inputFlags & WEST)
         {
             play("strafeLeft", true);
             _character->setForwardVelocity(0);
@@ -298,11 +262,12 @@ void CharacterGame::render(long elapsedTime)
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4(0.41f, 0.48f, 0.54f, 1.0f), 1.0f, 0);
 
-    // Draw our scene
-    _scene->visit(this, &CharacterGame::drawScene, (void*)0);
-    _scene->visit(this, &CharacterGame::drawScene, (void*)1);
+    // Draw our scene, with separate passes for opaque and transparent objects.
+    _scene->visit(this, &CharacterGame::drawScene, false);
+    _scene->visit(this, &CharacterGame::drawScene, true);
 
-    switch (drawDebug)
+    // Draw debug info (physics bodies, bounds, etc).
+    switch (_drawDebug)
     {
     case 1:
         Game::getInstance()->getPhysicsController()->drawDebug(_scene->getActiveCamera()->getViewProjectionMatrix());
@@ -315,8 +280,11 @@ void CharacterGame::render(long elapsedTime)
         break;
     }
 
-    _gamepad->draw();
+    // Draw gamepad for touch devices.
+    //if (isMultiTouch())
+        _gamepad->draw(Vector4(1.0f, 1.0f, 1.0f, 0.7f));
 
+    // Draw FPS
     _font->begin();
     char fps[32];
     sprintf(fps, "%d", getFrameRate());
@@ -324,24 +292,10 @@ void CharacterGame::render(long elapsedTime)
     _font->end();
 }
 
-bool CharacterGame::drawScene(Node* node, void* cookie)
+bool CharacterGame::drawScene(Node* node, bool transparent)
 {
-    Model* model = node->getModel();
-    if (model)
-    {
-        switch ((long)cookie)
-        {
-        case OPAQUE_OBJECTS:
-            if (!node->isTransparent())
-                model->draw();
-            break;
-
-        case TRANSPARENT_OBJECTS:
-            if (node->isTransparent())
-                model->draw();
-            break;
-        }
-    }
+    if (node->getModel() && (transparent == node->isTransparent()))
+        node->getModel()->draw();
 
     return true;
 }
@@ -357,35 +311,31 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         case Keyboard::KEY_W:
         case Keyboard::KEY_CAPITAL_W:
-            inputFlags |= NORTH;
-            velocityNS = 1.0f;
+            _inputFlags |= NORTH;
             break;
         case Keyboard::KEY_S:
         case Keyboard::KEY_CAPITAL_S:
-            inputFlags |= SOUTH;
-            velocityNS = -1.0f;
+            _inputFlags |= SOUTH;
             break;
         case Keyboard::KEY_A:
         case Keyboard::KEY_CAPITAL_A:
-            inputFlags |= WEST;
-            velocityEW = 1.0f;
+            _inputFlags |= WEST;
             break;
         case Keyboard::KEY_D:
         case Keyboard::KEY_CAPITAL_D:
-            inputFlags |= EAST;
-            velocityEW = -1.0f;
+            _inputFlags |= EAST;
             break;
         case Keyboard::KEY_B:
-            drawDebug++;
-            if (drawDebug > 3)
-                drawDebug = 0;
+            _drawDebug++;
+            if (_drawDebug > 3)
+                _drawDebug = 0;
             break;
         case Keyboard::KEY_SPACE:
             play("jump", false);
             _character->jump(3.0f);
             break;
         case Keyboard::KEY_SHIFT:
-            inputFlags |= RUNNING;
+            _inputFlags |= RUNNING;
             break;
         }
     }
@@ -395,26 +345,22 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
         {
         case Keyboard::KEY_W:
         case Keyboard::KEY_CAPITAL_W:
-            inputFlags &= ~NORTH;
-            velocityNS = 0.0f;
+            _inputFlags &= ~NORTH;
             break;
         case Keyboard::KEY_S:
         case Keyboard::KEY_CAPITAL_S:
-            inputFlags &= ~SOUTH;
-            velocityNS = 0.0f;
+            _inputFlags &= ~SOUTH;
             break;
         case Keyboard::KEY_A:
         case Keyboard::KEY_CAPITAL_A:
-            inputFlags &= ~WEST;
-            velocityEW = 0.0f;
+            _inputFlags &= ~WEST;
             break;
         case Keyboard::KEY_D:
         case Keyboard::KEY_CAPITAL_D:
-            inputFlags &= ~EAST;
-            velocityEW = 0.0f;
+            _inputFlags &= ~EAST;
             break;
         case Keyboard::KEY_SHIFT:
-            inputFlags &= ~RUNNING;
+            _inputFlags &= ~RUNNING;
             break;
         }
     }
@@ -423,17 +369,17 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
 void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     // Get the joystick's current state.
-    bool wasActive = _gamepad->isJoystickActive(JOYSTICK);
+    bool wasActive = _gamepad->isJoystickActive(0);
 
     _gamepad->touchEvent(evt, x, y, contactIndex);
 
     // See if the joystick is still active.
-    bool isActive = _gamepad->isJoystickActive(JOYSTICK);
+    bool isActive = _gamepad->isJoystickActive(0);
     if (!isActive)
     {
-        // If it was active before, reset the joystick's influence on the inputFlags.
+        // If it was active before, reset the joystick's influence on the _inputFlags.
         if (wasActive)
-            inputFlags = 0;
+            _inputFlags = 0;
 
         switch (evt)
         {
