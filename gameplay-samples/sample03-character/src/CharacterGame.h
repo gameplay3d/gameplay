@@ -18,11 +18,6 @@ public:
     CharacterGame();
 
     /**
-     * Destructor.
-     */
-    virtual ~CharacterGame();
-
-    /**
      * @see Game::touchEvent
      */
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
@@ -55,19 +50,17 @@ protected:
     void render(long elapsedTime);
 
 private:
-    
-    static const unsigned int JOYSTICK = 0;
-    static const unsigned int BUTTON_1 = 0;
 
     /**
      * Draws the default "gameplay powered" splash screen.
      */
     void drawSplash(void* param);
-    
-    void initializeCharacter();
+
+    bool initializeScene(Node* node);
     void initializeMaterial(Scene* scene, Node* node, Material* material);
-    bool initScene(Node* node, void* cookie);
-    bool drawScene(Node* node, void* cookie);
+    void initializeCharacter();
+    void initializeGamepad();
+    bool drawScene(Node* node, bool transparent);
     void loadAnimationClips(Node* node);
     void adjustCamera(long elapsedTime);
     void play(const char* id, bool repeat);
@@ -82,6 +75,8 @@ private:
     int _rotateX;
     Gamepad* _gamepad;
     MaterialParameter* _materialParameterAlpha;
+    int _drawDebug;
+    unsigned int _inputFlags;
 };
 
 #endif

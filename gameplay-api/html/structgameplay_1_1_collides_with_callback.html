@@ -123,13 +123,87 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3cbffeb1df690178efa10d9c075ba584"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3cbffeb1df690178efa10d9c075ba584"></a>
-btScalar&#160;</td><td class="memItemRight" valign="bottom"><b>addSingleResult</b> (btManifoldPoint &amp;cp, const btCollisionObject *a, int partIdA, int indexA, const btCollisionObject *b, int partIdB, int indexB)</td></tr>
+<tr class="memitem:a3cbffeb1df690178efa10d9c075ba584"><td class="memItemLeft" align="right" valign="top">btScalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgameplay_1_1_collides_with_callback.html#a3cbffeb1df690178efa10d9c075ba584">addSingleResult</a> (btManifoldPoint &amp;cp, const btCollisionObject *a, int partIdA, int indexA, const btCollisionObject *b, int partIdB, int indexB)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:afa4d8f825aa0218d3b9b224f4a17b073"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa4d8f825aa0218d3b9b224f4a17b073"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>result</b></td></tr>
+<tr class="memitem:afa4d8f825aa0218d3b9b224f4a17b073"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgameplay_1_1_collides_with_callback.html#afa4d8f825aa0218d3b9b224f4a17b073">result</a></td></tr>
 </table>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Internal class used to implement the collidesWith(PhysicsCollisionObject*) function. </p>
+</div><hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a3cbffeb1df690178efa10d9c075ba584"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btScalar <a class="el" href="structgameplay_1_1_collides_with_callback.html#a3cbffeb1df690178efa10d9c075ba584">gameplay::CollidesWithCallback::addSingleResult</a> </td>
+          <td>(</td>
+          <td class="paramtype">btManifoldPoint &amp;&#160;</td>
+          <td class="paramname"><em>cp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const btCollisionObject *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>partIdA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>indexA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const btCollisionObject *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>partIdB</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>indexB</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Called with each contact. Needed to implement collidesWith(PhysicsCollisionObject*). </p>
+
+</div>
+</div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="afa4d8f825aa0218d3b9b224f4a17b073"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="structgameplay_1_1_collides_with_callback.html#afa4d8f825aa0218d3b9b224f4a17b073">gameplay::CollidesWithCallback::result</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The result of the callback. </p>
+
+</div>
+</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>gameplay/src/PhysicsCollisionObject.cpp</li>
 </ul>
@@ -140,7 +214,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>result</b></td></tr>
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="structgameplay_1_1_collides_with_callback.html">CollidesWithCallback</a>      </li>
 
-    <li class="footer">Generated on Fri Apr 13 2012 21:34:02 for gameplay by
+    <li class="footer">Generated on Mon Apr 16 2012 12:56:50 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

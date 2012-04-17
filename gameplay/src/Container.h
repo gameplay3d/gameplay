@@ -231,8 +231,15 @@ protected:
      */
     void addControls(Theme* theme, Properties* properties);
 
-    Layout* _layout;                    // This container's layout.
-    std::vector<Control*> _controls;    // List of controls within this container.
+    /**
+     * The container's layout.
+     */
+    Layout* _layout;
+
+    /**
+     * List of controls within the container.
+     */
+    std::vector<Control*> _controls;
 
 private:
 

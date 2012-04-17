@@ -1021,7 +1021,7 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
         strcmp(properties->getNamespace(), "ghostObject") == 0 || 
         strcmp(properties->getNamespace(), "rigidBody") == 0))
     {
-        WARN("Failed to load collision object from properties object: must be non-null object and have namespace equal to \'character\', \'ghost\', or \'rigidbody\'.");
+        WARN("Failed to load collision object from properties object: must be non-null object and have namespace equal to \'character\', \'ghostObject\', or \'rigidBody\'.");
         return NULL;
     }
 

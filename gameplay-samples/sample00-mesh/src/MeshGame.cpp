@@ -112,7 +112,7 @@ void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     };
 }
 
-bool MeshGame::drawScene(Node* node, void* cookie)
+bool MeshGame::drawScene(Node* node)
 {
     Model* model = node->getModel();
     if (model)

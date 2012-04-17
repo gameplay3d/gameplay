@@ -164,12 +164,6 @@ scene
         material = res/scene.material#floortiles
     }
 
-    node rainbow
-    {
-        material = res/scene.material#rainbow
-        transparent = true
-    }
-
     node basketball
     {
         material = res/scene.material#basketball
