@@ -451,17 +451,34 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
 
     if (callback.hasHit())
     {
-        // Collision detected, fix it
-        _currentPosition.setInterpolate3(_currentPosition, targetPosition, callback.m_closestHitFraction);
+        // Collision detected, fix it.
+        Vector3 normal(callback.m_hitNormalWorld.x(), callback.m_hitNormalWorld.y(), callback.m_hitNormalWorld.z());
+        normal.normalize();
 
-        // Zero out fall velocity when we hit an object
-        _verticalVelocity.setZero();
+        float dot = normal.dot(Vector3::unitY());
+        if (dot > 1.0f - MATH_EPSILON)
+        {
+            targetPosition.setInterpolate3(_currentPosition, targetPosition, callback.m_closestHitFraction);
+
+            // Zero out fall velocity when we hit an object going straight down.
+            _verticalVelocity.setZero();
+        }
+        else
+        {
+            PhysicsCollisionObject* o = Game::getInstance()->getPhysicsController()->getCollisionObject(callback.m_hitCollisionObject);
+            if (o->getType() == PhysicsCollisionObject::RIGID_BODY && o->isDynamic())
+            {
+                PhysicsRigidBody* rb = static_cast<PhysicsRigidBody*>(o);
+                normal.normalize();
+                rb->applyImpulse(_mass * -normal * dot);
+            }
+
+            updateTargetPositionFromCollision(targetPosition, BV(normal));
+            _currentPosition = targetPosition;
+        }
     }
-    else
-    {
-        // We can move here
-        _currentPosition = targetPosition;
-    }
+
+    _currentPosition = targetPosition;
 }
 
 /*
