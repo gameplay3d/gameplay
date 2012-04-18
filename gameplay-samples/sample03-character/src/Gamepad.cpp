@@ -36,11 +36,6 @@ Gamepad::Gamepad(const char* texturePath, unsigned int joysticks, unsigned int b
     {
         _buttons[i] = new Button();
     }
-
-    for (unsigned int i = 0; i < MAX_TOUCH_INPUTS; i++)
-    {
-        _touches[i] = false;
-    }
 }
 
 Gamepad::Gamepad(const Gamepad* g)
@@ -247,15 +242,11 @@ void Gamepad::draw(const Vector4& color)
             _spriteBatch->draw(x, y, width, height, _joysticks[i]->_defaultTexCoordInner.u1, _joysticks[i]->_defaultTexCoordInner.v1, _joysticks[i]->_defaultTexCoordInner.u2, _joysticks[i]->_defaultTexCoordInner.v2, color);
         }
     }
-
     _spriteBatch->end();
 }
 
 void Gamepad::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    if (contactIndex >= MAX_TOUCH_INPUTS)
-        return;
-
     for (unsigned int i = 0; i < _buttonCount; ++i)
     {
         switch (evt)

@@ -26,11 +26,6 @@ public:
     };
 
     /**
-     * The maximum number of parallel touch inputs the gamepad supports.
-     */
-    static const unsigned int MAX_TOUCH_INPUTS = 4;
-
-    /**
      * Constructor.
      *
      * @param texturePath The path to the gamepad's texture atlas.
@@ -218,7 +213,6 @@ private:
     Joystick** _joysticks;
     Texture* _texture;
     SpriteBatch* _spriteBatch;
-    int _touches[MAX_TOUCH_INPUTS];
 };
 
 #endif
