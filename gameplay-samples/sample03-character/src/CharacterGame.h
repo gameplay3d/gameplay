@@ -8,7 +8,7 @@ using namespace gameplay;
 /**
  * This is a mesh demo game for rendering Mesh.
  */
-class CharacterGame: public Game
+class CharacterGame: public Game, public AnimationClip::Listener
 {
 public:
     
@@ -26,6 +26,11 @@ public:
      * @see Game::keyEvent
      */
     void keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * @see AnimationClip::Listener::animationEvent
+     */
+    void animationEvent(AnimationClip* clip, EventType type);
 
 protected:
 
@@ -63,20 +68,24 @@ private:
     bool drawScene(Node* node, bool transparent);
     void loadAnimationClips(Node* node);
     void adjustCamera(long elapsedTime);
-    void play(const char* id, bool repeat);
-    bool isJumping() const;
+    void play(const char* id, bool repeat, float speed = 1.0f);
+    void jump();
+
+    void drawLine(const Vector3& p1, const Vector3& p2, const Vector4& color);
 
     Font* _font;
     Scene* _scene;
     PhysicsCharacter* _character;
     Node* _characterMeshNode;
+    Node* _characterShadowNode;
     Animation* _animation;
     AnimationClip* _currentClip;
     int _rotateX;
     Gamepad* _gamepad;
     MaterialParameter* _materialParameterAlpha;
     int _drawDebug;
-    unsigned int _inputFlags;
+    unsigned int _keyFlags;
+    bool _jumping;
 };
 
 #endif
