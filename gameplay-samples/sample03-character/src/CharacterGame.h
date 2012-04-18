@@ -8,7 +8,7 @@ using namespace gameplay;
 /**
  * This is a mesh demo game for rendering Mesh.
  */
-class CharacterGame: public Game, public PhysicsCollisionObject::CollisionListener, public AnimationClip::Listener
+class CharacterGame: public Game, public AnimationClip::Listener
 {
 public:
     
@@ -16,11 +16,6 @@ public:
      * Constructor.
      */
     CharacterGame();
-
-    /**
-     * Destructor.
-     */
-    virtual ~CharacterGame();
 
     /**
      * @see Game::touchEvent
@@ -33,13 +28,9 @@ public:
     void keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
-     * @see PhysicsCollisionObject::CollisionListener::collisionEvent
+     * @see AnimationClip::Listener::animationEvent
      */
-    void collisionEvent(PhysicsCollisionObject::CollisionListener::EventType type,
-                        const PhysicsCollisionObject::CollisionPair& collisionPair,
-                        const Vector3& contactPointA, const Vector3& contactPointB);
-
-    void animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type);
+    void animationEvent(AnimationClip* clip, EventType type);
 
 protected:
 
@@ -64,30 +55,38 @@ protected:
     void render(long elapsedTime);
 
 private:
-    
-    static const unsigned int JOYSTICK = 0;
-    static const unsigned int BUTTON_1 = 0;
 
     /**
      * Draws the default "gameplay powered" splash screen.
      */
     void drawSplash(void* param);
-    
-    void initMaterial(Scene* scene, Node* node, Material* material);
-    bool initScene(Node* node, void* cookie);
-    bool drawScene(Node* node, void* cookie);
+
+    bool initializeScene(Node* node);
+    void initializeMaterial(Scene* scene, Node* node, Material* material);
+    void initializeCharacter();
+    void initializeGamepad();
+    bool drawScene(Node* node, bool transparent);
     void loadAnimationClips(Node* node);
     void adjustCamera(long elapsedTime);
+    void play(const char* id, bool repeat, float speed = 1.0f);
+    void jump();
+    bool isOnFloor() const;
+
+    void drawLine(const Vector3& p1, const Vector3& p2, const Vector4& color);
 
     Font* _font;
     Scene* _scene;
     PhysicsCharacter* _character;
     Node* _characterMeshNode;
+    Node* _characterShadowNode;
     Animation* _animation;
-    unsigned int _animationState;
+    AnimationClip* _currentClip;
+    AnimationClip* _jumpClip;
     int _rotateX;
     Gamepad* _gamepad;
     MaterialParameter* _materialParameterAlpha;
+    int _drawDebug;
+    unsigned int _keyFlags;
 };
 
 #endif

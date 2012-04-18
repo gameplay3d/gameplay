@@ -43,7 +43,7 @@ PhysicsGhostObject* PhysicsGhostObject::create(Node* node, Properties* propertie
 {
     // Check if the properties is valid and has a valid namespace.
     assert(properties);
-    if (!properties || !(strcmp(properties->getNamespace(), "ghost") == 0))
+    if (!properties || !(strcmp(properties->getNamespace(), "ghostObject") == 0))
     {
         WARN("Failed to load ghost object from properties object: must be non-null object and have namespace equal to \'ghost\'.");
         return NULL;

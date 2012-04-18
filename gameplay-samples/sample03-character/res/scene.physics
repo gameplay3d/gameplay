@@ -1,4 +1,4 @@
-rigidbody Basketball
+rigidBody basketball
 {
     type = SPHERE
     mass = 1.0
@@ -8,7 +8,7 @@ rigidbody Basketball
     angularDamping = 0.5
 }
 
-rigidbody Chair
+rigidBody chair
 {
     type = BOX
     mass = 5.0
@@ -18,7 +18,7 @@ rigidbody Chair
     angularDamping = 0.5
 }
 
-rigidbody Table
+rigidBody table
 {
     type = BOX
     mass = 0.0
@@ -28,7 +28,7 @@ rigidbody Table
     angularDamping = 0.5
 }
 
-rigidbody StaticBox
+rigidBody staticBox
 {
     type = BOX
     mass = 0.0
@@ -36,4 +36,32 @@ rigidbody StaticBox
     restitution = 0.75
     linearDamping = 0.025
     angularDamping = 0.16
+}
+
+rigidBody staticMesh
+{
+    type = MESH
+    mass = 0.0
+    friction = 0.5
+    restitution = 0.75
+    linearDamping = 0.025
+    angularDamping = 0.16
+}
+
+character boy
+{
+    type = CAPSULE  
+    radius = 1.2
+    height = 6.0
+    center = 0, 3.0, 0
+    centerAbsolute = true
+    mass = 20.0
+    maxStepHeight = 0
+    maxSlopeAngle = 0
+}
+
+ghostObject camera
+{
+    type = SPHERE
+    radius = 0.5
 }
