@@ -375,19 +375,11 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
 
 void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    // Get the joystick's current state.
-    bool wasActive = _gamepad->isJoystickActive(0);
-
+    // Send the touch event to the gamepad.
     _gamepad->touchEvent(evt, x, y, contactIndex);
 
-    // See if the joystick is still active.
-    bool isActive = _gamepad->isJoystickActive(0);
-    if (!isActive)
+    if (!_gamepad->isJoystickActive(0) || contactIndex != _gamepad->getJoystickContactIndex(0))
     {
-        // If it was active before, reset the joystick's influence on the _keyFlags.
-        if (wasActive)
-            _keyFlags = 0;
-
         switch (evt)
         {
         case Touch::TOUCH_PRESS:

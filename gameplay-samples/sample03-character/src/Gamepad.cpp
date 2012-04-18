@@ -165,6 +165,13 @@ const Vector2& Gamepad::getJoystickState(unsigned int joystickId) const
     return _joysticks[joystickId]->_direction;
 }
 
+unsigned int Gamepad::getJoystickContactIndex(unsigned int joystickId) const
+{
+    assert(joystickId < _joystickCount);
+
+    return _joysticks[joystickId]->_contactIndex;
+}
+
 void Gamepad::setSpriteBatch(SpriteBatch* spriteBatch)
 {
     _spriteBatch = spriteBatch;

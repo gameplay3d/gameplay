@@ -91,6 +91,13 @@ public:
     const Vector2& getJoystickState(unsigned int joystickId) const;
 
     /**
+     * Returns the current touch contact index for the specified joystick.
+     *
+     * @return The contact index for the specified joystick.
+     */
+    unsigned int getJoystickContactIndex(unsigned int joystickId) const;
+
+    /**
      * Draws the gamepad.
      *
      * @param color 
