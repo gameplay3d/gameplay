@@ -152,6 +152,13 @@ public:
     void setRightVelocity(float velocity = 1.0f);
 
     /**
+     * Returns the current velocity of the character.
+     *
+     * @return The current velocity.
+     */
+    Vector3 getCurrentVelocity() const;
+
+    /**
      * Causes the character to jump to the specified height.
      *
      * @param height The amount to jump.
