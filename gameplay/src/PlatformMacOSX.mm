@@ -667,6 +667,15 @@ int Platform::getOrientationAngle()
     return 0;
 }
 
+void Platform::setMultiTouch(bool enabled)
+{
+}
+    
+bool Platform::isMultiTouch()
+{
+    return false;
+}
+    
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     *pitch = __pitch;

@@ -26,11 +26,6 @@ public:
     };
 
     /**
-     * The maximum number of parallel touch inputs the gamepad supports.
-     */
-    static const unsigned int MAX_TOUCH_INPUTS = 4;
-
-    /**
      * Constructor.
      *
      * @param texturePath The path to the gamepad's texture atlas.
@@ -89,6 +84,13 @@ public:
      * @return A Vector2 of the joystick displacement for the specified joystick.
      */
     const Vector2& getJoystickState(unsigned int joystickId) const;
+
+    /**
+     * Returns the current touch contact index for the specified joystick.
+     *
+     * @return The contact index for the specified joystick.
+     */
+    unsigned int getJoystickContactIndex(unsigned int joystickId) const;
 
     /**
      * Draws the gamepad.
@@ -211,7 +213,6 @@ private:
     Joystick** _joysticks;
     Texture* _texture;
     SpriteBatch* _spriteBatch;
-    int _touches[MAX_TOUCH_INPUTS];
 };
 
 #endif
