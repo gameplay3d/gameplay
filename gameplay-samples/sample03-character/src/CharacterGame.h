@@ -56,23 +56,16 @@ protected:
 
 private:
 
-    /**
-     * Draws the default "gameplay powered" splash screen.
-     */
-    void drawSplash(void* param);
-
     bool initializeScene(Node* node);
     void initializeMaterial(Scene* scene, Node* node, Material* material);
     void initializeCharacter();
     void initializeGamepad();
+    void drawSplash(void* param);
     bool drawScene(Node* node, bool transparent);
-    void loadAnimationClips(Node* node);
-    void adjustCamera(long elapsedTime);
     void play(const char* id, bool repeat, float speed = 1.0f);
     void jump();
+    void adjustCamera(long elapsedTime);
     bool isOnFloor() const;
-
-    void drawLine(const Vector3& p1, const Vector3& p2, const Vector4& color);
 
     Font* _font;
     Scene* _scene;
@@ -85,8 +78,8 @@ private:
     int _rotateX;
     Gamepad* _gamepad;
     MaterialParameter* _materialParameterAlpha;
-    int _drawDebug;
     unsigned int _keyFlags;
+    int _drawDebug;
 };
 
 #endif

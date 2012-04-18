@@ -118,6 +118,13 @@ void CharacterGame::initializeGamepad()
         Rectangle(300, 310, 160, 160));
 }
 
+void CharacterGame::finalize()
+{
+    SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_font);
+    SAFE_DELETE(_gamepad);
+}
+
 void CharacterGame::drawSplash(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
@@ -128,11 +135,12 @@ void CharacterGame::drawSplash(void* param)
     SAFE_DELETE(batch);
 }
 
-void CharacterGame::finalize()
+bool CharacterGame::drawScene(Node* node, bool transparent)
 {
-    SAFE_RELEASE(_scene);
-    SAFE_RELEASE(_font);
-    SAFE_DELETE(_gamepad);
+    if (node->getModel() && (transparent == node->isTransparent()))
+        node->getModel()->draw();
+
+    return true;
 }
 
 void CharacterGame::play(const char* id, bool repeat, float speed)
@@ -294,14 +302,6 @@ void CharacterGame::render(long elapsedTime)
     sprintf(fps, "%d", getFrameRate());
     _font->drawText(fps, 5, 5, Vector4(1,1,0,1), 20);
     _font->end();
-}
-
-bool CharacterGame::drawScene(Node* node, bool transparent)
-{
-    if (node->getModel() && (transparent == node->isTransparent()))
-        node->getModel()->draw();
-
-    return true;
 }
 
 void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
