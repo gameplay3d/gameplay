@@ -28,6 +28,10 @@
 		42554EA2152BC35C000ED910 /* PhysicsCollisionShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42554E9F152BC35C000ED910 /* PhysicsCollisionShape.cpp */; };
 		42554EA3152BC35C000ED910 /* PhysicsCollisionShape.h in Headers */ = {isa = PBXBuildFile; fileRef = 42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */; };
 		42554EA4152BC35C000ED910 /* PhysicsCollisionShape.h in Headers */ = {isa = PBXBuildFile; fileRef = 42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */; };
+		426878AC153F4BB300844500 /* FlowLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426878AA153F4BB300844500 /* FlowLayout.cpp */; };
+		426878AD153F4BB300844500 /* FlowLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426878AA153F4BB300844500 /* FlowLayout.cpp */; };
+		426878AE153F4BB300844500 /* FlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 426878AB153F4BB300844500 /* FlowLayout.h */; };
+		426878AF153F4BB300844500 /* FlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 426878AB153F4BB300844500 /* FlowLayout.h */; };
 		4271C08E15337C8200B89DA7 /* Layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4271C08D15337C8200B89DA7 /* Layout.cpp */; };
 		4271C08F15337C8200B89DA7 /* Layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4271C08D15337C8200B89DA7 /* Layout.cpp */; };
 		428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 428390971489D6E800E2B2F5 /* SceneLoader.cpp */; };
@@ -400,6 +404,8 @@
 		4251B130152D049B002F6199 /* ThemeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThemeStyle.h; path = src/ThemeStyle.h; sourceTree = SOURCE_ROOT; };
 		42554E9F152BC35C000ED910 /* PhysicsCollisionShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsCollisionShape.cpp; path = src/PhysicsCollisionShape.cpp; sourceTree = SOURCE_ROOT; };
 		42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCollisionShape.h; path = src/PhysicsCollisionShape.h; sourceTree = SOURCE_ROOT; };
+		426878AA153F4BB300844500 /* FlowLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlowLayout.cpp; path = src/FlowLayout.cpp; sourceTree = SOURCE_ROOT; };
+		426878AB153F4BB300844500 /* FlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlowLayout.h; path = src/FlowLayout.h; sourceTree = SOURCE_ROOT; };
 		4271C08D15337C8200B89DA7 /* Layout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Layout.cpp; path = src/Layout.cpp; sourceTree = SOURCE_ROOT; };
 		428390971489D6E800E2B2F5 /* SceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLoader.cpp; path = src/SceneLoader.cpp; sourceTree = SOURCE_ROOT; };
 		428390981489D6E800E2B2F5 /* SceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneLoader.h; path = src/SceneLoader.h; sourceTree = SOURCE_ROOT; };
@@ -730,6 +736,8 @@
 				42CD0DD3147D8FF50000361E /* Effect.h */,
 				42CD0DD4147D8FF50000361E /* FileSystem.cpp */,
 				42CD0DD5147D8FF50000361E /* FileSystem.h */,
+				426878AA153F4BB300844500 /* FlowLayout.cpp */,
+				426878AB153F4BB300844500 /* FlowLayout.h */,
 				42CD0DD6147D8FF50000361E /* Font.cpp */,
 				42CD0DD7147D8FF50000361E /* Font.h */,
 				5BD5263F150F822A004C9099 /* Form.cpp */,
@@ -1055,6 +1063,7 @@
 				4251B131152D049B002F6199 /* ScreenDisplayer.h in Headers */,
 				4251B135152D049B002F6199 /* ThemeStyle.h in Headers */,
 				422260D81537790F0011E3AB /* Bundle.h in Headers */,
+				426878AE153F4BB300844500 /* FlowLayout.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1151,6 +1160,7 @@
 				4251B132152D049B002F6199 /* ScreenDisplayer.h in Headers */,
 				4251B136152D049B002F6199 /* ThemeStyle.h in Headers */,
 				422260D91537790F0011E3AB /* Bundle.h in Headers */,
+				426878AF153F4BB300844500 /* FlowLayout.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1306,6 +1316,7 @@
 				4251B133152D049B002F6199 /* ThemeStyle.cpp in Sources */,
 				4271C08E15337C8200B89DA7 /* Layout.cpp in Sources */,
 				422260D61537790F0011E3AB /* Bundle.cpp in Sources */,
+				426878AC153F4BB300844500 /* FlowLayout.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1397,6 +1408,7 @@
 				4251B134152D049B002F6199 /* ThemeStyle.cpp in Sources */,
 				4271C08F15337C8200B89DA7 /* Layout.cpp in Sources */,
 				422260D71537790F0011E3AB /* Bundle.cpp in Sources */,
+				426878AD153F4BB300844500 /* FlowLayout.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,6 +2,7 @@
 #include "Container.h"
 #include "Layout.h"
 #include "AbsoluteLayout.h"
+#include "FlowLayout.h"
 #include "VerticalLayout.h"
 #include "Label.h"
 #include "Button.h"
@@ -40,6 +41,7 @@ namespace gameplay
             layout = AbsoluteLayout::create();
             break;
         case Layout::LAYOUT_FLOW:
+            layout = FlowLayout::create();
             break;
         case Layout::LAYOUT_VERTICAL:
             layout = VerticalLayout::create();
