@@ -185,20 +185,33 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
 
     // Define the start transform
     btTransform start;
+    start.setIdentity();
     if (object->getNode())
-        start.setFromOpenGLMatrix(object->getNode()->getWorldMatrix().m);
-    else
+    {
+        Vector3 translation;
+        Quaternion rotation;
+        const Matrix& m = object->getNode()->getWorldMatrix();
+        m.getTranslation(&translation);
+        m.getRotation(&rotation);
+
         start.setIdentity();
+        start.setOrigin(BV(translation));
+        start.setRotation(BQ(rotation));
+    }
 
     // Define the end transform
     btTransform end(start);
     end.setOrigin(BV(endPosition));
+
+    float d1 = object->getNode()->getTranslationWorld().distance(endPosition);
+    float d2 = start.getOrigin().distance(end.getOrigin());
 
     // Perform bullet convex sweep test
     SweepTestCallback callback(object);
 
     // If the object is represented by a ghost object, use the ghost object's convex sweep test
     // since it is much faster than the world's version.
+    // NOTE: Unfortunately the ghost object sweep test does not seem reliable here currently, so using world's version instead.
     /*switch (object->getType())
     {
     case PhysicsCollisionObject::GHOST_OBJECT:
@@ -209,8 +222,8 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
     default:
         _world->convexSweepTest(static_cast<btConvexShape*>(shape->getShape()), start, end, callback, _world->getDispatchInfo().m_allowedCcdPenetration);
         break;
-    }
-    */
+    }*/
+
     _world->convexSweepTest(static_cast<btConvexShape*>(shape->getShape()), start, end, callback, _world->getDispatchInfo().m_allowedCcdPenetration);
 
     // Check for hits and store results
