@@ -199,12 +199,9 @@ extern void printError(const char* format, ...);
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
     #define USE_PVRTC
+	//#define USE_VAO
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
-    #define GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG                      0x8C00
-    #define GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG                      0x8C01
-    #define GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG                     0x8C02
-    #define GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG                     0x8C03
     #include <GL/glew.h>
     #define USE_VAO
 #elif __APPLE__
@@ -218,7 +215,8 @@ extern void printError(const char* format, ...);
         #define glIsVertexArray glIsVertexArrayOES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
-        #define USE_PVRTC 
+        #define USE_PVRTC
+        #define USE_VAO
     #elif TARGET_OS_MAC
         #include <OpenGL/gl.h>
         #include <OpenGL/glext.h>
@@ -226,6 +224,7 @@ extern void printError(const char* format, ...);
         #define glDeleteVertexArrays glDeleteVertexArraysAPPLE
         #define glGenVertexArrays glGenVertexArraysAPPLE
         #define glIsVertexArray glIsVertexArrayAPPLE
+        #define USE_VAO
     #else
         #error "Unsupported Apple Device"
     #endif
@@ -241,7 +240,7 @@ extern void printError(const char* format, ...);
 #define VERTEX_ATTRIBUTE_BLENDINDICES_NAME          "a_blendIndices"
 #define VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME       "a_texCoord"
 
-// Hardware Resources
+// Hardware buffer
 namespace gameplay
 {
 typedef GLint VertexAttribute;
