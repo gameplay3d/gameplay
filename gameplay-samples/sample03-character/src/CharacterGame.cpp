@@ -118,6 +118,13 @@ void CharacterGame::initializeGamepad()
         Rectangle(300, 310, 160, 160));
 }
 
+void CharacterGame::finalize()
+{
+    SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_font);
+    SAFE_DELETE(_gamepad);
+}
+
 void CharacterGame::drawSplash(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
@@ -128,11 +135,12 @@ void CharacterGame::drawSplash(void* param)
     SAFE_DELETE(batch);
 }
 
-void CharacterGame::finalize()
+bool CharacterGame::drawScene(Node* node, bool transparent)
 {
-    SAFE_RELEASE(_scene);
-    SAFE_RELEASE(_font);
-    SAFE_DELETE(_gamepad);
+    if (node->getModel() && (transparent == node->isTransparent()))
+        node->getModel()->draw();
+
+    return true;
 }
 
 void CharacterGame::play(const char* id, bool repeat, float speed)
@@ -296,14 +304,6 @@ void CharacterGame::render(long elapsedTime)
     _font->end();
 }
 
-bool CharacterGame::drawScene(Node* node, bool transparent)
-{
-    if (node->getModel() && (transparent == node->isTransparent()))
-        node->getModel()->draw();
-
-    return true;
-}
-
 void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
 {
     if (evt == Keyboard::KEY_PRESS)
@@ -375,19 +375,11 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
 
 void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    // Get the joystick's current state.
-    bool wasActive = _gamepad->isJoystickActive(0);
-
+    // Send the touch event to the gamepad.
     _gamepad->touchEvent(evt, x, y, contactIndex);
 
-    // See if the joystick is still active.
-    bool isActive = _gamepad->isJoystickActive(0);
-    if (!isActive)
+    if (!_gamepad->isJoystickActive(0) || contactIndex != _gamepad->getJoystickContactIndex(0))
     {
-        // If it was active before, reset the joystick's influence on the _keyFlags.
-        if (wasActive)
-            _keyFlags = 0;
-
         switch (evt)
         {
         case Touch::TOUCH_PRESS:
