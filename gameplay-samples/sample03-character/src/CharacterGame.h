@@ -70,6 +70,7 @@ private:
     void adjustCamera(long elapsedTime);
     void play(const char* id, bool repeat, float speed = 1.0f);
     void jump();
+    bool isOnFloor() const;
 
     void drawLine(const Vector3& p1, const Vector3& p2, const Vector4& color);
 
@@ -80,12 +81,12 @@ private:
     Node* _characterShadowNode;
     Animation* _animation;
     AnimationClip* _currentClip;
+    AnimationClip* _jumpClip;
     int _rotateX;
     Gamepad* _gamepad;
     MaterialParameter* _materialParameterAlpha;
     int _drawDebug;
     unsigned int _keyFlags;
-    bool _jumping;
 };
 
 #endif

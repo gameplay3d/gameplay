@@ -19,12 +19,15 @@ CharacterGame game;
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL),
       _animation(NULL), _currentClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
-      _keyFlags(0), _drawDebug(0), _jumping(false)
+      _keyFlags(0), _drawDebug(0)
 {
 }
 
 void CharacterGame::initialize()
 {
+    // Enable multi-touch (only affects devices that support multi-touch).
+    setMultiTouch(true);
+
     // Display the gameplay splash screen for at least 1 second.
     displayScreen(this, &CharacterGame::drawSplash, NULL, 1000L);
 
@@ -87,7 +90,8 @@ void CharacterGame::initializeCharacter()
     // Load character animations.
     _animation = node->getAnimation("movements");
     _animation->createClips("res/boy.animation");
-    _animation->getClip("jump")->addListener(this, _animation->getClip("jump")->getDuration() - 250);
+    _jumpClip = _animation->getClip("jump");
+    _jumpClip->addListener(this, _jumpClip->getDuration() - 250);
 
     // Start playing the idle animation when we load.
     play("idle", true);
@@ -140,10 +144,10 @@ void CharacterGame::play(const char* id, bool repeat, float speed)
     clip->setRepeatCount(repeat ? AnimationClip::REPEAT_INDEFINITE : 1);
 
     // Is the clip already playing?
-    if (clip->isPlaying())
+    if (clip == _currentClip && clip->isPlaying())
         return;
 
-    if (_jumping)
+    if (_jumpClip->isPlaying())
     {
         _currentClip = clip;
         return;
@@ -164,19 +168,28 @@ void CharacterGame::play(const char* id, bool repeat, float speed)
 
 void CharacterGame::jump()
 {
-    if (!_jumping)
+    if (isOnFloor())
     {
         play("jump", false, 0.55f);
         _character->jump(3.0f);
-        _jumping = true;
     }
+}
+
+bool CharacterGame::isOnFloor() const
+{
+    return (_character->getCurrentVelocity().y == 0);
 }
 
 void CharacterGame::update(long elapsedTime)
 {
-    // Compute heading direction vector
     Vector2 direction;
-    if (_gamepad->isJoystickActive(0))
+
+    if (_gamepad->getButtonState(0) == Gamepad::BUTTON_PRESSED)
+    {
+        // Jump while the gamepad button is being pressed
+        jump();
+    }
+    else if (_gamepad->isJoystickActive(0))
     {
         // Get joystick direction
         direction = _gamepad->getJoystickState(0);
@@ -465,29 +478,5 @@ void CharacterGame::adjustCamera(long elapsedTime)
 
 void CharacterGame::animationEvent(AnimationClip* clip, EventType type)
 {
-     _jumping = false;
-
-    if (_currentClip == clip)
-    {
-        jump();
-    }
-    else
-    {
-        const char* id = _currentClip->getID();
-        bool repeat = _currentClip->getRepeatCount() == AnimationClip::REPEAT_INDEFINITE ? true : false;
-        float speed = _currentClip->getSpeed();
-
-        _currentClip = clip;
-
-        play(id, repeat, speed);
-    }
-
-    /*if (_currentClip == _animation->getClip("jump"))
-    {
-        clip->crossFade(_currentClip, 150);
-    }
-    else
-    {
-        clip->crossFade(_currentClip, 150);
-    }*/
+    clip->crossFade(_currentClip, 150);
 }
