@@ -85,8 +85,8 @@ private:
     int _rotateX;
     Gamepad* _gamepad;
     MaterialParameter* _materialParameterAlpha;
-    int _drawDebug;
     unsigned int _keyFlags;
+    int _drawDebug;
 };
 
 #endif
