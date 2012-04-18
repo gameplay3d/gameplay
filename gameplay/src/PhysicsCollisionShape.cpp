@@ -121,10 +121,10 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
     assert(properties);
     if (!properties || 
         !(strcmp(properties->getNamespace(), "character") == 0 || 
-        strcmp(properties->getNamespace(), "ghost") == 0 || 
-        strcmp(properties->getNamespace(), "rigidbody") == 0))
+        strcmp(properties->getNamespace(), "ghostObject") == 0 || 
+        strcmp(properties->getNamespace(), "rigidBody") == 0))
     {
-        WARN("Failed to load physics collision shape from properties object: must be non-null object and have namespace equal to \'character\', \'ghost\', or \'rigidbody\'.");
+        WARN("Failed to load physics collision shape from properties object: must be non-null object and have namespace equal to \'character\', \'ghostObject\', or \'rigidBody\'.");
         return NULL;
     }
 
@@ -186,7 +186,7 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
             center = new Vector3();
             properties->getVector3("center", center);
         }
-        else if (strcmp(name, "center-absolute") == 0)
+        else if (strcmp(name, "centerAbsolute") == 0)
         {
             centerIsAbsolute = properties->getBool();
         }

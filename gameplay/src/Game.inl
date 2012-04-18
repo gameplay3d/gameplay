@@ -56,7 +56,7 @@ inline void Game::setMultiTouch(bool enabled)
     Platform::setMultiTouch(enabled);
 }
 
-inline bool isMultiTouch()
+inline bool Game::isMultiTouch() const
 {
     return Platform::isMultiTouch();
 }

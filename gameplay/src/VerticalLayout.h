@@ -69,6 +69,10 @@ protected:
      */
     void update(const Container* container);
 
+    /**
+     * Flag determining whether this layout will start laying out controls from the bottom of the container.
+     * The default is 'false' meaning controls will start at the top.
+     */
     bool _bottomToTop;
 
 private:

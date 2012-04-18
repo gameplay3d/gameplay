@@ -709,7 +709,7 @@ public:
      * Adds a transform listener.
      *
      * @param listener The listener to add.
-     * @param cookie An optional long value that is passed to the specified listener when it is called..
+     * @param cookie An optional long value that is passed to the specified listener when it is called.
      */
     void addListener(Transform::Listener* listener, long cookie = 0);
 
@@ -735,12 +735,26 @@ public:
 
 protected:
 
+    /**
+     * Transform Listener.
+     */
     struct TransformListener
     {
+        /**
+         * Listener for Transform events.
+         */
         Listener* listener;
+
+        /**
+         * An optional long value that is specified to the Listener's callback.
+         */
         long cookie;
     };
 
+    /**
+     * Defines the matrix dirty bits for marking the translation, scale and rotation
+     * components of the Transform.
+     */
     enum MatrixDirtyBits
     {
         DIRTY_TRANSLATION = 0x01,
@@ -766,11 +780,34 @@ protected:
      */
     void cloneInto(Transform* transform, NodeCloneContext &context) const;
 
+    /**
+     * The scale component of the Transform.
+     */
     Vector3 _scale;
+
+    /** 
+     * The rotation component of the Transform.
+     */
     Quaternion _rotation;
+    
+    /** 
+     * The translation component of the Transform.
+     */
     Vector3 _translation;
+    
+    /** 
+     * The Matrix representation of the Transform.
+     */
     mutable Matrix _matrix;
+    
+    /** 
+     * Matrix dirty bits flag.
+     */
     mutable char _matrixDirtyBits;
+    
+    /** 
+     * List of TransformListener's on the Transform.
+     */
     std::list<TransformListener>* _listeners;
 
 private:
