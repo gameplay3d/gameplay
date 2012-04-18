@@ -30,7 +30,7 @@ public:
         RGBA    = GL_RGBA,
         ALPHA   = GL_ALPHA,
         DEPTH   = GL_DEPTH_COMPONENT,
-#ifdef OPENGL_ES_PVR
+#ifdef USE_PVRTC
         COMPRESSED_RGB_PVRTC_4BPP = GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,
         COMPRESSED_RGBA_PVRTC_4BPP = GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,
         COMPRESSED_RGB_PVRTC_2BPP = GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,
@@ -213,8 +213,8 @@ private:
      */
     virtual ~Texture();
 
-#ifdef OPENGL_ES_PVR
-    static Texture* createCompressedPVR(const char* path);
+#ifdef USE_PVRTC
+    static Texture* createCompressedPVRTC(const char* path);
 #endif
     
     std::string _path;
