@@ -252,14 +252,13 @@ void Model::draw(bool wireframe)
         // No mesh parts (index buffers).
         if (_material)
         {
-            GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
-
             Technique* technique = _material->getTechnique();
             unsigned int passCount = technique->getPassCount();
             for (unsigned int i = 0; i < passCount; ++i)
             {
                 Pass* pass = technique->getPass(i);
                 pass->bind();
+                GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
                 if (wireframe && (_mesh->getPrimitiveType() == Mesh::TRIANGLES || _mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP))
                 {
                     unsigned int vertexCount = _mesh->getVertexCount();
@@ -284,15 +283,6 @@ void Model::draw(bool wireframe)
 
             // Get the material for this mesh part.
             Material* material = getMaterial(i);
-            /*if (_partMaterials && i < _partCount && _partMaterials[i])
-            {
-                material = _partMaterials[i]; // Use part material
-            }
-            else
-            {
-                material = _material; // Use shared material
-            }*/
-
             if (material)
             {
                 Technique* technique = material->getTechnique();
