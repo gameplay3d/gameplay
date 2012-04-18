@@ -4,6 +4,7 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include "Form.h"
 #include <unistd.h>
 
 #include <android/sensor.h>
@@ -549,7 +550,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                     break;
             }
             size_t pointerId = AMotionEvent_getPointerId(event, i);
-            Game::getInstance()->touchEvent(touchEvent, AMotionEvent_getX(event, i), AMotionEvent_getY(event, i), pointerId);
+            gameplay::Platform::touchEventInternal(touchEvent, AMotionEvent_getX(event, i), AMotionEvent_getY(event, i), pointerId);
         }
         return 1;
     } 
@@ -851,6 +852,14 @@ void Platform::displayKeyboard(bool display)
         __displayKeyboard = true;
     else
         __displayKeyboard = false;
+}
+
+void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    if (!Form::touchEventInternal(evt, x, y, contactIndex))
+    {
+        Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+    }
 }
 
 void Platform::sleep(long ms)
