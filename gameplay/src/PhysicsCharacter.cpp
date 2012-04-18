@@ -209,6 +209,15 @@ void PhysicsCharacter::setRightVelocity(float velocity)
     _rightVelocity = velocity;
 }
 
+Vector3 PhysicsCharacter::getCurrentVelocity() const
+{
+    Vector3 v(_currentVelocity.x(), _currentVelocity.y(), _currentVelocity.z());
+    v.x += _verticalVelocity.x();
+    v.y += _verticalVelocity.y();
+    v.z += _verticalVelocity.z();
+    return v;
+}
+
 void PhysicsCharacter::jump(float height)
 {
     // TODO: Add support for different jump modes (i.e. double jump, changing direction in air, holding down jump button for extra height, etc)
