@@ -90,7 +90,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
     if (mesh && glGenVertexArrays)
     {
         GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, 0) );
-        GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0) );
+        GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
 
         // Use hardware VAOs.
         GL_ASSERT( glGenVertexArrays(1, &b->_handle) );
@@ -260,8 +260,8 @@ void VertexAttributeBinding::bind()
             VertexAttribute& a = _attributes[i];
             if (a.enabled)
             {
-                GL_ASSERT( glEnableVertexAttribArray(i) );
                 GL_ASSERT( glVertexAttribPointer(i, a.size, a.type, a.normalized, a.stride, a.pointer) );
+                GL_ASSERT( glEnableVertexAttribArray(i) );
             }
         }
     }
