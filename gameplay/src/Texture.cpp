@@ -75,11 +75,11 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
             }
             else if (tolower(ext[1]) == 'p' && tolower(ext[2]) == 'v' && tolower(ext[3]) == 'r')
             {
-#ifdef OPENGL_ES_PVR
-                // PowerVR Compressed RGBA
-                texture = createCompressedPVR(path);
+#ifdef USE_PVRTC
+                // PowerVR Compressed Texture RGBA
+                texture = createCompressedPVRTC(path);
 #else
-                texture = NULL; // Cannot handle PVR if not supported on platform
+                texture = NULL; // Cannot handle PVRTC if not supported on platform
 #endif
             }
             break;
@@ -147,32 +147,32 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     return texture;
 }
 
-#ifdef OPENGL_ES_PVR
-Texture* Texture::createCompressedPVR(const char* path)
+#ifdef USE_PVRTC
+Texture* Texture::createCompressedPVRTC(const char* path)
 {
-    char PVRTexIdentifier[] = "PVR!";
+    char PVRTCIdentifier[] = "PVR!";
 
     enum
     {
-        PVRTextureFlagTypePVRTC_2 = 24,
-        PVRTextureFlagTypePVRTC_4
+        PVRTC_2 = 24,
+        PVRTC_4
     };
 
-    struct pvr_file_header
+    struct pvrtc_file_header
     {
         unsigned int size;                  // size of the structure
-        unsigned int height;                  // height of surface to be created
-        unsigned int width;                   // width of input surface
-        unsigned int mipmapCount;             // number of mip-map levels requested
+        unsigned int height;                // height of surface to be created
+        unsigned int width;                 // width of input surface
+        unsigned int mipmapCount;           // number of mip-map levels requested
         unsigned int formatflags;           // pixel format flags
-        unsigned int dataSize;                 // total size in bytes
-        unsigned int bpp;                    // number of bits per pixel
+        unsigned int dataSize;              // total size in bytes
+        unsigned int bpp;                   // number of bits per pixel
         unsigned int redBitMask;            // mask for red bit
         unsigned int greenBitMask;          // mask for green bits
         unsigned int blueBitMask;           // mask for blue bits
-        unsigned int alphaBitMask;            // mask for alpha channel
-        unsigned int pvrTag;                // magic number identifying pvr file
-        unsigned int surfaceCount;          // number of surfaces present in the pvr
+        unsigned int alphaBitMask;          // mask for alpha channel
+        unsigned int pvrtcTag;              // magic number identifying pvrtc file
+        unsigned int surfaceCount;          // number of surfaces present in the pvrtc
     } ;
 
     FILE* file = FileSystem::openFile(path, "rb");
@@ -183,24 +183,24 @@ Texture* Texture::createCompressedPVR(const char* path)
     }
 
     // Read the file header
-    unsigned int size = sizeof(pvr_file_header);
-    pvr_file_header header;
+    unsigned int size = sizeof(pvrtc_file_header);
+    pvrtc_file_header header;
     unsigned int read = (int)fread(&header, 1, size, file);
     assert(read == size);
     if (read != size)
     {
-        LOG_ERROR_VARG("Read file header error for pvr file: %s (%d < %d)", path, (int)read, (int)size);
+        LOG_ERROR_VARG("Read file header error for pvrtc file: %s (%d < %d)", path, (int)read, (int)size);
         fclose(file);
         return NULL;
     }
 
     // Proper file header identifier
-    if (PVRTexIdentifier[0] != (char)((header.pvrTag >>  0) & 0xff) ||
-        PVRTexIdentifier[1] != (char)((header.pvrTag >>  8) & 0xff) ||
-        PVRTexIdentifier[2] != (char)((header.pvrTag >> 16) & 0xff) ||
-        PVRTexIdentifier[3] != (char)((header.pvrTag >> 24) & 0xff))
+    if (PVRTCIdentifier[0] != (char)((header.pvrtcTag >>  0) & 0xff) ||
+        PVRTCIdentifier[1] != (char)((header.pvrtcTag >>  8) & 0xff) ||
+        PVRTCIdentifier[2] != (char)((header.pvrtcTag >> 16) & 0xff) ||
+        PVRTCIdentifier[3] != (char)((header.pvrtcTag >> 24) & 0xff))
      {
-        LOG_ERROR_VARG("Invalid PVR texture file: %s", path);
+        LOG_ERROR_VARG("Invalid PVRTC compressed texture file: %s", path);
         fclose(file);
         return NULL;
     }
@@ -208,17 +208,17 @@ Texture* Texture::createCompressedPVR(const char* path)
     // Format flags for GLenum format
     GLenum format;
     unsigned int formatFlags = header.formatflags & 0xff;
-    if (formatFlags == PVRTextureFlagTypePVRTC_4)
+    if (formatFlags == PVRTC_4)
     {
         format = header.alphaBitMask ? COMPRESSED_RGBA_PVRTC_4BPP : COMPRESSED_RGB_PVRTC_4BPP;
     }
-    else if (formatFlags == PVRTextureFlagTypePVRTC_2)
+    else if (formatFlags == PVRTC_2)
     {
         format = header.alphaBitMask ? COMPRESSED_RGBA_PVRTC_2BPP : COMPRESSED_RGB_PVRTC_2BPP;
     }
     else
     {
-        LOG_ERROR_VARG("Invalid PVR texture format flags for file: %s", path);
+        LOG_ERROR_VARG("Invalid PVRTC compressed texture format flags for file: %s", path);
         fclose(file);
         return NULL;
     }
@@ -228,7 +228,7 @@ Texture* Texture::createCompressedPVR(const char* path)
     assert(read == header.dataSize);
     if (read != header.dataSize)
     {
-        LOG_ERROR_VARG("Read file data error for pvr file: %s (%d < %d)", path, (int)read, (int)header.dataSize);
+        LOG_ERROR_VARG("Read file data error for pvrtc file: %s (%d < %d)", path, (int)read, (int)header.dataSize);
         SAFE_DELETE_ARRAY(data);
         fclose(file);
         return NULL;
@@ -259,7 +259,7 @@ Texture* Texture::createCompressedPVR(const char* path)
 
     for (unsigned int level = 0; level <= header.mipmapCount; level++)
     {
-        if (formatFlags == PVRTextureFlagTypePVRTC_4)
+        if (formatFlags == PVRTC_4)
         {
             dataSize = ( max((int)width, 8) * max((int)height, 8) * 4 + 7) / 8;
         }
