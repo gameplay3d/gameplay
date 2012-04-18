@@ -199,7 +199,6 @@ extern void printError(const char* format, ...);
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
     #define USE_PVRTC
-	//#define USE_VAO
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
