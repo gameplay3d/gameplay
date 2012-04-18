@@ -86,7 +86,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
     // Create a new VertexAttributeBinding.
     VertexAttributeBinding* b = new VertexAttributeBinding();
 
-#ifdef USE_GL_VAOS
+#ifdef USE_VAO
     if (mesh && glGenVertexArrays)
     {
         GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, 0) );
@@ -168,11 +168,11 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
             attrib = effect->getVertexAttribute(VERTEX_ATTRIBUTE_BLENDINDICES_NAME);
             break;
         case VertexFormat::TEXCOORD0:
-            attrib = effect->getVertexAttribute(VERTEX_ATTRIBUTE_TEXCOORD_PREFIX);
+            attrib = effect->getVertexAttribute(VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME);
             // Try adding a "0" after the texcoord attrib name (flexible name for this case).
             if (attrib == -1)
             {
-                name = VERTEX_ATTRIBUTE_TEXCOORD_PREFIX;
+                name = VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME;
                 name += "0";
                 attrib = effect->getVertexAttribute(name.c_str());
             }
@@ -184,7 +184,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
         case VertexFormat::TEXCOORD5:
         case VertexFormat::TEXCOORD6:
         case VertexFormat::TEXCOORD7:
-            name = VERTEX_ATTRIBUTE_TEXCOORD_PREFIX;
+            name = VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME;
             name += (e.usage - VertexFormat::TEXCOORD0);
             attrib = effect->getVertexAttribute(name.c_str());
             break;
@@ -221,8 +221,8 @@ void VertexAttributeBinding::setVertexAttribPointer(GLuint indx, GLint size, GLe
     if (_handle)
     {
         // Hardware mode
-        GL_ASSERT( glEnableVertexAttribArray(indx) );
         GL_ASSERT( glVertexAttribPointer(indx, size, type, normalize, stride, pointer) );
+        GL_ASSERT( glEnableVertexAttribArray(indx) );
     }
     else
     {
