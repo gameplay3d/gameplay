@@ -835,9 +835,9 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     tz = -__sensorEvent.acceleration.z;
     
     if (pitch != NULL)
-        *pitch = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
+        *pitch = -atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
     if (roll != NULL)
-        *roll = atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;
+        *roll = -atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;
 }
 
 void Platform::swapBuffers()
