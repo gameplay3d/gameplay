@@ -19,5 +19,6 @@ var classgameplay_1_1_scene =
     [ "setActiveCamera", "classgameplay_1_1_scene.html#a47ee6bea8c4dcd0b16e64ed415ead8d0", null ],
     [ "setAmbientColor", "classgameplay_1_1_scene.html#a6ba9b754208e53e248c25b4c180279bf", null ],
     [ "setId", "classgameplay_1_1_scene.html#ab29920ea69e09c238e170d41ced3ecf0", null ],
-    [ "visit", "classgameplay_1_1_scene.html#adec0ddf4c4287d4a5edd157768411cf3", null ]
+    [ "visit", "classgameplay_1_1_scene.html#ae234fd87e01b77182066b6f881cae3a6", null ],
+    [ "visit", "classgameplay_1_1_scene.html#a27625217db95d54e5a5cc17a0bbbec46", null ]
 ];
