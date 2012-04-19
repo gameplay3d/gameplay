@@ -186,7 +186,7 @@ void LongboardGame::update(long elapsedTime)
     getAccelerometerValues(&pitch, &roll);
 
     // Clamp angles
-    pitch = max(min(pitch, PITCH_MAX), PITCH_MIN);
+    pitch = max(min(-pitch, PITCH_MAX), PITCH_MIN);
     roll = max(min(roll, ROLL_MAX), -ROLL_MAX);
 
     
@@ -211,7 +211,7 @@ void LongboardGame::update(long elapsedTime)
 
     // Update direction based on accelerometer roll and max turn rate
     static Matrix rotMat;
-    Matrix::createRotationY(-MATH_DEG_TO_RAD((TURN_RATE_MAX_MS * elapsedTime) * (roll / ROLL_MAX) * throttle), &rotMat);
+    Matrix::createRotationY(MATH_DEG_TO_RAD((TURN_RATE_MAX_MS * elapsedTime) * (roll / ROLL_MAX) * throttle), &rotMat);
     rotMat.transformVector(&_direction);
     _direction.normalize();
 
@@ -222,15 +222,15 @@ void LongboardGame::update(long elapsedTime)
 
     // Transform the wheels
     Matrix::createScale(1.2f, 1.2f, 1.2f, &_wheelsWorldMatrix);
-    _wheelsWorldMatrix.translate(-roll / ROLL_MAX * 0.05f, 0, 0.05f);
-    _wheelsWorldMatrix.rotateY(MATH_DEG_TO_RAD(roll * 0.45f));
+    _wheelsWorldMatrix.translate(roll / ROLL_MAX * 0.05f, 0, 0.05f);
+    _wheelsWorldMatrix.rotateY(-MATH_DEG_TO_RAD(roll * 0.45f));
     Matrix::multiply(_viewProjectionMatrix, _wheelsWorldMatrix, &_wheelsWorldViewProjectionMatrix);
 
     // Transform and tilt the board
     Matrix::createScale(1.25f, 1.25f, 1.25f, &_boardWorldMatrix);
     _boardWorldMatrix.translate(0, 0, 0.65f);
-    _boardWorldMatrix.rotateZ(MATH_DEG_TO_RAD(roll * 0.5f));
-    _boardWorldMatrix.rotateY(MATH_DEG_TO_RAD(roll * 0.1f));
+    _boardWorldMatrix.rotateZ(-MATH_DEG_TO_RAD(roll * 0.5f));
+    _boardWorldMatrix.rotateY(-MATH_DEG_TO_RAD(roll * 0.1f));
     Matrix::multiply(_viewProjectionMatrix, _boardWorldMatrix, &_boardWorldViewProjectionMatrix);
 
     // Transform the ground texture coords to give the illusion of the board moving.

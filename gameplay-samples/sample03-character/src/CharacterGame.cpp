@@ -197,7 +197,8 @@ void CharacterGame::update(long elapsedTime)
         // Jump while the gamepad button is being pressed
         jump();
     }
-    else if (_gamepad->isJoystickActive(0))
+
+	if (_gamepad->isJoystickActive(0))
     {
         // Get joystick direction
         direction = _gamepad->getJoystickState(0);
@@ -378,7 +379,7 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     // Send the touch event to the gamepad.
     _gamepad->touchEvent(evt, x, y, contactIndex);
 
-    if (!_gamepad->isJoystickActive(0) || contactIndex != _gamepad->getJoystickContactIndex(0))
+	if (!_gamepad->isJoystickActive(0) || contactIndex != _gamepad->getJoystickContactIndex(0))
     {
         switch (evt)
         {
