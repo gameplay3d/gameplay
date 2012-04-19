@@ -24,6 +24,7 @@ var files =
     [ "gameplay/src/DepthStencilTarget.h", null, null ],
     [ "gameplay/src/Effect.h", null, null ],
     [ "gameplay/src/FileSystem.h", null, null ],
+    [ "gameplay/src/FlowLayout.h", null, null ],
     [ "gameplay/src/Font.h", null, null ],
     [ "gameplay/src/Form.h", null, null ],
     [ "gameplay/src/FrameBuffer.h", null, null ],

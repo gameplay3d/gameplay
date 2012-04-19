@@ -155,8 +155,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3c3e6c8ff626476027f67d08d409ba36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#a3c3e6c8ff626476027f67d08d409ba36">bindAudioListenerToCamera</a> (bool bind)</td></tr>
 <tr class="memitem:ac1725190b60b42bb52910f150fcc0a8a"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#ac1725190b60b42bb52910f150fcc0a8a">getAmbientColor</a> () const </td></tr>
 <tr class="memitem:a6ba9b754208e53e248c25b4c180279bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#a6ba9b754208e53e248c25b4c180279bf">setAmbientColor</a> (float red, float green, float blue)</td></tr>
-<tr class="memitem:adec0ddf4c4287d4a5edd157768411cf3"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:adec0ddf4c4287d4a5edd157768411cf3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#adec0ddf4c4287d4a5edd157768411cf3">visit</a> (T *instance, bool(T::*visitMethod)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *, void *), void *cookie=0)</td></tr>
+<tr class="memitem:ae234fd87e01b77182066b6f881cae3a6"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:ae234fd87e01b77182066b6f881cae3a6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#ae234fd87e01b77182066b6f881cae3a6">visit</a> (T *instance, bool(T::*visitMethod)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *))</td></tr>
+<tr class="memitem:a27625217db95d54e5a5cc17a0bbbec46"><td class="memTemplParams" colspan="2">template&lt;class T , class C &gt; </td></tr>
+<tr class="memitem:a27625217db95d54e5a5cc17a0bbbec46"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#a27625217db95d54e5a5cc17a0bbbec46">visit</a> (T *instance, bool(T::*visitMethod)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *, C), C cookie)</td></tr>
 <tr class="memitem:aeae4174b22fc093cb18d0e56d4241643"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#aeae4174b22fc093cb18d0e56d4241643">drawDebug</a> (unsigned int debugFlags)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -635,14 +637,14 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="adec0ddf4c4287d4a5edd157768411cf3"></a>
+<a class="anchor" id="ae234fd87e01b77182066b6f881cae3a6"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;class T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_scene.html#adec0ddf4c4287d4a5edd157768411cf3">gameplay::Scene::visit</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_scene.html#ae234fd87e01b77182066b6f881cae3a6">gameplay::Scene::visit</a> </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>instance</em>, </td>
@@ -650,14 +652,53 @@ template&lt;class T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool(T::*)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *, void *)&#160;</td>
+          <td class="paramtype">bool(T::*)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *)&#160;</td>
+          <td class="paramname"><em>visitMethod</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Visits each node in the scene and calls the specified method pointer.</p>
+<p>Calling this method invokes the specified method pointer for each node in the scene hierarchy.</p>
+<p>The visitMethod parameter must be a pointer to a method that has a bool return type and accepts a single parameter of type Node*.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">instance</td><td>The pointer to an instance of the object that contains visitMethod. </td></tr>
+    <tr><td class="paramname">visitMethod</td><td>The pointer to the class method to call for each node in the scene. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a27625217db95d54e5a5cc17a0bbbec46"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T , class C &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_scene.html#ae234fd87e01b77182066b6f881cae3a6">gameplay::Scene::visit</a> </td>
+          <td>(</td>
+          <td class="paramtype">T *&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool(T::*)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *, C)&#160;</td>
           <td class="paramname"><em>visitMethod</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>cookie</em> = <code>0</code>&#160;</td>
+          <td class="paramtype">C&#160;</td>
+          <td class="paramname"><em>cookie</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -669,7 +710,7 @@ template&lt;class T &gt; </div>
 <div class="memdoc">
 <p>Visits each node in the scene and calls the specified method pointer.</p>
 <p>Calling this method invokes the specified method pointer for each node in the scene hierarchy, passing the <a class="el" href="classgameplay_1_1_node.html">Node</a> and the specified cookie value.</p>
-<p>The visitMethod parameter must be a pointer to a method that has a bool return type and accepts two parameters: a <a class="el" href="classgameplay_1_1_node.html">Node</a> pointer and a void* (cookie). The scene travesal continues while visitMethod return true. Returning false will cause the traversal to stop.</p>
+<p>The visitMethod parameter must be a pointer to a method that has a bool return type and accepts two parameters: a <a class="el" href="classgameplay_1_1_node.html">Node</a> pointer and a cookie of a user-specified type. The scene travesal continues while visitMethod return true. Returning false will cause the traversal to stop.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">instance</td><td>The pointer to an instance of the object that contains visitMethod. </td></tr>
@@ -691,7 +732,7 @@ template&lt;class T &gt; </div>
       <li class="navelem"><b>gameplay</b>      </li>
       <li class="navelem"><a class="el" href="classgameplay_1_1_scene.html">Scene</a>      </li>
 
-    <li class="footer">Generated on Mon Apr 16 2012 13:23:50 for gameplay by
+    <li class="footer">Generated on Thu Apr 19 2012 01:08:55 for gameplay by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>
