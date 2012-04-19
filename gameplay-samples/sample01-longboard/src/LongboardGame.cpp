@@ -186,7 +186,7 @@ void LongboardGame::update(long elapsedTime)
     getAccelerometerValues(&pitch, &roll);
 
     // Clamp angles
-    pitch =  max(min(-pitch, PITCH_MAX), PITCH_MIN);
+    pitch = max(min(-pitch, PITCH_MAX), PITCH_MIN);
     roll = max(min(roll, ROLL_MAX), -ROLL_MAX);
 
     
