@@ -340,8 +340,8 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         else if (rMouseDown)
         {
             // Update the pitch and roll by adding the scaled deltas.
-            __roll += -(float)(LOWORD(lParam) - lx) * ACCELEROMETER_X_FACTOR;
-            __pitch += (float)(HIWORD(lParam) - ly) * ACCELEROMETER_Y_FACTOR;
+            __roll += (float)(LOWORD(lParam) - lx) * ACCELEROMETER_X_FACTOR;
+            __pitch += -(float)(HIWORD(lParam) - ly) * ACCELEROMETER_Y_FACTOR;
 
             // Clamp the values to the valid range.
             __roll = max(min(__roll, 90.0f), -90.0f);
