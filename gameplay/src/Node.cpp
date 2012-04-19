@@ -994,18 +994,18 @@ PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type ty
     return _collisionObject;
 }
 
-PhysicsCollisionObject* Node::setCollisionObject(const char* filePath)
+PhysicsCollisionObject* Node::setCollisionObject(const char* url)
 {
     // Load the collision object properties from file.
-    Properties* properties = Properties::create(filePath);
+    Properties* properties = Properties::create(url);
     assert(properties);
     if (properties == NULL)
     {
-        WARN_VARG("Failed to load collision object file: %s", filePath);
+        WARN_VARG("Failed to load collision object file: %s", url);
         return NULL;
     }
 
-    PhysicsCollisionObject* collisionObject = setCollisionObject(properties->getNextNamespace());
+    PhysicsCollisionObject* collisionObject = setCollisionObject((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
     SAFE_DELETE(properties);
 
     return collisionObject;

@@ -104,28 +104,28 @@ AudioSource::~AudioSource()
     SAFE_RELEASE(_buffer);
 }
 
-AudioSource* AudioSource::create(const char* path)
+AudioSource* AudioSource::create(const char* url)
 {
-    assert(path);
+    assert(url);
 
     // Load from a .audio file.
-    std::string pathStr = path;
+    std::string pathStr = url;
     if (pathStr.find(".audio") != pathStr.npos)
     {
-        Properties* properties = Properties::create(path);
+        Properties* properties = Properties::create(url);
         assert(properties);
         if (properties == NULL)
         {
             return NULL;
         }
 
-        AudioSource* audioSource = create(properties->getNextNamespace());
+        AudioSource* audioSource = create((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
         SAFE_DELETE(properties);
         return audioSource;
     }
 
-    // Create an audio buffer from this path.
-    AudioBuffer* buffer = AudioBuffer::create(path);
+    // Create an audio buffer from this URL.
+    AudioBuffer* buffer = AudioBuffer::create(url);
     if (buffer == NULL)
         return NULL;
 
