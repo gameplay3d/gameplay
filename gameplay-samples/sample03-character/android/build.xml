@@ -73,12 +73,11 @@
         <copy file="../res/decals.png" tofile="assets/res/decals.png"/>
         <copy file="../res/door.png" tofile="assets/res/door.png"/>
         <copy file="../res/doorframe.png" tofile="assets/res/doorframe.png"/>
-        <copy file="../res/easil.png" tofile="assets/res/easil.png"/>
+        <copy file="../res/easel.png" tofile="assets/res/easel.png"/>
         <copy file="../res/floor.png" tofile="assets/res/floor.png"/>
         <copy file="../res/floortiles.png" tofile="assets/res/floortiles.png"/>
         <copy file="../res/gamepad.png" tofile="assets/res/gamepad.png"/>
         <copy file="../res/playtable.png" tofile="assets/res/playtable.png"/>
-        <copy file="../res/rainbow.png" tofile="assets/res/rainbow.png"/>
         <copy file="../res/scene.gpb" tofile="assets/res/scene.gpb"/>
         <copy file="../res/scene.material" tofile="assets/res/scene.material"/>
         <copy file="../res/scene.physics" tofile="assets/res/scene.physics"/>

@@ -69,7 +69,6 @@
     <asset path="res/floortiles.png">res/floortiles.png</asset>
     <asset path="res/gamepad.png">res/gamepad.png</asset>
     <asset path="res/playtable.png">res/playtable.png</asset>
-    <asset path="res/rainbow.png">res/rainbow.png</asset>
     <asset path="res/scene.gpb">res/scene.gpb</asset>
     <asset path="res/scene.material">res/scene.material</asset>
     <asset path="res/scene.physics">res/scene.physics</asset>

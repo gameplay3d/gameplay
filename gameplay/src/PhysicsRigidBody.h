@@ -294,7 +294,7 @@ private:
      * 
      * @param node The node to create a rigid body for; note that the node must have
      *      a model attached to it prior to creating a rigid body for it.
-     * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidbody').
+     * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidBody').
      * @return The newly created rigid body, or <code>NULL</code> if the rigid body failed to load.
      */
     static PhysicsRigidBody* create(Node* node, Properties* properties);
