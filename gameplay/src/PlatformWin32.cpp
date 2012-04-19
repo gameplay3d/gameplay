@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "Form.h"
 #include <GL/wglew.h>
+#include <windowsx.h>
 
 // Default to 720p
 #define WINDOW_WIDTH    1280
@@ -21,7 +22,6 @@ static HINSTANCE __hinstance = 0;
 static HWND __hwnd = 0;
 static HDC __hdc = 0;
 static HGLRC __hrc = 0;
-
 
 static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
 {
@@ -245,6 +245,14 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
     }
 }
 
+void UpdateCapture(LPARAM lParam)
+{
+	if ((lParam & MK_LBUTTON) || (lParam & MK_MBUTTON) || (lParam & MK_RBUTTON))
+		SetCapture(__hwnd);
+	else
+		ReleaseCapture();
+}
+
 LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if (hwnd != __hwnd)
@@ -257,9 +265,6 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
     static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
 
-    static bool hasMouse = false;
-    static bool lMouseDown = false;
-    static bool rMouseDown = false;
     static int lx, ly;
 
     static bool shiftDown = false;
@@ -281,87 +286,85 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return 0;
 
     case WM_LBUTTONDOWN:
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0))
-        {
-            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, LOWORD(lParam), HIWORD(lParam), 0);
-        }
-        lMouseDown = true;
-        return 0;
+    {
+        int x = GET_X_LPARAM(lParam);
+        int y = GET_Y_LPARAM(lParam);
 
+		UpdateCapture(wParam);
+        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, x, y, 0))
+        {
+            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, x, y, 0);
+        }
+        return 0;
+    }
     case WM_LBUTTONUP:
-        lMouseDown = false;
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0))
-        {
-            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, LOWORD(lParam), HIWORD(lParam), 0);
-        }
-        return 0;
+    {
+        int x = GET_X_LPARAM(lParam);
+        int y = GET_Y_LPARAM(lParam);
 
+        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, x, y, 0))
+        {
+            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, x, y, 0);
+        }
+		UpdateCapture(wParam);
+        return 0;
+    }
     case WM_RBUTTONDOWN:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0);
-        rMouseDown = true;
-        lx = LOWORD(lParam);
-        ly = HIWORD(lParam);
+		UpdateCapture(wParam);
+		lx = GET_X_LPARAM(lParam);
+        ly = GET_Y_LPARAM(lParam);
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, lx, ly, 0);
         break;
 
     case WM_RBUTTONUP:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON, LOWORD(lParam), HIWORD(lParam), 0);
-        rMouseDown = false;
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+		UpdateCapture(wParam);
         break;
 
     case WM_MBUTTONDOWN:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON, LOWORD(lParam), HIWORD(lParam), 0);
+		UpdateCapture(wParam);
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         break;
 
     case WM_MBUTTONUP:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, LOWORD(lParam), HIWORD(lParam), 0);
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+		UpdateCapture(wParam);
         break;
 
     case WM_MOUSEMOVE:
     {
-        if (!hasMouse)
-        {
-            hasMouse = true;
+        int x = GET_X_LPARAM(lParam);
+        int y = GET_Y_LPARAM(lParam);
 
-            // Call TrackMouseEvent to detect the next WM_MOUSE_LEAVE.
-            TRACKMOUSEEVENT tme;
-            tme.cbSize = sizeof(TRACKMOUSEEVENT);
-            tme.dwFlags = TME_LEAVE;
-            tme.hwndTrack = __hwnd;
-            TrackMouseEvent(&tme);
-        }
+		// Allow Game::mouseEvent a chance to handle (and possibly consume) the event.
+		if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
+		{
+			if ((wParam & MK_LBUTTON) == MK_LBUTTON)
+			{
+				// Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
+				gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0);
+				return 0;
+			}
+			else if ((wParam & MK_RBUTTON) == MK_RBUTTON)
+			{
+				// Update the pitch and roll by adding the scaled deltas.
+				__roll += (float)(x - lx) * ACCELEROMETER_X_FACTOR;
+				__pitch += -(float)(y - ly) * ACCELEROMETER_Y_FACTOR;
 
-        bool consumed = gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, LOWORD(lParam), HIWORD(lParam), 0);
-        if (lMouseDown && !consumed)
-        {
-            // Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
-            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, LOWORD(lParam), HIWORD(lParam), 0);
-            return 0;
-        }
-        else if (rMouseDown)
-        {
-            // Update the pitch and roll by adding the scaled deltas.
-            __roll += (float)(LOWORD(lParam) - lx) * ACCELEROMETER_X_FACTOR;
-            __pitch += -(float)(HIWORD(lParam) - ly) * ACCELEROMETER_Y_FACTOR;
+				// Clamp the values to the valid range.
+				__roll = max(min(__roll, 90.0f), -90.0f);
+				__pitch = max(min(__pitch, 90.0f), -90.0f);
 
-            // Clamp the values to the valid range.
-            __roll = max(min(__roll, 90.0f), -90.0f);
-            __pitch = max(min(__pitch, 90.0f), -90.0f);
-
-            // Update the last X/Y values.
-            lx = LOWORD(lParam);
-            ly = HIWORD(lParam);
-        }
+				// Update the last X/Y values.
+				lx = x;
+				ly = y;
+			}
+		}
         break;
     }
 
-    case WM_MOUSELEAVE:
-        hasMouse = false;
-        lMouseDown = false;
-        rMouseDown = false;
-        break;
-
     case WM_MOUSEWHEEL:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_WHEEL, LOWORD(lParam), HIWORD(lParam), GET_WHEEL_DELTA_WPARAM(wParam) / 120);
+        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_WHEEL, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), GET_WHEEL_DELTA_WPARAM(wParam) / 120);
         break;
 
     case WM_KEYDOWN:
