@@ -348,8 +348,8 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			else if ((wParam & MK_RBUTTON) == MK_RBUTTON)
 			{
 				// Update the pitch and roll by adding the scaled deltas.
-				__roll += -(float)(x - lx) * ACCELEROMETER_X_FACTOR;
-				__pitch += (float)(y - ly) * ACCELEROMETER_Y_FACTOR;
+				__roll += (float)(x - lx) * ACCELEROMETER_X_FACTOR;
+				__pitch += -(float)(y - ly) * ACCELEROMETER_Y_FACTOR;
 
 				// Clamp the values to the valid range.
 				__roll = max(min(__roll, 90.0f), -90.0f);
