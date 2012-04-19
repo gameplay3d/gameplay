@@ -1046,13 +1046,22 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     double tx, ty, tz;
     accelerometer_read_forces(&tx, &ty, &tz);
 
-    // Hack landscape adjustment only.
-    if (__orientationAngle == 0)
-    {
-        tx = -tx;
-        ty = -ty;
-        tz = -tz;
-    }
+    if (__orientationAngle == 90)
+	{
+		tx = -ty;
+		ty = tx;
+	}
+	else if (__orientationAngle == 180)
+	{
+		tx = -tx;
+		ty = -ty;
+		tz = -tz;
+	}
+	else if (__orientationAngle == 270)
+	{
+		tx = ty;
+		ty = -tx;
+	}
 
     if (pitch != NULL)
         *pitch = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
