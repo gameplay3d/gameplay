@@ -198,14 +198,11 @@ extern void printError(const char* format, ...);
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
-    #define OPENGL_ES_PVR    
+    #define USE_PVRTC
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
-    #define GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG                      0x8C00
-    #define GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG                      0x8C01
-    #define GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG                     0x8C02
-    #define GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG                     0x8C03
     #include <GL/glew.h>
+    #define USE_VAO
 #elif __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
@@ -217,7 +214,8 @@ extern void printError(const char* format, ...);
         #define glIsVertexArray glIsVertexArrayOES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
-        #define OPENGL_ES_PVR    
+        #define USE_PVRTC
+        #define USE_VAO
     #elif TARGET_OS_MAC
         #include <OpenGL/gl.h>
         #include <OpenGL/glext.h>
@@ -225,12 +223,11 @@ extern void printError(const char* format, ...);
         #define glDeleteVertexArrays glDeleteVertexArraysAPPLE
         #define glGenVertexArrays glGenVertexArraysAPPLE
         #define glIsVertexArray glIsVertexArrayAPPLE
+        #define USE_VAO
     #else
         #error "Unsupported Apple Device"
     #endif
 #endif
-
-
 
 // Graphics (GLSL)
 #define VERTEX_ATTRIBUTE_POSITION_NAME              "a_position"
@@ -240,9 +237,9 @@ extern void printError(const char* format, ...);
 #define VERTEX_ATTRIBUTE_BINORMAL_NAME              "a_binormal"
 #define VERTEX_ATTRIBUTE_BLENDWEIGHTS_NAME          "a_blendWeights"
 #define VERTEX_ATTRIBUTE_BLENDINDICES_NAME          "a_blendIndices"
-#define VERTEX_ATTRIBUTE_TEXCOORD_PREFIX            "a_texCoord"
+#define VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME       "a_texCoord"
 
-// Hardware Resources
+// Hardware buffer
 namespace gameplay
 {
 typedef GLint VertexAttribute;

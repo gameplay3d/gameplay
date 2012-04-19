@@ -209,6 +209,15 @@ void PhysicsCharacter::setRightVelocity(float velocity)
     _rightVelocity = velocity;
 }
 
+Vector3 PhysicsCharacter::getCurrentVelocity() const
+{
+    Vector3 v(_currentVelocity.x(), _currentVelocity.y(), _currentVelocity.z());
+    v.x += _verticalVelocity.x();
+    v.y += _verticalVelocity.y();
+    v.z += _verticalVelocity.z();
+    return v;
+}
+
 void PhysicsCharacter::jump(float height)
 {
     // TODO: Add support for different jump modes (i.e. double jump, changing direction in air, holding down jump button for extra height, etc)
@@ -440,28 +449,69 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
     btTransform end;
     start.setIdentity();
     end.setIdentity();
-    start.setOrigin(_currentPosition);
-    end.setOrigin(targetPosition);
 
-    ClosestNotMeConvexResultCallback callback(this, btVector3(0, 1, 0), _cosSlopeAngle);
-    callback.m_collisionFilterGroup = _ghostObject->getBroadphaseHandle()->m_collisionFilterGroup;
-    callback.m_collisionFilterMask = _ghostObject->getBroadphaseHandle()->m_collisionFilterMask;
-
-    _ghostObject->convexSweepTest(static_cast<btConvexShape*>(_collisionShape->getShape()), start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
-
-    if (callback.hasHit())
+    btScalar fraction = 1.0;
+    int maxIter = 10;
+    while (fraction > btScalar(0.01) && maxIter-- > 0)
     {
-        // Collision detected, fix it
-        _currentPosition.setInterpolate3(_currentPosition, targetPosition, callback.m_closestHitFraction);
+        start.setOrigin(_currentPosition);
+        end.setOrigin(targetPosition);
 
-        // Zero out fall velocity when we hit an object
-        _verticalVelocity.setZero();
+        btVector3 sweepDirNegative(_currentPosition - targetPosition);
+
+        ClosestNotMeConvexResultCallback callback(this, sweepDirNegative, 0.0);
+        callback.m_collisionFilterGroup = _ghostObject->getBroadphaseHandle()->m_collisionFilterGroup;
+        callback.m_collisionFilterMask = _ghostObject->getBroadphaseHandle()->m_collisionFilterMask;
+
+        _ghostObject->convexSweepTest(static_cast<btConvexShape*>(_collisionShape->getShape()), start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+
+        fraction -= callback.m_closestHitFraction;
+
+        if (callback.hasHit())
+        {
+            // Collision detected, fix it.
+            Vector3 normal(callback.m_hitNormalWorld.x(), callback.m_hitNormalWorld.y(), callback.m_hitNormalWorld.z());
+            normal.normalize();
+
+            float dot = normal.dot(Vector3::unitY());
+            if (dot > 1.0f - MATH_EPSILON)
+            {
+                targetPosition.setInterpolate3(_currentPosition, targetPosition, callback.m_closestHitFraction);
+
+                // Zero out fall velocity when we hit an object going straight down.
+                _verticalVelocity.setZero();
+                break;
+            }
+            else
+            {
+                PhysicsCollisionObject* o = Game::getInstance()->getPhysicsController()->getCollisionObject(callback.m_hitCollisionObject);
+                if (o->getType() == PhysicsCollisionObject::RIGID_BODY && o->isDynamic())
+                {
+                    PhysicsRigidBody* rb = static_cast<PhysicsRigidBody*>(o);
+                    normal.normalize();
+                    rb->applyImpulse(_mass * -normal * sqrt(BV(normal).dot(_verticalVelocity)));
+                }
+
+                updateTargetPositionFromCollision(targetPosition, BV(normal));
+            }
+        }
+        else
+        {
+            // Nothing is in the way.
+            break;
+        }
     }
-    else
-    {
-        // We can move here
-        _currentPosition = targetPosition;
-    }
+
+    // Calculate what the vertical velocity actually is.
+    // In cases where the character might not actually be able to move down,
+    // but isn't intersecting with an object straight down either, we don't
+    // want to keep increasing the vertical velocity until the character 
+    // randomly drops through the floor when it can finally move due to its
+    // vertical velocity having such a great magnitude.
+    if (!_verticalVelocity.isZero())
+        _verticalVelocity = ((targetPosition + btVector3(0.0, _stepHeight, 0.0)) - _currentPosition) / time;
+
+    _currentPosition = targetPosition;
 }
 
 /*
