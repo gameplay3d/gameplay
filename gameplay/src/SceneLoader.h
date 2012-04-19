@@ -20,9 +20,13 @@ class SceneLoader
 private:
 
     /**
-     * Loads a scene file file.
+     * Loads a scene using the data from the Properties object defined at the specified URL, 
+     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
+     * 
+     * @param url The URL pointing to the Properties object defining the scene.
      */
-    static Scene* load(const char* filePath);
+    static Scene* load(const char* url);
     
     /**
      * Helper structures and functions for SceneLoader::load(const char*).
