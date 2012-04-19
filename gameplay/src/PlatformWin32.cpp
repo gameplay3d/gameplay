@@ -286,21 +286,29 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return 0;
 
     case WM_LBUTTONDOWN:
+    {
+        int x = GET_X_LPARAM(lParam);
+        int y = GET_Y_LPARAM(lParam);
+
 		UpdateCapture(wParam);
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0))
+        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, x, y, 0))
         {
-            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, x, y, 0);
         }
         return 0;
-
+    }
     case WM_LBUTTONUP:
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0))
+    {
+        int x = GET_X_LPARAM(lParam);
+        int y = GET_Y_LPARAM(lParam);
+
+        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, x, y, 0))
         {
-            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, x, y, 0);
         }
 		UpdateCapture(wParam);
         return 0;
-
+    }
     case WM_RBUTTONDOWN:
 		UpdateCapture(wParam);
 		lx = GET_X_LPARAM(lParam);
@@ -325,28 +333,31 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case WM_MOUSEMOVE:
     {
+        int x = GET_X_LPARAM(lParam);
+        int y = GET_Y_LPARAM(lParam);
+
 		// Allow Game::mouseEvent a chance to handle (and possibly consume) the event.
-		if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, GET_X_LPARAM(lParam),  GET_Y_LPARAM(lParam), 0))
+		if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
 		{
 			if ((wParam & MK_LBUTTON) == MK_LBUTTON)
 			{
 				// Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
-				gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+				gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0);
 				return 0;
 			}
 			else if ((wParam & MK_RBUTTON) == MK_RBUTTON)
 			{
 				// Update the pitch and roll by adding the scaled deltas.
-				__roll += -(float)(GET_X_LPARAM(lParam) - lx) * ACCELEROMETER_X_FACTOR;
-				__pitch += (float)(GET_Y_LPARAM(lParam) - ly) * ACCELEROMETER_Y_FACTOR;
+				__roll += -(float)(x - lx) * ACCELEROMETER_X_FACTOR;
+				__pitch += (float)(y - ly) * ACCELEROMETER_Y_FACTOR;
 
 				// Clamp the values to the valid range.
 				__roll = max(min(__roll, 90.0f), -90.0f);
 				__pitch = max(min(__pitch, 90.0f), -90.0f);
 
 				// Update the last X/Y values.
-				lx = GET_X_LPARAM(lParam);
-				ly = GET_Y_LPARAM(lParam);
+				lx = x;
+				ly = y;
 			}
 		}
         break;
