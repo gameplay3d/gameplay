@@ -426,6 +426,8 @@ void CharacterGame::adjustCamera(long elapsedTime)
     // Get focal point of camera (use the resolved world location of the head joint as a focal point)
     Vector3 focalPoint(cameraPosition + (cameraDirection * CAMERA_FOCUS_DISTANCE));
 
+    Vector3 oldPosition = cameraNode->getTranslationWorld();
+
     PhysicsController::HitResult result;
     PhysicsCollisionObject* occlusion = NULL;
     do
@@ -437,7 +439,10 @@ void CharacterGame::adjustCamera(long elapsedTime)
         occlusion = result.object;
 
         // Step the camera closer to the focal point to resolve the occlusion
-        do
+        float d = cameraNode->getTranslationWorld().distance(result.point);
+        cameraNode->translateForward(d);
+        cameraOffset += d;
+        while (physics->sweepTest(cameraNode->getCollisionObject(), focalPoint, &result) && result.object == occlusion)
         {
             // Prevent the camera from getting too close to the character.
             // Without this check, it's possible for the camera to fly past the character
@@ -447,9 +452,7 @@ void CharacterGame::adjustCamera(long elapsedTime)
 
             cameraNode->translateForward(0.1f);
             cameraOffset += 0.1f;
-
-        } while (physics->sweepTest(cameraNode->getCollisionObject(), focalPoint, &result) && result.object == occlusion);
-
+        }
     } while (true);
 
     // If the character is closer than 10 world units to the camera, apply transparency to the character
@@ -466,6 +469,10 @@ void CharacterGame::adjustCamera(long elapsedTime)
         _characterMeshNode->setTransparent(false);
         _materialParameterAlpha->setValue(1.0f);
     }
+
+    Vector3 newPosition = cameraNode->getTranslationWorld();
+    float distance = oldPosition.distance(newPosition);
+    distance = 0;
 }
 
 void CharacterGame::animationEvent(AnimationClip* clip, EventType type)
