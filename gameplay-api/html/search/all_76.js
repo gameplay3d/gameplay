@@ -16,5 +16,5 @@ var searchData=
   ['verticallayout',['VerticalLayout',['../classgameplay_1_1_vertical_layout.html#ad3b128dfed6b91487114d60abead5db1',1,'gameplay::VerticalLayout']]],
   ['view_5fmatrix',['VIEW_MATRIX',['../classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017a1d263042494a24659d78c27a2a4ebd62',1,'gameplay::RenderState']]],
   ['view_5fprojection_5fmatrix',['VIEW_PROJECTION_MATRIX',['../classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017ad4493886553d11e2ee264e00f40fe89a',1,'gameplay::RenderState']]],
-  ['visit',['visit',['../classgameplay_1_1_scene.html#adec0ddf4c4287d4a5edd157768411cf3',1,'gameplay::Scene']]]
+  ['visit',['visit',['../classgameplay_1_1_scene.html#ae234fd87e01b77182066b6f881cae3a6',1,'gameplay::Scene::visit(T *instance, bool(T::*visitMethod)(Node *))'],['../classgameplay_1_1_scene.html#a27625217db95d54e5a5cc17a0bbbec46',1,'gameplay::Scene::visit(T *instance, bool(T::*visitMethod)(Node *, C), C cookie)']]]
 ];
