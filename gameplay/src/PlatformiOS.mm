@@ -460,17 +460,18 @@ int getKey(unichar keyCode);
     return YES;
 }
 
-- (void)getAccelerometerPitch:(float *)pitch roll:(float *)roll 
+- (void)getAccelerometerPitch:(float*)pitch roll:(float*)roll 
 {
     float p = 0.0f;
     float r = 0.0f;
-    CMAccelerometerData *accelerometerData = motionManager.accelerometerData;
+    CMAccelerometerData* accelerometerData = motionManager.accelerometerData;
     if(accelerometerData != nil) 
     {
         float tx, ty, tz;
-        tx = accelerometerData.acceleration.y;
-        ty = -accelerometerData.acceleration.x;
-        tz = -accelerometerData.acceleration.z;      
+        tx = -accelerometerData.acceleration.y;
+        ty = accelerometerData.acceleration.x;
+        tz = accelerometerData.acceleration.z;  
+        
         p = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
         r = atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;     
     }
