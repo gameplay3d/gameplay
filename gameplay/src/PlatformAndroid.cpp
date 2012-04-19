@@ -42,6 +42,7 @@ const ASensor* __accelerometerSensor;
 
 static int __orientationAngle = 90; // Landscape by default.
 static bool __multiTouch = false;
+static int __primaryTouchId = -1;
 bool __displayKeyboard = false;
 
 static const char* __glExtensions;
@@ -532,25 +533,57 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
 {
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION)
     {
-        int32_t data = AMotionEvent_getAction(event);
-        Touch::TouchEvent touchEvent;
-        size_t pointerCount = AMotionEvent_getPointerCount(event);
-        for (size_t i = 0; i < pointerCount; ++i)
+        int32_t action = AMotionEvent_getAction(event);
+        size_t pointerIndex;
+        size_t pointerId;
+        size_t pointerCount;
+        switch (action & AMOTION_EVENT_ACTION_MASK)
         {
-            switch (data & AMOTION_EVENT_ACTION_MASK)
-            {
-                case AMOTION_EVENT_ACTION_DOWN:
-                    touchEvent = Touch::TOUCH_PRESS;
-                    break;
-                case AMOTION_EVENT_ACTION_UP:
-                    touchEvent = Touch::TOUCH_RELEASE;
-                    break;
-                case AMOTION_EVENT_ACTION_MOVE:
-                    touchEvent = Touch::TOUCH_MOVE;
-                    break;
-            }
-            size_t pointerId = AMotionEvent_getPointerId(event, i);
-            gameplay::Platform::touchEventInternal(touchEvent, AMotionEvent_getX(event, i), AMotionEvent_getY(event, i), pointerId);
+            case AMOTION_EVENT_ACTION_DOWN:
+                // Primary pointer down
+                pointerId = AMotionEvent_getPointerId(event, 0);
+                gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, AMotionEvent_getX(event, 0), AMotionEvent_getY(event, 0), pointerId);
+                __primaryTouchId = pointerId;
+                break;
+            case AMOTION_EVENT_ACTION_UP:
+                pointerId = AMotionEvent_getPointerId(event, 0);
+                if (__multiTouch || __primaryTouchId == pointerId)
+                {
+                    gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, AMotionEvent_getX(event, 0), AMotionEvent_getY(event, 0), pointerId);
+                }
+                __primaryTouchId = -1;
+                break;
+            case AMOTION_EVENT_ACTION_POINTER_DOWN:
+                // Non-primary pointer down
+                if (__multiTouch)
+                {
+                    pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+                    pointerId = AMotionEvent_getPointerId(event, pointerIndex);
+                    gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, AMotionEvent_getX(event, pointerIndex), AMotionEvent_getY(event, pointerIndex), pointerId);
+                }
+                break;
+            case AMOTION_EVENT_ACTION_POINTER_UP:
+                pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+                pointerId = AMotionEvent_getPointerId(event, pointerIndex);
+                if (__multiTouch || __primaryTouchId == pointerId)
+                {
+                    gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, AMotionEvent_getX(event, pointerIndex), AMotionEvent_getY(event, pointerIndex), pointerId);
+                }
+                if (__primaryTouchId == pointerId)
+                    __primaryTouchId = -1;
+                break;
+            case AMOTION_EVENT_ACTION_MOVE:
+                // ACTION_MOVE events are batched, unlike the other events.
+                pointerCount = AMotionEvent_getPointerCount(event);
+                for (size_t i = 0; i < pointerCount; ++i)
+                {
+                    pointerId = AMotionEvent_getPointerId(event, i);
+                    if (__multiTouch || __primaryTouchId == pointerId)
+                    {
+                        gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, AMotionEvent_getX(event, i), AMotionEvent_getY(event, i), pointerId);
+                    }
+                }
+                break;
         }
         return 1;
     } 
