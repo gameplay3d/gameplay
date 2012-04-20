@@ -4,13 +4,14 @@
 #include "Mesh.h"
 #include "MeshSkin.h"
 #include "Material.h"
-#include "Node.h"
 
 namespace gameplay
 {
 
-class Package;
+class Bundle;
 class MeshSkin;
+class Node;
+class NodeCloneContext;
 
 /**
  * Defines a Model which is an instance of a Mesh that can be drawn
@@ -20,7 +21,7 @@ class Model : public Ref
 {
     friend class Node;
     friend class Mesh;
-    friend class Package;
+    friend class Bundle;
 
 public:
 
@@ -110,11 +111,20 @@ public:
     Material* setMaterial(const char* materialPath, int partIndex = -1);
 
     /**
+     * Determines if a custom (non-shared) material is set for the specified part index.
+     *
+     * @param partIndex MeshPart index.
+     *
+     * @return True if a custom MeshPart material is set for the specified index, false otherwise.
+     */
+    bool hasMaterial(unsigned int partIndex) const;
+
+    /**
      * Returns the MeshSkin.
      * 
      * @return The MeshSkin, or NULL if one is not set.
      */
-    MeshSkin* getSkin();
+    MeshSkin* getSkin() const;
 
     /**
      * Returns the node that is associated with this model.
@@ -167,6 +177,14 @@ private:
     void setMaterialNodeBinding(Material *m);
 
     void validatePartCount();
+
+    /**
+     * Clones the model and returns a new model.
+     * 
+     * @param context The clone context.
+     * @return The new cloned model.
+     */
+    Model* clone(NodeCloneContext &context);
 
     Mesh* _mesh;
     Material* _material;

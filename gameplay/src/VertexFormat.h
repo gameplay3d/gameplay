@@ -90,7 +90,7 @@ public:
     };
 
     /**
-     * Constructs a new vertex format for the requested vertex element layout.
+     * Constructor.
      *
      * The passed in element array is copied into the new VertexFormat.
      *
@@ -105,21 +105,21 @@ public:
     ~VertexFormat();
 
     /**
-     * Returns the vertex element at the specified index.
+     * Gets the vertex element at the specified index.
      *
-     * index The index of the element to retreive.
+     * @param index The index of the element to retreive.
      */
     const Element& getElement(unsigned int index) const;
 
     /**
-     * Returns the number of elements in this VertexFormat.
+     * Gets the number of elements in this VertexFormat.
      *
      * @return The number of items in the elements array.
      */
     unsigned int getElementCount() const;
 
     /**
-     * Returns the size (in bytes) of a single vertex using this format.
+     * Gets the size (in bytes) of a single vertex using this format.
      */
     unsigned int getVertexSize() const;
 
@@ -140,6 +140,11 @@ public:
      * @return true if the elements in this VertexFormat are not equal to the specified one, false otherwise.
      */
     bool operator != (const VertexFormat& f) const;
+
+    /**
+     * Returns a string representation of a Usage enumeration value.
+     */
+    static const char* toString(Usage usage);
 
 private:
 

@@ -5,12 +5,20 @@ precision highp float;
 // Uniforms
 uniform vec3 u_lightColor;                      // Light color
 uniform vec3 u_ambientColor;                    // Ambient color
-uniform float u_specularExponent;               // Specular exponent or shininess property.
+uniform float u_specularExponent;               // Specular exponent or shininess property
+#if !defined(VERTEX_COLOR)
 uniform vec4 u_diffuseColor;                    // Diffuse color
+#endif
+#if defined(GLOBAL_ALPHA)
+uniform float u_globalAlpha;                    // Global alpha value
+#endif
 
 // Inputs
-varying vec3 v_normalVector;                    // NormalVector in view space.
+varying vec3 v_normalVector;                    // NormalVector in view space
 varying vec3 v_cameraDirection;                 // Camera direction
+#if defined(VERTEX_COLOR)
+varying vec4 v_color;							// Vertex color
+#endif
 
 // Global variables
 vec4 _baseColor;                                // Base color
@@ -24,7 +32,8 @@ void lighting(vec3 normalVector, vec3 cameraDirection, vec3 lightDirection, floa
     _ambientColor = _baseColor.rgb * u_ambientColor;
 
     // Diffuse
-    float diffuseIntensity = attenuation * max(0.0, dot(normalVector, lightDirection));
+    float ddot = abs(dot(normalVector, lightDirection));
+    float diffuseIntensity = attenuation * ddot;
     diffuseIntensity = max(0.0, diffuseIntensity);
     _diffuseColor = u_lightColor * _baseColor.rgb * diffuseIntensity;
 
@@ -103,8 +112,12 @@ void applyLight()
 
 void main()
 {
-    // Fetch diffuse color from texture.
-    _baseColor = u_diffuseColor;
+    // Set base diffuse color
+#if defined(VERTEX_COLOR)
+	_baseColor = v_color;
+#else
+	_baseColor = u_diffuseColor;
+#endif
 
     // Apply light
     applyLight();
@@ -112,4 +125,8 @@ void main()
     // Light the pixel
     gl_FragColor.a = _baseColor.a;
     gl_FragColor.rgb = _ambientColor + _diffuseColor + _specularColor;
+
+#if defined(GLOBAL_ALPHA)
+    gl_FragColor.a *= u_globalAlpha;
+#endif
 }

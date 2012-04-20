@@ -1,13 +1,18 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+#include <queue>
+
 #include "Keyboard.h"
 #include "Touch.h"
 #include "Mouse.h"
 #include "AudioController.h"
 #include "AnimationController.h"
 #include "PhysicsController.h"
+#include "AudioListener.h"
+#include "Rectangle.h"
 #include "Vector4.h"
+#include "TimeListener.h"
 
 namespace gameplay
 {
@@ -96,8 +101,8 @@ public:
     /**
      * Call this method to initialize the game, and begin running the game.
      *
-     * @param width The width of the game window to run at.
-     * @param height The height of the game window to run at.
+     * @param width The width of the game window to run at. Default is -1 meaning native resolution width.
+     * @param height The height of the game window to run at. Default is -1 meaning native resolution height.
      * 
      * @return Zero for normal termination, or non-zero if an error occurred.
      */
@@ -148,6 +153,22 @@ public:
     inline unsigned int getHeight() const;
 
     /**
+     * Gets the game current viewport.
+     *
+     * The default viewport is Rectangle(0, 0, Game::getWidth(), Game::getHeight()).
+     */
+    inline const Rectangle& getViewport() const;
+
+    /**
+     * Set the game current viewport.
+     *
+     * The x, y, width and height of the viewport must all be positive.
+     *
+     * viewport The custom viewport to be set on the game.
+     */
+    void setViewport(const Rectangle& viewport);
+
+    /**
      * Clears the specified resource buffers to the specified clear values. 
      *
      * @param flags The flags indicating which buffers to be cleared.
@@ -182,15 +203,30 @@ public:
     inline PhysicsController* getPhysicsController() const;
 
     /**
+     * Gets the audio listener for 3D audio.
+     * 
+     * @return The audio listener for this game.
+     */
+    AudioListener* getAudioListener();
+
+    /**
      * Menu callback on menu events.
      */
     virtual void menu();
-
+    
+    /**
+     * Shows or hides the virtual keyboard (if supported).
+     *
+     * @param display true when virtual keyboard needs to be displayed; false otherwise.
+     */
+     inline void displayKeyboard(bool display);
+     
     /**
      * Keyboard callback on keyPress events.
      *
      * @param evt The key event that occured.
-     * @param key The key code that was pressed, released or repeated.
+     * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
+     *            If evt is KEY_CHAR then key is the unicode value of the character.
      * 
      * @see Keyboard::KeyEvent
      * @see Keyboard::Key
@@ -216,21 +252,13 @@ public:
      * @param evt The mouse event that occurred.
      * @param x The x position of the mouse in pixels. Left edge is zero.
      * @param y The y position of the mouse in pixels. Top edge is zero.
+     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
      *
      * @return True if the mouse event is consumed or false if it is not consumed.
      *
      * @see Mouse::MouseEvent
      */
-    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y);
-
-    /**
-     * Mouse callback on mouse wheel events.
-     *
-     * @param x The x position of the mouse in pixels. Left edge is zero.
-     * @param y The y position of the mouse in pixels. Top edge is zero.
-     * @param delta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
-     */
-    virtual void mouseWheelEvent(int x, int y, int delta);
+    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
      * Sets muli-touch is to be enabled/disabled. Default is disabled.
@@ -253,6 +281,16 @@ public:
      * @param roll The roll angle returned (in degrees). If NULL then not returned.
      */
     inline void getAccelerometerValues(float* pitch, float* roll);
+
+    /**
+     * Schedules a time event to be sent to the given TimeListener a given of game milliseconds from now.
+     * Game time stops while the game is paused. A time offset of zero will fire the time event in the next frame.
+     * 
+     * @param timeOffset The number of game milliseconds in the future to schedule the event to be fired.
+     * @param timeListener The TimeListener that will receive the event.
+     * @param cookie The cookie data that the time event will contain.
+     */
+    void schedule(long timeOffset, TimeListener* timeListener, void* cookie = 0);
 
 protected:
 
@@ -299,7 +337,37 @@ protected:
     template <class T>
     void renderOnce(T* instance, void (T::*method)(void*), void* cookie);
 
+    /**
+     * Updates the game's internal systems (audio, animation, physics) once.
+     * 
+     * Note: This does not call the user-defined Game::update() function.
+     *
+     * This is useful for rendering animated splash screens.
+     */
+    void updateOnce();
+
 private:
+
+    /**
+     * TimeEvent represents the event that is sent to TimeListeners as a result of 
+     * calling Game::schedule().
+     */
+    class TimeEvent
+    {
+    public:
+
+        TimeEvent(long time, TimeListener* timeListener, void* cookie);
+        // The comparator is used to determine the order of time events in the priority queue.
+        bool operator<(const TimeEvent& v) const;
+        
+        /**
+         * The game time.
+         * @see Game::getGameTime()
+         */
+        long time;
+        TimeListener* listener;
+        void* cookie;
+    };
 
     /**
      * Constructor.
@@ -318,6 +386,13 @@ private:
      */
     void shutdown();
 
+    /**
+     * Fires the time events that were scheduled to be called.
+     * 
+     * @param frameTime The current game frame time. Used to determine which time events need to be fired.
+     */
+    void fireTimeEvents(long frameTime);
+
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
     static long _pausedTimeLast;                // The last time paused.
@@ -327,12 +402,19 @@ private:
     unsigned int _frameRate;                    // The current frame rate.
     unsigned int _width;                        // The game's display width.
     unsigned int _height;                       // The game's display height.
+    Rectangle _viewport;                        // the games's current viewport.
     Vector4 _clearColor;                        // The clear color value last used for clearing the color buffer.
     float _clearDepth;                          // The clear depth value last used for clearing the depth buffer.
     int _clearStencil;                          // The clear stencil value last used for clearing the stencil buffer.
     AnimationController* _animationController;  // Controls the scheduling and running of animations.
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
+    AudioListener* _audioListener;              // The audio listener in 3D space.
+    std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents; // Contains the scheduled time events.
+
+    // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.
+
+    friend class ScreenDisplayer;
 };
 
 }

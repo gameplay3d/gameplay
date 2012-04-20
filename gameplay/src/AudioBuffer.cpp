@@ -2,24 +2,47 @@
 #include "AudioBuffer.h"
 #include "FileSystem.h"
 
+#ifdef __ANDROID__
+extern AAssetManager* __assetManager;
+#endif
+
 namespace gameplay
 {
 
 // Audio buffer cache
 static std::vector<AudioBuffer*> __buffers;
 
+#ifndef __ANDROID__
 AudioBuffer::AudioBuffer(const char* path, ALuint buffer)
     : _filePath(path), _alBuffer(buffer)
 {
 }
+#else
+AudioBuffer::AudioBuffer(const char* path) : _filePath(path)
+{
+}
+#endif
 
 AudioBuffer::~AudioBuffer()
 {
+    // Remove the buffer from the cache.
+    unsigned int bufferCount = (unsigned int)__buffers.size();
+    for (unsigned int i = 0; i < bufferCount; i++)
+    {
+        if (this == __buffers[i])
+        {
+            __buffers.erase(__buffers.begin() + i);
+            break;
+        }
+    }
+
+#ifndef __ANDROID__
     if (_alBuffer)
     {
         alDeleteBuffers(1, &_alBuffer);
         _alBuffer = 0;
     }
+#endif
 }
 
 AudioBuffer* AudioBuffer::create(const char* path)
@@ -39,6 +62,7 @@ AudioBuffer* AudioBuffer::create(const char* path)
         }
     }
 
+#ifndef __ANDROID__
     ALuint alBuffer;
     ALCenum al_error;
 
@@ -106,8 +130,58 @@ cleanup:
     if (alBuffer)
         alDeleteBuffers(1, &alBuffer);
     return NULL;
+#else
+    // Get the file header in order to determine the type.
+    AAsset* asset = AAssetManager_open(__assetManager, path, AASSET_MODE_RANDOM);
+    char header[12];
+    if (AAsset_read(asset, header, 12) != 12)
+    {
+        LOG_ERROR_VARG("Invalid audio buffer file: %s", path);
+        return NULL;
+    }
+
+    // Get the file descriptor for the audio file.
+    off_t start, length;
+    int fd = AAsset_openFileDescriptor(asset, &start, &length);
+    if (fd < 0)
+    {
+        LOG_ERROR_VARG("Failed to open file descriptor for asset: %s", path);
+        return NULL;
+    }
+    AAsset_close(asset);
+    SLDataLocator_AndroidFD data = {SL_DATALOCATOR_ANDROIDFD, fd, start, length};
+
+    // Set the appropriate mime type information.
+    SLDataFormat_MIME mime;
+    mime.formatType = SL_DATAFORMAT_MIME;
+    std::string pathStr = path;
+    if (memcmp(header, "RIFF", 4) == 0)
+    {
+        mime.mimeType = (SLchar*)"audio/x-wav";
+        mime.containerType = SL_CONTAINERTYPE_WAV;
+    }
+    else if (memcmp(header, "OggS", 4) == 0)
+    {
+        mime.mimeType = (SLchar*)"application/ogg";
+        mime.containerType = SL_CONTAINERTYPE_OGG;
+    }
+    else
+    {
+        LOG_ERROR_VARG("Unsupported audio file: %s", path);
+    }
+
+    buffer = new AudioBuffer(path);
+    buffer->_data = data;
+    buffer->_mime = mime;
+
+    // Add the buffer to the cache.
+    __buffers.push_back(buffer);
+
+    return buffer;
+#endif
 }
-    
+
+#ifndef __ANDROID__
 bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
 {
     unsigned char stream[12];
@@ -116,6 +190,12 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     if (fread(stream, 1, 8, file) != 8 || memcmp(stream, "fmt ", 4) != 0 )
         return false;
     
+    unsigned int section_size;
+    section_size  = stream[7]<<24;
+    section_size |= stream[6]<<16;
+    section_size |= stream[5]<<8;
+    section_size |= stream[4];
+
     // Check for a valid pcm format.
     if (fread(stream, 1, 2, file) != 2 || stream[1] != 0 || stream[0] != 1)
     {
@@ -153,7 +233,6 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     bits  = stream[1]<<8;
     bits |= stream[0];
     
-
     // Now convert the given channel count and bit depth into an OpenAL format. 
     ALuint format = 0;
     if (bits == 8)
@@ -176,13 +255,45 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
         return false;
     }
     
-    // Read the data chunk, which will hold the decoded sample data 
-    if (fread(stream, 1, 4, file) != 4 || memcmp(stream, "data", 4) != 0)
+    // Check against the size of the format header as there may be more data that we need to read
+    if (section_size > 16)
+    {
+        unsigned int length = section_size - 16;
+
+        // extension size is 2 bytes
+        if (fread(stream, 1, length, file) != length)
+            return false;
+    }
+
+    if (fread(stream, 1, 4, file) != 4)
+        return false;
+
+    // read the next chunk, could be fact section or the data section
+    if (memcmp(stream, "fact", 4) == 0)
+    {
+        if (fread(stream, 1, 4, file) != 4)
+            return false;
+
+        section_size  = stream[3]<<24;
+        section_size |= stream[2]<<16;
+        section_size |= stream[1]<<8;
+        section_size |= stream[0];
+
+        // read in the rest of the fact section
+        if (fread(stream, 1, section_size, file) != section_size)
+            return false;
+
+        if (fread(stream, 1, 4, file) != 4)
+            return false;
+    }
+
+    // should now be the data section which holds the decoded sample data
+    if (memcmp(stream, "data", 4) != 0)
     {
         LOG_ERROR("WAV file has no data.");
         return false;
     }
-    
+
     // Read how much data is remaining and buffer it up.
     unsigned int dataSize;
     fread(&dataSize, sizeof(int), 1, file);
@@ -225,34 +336,34 @@ bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
     else
         format = AL_FORMAT_STEREO16;
 
-	// size = #samples * #channels * 2 (for 16 bit)
+    // size = #samples * #channels * 2 (for 16 bit)
     unsigned int data_size = ov_pcm_total(&ogg_file, -1) * info->channels * 2;
     char* data = new char[data_size];
 
     while (size < data_size)
     {
-    	result = ov_read(&ogg_file, data + size, data_size - size, 0, 2, 1, &section);
-    	if (result > 0)
-    	{
-    		size += result;
-    	}
-    	else if (result < 0)
-    	{
-    		SAFE_DELETE_ARRAY(data);
-    		LOG_ERROR("OGG file missing data.");
-    		return false;
-    	}
-    	else
-    	{
-    		break;
-    	}
+        result = ov_read(&ogg_file, data + size, data_size - size, 0, 2, 1, &section);
+        if (result > 0)
+        {
+            size += result;
+        }
+        else if (result < 0)
+        {
+            SAFE_DELETE_ARRAY(data);
+            LOG_ERROR("OGG file missing data.");
+            return false;
+        }
+        else
+        {
+            break;
+        }
     }
     
     if (size == 0)
     {
-    	SAFE_DELETE_ARRAY(data);
-    	LOG_ERROR("Unable to read OGG data.");
-    	return false;
+        SAFE_DELETE_ARRAY(data);
+        LOG_ERROR("Unable to read OGG data.");
+        return false;
     }
 
     alBufferData(buffer, format, data, data_size, info->rate);
@@ -265,5 +376,6 @@ bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
 
     return true;
 }
+#endif
 
 }

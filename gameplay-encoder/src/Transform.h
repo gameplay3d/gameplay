@@ -50,6 +50,17 @@ public:
         ANIMATE_ROTATE_Y = 19,
         ANIMATE_ROTATE_Z = 20
     };
+
+    /**
+     * Returns the string representation of the given TransformProperty.
+     */
+    static const char* getPropertyString(unsigned int prop);
+
+    /**
+     * Returns the number of floats for the given property or zero if not a valid property.
+     */
+    static unsigned int getPropertySize(unsigned int prop);
+
 };
 
 }

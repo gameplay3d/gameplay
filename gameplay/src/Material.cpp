@@ -5,6 +5,7 @@
 #include "Technique.h"
 #include "Pass.h"
 #include "Properties.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -125,6 +126,24 @@ Material* Material::create(const char* vshPath, const char* fshPath, const char*
     return material;
 }
 
+Material* Material::clone(NodeCloneContext &context) const
+{
+    Material* material = new Material();
+    RenderState::cloneInto(material, context);
+
+    for (std::vector<Technique*>::const_iterator it = _techniques.begin(); it != _techniques.end(); ++it)
+    {
+        const Technique* technique = *it;
+        Technique* techniqueClone = technique->clone(material, context);
+        material->_techniques.push_back(techniqueClone);
+        if (_currentTechnique == technique)
+        {
+            material->_currentTechnique = techniqueClone;
+        }
+    }
+    return material;
+}
+
 unsigned int Material::getTechniqueCount() const
 {
     return _techniques.size();
@@ -212,17 +231,17 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
     const char* fragmentShaderPath = passProperties->getString("fragmentShader");
     assert(fragmentShaderPath);
     const char* defines = passProperties->getString("defines");
-    std::string define = "";
+    std::string define;
     if (defines != NULL)
     {
-        char* token = strtok((char*)defines, ";");
-        while (token)
+        define = defines;
+        define.insert(0, "#define ");
+        unsigned int pos;
+        while ((pos = define.find(';')) != std::string::npos)
         {
-            define += "#define ";
-            define += token;
-            define += "\n";
-            token = strtok(NULL, ";");
+            define.replace(pos, 1, "\n#define ");
         }
+        define += "\n";
     }
 
     // Create the pass

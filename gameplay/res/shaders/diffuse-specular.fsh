@@ -7,6 +7,9 @@ uniform vec3 u_lightColor;                      // Light color
 uniform vec3 u_ambientColor;                    // Ambient color
 uniform float u_specularExponent;               // Specular exponent or shininess property.
 uniform sampler2D u_diffuseTexture;             // Diffuse texture.
+#if defined(GLOBAL_ALPHA)
+uniform float u_globalAlpha;                    // Global alpha value
+#endif
 
 // Inputs
 varying vec3 v_normalVector;                    // NormalVector in view space.
@@ -25,12 +28,13 @@ void lighting(vec3 normalVector, vec3 cameraDirection, vec3 lightDirection, floa
     _ambientColor = _baseColor.rgb * u_ambientColor;
 
     // Diffuse
-    float diffuseIntensity = attenuation * max(0.0, dot(normalVector, lightDirection));
+    float ddot = dot(normalVector, lightDirection);
+    float diffuseIntensity = attenuation * ddot;
     diffuseIntensity = max(0.0, diffuseIntensity);
     _diffuseColor = u_lightColor * _baseColor.rgb * diffuseIntensity;
 
     // Specular
-    vec3 halfVector = normalize(cameraDirection + lightDirection);
+    vec3 halfVector = normalize(lightDirection + cameraDirection);
     float specularIntensity = attenuation * max(0.0, pow(dot(normalVector, halfVector), u_specularExponent));
     specularIntensity = max(0.0, specularIntensity);
     _specularColor = u_lightColor * _baseColor.rgb * specularIntensity;
@@ -113,4 +117,8 @@ void main()
     // Light the pixel
     gl_FragColor.a = _baseColor.a;
     gl_FragColor.rgb = _ambientColor + _diffuseColor + _specularColor;
+
+#if defined(GLOBAL_ALPHA)
+    gl_FragColor.a *= u_globalAlpha;
+#endif
 }

@@ -21,7 +21,7 @@ class Model;
 class Mesh : public Ref
 {
     friend class Model;
-    friend class Package;
+    friend class Bundle;
 
 public:
 
@@ -124,6 +124,15 @@ public:
     static Mesh* createBoundingBox(const BoundingBox& box);
 
     /**
+     * Returns a URL from which the mesh was loaded from.
+     *
+     * For meshes loaded from a Bundle, this URL will point
+     * to the file and ID of the mesh within the bundle. For
+     * all other meshes, an empty string will be returned.
+     */
+    const char* getUrl() const;
+
+    /**
      * Gets the vertex format for the mesh.
      *
      * @return The vertex format.
@@ -221,7 +230,7 @@ public:
     /**
      * Returns the bounding box for the points in this mesh.
      * 
-     * Only meshes loaded from package files are imported with valid
+     * Only meshes loaded from bundle files are imported with valid
      * bounding volumes. Programmatically created meshes will contain
      * empty bounding volumes until the setBoundingBox and/or
      * setBoundingSphere methods are called to specify the mesh's
@@ -250,7 +259,7 @@ public:
     /**
      * Returns the bounding sphere for the points in the mesh.
      *
-     * Only meshes loaded from package files are imported with valid
+     * Only meshes loaded from bundle files are imported with valid
      * bounding volumes. Programmatically created meshes will contain
      * empty bounding volumes until the setBoundingBox and/or
      * setBoundingSphere methods are called to specify the mesh's
@@ -290,11 +299,10 @@ private:
 
     /**
      * Constructor.
-     *
-     * @param copy The mesh to copy from.
      */
     Mesh(const Mesh& copy);
 
+    std::string _url;
     const VertexFormat _vertexFormat;
     unsigned int _vertexCount;
     VertexBufferHandle _vertexBuffer;

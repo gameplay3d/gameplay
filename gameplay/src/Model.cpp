@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Technique.h"
 #include "Pass.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -190,7 +191,12 @@ Material* Model::setMaterial(const char* materialPath, int partIndex)
     return material;
 }
 
-MeshSkin* Model::getSkin()
+bool Model::hasMaterial(unsigned int partIndex) const
+{
+    return (partIndex < _partCount && _partMaterials && _partMaterials[partIndex]);
+}
+
+MeshSkin* Model::getSkin() const
 {
     return _skin;
 }
@@ -204,7 +210,8 @@ void Model::setSkin(MeshSkin* skin)
 
         // Assign the new skin
         _skin = skin;
-        _skin->_model = this;
+        if (_skin)
+            _skin->_model = this;
     }
 }
 
@@ -245,14 +252,13 @@ void Model::draw(bool wireframe)
         // No mesh parts (index buffers).
         if (_material)
         {
-            GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
-
             Technique* technique = _material->getTechnique();
             unsigned int passCount = technique->getPassCount();
             for (unsigned int i = 0; i < passCount; ++i)
             {
                 Pass* pass = technique->getPass(i);
                 pass->bind();
+                GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
                 if (wireframe && (_mesh->getPrimitiveType() == Mesh::TRIANGLES || _mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP))
                 {
                     unsigned int vertexCount = _mesh->getVertexCount();
@@ -276,16 +282,7 @@ void Model::draw(bool wireframe)
             MeshPart* part = _mesh->getPart(i);
 
             // Get the material for this mesh part.
-            Material* material;
-            if (_partMaterials && i < _partCount && _partMaterials[i])
-            {
-                material = _partMaterials[i]; // Use part material
-            }
-            else
-            {
-                material = _material; // Use shared material
-            }
-
+            Material* material = getMaterial(i);
             if (material)
             {
                 Technique* technique = material->getTechnique();
@@ -350,6 +347,19 @@ void Model::validatePartCount()
         // Update local part count.
         _partCount = _mesh->getPartCount();
     }
+}
+
+Model* Model::clone(NodeCloneContext &context)
+{
+    Model* model = Model::create(getMesh());
+    if (getSkin())
+    {
+        model->setSkin(getSkin()->clone());
+    }
+    Material* materialClone = getMaterial()->clone(context);
+    model->setMaterial(materialClone); // TODO: Don't forget material parts
+    materialClone->release();
+    return model;
 }
 
 void Model::setMaterialNodeBinding(Material *material)

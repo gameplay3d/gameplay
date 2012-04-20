@@ -26,7 +26,19 @@ public:
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
 
+    /**
+     * Adds the given animation channel to this animation.
+     * 
+     * @param animationChannel The animation channel to add.
+     */
     void add(AnimationChannel* animationChannel);
+
+    /**
+     * Removes the given animation channel from this animation.
+     * 
+     * @param animationChannel The animation channel to remove.
+     */
+    void remove(AnimationChannel* animationChannel);
 
     /**
      * Returns the number of animation channels contained in this animation.
@@ -36,7 +48,11 @@ public:
     unsigned int getAnimationChannelCount() const;
 
     /**
-     * Returns the specified animation channel.
+     * Returns the animation channel at the given index.
+     * 
+     * @param index The index of the animation channel to get.
+     * 
+     * @return The pointer to the animation channel or NULL if not found.
      */
     AnimationChannel* getAnimationChannel(unsigned int index) const;
 
