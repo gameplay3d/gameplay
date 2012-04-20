@@ -92,19 +92,19 @@ public:
     void set(float x, float y, float width, float height);
 
     /**
-     * Sets the x-coordinate and y-coordinate values of this rectangle to the specified values.
-     *
-     * @param x The x-coordinate of the rectangle.
-     * @param y The y-coordinate of the rectangle.
-     */
-    void set(float x, float y);
-
-    /**
      * Sets the values of this rectangle to those in the specified rectangle.
      *
      * @param r The rectangle to copy.
      */
     void set(const Rectangle& r);
+
+    /**
+     * Sets the x-coordinate and y-coordinate values of this rectangle to the specified values.
+     *
+     * @param x The x-coordinate of the rectangle.
+     * @param y The y-coordinate of the rectangle.
+     */
+    void setPosition(float x, float y);
 
     /**
      * Returns the x-coordinate of the left side of the rectangle.

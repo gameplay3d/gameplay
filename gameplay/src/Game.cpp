@@ -17,10 +17,11 @@ Game::Game()
     : _initialized(false), _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
       _clearDepth(1.0f), _clearStencil(0),
-      _animationController(NULL), _audioController(NULL)
+      _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL)
 {
     assert(__gameInstance == NULL);
     __gameInstance = this;
+    _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
 }
 
 Game::Game(const Game& copy)
@@ -31,7 +32,7 @@ Game::~Game()
 {
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.
-
+    delete _timeEvents;
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
     Ref::printLeaks();
     printMemoryLeaks();
@@ -68,8 +69,15 @@ int Game::run(int width, int height)
     if (_state != UNINITIALIZED)
         return -1;
 
-    _width = width;
-    _height = height;
+    if (width == -1)
+        _width = Platform::getDisplayWidth();
+    else
+        _width = width;
+    
+    if (height == -1)
+        _height = Platform::getDisplayHeight();
+    else
+        _height = height;
 
     // Start up game systems.
     if (!startup())
@@ -84,6 +92,8 @@ bool Game::startup()
 {
     if (_state != UNINITIALIZED)
         return false;
+
+    setViewport(Rectangle(0.0f, 0.0f, (float)_width, (float)_height));
 
     RenderState::initialize();
 
@@ -106,6 +116,7 @@ void Game::shutdown()
     // Call user finalization.
     if (_state != UNINITIALIZED)
     {
+        Platform::signalShutdown();
         finalize();
 
         _animationController->finalize();
@@ -117,10 +128,12 @@ void Game::shutdown()
         _physicsController->finalize();
         SAFE_DELETE(_physicsController);
 
-        RenderState::finalize();
-    }
+        SAFE_DELETE(_audioListener);
 
-    _state = UNINITIALIZED;
+        RenderState::finalize();
+        
+        _state = UNINITIALIZED;
+    }
 }
 
 void Game::pause()
@@ -154,45 +167,59 @@ void Game::exit()
 
 void Game::frame()
 {
-    if (_state != RUNNING)
+    if (!_initialized)
     {
-        return;
+        initialize();
+        _initialized = true;
+    }
+
+    if (_state == Game::RUNNING)
+    {
+        // Update Time.
+        static long lastFrameTime = Game::getGameTime();
+        long frameTime = Game::getGameTime();
+        long elapsedTime = (frameTime - lastFrameTime);
+        lastFrameTime = frameTime;
+
+        // Update the scheduled and running animations.
+        _animationController->update(elapsedTime);
+
+        // Fire time events to scheduled TimeListeners
+        fireTimeEvents(frameTime);
+    
+        // Update the physics.
+        _physicsController->update(elapsedTime);
+        // Application Update.
+        update(elapsedTime);
+
+        // Audio Rendering.
+        _audioController->update(elapsedTime);
+        // Graphics Rendering.
+        render(elapsedTime);
+
+        // Update FPS.
+        ++_frameCount;
+        if ((Game::getGameTime() - _frameLastFPS) >= 1000)
+        {
+            _frameRate = _frameCount;
+            _frameCount = 0;
+            _frameLastFPS = Game::getGameTime();
+        }
     }
     else
     {
-        if (!_initialized)
-        {
-            initialize();
-            _initialized = true;
-        }
+        // Application Update.
+        update(0);
+
+        // Graphics Rendering.
+        render(0);
     }
+}
 
-    // Update Time.
-    static long lastFrameTime = Game::getGameTime();
-    long frameTime = Game::getGameTime();
-    long elapsedTime = (frameTime - lastFrameTime);
-    lastFrameTime = frameTime;
-
-    // Update the scheduled and running animations.
-    _animationController->update(elapsedTime);
-    // Update the physics.
-    _physicsController->update(elapsedTime);
-    // Application Update.
-    update(elapsedTime);
-
-    // Audio Rendering.
-    _audioController->update(elapsedTime);
-    // Graphics Rendering.
-    render(elapsedTime);
-
-    // Update FPS.
-    ++_frameCount;
-    if ((Game::getGameTime() - _frameLastFPS) >= 1000)
-    {
-        _frameRate = _frameCount;
-        _frameCount = 0;
-        _frameLastFPS = Game::getGameTime();
-    }
+void Game::setViewport(const Rectangle& viewport)
+{
+    _viewport = viewport;
+    glViewport((GLuint)viewport.x, (GLuint)viewport.y, (GLuint)viewport.width, (GLuint)viewport.height); 
 }
 
 void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil)
@@ -238,6 +265,15 @@ void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, 
     glClear(bits);
 }
 
+AudioListener* Game::getAudioListener()
+{
+    if (_audioListener == NULL)
+    {
+        _audioListener = new AudioListener();
+    }
+    return _audioListener;
+}
+
 void Game::menu()
 {
 }
@@ -250,13 +286,55 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 {
 }
 
-bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y)
+void Game::schedule(long timeOffset, TimeListener* timeListener, void* cookie)
+{
+    assert(timeListener);
+    TimeEvent timeEvent(getGameTime() + timeOffset, timeListener, cookie);
+    _timeEvents->push(timeEvent);
+}
+
+bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
     return false;
 }
 
-void Game::mouseWheelEvent(int x, int y, int delta)
+void Game::updateOnce()
 {
+    // Update Time.
+    static long lastFrameTime = Game::getGameTime();
+    long frameTime = Game::getGameTime();
+    long elapsedTime = (frameTime - lastFrameTime);
+    lastFrameTime = frameTime;
+
+    // Update the internal controllers.
+    _animationController->update(elapsedTime);
+    _physicsController->update(elapsedTime);
+    _audioController->update(elapsedTime);
+}
+
+void Game::fireTimeEvents(long frameTime)
+{
+    while (_timeEvents->size() > 0)
+    {
+        const TimeEvent* timeEvent = &_timeEvents->top();
+        if (timeEvent->time > frameTime)
+        {
+            break;
+        }
+        timeEvent->listener->timeEvent(frameTime - timeEvent->time, timeEvent->cookie);
+        _timeEvents->pop();
+    }
+}
+
+Game::TimeEvent::TimeEvent(long time, TimeListener* timeListener, void* cookie)
+            : time(time), listener(timeListener), cookie(cookie)
+{
+}
+
+bool Game::TimeEvent::operator<(const TimeEvent& v) const
+{
+    // The first element of std::priority_queue is the greatest.
+    return time > v.time;
 }
 
 }

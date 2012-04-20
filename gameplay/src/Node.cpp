@@ -2,18 +2,28 @@
 #include "Node.h"
 #include "Scene.h"
 #include "Joint.h"
+#include "PhysicsRigidBody.h"
+#include "PhysicsGhostObject.h"
+#include "PhysicsCharacter.h"
+#include "Game.h"
 
+// Node dirty flags
 #define NODE_DIRTY_WORLD 1
 #define NODE_DIRTY_BOUNDS 2
 #define NODE_DIRTY_ALL (NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS)
+
+// Node property flags
+#define NODE_FLAG_VISIBLE 1
+#define NODE_FLAG_TRANSPARENT 2
+#define NODE_FLAG_DYNAMIC 4
 
 namespace gameplay
 {
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
-    _camera(NULL), _light(NULL), _model(NULL), _audioSource(NULL), _particleEmitter(NULL), _physicsRigidBody(NULL), 
-    _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true)
+    _nodeFlags(NODE_FLAG_VISIBLE), _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
+    _collisionObject(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
     if (id)
     {
@@ -21,21 +31,35 @@ Node::Node(const char* id)
     }
 }
 
-Node::Node(const Node& node)
-{
-    // hidden
-}
-
 Node::~Node()
 {
     removeAllChildren();
+
+    if (_model)
+        _model->setNode(NULL);
+    if (_audioSource)
+        _audioSource->setNode(NULL);
+    if (_particleEmitter)
+        _particleEmitter->setNode(NULL);
+    if (_form)
+        _form->setNode(NULL);
 
     SAFE_RELEASE(_camera);
     SAFE_RELEASE(_light);
     SAFE_RELEASE(_model);
     SAFE_RELEASE(_audioSource);
     SAFE_RELEASE(_particleEmitter);
-    SAFE_DELETE(_physicsRigidBody);
+    SAFE_RELEASE(_form);
+    SAFE_DELETE(_collisionObject);
+
+    // Cleanup user data
+    if (_userData)
+    {
+        // Call custom cleanup callback if specified
+        if (_userData->cleanupCallback)
+            _userData->cleanupCallback(_userData->pointer);
+        SAFE_DELETE(_userData);
+    }
 }
 
 Node* Node::create(const char* id)
@@ -186,12 +210,80 @@ Node* Node::getParent() const
     return _parent;
 }
 
+bool Node::isVisible() const
+{
+    return ((_nodeFlags & NODE_FLAG_VISIBLE) == NODE_FLAG_VISIBLE);
+}
+
+void Node::setVisible(bool visible)
+{
+    if (visible)
+        _nodeFlags |= NODE_FLAG_VISIBLE;
+    else
+        _nodeFlags &= ~NODE_FLAG_VISIBLE;
+}
+
+bool Node::isTransparent() const
+{
+    return ((_nodeFlags & NODE_FLAG_TRANSPARENT) == NODE_FLAG_TRANSPARENT);
+}
+
+void Node::setTransparent(bool transparent)
+{
+    if (transparent)
+        _nodeFlags |= NODE_FLAG_TRANSPARENT;
+    else
+        _nodeFlags &= ~NODE_FLAG_TRANSPARENT;
+}
+
+bool Node::isDynamic() const
+{
+    return ((_nodeFlags & NODE_FLAG_DYNAMIC) == NODE_FLAG_DYNAMIC);
+}
+
+void Node::setDynamic(bool dynamic)
+{
+    if (dynamic)
+        _nodeFlags |= NODE_FLAG_DYNAMIC;
+    else
+        _nodeFlags &= ~NODE_FLAG_DYNAMIC;
+}
+
+void* Node::getUserPointer() const
+{
+    return (_userData ? _userData->pointer : NULL);
+}
+
+void Node::setUserPointer(void* pointer, void (*cleanupCallback)(void*))
+{
+    // If existing user pointer is being changed, call cleanup function to free previous pointer
+    if (_userData && _userData->pointer && _userData->cleanupCallback && pointer != _userData->pointer)
+    {
+        _userData->cleanupCallback(_userData->pointer);
+    }
+
+    if (pointer)
+    {
+        // Assign user pointer
+        if (_userData == NULL)
+            _userData = new UserData();
+
+        _userData->pointer = pointer;
+        _userData->cleanupCallback = cleanupCallback;
+    }
+    else
+    {
+        // Clear user pointer
+        SAFE_DELETE(_userData);
+    }
+}
+
 unsigned int Node::getChildCount() const
 {
     return _childCount;
 }
 
-Node* Node::findNode(const char* id, bool recursive, bool exactMatch)
+Node* Node::findNode(const char* id, bool recursive, bool exactMatch) const
 {
     assert(id);
     
@@ -221,7 +313,7 @@ Node* Node::findNode(const char* id, bool recursive, bool exactMatch)
     return NULL;
 }   
 
-unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool recursive, bool exactMatch)
+unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool recursive, bool exactMatch) const
 {
     assert(id);
     
@@ -285,7 +377,7 @@ const Matrix& Node::getWorldMatrix() const
         // If we have a parent, multiply our parent world transform by our local
         // transform to obtain our final resolved world transform.
         Node* parent = getParent();
-        if (parent && (!_physicsRigidBody || _physicsRigidBody->isKinematic()) )
+        if (parent && (!_collisionObject || _collisionObject->isKinematic()))
         {
             Matrix::multiply(parent->getWorldMatrix(), getMatrix(), &_world);
         }
@@ -310,7 +402,7 @@ const Matrix& Node::getWorldMatrix() const
 const Matrix& Node::getWorldViewMatrix() const
 {
     static Matrix worldView;
-    
+
     Matrix::multiply(getViewMatrix(), getWorldMatrix(), &worldView);
 
     return worldView;
@@ -319,16 +411,19 @@ const Matrix& Node::getWorldViewMatrix() const
 const Matrix& Node::getInverseTransposeWorldViewMatrix() const
 {
     static Matrix invTransWorldView;
-
-    // Assume the matrix is always dirty since the camera is moving
-    // almost every frame in most games.
-    //    
-    // TODO: Optimize here to NOT calculate the inverse transpose if the matrix is orthogonal.
     Matrix::multiply(getViewMatrix(), getWorldMatrix(), &invTransWorldView);
     invTransWorldView.invert();
     invTransWorldView.transpose();
-
     return invTransWorldView;
+}
+
+const Matrix& Node::getInverseTransposeWorldMatrix() const
+{
+    static Matrix invTransWorld;
+    invTransWorld = getWorldMatrix();
+    invTransWorld.invert();
+    invTransWorld.transpose();
+    return invTransWorld;
 }
 
 const Matrix& Node::getViewMatrix() const
@@ -437,6 +532,8 @@ Vector3 Node::getForwardVectorView() const
     Vector3 vector;
     getWorldMatrix().getForwardVector(&vector);
     getViewMatrix().transformVector(&vector);
+    //getForwardVector(&vector);
+    //getWorldViewMatrix().transformVector(&vector);
     return vector;
 }
 
@@ -452,6 +549,25 @@ Vector3 Node::getActiveCameraTranslationWorld() const
             if (cameraNode)
             {
                 return cameraNode->getTranslationWorld();
+            }
+        }
+    }
+
+    return Vector3::zero();
+}
+
+Vector3 Node::getActiveCameraTranslationView() const
+{
+    Scene* scene = getScene();
+    if (scene)
+    {
+        Camera* camera = scene->getActiveCamera();
+        if (camera)
+        {
+            Node* cameraNode = camera->getNode();
+            if (cameraNode)
+            {
+                return cameraNode->getTranslationView();
             }
         }
     }
@@ -490,6 +606,69 @@ void Node::setBoundsDirty()
     // Mark our parent bounds as dirty as well
     if (_parent)
         _parent->setBoundsDirty();
+}
+
+Animation* Node::getAnimation(const char* id) const
+{
+    Animation* animation = ((AnimationTarget*)this)->getAnimation(id);
+    if (animation)
+        return animation;
+    
+    // See if this node has a model, then drill down.
+    Model* model = this->getModel();
+    if (model)
+    {
+        // Check to see if there's any animations with the ID on the joints.
+        MeshSkin* skin = model->getSkin();
+        if (skin)
+        {
+            Joint* rootJoint = skin->getRootJoint();
+            if (rootJoint)
+            {
+                animation = rootJoint->getAnimation(id);
+                if (animation)
+                    return animation;
+            }
+        }
+
+        // Check to see if any of the model's material parameter's has an animation
+        // with the given ID.
+        Material* material = model->getMaterial();
+        if (material)
+        {
+            // How to access material parameters? hidden on the Material::RenderState.
+            std::vector<MaterialParameter*>::iterator itr = material->_parameters.begin();
+            for (; itr != material->_parameters.end(); itr++)
+            {
+                animation = ((MaterialParameter*)(*itr))->getAnimation(id);
+                if (animation)
+                    return animation;
+            }
+        }
+    }
+
+    // look through form for animations.
+    Form* form = this->getForm();
+    if (form)
+    {
+        animation = form->getAnimation(id);
+        if (animation)
+            return animation;
+    }
+
+    // Look through this node's children for an animation with the specified ID.
+    unsigned int childCount = this->getChildCount();
+    Node* child = this->getFirstChild();
+    for (unsigned int i = 0; i < childCount; i++)
+    {
+        animation = child->getAnimation(id);
+        if (animation)
+            return animation;
+
+        child = child->getNextSibling();
+    }
+    
+    return NULL;
 }
 
 Camera* Node::getCamera() const
@@ -565,6 +744,31 @@ void Node::setModel(Model* model)
 Model* Node::getModel() const
 {
     return _model;
+}
+
+void Node::setForm(Form* form)
+{
+    if (_form != form)
+    {
+        if (_form)
+        {
+            _form->setNode(NULL);
+            SAFE_RELEASE(_form);
+        }
+
+        _form = form;
+
+        if (_form)
+        {
+            _form->addRef();
+            _form->setNode(this);
+        }
+    }
+}
+
+Form* Node::getForm() const
+{
+    return _form;
 }
 
 const BoundingSphere& Node::getBoundingSphere() const
@@ -643,6 +847,70 @@ const BoundingSphere& Node::getBoundingSphere() const
     return _bounds;
 }
 
+
+Node* Node::clone() const
+{
+    NodeCloneContext context;
+    return cloneRecursive(context);
+}
+
+Node* Node::cloneSingleNode(NodeCloneContext &context) const
+{
+    Node* copy = Node::create(getId());
+    context.registerClonedNode(this, copy);
+    cloneInto(copy, context);
+    return copy;
+}
+
+Node* Node::cloneRecursive(NodeCloneContext &context) const
+{
+    Node* copy = cloneSingleNode(context);
+
+    for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
+    {
+        Node* childCopy = child->cloneRecursive(context);
+        copy->addChild(childCopy); // TODO: Does child order matter?
+        childCopy->release();
+    }
+    return copy;
+}
+
+void Node::cloneInto(Node* node, NodeCloneContext &context) const
+{
+    Transform::cloneInto(node, context);
+
+    // TODO: Clone the rest of the node data.
+    //node->setCamera(getCamera());
+    //node->setLight(getLight());
+
+    if (Camera* camera = getCamera())
+    {
+        Camera* cameraClone = camera->clone(context);
+        node->setCamera(cameraClone);
+        cameraClone->release();
+    }
+    if (Light* light = getLight())
+    {
+        Light* lightClone = light->clone(context);
+        node->setLight(lightClone);
+        lightClone->release();
+    }
+    if (AudioSource* audio = getAudioSource())
+    {
+        AudioSource* audioClone = audio->clone(context);
+        node->setAudioSource(audioClone);
+        audioClone->release();
+    }
+    if (Model* model = getModel())
+    {
+        Model* modelClone = model->clone(context);
+        node->setModel(modelClone);
+        modelClone->release();
+    }
+    node->_world = _world;
+    node->_bounds = _bounds;
+}
+
 AudioSource* Node::getAudioSource() const
 {
     return _audioSource;
@@ -693,32 +961,115 @@ void Node::setParticleEmitter(ParticleEmitter* emitter)
     }
 }
 
-PhysicsRigidBody* Node::getPhysicsRigidBody() const
+PhysicsCollisionObject* Node::getCollisionObject() const
 {
-    return _physicsRigidBody;
+    return _collisionObject;
 }
 
-void Node::setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass, float friction,
-        float restitution, float linearDamping, float angularDamping)
+PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters)
 {
-    SAFE_DELETE(_physicsRigidBody);
+    SAFE_DELETE(_collisionObject);
+
+    switch (type)
+    {
+    case PhysicsCollisionObject::RIGID_BODY:
+        {
+            _collisionObject = new PhysicsRigidBody(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters());
+        }
+        break;
+
+    case PhysicsCollisionObject::GHOST_OBJECT:
+        {
+            _collisionObject = new PhysicsGhostObject(this, shape);
+        }
+        break;
+
+    case PhysicsCollisionObject::CHARACTER:
+        {
+            _collisionObject = new PhysicsCharacter(this, shape, rigidBodyParameters ? rigidBodyParameters->mass : 1.0f);
+        }
+        break;
+    }
+
+    return _collisionObject;
+}
+
+PhysicsCollisionObject* Node::setCollisionObject(const char* filePath)
+{
+    // Load the collision object properties from file.
+    Properties* properties = Properties::create(filePath);
+    assert(properties);
+    if (properties == NULL)
+    {
+        WARN_VARG("Failed to load collision object file: %s", filePath);
+        return NULL;
+    }
+
+    PhysicsCollisionObject* collisionObject = setCollisionObject(properties->getNextNamespace());
+    SAFE_DELETE(properties);
+
+    return collisionObject;
+}
+
+PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
+{
+    SAFE_DELETE(_collisionObject);
+
+    // Check if the properties is valid.
+    if (!properties || 
+        !(strcmp(properties->getNamespace(), "character") == 0 || 
+        strcmp(properties->getNamespace(), "ghostObject") == 0 || 
+        strcmp(properties->getNamespace(), "rigidBody") == 0))
+    {
+        WARN("Failed to load collision object from properties object: must be non-null object and have namespace equal to \'character\', \'ghostObject\', or \'rigidBody\'.");
+        return NULL;
+    }
+
+    if (strcmp(properties->getNamespace(), "character") == 0)
+    {
+        _collisionObject = PhysicsCharacter::create(this, properties);
+    }
+    else if (strcmp(properties->getNamespace(), "ghostObject") == 0)
+    {
+        _collisionObject = PhysicsGhostObject::create(this, properties);
+    }
+    else if (strcmp(properties->getNamespace(), "rigidBody") == 0)
+    {
+        _collisionObject = PhysicsRigidBody::create(this, properties);
+    }
+    return _collisionObject;
+}
+
+NodeCloneContext::NodeCloneContext()
+{
     
-    if (type != PhysicsRigidBody::SHAPE_NONE)
-        _physicsRigidBody = new PhysicsRigidBody(this, type, mass, friction, restitution, linearDamping, angularDamping);
 }
 
-void Node::setPhysicsRigidBody(const char* filePath)
+NodeCloneContext::~NodeCloneContext()
 {
-    SAFE_DELETE(_physicsRigidBody);
 
-    _physicsRigidBody = PhysicsRigidBody::create(this, filePath);
 }
 
-void Node::setPhysicsRigidBody(Properties* properties)
+Animation* NodeCloneContext::findClonedAnimation(const Animation* animation)
 {
-    SAFE_DELETE(_physicsRigidBody);
+    AnimationMap::iterator it = _clonedAnimations.find(animation);
+    return it != _clonedAnimations.end() ? it->second : NULL;
+}
 
-    _physicsRigidBody = PhysicsRigidBody::create(this, properties);
+void NodeCloneContext::registerClonedAnimation(const Animation* original, Animation* clone)
+{
+    _clonedAnimations[original] = clone;
+}
+
+Node* NodeCloneContext::findClonedNode(const Node* node)
+{
+    NodeMap::iterator it = _clonedNodes.find(node);
+    return it != _clonedNodes.end() ? it->second : NULL;
+}
+
+void NodeCloneContext::registerClonedNode(const Node* original, Node* clone)
+{
+    _clonedNodes[original] = clone;
 }
 
 }

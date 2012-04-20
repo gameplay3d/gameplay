@@ -8,8 +8,12 @@ namespace gameplay
 
 class MaterialParameter;
 class Node;
+class NodeCloneContext;
 class Pass;
 
+/**
+ * Defines the render state of the graphics device.
+ */
 class RenderState : public Ref
 {
     friend class Game;
@@ -58,6 +62,11 @@ public:
         WORLD_VIEW_PROJECTION_MATRIX,
 
         /**
+         * Binds a node's InverseTransposeWorl matrix.
+         */
+        INVERSE_TRANSPOSE_WORLD_MATRIX,
+
+        /**
          * Binds a node's InverseTransposeWorldView matrix.
          */
         INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX,
@@ -66,6 +75,11 @@ public:
          * Binds the position (Vector3) of the active camera for the node's scene.
          */
         CAMERA_WORLD_POSITION,
+
+        /**
+         * Binds the view-space position (Vector3) of the active camera for the node's scene.
+         */
+        CAMERA_VIEW_POSITION,
 
         /**
          * Binds the matrix palette of MeshSkin attached to a node's model.
@@ -280,11 +294,6 @@ protected:
     RenderState();
 
     /**
-     * Hidden copy constructor.
-     */
-    RenderState(const RenderState& copy);
-
-    /**
      * Destructor.
      */
     virtual ~RenderState();
@@ -326,10 +335,51 @@ protected:
      */
     RenderState* getTopmost(RenderState* below);
 
+    /**
+     * Copies the data from this RenderState into the given RenderState.
+     * 
+     * @param renderState The RenderState to copy the data to.
+     * @param context The clone context.
+     */
+    void cloneInto(RenderState* renderState, NodeCloneContext& context) const;
+
+private:
+
+    /**
+     * Hidden copy constructor.
+     */
+    RenderState(const RenderState& copy);
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    RenderState& operator=(const RenderState&);
+
+protected:
+
+    /**
+     * Collection of MaterialParameter's to be applied to the gamplay::Effect.
+     */
     mutable std::vector<MaterialParameter*> _parameters;
+    
+    /**
+     * Map of IDs to AutoBindings.
+     */
     std::map<std::string, AutoBinding> _autoBindings;
+
+    /**
+     * The Node bound to the RenderState.
+     */
     Node* _nodeBinding;
+
+    /**
+     * The StateBlock of fixed-function render states that can be applied to the RenderState.
+     */
     mutable StateBlock* _state;
+
+    /**
+     * The RenderState's parent.
+     */
     RenderState* _parent;
 };
 

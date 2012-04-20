@@ -41,7 +41,7 @@ public:
      *
      * @param array An array containing the elements of the vector in the order x, y.
      */
-    Vector2(float* array);
+    Vector2(const float* array);
 
     /**
      * Constructs a vector that describes the direction between the specified points.
@@ -183,7 +183,7 @@ public:
      * 
      * @return The dot product.
      */
-    float dot(const Vector2& v);
+    float dot(const Vector2& v) const;
 
     /**
      * Returns the dot product between the specified vectors.
@@ -231,8 +231,10 @@ public:
      * after calling this method will be 1.0f). If the vector
      * already has unit length or if the length of the vector
      * is zero, this method does nothing.
+     * 
+     * @return This vector, after the normalization occurs.
      */
-    void normalize();
+    Vector2& normalize();
 
     /**
      * Normalizes this vector and stores the result in dst.
@@ -280,7 +282,7 @@ public:
      *
      * @param array An array containing the elements of the vector in the order x, y.
      */
-    void set(float* array);
+    void set(const float* array);
 
     /**
      * Sets the elements of this vector to those in the specified vector.
@@ -323,7 +325,7 @@ public:
      * @param v The vector to add.
      * @return The vector sum.
      */
-    inline Vector2 operator+(const Vector2& v) const;
+    inline const Vector2 operator+(const Vector2& v) const;
 
     /**
      * Adds the given vector to this vector.
@@ -341,7 +343,7 @@ public:
      * @param v The vector to add.
      * @return The vector sum.
      */
-    inline Vector2 operator-(const Vector2& v) const;
+    inline const Vector2 operator-(const Vector2& v) const;
 
     /**
      * Subtracts the given vector from this vector.
@@ -358,7 +360,7 @@ public:
      * 
      * @return The negation of this vector.
      */
-    inline Vector2 operator-() const;
+    inline const Vector2 operator-() const;
 
     /**
      * Calculates the scalar product of this vector with the given value.
@@ -368,7 +370,7 @@ public:
      * @param x The value to scale by.
      * @return The scaled vector.
      */
-    inline Vector2 operator*(float x) const;
+    inline const Vector2 operator*(float x) const;
 
     /**
      * Scales this vector by the given value.
@@ -395,6 +397,15 @@ public:
      * @return True if this vector is equal to the given vector, false otherwise.
      */
     inline bool operator==(const Vector2& v) const;
+
+    /**
+     * Determines if this vector is not equal to the given vector.
+     * 
+     * @param v The vector to compare against.
+     * 
+     * @return True if this vector is not equal to the given vector, false otherwise.
+     */
+    inline bool operator!=(const Vector2& v) const;
 };
 
 /**
@@ -404,7 +415,7 @@ public:
  * @param v The vector to scale.
  * @return The scaled vector.
  */
-inline Vector2 operator*(float x, const Vector2& v);
+inline const Vector2 operator*(float x, const Vector2& v);
 
 }
 

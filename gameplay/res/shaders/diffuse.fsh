@@ -6,6 +6,9 @@ precision highp float;
 uniform vec3 u_lightColor;                      // Light color
 uniform vec3 u_ambientColor;                    // Ambient color
 uniform sampler2D u_diffuseTexture;             // Diffuse texture.
+#if defined(GLOBAL_ALPHA)
+uniform float u_globalAlpha;                    // Global alpha value
+#endif
 
 // Inputs
 varying vec3 v_normalVector;                    // NormalVector in view space.
@@ -22,7 +25,8 @@ void lighting(vec3 normalVector, vec3 lightDirection, float attenuation)
     _ambientColor = _baseColor.rgb * u_ambientColor;
 
     // Diffuse
-    float diffuseIntensity = attenuation * max(0.0, dot(normalVector, lightDirection));
+	float ddot = dot(normalVector, lightDirection);
+    float diffuseIntensity = attenuation * ddot;
     diffuseIntensity = max(0.0, diffuseIntensity);
     _diffuseColor = u_lightColor * _baseColor.rgb * diffuseIntensity;
 }
@@ -100,4 +104,8 @@ void main()
     // Light the pixel
     gl_FragColor.a = _baseColor.a;
     gl_FragColor.rgb = _ambientColor + _diffuseColor;
+
+#if defined(GLOBAL_ALPHA)
+    gl_FragColor.a *= u_globalAlpha;
+#endif
 }

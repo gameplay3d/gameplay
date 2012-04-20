@@ -30,16 +30,18 @@
     <!-- Description, displayed in the BlackBerry Tablet OS application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
     <description>Longboard Sample</description>
-    
+
     <!-- Copyright information. Optional. -->
     <!-- <copyright></copyright> -->
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
-    <author>Research In Motion</author>
-    
+    <author>RIM Canada</author>
+
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
-    <!-- <authorId>ABC1234YjsnUk235h</authorId> -->
-   
+    <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
+
+    <platformVersion>2.0.0.7971</platformVersion>
+
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>
         <autoOrients>false</autoOrients>
@@ -51,13 +53,17 @@
     <category>core.games</category>
  
     <asset path="icon.png">icon.png</asset>
-    <asset path="res">res</asset>
+    <asset path="res/asphalt.png">res/asphalt.png</asset>
+    <asset path="res/longboard.png">res/longboard.png</asset>
+    <asset path="res/longboard.wav">res/longboard.wav</asset>
+    <asset path="res/longboard_wheels.png">res/longboard_wheels.png</asset>
+    <asset path="res/overlay_gradient.png">res/overlay_gradient.png</asset>
+    <asset path="res/quad.fsh">res/quad.fsh</asset>
+    <asset path="res/quad.vsh">res/quad.vsh</asset>
+    <asset path="res/textured.fsh">res/textured.fsh</asset>
+    <asset path="res/textured.vsh">res/textured.vsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/logo_powered_white.png}">res/logo_powered_white.png</asset>
     
-    <!-- BlackBerry NDK 1.0
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
-    -->
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Debug/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>

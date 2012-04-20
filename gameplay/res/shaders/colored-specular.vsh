@@ -7,11 +7,16 @@ uniform vec3 u_cameraPosition;                      // Position of the camera.
 // Inputs
 attribute vec4 a_position;                          // Vertex Position (x, y, z, w)
 attribute vec3 a_normal;                            // Vertex Normal (x, y, z)
-attribute vec2 a_texCoord;                          // Vertex Texture Coordinate (u, v)
+#if defined(VERTEX_COLOR)
+attribute vec4 a_color;
+#endif
 
 // Outputs
-varying vec3 v_normalVector;                        // NormalVector in view space.
+varying vec3 v_normalVector;                        // NormalVector in view space
 varying vec3 v_cameraDirection;                     // Camera direction
+#if defined(VERTEX_COLOR)
+varying vec4 v_color;								// Vertex color
+#endif
 
 #if defined(SKINNING)
 
@@ -188,6 +193,10 @@ void main()
     // Compute the camera direction.
     vec4 positionWorldSpace = u_worldMatrix * position;
     v_cameraDirection = u_cameraPosition - positionWorldSpace.xyz;
+
+#if defined(VERTEX_COLOR)
+	v_color = a_color;
+#endif
 
     // Apply light.
     applyLight(position);

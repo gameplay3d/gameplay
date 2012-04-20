@@ -142,6 +142,9 @@ class ParticleEmitter : public Ref
 
 public:
 
+    /**
+     * Defines the types of texture blending 
+     */
     enum TextureBlending
     {
         BLEND_OPAQUE,
@@ -211,6 +214,13 @@ public:
      * @return Whether this ParticleEmitter is currently started.
      */
     bool isStarted() const;
+
+    /**
+     * Gets whether this ParticleEmitter is currently active (i.e. if any of its particles are alive).
+     * 
+     * @return Whether this ParticleEmitter is currently active.
+     */
+    bool isActive() const;
 
     /**
      * Generates an arbitrary number of particles all at once.  Each newly emitted
@@ -425,8 +435,8 @@ public:
      * Gets the maximum rotation speed of each emitted particle.
      * This determines the speed of rotation of each particle's screen-facing billboard.
      *
-     * @param min The minimum rotation speed (per particle).
-     * @param max The maximum rotation speed (per particle).
+     * @param speedMin The minimum rotation speed (per particle).
+     * @param speedMax The maximum rotation speed (per particle).
      */
     void setRotationPerParticle(float speedMin, float speedMax);
 
@@ -487,7 +497,7 @@ public:
     /**
      * Sets whether particles cycle through the sprite frames.
      *
-     * @param animating Whether to animate particles through the sprite frames.
+     * @param animated Whether to animate particles through the sprite frames.
      */
     void setSpriteAnimated(bool animated);
 

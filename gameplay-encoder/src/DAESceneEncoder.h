@@ -185,11 +185,13 @@ private:
      * Returns the VertexUsage value for the given semantic string.
      * 
      * @param semantic The semantic attribute string from the COLLADA <input> element.
-     * @param The VertexUsage or -1 if the string was not recognized.
+     * 
+     * @return The VertexUsage or -1 if the string was not recognized.
      */
     static int getVertexUsageType(const std::string& semantic);
     
 private:
+    
     DAE* _collada;        // Collada datastore in memory to read from.
     domCOLLADA* _dom;
     FILE* file;        // Output file to write to.
