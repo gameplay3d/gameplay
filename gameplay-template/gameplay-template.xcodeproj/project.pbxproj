@@ -70,7 +70,6 @@
 		5BAF206C152F2DDD003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = gameplay.xcodeproj; path = GAMEPLAY_PATH/gameplay/gameplay.xcodeproj; sourceTree = SOURCE_ROOT; };
 		5BC4E849150F911D00CBE1C0 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = text; name = shaders; path = GAMEPLAY_PATH/gameplay/res/shaders; sourceTree = SOURCE_ROOT; };
-		5BC4E84A150F911D00CBE1C0 /* textures */ = {isa = PBXFileReference; lastKnownFileType = text; name = textures; path = GAMEPLAY_PATH/gameplay/res/textures; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,7 +201,6 @@
 			isa = PBXGroup;
 			children = (
 				5BC4E849150F911D00CBE1C0 /* shaders */,
-				5BC4E84A150F911D00CBE1C0 /* textures */,
 				5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */,
 			);
 			name = GamePlay;
