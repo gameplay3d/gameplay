@@ -219,6 +219,7 @@ copy gameplay-template\android\jni\Application.mk %projPath%\android\jni\Applica
 copy gameplay-template\android\jni\template.Android.mk %projPath%\android\jni\Android.mk
 call:replace %projPath%\android\jni\Android.mk TemplateGame "%className%"
 call:replace %projPath%\android\jni\Android.mk TEMPLATE_PROJECT "%projName%"
+call:replace %projPath%\android\jni\Android.mk GAMEPLAY_PATH "%gpPath%"
 
 mkdir %projPath%\android\res\drawable
 
