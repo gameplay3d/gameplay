@@ -4,6 +4,8 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include "Form.h"
+#include <unistd.h>
 #include <sys/keycodes.h>
 #include <screen/screen.h>
 #include <input/screen_helpers.h>
@@ -13,6 +15,7 @@
 #include <bps/navigator.h>
 #include <bps/accelerometer.h>
 #include <bps/orientation.h>
+#include <bps/virtualkeyboard.h>
 
 #define TOUCH_COUNT_MAX     4
 
@@ -74,21 +77,17 @@ static Keyboard::Key getKey(int qnxKeycode)
     case KEYCODE_CAPS_LOCK:
         return Keyboard::KEY_CAPS_LOCK;
     case KEYCODE_LEFT_SHIFT:
-        return Keyboard::KEY_LEFT_SHIFT;
     case KEYCODE_RIGHT_SHIFT:
-        return Keyboard::KEY_RIGHT_SHIFT;
+        return Keyboard::KEY_SHIFT;
     case KEYCODE_LEFT_CTRL:
-        return Keyboard::KEY_LEFT_CTRL;
     case KEYCODE_RIGHT_CTRL:
-        return Keyboard::KEY_RIGHT_CTRL;
+        return Keyboard::KEY_CTRL;
     case KEYCODE_LEFT_ALT:
-        return Keyboard::KEY_LEFT_ALT;
     case KEYCODE_RIGHT_ALT:
-        return Keyboard::KEY_RIGHT_ALT;
+        return Keyboard::KEY_ALT;
     case KEYCODE_LEFT_HYPER:
-        return Keyboard::KEY_LEFT_HYPER;
     case KEYCODE_RIGHT_HYPER:
-        return Keyboard::KEY_RIGHT_HYPER;
+        return Keyboard::KEY_HYPER;
     case KEYCODE_INSERT:
         return Keyboard::KEY_INSERT;
     case KEYCODE_HOME:
@@ -251,6 +250,14 @@ static Keyboard::Key getKey(int qnxKeycode)
         return Keyboard::KEY_QUOTE;
     case KEYCODE_APOSTROPHE:
         return Keyboard::KEY_APOSTROPHE;
+    case 0x20AC:
+        return Keyboard::KEY_EURO;
+    case KEYCODE_POUND_SIGN:
+        return Keyboard::KEY_POUND;
+    case KEYCODE_YEN_SIGN:
+        return Keyboard::KEY_YEN;
+    case KEYCODE_MIDDLE_DOT:
+        return Keyboard::KEY_MIDDLE_DOT;
     case KEYCODE_CAPITAL_A:
         return Keyboard::KEY_CAPITAL_A;
     case KEYCODE_A:
@@ -358,6 +365,37 @@ static Keyboard::Key getKey(int qnxKeycode)
     default:
         return Keyboard::KEY_NONE;
     }
+}
+
+/**
+ * Returns the unicode value from the given QNX key code value.
+ * Some non-printable characters also have corresponding unicode values, such as backspace.
+ *
+ * @param qnxKeyCode The keyboard key code.
+ *
+ * @return The unicode value or 0 if the keycode did not represent a unicode key.
+ */
+static int getUnicode(int qnxKeyCode)
+{
+    if (qnxKeyCode >= KEYCODE_PC_KEYS && qnxKeyCode <= UNICODE_PRIVATE_USE_AREA_LAST)
+    {
+        switch (qnxKeyCode)
+        {
+        case KEYCODE_BACKSPACE:
+            return 0x0008;
+        case KEYCODE_TAB:
+            return 0x0009;
+        case KEYCODE_KP_ENTER:
+        case KEYCODE_RETURN:
+            return 0x000A;
+        case KEYCODE_ESCAPE:
+            return 0x001B;
+        // Win32 doesn't consider delete to be a key char.
+        default:
+            return 0;
+        }
+    }
+    return qnxKeyCode;
 }
 
 extern void printError(const char* format, ...)
@@ -468,10 +506,7 @@ Platform* Platform::create(Game* game)
     int screenUsage = SCREEN_USAGE_DISPLAY|SCREEN_USAGE_OPENGL_ES2;
     int screenSwapInterval = WINDOW_VSYNC ? 1 : 0;
     int screenTransparency = SCREEN_TRANSPARENCY_NONE;
-
-    // Hard-coded to fullscreen.
-    __screenWindowSize[0] = -1;
-    __screenWindowSize[1] = -1;
+    int angle = atoi(getenv("ORIENTATION"));
 
     // Hard-coded to (0,0).
     int windowPosition[] =
@@ -538,23 +573,69 @@ Platform* Platform::create(Game* game)
         goto error;
     }
 
-    if (__screenWindowSize[0] > 0 && __screenWindowSize[1] > 0)
+    screen_display_t screen_display;
+    rc = screen_get_window_property_pv(__screenWindow, SCREEN_PROPERTY_DISPLAY, (void **)&screen_display);
+    if (rc)
     {
-        rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_SIZE, __screenWindowSize);
-        if (rc)
+        perror("screen_get_window_property_pv(SCREEN_PROPERTY_DISPLAY)");
+        goto error;
+    }
+
+    screen_display_mode_t screen_mode;
+    rc = screen_get_display_property_pv(screen_display, SCREEN_PROPERTY_MODE, (void**)&screen_mode);
+    if (rc)
+    {
+        perror("screen_get_display_property_pv(SCREEN_PROPERTY_MODE)");
+        goto error;
+    }
+
+    int size[2];
+    rc = screen_get_window_property_iv(__screenWindow, SCREEN_PROPERTY_BUFFER_SIZE, size);
+    if (rc)
+    {
+        perror("screen_get_window_property_iv(SCREEN_PROPERTY_BUFFER_SIZE)");
+        goto error;
+    }
+
+    __screenWindowSize[0] = size[0];
+    __screenWindowSize[1] = size[1];
+
+    if ((angle == 0) || (angle == 180))
+    {
+        if (((screen_mode.width > screen_mode.height) && (size[0] < size[1])) ||
+            ((screen_mode.width < screen_mode.height) && (size[0] > size[1])))
         {
-            perror("screen_set_window_property_iv(SCREEN_PROPERTY_SIZE)");
-            goto error;
+            __screenWindowSize[1] = size[0];
+            __screenWindowSize[0] = size[1];
+        }
+    }
+    else if ((angle == 90) || (angle == 270))
+    {
+        if (((screen_mode.width > screen_mode.height) && (size[0] > size[1])) ||
+            ((screen_mode.width < screen_mode.height) && (size[0] < size[1])))
+        {
+            __screenWindowSize[1] = size[0];
+            __screenWindowSize[0] = size[1];
         }
     }
     else
     {
-        rc = screen_get_window_property_iv(__screenWindow, SCREEN_PROPERTY_SIZE, __screenWindowSize);
-        if (rc)
-        {
-            perror("screen_get_window_property_iv(SCREEN_PROPERTY_SIZE)");
-            goto error;
-        }
+        perror("Navigator returned an unexpected orientation angle.");
+        goto error;
+    }
+
+    rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_BUFFER_SIZE, __screenWindowSize);
+    if (rc)
+    {
+        perror("screen_set_window_property_iv(SCREEN_PROPERTY_BUFFER_SIZE)");
+        goto error;
+    }
+
+    rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_ROTATION, &angle);
+    if (rc)
+    {
+        perror("screen_set_window_property_iv(SCREEN_PROPERTY_ROTATION)");
+        goto error;
     }
 
     if (windowPosition[0] != 0 || windowPosition[1] != 0)
@@ -640,9 +721,8 @@ Platform* Platform::create(Game* game)
 
     if (strstr(__glExtensions, "GL_OES_vertex_array_object") || strstr(__glExtensions, "GL_ARB_vertex_array_object"))
     {
-        // Disable VAO extension for now.
         glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
-        glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArrays");
+        glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
         glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
         glIsVertexArray = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress("glIsVertexArrayOES");
     }
@@ -665,13 +745,29 @@ long timespec2millis(struct timespec *a)
     return a->tv_sec*1000 + a->tv_nsec/1000000;
 }
 
+/**
+ * Fires a mouse event or a touch event on the game.
+ * If the mouse event is not consumed, a touch event is fired instead.
+ *
+ * @param mouseEvent The mouse event to fire.
+ * @param touchEvent The touch event to fire.
+ * @param x The x position of the touch in pixels.
+ * @param y The y position of the touch in pixels.
+ */
+void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEvent, int x, int y)
+{
+    if (!Game::getInstance()->mouseEvent(mouseEvent, x, y, 0))
+    {
+        Game::getInstance()->touchEvent(touchEvent, x, y, 0);
+    }
+}
+
 int Platform::enterMessagePump()
 {
     int rc;
     int eventType;
     int flags;
     int value;
-    int visible = 1;
     int position[2];
     int domain;
     mtouch_event_t touchEvent;
@@ -707,47 +803,117 @@ int Platform::enterMessagePump()
                 {
                     case SCREEN_EVENT_MTOUCH_TOUCH:
                     {
-                        if (!__multiTouch)
+                        screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
+                        if (__multiTouch || touchEvent.contact_id == 0)
                         {
-                            screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                           Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, position[0], position[1], 0);
-                        }
-                        else
-                        {
-                            screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                            Game::getInstance()->touchEvent(Touch::TOUCH_PRESS, touchEvent.x, touchEvent.y, touchEvent.contact_id);
+                            gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
                         break;
                     }
 
                     case SCREEN_EVENT_MTOUCH_RELEASE:
                     {
-                        if (!__multiTouch)
+                        screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
+                        if (__multiTouch || touchEvent.contact_id == 0)
                         {
-                            screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                           Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, position[0], position[1], 0);
-                        }
-                        else
-                        {
-                            screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                            Game::getInstance()->touchEvent(Touch::TOUCH_RELEASE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
+                            gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
                         break;
                     }
 
                     case SCREEN_EVENT_MTOUCH_MOVE:
                     {
-                        if (!__multiTouch)
+                        screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
+                        if (__multiTouch ||touchEvent.contact_id == 0)
                         {
-                            screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_POSITION, position);
-                           Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, position[0], position[1], 0);
-                        }
-                        else
-                        {
-                            screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                            Game::getInstance()->touchEvent(Touch::TOUCH_MOVE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
+                            gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
                         break;
+                    }
+
+                    case SCREEN_EVENT_POINTER:
+                    {
+                        static int mouse_pressed = 0;
+                        int buttons;
+                        int wheel;
+                        // A move event will be fired unless a button state changed.
+                        bool move = true;
+                        bool left_move = false;
+                        //This is a mouse move event, it is applicable to a device with a usb mouse or simulator
+                        screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_BUTTONS, &buttons);
+                        screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_SOURCE_POSITION, position);
+                        screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_MOUSE_WHEEL, &wheel);
+
+                        // Handle left mouse. Interpret as touch if the left mouse event is not consumed.
+                        if (buttons & SCREEN_LEFT_MOUSE_BUTTON)
+                        {
+                            if (mouse_pressed & SCREEN_LEFT_MOUSE_BUTTON)
+                            {
+                                left_move = true;
+                            }
+                            else
+                            {
+                                move = false;
+                                mouse_pressed |= SCREEN_LEFT_MOUSE_BUTTON;
+                                mouseOrTouchEvent(Mouse::MOUSE_PRESS_LEFT_BUTTON, Touch::TOUCH_PRESS, position[0], position[1]);
+                            }
+                        }
+                        else if (mouse_pressed & SCREEN_LEFT_MOUSE_BUTTON)
+                        {
+                            move = false;
+                            mouse_pressed &= ~SCREEN_LEFT_MOUSE_BUTTON;
+                            mouseOrTouchEvent(Mouse::MOUSE_RELEASE_LEFT_BUTTON, Touch::TOUCH_RELEASE, position[0], position[1]);
+                        }
+
+                        // Handle right mouse
+                        if (buttons & SCREEN_RIGHT_MOUSE_BUTTON)
+                        {
+                            if ((mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON) == 0)
+                            {
+                                move = false;
+                                mouse_pressed |= SCREEN_RIGHT_MOUSE_BUTTON;
+                                Game::getInstance()->mouseEvent(Mouse::MOUSE_PRESS_RIGHT_BUTTON, position[0], position[1], 0);
+                            }
+                        }
+                        else if (mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON)
+                        {
+                            move = false;
+                            mouse_pressed &= ~SCREEN_RIGHT_MOUSE_BUTTON;
+                            Game::getInstance()->mouseEvent(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, position[0], position[1], 0);
+                        }
+
+                        // Handle middle mouse
+                        if (buttons & SCREEN_MIDDLE_MOUSE_BUTTON)
+                        {
+                            if ((mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON) == 0)
+                            {
+                                move = false;
+                                mouse_pressed |= SCREEN_MIDDLE_MOUSE_BUTTON;
+                                Game::getInstance()->mouseEvent(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, position[0], position[1], 0);
+                            }
+                        }
+                        else if (mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON)
+                        {
+                            move = false;
+                            mouse_pressed &= ~SCREEN_MIDDLE_MOUSE_BUTTON;
+                            Game::getInstance()->mouseEvent(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, position[0], position[1], 0);
+                        }
+
+                        // Fire a move event if none of the buttons changed.
+                        if (left_move)
+                        {
+                            mouseOrTouchEvent(Mouse::MOUSE_MOVE, Touch::TOUCH_MOVE, position[0], position[1]);
+                        }
+                        else if (move)
+                        {
+                            Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, position[0], position[1], 0);
+                        }
+
+                        // Handle mouse wheel events
+                        if (wheel)
+                        {
+                            Game::getInstance()->mouseEvent(Mouse::MOUSE_WHEEL, position[0], position[1], -wheel);
+                        }
                         break;
                     }
 
@@ -756,7 +922,17 @@ int Platform::enterMessagePump()
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_KEY_FLAGS, &flags);
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_KEY_SYM, &value);
                         gameplay::Keyboard::KeyEvent evt = (flags & KEY_DOWN) ? gameplay::Keyboard::KEY_PRESS :  gameplay::Keyboard::KEY_RELEASE;
-                        Game::getInstance()->keyEvent(evt, getKey(value));
+                        // Suppress key repeats
+                        if ((flags & KEY_REPEAT) == 0)
+                        {
+                            keyEventInternal(evt, getKey(value));
+                            if (evt == gameplay::Keyboard::KEY_PRESS && (flags & KEY_SYM_VALID))
+                            {
+                                int unicode = getUnicode(value);
+                                if (unicode)
+                                    keyEventInternal(gameplay::Keyboard::KEY_CHAR, unicode);
+                            }
+                        }
                         break;
                     }
                 }
@@ -779,32 +955,27 @@ int Platform::enterMessagePump()
         if (_game->getState() == Game::UNINITIALIZED)
             break;
 
-        // Idle time (no events left to process) is spent rendering.
-        // We skip rendering when the window is not visible or the app is paused.
-        if (visible && _game->getState() != Game::PAUSED)
-        {
-            _game->frame();
+        _game->frame();
 
-            // Post the new frame to the display.
-            // Note that there are a couple cases where eglSwapBuffers could fail
-            // with an error code that requires a certain level of re-initialization:
-            //
-            // 1) EGL_BAD_NATIVE_WINDOW - Called when the surface we're currently using
-            //    is invalidated. This would require us to destroy our EGL surface,
-            //    close our OpenKODE window, and start again.
-            //
-            // 2) EGL_CONTEXT_LOST - Power management event that led to our EGL context
-            //    being lost. Requires us to re-create and re-initalize our EGL context
-            //    and all OpenGL ES state.
-            //
-            // For now, if we get these, we'll simply exit.
-            rc = eglSwapBuffers(__eglDisplay, __eglSurface);
-            if (rc != EGL_TRUE)
-            {
-                _game->exit();
-                perror("eglSwapBuffers");
-                break;
-            }
+        // Post the new frame to the display.
+        // Note that there are a couple cases where eglSwapBuffers could fail
+        // with an error code that requires a certain level of re-initialization:
+        //
+        // 1) EGL_BAD_NATIVE_WINDOW - Called when the surface we're currently using
+        //    is invalidated. This would require us to destroy our EGL surface,
+        //    close our OpenKODE window, and start again.
+        //
+        // 2) EGL_CONTEXT_LOST - Power management event that led to our EGL context
+        //    being lost. Requires us to re-create and re-initalize our EGL context
+        //    and all OpenGL ES state.
+        //
+        // For now, if we get these, we'll simply exit.
+        rc = eglSwapBuffers(__eglDisplay, __eglSurface);
+        if (rc != EGL_TRUE)
+        {
+            _game->exit();
+            perror("eglSwapBuffers");
+            break;
         }
     }
 
@@ -813,6 +984,21 @@ int Platform::enterMessagePump()
     screen_destroy_context(__screenContext);
 
     return 0;
+}
+    
+void Platform::signalShutdown() 
+{
+    // nothing to do  
+}
+    
+unsigned int Platform::getDisplayWidth()
+{
+    return __screenWindowSize[0];
+}
+
+unsigned int Platform::getDisplayHeight()
+{
+    return __screenWindowSize[1];
 }
 
 long Platform::getAbsoluteTime()
@@ -860,13 +1046,22 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     double tx, ty, tz;
     accelerometer_read_forces(&tx, &ty, &tz);
 
-    // Hack landscape adjustment only.
-    if (__orientationAngle == 0)
-    {
-        tx = -tx;
-        ty = -ty;
-        tz = -tz;
-    }
+    if (__orientationAngle == 90)
+	{
+		tx = -ty;
+		ty = tx;
+	}
+	else if (__orientationAngle == 180)
+	{
+		tx = -tx;
+		ty = -ty;
+		tz = -tz;
+	}
+	else if (__orientationAngle == 270)
+	{
+		tx = ty;
+		ty = -tx;
+	}
 
     if (pitch != NULL)
         *pitch = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
@@ -878,6 +1073,33 @@ void Platform::swapBuffers()
 {
     if (__eglDisplay && __eglSurface)
         eglSwapBuffers(__eglDisplay, __eglSurface);
+}
+
+void Platform::displayKeyboard(bool display)
+{
+    if (display)
+        virtualkeyboard_show();
+    else
+        virtualkeyboard_hide();
+}
+
+void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    if (!Form::touchEventInternal(evt, x, y, contactIndex))
+    {
+        Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+    }
+}
+
+void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Form::keyEventInternal(evt, key);
+}
+
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
 }
 
 }

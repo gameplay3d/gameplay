@@ -8,6 +8,15 @@
 namespace gameplay
 {
 
+/**
+ * Defines a video output off all graphics buffer containing a complete frame of data.
+ * This consists of a RenderTarget and DepthStencilTarget holding the color, depth and
+ * stencil data in the rendering frame. 
+ * 
+ * to change the default Game framebuffer call Game::setFrameBuffer(myFrameBuffer);
+ * To restore back to the default call Game::setFrameBuffer(NULL).
+ * This is useful for rendering shadows and other post-processing effects.
+ */
 class FrameBuffer : public Ref
 {
 public:
@@ -99,10 +108,13 @@ public:
      
 private:
  
+    /**
+     * Constructor.
+     */
     FrameBuffer(const char* id);
 
     /**
-     * Destructor.  Removes this FrameBuffer from the list of available FrameBuffers.
+     * Destructor.
      */
     ~FrameBuffer();
 

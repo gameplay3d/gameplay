@@ -55,6 +55,13 @@ void BoundingBox::getCorners(Vector3* dst) const
     dst[7].set(min.x, max.y, min.z);
 }
 
+Vector3 BoundingBox::getCenter() const
+{
+    Vector3 center;
+    getCenter(&center);
+    return center;
+}
+
 void BoundingBox::getCenter(Vector3* dst) const
 {
     dst->set(min, max);
@@ -69,9 +76,9 @@ bool BoundingBox::intersects(const BoundingSphere& sphere) const
 
 bool BoundingBox::intersects(const BoundingBox& box) const
 {
-    return ((min.x >= box.min.x && min.x <= max.x) || (box.min.x >= min.x && box.min.x <= max.x)) &&
-            ((min.y >= box.min.y && min.y <= max.y) || (box.min.y >= min.y && box.min.y <= max.y)) &&
-            ((min.z >= box.min.z && min.z <= max.z) || (box.min.z >= min.z && box.min.z <= max.z));
+    return ((min.x >= box.min.x && min.x <= box.max.x) || (box.min.x >= min.x && box.min.x <= max.x)) &&
+            ((min.y >= box.min.y && min.y <= box.max.y) || (box.min.y >= min.y && box.min.y <= max.y)) &&
+            ((min.z >= box.min.z && min.z <= box.max.z) || (box.min.z >= min.z && box.min.z <= max.z));
 }
 
 bool BoundingBox::intersects(const Frustum& frustum) const

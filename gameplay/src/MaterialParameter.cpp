@@ -32,7 +32,7 @@ void MaterialParameter::clearValue()
             SAFE_DELETE_ARRAY(_value.intPtrValue);
             break;
         case MaterialParameter::METHOD:
-            SAFE_DELETE(_value.method);
+            SAFE_RELEASE(_value.method);
             break;
         }
 
@@ -294,7 +294,7 @@ unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyI
     {
         case ANIMATE_UNIFORM:
         {
-            switch(_type)
+            switch (_type)
             {
                 // These types don't support animation.
                 case NONE:
@@ -304,7 +304,7 @@ unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyI
                     return 0;
                 case FLOAT:
                 case INT:
-                    return 1;
+                    return _count;
                 case VECTOR2:
                     return 2 * _count;
                 case VECTOR3:
@@ -329,10 +329,30 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
             switch (_type)
             {
                 case FLOAT:
-                    value->setFloat(0, _value.floatValue);
+                    if (_count == 1)
+                    {
+                        value->setFloat(0, _value.floatValue);
+                    }
+                    else
+                    {
+                        for (unsigned int i = 0; i < _count; i++)
+                        {
+                            value->setFloat(i, _value.floatPtrValue[i]);
+                        }
+                    }
                     break;
                 case INT:
-                    value->setFloat(0, _value.intValue);
+                    if (_count == 1)
+                    {
+                        value->setFloat(0, _value.intValue);
+                    }
+                    else
+                    {
+                        for (unsigned int i = 0; i < _count; i++)
+                        {
+                            value->setFloat(i, _value.intPtrValue[i]);
+                        }
+                    }
                     break;
                 case VECTOR2:
                     for (unsigned int i = 0; i < _count; i++)
@@ -359,8 +379,10 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
     }
 }
 
-void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue* value)
+void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight)
 {
+    assert(blendWeight >= 0.0f && blendWeight <= 1.0f);
+
     switch (propertyId)
     {
         case ANIMATE_UNIFORM:
@@ -368,33 +390,169 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
             switch (_type)
             {
                 case FLOAT:
-                    _value.floatValue = value->getFloat(0);
+                {
+                    if (_count == 1)
+                    {
+                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
+                        {
+                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
+                            _value.floatValue = value->getFloat(0);
+                        }
+                        else
+                        {
+                            _value.floatValue = Curve::lerp(blendWeight, _value.floatValue, value->getFloat(0));
+                        }
+                    }
+                    else
+                    {
+                        applyAnimationValue(value, blendWeight, 1);
+                    }                    
                     break;
+                }
                 case INT:
-                    _value.intValue = value->getFloat(0);
+                {
+                    if (_count == 1)
+                    {
+                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
+                        {
+                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
+                            _value.intValue = value->getFloat(0);
+                        }
+                        else
+                        {
+                            _value.intValue = Curve::lerp(blendWeight, _value.intValue, value->getFloat(0));
+                        }
+                    }
+                    else
+                    {
+                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
+                        {
+                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
+                            for (unsigned int i = 0; i < _count; i++)
+                                _value.intPtrValue[i] = value->getFloat(i);
+                        }
+                        else
+                        {
+                            for (unsigned int i = 0; i < _count; i++)
+                                _value.intPtrValue[i] = Curve::lerp(blendWeight, _value.intPtrValue[i], value->getFloat(i));
+                        }
+                    }
                     break;
+                }
                 case VECTOR2:
-                    for (unsigned int i = 0; i < _count; i++)
-                    {
-                        value->getFloat(_value.floatPtrValue, i * 2, 2);
-                    }
+                {
+                    applyAnimationValue(value, blendWeight, 2);
                     break;
+                }
                 case VECTOR3:
-                    for (unsigned int i = 0; i < _count; i++)
-                    {
-                        value->getFloat(_value.floatPtrValue, i * 3, 3);
-                    }
+                {
+                    applyAnimationValue(value, blendWeight, 3);
                     break;
+                }
                 case VECTOR4:
-                    for (unsigned int i = 0; i < _count; i++)
-                    {
-                        value->getFloat(_value.floatPtrValue, i * 4, 4);
-                    }
+                {
+                    applyAnimationValue(value, blendWeight, 4);
                     break;
+                }
 
                 // UNSUPPORTED: NONE, MATRIX, METHOD, SAMPLER 
             }
         }
+    }
+}
+
+void MaterialParameter::applyAnimationValue(AnimationValue* value, float blendWeight, int components)
+{
+    unsigned int count = _count * components;
+    if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
+    {
+        _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
+
+        for (unsigned int i = 0; i < count; i++)
+            _value.floatPtrValue[i] = value->getFloat(i);
+    }
+    else
+    {
+        for (unsigned int i = 0; i < count; i++)
+            _value.floatPtrValue[i] = Curve::lerp(blendWeight, _value.floatPtrValue[i], value->getFloat(i));
+    }
+}
+
+void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
+{
+    materialParameter->_type = _type;
+    materialParameter->_count = _count;
+    materialParameter->_dynamic = _dynamic;
+    materialParameter->_uniform = _uniform;
+    switch (_type)
+    {
+    case NONE:
+        break;
+    case FLOAT:
+        materialParameter->setValue(_value.floatValue);
+        break;
+    case INT:
+        materialParameter->setValue(_value.intValue);
+        break;
+    case VECTOR2:
+    {
+        Vector2* value = reinterpret_cast<Vector2*>(_value.floatPtrValue);
+        if (_count == 1)
+        {
+            materialParameter->setValue(*value);
+        }
+        else
+        {
+            materialParameter->setValue(value, _count);
+        }
+        break;
+    }   
+    case VECTOR3:
+    {
+        Vector3* value = reinterpret_cast<Vector3*>(_value.floatPtrValue);
+        if (_count == 1)
+        {
+            materialParameter->setValue(*value);
+        }
+        else
+        {
+            materialParameter->setValue(value, _count);
+        }
+        break;
+    }
+    case VECTOR4:
+    {
+        Vector4* value = reinterpret_cast<Vector4*>(_value.floatPtrValue);
+        if (_count == 1)
+        {
+            materialParameter->setValue(*value);
+        }
+        else
+        {
+            materialParameter->setValue(value, _count);
+        }
+        break;
+    }
+    case MATRIX:
+    {
+        Matrix* value = reinterpret_cast<Matrix*>(_value.floatPtrValue);
+        if (_count == 1)
+        {
+            materialParameter->setValue(*value);
+        }
+        else
+        {
+            materialParameter->setValue(value, _count);
+        }
+        break;
+    }
+    case SAMPLER:
+        materialParameter->setValue(_value.samplerValue);
+        break;
+    case METHOD:
+        materialParameter->_value.method = _value.method;
+        materialParameter->_value.method->addRef();
+        break;
     }
 }
 

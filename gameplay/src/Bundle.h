@@ -1,5 +1,5 @@
-#ifndef PACKAGE_H_
-#define PACKAGE_H_
+#ifndef BUNDLE_H_
+#define BUNDLE_H_
 
 #include "Mesh.h"
 #include "Font.h"
@@ -10,29 +10,29 @@ namespace gameplay
 {
 
 /**
- * Represents a gameplay binary package file (.gpb) that contains a
- * collection of game resources that can be loaded.
+ * Represents a gameplay bundle file (.gpb) that contains a
+ * collection of binary game assets that can be loaded.
  */
-class Package : public Ref
+class Bundle : public Ref
 {
-    friend class SceneLoader;
+    friend class PhysicsController;
 
 public:
 
     /**
-     * Returns a Package for the given resource path.
+     * Returns a Bundle for the given resource path.
      *
-     * The specified path must reference a valid gameplay binary file.
-     * If the package is already loaded, the existing package is returned
+     * The specified path must reference a valid gameplay bundle file.
+     * If the bundle is already loaded, the existing bundle is returned
      * with its reference count incremented. When no longer needed, the
      * release() method must be called. Note that calling release() does
-     * NOT free any actual game objects created/returned from the Package
+     * NOT free any actual game objects created/returned from the Bundle
      * instance and those objects must be released separately.
      */
-    static Package* create(const char* path);
+    static Bundle* create(const char* path);
 
     /**
-     * Loads the scene with the specified ID from the package.
+     * Loads the scene with the specified ID from the bundle.
      * If id is NULL then the first scene found is loaded.
      * 
      * @param id The ID of the scene to load (NULL to load the first scene).
@@ -42,16 +42,16 @@ public:
     Scene* loadScene(const char* id = NULL);
 
     /**
-     * Loads a node with the specified ID from the package.
+     * Loads a node with the specified ID from the bundle.
      *
-     * @param id The ID of the node to load in the package.
+     * @param id The ID of the node to load in the bundle.
      * 
      * @return The loaded node, or NULL if the node could not be loaded.
      */
     Node* loadNode(const char* id);
 
     /**
-     * Loads a mesh with the specified ID from the package.
+     * Loads a mesh with the specified ID from the bundle.
      *
      * @param id The ID of the mesh to load.
      * 
@@ -60,7 +60,7 @@ public:
     Mesh* loadMesh(const char* id);
 
     /**
-     * Loads a font with the specified ID from the package.
+     * Loads a font with the specified ID from the bundle.
      *
      * @param id The ID of the font to load.
      * 
@@ -69,7 +69,7 @@ public:
     Font* loadFont(const char* id);
 
     /**
-     * Determines if this package contains a top-level object with the given ID.
+     * Determines if this bundle contains a top-level object with the given ID.
      *
      * This method performs a case-sensitive comparison.
      *
@@ -78,12 +78,12 @@ public:
     bool contains(const char* id) const;
 
     /**
-     * Returns the number of top-level objects in this package.
+     * Returns the number of top-level objects in this bundle.
      */
     unsigned int getObjectCount() const;
 
     /**
-     * Returns the unique identifier of the top-level object at the specified index in this package.
+     * Returns the unique identifier of the top-level object at the specified index in this bundle.
      *
      * @param index The index of the object.
      * 
@@ -118,12 +118,37 @@ private:
         std::vector<Matrix> inverseBindPoseMatrices;
     };
 
-    Package(const char* path);
+    struct MeshPartData
+    {
+        MeshPartData();
+        ~MeshPartData();
+
+        Mesh::PrimitiveType primitiveType;
+        Mesh::IndexFormat indexFormat;
+        unsigned int indexCount;
+        unsigned char* indexData;
+    };
+
+    struct MeshData
+    {
+        MeshData(const VertexFormat& vertexFormat);
+        ~MeshData();
+
+        VertexFormat vertexFormat;
+        unsigned int vertexCount;
+        unsigned char* vertexData;
+        BoundingBox boundingBox;
+        BoundingSphere boundingSphere;
+        Mesh::PrimitiveType primitiveType;
+        std::vector<MeshPartData*> parts;
+    };
+
+    Bundle(const char* path);
 
     /**
      * Destructor.
      */
-    ~Package();
+    ~Bundle();
 
     /**
      * Finds a reference by ID.
@@ -131,7 +156,7 @@ private:
     Reference* find(const char* id) const;
 
     /**
-     * Resets any load session specific state for the package.
+     * Resets any load session specific state for the bundle.
      */
     void clearLoadSession();
 
@@ -174,45 +199,21 @@ private:
     Reference* seekToFirstType(unsigned int type);
 
     /**
-     * Loads the scene with the specified ID from the package, and loads the specified nodes with mesh rigid body support.
-     * If id is NULL then the first scene found is loaded.
-     * 
-     * @param id The ID of the scene to load (NULL to load the first scene).
-     * @param nodesWithMeshRB A list of the IDs of the nodes within the scene that 
-     *      should be loaded with support for triangle mesh rigid bodies.
-     * 
-     * @return The loaded scene, or NULL if the scene could not be loaded.
-     */
-    Scene* loadScene(const char* id, const std::vector<std::string>* nodesWithMeshRB);
-
-    /**
-     * Loads a node with the specified ID from the package, optionally with mesh rigid body support.
-     *
-     * @param id The ID of the node to load in the package.
-     * @param loadWithMeshRBSupport Whether or not to load the node with mesh rigid body support.
-     * 
-     * @return The loaded node, or NULL if the node could not be loaded.
-     */
-    Node* loadNode(const char* id, bool loadWithMeshRBSupport);
-
-    /**
      * Internal method to load a node.
      *
      * Only one of node or scene should be passed as non-NULL (or neither).
      */
-    Node* loadNode(const char* id, Scene* sceneContext, Node* nodeContext, bool loadWithMeshRBSupport);
+    Node* loadNode(const char* id, Scene* sceneContext, Node* nodeContext);
 
     /**
-     * Loads a mesh with the specified ID from the package.
+     * Loads a mesh with the specified ID from the bundle.
      *
      * @param id The ID of the mesh to load.
-     * @param loadWithMeshRBSupport Whether to load the mesh with 
-     *      support for triangle mesh rigid bodies or not.
      * @param nodeId The id of the mesh's model's parent node.
      * 
      * @return The loaded mesh, or NULL if the mesh could not be loaded.
      */
-    Mesh* loadMesh(const char* id, bool loadWithMeshRBSupport, const char* nodeId);
+    Mesh* loadMesh(const char* id, const char* nodeId);
 
     /**
      * Reads an unsigned int from the current file position.
@@ -264,6 +265,18 @@ private:
     bool readArray(unsigned int* length, std::vector<T>* values);
 
     /**
+     * Reads an array of values and the array length from the current file position.
+     * 
+     * @param length A pointer to where the length of the array will be copied to.
+     * @param values A pointer to the vector to copy the values to. The vector will be resized if it is smaller than length.
+     * @param readSize The size that reads will be preformed at, size must be the same as or smaller then the sizeof(T)
+     * 
+     * @return True if successful, false if an error occurred.
+     */
+    template <class T>
+    bool readArray(unsigned int* length, std::vector<T>* values, unsigned int readSize);
+    
+    /**
      * Reads 16 floats from the current file position.
      *
      * @param m A pointer to float array of size 16.
@@ -287,7 +300,7 @@ private:
      * 
      * @return A pointer to new node or NULL if there was an error.
      */
-    Node* readNode(Scene* sceneContext, Node* nodeContext, const std::vector<std::string>* nodesWithMeshRB);
+    Node* readNode(Scene* sceneContext, Node* nodeContext);
 
     /**
      * Reads a camera from the current file position.
@@ -308,7 +321,25 @@ private:
      * 
      * @return A pointer to a new model or NULL if there was an error.
      */
-    Model* readModel(Scene* sceneContext, Node* nodeContext, bool loadWithMeshRBSupport, const char* nodeId);
+    Model* readModel(Scene* sceneContext, Node* nodeContext, const char* nodeId);
+
+    /**
+     * Reads mesh data from the current file position.
+     */
+    MeshData* readMeshData();
+
+    /**
+     * Reads mesh data for the specified URL.
+     *
+     * The specified URL should be formatted as 'bundle#id', where
+     * 'bundle' is the bundle file containing the mesh and 'id' is the ID
+     * of the mesh to read data for.
+     *
+     * @param url The URL to read mesh data from.
+     *
+     * @return The mesh rigid body data.
+     */
+    static MeshData* readMeshData(const char* url);
 
     /**
      * Reads a mesh skin from the current file position.
@@ -356,6 +387,7 @@ private:
     void resolveJointReferences(Scene* sceneContext, Node* nodeContext);
 
 private:
+
     std::string _path;
     unsigned int _referenceCount;
     Reference* _references;

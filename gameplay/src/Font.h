@@ -11,7 +11,8 @@ namespace gameplay
  */
 class Font : public Ref
 {
-    friend class Package;
+    friend class Bundle;
+    friend class TextBox;
 
 public:
 
@@ -76,17 +77,17 @@ public:
     };
 
     /**
-     * Creates a font from the given package.
+     * Creates a font from the given bundle.
      *
-     * If the 'id' parameter is NULL, it is assumed that the Package at 'path'
-     * contains exactly one Font resource. If the Package does not meet this criteria,
+     * If the 'id' parameter is NULL, it is assumed that the Bundle at 'path'
+     * contains exactly one Font resource. If the Bundle does not meet this criteria,
      * NULL is returned.
      *
      * If a font for the given path has already been loaded, the existing font will be
      * returned with its reference count increased.
      *
-     * @param path The path to a package file containing a font resource.
-     * @param id An optional ID of the font resource within the package (NULL for the first/only resource).
+     * @param path The path to a bundle file containing a font resource.
+     * @param id An optional ID of the font resource within the bundle (NULL for the first/only resource).
      * 
      * @return The specified font.
      */
@@ -131,32 +132,34 @@ public:
      * @param x The viewport x position to draw text at.
      * @param y The viewport y position to draw text at.
      * @param color The color of text.
-     * @param size The size to draw text.
+     * @param size The size to draw text (0 for default size).
+     * @param rightToLeft Whether to draw text from right to left.
      */
-    void drawText(const char* text, int x, int y, const Vector4& color, unsigned int size, bool rightToLeft = false);
+    void drawText(const char* text, int x, int y, const Vector4& color, unsigned int size = 0, bool rightToLeft = false);
 
     /**
      * Draws the specified text within a rectangular area, with a specified alignment and scale.
      * Clips text outside the viewport.  Optionally wraps text to fit within the width of the viewport.
      *
      * @param text The text to draw.
-     * @param clip The viewport area to draw within.  Text will be clipped outside this rectangle.
+     * @param area The viewport area to draw within.  Text will be clipped outside this rectangle.
      * @param color The color of text.
-     * @param size The size to draw text.
+     * @param size The size to draw text (0 for default size).
      * @param justify Justification of text within the viewport.
      * @param wrap Wraps text to fit within the width of the viewport if true.
-     * @param rightToLeft
+     * @param rightToLeft Whether to draw text from right to left.
+     * @param clip A region to clip text within after applying justification to the viewport area.
      */
-    void drawText(const char* text, const Rectangle& clip, const Vector4& color, unsigned int size,
-                  Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
+    void drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size = 0, 
+                  Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false, const Rectangle* clip = NULL);
 
     /**
      * Measures a string's width and height without alignment, wrapping or clipping.
      *
      * @param text The text to measure.
-     * @param size
-     * @param width Destination for the text's width.
-     * @param height Destination for the text's height.
+     * @param size The font height to scale to.
+     * @param widthOut Destination for the text's width.
+     * @param heightOut Destination for the text's height.
      */
     void measureText(const char* text, unsigned int size, unsigned int* widthOut, unsigned int* heightOut);
 
@@ -164,9 +167,9 @@ public:
      * Measures a string's bounding box after alignment, wrapping and clipping within a viewport.
      *
      * @param text The text to measure.
+     * @param clip The clip rectangle.
+     * @param size The font height to scale to.
      * @param out Destination rectangle to store the bounds in.
-     * @param viewport The viewport area to align, wrap and clip text within while measuring.
-     * @param scale The scaling factor to apply.
      * @param justify Justification of text within the viewport.
      * @param wrap Whether to measure text with wrapping applied.
      * @param ignoreClip Whether to clip 'out' to the viewport.  Set false for the bounds of what would actually be drawn
@@ -174,6 +177,35 @@ public:
      */
     void measureText(const char* text, const Rectangle& clip, unsigned int size, Rectangle* out,
                      Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool ignoreClip = false);
+
+    /**
+     * Get an index into a string corresponding to the character nearest the given location within the clip region.
+     */
+    unsigned int getIndexAtLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
+                                    Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
+
+    /**
+     * Get the location of the character at the given index.
+     */
+    void getLocationAtIndex(const char* text, const Rectangle& clip, unsigned int size, Vector2* outLocation, const unsigned int destIndex,
+                            Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
+
+    /**
+     * Gets the sprite batch for this Font.
+     * 
+     * @return The sprite batch for this Font.
+     */
+    SpriteBatch* getSpriteBatch() const;
+
+    /**
+     * Gets the Justify value from the given string.
+     * Returns ALIGN_TOP_LEFT if the string is unrecognized.
+     * 
+     * @param justify The string such as "ALIGN_HCENTER" or "ALIGN_VCENTER_RIGHT".
+     * 
+     * @return The Justify value.
+     */
+    static Justify getJustify(const char* justify);
 
 
 private:
@@ -184,7 +216,7 @@ private:
     Font();
 
     /**
-     * Copy constructor.
+     * Constructor.
      */
     Font(const Font& copy);
 
@@ -193,13 +225,17 @@ private:
      */
     ~Font();
 
-    // Utilities
+    unsigned int getIndexOrLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
+                                    const int destIndex = -1, Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
+
     unsigned int getTokenWidth(const char* token, unsigned int length, unsigned int size, float scale);
+
     unsigned int getReversedTokenLength(const char* token, const char* bufStart);
 
-    // Returns false if EOF was reached, true otherwise.
-    bool handleDelimiters(char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
-                          std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd);
+    int handleDelimiters(const char** token, const unsigned int size, const int iteration, const int areaX, int* xPos, int* yPos, unsigned int* lineLength,
+                         std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd, unsigned int* charIndex = NULL,
+                         const Vector2* stopAtPosition = NULL, const int currentIndex = -1, const int destIndex = -1);
+
     void addLineInfo(const Rectangle& area, int lineWidth, int lineLength, Justify hAlign,
                      std::vector<int>* xPositions, std::vector<unsigned int>* lineLengths, bool rightToLeft);
 
@@ -212,6 +248,7 @@ private:
     unsigned int _glyphCount;
     Texture* _texture;
     SpriteBatch* _batch;
+    Rectangle _viewport;
 };
 
 }

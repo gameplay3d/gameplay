@@ -2,6 +2,7 @@
 #include "ParticleEmitter.h"
 #include "Game.h"
 #include "Node.h"
+#include "Scene.h"
 #include "Quaternion.h"
 #include "Properties.h"
 
@@ -33,6 +34,11 @@ ParticleEmitter::ParticleEmitter(SpriteBatch* batch, unsigned int particleCountM
 
     _spriteBatch->getStateBlock()->setDepthWrite(false);
     _spriteBatch->getStateBlock()->setDepthTest(true);
+    /*
+    _spriteBatch->getStateBlock()->setBlend(true);
+    _spriteBatch->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
+    _spriteBatch->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
+    */
 }
 
 ParticleEmitter::~ParticleEmitter()
@@ -51,14 +57,13 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
 
     if (!texture)
     {
-        // Use default texture.
-        texture = Texture::create("../gameplay/res/textures/particle-default.png", true);
+        LOG_ERROR_VARG("Error creating ParticleEmitter: Could not read texture file: %s", textureFile);
+        return NULL;
     }
-    assert(texture);
 
     // Use default SpriteBatch material.
     SpriteBatch* batch =  SpriteBatch::create(texture, NULL, particleCountMax);
-    texture->release(); // batch owns the texture
+    texture->release(); // batch owns the texture.
     assert(batch);
 
     ParticleEmitter* emitter = new ParticleEmitter(batch, particleCountMax);
@@ -233,6 +238,27 @@ void ParticleEmitter::stop()
 bool ParticleEmitter::isStarted() const
 {
     return _started;
+}
+
+bool ParticleEmitter::isActive() const
+{
+    if (_started)
+        return true;
+
+    if (!_node)
+        return false;
+
+    bool active = false;
+    for (unsigned int i = 0; i < _particleCount; i++)
+    {
+        if (_particles[i]._energy > 0)
+        {
+            active = true;
+            break;
+        }
+    }
+
+    return active;
 }
 
 void ParticleEmitter::emit(unsigned int particleCount)
@@ -503,7 +529,7 @@ void ParticleEmitter::setTextureBlending(TextureBlending textureBlending)
             break;
         case BLEND_ADDITIVE:
             _spriteBatch->getStateBlock()->setBlend(true);
-            _spriteBatch->getStateBlock()->setBlendSrc(RenderState::BLEND_ONE);
+            _spriteBatch->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
             _spriteBatch->getStateBlock()->setBlendDst(RenderState::BLEND_ONE);
             break;
         case BLEND_MULTIPLIED:
@@ -742,6 +768,11 @@ ParticleEmitter::TextureBlending ParticleEmitter::getTextureBlendingFromString(c
 
 void ParticleEmitter::update(long elapsedTime)
 {
+    if (!isActive())
+    {
+        return;
+    }
+
     // Calculate the time passed since last update.
     float elapsedSecs = (float)elapsedTime / 1000.0f;
 
@@ -848,6 +879,11 @@ void ParticleEmitter::update(long elapsedTime)
 
 void ParticleEmitter::draw()
 {
+    if (!isActive())
+    {
+        return;
+    }
+
     if (_particleCount > 0)
     {
         // Set our node's view projection matrix to this emitter's effect.
@@ -859,28 +895,23 @@ void ParticleEmitter::draw()
         // Begin sprite batch drawing
         _spriteBatch->begin();
 
-        // Which draw call we use depends on whether particles are rotating.
-        if (_rotationPerParticleSpeedMin == 0.0f && _rotationPerParticleSpeedMax == 0.0f)
-        {
-            // No rotation.
-            for (unsigned int i = 0; i < _particleCount; i++)
-            {
-                Particle* p = &_particles[i];
-                _spriteBatch->draw(p->_position.x, p->_position.y, p->_position.z, p->_size, p->_size,
-                                   _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3], p->_color);
-            }
-        }
-        else
-        {
-            // Rotation.
-            Vector2 pivot(0.5f, 0.5f);
+        // 2D Rotation.
+        Vector2 pivot(0.5f, 0.5f);
 
-            for (unsigned int i = 0; i < _particleCount; i++)
-            {
-                Particle* p = &_particles[i];
-                _spriteBatch->draw(p->_position, p->_size, p->_size,
-                                   _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3], p->_color, pivot, p->_angle);
-            }
+        // 3D Rotation so that particles always face the camera.
+        const Matrix& cameraWorldMatrix = _node->getScene()->getActiveCamera()->getNode()->getWorldMatrix();
+        Vector3 right;
+        cameraWorldMatrix.getRightVector(&right);
+        Vector3 up;
+        cameraWorldMatrix.getUpVector(&up);
+
+        for (unsigned int i = 0; i < _particleCount; i++)
+        {
+            Particle* p = &_particles[i];
+
+            _spriteBatch->draw(p->_position, right, up, p->_size, p->_size,
+                               _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3],
+                               p->_color, pivot, p->_angle);
         }
 
         // Render.

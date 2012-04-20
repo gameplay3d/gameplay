@@ -65,15 +65,13 @@ public:
      */
     void generateHeightmap(const char* filename);
 
+    void computeBounds();
+
     Model* model;
     std::vector<Vertex> vertices;
     std::vector<MeshPart*> parts;
     BoundingVolume bounds;
     std::map<Vertex, unsigned int> vertexLookupTable;
-
-private:
-
-    void computeBounds();
 
 private:
     std::vector<VertexElement> _vertexFormat;

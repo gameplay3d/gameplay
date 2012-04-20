@@ -12,6 +12,7 @@ namespace gameplay
 
 class BoundingBox;
 class BoundingSphere;
+class NodeCloneContext;
 
 /**
  * Defines a 3-dimensional transformation.
@@ -29,6 +30,11 @@ class BoundingSphere;
 class Transform : public AnimationTarget
 {
 public:
+
+    /**
+     * Scale animation property. Data=scale
+     */
+    static const int ANIMATE_SCALE_UNIT = 0;
 
     /**
      * Scale animation property. Data=sx,sy,sz
@@ -322,6 +328,16 @@ public:
     /**
      * Rotates this transform's rotation component by the given rotation.
      *
+     * @param qx The quaternion x value.
+     * @param qy The quaternion y value.
+     * @param qz The quaternion z value.
+     * @param qw The quaternion w value.
+     */
+    void rotate(float qx, float qy, float qz, float qw);
+
+    /**
+     * Rotates this transform's rotation component by the given rotation.
+     *
      * @param rotation The rotation to rotate by (as a quaternion).
      */
     void rotate(const Quaternion& rotation);
@@ -447,6 +463,11 @@ public:
      * @param transform The transform to set this transform to.
      */
     void set(const Transform& transform);
+
+    /**
+     * Sets this transform to the identity transform.
+     */
+    void setIdentity();
 
     /**
      * Sets the scale factor along all axes for this transform
@@ -659,7 +680,7 @@ public:
      * Transforms the specified vector and stores the
      * result in the original vector.
      *
-     * @param normal The vector to transform.
+     * @param vector The vector to transform.
      */
     void transformVector(Vector3* vector);
 
@@ -688,7 +709,7 @@ public:
      * Adds a transform listener.
      *
      * @param listener The listener to add.
-     * @param cookie An optional long value that is passed to the specified listener when it is called..
+     * @param cookie An optional long value that is passed to the specified listener when it is called.
      */
     void addListener(Transform::Listener* listener, long cookie = 0);
 
@@ -710,26 +731,101 @@ public:
     /**
      * @see AnimationTarget#setAnimationProperty
      */
-    void setAnimationPropertyValue(int propertyId, AnimationValue* value);
+    void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 protected:
 
+    /**
+     * Transform Listener.
+     */
     struct TransformListener
     {
+        /**
+         * Listener for Transform events.
+         */
         Listener* listener;
+
+        /**
+         * An optional long value that is specified to the Listener's callback.
+         */
         long cookie;
     };
 
-    void dirty();
+    /**
+     * Defines the matrix dirty bits for marking the translation, scale and rotation
+     * components of the Transform.
+     */
+    enum MatrixDirtyBits
+    {
+        DIRTY_TRANSLATION = 0x01,
+        DIRTY_SCALE = 0x02,
+        DIRTY_ROTATION = 0x04,
+    };
+
+    /**
+     * Marks this transform as dirty and fires transformChanged().
+     */
+    void dirty(char matrixDirtyBits);
+
+    /**
+     * Called when the transform changes.
+     */
     virtual void transformChanged();
 
+    /**
+     * Copies from data from this node into transform for the purpose of cloning.
+     * 
+     * @param transform The transform to copy into.
+     * @param context The clone context.
+     */
+    void cloneInto(Transform* transform, NodeCloneContext &context) const;
+
+    /**
+     * The scale component of the Transform.
+     */
     Vector3 _scale;
+
+    /** 
+     * The rotation component of the Transform.
+     */
     Quaternion _rotation;
+    
+    /** 
+     * The translation component of the Transform.
+     */
     Vector3 _translation;
+    
+    /** 
+     * The Matrix representation of the Transform.
+     */
     mutable Matrix _matrix;
-    mutable bool _matrixDirty;
+    
+    /** 
+     * Matrix dirty bits flag.
+     */
+    mutable char _matrixDirtyBits;
+    
+    /** 
+     * List of TransformListener's on the Transform.
+     */
     std::list<TransformListener>* _listeners;
 
+private:
+    static const char ANIMATION_SCALE_X_BIT = 0x01; 
+    static const char ANIMATION_SCALE_Y_BIT = 0x02; 
+    static const char ANIMATION_SCALE_Z_BIT = 0x04; 
+    static const char ANIMATION_ROTATION_BIT = 0x08;  
+    static const char ANIMATION_TRANSLATION_X_BIT = 0x10; 
+    static const char ANIMATION_TRANSLATION_Y_BIT = 0x20; 
+    static const char ANIMATION_TRANSLATION_Z_BIT = 0x40; 
+
+    void applyAnimationValueScaleX(float sx, float blendWeight);
+    void applyAnimationValueScaleY(float sy, float blendWeight);
+    void applyAnimationValueScaleZ(float sz, float blendWeight);
+    void applyAnimationValueRotation(Quaternion* q, float blendWeight);
+    void applyAnimationValueTranslationX(float tx, float blendWeight);
+    void applyAnimationValueTranslationY(float ty, float blendWeight);
+    void applyAnimationValueTranslationZ(float tz, float blendWeight);
 };
 
 }

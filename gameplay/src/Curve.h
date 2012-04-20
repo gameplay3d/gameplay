@@ -1,14 +1,17 @@
 #ifndef CURVE_H_
 #define CURVE_H_
 
+#include "Ref.h"
+
 namespace gameplay
 {
 
 /**
  * Represents an n-dimensional curve.
  */
-class Curve
+class Curve : public Ref
 {
+    friend class AnimationTarget;
     friend class Animation;
     friend class AnimationClip;
     friend class AnimationController;
@@ -272,19 +275,13 @@ public:
         BOUNCE_OUT_IN
     };
 
-
     /**
-     * Constructs a new curve and the specified parameters.
-     *
+     * Creates a new curve.
+     * 
      * @param pointCount The number of points in the curve.
      * @param componentCount The number of float component values per key value.
      */
-    Curve(unsigned int pointCount, unsigned int componentCount);
-
-    /**
-     * Destructor.
-     */
-    ~Curve();
+    static Curve* create(unsigned int pointCount, unsigned int componentCount);
 
     /**
      * Gets the number of points in the curve.
@@ -354,6 +351,11 @@ public:
      */
     void evaluate(float time, float* dst) const;
 
+    /**
+     * Linear interpolation function.
+     */
+    static float lerp(float t, float from, float to);
+
 private:
 
     /**
@@ -391,9 +393,27 @@ private:
     Curve();
 
     /**
+     * Constructs a new curve and the specified parameters.
+     *
+     * @param pointCount The number of points in the curve.
+     * @param componentCount The number of float component values per key value.
+     */
+    Curve(unsigned int pointCount, unsigned int componentCount);
+
+    /**
      * Constructor.
      */
     Curve(const Curve& copy);
+
+    /**
+     * Destructor.
+     */
+    ~Curve();
+
+    /**
+     * Copy assignment operator.
+     */
+    Curve& operator=(const Curve&);
 
     /**
      * Bezier interpolation function.
@@ -460,17 +480,17 @@ private:
     Point* _points;                     // The points on the curve.
 };
 
-inline float bezier(float eq0, float eq1, float eq2, float eq3, float from, float out, float to, float in);
+inline static float bezier(float eq0, float eq1, float eq2, float eq3, float from, float out, float to, float in);
 
-inline float bspline(float eq0, float eq1, float eq2, float eq3, float c0, float c1, float c2, float c3);
+inline static float bspline(float eq0, float eq1, float eq2, float eq3, float c0, float c1, float c2, float c3);
 
-inline float hermite(float h00, float h01, float h10, float h11, float from, float out, float to, float in);
+inline static float hermite(float h00, float h01, float h10, float h11, float from, float out, float to, float in);
 
-inline float hermiteFlat(float h00, float h01, float from, float to);
+inline static float hermiteFlat(float h00, float h01, float from, float to);
 
-inline float hermiteSmooth(float h00, float h01, float h10, float h11, float from, float out, float to, float in);
+inline static float hermiteSmooth(float h00, float h01, float h10, float h11, float from, float out, float to, float in);
 
-inline float lerp(float s, float from, float to);
+inline static float lerpInl(float s, float from, float to);
 
 }
 

@@ -19,9 +19,6 @@
     <ClCompile Include="src\Camera.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\gameplay\src\Curve.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\DAEChannelTarget.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -127,6 +124,9 @@
     <ClCompile Include="src\VertexElement.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Curve.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\VertexElement.h">
@@ -148,9 +148,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Camera.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gameplay\src\Curve.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\DAEChannelTarget.h">
@@ -252,6 +249,9 @@
     <ClInclude Include="src\Vertex.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Curve.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Vector2.inl">
@@ -261,6 +261,12 @@
       <Filter>src</Filter>
     </None>
     <None Include="src\Vector4.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Quaternion.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Curve.inl">
       <Filter>src</Filter>
     </None>
   </ItemGroup>

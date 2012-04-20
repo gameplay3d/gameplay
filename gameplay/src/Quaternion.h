@@ -16,7 +16,7 @@ class Matrix;
  * Quaternions are typically used as a replacement for euler angles and rotation matrices as a way to achieve smooth interpolation and avoid gimbal lock.
  *
  * Note that this quaternion class does not automatically keep the quaternion normalized. Therefore, care must be taken to normalize the quaternion when neccessary, by calling the normalize method.
- * The package provides three methods for doing quaternion interpolation: lerp, slerp, and squad.
+ * This class provides three methods for doing quaternion interpolation: lerp, slerp, and squad.
  *
  * lerp (linear interpolation): the interpolation curve gives a straight line in quaternion space. It is simple and fast to compute. The only problem is that it does not provide constant angular velocity. Note that a constant velocity is not necessarily a requirement for a curve;
  * slerp (spherical linear interpolation): the interpolation curve forms a great arc on the quaternion unit sphere. Slerp provides constant angular velocity;
@@ -40,6 +40,8 @@ class Matrix;
  */
 class Quaternion
 {
+    friend class Curve;
+
 public:
 
     /**
@@ -293,7 +295,7 @@ public:
      * @param dst A quaternion to store the result in.
      */
     static void lerp(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst);
-
+    
     /**
      * Interpolates between two quaternions using spherical linear interpolation.
      *
@@ -310,7 +312,7 @@ public:
      * @param dst A quaternion to store the result in.
      */
     static void slerp(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst);
-
+    
     /**
      * Interpolates over a series of quaternions using spherical spline interpolation.
      *
@@ -338,7 +340,7 @@ public:
      * @param q The quaternion to multiply.
      * @return The quaternion product.
      */
-    inline Quaternion operator*(const Quaternion& q) const;
+    inline const Quaternion operator*(const Quaternion& q) const;
 
     /**
      * Multiplies this quaternion with the given quaternion.
@@ -349,6 +351,32 @@ public:
     inline Quaternion& operator*=(const Quaternion& q);
 
 private:
+
+    /**
+     * Interpolates between two quaternions using spherical linear interpolation.
+     *
+     * Spherical linear interpolation provides smooth transitions between different
+     * orientations and is often useful for animating models or cameras in 3D.
+     *
+     * Note: For accurate interpolation, the input quaternions must be at (or close to) unit length.
+     * This method does not automatically normalize the input quaternions, so it is up to the
+     * caller to ensure they call normalize beforehand, if necessary.
+     *
+     * @param q1x The x component of the first quaternion.
+     * @param q1y The y component of the first quaternion.
+     * @param q1z The z component of the first quaternion.
+     * @param q1w The w component of the first quaternion.
+     * @param q2x The x component of the second quaternion.
+     * @param q2y The y component of the second quaternion.
+     * @param q2z The z component of the second quaternion.
+     * @param q2w The w component of the second quaternion.
+     * @param t The interpolation coefficient.
+     * @param dstx A pointer to store the x component of the slerp in.
+     * @param dsty A pointer to store the y component of the slerp in.
+     * @param dstz A pointer to store the z component of the slerp in.
+     * @param dstw A pointer to store the w component of the slerp in.
+     */
+    static void slerp(float q1x, float q1y, float q1z, float q1w, float q2x, float q2y, float q2z, float q2w, float t, float* dstx, float* dsty, float* dstz, float* dstw);
 
     static void slerpForSquad(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst);
 };

@@ -7,6 +7,9 @@ uniform vec3 u_lightColor;                   // Light color.
 uniform vec3 u_ambientColor;                 // Ambient color.
 uniform sampler2D u_diffuseTexture;          // Diffuse texture.
 uniform sampler2D u_normalMapTexture;        // Normal map texture.
+#if defined(GLOBAL_ALPHA)
+uniform float u_globalAlpha;                    // Global alpha value
+#endif
 
 // Inputs
 varying vec2 v_texCoord;                     // Texture Coordinate.
@@ -103,4 +106,8 @@ void main()
     // Light the pixel
     gl_FragColor.a = _baseColor.a;
     gl_FragColor.rgb = _ambientColor + _diffuseColor;
+
+#if defined(GLOBAL_ALPHA)
+    gl_FragColor.a *= u_globalAlpha;
+#endif
 }

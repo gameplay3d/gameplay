@@ -6,7 +6,7 @@
 #include "GPBFile.h"
 #include "Animations.h"
 #include "Transform.h"
-#include "../../gameplay/src/Curve.h"
+#include "Curve.h"
 #include "Matrix.h"
 
 namespace gameplay
@@ -225,7 +225,7 @@ void MeshSkin::computeBounds()
         vertices.clear();
         BoundingVolume jointBounds;
         jointBounds.min.set(FLT_MAX, FLT_MAX, FLT_MAX);
-        jointBounds.max.set(FLT_MIN, FLT_MIN, FLT_MIN);
+        jointBounds.max.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
         for (unsigned int j = 0; j < vertexCount; ++j)
         {
             const Vertex& v = _mesh->getVertex(j);
@@ -313,25 +313,27 @@ void MeshSkin::computeBounds()
         if (duration > maxDuration)
             maxDuration = duration;
 
-        // Set curve points
-        float* keyValuesPtr = keyValues;
-        for (unsigned int j = 0; j < keyCount; ++j)
+        if (duration > 0.0f)
         {
-            // Store time normalized, between 0-1
-            float t = (keyTimes[j] - startTime) / duration;
+            // Set curve points
+            float* keyValuesPtr = keyValues;
+            for (unsigned int j = 0; j < keyCount; ++j)
+            {
+                // Store time normalized, between 0-1
+                float t = (keyTimes[j] - startTime) / duration;
 
-            // Set the curve point
-            // TODO: Handle other interpolation types
-            curve->setPoint(j, t, keyValuesPtr, gameplay::Curve::LINEAR);
+                // Set the curve point
+                // TODO: Handle other interpolation types
+                curve->setPoint(j, t, keyValuesPtr, gameplay::Curve::LINEAR);
 
-            // Move to the next point on the curve
-            keyValuesPtr += curve->getComponentCount();
+                // Move to the next point on the curve
+                keyValuesPtr += curve->getComponentCount();
+            }
+            curves.push_back(curve);
         }
 
         delete[] keyValues;
         keyValues = NULL;
-
-        curves.push_back(curve);
 
         DEBUGPRINT_VARG("> %d%%\r", (int)((float)(i+1) / (float)channelCount * 100.0f));
     }
@@ -354,7 +356,7 @@ void MeshSkin::computeBounds()
     Matrix temp;
     Matrix* jointTransforms = new Matrix[jointCount];
     _mesh->bounds.min.set(FLT_MAX, FLT_MAX, FLT_MAX);
-    _mesh->bounds.max.set(FLT_MIN, FLT_MIN, FLT_MIN);
+    _mesh->bounds.max.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
     _mesh->bounds.center.set(0, 0, 0);
     _mesh->bounds.radius = 0;
     Vector3 skinnedPos;
