@@ -468,8 +468,28 @@ int getKey(unichar keyCode);
     if(accelerometerData != nil) 
     {
         float tx, ty, tz;
-        tx = -accelerometerData.acceleration.y;
-        ty = accelerometerData.acceleration.x;
+        
+        switch ([[UIApplication sharedApplication] statusBarOrientation])
+        {
+        case UIInterfaceOrientationLandscapeRight:
+            tx = -accelerometerData.acceleration.y;
+            ty = accelerometerData.acceleration.x;
+            break;
+
+        case UIInterfaceOrientationLandscapeLeft:
+            tx = accelerometerData.acceleration.y;
+            ty = -accelerometerData.acceleration.x;
+            break;
+
+        case UIInterfaceOrientationPortraitUpsideDown:
+            tx = -accelerometerData.acceleration.y;
+            ty = -accelerometerData.acceleration.x;
+            break;
+
+        case UIInterfaceOrientationPortrait:
+            break;
+        }
+        
         tz = accelerometerData.acceleration.z;  
         
         p = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
