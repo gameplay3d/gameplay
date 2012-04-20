@@ -14,12 +14,12 @@
 #
 
 SAMPLE_PATH := $(call my-dir)/../../src
-LIBPNG_PATH := $(call my-dir)/../../../../external-deps/libpng/lib/android/arm
-ZLIB_PATH := $(call my-dir)/../../../../external-deps/zlib/lib/android/arm
-BULLET_PATH := $(call my-dir)/../../../../external-deps/bullet/lib/android/arm
+LIBPNG_PATH := ../GAMEPLAY_PATH/external-deps/libpng/lib/android/arm
+ZLIB_PATH := ../GAMEPLAY_PATH/external-deps/zlib/lib/android/arm
+BULLET_PATH := ../GAMEPLAY_PATH/external-deps/bullet/lib/android/arm
 
 # gameplay
-LOCAL_PATH := $(call my-dir)/../../../../gameplay/android/obj/local/armeabi
+LOCAL_PATH := ../GAMEPLAY_PATH/gameplay/android/obj/local/armeabi
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libgameplay
 LOCAL_SRC_FILES := libgameplay.a
@@ -51,10 +51,10 @@ LOCAL_PATH := $(SAMPLE_PATH)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := TEMPLATE_PROJECT
-LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp TemplateGame.cpp
+LOCAL_SRC_FILES := ../GAMEPLAY_PATH/gameplay/src/gameplay-main-android.cpp TemplateGame.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
-LOCAL_CFLAGS    := -D__ANDROID__ -I"../../../external-deps/bullet/include" -I"../../../external-deps/libpng/include" -I"../../../gameplay/src"
+LOCAL_CFLAGS    := -D__ANDROID__ -I"../GAMEPLAY_PATH/external-deps/bullet/include" -I"../GAMEPLAY_PATH/external-deps/libpng/include" -I"../GAMEPLAY_PATH/gameplay/src"
 
 LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay libpng libzlib libbullet
 
