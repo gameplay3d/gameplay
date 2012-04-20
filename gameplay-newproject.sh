@@ -153,12 +153,9 @@ if [[ ${gpPathAbs} == ${common_path} ]]; then
 fi
 
 
-# Below does copy, then uses 'sed' with -i for inplace editing
-# Alternative below uses sed to do a input then output skipping the copy
-# sed "s/TEMPLATE_PROJECT/$projectName/g" "gameplay-template/gameplay-template.vcxproj" > "$projPath/$projName.vcxproj"
-
 #############################################
-# Copy Visual Studio project files
+# Copy Microsoft Visual Studio project files
+#############################################
 cp "gameplay-template/gameplay-template.vcxproj" "$projPath/$projName.vcxproj"
 sed -i "" "s*TEMPLATE_PROJECT*$projectName*g" "$projPath/$projName.vcxproj"
 sed -i "" "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj"
@@ -172,7 +169,8 @@ sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj.user"
 
 
 #############################################
-# Copy XCode project files
+# Copy Apple Xcode project files
+#############################################
 mkdir -p "$projPath/$projName.xcodeproj"
 cp "gameplay-template/gameplay-template.xcodeproj/project.pbxproj" "$projPath/$projName.xcodeproj/project.pbxproj"
 sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.xcodeproj/project.pbxproj"
@@ -190,6 +188,7 @@ sed -i "" "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-ios.plist"
 
 #############################################
 # Copy BlackBerry NDK project files
+#############################################
 cp "gameplay-template/template.cproject" "$projPath/.cproject"
 sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/.cproject"
 sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/.cproject"
@@ -207,9 +206,11 @@ sed -i "" "s*TEMPLATE_DESCRIPTION*$desc*g" "$projPath/bar-descriptor.xml"
 
 #############################################
 # Copy Android NDK project files
+#############################################
 mkdir -p "$projPath/android"
 mkdir -p "$projPath/android/jni"
 mkdir -p "$projPath/android/res/values"
+mkdir -p "$projPath/android/res/drawable"
 
 cp "gameplay-template/android/template.AndroidManifest.xml" "$projPath/android/AndroidManifest.xml"
 sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/AndroidManifest.xml"
@@ -218,20 +219,15 @@ sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/android/AndroidManifest.xml"
 cp "gameplay-template/android/template.build.xml" "$projPath/android/build.xml"
 sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/build.xml"
 
-# Does not exist
-#cp "gameplay-template/android/template.project" "$projPath/android/.project"
-#sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/.project"
-
-#cp "gameplay-template/android/template.classpath" "$projPath/android/.classpath"
-
 cp "gameplay-template/android/jni/Application.mk" "$projPath/android/jni/Application.mk"
 
 cp "gameplay-template/android/jni/template.Android.mk" "$projPath/android/jni/Android.mk"
 sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/jni/Android.mk"
 sed -i "" "s*TemplateGame*$className*g" "$projPath/android/jni/Android.mk"
+sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/android/jni/Android.mk"
 
-#cp "gameplay-template/android/jni/main.cpp" "$projPath/android/jni/main.cpp"
 
+cp "gameplay-template/icon.png" "$projPath/android/res/drawable/icon.png"
 cp "gameplay-template/android/res/values/template.strings.xml" "$projPath/android/res/values/strings.xml"
 sed -i "" "s*TEMPLATE_TITLE*$title*g" "$projPath/android/res/values/strings.xml"
 
@@ -246,7 +242,6 @@ sed -i "" "s*TemplateGame*$className*g" "$projPath/src/$className.cpp"
 
 # Copy resource files
 cp "gameplay-template/res/"* "$projPath/res/"
-#cp "gameplay-template/res/shaders/colored."* "$projPath/res/"
 
 # Copy icon
 cp "gameplay-template/icon.png" "$projPath/icon.png"
