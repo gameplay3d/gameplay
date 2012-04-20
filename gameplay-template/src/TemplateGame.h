@@ -18,7 +18,7 @@ public:
     TemplateGame();
 
     /**
-     * Touch event handler.
+     * @see Game::touchEvent
      */
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
@@ -49,7 +49,7 @@ private:
     /**
      * Draws the scene each frame.
      */
-    bool drawScene(Node* node, void* cookie);
+    bool drawScene(Node* node);
 
     Scene* _scene;
 };

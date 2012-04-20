@@ -26,6 +26,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\test\bar-descriptor.xml" />
+    <None Include="..\..\test\icon.png" />
     <None Include="res\arial40.gpb" />
     <None Include="res\editor.form" />
     <None Include="res\editor.png" />

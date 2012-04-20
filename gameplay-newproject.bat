@@ -177,9 +177,14 @@ call:replace %projPath%\%projName%.xcodeproj\project.pbxproj GAMEPLAY_PATH "%gpP
 call:replace %projPath%\%projName%.xcodeproj\project.pbxproj TemplateGame "%className%"
 call:replace %projPath%\%projName%.xcodeproj\project.pbxproj TEMPLATE_PROJECT "%projName%"
 
-copy gameplay-template\gameplay-template-macosx.plist %projPath%\%projName%-macosx.plist
+copy gameplay-template\TEMPLATE_PROJECT-macosx.plist %projPath%\%projName%-macosx.plist
 call:replace %projPath%\%projName%-macosx.plist TEMPLATE_UUID "%uuid%"
 call:replace %projPath%\%projName%-macosx.plist TEMPLATE_AUTHOR "%author%"
+
+copy gameplay-template\TEMPLATE_PROJECT-ios.plist %projPath%\%projName%-ios.plist
+call:replace %projPath%\%projName%-ios.plist TEMPLATE_TITLE "%title%"
+call:replace %projPath%\%projName%-ios.plist TEMPLATE_UUID "%uuid%"
+call:replace %projPath%\%projName%-ios.plist TEMPLATE_AUTHOR "%author%"
 
 REM Copy BlackBerry NDK project files
 copy gameplay-template\template.cproject %projPath%\.cproject
@@ -207,11 +212,6 @@ call:replace %projPath%\android\AndroidManifest.xml TEMPLATE_UUID "%uuid%"
 copy gameplay-template\android\template.build.xml %projPath%\android\build.xml
 call:replace %projPath%\android\build.xml TEMPLATE_PROJECT "%projName%"
 
-copy gameplay-template\android\template.project %projPath%\android\.project
-call:replace %projPath%\android\.project TEMPLATE_PROJECT "%projName%"
-
-copy gameplay-template\android\template.classpath %projPath%\android\.classpath
-
 mkdir %projPath%\android\jni
 
 copy gameplay-template\android\jni\Application.mk %projPath%\android\jni\Application.mk
@@ -220,7 +220,9 @@ copy gameplay-template\android\jni\template.Android.mk %projPath%\android\jni\An
 call:replace %projPath%\android\jni\Android.mk TemplateGame "%className%"
 call:replace %projPath%\android\jni\Android.mk TEMPLATE_PROJECT "%projName%"
 
-copy gameplay-template\android\jni\main.cpp %projPath%\android\jni\main.cpp
+mkdir %projPath%\android\res\drawable
+
+copy gameplay-template\icon.png %projPath%\android\res\drawable\icon.png
 
 mkdir %projPath%\android\res\values
 
@@ -236,7 +238,6 @@ call:replace %projPath%\src\%className%.cpp TemplateGame "%className%"
 
 REM Copy resource files
 copy gameplay-template\res\* %projPath%\res\
-copy gameplay\res\shaders\colored.* %projPath%\res\
 
 REM Copy icon
 copy gameplay-template\icon.png %projPath%\icon.png
