@@ -1,5 +1,5 @@
 ## gameplay v1.2.0
-An open-source, cross-platform 3D native game framework making it easy to learn and write mobile and desktop games. 
+An open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
 
 ## Supported Mobile Platforms
 - BlackBerry PlayBook 2 (using BlackBerry Native SDK 2)
