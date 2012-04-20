@@ -160,6 +160,17 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="bar-descriptor.xml" >
+        <SubType>Designer</SubType>
+    </None>
+    <None Include="icon.png" />
+    <None Include="res\box.dae" />
+    <None Include="res\box.gpb" />
+    <None Include="res\box.material" />
+    <None Include="res\colored.fsh" />
+    <None Include="res\colored.vsh" />
+  </ItemGroup> 
+  <ItemGroup>
     <ClCompile Include="src\TemplateGame.cpp" />
   </ItemGroup>
   <ItemGroup>
