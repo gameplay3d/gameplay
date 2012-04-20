@@ -158,7 +158,7 @@ fi
 # sed "s/TEMPLATE_PROJECT/$projectName/g" "gameplay-template/gameplay-template.vcxproj" > "$projPath/$projName.vcxproj"
 
 #############################################
-# Copy Microsoft Virtual Studio project files
+# Copy Visual Studio project files
 cp "gameplay-template/gameplay-template.vcxproj" "$projPath/$projName.vcxproj"
 sed -i "" "s*TEMPLATE_PROJECT*$projectName*g" "$projPath/$projName.vcxproj"
 sed -i "" "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj"
@@ -172,7 +172,7 @@ sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj.user"
 
 
 #############################################
-# Copy Apple XCode project files
+# Copy XCode project files
 mkdir -p "$projPath/$projName.xcodeproj"
 cp "gameplay-template/gameplay-template.xcodeproj/project.pbxproj" "$projPath/$projName.xcodeproj/project.pbxproj"
 sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.xcodeproj/project.pbxproj"
@@ -184,6 +184,7 @@ sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-macosx.plist"
 sed -i "" "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-macosx.plist"
 
 cp "gameplay-template/TEMPLATE_PROJECT-ios.plist" "$projPath/$projName-ios.plist"
+sed -i "" "s*TEMPLATE_TITLE*$title*g" "$projPath/$projName-ios.plist"
 sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-ios.plist"
 sed -i "" "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-ios.plist"
 
