@@ -1,17 +1,15 @@
 #include "Base.h"
 #include "Game.h"
-#include "Package.h"
+#include "Bundle.h"
 #include "SceneLoader.h"
 
 namespace gameplay
 {
 
-// Static member variables.
 std::map<std::string, Properties*> SceneLoader::_propertiesFromFile;
 std::vector<SceneLoader::SceneAnimation> SceneLoader::_animations;
-std::vector<SceneLoader::SceneNodeProperty> SceneLoader::_nodeProperties;
-std::vector<std::string> SceneLoader::_nodesWithMeshRB;
-std::map<std::string, SceneLoader::MeshRigidBodyData>* SceneLoader::_meshRigidBodyData = NULL;
+std::vector<SceneLoader::SceneNode> SceneLoader::_sceneNodes;
+std::string SceneLoader::_path;
 
 Scene* SceneLoader::load(const char* filePath)
 {
@@ -35,26 +33,12 @@ Scene* SceneLoader::load(const char* filePath)
         SAFE_DELETE(properties);
         return NULL;
     }
-    
 
+    // Get the path to the main GPB.
+    _path = sceneProperties->getString("path");
     // Build the node URL/property and animation reference tables and load the referenced files.
     buildReferenceTables(sceneProperties);
     loadReferencedFiles();
-
-    // Calculate the node IDs that need to be loaded with mesh rigid body support.
-    calculateNodesWithMeshRigidBodies(sceneProperties);
-
-    // Set up for storing the mesh rigid body data.
-    if (_nodesWithMeshRB.size() > 0)
-    {
-        // We do not currently support loading more than one scene simultaneously.
-        if (_meshRigidBodyData)
-        {
-            WARN("Attempting to load multiple scenes simultaneously; mesh rigid bodies will not load properly.");
-        }
-
-        _meshRigidBodyData = new std::map<std::string, MeshRigidBodyData>();
-    }
 
     // Load the main scene data from GPB and apply the global scene properties.
     Scene* scene = loadMainSceneData(sceneProperties);
@@ -66,8 +50,20 @@ Scene* SceneLoader::load(const char* filePath)
 
     // First apply the node url properties. Following that,
     // apply the normal node properties and create the animations.
+    // We apply physics properties after all other node properties
+    // so that the transform (SRT) properties get applied before
+    // processing physics collision objects.
     applyNodeUrls(scene);
-    applyNodeProperties(scene, sceneProperties);
+    applyNodeProperties(scene, sceneProperties, 
+        SceneNodeProperty::AUDIO | 
+        SceneNodeProperty::MATERIAL | 
+        SceneNodeProperty::PARTICLE |
+        SceneNodeProperty::ROTATE |
+        SceneNodeProperty::SCALE |
+        SceneNodeProperty::TRANSLATE | 
+        SceneNodeProperty::TRANSPARENT |
+        SceneNodeProperty::DYNAMIC);
+    applyNodeProperties(scene, sceneProperties, SceneNodeProperty::CHARACTER | SceneNodeProperty::GHOSTOBJECT | SceneNodeProperty::RIGIDBODY);
     createAnimations(scene);
 
     // Find the physics properties object.
@@ -98,56 +94,12 @@ Scene* SceneLoader::load(const char* filePath)
     // Clean up the .scene file's properties object.
     SAFE_DELETE(properties);
 
-    // Clean up mesh rigid body data.
-    if (_meshRigidBodyData)
-    {
-        std::map<std::string, MeshRigidBodyData>::iterator iter = _meshRigidBodyData->begin();
-        for (; iter != _meshRigidBodyData->end(); iter++)
-        {
-            for (unsigned int i = 0; i < iter->second.indexData.size(); i++)
-            {
-                SAFE_DELETE_ARRAY(iter->second.indexData[i]);
-            }
-
-            SAFE_DELETE_ARRAY(iter->second.vertexData);
-        }
-
-        SAFE_DELETE(_meshRigidBodyData);
-    }
-
     // Clear all temporary data stores.
     _propertiesFromFile.clear();
     _animations.clear();
-    _nodeProperties.clear();
-    _nodesWithMeshRB.clear();
+    _sceneNodes.clear();
 
     return scene;
-}
-
-void SceneLoader::addMeshRigidBodyData(std::string id, Mesh* mesh, unsigned char* vertexData, unsigned int vertexByteCount)
-{
-    if (!_meshRigidBodyData)
-    {
-        WARN("Attempting to add mesh rigid body data outside of scene loading; ignoring request.");
-        return;
-    }
-
-    (*_meshRigidBodyData)[id].mesh = mesh;
-    (*_meshRigidBodyData)[id].vertexData = new unsigned char[vertexByteCount];
-    memcpy((*_meshRigidBodyData)[id].vertexData, vertexData, vertexByteCount);
-}
-
-void SceneLoader::addMeshRigidBodyData(std::string id, unsigned char* indexData, unsigned int indexByteCount)
-{
-    if (!_meshRigidBodyData)
-    {
-        WARN("Attempting to add mesh rigid body data outside of scene loading; ignoring request.");
-        return;
-    }
-
-    unsigned char* indexDataCopy = new unsigned char[indexByteCount];
-    memcpy(indexDataCopy, indexData, indexByteCount);
-    (*_meshRigidBodyData)[id].indexData.push_back(indexDataCopy);
 }
 
 void SceneLoader::addSceneAnimation(const char* animationID, const char* targetID, const char* url)
@@ -156,7 +108,7 @@ void SceneLoader::addSceneAnimation(const char* animationID, const char* targetI
     std::string file;
     std::string id;
     splitURL(url, &file, &id);
-    
+
     // If there is a file that needs to be loaded later, add an 
     // empty entry to the properties table to signify it.
     if (file.length() > 0 && _propertiesFromFile.count(file) == 0)
@@ -166,166 +118,158 @@ void SceneLoader::addSceneAnimation(const char* animationID, const char* targetI
     _animations.push_back(SceneAnimation(animationID, targetID, file, id));
 }
 
-void SceneLoader::addSceneNodeProperty(SceneNodeProperty::Type type, const char* nodeID, const char* url)
+void SceneLoader::addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::Type type, const char* url, int index)
 {
     // Calculate the file and id from the given url.
     std::string file;
     std::string id;
     splitURL(url, &file, &id);
-    
+
     // If there is a non-GPB file that needs to be loaded later, add an 
     // empty entry to the properties table to signify it.
     if (file.length() > 0 && file.find(".gpb") == file.npos && _propertiesFromFile.count(file) == 0)
         _propertiesFromFile[file] = NULL;
 
+    SceneNodeProperty prop(type, file, id, index);
+
+    // Parse for wildcharacter character (only supported on the URL attribute)
+    if (type == SceneNodeProperty::URL)
+    {
+        if (id.length() > 1 && id.at(id.length()-1) == '*')
+        {
+            prop._id = id.substr(0, id.length()-1);
+            sceneNode._exactMatch = false;
+        }
+    }
+
     // Add the node property to the list of node properties to be resolved later.
-    _nodeProperties.push_back(SceneNodeProperty(type, nodeID, file, id));
+    sceneNode._properties.push_back(prop);
 }
 
-void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* sceneProperties)
+void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* sceneProperties, unsigned int typeFlags)
 {
-    // Apply all of the remaining scene node properties except rigid body (we apply that last).
-    for (unsigned int i = 0; i < _nodeProperties.size(); i++)
+    for (unsigned int i = 0, ncount = _sceneNodes.size(); i < ncount; ++i)
     {
-        // If the referenced node doesn't exist in the scene, then we
-        // can't do anything so we skip to the next scene node property.
-        Node* node = scene->findNode(_nodeProperties[i]._nodeID);
-        if (!node)
-        {
-            WARN_VARG("Attempting to set a property for node '%s', which does not exist in the scene.", _nodeProperties[i]._nodeID);
-            continue;
-        }
+        SceneNode& sceneNode = _sceneNodes[i];
 
-        if (_nodeProperties[i]._type == SceneNodeProperty::AUDIO ||
-            _nodeProperties[i]._type == SceneNodeProperty::MATERIAL ||
-            _nodeProperties[i]._type == SceneNodeProperty::PARTICLE ||
-            _nodeProperties[i]._type == SceneNodeProperty::RIGIDBODY)
+        if (sceneNode._exactMatch)
         {
-            // Check to make sure the referenced properties object was loaded properly.
-            Properties* p = _propertiesFromFile[_nodeProperties[i]._file];
-            if (!p)
+            // Find the node matching the specified ID exactly
+            Node* node = scene->findNode(sceneNode._nodeID);
+            if (!node)
             {
-                WARN_VARG("The referenced node data in file '%s' failed to load.", _nodeProperties[i]._file.c_str());
+                WARN_VARG("Attempting to set a property for node '%s', which does not exist in the scene.", sceneNode._nodeID);
                 continue;
             }
 
-            // If a specific namespace within the file was specified, load that namespace.
-            if (_nodeProperties[i]._id.size() > 0)
+            for (unsigned int j = 0, pcount = sceneNode._properties.size(); j < pcount; ++j)
             {
-                p = p->getNamespace(_nodeProperties[i]._id.c_str());
-                if (!p)
-                {
-                    WARN_VARG("The referenced node data at '%s#%s' failed to load.", _nodeProperties[i]._file.c_str(), _nodeProperties[i]._id.c_str());
-                    continue;
-                }
-            }
-            else
-            {
-                // Otherwise, use the first namespace.
-                p->rewind();
-                p = p->getNextNamespace();
-            }
-
-            switch (_nodeProperties[i]._type)
-            {
-            case SceneNodeProperty::AUDIO:
-            {
-                AudioSource* audioSource = AudioSource::create(p);
-                node->setAudioSource(audioSource);
-                SAFE_RELEASE(audioSource);
-                break;
-            }
-            case SceneNodeProperty::MATERIAL:
-                if (!node->getModel())
-                    WARN_VARG("Attempting to set a material on node '%s', which has no model.", _nodeProperties[i]._nodeID);
-                else
-                {
-                    Material* material = Material::create(p);
-                    node->getModel()->setMaterial(material);
-                    SAFE_RELEASE(material);
-                }
-
-                break;
-            case SceneNodeProperty::PARTICLE:
-            {
-                ParticleEmitter* particleEmitter = ParticleEmitter::create(p);
-                node->setParticleEmitter(particleEmitter);
-                SAFE_RELEASE(particleEmitter);
-                break;
-            }
-            case SceneNodeProperty::RIGIDBODY:
-                // Process this last in a separate loop to allow scale, translate, rotate to be applied first.
-                break;
-            default:
-                // This cannot happen.
-                break;
+                SceneNodeProperty& snp = sceneNode._properties[j];
+                if (typeFlags & snp._type)
+                    applyNodeProperty(sceneNode, node, sceneProperties, snp);
             }
         }
         else
         {
-            Properties* np = sceneProperties->getNamespace(_nodeProperties[i]._nodeID);
-            const char* name = NULL;
+            // Find all nodes matching the specified ID
+            std::vector<Node*> nodes;
+            unsigned int nodeCount = scene->findNodes(sceneNode._nodeID, nodes, true, false);
+            if (nodeCount == 0)
+                continue;
+            
+            for (unsigned int j = 0, pcount = sceneNode._properties.size(); j < pcount; ++j)
+            {
+                SceneNodeProperty& snp = sceneNode._properties[j];
+                if ((typeFlags & snp._type) == 0)
+                    continue;
 
-            switch (_nodeProperties[i]._type)
-            {
-            case SceneNodeProperty::TRANSLATE:
-            {
-                Vector3 t;
-                if (np && np->getVector3("translate", &t))
-                    node->setTranslation(t);
-                break;
-            }
-            case SceneNodeProperty::ROTATE:
-            {
-                Quaternion r;
-                if (np && np->getQuaternionFromAxisAngle("rotate", &r))
-                    node->setRotation(r);
-                break;
-            }
-            case SceneNodeProperty::SCALE:
-            {
-                Vector3 s;
-                if (np && np->getVector3("scale", &s))
-                    node->setScale(s);
-                break;
-            }
-            default:
-                WARN_VARG("Unsupported node property type: %d.", _nodeProperties[i]._type);
-                break;
+                for (unsigned int k = 0; k < nodeCount; ++k)
+                    applyNodeProperty(sceneNode, nodes[k], sceneProperties, snp);
             }
         }
     }
+}
 
-    // Process rigid body properties.
-    for (unsigned int i = 0; i < _nodeProperties.size(); i++)
+void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp)
+{
+    if (snp._type == SceneNodeProperty::AUDIO ||
+        snp._type == SceneNodeProperty::MATERIAL ||
+        snp._type == SceneNodeProperty::PARTICLE ||
+        snp._type == SceneNodeProperty::CHARACTER ||
+        snp._type == SceneNodeProperty::GHOSTOBJECT ||
+        snp._type == SceneNodeProperty::RIGIDBODY)
     {
-        if (_nodeProperties[i]._type == SceneNodeProperty::RIGIDBODY)
+        // Check to make sure the referenced properties object was loaded properly.
+        Properties* p = _propertiesFromFile[snp._file];
+        if (!p)
         {
-            // If the referenced node doesn't exist in the scene, then we
-            // can't do anything so we skip to the next scene node property.
-            Node* node = scene->findNode(_nodeProperties[i]._nodeID);
-            if (!node)
-            {
-                WARN_VARG("Attempting to set a property for node '%s', which does not exist in the scene.", _nodeProperties[i]._nodeID);
-                continue;
-            }
+            WARN_VARG("The referenced node data in file '%s' failed to load.", snp._file.c_str());
+            return;
+        }
 
-            // Check to make sure the referenced properties object was loaded properly.
-            Properties* p = _propertiesFromFile[_nodeProperties[i]._file];
+        // If a specific namespace within the file was specified, load that namespace.
+        if (snp._id.size() > 0)
+        {
+            p = p->getNamespace(snp._id.c_str());
             if (!p)
             {
-                WARN_VARG("The referenced node data in file '%s' failed to load.", _nodeProperties[i]._file.c_str());
-                continue;
+                WARN_VARG("The referenced node data at '%s#%s' failed to load.", snp._file.c_str(), snp._id.c_str());
+                return;
+            }
+        }
+        else
+        {
+            // Otherwise, use the first namespace.
+            p->rewind();
+            p = p->getNextNamespace();
+        }
+
+        switch (snp._type)
+        {
+        case SceneNodeProperty::AUDIO:
+        {
+            AudioSource* audioSource = AudioSource::create(p);
+            node->setAudioSource(audioSource);
+            SAFE_RELEASE(audioSource);
+            break;
+        }
+        case SceneNodeProperty::MATERIAL:
+            if (!node->getModel())
+                WARN_VARG("Attempting to set a material on node '%s', which has no model.", sceneNode._nodeID);
+            else
+            {
+                Material* material = Material::create(p);
+                node->getModel()->setMaterial(material, snp._index);
+                SAFE_RELEASE(material);
+            }
+            break;
+        case SceneNodeProperty::PARTICLE:
+        {
+            ParticleEmitter* particleEmitter = ParticleEmitter::create(p);
+            node->setParticleEmitter(particleEmitter);
+            SAFE_RELEASE(particleEmitter);
+            break;
+        }
+        case SceneNodeProperty::CHARACTER:
+        case SceneNodeProperty::GHOSTOBJECT:
+        case SceneNodeProperty::RIGIDBODY:
+        {
+            // Check to make sure the referenced properties object was loaded properly.
+            Properties* p = _propertiesFromFile[snp._file];
+            if (!p)
+            {
+                WARN_VARG("The referenced node data in file '%s' failed to load.", snp._file.c_str());
+                return;
             }
 
             // If a specific namespace within the file was specified, load that namespace.
-            if (_nodeProperties[i]._id.size() > 0)
+            if (snp._id.size() > 0)
             {
-                p = p->getNamespace(_nodeProperties[i]._id.c_str());
+                p = p->getNamespace(snp._id.c_str());
                 if (!p)
                 {
-                    WARN_VARG("The referenced node data at '%s#%s' failed to load.", _nodeProperties[i]._file.c_str(), _nodeProperties[i]._id.c_str());
-                    continue;
+                    WARN_VARG("The referenced node data at '%s#%s' failed to load.", snp._file.c_str(), snp._id.c_str());
+                    return;
                 }
             }
             else
@@ -335,32 +279,106 @@ void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* scen
                 p = p->getNextNamespace();
             }
 
-            // If the scene file specifies a rigid body model, use it for creating the rigid body.
-            Properties* np = sceneProperties->getNamespace(_nodeProperties[i]._nodeID);
-            const char* name = NULL;
-            if (np && (name = np->getString("rigidbodymodel")))
+            // Check to make sure the type of the namespace used to load the physics collision object is correct.
+            if (snp._type == SceneNodeProperty::CHARACTER && strcmp(p->getNamespace(), "character") != 0)
             {
-                Node* modelNode = scene->findNode(name);
-                if (!modelNode)
-                    WARN_VARG("Node '%s' does not exist; attempting to use its model for rigid body creation.", name);
-                else
+                WARN_VARG("Attempting to set a 'character' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
+            }
+            else if (snp._type == SceneNodeProperty::GHOSTOBJECT && strcmp(p->getNamespace(), "ghostObject") != 0)
+            {
+                WARN_VARG("Attempting to set a 'ghostObject' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
+            }
+            else if (snp._type == SceneNodeProperty::RIGIDBODY && strcmp(p->getNamespace(), "rigidBody") != 0)
+            {
+                WARN_VARG("Attempting to set a 'rigidBody' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
+            }
+            else
+            {
+                // If the scene file specifies a rigid body model, use it for creating the collision object.
+                Properties* np = sceneProperties->getNamespace(sceneNode._nodeID);
+                const char* name = NULL;
+                if (np && (name = np->getString("rigidBodyModel")))
                 {
-                    if (!modelNode->getModel())
-                        WARN_VARG("Node '%s' does not have a model; attempting to use its model for rigid body creation.", name);
+                    Node* modelNode = node->getScene()->findNode(name);
+                    if (!modelNode)
+                        WARN_VARG("Node '%s' does not exist; attempting to use its model for collision object creation.", name);
                     else
                     {
-                        // Set the specified model during physics rigid body creation.
-                        Model* model = node->getModel();
-                        node->setModel(modelNode->getModel());
-                        node->setPhysicsRigidBody(p);
-                        node->setModel(model);
+                        if (!modelNode->getModel())
+                            WARN_VARG("Node '%s' does not have a model; attempting to use its model for collision object creation.", name);
+                        else
+                        {
+                            // Temporarily set rigidBody model on model so it's used during collision object creation.
+                            Model* model = node->getModel();
+                            assert(model);
+                        
+                            // Up ref count to prevent node from releasing the model when we swap it.
+                            model->addRef(); 
+                        
+                            // Create collision object with new rigidBodyModel set.
+                            node->setModel(modelNode->getModel());
+                            node->setCollisionObject(p);
+
+                            // Restore original model.
+                            node->setModel(model);
+                        
+                            // Decrement temporarily added reference.
+                            model->release();
+                        }
                     }
                 }
+                else
+                    node->setCollisionObject(p);
             }
-            else if (!node->getModel())
-                WARN_VARG("Attempting to set a rigid body on node '%s', which has no model.", _nodeProperties[i]._nodeID);
-            else
-                node->setPhysicsRigidBody(p);
+            break;
+        }
+        default:
+            // This cannot happen.
+            break;
+        }
+    }
+    else
+    {
+        // Handle Scale, Rotate and Translate
+        Properties* np = sceneProperties->getNamespace(sceneNode._nodeID);
+        const char* name = NULL;
+
+        switch (snp._type)
+        {
+        case SceneNodeProperty::TRANSLATE:
+        {
+            Vector3 t;
+            if (np && np->getVector3("translate", &t))
+                node->setTranslation(t);
+            break;
+        }
+        case SceneNodeProperty::ROTATE:
+        {
+            Quaternion r;
+            if (np && np->getQuaternionFromAxisAngle("rotate", &r))
+                node->setRotation(r);
+            break;
+        }
+        case SceneNodeProperty::SCALE:
+        {
+            Vector3 s;
+            if (np && np->getVector3("scale", &s))
+                node->setScale(s);
+            break;
+        }
+        case SceneNodeProperty::TRANSPARENT:
+        {
+            node->setTransparent(true);
+            break;
+        }
+        case SceneNodeProperty::DYNAMIC:
+        {
+            node->setDynamic(true);
+            break;
+        }
+        default:
+            WARN_VARG("Unsupported node property type: %d.", snp._type);
+            break;
         }
     }
 }
@@ -369,65 +387,126 @@ void SceneLoader::applyNodeUrls(Scene* scene)
 {
     // Apply all URL node properties so that when we go to apply
     // the other node properties, the node is in the scene.
-    for (unsigned int i = 0; i < _nodeProperties.size(); )
+    for (unsigned int i = 0, ncount = _sceneNodes.size(); i < ncount; ++i)
     {
-        if (_nodeProperties[i]._type == SceneNodeProperty::URL)
+        SceneNode& sceneNode = _sceneNodes[i];
+
+        // Iterate backwards over the properties list so we can remove properties as we go
+        // without danger of indexing out of bounds.
+        for (int j = sceneNode._properties.size() - 1; j >= 0; --j)
         {
-            // Make sure that the ID we are using to insert the node into the scene with is unique.
-            if (scene->findNode(_nodeProperties[i]._nodeID) != NULL)
-                WARN_VARG("Attempting to insert or rename a node to an ID that already exists: ID='%s'", _nodeProperties[i]._nodeID);
-            else
+            SceneNodeProperty& snp = sceneNode._properties[j];
+            if (snp._type != SceneNodeProperty::URL)
+                continue;
+
+            if (snp._file.empty())
             {
-                // If a file was specified, load the node from file and then insert it into the scene with the new ID.
-                if (_nodeProperties[i]._file.size() > 0)
+                // The node is from the main GPB and should just be renamed.
+
+                // TODO: Should we do all nodes with this case first to allow users to stitch in nodes with
+                // IDs equal to IDs that were in the original GPB file but were changed in the scene file?
+                if (sceneNode._exactMatch)
                 {
-                    Package* tmpPackage = Package::create(_nodeProperties[i]._file.c_str());
-                    if (!tmpPackage)
-                        WARN_VARG("Failed to load GPB file '%s' for node stitching.", _nodeProperties[i]._file.c_str());
+                    Node* node = scene->findNode(snp._id.c_str());
+                    if (node)
+                    {
+                        node->setId(sceneNode._nodeID);
+                    }
                     else
                     {
-                        bool loadWithMeshRBSupport = false;
-                        for (unsigned int j = 0; j < _nodesWithMeshRB.size(); j++)
-                        {
-                            if (_nodeProperties[i]._id == _nodesWithMeshRB[j])
-                            {
-                                loadWithMeshRBSupport = true;
-                                break;
-                            }
-                        }
-
-                        Node* node = tmpPackage->loadNode(_nodeProperties[i]._id.c_str(), loadWithMeshRBSupport);
-                        if (!node)
-                            WARN_VARG("Could not load node '%s' in GPB file '%s'.", _nodeProperties[i]._id.c_str(), _nodeProperties[i]._file.c_str());
-                        else
-                        {
-                            node->setId(_nodeProperties[i]._nodeID);
-                            scene->addNode(node);
-                            SAFE_RELEASE(node);
-                        }
-                        
-                        SAFE_RELEASE(tmpPackage);
+                        WARN_VARG("Could not find node '%s' in main scene GPB file.", snp._id.c_str());
                     }
                 }
                 else
                 {
-                    // TODO: Should we do all nodes with this case first to allow users to stitch in nodes with
-                    // IDs equal to IDs that were in the original GPB file but were changed in the scene file?
-
-                    // Otherwise, the node is from the main GPB and should just be renamed.
-                    Node* node = scene->findNode(_nodeProperties[i]._id.c_str());
-                    if (!node)
-                        WARN_VARG("Could not find node '%s' in main scene GPB file.", _nodeProperties[i]._id.c_str());
+                    // Search for nodes using a partial match
+                    std::string partialMatch = snp._id;
+                    std::vector<Node*> nodes;
+                    unsigned int nodeCount = scene->findNodes(snp._id.c_str(), nodes, true, false);
+                    if (nodeCount > 0)
+                    {
+                        for (unsigned int k = 0; k < nodeCount; ++k)
+                        {
+                            // Construct a new node ID using _nodeID plus the remainder of the partial match.
+                            Node* node = nodes[k];
+                            std::string newID(sceneNode._nodeID);
+                            newID += (node->getId() + snp._id.length());
+                            node->setId(newID.c_str());
+                        }
+                    }
                     else
-                        node->setId(_nodeProperties[i]._nodeID);
+                    {
+                        WARN_VARG("Could not find any nodes matching '%s' in main scene GPB file.", snp._id.c_str());
+                    }
+                }
+            }
+            else
+            {
+                // An external file was referenced, so load the node from file and then insert it into the scene with the new ID.
+
+                // TODO: Revisit this to determine if we should cache Bundle objects for the duration of the scene
+                // load to prevent constantly creating/destroying the same externally referenced bundles each time
+                // a url with a file is encountered.
+                Bundle* tmpBundle = Bundle::create(snp._file.c_str());
+                if (tmpBundle)
+                {
+                    if (sceneNode._exactMatch)
+                    {
+                        Node* node = tmpBundle->loadNode(snp._id.c_str());
+                        if (node)
+                        {
+                            node->setId(sceneNode._nodeID);
+                            scene->addNode(node);
+                            SAFE_RELEASE(node);
+                        }
+                        else
+                        {
+                            WARN_VARG("Could not load node '%s' in GPB file '%s'.", snp._id.c_str(), snp._file.c_str());
+                        }
+                    }
+                    else
+                    {
+                        // Search for nodes in the bundle using a partial match
+                        std::string partialMatch = snp._id;
+                        unsigned int objectCount = tmpBundle->getObjectCount();
+                        unsigned int matchCount = 0;
+                        for (unsigned int k = 0; k < objectCount; ++k)
+                        {
+                            const char* objid = tmpBundle->getObjectID(k);
+                            if (strstr(objid, snp._id.c_str()) == objid)
+                            {
+                                // This object ID matches (starts with).
+                                // Try to load this object as a Node.
+                                Node* node = tmpBundle->loadNode(objid);
+                                if (node)
+                                {
+                                    // Construct a new node ID using _nodeID plus the remainder of the partial match.
+                                    std::string newID(sceneNode._nodeID);
+                                    newID += (node->getId() + snp._id.length());
+                                    node->setId(newID.c_str());
+                                    scene->addNode(node);
+                                    SAFE_RELEASE(node);
+                                    matchCount++;
+                                }
+                            }
+                        }
+                        if (matchCount == 0)
+                        {
+                            WARN_VARG("Could not find any nodes matching '%s' in GPB file '%s'.", snp._id.c_str(), snp._file.c_str());
+                        }
+                    }
+
+                    SAFE_RELEASE(tmpBundle);
+                }
+                else
+                {
+                    WARN_VARG("Failed to load GPB file '%s' for node stitching.", snp._file.c_str());
                 }
             }
 
             // Remove the node property since we are done applying it.
-            _nodeProperties.erase(_nodeProperties.begin() + i);
+            sceneNode._properties.erase(sceneNode._properties.begin() + j);
         }
-        else
-            i++;
     }
 }
 
@@ -436,7 +515,7 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
     // Go through the child namespaces of the scene.
     Properties* ns;
     const char* name = NULL;
-    while (ns = sceneProperties->getNextNamespace())
+    while ((ns = sceneProperties->getNextNamespace()) != NULL)
     {
         if (strcmp(ns->getNamespace(), "node") == 0)
         {
@@ -446,43 +525,72 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                 continue;
             }
 
-            while (name = ns->getNextProperty())
+            // Add a SceneNode to the end of the list
+            _sceneNodes.resize(_sceneNodes.size() + 1);
+            SceneNode& sceneNode = _sceneNodes[_sceneNodes.size()-1];
+            sceneNode._nodeID = ns->getId();
+
+            while ((name = ns->getNextProperty()) != NULL)
             {
                 if (strcmp(name, "url") == 0)
                 {
-                    addSceneNodeProperty(SceneNodeProperty::URL, ns->getId(), ns->getString());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::URL, ns->getString());
                 }
                 else if (strcmp(name, "audio") == 0)
                 {
-                    addSceneNodeProperty(SceneNodeProperty::AUDIO, ns->getId(), ns->getString());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::AUDIO, ns->getString());
                 }
-                else if (strcmp(name, "material") == 0)
+                else if (strncmp(name, "material", 8) == 0)
                 {
-                    addSceneNodeProperty(SceneNodeProperty::MATERIAL, ns->getId(), ns->getString());
+                    int materialIndex = -1;
+                    name = strchr(name, '[');
+                    if (name && strlen(name) >= 3)
+                    {
+                        std::string indexString(name);
+                        indexString = indexString.substr(1, indexString.size()-2);
+                        materialIndex = (unsigned int)atoi(indexString.c_str());
+                    }
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::MATERIAL, ns->getString(), materialIndex);
                 }
                 else if (strcmp(name, "particle") == 0)
                 {
-                    addSceneNodeProperty(SceneNodeProperty::PARTICLE, ns->getId(), ns->getString());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::PARTICLE, ns->getString());
                 }
-                else if (strcmp(name, "rigidbody") == 0)
+                else if (strcmp(name, "character") == 0)
                 {
-                    addSceneNodeProperty(SceneNodeProperty::RIGIDBODY, ns->getId(), ns->getString());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::CHARACTER, ns->getString());
                 }
-                else if (strcmp(name, "rigidbodymodel") == 0)
+                else if (strcmp(name, "ghostObject") == 0)
+                {
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::GHOSTOBJECT, ns->getString());
+                }
+                else if (strcmp(name, "rigidBody") == 0)
+                {
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::RIGIDBODY, ns->getString());
+                }
+                else if (strcmp(name, "rigidBodyModel") == 0)
                 {
                     // Ignore this for now. We process this when we do rigid body creation.
                 }
                 else if (strcmp(name, "translate") == 0)
                 {
-                    addSceneNodeProperty(SceneNodeProperty::TRANSLATE, ns->getId());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::TRANSLATE);
                 }
                 else if (strcmp(name, "rotate") == 0)
                 {
-                    addSceneNodeProperty(SceneNodeProperty::ROTATE, ns->getId());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::ROTATE);
                 }
                 else if (strcmp(name, "scale") == 0)
                 {
-                    addSceneNodeProperty(SceneNodeProperty::SCALE, ns->getId());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::SCALE);
+                }
+                else if (strcmp(name, "transparent") == 0)
+                {
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::TRANSPARENT);
+                }
+                else if (strcmp(name, "dynamic") == 0)
+                {
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::DYNAMIC);
                 }
                 else
                 {
@@ -494,7 +602,7 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
         {
             // Load all the animations.
             Properties* animation;
-            while (animation = ns->getNextNamespace())
+            while ((animation = ns->getNextNamespace()) != NULL)
             {
                 if (strcmp(animation->getNamespace(), "animation") == 0)
                 {
@@ -533,44 +641,8 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
         }
         else
         {
+            // TODO: Should we ignore these items? They could be used for generic properties file inheritence.
             WARN_VARG("Unsupported child namespace (of 'scene'): %s", ns->getNamespace());
-        }
-    }
-}
-
-void SceneLoader::calculateNodesWithMeshRigidBodies(const Properties* sceneProperties)
-{
-    const char* name = NULL;
-
-    // Make a list of all nodes with triangle mesh rigid bodies.
-    for (unsigned int i = 0; i < _nodeProperties.size(); i++)
-    {
-        if (_nodeProperties[i]._type == SceneNodeProperty::RIGIDBODY)
-        {
-            Properties* p = _propertiesFromFile[_nodeProperties[i]._file];
-            if (p)
-            {
-                if (_nodeProperties[i]._id.size() > 0)
-                {
-                    p = p->getNamespace(_nodeProperties[i]._id.c_str());
-                }
-                else
-                {
-                    p = p->getNextNamespace();
-                }
-
-                if (p && strcmp(p->getNamespace(), "rigidbody") == 0 &&
-                    strcmp(p->getString("type"), "MESH") == 0)
-                {
-                    // If the node specifies a rigidbodymodel, then use
-                    // that node's ID; otherwise, use its ID.
-                    Properties* p = sceneProperties->getNamespace(_nodeProperties[i]._nodeID);
-                    if (p && (name = p->getString("rigidbodymodel")))
-                        _nodesWithMeshRB.push_back(name);
-                    else
-                        _nodesWithMeshRB.push_back(_nodeProperties[i]._nodeID);
-                }
-            }
         }
     }
 }
@@ -578,7 +650,7 @@ void SceneLoader::calculateNodesWithMeshRigidBodies(const Properties* scenePrope
 void SceneLoader::createAnimations(const Scene* scene)
 {
     // Create the scene animations.
-    for (unsigned int i = 0; i < _animations.size(); i++)
+    for (unsigned int i = 0, count = _animations.size(); i < count; i++)
     {
         // If the target node doesn't exist in the scene, then we
         // can't do anything so we skip to the next animation.
@@ -606,19 +678,8 @@ void SceneLoader::createAnimations(const Scene* scene)
             }
         }
 
-        Game::getInstance()->getAnimationController()->createAnimation(_animations[i]._animationID, node, p);
+        node->createAnimation(_animations[i]._animationID, p);
     }
-}
-
-const SceneLoader::MeshRigidBodyData* SceneLoader::getMeshRigidBodyData(std::string id)
-{
-    if (!_meshRigidBodyData)
-    {
-        WARN("Attempting to get mesh rigid body data, but none has been loaded; ignoring request.");
-        return NULL;
-    }
-
-    return (_meshRigidBodyData->count(id) > 0) ? &(*_meshRigidBodyData)[id] : NULL;
 }
 
 PhysicsConstraint* SceneLoader::loadGenericConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB)
@@ -704,19 +765,19 @@ PhysicsConstraint* SceneLoader::loadHingeConstraint(const Properties* constraint
 Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
 {
     // Load the main scene from the specified path.
-    const char* path = sceneProperties->getString("path");
-    Package* package = Package::create(path);
-    if (!package)
+    Bundle* bundle = Bundle::create(_path.c_str());
+    if (!bundle)
     {
-        WARN_VARG("Failed to load scene GPB file '%s'.", path);
+        WARN_VARG("Failed to load scene GPB file '%s'.", _path.c_str());
         return NULL;
     }
-    
-    Scene* scene = package->loadScene(NULL, &_nodesWithMeshRB);
+
+    const char* sceneID = strlen(sceneProperties->getId()) == 0 ? NULL : sceneProperties->getId();
+    Scene* scene = bundle->loadScene(sceneID);
     if (!scene)
     {
-        WARN_VARG("Failed to load scene from '%s'.", path);
-        SAFE_RELEASE(package);
+        WARN_VARG("Failed to load scene from '%s'.", _path.c_str());
+        SAFE_RELEASE(bundle);
         return NULL;
     }
 
@@ -729,7 +790,7 @@ Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
             scene->setActiveCamera(camera->getCamera());
     }
 
-    SAFE_RELEASE(package);
+    SAFE_RELEASE(bundle);
     return scene;
 }
 
@@ -742,7 +803,7 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
 
     Properties* constraint;
     const char* name;
-    while (constraint = physics->getNextNamespace())
+    while ((constraint = physics->getNextNamespace()) != NULL)
     {
         if (strcmp(constraint->getNamespace(), "constraint") == 0)
         {
@@ -763,12 +824,12 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
                 WARN_VARG("Node '%s' to be used as 'rigidBodyA' for constraint %s cannot be found.", name, constraint->getId());
                 continue;
             }
-            PhysicsRigidBody* rbA = rbANode->getPhysicsRigidBody();
-            if (!rbA)
+            if (!rbANode->getCollisionObject() || rbANode->getCollisionObject()->getType() != PhysicsCollisionObject::RIGID_BODY)
             {
                 WARN_VARG("Node '%s' to be used as 'rigidBodyA' does not have a rigid body.", name);
                 continue;
             }
+            PhysicsRigidBody* rbA = static_cast<PhysicsRigidBody*>(rbANode->getCollisionObject());
 
             // Attempt to load the second rigid body. If the second rigid body is not
             // specified, that is usually okay (only spring constraints require both and
@@ -784,12 +845,12 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
                     WARN_VARG("Node '%s' to be used as 'rigidBodyB' for constraint %s cannot be found.", name, constraint->getId());
                     continue;
                 }
-                rbB = rbBNode->getPhysicsRigidBody();
-                if (!rbB)
+                if (!rbBNode->getCollisionObject() || rbBNode->getCollisionObject()->getType() != PhysicsCollisionObject::RIGID_BODY)
                 {
                     WARN_VARG("Node '%s' to be used as 'rigidBodyB' does not have a rigid body.", name);
                     continue;
                 }
+                rbB = static_cast<PhysicsRigidBody*>(rbBNode->getCollisionObject());
             }
 
             PhysicsConstraint* physicsConstraint = NULL;
@@ -818,7 +879,7 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
             
             // If the constraint failed to load, continue on to the next one.
             if (!physicsConstraint)
-                    continue;
+                continue;
 
             // If the breaking impulse was specified, apply it to the constraint.
             if (constraint->getString("breakingImpulse"))

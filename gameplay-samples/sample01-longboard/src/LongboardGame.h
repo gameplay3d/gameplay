@@ -25,6 +25,11 @@ public:
      */
     virtual ~LongboardGame();
 
+    /**
+     * @see Game::keyEvent
+     */
+    void keyEvent(Keyboard::KeyEvent evt, int key);
+
 protected:
 
     /**
@@ -69,6 +74,11 @@ private:
      * static screen-space lighting effect to give a bit more realism.
      */
     void buildGradient();
+
+    /**
+     * Draws the default "gameplay powered" splash screen.
+     */
+    void drawSplash(void* param);
 
     // Ground
     Model* _ground;

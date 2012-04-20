@@ -35,11 +35,13 @@
     <!-- <copyright></copyright> -->
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
-    <author>Research In Motion</author>
-    
+    <author>RIM Canada</author>
+
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
-    <!-- <authorId>ABC1234YjsnUk235h</authorId> -->
-   
+    <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
+
+   <platformVersion>2.0.0.7971</platformVersion>
+
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>
         <autoOrients>false</autoOrients>
@@ -52,22 +54,55 @@
     
     <asset path="icon.png">icon.png</asset>
     <asset path="res/arial40.gpb">res/arial40.gpb</asset>
-    <asset path="res/floor.material">res/floor.material</asset>
+    <asset path="res/backboard.png">res/backboard.png</asset>
+    <asset path="res/basketball.png">res/basketball.png</asset>
+    <asset path="res/basketballnet.png">res/basketballnet.png</asset>
+    <asset path="res/book.png">res/book.png</asset>
+    <asset path="res/bookshelf.png">res/bookshelf.png</asset>
+    <asset path="res/boy.animation">res/boy.animation</asset>
+    <asset path="res/character.png">res/character.png</asset>
+    <asset path="res/decals.png">res/decals.png</asset>
+    <asset path="res/door.png">res/door.png</asset>
+    <asset path="res/doorframe.png">res/doorframe.png</asset>
+    <asset path="res/easel.png">res/easel.png</asset>
     <asset path="res/floor.png">res/floor.png</asset>
-    <asset path="res/seymour.gpb">res/seymour.gpb</asset>
-    <asset path="res/seymour.material">res/seymour.material</asset>
-    <asset path="res/seymour-clips.animation">res/seymour-clips.animation</asset>
-    <asset path="res/seymour-diffuse.png">res/seymour-diffuse.png</asset>
+    <asset path="res/floortiles.png">res/floortiles.png</asset>
+    <asset path="res/gamepad.png">res/gamepad.png</asset>
+    <asset path="res/playtable.png">res/playtable.png</asset>
+    <asset path="res/scene.gpb">res/scene.gpb</asset>
+    <asset path="res/scene.material">res/scene.material</asset>
+    <asset path="res/scene.physics">res/scene.physics</asset>
+    <asset path="res/scene.scene">res/scene.scene</asset>
+    <asset path="res/shadow.png">res/shadow.png</asset>
+    <asset path="res/storageorganizer.png">res/storageorganizer.png</asset>
+    <asset path="res/tableleg1.png">res/tableleg1.png</asset>
+    <asset path="res/tableleg2.png">res/tableleg2.png</asset>
+    <asset path="res/tableleg3.png">res/tableleg3.png</asset>
+    <asset path="res/tableleg4.png">res/tableleg4.png</asset>
+    <asset path="res/tabletop.png">res/tabletop.png</asset>
+    <asset path="res/tiles.png">res/tiles.png</asset>
+    <asset path="res/tilesn.png">res/tilesn.png</asset>
+    <asset path="res/toybox.png">res/toybox.png</asset>
+    <asset path="res/walleast.png">res/walleast.png</asset>
+    <asset path="res/wallnorth.png">res/wallnorth.png</asset>
+    <asset path="res/walloverhang.png">res/walloverhang.png</asset>
+    <asset path="res/wallsouth.png">res/wallsouth.png</asset>
+    <asset path="res/wallwest.png">res/wallwest.png</asset>
+    <asset path="res/windowledge.png">res/windowledge.png</asset>
+    <asset path="res/wood.png">res/wood.png</asset>
+    <asset path="res/woodn.png">res/woodn.png</asset>
+    <asset path="${workspace_loc:/gameplay/res/logo_powered_white.png}">res/logo_powered_white.png</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/colored.fsh}">res/shaders/colored.fsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/colored.vsh}">res/shaders/colored.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.fsh}">res/shaders/colored-specular.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.vsh}">res/shaders/colored-specular.vsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.fsh}">res/shaders/diffuse.fsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.vsh}">res/shaders/diffuse.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.fsh}">res/shaders/diffuse-specular.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.vsh}">res/shaders/diffuse-specular.vsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/textured.fsh}">res/shaders/textured.fsh</asset>
+    <asset path="${workspace_loc:/gameplay/res/shaders/textured.vsh}">res/shaders/textured.vsh</asset>
     
-    <!-- BlackBerry NDK 1.0
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
-    -->
     <configuration id="com.qnx.qcc.configuration.exe.debug.417937691" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Debug/sample03-character" entry="true" type="Qnx/Elf">sample03-character</asset>

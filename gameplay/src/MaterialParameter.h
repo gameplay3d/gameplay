@@ -164,21 +164,35 @@ public:
     /**
      * @see AnimationTarget#setAnimationProperty
      */
-    void setAnimationPropertyValue(int propertyId, AnimationValue* value);
+    void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 private:
 
+    static const char ANIMATION_UNIFORM_BIT = 0x01;
+    
+    /**
+     * Constructor.
+     */
+    MaterialParameter(const char* name);
+    
+    /**
+     * Destructor.
+     */
+    ~MaterialParameter();
+    
     /**
      * Interface implemented by templated method bindings for simple storage and iteration.
      */
-    class MethodBinding
+    class MethodBinding : public Ref
     {
     public:
+        virtual void setValue(Effect* effect) = 0;
+
+    protected:
         /**
          * Destructor.
          */
         virtual ~MethodBinding() { }
-        virtual void setValue(Effect* effect) = 0;
     };
 
     /**
@@ -216,20 +230,14 @@ private:
         CountMethod _countMethod;
     };
 
-    /**
-     * Constructor.
-     */
-    MaterialParameter(const char* name);
-
-    /**
-     * Destructor.
-     */
-    ~MaterialParameter();
-
     void clearValue();
 
     void bind(Effect* effect);
 
+    void applyAnimationValue(AnimationValue* value, float blendWeight, int components);
+
+    void cloneInto(MaterialParameter* materialParameter) const;
+    
     union
     {
         float floatValue;
@@ -239,7 +247,7 @@ private:
         const Texture::Sampler* samplerValue;
         MethodBinding* method;
     } _value;
-
+    
     enum
     {
         NONE,
@@ -252,7 +260,7 @@ private:
         SAMPLER,
         METHOD
     } _type;
-
+    
     unsigned int _count;
     bool _dynamic;
     std::string _name;

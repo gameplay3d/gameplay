@@ -35,11 +35,13 @@
     <!-- <copyright></copyright> -->
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
-    <author>Research In Motion</author>
-    
+    <author>RIM Canada</author>
+
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
-    <!-- <authorId>ABC1234YjsnUk235h</authorId> -->
-   
+    <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
+
+   <platformVersion>2.0.0.7971</platformVersion>
+
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>
         <autoOrients>false</autoOrients>
@@ -57,19 +59,13 @@
     <asset path="res//background.ogg">res/background.ogg</asset>
     <asset path="res/background.png">res/background.png</asset>
     <asset path="res/propulsion_glow.png">res/propulsion_glow.png</asset>
-    <asset path="res/splash.png">res/splash.png</asset>
+    <asset path="${workspace_loc:/gameplay/res/logo_powered_white.png}">res/logo_powered_white.png</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.fsh}">res/shaders/colored-specular.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.vsh}">res/shaders/colored-specular.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.fsh}">res/shaders/diffuse.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.vsh}">res/shaders/diffuse.vsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/textured.fsh}">res/shaders/textured.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/textured.vsh}">res/shaders/textured.vsh</asset>
-    
-    <!-- BlackBerry NDK 1.0
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
-    -->
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.1898582830" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

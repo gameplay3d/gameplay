@@ -183,7 +183,7 @@ private:
  * @param sphere The bounding sphere to transform.
  * @return The resulting transformed bounding sphere.
  */
-inline BoundingSphere operator*(const Matrix& matrix, const BoundingSphere& sphere);
+inline const BoundingSphere operator*(const Matrix& matrix, const BoundingSphere& sphere);
 
 }
 

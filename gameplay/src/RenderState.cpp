@@ -3,6 +3,7 @@
 #include "Node.h"
 #include "Pass.h"
 #include "Technique.h"
+#include "Node.h"
 
 // Render state override bits
 #define RS_BLEND 1
@@ -18,10 +19,6 @@ RenderState::StateBlock* RenderState::StateBlock::_defaultState = NULL;
 
 RenderState::RenderState()
     : _nodeBinding(NULL), _state(NULL), _parent(NULL)
-{
-}
-
-RenderState::RenderState(const RenderState& copy)
 {
 }
 
@@ -130,6 +127,10 @@ void RenderState::setParameterAutoBinding(const char* name, const char* autoBind
     {
         value = WORLD_VIEW_PROJECTION_MATRIX;
     }
+    else if (strcmp(autoBinding, "INVERSE_TRANSPOSE_WORLD_MATRIX") == 0)
+    {
+        value = INVERSE_TRANSPOSE_WORLD_MATRIX;
+    }
     else if (strcmp(autoBinding, "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX") == 0)
     {
         value = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX;
@@ -137,6 +138,10 @@ void RenderState::setParameterAutoBinding(const char* name, const char* autoBind
     else if (strcmp(autoBinding, "CAMERA_WORLD_POSITION") == 0)
     {
         value = CAMERA_WORLD_POSITION;
+    }
+    else if (strcmp(autoBinding, "CAMERA_VIEW_POSITION") == 0)
+    {
+        value = CAMERA_VIEW_POSITION;
     }
     else if (strcmp(autoBinding, "MATRIX_PALETTE") == 0)
     {
@@ -218,12 +223,20 @@ void RenderState::applyAutoBinding(const char* uniformName, AutoBinding autoBind
         getParameter(uniformName)->bindValue(_nodeBinding, &Node::getWorldViewProjectionMatrix);
         break;
 
+    case INVERSE_TRANSPOSE_WORLD_MATRIX:
+        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getInverseTransposeWorldMatrix);
+        break;
+
     case INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX:
         getParameter(uniformName)->bindValue(_nodeBinding, &Node::getInverseTransposeWorldViewMatrix);
         break;
 
     case CAMERA_WORLD_POSITION:
         getParameter(uniformName)->bindValue(_nodeBinding, &Node::getActiveCameraTranslationWorld);
+        break;
+
+    case CAMERA_VIEW_POSITION:
+        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getActiveCameraTranslationView);
         break;
 
     case MATRIX_PALETTE:
@@ -293,6 +306,32 @@ RenderState* RenderState::getTopmost(RenderState* below)
     }
 
     return NULL;
+}
+
+void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context) const
+{
+    for (std::map<std::string, AutoBinding>::const_iterator it = _autoBindings.begin(); it != _autoBindings.end(); ++it)
+    {
+        renderState->setParameterAutoBinding(it->first.c_str(), it->second);
+    }
+    for (std::vector<MaterialParameter*>::const_iterator it = _parameters.begin(); it != _parameters.end(); ++it)
+    {
+        const MaterialParameter* param = *it;
+
+        MaterialParameter* paramCopy = new MaterialParameter(param->getName());
+        param->cloneInto(paramCopy);
+
+        renderState->_parameters.push_back(paramCopy);
+    }
+    renderState->_parent = _parent;
+    if (Node* node = context.findClonedNode(_nodeBinding))
+    {
+        renderState->setNodeBinding(node);
+    }
+    if (_state)
+    {
+        renderState->setStateBlock(_state);
+    }
 }
 
 RenderState::StateBlock::StateBlock()

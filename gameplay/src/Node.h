@@ -5,16 +5,20 @@
 #include "Camera.h"
 #include "Light.h"
 #include "Model.h"
+#include "Form.h"
 #include "AudioSource.h"
 #include "ParticleEmitter.h"
 #include "PhysicsRigidBody.h"
+#include "PhysicsCollisionObject.h"
+#include "PhysicsCollisionShape.h"
 #include "BoundingBox.h"
 
 namespace gameplay
 {
 
-class Package;
+class Bundle;
 class Scene;
+class Form;
 
 /**
  * Defines a basic hierachial structure of transformation spaces.
@@ -22,7 +26,7 @@ class Scene;
 class Node : public Transform, public Ref
 {
     friend class Scene;
-    friend class Package;
+    friend class Bundle;
     friend class MeshSkin;
 
 public:
@@ -110,6 +114,90 @@ public:
     Node* getParent() const;
 
     /**
+     * Returns whether this node is visible (true by default).
+     *
+     * @return Whether the node is visible.
+     */
+    bool isVisible() const;
+
+    /**
+     * Sets whether this node is visible.
+     *
+     * @return Whether this node is visible.
+     */
+    void setVisible(bool visible);
+
+    /**
+     * Returns whether this node is transparent (false by default).
+     *
+     * All nodes are opaque by default, unless otherwise set as
+     * transparent using the setTransparent method. These methods
+     * can be used to flag nodes as transparent and then query the
+     * property during game execution, for example to render all
+     * opaque objects first, followed by transparent objects with
+     * alpha blending enabled.
+     *
+     * @return Whether the node is transparent.
+     */
+    bool isTransparent() const;
+
+    /**
+     * Sets whether this node is transparent.
+     *
+     * @param transparent Whether the node is transparent.
+     */
+    void setTransparent(bool transparent);
+
+    /**
+     * Returns whether this node is dynamic.
+     *
+     * The dynamic propery can be used to flag nodes as being non-static.
+     * This can be useful for modifying behavior or rendering/material
+     * logic at runtime for static vs dynamic (moving) objects. An
+     * example would be determing whether to use static or  dyanmic
+     * lighting materials for node models during loading.
+     *
+     * @return Whether this node is dynamic (false by default).
+     */
+    bool isDynamic() const;
+
+    /**
+     * Sets whether this node is dynamic.
+     *
+     * @param dynamic Whether the node is dynamic.
+     */
+    void setDynamic(bool dynamic);
+
+    /**
+     * Returns the user pointer for this node.
+     *
+     * @return The user pointer for this node.
+     * @see setUserPointer(void*)
+     */
+    void* getUserPointer() const;
+
+    /**
+     * Sets the user pointer for this node.
+     *
+     * The user pointer is initially NULL and can be set to anything.
+     * This is normally used to store game-specific data, such as 
+     * game state for a particular node.  For example, attributes
+     * for a game character, such as hit points, stamina, etc can
+     * be defined in a game structure and stored in this field.
+     *
+     * When a node is deleted, the (optional) cleanup callback
+     * function passed to this function is called to allow the 
+     * user to free any memory associated with the user pointer.
+     *
+     * @param pointer User pointer.
+     * @param cleanupCallback Optional callback that is called when the
+     *      Node is being destroyed (or when the user pointer changes),
+     *      to allow the user to cleanup any memory associated with the
+     *      user pointer.
+     */
+    void setUserPointer(void* pointer, void (*cleanupCallback)(void*) = NULL);
+
+    /**
      * Returns the number of direct children of this item.
      *
      * @return The number of children.
@@ -119,18 +207,18 @@ public:
     /**
      * Returns the first child node that matches the given ID.
      *
-     * This method checks the specified ID against its own ID, as well as its 
-     * immediate children nodes. If recursive is true, it also traverses the
-     * Node's hierarchy.
+     * This method checks the specified ID against its immediate child nodes 
+     * but does not check the ID against itself.
+     * If recursive is true, it also traverses the Node's hierarchy with a breadth first search.
      *
      * @param id The ID of the child to find.
-     * @param recursive true to search recursively all the node's children, false for only direct children.
+     * @param recursive True to search recursively all the node's children, false for only direct children.
      * @param exactMatch true if only nodes whose ID exactly matches the specified ID are returned,
      *        or false if nodes that start with the given ID are returned.
      * 
      * @return The Node found or NULL if not found.
      */
-    Node* findNode(const char* id, bool recursive = true, bool exactMatch = true);
+    Node* findNode(const char* id, bool recursive = true, bool exactMatch = true) const;
 
     /**
      * Returns all child nodes that match the given ID.
@@ -143,7 +231,7 @@ public:
      * 
      * @return The number of matches found.
      */
-    unsigned int findNodes(const char* id, std::vector<Node*>& nodes, bool recursive = true, bool exactMatch = true);
+    unsigned int findNodes(const char* id, std::vector<Node*>& nodes, bool recursive = true, bool exactMatch = true) const;
 
     /**
      * Gets the scene.
@@ -172,9 +260,18 @@ public:
     const Matrix& getWorldViewMatrix() const;
 
     /**
+     * Gets the inverse transpose world matrix corresponding to this node.
+     *
+     * This matrix is typically used to transform normal vectors into world space.
+     *
+     * @return The inverse world matrix of this node.
+     */
+    const Matrix& getInverseTransposeWorldMatrix() const;
+
+    /**
      * Gets the inverse transpose world view matrix corresponding to this node.
      *
-     * This matrix is typically used to transform normal vectors.
+     * This matrix is typically used to transform normal vectors into view space.
      *
      * @return The inverse world view matrix of this node.
      */
@@ -260,6 +357,21 @@ public:
     Vector3 getActiveCameraTranslationWorld() const;
 
     /**
+     * Returns the view-space translation vector of the currently active camera for this node's scene.
+     *
+     * @return The translation vector of the scene's active camera, in view-space.
+     */
+    Vector3 getActiveCameraTranslationView() const;
+
+    /**
+     * Gets the first animation in the node hierarchy with the specified ID.
+     *
+     * @param id The ID of the animation to get. Returns the first animation if ID is NULL.
+     * @return The first animation with the specified ID.
+     */
+    Animation* getAnimation(const char* id = NULL) const;
+
+    /**
      * Returns the pointer to this node's camera.
      *
      * @return The pointer to this node's camera or NULL.
@@ -311,6 +423,20 @@ public:
     void setModel(Model* model);
 
     /**
+     * Returns the pointer to this node's form.
+     * 
+     * @return The pointer to this node's form or NULL.
+     */
+    Form* getForm() const;
+
+    /**
+     * Assigns a form to this node.
+     * 
+     * @param form The form pointer. May be NULL.
+     */
+    void setForm(Form* form);
+
+    /**
      * Returns the pointer to this node's audio source.
      *
      * @return The pointer to this node's audio source or NULL.
@@ -345,43 +471,67 @@ public:
     void setParticleEmitter(ParticleEmitter* emitter);
 
     /**
-     * Returns the pointer to this node's physics rigid body or NULL.
+     * Returns the pointer to this node's physics collision object.
      *
-     * @return The pointer to this node's physics rigid body or NULL.
-     */
-    PhysicsRigidBody* getPhysicsRigidBody() const;
-
-    /**
-     * Sets (or disables) the physics rigid body for this node.
-     * 
-     * Note: This is only allowed for nodes that have a model attached to them.
+     * The type of the returned collision object can be queried using
+     * the PhysicsCollisionObject::getType() method.
      *
-     * @param type The type of rigid body to set; to disable the physics rigid
-     *      body, pass PhysicsRigidBody#SHAPE_NONE.
-     * @param mass The mass of the rigid body, in kilograms.
-     * @param friction The friction of the rigid body (between 0.0 and 1.0, where 0.0 is
-     *      minimal friction and 1.0 is maximal friction).
-     * @param restitution The restitution of the rigid body (this controls the bounciness of
-     *      the rigid body; between 0.0 and 1.0, where 0.0 is minimal bounciness and 1.0 is maximal bounciness).
-     * @param linearDamping The percentage of linear velocity lost per second (between 0.0 and 1.0).
-     * @param angularDamping The percentage of angular velocity lost per second (between 0.0 and 1.0).
+     * @return The pointer to this node's physics collision object.
      */
-    void setPhysicsRigidBody(PhysicsRigidBody::Type type, float mass = 0.0f, float friction = 0.5f,
-        float restitution = 0.0f, float linearDamping = 0.0f, float angularDamping = 0.0f);
+    PhysicsCollisionObject* getCollisionObject() const;
 
     /**
-     * Sets the physics rigid body for this node using the rigid body definition in the given file.
-     * 
-     * @param filePath The path to the file that contains the rigid body definition.
+     * Sets (or disables) the physics collision object for this node.
+     *
+     * The supported collision object types include rigid bodies, ghost objects and 
+     * characters.
+     *
+     * Rigid bodies are used to represent most physical objects in a game. The important
+     * feature of rigid bodies is that they can be simulated by the physics system as other
+     * rigid bodies or collision objects collide with them. To support this physics simulation,
+     * rigid bodies require additional parameters, such as mass, friction and restitution to
+     * define their physical features. These parameters can be passed into the
+     * 'rigidBodyParameters' parameter.
+     *
+     * Ghost objects are a simple type of collision object that are not simulated. By default
+     * they pass through other objects in the scene without affecting them. Ghost objects do
+     * receive collision events however, which makes them useful for representing non-simulated
+     * entities in a game that still require collision events, such as volumetric triggers, 
+     * power-ups, etc.
+     *
+     * Characters are an extention of ghost objects which provide a number of additional features
+     * for animating and moving characters within a game. Characters are represented as ghost
+     * objects instead of rigid bodies to allow more direct control over character movement,
+     * since attempting to model a physics character with a simulated rigid body usually results
+     * in unresponse and unpredictable character movement. Unlike normal ghost objects,
+     * characters to react to other characters and rigid bodies in the world. Characters react
+     * to gravity and collide (and respond) with rigid bodies to allow them to walk on the ground,
+     * slide along walls and walk up/down slopes and stairs.
+     *
+     * @param type The type of the collision object to set; to disable the physics
+     *        collision object, pass PhysicsCollisionObject::NONE.
+     * @param shape Definition of a physics collision shape to be used for this collision object.
+     *        Use the static shape methods on the PhysicsCollisionShape class to specificy a shape
+     *        definition, such as PhysicsCollisionShape::box().
+     * @param rigidBodyParameters If type is PhysicsCollisionObject::RIGID_BODY, this
+     *        must point to a valid rigid body parameters object containing information
+     *        about the rigid body; otherwise, this parmater may be NULL.
      */
-    void setPhysicsRigidBody(const char* filePath);
+    PhysicsCollisionObject* setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters = NULL);
 
     /**
-     * Sets the physics rigid body for this node from the given properties object.
+     * Sets the physics collision object for this node using the definition in the given file.
      * 
-     * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidbody').
+     * @param filePath The path to the file that set the collision object definition.
      */
-    void setPhysicsRigidBody(Properties* properties);
+    PhysicsCollisionObject* setCollisionObject(const char* filePath);
+
+    /**
+     * Sets the physics collision object for this node from the given properties object.
+     * 
+     * @param properties The properties object defining the collision ojbect.
+     */
+    PhysicsCollisionObject* setCollisionObject(Properties* properties);
 
     /**
      * Returns the bounding sphere for the Node, in world space.
@@ -404,6 +554,13 @@ public:
      */
     const BoundingSphere& getBoundingSphere() const;
 
+    /**
+     * Clones the node and all of its child nodes.
+     * 
+     * @return A new node.
+     */
+    Node* clone() const;
+
 protected:
 
     /**
@@ -412,14 +569,35 @@ protected:
     Node(const char* id);
 
     /**
-     * Copy constructor.
-     */
-    Node(const Node& copy);
-
-    /**
      * Destructor.
      */
     virtual ~Node();
+
+    /**
+     * Clones a single node and its data but not its children.
+     * 
+     * @param context The clone context.
+     * 
+     * @return Pointer to the newly created node.
+     */
+    virtual Node* cloneSingleNode(NodeCloneContext &context) const;
+
+    /**
+     * Recursively clones this node and its children.
+     * 
+     * @param context The clone context.
+     * 
+     * @return The newly created node.
+     */
+    Node* cloneRecursive(NodeCloneContext &context) const;
+
+    /**
+     * Copies the data from this node into the given node.
+     * 
+     * @param node The node to copy the data to.
+     * @param context The clone context.
+     */
+    void cloneInto(Node* node, NodeCloneContext &context) const;
 
     /**
      * Removes this node from its parent.
@@ -431,6 +609,9 @@ protected:
      */
     void transformChanged();
 
+    /**
+     * Called when this Node's hierarchy changes.
+     */
     void hierarchyChanged();
 
     /**
@@ -438,23 +619,213 @@ protected:
      */
     void setBoundsDirty();
 
+private:
+
+    /**
+     * Hidden copy constructor.
+     */
+    Node(const Node& copy);
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Node& operator=(const Node&);
+
+protected:
+
+    /**
+     * Defines a pointer and cleanup callback to custom user data that can be store in a Node.
+     */
+    struct UserData
+    {
+        /**
+         * Constructor.
+         */
+        UserData() : pointer(NULL), cleanupCallback(NULL) {}
+
+        /**
+         * A pointer to custom user data.
+         */
+        void* pointer;
+
+        /** 
+         * Cleanup callback.
+         */
+        void (*cleanupCallback)(void*);
+    };
+
+    /**
+     * The Scene this node belongs to.
+     */
     Scene* _scene;
+
+    /**
+     * The Node's ID.
+     */ 
     std::string _id;
+
+    /**
+     * Pointer to the Node's first child.
+     */
     Node* _firstChild;
+    
+    /**
+     * Pointer to the Node's next child.
+     */
     Node* _nextSibling;
+    
+    /**
+     * Pointer to the Node's previous sibling.
+     */
     Node* _prevSibling;
+
+    /**
+     * Pointer to the Node's parent.
+     */
     Node* _parent;
+
+    /**
+     * The number of children belonging to the Node.
+     */
     unsigned int _childCount;
+
+    /**
+     * Node property flags. 
+     */ 
+    unsigned int _nodeFlags;
+
+    /**
+     * Pointer to the Camera attached to the Node.
+     */
     Camera* _camera;
+
+    /**
+     * Pointer to the Light attached to the Node.
+     */ 
     Light* _light;
+
+    /**
+     * Pointer to the Model attached to the Node.
+     */
     Model* _model;
+    
+    /**
+     * Pointer to the Form attached to the Node.
+     */
+    Form* _form;
+    
+    /**
+     * Pointer to the AudioSource attached to the Node.
+     */
     AudioSource* _audioSource;
+    
+    /**
+     * Pointer to the ParticleEmitter attached to the Node.
+     */
     ParticleEmitter* _particleEmitter;
-    PhysicsRigidBody* _physicsRigidBody;
+    
+    /**
+     * Pointer to the PhysicsCollisionObject attached to the Node.
+     */
+    PhysicsCollisionObject* _collisionObject;
+    
+    /**
+     * World Matrix representation of the Node.
+     */
     mutable Matrix _world;
+
+    /**
+     * Dirty bits flag for the Node.
+     */
     mutable int _dirtyBits;
+    
+    /**
+     * A flag indicating if the Node's hierarchy has changed.
+     */ 
     bool _notifyHierarchyChanged;
+
+    /**
+     * The Bounding Sphere containing the Node.
+     */
     mutable BoundingSphere _bounds;
+
+    /**
+     * Pointer to custom UserData and cleanup call back that can be stored in a Node.
+     */
+    UserData* _userData;
+};
+
+/**
+ * NodeCloneContext represents the context data that is kept when cloning a node.
+ * 
+ * The NodeCloneContext is used to make sure objects don't get cloned twice.
+ */
+class NodeCloneContext
+{
+public:
+
+    /**
+     * Constructor.
+     */
+    NodeCloneContext();
+
+    /**
+     * Destructor.
+     */
+    ~NodeCloneContext();
+
+    /**
+     * Finds the cloned animation of the given animation or NULL if this animation was not registered with this context.
+     * 
+     * @param animation The animation to search for the cloned copy of.
+     * 
+     * @return The cloned animation or NULL if not found.
+     */
+    Animation* findClonedAnimation(const Animation* animation);
+
+    /**
+     * Registers the cloned animation with this context so that it doesn't get cloned twice.
+     * 
+     * @param original The pointer to the original animation.
+     * @param clone The pointer to the cloned animation.
+     */
+    void registerClonedAnimation(const Animation* original, Animation* clone);
+
+    /**
+     * Finds the cloned node of the given node or NULL if this node was not registered with this context.
+     * 
+     * @param node The node to search for the cloned copy of.
+     * 
+     * @return The cloned node or NULL if not found.
+     */
+    Node* findClonedNode(const Node* node);
+
+    /**
+     * Registers the cloned node with this context so that it doens't get cloned twice.
+     * 
+     * @param original The pointer to the original node.
+     * @param clone The pointer to the cloned node.
+     */
+    void registerClonedNode(const Node* original, Node* clone);
+
+private:
+    
+    /**
+     * Hidden copy constructor.
+     */
+    NodeCloneContext(const NodeCloneContext&);
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    NodeCloneContext& operator=(const NodeCloneContext&);
+
+private:
+    typedef std::map<const Animation*, Animation*> AnimationMap;
+    typedef std::map<const Node*, Node*> NodeMap;
+
+    AnimationMap _clonedAnimations;
+    NodeMap _clonedNodes;
 };
 
 }

@@ -156,7 +156,7 @@ void Mesh::generateHeightmap(const char* filename)
     float* heights = new float[width * height];
     int index = 0;
     float minHeight = FLT_MAX;
-    float maxHeight = FLT_MIN;
+    float maxHeight = -FLT_MAX;
     for (int z = minZ; z <= maxZ; z++)
     {
         rayOrigin.z = (float)z;
@@ -273,7 +273,6 @@ void Mesh::writeBinaryVertices(FILE* file)
     }
 
     // Write bounds
-    computeBounds();
     write(&bounds.min.x, 3, file);
     write(&bounds.max.x, 3, file);
     write(&bounds.center.x, 3, file);
@@ -302,7 +301,6 @@ void Mesh::writeText(FILE* file)
     fprintf(file, "</vertices>\n");
 
     // write bounds
-    computeBounds();
     fprintf(file, "<bounds>\n");
     fprintf(file, "<min>\n");
     writeVectorText(bounds.min, file);
@@ -392,7 +390,7 @@ void Mesh::computeBounds()
     }
 
     bounds.min.x = bounds.min.y = bounds.min.z = FLT_MAX;
-    bounds.max.x = bounds.max.y = bounds.max.z = FLT_MIN;
+    bounds.max.x = bounds.max.y = bounds.max.z = -FLT_MAX;
     bounds.center.x = bounds.center.y = bounds.center.z = 0.0f;
     bounds.radius = 0.0f;
 

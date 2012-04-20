@@ -235,6 +235,11 @@ Mesh* Mesh::createBoundingBox(const BoundingBox& box)
     return mesh;
 }
 
+const char* Mesh::getUrl() const
+{
+    return _url.c_str();
+}
+
 const VertexFormat& Mesh::getVertexFormat() const
 {
     return _vertexFormat;

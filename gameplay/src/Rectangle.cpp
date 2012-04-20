@@ -52,6 +52,12 @@ void Rectangle::set(float x, float y, float width, float height)
     this->height = height;
 }
 
+void Rectangle::setPosition(float x, float y)
+{
+    this->x = x;
+    this->y = y;
+}
+
 float Rectangle::left() const
 {
     return x;

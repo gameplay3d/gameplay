@@ -38,7 +38,7 @@
     <None Include="res\spaceship.wav">
       <Filter>res</Filter>
     </None>
-    <None Include="res\splash.png">
+    <None Include="..\..\gameplay\res\logo_powered_white.png">
       <Filter>res</Filter>
     </None>
   </ItemGroup>

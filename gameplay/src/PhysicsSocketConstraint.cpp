@@ -1,5 +1,5 @@
+#include "Base.h"
 #include "PhysicsSocketConstraint.h"
-
 #include "Node.h"
 
 namespace gameplay
@@ -38,11 +38,11 @@ PhysicsSocketConstraint::PhysicsSocketConstraint(PhysicsRigidBody* a, const Vect
         b->getNode()->getWorldMatrix().getScale(&sB);
         Vector3 tB(translationOffsetB.x * sB.x, translationOffsetB.y * sB.y, translationOffsetB.z * sB.z);
 
-        _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, btVector3(tA.x, tA.y, tA.z), btVector3(tB.x, tB.y, tB.z));
+        _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, BV(tA), BV(tB));
     }
     else
     {
-        _constraint = new btPoint2PointConstraint(*a->_body, btVector3(tA.x, tA.y, tA.z));
+        _constraint = new btPoint2PointConstraint(*a->_body, BV(tA));
     }
 }
 

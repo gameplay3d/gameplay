@@ -1,6 +1,6 @@
-## GamePlay Encoder
-GamePlay Encoder is a command-line tool for encoding/packaging games assets like fonts and 3D scene files
-into a binary package file format for the GamePlay runtime framework. 
+## gameplay-encoder
+Command-line tool for encoding games assets like true-type fonts and 3D scene files
+into a simple binary-based bundle file format for the gameplay 3D game framework runtime. 
 
 ## TrueType Font Support
 TrueType Fonts conversion is enabled/built-in by default into gameplay-encoder via freetype 2 library.
@@ -27,10 +27,10 @@ You must then rebuild gameplay-encoder with the follow platform/tooling instruct
 - Add "fbxsdk-2012.2-mdd.lib" and "wininet.lib" to the Additional Dependencies (Linker/Input)
   * Example: fbxsdk-2012.2-mdd.lib;wininet.lib
 - Add a post build event to copy the DLL (Build Events/Post-Build Event)
-  * Example: copy /Y "C:/Program Files/Autodesk/FBX/FbxSdk/2012.2/lib/vs2010/x86/fbxsdk-2012.2d.dll" "$(TargetDir)"
+  * Example: copy /Y "C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\lib\vs2010\x86\fbxsdk-2012.2d.dll" "$(TargetDir)"
 - Build gameplay-encoder
 
-### Building FBX Support on Mac OS X using XCode 4
+### Building FBX Support on Mac OS X using XCode 4.3.2+
 - Download and install the FBX SDK for Mac OS X (http://www.autodesk.com/fbx)
 - Edit the project properties of target "gameplay-encoder".
 - Add Preprocessor Macro "USE_FBX" to both Debug/Release sections. (Build Settings)
@@ -41,12 +41,11 @@ You must then rebuild gameplay-encoder with the follow platform/tooling instruct
   * Example: libiconv.dylib, Cocoa.framework, SystemConfiguration.framework
 - Build gameplay-encoder
 
-## Binary Format
-The GamePlay binary package format is well defined in the gameplay-encoder/gameplay-binary.txt file.
+## Bundle File Format
+The gameplay bundle file format is well defined in the gameplay-encoder/gameplay-bundle.txt file.
 
-## Binary Loading
-GamePlay binary package files can easily be loaded using the gameplay/Package.h which is part
-of the GamePlay runtime framework.
+## Bundle File Loading
+Bundle files can easily be loaded using the gameplay/Bundle.h which is part of the gameplay runtime framework.
 
 ## Disclaimer
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 

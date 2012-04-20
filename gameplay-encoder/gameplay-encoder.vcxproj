@@ -11,12 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\gameplay\src\Curve.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\AnimationChannel.cpp" />
     <ClCompile Include="src\Base.cpp" />
     <ClCompile Include="src\BoundingVolume.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Curve.cpp" />
     <ClCompile Include="src\EncoderArguments.cpp" />
     <ClCompile Include="src\DAEChannelTarget.cpp" />
     <ClCompile Include="src\DAEOptimizer.cpp" />
@@ -55,12 +55,12 @@
     <ClCompile Include="src\VertexElement.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\gameplay\src\Curve.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\AnimationChannel.h" />
     <ClInclude Include="src\Base.h" />
     <ClInclude Include="src\BoundingVolume.h" />
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Curve.h" />
     <ClInclude Include="src\EncoderArguments.h" />
     <ClInclude Include="src\DAEChannelTarget.h" />
     <ClInclude Include="src\DAEOptimizer.h" />
@@ -98,6 +98,8 @@
     <ClInclude Include="src\VertexElement.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\Curve.inl" />
+    <None Include="src\Quaternion.inl" />
     <None Include="src\Vector2.inl" />
     <None Include="src\Vector3.inl" />
     <None Include="src\Vector4.inl" />

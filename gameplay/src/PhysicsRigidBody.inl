@@ -1,31 +1,12 @@
 #include "PhysicsRigidBody.h"
+#include "Base.h"
 
 namespace gameplay
 {
 
-inline float PhysicsRigidBody::getAngularDamping() const
+inline float PhysicsRigidBody::getMass() const
 {
-    return _body->getAngularDamping();
-}
-
-inline const Vector3& PhysicsRigidBody::getAngularVelocity() const
-{
-    if (!_angularVelocity)
-        _angularVelocity = new Vector3();
-
-    const btVector3& v = _body->getAngularVelocity();
-    _angularVelocity->set(v.x(), v.y(), v.z());
-    return *_angularVelocity;
-}
-
-inline const Vector3& PhysicsRigidBody::getAnisotropicFriction() const
-{
-    if (!_anisotropicFriction)
-        _anisotropicFriction = new Vector3();
-
-    const btVector3& af = _body->getAnisotropicFriction();
-    _anisotropicFriction->set(af.x(), af.y(), af.z());
-    return *_anisotropicFriction;
+    return _mass;
 }
 
 inline float PhysicsRigidBody::getFriction() const
@@ -33,34 +14,9 @@ inline float PhysicsRigidBody::getFriction() const
     return _body->getFriction();
 }
 
-inline const Vector3& PhysicsRigidBody::getGravity() const
+inline void PhysicsRigidBody::setFriction(float friction)
 {
-    if (!_gravity)
-        _gravity = new Vector3();
-
-    const btVector3& g = _body->getGravity();
-    _gravity->set(g.x(), g.y(), g.z());
-    return *_gravity;
-}
-
-inline float PhysicsRigidBody::getLinearDamping() const
-{
-    return _body->getLinearDamping();
-}
-
-inline const Vector3& PhysicsRigidBody::getLinearVelocity() const
-{
-    if (!_linearVelocity)
-        _linearVelocity = new Vector3();
-
-    const btVector3& v = _body->getLinearVelocity();
-    _linearVelocity->set(v.x(), v.y(), v.z());
-    return *_linearVelocity;
-}
-
-inline const Node* PhysicsRigidBody::getNode() const
-{
-    return _node;
+    _body->setFriction(friction);
 }
 
 inline float PhysicsRigidBody::getRestitution() const
@@ -68,19 +24,19 @@ inline float PhysicsRigidBody::getRestitution() const
     return _body->getRestitution();
 }
 
-inline bool PhysicsRigidBody::isKinematic() const
+inline void PhysicsRigidBody::setRestitution(float restitution)
 {
-    return (_body->getCollisionFlags() & btCollisionObject::CF_KINEMATIC_OBJECT) != 0;
+    _body->setRestitution(restitution);
 }
 
-inline void PhysicsRigidBody::setAngularVelocity(const Vector3& velocity)
+inline float PhysicsRigidBody::getLinearDamping() const
 {
-    _body->setAngularVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+    return _body->getLinearDamping();
 }
 
-inline void PhysicsRigidBody::setAnisotropicFriction(const Vector3& friction)
+inline float PhysicsRigidBody::getAngularDamping() const
 {
-    _body->setAnisotropicFriction(btVector3(friction.x, friction.y, friction.z));
+    return _body->getAngularDamping();
 }
 
 inline void PhysicsRigidBody::setDamping(float linearDamping, float angularDamping)
@@ -88,55 +44,53 @@ inline void PhysicsRigidBody::setDamping(float linearDamping, float angularDampi
     _body->setDamping(linearDamping, angularDamping);
 }
 
-inline void PhysicsRigidBody::setFriction(float friction)
+inline Vector3 PhysicsRigidBody::getLinearVelocity() const
 {
-    _body->setFriction(friction);
-}
-
-inline void PhysicsRigidBody::setGravity(const Vector3& gravity)
-{
-    _body->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
-}
-
-inline void PhysicsRigidBody::setKinematic(bool kinematic)
-{
-    if (kinematic)
-    {
-        _body->setCollisionFlags(_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-        _body->setActivationState(DISABLE_DEACTIVATION);
-    }
-    else
-    {
-        _body->setCollisionFlags(_body->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
-        _body->setActivationState(ACTIVE_TAG);
-    }
+    const btVector3& v = _body->getLinearVelocity();
+    return Vector3(v.x(), v.y(), v.z());
 }
 
 inline void PhysicsRigidBody::setLinearVelocity(const Vector3& velocity)
 {
-    _body->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+    _body->setLinearVelocity(BV(velocity));
 }
 
-inline void PhysicsRigidBody::setRestitution(float restitution)
+inline Vector3 PhysicsRigidBody::getAngularVelocity() const
 {
-    _body->setRestitution(restitution);
+    const btVector3& v = _body->getAngularVelocity();
+    return Vector3(v.x(), v.y(), v.z());
 }
 
-inline bool PhysicsRigidBody::CollisionPair::operator<(const CollisionPair& cp) const
+inline void PhysicsRigidBody::setAngularVelocity(const Vector3& velocity)
 {
-    // If the pairs are equal, then return false.
-    if ((_rbA == cp._rbA && _rbB == cp._rbB) || (_rbA == cp._rbB && _rbB == cp._rbA))
-        return false;
-    else
-    {
-        // We choose to compare based on _rbA arbitrarily.
-        if (_rbA < cp._rbA)
-            return true;
-        else if (_rbA == cp._rbA)
-            return _rbB < cp._rbB;
-        else
-            return false;
-    }
+    _body->setAngularVelocity(BV(velocity));
+}
+
+inline Vector3 PhysicsRigidBody::getAnisotropicFriction() const
+{
+    const btVector3& af = _body->getAnisotropicFriction();
+    return Vector3(af.x(), af.y(), af.z());
+}
+
+inline void PhysicsRigidBody::setAnisotropicFriction(const Vector3& friction)
+{
+    _body->setAnisotropicFriction(BV(friction));
+}
+
+inline Vector3 PhysicsRigidBody::getGravity() const
+{
+    const btVector3& g = _body->getGravity();
+    return Vector3(g.x(), g.y(), g.z());
+}
+
+inline void PhysicsRigidBody::setGravity(const Vector3& gravity)
+{
+    _body->setGravity(BV(gravity));
+}
+
+inline bool PhysicsRigidBody::isStatic() const
+{
+    return _body->isStaticObject();
 }
 
 }

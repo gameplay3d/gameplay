@@ -7,19 +7,23 @@
 #include "PhysicsHingeConstraint.h"
 #include "PhysicsSocketConstraint.h"
 #include "PhysicsSpringConstraint.h"
-#include "PhysicsRigidBody.h"
+#include "PhysicsCollisionObject.h"
+#include "MeshBatch.h"
 
 namespace gameplay
 {
-    
+
 /**
  * Defines a class for controlling game physics.
  */
-class PhysicsController
+class PhysicsController : public btCollisionWorld::ContactResultCallback
 {
     friend class Game;
     friend class PhysicsConstraint;
     friend class PhysicsRigidBody;
+    friend class PhysicsCharacter;
+    friend class PhysicsCollisionObject;
+    friend class PhysicsGhostObject;
 
 public:
 
@@ -53,6 +57,32 @@ public:
     };
 
     /**
+     * Stucture that stores hit test results for ray and sweep tests.
+     */
+    struct HitResult
+    {
+        /**
+         * The collision object that was hit.
+         */
+        PhysicsCollisionObject* object;
+
+        /**
+         * The point where the collision occurred, in world space.
+         */
+        Vector3 point;
+
+        /**
+         * The fraction (0-1) of the test distance to the collision point.
+         */
+        float fraction;
+
+        /**
+         * The normal vector of the collision surface, in world space.
+         */
+        Vector3 normal;
+    };
+
+    /**
      * Adds a listener to the physics controller.
      * 
      * @param listener The listener to add.
@@ -65,6 +95,7 @@ public:
      * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
      *      body specified the constraint applies between it and the global physics world object.
      * @param b The second rigid body to constrain (optional).
+     * @return Pointer to the created PhysicsFixedConstraint object.
      */
     PhysicsFixedConstraint* createFixedConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b = NULL);
 
@@ -75,6 +106,7 @@ public:
      * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
      *      body specified the constraint applies between it and the global physics world object.
      * @param b The second rigid body to constrain (optional).
+     * @return Pointer to the created PhysicsGenericConstraint object.
      */
     PhysicsGenericConstraint* createGenericConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b = NULL);
 
@@ -92,6 +124,7 @@ public:
      *      (in its local space) with respect to the constraint joint (optional).
      * @param translationOffsetB The translation offset for the second rigid body
      *      (in its local space) with respect to the constraint joint (optional).
+     * @return Pointer to the created PhysicsGenericConstraint object.
      */
     PhysicsGenericConstraint* createGenericConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, 
                                                       PhysicsRigidBody* b = NULL, const Quaternion& rotationOffsetB = Quaternion(), const Vector3& translationOffsetB = Vector3());
@@ -110,6 +143,7 @@ public:
      *      (in its local space) with respect to the constraint joint (optional).
      * @param translationOffsetB The translation offset for the second rigid body
      *      (in its local space) with respect to the constraint joint (optional).
+     * @return Pointer to the created PhysicsHingeConstraint object.
      */
     PhysicsHingeConstraint* createHingeConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
                                                   PhysicsRigidBody* b = NULL, const Quaternion& rotationOffsetB = Quaternion(), const Vector3& translationOffsetB = Vector3());
@@ -122,6 +156,7 @@ public:
      * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
      *      body specified the constraint applies between it and the global physics world object.
      * @param b The second rigid body to constrain (optional).
+     * @return Pointer to the created PhysicsSocketConstraint object.
      */
     PhysicsSocketConstraint* createSocketConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b = NULL);
 
@@ -135,6 +170,7 @@ public:
      * @param b The second rigid body to constrain (optional).
      * @param translationOffsetB The translation offset for the second rigid body
      *      (in its local space) with respect to the constraint joint (optional).
+     * @return Pointer to the created PhysicsSocketConstraint object.
      */
     PhysicsSocketConstraint* createSocketConstraint(PhysicsRigidBody* a, const Vector3& translationOffsetA,
                                                     PhysicsRigidBody* b = NULL, const Vector3& translationOffsetB = Vector3());
@@ -147,6 +183,7 @@ public:
      * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
      *      body specified the constraint applies between it and the global physics world object.
      * @param b The second rigid body to constrain (optional).
+     * @return Pointer to the created PhysicsSpringConstraint object.
      */
     PhysicsSpringConstraint* createSpringConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b);
 
@@ -164,6 +201,7 @@ public:
      *      (in its local space) with respect to the constraint joint (optional).
      * @param translationOffsetB The translation offset for the second rigid body
      *      (in its local space) with respect to the constraint joint (optional).
+     * @return Pointer to the created PhysicsSpringConstraint object.
      */
     PhysicsSpringConstraint* createSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,          
                                                     PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
@@ -173,7 +211,7 @@ public:
      * 
      * @return The gravity vector.
      */
-    const Vector3& getGravity(const Vector3& gravity) const;
+    const Vector3& getGravity() const;
 
     /**
      * Sets the gravity vector for the simulated physics world.
@@ -181,7 +219,7 @@ public:
      * @param gravity The gravity vector.
      */
     void setGravity(const Vector3& gravity);
-    
+
     /**
      * Draws debugging information (rigid body outlines, etc.) using the given view projection matrix.
      * 
@@ -189,7 +227,52 @@ public:
      */
     void drawDebug(const Matrix& viewProjection);
 
+    /**
+     * Performs a ray test on the physics world.
+     * 
+     * @param ray The ray to test intersection with.
+     * @param distance How far along the given ray to test for intersections.
+     * @param result Optional pointer to a HitTest structure to store hit test result information in.
+     * @return True if the ray test collided with a physics object, false otherwise.
+     */
+    bool rayTest(const Ray& ray, float distance, PhysicsController::HitResult* result = NULL);
+
+    /**
+     * Performs a sweep test of the given collision object on the physics world.
+     *
+     * The start position of the sweep test is defined by the current world position
+     * of the specified collision object.
+     *
+     * @param object The collision object to test.
+     * @param endPosition The end position of the sweep test, in world space.
+     * @param result Optional pointer to a HitTest structure to store hit test result information in.
+     * @return True if the object intersects any other physics objects, false otherwise.
+     */
+    bool sweepTest(PhysicsCollisionObject* object, const Vector3& endPosition, PhysicsController::HitResult* result = NULL);
+
+protected:
+
+    /**
+     * Internal function used for Bullet integration (do not use or override).
+     */
+    btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB);    
+
 private:
+
+    // Internal constants for the collision status cache.
+    static const int DIRTY;
+    static const int COLLISION;
+    static const int REGISTERED;
+    static const int REMOVE;
+
+    // Represents the collision listeners and status for a given collision pair (used by the collision status cache).
+    struct CollisionInfo
+    {
+        CollisionInfo() : _status(0) { }
+
+        std::vector<PhysicsCollisionObject::CollisionListener*> _listeners;
+        int _status;
+    };
 
     /**
      * Constructor.
@@ -226,23 +309,45 @@ private:
      */
     void update(long elapsedTime);
 
-    // Adds the given rigid body to the world.
-    void addRigidBody(PhysicsRigidBody* body);
+    // Adds the given collision listener for the two given collision objects.
+    void addCollisionListener(PhysicsCollisionObject::CollisionListener* listener, PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB);
+
+    // Removes the given collision listener.
+    void removeCollisionListener(PhysicsCollisionObject::CollisionListener* listener, PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB);
+
+    // Adds the given collision object to the world.
+    void addCollisionObject(PhysicsCollisionObject* object);
     
-    // Removes the given rigid body from the simulated physics world.
-    void removeRigidBody(PhysicsRigidBody* rigidBody);
+    // Removes the given collision object from the simulated physics world.
+    void removeCollisionObject(PhysicsCollisionObject* object);
     
     // Gets the corresponding GamePlay object for the given Bullet object.
-    PhysicsRigidBody* getRigidBody(const btCollisionObject* collisionObject);
+    PhysicsCollisionObject* getCollisionObject(const btCollisionObject* collisionObject) const;
+
+    // Creates a collision shape for the given node and gameplay shape definition.
+    // Populates 'centerOfMassOffset' with the correct calculated center of mass offset.
+    PhysicsCollisionShape* createShape(Node* node, const PhysicsCollisionShape::Definition& shape, Vector3* centerOfMassOffset);
     
-    // Creates a box collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createBox(const Vector3& min, const Vector3& max, const btVector3& scale);
+    // Creates a box collision shape.
+    PhysicsCollisionShape* createBox(const Vector3& extents, const Vector3& scale);
 
-    // Creates a sphere collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createSphere(float radius, const btVector3& scale);
+    // Creates a sphere collision shape.
+    PhysicsCollisionShape* createSphere(float radius, const Vector3& scale);
 
-    // Creates a triangle mesh collision shape to be used in the creation of a rigid body.
-    btCollisionShape* createMesh(PhysicsRigidBody* body);
+    // Creates a capsule collision shape.
+    PhysicsCollisionShape* createCapsule(float radius, float height, const Vector3& scale);
+
+    // Creates a heightfield collision shape.
+    PhysicsCollisionShape* createHeightfield(Node* node, Image* image, Vector3* centerOfMassOffset);
+
+    // Creates a triangle mesh collision shape.
+    PhysicsCollisionShape* createMesh(Mesh* mesh, const Vector3& scale);
+
+    // Destroys a collision shape created through PhysicsController
+    void destroyShape(PhysicsCollisionShape* shape);
+
+    // Helper function for calculating heights from heightmap (image) or heightfield data.
+    static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
 
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
@@ -258,7 +363,55 @@ private:
     {
     public:
 
-        DebugDrawer();        
+        /** 
+         * DebugVertex.
+         */
+        struct DebugVertex
+        {
+            /**
+             * The x coordinate of the vertex.
+             */
+            float x;
+    
+            /**
+             * The y coordinate of the vertex.
+             */
+            float y;
+    
+            /**
+             * The z coordinate of the vertex.
+             */
+            float z;
+
+            /**
+             * The red color component of the vertex.
+             */
+            float r;
+    
+            /**
+             * The green color component of the vertex.
+             */
+            float g;
+    
+            /**
+             * The blue color component of the vertex.
+             */
+            float b;
+    
+            /**
+             * The alpha component of the vertex.
+             */
+            float a;
+        };
+
+        /**
+         * Constructor.
+         */
+        DebugDrawer(); 
+
+        /** 
+         * Destructor.
+         */
         ~DebugDrawer();
         
         void begin(const Matrix& viewProjection);
@@ -268,35 +421,31 @@ private:
         void drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor);        
         void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);        
         void drawContactPoint(const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color);        
-        void reportErrorWarning(const char* warningString);        
+        void reportErrorWarning(const char* warningString);
         void draw3dText(const btVector3& location, const char* textString);        
         void setDebugMode(int mode);        
-        int	getDebugMode() const;
+        int    getDebugMode() const;
         
     private:
         
         int _mode;
-        Effect* _effect;
-        VertexAttribute _positionAttrib;
-        VertexAttribute _colorAttrib;
-        Uniform* _viewProjectionMatrixUniform;
         const Matrix* _viewProjection;
-        float* _vertexData;
-        unsigned int _vertexCount;
-        unsigned int _vertexDataSize;
+        MeshBatch* _meshBatch;
     };
-    
+
     btDefaultCollisionConfiguration* _collisionConfiguration;
     btCollisionDispatcher* _dispatcher;
     btBroadphaseInterface* _overlappingPairCache;
     btSequentialImpulseConstraintSolver* _solver;
     btDynamicsWorld* _world;
-    btAlignedObjectArray<btCollisionShape*> _shapes;
+    btGhostPairCallback* _ghostPairCallback;
+    std::vector<PhysicsCollisionShape*> _shapes;
     DebugDrawer* _debugDrawer;
     Listener::EventType _status;
     std::vector<Listener*>* _listeners;
-    std::vector<PhysicsRigidBody*> _bodies;
     Vector3 _gravity;
+    std::map<PhysicsCollisionObject::CollisionPair, CollisionInfo> _collisionStatus;
+
 };
 
 }

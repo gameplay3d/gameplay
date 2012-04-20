@@ -4,8 +4,9 @@
 #include "Game.h"
 #include "Keyboard.h"
 #include "Touch.h"
+#include "Mouse.h"
 #include "FileSystem.h"
-#include "Package.h"
+#include "Bundle.h"
 
 // Math
 #include "Rectangle.h"
@@ -43,6 +44,7 @@
 #include "FrameBuffer.h"
 #include "RenderTarget.h"
 #include "DepthStencilTarget.h"
+#include "ScreenDisplayer.h"
 
 // Audio
 #include "AudioController.h"
@@ -65,7 +67,24 @@
 #include "PhysicsHingeConstraint.h"
 #include "PhysicsSocketConstraint.h"
 #include "PhysicsSpringConstraint.h"
+#include "PhysicsCollisionObject.h"
+#include "PhysicsCollisionShape.h"
 #include "PhysicsRigidBody.h"
+#include "PhysicsGhostObject.h"
+#include "PhysicsCharacter.h"
 
-
+// UI
+#include "Theme.h"
+#include "Control.h"
+#include "Container.h"
+#include "Form.h"
+#include "Label.h"
+#include "Button.h"
+#include "CheckBox.h"
+#include "TextBox.h"
+#include "RadioButton.h"
+#include "Slider.h"
+#include "Layout.h"
+#include "AbsoluteLayout.h"
+#include "VerticalLayout.h"
 

@@ -11,31 +11,28 @@
   <ItemGroup>
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
-    <None Include="res\arial.ttf">
+    <None Include="res\scene.scene">
       <Filter>res</Filter>
     </None>
-    <None Include="res\arial40.gpb">
+    <None Include="res\scene.dae">
       <Filter>res</Filter>
     </None>
-    <None Include="res\floor.material">
+    <None Include="res\scene.material">
       <Filter>res</Filter>
     </None>
-    <None Include="res\floor.png">
+    <None Include="res\boy.animation">
       <Filter>res</Filter>
     </None>
-    <None Include="res\seymour.dae">
+    <None Include="res\scene.physics">
       <Filter>res</Filter>
     </None>
-    <None Include="res\seymour.gpb">
+    <None Include="..\..\gameplay\res\logo_powered_white.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\seymour.material">
+    <None Include="res\gamepad.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\seymour-diffuse.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\seymour-clips.animation">
+    <None Include="res\diffuse-transparent.fsh">
       <Filter>res</Filter>
     </None>
   </ItemGroup>
@@ -43,9 +40,15 @@
     <ClCompile Include="src\CharacterGame.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Gamepad.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CharacterGame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gamepad.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -35,11 +35,13 @@
     <!-- <copyright></copyright> -->
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
-    <author>Research In Motion</author>
-    
+    <author>RIM Canada</author>
+
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
-    <!-- <authorId>ABC1234YjsnUk235h</authorId> -->
-   
+    <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
+
+    <platformVersion>2.0.0.7971</platformVersion>
+
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>
         <autoOrients>false</autoOrients>
@@ -51,15 +53,16 @@
     <category>core.games</category>
     
     <asset path="icon.png">icon.png</asset>
-    <asset path="res">res</asset>
+    <asset path="res/arial40.gpb">res/arial40.gpb</asset>
+    <asset path="res/colored.fsh">res/colored.fsh</asset>
+    <asset path="res/colored.vsh">res/colored.vsh</asset>
+    <asset path="res/duck-diffuse.png">res/duck-diffuse.png</asset>
+    <asset path="res/duck.gpb">res/duck.gpb</asset>
+    <asset path="res/duck.material">res/duck.material</asset>
+    <asset path="res/grid.material">res/grid.material</asset>
+    <asset path="${workspace_loc:/gameplay/res/logo_powered_white.png}">res/logo_powered_white.png</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.fsh}">res/shaders/diffuse-specular.fsh</asset>
     <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.vsh}">res/shaders/diffuse-specular.vsh</asset>
-    
-    <!-- BlackBerry NDK 1.0
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libOpenAL.so" type="Qnx/Elf">lib/libOpenAL.so.1</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libalut.so" type="Qnx/Elf">lib/libalut.so.1</asset>
-    <asset path="${QNX_TARGET}/../target-override/${CPUVARDIR}/usr/lib/libbps.so" type="Qnx/Elf">lib/libbps.so.1</asset>
-    -->
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

@@ -163,6 +163,7 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\..\gameplay\res\logo_powered_white.png" />
     <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
     <None Include="res\arial.ttf" />
@@ -171,6 +172,9 @@
     <None Include="res\duck.dae" />
     <None Include="res\duck.gpb" />
     <None Include="res\duck.material" />
+    <None Include="res\grid.material" />
+    <None Include="res\line.fsh" />
+    <None Include="res\line.vsh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshGame.cpp" />

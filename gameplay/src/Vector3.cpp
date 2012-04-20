@@ -14,7 +14,7 @@ Vector3::Vector3(float x, float y, float z)
     set(x, y, z);
 }
 
-Vector3::Vector3(float* array)
+Vector3::Vector3(const float* array)
 {
     set(array);
 }
@@ -203,7 +203,7 @@ float Vector3::distanceSquared(const Vector3& v) const
     return (dx * dx + dy * dy + dz * dz);
 }
 
-float Vector3::dot(const Vector3& v)
+float Vector3::dot(const Vector3& v) const
 {
     return (x * v.x + y * v.y + z * v.z);
 }
@@ -230,9 +230,10 @@ void Vector3::negate()
     z = -z;
 }
 
-void Vector3::normalize()
+Vector3& Vector3::normalize()
 {
     normalize(this);
+    return *this;
 }
 
 void Vector3::normalize(Vector3* dst) const
@@ -276,7 +277,7 @@ void Vector3::set(float x, float y, float z)
     this->z = z;
 }
 
-void Vector3::set(float* array)
+void Vector3::set(const float* array)
 {
     assert(array);
 

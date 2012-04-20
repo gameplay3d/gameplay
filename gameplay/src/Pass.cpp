@@ -2,6 +2,7 @@
 #include "Pass.h"
 #include "Technique.h"
 #include "Material.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -12,10 +13,6 @@ Pass::Pass(const char* id, Technique* technique, Effect* effect) :
     assert(technique);
 
     RenderState::_parent = _technique;
-}
-
-Pass::Pass(const Pass& copy)
-{
 }
 
 Pass::~Pass()
@@ -81,6 +78,15 @@ void Pass::unbind()
     {
         _vaBinding->unbind();
     }
+}
+
+Pass* Pass::clone(Technique* technique, NodeCloneContext &context) const
+{
+    Effect* effect = getEffect();
+    effect->addRef();
+    Pass* pass = new Pass(getId(), technique, effect);
+    RenderState::cloneInto(pass, context);
+    return pass;
 }
 
 }

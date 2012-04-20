@@ -17,7 +17,7 @@ VertexAttributeBinding::VertexAttributeBinding() :
 VertexAttributeBinding::~VertexAttributeBinding()
 {
     // Delete from the vertex attribute binding cache.
-    std::vector<VertexAttributeBinding*>::iterator itr = find(__vertexAttributeBindingCache.begin(), __vertexAttributeBindingCache.end(), this);
+    std::vector<VertexAttributeBinding*>::iterator itr = std::find(__vertexAttributeBindingCache.begin(), __vertexAttributeBindingCache.end(), this);
     if (itr != __vertexAttributeBindingCache.end())
     {
         __vertexAttributeBindingCache.erase(itr);
@@ -86,11 +86,11 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
     // Create a new VertexAttributeBinding.
     VertexAttributeBinding* b = new VertexAttributeBinding();
 
-#ifdef USE_GL_VAOS
+#ifdef USE_VAO
     if (mesh && glGenVertexArrays)
     {
         GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, 0) );
-        GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0) );
+        GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
 
         // Use hardware VAOs.
         GL_ASSERT( glGenVertexArrays(1, &b->_handle) );
@@ -168,11 +168,11 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
             attrib = effect->getVertexAttribute(VERTEX_ATTRIBUTE_BLENDINDICES_NAME);
             break;
         case VertexFormat::TEXCOORD0:
-            attrib = effect->getVertexAttribute(VERTEX_ATTRIBUTE_TEXCOORD_PREFIX);
+            attrib = effect->getVertexAttribute(VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME);
             // Try adding a "0" after the texcoord attrib name (flexible name for this case).
             if (attrib == -1)
             {
-                name = VERTEX_ATTRIBUTE_TEXCOORD_PREFIX;
+                name = VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME;
                 name += "0";
                 attrib = effect->getVertexAttribute(name.c_str());
             }
@@ -184,7 +184,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
         case VertexFormat::TEXCOORD5:
         case VertexFormat::TEXCOORD6:
         case VertexFormat::TEXCOORD7:
-            name = VERTEX_ATTRIBUTE_TEXCOORD_PREFIX;
+            name = VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME;
             name += (e.usage - VertexFormat::TEXCOORD0);
             attrib = effect->getVertexAttribute(name.c_str());
             break;
@@ -195,7 +195,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
 
         if (attrib == -1)
         {
-            WARN_VARG("Warning: Vertex attribute not found for usage %d", (int)e.usage);
+            WARN_VARG("Warning: Vertex element with usage '%s' in mesh '%s' does not correspond to an attribute in effect '%s'.", VertexFormat::toString(e.usage), mesh->getUrl(), effect->getId());
         }
         else
         {
@@ -221,8 +221,8 @@ void VertexAttributeBinding::setVertexAttribPointer(GLuint indx, GLint size, GLe
     if (_handle)
     {
         // Hardware mode
-        GL_ASSERT( glEnableVertexAttribArray(indx) );
         GL_ASSERT( glVertexAttribPointer(indx, size, type, normalize, stride, pointer) );
+        GL_ASSERT( glEnableVertexAttribArray(indx) );
     }
     else
     {
@@ -260,8 +260,8 @@ void VertexAttributeBinding::bind()
             VertexAttribute& a = _attributes[i];
             if (a.enabled)
             {
-                GL_ASSERT( glEnableVertexAttribArray(i) );
                 GL_ASSERT( glVertexAttribPointer(i, a.size, a.type, a.normalized, a.stride, a.pointer) );
+                GL_ASSERT( glEnableVertexAttribArray(i) );
             }
         }
     }
