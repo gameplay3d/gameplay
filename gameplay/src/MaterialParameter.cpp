@@ -315,6 +315,7 @@ unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyI
                     return 0;
             }
         }
+        break;
     }
 
     return 0;
@@ -376,6 +377,7 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
                 // UNSUPPORTED: NONE, MATRIX, METHOD, SAMPLER 
             }
         }
+        break;
     }
 }
 
@@ -454,10 +456,10 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
                     applyAnimationValue(value, blendWeight, 4);
                     break;
                 }
-
                 // UNSUPPORTED: NONE, MATRIX, METHOD, SAMPLER 
             }
         }
+        break;
     }
 }
 

@@ -13,7 +13,7 @@
 #include <bps/event.h>
 #include <bps/screen.h>
 #include <bps/navigator.h>
-#include <bps/accelerometer.h>
+#include <bps/sensor.h>
 #include <bps/orientation.h>
 #include <bps/virtualkeyboard.h>
 
@@ -35,7 +35,8 @@ static EGLSurface __eglSurface = EGL_NO_SURFACE;
 static EGLConfig __eglConfig = 0;
 static int __orientationAngle;
 static bool __multiTouch = false;
-
+static float __pitch;
+static float __roll;
 static const char* __glExtensions;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray = NULL;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
@@ -493,7 +494,12 @@ Platform* Platform::create(Game* game)
     Platform* platform = new Platform(game);
 
     bps_initialize();
-    accelerometer_set_update_frequency(FREQ_40_HZ);
+
+    static const int SENSOR_RATE = 25000;
+    sensor_set_rate(SENSOR_TYPE_AZIMUTH_PITCH_ROLL, SENSOR_RATE);
+    sensor_set_skip_duplicates(SENSOR_TYPE_AZIMUTH_PITCH_ROLL, true);
+    sensor_request_events(SENSOR_TYPE_AZIMUTH_PITCH_ROLL);
+
     navigator_request_events(0);
     navigator_rotation_lock(true);
 
@@ -949,6 +955,16 @@ int Platform::enterMessagePump()
                     break;
                 }
             }
+            else if (domain == sensor_get_domain())
+            {
+            	if (bps_event_get_code(event) == SENSOR_AZIMUTH_PITCH_ROLL_READING)
+            	{
+					float azimuth;
+					sensor_event_get_apr(event, &azimuth, &__pitch, &__roll);
+
+
+				   }
+            }
         }
 
         // If we are done, then exit.
@@ -1043,30 +1059,40 @@ bool Platform::isMultiTouch()
 
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
-    double tx, ty, tz;
-    accelerometer_read_forces(&tx, &ty, &tz);
+	switch(__orientationAngle)
+	{
+	// Landscape based device adjusting for landscape game mode
+	case 0:
+		if (pitch)
+			*pitch = __pitch;
+		if (roll)
+			*roll = -__roll;
+		break;
+	case 180:
+		if (pitch)
+			*pitch = -__pitch;
+		if (roll)
+			*roll = __roll;
+		break;
 
-    if (__orientationAngle == 90)
-	{
-		tx = -ty;
-		ty = tx;
-	}
-	else if (__orientationAngle == 180)
-	{
-		tx = -tx;
-		ty = -ty;
-		tz = -tz;
-	}
-	else if (__orientationAngle == 270)
-	{
-		tx = ty;
-		ty = -tx;
-	}
+	// Portrait based device adjusting for landscape game mode
+	case 90:
+		if (pitch)
+			*pitch = -__roll;
+		if (roll)
+			*roll = -__pitch;
+		break;
 
-    if (pitch != NULL)
-        *pitch = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
-    if (roll != NULL)
-        *roll = atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;
+	case  270:
+		if (pitch)
+			*pitch = __roll;
+		if (roll)
+			*roll = __pitch;
+		break;
+
+	default:
+		break;
+	}
 }
 
 void Platform::swapBuffers()
