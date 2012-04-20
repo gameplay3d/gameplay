@@ -11,9 +11,9 @@ TemplateGame::TemplateGame()
 void TemplateGame::initialize()
 {
     // Load game scene from file
-    Package* pkg = Package::create("res/box.gpb");
-    _scene = pkg->loadScene();
-    SAFE_RELEASE(pkg);
+    Bundle* bundle = Bundle::create("res/box.gpb");
+    _scene = bundle->loadScene();
+    SAFE_RELEASE(bundle);
 
     // Get light node
     Node* lightNode = _scene->findNode("directionalLight");
@@ -47,7 +47,7 @@ void TemplateGame::render(long elapsedTime)
     _scene->visit(this, &TemplateGame::drawScene);
 }
 
-bool TemplateGame::drawScene(Node* node, void* cookie)
+bool TemplateGame::drawScene(Node* node)
 {
     // If the node visited contains a model, draw it
     Model* model = node->getModel(); 
