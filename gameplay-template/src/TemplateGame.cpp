@@ -15,6 +15,9 @@ void TemplateGame::initialize()
     _scene = bundle->loadScene();
     SAFE_RELEASE(bundle);
 
+    // Set the aspect ratio for the scene's camera to match the current resolution
+    _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
+    
     // Get light node
     Node* lightNode = _scene->findNode("directionalLight");
     Light* light = lightNode->getLight();
