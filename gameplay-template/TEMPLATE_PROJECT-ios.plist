@@ -4,10 +4,10 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+    <key>CFBundleDisplayName</key>
+	<string>TEMPLATE_TITLE</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
-	<key>CFBundleIconFile</key>
-	<string>icon.png</string>
 	<key>CFBundleIdentifier</key>
 	<string>TEMPLATE_UUID</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -28,5 +28,7 @@
 	<array>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+    <key>CFBundleIconFile</key>
+	<string>icon.png</string>
 </dict>
 </plist>
