@@ -5,8 +5,8 @@ material box
         pass
         {
             // shaders
-            vertexShader = res/shaders/colored.vsh
-            fragmentShader = res/shaders/colored.fsh
+            vertexShader = res/colored.vsh
+            fragmentShader = res/colored.fsh
             
             // uniforms
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
