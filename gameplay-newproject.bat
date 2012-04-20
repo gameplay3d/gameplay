@@ -177,9 +177,9 @@ call:replace %projPath%\%projName%.xcodeproj\project.pbxproj GAMEPLAY_PATH "%gpP
 call:replace %projPath%\%projName%.xcodeproj\project.pbxproj TemplateGame "%className%"
 call:replace %projPath%\%projName%.xcodeproj\project.pbxproj TEMPLATE_PROJECT "%projName%"
 
-copy gameplay-template\gameplay-template-macos.plist %projPath%\%projName%-macos.plist
-call:replace %projPath%\%projName%-macos.plist TEMPLATE_UUID "%uuid%"
-call:replace %projPath%\%projName%-macos.plist TEMPLATE_AUTHOR "%author%"
+copy gameplay-template\gameplay-template-macosx.plist %projPath%\%projName%-macosx.plist
+call:replace %projPath%\%projName%-macosx.plist TEMPLATE_UUID "%uuid%"
+call:replace %projPath%\%projName%-macosx.plist TEMPLATE_AUTHOR "%author%"
 
 REM Copy BlackBerry NDK project files
 copy gameplay-template\template.cproject %projPath%\.cproject
@@ -196,6 +196,37 @@ call:replace %projPath%\bar-descriptor.xml TEMPLATE_TITLE "%title%"
 call:replace %projPath%\bar-descriptor.xml TEMPLATE_UUID "%uuid%"
 call:replace %projPath%\bar-descriptor.xml TEMPLATE_AUTHOR "%author%"
 call:replace %projPath%\bar-descriptor.xml TEMPLATE_DESCRIPTION "%desc%"
+
+REM Copy Android NDK project files
+mkdir %projPath%\android
+
+copy gameplay-template\android\template.AndroidManifest.xml %projPath%\android\AndroidManifest.xml
+call:replace %projPath%\android\AndroidManifest.xml TEMPLATE_PROJECT "%projName%"
+call:replace %projPath%\android\AndroidManifest.xml TEMPLATE_UUID "%uuid%"
+
+copy gameplay-template\android\template.build.xml %projPath%\android\build.xml
+call:replace %projPath%\android\build.xml TEMPLATE_PROJECT "%projName%"
+
+copy gameplay-template\android\template.project %projPath%\android\.project
+call:replace %projPath%\android\.project TEMPLATE_PROJECT "%projName%"
+
+copy gameplay-template\android\template.classpath %projPath%\android\.classpath
+
+mkdir %projPath%\android\jni
+
+copy gameplay-template\android\jni\Application.mk %projPath%\android\jni\Application.mk
+
+copy gameplay-template\android\jni\template.Android.mk %projPath%\android\jni\Android.mk
+call:replace %projPath%\android\jni\Android.mk TemplateGame "%className%"
+call:replace %projPath%\android\jni\Android.mk TEMPLATE_PROJECT "%projName%"
+
+copy gameplay-template\android\jni\main.cpp %projPath%\android\jni\main.cpp
+
+mkdir %projPath%\android\res\values
+
+copy gameplay-template\android\res\values\template.strings.xml %projPath%\android\res\values\strings.xml
+call:replace %projPath%\android\res\values\strings.xml TEMPLATE_TITLE "%title%"
+
 
 REM Copy source files
 copy gameplay-template\src\TemplateGame.h %projPath%\src\%className%.h

@@ -18,6 +18,14 @@ Ref::Ref() :
 #endif
 }
 
+Ref::Ref(const Ref& copy) :
+    _refCount(1)
+{
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+    __record = trackRef(this);
+#endif
+}
+
 Ref::~Ref()
 {
 }

@@ -10,6 +10,10 @@ class Image;
 
 /**
  * Represents a texture.
+ *
+ * TODO: Addd support for the following: 
+ * COMPRESSED_RGBA_ATITC = GL_ATC_RGBA_EXPLICIT_ALPHA_AMD,
+ * COMPRESSED_RGBA_DXT1 = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
  */
 class Texture : public Ref
 {
@@ -25,7 +29,13 @@ public:
         RGB     = GL_RGB,
         RGBA    = GL_RGBA,
         ALPHA   = GL_ALPHA,
-        DEPTH   = GL_DEPTH_COMPONENT
+        DEPTH   = GL_DEPTH_COMPONENT,
+#ifdef USE_PVRTC
+        COMPRESSED_RGB_PVRTC_4BPP = GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,
+        COMPRESSED_RGBA_PVRTC_4BPP = GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,
+        COMPRESSED_RGB_PVRTC_2BPP = GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,
+        COMPRESSED_RGBA_PVRTC_2BPP = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG
+#endif
     };
 
     /**
@@ -203,6 +213,10 @@ private:
      */
     virtual ~Texture();
 
+#ifdef USE_PVRTC
+    static Texture* createCompressedPVRTC(const char* path);
+#endif
+    
     std::string _path;
     TextureHandle _handle;
     unsigned int _width;

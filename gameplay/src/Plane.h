@@ -45,7 +45,7 @@ public:
      * Constructs a new plane from the specified values.
      *
      * @param normal The normal vector of this plane.
-     * @param distance The distance to this plane along its (unit) normal to the origin.
+     * @param distance The distance from this plane along its (unit) normal to the origin.
      */
     Plane(const Vector3& normal, float distance);
 
@@ -220,7 +220,7 @@ private:
  * @param plane The plane to transform.
  * @return The resulting transformed plane.
  */
-inline Plane operator*(const Matrix& matrix, const Plane& plane);
+inline const Plane operator*(const Matrix& matrix, const Plane& plane);
 
 }
 

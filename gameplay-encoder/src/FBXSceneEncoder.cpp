@@ -15,7 +15,7 @@ using namespace gameplay;
  * 
  * @return The aspect ratio from the camera.
  */
-float getAspectRatio(KFbxCamera* fbxCamera);
+static float getAspectRatio(KFbxCamera* fbxCamera);
 
 /**
  * Returns the field of view Y from the given camera.
@@ -24,7 +24,7 @@ float getAspectRatio(KFbxCamera* fbxCamera);
  * 
  * @return The field of view Y.
  */
-float getFieldOfView(KFbxCamera* fbxCamera);
+static float getFieldOfView(KFbxCamera* fbxCamera);
 
 /**
  * Loads the texture coordinates from given mesh's polygon part into the vertex.
@@ -34,7 +34,7 @@ float getFieldOfView(KFbxCamera* fbxCamera);
  * @param posInPoly The position in the polygon.
  * @param vertex The vertex to copy the texture coordinates to.
  */
-void loadTextureCoords(KFbxMesh* fbxMesh, int polyIndex, int posInPoly, Vertex* vertex);
+static void loadTextureCoords(KFbxMesh* fbxMesh, int polyIndex, int posInPoly, Vertex* vertex);
 
 /**
  * Loads the normal from the mesh and adds it to the given vertex.
@@ -43,7 +43,7 @@ void loadTextureCoords(KFbxMesh* fbxMesh, int polyIndex, int posInPoly, Vertex* 
  * @param vertexIndex The vertex index in the mesh.
  * @param vertex The vertex to copy to.
  */
-void loadNormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
+static void loadNormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
 
 /**
  * Loads the tangent from the mesh and adds it to the given vertex.
@@ -52,7 +52,7 @@ void loadNormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
  * @param vertexIndex The index of the vertex within fbxMesh.
  * @param vertex The vertex to copy to.
  */
-void loadTangent(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
+static void loadTangent(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
 
 /**
  * Loads the binormal from the mesh and adds it to the given vertex.
@@ -61,7 +61,16 @@ void loadTangent(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
  * @param vertexIndex The index of the vertex within fbxMesh.
  * @param vertex The vertex to copy to.
  */
-void loadBinormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
+static void loadBinormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
+
+/**
+ * Loads the vertex diffuse color from the mesh and adds it to the given vertex.
+ * 
+ * @param fbxMesh The mesh to load from.
+ * @param vertexIndex The index of the vertex within fbxMesh.
+ * @param vertex The vertex to copy to.
+ */
+static void loadVertexColor(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
 
 /**
  * Loads the blend weight and blend indices data into the vertex.
@@ -69,7 +78,7 @@ void loadBinormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
  * @param vertexWeights List of vertex weights. The x member contains the blendIndices. The y member contains the blendWeights.
  * @param vertex The vertex to copy the blend data to.
  */
-void loadBlendData(const std::vector<Vector2>& vertexWeights, Vertex* vertex);
+static void loadBlendData(const std::vector<Vector2>& vertexWeights, Vertex* vertex);
 
 /**
  * Loads the blend weights and blend indices from the given mesh.
@@ -81,17 +90,17 @@ void loadBlendData(const std::vector<Vector2>& vertexWeights, Vertex* vertex);
  * 
  * @return True if this mesh has a mesh skin, false otherwise.
  */
-bool loadBlendWeights(KFbxMesh* fbxMesh, std::vector<std::vector<Vector2> >& weights);
+static bool loadBlendWeights(KFbxMesh* fbxMesh, std::vector<std::vector<Vector2> >& weights);
 
 /**
  * Copies from an FBX matrix to a float[16] array.
  */
-void copyMatrix(const KFbxMatrix& fbxMatrix, float* matrix);
+static void copyMatrix(const KFbxMatrix& fbxMatrix, float* matrix);
 
 /**
  * Copies from an FBX matrix to a gameplay matrix.
  */
-void copyMatrix(const KFbxMatrix& fbxMatrix, Matrix& matrix);
+static void copyMatrix(const KFbxMatrix& fbxMatrix, Matrix& matrix);
 
 /**
  * Finds the min and max start time and stop time of the given animation curve.
@@ -105,7 +114,7 @@ void copyMatrix(const KFbxMatrix& fbxMatrix, Matrix& matrix);
  * @param stopTime The max stop time. (in/out)
  * @param frameRate The frame rate. (in/out)
  */
-void findMinMaxTime(KFbxAnimCurve* animCurve, float* startTime, float* stopTime, float* frameRate);
+static void findMinMaxTime(KFbxAnimCurve* animCurve, float* startTime, float* stopTime, float* frameRate);
 
 /**
  * Appends a key frame of the given node's transform at the given time.
@@ -115,7 +124,7 @@ void findMinMaxTime(KFbxAnimCurve* animCurve, float* startTime, float* stopTime,
  * @param keyTimes The list of key times to append to.
  * @param keyValues The list of key values to append to.
  */
-void appendKeyFrame(KFbxNode* fbxNode, float time, std::vector<float>* keyTimes, std::vector<float>* keyValues);
+static void appendKeyFrame(KFbxNode* fbxNode, float time, std::vector<float>* keyTimes, std::vector<float>* keyValues);
 
 /**
  * Decomposes the given node's matrix transform at the given time and copies to scale, rotation and translation.
@@ -126,7 +135,7 @@ void appendKeyFrame(KFbxNode* fbxNode, float time, std::vector<float>* keyTimes,
  * @param rotation The rotation to copy to.
  * @param translation The translation to copy to.
  */
-void decompose(KFbxNode* fbxNode, float time, Vector3* scale, Quaternion* rotation, Vector3* translation);
+static void decompose(KFbxNode* fbxNode, float time, Vector3* scale, Quaternion* rotation, Vector3* translation);
 
 /**
  * Creates an animation channel that targets the given node and target attribute using the given key times and key values.
@@ -138,7 +147,7 @@ void decompose(KFbxNode* fbxNode, float time, Vector3* scale, Quaternion* rotati
  * 
  * @return The newly created animation channel.
  */
-AnimationChannel* createAnimationChannel(KFbxNode* fbxNode, unsigned int targetAttrib, const std::vector<float>& keyTimes, const std::vector<float>& keyValues);
+static AnimationChannel* createAnimationChannel(KFbxNode* fbxNode, unsigned int targetAttrib, const std::vector<float>& keyTimes, const std::vector<float>& keyValues);
 
 void addScaleChannel(Animation* animation, KFbxNode* fbxNode, float startTime, float stopTime);
 
@@ -240,7 +249,13 @@ void FBXSceneEncoder::loadScene(KFbxScene* fbxScene)
     // Find the ambient light of the scene
     KFbxColor ambientColor = fbxScene->GetGlobalSettings().GetAmbientColor();
     scene->setAmbientColor((float)ambientColor.mRed, (float)ambientColor.mGreen, (float)ambientColor.mBlue);
-
+    
+    // Assign the first camera node (if there is one) in the scene as the active camera
+    // This ensures that if there's a camera in the scene that it is assigned as the 
+    // active camera.
+    // TODO: add logic to find the "active" camera node in the fbxScene
+    scene->setActiveCameraNode(scene->getFirstCameraNode());
+    
     _gamePlayFile.addScene(scene);
 }
 
@@ -260,7 +275,7 @@ void FBXSceneEncoder::loadAnimationChannels(KFbxAnimLayer* animLayer, KFbxNode* 
     // TODO: Ignore properties that are not animated (scale, rotation, translation)
     // This should result in only one animation channel per animated node.
 
-    float startTime = FLT_MAX, stopTime = -1.0f, frameRate = FLT_MIN;
+    float startTime = FLT_MAX, stopTime = -1.0f, frameRate = -FLT_MAX;
     bool tx = false, ty = false, tz = false, rx = false, ry = false, rz = false, sx = false, sy = false, sz = false;
     KFbxAnimCurve* animCurve = NULL;
     animCurve = fbxNode->LclTranslation.GetCurve<KFbxAnimCurve>(animLayer, KFCURVENODE_T_X);
@@ -637,19 +652,64 @@ void FBXSceneEncoder::loadLight(KFbxNode* fbxNode, Node* node)
     switch (fbxLight->LightType.Get())
     {
     case KFbxLight::ePOINT:
-        light->setPointLight();
-        // TODO: range
+    {
+        KFbxLight::EDecayType decayType = fbxLight->DecayType.Get();
+        switch (decayType)
+        {
+        case KFbxLight::eNONE:
+            // No decay. Can assume we have an ambient light, because ambient lights in the scene are 
+            // converted to point lights with no decay when exporting to FBX.
+            light->setAmbientLight();
+            break;
+        case KFbxLight::eLINEAR:
+            light->setPointLight();
+            light->setLinearAttenuation((float)fbxLight->DecayStart.Get());
+            break;
+        case KFbxLight::eQUADRATIC:
+            light->setPointLight();
+            light->setQuadraticAttenuation((float)fbxLight->DecayStart.Get());
+            break;
+        case KFbxLight::eCUBIC:
+        default:
+            // Not supported..
+            break;
+        }
         break;
+    }
     case KFbxLight::eDIRECTIONAL:
+    {
         light->setDirectionalLight();
         break;
+    }
     case KFbxLight::eSPOT:
+    {
         light->setSpotLight();
-        // TODO: range and angles
+
+        KFbxLight::EDecayType decayType = fbxLight->DecayType.Get();
+        switch (decayType)
+        {
+        case KFbxLight::eNONE:
+            // No decay.
+            break;
+        case KFbxLight::eLINEAR:
+            light->setLinearAttenuation((float)fbxLight->DecayStart.Get());
+            break;  
+        case KFbxLight::eQUADRATIC:
+            light->setQuadraticAttenuation((float)fbxLight->DecayStart.Get());
+            break;
+        case KFbxLight::eCUBIC:
+            // Not supported..
+            break;
+        }
+
+        light->setFalloffAngle(MATH_DEG_TO_RAD((float)fbxLight->ConeAngle.Get())); // fall off angle
         break;
+    }
     default:
+    {
         warning("Unknown light type in node.");
         return;
+    }
     }
 
     _gamePlayFile.addLight(light);
@@ -778,7 +838,7 @@ Mesh* FBXSceneEncoder::loadMesh(KFbxMesh* fbxMesh)
             loadNormal(fbxMesh, vertexIndex, &vertex);
             loadTangent(fbxMesh, vertexIndex, &vertex);
             loadBinormal(fbxMesh, vertexIndex, &vertex);
-            // TODO: loadDiffuseColors
+            loadVertexColor(fbxMesh, vertexIndex, &vertex);
 
             if (hasSkin)
             {
@@ -819,39 +879,39 @@ Mesh* FBXSceneEncoder::loadMesh(KFbxMesh* fbxMesh)
     // It should be the same order as how the Vertex data is written.
 
     // Position
-    mesh->addVetexAttribute(POSITION, 3);
+    mesh->addVetexAttribute(POSITION, Vertex::POSITION_COUNT);
 
     const Vertex& vertex = mesh->vertices[0];
     // Normals
     if (vertex.hasNormal)
     {
-        mesh->addVetexAttribute(NORMAL, 3);
+        mesh->addVetexAttribute(NORMAL, Vertex::NORMAL_COUNT);
     }
     // Tangents
     if (vertex.hasTangent)
     {
-        mesh->addVetexAttribute(TANGENT, 3);
+        mesh->addVetexAttribute(TANGENT, Vertex::TANGENT_COUNT);
     }
     // Binormals
     if (vertex.hasBinormal)
     {
-        mesh->addVetexAttribute(BINORMAL, 3);
+        mesh->addVetexAttribute(BINORMAL, Vertex::BINORMAL_COUNT);
     }
     // Texture Coordinates
     if (vertex.hasTexCoord)
     {
-        mesh->addVetexAttribute(TEXCOORD0, 2);
+        mesh->addVetexAttribute(TEXCOORD0, Vertex::TEXCOORD_COUNT);
     }
     // Diffuse Color
-    if (vertex.hasColor)
+    if (vertex.hasDiffuse)
     {
-        mesh->addVetexAttribute(COLOR, 3);
+        mesh->addVetexAttribute(COLOR, Vertex::DIFFUSE_COUNT);
     }
     // Skinning BlendWeights BlendIndices
     if (vertex.hasWeights)
     {
-        mesh->addVetexAttribute(BLENDWEIGHTS, 4);
-        mesh->addVetexAttribute(BLENDINDICES, 4);
+        mesh->addVetexAttribute(BLENDWEIGHTS, Vertex::BLEND_WEIGHTS_COUNT);
+        mesh->addVetexAttribute(BLENDINDICES, Vertex::BLEND_INDICES_COUNT);
     }
 
     _gamePlayFile.addMesh(mesh);
@@ -974,23 +1034,23 @@ void loadTextureCoords(KFbxMesh* fbxMesh, int polyIndex, int posInPoly, Vertex* 
     if (fbxMesh->GetElementUVCount() > 0)
     {
         // Get only the first UV coordinates.
-        KFbxGeometryElementUV* leUV = fbxMesh->GetElementUV(0);
-        switch (leUV->GetMappingMode())
+        KFbxGeometryElementUV* uv = fbxMesh->GetElementUV(0);
+        switch (uv->GetMappingMode())
         {
         case KFbxGeometryElement::eBY_CONTROL_POINT:
-            switch (leUV->GetReferenceMode())
+            switch (uv->GetReferenceMode())
             {
             case KFbxGeometryElement::eDIRECT:
                 vertex->hasTexCoord = true;
-                vertex->texCoord.x = (float)leUV->GetDirectArray().GetAt(polyIndex)[0];
-                vertex->texCoord.y = (float)leUV->GetDirectArray().GetAt(polyIndex)[1];
+                vertex->texCoord.x = (float)uv->GetDirectArray().GetAt(polyIndex)[0];
+                vertex->texCoord.y = (float)uv->GetDirectArray().GetAt(polyIndex)[1];
                 break;
             case KFbxGeometryElement::eINDEX_TO_DIRECT:
                 {
-                    int id = leUV->GetIndexArray().GetAt(polyIndex);
+                    int id = uv->GetIndexArray().GetAt(polyIndex);
                     vertex->hasTexCoord = true;
-                    vertex->texCoord.x = (float)leUV->GetDirectArray().GetAt(id)[0];
-                    vertex->texCoord.y = (float)leUV->GetDirectArray().GetAt(id)[1];
+                    vertex->texCoord.x = (float)uv->GetDirectArray().GetAt(id)[0];
+                    vertex->texCoord.y = (float)uv->GetDirectArray().GetAt(id)[1];
                 }
                 break;
             default:
@@ -1000,13 +1060,13 @@ void loadTextureCoords(KFbxMesh* fbxMesh, int polyIndex, int posInPoly, Vertex* 
         case KFbxGeometryElement::eBY_POLYGON_VERTEX:
             {
                 int lTextureUVIndex = fbxMesh->GetTextureUVIndex(polyIndex, posInPoly);
-                switch (leUV->GetReferenceMode())
+                switch (uv->GetReferenceMode())
                 {
                 case KFbxGeometryElement::eDIRECT:
                 case KFbxGeometryElement::eINDEX_TO_DIRECT:
                     vertex->hasTexCoord = true;
-                    vertex->texCoord.x = (float)leUV->GetDirectArray().GetAt(lTextureUVIndex)[0];
-                    vertex->texCoord.y = (float)leUV->GetDirectArray().GetAt(lTextureUVIndex)[1];
+                    vertex->texCoord.x = (float)uv->GetDirectArray().GetAt(lTextureUVIndex)[0];
+                    vertex->texCoord.y = (float)uv->GetDirectArray().GetAt(lTextureUVIndex)[1];
                     break;
                 default:
                     break;
@@ -1024,14 +1084,14 @@ void loadNormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex)
     if (fbxMesh->GetElementNormalCount() > 0)
     {
         // Get only the first
-        KFbxGeometryElementNormal* leNormal = fbxMesh->GetElementNormal(0);
-        if (leNormal->GetMappingMode() == KFbxGeometryElement::eBY_POLYGON_VERTEX)
+        KFbxGeometryElementNormal* normal = fbxMesh->GetElementNormal(0);
+        if (normal->GetMappingMode() == KFbxGeometryElement::eBY_POLYGON_VERTEX)
         {
-            switch (leNormal->GetReferenceMode())
+            switch (normal->GetReferenceMode())
             {
             case KFbxGeometryElement::eDIRECT:
                 {
-                    KFbxVector4 vec4 = leNormal->GetDirectArray().GetAt(vertexIndex);
+                    KFbxVector4 vec4 = normal->GetDirectArray().GetAt(vertexIndex);
                     vertex->hasNormal = true;
                     vertex->normal.x = (float)vec4[0];
                     vertex->normal.y = (float)vec4[1];
@@ -1040,8 +1100,8 @@ void loadNormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex)
                 break;
             case KFbxGeometryElement::eINDEX_TO_DIRECT:
                 {
-                    int id = leNormal->GetIndexArray().GetAt(vertexIndex);
-                    KFbxVector4 vec4 = leNormal->GetDirectArray().GetAt(id);
+                    int id = normal->GetIndexArray().GetAt(vertexIndex);
+                    KFbxVector4 vec4 = normal->GetDirectArray().GetAt(id);
                     vertex->hasNormal = true;
                     vertex->normal.x = (float)vec4[0];
                     vertex->normal.y = (float)vec4[1];
@@ -1060,14 +1120,14 @@ void loadTangent(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex)
     if (fbxMesh->GetElementTangentCount() > 0)
     {
         // Get only the first tangent
-        KFbxGeometryElementTangent* leTangent = fbxMesh->GetElementTangent(0);
-        if (leTangent->GetMappingMode() == KFbxGeometryElement::eBY_POLYGON_VERTEX)
+        KFbxGeometryElementTangent* tangent = fbxMesh->GetElementTangent(0);
+        if (tangent->GetMappingMode() == KFbxGeometryElement::eBY_POLYGON_VERTEX)
         {
-            switch (leTangent->GetReferenceMode())
+            switch (tangent->GetReferenceMode())
             {
             case KFbxGeometryElement::eDIRECT:
                 {
-                    KFbxVector4 vec4 = leTangent->GetDirectArray().GetAt(vertexIndex);
+                    KFbxVector4 vec4 = tangent->GetDirectArray().GetAt(vertexIndex);
                     vertex->hasTangent = true;
                     vertex->tangent.x = (float)vec4[0];
                     vertex->tangent.y = (float)vec4[1];
@@ -1076,8 +1136,8 @@ void loadTangent(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex)
                 break;
             case KFbxGeometryElement::eINDEX_TO_DIRECT:
                 {
-                    int id = leTangent->GetIndexArray().GetAt(vertexIndex);
-                    KFbxVector4 vec4 = leTangent->GetDirectArray().GetAt(id);
+                    int id = tangent->GetIndexArray().GetAt(vertexIndex);
+                    KFbxVector4 vec4 = tangent->GetDirectArray().GetAt(id);
                     vertex->hasTangent = true;
                     vertex->tangent.x = (float)vec4[0];
                     vertex->tangent.y = (float)vec4[1];
@@ -1096,14 +1156,14 @@ void loadBinormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex)
     if (fbxMesh->GetElementBinormalCount() > 0)
     {
         // Get only the first binormal.
-        KFbxGeometryElementBinormal* leBinormal = fbxMesh->GetElementBinormal(0);
-        if (leBinormal->GetMappingMode() == KFbxGeometryElement::eBY_POLYGON_VERTEX)
+        KFbxGeometryElementBinormal* binormal = fbxMesh->GetElementBinormal(0);
+        if (binormal->GetMappingMode() == KFbxGeometryElement::eBY_POLYGON_VERTEX)
         {
-            switch (leBinormal->GetReferenceMode())
+            switch (binormal->GetReferenceMode())
             {
             case KFbxGeometryElement::eDIRECT:
                 {
-                    KFbxVector4 vec4 = leBinormal->GetDirectArray().GetAt(vertexIndex);
+                    KFbxVector4 vec4 = binormal->GetDirectArray().GetAt(vertexIndex);
                     vertex->hasBinormal = true;
                     vertex->binormal.x = (float)vec4[0];
                     vertex->binormal.y = (float)vec4[1];
@@ -1112,12 +1172,52 @@ void loadBinormal(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex)
                 break;
             case KFbxGeometryElement::eINDEX_TO_DIRECT:
                 {
-                    int id = leBinormal->GetIndexArray().GetAt(vertexIndex);
-                    KFbxVector4 vec4 = leBinormal->GetDirectArray().GetAt(id);
+                    int id = binormal->GetIndexArray().GetAt(vertexIndex);
+                    KFbxVector4 vec4 = binormal->GetDirectArray().GetAt(id);
                     vertex->hasBinormal = true;
                     vertex->binormal.x = (float)vec4[0];
                     vertex->binormal.y = (float)vec4[1];
                     vertex->binormal.z = (float)vec4[2];
+                }
+                break;
+            default:
+                break;
+            }
+        }
+    }
+}
+
+void loadVertexColor(KFbxMesh* fbxMesh, int vertexIndex, Vertex* vertex)
+{
+    if (fbxMesh->GetElementVertexColorCount() > 0)
+    {
+        // Get only the first vertex color.
+        KFbxGeometryElementVertexColor* vertexColor = fbxMesh->GetElementVertexColor(0);
+        if (vertexColor->GetMappingMode() == KFbxGeometryElement::eBY_POLYGON_VERTEX)
+        {
+            switch (vertexColor->GetReferenceMode())
+            {
+            case KFbxGeometryElement::eDIRECT:
+                {
+                    KFbxColor color = vertexColor->GetDirectArray().GetAt(vertexIndex);
+
+                    vertex->hasDiffuse = true;
+                    vertex->diffuse.x = (float)color.mRed;
+                    vertex->diffuse.y = (float)color.mGreen;
+                    vertex->diffuse.z = (float)color.mBlue;
+                    vertex->diffuse.w = (float)color.mAlpha;
+                }
+                break;
+            case KFbxGeometryElement::eINDEX_TO_DIRECT:
+                {
+                    int id = vertexColor->GetIndexArray().GetAt(vertexIndex);
+                    KFbxColor color = vertexColor->GetDirectArray().GetAt(id);
+
+                    vertex->hasDiffuse = true;
+                    vertex->diffuse.x = (float)color.mRed;
+                    vertex->diffuse.y = (float)color.mGreen;
+                    vertex->diffuse.z = (float)color.mBlue;
+                    vertex->diffuse.w = (float)color.mAlpha;
                 }
                 break;
             default:
@@ -1225,6 +1325,7 @@ void appendKeyFrame(KFbxNode* fbxNode, float time, std::vector<float>* keyTimes,
     Quaternion rotation;
     Vector3 translation;
     matrix.decompose(&scale, &rotation, &translation);
+    rotation.normalize();
 
     keyTimes->push_back(time);
     keyValues->push_back(scale.x);

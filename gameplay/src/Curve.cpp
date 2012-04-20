@@ -54,6 +54,11 @@ using std::strcmp;
 namespace gameplay
 {
 
+Curve* Curve::create(unsigned int pointCount, unsigned int componentCount)
+{
+    return new Curve(pointCount, componentCount);
+}
+
 Curve::Curve(unsigned int pointCount, unsigned int componentCount)
     : _pointCount(pointCount), _componentCount(componentCount), _componentSize(sizeof(float)*componentCount), _quaternionOffset(NULL), _points(NULL)
 {
@@ -114,7 +119,7 @@ void Curve::setPoint(unsigned int index, float time, float* value, Interpolation
 
 void Curve::setPoint(unsigned int index, float time, float* value, InterpolationType type, float* inValue, float* outValue)
 {
-    assert(index < _pointCount && time >= 0.0f && time <= 1.0f && !(index == 0 && time != 0.0f) && !(index == _pointCount - 1 && time != 1.0f));
+    assert(index < _pointCount && time >= 0.0f && time <= 1.0f && !(index == 0 && time != 0.0f) && !(_pointCount != 1 && index == _pointCount - 1 && time != 1.0f));
 
     _points[index].time = time;
     _points[index].type = type;
@@ -146,8 +151,9 @@ void Curve::evaluate(float time, float* dst) const
 {
     assert(dst && time >= 0 && time <= 1.0f);
 
+    // Check if the point count is 1.
     // Check if we are at or beyond the bounds of the curve.
-    if (time <= _points[0].time)
+    if (_pointCount == 1 || time <= _points[0].time)
     {
         memcpy(dst, _points[0].value, _componentSize);
         return;
@@ -703,6 +709,11 @@ void Curve::evaluate(float time, float* dst) const
     interpolateLinear(t, from, to, dst);
 }
 
+float Curve::lerp(float t, float from, float to)
+{
+    return lerpInl(t, from, to);
+}
+
 void Curve::setQuaternionOffset(unsigned int offset)
 {
     assert(offset <= (_componentCount - 4));
@@ -1078,7 +1089,7 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
             if (fromValue[i] == toValue[i])
                 dst[i] = fromValue[i];
             else
-                dst[i] = lerp(s, fromValue[i], toValue[i]);
+                dst[i] = lerpInl(s, fromValue[i], toValue[i]);
         }
     }
     else
@@ -1091,7 +1102,7 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
             if (fromValue[i] == toValue[i])
                 dst[i] = fromValue[i];
             else
-                dst[i] = lerp(s, fromValue[i], toValue[i]);
+                dst[i] = lerpInl(s, fromValue[i], toValue[i]);
         }
 
         // Handle quaternion component.
@@ -1103,18 +1114,22 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
             if (fromValue[i] == toValue[i])
                 dst[i] = fromValue[i];
             else
-                dst[i] = lerp(s, fromValue[i], toValue[i]);
+                dst[i] = lerpInl(s, fromValue[i], toValue[i]);
         }
     }
 }
 
 void Curve::interpolateQuaternion(float s, float* from, float* to, float* dst) const
-{        
+{
     // Evaluate.
     if (s >= 0)
+    {
         Quaternion::slerp(from[0], from[1], from[2], from[3], to[0], to[1], to[2], to[3], s, dst, dst + 1, dst + 2, dst + 3);
+    }
     else
         Quaternion::slerp(to[0], to[1], to[2], to[3], from[0], from[1], from[2], from[3], s, dst, dst + 1, dst + 2, dst + 3);
+
+    //((Quaternion*) dst)->normalize();
 }
 
 int Curve::determineIndex(float time) const

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		42458CBB14C3AB4D00EFFB61 /* sample02-spaceship-ios.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42458CBA14C3AB4D00EFFB61 /* sample02-spaceship-ios.plist */; };
 		42CCD51B146EBF3600353661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD51A146EBF3600353661 /* Cocoa.framework */; };
 		42CCD549146EC0AE00353661 /* SpaceshipGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CCD547146EC0AE00353661 /* SpaceshipGame.cpp */; };
 		42CCD54B146EC10200353661 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD54A146EC10200353661 /* QuartzCore.framework */; };
@@ -33,18 +32,19 @@
 		5B43D1AF14C35A0E008A5D9D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD55D146EC24F00353661 /* icon.png */; };
 		5B43D1B014C35A0E008A5D9D /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD55F146EC27A00353661 /* res */; };
 		5B43D1B814C35A65008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1B714C35A65008A5D9D /* libgameplay.a */; };
-		5B43D1BD14C35A9B008A5D9D /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1BB14C35A9B008A5D9D /* OpenAL.framework */; };
-		5B43D1BE14C35A9B008A5D9D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1BC14C35A9B008A5D9D /* OpenGLES.framework */; };
-		5B43D1C014C35AA0008A5D9D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1BF14C35AA0008A5D9D /* UIKit.framework */; };
-		5B43D1C214C35AA7008A5D9D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1C114C35AA7008A5D9D /* QuartzCore.framework */; };
-		5B43D1C314C35C18008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1B714C35A65008A5D9D /* libgameplay.a */; };
-		5B43D1C514C35F13008A5D9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1C414C35F13008A5D9D /* Foundation.framework */; };
+		5B928C6E1513E9AD0095E677 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1B714C35A65008A5D9D /* libgameplay.a */; };
+		5BAF204E152F2BAB003E2AC3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2048152F2BAB003E2AC3 /* CoreMotion.framework */; };
+		5BAF204F152F2BAB003E2AC3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2049152F2BAB003E2AC3 /* Foundation.framework */; };
+		5BAF2050152F2BAB003E2AC3 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF204A152F2BAB003E2AC3 /* OpenAL.framework */; };
+		5BAF2051152F2BAB003E2AC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF204B152F2BAB003E2AC3 /* OpenGLES.framework */; };
+		5BAF2052152F2BAB003E2AC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF204C152F2BAB003E2AC3 /* QuartzCore.framework */; };
+		5BAF2053152F2BAB003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF204D152F2BAB003E2AC3 /* UIKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		42458CBA14C3AB4D00EFFB61 /* sample02-spaceship-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample02-spaceship-ios.plist"; sourceTree = "<group>"; };
-		42C932E31491A18F0098216A /* sample02-spaceship-macos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample02-spaceship-macos.plist"; sourceTree = "<group>"; };
-		42CCD516146EBF3600353661 /* sample02-spaceship-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample02-spaceship-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C932E31491A18F0098216A /* sample02-spaceship-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample02-spaceship-macosx.plist"; sourceTree = "<group>"; };
+		42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample02-spaceship-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD51A146EBF3600353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42CCD547146EC0AE00353661 /* SpaceshipGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SpaceshipGame.cpp; path = src/SpaceshipGame.cpp; sourceTree = SOURCE_ROOT; };
 		42CCD548146EC0AE00353661 /* SpaceshipGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpaceshipGame.h; path = src/SpaceshipGame.h; sourceTree = SOURCE_ROOT; };
@@ -52,21 +52,22 @@
 		42CCD54C146EC10E00353661 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		42CCD54E146EC11600353661 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		42CCD557146EC22900353661 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		42CCD559146EC23C00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macos/libpng.a"; sourceTree = "<group>"; };
+		42CCD559146EC23C00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42CCD55D146EC24F00353661 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		42CCD55F146EC27A00353661 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
-		42CD0EEE147D932B0000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macos/libbullet.a"; sourceTree = "<group>"; };
-		42CD0EEF147D932B0000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macos/libogg.a"; sourceTree = "<group>"; };
-		42CD0EF0147D932B0000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbis.a"; sourceTree = "<group>"; };
-		42CD0EF1147D932B0000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisenc.a"; sourceTree = "<group>"; };
-		42CD0EF2147D932B0000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macos/libvorbisfile.a"; sourceTree = "<group>"; };
+		42CD0EEE147D932B0000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macosx/libbullet.a"; sourceTree = "<group>"; };
+		42CD0EEF147D932B0000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macosx/libogg.a"; sourceTree = "<group>"; };
+		42CD0EF0147D932B0000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbis.a"; sourceTree = "<group>"; };
+		42CD0EF1147D932B0000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisenc.a"; sourceTree = "<group>"; };
+		42CD0EF2147D932B0000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisfile.a"; sourceTree = "<group>"; };
 		5B43D1B414C35A0E008A5D9D /* sample02-spaceship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample02-spaceship.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B43D1B714C35A65008A5D9D /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
-		5B43D1BB14C35A9B008A5D9D /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		5B43D1BC14C35A9B008A5D9D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		5B43D1BF14C35AA0008A5D9D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		5B43D1C114C35AA7008A5D9D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		5B43D1C414C35F13008A5D9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2048152F2BAB003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2049152F2BAB003E2AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF204A152F2BAB003E2AC3 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF204B152F2BAB003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF204C152F2BAB003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF204D152F2BAB003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B43D1C314C35C18008A5D9D /* libgameplay.a in Frameworks */,
+				5B928C6E1513E9AD0095E677 /* libgameplay.a in Frameworks */,
 				42CD0EF3147D932B0000361E /* libbullet.a in Frameworks */,
 				42CD0EF4147D932B0000361E /* libogg.a in Frameworks */,
 				42CD0EF5147D932B0000361E /* libvorbis.a in Frameworks */,
@@ -93,11 +94,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B43D1C514C35F13008A5D9D /* Foundation.framework in Frameworks */,
-				5B43D1C214C35AA7008A5D9D /* QuartzCore.framework in Frameworks */,
-				5B43D1C014C35AA0008A5D9D /* UIKit.framework in Frameworks */,
-				5B43D1BD14C35A9B008A5D9D /* OpenAL.framework in Frameworks */,
-				5B43D1BE14C35A9B008A5D9D /* OpenGLES.framework in Frameworks */,
+				5BAF204E152F2BAB003E2AC3 /* CoreMotion.framework in Frameworks */,
+				5BAF204F152F2BAB003E2AC3 /* Foundation.framework in Frameworks */,
+				5BAF2050152F2BAB003E2AC3 /* OpenAL.framework in Frameworks */,
+				5BAF2051152F2BAB003E2AC3 /* OpenGLES.framework in Frameworks */,
+				5BAF2052152F2BAB003E2AC3 /* QuartzCore.framework in Frameworks */,
+				5BAF2053152F2BAB003E2AC3 /* UIKit.framework in Frameworks */,
 				5B43D1B814C35A65008A5D9D /* libgameplay.a in Frameworks */,
 				5B43D1A214C35A0E008A5D9D /* libbullet.a in Frameworks */,
 				5B43D1A314C35A0E008A5D9D /* libogg.a in Frameworks */,
@@ -131,7 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				42458CBA14C3AB4D00EFFB61 /* sample02-spaceship-ios.plist */,
-				42C932E31491A18F0098216A /* sample02-spaceship-macos.plist */,
+				42C932E31491A18F0098216A /* sample02-spaceship-macosx.plist */,
 				42CCD55D146EC24F00353661 /* icon.png */,
 				42CCD55F146EC27A00353661 /* res */,
 				42CCD520146EBF3600353661 /* src */,
@@ -144,7 +146,7 @@
 		42CCD517146EBF3600353661 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				42CCD516146EBF3600353661 /* sample02-spaceship-macos.app */,
+				42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */,
 				5B43D1B414C35A0E008A5D9D /* sample02-spaceship.app */,
 			);
 			name = Products;
@@ -153,8 +155,8 @@
 		42CCD519146EBF3600353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B43D1BA14C35A81008A5D9D /* Mac OS X */,
 				5B43D1B914C35A7A008A5D9D /* iOS */,
+				5B43D1BA14C35A81008A5D9D /* MacOSX */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -172,16 +174,17 @@
 		5B43D1B914C35A7A008A5D9D /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				5B43D1C414C35F13008A5D9D /* Foundation.framework */,
-				5B43D1C114C35AA7008A5D9D /* QuartzCore.framework */,
-				5B43D1BF14C35AA0008A5D9D /* UIKit.framework */,
-				5B43D1BB14C35A9B008A5D9D /* OpenAL.framework */,
-				5B43D1BC14C35A9B008A5D9D /* OpenGLES.framework */,
+				5BAF2048152F2BAB003E2AC3 /* CoreMotion.framework */,
+				5BAF2049152F2BAB003E2AC3 /* Foundation.framework */,
+				5BAF204A152F2BAB003E2AC3 /* OpenAL.framework */,
+				5BAF204B152F2BAB003E2AC3 /* OpenGLES.framework */,
+				5BAF204C152F2BAB003E2AC3 /* QuartzCore.framework */,
+				5BAF204D152F2BAB003E2AC3 /* UIKit.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		5B43D1BA14C35A81008A5D9D /* Mac OS X */ = {
+		5B43D1BA14C35A81008A5D9D /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
 				42CCD51A146EBF3600353661 /* Cocoa.framework */,
@@ -189,15 +192,15 @@
 				42CCD54E146EC11600353661 /* OpenGL.framework */,
 				42CCD54C146EC10E00353661 /* OpenAL.framework */,
 			);
-			name = "Mac OS X";
+			name = MacOSX;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		42CCD515146EBF3600353661 /* sample02-spaceship-macos */ = {
+		42CCD515146EBF3600353661 /* sample02-spaceship-macosx */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 42CCD534146EBF3600353661 /* Build configuration list for PBXNativeTarget "sample02-spaceship-macos" */;
+			buildConfigurationList = 42CCD534146EBF3600353661 /* Build configuration list for PBXNativeTarget "sample02-spaceship-macosx" */;
 			buildPhases = (
 				42CCD512146EBF3600353661 /* Sources */,
 				42CCD513146EBF3600353661 /* Frameworks */,
@@ -208,9 +211,9 @@
 			);
 			dependencies = (
 			);
-			name = "sample02-spaceship-macos";
+			name = "sample02-spaceship-macosx";
 			productName = "sample02-spaceship";
-			productReference = 42CCD516146EBF3600353661 /* sample02-spaceship-macos.app */;
+			productReference = 42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */;
 			productType = "com.apple.product-type.application";
 		};
 		5B43D19D14C35A0E008A5D9D /* sample02-spaceship-ios */ = {
@@ -237,7 +240,7 @@
 		42CCD50D146EBF3600353661 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 42CCD510146EBF3600353661 /* Build configuration list for PBXProject "sample02-spaceship" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -251,7 +254,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42CCD515146EBF3600353661 /* sample02-spaceship-macos */,
+				42CCD515146EBF3600353661 /* sample02-spaceship-macosx */,
 				5B43D19D14C35A0E008A5D9D /* sample02-spaceship-ios */,
 			);
 		};
@@ -273,7 +276,6 @@
 			files = (
 				5B43D1AF14C35A0E008A5D9D /* icon.png in Resources */,
 				5B43D1B014C35A0E008A5D9D /* res in Resources */,
-				42458CBB14C3AB4D00EFFB61 /* sample02-spaceship-ios.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,7 +293,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 		5B43D1AD14C35A0E008A5D9D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -304,7 +306,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -376,7 +378,7 @@
 		42CCD535146EBF3600353661 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -388,12 +390,12 @@
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "sample02-spaceship-macos.plist";
+				INFOPLIST_FILE = "sample02-spaceship-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -404,7 +406,7 @@
 		42CCD536146EBF3600353661 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -416,12 +418,12 @@
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
 				);
-				INFOPLIST_FILE = "sample02-spaceship-macos.plist";
+				INFOPLIST_FILE = "sample02-spaceship-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/bullet/lib/macos\"",
-					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macos\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -432,7 +434,7 @@
 		5B43D1B214C35A0E008A5D9D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
@@ -446,6 +448,7 @@
 					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample02-spaceship-ios.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
@@ -456,6 +459,7 @@
 				PRODUCT_NAME = "sample02-spaceship";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -463,7 +467,7 @@
 		5B43D1B314C35A0E008A5D9D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
@@ -477,6 +481,7 @@
 					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample02-spaceship-ios.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
@@ -487,6 +492,7 @@
 				PRODUCT_NAME = "sample02-spaceship";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -503,7 +509,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		42CCD534146EBF3600353661 /* Build configuration list for PBXNativeTarget "sample02-spaceship-macos" */ = {
+		42CCD534146EBF3600353661 /* Build configuration list for PBXNativeTarget "sample02-spaceship-macosx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				42CCD535146EBF3600353661 /* Debug */,

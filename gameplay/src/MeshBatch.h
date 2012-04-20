@@ -7,6 +7,9 @@
 namespace gameplay
 {
 
+/**
+ * Defines a class for rendering multiple mesh into a single draw call on the graphics device.
+ */
 class MeshBatch
 {
 public:
@@ -54,7 +57,7 @@ public:
     /**
      * Explicitly sets a new capacity for the batch.
      *
-     * @param The new batch capacity.
+     * @param capacity The new batch capacity.
      */
     void setCapacity(unsigned int capacity);
 
@@ -111,8 +114,14 @@ public:
 
 private:
 
+    /**
+     * Constructor.
+     */
     MeshBatch(const VertexFormat& vertexFormat, Mesh::PrimitiveType primitiveType, Material* material, bool indexed, unsigned int initialCapacity, unsigned int growSize);
 
+    /**
+     * Constructor.
+     */
     MeshBatch(const MeshBatch& copy);
 
     void updateVertexAttributeBinding();

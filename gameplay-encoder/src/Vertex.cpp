@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 Vertex::Vertex(void)
-    : hasNormal(false), hasTangent(false), hasBinormal(false), hasTexCoord(false), hasColor(false), hasWeights(false)
+    : hasNormal(false), hasTangent(false), hasBinormal(false), hasTexCoord(false), hasDiffuse(false), hasWeights(false)
 {
 }
 
@@ -15,17 +15,19 @@ Vertex::~Vertex(void)
 
 unsigned int Vertex::byteSize() const
 {
-    unsigned int count = 3;
+    unsigned int count = POSITION_COUNT;
     if (hasNormal)
-        count += 3;
+        count += NORMAL_COUNT;
     if (hasTangent)
-        count += 3;
+        count += TANGENT_COUNT;
     if (hasBinormal)
-        count += 3;
+        count += BINORMAL_COUNT;
     if (hasTexCoord)
-        count += 2;
+        count += TEXCOORD_COUNT;
     if (hasWeights)
-        count += 8;
+        count += BLEND_WEIGHTS_COUNT + BLEND_INDICES_COUNT;
+    if (hasDiffuse)
+        count += DIFFUSE_COUNT;
     return count * sizeof(float);
 }
 
@@ -48,11 +50,10 @@ void Vertex::writeBinary(FILE* file) const
     {
         writeVectorBinary(texCoord, file);
     }
-    // TODO add vertex color?
-    //if (hasColor)
-    //{
-    //    writeVectorBinary(color, file);
-    //}
+    if (hasDiffuse)
+    {
+        writeVectorBinary(diffuse, file);
+    }
     if (hasWeights)
     {
         writeVectorBinary(blendWeights, file);
@@ -83,6 +84,11 @@ void Vertex::writeText(FILE* file) const
     {
         write("// texCoord\n", file);
         writeVectorText(texCoord, file);
+    }
+    if (hasDiffuse)
+    {
+        write("// diffuse\n", file);
+        writeVectorText(diffuse, file);
     }
     if (hasWeights)
     {

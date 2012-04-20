@@ -1,6 +1,9 @@
 #ifndef PLATFORM_H_
 #define PLATFORM_H_
 
+#include "Touch.h"
+#include "Keyboard.h"
+
 namespace gameplay
 {
 
@@ -36,6 +39,27 @@ public:
      * @return The platform message pump return code.
      */
     int enterMessagePump();
+    
+    /**
+     * This method informs the platform that the game is shutting down 
+     * and anything platform specific should be shutdown as well or halted
+     * This function is called automatically when the game shutdown function is called
+     */
+    static void signalShutdown();
+    
+    /**
+     * Gets the display width.
+     * 
+     * @return The display width.
+     */
+    static unsigned int getDisplayWidth();
+    
+    /**
+     * Gets the display height.
+     * 
+     * @return The display height.
+     */
+    static unsigned int getDisplayHeight();
 
     /**
      * Gets the absolute platform time starting from when the message pump was started.
@@ -94,6 +118,44 @@ public:
      * Swaps the frame buffer on the device.
      */
     static void swapBuffers();
+    
+    /**
+     * Shows or hides the virtual keyboard (if supported).
+     *
+     * @param display true when virtual keyboard needs to be displayed and false otherwise.
+     */
+    static void displayKeyboard(bool display);
+
+    /**
+     * Touch callback on touch events. This method handles passing the touch event to the form or to the game.
+     *
+     * @param evt The touch event that occurred.
+     * @param x The x position of the touch in pixels. Left edge is zero.
+     * @param y The y position of the touch in pixels. Top edge is zero.
+     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     *
+     * @see Touch::TouchEvent
+     */
+    static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    /**
+     * Keyboard callback on keyPress events.
+     *
+     * @param evt The key event that occured.
+     * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
+     *            If evt is KEY_CHAR then key is the unicode value of the character.
+     * 
+     * @see Keyboard::KeyEvent
+     * @see Keyboard::Key
+     */
+    static void keyEventInternal(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * Sleeps synchronously for the given amount of time (in milliseconds).
+     *
+     * @param ms How long to sleep (in milliseconds).
+     */
+    static void sleep(long ms);
 
 private:
 

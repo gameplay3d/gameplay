@@ -1,27 +1,24 @@
 #include "Base.h"
 #include "Node.h"
 #include "AudioListener.h"
+#include "Game.h"
 
 namespace gameplay
 {
 
-static AudioListener* __audioListenerInstance = NULL;
-
 AudioListener::AudioListener()
     : _gain(1.0f), _camera(NULL)
-
 {
-    assert(__audioListenerInstance == NULL);
-    __audioListenerInstance = this;
 }
 
 AudioListener::~AudioListener()
 {
+    SAFE_RELEASE(_camera);
 }
 
 AudioListener* AudioListener::getInstance()
 {
-    return __audioListenerInstance;
+    return Game::getInstance()->getAudioListener();
 }
 
 float AudioListener::getGain() const 
@@ -52,6 +49,11 @@ const Vector3& AudioListener::getVelocity() const
 void AudioListener::setVelocity(const Vector3& velocity)
 {
     _velocity = velocity;
+}
+
+const float* AudioListener::getOrientation() const
+{
+    return (const float*)&_orientation[0];
 }
 
 const Vector3& AudioListener::getOrientationForward() const 
@@ -106,8 +108,12 @@ void AudioListener::transformChanged(Transform* transform, long cookie)
 {
     if (transform)
     {
-        setPosition(transform->getTranslation());
-        setOrientation(transform->getForwardVector(), transform->getUpVector());
+        Node* node = static_cast<Node*>(transform);
+        setPosition(node->getTranslationWorld());
+        
+        Vector3 up;
+        node->getWorldMatrix().getUpVector(&up);
+        setOrientation(node->getForwardVectorWorld(), up);
     }
 }
 

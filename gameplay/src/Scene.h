@@ -2,6 +2,7 @@
 #define SCENE_H_
 
 #include "Node.h"
+#include "MeshBatch.h"
 
 namespace gameplay
 {
@@ -12,6 +13,15 @@ namespace gameplay
 class Scene : public Ref
 {
 public:
+
+    /**
+     * Enumeration of supported scene debug flags for debug drawing.
+     */
+    enum DebugFlags
+    {
+        DEBUG_BOXES = 1,
+        DEBUG_SPHERES = 2
+    };
 
     /**
      * Creates a new empty scene.
@@ -133,25 +143,11 @@ public:
     void bindAudioListenerToCamera(bool bind);
 
     /**
-     * Gets the viewport for the scene.
-     *
-     * @return The scene's viewport.
-     */
-    const Viewport& getViewport() const;
-
-    /**
-     * Sets the scene's viewport.
-     *
-     * @param viewport The viewport to be set for this scene.
-     */
-    void setViewport(const Viewport& viewport);
-
-    /**
      * Returns the ambient color of the scene. Black is the default color.
      * 
      * @return The ambient color of the scene.
      */
-    const Vector3& getAmbientColor();
+    const Vector3& getAmbientColor() const;
 
     /**
      * Sets the ambient color of the scene.
@@ -166,19 +162,42 @@ public:
      * Visits each node in the scene and calls the specified method pointer.
      *
      * Calling this method invokes the specified method pointer for each node
+     * in the scene hierarchy.
+     *
+     * The visitMethod parameter must be a pointer to a method that has a bool
+     * return type and accepts a single parameter of type Node*.
+     *
+     * @param instance The pointer to an instance of the object that contains visitMethod.
+     * @param visitMethod The pointer to the class method to call for each node in the scene.
+     */
+    template <class T>
+    void visit(T* instance, bool (T::*visitMethod)(Node*));
+
+    /**
+     * Visits each node in the scene and calls the specified method pointer.
+     *
+     * Calling this method invokes the specified method pointer for each node
      * in the scene hierarchy, passing the Node and the specified cookie value.
      * 
      * The visitMethod parameter must be a pointer to a method that has a bool
-     * return type and accepts two parameters: a Node pointer and a void* (cookie).
-     * The scene travesal continues while visitMethod return true. Returning false
-     * will cause the traversal to stop.
+     * return type and accepts two parameters: a Node pointer and a cookie of a
+     * user-specified type. The scene travesal continues while visitMethod return
+     * true. Returning false will cause the traversal to stop.
      *
      * @param instance The pointer to an instance of the object that contains visitMethod.
      * @param visitMethod The pointer to the class method to call for each node in the scene.
      * @param cookie An optional user-defined parameter that will be passed to each invocation of visitMethod.
      */
-    template <class T>
-    void visit(T* instance, bool (T::*visitMethod)(Node*,void*), void* cookie = 0);
+    template <class T, class C>
+    void visit(T* instance, bool (T::*visitMethod)(Node*,C), C cookie);
+
+    /**
+     * Draws debugging information (bounding volumes, etc.) for the scene.
+     *
+     * @param debugFlags Bitwise combination of debug flags from mthe DebugFlags 
+     *        enumeration, specifying which debugging information to draw.
+     */
+    void drawDebug(unsigned int debugFlags);
 
 private:
 
@@ -201,20 +220,37 @@ private:
      * Visits the given node and all of its children recursively.
      */
     template <class T>
-    bool visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,void*), void* cookie);
+    bool visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*));
+
+    /**
+     * Visits the given node and all of its children recursively.
+     */
+    template <class T, class C>
+    bool visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), C cookie);
 
     std::string _id;
     Camera* _activeCamera;
-    Viewport _viewport;
     Node* _firstNode;
     Node* _lastNode;
     unsigned int _nodeCount;
     Vector3 _ambientColor;
     bool _bindAudioListenerToCamera;
+    MeshBatch* _debugBatch;
 };
 
 template <class T>
-void Scene::visit(T* instance, bool (T::*visitMethod)(Node*,void*), void* cookie)
+void Scene::visit(T* instance, bool (T::*visitMethod)(Node*))
+{
+    for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
+    {
+        if (!visitNode(node, instance, visitMethod))
+            return;
+    }
+}
+
+
+template <class T, class C>
+void Scene::visit(T* instance, bool (T::*visitMethod)(Node*,C), C cookie)
 {
     for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
     {
@@ -224,7 +260,24 @@ void Scene::visit(T* instance, bool (T::*visitMethod)(Node*,void*), void* cookie
 }
 
 template <class T>
-bool Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,void*), void* cookie)
+bool Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*))
+{
+    // Invoke the visit method for this node.
+    if (!(instance->*visitMethod)(node))
+        return false;
+
+    // Recurse for all children.
+    for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
+    {
+        if (!visitNode(child, instance, visitMethod))
+            return false;
+    }
+
+    return true;
+}
+
+template <class T, class C>
+bool Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), C cookie)
 {
     // Invoke the visit method for this node.
     if (!(instance->*visitMethod)(node, cookie))

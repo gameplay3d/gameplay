@@ -55,6 +55,13 @@ void BoundingBox::getCorners(Vector3* dst) const
     dst[7].set(min.x, max.y, min.z);
 }
 
+Vector3 BoundingBox::getCenter() const
+{
+    Vector3 center;
+    getCenter(&center);
+    return center;
+}
+
 void BoundingBox::getCenter(Vector3* dst) const
 {
     dst->set(min, max);

@@ -35,6 +35,9 @@ LongboardGame::~LongboardGame()
 
 void LongboardGame::initialize()
 {
+    // Display the gameplay splash screen for at least 1 second.
+    displayScreen(this, &LongboardGame::drawSplash, NULL, 1000L);
+
     // Create our render state block that will be reused across all materials
     _stateBlock = RenderState::StateBlock::create();
     _stateBlock->setCullFace(true);
@@ -183,9 +186,10 @@ void LongboardGame::update(long elapsedTime)
     getAccelerometerValues(&pitch, &roll);
 
     // Clamp angles
-    pitch = max(min(pitch, PITCH_MAX), PITCH_MIN);
+    pitch = max(min(-pitch, PITCH_MAX), PITCH_MIN);
     roll = max(min(roll, ROLL_MAX), -ROLL_MAX);
 
+    
     // Calculate the 'throttle' (which is the % controlling change in acceleration, similar to a car's gas pedal)
     float throttle = 1.0f - ((pitch - PITCH_MIN) / PITCH_RANGE);
 
@@ -207,7 +211,7 @@ void LongboardGame::update(long elapsedTime)
 
     // Update direction based on accelerometer roll and max turn rate
     static Matrix rotMat;
-    Matrix::createRotationY(-MATH_DEG_TO_RAD((TURN_RATE_MAX_MS * elapsedTime) * (roll / ROLL_MAX) * throttle), &rotMat);
+    Matrix::createRotationY(MATH_DEG_TO_RAD((TURN_RATE_MAX_MS * elapsedTime) * (roll / ROLL_MAX) * throttle), &rotMat);
     rotMat.transformVector(&_direction);
     _direction.normalize();
 
@@ -218,15 +222,15 @@ void LongboardGame::update(long elapsedTime)
 
     // Transform the wheels
     Matrix::createScale(1.2f, 1.2f, 1.2f, &_wheelsWorldMatrix);
-    _wheelsWorldMatrix.translate(-roll / ROLL_MAX * 0.05f, 0, 0.05f);
-    _wheelsWorldMatrix.rotateY(MATH_DEG_TO_RAD(roll * 0.45f));
+    _wheelsWorldMatrix.translate(roll / ROLL_MAX * 0.05f, 0, 0.05f);
+    _wheelsWorldMatrix.rotateY(-MATH_DEG_TO_RAD(roll * 0.45f));
     Matrix::multiply(_viewProjectionMatrix, _wheelsWorldMatrix, &_wheelsWorldViewProjectionMatrix);
 
     // Transform and tilt the board
     Matrix::createScale(1.25f, 1.25f, 1.25f, &_boardWorldMatrix);
     _boardWorldMatrix.translate(0, 0, 0.65f);
-    _boardWorldMatrix.rotateZ(MATH_DEG_TO_RAD(roll * 0.5f));
-    _boardWorldMatrix.rotateY(MATH_DEG_TO_RAD(roll * 0.1f));
+    _boardWorldMatrix.rotateZ(-MATH_DEG_TO_RAD(roll * 0.5f));
+    _boardWorldMatrix.rotateY(-MATH_DEG_TO_RAD(roll * 0.1f));
     Matrix::multiply(_viewProjectionMatrix, _boardWorldMatrix, &_boardWorldViewProjectionMatrix);
 
     // Transform the ground texture coords to give the illusion of the board moving.
@@ -243,6 +247,19 @@ void LongboardGame::update(long elapsedTime)
     }
 }
 
+void LongboardGame::keyEvent(Keyboard::KeyEvent evt, int key)
+{
+    if (evt == Keyboard::KEY_PRESS)
+    {
+        switch (key)
+        {
+        case Keyboard::KEY_ESCAPE:
+            exit();
+            break;
+        }
+    }
+}
+
 void LongboardGame::render(long elapsedTime)
 {
     // Clear the color and depth buffers.
@@ -253,4 +270,14 @@ void LongboardGame::render(long elapsedTime)
     _wheels->draw();
     _board->draw();
     _gradient->draw();
+}
+
+void LongboardGame::drawSplash(void* param)
+{
+    clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
+    SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
+    batch->begin();
+    batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
+    batch->end();
+    SAFE_DELETE(batch);
 }

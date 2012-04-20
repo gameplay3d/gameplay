@@ -3,6 +3,7 @@
 
 #include "Ref.h"
 #include "Properties.h"
+#include "Curve.h"
 
 namespace gameplay
 {
@@ -10,7 +11,6 @@ namespace gameplay
 class AnimationTarget;
 class AnimationController;
 class AnimationClip;
-class Curve;
 
 /**
  * Defines a generic property animation.
@@ -22,10 +22,9 @@ class Curve;
  */
 class Animation : public Ref
 {
-    friend class AnimationController;
     friend class AnimationClip;
     friend class AnimationTarget;
-    friend class Package;
+    friend class Bundle;
 
 public:
     
@@ -67,6 +66,18 @@ public:
      * @return The AnimationClip with the specified ID; NULL if an AnimationClip with the given ID is not found.
      */
     AnimationClip* getClip(const char* clipId = NULL);
+
+    /**
+     * Returns the AnimationClip at the given index.
+     *
+     * @param index Index of the clip to return.
+     */
+    AnimationClip* getClip(unsigned int index) const;
+
+    /**
+     * Returns the number of animation clips in this animation.
+     */
+    unsigned int getClipCount() const;
     
     /**
      * Plays the AnimationClip with the specified name. 
@@ -82,6 +93,18 @@ public:
      */
     void stop(const char* clipId = NULL);
 
+    /** 
+     * Pauses the AnimationClip with the specified name.
+     *
+     * @param clipId The ID of the AnimationClip to pause. If NULL, pauses the default clip.
+     */
+    void pause(const char* clipId = NULL);
+
+    /**
+     * Returns true if this animation targets the given AnimationTarget.
+     */
+    bool targets(AnimationTarget* target) const;
+    
 private:
 
     /**
@@ -99,8 +122,11 @@ private:
     private:
 
         Channel(Animation* animation, AnimationTarget* target, int propertyId, Curve* curve, unsigned long duration);
-        Channel(const Channel& copy);
+        Channel(const Channel& copy, Animation* animation, AnimationTarget* target);
+        Channel(const Channel&); // Hidden copy constructor.
         ~Channel();
+        Channel& operator=(const Channel&); // Hidden copy assignment operator.
+        Curve* getCurve() const;
 
         Animation* _animation;                // Reference to the animation this channel belongs to.
         AnimationTarget* _target;             // The target of this channel.
@@ -110,12 +136,7 @@ private:
     };
 
     /**
-     * Constructor.
-     */
-    Animation();
-
-    /**
-     * Constructor.
+     * Hidden copy constructor.
      */
     Animation(const Animation& copy);
 
@@ -130,10 +151,20 @@ private:
     Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type);
 
     /**
+     * Constructor.
+     */
+    Animation(const char* id);
+
+    /**
      * Destructor.
      */
     ~Animation();
-
+    
+    /**
+     * Hidden copy assignment operator.
+     */
+    Animation& operator=(const Animation&);
+    
     /**
      * Creates the default clip.
      */
@@ -178,6 +209,16 @@ private:
      * Sets the rotation offset in a Curve representing a Transform's animation data.
      */
     void setTransformRotationOffset(Curve* curve, unsigned int propertyId);
+
+    /**
+     * Clones this animation.
+     * 
+     * @param channel The channel to clone and add to the animation.
+     * @param target The target of the animation.
+     * 
+     * @return The newly created animation.
+     */
+    Animation* clone(Channel* channel, AnimationTarget* target);
     
     AnimationController* _controller;       // The AnimationController that this Animation will run on.
     std::string _id;                        // The Animation's ID.

@@ -14,7 +14,7 @@ Vector4::Vector4(float x, float y, float z, float w)
     set(x, y, z, w);
 }
 
-Vector4::Vector4(float* src)
+Vector4::Vector4(const float* src)
 {
     set(src);
 }
@@ -204,7 +204,7 @@ float Vector4::distanceSquared(const Vector4& v) const
     return (dx * dx + dy * dy + dz * dz + dw * dw);
 }
 
-float Vector4::dot(const Vector4& v)
+float Vector4::dot(const Vector4& v) const
 {
     return (x * v.x + y * v.y + z * v.z + w * v.w);
 }
@@ -233,9 +233,10 @@ void Vector4::negate()
     w = -w;
 }
 
-void Vector4::normalize()
+Vector4& Vector4::normalize()
 {
     normalize(this);
+    return *this;
 }
 
 void Vector4::normalize(Vector4* dst)
@@ -283,7 +284,7 @@ void Vector4::set(float x, float y, float z, float w)
     this->w = w;
 }
 
-void Vector4::set(float* array)
+void Vector4::set(const float* array)
 {
     assert(array);
 

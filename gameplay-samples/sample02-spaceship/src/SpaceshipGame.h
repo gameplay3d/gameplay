@@ -23,6 +23,11 @@ public:
     virtual ~SpaceshipGame();
 
     /**
+     * @see Game::keyEvent
+     */
+    void keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
      * @see Game::touchEvent
      */
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
@@ -85,9 +90,9 @@ private:
     void resetGame();
 
     /**
-     * Draw the splash screen
+     * Draws the default "gameplay powered" splash screen.
      */
-    void drawSplash(void* cookie);
+    void drawSplash(void* param);
 
     /**
      * Draws the scene
