@@ -827,8 +827,8 @@ namespace gameplay
             value->setFloat(1, _bounds.y);
             break;
         case ANIMATE_SIZE:
-            value->setFloat(0, _clipBounds.width);
-            value->setFloat(1, _clipBounds.height);
+            value->setFloat(0, _bounds.width);
+            value->setFloat(1, _bounds.height);
             break;
         case ANIMATE_POSITION_X:
             value->setFloat(0, _bounds.x);
@@ -837,10 +837,10 @@ namespace gameplay
             value->setFloat(0, _bounds.y);
             break;
         case ANIMATE_SIZE_WIDTH:
-            value->setFloat(0, _clipBounds.width);
+            value->setFloat(0, _bounds.width);
             break;
         case ANIMATE_SIZE_HEIGHT:
-            value->setFloat(0, _clipBounds.height);
+            value->setFloat(0, _bounds.height);
             break;
         case ANIMATE_OPACITY:
         default:
@@ -853,95 +853,36 @@ namespace gameplay
         switch(propertyId)
         {
         case ANIMATE_POSITION:
-            applyAnimationValuePositionX(value->getFloat(0), blendWeight);
-            applyAnimationValuePositionY(value->getFloat(1), blendWeight);
+            _bounds.x = Curve::lerp(blendWeight, _bounds.x, value->getFloat(0));
+            _bounds.y = Curve::lerp(blendWeight, _bounds.y, value->getFloat(1));
+            _dirty = true;
             break;
         case ANIMATE_POSITION_X:
-            applyAnimationValuePositionX(value->getFloat(0), blendWeight);
+            _bounds.x = Curve::lerp(blendWeight, _bounds.x, value->getFloat(0));
+            _dirty = true;
             break;
         case ANIMATE_POSITION_Y:
-            applyAnimationValuePositionY(value->getFloat(0), blendWeight);
+            _bounds.y = Curve::lerp(blendWeight, _bounds.y, value->getFloat(0));
+            _dirty = true;
             break;
         case ANIMATE_SIZE:
-            applyAnimationValueSizeWidth(value->getFloat(0), blendWeight);
-            applyAnimationValueSizeHeight(value->getFloat(1), blendWeight);
+            _bounds.width = Curve::lerp(blendWeight, _bounds.width, value->getFloat(0));
+            _bounds.height = Curve::lerp(blendWeight, _bounds.height, value->getFloat(1));
+            _dirty = true;
             break;
         case ANIMATE_SIZE_WIDTH:
-            applyAnimationValueSizeWidth(value->getFloat(0), blendWeight);
+            _bounds.width = Curve::lerp(blendWeight, _bounds.width, value->getFloat(0));
+            _dirty = true;
             break;
         case ANIMATE_SIZE_HEIGHT:
-            applyAnimationValueSizeHeight(value->getFloat(0), blendWeight);
+            _bounds.height = Curve::lerp(blendWeight, _bounds.height, value->getFloat(0));
+            _dirty = true;
             break;
         case ANIMATE_OPACITY:
-            applyAnimationValueOpacity();
+            _dirty = true;
         default:
             break;
         }
-    }
-
-    void Control::applyAnimationValuePositionX(float x, float blendWeight)
-    {
-        if ((_animationPropertyBitFlag & ANIMATION_POSITION_X_BIT) != ANIMATION_POSITION_X_BIT)
-        {
-            _animationPropertyBitFlag |= ANIMATION_POSITION_X_BIT;
-        }
-        else
-        {
-            x = Curve::lerp(blendWeight, _bounds.x, x);
-        }
-        _bounds.x = x;
-        _dirty = true;
-    }
-    
-    void Control::applyAnimationValuePositionY(float y, float blendWeight)
-    {
-        if ((_animationPropertyBitFlag & ANIMATION_POSITION_Y_BIT) != ANIMATION_POSITION_Y_BIT)
-        {
-            _animationPropertyBitFlag |= ANIMATION_POSITION_Y_BIT;
-        }
-        else
-        {
-            y = Curve::lerp(blendWeight, _bounds.y, y);
-        }
-        _bounds.y = y;
-        _dirty = true;
-    }
-    
-    void Control::applyAnimationValueSizeWidth(float width, float blendWeight)
-    {
-        if ((_animationPropertyBitFlag & ANIMATION_SIZE_WIDTH_BIT) != ANIMATION_SIZE_WIDTH_BIT)
-        {
-            _animationPropertyBitFlag |= ANIMATION_SIZE_WIDTH_BIT;
-        }
-        else
-        {
-            width = Curve::lerp(blendWeight, _clipBounds.width, width);
-        }
-        _clipBounds.width = width;
-        _dirty = true;
-    }
-
-    void Control::applyAnimationValueSizeHeight(float height, float blendWeight)
-    {
-        if ((_animationPropertyBitFlag & ANIMATION_SIZE_HEIGHT_BIT) != ANIMATION_SIZE_HEIGHT_BIT)
-        {
-            _animationPropertyBitFlag |= ANIMATION_SIZE_HEIGHT_BIT;
-        }
-        else
-        {
-            height = Curve::lerp(blendWeight, _clipBounds.height, height);
-        }
-        _clipBounds.height = height;
-        _dirty = true;
-    }
-
-    void Control::applyAnimationValueOpacity()
-    {
-        if ((_animationPropertyBitFlag & ANIMATION_OPACITY_BIT) != ANIMATION_OPACITY_BIT)
-        {
-            _animationPropertyBitFlag |= ANIMATION_OPACITY_BIT;
-        }
-        _dirty = true;
     }
     
     Theme::Style::Overlay** Control::getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays)

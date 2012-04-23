@@ -304,7 +304,7 @@ void AnimationClip::addEndListener(AnimationClip::Listener* listener)
     _endListeners->push_back(listener);
 }
 
-bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*>* activeTargets)
+bool AnimationClip::update(unsigned long elapsedTime)
 {
     if (isClipStateBitSet(CLIP_IS_PAUSED_BIT))
     {
@@ -438,12 +438,6 @@ bool AnimationClip::update(unsigned long elapsedTime, std::list<AnimationTarget*
         channel = _animation->_channels[i];
         target = channel->_target;
         value = _values[i];
-
-        // If the target's _animationPropertyBitFlag is clear, we can assume that this is the first
-        // animation channel to act on the target and we can add the target to the list of
-        // active targets stored by the AnimationController.
-        if (target->_animationPropertyBitFlag == 0x00)
-            activeTargets->push_front(target);
 
         // Evaluate the point on Curve
         channel->getCurve()->evaluate(percentComplete, value->_value);
