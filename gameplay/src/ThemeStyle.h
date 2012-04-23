@@ -49,7 +49,6 @@ private:
     private:
 
         static const int ANIMATE_OPACITY = 1;
-        static const char ANIMATION_OPACITY_BIT = 0x01;
 
         Overlay();
             
@@ -145,9 +144,7 @@ private:
         void setImageList(Theme::ImageList* imageList);
             
         Theme::ImageList* getImageList() const;
-
-        void applyAnimationValueOpacity(float opacity, float blendWeight);
-
+        
         Skin* _skin;
         Theme::ThemeImage* _cursor;
         Theme::ImageList* _imageList;
