@@ -202,11 +202,6 @@ protected:
      */
     TargetType _targetType;
 
-    /**
-     * Bit flag used to indicate which properties on the AnimationTarget are currently animating.
-     */ 
-    unsigned char _animationPropertyBitFlag;
-
 private:
 
     /**

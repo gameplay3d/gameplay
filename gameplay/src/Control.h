@@ -877,26 +877,10 @@ protected:
 
 private:
 
-    static const char ANIMATION_POSITION_X_BIT = 0x01;
-    static const char ANIMATION_POSITION_Y_BIT = 0x02;
-    static const char ANIMATION_SIZE_WIDTH_BIT = 0x04;
-    static const char ANIMATION_SIZE_HEIGHT_BIT = 0x08;
-    static const char ANIMATION_OPACITY_BIT = 0x10;
-
     /*
      * Constructor.
      */    
     Control(const Control& copy);
-    
-    void applyAnimationValuePositionX(float x, float blendWeight);
-    
-    void applyAnimationValuePositionY(float y, float blendWeight);
-    
-    void applyAnimationValueSizeWidth(float width, float blendWeight);
-    
-    void applyAnimationValueSizeHeight(float height, float blendWeight);
-    
-    void applyAnimationValueOpacity();
 
     Theme::Style::Overlay** getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays);
 

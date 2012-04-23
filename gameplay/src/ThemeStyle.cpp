@@ -451,16 +451,7 @@ void Theme::Style::Overlay::setAnimationPropertyValue(int propertyId, AnimationV
     {
         case ANIMATE_OPACITY:
         {
-            float opacity = value->getFloat(0);
-            if ((_animationPropertyBitFlag & ANIMATION_OPACITY_BIT) != ANIMATION_OPACITY_BIT)
-            {
-                _animationPropertyBitFlag |= ANIMATION_OPACITY_BIT;
-            }
-            else
-            {
-                opacity = Curve::lerp(blendWeight, _opacity, opacity);
-            }
-            _opacity = opacity;
+            _opacity = Curve::lerp(blendWeight, _opacity, value->getFloat(0));
             break;
         }
         default:
