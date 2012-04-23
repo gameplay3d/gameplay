@@ -98,7 +98,6 @@ private:
     
     State _state;                                 // The current state of the AnimationController.
     std::list<AnimationClip*> _runningClips;      // A list of running AnimationClips.
-    std::list<AnimationTarget*> _activeTargets;   // A list of animating AnimationTargets.
 };
 
 }
