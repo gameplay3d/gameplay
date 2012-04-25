@@ -66,6 +66,18 @@ public:
      * @return The AnimationClip with the specified ID; NULL if an AnimationClip with the given ID is not found.
      */
     AnimationClip* getClip(const char* clipId = NULL);
+
+    /**
+     * Returns the AnimationClip at the given index.
+     *
+     * @param index Index of the clip to return.
+     */
+    AnimationClip* getClip(unsigned int index) const;
+
+    /**
+     * Returns the number of animation clips in this animation.
+     */
+    unsigned int getClipCount() const;
     
     /**
      * Plays the AnimationClip with the specified name. 

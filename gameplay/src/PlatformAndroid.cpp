@@ -4,6 +4,7 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include "Form.h"
 #include <unistd.h>
 
 #include <android/sensor.h>
@@ -41,6 +42,7 @@ const ASensor* __accelerometerSensor;
 
 static int __orientationAngle = 90; // Landscape by default.
 static bool __multiTouch = false;
+static int __primaryTouchId = -1;
 bool __displayKeyboard = false;
 
 static const char* __glExtensions;
@@ -194,69 +196,63 @@ error:
 }
 
 // Display the android virtual keyboard.
-void displayKeyboard(android_app* state, bool pShow)
+void displayKeyboard(android_app* state, bool show)
 { 
-    
-    // The following functions is supposed to show / hide functins from a native activity.. but currently
-    // do not work. 
+    // The following functions is supposed to show / hide functins from a native activity.. but currently do not work. 
     // ANativeActivity_showSoftInput(state->activity, ANATIVEACTIVITY_SHOW_SOFT_INPUT_IMPLICIT);
     // ANativeActivity_hideSoftInput(state->activity, ANATIVEACTIVITY_HIDE_SOFT_INPUT_IMPLICIT_ONLY);
     
     // Show or hide the keyboard by calling the appropriate Java method through JNI instead.
-    // Attaches the current thread to the JVM.
-    jint lResult;
-    jint lFlags = 0;
-    JavaVM* lJavaVM = state->activity->vm;
-    JNIEnv* lJNIEnv = state->activity->env; 
-    JavaVMAttachArgs lJavaVMAttachArgs;
-    lJavaVMAttachArgs.version = JNI_VERSION_1_6;
-    lJavaVMAttachArgs.name = "NativeThread";
-    lJavaVMAttachArgs.group = NULL;
-    lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs); 
-    if (lResult == JNI_ERR)
+    jint result;
+    jint flags = 0;
+    JavaVM* jvm = state->activity->vm;
+    JNIEnv* env;
+    jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
+    jvm->AttachCurrentThread(&env, NULL);
+    if (result == JNI_ERR)
     { 
         return; 
     } 
     // Retrieves NativeActivity. 
     jobject lNativeActivity = state->activity->clazz;
-    jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+    jclass ClassNativeActivity = env->GetObjectClass(lNativeActivity);
 
     // Retrieves Context.INPUT_METHOD_SERVICE.
-    jclass ClassContext = lJNIEnv->FindClass("android/content/Context");
-    jfieldID FieldINPUT_METHOD_SERVICE = lJNIEnv->GetStaticFieldID(ClassContext, "INPUT_METHOD_SERVICE", "Ljava/lang/String;");
-    jobject INPUT_METHOD_SERVICE = lJNIEnv->GetStaticObjectField(ClassContext, FieldINPUT_METHOD_SERVICE);
+    jclass ClassContext = env->FindClass("android/content/Context");
+    jfieldID FieldINPUT_METHOD_SERVICE = env->GetStaticFieldID(ClassContext, "INPUT_METHOD_SERVICE", "Ljava/lang/String;");
+    jobject INPUT_METHOD_SERVICE = env->GetStaticObjectField(ClassContext, FieldINPUT_METHOD_SERVICE);
     
     // Runs getSystemService(Context.INPUT_METHOD_SERVICE).
-    jclass ClassInputMethodManager = lJNIEnv->FindClass("android/view/inputmethod/InputMethodManager");
-    jmethodID MethodGetSystemService = lJNIEnv->GetMethodID(ClassNativeActivity, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
-    jobject lInputMethodManager = lJNIEnv->CallObjectMethod(lNativeActivity, MethodGetSystemService, INPUT_METHOD_SERVICE);
+    jclass ClassInputMethodManager = env->FindClass("android/view/inputmethod/InputMethodManager");
+    jmethodID MethodGetSystemService = env->GetMethodID(ClassNativeActivity, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
+    jobject lInputMethodManager = env->CallObjectMethod(lNativeActivity, MethodGetSystemService, INPUT_METHOD_SERVICE);
     
     // Runs getWindow().getDecorView().
-    jmethodID MethodGetWindow = lJNIEnv->GetMethodID(ClassNativeActivity, "getWindow", "()Landroid/view/Window;");
-    jobject lWindow = lJNIEnv->CallObjectMethod(lNativeActivity, MethodGetWindow);
-    jclass ClassWindow = lJNIEnv->FindClass("android/view/Window");
-    jmethodID MethodGetDecorView = lJNIEnv->GetMethodID(ClassWindow, "getDecorView", "()Landroid/view/View;");
-    jobject lDecorView = lJNIEnv->CallObjectMethod(lWindow, MethodGetDecorView);
-    if (pShow)
+    jmethodID MethodGetWindow = env->GetMethodID(ClassNativeActivity, "getWindow", "()Landroid/view/Window;");
+    jobject lWindow = env->CallObjectMethod(lNativeActivity, MethodGetWindow);
+    jclass ClassWindow = env->FindClass("android/view/Window");
+    jmethodID MethodGetDecorView = env->GetMethodID(ClassWindow, "getDecorView", "()Landroid/view/View;");
+    jobject lDecorView = env->CallObjectMethod(lWindow, MethodGetDecorView);
+    if (show)
     {
         // Runs lInputMethodManager.showSoftInput(...).
-        jmethodID MethodShowSoftInput = lJNIEnv->GetMethodID( ClassInputMethodManager, "showSoftInput", "(Landroid/view/View;I)Z");
-        jboolean lResult = lJNIEnv->CallBooleanMethod(lInputMethodManager, MethodShowSoftInput, lDecorView, lFlags); 
+        jmethodID MethodShowSoftInput = env->GetMethodID( ClassInputMethodManager, "showSoftInput", "(Landroid/view/View;I)Z");
+        jboolean result = env->CallBooleanMethod(lInputMethodManager, MethodShowSoftInput, lDecorView, flags); 
     } 
     else 
     { 
         // Runs lWindow.getViewToken() 
-        jclass ClassView = lJNIEnv->FindClass("android/view/View");
-        jmethodID MethodGetWindowToken = lJNIEnv->GetMethodID(ClassView, "getWindowToken", "()Landroid/os/IBinder;");
-        jobject lBinder = lJNIEnv->CallObjectMethod(lDecorView, MethodGetWindowToken); 
+        jclass ClassView = env->FindClass("android/view/View");
+        jmethodID MethodGetWindowToken = env->GetMethodID(ClassView, "getWindowToken", "()Landroid/os/IBinder;");
+        jobject lBinder = env->CallObjectMethod(lDecorView, MethodGetWindowToken); 
         
         // lInputMethodManager.hideSoftInput(...). 
-        jmethodID MethodHideSoftInput = lJNIEnv->GetMethodID(ClassInputMethodManager, "hideSoftInputFromWindow", "(Landroid/os/IBinder;I)Z"); 
-        jboolean lRes = lJNIEnv->CallBooleanMethod( lInputMethodManager, MethodHideSoftInput, lBinder, lFlags); 
+        jmethodID MethodHideSoftInput = env->GetMethodID(ClassInputMethodManager, "hideSoftInputFromWindow", "(Landroid/os/IBinder;I)Z"); 
+        jboolean lRes = env->CallBooleanMethod( lInputMethodManager, MethodHideSoftInput, lBinder, flags); 
     }
     
     // Finished with the JVM.
-    lJavaVM->DetachCurrentThread(); 
+    jvm->DetachCurrentThread(); 
 }
 
 // Gets the Keyboard::Key enumeration constant that corresponds to the given Android key code.
@@ -531,25 +527,57 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
 {
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION)
     {
-        int32_t data = AMotionEvent_getAction(event);
-        Touch::TouchEvent touchEvent;
-        size_t pointerCount = AMotionEvent_getPointerCount(event);
-        for (size_t i = 0; i < pointerCount; ++i)
+        int32_t action = AMotionEvent_getAction(event);
+        size_t pointerIndex;
+        size_t pointerId;
+        size_t pointerCount;
+        switch (action & AMOTION_EVENT_ACTION_MASK)
         {
-            switch (data & AMOTION_EVENT_ACTION_MASK)
-            {
-                case AMOTION_EVENT_ACTION_DOWN:
-                    touchEvent = Touch::TOUCH_PRESS;
-                    break;
-                case AMOTION_EVENT_ACTION_UP:
-                    touchEvent = Touch::TOUCH_RELEASE;
-                    break;
-                case AMOTION_EVENT_ACTION_MOVE:
-                    touchEvent = Touch::TOUCH_MOVE;
-                    break;
-            }
-            size_t pointerId = AMotionEvent_getPointerId(event, i);
-            Game::getInstance()->touchEvent(touchEvent, AMotionEvent_getX(event, i), AMotionEvent_getY(event, i), pointerId);
+            case AMOTION_EVENT_ACTION_DOWN:
+                // Primary pointer down
+                pointerId = AMotionEvent_getPointerId(event, 0);
+                gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, AMotionEvent_getX(event, 0), AMotionEvent_getY(event, 0), pointerId);
+                __primaryTouchId = pointerId;
+                break;
+            case AMOTION_EVENT_ACTION_UP:
+                pointerId = AMotionEvent_getPointerId(event, 0);
+                if (__multiTouch || __primaryTouchId == pointerId)
+                {
+                    gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, AMotionEvent_getX(event, 0), AMotionEvent_getY(event, 0), pointerId);
+                }
+                __primaryTouchId = -1;
+                break;
+            case AMOTION_EVENT_ACTION_POINTER_DOWN:
+                // Non-primary pointer down
+                if (__multiTouch)
+                {
+                    pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+                    pointerId = AMotionEvent_getPointerId(event, pointerIndex);
+                    gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, AMotionEvent_getX(event, pointerIndex), AMotionEvent_getY(event, pointerIndex), pointerId);
+                }
+                break;
+            case AMOTION_EVENT_ACTION_POINTER_UP:
+                pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+                pointerId = AMotionEvent_getPointerId(event, pointerIndex);
+                if (__multiTouch || __primaryTouchId == pointerId)
+                {
+                    gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, AMotionEvent_getX(event, pointerIndex), AMotionEvent_getY(event, pointerIndex), pointerId);
+                }
+                if (__primaryTouchId == pointerId)
+                    __primaryTouchId = -1;
+                break;
+            case AMOTION_EVENT_ACTION_MOVE:
+                // ACTION_MOVE events are batched, unlike the other events.
+                pointerCount = AMotionEvent_getPointerCount(event);
+                for (size_t i = 0; i < pointerCount; ++i)
+                {
+                    pointerId = AMotionEvent_getPointerId(event, i);
+                    if (__multiTouch || __primaryTouchId == pointerId)
+                    {
+                        gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, AMotionEvent_getX(event, i), AMotionEvent_getY(event, i), pointerId);
+                    }
+                }
+                break;
         }
         return 1;
     } 
@@ -661,7 +689,10 @@ int Platform::enterMessagePump()
 {
     // Get the android application's activity.
     ANativeActivity* activity = __state->activity;
-    JNIEnv* env = activity->env;
+    JavaVM* jvm = __state->activity->vm;
+    JNIEnv* env;
+    jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
+    jvm->AttachCurrentThread(&env, NULL);
 
     // Get the package name for this app from Java.
     jclass clazz = env->GetObjectClass(activity->clazz);
@@ -765,6 +796,8 @@ int Platform::enterMessagePump()
         // Display the keyboard.
         gameplay::displayKeyboard(__state, __displayKeyboard);
     }
+
+    jvm->DetachCurrentThread();
 }
 
 void Platform::signalShutdown() 
@@ -834,9 +867,9 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     tz = -__sensorEvent.acceleration.z;
     
     if (pitch != NULL)
-        *pitch = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
+        *pitch = -atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
     if (roll != NULL)
-        *roll = atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;
+        *roll = -atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;
 }
 
 void Platform::swapBuffers()
@@ -851,6 +884,14 @@ void Platform::displayKeyboard(bool display)
         __displayKeyboard = true;
     else
         __displayKeyboard = false;
+}
+
+void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    if (!Form::touchEventInternal(evt, x, y, contactIndex))
+    {
+        Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+    }
 }
 
 void Platform::sleep(long ms)

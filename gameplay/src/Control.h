@@ -94,6 +94,10 @@ public:
     class Listener
     {
     public:
+
+        /**
+         * Defines the Listener's event types.
+         */
         enum EventType
         {
             /**
@@ -267,7 +271,7 @@ public:
     /**
      * Set this control to fit vertically within its parent container.
      *
-     * @param autoWidth Whether to size this control to fit vertically within its parent container.
+     * @param autoHeight Whether to size this control to fit vertically within its parent container.
      */
     void setAutoHeight(bool autoHeight);
 
@@ -782,12 +786,12 @@ protected:
     static State getState(const char* state);
 
     /**
-     * Get a ThemeImage from its ID, for a given state.
+     * Get a Theme::ThemeImage from its ID, for a given state.
      *
      * @param id The ID of the image to retrieve.
      * @param state The state to get this image from.
      *
-     * @return The requested image, or NULL if none was found.
+     * @return The requested Theme::ThemeImage, or NULL if none was found.
      */
     Theme::ThemeImage* getImage(const char* id, State state);
 
@@ -798,8 +802,17 @@ protected:
      */
     void notifyListeners(Listener::EventType eventType);
 
+    /**
+     * Gets the Alignment by string.
+     *
+     * @param alignment The string representation of the Alignment type.
+     * @return The Alignment enum value corresponding to the given string.
+     */
     static Alignment getAlignment(const char* alignment);
 
+    /** 
+     * The Control's ID.
+     */ 
     std::string _id;
     State _state;           // Determines overlay used during draw().
     Rectangle _bounds;      // Position, relative to parent container's clipping window, and desired size.
@@ -807,38 +820,50 @@ protected:
     Rectangle _absoluteBounds;
     Rectangle _viewportBounds;
     Rectangle _clip;        // Clipping window of this control's content, after clipping.
+
     bool _dirty;
+    
+    /**
+     * Flag for whether the Control consume's touch events.
+     */
     bool _consumeTouchEvents;
+    
+    /**
+     * The Control's Alignmnet
+     */
     Alignment _alignment;
+    
+    /**
+     * Whether the Control's width is auto-sized.
+     */
     bool _autoWidth;
+    
+    /**
+     * Whether the Control's height is auto-sized.
+     */
     bool _autoHeight;
+    
+    /**
+     * The Control's Theme::Style.
+     */
     Theme::Style* _style;
+    
+    /**
+     * Listeners map of EventType's to a list of Listeners.
+     */
     std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
 
-    float _opacity;         // Current opacity.
+    /**
+     * The current opacity of the control.
+     */
+    float _opacity;
 
 private:
-
-    static const char ANIMATION_POSITION_X_BIT = 0x01;
-    static const char ANIMATION_POSITION_Y_BIT = 0x02;
-    static const char ANIMATION_SIZE_WIDTH_BIT = 0x04;
-    static const char ANIMATION_SIZE_HEIGHT_BIT = 0x08;
-    static const char ANIMATION_OPACITY_BIT = 0x10;
 
     /*
      * Constructor.
      */    
     Control(const Control& copy);
-    
-    void applyAnimationValuePositionX(float x, float blendWeight);
-    
-    void applyAnimationValuePositionY(float y, float blendWeight);
-    
-    void applyAnimationValueSizeWidth(float width, float blendWeight);
-    
-    void applyAnimationValueSizeHeight(float height, float blendWeight);
-    
-    void applyAnimationValueOpacity();
 
     Theme::Style::Overlay** getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays);
 

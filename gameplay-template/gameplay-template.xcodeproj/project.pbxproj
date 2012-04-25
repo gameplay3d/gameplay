@@ -70,7 +70,6 @@
 		5BAF206C152F2DDD003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = gameplay.xcodeproj; path = GAMEPLAY_PATH/gameplay/gameplay.xcodeproj; sourceTree = SOURCE_ROOT; };
 		5BC4E849150F911D00CBE1C0 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = text; name = shaders; path = GAMEPLAY_PATH/gameplay/res/shaders; sourceTree = SOURCE_ROOT; };
-		5BC4E84A150F911D00CBE1C0 /* textures */ = {isa = PBXFileReference; lastKnownFileType = text; name = textures; path = GAMEPLAY_PATH/gameplay/res/textures; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,7 +201,6 @@
 			isa = PBXGroup;
 			children = (
 				5BC4E849150F911D00CBE1C0 /* shaders */,
-				5BC4E84A150F911D00CBE1C0 /* textures */,
 				5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */,
 			);
 			name = GamePlay;
@@ -479,6 +477,8 @@
 		5B61612A14CCC24C0073B857 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+                ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
@@ -489,6 +489,7 @@
 					"GAMEPLAY_PATH/external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-ios.plist";
+                IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"GAMEPLAY_PATH/external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
@@ -496,6 +497,7 @@
 					"\"GAMEPLAY_PATH/external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				SDKROOT = iphoneos;
+                TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -504,6 +506,8 @@
 		5B61612B14CCC24C0073B857 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+                ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
@@ -514,6 +518,7 @@
 					"GAMEPLAY_PATH/external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-ios.plist";
+                IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"GAMEPLAY_PATH/external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
@@ -521,6 +526,7 @@
 					"\"GAMEPLAY_PATH/external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				SDKROOT = iphoneos;
+                TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};

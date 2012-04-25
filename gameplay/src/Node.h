@@ -149,6 +149,26 @@ public:
     void setTransparent(bool transparent);
 
     /**
+     * Returns whether this node is dynamic.
+     *
+     * The dynamic propery can be used to flag nodes as being non-static.
+     * This can be useful for modifying behavior or rendering/material
+     * logic at runtime for static vs dynamic (moving) objects. An
+     * example would be determing whether to use static or  dyanmic
+     * lighting materials for node models during loading.
+     *
+     * @return Whether this node is dynamic (false by default).
+     */
+    bool isDynamic() const;
+
+    /**
+     * Sets whether this node is dynamic.
+     *
+     * @param dynamic Whether the node is dynamic.
+     */
+    void setDynamic(bool dynamic);
+
+    /**
      * Returns the user pointer for this node.
      *
      * @return The user pointer for this node.
@@ -618,30 +638,120 @@ protected:
      */
     struct UserData
     {
+        /**
+         * Constructor.
+         */
         UserData() : pointer(NULL), cleanupCallback(NULL) {}
+
+        /**
+         * A pointer to custom user data.
+         */
         void* pointer;
+
+        /** 
+         * Cleanup callback.
+         */
         void (*cleanupCallback)(void*);
     };
 
+    /**
+     * The Scene this node belongs to.
+     */
     Scene* _scene;
+
+    /**
+     * The Node's ID.
+     */ 
     std::string _id;
+
+    /**
+     * Pointer to the Node's first child.
+     */
     Node* _firstChild;
+    
+    /**
+     * Pointer to the Node's next child.
+     */
     Node* _nextSibling;
+    
+    /**
+     * Pointer to the Node's previous sibling.
+     */
     Node* _prevSibling;
+
+    /**
+     * Pointer to the Node's parent.
+     */
     Node* _parent;
+
+    /**
+     * The number of children belonging to the Node.
+     */
     unsigned int _childCount;
+
+    /**
+     * Node property flags. 
+     */ 
     unsigned int _nodeFlags;
+
+    /**
+     * Pointer to the Camera attached to the Node.
+     */
     Camera* _camera;
+
+    /**
+     * Pointer to the Light attached to the Node.
+     */ 
     Light* _light;
+
+    /**
+     * Pointer to the Model attached to the Node.
+     */
     Model* _model;
+    
+    /**
+     * Pointer to the Form attached to the Node.
+     */
     Form* _form;
+    
+    /**
+     * Pointer to the AudioSource attached to the Node.
+     */
     AudioSource* _audioSource;
+    
+    /**
+     * Pointer to the ParticleEmitter attached to the Node.
+     */
     ParticleEmitter* _particleEmitter;
+    
+    /**
+     * Pointer to the PhysicsCollisionObject attached to the Node.
+     */
     PhysicsCollisionObject* _collisionObject;
+    
+    /**
+     * World Matrix representation of the Node.
+     */
     mutable Matrix _world;
+
+    /**
+     * Dirty bits flag for the Node.
+     */
     mutable int _dirtyBits;
+    
+    /**
+     * A flag indicating if the Node's hierarchy has changed.
+     */ 
     bool _notifyHierarchyChanged;
+
+    /**
+     * The Bounding Sphere containing the Node.
+     */
     mutable BoundingSphere _bounds;
+
+    /**
+     * Pointer to custom UserData and cleanup call back that can be stored in a Node.
+     */
     UserData* _userData;
 };
 

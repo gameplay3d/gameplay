@@ -26,50 +26,13 @@ public:
     };
 
     /**
-     * Texture coordinate object.
-     */
-    typedef struct texCoord
-    {
-        float u1;
-        float v1;
-        float u2;
-        float v2;
-    } TexCoord;
-
-    /**
-     * Rectangle object.
-     */
-    typedef struct rect
-    {
-        float x;
-        float y;
-        float width;
-        float height;
-    } Rect;
-
-    /**
-     * The maximum number of buttons supported on a gamepad.
-     */
-    static const unsigned int MAX_BUTTONS = 16;
-
-    /**
-     * The maximum number of joysticks supported on a gamepad.
-     */
-    static const unsigned int MAX_JOYSTICKS = 2;
-
-    /**
-     * The maximum number of parallel touch inputs the gamepad supports.
-     */
-    static const unsigned int MAX_TOUCH_INPUTS = 4;
-
-    /**
      * Constructor.
      *
      * @param texturePath The path to the gamepad's texture atlas.
      * @param joysticks The number of joysticks the game pad will have.
      * @param buttons The number of buttons the game pad will have.
      */
-    Gamepad(const char* texturePath, unsigned int joysticks, unsigned int buttons);
+    Gamepad(const char* texturePath, unsigned int joystickCount, unsigned int buttonCount);
 
     /**
      * Destructor.
@@ -79,12 +42,12 @@ public:
     /**
      * Sets the screen region and textures to use for the specified button on the gamepad.
      *
-     * @param buttonId The unique integer ID of the button to set; 0 <= buttonId < MAX_BUTTONS;
+     * @param buttonId The unique integer ID of the button to set.
      * @param screenRegion The region on the screen to draw the button.
      * @param releasedTextureRegion The region on the gamepad's texture atlas to draw as the BUTTON_RELEASED state. 
      * @param pressedTextureRegion The region on the gamepad's texture atlas to draw as the BUTTON_PRESSED state.
      */
-    void setButton(unsigned int buttonId, Rect* screenRegion, Rect* releasedTextureRegion, Rect* pressedTextureRegion);
+    void setButton(unsigned int buttonId, const Rectangle& screenRegion, const Rectangle& releasedTextureRegion, const Rectangle& pressedTextureRegion);
 
     /**
      * Returns the current state of the specified button.
@@ -97,19 +60,19 @@ public:
     /**
      * Sets the screen region and textures to use for the specified joystick on the gamepad.
      *
-     * @param joystickId The unique integer ID of the joystick to set; 0 <= joystickId < MAX_JOYSTICKS;
+     * @param joystickId The unique integer ID of the joystick to set.
      * @param thumbScreenRegion The region on the screen to draw the thumb stick of the joystick.
      * @param thumbTextureRegion The region on the gamepad's texture atlas to draw as the thumb stick of the joystick.
      * @param dockScreenRegion The region on the screen to draw the dock that the thumb stick sits in.
      * @param dockTextureRegion The region on the gamepad's texture atlas to draw as the dock for the thumb stick of the joystick.
      * @param radius The maximum radius that the thumb stick will revolve around the dock region.
      */ 
-    void setJoystick(unsigned int joystickId, Rect* thumbScreenRegion, Rect* thumbTextureRegion, Rect* dockScreenRegion, Rect* dockTextureRegion, float radius);
+    void setJoystick(unsigned int joystickId, const Rectangle& thumbScreenRegion, const Rectangle& thumbTextureRegion, const Rectangle& dockScreenRegion, const Rectangle& dockTextureRegion, float radius);
 
     /**
      * Gets whether the specified joystick is active or not.
      * 
-     * @param joystickId The unique integer ID of the joystick to set; 0 <= joystickId < MAX_JOYSTICKS;
+     * @param joystickId The unique integer ID of the joystick to set.
      * @return Whether the given joystick is active or not.
      */
     bool isJoystickActive(unsigned int joystickId) const;
@@ -117,10 +80,17 @@ public:
     /**
      * Returns the specified joystick's state as a Vector2.
      *
-     * @param joystickId The unique integer ID of the joystick to set; 0 <= joystickId < MAX_JOYSTICKS;
+     * @param joystickId The unique integer ID of the joystick to set.
      * @return A Vector2 of the joystick displacement for the specified joystick.
      */
     const Vector2& getJoystickState(unsigned int joystickId) const;
+
+    /**
+     * Returns the current touch contact index for the specified joystick.
+     *
+     * @return The contact index for the specified joystick.
+     */
+    unsigned int getJoystickContactIndex(unsigned int joystickId) const;
 
     /**
      * Draws the gamepad.
@@ -163,6 +133,17 @@ private:
      */
     void setSpriteBatch(SpriteBatch* spriteBatch);
 
+    /**
+     * Structure for holding texture coordinates for a rectangle.
+     */
+    struct TexCoords
+    {
+        float u1;
+        float u2;
+        float v1;
+        float v2;
+    };
+
     /** 
      * Defines a gamepad button.
      */
@@ -183,13 +164,13 @@ private:
          * Destructor.
          */
         ~Button();
-        
+
         Gamepad::ButtonState _pressed;
-        Rect _region;
+        Rectangle _region;
         bool _defaultTextureEnabled;
-        TexCoord _defaultTexCoord;
+        TexCoords _defaultTexCoord;
         bool _focusTextureEnabled;
-        TexCoord _focusTexCoord;
+        TexCoords _focusTexCoord;
         unsigned int _contactIndex;
     };
 
@@ -213,16 +194,16 @@ private:
          * Destructor.
          */
         ~Joystick();
-        
+
         Vector2 _displacement;
         Vector2 _direction;
         float _radius;
-        Rect _regionInner;
+        Rectangle _regionInner;
         bool _defaultTextureInnerEnabled;
-        TexCoord _defaultTexCoordInner;
-        Rect _regionOuter;
+        TexCoords _defaultTexCoordInner;
+        Rectangle _regionOuter;
         bool _defaultTextureOuterEnabled;
-        TexCoord _defaultTexCoordOuter;
+        TexCoords _defaultTexCoordOuter;
         unsigned int _contactIndex;
     };
 
@@ -232,7 +213,6 @@ private:
     Joystick** _joysticks;
     Texture* _texture;
     SpriteBatch* _spriteBatch;
-    int _touches[MAX_TOUCH_INPUTS];
 };
 
 #endif

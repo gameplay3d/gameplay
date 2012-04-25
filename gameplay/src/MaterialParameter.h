@@ -167,9 +167,7 @@ public:
     void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 private:
-
-    static const char ANIMATION_UNIFORM_BIT = 0x01;
-    
+   
     /**
      * Constructor.
      */

@@ -49,9 +49,28 @@ public:
 
     public:
 
+        /**
+         * Constructor.
+         */
         Definition();
+
+        /** 
+         * Constructs a new Defintion that is a copy of the specified Definition.
+         *
+         * @param definition The Definition to copy.
+         */ 
         Definition(const Definition& definition);
+
+        /**
+         * Assigns the specified Definition as the Definition.
+         *
+         * @param definition The Definition to assign to the Definition.
+         */
         Definition& operator=(const Definition& definition);
+        
+        /**
+         * Destructor.
+         */
         ~Definition();
 
     private:

@@ -95,6 +95,7 @@ public:
      * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
      *      body specified the constraint applies between it and the global physics world object.
      * @param b The second rigid body to constrain (optional).
+     * @return Pointer to the created PhysicsFixedConstraint object.
      */
     PhysicsFixedConstraint* createFixedConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b = NULL);
 
@@ -105,6 +106,7 @@ public:
      * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
      *      body specified the constraint applies between it and the global physics world object.
      * @param b The second rigid body to constrain (optional).
+     * @return Pointer to the created PhysicsGenericConstraint object.
      */
     PhysicsGenericConstraint* createGenericConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b = NULL);
 
@@ -122,6 +124,7 @@ public:
      *      (in its local space) with respect to the constraint joint (optional).
      * @param translationOffsetB The translation offset for the second rigid body
      *      (in its local space) with respect to the constraint joint (optional).
+     * @return Pointer to the created PhysicsGenericConstraint object.
      */
     PhysicsGenericConstraint* createGenericConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA, 
                                                       PhysicsRigidBody* b = NULL, const Quaternion& rotationOffsetB = Quaternion(), const Vector3& translationOffsetB = Vector3());
@@ -140,6 +143,7 @@ public:
      *      (in its local space) with respect to the constraint joint (optional).
      * @param translationOffsetB The translation offset for the second rigid body
      *      (in its local space) with respect to the constraint joint (optional).
+     * @return Pointer to the created PhysicsHingeConstraint object.
      */
     PhysicsHingeConstraint* createHingeConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
                                                   PhysicsRigidBody* b = NULL, const Quaternion& rotationOffsetB = Quaternion(), const Vector3& translationOffsetB = Vector3());
@@ -152,6 +156,7 @@ public:
      * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
      *      body specified the constraint applies between it and the global physics world object.
      * @param b The second rigid body to constrain (optional).
+     * @return Pointer to the created PhysicsSocketConstraint object.
      */
     PhysicsSocketConstraint* createSocketConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b = NULL);
 
@@ -165,6 +170,7 @@ public:
      * @param b The second rigid body to constrain (optional).
      * @param translationOffsetB The translation offset for the second rigid body
      *      (in its local space) with respect to the constraint joint (optional).
+     * @return Pointer to the created PhysicsSocketConstraint object.
      */
     PhysicsSocketConstraint* createSocketConstraint(PhysicsRigidBody* a, const Vector3& translationOffsetA,
                                                     PhysicsRigidBody* b = NULL, const Vector3& translationOffsetB = Vector3());
@@ -177,6 +183,7 @@ public:
      * @param a The first (possibly only) rigid body to constrain. If this is the only rigid
      *      body specified the constraint applies between it and the global physics world object.
      * @param b The second rigid body to constrain (optional).
+     * @return Pointer to the created PhysicsSpringConstraint object.
      */
     PhysicsSpringConstraint* createSpringConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b);
 
@@ -194,6 +201,7 @@ public:
      *      (in its local space) with respect to the constraint joint (optional).
      * @param translationOffsetB The translation offset for the second rigid body
      *      (in its local space) with respect to the constraint joint (optional).
+     * @return Pointer to the created PhysicsSpringConstraint object.
      */
     PhysicsSpringConstraint* createSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,          
                                                     PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB);
@@ -224,7 +232,7 @@ public:
      * 
      * @param ray The ray to test intersection with.
      * @param distance How far along the given ray to test for intersections.
-     * @param result Optioanl pointer to a HitTest structure to store hit test result information in.
+     * @param result Optional pointer to a HitTest structure to store hit test result information in.
      * @return True if the ray test collided with a physics object, false otherwise.
      */
     bool rayTest(const Ray& ray, float distance, PhysicsController::HitResult* result = NULL);
@@ -237,6 +245,7 @@ public:
      *
      * @param object The collision object to test.
      * @param endPosition The end position of the sweep test, in world space.
+     * @param result Optional pointer to a HitTest structure to store hit test result information in.
      * @return True if the object intersects any other physics objects, false otherwise.
      */
     bool sweepTest(PhysicsCollisionObject* object, const Vector3& endPosition, PhysicsController::HitResult* result = NULL);
@@ -354,13 +363,55 @@ private:
     {
     public:
 
+        /** 
+         * DebugVertex.
+         */
         struct DebugVertex
         {
-            float x, y, z;
-            float r, g, b, a;
+            /**
+             * The x coordinate of the vertex.
+             */
+            float x;
+    
+            /**
+             * The y coordinate of the vertex.
+             */
+            float y;
+    
+            /**
+             * The z coordinate of the vertex.
+             */
+            float z;
+
+            /**
+             * The red color component of the vertex.
+             */
+            float r;
+    
+            /**
+             * The green color component of the vertex.
+             */
+            float g;
+    
+            /**
+             * The blue color component of the vertex.
+             */
+            float b;
+    
+            /**
+             * The alpha component of the vertex.
+             */
+            float a;
         };
 
-        DebugDrawer();        
+        /**
+         * Constructor.
+         */
+        DebugDrawer(); 
+
+        /** 
+         * Destructor.
+         */
         ~DebugDrawer();
         
         void begin(const Matrix& viewProjection);

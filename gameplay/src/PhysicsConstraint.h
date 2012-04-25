@@ -102,8 +102,19 @@ protected:
      */
     static Vector3 offsetByCenterOfMass(const Node* node, const Vector3& v);
 
+    /**
+     * Pointer to the one rigid body bound by this constraint.
+     */
     PhysicsRigidBody* _a;
+    
+    /**
+     * Pointer to the other rigid body bound by this constraint.
+     */
     PhysicsRigidBody* _b;
+    
+    /**
+     * Pointer to the Bullet constraint.
+     */
     btTypedConstraint* _constraint;
 };
 

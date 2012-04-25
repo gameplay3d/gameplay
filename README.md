@@ -1,5 +1,5 @@
 ## gameplay v1.2.0
-An open-source, cross-platform 3D native game framework making it easy to learn and write mobile and desktop games. 
+An open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
 
 ## Supported Mobile Platforms
 - BlackBerry PlayBook 2 (using BlackBerry Native SDK 2)
@@ -11,9 +11,11 @@ An open-source, cross-platform 3D native game framework making it easy to learn 
 - Apple MacOS X (using Apple XCode 4.3.2)
 
 ## Roadmap for 'next' branch
-- Lua Scripting
+- Shadows
+- Lua Script Bindings
 - Terrain
 - Editor
+- Performance/Optimizations
 
 ## Licence
 The project is open sourced under the Apache 2.0 license.
