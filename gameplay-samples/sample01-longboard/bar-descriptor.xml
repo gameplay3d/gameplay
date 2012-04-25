@@ -9,7 +9,7 @@
 
     <!-- A universally unique application identifier. Must be unique across all BlackBerry Tablet OS applications.
          Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-    <id>com.rim.sample01_longboard</id>
+    <id>org.gameplay3d.sample01_longboard</id>
 
     <!-- The name that is displayed in the BlackBerry Tablet OS application installer. 
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
@@ -62,7 +62,7 @@
     <asset path="res/quad.vsh">res/quad.vsh</asset>
     <asset path="res/textured.fsh">res/textured.fsh</asset>
     <asset path="res/textured.vsh">res/textured.vsh</asset>
-    <asset path="${workspace_loc:/gameplay/res/logo_powered_white.png}">res/logo_powered_white.png</asset>
+    <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
