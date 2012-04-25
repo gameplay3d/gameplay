@@ -196,69 +196,63 @@ error:
 }
 
 // Display the android virtual keyboard.
-void displayKeyboard(android_app* state, bool pShow)
+void displayKeyboard(android_app* state, bool show)
 { 
-    
-    // The following functions is supposed to show / hide functins from a native activity.. but currently
-    // do not work. 
+    // The following functions is supposed to show / hide functins from a native activity.. but currently do not work. 
     // ANativeActivity_showSoftInput(state->activity, ANATIVEACTIVITY_SHOW_SOFT_INPUT_IMPLICIT);
     // ANativeActivity_hideSoftInput(state->activity, ANATIVEACTIVITY_HIDE_SOFT_INPUT_IMPLICIT_ONLY);
     
     // Show or hide the keyboard by calling the appropriate Java method through JNI instead.
-    // Attaches the current thread to the JVM.
-    jint lResult;
-    jint lFlags = 0;
-    JavaVM* lJavaVM = state->activity->vm;
-    JNIEnv* lJNIEnv = state->activity->env; 
-    JavaVMAttachArgs lJavaVMAttachArgs;
-    lJavaVMAttachArgs.version = JNI_VERSION_1_6;
-    lJavaVMAttachArgs.name = "NativeThread";
-    lJavaVMAttachArgs.group = NULL;
-    lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs); 
-    if (lResult == JNI_ERR)
+    jint result;
+    jint flags = 0;
+    JavaVM* jvm = state->activity->vm;
+    JNIEnv* env;
+    jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
+    jvm->AttachCurrentThread(&env, NULL);
+    if (result == JNI_ERR)
     { 
         return; 
     } 
     // Retrieves NativeActivity. 
     jobject lNativeActivity = state->activity->clazz;
-    jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+    jclass ClassNativeActivity = env->GetObjectClass(lNativeActivity);
 
     // Retrieves Context.INPUT_METHOD_SERVICE.
-    jclass ClassContext = lJNIEnv->FindClass("android/content/Context");
-    jfieldID FieldINPUT_METHOD_SERVICE = lJNIEnv->GetStaticFieldID(ClassContext, "INPUT_METHOD_SERVICE", "Ljava/lang/String;");
-    jobject INPUT_METHOD_SERVICE = lJNIEnv->GetStaticObjectField(ClassContext, FieldINPUT_METHOD_SERVICE);
+    jclass ClassContext = env->FindClass("android/content/Context");
+    jfieldID FieldINPUT_METHOD_SERVICE = env->GetStaticFieldID(ClassContext, "INPUT_METHOD_SERVICE", "Ljava/lang/String;");
+    jobject INPUT_METHOD_SERVICE = env->GetStaticObjectField(ClassContext, FieldINPUT_METHOD_SERVICE);
     
     // Runs getSystemService(Context.INPUT_METHOD_SERVICE).
-    jclass ClassInputMethodManager = lJNIEnv->FindClass("android/view/inputmethod/InputMethodManager");
-    jmethodID MethodGetSystemService = lJNIEnv->GetMethodID(ClassNativeActivity, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
-    jobject lInputMethodManager = lJNIEnv->CallObjectMethod(lNativeActivity, MethodGetSystemService, INPUT_METHOD_SERVICE);
+    jclass ClassInputMethodManager = env->FindClass("android/view/inputmethod/InputMethodManager");
+    jmethodID MethodGetSystemService = env->GetMethodID(ClassNativeActivity, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
+    jobject lInputMethodManager = env->CallObjectMethod(lNativeActivity, MethodGetSystemService, INPUT_METHOD_SERVICE);
     
     // Runs getWindow().getDecorView().
-    jmethodID MethodGetWindow = lJNIEnv->GetMethodID(ClassNativeActivity, "getWindow", "()Landroid/view/Window;");
-    jobject lWindow = lJNIEnv->CallObjectMethod(lNativeActivity, MethodGetWindow);
-    jclass ClassWindow = lJNIEnv->FindClass("android/view/Window");
-    jmethodID MethodGetDecorView = lJNIEnv->GetMethodID(ClassWindow, "getDecorView", "()Landroid/view/View;");
-    jobject lDecorView = lJNIEnv->CallObjectMethod(lWindow, MethodGetDecorView);
-    if (pShow)
+    jmethodID MethodGetWindow = env->GetMethodID(ClassNativeActivity, "getWindow", "()Landroid/view/Window;");
+    jobject lWindow = env->CallObjectMethod(lNativeActivity, MethodGetWindow);
+    jclass ClassWindow = env->FindClass("android/view/Window");
+    jmethodID MethodGetDecorView = env->GetMethodID(ClassWindow, "getDecorView", "()Landroid/view/View;");
+    jobject lDecorView = env->CallObjectMethod(lWindow, MethodGetDecorView);
+    if (show)
     {
         // Runs lInputMethodManager.showSoftInput(...).
-        jmethodID MethodShowSoftInput = lJNIEnv->GetMethodID( ClassInputMethodManager, "showSoftInput", "(Landroid/view/View;I)Z");
-        jboolean lResult = lJNIEnv->CallBooleanMethod(lInputMethodManager, MethodShowSoftInput, lDecorView, lFlags); 
+        jmethodID MethodShowSoftInput = env->GetMethodID( ClassInputMethodManager, "showSoftInput", "(Landroid/view/View;I)Z");
+        jboolean result = env->CallBooleanMethod(lInputMethodManager, MethodShowSoftInput, lDecorView, flags); 
     } 
     else 
     { 
         // Runs lWindow.getViewToken() 
-        jclass ClassView = lJNIEnv->FindClass("android/view/View");
-        jmethodID MethodGetWindowToken = lJNIEnv->GetMethodID(ClassView, "getWindowToken", "()Landroid/os/IBinder;");
-        jobject lBinder = lJNIEnv->CallObjectMethod(lDecorView, MethodGetWindowToken); 
+        jclass ClassView = env->FindClass("android/view/View");
+        jmethodID MethodGetWindowToken = env->GetMethodID(ClassView, "getWindowToken", "()Landroid/os/IBinder;");
+        jobject lBinder = env->CallObjectMethod(lDecorView, MethodGetWindowToken); 
         
         // lInputMethodManager.hideSoftInput(...). 
-        jmethodID MethodHideSoftInput = lJNIEnv->GetMethodID(ClassInputMethodManager, "hideSoftInputFromWindow", "(Landroid/os/IBinder;I)Z"); 
-        jboolean lRes = lJNIEnv->CallBooleanMethod( lInputMethodManager, MethodHideSoftInput, lBinder, lFlags); 
+        jmethodID MethodHideSoftInput = env->GetMethodID(ClassInputMethodManager, "hideSoftInputFromWindow", "(Landroid/os/IBinder;I)Z"); 
+        jboolean lRes = env->CallBooleanMethod( lInputMethodManager, MethodHideSoftInput, lBinder, flags); 
     }
     
     // Finished with the JVM.
-    lJavaVM->DetachCurrentThread(); 
+    jvm->DetachCurrentThread(); 
 }
 
 // Gets the Keyboard::Key enumeration constant that corresponds to the given Android key code.
@@ -695,7 +689,10 @@ int Platform::enterMessagePump()
 {
     // Get the android application's activity.
     ANativeActivity* activity = __state->activity;
-    JNIEnv* env = activity->env;
+    JavaVM* jvm = __state->activity->vm;
+    JNIEnv* env;
+    jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
+    jvm->AttachCurrentThread(&env, NULL);
 
     // Get the package name for this app from Java.
     jclass clazz = env->GetObjectClass(activity->clazz);
@@ -799,6 +796,8 @@ int Platform::enterMessagePump()
         // Display the keyboard.
         gameplay::displayKeyboard(__state, __displayKeyboard);
     }
+
+    jvm->DetachCurrentThread();
 }
 
 void Platform::signalShutdown() 
