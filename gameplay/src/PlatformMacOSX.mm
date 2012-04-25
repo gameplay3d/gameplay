@@ -251,8 +251,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     if (__rightMouseDown)
     {
         // Update the pitch and roll by adding the scaled deltas.
-        __roll += -(float)(point.x - __lx) * ACCELEROMETER_FACTOR_X;
-        __pitch -= (float)(point.y - (WINDOW_HEIGHT - __ly)) * ACCELEROMETER_FACTOR_Y;
+        __roll += (float)(point.x - __lx) * ACCELEROMETER_FACTOR_X;
+        __pitch -= -(float)(point.y - (WINDOW_HEIGHT - __ly)) * ACCELEROMETER_FACTOR_Y;
     
         // Clamp the values to the valid range.
         __roll = max(min(__roll, 90.0f), -90.0f);
@@ -667,6 +667,15 @@ int Platform::getOrientationAngle()
     return 0;
 }
 
+void Platform::setMultiTouch(bool enabled)
+{
+}
+    
+bool Platform::isMultiTouch()
+{
+    return false;
+}
+    
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     *pitch = __pitch;

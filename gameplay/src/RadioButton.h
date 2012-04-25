@@ -131,9 +131,24 @@ protected:
      */
     static void clearSelected(const std::string& groupId);
 
+    /**
+     * The RadioButton's group ID.
+     */
     std::string _groupId;
+    
+    /**
+     * Whether the RadioButton is currently selected.
+     */
     bool _selected;
+    
+    /**
+     * The size at which the RadioButton's icon will be drawn.
+     */
     Vector2 _imageSize;
+
+    /**
+     * The ThemeImage to use for the RadioButton.
+     */ 
     Theme::ThemeImage* _image;
 
 private:

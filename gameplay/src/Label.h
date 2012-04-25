@@ -86,6 +86,13 @@ protected:
      */
     virtual void initialize(Theme::Style* style, Properties* properties);
 
+    /**
+     * Called when a label's properties change. Updates this label's internal rendering
+     * properties, such as its text viewport.
+     *
+     * @param clip The clipping rectangle of this label's parent container.
+     * @param offset The scroll offset of this label's parent container.
+     */
     void update(const Rectangle& clip, const Vector2& offset);
 
     /**
@@ -95,8 +102,19 @@ protected:
      */
     void drawText(const Rectangle& clip);
 
-    std::string _text;      // The text displayed by this label.
+    /**
+     * The text displayed by this label.
+     */
+    std::string _text;
+
+    /**
+     * The font being used to display the label.
+     */
     Font* _font;
+    
+    /**
+     * The text color being used to display the label.
+     */
     Vector4 _textColor;
     Rectangle _textBounds;  // The position and size of this control's text area, before clipping.  Used for text alignment.
 

@@ -61,8 +61,9 @@ Scene* SceneLoader::load(const char* filePath)
         SceneNodeProperty::ROTATE |
         SceneNodeProperty::SCALE |
         SceneNodeProperty::TRANSLATE | 
-        SceneNodeProperty::TRANSPARENT);
-    applyNodeProperties(scene, sceneProperties, SceneNodeProperty::CHARACTER | SceneNodeProperty::GHOST | SceneNodeProperty::RIGIDBODY);
+        SceneNodeProperty::TRANSPARENT |
+        SceneNodeProperty::DYNAMIC);
+    applyNodeProperties(scene, sceneProperties, SceneNodeProperty::CHARACTER | SceneNodeProperty::GHOSTOBJECT | SceneNodeProperty::RIGIDBODY);
     createAnimations(scene);
 
     // Find the physics properties object.
@@ -195,7 +196,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         snp._type == SceneNodeProperty::MATERIAL ||
         snp._type == SceneNodeProperty::PARTICLE ||
         snp._type == SceneNodeProperty::CHARACTER ||
-        snp._type == SceneNodeProperty::GHOST ||
+        snp._type == SceneNodeProperty::GHOSTOBJECT ||
         snp._type == SceneNodeProperty::RIGIDBODY)
     {
         // Check to make sure the referenced properties object was loaded properly.
@@ -250,7 +251,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             break;
         }
         case SceneNodeProperty::CHARACTER:
-        case SceneNodeProperty::GHOST:
+        case SceneNodeProperty::GHOSTOBJECT:
         case SceneNodeProperty::RIGIDBODY:
         {
             // Check to make sure the referenced properties object was loaded properly.
@@ -283,20 +284,20 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             {
                 WARN_VARG("Attempting to set a 'character' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
             }
-            else if (snp._type == SceneNodeProperty::GHOST && strcmp(p->getNamespace(), "ghost") != 0)
+            else if (snp._type == SceneNodeProperty::GHOSTOBJECT && strcmp(p->getNamespace(), "ghostObject") != 0)
             {
-                WARN_VARG("Attempting to set a 'ghost' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
+                WARN_VARG("Attempting to set a 'ghostObject' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
             }
-            else if (snp._type == SceneNodeProperty::RIGIDBODY && strcmp(p->getNamespace(), "rigidbody") != 0)
+            else if (snp._type == SceneNodeProperty::RIGIDBODY && strcmp(p->getNamespace(), "rigidBody") != 0)
             {
-                WARN_VARG("Attempting to set a 'rigidbody' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
+                WARN_VARG("Attempting to set a 'rigidBody' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
             }
             else
             {
                 // If the scene file specifies a rigid body model, use it for creating the collision object.
                 Properties* np = sceneProperties->getNamespace(sceneNode._nodeID);
                 const char* name = NULL;
-                if (np && (name = np->getString("rigidbodymodel")))
+                if (np && (name = np->getString("rigidBodyModel")))
                 {
                     Node* modelNode = node->getScene()->findNode(name);
                     if (!modelNode)
@@ -307,14 +308,14 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                             WARN_VARG("Node '%s' does not have a model; attempting to use its model for collision object creation.", name);
                         else
                         {
-                            // Temporarily set rigidbody model on model so it's used during collision object creation.
+                            // Temporarily set rigidBody model on model so it's used during collision object creation.
                             Model* model = node->getModel();
                             assert(model);
                         
                             // Up ref count to prevent node from releasing the model when we swap it.
                             model->addRef(); 
                         
-                            // Create collision object with new rigidbodymodel set.
+                            // Create collision object with new rigidBodyModel set.
                             node->setModel(modelNode->getModel());
                             node->setCollisionObject(p);
 
@@ -368,6 +369,11 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         case SceneNodeProperty::TRANSPARENT:
         {
             node->setTransparent(true);
+            break;
+        }
+        case SceneNodeProperty::DYNAMIC:
+        {
+            node->setDynamic(true);
             break;
         }
         default:
@@ -554,15 +560,15 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                 {
                     addSceneNodeProperty(sceneNode, SceneNodeProperty::CHARACTER, ns->getString());
                 }
-                else if (strcmp(name, "ghost") == 0)
+                else if (strcmp(name, "ghostObject") == 0)
                 {
-                    addSceneNodeProperty(sceneNode, SceneNodeProperty::GHOST, ns->getString());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::GHOSTOBJECT, ns->getString());
                 }
-                else if (strcmp(name, "rigidbody") == 0)
+                else if (strcmp(name, "rigidBody") == 0)
                 {
                     addSceneNodeProperty(sceneNode, SceneNodeProperty::RIGIDBODY, ns->getString());
                 }
-                else if (strcmp(name, "rigidbodymodel") == 0)
+                else if (strcmp(name, "rigidBodyModel") == 0)
                 {
                     // Ignore this for now. We process this when we do rigid body creation.
                 }
@@ -581,6 +587,10 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                 else if (strcmp(name, "transparent") == 0)
                 {
                     addSceneNodeProperty(sceneNode, SceneNodeProperty::TRANSPARENT);
+                }
+                else if (strcmp(name, "dynamic") == 0)
+                {
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::DYNAMIC);
                 }
                 else
                 {

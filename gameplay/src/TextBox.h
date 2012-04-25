@@ -122,11 +122,30 @@ protected:
      */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
+    /**
+     * The current position of the TextBox's caret.
+     */
     Vector2 _caretLocation;
     Vector2 _prevCaretLocation;
+
+    /**
+     * The index into the TextBox's string that the caret is.
+     */
     unsigned int textIndex;
+    
+    /**
+     * The last character that was entered into the TextBox.
+     */
     int _lastKeypress;
+
+    /**
+     * The font size to be used in the TextBox.
+     */
     unsigned int _fontSize;
+    
+    /**
+     * The Theme::Image for the TextBox's caret.
+     */
     Theme::ThemeImage* _caretImage;
 
 private:

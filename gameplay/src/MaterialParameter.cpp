@@ -315,6 +315,7 @@ unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyI
                     return 0;
             }
         }
+        break;
     }
 
     return 0;
@@ -376,6 +377,7 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
                 // UNSUPPORTED: NONE, MATRIX, METHOD, SAMPLER 
             }
         }
+        break;
     }
 }
 
@@ -392,50 +394,21 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
                 case FLOAT:
                 {
                     if (_count == 1)
-                    {
-                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
-                        {
-                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
-                            _value.floatValue = value->getFloat(0);
-                        }
-                        else
-                        {
-                            _value.floatValue = Curve::lerp(blendWeight, _value.floatValue, value->getFloat(0));
-                        }
-                    }
+                        _value.floatValue = Curve::lerp(blendWeight, _value.floatValue, value->getFloat(0));
                     else
-                    {
                         applyAnimationValue(value, blendWeight, 1);
-                    }                    
                     break;
                 }
                 case INT:
                 {
                     if (_count == 1)
                     {
-                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
-                        {
-                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
-                            _value.intValue = value->getFloat(0);
-                        }
-                        else
-                        {
-                            _value.intValue = Curve::lerp(blendWeight, _value.intValue, value->getFloat(0));
-                        }
+                        _value.intValue = Curve::lerp(blendWeight, _value.intValue, value->getFloat(0));
                     }
                     else
                     {
-                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
-                        {
-                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
-                            for (unsigned int i = 0; i < _count; i++)
-                                _value.intPtrValue[i] = value->getFloat(i);
-                        }
-                        else
-                        {
-                            for (unsigned int i = 0; i < _count; i++)
-                                _value.intPtrValue[i] = Curve::lerp(blendWeight, _value.intPtrValue[i], value->getFloat(i));
-                        }
+                        for (unsigned int i = 0; i < _count; i++)
+                            _value.intPtrValue[i] = Curve::lerp(blendWeight, _value.intPtrValue[i], value->getFloat(i));
                     }
                     break;
                 }
@@ -454,28 +427,18 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
                     applyAnimationValue(value, blendWeight, 4);
                     break;
                 }
-
                 // UNSUPPORTED: NONE, MATRIX, METHOD, SAMPLER 
             }
         }
+        break;
     }
 }
 
 void MaterialParameter::applyAnimationValue(AnimationValue* value, float blendWeight, int components)
 {
     unsigned int count = _count * components;
-    if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
-    {
-        _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
-
-        for (unsigned int i = 0; i < count; i++)
-            _value.floatPtrValue[i] = value->getFloat(i);
-    }
-    else
-    {
-        for (unsigned int i = 0; i < count; i++)
-            _value.floatPtrValue[i] = Curve::lerp(blendWeight, _value.floatPtrValue[i], value->getFloat(i));
-    }
+    for (unsigned int i = 0; i < count; i++)
+        _value.floatPtrValue[i] = Curve::lerp(blendWeight, _value.floatPtrValue[i], value->getFloat(i));
 }
 
 void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const

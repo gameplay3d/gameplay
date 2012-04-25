@@ -20,7 +20,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample03-character", "gamep
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameplay-encoder", "gameplay-encoder\gameplay-encoder.vcxproj", "{9D69B743-4872-4DD1-8E30-0087C64298D7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample04-particles", "gameplay-samples\sample04-particles\sample04-particles.vcxproj", "{F47B5740-3C0C-BACE-4C2B-EE23A358D499}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample04-particles", "gameplay-samples\sample04-particles\sample04-particles.vcxproj", "{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
@@ -67,12 +67,12 @@ Global
 		{9D69B743-4872-4DD1-8E30-0087C64298D7}.DebugMem|Win32.Build.0 = Debug|Win32
 		{9D69B743-4872-4DD1-8E30-0087C64298D7}.Release|Win32.ActiveCfg = Release|Win32
 		{9D69B743-4872-4DD1-8E30-0087C64298D7}.Release|Win32.Build.0 = Release|Win32
-		{F47B5740-3C0C-BACE-4C2B-EE23A358D499}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F47B5740-3C0C-BACE-4C2B-EE23A358D499}.Debug|Win32.Build.0 = Debug|Win32
-		{F47B5740-3C0C-BACE-4C2B-EE23A358D499}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
-		{F47B5740-3C0C-BACE-4C2B-EE23A358D499}.DebugMem|Win32.Build.0 = DebugMem|Win32
-		{F47B5740-3C0C-BACE-4C2B-EE23A358D499}.Release|Win32.ActiveCfg = Release|Win32
-		{F47B5740-3C0C-BACE-4C2B-EE23A358D499}.Release|Win32.Build.0 = Release|Win32
+		{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}.Debug|Win32.Build.0 = Debug|Win32
+		{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
+		{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}.DebugMem|Win32.Build.0 = DebugMem|Win32
+		{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}.Release|Win32.ActiveCfg = Release|Win32
+		{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}.Release|Win32.Build.0 = Release|Win32
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Debug|Win32.Build.0 = Debug|Win32
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
