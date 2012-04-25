@@ -610,6 +610,13 @@ public:
      */
     void draw();
 
+    /**
+     * Gets a BlendMode enum from a corresponding string.
+     */
+    static TextureBlending getTextureBlendingFromString(const char* src);
+
+    void setTextureBlending(TextureBlending blending);
+
 private:
 
     /**
@@ -650,13 +657,6 @@ private:
      * Generates a color within the domain defined by a base vector and its variance.
      */
     void generateColor(const Vector4& base, const Vector4& variance, Vector4* dst);
-
-    /**
-     * Gets a BlendMode enum from a corresponding string.
-     */
-    static TextureBlending getTextureBlendingFromString(const char* src);
-
-    void setTextureBlending(TextureBlending blending);
 
     /**
      * Defines the data for a single particle in the system.

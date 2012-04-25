@@ -207,7 +207,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                 switch (delimiter)
                 {
                 case ' ':
-                    xPos += (float)size*0.5f;
+                    xPos += size >> 1;
                     break;
                 case '\r':
                 case '\n':
@@ -215,7 +215,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                     xPos = x;
                     break;
                 case '\t':
-                    xPos += ((float)size*0.5f)*4;
+                    xPos += (size >> 1)*4;
                     break;
                 case 0:
                     done = true;
@@ -256,7 +256,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
             switch (c)
             {
             case ' ':
-                xPos += (float)size*0.5f;
+                xPos += size >> 1;
                 break;
             case '\r':
             case '\n':
@@ -264,7 +264,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                 xPos = x;
                 break;
             case '\t':
-                xPos += ((float)size*0.5f)*4;
+                xPos += (size >> 1)*4;
                 break;
             default:
                 int index = c - 32; // HACK for ASCII
@@ -272,7 +272,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                 {
                     Glyph& g = _glyphs[index];
                     _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
-                    xPos += g.width * scale + ((float)size*0.125f);
+                    xPos += floor(g.width * scale + (float)(size >> 3));
                     break;
                 }
             }
@@ -343,7 +343,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                     switch (delimiter)
                     {
                         case ' ':
-                            delimWidth += (float)size*0.5f;
+                            delimWidth += size >> 1;
                             lineLength++;
                             break;
                         case '\r':
@@ -360,7 +360,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                             delimWidth = 0;
                             break;
                         case '\t':
-                            delimWidth += ((float)size*0.5f)*4;
+                            delimWidth += (size >> 1)*4;
                             lineLength++;
                             break;
                         case 0:
@@ -388,7 +388,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                 // Wrap if necessary.
                 if (lineWidth + tokenWidth + delimWidth > area.width)
                 {
-                    yPos += size;
+                    yPos += (int)size;
 
                     // Push position of current line.
                     if (lineLength)
@@ -439,7 +439,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                 char delimiter = token[0];
                 while (delimiter == '\n')
                 {
-                    yPos += size;
+                    yPos += (int)size;
                     ++token;
                     delimiter = token[0];
                 }
@@ -529,10 +529,10 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
 
         // Wrap if necessary.
         if (wrap &&
-            xPos + tokenWidth > area.x + area.width ||
+            xPos + (int)tokenWidth > area.x + area.width ||
             (rightToLeft && currentLineLength > lineLength))
         {
-            yPos += size;
+            yPos += (int)size;
             currentLineLength = tokenLength;
 
             if (xPositionsIt != xPositions.end())
@@ -587,7 +587,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                         }
                     }
                 }
-                xPos += g.width*scale + ((float)size*0.125f);
+                xPos += (int)(g.width)*scale + (size >> 3);
             }
         }
 
@@ -729,7 +729,7 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
                 switch (delimiter)
                 {
                     case ' ':
-                        delimWidth += (float)size*0.5f;
+                        delimWidth += size >> 1;
                         break;
                     case '\r':
                     case '\n':
@@ -765,7 +765,7 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
                         delimWidth = 0;
                         break;
                     case '\t':
-                        delimWidth += ((float)size*0.5f)*4;
+                        delimWidth += (size >> 1)*4;
                         break;
                     case 0:
                         reachedEOF = true;
@@ -1010,7 +1010,7 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
     }
 }
 
-unsigned int Font::getIndexAtLocation(const char* text, const Rectangle& area, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
+int Font::getIndexAtLocation(const char* text, const Rectangle& area, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
                                       Justify justify, bool wrap, bool rightToLeft)
 {
     return getIndexOrLocation(text, area, size, inLocation, outLocation, -1, justify, wrap, rightToLeft);
@@ -1022,7 +1022,7 @@ void Font::getLocationAtIndex(const char* text, const Rectangle& clip, unsigned 
     getIndexOrLocation(text, clip, size, *outLocation, outLocation, (const int)destIndex, justify, wrap, rightToLeft);
 }
 
-unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
+int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
                                       const int destIndex, Justify justify, bool wrap, bool rightToLeft)
 {
     unsigned int charIndex = 0;
@@ -1078,7 +1078,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
                     switch (delimiter)
                     {
                         case ' ':
-                            delimWidth += (float)size*0.5f;
+                            delimWidth += size >> 1;
                             lineLength++;
                             break;
                         case '\r':
@@ -1095,7 +1095,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
                             delimWidth = 0;
                             break;
                         case '\t':
-                            delimWidth += ((float)size*0.5f)*4;
+                            delimWidth += (size >> 1)*4;
                             lineLength++;
                             break;
                         case 0:
@@ -1248,11 +1248,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
         }
 
         currentLineLength += delimLength;
-        if (result == 0)
-        {
-            break;
-        }
-        else if (result == 2)
+        if (result == 0 || result == 2)
         {
             outLocation->x = xPos;
             outLocation->y = yPos;
@@ -1261,7 +1257,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
 
         if (destIndex == (int)charIndex ||
             (destIndex == -1 &&
-             inLocation.x >= xPos && inLocation.x < floor(xPos + ((float)size*0.125f)) &&
+             inLocation.x >= xPos && inLocation.x < floor(xPos + (float)(size >> 3)) &&
              inLocation.y >= yPos && inLocation.y < yPos + size))
         {
             outLocation->x = xPos;
@@ -1293,7 +1289,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
 
         // Wrap if necessary.
         if (wrap &&
-            xPos + tokenWidth > area.x + area.width ||
+            xPos + (int)tokenWidth > area.x + area.width ||
             (rightToLeft && currentLineLength > lineLength))
         {
             yPos += size;
@@ -1334,7 +1330,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
                 // Check against inLocation.
                 if (destIndex == (int)charIndex ||
                     (destIndex == -1 &&
-                    inLocation.x >= xPos && inLocation.x < floor(xPos + g.width*scale + ((float)size*0.125f)) &&
+                    inLocation.x >= xPos && inLocation.x < floor(xPos + g.width*scale + (float)(size >> 3)) &&
                     inLocation.y >= yPos && inLocation.y < yPos + size))
                 {
                     outLocation->x = xPos;
@@ -1342,7 +1338,7 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
                     return charIndex;
                 }
 
-                xPos += g.width*scale + ((float)size*0.125f);
+                xPos += floor(g.width*scale + (float)(size >> 3));
                 charIndex++;
             }
         }
@@ -1413,9 +1409,18 @@ unsigned int Font::getIndexOrLocation(const char* text, const Rectangle& area, u
         }
     }
 
-    outLocation->x = xPos;
-    outLocation->y = yPos;
-    return charIndex;
+
+    if (destIndex == (int)charIndex ||
+        (destIndex == -1 &&
+         inLocation.x >= xPos && inLocation.x < floor(xPos + (float)(size >> 3)) &&
+         inLocation.y >= yPos && inLocation.y < yPos + size))
+    {
+        outLocation->x = xPos;
+        outLocation->y = yPos;
+        return charIndex;
+    }
+    
+    return -1;
 }
 
 unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigned int size, float scale)
@@ -1428,17 +1433,17 @@ unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigne
         switch (c)
         {
         case ' ':
-            tokenWidth += (float)size*0.5f;
+            tokenWidth += size >> 1;
             break;
         case '\t':
-            tokenWidth += ((float)size*0.5f)*4;
+            tokenWidth += (size >> 1)*4;
             break;
         default:
             int glyphIndex = c - 32;
             if (glyphIndex >= 0 && glyphIndex < (int)_glyphCount)
             {
                 Glyph& g = _glyphs[glyphIndex];
-                tokenWidth += g.width * scale + ((float)size*0.125f);
+                tokenWidth += floor(g.width * scale + (float)(size >> 3));
             }
             break;
         }
@@ -1481,8 +1486,8 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
             delimiter == 0)
     {
         if ((stopAtPosition &&
-            stopAtPosition->x >= *xPos && stopAtPosition->x < floor(*xPos + ((float)size*0.5f)) &&
-            stopAtPosition->y >= *yPos && stopAtPosition->y < *yPos + size) ||
+            stopAtPosition->x >= *xPos && stopAtPosition->x < *xPos + ((int)size >> 1) &&
+            stopAtPosition->y >= *yPos && stopAtPosition->y < *yPos + (int)size) ||
             (currentIndex >= 0 && destIndex >= 0 && currentIndex + (int)*lineLength == destIndex))
         {
             // Success + stopAtPosition was reached.
@@ -1492,7 +1497,7 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
         switch (delimiter)
         {
             case ' ':
-                *xPos += (float)size*0.5f;
+                *xPos += size >> 1;
                 (*lineLength)++;
                 if (charIndex)
                 {
@@ -1524,7 +1529,7 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
                 }
                 break;
             case '\t':
-                *xPos += ((float)size*0.5f)*4;
+                *xPos += (size >> 1)*4;
                 (*lineLength)++;
                 if (charIndex)
                 {

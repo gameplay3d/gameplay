@@ -11,7 +11,7 @@ namespace gameplay
             control->_autoWidth || control->_autoHeight)
         {
             Rectangle controlBounds = control->getBounds();
-            const Rectangle& containerBounds = container->getClipBounds();
+            const Rectangle& containerBounds = container->getBounds();
             const Theme::Border& containerBorder = container->getBorder(container->getState());
             const Theme::Padding& containerPadding = container->getPadding();
 
@@ -50,5 +50,10 @@ namespace gameplay
 
             control->setBounds(controlBounds);
         }
+    }
+
+    bool Layout::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+    {
+        return false;
     }
 }

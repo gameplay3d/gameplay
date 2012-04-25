@@ -153,7 +153,7 @@ namespace gameplay
     {
         if (isDirty())
         {
-            Container::update(Rectangle(0, 0, _bounds.width, _bounds.height));
+            Container::update(Rectangle(0, 0, _bounds.width, _bounds.height), Vector2::zero());
         }
     }
 
@@ -343,7 +343,7 @@ namespace gameplay
                             m.transformPoint(&point);
 
                             // Pass the touch event on.
-                            const Rectangle& bounds = form->getClipBounds();
+                            const Rectangle& bounds = form->getBounds();
                             if (form->getState() == Control::FOCUS ||
                                 (evt == Touch::TOUCH_PRESS &&
                                  point.x >= bounds.x &&
@@ -362,7 +362,7 @@ namespace gameplay
                 else
                 {
                     // Simply compare with the form's bounds.
-                    const Rectangle& bounds = form->getClipBounds();
+                    const Rectangle& bounds = form->getBounds();
                     if (form->getState() == Control::FOCUS ||
                         (evt == Touch::TOUCH_PRESS &&
                          x >= bounds.x &&

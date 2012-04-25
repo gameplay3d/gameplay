@@ -86,7 +86,7 @@ protected:
      */
     virtual void initialize(Theme::Style* style, Properties* properties);
 
-    void update(const Rectangle& clip);
+    void update(const Rectangle& clip, const Vector2& offset);
 
     /**
      * Draw this label's text.
@@ -98,6 +98,7 @@ protected:
     std::string _text;      // The text displayed by this label.
     Font* _font;
     Vector4 _textColor;
+    Rectangle _textBounds;  // The position and size of this control's text area, before clipping.  Used for text alignment.
 
 private:
 

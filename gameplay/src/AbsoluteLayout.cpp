@@ -51,7 +51,7 @@ namespace gameplay
 
             if (control->isDirty() || control->isContainer())
             {
-                control->update(container->getClip());
+                control->update(container->getClip(), Vector2::zero());
             }
         }
     }

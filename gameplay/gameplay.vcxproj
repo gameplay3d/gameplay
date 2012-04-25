@@ -37,6 +37,7 @@
     <ClCompile Include="src\DepthStencilTarget.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
+    <ClCompile Include="src\FlowLayout.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\Form.cpp" />
     <ClCompile Include="src\FrameBuffer.cpp" />
@@ -89,6 +90,7 @@
     <ClCompile Include="src\RenderTarget.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SceneLoader.cpp" />
+    <ClCompile Include="src\ScrollLayout.cpp" />
     <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
@@ -128,6 +130,7 @@
     <ClInclude Include="src\DepthStencilTarget.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FileSystem.h" />
+    <ClInclude Include="src\FlowLayout.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Form.h" />
     <ClInclude Include="src\FrameBuffer.h" />
@@ -179,6 +182,7 @@
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SceneLoader.h" />
     <ClInclude Include="src\ScreenDisplayer.h" />
+    <ClInclude Include="src\ScrollLayout.h" />
     <ClInclude Include="src\Slider.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />

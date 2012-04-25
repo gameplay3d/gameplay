@@ -34,11 +34,6 @@ ParticleEmitter::ParticleEmitter(SpriteBatch* batch, unsigned int particleCountM
 
     _spriteBatch->getStateBlock()->setDepthWrite(false);
     _spriteBatch->getStateBlock()->setDepthTest(true);
-    /*
-    _spriteBatch->getStateBlock()->setBlend(true);
-    _spriteBatch->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
-    _spriteBatch->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
-    */
 }
 
 ParticleEmitter::~ParticleEmitter()

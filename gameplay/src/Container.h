@@ -158,7 +158,7 @@ protected:
      *
      * @param clip The clipping rectangle of this container's parent container.
      */
-    virtual void update(const Rectangle& clip);
+    virtual void update(const Rectangle& clip, const Vector2& offset);
 
     /**
      * Draws the themed border and background of this container and all its controls.
@@ -166,7 +166,7 @@ protected:
      * @param spriteBatch The sprite batch containing this container's border images.
      * @param clip The clipping rectangle of this container's parent container.
      */
-    void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
+    void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip, const Vector2& offset = Vector2::zero());
 
     /**
      * Draws the icons of all controls within this container.

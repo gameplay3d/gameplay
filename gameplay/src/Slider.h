@@ -149,7 +149,7 @@ protected:
      */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
-    void update(const Rectangle& clip);
+    void update(const Rectangle& clip, const Vector2& offset);
 
     float _min;
     float _max;
