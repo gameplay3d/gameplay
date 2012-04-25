@@ -297,14 +297,7 @@ void SpriteBatch::draw(float x, float y, float width, float height, float u1, fl
 
 void SpriteBatch::draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip)
 {
-    // Need to clip the rectangle given by { x, y, width, height } into clip by potentially:
-    //  - Moving x to the right.
-    //  - Moving y down.
-    //  - Moving width to the left.
-    //  - Moving height up.
-    //  - A combination of the above.
-    //  - Not drawing at all.
-    //
+    // Clip the rectangle given by { x, y, width, height } into clip.
     // We need to scale the uvs accordingly as we do this.
 
     // First check to see if we need to draw at all.
@@ -321,7 +314,9 @@ void SpriteBatch::draw(float x, float y, float width, float height, float u1, fl
     if (x < clip.x)
     {
         const float percent = (clip.x - x) / width;
+        const float dx = clip.x - x;
         x = clip.x;
+        width -= dx;
         u1 += uvWidth * percent;
     }
 
@@ -329,7 +324,9 @@ void SpriteBatch::draw(float x, float y, float width, float height, float u1, fl
     if (y < clip.y)
     {
         const float percent = (clip.y - y) / height;
+        const float dy = clip.y - y;
         y = clip.y;
+        height -= dy;
         v1 += uvHeight * percent;
     }
 

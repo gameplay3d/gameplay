@@ -24,6 +24,7 @@ class Control : public Ref, public AnimationTarget
     friend class AbsoluteLayout;
     friend class VerticalLayout;
     friend class FlowLayout;
+    friend class ScrollLayout;
 
 public:
 
@@ -731,14 +732,16 @@ protected:
      * properties, such as its text viewport.
      *
      * @param clip The clipping rectangle of this control's parent container.
+     * @param offset Layout-computed positioning offset to add to the control's position.
      */
-    virtual void update(const Rectangle& clip);
+    virtual void update(const Rectangle& clip, const Vector2& offset);
 
     /**
      * Draw the images associated with this control.
      *
      * @param spriteBatch The sprite batch containing this control's icons.
      * @param clip The clipping rectangle of this control's parent container.
+     * @param offset Layout-computed positioning offset to add to the control's position.
      */
     virtual void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
@@ -746,6 +749,7 @@ protected:
      * Draw this control's text.
      *
      * @param clip The clipping rectangle of this control's parent container.
+     * @param offset Layout-computed positioning offset to add to the control's position.
      */
     virtual void drawText(const Rectangle& clip);
 
@@ -777,6 +781,14 @@ protected:
      */
     static State getState(const char* state);
 
+    /**
+     * Get a ThemeImage from its ID, for a given state.
+     *
+     * @param id The ID of the image to retrieve.
+     * @param state The state to get this image from.
+     *
+     * @return The requested image, or NULL if none was found.
+     */
     Theme::ThemeImage* getImage(const char* id, State state);
 
     /**
@@ -792,7 +804,8 @@ protected:
     State _state;           // Determines overlay used during draw().
     Rectangle _bounds;      // Position, relative to parent container's clipping window, and desired size.
     Rectangle _clipBounds;  // The position and size of this control, relative to parent container's bounds, including border and padding, after clipping.
-    Rectangle _textBounds;  // The position and size of this control's text area, before clipping.  Used for text alignment.
+    Rectangle _absoluteBounds;
+    Rectangle _viewportBounds;
     Rectangle _clip;        // Clipping window of this control's content, after clipping.
     bool _dirty;
     bool _consumeTouchEvents;
@@ -850,8 +863,9 @@ private:
      *
      * @param spriteBatch The sprite batch containing this control's border images.
      * @param clip The clipping rectangle of this control's parent container.
+     * @param offset Layout-computed positioning offset to add to the control's position.
      */
-    virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
+    virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip, const Vector2& offset = Vector2::zero());
     
     bool _styleOverridden;
     Theme::Skin* _skin;

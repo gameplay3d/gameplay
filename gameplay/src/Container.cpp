@@ -2,7 +2,9 @@
 #include "Container.h"
 #include "Layout.h"
 #include "AbsoluteLayout.h"
+#include "FlowLayout.h"
 #include "VerticalLayout.h"
+#include "ScrollLayout.h"
 #include "Label.h"
 #include "Button.h"
 #include "CheckBox.h"
@@ -40,9 +42,13 @@ namespace gameplay
             layout = AbsoluteLayout::create();
             break;
         case Layout::LAYOUT_FLOW:
+            layout = FlowLayout::create();
             break;
         case Layout::LAYOUT_VERTICAL:
             layout = VerticalLayout::create();
+            break;
+        case Layout::LAYOUT_SCROLL:
+            layout = ScrollLayout::create();
             break;
         }
 
@@ -227,25 +233,28 @@ namespace gameplay
         return NULL;
     }
 
-    void Container::update(const Rectangle& clip)
+    void Container::update(const Rectangle& clip, const Vector2& offset)
     {
         // Update this container's viewport.
-        Control::update(clip);
+        Control::update(clip, offset);
 
         _layout->update(this);
     }
 
-    void Container::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
+    void Container::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip, const Vector2& offset)
     {
         // First draw our own border.
-        Control::drawBorder(spriteBatch, clip);
+        Control::drawBorder(spriteBatch, clip, offset);
 
         // Now call drawBorder on all controls within this container.
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
-            control->drawBorder(spriteBatch, _clip);
+            if (_layout->getType() == Layout::LAYOUT_SCROLL)
+                control->drawBorder(spriteBatch, _clip, ((ScrollLayout*)_layout)->_scrollPosition);
+            else
+                control->drawBorder(spriteBatch, _clip, Vector2::zero());
         }
     }
 
@@ -308,6 +317,12 @@ namespace gameplay
         float xPos = border.left + padding.left;
         float yPos = border.top + padding.top;
 
+        Vector2* offset = NULL;
+        if (_layout->getType() == Layout::LAYOUT_SCROLL)
+        {
+            offset = &((ScrollLayout*)_layout)->_scrollPosition;
+        }
+
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
@@ -317,16 +332,24 @@ namespace gameplay
                 continue;
             }
 
-            const Rectangle& bounds = control->getClipBounds();
+            const Rectangle& bounds = control->getBounds();
+            float boundsX = bounds.x;
+            float boundsY = bounds.y;
+            if (offset)
+            {
+                boundsX += offset->x;
+                boundsY += offset->y;
+            }
+
             if (control->getState() != Control::NORMAL ||
                 (evt == Touch::TOUCH_PRESS &&
-                 x >= xPos + bounds.x &&
-                 x <= xPos + bounds.x + bounds.width &&
-                 y >= yPos + bounds.y &&
-                 y <= yPos + bounds.y + bounds.height))
+                 x >= xPos + boundsX &&
+                 x <= xPos + boundsX + bounds.width &&
+                 y >= yPos + boundsY &&
+                 y <= yPos + boundsY + bounds.height))
             {
                 // Pass on the event's clip relative to the control.
-                eventConsumed |= control->touchEvent(evt, x - xPos - bounds.x, y - yPos - bounds.y, contactIndex);
+                eventConsumed |= control->touchEvent(evt, x - xPos - boundsX, y - yPos - boundsY, contactIndex);
             }
         }
 
@@ -343,6 +366,15 @@ namespace gameplay
         case Touch::TOUCH_RELEASE:
             setState(Control::NORMAL);
             break;
+        }
+
+        if (!eventConsumed)
+        {
+            // Pass the event on to the layout.
+            if (_layout->touchEvent(evt, x - xPos, y - yPos, contactIndex))
+            {
+                _dirty = true;
+            }
         }
 
         return (_consumeTouchEvents | eventConsumed);
@@ -391,6 +423,10 @@ namespace gameplay
         else if (layoutName == "LAYOUT_FLOW")
         {
             return Layout::LAYOUT_FLOW;
+        }
+        else if (layoutName == "LAYOUT_SCROLL")
+        {
+            return Layout::LAYOUT_SCROLL;
         }
         else
         {

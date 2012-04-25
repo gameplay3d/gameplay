@@ -19,6 +19,7 @@ namespace gameplay
     {
         Label* label = new Label();
         label->initialize(style, properties);
+        label->_consumeTouchEvents = false;
 
         return label;
     }
@@ -48,6 +49,8 @@ namespace gameplay
             eventFlags &= ~Listener::VALUE_CHANGED;
         }
 
+        _consumeTouchEvents = true;
+
         Control::addListener(listener, eventFlags);
     }
     
@@ -64,9 +67,11 @@ namespace gameplay
         return _text.c_str();
     }
 
-    void Label::update(const Rectangle& clip)
+    void Label::update(const Rectangle& clip, const Vector2& offset)
     {
-        Control::update(clip);
+        Control::update(clip, offset);
+
+        _textBounds.set(_viewportBounds);
 
         _font = getFont(_state);
         _textColor = getTextColor(_state);

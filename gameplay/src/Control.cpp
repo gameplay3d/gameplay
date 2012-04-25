@@ -74,29 +74,39 @@ namespace gameplay
         overrideThemedProperties(properties, STATE_ALL);
 
         // Override themed properties on specific states.
-        Properties* stateSpace = properties->getNextNamespace();
-        while (stateSpace != NULL)
+        Properties* innerSpace = properties->getNextNamespace();
+        while (innerSpace != NULL)
         {
-            std::string stateName(stateSpace->getNamespace());
-            std::transform(stateName.begin(), stateName.end(), stateName.begin(), (int(*)(int))toupper);
-            if (stateName == "STATENORMAL")
+            std::string spaceName(innerSpace->getNamespace());
+            std::transform(spaceName.begin(), spaceName.end(), spaceName.begin(), (int(*)(int))toupper);
+            if (spaceName == "STATENORMAL")
             {
-                overrideThemedProperties(stateSpace, NORMAL);
+                overrideThemedProperties(innerSpace, NORMAL);
             }
-            else if (stateName == "STATEFOCUS")
+            else if (spaceName == "STATEFOCUS")
             {
-                overrideThemedProperties(stateSpace, FOCUS);
+                overrideThemedProperties(innerSpace, FOCUS);
             }
-            else if (stateName == "STATEACTIVE")
+            else if (spaceName == "STATEACTIVE")
             {
-                overrideThemedProperties(stateSpace, ACTIVE);
+                overrideThemedProperties(innerSpace, ACTIVE);
             }
-            else if (stateName == "STATEDISABLED")
+            else if (spaceName == "STATEDISABLED")
             {
-                overrideThemedProperties(stateSpace, DISABLED);
+                overrideThemedProperties(innerSpace, DISABLED);
+            }
+            else if (spaceName == "MARGIN")
+            {
+                setMargin(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
+                    innerSpace->getFloat("left"), innerSpace->getFloat("right"));
+            }
+            else if (spaceName == "PADDING")
+            {
+                setPadding(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
+                    innerSpace->getFloat("left"), innerSpace->getFloat("right"));
             }
 
-            stateSpace = properties->getNextNamespace();
+            innerSpace = properties->getNextNamespace();
         }
     }
 
@@ -602,8 +612,8 @@ namespace gameplay
             notifyListeners(Listener::RELEASE);
 
             // Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
-            if (x > 0 && x <= _clipBounds.width &&
-                y > 0 && y <= _clipBounds.height)
+            if (x > 0 && x <= _bounds.width &&
+                y > 0 && y <= _bounds.height)
             {
                 notifyListeners(Listener::CLICK);
             }
@@ -633,37 +643,67 @@ namespace gameplay
         }
     }
 
-    void Control::update(const Rectangle& clip)
+    void Control::update(const Rectangle& clip, const Vector2& offset)
     {
-        // Calculate the bounds.
-        float x = clip.x + _bounds.x;
-        float y = clip.y + _bounds.y;
+        // Calculate the clipped bounds.
+        float x = _bounds.x + offset.x;
+        float y = _bounds.y + offset.y;
         float width = _bounds.width;
         float height = _bounds.height;
 
         float clipX2 = clip.x + clip.width;
-        float x2 = x + width;
+        float x2 = clip.x + x + width;
         if (x2 > clipX2)
-            width = clipX2 - x;
+            width -= x2 - clipX2;
 
         float clipY2 = clip.y + clip.height;
-        float y2 = y + height;
+        float y2 = clip.y + y + height;
         if (y2 > clipY2)
-            height = clipY2 - y;
+            height -= y2 - clipY2;
 
-        _clipBounds.set(_bounds.x, _bounds.y, width, height);
+        if (x < 0)
+        {
+            width += x;
+            x = -x;
+        }
+        else
+        {
+            x = 0;
+        }
 
-        // Calculate the clipping viewport.
+        if (y < 0)
+        {
+            height += y;
+            y = -y;
+        }
+        else
+        {
+            y = 0;
+        }
+
+        _clipBounds.set(x, y, width, height);
+
+        // Calculate the absolute bounds.
+        x = _bounds.x + offset.x + clip.x;
+        y = _bounds.y + offset.y + clip.y;
+
+        _absoluteBounds.set(x, y, _bounds.width, _bounds.height);
+
+        // Calculate the absolute viewport bounds.
+        // Absolute bounds minus border and padding.
         const Theme::Border& border = getBorder(_state);
         const Theme::Padding& padding = getPadding();
 
-        x +=  border.left + padding.left;
-        y +=  border.top + padding.top;
+        x += border.left + padding.left;
+        y += border.top + padding.top;
         width = _bounds.width - border.left - padding.left - border.right - padding.right;
         height = _bounds.height - border.top - padding.top - border.bottom - padding.bottom;
 
-        _textBounds.set(x, y, width, height);
+        _viewportBounds.set(x, y, width, height);
 
+        // Calculate the clip area.
+        // Absolute bounds, minus border and padding,
+        // clipped to the parent container's clip area.
         clipX2 = clip.x + clip.width;
         x2 = x + width;
         if (x2 > clipX2)
@@ -675,23 +715,30 @@ namespace gameplay
             height = clipY2 - y;
 
         if (x < clip.x)
+        {
+            float dx = clip.x - x;
+            width -= dx;
             x = clip.x;
+        }
 
         if (y < clip.y)
+        {
+            float dy = clip.y - y;
+            height -= dy;
             y = clip.y;
-
+        }
+ 
         _clip.set(x, y, width, height);
 
+        // Cache themed attributes for performance.
         _skin = getSkin(_state);
         _opacity = getOpacity(_state);
     }
 
-    void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
+    void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip, const Vector2& offset)
     {
         if (!_skin || _bounds.width <= 0 || _bounds.height <= 0)
             return;
-
-        Vector2 pos(clip.x + _bounds.x, clip.y + _bounds.y);
 
         // Get the border and background images for this control's current state.
         const Theme::UVs& topLeft = _skin->getUVs(Theme::Skin::TOP_LEFT);
@@ -712,34 +759,34 @@ namespace gameplay
 
         float midWidth = _bounds.width - border.left - border.right;
         float midHeight = _bounds.height - border.top - border.bottom;
-        float midX = pos.x + border.left;
-        float midY = pos.y + border.top;
-        float rightX = pos.x + _bounds.width - border.right;
-        float bottomY = pos.y + _bounds.height - border.bottom;
+        float midX = _absoluteBounds.x + border.left;
+        float midY = _absoluteBounds.y + border.top;
+        float rightX = _absoluteBounds.x + _bounds.width - border.right;
+        float bottomY = _absoluteBounds.y + _bounds.height - border.bottom;
 
         // Draw themed border sprites.
         if (!border.left && !border.right && !border.top && !border.bottom)
         {
             // No border, just draw the image.
-            spriteBatch->draw(pos.x, pos.y, _bounds.width, _bounds.height, center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+            spriteBatch->draw(_absoluteBounds.x, _absoluteBounds.y, _bounds.width, _bounds.height, center.u1, center.v1, center.u2, center.v2, skinColor, clip);
         }
         else
         {
             if (border.left && border.top)
-                spriteBatch->draw(pos.x, pos.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, skinColor, clip);
+                spriteBatch->draw(_absoluteBounds.x, _absoluteBounds.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, skinColor, clip);
             if (border.top)
-                spriteBatch->draw(pos.x + border.left, pos.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, skinColor, clip);
+                spriteBatch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, skinColor, clip);
             if (border.right && border.top)
-                spriteBatch->draw(rightX, pos.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, skinColor, clip);
+                spriteBatch->draw(rightX, _absoluteBounds.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, skinColor, clip);
             if (border.left)
-                spriteBatch->draw(pos.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, skinColor, clip);
+                spriteBatch->draw(_absoluteBounds.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, skinColor, clip);
             if (border.left && border.right && border.top && border.bottom)
-                spriteBatch->draw(pos.x + border.left, pos.y + border.top, _bounds.width - border.left - border.right, _bounds.height - border.top - border.bottom,
+                spriteBatch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y + border.top, _bounds.width - border.left - border.right, _bounds.height - border.top - border.bottom,
                     center.u1, center.v1, center.u2, center.v2, skinColor, clip);
             if (border.right)
                 spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, skinColor, clip);
             if (border.bottom && border.left)
-                spriteBatch->draw(pos.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, skinColor, clip);
+                spriteBatch->draw(_absoluteBounds.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, skinColor, clip);
             if (border.bottom)
                 spriteBatch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, skinColor, clip);
             if (border.bottom && border.right)
@@ -827,8 +874,8 @@ namespace gameplay
             value->setFloat(1, _bounds.y);
             break;
         case ANIMATE_SIZE:
-            value->setFloat(0, _clipBounds.width);
-            value->setFloat(1, _clipBounds.height);
+            value->setFloat(0, _bounds.width);
+            value->setFloat(1, _bounds.height);
             break;
         case ANIMATE_POSITION_X:
             value->setFloat(0, _bounds.x);
@@ -837,10 +884,10 @@ namespace gameplay
             value->setFloat(0, _bounds.y);
             break;
         case ANIMATE_SIZE_WIDTH:
-            value->setFloat(0, _clipBounds.width);
+            value->setFloat(0, _bounds.width);
             break;
         case ANIMATE_SIZE_HEIGHT:
-            value->setFloat(0, _clipBounds.height);
+            value->setFloat(0, _bounds.height);
             break;
         case ANIMATE_OPACITY:
         default:
@@ -915,9 +962,9 @@ namespace gameplay
         }
         else
         {
-            width = Curve::lerp(blendWeight, _clipBounds.width, width);
+            width = Curve::lerp(blendWeight, _bounds.width, width);
         }
-        _clipBounds.width = width;
+        _bounds.width = width;
         _dirty = true;
     }
 
@@ -929,9 +976,9 @@ namespace gameplay
         }
         else
         {
-            height = Curve::lerp(blendWeight, _clipBounds.height, height);
+            height = Curve::lerp(blendWeight, _bounds.height, height);
         }
-        _clipBounds.height = height;
+        _bounds.height = height;
         _dirty = true;
     }
 

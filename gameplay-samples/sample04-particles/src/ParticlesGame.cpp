@@ -449,6 +449,10 @@ void ParticlesGame::keyEvent(Keyboard::KeyEvent evt, int key)
         case Keyboard::KEY_ESCAPE:
             exit();
             break;
+        case Keyboard::KEY_B:
+            // Disable blending.
+            _particleEmitterNode->getParticleEmitter()->setTextureBlending(ParticleEmitter::BLEND_OPAQUE);
+            break;
         case Keyboard::KEY_W:
             _wDown = true;
             break;

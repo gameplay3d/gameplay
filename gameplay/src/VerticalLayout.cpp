@@ -71,7 +71,7 @@ namespace gameplay
 
             align(control, container);
 
-            const Rectangle& bounds = control->getClipBounds();
+            const Rectangle& bounds = control->getBounds();
             const Theme::Margin& margin = control->getMargin();
 
             yPosition += margin.top;
@@ -79,7 +79,7 @@ namespace gameplay
             control->setPosition(0, yPosition);
             if (control->isDirty() || control->isContainer())
             {
-                control->update(container->getClip());
+                control->update(container->getClip(), Vector2::zero());
             }
 
             yPosition += bounds.height + margin.bottom;
