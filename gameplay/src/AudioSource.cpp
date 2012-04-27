@@ -274,6 +274,11 @@ void AudioSource::play()
         }
     }
 #endif
+
+    // Add the source to the controller's list of currently playing sources.
+    AudioController* audioController = Game::getInstance()->getAudioController();
+    if (audioController->_playingSources.find(this) == audioController->_playingSources.end())
+        audioController->_playingSources.insert(this);
 }
 
 void AudioSource::pause()
@@ -290,6 +295,19 @@ void AudioSource::pause()
         }
     }
 #endif
+
+    // Remove the source from the controller's set of currently playing sources
+    // if the source is being paused by the user and not the controller itself.
+    AudioController* audioController = Game::getInstance()->getAudioController();
+    if (audioController->_pausingSource != this)
+    {
+        std::set<AudioSource*>::iterator iter = audioController->_playingSources.find(this);
+        if (iter != audioController->_playingSources.end())
+        {
+            WARN("\n\nRemoving an audio source from the list of playing sources...\n\n\n");
+            audioController->_playingSources.erase(iter);
+        }
+    }
 }
 
 void AudioSource::resume()
@@ -313,7 +331,13 @@ void AudioSource::stop()
             WARN("AudioSource::stop() failed to set player state.");
         }
     }
-#endif 
+#endif
+
+    // Remove the source from the controller's set of currently playing sources.
+    AudioController* audioController = Game::getInstance()->getAudioController();
+    std::set<AudioSource*>::iterator iter = audioController->_playingSources.find(this);
+    if (iter != audioController->_playingSources.end())
+        audioController->_playingSources.erase(iter);
 }
 
 void AudioSource::rewind()
