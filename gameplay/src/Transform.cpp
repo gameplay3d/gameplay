@@ -692,6 +692,7 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
         case ANIMATE_ROTATE:
         {
             applyAnimationValueRotation(value, 0, blendWeight);
+            dirty(DIRTY_ROTATION);
             break;
         }
         case ANIMATE_TRANSLATE:
@@ -717,14 +718,27 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
         case ANIMATE_ROTATE_TRANSLATE:
         {
             applyAnimationValueRotation(value, 0, blendWeight);
-            setTranslation(Curve::lerp(blendWeight, _translation.x, value->getFloat(4)), Curve::lerp(blendWeight, _translation.y, value->getFloat(5)), Curve::lerp(blendWeight, _translation.z, value->getFloat(6)));
+
+            _translation.x = Curve::lerp(blendWeight, _translation.x, value->getFloat(4));
+            _translation.y = Curve::lerp(blendWeight, _translation.y, value->getFloat(5));
+            _translation.z = Curve::lerp(blendWeight, _translation.z, value->getFloat(6));
+
+            dirty(DIRTY_ROTATION | DIRTY_TRANSLATION);
             break;
         }
         case ANIMATE_SCALE_ROTATE_TRANSLATE:
         {
-            setScale(Curve::lerp(blendWeight, _scale.x, value->getFloat(0)), Curve::lerp(blendWeight, _scale.y, value->getFloat(1)), Curve::lerp(blendWeight, _scale.z, value->getFloat(2)));
+            _scale.x = Curve::lerp(blendWeight, _scale.x, value->getFloat(0));
+            _scale.y = Curve::lerp(blendWeight, _scale.y, value->getFloat(1));
+            _scale.z = Curve::lerp(blendWeight, _scale.z, value->getFloat(2));
+            
             applyAnimationValueRotation(value, 3, blendWeight);
-            setTranslation(Curve::lerp(blendWeight, _translation.x, value->getFloat(7)), Curve::lerp(blendWeight, _translation.y, value->getFloat(8)), Curve::lerp(blendWeight, _translation.z, value->getFloat(9)));
+            
+            _translation.x = Curve::lerp(blendWeight, _translation.x, value->getFloat(7));
+            _translation.y = Curve::lerp(blendWeight, _translation.y, value->getFloat(8));
+            _translation.z = Curve::lerp(blendWeight, _translation.z, value->getFloat(9));
+
+            dirty(DIRTY_SCALE | DIRTY_ROTATION | DIRTY_TRANSLATION);
             break;
         }
         default:
@@ -786,9 +800,8 @@ void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const
 
 void Transform::applyAnimationValueRotation(AnimationValue* value, unsigned int index, float blendWeight)
 {
-    Quaternion q(value->getFloat(index), value->getFloat(index + 1), value->getFloat(index + 2), value->getFloat(index + 3));
-    Quaternion::slerp(_rotation, q, blendWeight, &q);
-    setRotation(q);
+    Quaternion::slerp(_rotation.x, _rotation.y, _rotation.z, _rotation.w, value->getFloat(index), value->getFloat(index + 1), value->getFloat(index + 2), value->getFloat(index + 3), blendWeight, 
+        &_rotation.x, &_rotation.y, &_rotation.z, &_rotation.w);
 }
 
 }
