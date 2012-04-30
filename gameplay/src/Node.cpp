@@ -866,10 +866,16 @@ Node* Node::cloneRecursive(NodeCloneContext &context) const
 {
     Node* copy = cloneSingleNode(context);
 
+    Node* lastChild = NULL;
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
     {
+        lastChild = child;
+    }
+    // Loop through the nodes backwards because addChild adds the node to the front.
+    for (Node* child = lastChild; child != NULL; child = child->getPreviousSibling())
+    {
         Node* childCopy = child->cloneRecursive(context);
-        copy->addChild(childCopy); // TODO: Does child order matter?
+        copy->addChild(childCopy);
         childCopy->release();
     }
     return copy;
@@ -880,8 +886,6 @@ void Node::cloneInto(Node* node, NodeCloneContext &context) const
     Transform::cloneInto(node, context);
 
     // TODO: Clone the rest of the node data.
-    //node->setCamera(getCamera());
-    //node->setLight(getLight());
 
     if (Camera* camera = getCamera())
     {
