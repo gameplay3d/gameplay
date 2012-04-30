@@ -134,9 +134,11 @@ private:
     /**
      * Clones the MeshSkin and the joints that it references.
      * 
+     * @param context The clone context.
+     * 
      * @return The newly created MeshSkin.
      */
-    MeshSkin* clone() const;
+    MeshSkin* clone(NodeCloneContext &context) const;
 
     /**
      * Sets the number of joints that can be stored in this skin.

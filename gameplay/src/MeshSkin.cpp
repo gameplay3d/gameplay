@@ -57,7 +57,7 @@ Joint* MeshSkin::getJoint(const char* id) const
     return NULL;
 }
 
-MeshSkin* MeshSkin::clone() const
+MeshSkin* MeshSkin::clone(NodeCloneContext &context) const
 {
     MeshSkin* skin = new MeshSkin();
     skin->_bindShape = _bindShape;
@@ -67,7 +67,18 @@ MeshSkin* MeshSkin::clone() const
         skin->setJointCount(jointCount);
 
         assert(skin->_rootNode == NULL);
-        skin->_rootNode = _rootNode->clone();
+        
+        // Check if the root node has already been cloned.
+        if (Node* rootNode = context.findClonedNode(_rootNode))
+        {
+            skin->_rootNode = rootNode;
+            rootNode->addRef();
+        }
+        else
+        {
+            skin->_rootNode = _rootNode->cloneRecursive(context);
+        }
+        
         Node* node = skin->_rootNode->findNode(_rootJoint->getId());
         assert(node);
         skin->_rootJoint = static_cast<Joint*>(node);
