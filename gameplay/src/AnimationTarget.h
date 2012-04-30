@@ -19,7 +19,6 @@ class AnimationTarget
 {
     friend class Animation;
     friend class AnimationClip;
-    friend class AnimationController;
 
 public:
 
