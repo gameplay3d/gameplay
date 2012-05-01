@@ -3,11 +3,11 @@
 // Declare our game instance
 ParticlesGame game;
 
-static std::string _particleFiles[] = 
+static const std::string _particleFiles[] = 
 {
-    "fire",
-    "smoke",
-    "explosion",
+    "res/fire.particle",
+    "res/smoke.particle",
+    "res/explosion.particle",
 };
 
 const static unsigned int _particleFilesCount = 3;
@@ -496,11 +496,7 @@ void ParticlesGame::loadEmitters()
 {
     for (unsigned int i = 0; i < _particleFilesCount; i++)
     {
-        std::string s = "res/";
-        s += _particleFiles[i].c_str();
-        s += ".particle";
-        _particleFiles[i] = s;
-        ParticleEmitter* emitter = ParticleEmitter::create(s.c_str());
+        ParticleEmitter* emitter = ParticleEmitter::create(_particleFiles[i].c_str());
         _particleEmitters.push_back(emitter);
     }
     _particleEmitterIndex = 0;

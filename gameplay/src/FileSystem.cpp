@@ -162,13 +162,16 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
     if (stat(fullPath.c_str(), &s) != 0)
     {
         AAsset* asset = AAssetManager_open(__assetManager, path, AASSET_MODE_RANDOM);
-        const void* data = AAsset_getBuffer(asset);
-        int length = AAsset_getLength(asset);
-        FILE* file = fopen(fullPath.c_str(), "wb");
+        if (asset)
+        {
+            const void* data = AAsset_getBuffer(asset);
+            int length = AAsset_getLength(asset);
+            FILE* file = fopen(fullPath.c_str(), "wb");
         
-        int ret = fwrite(data, sizeof(unsigned char), length, file);
-        assert(ret == length);
-        fclose(file);
+            int ret = fwrite(data, sizeof(unsigned char), length, file);
+            assert(ret == length);
+            fclose(file);
+        }
     }
 #endif
     
