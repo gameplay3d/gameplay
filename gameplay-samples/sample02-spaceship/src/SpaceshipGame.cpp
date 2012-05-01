@@ -249,6 +249,8 @@ void SpaceshipGame::update(long elapsedTime)
         // Stop the background track
         if (_backgroundSound->getState() != AudioSource::STOPPED)
             _backgroundSound->stop();
+
+        _throttle = 0.0f;
     }
 
     // Set initial force due to gravity
