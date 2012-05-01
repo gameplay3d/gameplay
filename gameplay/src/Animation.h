@@ -43,9 +43,13 @@ public:
     unsigned long getDuration() const;
 
     /**
-     * Creates an AnimationClip from an .animation file.
+     * Creates an AnimationClip from the Properties object defined at the specified URL, 
+     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional).
+     * 
+     * @param url The URL pointing to the Properties object containing the clip definitions.
      */
-    void createClips(const char* animationFile);
+    void createClips(const char* url);
     
     /**
      * Creates an AnimationClip from the Animation.

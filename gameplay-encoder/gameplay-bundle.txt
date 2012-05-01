@@ -137,6 +137,7 @@ Reference
 2->Node
                 type                    enum NodeType
                 transform               float[16]
+                parent_id               string
                 children                Node[]
                 camera                  Camera
                 light                   Light
