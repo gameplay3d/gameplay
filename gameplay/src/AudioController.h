@@ -65,7 +65,8 @@ private:
     SL3DDopplerItf _listenerDoppler;
     SL3DLocationItf _listenerLocation;
 #endif
-    static std::list<AudioSource*> _playingSources;     // List of currently running sources.
+    std::set<AudioSource*> _playingSources;
+    AudioSource* _pausingSource;
 };
 
 }
