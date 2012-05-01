@@ -286,6 +286,20 @@ unsigned int Node::getChildCount() const
 Node* Node::findNode(const char* id, bool recursive, bool exactMatch) const
 {
     assert(id);
+
+    // If the node has a model with a mesh skin, search the skin's hierarchy as well.
+    Node* rootNode = NULL;
+    if (_model != NULL && _model->getSkin() != NULL && (rootNode = _model->getSkin()->_rootNode) != NULL)
+    {
+        if ((exactMatch && rootNode->_id == id) || (!exactMatch && rootNode->_id.find(id) == 0))
+            return rootNode;
+        
+        Node* match = rootNode->findNode(id, true, exactMatch);
+        if (match)
+        {
+            return match;
+        }
+    }
     
     // Search immediate children first.
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())

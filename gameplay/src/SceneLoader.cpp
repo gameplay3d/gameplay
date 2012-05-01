@@ -453,7 +453,7 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                 {
                     if (sceneNode._exactMatch)
                     {
-                        Node* node = tmpBundle->loadNode(snp._id.c_str());
+                        Node* node = tmpBundle->loadNode(snp._id.c_str(), scene);
                         if (node)
                         {
                             node->setId(sceneNode._nodeID);
