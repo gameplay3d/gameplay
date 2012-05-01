@@ -28,13 +28,15 @@ class Material : public RenderState
 public:
 
     /**
-     * Creates a material from a specified file path.
-     *
-     * @param materialPath Path path to the material file.
+     * Creates a material using the data from the Properties object defined at the specified URL, 
+     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
+     * 
+     * @param url The URL pointing to the Properties object defining the material.
      * 
      * @return A new Material.
      */
-    static Material* create(const char* materialPath);
+    static Material* create(const char* url);
 
     /**
      * Creates a material from the specified properties object.

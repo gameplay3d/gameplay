@@ -142,11 +142,13 @@ public:
     };
 
     /**
-     * Creates a Properties runtime settings from a specified file path.
-     *
-     * @param filePath The file to create the properties from.
+     * Creates a Properties runtime settings from the specified URL, where the URL is of
+     * the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional).
+     * 
+     * @param url The URL to create the properties from.
      */
-    static Properties* create(const char* filePath);
+    static Properties* create(const char* url);
 
     /**
      * Destructor.
@@ -390,6 +392,9 @@ private:
 
     // Called by resolveInheritance().
     void mergeWith(Properties* overrides);
+
+    // Clones the Properties object.
+    Properties* clone();
 
     std::string _namespace;
     std::string _id;

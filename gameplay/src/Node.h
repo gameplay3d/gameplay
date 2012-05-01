@@ -520,11 +520,13 @@ public:
     PhysicsCollisionObject* setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters = NULL);
 
     /**
-     * Sets the physics collision object for this node using the definition in the given file.
+     * Sets the physics collision object for this node using the data from the Properties object defined at the specified URL, 
+     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
      * 
-     * @param filePath The path to the file that set the collision object definition.
+     * @param url The URL pointing to the Properties object defining the physics collision object.
      */
-    PhysicsCollisionObject* setCollisionObject(const char* filePath);
+    PhysicsCollisionObject* setCollisionObject(const char* url);
 
     /**
      * Sets the physics collision object for this node from the given properties object.
