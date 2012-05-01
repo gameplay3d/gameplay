@@ -407,13 +407,15 @@ private:
     ~Theme();
 
     /**
-     * Creates an instance of a Theme from a theme file.
-     *
-     * @param path Path to a theme file.
+     * Creates an instance of a Theme using the data from the Properties object defined at the specified URL, 
+     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
+     * 
+     * @param url The URL pointing to the Properties object defining the theme.
      *
      * @return A new Theme.
      */
-    static Theme* create(const char* path);
+    static Theme* create(const char* url);
 
     Theme::Style* getStyle(const char* id) const;
 
@@ -425,7 +427,7 @@ private:
 
     void lookUpSprites(const Properties* overlaySpace, ImageList** imageList, ThemeImage** mouseCursor, Skin** skin);
 
-    std::string _path;
+    std::string _url;
     Texture* _texture;
     SpriteBatch* _spriteBatch;
     std::vector<Style*> _styles;

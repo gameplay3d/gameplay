@@ -354,7 +354,7 @@ Model* Model::clone(NodeCloneContext &context)
     Model* model = Model::create(getMesh());
     if (getSkin())
     {
-        model->setSkin(getSkin()->clone());
+        model->setSkin(getSkin()->clone(context));
     }
     Material* materialClone = getMaterial()->clone(context);
     model->setMaterial(materialClone); // TODO: Don't forget material parts

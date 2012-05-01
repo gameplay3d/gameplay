@@ -34,13 +34,14 @@ public:
     };
 
     /**
-     * Create an audio source. This is used to instantiate an Audio Source. Currently only wav, au, raw and .audio files are supported.
-     *
-     * @param path The relative location on disk of the sound file or .audio file.
+     * Create an audio source. This is used to instantiate an Audio Source. Currently only wav, au, and raw files are supported.
+     * Alternately, a URL specifying a Properties object that defines an audio source can be used (where the URL is of the format
+     * "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>" and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional).
      * 
+     * @param url The relative location on disk of the sound file or a URL specifying a Properties object defining an audio source.
      * @return The newly created audio source, or NULL if an audio source cannot be created.
      */
-    static AudioSource* create(const char* path);
+    static AudioSource* create(const char* url);
 
     /**
      * Create an audio source from the given properties object.
@@ -147,17 +148,10 @@ public:
 
 private:
 
-#ifndef __ANDROID__
     /**
      * Constructor that takes an AudioBuffer.
      */
     AudioSource(AudioBuffer* buffer, ALuint source);
-#else
-    /**
-     * Constructor that takes an AudioBuffer.
-     */
-    AudioSource(AudioBuffer* buffer, const SLObjectItf& player);
-#endif
 
     /**
      * Destructor.
@@ -183,18 +177,7 @@ private:
      */
     AudioSource* clone(NodeCloneContext &context) const;
 
-#ifndef __ANDROID__
     ALuint _alSource;
-#else
-    SLObjectItf _playerObject;
-    SL3DDopplerItf _playerDoppler;
-    SL3DLocationItf _playerLocation;
-    SLPlayItf _playerPlay;
-    SLPitchItf _playerPitch;
-    SLSeekItf _playerSeek;
-    SLVolumeItf _playerVolume;
-    SLmillibel _maxVolume;
-#endif
     AudioBuffer* _buffer;
     bool _looped;
     float _gain;

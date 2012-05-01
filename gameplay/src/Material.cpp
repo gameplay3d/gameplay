@@ -32,19 +32,19 @@ Material::~Material()
     }
 }
 
-Material* Material::create(const char* materialPath)
+Material* Material::create(const char* url)
 {
-    assert(materialPath);
+    assert(url);
 
     // Load the material properties from file
-    Properties* properties = Properties::create(materialPath);
+    Properties* properties = Properties::create(url);
     assert(properties);
     if (properties == NULL)
     {
         return NULL;
     }
 
-    Material* material = create(properties->getNextNamespace());
+    Material* material = create((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
     SAFE_DELETE(properties);
 
     return material;

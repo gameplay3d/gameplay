@@ -54,17 +54,9 @@ private:
      */
     void update(long elapsedTime);
 
-#ifndef __ANDROID__
+
     ALCdevice* _alcDevice;
     ALCcontext* _alcContext;
-#else
-    SLObjectItf _engineObject;
-    SLEngineItf _engineEngine;
-    SLObjectItf _outputMixObject;
-    SLObjectItf _listenerObject;
-    SL3DDopplerItf _listenerDoppler;
-    SL3DLocationItf _listenerLocation;
-#endif
     std::set<AudioSource*> _playingSources;
     AudioSource* _pausingSource;
 };

@@ -19,17 +19,10 @@ class AudioBuffer : public Ref
 
 private:
     
-#ifndef __ANDROID__
     /**
      * Constructor.
      */
     AudioBuffer(const char* path, ALuint buffer);
-#else
-    /**
-     * Constructor.
-     */
-    AudioBuffer(const char* path);
-#endif
 
     /**
      * Destructor.
@@ -45,19 +38,12 @@ private:
      */
     static AudioBuffer* create(const char* path);
     
-#ifndef __ANDROID__
     static bool loadWav(FILE* file, ALuint buffer);
     
     static bool loadOgg(FILE* file, ALuint buffer);
-#endif
 
     std::string _filePath;
-#ifndef __ANDROID__
     ALuint _alBuffer;
-#else
-    SLDataLocator_AndroidFD _data;
-    SLDataFormat_MIME _mime;
-#endif
 };
 
 }
