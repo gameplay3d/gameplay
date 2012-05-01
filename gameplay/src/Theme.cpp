@@ -52,15 +52,15 @@ namespace gameplay
         }
     }
 
-    Theme* Theme::create(const char* path)
+    Theme* Theme::create(const char* url)
     {
-        assert(path);
+        assert(url);
 
         // Search theme cache first.
         for (unsigned int i = 0, count = __themeCache.size(); i < count; ++i)
         {
             Theme* t = __themeCache[i];
-            if (t->_path == path)
+            if (t->_url == url)
             {
                 // Found a match.
                 t->addRef();
@@ -70,7 +70,7 @@ namespace gameplay
         }
 
         // Load theme properties from file path.
-        Properties* properties = Properties::create(path);
+        Properties* properties = Properties::create(url);
         assert(properties);
         if (properties == NULL)
         {
@@ -78,7 +78,7 @@ namespace gameplay
         }
 
         // Check if the Properties is valid and has a valid namespace.
-        Properties* themeProperties = properties->getNextNamespace();
+        Properties* themeProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
         assert(themeProperties);
         if (!themeProperties || !(strcmp(themeProperties->getNamespace(), "theme") == 0))
         {
@@ -88,7 +88,7 @@ namespace gameplay
 
         // Create a new theme.
         Theme* theme = new Theme();
-        theme->_path = path;
+        theme->_url = url;
         
         // Parse the Properties object and set up the theme.
         const char* textureFile = themeProperties->getString("texture");

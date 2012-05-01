@@ -36,18 +36,18 @@ namespace gameplay
         }
     }
 
-    Form* Form::create(const char* path)
+    Form* Form::create(const char* url)
     {
         // Load Form from .form file.
-        assert(path);
+        assert(url);
 
-        Properties* properties = Properties::create(path);
+        Properties* properties = Properties::create(url);
         assert(properties);
         if (properties == NULL)
             return NULL;
 
         // Check if the Properties is valid and has a valid namespace.
-        Properties* formProperties = properties->getNextNamespace();
+        Properties* formProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
         assert(formProperties);
         if (!formProperties || !(strcmp(formProperties->getNamespace(), "form") == 0))
         {
