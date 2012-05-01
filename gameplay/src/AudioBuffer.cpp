@@ -2,26 +2,16 @@
 #include "AudioBuffer.h"
 #include "FileSystem.h"
 
-#ifdef __ANDROID__
-extern AAssetManager* __assetManager;
-#endif
-
 namespace gameplay
 {
 
 // Audio buffer cache
 static std::vector<AudioBuffer*> __buffers;
 
-#ifndef __ANDROID__
 AudioBuffer::AudioBuffer(const char* path, ALuint buffer)
     : _filePath(path), _alBuffer(buffer)
 {
 }
-#else
-AudioBuffer::AudioBuffer(const char* path) : _filePath(path)
-{
-}
-#endif
 
 AudioBuffer::~AudioBuffer()
 {
@@ -36,13 +26,11 @@ AudioBuffer::~AudioBuffer()
         }
     }
 
-#ifndef __ANDROID__
     if (_alBuffer)
     {
         alDeleteBuffers(1, &_alBuffer);
         _alBuffer = 0;
     }
-#endif
 }
 
 AudioBuffer* AudioBuffer::create(const char* path)
@@ -62,7 +50,6 @@ AudioBuffer* AudioBuffer::create(const char* path)
         }
     }
 
-#ifndef __ANDROID__
     ALuint alBuffer;
     ALCenum al_error;
 
@@ -130,58 +117,8 @@ cleanup:
     if (alBuffer)
         alDeleteBuffers(1, &alBuffer);
     return NULL;
-#else
-    // Get the file header in order to determine the type.
-    AAsset* asset = AAssetManager_open(__assetManager, path, AASSET_MODE_RANDOM);
-    char header[12];
-    if (AAsset_read(asset, header, 12) != 12)
-    {
-        LOG_ERROR_VARG("Invalid audio buffer file: %s", path);
-        return NULL;
-    }
-
-    // Get the file descriptor for the audio file.
-    off_t start, length;
-    int fd = AAsset_openFileDescriptor(asset, &start, &length);
-    if (fd < 0)
-    {
-        LOG_ERROR_VARG("Failed to open file descriptor for asset: %s", path);
-        return NULL;
-    }
-    AAsset_close(asset);
-    SLDataLocator_AndroidFD data = {SL_DATALOCATOR_ANDROIDFD, fd, start, length};
-
-    // Set the appropriate mime type information.
-    SLDataFormat_MIME mime;
-    mime.formatType = SL_DATAFORMAT_MIME;
-    std::string pathStr = path;
-    if (memcmp(header, "RIFF", 4) == 0)
-    {
-        mime.mimeType = (SLchar*)"audio/x-wav";
-        mime.containerType = SL_CONTAINERTYPE_WAV;
-    }
-    else if (memcmp(header, "OggS", 4) == 0)
-    {
-        mime.mimeType = (SLchar*)"application/ogg";
-        mime.containerType = SL_CONTAINERTYPE_OGG;
-    }
-    else
-    {
-        LOG_ERROR_VARG("Unsupported audio file: %s", path);
-    }
-
-    buffer = new AudioBuffer(path);
-    buffer->_data = data;
-    buffer->_mime = mime;
-
-    // Add the buffer to the cache.
-    __buffers.push_back(buffer);
-
-    return buffer;
-#endif
 }
 
-#ifndef __ANDROID__
 bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
 {
     unsigned char stream[12];
@@ -376,6 +313,5 @@ bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
 
     return true;
 }
-#endif
 
 }
