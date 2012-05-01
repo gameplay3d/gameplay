@@ -17,7 +17,7 @@
 						<toolChain id="com.qnx.qcc.toolChain.staticLib.debug.1686166742" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.545743487" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.158841187" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/gameplay/Device-Debug}" id="org.eclipse.cdt.build.core.internal.builder.159190287" superClass="org.eclipse.cdt.build.core.internal.builder"/>
+							<builder buildPath="${workspace_loc:/gameplay/Device-Debug}" id="org.eclipse.cdt.build.core.internal.builder.159190287" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="org.eclipse.cdt.build.core.internal.builder"/>
 							<tool id="com.qnx.qcc.tool.compiler.96907942" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.1765481355" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.security.311918799" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
@@ -25,8 +25,8 @@
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.2133604142" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/bullet/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/oggvorbis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.997142816" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -78,8 +78,8 @@
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1670164593" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/bullet/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/oggvorbis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1380846613" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -130,8 +130,8 @@
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1503059677" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/bullet/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/oggvorbis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.81809638" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -185,8 +185,8 @@
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1769677874" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/bullet/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/oggvorbis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.2007171407" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -238,8 +238,8 @@
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.847642559" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/bullet/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/oggvorbis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1038720310" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -291,8 +291,8 @@
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.513622172" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/bullet/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/oggvorbis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1961855927" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -345,8 +345,8 @@
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1685994750" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/bullet/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/../external-deps/oggvorbis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1658185881" superClass="com.qnx.qcc.inputType.compiler"/>

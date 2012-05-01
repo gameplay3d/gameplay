@@ -112,7 +112,7 @@ void CharacterGame::initializeGamepad()
         64.0f);
 
     // Add a single gamepad button
-	_gamepad->setButton(0,
+    _gamepad->setButton(0,
         Rectangle(getWidth() - scale * (176.0f), getHeight() - 176.0f * scale, 128.0f * scale, 128.0f * scale),
         Rectangle(40, 310, 160, 160),
         Rectangle(300, 310, 160, 160));
@@ -198,7 +198,7 @@ void CharacterGame::update(long elapsedTime)
         jump();
     }
 
-	if (_gamepad->isJoystickActive(0))
+    if (_gamepad->isJoystickActive(0))
     {
         // Get joystick direction
         direction = _gamepad->getJoystickState(0);
@@ -379,7 +379,7 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     // Send the touch event to the gamepad.
     _gamepad->touchEvent(evt, x, y, contactIndex);
 
-	if (!_gamepad->isJoystickActive(0) || contactIndex != _gamepad->getJoystickContactIndex(0))
+    if (!_gamepad->isJoystickActive(0) || contactIndex != _gamepad->getJoystickContactIndex(0))
     {
         switch (evt)
         {
