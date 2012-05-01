@@ -147,17 +147,10 @@ public:
 
 private:
 
-#ifndef __ANDROID__
     /**
      * Constructor that takes an AudioBuffer.
      */
     AudioSource(AudioBuffer* buffer, ALuint source);
-#else
-    /**
-     * Constructor that takes an AudioBuffer.
-     */
-    AudioSource(AudioBuffer* buffer, const SLObjectItf& player);
-#endif
 
     /**
      * Destructor.
@@ -183,18 +176,7 @@ private:
      */
     AudioSource* clone(NodeCloneContext &context) const;
 
-#ifndef __ANDROID__
     ALuint _alSource;
-#else
-    SLObjectItf _playerObject;
-    SL3DDopplerItf _playerDoppler;
-    SL3DLocationItf _playerLocation;
-    SLPlayItf _playerPlay;
-    SLPitchItf _playerPitch;
-    SLSeekItf _playerSeek;
-    SLVolumeItf _playerVolume;
-    SLmillibel _maxVolume;
-#endif
     AudioBuffer* _buffer;
     bool _looped;
     float _gain;
