@@ -6,7 +6,7 @@
 #include "Joint.h"
 
 #define BUNDLE_VERSION_MAJOR            1
-#define BUNDLE_VERSION_MINOR            1
+#define BUNDLE_VERSION_MINOR            2
 
 #define BUNDLE_TYPE_SCENE               1
 #define BUNDLE_TYPE_NODE                2
@@ -32,7 +32,7 @@ namespace gameplay
 static std::vector<Bundle*> __bundleCache;
 
 Bundle::Bundle(const char* path) :
-    _path(path), _referenceCount(0), _references(NULL), _file(NULL)
+    _path(path), _referenceCount(0), _references(NULL), _file(NULL), _trackedNodes(NULL)
 {
 }
 
@@ -412,17 +412,105 @@ Scene* Bundle::loadScene(const char* id)
 
 Node* Bundle::loadNode(const char* id)
 {
+    return loadNode(id, NULL);
+}
+
+Node* Bundle::loadNode(const char* id, Scene* sceneContext)
+{
     assert(id);
 
     clearLoadSession();
 
-    Node* node = loadNode(id, NULL, NULL);
-   
+    // Load the node and any referenced joints with node tracking enabled.
+    _trackedNodes = new std::map<std::string, Node*>();
+    Node* node = loadNode(id, sceneContext, NULL);
     if (node)
+        resolveJointReferences(sceneContext, node);
+
+    // Load all animations targeting any nodes or mesh skins under this node's hierarchy.
+    for (unsigned int i = 0; i < _referenceCount; i++)
     {
-        resolveJointReferences(NULL, node);
+        Reference* ref = &_references[i];
+        if (ref->type == BUNDLE_TYPE_ANIMATIONS)
+        {
+            if (fseek(_file, ref->offset, SEEK_SET) != 0)
+            {
+                LOG_ERROR_VARG("Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
+                SAFE_DELETE(_trackedNodes);
+                return NULL;
+            }
+            
+            // Read the number of animations in this object.
+            unsigned int animationCount;
+            if (!read(&animationCount))
+            {
+                LOG_ERROR_VARG("Failed to read %s for %s: %s", "animationCount", "Animations");
+                SAFE_DELETE(_trackedNodes);
+                return NULL;
+            }
+
+            for (unsigned int j = 0; j < animationCount; j++)
+            {
+                const std::string id = readString(_file);
+
+                // Read the number of animation channels in this animation.
+                unsigned int animationChannelCount;
+                if (!read(&animationChannelCount))
+                {
+                    LOG_ERROR_VARG("Failed to read %s for %s: %s", "animationChannelCount", "animation", id.c_str());
+                    SAFE_DELETE(_trackedNodes);
+                    return NULL;
+                }
+
+                Animation* animation = NULL;
+                for (unsigned int k = 0; k < animationChannelCount; k++)
+                {
+                    // read targetId
+                    std::string targetId = readString(_file);
+                    if (targetId.empty())
+                    {
+                        LOG_ERROR_VARG("Failed to read %s for %s: %s", "targetId", "animation", id.c_str());
+                        SAFE_DELETE(_trackedNodes);
+                        return NULL;
+                    }
+
+                    // If the target is one of the loaded nodes/joints, then load the animation.
+                    std::map<std::string, Node*>::iterator iter = _trackedNodes->find(targetId);
+                    if (iter != _trackedNodes->end())
+                    {
+                        // Read target attribute
+                        unsigned int targetAttribute;
+                        if (!read(&targetAttribute))
+                        {
+                            LOG_ERROR_VARG("Failed to read %s for %s: %s", "targetAttribute", "animation", id.c_str());
+                            SAFE_DELETE(_trackedNodes);
+                            return NULL;
+                        }
+
+                        AnimationTarget* target = iter->second;
+                        if (!target)
+                        {
+                            LOG_ERROR_VARG("Failed to read %s for %s: %s", "animation target", targetId.c_str(), id.c_str());
+                            SAFE_DELETE(_trackedNodes);
+                            return NULL;
+                        }
+
+                        animation = readAnimationChannelData(animation, id.c_str(), target, targetAttribute);
+                    }
+                    else
+                    {
+                        // Skip the animation channel (passing a target attribute of 
+                        // 0 causes the animation to not be created).
+                        unsigned int data;
+                        read(&data);
+                        readAnimationChannelData(NULL, id.c_str(), NULL, 0);
+                    }
+                }
+            }
+        }
     }
 
+    SAFE_DELETE(_trackedNodes);
     return node;
 }
 
@@ -458,6 +546,44 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext, Node* nodeContext)
     return node;
 }
 
+bool Bundle::skipNode()
+{
+    const char* id = getIdFromOffset();
+
+    // Skip the node's type.
+    unsigned int nodeType;
+    if (!read(&nodeType))
+    {
+        return false;
+    }
+    
+    // Skip over the node's transform and parent ID.
+    fseek(_file, sizeof(float) * 16, SEEK_CUR);
+    readString(_file);
+
+    // Skip over the node's children.
+    unsigned int childrenCount;
+    if (!read(&childrenCount))
+    {
+        return false;
+    }
+    else if (childrenCount > 0)
+    {
+        for (unsigned int i = 0; i < childrenCount; i++)
+        {
+            if (!skipNode())
+                return false;
+        }
+    }
+    
+    // Skip over the node's camera, light, and model attachments.
+    Camera* camera = readCamera(); SAFE_RELEASE(camera);
+    Light* light = readLight(); SAFE_RELEASE(light);
+    Model* model = readModel(id); SAFE_RELEASE(model);
+
+    return true;
+}
+
 Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
 {
     const char* id = getIdFromOffset();
@@ -482,6 +608,39 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
         return NULL;
     }
 
+    // If we are tracking nodes and it's not in the set yet, add it.
+    if (_trackedNodes)
+    {
+        std::map<std::string, Node*>::iterator iter = _trackedNodes->find(id);
+        if (iter != _trackedNodes->end())
+        {
+            SAFE_RELEASE(node);
+
+            // Skip over the node's transform and parent ID.
+            fseek(_file, sizeof(float) * 16, SEEK_CUR);
+            readString(_file);
+
+            // Skip over the node's children.
+            unsigned int childrenCount;
+            if (!read(&childrenCount))
+            {
+                return NULL;
+            }
+            else if (childrenCount > 0)
+            {
+                for (unsigned int i = 0; i < childrenCount; i++)
+                {
+                    if (!skipNode())
+                        return NULL;
+                }
+            }
+
+            return iter->second;
+        }
+        else
+            _trackedNodes->insert(std::make_pair(id, node));
+    }
+
     // If no loading context is set, set this node to the loading context
     if (sceneContext == NULL && nodeContext == NULL)
     {
@@ -497,6 +656,9 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
     }
     setTransform(transform, node);
 
+    // Skip over the parent ID.
+    readString(_file);
+
     // Read children
     unsigned int childrenCount;
     if (!read(&childrenCount))
@@ -509,7 +671,29 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
         // Read each child
         for (unsigned int i = 0; i < childrenCount; i++)
         {
-            Node* child = readNode(sceneContext, nodeContext);
+            // Search the passed in loading contexts (scene/node) first to see
+            // if we've already loaded this child node during this load session.
+            Node* child = NULL;
+            id = getIdFromOffset();
+
+            if (sceneContext)
+            {
+                child = sceneContext->findNode(id, true);
+            }
+            else if (nodeContext)
+            {
+                child = nodeContext->findNode(id, true);
+            }
+            
+            // If the child node wasn't already loaded, load it.
+            if (!child)
+                child = readNode(sceneContext, nodeContext);
+            else
+            {
+                // Otherwise, skip over its data in the file.
+                readNode(NULL, NULL);
+            }
+
             if (child)
             {
                 node->addChild(child);
@@ -535,7 +719,7 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
     }
 
     // Read model
-    Model* model = readModel(sceneContext, nodeContext, node->getId());
+    Model* model = readModel(node->getId());
     if (model)
     {
         node->setModel(model);
@@ -666,7 +850,7 @@ Light* Bundle::readLight()
     return light;
 }
 
-Model* Bundle::readModel(Scene* sceneContext, Node* nodeContext, const char* nodeId)
+Model* Bundle::readModel(const char* nodeId)
 {
     // Read mesh
     Mesh* mesh = NULL;
@@ -688,7 +872,7 @@ Model* Bundle::readModel(Scene* sceneContext, Node* nodeContext, const char* nod
             }
             if (hasSkin)
             {
-                MeshSkin* skin = readMeshSkin(sceneContext, nodeContext);
+                MeshSkin* skin = readMeshSkin();
                 if (skin)
                 {
                     model->setSkin(skin);
@@ -712,7 +896,7 @@ Model* Bundle::readModel(Scene* sceneContext, Node* nodeContext, const char* nod
     return NULL;
 }
 
-MeshSkin* Bundle::readMeshSkin(Scene* sceneContext, Node* nodeContext)
+MeshSkin* Bundle::readMeshSkin()
 {
     MeshSkin* meshSkin = new MeshSkin();
 
@@ -815,18 +999,62 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
         if (jointCount > 0)
         {
             Joint* rootJoint = skinData->skin->getJoint((unsigned int)0);
-            Node* parent = rootJoint->getParent();
-            while (parent)
+            Node* node = rootJoint;
+            Node* parent = node->getParent();
+            
+            while (true)
             {
-                if (skinData->skin->getJointIndex(static_cast<Joint*>(parent)) != -1)
+                if (parent)
                 {
-                    // Parent is a joint in the MeshSkin, so treat it as the new root
-                    rootJoint = static_cast<Joint*>(parent);
+                    if (skinData->skin->getJointIndex(static_cast<Joint*>(parent)) != -1)
+                    {
+                        // Parent is a joint in the MeshSkin, so treat it as the new root
+                        rootJoint = static_cast<Joint*>(parent);
+                    }
+
+                    node = parent;
+                    parent = node->getParent();
                 }
-                parent = parent->getParent();
+                else
+                {
+                    std::string nodeID = node->getId();
+
+                    while (true)
+                    {
+                        // Get the node's type.
+                        Reference* ref = find(nodeID.c_str());
+                        if (ref == NULL)
+                        {
+                            LOG_ERROR_VARG("No object with name '%s' in bundle '%s'.", nodeID.c_str(), _path.c_str());
+                            break;
+                        }
+
+                        // Seek to the current node in the file so we can get it's parent ID.
+                        seekTo(nodeID.c_str(), ref->type);
+
+                        // Skip over the node type (1 unsigned int) and transform (16 floats) and read the parent id.
+                        fseek(_file, sizeof(unsigned int) + sizeof(float)*16, SEEK_CUR);
+                        std::string parentID = readString(_file);
+                        
+                        if (parentID.size() > 0)
+                            nodeID = parentID;
+                        else
+                            break;
+                    }
+
+                    if (nodeID != rootJoint->getId())
+                        loadNode(nodeID.c_str(), sceneContext, nodeContext);
+
+                    break;
+                }
             }
+
             skinData->skin->setRootJoint(rootJoint);
         }
+
+        // Remove the joint hierarchy from the scene since it is owned by the mesh skin.
+        if (sceneContext)
+            sceneContext->removeNode(skinData->skin->_rootNode);
 
         // Done with this MeshSkinData entry
         SAFE_DELETE(_meshSkins[i]);
@@ -906,6 +1134,11 @@ Animation* Bundle::readAnimationChannel(Scene* scene, Animation* animation, cons
         }
     }
 
+    return readAnimationChannelData(animation, animationId, target, targetAttribute);
+}
+
+Animation* Bundle::readAnimationChannelData(Animation* animation, const char* id, AnimationTarget* target, unsigned int targetAttribute)
+{
     std::vector<unsigned long> keyTimes;
     std::vector<float> values;
     std::vector<float> tangentsIn;
@@ -964,7 +1197,7 @@ Animation* Bundle::readAnimationChannel(Scene* scene, Animation* animation, cons
         if (animation == NULL)
         {
             // TODO: This code currently assumes LINEAR only
-            animation = target->createAnimation(animationId, targetAttribute, keyTimesCount, &keyTimes[0], &values[0], Curve::LINEAR);
+            animation = target->createAnimation(id, targetAttribute, keyTimesCount, &keyTimes[0], &values[0], Curve::LINEAR);
         }
         else
         {
