@@ -50,11 +50,13 @@ class Form : public Container
 public:
 
     /**
-     * Create from properties file.
-     *
-     * @param path Path to the properties file to create a new form from.
+     * Creates a form using the data from the Properties object defined at the specified URL, 
+     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
+     * 
+     * @param url The URL pointing to the Properties object defining the animation data. 
      */
-    static Form* create(const char* path);
+    static Form* create(const char* url);
 
     /**
      * Get a form from its ID.

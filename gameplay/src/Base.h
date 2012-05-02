@@ -40,10 +40,6 @@ using std::min;
 using std::max;
 using std::modf;
 
-#ifdef __ANDROID__
-#include <android/asset_manager.h>
-#endif
-
 // Common
 #ifndef NULL
 #define NULL     0
@@ -163,12 +159,8 @@ extern void printError(const char* format, ...);
     #define NOMINMAX
 #endif
 
-// Audio (OpenAL, OpenSL, OggVorbis)
-#ifdef __ANDROID__
-#include <SLES/OpenSLES.h>
-#include <SLES/OpenSLES_Android.h>
-#else
-#ifdef __QNX__
+// Audio (OpenAL/Vorbis)
+#if defined (__QNX__) || defined(__ANDROID__)
 #include <AL/al.h>
 #include <AL/alc.h>
 #elif WIN32
@@ -179,7 +171,6 @@ extern void printError(const char* format, ...);
 #include <OpenAL/alc.h>
 #endif
 #include <vorbis/vorbisfile.h>
-#endif
 
 // Image
 #include <png.h>
