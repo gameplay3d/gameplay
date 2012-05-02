@@ -11,21 +11,21 @@ std::vector<SceneLoader::SceneAnimation> SceneLoader::_animations;
 std::vector<SceneLoader::SceneNode> SceneLoader::_sceneNodes;
 std::string SceneLoader::_path;
 
-Scene* SceneLoader::load(const char* filePath)
+Scene* SceneLoader::load(const char* url)
 {
-    assert(filePath);
+    assert(url);
 
     // Load the scene properties from file.
-    Properties* properties = Properties::create(filePath);
+    Properties* properties = Properties::create(url);
     assert(properties);
     if (properties == NULL)
     {
-        WARN_VARG("Failed to load scene file: %s", filePath);
+        WARN_VARG("Failed to load scene file: %s", url);
         return NULL;
     }
 
     // Check if the properties object is valid and has a valid namespace.
-    Properties* sceneProperties = properties->getNextNamespace();
+    Properties* sceneProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
     assert(sceneProperties);
     if (!sceneProperties || !(strcmp(sceneProperties->getNamespace(), "scene") == 0))
     {
@@ -36,6 +36,7 @@ Scene* SceneLoader::load(const char* filePath)
 
     // Get the path to the main GPB.
     _path = sceneProperties->getString("path");
+
     // Build the node URL/property and animation reference tables and load the referenced files.
     buildReferenceTables(sceneProperties);
     loadReferencedFiles();
@@ -452,7 +453,7 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                 {
                     if (sceneNode._exactMatch)
                     {
-                        Node* node = tmpBundle->loadNode(snp._id.c_str());
+                        Node* node = tmpBundle->loadNode(snp._id.c_str(), scene);
                         if (node)
                         {
                             node->setId(sceneNode._nodeID);
@@ -641,7 +642,7 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
         }
         else
         {
-            // TODO: Should we ignore these items? They could be used for generic properties file inheritence.
+            // TODO: Should we ignore these items? They could be used for generic properties file inheritance.
             WARN_VARG("Unsupported child namespace (of 'scene'): %s", ns->getNamespace());
         }
     }
@@ -772,8 +773,8 @@ Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
         return NULL;
     }
 
-    const char* sceneID = strlen(sceneProperties->getId()) == 0 ? NULL : sceneProperties->getId();
-    Scene* scene = bundle->loadScene(sceneID);
+    // TODO: Support loading a specific scene from a GPB file using the URL syntax (i.e. "res/scene.gpb#myscene").
+    Scene* scene = bundle->loadScene(NULL);
     if (!scene)
     {
         WARN_VARG("Failed to load scene from '%s'.", _path.c_str());

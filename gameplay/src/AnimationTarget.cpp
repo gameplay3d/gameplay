@@ -8,7 +8,7 @@ namespace gameplay
 {
 
 AnimationTarget::AnimationTarget()
-    : _targetType(SCALAR), _animationPropertyBitFlag(0x00), _animationChannels(NULL)
+    : _targetType(SCALAR), _animationChannels(NULL)
 {
 }
 
@@ -47,14 +47,14 @@ Animation* AnimationTarget::createAnimation(const char* id, int propertyId, unsi
     return animation;
 }
 
-Animation* AnimationTarget::createAnimation(const char* id, const char* animationFile)
+Animation* AnimationTarget::createAnimation(const char* id, const char* url)
 {
-    assert(animationFile);
+    assert(url);
     
-    Properties* p = Properties::create(animationFile);
+    Properties* p = Properties::create(url);
     assert(p);
 
-    Animation* animation = createAnimation(id, p->getNextNamespace());
+    Animation* animation = createAnimation(id, (strlen(p->getNamespace()) > 0) ? p : p->getNextNamespace());
 
     SAFE_DELETE(p);
 

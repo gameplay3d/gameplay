@@ -811,21 +811,7 @@ protected:
     std::list<TransformListener>* _listeners;
 
 private:
-    static const char ANIMATION_SCALE_X_BIT = 0x01; 
-    static const char ANIMATION_SCALE_Y_BIT = 0x02; 
-    static const char ANIMATION_SCALE_Z_BIT = 0x04; 
-    static const char ANIMATION_ROTATION_BIT = 0x08;  
-    static const char ANIMATION_TRANSLATION_X_BIT = 0x10; 
-    static const char ANIMATION_TRANSLATION_Y_BIT = 0x20; 
-    static const char ANIMATION_TRANSLATION_Z_BIT = 0x40; 
-
-    void applyAnimationValueScaleX(float sx, float blendWeight);
-    void applyAnimationValueScaleY(float sy, float blendWeight);
-    void applyAnimationValueScaleZ(float sz, float blendWeight);
-    void applyAnimationValueRotation(Quaternion* q, float blendWeight);
-    void applyAnimationValueTranslationX(float tx, float blendWeight);
-    void applyAnimationValueTranslationY(float ty, float blendWeight);
-    void applyAnimationValueTranslationZ(float tz, float blendWeight);
+    void applyAnimationValueRotation(AnimationValue* value, unsigned int index, float blendWeight);
 };
 
 }

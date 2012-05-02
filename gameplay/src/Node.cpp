@@ -286,6 +286,20 @@ unsigned int Node::getChildCount() const
 Node* Node::findNode(const char* id, bool recursive, bool exactMatch) const
 {
     assert(id);
+
+    // If the node has a model with a mesh skin, search the skin's hierarchy as well.
+    Node* rootNode = NULL;
+    if (_model != NULL && _model->getSkin() != NULL && (rootNode = _model->getSkin()->_rootNode) != NULL)
+    {
+        if ((exactMatch && rootNode->_id == id) || (!exactMatch && rootNode->_id.find(id) == 0))
+            return rootNode;
+        
+        Node* match = rootNode->findNode(id, true, exactMatch);
+        if (match)
+        {
+            return match;
+        }
+    }
     
     // Search immediate children first.
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
@@ -866,10 +880,16 @@ Node* Node::cloneRecursive(NodeCloneContext &context) const
 {
     Node* copy = cloneSingleNode(context);
 
+    Node* lastChild = NULL;
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
     {
+        lastChild = child;
+    }
+    // Loop through the nodes backwards because addChild adds the node to the front.
+    for (Node* child = lastChild; child != NULL; child = child->getPreviousSibling())
+    {
         Node* childCopy = child->cloneRecursive(context);
-        copy->addChild(childCopy); // TODO: Does child order matter?
+        copy->addChild(childCopy);
         childCopy->release();
     }
     return copy;
@@ -880,8 +900,6 @@ void Node::cloneInto(Node* node, NodeCloneContext &context) const
     Transform::cloneInto(node, context);
 
     // TODO: Clone the rest of the node data.
-    //node->setCamera(getCamera());
-    //node->setLight(getLight());
 
     if (Camera* camera = getCamera())
     {
@@ -994,18 +1012,18 @@ PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type ty
     return _collisionObject;
 }
 
-PhysicsCollisionObject* Node::setCollisionObject(const char* filePath)
+PhysicsCollisionObject* Node::setCollisionObject(const char* url)
 {
     // Load the collision object properties from file.
-    Properties* properties = Properties::create(filePath);
+    Properties* properties = Properties::create(url);
     assert(properties);
     if (properties == NULL)
     {
-        WARN_VARG("Failed to load collision object file: %s", filePath);
+        WARN_VARG("Failed to load collision object file: %s", url);
         return NULL;
     }
 
-    PhysicsCollisionObject* collisionObject = setCollisionObject(properties->getNextNamespace());
+    PhysicsCollisionObject* collisionObject = setCollisionObject((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
     SAFE_DELETE(properties);
 
     return collisionObject;
