@@ -9,7 +9,7 @@
 
     <!-- A universally unique application identifier. Must be unique across all BlackBerry Tablet OS applications.
          Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-    <id>com.rim.sample02_spaceship</id>
+    <id>org.gameplay3d.sample02_spaceship</id>
 
     <!-- The name that is displayed in the BlackBerry Tablet OS application installer. 
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
@@ -59,13 +59,13 @@
     <asset path="res//background.ogg">res/background.ogg</asset>
     <asset path="res/background.png">res/background.png</asset>
     <asset path="res/propulsion_glow.png">res/propulsion_glow.png</asset>
-    <asset path="${workspace_loc:/gameplay/res/logo_powered_white.png}">res/logo_powered_white.png</asset>
-    <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.fsh}">res/shaders/colored-specular.fsh</asset>
-    <asset path="${workspace_loc:/gameplay/res/shaders/colored-specular.vsh}">res/shaders/colored-specular.vsh</asset>
-    <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.fsh}">res/shaders/diffuse.fsh</asset>
-    <asset path="${workspace_loc:/gameplay/res/shaders/diffuse.vsh}">res/shaders/diffuse.vsh</asset>
-    <asset path="${workspace_loc:/gameplay/res/shaders/textured.fsh}">res/shaders/textured.fsh</asset>
-    <asset path="${workspace_loc:/gameplay/res/shaders/textured.vsh}">res/shaders/textured.vsh</asset>
+    <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
+    <asset path="../../gameplay/res/shaders/colored-specular.fsh">res/shaders/colored-specular.fsh</asset>
+    <asset path="../../gameplay/res/shaders/colored-specular.vsh">res/shaders/colored-specular.vsh</asset>
+    <asset path="../../gameplay/res/shaders/diffuse.fsh">res/shaders/diffuse.fsh</asset>
+    <asset path="../../gameplay/res/shaders/diffuse.vsh">res/shaders/diffuse.vsh</asset>
+    <asset path="../../gameplay/res/shaders/textured.fsh">res/shaders/textured.fsh</asset>
+    <asset path="../../gameplay/res/shaders/textured.vsh">res/shaders/textured.vsh</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.1898582830" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

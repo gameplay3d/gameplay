@@ -105,14 +105,14 @@ unsigned long Animation::getDuration() const
     return _duration;
 }
 
-void Animation::createClips(const char* animationFile)
+void Animation::createClips(const char* url)
 {
-    assert(animationFile);
+    assert(url);
 
-    Properties* properties = Properties::create(animationFile);
+    Properties* properties = Properties::create(url);
     assert(properties);
 
-    Properties* pAnimation = properties->getNextNamespace();
+    Properties* pAnimation = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
     assert(pAnimation);
     
     int frameCount = pAnimation->getInt("frameCount");
