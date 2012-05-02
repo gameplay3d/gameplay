@@ -13,7 +13,7 @@ static std::string _particleFiles[] =
 const static unsigned int _particleFilesCount = 3;
 const static float PARTICLE_SIZE_MAX[] = { 5.0f, 30.0f, 30.0f };
 const static float EMIT_RATE_MAX[] = { 500, 100, 100 };
-const float INPUT_SENSITIVITY = 1.0f;
+const float INPUT_SENSITIVITY = 0.05f;
 const Vector4 BACKGROUND_COLOR = Vector4::zero();
 
 ParticlesGame::ParticlesGame() : _scene(NULL)
@@ -22,6 +22,9 @@ ParticlesGame::ParticlesGame() : _scene(NULL)
 
 void ParticlesGame::initialize()
 {
+    // Disable VSync.
+    setVsync(false);
+
     // Display the gameplay splash screen for at least 1 second.
     displayScreen(this, &ParticlesGame::drawSplash, NULL, 1000L);
 
@@ -43,6 +46,8 @@ void ParticlesGame::initialize()
     cameraNode->setTranslation(0.0f, 0.0f, 40.0f);
     _scene->setActiveCamera(camera);
     SAFE_RELEASE(camera);
+
+    _font = Font::create("res/arial40.gpb");
 
     // Load preset emitters.
     loadEmitters();
@@ -347,28 +352,28 @@ void ParticlesGame::update(long elapsedTime)
     {
         Vector3 v = _scene->getActiveCamera()->getNode()->getForwardVector();
         v.normalize();
-        v.scale(INPUT_SENSITIVITY);
+        v.scale(INPUT_SENSITIVITY * elapsedTime);
         _scene->getActiveCamera()->getNode()->translate(v);
     }
     if (_aDown)
     {
         Vector3 v = _scene->getActiveCamera()->getNode()->getLeftVector();
         v.normalize();
-        v.scale(INPUT_SENSITIVITY);
+        v.scale(INPUT_SENSITIVITY * elapsedTime);
         _scene->getActiveCamera()->getNode()->translate(v);
     }
     if (_sDown)
     {
         Vector3 v = _scene->getActiveCamera()->getNode()->getBackVector();
         v.normalize();
-        v.scale(INPUT_SENSITIVITY);
+        v.scale(INPUT_SENSITIVITY * elapsedTime);
         _scene->getActiveCamera()->getNode()->translate(v);
     }
     if (_dDown)
     {
         Vector3 v = _scene->getActiveCamera()->getNode()->getRightVector();
         v.normalize();
-        v.scale(INPUT_SENSITIVITY);
+        v.scale(INPUT_SENSITIVITY * elapsedTime);
         _scene->getActiveCamera()->getNode()->translate(v);
     }
 
@@ -378,10 +383,10 @@ void ParticlesGame::update(long elapsedTime)
     char buffer[16];
     sprintf(buffer, "Particles: %u", emitter->getParticlesCount());
     _particlesCount->setText(buffer);
-
+    
     sprintf(buffer, "FPS: %u", getFrameRate());
     _fps->setText(buffer);
-
+    
     _form->update();
 }
 
@@ -390,10 +395,12 @@ void ParticlesGame::render(long elapsedTime)
     // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, BACKGROUND_COLOR, 1.0f, 0);
 
+    _form->draw();
+
     // Visit all the nodes in the scene for drawing
     _scene->visit(this, &ParticlesGame::drawScene, (void*)0);
 
-    _form->draw();
+    //drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
 }
 
 bool ParticlesGame::drawScene(Node* node, void* cookie)
@@ -618,4 +625,13 @@ void ParticlesGame::drawSplash(void* param)
     batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
     batch->end();
     SAFE_DELETE(batch);
+}
+
+void ParticlesGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
+{
+    char buffer[10];
+    sprintf(buffer, "%u", fps);
+    font->begin();
+    font->drawText(buffer, x, y, color, font->getSize());
+    font->end();
 }

@@ -56,10 +56,10 @@ namespace gameplay
     
     void Label::setText(const char* text)
     {
-        if (text)
-        {
-            _text = text;
-        }
+        assert(text);
+
+        _text = text;
+        _dirty = true;
     }
 
     const char* Label::getText()

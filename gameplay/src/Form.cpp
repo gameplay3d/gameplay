@@ -13,7 +13,7 @@ namespace gameplay
 {
     static std::vector<Form*> __forms;
 
-    Form::Form() : _theme(NULL), _quad(NULL), _node(NULL), _frameBuffer(NULL)
+    Form::Form() : _theme(NULL), _quad(NULL), _node(NULL), _frameBuffer(NULL), _spriteBatch(NULL)
     {
     }
 
@@ -97,6 +97,15 @@ namespace gameplay
         // Add all the controls to the form.
         form->addControls(theme, formProperties);
 
+        // Create the frame buffer.
+        form->_frameBuffer = FrameBuffer::create(form->_id.c_str());
+        RenderTarget* rt = RenderTarget::create(form->_id.c_str(), form->_bounds.width, form->_bounds.height);
+        form->_frameBuffer->setRenderTarget(rt);
+        SAFE_RELEASE(rt);
+
+        Matrix::createOrthographicOffCenter(0, form->_bounds.width, form->_bounds.height, 0, 0, 1, &form->_projectionMatrix);
+        form->_theme->setProjectionMatrix(form->_projectionMatrix);
+
         SAFE_DELETE(properties);
 
         __forms.push_back(form);
@@ -136,15 +145,11 @@ namespace gameplay
     void Form::setNode(Node* node)
     {
         _node = node;
-
-        if (_node && !_quad)
+        
+        if (_node)
         {
-            // Set this Form up to be 3D by initializing a quad, projection matrix and viewport.
+            // Set this Form up to be 3D by initializing a quad.
             setQuad(0.0f, 0.0f, _bounds.width, _bounds.height);
-
-            Matrix::createOrthographicOffCenter(0, _bounds.width, _bounds.height, 0, 0, 1, &_projectionMatrix);
-            _theme->setProjectionMatrix(_projectionMatrix);
-            
             _node->setModel(_quad);
         }
     }
@@ -167,42 +172,49 @@ namespace gameplay
         // On the other hand, if this form has not been set on a node it will render
         // directly to the display.
 
+        //
+
+        // Check whether this form has changed since the last call to draw()
+        // and if so, render into the framebuffer.
+        if (isDirty())
+        {
+            _frameBuffer->bind();
+
+            Game* game = Game::getInstance();
+            Rectangle prevViewport = game->getViewport();
+            game->setViewport(Rectangle(_bounds.x, _bounds.y, _bounds.width, _bounds.height));
+            //game->clear(Game::CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 0), 1, 0);
+
+            draw(_theme->getSpriteBatch(), _clip);
+
+            // Rebind the default framebuffer and game viewport.
+            FrameBuffer::bindDefault();
+
+            // restore the previous game viewport
+            game->setViewport(prevViewport);
+        }
+
         if (_node)
         {
-            // Check whether this form has changed since the last call to draw()
-            // and if so, render into the framebuffer.
-            if (isDirty())
-            {
-                _frameBuffer->bind();
-
-                Game* game = Game::getInstance();
-                Rectangle prevViewport = game->getViewport();
-                
-                game->setViewport(Rectangle(_bounds.x, _bounds.y, _bounds.width, _bounds.height));
-
-                draw(_theme->getSpriteBatch(), _clip);
-
-                // Rebind the default framebuffer and game viewport.
-                FrameBuffer::bindDefault();
-
-                // restore the previous game viewport
-                game->setViewport(prevViewport);
-            }
-
             _quad->draw();
         }
         else
         {
-            draw(_theme->getSpriteBatch(), _clip);
+            if (!_spriteBatch)
+            {
+                _spriteBatch = SpriteBatch::create(_frameBuffer->getRenderTarget()->getTexture());
+                _spriteBatch->setProjectionMatrix(_projectionMatrix);
+            }
+
+            _spriteBatch->begin();
+            _spriteBatch->draw(_bounds.x, _bounds.y, 0, _bounds.width, _bounds.height, 0, 1, 1, 0, Vector4::one());
+            _spriteBatch->end();
         }
     }
 
     void Form::draw(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
         std::vector<Control*>::const_iterator it;
-
-        // Batch for all themed border and background sprites.
-        spriteBatch->begin();
 
         // Batch each font individually.
         std::set<Font*>::const_iterator fontIter;
@@ -215,6 +227,9 @@ namespace gameplay
             }
         }
 
+        // Batch for all themed border and background sprites.
+        spriteBatch->begin();
+
         // Draw the form's border and background.
         // We don't pass the form's position to itself or it will be applied twice!
         Control::drawBorder(spriteBatch, Rectangle(0, 0, _bounds.width, _bounds.height));
@@ -223,13 +238,10 @@ namespace gameplay
         {
             Control* control = *it;
 
-            // Draw this control's border and background.
-            control->drawBorder(spriteBatch, clip);
-
-            // Add all themed foreground sprites (checkboxes etc.) to the same batch.
-            control->drawImages(spriteBatch, clip);
-
-            control->drawText(clip);
+            //if (control->isDirty())
+            {
+                control->draw(spriteBatch, clip);
+            }
         }
 
         // Done all batching.
@@ -265,20 +277,6 @@ namespace gameplay
 
         // Bind the WorldViewProjection matrix
         material->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
-
-        // Create a FrameBuffer if necessary.
-        if (!_frameBuffer)
-        {
-            _frameBuffer = FrameBuffer::create(_id.c_str());
-        }
-
-        // Use the FrameBuffer to texture the quad.
-        if (!_frameBuffer->getRenderTarget())
-        {
-            RenderTarget* rt = RenderTarget::create(_id.c_str(), _bounds.width, _bounds.height);
-            _frameBuffer->setRenderTarget(rt);
-            SAFE_RELEASE(rt);
-        }
 
         Texture::Sampler* sampler = Texture::Sampler::create(_frameBuffer->getRenderTarget()->getTexture());
         sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);

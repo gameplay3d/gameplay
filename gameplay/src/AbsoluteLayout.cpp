@@ -47,10 +47,9 @@ namespace gameplay
         {
             Control* control = controls[i];
 
-            align(control, container);
-
             if (control->isDirty() || control->isContainer())
             {
+                align(control, container);
                 control->update(container->getClip(), Vector2::zero());
             }
         }

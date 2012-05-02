@@ -160,6 +160,7 @@ private:
     Node* _node;                // Node for transforming this Form in world-space.
     FrameBuffer* _frameBuffer;  // FBO the Form is rendered into for texturing the quad.
     Matrix _projectionMatrix;   // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
+    SpriteBatch* _spriteBatch;
 };
 
 }

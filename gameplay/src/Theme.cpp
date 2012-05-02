@@ -430,7 +430,9 @@ namespace gameplay
         std::set<Font*>::const_iterator it;
         for (it = _fonts.begin(); it != _fonts.end(); ++it)
         {
-            (*it)->getSpriteBatch()->setProjectionMatrix(matrix);
+            Font* font = *it;
+            if (font)
+                font->getSpriteBatch()->setProjectionMatrix(matrix);
         }
     }
 
