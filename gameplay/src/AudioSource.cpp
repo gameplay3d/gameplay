@@ -9,8 +9,6 @@
 namespace gameplay
 {
 
-
-#ifndef __ANDROID__
 AudioSource::AudioSource(AudioBuffer* buffer, ALuint source) 
     : _alSource(source), _buffer(buffer), _looped(true), _gain(1.0f), _pitch(1.0f), _node(NULL)
 {
@@ -20,116 +18,42 @@ AudioSource::AudioSource(AudioBuffer* buffer, ALuint source)
     alSourcef(_alSource, AL_GAIN, _gain);
     alSourcefv(_alSource, AL_VELOCITY, (const ALfloat*)&_velocity);
 }
-#else
-AudioSource::AudioSource(AudioBuffer* buffer, const SLObjectItf& player)
-    : _playerObject(player), _playerDoppler(NULL), _playerLocation(NULL), _playerPlay(NULL), _playerPitch(NULL),
-    _playerSeek(NULL), _playerVolume(NULL), _buffer(buffer), _looped(true), _gain(1.0f), _pitch(1.0f), _node(NULL)
-{
-    // Get the different interfaces for the OpenSL audio player that we need.
-    SLresult result = (*_playerObject)->GetInterface(_playerObject, SL_IID_3DDOPPLER, &_playerDoppler);
-    if (result != SL_RESULT_SUCCESS)
-    {
-        WARN("AudioSource::AudioSource() - Failed to get 3D doppler interface for OpenSL audio player.");
-    }
-    
-    result = (*_playerObject)->GetInterface(_playerObject, SL_IID_3DLOCATION, &_playerLocation);
-    if (result != SL_RESULT_SUCCESS)
-    {
-        WARN("AudioSource::AudioSource() - Failed to get 3D location interface for OpenSL audio player.");
-    }
-
-    result = (*_playerObject)->GetInterface(_playerObject, SL_IID_PLAY, &_playerPlay);
-    if (result != SL_RESULT_SUCCESS)
-    {
-        WARN("AudioSource::AudioSource() - Failed to get play interface for OpenSL audio player.");
-    }
-
-    result = (*_playerObject)->GetInterface(_playerObject, SL_IID_PITCH, &_playerPitch);
-    if (result != SL_RESULT_SUCCESS)
-    {
-        WARN("AudioSource::AudioSource() - Failed to get rate pitch interface for OpenSL audio player.");
-    }
-
-    result = (*_playerObject)->GetInterface(_playerObject, SL_IID_SEEK, &_playerSeek);
-    if (result != SL_RESULT_SUCCESS)
-    {
-        WARN("AudioSource::AudioSource() - Failed to get seek interface for OpenSL audio player.");
-    }
-
-    result = (*_playerObject)->GetInterface(_playerObject, SL_IID_VOLUME, &_playerVolume);
-    if (result != SL_RESULT_SUCCESS)
-    {
-        WARN("AudioSource::AudioSource() - Failed to get volume interface for OpenSL audio player.");
-    }
-
-    // Get the max volume level (used to convert from our API's parameter to OpenSL's expected units).
-    if (_playerVolume)
-    {
-        result = (*_playerVolume)->GetMaxVolumeLevel(_playerVolume, &_maxVolume);
-        if (result != SL_RESULT_SUCCESS)
-        {
-            WARN("AudioSource::AudioSource() - Failed to get the max volume level for OpenSL audio player (needed for parameter conversion).");
-        }
-    }
-
-    setLooped(_looped);
-    setPitch(_pitch);
-    setGain(_gain);
-    setVelocity(_velocity);
-}
-#endif
 
 AudioSource::~AudioSource()
 {
-#ifndef __ANDROID__
     if (_alSource)
     {
         alDeleteSources(1, &_alSource);
         _alSource = 0;
     }
-#else
-    if (_playerObject)
-    {
-        (*_playerObject)->Destroy(_playerObject);
-        _playerObject = NULL;
-        _playerDoppler = NULL;
-        _playerLocation = NULL;
-        _playerPlay = NULL;
-        _playerPitch = NULL;
-        _playerSeek = NULL;
-        _playerVolume = NULL;
-    }
-#endif
-
     SAFE_RELEASE(_buffer);
 }
 
-AudioSource* AudioSource::create(const char* path)
+AudioSource* AudioSource::create(const char* url)
 {
-    assert(path);
+    assert(url);
 
     // Load from a .audio file.
-    std::string pathStr = path;
+    std::string pathStr = url;
     if (pathStr.find(".audio") != pathStr.npos)
     {
-        Properties* properties = Properties::create(path);
+        Properties* properties = Properties::create(url);
         assert(properties);
         if (properties == NULL)
         {
             return NULL;
         }
 
-        AudioSource* audioSource = create(properties->getNextNamespace());
+        AudioSource* audioSource = create((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
         SAFE_DELETE(properties);
         return audioSource;
     }
 
-    // Create an audio buffer from this path.
-    AudioBuffer* buffer = AudioBuffer::create(path);
+    // Create an audio buffer from this URL.
+    AudioBuffer* buffer = AudioBuffer::create(url);
     if (buffer == NULL)
         return NULL;
 
-#ifndef __ANDROID__
     // Load the audio source.
     ALuint alSource = 0;
 
@@ -142,31 +66,6 @@ AudioSource* AudioSource::create(const char* path)
     }
     
     return new AudioSource(buffer, alSource);
-#else
-    AudioController* audioController = Game::getInstance()->getAudioController();
-    SLDataLocator_OutputMix locator = {SL_DATALOCATOR_OUTPUTMIX, audioController->_outputMixObject};
-
-    SLDataSource dataSource = {&buffer->_data, &buffer->_mime};
-    SLDataSink dataSink = {&locator, NULL};
-
-    SLObjectItf player;
-    const SLInterfaceID interfaces[] = {SL_IID_3DDOPPLER, SL_IID_3DLOCATION, SL_IID_PLAY, SL_IID_PITCH, SL_IID_SEEK, SL_IID_VOLUME};
-    const SLboolean required[] = {SL_BOOLEAN_FALSE, SL_BOOLEAN_FALSE, SL_BOOLEAN_FALSE, SL_BOOLEAN_FALSE, SL_BOOLEAN_FALSE, SL_BOOLEAN_FALSE};
-    SLresult result = (*audioController->_engineEngine)->CreateAudioPlayer(audioController->_engineEngine, &player, &dataSource, &dataSink, 6, interfaces, required);
-    if (result != SL_RESULT_SUCCESS)
-    {
-        WARN("AudioSource::create - Failed to create OpenSL audio player.");
-        return NULL;
-    }
-
-    result = (*player)->Realize(player, SL_BOOLEAN_FALSE);
-    if (result != SL_RESULT_SUCCESS)
-    {
-        WARN("AudioSource::create - Failed to realize OpenSL audio player.");
-    }
-
-    return new AudioSource(buffer, player);
-#endif
 }
 
 AudioSource* AudioSource::create(Properties* properties)
@@ -218,7 +117,6 @@ AudioSource* AudioSource::create(Properties* properties)
 
 AudioSource::State AudioSource::getState() const
 {
-#ifndef __ANDROID__
     ALint state;
     alGetSourcei(_alSource, AL_SOURCE_STATE, &state);
 
@@ -233,47 +131,12 @@ AudioSource::State AudioSource::getState() const
         default:         
             return INITIAL;
     }
-#else
-    if (_playerPlay != NULL)
-    {
-        SLuint32 state;
-        SLresult result = (*_playerPlay)->GetPlayState(_playerPlay, &state);
-        if (result != SL_RESULT_SUCCESS)
-        {
-            WARN("AudioSource::getState() failed to get player state.");
-        }
-
-        switch (state)
-        {
-            case SL_PLAYSTATE_PLAYING:
-                return PLAYING;
-            case SL_PLAYSTATE_PAUSED:
-                return PAUSED;
-            case SL_PLAYSTATE_STOPPED:
-                return STOPPED;
-            default:
-                return INITIAL;
-        }
-    }
-#endif
-
     return INITIAL;
 }
 
 void AudioSource::play()
 {
-#ifndef __ANDROID__
     alSourcePlay(_alSource);
-#else
-    if (_playerPlay != NULL)
-    {
-        SLresult result = (*_playerPlay)->SetPlayState(_playerPlay, SL_PLAYSTATE_PLAYING);
-        if (result != SL_RESULT_SUCCESS)
-        {
-            WARN("AudioSource::play() failed to set player state.");
-        }
-    }
-#endif
 
     // Add the source to the controller's list of currently playing sources.
     AudioController* audioController = Game::getInstance()->getAudioController();
@@ -283,18 +146,7 @@ void AudioSource::play()
 
 void AudioSource::pause()
 {
-#ifndef __ANDROID__
     alSourcePause(_alSource);
-#else
-    if (_playerPlay != NULL)
-    {
-        SLresult result = (*_playerPlay)->SetPlayState(_playerPlay, SL_PLAYSTATE_PAUSED);
-        if (result != SL_RESULT_SUCCESS)
-        {
-            WARN("AudioSource::pause() failed to set player state.");
-        }
-    }
-#endif
 
     // Remove the source from the controller's set of currently playing sources
     // if the source is being paused by the user and not the controller itself.
@@ -320,18 +172,7 @@ void AudioSource::resume()
 
 void AudioSource::stop()
 {
-#ifndef __ANDROID__
     alSourceStop(_alSource);
-#else
-    if (_playerPlay != NULL)
-    {
-        SLresult result = (*_playerPlay)->SetPlayState(_playerPlay, SL_PLAYSTATE_STOPPED);
-        if (result != SL_RESULT_SUCCESS)
-        {
-            WARN("AudioSource::stop() failed to set player state.");
-        }
-    }
-#endif
 
     // Remove the source from the controller's set of currently playing sources.
     AudioController* audioController = Game::getInstance()->getAudioController();
@@ -342,18 +183,7 @@ void AudioSource::stop()
 
 void AudioSource::rewind()
 {
-#ifndef __ANDROID__
     alSourceRewind(_alSource);
-#else
-    if (_playerPlay != NULL)
-    {
-        SLresult result = (*_playerPlay)->SetMarkerPosition(_playerPlay, 0);
-        if (result != SL_RESULT_SUCCESS)
-        {
-            WARN("AudioSource::rewind() failed to set player marker position.");
-        }
-    }
-#endif
 }
 
 bool AudioSource::isLooped() const
@@ -363,8 +193,6 @@ bool AudioSource::isLooped() const
 
 void AudioSource::setLooped(bool looped)
 {
-#ifndef __ANDROID__
-     // Clear error state.
     alGetError();
     alSourcei(_alSource, AL_LOOPING, (looped) ? AL_TRUE : AL_FALSE);
 
@@ -373,17 +201,6 @@ void AudioSource::setLooped(bool looped)
     {
         LOG_ERROR_VARG("AudioSource::setLooped Error: %d", error);
     }
-#else
-    if (_playerSeek)
-    {
-        SLresult result = (*_playerSeek)->SetLoop(_playerSeek, looped, 0, SL_TIME_UNKNOWN);
-        if (result != SL_RESULT_SUCCESS)
-        {
-            WARN("AudioSource::setLooped() failed.");
-        }
-    }
-#endif
-
     _looped = looped;
 }
 
@@ -394,19 +211,7 @@ float AudioSource::getGain() const
 
 void AudioSource::setGain(float gain)
 {
-#ifndef __ANDROID__
     alSourcef(_alSource, AL_GAIN, gain);
-#else
-    if (_playerVolume)
-    {
-        SLmillibel volume = (gain < MATH_EPSILON) ? SL_MILLIBEL_MIN : (10.0f * log10(gain)) * 100;
-        SLresult result = (*_playerVolume)->SetVolumeLevel(_playerVolume, volume);
-        if (result != SL_RESULT_SUCCESS)
-        {
-            WARN("AudioSource::setGain() failed to set player gain.");
-        }
-    }
-#endif
     _gain = gain;
 }
 
@@ -417,18 +222,7 @@ float AudioSource::getPitch() const
 
 void AudioSource::setPitch(float pitch)
 {
-#ifndef __ANDROID__
     alSourcef(_alSource, AL_PITCH, pitch);
-#else
-    if (_playerPitch)
-    {
-        SLresult result = (*_playerPitch)->SetPitch(_playerPitch, (SLpermille)(pitch * 1000));
-        if (result != SL_RESULT_SUCCESS)
-        {
-            WARN("AudioSource::setPitch() failed to set player pitch.");
-        }
-    }
-#endif
     _pitch = pitch;
 }
 
@@ -439,22 +233,7 @@ const Vector3& AudioSource::getVelocity() const
 
 void AudioSource::setVelocity(const Vector3& velocity)
 {
-#ifndef __ANDROID__
     alSourcefv(_alSource, AL_VELOCITY, (ALfloat*)&velocity);
-#else
-    if (_playerDoppler)
-    {
-        SLVec3D v;
-        v.x = velocity.x;
-        v.y = velocity.y;
-        v.z = velocity.z;
-        SLresult result = (*_playerDoppler)->SetVelocityCartesian(_playerDoppler, &v);
-        if (result != SL_RESULT_SUCCESS)
-        {
-            WARN("AudioSource::setVelocity - failed to set velocity.");
-        }
-    }
-#endif
     _velocity = velocity;
 }
 
@@ -487,31 +266,15 @@ void AudioSource::setNode(Node* node)
 
 void AudioSource::transformChanged(Transform* transform, long cookie)
 {
-#ifndef __ANDROID__
     if (_node)
     {
         Vector3 translation = _node->getTranslationWorld();
         alSourcefv(_alSource, AL_POSITION, (const ALfloat*)&translation.x);
     }
-#else
-    if (_playerLocation)
-    {
-        SLVec3D position;
-        position.x = transform->getTranslationX();
-        position.y = transform->getTranslationY();
-        position.z = transform->getTranslationZ();
-        SLresult result = (*_playerLocation)->SetLocationCartesian(_playerLocation, &position);
-        if (result != SL_RESULT_SUCCESS)
-        {
-            WARN("AudioSource::transformChanged - failed to update location.");
-        }
-    }
-#endif
 }
 
 AudioSource* AudioSource::clone(NodeCloneContext &context) const
 {
-#ifndef __ANDROID__
     ALuint alSource = 0;
     alGenSources(1, &alSource);
     if (alGetError() != AL_NO_ERROR)
@@ -520,11 +283,7 @@ AudioSource* AudioSource::clone(NodeCloneContext &context) const
         return NULL;
     }
     AudioSource* audioClone = new AudioSource(_buffer, alSource);
-#else
-    // TODO: Implement cloning audio source for Android
-    AudioSource* audioClone = new AudioSource(_buffer, _playerObject);
 
-#endif
     _buffer->addRef();
     audioClone->setLooped(isLooped());
     audioClone->setGain(getGain());
