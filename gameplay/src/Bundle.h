@@ -16,6 +16,7 @@ namespace gameplay
 class Bundle : public Ref
 {
     friend class PhysicsController;
+    friend class SceneLoader;
 
 public:
 
@@ -206,6 +207,11 @@ private:
     Node* loadNode(const char* id, Scene* sceneContext, Node* nodeContext);
 
     /**
+     * Internal method for SceneLoader to load a node into a scene.
+     */
+    Node* loadNode(const char* id, Scene* sceneContext);
+
+    /**
      * Loads a mesh with the specified ID from the bundle.
      *
      * @param id The ID of the mesh to load.
@@ -321,7 +327,7 @@ private:
      * 
      * @return A pointer to a new model or NULL if there was an error.
      */
-    Model* readModel(Scene* sceneContext, Node* nodeContext, const char* nodeId);
+    Model* readModel(const char* nodeId);
 
     /**
      * Reads mesh data from the current file position.
@@ -346,7 +352,7 @@ private:
      *
      * @return A pointer to a new mesh skin or NULL if there was an error.
      */
-    MeshSkin* readMeshSkin(Scene* sceneContext, Node* nodeContext);
+    MeshSkin* readMeshSkin();
 
     /**
      * Reads an animation from the current file position.
@@ -374,6 +380,21 @@ private:
     Animation* readAnimationChannel(Scene* scene, Animation* animation, const char* animationId);
 
     /**
+     * Reads the animation channel data at the current file position into the given animation
+     * (with the given animation target and target attribute).
+     * 
+     * Note: this is used by #loadNode(const char*, Scene*) and #readAnimationChannel(Scene*, Animation*, const char*).
+     * 
+     * @param animation The animation to the load channel into.
+     * @param id The ID of the animation that this channel is loaded into.
+     * @param target The animation target.
+     * @param targetAttribute The target attribute being animated.
+     * 
+     * @return The animation that the channel was loaded into.
+     */
+    Animation* readAnimationChannelData(Animation* animation, const char* id, AnimationTarget* target, unsigned int targetAttribute);
+
+    /**
      * Sets the transformation matrix.
      *
      * @param values A pointer to array of 16 floats.
@@ -388,12 +409,20 @@ private:
 
 private:
 
+    /**
+     * Skips over a Node's data within a bundle.
+     *
+     * @return True if the Node was successfully skipped; false otherwise.
+     */
+    bool skipNode();
+
     std::string _path;
     unsigned int _referenceCount;
     Reference* _references;
     FILE* _file;
 
     std::vector<MeshSkinData*> _meshSkins;
+    std::map<std::string, Node*>* _trackedNodes;
 };
 
 }

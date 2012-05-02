@@ -20,6 +20,7 @@ class MeshSkin : public Transform::Listener
     friend class Bundle;
     friend class Model;
     friend class Joint;
+    friend class Node;
 
 public:
 

@@ -46,11 +46,40 @@ Properties::Properties(FILE* file, const char* name, const char* id, const char*
     rewind();
 }
 
-Properties* Properties::create(const char* filePath)
+Properties* Properties::create(const char* url)
 {
-    assert(filePath);
+    assert(url);
 
-    FILE* file = FileSystem::openFile(filePath, "rb");
+    if (!url || strlen(url) == 0)
+    {
+        WARN("Attempting to create a Properties object from an empty URL!");
+        return NULL;
+    }
+
+    std::string urlString = url;
+    std::string fileString;
+    std::vector<std::string> namespacePath;
+
+    // If the url references a specific namespace within the file,
+    // calculate the full namespace path to the final namespace.
+    unsigned int loc = urlString.rfind("#");
+    if (loc != urlString.npos)
+    {
+        fileString = urlString.substr(0, loc);
+        std::string namespacePathString = urlString.substr(loc + 1);
+        while ((loc = namespacePathString.find("/")) != namespacePathString.npos)
+        {
+            namespacePath.push_back(namespacePathString.substr(0, loc));
+            namespacePathString = namespacePathString.substr(loc + 1);
+        }
+        namespacePath.push_back(namespacePathString);
+    }
+    else
+    {
+        fileString = url;
+    }
+
+    FILE* file = FileSystem::openFile(fileString.c_str(), "rb");
     if (!file)
     {
         return NULL;
@@ -62,7 +91,46 @@ Properties* Properties::create(const char* filePath)
 
     fclose(file);
 
-    return properties;
+    // If the url references a specific namespace within the file,
+    // return the specified namespace or notify the user if it cannot be found.
+    Properties* originalProperties = properties;
+    if (namespacePath.size() > 0)
+    {
+        unsigned int size = namespacePath.size();
+        Properties* iter = properties->getNextNamespace();
+        for (unsigned int i = 0; i < size;)
+        {
+            while (true)
+            {
+                if (strcmp(iter->getId(), namespacePath[i].c_str()) == 0)
+                {
+                    if (i != size - 1)
+                    {
+                        properties = iter->getNextNamespace();
+                        iter = properties;
+                    }
+                    else
+                        properties = iter;
+
+                    i++;
+                    break;
+                }
+                
+                iter = properties->getNextNamespace();
+                if (iter == NULL)
+                {
+                    WARN_VARG("Failed to load Properties object from URL '%s'.", url);
+                    return NULL;
+                }
+            }
+        }
+
+        properties = properties->clone();
+        SAFE_DELETE(originalProperties);
+        return properties;
+    }
+    else
+        return properties;
 }
 
 void Properties::readProperties(FILE* file)
@@ -815,6 +883,26 @@ bool Properties::getColor(const char* name, Vector4* out) const
 
     out->set(0.0f, 0.0f, 0.0f, 0.0f);
     return false;
+}
+
+Properties* Properties::clone()
+{
+    Properties* p = new Properties();
+    
+    p->_namespace = _namespace;
+    p->_id = _id;
+    p->_parentID = _parentID;
+    p->_properties = _properties;
+    p->_propertiesItr = p->_properties.end();
+
+    unsigned int count = _namespaces.size();
+    for (unsigned int i = 0; i < count; i++)
+    {
+        p->_namespaces.push_back(_namespaces[i]->clone());
+    }
+    p->_namespacesItr = p->_namespaces.end();
+
+    return p;
 }
 
 }

@@ -154,13 +154,15 @@ public:
     };
 
     /**
-     * Creates a particle emitter from a .particle file.
-     *
-     * @param particleFile The .particle file to load.
+     * Creates a particle emitter using the data from the Properties object defined at the specified URL, 
+     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
+     * 
+     * @param url The URL pointing to the Properties object defining the particle emitter.
      * 
      * @return An initialized ParticleEmitter.
      */
-    static ParticleEmitter* create(const char* particleFile);
+    static ParticleEmitter* create(const char* url);
 
     /**
      * Creates a particle emitter from the specified properties object.
