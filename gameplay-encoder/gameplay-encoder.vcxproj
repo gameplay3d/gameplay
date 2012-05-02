@@ -98,6 +98,7 @@
     <ClInclude Include="src\VertexElement.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="gameplay-bundle.txt" />
     <None Include="src\Curve.inl" />
     <None Include="src\Quaternion.inl" />
     <None Include="src\Vector2.inl" />

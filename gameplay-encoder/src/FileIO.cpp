@@ -64,8 +64,12 @@ void write(const std::string& str, FILE* file)
 {
     // Write the length of the string
     write(str.size(), file);
-    // Write the array of characters of the string
-    write(str.c_str(), file);
+    
+    if (str.size() > 0)
+    {
+        // Write the array of characters of the string
+        write(str.c_str(), file);
+    }
 }
 
 void writeZero(FILE* file)

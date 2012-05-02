@@ -269,6 +269,7 @@
     <None Include="src\Curve.inl">
       <Filter>src</Filter>
     </None>
+    <None Include="gameplay-bundle.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">

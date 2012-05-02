@@ -82,18 +82,18 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
     return emitter;
 }
 
-ParticleEmitter* ParticleEmitter::create(const char* particleFile)
+ParticleEmitter* ParticleEmitter::create(const char* url)
 {
-    assert(particleFile);
+    assert(url);
 
-    Properties* properties = Properties::create(particleFile);
+    Properties* properties = Properties::create(url);
     if (!properties)
     {
-        LOG_ERROR_VARG("Error loading ParticleEmitter: Could not load file: %s", particleFile);
+        LOG_ERROR_VARG("Error loading ParticleEmitter: Could not load file: %s", url);
         return NULL;
     }
 
-    ParticleEmitter* particle = create(properties->getNextNamespace());
+    ParticleEmitter* particle = create((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
     SAFE_DELETE(properties);
 
     return particle;
