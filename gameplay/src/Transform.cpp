@@ -6,6 +6,9 @@
 namespace gameplay
 {
 
+int Transform::_suspendTransformChanged(0);
+std::vector<Transform*> Transform::_transformsChanged;
+
 Transform::Transform()
     : _matrixDirtyBits(0), _listeners(NULL)
 {
@@ -37,6 +40,45 @@ Transform::Transform(const Transform& copy)
 Transform::~Transform()
 {
     SAFE_DELETE(_listeners);
+}
+
+void Transform::suspendTransformChanged()
+{
+    _suspendTransformChanged++;
+}
+
+void Transform::resumeTransformChanged()
+{
+    if (_suspendTransformChanged == 0) // We haven't suspended transformChanged() calls, so do nothing.
+        return;
+    
+    if (--_suspendTransformChanged == 0)
+    {
+        // Call transformChanged() on all transforms in the list
+        unsigned int transformCount = _transformsChanged.size();
+        for (unsigned int i = 0; i < transformCount; i++)
+        {
+            Transform* t = _transformsChanged.at(i);
+            t->transformChanged();
+        }
+
+        // Go through list and reset DIRTY_NOTIFY bit. The list could potentially be larger here if the 
+        // transforms we were delaying calls to transformChanged() have any child nodes.
+        transformCount = _transformsChanged.size();
+        for (unsigned int i = 0; i < transformCount; i++)
+        {
+            Transform* t = _transformsChanged.at(i);
+            t->_matrixDirtyBits &= ~DIRTY_NOTIFY;
+        }
+
+        // empty list for next frame.
+        _transformsChanged.clear();
+    }
+}
+
+bool Transform::isTransformChangedSuspended()
+{
+    return (_suspendTransformChanged > 0);
 }
 
 const Matrix& Transform::getMatrix() const
@@ -74,7 +116,7 @@ const Matrix& Transform::getMatrix() const
             Matrix::createScale(_scale, &_matrix);
         }
 
-        _matrixDirtyBits = 0;
+        _matrixDirtyBits &= ~DIRTY_TRANSLATION & ~DIRTY_ROTATION & ~DIRTY_SCALE;
     }
 
     return _matrix;
@@ -692,7 +734,6 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
         case ANIMATE_ROTATE:
         {
             applyAnimationValueRotation(value, 0, blendWeight);
-            dirty(DIRTY_ROTATION);
             break;
         }
         case ANIMATE_TRANSLATE:
@@ -718,27 +759,14 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
         case ANIMATE_ROTATE_TRANSLATE:
         {
             applyAnimationValueRotation(value, 0, blendWeight);
-
-            _translation.x = Curve::lerp(blendWeight, _translation.x, value->getFloat(4));
-            _translation.y = Curve::lerp(blendWeight, _translation.y, value->getFloat(5));
-            _translation.z = Curve::lerp(blendWeight, _translation.z, value->getFloat(6));
-
-            dirty(DIRTY_ROTATION | DIRTY_TRANSLATION);
+            setTranslation(Curve::lerp(blendWeight, _translation.x, value->getFloat(4)), Curve::lerp(blendWeight, _translation.y, value->getFloat(5)), Curve::lerp(blendWeight, _translation.z, value->getFloat(6)));
             break;
         }
         case ANIMATE_SCALE_ROTATE_TRANSLATE:
         {
-            _scale.x = Curve::lerp(blendWeight, _scale.x, value->getFloat(0));
-            _scale.y = Curve::lerp(blendWeight, _scale.y, value->getFloat(1));
-            _scale.z = Curve::lerp(blendWeight, _scale.z, value->getFloat(2));
-            
+            setScale(Curve::lerp(blendWeight, _scale.x, value->getFloat(0)), Curve::lerp(blendWeight, _scale.y, value->getFloat(1)), Curve::lerp(blendWeight, _scale.z, value->getFloat(2)));
             applyAnimationValueRotation(value, 3, blendWeight);
-            
-            _translation.x = Curve::lerp(blendWeight, _translation.x, value->getFloat(7));
-            _translation.y = Curve::lerp(blendWeight, _translation.y, value->getFloat(8));
-            _translation.z = Curve::lerp(blendWeight, _translation.z, value->getFloat(9));
-
-            dirty(DIRTY_SCALE | DIRTY_ROTATION | DIRTY_TRANSLATION);
+            setTranslation(Curve::lerp(blendWeight, _translation.x, value->getFloat(7)), Curve::lerp(blendWeight, _translation.y, value->getFloat(8)), Curve::lerp(blendWeight, _translation.z, value->getFloat(9)));
             break;
         }
         default:
@@ -749,7 +777,28 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
 void Transform::dirty(char matrixDirtyBits)
 {
     _matrixDirtyBits |= matrixDirtyBits;
-    transformChanged();
+    if (isTransformChangedSuspended())
+    {
+        if (!isDirty(DIRTY_NOTIFY))
+        {
+            suspendTransformChange(this);
+        }
+    }
+    else
+    {
+        transformChanged();
+    }
+}
+
+bool Transform::isDirty(char matrixDirtyBits) const
+{
+    return (_matrixDirtyBits & matrixDirtyBits) == matrixDirtyBits;
+}
+
+void Transform::suspendTransformChange(Transform* transform)
+{
+    transform->_matrixDirtyBits |= DIRTY_NOTIFY;
+    _transformsChanged.push_back(transform);
 }
 
 void Transform::addListener(Transform::Listener* listener, long cookie)
@@ -802,6 +851,7 @@ void Transform::applyAnimationValueRotation(AnimationValue* value, unsigned int 
 {
     Quaternion::slerp(_rotation.x, _rotation.y, _rotation.z, _rotation.w, value->getFloat(index), value->getFloat(index + 1), value->getFloat(index + 2), value->getFloat(index + 3), blendWeight, 
         &_rotation.x, &_rotation.y, &_rotation.z, &_rotation.w);
+    dirty(DIRTY_ROTATION);
 }
 
 }
