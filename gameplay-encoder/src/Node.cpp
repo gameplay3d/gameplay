@@ -40,6 +40,10 @@ void Node::writeBinary(FILE* file)
     write(type, file);
 
     write(_transform.m, 16, file);
+
+    // write parent's id
+    write((_parent) ? _parent->getId() : std::string(), file);
+
     // children
     write(getChildCount(), file); // write number of children
     for (Node* node = getFirstChild(); node != NULL; node = node->getNextSibling())
