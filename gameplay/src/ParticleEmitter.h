@@ -685,6 +685,7 @@ private:
         float _size;
         unsigned int _frame;
         float _timeOnCurrentFrame;
+        bool _visible;
     };
 
     unsigned int _particleCountMax;

@@ -68,7 +68,7 @@ namespace gameplay
         while (i != end)
         {
             Control* control = controls.at(i);
-
+            
             align(control, container);
 
             const Rectangle& bounds = control->getBounds();
@@ -76,9 +76,9 @@ namespace gameplay
 
             yPosition += margin.top;
 
-            control->setPosition(0, yPosition);
             if (control->isDirty() || control->isContainer())
             {
+                control->setPosition(0, yPosition);
                 control->update(container->getClip(), Vector2::zero());
             }
 

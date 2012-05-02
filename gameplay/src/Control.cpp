@@ -735,7 +735,7 @@ namespace gameplay
         _opacity = getOpacity(_state);
     }
 
-    void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip, const Vector2& offset)
+    void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
         if (!_skin || _bounds.width <= 0 || _bounds.height <= 0)
             return;
@@ -800,6 +800,14 @@ namespace gameplay
 
     void Control::drawText(const Rectangle& position)
     {
+    }
+
+    void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip)
+    {
+        drawBorder(spriteBatch, clip);
+        drawImages(spriteBatch, clip);
+        drawText(clip);
+        _dirty = false;
     }
 
     bool Control::isDirty()

@@ -11,6 +11,7 @@
 #include "RadioButton.h"
 #include "Slider.h"
 #include "TextBox.h"
+#include "Game.h"
 
 namespace gameplay
 {
@@ -240,21 +241,21 @@ namespace gameplay
 
         _layout->update(this);
     }
-
+    /*
     void Container::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip, const Vector2& offset)
     {
         // First draw our own border.
-        Control::drawBorder(spriteBatch, clip, offset);
+        Control::drawBorder(spriteBatch, clip);
 
         // Now call drawBorder on all controls within this container.
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
-            if (_layout->getType() == Layout::LAYOUT_SCROLL)
-                control->drawBorder(spriteBatch, _clip, ((ScrollLayout*)_layout)->_scrollPosition);
-            else
-                control->drawBorder(spriteBatch, _clip, Vector2::zero());
+            if (control->isDirty())
+            {
+                control->drawBorder(spriteBatch, _clip);
+            }
         }
     }
 
@@ -264,7 +265,8 @@ namespace gameplay
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
-            control->drawImages(spriteBatch, _clip);
+            if (control->isDirty())
+                control->drawImages(spriteBatch, _clip);
         }
 
         _dirty = false;
@@ -276,7 +278,32 @@ namespace gameplay
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
-            control->drawText(_clip);
+            if (control->isDirty())
+                control->drawText(_clip);
+        }
+
+        _dirty = false;
+    }*/
+
+    void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip)
+    {
+        GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
+        GL_ASSERT( glClearColor(0, 0, 0, 1) );
+        GL_ASSERT( glScissor(_absoluteBounds.x, Game::getInstance()->getHeight() - _absoluteBounds.y - _absoluteBounds.height,
+            _absoluteBounds.width, _absoluteBounds.height) );
+        GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
+        GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
+
+        Control::drawBorder(spriteBatch, clip);
+
+        std::vector<Control*>::const_iterator it;
+        for (it = _controls.begin(); it < _controls.end(); it++)
+        {
+            Control* control = *it;
+            //if (control->isDirty())
+            {
+                control->draw(spriteBatch, _clip);
+            }
         }
 
         _dirty = false;

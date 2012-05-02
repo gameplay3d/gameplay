@@ -48,7 +48,7 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
     assert(textureFile);
 
     Texture* texture = NULL;
-    texture = Texture::create(textureFile, true);    
+    texture = Texture::create(textureFile, false);
 
     if (!texture)
     {
@@ -277,6 +277,7 @@ void ParticleEmitter::emit(unsigned int particleCount)
     for (unsigned int i = 0; i < particleCount; i++)
     {
         Particle* p = &_particles[_particleCount];
+        p->_visible = true;
 
         generateColor(_colorStart, _colorStartVar, &p->_colorStart);
         generateColor(_colorEnd, _colorEndVar, &p->_colorEnd);
@@ -779,13 +780,18 @@ void ParticleEmitter::update(long elapsedTime)
         // How many particles should we emit this frame?
         unsigned int emitCount = _timeRunning / _timePerEmission;
             
-        if ((int)_timePerEmission > 0)
+        if (emitCount)
         {
-            _timeRunning %= (int)_timePerEmission;
-        }
+            if ((int)_timePerEmission > 0)
+            {
+                _timeRunning %= (int)_timePerEmission;
+            }
 
-        emit(emitCount);
+            emit(emitCount);
+        }
     }
+
+    const Frustum& frustum = _node->getScene()->getActiveCamera()->getFrustum();
 
     // Now update all currently living particles.
     for (unsigned int particlesIndex = 0; particlesIndex < _particleCount; ++particlesIndex)
@@ -811,6 +817,12 @@ void ParticleEmitter::update(long elapsedTime)
             p->_position.x += p->_velocity.x * elapsedSecs;
             p->_position.y += p->_velocity.y * elapsedSecs;
             p->_position.z += p->_velocity.z * elapsedSecs;
+
+            if (!frustum.intersects(p->_position))
+            {
+                p->_visible = false;
+                continue;
+            }
 
             p->_angle += p->_rotationPerParticleSpeed * elapsedSecs;
 
@@ -891,10 +903,11 @@ void ParticleEmitter::draw()
         _spriteBatch->begin();
 
         // 2D Rotation.
-        Vector2 pivot(0.5f, 0.5f);
+        static const Vector2 pivot(0.5f, 0.5f);
 
         // 3D Rotation so that particles always face the camera.
         const Matrix& cameraWorldMatrix = _node->getScene()->getActiveCamera()->getNode()->getWorldMatrix();
+
         Vector3 right;
         cameraWorldMatrix.getRightVector(&right);
         Vector3 up;
@@ -904,9 +917,12 @@ void ParticleEmitter::draw()
         {
             Particle* p = &_particles[i];
 
-            _spriteBatch->draw(p->_position, right, up, p->_size, p->_size,
-                               _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3],
-                               p->_color, pivot, p->_angle);
+            if (p->_visible)
+            {
+                _spriteBatch->draw(p->_position, right, up, p->_size, p->_size,
+                                   _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3],
+                                   p->_color, pivot, p->_angle);
+            }
         }
 
         // Render.
