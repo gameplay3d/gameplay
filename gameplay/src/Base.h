@@ -51,31 +51,6 @@ namespace gameplay
 extern void printError(const char* format, ...);
 }
 
-#ifdef __ANDROID__
-#include <android/log.h>
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
-
-// System Errors
-#define LOG_ERROR(x) \
-    { \
-        LOGI(x); \
-        assert(#x == 0); \
-    }
-#define LOG_ERROR_VARG(x, ...) \
-    { \
-        LOGI(x, __VA_ARGS__); \
-        assert(#x == 0); \
-    }
-
-// Warning macro
-#ifdef WARN
-#undef WARN
-#endif
-#define WARN(x) LOGI(x)
-#define WARN_VARG(x, ...) LOGI(x, __VA_ARGS__)
-
-#else
-
 // System Errors
 #define LOG_ERROR(x) \
     { \
@@ -94,7 +69,6 @@ extern void printError(const char* format, ...);
 #endif
 #define WARN(x) printError(x)
 #define WARN_VARG(x, ...) printError(x, __VA_ARGS__)
-#endif
 
 // Bullet Physics
 #include <btBulletDynamicsCommon.h>
@@ -301,12 +275,6 @@ extern GLenum __gl_error_code;
     #pragma warning( disable : 4800 )
     #pragma warning( disable : 4996 )
 #endif
-
-#ifdef __ANDROID__
-#include <android_native_app_glue.h>
-extern void amain(struct android_app* state);
-#endif
-
 
 // Assert has special behavior on Windows (for Visual Studio).
 #ifdef WIN32
