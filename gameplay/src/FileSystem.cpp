@@ -11,6 +11,7 @@
 #endif
 
 #ifdef __ANDROID__
+#include <android/asset_manager.h>
 extern AAssetManager* __assetManager;
 #endif
 
