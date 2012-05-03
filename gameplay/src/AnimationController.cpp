@@ -96,6 +96,8 @@ void AnimationController::update(long elapsedTime)
     if (_state != RUNNING)
         return;
 
+    Transform::suspendTransformChanged();
+
     // Loop through running clips and call update() on them.
     std::list<AnimationClip*>::iterator clipIter = _runningClips.begin();
     while (clipIter != _runningClips.end())
@@ -119,6 +121,8 @@ void AnimationController::update(long elapsedTime)
             clipIter++;
         }
     }
+
+    Transform::resumeTransformChanged();
 
     if (_runningClips.empty())
         _state = IDLE;

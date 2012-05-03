@@ -601,11 +601,22 @@ void Node::transformChanged()
     _dirtyBits |= NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS;
 
     // Notify our children that their transform has also changed (since transforms are inherited).
-    Joint* rootJoint = NULL;
     Node* n = getFirstChild();
     while (n)
     {
-        n->transformChanged();
+        if (Transform::isTransformChangedSuspended())
+        {
+            // If the DIRTY_NOTIFY bit is not set
+            if (!n->isDirty(Transform::DIRTY_NOTIFY))
+            {
+                n->transformChanged();
+                suspendTransformChange(n);
+            }
+        }
+        else
+        {
+            n->transformChanged();
+        }
         n = n->getNextSibling();
     }
 
