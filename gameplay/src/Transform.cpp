@@ -6,6 +6,9 @@
 namespace gameplay
 {
 
+int Transform::_suspendTransformChanged(0);
+std::vector<Transform*> Transform::_transformsChanged;
+
 Transform::Transform()
     : _matrixDirtyBits(0), _listeners(NULL)
 {
@@ -37,6 +40,45 @@ Transform::Transform(const Transform& copy)
 Transform::~Transform()
 {
     SAFE_DELETE(_listeners);
+}
+
+void Transform::suspendTransformChanged()
+{
+    _suspendTransformChanged++;
+}
+
+void Transform::resumeTransformChanged()
+{
+    if (_suspendTransformChanged == 0) // We haven't suspended transformChanged() calls, so do nothing.
+        return;
+    
+    if (--_suspendTransformChanged == 0)
+    {
+        // Call transformChanged() on all transforms in the list
+        unsigned int transformCount = _transformsChanged.size();
+        for (unsigned int i = 0; i < transformCount; i++)
+        {
+            Transform* t = _transformsChanged.at(i);
+            t->transformChanged();
+        }
+
+        // Go through list and reset DIRTY_NOTIFY bit. The list could potentially be larger here if the 
+        // transforms we were delaying calls to transformChanged() have any child nodes.
+        transformCount = _transformsChanged.size();
+        for (unsigned int i = 0; i < transformCount; i++)
+        {
+            Transform* t = _transformsChanged.at(i);
+            t->_matrixDirtyBits &= ~DIRTY_NOTIFY;
+        }
+
+        // empty list for next frame.
+        _transformsChanged.clear();
+    }
+}
+
+bool Transform::isTransformChangedSuspended()
+{
+    return (_suspendTransformChanged > 0);
 }
 
 const Matrix& Transform::getMatrix() const
@@ -74,7 +116,7 @@ const Matrix& Transform::getMatrix() const
             Matrix::createScale(_scale, &_matrix);
         }
 
-        _matrixDirtyBits = 0;
+        _matrixDirtyBits &= ~DIRTY_TRANSLATION & ~DIRTY_ROTATION & ~DIRTY_SCALE;
     }
 
     return _matrix;
@@ -735,7 +777,28 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
 void Transform::dirty(char matrixDirtyBits)
 {
     _matrixDirtyBits |= matrixDirtyBits;
-    transformChanged();
+    if (isTransformChangedSuspended())
+    {
+        if (!isDirty(DIRTY_NOTIFY))
+        {
+            suspendTransformChange(this);
+        }
+    }
+    else
+    {
+        transformChanged();
+    }
+}
+
+bool Transform::isDirty(char matrixDirtyBits) const
+{
+    return (_matrixDirtyBits & matrixDirtyBits) == matrixDirtyBits;
+}
+
+void Transform::suspendTransformChange(Transform* transform)
+{
+    transform->_matrixDirtyBits |= DIRTY_NOTIFY;
+    _transformsChanged.push_back(transform);
 }
 
 void Transform::addListener(Transform::Listener* listener, long cookie)
@@ -786,9 +849,9 @@ void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const
 
 void Transform::applyAnimationValueRotation(AnimationValue* value, unsigned int index, float blendWeight)
 {
-    Quaternion q(value->getFloat(index), value->getFloat(index + 1), value->getFloat(index + 2), value->getFloat(index + 3));
-    Quaternion::slerp(_rotation, q, blendWeight, &q);
-    setRotation(q);
+    Quaternion::slerp(_rotation.x, _rotation.y, _rotation.z, _rotation.w, value->getFloat(index), value->getFloat(index + 1), value->getFloat(index + 2), value->getFloat(index + 3), blendWeight, 
+        &_rotation.x, &_rotation.y, &_rotation.z, &_rotation.w);
+    dirty(DIRTY_ROTATION);
 }
 
 }
