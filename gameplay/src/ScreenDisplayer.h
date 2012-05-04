@@ -14,6 +14,11 @@ class ScreenDisplayer
 {
 public:
 
+	/**
+	 * Constructor.
+	 */
+	ScreenDisplayer();
+
     /**
      * Displays a screen using the {@link Game#renderOnce} mechanism for at least the given amount of time.
      * 
@@ -34,6 +39,10 @@ private:
     long _time;
     long _startTime;
 };
+
+inline ScreenDisplayer::ScreenDisplayer() : _time(0L), _startTime(0L)
+{
+}
 
 template <typename T> void ScreenDisplayer::run(T* instance, void (T::*method) (void*), void* cookie, long time)
 {
