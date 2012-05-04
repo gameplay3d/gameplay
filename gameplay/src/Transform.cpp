@@ -52,7 +52,7 @@ void Transform::resumeTransformChanged()
     if (_suspendTransformChanged == 0) // We haven't suspended transformChanged() calls, so do nothing.
         return;
     
-    if (--_suspendTransformChanged == 0)
+    if (_suspendTransformChanged == 1)
     {
         // Call transformChanged() on all transforms in the list
         unsigned int transformCount = _transformsChanged.size();
@@ -74,6 +74,7 @@ void Transform::resumeTransformChanged()
         // empty list for next frame.
         _transformsChanged.clear();
     }
+    _suspendTransformChanged--;
 }
 
 bool Transform::isTransformChangedSuspended()
