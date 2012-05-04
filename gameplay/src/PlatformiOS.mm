@@ -845,11 +845,6 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
-int Platform::getOrientationAngle()
-{
-    return 0;
-}
-
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     [__appDelegate getAccelerometerPitch:pitch roll:roll];

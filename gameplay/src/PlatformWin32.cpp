@@ -637,11 +637,6 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
-int Platform::getOrientationAngle()
-{
-    return 0;
-}
-
 void Platform::setMultiTouch(bool enabled)
 {
 }
