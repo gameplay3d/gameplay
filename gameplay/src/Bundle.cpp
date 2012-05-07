@@ -1210,7 +1210,7 @@ Animation* Bundle::readAnimationChannelData(Animation* animation, const char* id
 
 Mesh* Bundle::loadMesh(const char* id)
 {
-    return loadMesh(id, false);
+    return loadMesh(id, NULL);
 }
 
 Mesh* Bundle::loadMesh(const char* id, const char* nodeId)

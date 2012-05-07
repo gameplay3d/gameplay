@@ -5,7 +5,7 @@
 namespace gameplay
 {
 
-void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, unsigned char* srcBitmap, int srcWidth, int srcHeight)
+static void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, unsigned char* srcBitmap, int srcWidth, int srcHeight)
 {
     // offset dst bitmap by x,y.
     dstBitmap +=  (x + (y * dstWidth));
@@ -18,17 +18,17 @@ void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, unsigned c
     }
 }
 
-void writeUint(FILE* fp, unsigned int i)
+static void writeUint(FILE* fp, unsigned int i)
 {
     fwrite(&i, sizeof(unsigned int), 1, fp);
 }
 
-void writeFloat(FILE* fp, float f)
+static void writeFloat(FILE* fp, float f)
 {
     fwrite(&f, sizeof(float), 1, fp);
 }
 
-void writeString(FILE* fp, const char* str)
+static void writeString(FILE* fp, const char* str)
 {
     unsigned int len = strlen(str);
     fwrite(&len, sizeof(unsigned int), 1, fp);
@@ -40,7 +40,6 @@ void writeString(FILE* fp, const char* str)
 
 int writeFont(const char* filename, unsigned int fontSize, const char* id, bool fontpreview = false)
 {
- 
     Glyph glyphArray[END_INDEX - START_INDEX];
     
     // Initialize freetype library.

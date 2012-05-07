@@ -13,7 +13,16 @@ namespace gameplay
  * 
  * @return The index in skeletonArray or -1 if not found.
  */
-int getIndex(const domInstance_controller::domSkeleton_Array& skeletonArray, const domNodeRef& node);
+static int getIndex(const domInstance_controller::domSkeleton_Array& skeletonArray, const domNodeRef& node);
+
+/**
+ * Gets all of the animation channels that target the given node and appends them to the list.
+ * 
+ * @param animationRef The animation to search in.
+ * @param nodeIdSlash The node's id with a forward slash appended to it.
+ * @param channels The list of channels to append to.
+ */
+static void getAnimationChannels(const domAnimationRef& animationRef, const std::string& nodeIdSlash, std::list<domChannelRef>& channels);
 
 void getAnimationChannels(const domNodeRef& node, std::list<domChannelRef>& channels)
 {
@@ -33,19 +42,7 @@ void getAnimationChannels(const domNodeRef& node, std::list<domChannelRef>& chan
         for (size_t j = 0; j < animationCount; ++j)
         {
             domAnimationRef& animationRef = animationArray.get(j);
-            domChannel_Array& channelArray = animationRef->getChannel_array();
-            size_t channelArrayCount = channelArray.getCount();
-            for (size_t k = 0; k < channelArrayCount; ++k)
-            {
-                domChannelRef& channel = channelArray.get(k);
-                const char* target = channel->getTarget();
-
-                // TODO: Assumes only one target per channel?
-                if (startsWith(target, nodeIdSlash.c_str()))
-                {
-                    channels.push_back(channel);
-                }
-            }
+            getAnimationChannels(animationRef, nodeIdSlash, channels);
         }
     }
 
@@ -262,6 +259,20 @@ const domInstance_controller::domSkeletonRef getSkeleton(const domInstance_contr
     return NULL;
 }
 
+domNode* getRootJointNode(const domSkin* skin)
+{
+    std::vector<std::string> names;
+    getJointNames(skin, names);
+    daeSIDResolver resolver(const_cast<domSkin*>(skin)->getDocument()->getDomRoot(), names[0].c_str());
+    daeElement* element = resolver.getElement();
+    if (element && element->getElementType() == COLLADA_TYPE::NODE)
+    {
+        domNode* node = daeSafeCast<domNode>(resolver.getElement());
+        return node;
+    }
+    return NULL;
+}
+
 bool equalKeyTimes(const domSource* s1, const domSource* s2)
 {
     // TODO: shouldn't assume that the source has a float array.
@@ -353,6 +364,31 @@ int getIndex(const domInstance_controller::domSkeleton_Array& skeletonArray, con
         }
     }
     return -1;
+}
+
+void getAnimationChannels(const domAnimationRef& animationRef, const std::string& nodeIdSlash, std::list<domChannelRef>& channels)
+{
+    domChannel_Array& channelArray = animationRef->getChannel_array();
+    size_t channelArrayCount = channelArray.getCount();
+    for (size_t k = 0; k < channelArrayCount; ++k)
+    {
+        domChannelRef& channel = channelArray.get(k);
+        const char* target = channel->getTarget();
+
+        // TODO: Assumes only one target per channel?
+        if (startsWith(target, nodeIdSlash.c_str()))
+        {
+            channels.push_back(channel);
+        }
+    }
+
+    // This animation could have child animations.
+    const domAnimation_Array& animationArray = animationRef->getAnimation_array();
+    unsigned int animationCount = animationArray.getCount();
+    for (size_t i = 0; i < animationCount; ++i)
+    {
+        getAnimationChannels(animationArray[i], nodeIdSlash, channels);
+    }
 }
 
 }
