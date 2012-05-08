@@ -104,8 +104,6 @@ private:
     Slider* _burstSize;
     Container* _position;
     Container* _particleProperties;
-    Label* _particlesCount;
-    Label* _fps;
 };
 
 #endif

@@ -119,7 +119,7 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                         // TODO: Move cursor to beginning of line.
                         // This only works for left alignment...
                         
-                        //_caretLocation.x = _clip.x;
+                        //_caretLocation.x = _viewportClipBounds.x;
                         //_dirty = true;
                         break;
                     }
@@ -306,7 +306,7 @@ void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
             Vector4 color = _caretImage->getColor();
             color.w *= _opacity;
 
-            spriteBatch->draw(_caretLocation.x - (region.width / 2.0f), _caretLocation.y, region.width, _fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _clip);
+            spriteBatch->draw(_caretLocation.x - (region.width / 2.0f), _caretLocation.y, region.width, _fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
         }
     }
 

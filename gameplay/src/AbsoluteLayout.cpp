@@ -5,53 +5,56 @@
 
 namespace gameplay
 {
-    static AbsoluteLayout* __instance;
 
-    AbsoluteLayout::AbsoluteLayout()
+static AbsoluteLayout* __instance;
+
+AbsoluteLayout::AbsoluteLayout()
+{
+}
+
+AbsoluteLayout::AbsoluteLayout(const AbsoluteLayout& copy)
+{
+}
+
+AbsoluteLayout::~AbsoluteLayout()
+{
+    __instance = NULL;
+}
+
+AbsoluteLayout* AbsoluteLayout::create()
+{
+    if (!__instance)
     {
+        __instance = new AbsoluteLayout();
+    }
+    else
+    {
+        __instance->addRef();
     }
 
-    AbsoluteLayout::AbsoluteLayout(const AbsoluteLayout& copy)
-    {
-    }
+    return __instance;
+}
 
-    AbsoluteLayout::~AbsoluteLayout()
-    {
-    }
+Layout::Type AbsoluteLayout::getType()
+{
+    return Layout::LAYOUT_ABSOLUTE;
+}
 
-    AbsoluteLayout* AbsoluteLayout::create()
+void AbsoluteLayout::update(const Container* container)
+{
+    // An AbsoluteLayout does nothing to modify the layout of Controls.
+    std::vector<Control*> controls = container->getControls();
+    unsigned int controlsCount = controls.size();
+    for (unsigned int i = 0; i < controlsCount; i++)
     {
-        if (!__instance)
+        Control* control = controls[i];
+
+        if (control->isDirty() || control->isContainer())
         {
-            __instance = new AbsoluteLayout();
-        }
-        else
-        {
-            __instance->addRef();
-        }
-
-        return __instance;
-    }
-
-    Layout::Type AbsoluteLayout::getType()
-    {
-        return Layout::LAYOUT_ABSOLUTE;
-    }
-
-    void AbsoluteLayout::update(const Container* container)
-    {
-        // An AbsoluteLayout does nothing to modify the layout of Controls.
-        std::vector<Control*> controls = container->getControls();
-        unsigned int controlsCount = controls.size();
-        for (unsigned int i = 0; i < controlsCount; i++)
-        {
-            Control* control = controls[i];
-
-            if (control->isDirty() || control->isContainer())
-            {
-                align(control, container);
-                control->update(container->getClip(), Vector2::zero());
-            }
+            align(control, container);
+            control->update(container->getClip(), Vector2::zero());
         }
     }
+}
+
 }

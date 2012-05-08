@@ -1,6 +1,6 @@
 #include "ParticlesGame.h"
 
-// Declare our game instance
+// Declare our game instance.
 ParticlesGame game;
 
 static const std::string _particleFiles[] = 
@@ -47,6 +47,7 @@ void ParticlesGame::initialize()
     _scene->setActiveCamera(camera);
     SAFE_RELEASE(camera);
 
+    // Create a font for drawing the framerate.
     _font = Font::create("res/arial40.gpb");
 
     // Load preset emitters.
@@ -56,6 +57,7 @@ void ParticlesGame::initialize()
     _form = Form::create("res/editor.form");
     _form->setConsumeTouchEvents(false);
 
+    // Store pointers to UI controls we care about.
     _startRed = (Slider*)_form->getControl("startRed");
     _startGreen = (Slider*)_form->getControl("startGreen");
     _startBlue = (Slider*)_form->getControl("startBlue");
@@ -82,9 +84,8 @@ void ParticlesGame::initialize()
     _zoomIn = (Button*)_form->getControl("zoomIn");
     _zoomOut = (Button*)_form->getControl("zoomOut");
     _burstSize = (Slider*)_form->getControl("burstSize");
-    _particlesCount = (Label*)_form->getControl("particlesCount");
-    _fps = (Label*)_form->getControl("FPS");
 
+    // Listen for UI events.
     _startRed->addListener(this, Listener::VALUE_CHANGED);
     _startGreen->addListener(this, Listener::VALUE_CHANGED);
     _startBlue->addListener(this, Listener::VALUE_CHANGED);
@@ -113,11 +114,13 @@ void ParticlesGame::initialize()
     _zoomOut->addListener(this, Listener::RELEASE);
     _burstSize->addListener(this, Listener::VALUE_CHANGED);
     
+    // Apply default emitter values to the UI.
     emitterChanged();
 }
 
 void ParticlesGame::controlEvent(Control* control, EventType evt)
 {
+    // Handle UI events.
     ParticleEmitter* emitter = _particleEmitterNode->getParticleEmitter();
     switch(evt)
     {
@@ -287,6 +290,7 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
     case Listener::CLICK:
         if (control == _reset)
         {
+            // Re-load the current emitter.
             _particleEmitterNode->setParticleEmitter(NULL);
             SAFE_RELEASE(emitter);
             emitter = _particleEmitters[_particleEmitterIndex] = ParticleEmitter::create(_particleFiles[_particleEmitterIndex].c_str());
@@ -294,11 +298,13 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         }
         else if (control == _emit)
         {
+            // Emit a burst of particles.
             unsigned int burstSize = (unsigned int)_burstSize->getValue();
             emitter->emit(burstSize);
         }
         else if (control == _minimize)
         {
+            // Minimize / maximize the right-side UI container.
             if (_particleProperties->getWidth() > 0)
             {
                 _particleProperties->setSize(0, 0);
@@ -377,30 +383,26 @@ void ParticlesGame::update(long elapsedTime)
         _scene->getActiveCamera()->getNode()->translate(v);
     }
 
-    ParticleEmitter* emitter = _particleEmitters[_particleEmitterIndex];
-    emitter->update(elapsedTime);
-
-    char buffer[16];
-    sprintf(buffer, "Particles: %u", emitter->getParticlesCount());
-    _particlesCount->setText(buffer);
+    // Update particles.
+    _particleEmitterNode->getParticleEmitter()->update(elapsedTime);
     
-    sprintf(buffer, "FPS: %u", getFrameRate());
-    _fps->setText(buffer);
-    
+    // Update UI.
     _form->update();
 }
 
 void ParticlesGame::render(long elapsedTime)
 {
-    // Clear the color and depth buffers
+    // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, BACKGROUND_COLOR, 1.0f, 0);
 
+    // Draw the UI.
     _form->draw();
 
-    // Visit all the nodes in the scene for drawing
+    // Visit all the nodes in the scene for drawing.
     _scene->visit(this, &ParticlesGame::drawScene, (void*)0);
 
-    //drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
+    // Draw the framerate and number of live particles.
+    drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, getHeight() - _font->getSize()*2, getFrameRate());
 }
 
 bool ParticlesGame::drawScene(Node* node, void* cookie)
@@ -415,6 +417,8 @@ bool ParticlesGame::drawScene(Node* node, void* cookie)
 
 void ParticlesGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
+    // Touch events that don't hit the UI
+    // allow the camera to rotate around the particle emitter.
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
@@ -518,15 +522,18 @@ void ParticlesGame::loadEmitters()
 
 void ParticlesGame::emitterChanged()
 {
+    // Stop the current emitter.
     ParticleEmitter* prevEmitter = _particleEmitterNode->getParticleEmitter();
     if (prevEmitter)
     {
         prevEmitter->stop();
     }
 
+    // Set the new emitter on the node.
     ParticleEmitter* emitter = _particleEmitters[_particleEmitterIndex];
     _particleEmitterNode->setParticleEmitter(emitter);
 
+    // The 'explosion' emitter is meant to emit in bursts.
     if (_particleEmitterIndex == 2)
     {
         _started->setChecked(false);
@@ -542,6 +549,7 @@ void ParticlesGame::emitterChanged()
     _scene->getActiveCamera()->getNode()->setTranslation(0.0f, 0.0f, 40.0f);
     _cameraParent->setIdentity();
 
+    // Set the values of UI controls to display the new emitter's settings.
     char txt[25];
 
     _startRed->setValue(emitter->getColorStart().x);
@@ -625,8 +633,8 @@ void ParticlesGame::drawSplash(void* param)
 
 void ParticlesGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
 {
-    char buffer[10];
-    sprintf(buffer, "%u", fps);
+    char buffer[30];
+    sprintf(buffer, "FPS: %u\nParticles: %u", fps, _particleEmitterNode->getParticleEmitter()->getParticlesCount());
     font->begin();
     font->drawText(buffer, x, y, color, font->getSize());
     font->end();

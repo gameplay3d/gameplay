@@ -245,7 +245,7 @@ private:
 
     Container(const Container& copy);
 
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip);
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
 };
 
 }
