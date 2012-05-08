@@ -5,56 +5,56 @@
 
 namespace gameplay
 {
-    static AbsoluteLayout* __instance;
 
-    AbsoluteLayout::AbsoluteLayout()
+static AbsoluteLayout* __instance;
+
+AbsoluteLayout::AbsoluteLayout()
+{
+}
+
+AbsoluteLayout::AbsoluteLayout(const AbsoluteLayout& copy)
+{
+}
+
+AbsoluteLayout::~AbsoluteLayout()
+{
+    __instance = NULL;
+}
+
+AbsoluteLayout* AbsoluteLayout::create()
+{
+    if (!__instance)
     {
+        __instance = new AbsoluteLayout();
+    }
+    else
+    {
+        __instance->addRef();
     }
 
-    AbsoluteLayout::AbsoluteLayout(const AbsoluteLayout& copy)
+    return __instance;
+}
+
+Layout::Type AbsoluteLayout::getType()
+{
+    return Layout::LAYOUT_ABSOLUTE;
+}
+
+void AbsoluteLayout::update(const Container* container)
+{
+    GP_ASSERT(container);
+
+    // An AbsoluteLayout does nothing to modify the layout of Controls.
+    std::vector<Control*> controls = container->getControls();
+    unsigned int controlsCount = controls.size();
+    for (unsigned int i = 0; i < controlsCount; i++)
     {
+        Control* control = controls[i];
+        GP_ASSERT(control);
+
+        align(control, container);
+        control->update(container->getClip(), Vector2::zero());
     }
+}
 
-    AbsoluteLayout::~AbsoluteLayout()
-    {
-    }
-
-    AbsoluteLayout* AbsoluteLayout::create()
-    {
-        if (!__instance)
-        {
-            __instance = new AbsoluteLayout();
-        }
-        else
-        {
-            __instance->addRef();
-        }
-
-        return __instance;
-    }
-
-    Layout::Type AbsoluteLayout::getType()
-    {
-        return Layout::LAYOUT_ABSOLUTE;
-    }
-
-    void AbsoluteLayout::update(const Container* container)
-    {
-        GP_ASSERT(container);
-
-        // An AbsoluteLayout does nothing to modify the layout of Controls.
-        std::vector<Control*> controls = container->getControls();
-        unsigned int controlsCount = controls.size();
-        for (unsigned int i = 0; i < controlsCount; i++)
-        {
-            Control* control = controls[i];
-            GP_ASSERT(control);
-
-            align(control, container);
-            if (control->isDirty() || control->isContainer())
-            {
-                control->update(container->getClip());
-            }
-        }
-    }
 }

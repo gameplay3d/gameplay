@@ -41,6 +41,7 @@ void CheckBox::setChecked(bool checked)
     if (_checked != checked)
     {
         _checked = checked;
+        _dirty = true;
         notifyListeners(Control::Listener::VALUE_CHANGED);
     }
 }
@@ -79,19 +80,11 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
         {
             if (_state == Control::ACTIVE)
             {
-                if (x > 0 && x <= _clipBounds.width &&
-                    y > 0 && y <= _clipBounds.height)
+                if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                    y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
                 {
                     _checked = !_checked;
                     notifyListeners(Control::Listener::VALUE_CHANGED);
-
-                    // Animate between icons.  Old fades out, then the new fades in.
-                    /*
-                    AnimationController* animationController = Game::getInstance()->getAnimationController();
-                    float from[1] = { 1.0f };
-                    float to[1] = { 0.0f };
-                    animationController->createAnimationFromTo("CheckBox::toggle", this, CheckBox::ANIMATE_SPRITE_ALPHA, from, to, Curve::QUADRATIC_IN_OUT, 200L);
-                    */
                 }
             }
         }
@@ -101,9 +94,9 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     return Button::touchEvent(evt, x, y, contactIndex);
 }
 
-void CheckBox::update(const Rectangle& clip)
+void CheckBox::update(const Rectangle& clip, const Vector2& offset)
 {
-    Label::update(clip);
+    Label::update(clip, offset);
 
     Vector2 size;
     if (_imageSize.isZero())
@@ -145,8 +138,6 @@ void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 
     // Left, v-center.
     // TODO: Set an alignment for icons.
-    const Theme::Border& border = getBorder(_state);
-    const Theme::Padding padding = getPadding();
     
     const Rectangle& region = _image->getRegion();
     const Theme::UVs& uvs = _image->getUVs();
@@ -163,10 +154,9 @@ void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
         size.set(_imageSize);
     }
 
-    Vector2 pos(clip.x + _bounds.x + border.left + padding.left,
-        clip.y + _bounds.y + (_clipBounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
+    Vector2 pos(_viewportBounds.x, _viewportBounds.y + _viewportBounds.height * 0.5f - size.y * 0.5f);
 
-    spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _clip);
+    spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
 }
 
 }

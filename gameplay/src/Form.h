@@ -157,11 +157,18 @@ private:
      */
     static void keyEventInternal(Keyboard::KeyEvent evt, int key);
 
+    static int nextHighestPowerOfTwo(int x);
+
     Theme* _theme;              // The Theme applied to this Form.
     Model* _quad;               // Quad for rendering this Form in world-space.
     Node* _node;                // Node for transforming this Form in world-space.
     FrameBuffer* _frameBuffer;  // FBO the Form is rendered into for texturing the quad.
     Matrix _projectionMatrix;   // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
+    Matrix _defaultProjectionMatrix;
+    SpriteBatch* _spriteBatch;
+
+    float _u2;
+    float _v1;
 };
 
 }
