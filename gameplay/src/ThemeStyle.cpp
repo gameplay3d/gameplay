@@ -27,6 +27,7 @@ Theme::Style::Style(const Style& copy)
 
     for (int i = 0; i < OVERLAY_MAX; i++)
     {
+        GP_ASSERT(copy._overlays[i]);
         _overlays[i] = new Theme::Style::Overlay(*copy._overlays[i]);
     }
 }
@@ -41,7 +42,7 @@ Theme::Style::~Style()
     
 const char* Theme::Style::getId() const
 {
-    return _id.data();
+    return _id.c_str();
 }
 
 Theme::Style::Overlay* Theme::Style::getOverlay(OverlayType overlayType) const
@@ -177,7 +178,7 @@ const Vector4& Theme::Style::Overlay::getSkinColor() const
 
 void Theme::Style::Overlay::setSkinRegion(const Rectangle& region, float tw, float th)
 {
-    assert(_skin);
+    GP_ASSERT(_skin);
     _skin->setRegion(region, tw, th);
 }
 
@@ -263,6 +264,8 @@ void Theme::Style::Overlay::setTextColor(const Vector4& color)
 
 const Rectangle& Theme::Style::Overlay::getImageRegion(const char* id) const
 {
+    GP_ASSERT(_imageList);
+
     ThemeImage* image = _imageList->getImage(id);
     if (image)
     {
@@ -276,14 +279,16 @@ const Rectangle& Theme::Style::Overlay::getImageRegion(const char* id) const
     
 void Theme::Style::Overlay::setImageRegion(const char* id, const Rectangle& region, float tw, float th)
 {
+    GP_ASSERT(_imageList);
     ThemeImage* image = _imageList->getImage(id);
-    assert(image);
+    GP_ASSERT(image);
     image->_region.set(region);
     generateUVs(tw, th, region.x, region.y, region.width, region.height, &(image->_uvs));
 }
 
 const Vector4& Theme::Style::Overlay::getImageColor(const char* id) const
 {
+    GP_ASSERT(_imageList);
     ThemeImage* image = _imageList->getImage(id);
     if (image)
     {
@@ -297,13 +302,15 @@ const Vector4& Theme::Style::Overlay::getImageColor(const char* id) const
 
 void Theme::Style::Overlay::setImageColor(const char* id, const Vector4& color)
 {
+    GP_ASSERT(_imageList);
     ThemeImage* image = _imageList->getImage(id);
-    assert(image);
+    GP_ASSERT(image);
     image->_color.set(color);
 }
 
 const Theme::UVs& Theme::Style::Overlay::getImageUVs(const char* id) const
 {
+    GP_ASSERT(_imageList);
     ThemeImage* image = _imageList->getImage(id);
     if (image)
     {
@@ -329,7 +336,7 @@ const Rectangle& Theme::Style::Overlay::getCursorRegion() const
     
 void Theme::Style::Overlay::setCursorRegion(const Rectangle& region, float tw, float th)
 {
-    assert(_cursor);
+    GP_ASSERT(_cursor);
     _cursor->_region.set(region);
     generateUVs(tw, th, region.x, region.y, region.width, region.height, &(_cursor->_uvs));
 }
@@ -348,7 +355,7 @@ const Vector4& Theme::Style::Overlay::getCursorColor() const
 
 void Theme::Style::Overlay::setCursorColor(const Vector4& color)
 {
-    assert(_cursor);
+    GP_ASSERT(_cursor);
     _cursor->_color.set(color);
 }
 
@@ -435,6 +442,8 @@ unsigned int Theme::Style::Overlay::getAnimationPropertyComponentCount(int prope
 
 void Theme::Style::Overlay::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 {
+    GP_ASSERT(value);
+
     switch(propertyId)
     {
     case ANIMATE_OPACITY:
@@ -447,6 +456,8 @@ void Theme::Style::Overlay::getAnimationPropertyValue(int propertyId, AnimationV
 
 void Theme::Style::Overlay::setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight)
 {
+    GP_ASSERT(value);
+
     switch(propertyId)
     {
         case ANIMATE_OPACITY:

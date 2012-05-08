@@ -21,7 +21,7 @@ Animation::Animation(const char* id, AnimationTarget* target, int propertyId, un
     createChannel(target, propertyId, keyCount, keyTimes, keyValues, type);
     // Release the animation because a newly created animation has a ref count of 1 and the channels hold the ref to animation.
     release();
-    assert(getRefCount() == 1);
+    GP_ASSERT(getRefCount() == 1);
 }
 
 Animation::Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type)
@@ -30,7 +30,7 @@ Animation::Animation(const char* id, AnimationTarget* target, int propertyId, un
     createChannel(target, propertyId, keyCount, keyTimes, keyValues, keyInValue, keyOutValue, type);
     // Release the animation because a newly created animation has a ref count of 1 and the channels hold the ref to animation.
     release();
-    assert(getRefCount() == 1);
+    GP_ASSERT(getRefCount() == 1);
 }
 
 Animation::Animation(const char* id)
@@ -70,7 +70,7 @@ Animation::Channel::Channel(Animation* animation, AnimationTarget* target, int p
     : _animation(animation), _target(target), _propertyId(propertyId), _curve(curve), _duration(duration)
 {
     // get property component count, and ensure the property exists on the AnimationTarget by getting the property component count.
-    assert(_target->getAnimationPropertyComponentCount(propertyId));
+    GP_ASSERT(_target->getAnimationPropertyComponentCount(propertyId));
     _curve->addRef();
     _target->addChannel(this);
     _animation->addRef();
@@ -107,16 +107,16 @@ unsigned long Animation::getDuration() const
 
 void Animation::createClips(const char* url)
 {
-    assert(url);
+    GP_ASSERT(url);
 
     Properties* properties = Properties::create(url);
-    assert(properties);
+    GP_ASSERT(properties);
 
     Properties* pAnimation = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
-    assert(pAnimation);
+    GP_ASSERT(pAnimation);
     
     int frameCount = pAnimation->getInt("frameCount");
-    assert(frameCount > 0);
+    GP_ASSERT(frameCount > 0);
 
     createClips(pAnimation, (unsigned int)frameCount);
 
@@ -229,7 +229,7 @@ void Animation::createDefaultClip()
 
 void Animation::createClips(Properties* animationProperties, unsigned int frameCount)
 {
-    assert(animationProperties);
+    GP_ASSERT(animationProperties);
     
     Properties* pClip = animationProperties->getNextNamespace();
     
@@ -296,7 +296,7 @@ AnimationClip* Animation::findClip(const char* id) const
 Animation::Channel* Animation::createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type)
 {
     unsigned int propertyComponentCount = target->getAnimationPropertyComponentCount(propertyId);
-    assert(propertyComponentCount > 0);
+    GP_ASSERT(propertyComponentCount > 0);
 
     Curve* curve = Curve::create(keyCount, propertyComponentCount);
     if (target->_targetType == AnimationTarget::TRANSFORM)
@@ -333,7 +333,7 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
 Animation::Channel* Animation::createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type)
 {
     unsigned int propertyComponentCount = target->getAnimationPropertyComponentCount(propertyId);
-    assert(propertyComponentCount > 0);
+    GP_ASSERT(propertyComponentCount > 0);
 
     Curve* curve = Curve::create(keyCount, propertyComponentCount);
     if (target->_targetType == AnimationTarget::TRANSFORM)
@@ -417,7 +417,7 @@ Animation* Animation::clone(Channel* channel, AnimationTarget* target)
     animation->addChannel(channelCopy);
     // Release the animation because a newly created animation has a ref count of 1 and the channels hold the ref to animation.
     animation->release();
-    assert(animation->getRefCount() == 1);
+    GP_ASSERT(animation->getRefCount() == 1);
     return animation;
 }
 

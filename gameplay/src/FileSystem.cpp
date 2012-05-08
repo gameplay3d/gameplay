@@ -50,7 +50,7 @@ void makepath(std::string path, int mode)
             // Directory does not exist.
             if (mkdir(dirPath.c_str(), 0777) != 0)
             {
-                WARN_VARG("Failed to create directory: '%s'", dirPath.c_str());
+                GP_WARN("Failed to create directory: '%s'", dirPath.c_str());
                 return;
             }
         }
@@ -170,7 +170,7 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
             FILE* file = fopen(fullPath.c_str(), "wb");
         
             int ret = fwrite(data, sizeof(unsigned char), length, file);
-            assert(ret == length);
+            GP_ASSERT(ret == length);
             fclose(file);
         }
     }
@@ -199,7 +199,7 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     FILE* file = openFile(filePath, "rb");
     if (file == NULL)
     {
-        LOG_ERROR_VARG("Failed to load file: %s", filePath);
+        GP_ERROR("Failed to load file: %s", filePath);
         return NULL;
     }
 
@@ -211,10 +211,10 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     // Read entire file contents.
     char* buffer = new char[size + 1];
     int read = (int)fread(buffer, 1, size, file);
-    assert(read == size);
+    GP_ASSERT(read == size);
     if (read != size)
     {
-        LOG_ERROR_VARG("Read error for file: %s (%d < %d)", filePath, (int)read, (int)size);
+        GP_ERROR("Read error for file: %s (%d < %d)", filePath, (int)read, (int)size);
         SAFE_DELETE_ARRAY(buffer);
         return NULL;
     }

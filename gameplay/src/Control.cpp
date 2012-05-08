@@ -34,6 +34,7 @@ namespace gameplay
 
     void Control::initialize(Theme::Style* style, Properties* properties)
     {
+        GP_ASSERT(properties);
         _style = style;
 
         // Properties not defined by the style.
@@ -94,6 +95,10 @@ namespace gameplay
             else if (stateName == "STATEDISABLED")
             {
                 overrideThemedProperties(stateSpace, DISABLED);
+            }
+            else
+            {
+                // Ignore this case because there can be an inner namespace of a control that does not override a state.
             }
 
             stateSpace = properties->getNextNamespace();
@@ -190,7 +195,9 @@ namespace gameplay
 
     float Control::getOpacity(State state) const
     {
-        return getOverlay(state)->getOpacity();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getOpacity();
     }
 
     void Control::setBorder(float top, float bottom, float left, float right, unsigned char states)
@@ -209,7 +216,9 @@ namespace gameplay
 
     const Theme::Border& Control::getBorder(State state) const
     {
-        return getOverlay(state)->getBorder();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getBorder();
     }
 
     void Control::setSkinRegion(const Rectangle& region, unsigned char states)
@@ -228,12 +237,16 @@ namespace gameplay
 
     const Rectangle& Control::getSkinRegion(State state) const
     {
-        return getOverlay(state)->getSkinRegion();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getSkinRegion();
     }
 
     const Theme::UVs& Control::getSkinUVs(Theme::Skin::SkinArea area, State state) const
     {
-        return getOverlay(state)->getSkinUVs(area);
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getSkinUVs(area);
     }
 
     void Control::setSkinColor(const Vector4& color, unsigned char states)
@@ -252,28 +265,34 @@ namespace gameplay
 
     const Vector4& Control::getSkinColor(State state) const
     {
-        return getOverlay(state)->getSkinColor();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getSkinColor();
     }
 
     void Control::setMargin(float top, float bottom, float left, float right)
     {
+        GP_ASSERT(_style);
         _style->setMargin(top, bottom, left, right);
         _dirty = true;
     }
 
     const Theme::Margin& Control::getMargin() const
     {
+        GP_ASSERT(_style);
         return _style->getMargin();
     }
 
     void Control::setPadding(float top, float bottom, float left, float right)
     {
+        GP_ASSERT(_style);
         _style->setPadding(top, bottom, left, right);
         _dirty = true;
     }
     
     const Theme::Padding& Control::getPadding() const
     {
+        GP_ASSERT(_style);
         return _style->getPadding();
     }
 
@@ -293,7 +312,9 @@ namespace gameplay
 
     const Rectangle& Control::getImageRegion(const char* id, State state) const
     {
-        return getOverlay(state)->getImageRegion(id);
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getImageRegion(id);
     }
 
     void Control::setImageColor(const char* id, const Vector4& color, unsigned char states)
@@ -312,12 +333,16 @@ namespace gameplay
 
     const Vector4& Control::getImageColor(const char* id, State state) const
     {
-        return getOverlay(state)->getImageColor(id);
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getImageColor(id);
     }
 
     const Theme::UVs& Control::getImageUVs(const char* id, State state) const
     {
-        return getOverlay(state)->getImageUVs(id);
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getImageUVs(id);
     }
 
     void Control::setCursorRegion(const Rectangle& region, unsigned char states)
@@ -336,7 +361,9 @@ namespace gameplay
 
     const Rectangle& Control::getCursorRegion(State state) const
     {
-        return getOverlay(state)->getCursorRegion();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getCursorRegion();
     }
 
     void Control::setCursorColor(const Vector4& color, unsigned char states)
@@ -355,12 +382,16 @@ namespace gameplay
 
     const Vector4& Control::getCursorColor(State state)
     {
-        return getOverlay(state)->getCursorColor();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getCursorColor();
     }
     
     const Theme::UVs& Control::getCursorUVs(State state)
     {
-        return getOverlay(state)->getCursorUVs();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getCursorUVs();
     }
 
     void Control::setFont(Font* font, unsigned char states)
@@ -379,7 +410,9 @@ namespace gameplay
 
     Font* Control::getFont(State state) const
     {
-        return getOverlay(state)->getFont();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getFont();
     }
 
     void Control::setFontSize(unsigned int fontSize, unsigned char states)
@@ -398,7 +431,9 @@ namespace gameplay
 
     unsigned int Control::getFontSize(State state) const
     {
-        return getOverlay(state)->getFontSize();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getFontSize();
     }
 
     void Control::setTextColor(const Vector4& color, unsigned char states)
@@ -417,7 +452,9 @@ namespace gameplay
 
     const Vector4& Control::getTextColor(State state) const
     {
-        return getOverlay(state)->getTextColor();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getTextColor();
     }
 
     void Control::setTextAlignment(Font::Justify alignment, unsigned char states)
@@ -436,7 +473,9 @@ namespace gameplay
 
     Font::Justify Control::getTextAlignment(State state) const
     {
-        return getOverlay(state)->getTextAlignment();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getTextAlignment();
     }
 
     void Control::setTextRightToLeft(bool rightToLeft, unsigned char states)
@@ -455,7 +494,9 @@ namespace gameplay
 
     bool Control::getTextRightToLeft(State state) const
     {
-        return getOverlay(state)->getTextRightToLeft();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getTextRightToLeft();
     }
 
     const Rectangle& Control::getClipBounds() const
@@ -540,6 +581,8 @@ namespace gameplay
 
     void Control::addListener(Control::Listener* listener, int eventFlags)
     {
+        GP_ASSERT(listener);
+
         if ((eventFlags & Listener::PRESS) == Listener::PRESS)
         {
             addSpecificListener(listener, Listener::PRESS);
@@ -568,6 +611,8 @@ namespace gameplay
 
     void Control::addSpecificListener(Control::Listener* listener, Listener::EventType eventType)
     {
+        GP_ASSERT(listener);
+
         if (!_listeners)
         {
             _listeners = new std::map<Listener::EventType, std::list<Listener*>*>();
@@ -627,6 +672,7 @@ namespace gameplay
                 std::list<Listener*>* listenerList = itr->second;
                 for (std::list<Listener*>::iterator listenerItr = listenerList->begin(); listenerItr != listenerList->end(); listenerItr++)
                 {
+                    GP_ASSERT(*listenerItr);
                     (*listenerItr)->controlEvent(this, eventType);
                 }
             }
@@ -688,7 +734,7 @@ namespace gameplay
 
     void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
-        if (!_skin || _bounds.width <= 0 || _bounds.height <= 0)
+        if (!spriteBatch || !_skin || _bounds.width <= 0 || _bounds.height <= 0)
             return;
 
         Vector2 pos(clip.x + _bounds.x, clip.y + _bounds.y);
@@ -794,7 +840,11 @@ namespace gameplay
 
     Theme::ThemeImage* Control::getImage(const char* id, State state)
     {
-        return getOverlay(state)->getImageList()->getImage(id);
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        Theme::ImageList* imageList = overlay->getImageList();
+        GP_ASSERT(imageList);
+        return imageList->getImage(id);
     }
 
     // Implementation of AnimationHandler
@@ -820,6 +870,8 @@ namespace gameplay
 
     void Control::getAnimationPropertyValue(int propertyId, AnimationValue* value)
     {
+        GP_ASSERT(value);
+
         switch(propertyId)
         {
         case ANIMATE_POSITION:
@@ -850,6 +902,8 @@ namespace gameplay
 
     void Control::setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight)
     {
+        GP_ASSERT(value);
+
         switch(propertyId)
         {
         case ANIMATE_POSITION:
@@ -887,6 +941,9 @@ namespace gameplay
     
     Theme::Style::Overlay** Control::getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays)
     {
+        GP_ASSERT(overlays);
+        GP_ASSERT(_style);
+
         unsigned int index = 0;
         if ((overlayTypes & NORMAL) == NORMAL)
         {
@@ -913,6 +970,8 @@ namespace gameplay
 
     Theme::Style::Overlay* Control::getOverlay(State state) const
     {
+        GP_ASSERT(_style);
+
         switch(state)
         {
         case Control::NORMAL:
@@ -936,13 +995,17 @@ namespace gameplay
         }
 
         // Copy the style.
-        WARN_VARG("%d", sizeof(Theme::Style::Overlay));
+        GP_ASSERT(_style);
         _style = new Theme::Style(*_style);
         _styleOverridden = true;
     }
 
     void Control::overrideThemedProperties(Properties* properties, unsigned char states)
     {
+        GP_ASSERT(properties);
+        GP_ASSERT(_style);
+        GP_ASSERT(_style->_theme);
+
         Theme::ImageList* imageList = NULL;
         Theme::ThemeImage* cursor = NULL;
         Theme::Skin* skin = NULL;
@@ -1042,7 +1105,9 @@ namespace gameplay
 
     Theme::Skin* Control::getSkin(State state)
     {
-        return getOverlay(state)->getSkin();
+        Theme::Style::Overlay* overlay = getOverlay(state);
+        GP_ASSERT(overlay);
+        return overlay->getSkin();
     }
 
     Control::Alignment Control::getAlignment(const char* alignment)
@@ -1111,6 +1176,10 @@ namespace gameplay
         else if (strcmp(alignment, "ALIGN_BOTTOM_RIGHT") == 0)
         {
             return Control::ALIGN_BOTTOM_RIGHT;
+        }
+        else
+        {
+            GP_ERROR("Failed to get corresponding control alignment for unsupported value \'%s\'.", alignment);
         }
 
         // Default.

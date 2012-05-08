@@ -7,6 +7,9 @@ namespace gameplay
 {
     void Layout::align(Control* control, const Container* container)
     {
+        GP_ASSERT(control);
+        GP_ASSERT(container);
+
         if (control->_alignment != Control::ALIGN_TOP_LEFT ||
             control->_autoWidth || control->_autoHeight)
         {

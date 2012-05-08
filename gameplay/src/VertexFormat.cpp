@@ -25,7 +25,7 @@ VertexFormat::~VertexFormat()
 
 const VertexFormat::Element& VertexFormat::getElement(unsigned int index) const
 {
-    assert(index < _elements.size());
+    GP_ASSERT(index < _elements.size());
 
     return _elements[index];
 }
