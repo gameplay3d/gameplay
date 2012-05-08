@@ -39,6 +39,7 @@ void CheckBox::setChecked(bool checked)
     if (_checked != checked)
     {
         _checked = checked;
+        _dirty = true;
         notifyListeners(Control::Listener::VALUE_CHANGED);
     }
 }
@@ -150,7 +151,7 @@ void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 
     Vector2 pos(_viewportBounds.x, _viewportBounds.y + _viewportBounds.height * 0.5f - size.y * 0.5f);
 
-    spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _clip);
+    spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
 }
 
 }

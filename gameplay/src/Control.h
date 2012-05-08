@@ -814,12 +814,41 @@ protected:
      * The Control's ID.
      */ 
     std::string _id;
-    State _state;           // Determines overlay used during draw().
-    Rectangle _bounds;      // Position, relative to parent container's clipping window, and desired size.
-    Rectangle _clipBounds;  // The position and size of this control, relative to parent container's bounds, including border and padding, after clipping.
+
+    /**
+     * Determines overlay used during draw().
+     */
+    State _state;
+
+    /**
+     * Position, relative to parent container's clipping window, and desired size.
+     */
+    Rectangle _bounds;
+
+    /**
+     * Position, relative to parent container's clipping window, including border and padding, after clipping.
+     */
+    Rectangle _clipBounds;
+
+    /**
+     * Absolute bounds, including border and padding, before clipping.
+     */
     Rectangle _absoluteBounds;
+
+    /**
+     * Absolute bounds, including border and padding, after clipping.
+     */
+    Rectangle _absoluteClipBounds;
+
+    /**
+     * Absolute bounds of content area (i.e. without border and padding), before clipping.
+     */
     Rectangle _viewportBounds;
-    Rectangle _clip;        // Clipping window of this control's content, after clipping.
+
+    /**
+     * Absolute bounds of content area (i.e. without border and padding), after clipping.
+     */
+    Rectangle _viewportClipBounds;
 
     bool _dirty;
     
@@ -891,10 +920,11 @@ private:
      */
     virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
 
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip);
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
     
     bool _styleOverridden;
     Theme::Skin* _skin;
+    Rectangle _clearBounds;         // Previous frame's absolute clip bounds, to be cleared if necessary.
 };
 
 }
