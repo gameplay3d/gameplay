@@ -18,7 +18,7 @@ Image* Image::create(const char* path)
     unsigned char sig[8];
     if (fread(sig, 1, 8, fp) != 8 || png_sig_cmp(sig, 0, 8) != 0)
     {
-        LOG_ERROR_VARG("Texture is not a valid PNG: %s", path);
+        GP_ERROR("Texture is not a valid PNG: %s", path);
         fclose(fp);
         return NULL;
     }
@@ -73,7 +73,7 @@ Image* Image::create(const char* path)
         break;
 
     default:
-        LOG_ERROR_VARG("Unsupported PNG color type (%d) for texture: %s", (int)colorType, path);
+        GP_ERROR("Unsupported PNG color type (%d) for texture: %s", (int)colorType, path);
         fclose(fp);
         png_destroy_read_struct(&png, &info, NULL);
         return NULL;

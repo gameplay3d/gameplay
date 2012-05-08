@@ -55,7 +55,7 @@ Theme::~Theme()
 
 Theme* Theme::create(const char* url)
 {
-    assert(url);
+    GP_ASSERT(url);
 
     // Search theme cache first.
     for (unsigned int i = 0, count = __themeCache.size(); i < count; ++i)
@@ -72,7 +72,7 @@ Theme* Theme::create(const char* url)
 
     // Load theme properties from file path.
     Properties* properties = Properties::create(url);
-    assert(properties);
+    GP_ASSERT(properties);
     if (properties == NULL)
     {
         return NULL;
@@ -80,7 +80,7 @@ Theme* Theme::create(const char* url)
 
     // Check if the Properties is valid and has a valid namespace.
     Properties* themeProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
-    assert(themeProperties);
+    GP_ASSERT(themeProperties);
     if (!themeProperties || !(strcmp(themeProperties->getNamespace(), "theme") == 0))
     {
         SAFE_DELETE(properties);
@@ -94,7 +94,9 @@ Theme* Theme::create(const char* url)
     // Parse the Properties object and set up the theme.
     const char* textureFile = themeProperties->getString("texture");
     theme->_texture = Texture::create(textureFile, false);
+    GP_ASSERT(theme->_texture);
     theme->_spriteBatch = SpriteBatch::create(theme->_texture);
+    GP_ASSERT(theme->_spriteBatch);
 
     float tw = 1.0f / theme->_texture->getWidth();
     float th = 1.0f / theme->_texture->getHeight();
@@ -140,6 +142,7 @@ Theme* Theme::create(const char* url)
             }
 
             Skin* skin = Skin::create(space->getId(), tw, th, region, border, color);
+            GP_ASSERT(skin);
             theme->_skins.push_back(skin);
         }
 
@@ -202,6 +205,7 @@ Theme* Theme::create(const char* url)
                     theme->lookUpSprites(innerSpace, &imageList, &cursor, &skin);
 
                     normal = Theme::Style::Overlay::create();
+                    GP_ASSERT(normal);
                     normal->setSkin(skin);
                     normal->setCursor(cursor);
                     normal->setImageList(imageList);
@@ -212,9 +216,11 @@ Theme* Theme::create(const char* url)
                     normal->setTextRightToLeft(rightToLeft);
                     normal->setOpacity(opacity);
 
-                    theme->_fonts.insert(font);
-
-                    if (font) font->release();
+                    if (font)
+                    {
+                        theme->_fonts.insert(font);
+                        font->release();
+                    }
 
                     // Done with this pass.
                     break;
@@ -224,7 +230,8 @@ Theme* Theme::create(const char* url)
             }
 
             // At least the OVERLAY_NORMAL is required.
-            assert(normal);
+            if (!normal)
+                GP_ERROR("All themes require the normal state overlay to be defined.");
 
             space->rewind();
             innerSpace = space->getNextNamespace();
@@ -330,6 +337,7 @@ Theme* Theme::create(const char* url)
                     if (strcmp(innerSpacename, "stateFocus") == 0)
                     {
                         focus = Theme::Style::Overlay::create();
+                        GP_ASSERT(focus);
                         focus->setSkin(skin);
                         focus->setCursor(cursor);
                         focus->setImageList(imageList);
@@ -340,11 +348,13 @@ Theme* Theme::create(const char* url)
                         focus->setTextRightToLeft(rightToLeft);
                         focus->setOpacity(opacity);
 
-                        theme->_fonts.insert(font);
+                        if (font)
+                            theme->_fonts.insert(font);
                     }
                     else if (strcmp(innerSpacename, "stateActive") == 0)
                     {
                         active = Theme::Style::Overlay::create();
+                        GP_ASSERT(active);
                         active->setSkin(skin);
                         active->setCursor(cursor);
                         active->setImageList(imageList);
@@ -355,11 +365,13 @@ Theme* Theme::create(const char* url)
                         active->setTextRightToLeft(rightToLeft);
                         active->setOpacity(opacity);
 
-                        theme->_fonts.insert(font);
+                        if (font)
+                            theme->_fonts.insert(font);
                     }
                     else if (strcmp(innerSpacename, "stateDisabled") == 0)
                     {
                         disabled = Theme::Style::Overlay::create();
+                        GP_ASSERT(disabled);
                         disabled->setSkin(skin);
                         disabled->setCursor(cursor);
                         disabled->setImageList(imageList);
@@ -370,7 +382,8 @@ Theme* Theme::create(const char* url)
                         disabled->setTextRightToLeft(rightToLeft);
                         disabled->setOpacity(opacity);
 
-                        theme->_fonts.insert(font);
+                        if (font)
+                            theme->_fonts.insert(font);
                     }
                 }
 
@@ -396,6 +409,7 @@ Theme* Theme::create(const char* url)
             }
 
             Theme::Style* s = new Theme::Style(theme, space->getId(), tw, th, margin, padding, normal, focus, active, disabled);
+            GP_ASSERT(s);
             theme->_styles.push_back(s);
         }
 
@@ -412,8 +426,11 @@ Theme* Theme::create(const char* url)
 
 Theme::Style* Theme::getStyle(const char* name) const
 {
+    GP_ASSERT(name);
+
     for (unsigned int i = 0, count = _styles.size(); i < count; ++i)
     {
+        GP_ASSERT(_styles[i]);
         if (strcmp(name, _styles[i]->getId()) == 0)
         {
             return _styles[i];
@@ -425,6 +442,7 @@ Theme::Style* Theme::getStyle(const char* name) const
 
 void Theme::setProjectionMatrix(const Matrix& matrix)
 {
+    GP_ASSERT(_spriteBatch);
     _spriteBatch->setProjectionMatrix(matrix);
 
     // Set the matrix on each Font used by the style.
@@ -432,8 +450,9 @@ void Theme::setProjectionMatrix(const Matrix& matrix)
     for (it = _fonts.begin(); it != _fonts.end(); ++it)
     {
         Font* font = *it;
-        if (font)
-            font->getSpriteBatch()->setProjectionMatrix(matrix);
+        GP_ASSERT(font);
+        GP_ASSERT(font->getSpriteBatch());
+        font->getSpriteBatch()->setProjectionMatrix(matrix);
     }
 }
 
@@ -443,8 +462,8 @@ SpriteBatch* Theme::getSpriteBatch() const
 }
 
 /**************
-    * Theme::UVs *
-    **************/
+ * Theme::UVs *
+ **************/
 Theme::UVs::UVs()
     : u1(0), v1(0), u2(0), v2(0)
 {
@@ -462,17 +481,17 @@ const Theme::UVs& Theme::UVs::empty()
 }
 
 /**********************
-    * Theme::SideRegions *
-    **********************/
+ * Theme::SideRegions *
+ **********************/
 const Theme::SideRegions& Theme::SideRegions::empty()
 {
     static SideRegions empty;
     return empty;
 }
 
-/****************
-    * Theme::ThemeImage *
-    ****************/
+/*********************
+ * Theme::ThemeImage *
+ *********************/
 Theme::ThemeImage::ThemeImage(float tw, float th, const Rectangle& region, const Vector4& color)
     : _region(region), _color(color)
 {
@@ -485,6 +504,8 @@ Theme::ThemeImage::~ThemeImage()
 
 Theme::ThemeImage* Theme::ThemeImage::create(float tw, float th, Properties* properties, const Vector4& defaultColor)
 {
+    GP_ASSERT(properties);
+
     Vector4 regionVector;                
     properties->getVector4("region", &regionVector);
     const Rectangle region(regionVector.x, regionVector.y, regionVector.z, regionVector.w);
@@ -530,8 +551,8 @@ const Vector4& Theme::ThemeImage::getColor() const
 }
 
 /********************
-    * Theme::ImageList *
-    ********************/
+ * Theme::ImageList *
+ ********************/
 Theme::ImageList::ImageList(const Vector4& color) : _color(color)
 {
 }
@@ -545,6 +566,7 @@ Theme::ImageList::ImageList(const ImageList& copy)
     for (it = copy._images.begin(); it != copy._images.end(); it++)
     {
         ThemeImage* image = *it;
+        GP_ASSERT(image);
         _images.push_back(new ThemeImage(*image));
     }
 }
@@ -561,6 +583,8 @@ Theme::ImageList::~ImageList()
 
 Theme::ImageList* Theme::ImageList::create(float tw, float th, Properties* properties)
 {
+    GP_ASSERT(properties);
+
     Vector4 color(1, 1, 1, 1);
     if (properties->exists("color"))
     {
@@ -579,6 +603,7 @@ Theme::ImageList* Theme::ImageList::create(float tw, float th, Properties* prope
     while (space != NULL)
     {
         ThemeImage* image = ThemeImage::create(tw, th, space, color);
+        GP_ASSERT(image);
         imageList->_images.push_back(image);
         space = properties->getNextNamespace();
     }
@@ -593,10 +618,14 @@ const char* Theme::ImageList::getId() const
 
 Theme::ThemeImage* Theme::ImageList::getImage(const char* imageId) const
 {
+    GP_ASSERT(imageId);
+
     std::vector<ThemeImage*>::const_iterator it;
     for (it = _images.begin(); it != _images.end(); it++)
     {
         ThemeImage* image = *it;
+        GP_ASSERT(image);
+        GP_ASSERT(image->getId());
         if (strcmp(image->getId(), imageId) == 0)
         {
             return image;
@@ -607,8 +636,8 @@ Theme::ThemeImage* Theme::ImageList::getImage(const char* imageId) const
 }
 
 /***************
-    * Theme::Skin *
-    ***************/
+ * Theme::Skin *
+ ***************/
 Theme::Skin* Theme::Skin::create(const char* id, float tw, float th, const Rectangle& region, const Theme::Border& border, const Vector4& color)
 {
     Skin* skin = new Skin(tw, th, region, border, color);
@@ -717,25 +746,31 @@ const Vector4& Theme::Skin::getColor() const
 }
     
 /**
-    * Theme utility methods.
-    */
+ * Theme utility methods.
+ */
 void Theme::generateUVs(float tw, float th, float x, float y, float width, float height, UVs* uvs)
 {
+    GP_ASSERT(uvs);
     uvs->u1 = x * tw;
     uvs->u2 = (x + width) * tw;
     uvs->v1 = 1.0f - (y * th);
     uvs->v2 = 1.0f - ((y + height) * th);
 }
 
-void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList, ThemeImage** cursor, Skin** Skin)
+void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList, ThemeImage** cursor, Skin** skin)
 {
+    GP_ASSERT(overlaySpace);
+
     const char* imageListString = overlaySpace->getString("imageList");
     if (imageListString)
     {
         for (unsigned int i = 0; i < _imageLists.size(); ++i)
         {
+            GP_ASSERT(_imageLists[i]);
+            GP_ASSERT(_imageLists[i]->getId());
             if (strcmp(_imageLists[i]->getId(), imageListString) == 0)
             {
+                GP_ASSERT(imageList);
                 *imageList = _imageLists[i];
                 break;
             }
@@ -747,8 +782,11 @@ void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList,
     {
         for (unsigned int i = 0; i < _images.size(); ++i)
         {
+            GP_ASSERT(_images[i]);
+            GP_ASSERT(_images[i]->getId());
             if (strcmp(_images[i]->getId(), cursorString) == 0)
             {
+                GP_ASSERT(cursor);
                 *cursor = _images[i];
                 break;
             }
@@ -760,9 +798,12 @@ void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList,
     {
         for (unsigned int i = 0; i < _skins.size(); ++i)
         {
+            GP_ASSERT(_skins[i]);
+            GP_ASSERT(_skins[i]->getId());
             if (strcmp(_skins[i]->getId(), skinString) == 0)
             {
-                *Skin = _skins[i];
+                GP_ASSERT(skin);
+                *skin = _skins[i];
                 break;
             }
         }

@@ -83,7 +83,7 @@ SpriteBatch* SpriteBatch::create(const char* texturePath, Effect* effect, unsign
 
 SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int initialCapacity)
 {
-    assert(texture != NULL);
+    GP_ASSERT(texture != NULL);
 
     bool customEffect = (effect != NULL);
     if (!customEffect)
@@ -94,7 +94,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
             __spriteEffect = Effect::createFromSource(SPRITE_VSH, SPRITE_FSH);
             if (__spriteEffect == NULL)
             {
-                LOG_ERROR("Unable to load sprite effect.");
+                GP_ERROR("Unable to load sprite effect.");
                 return NULL;
             }
 
@@ -120,7 +120,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
     }
     if (!samplerUniform)
     {
-        LOG_ERROR("No uniform of type GL_SAMPLER_2D found in sprite effect.");
+        GP_ERROR("No uniform of type GL_SAMPLER_2D found in sprite effect.");
         SAFE_RELEASE(effect);
         return NULL;
     }

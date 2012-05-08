@@ -62,6 +62,8 @@ Container* Container::create(Layout::Type type)
 
 Container* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
 {
+    GP_ASSERT(properties);
+
     const char* layoutString = properties->getString("layout");
     Container* container = Container::create(getLayoutType(layoutString));
     container->initialize(style, properties);
@@ -72,6 +74,9 @@ Container* Container::create(Theme::Style* style, Properties* properties, Theme*
 
 void Container::addControls(Theme* theme, Properties* properties)
 {
+    GP_ASSERT(theme);
+    GP_ASSERT(properties);
+
     // Add all the controls to this container.
     Properties* controlSpace = properties->getNextNamespace();
     while (controlSpace != NULL)
@@ -80,11 +85,9 @@ void Container::addControls(Theme* theme, Properties* properties)
 
         const char* controlStyleName = controlSpace->getString("style");
         Theme::Style* controlStyle = NULL;
-        if (controlStyleName)
-        {
-                controlStyle = theme->getStyle(controlStyleName);
-        }
-        assert(controlStyle);
+        GP_ASSERT(controlStyleName);
+        controlStyle = theme->getStyle(controlStyleName);
+        GP_ASSERT(controlStyle);
 
         std::string controlName(controlSpace->getNamespace());
         std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
@@ -116,6 +119,10 @@ void Container::addControls(Theme* theme, Properties* properties)
         {
             control = TextBox::create(controlStyle, controlSpace);
         }
+        else
+        {
+            GP_ERROR("Failed to create control; unrecognized control name \'%s\'.", controlName.c_str());
+        }
 
         // Add the new control to the form.
         if (control)
@@ -135,6 +142,7 @@ Layout* Container::getLayout()
 
 unsigned int Container::addControl(Control* control)
 {
+    GP_ASSERT(control);
     _controls.push_back(control);
 
     return _controls.size() - 1;
@@ -142,6 +150,7 @@ unsigned int Container::addControl(Control* control)
 
 void Container::insertControl(Control* control, unsigned int index)
 {
+    GP_ASSERT(control);
     std::vector<Control*>::iterator it = _controls.begin() + index;
     _controls.insert(it, control);
 }
@@ -161,18 +170,21 @@ void Container::removeControl(const char* id)
         if (strcmp(id, c->getID()) == 0)
         {
             _controls.erase(it);
+            return;
         }
     }
 }
 
 void Container::removeControl(Control* control)
 {
+    GP_ASSERT(control);
     std::vector<Control*>::iterator it;
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
         if (*it == control)
         {
             _controls.erase(it);
+            return;
         }
     }
 }
@@ -185,10 +197,12 @@ Control* Container::getControl(unsigned int index) const
 
 Control* Container::getControl(const char* id) const
 {
+    GP_ASSERT(id);
     std::vector<Control*>::const_iterator it;
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
         Control* c = *it;
+        GP_ASSERT(c);
         if (strcmp(id, c->getID()) == 0)
         {
             return c;
@@ -206,7 +220,7 @@ Control* Container::getControl(const char* id) const
     return NULL;
 }
 
-std::vector<Control*> Container::getControls() const
+const std::vector<Control*>& Container::getControls() const
 {
     return _controls;
 }
@@ -220,6 +234,7 @@ Animation* Container::getAnimation(const char* id) const
     for (; itr != end; itr++)
     {
         control = *itr;
+        GP_ASSERT(control);
         Animation* animation = control->getAnimation(id);
         if (animation)
             return animation;
@@ -240,51 +255,9 @@ void Container::update(const Rectangle& clip, const Vector2& offset)
     // Update this container's viewport.
     Control::update(clip, offset);
 
+    GP_ASSERT(_layout);
     _layout->update(this);
 }
-/*
-void Container::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip, const Vector2& offset)
-{
-    // First draw our own border.
-    Control::drawBorder(spriteBatch, clip);
-
-    // Now call drawBorder on all controls within this container.
-    std::vector<Control*>::const_iterator it;
-    for (it = _controls.begin(); it < _controls.end(); it++)
-    {
-        Control* control = *it;
-        if (control->isDirty())
-        {
-            control->drawBorder(spriteBatch, _viewportClipBounds);
-        }
-    }
-}
-
-void Container::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
-{
-    std::vector<Control*>::const_iterator it;
-    for (it = _controls.begin(); it < _controls.end(); it++)
-    {
-        Control* control = *it;
-        if (control->isDirty())
-            control->drawImages(spriteBatch, _viewportClipBounds);
-    }
-
-    _dirty = false;
-}
-
-void Container::drawText(const Rectangle& clip)
-{
-    std::vector<Control*>::const_iterator it;
-    for (it = _controls.begin(); it < _controls.end(); it++)
-    {
-        Control* control = *it;
-        if (control->isDirty())
-            control->drawText(_viewportClipBounds);
-    }
-
-    _dirty = false;
-}*/
 
 void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight)
 {
@@ -308,6 +281,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
         Control* control = *it;
+        GP_ASSERT(control);
         if (!needsClear || control->isDirty() || control->_clearBounds.intersects(boundsUnion))
         {
             control->draw(spriteBatch, _viewportClipBounds, needsClear, targetHeight);
@@ -329,6 +303,7 @@ bool Container::isDirty()
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
+            GP_ASSERT(*it);
             if ((*it)->isDirty())
             {
                 return true;
@@ -347,7 +322,6 @@ bool Container::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
     }
 
     bool eventConsumed = false;
-
     const Theme::Border& border = getBorder(_state);
     const Theme::Padding& padding = getPadding();
     float xPos = border.left + padding.left;
@@ -363,6 +337,7 @@ bool Container::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
         Control* control = *it;
+        GP_ASSERT(control);
         if (!control->isEnabled())
         {
             continue;
@@ -422,6 +397,7 @@ void Container::keyEvent(Keyboard::KeyEvent evt, int key)
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
         Control* control = *it;
+        GP_ASSERT(control);
         if (!control->isEnabled())
         {
             continue;

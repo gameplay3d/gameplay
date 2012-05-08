@@ -26,6 +26,8 @@ RadioButton::~RadioButton()
 
 RadioButton* RadioButton::create(Theme::Style* style, Properties* properties)
 {
+    GP_ASSERT(properties);
+
     RadioButton* radioButton = new RadioButton();
     radioButton->initialize(style, properties);
 
@@ -67,8 +69,7 @@ void RadioButton::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
     {
-        assert("TEXT_CHANGED event is not applicable to RadioButton.");
-        eventFlags &= ~Listener::TEXT_CHANGED;
+        GP_ERROR("TEXT_CHANGED event is not applicable to RadioButton.");
     }
 
     Control::addListener(listener, eventFlags);
@@ -111,6 +112,7 @@ void RadioButton::clearSelected(const std::string& groupId)
     for (it = __radioButtons.begin(); it < __radioButtons.end(); it++)
     {
         RadioButton* radioButton = *it;
+        GP_ASSERT(radioButton);
         if (groupId == radioButton->_groupId)
         {
             radioButton->_selected = false;
@@ -159,6 +161,9 @@ void RadioButton::update(const Rectangle& clip, const Vector2& offset)
 
 void RadioButton::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
+    GP_ASSERT(spriteBatch);
+    GP_ASSERT(_image);
+
     // Left, v-center.
     // TODO: Set an alignment for radio button images.   
     const Rectangle& region = _image->getRegion();

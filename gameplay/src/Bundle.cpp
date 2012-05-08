@@ -96,7 +96,7 @@ bool Bundle::readArray(unsigned int* length, std::vector<T>* values)
 template <class T>
 bool Bundle::readArray(unsigned int* length, std::vector<T>* values, unsigned int readSize)
 {
-    assert(sizeof(T) >= readSize);
+    GP_ASSERT(sizeof(T) >= readSize);
 
     if (!read(length))
     {
@@ -122,7 +122,7 @@ std::string readString(FILE* fp)
     }
 
     // Sanity check to detect if string length is far too big
-    assert(length < BUNDLE_MAX_STRING_LENGTH);
+    GP_ASSERT(length < BUNDLE_MAX_STRING_LENGTH);
 
     std::string str;
     if (length > 0)
@@ -154,7 +154,7 @@ Bundle* Bundle::create(const char* path)
     FILE* fp = FileSystem::openFile(path, "rb");
     if (!fp)
     {
-        WARN_VARG("Failed to open file: '%s'.", path);
+        GP_WARN("Failed to open file: '%s'.", path);
         return NULL;
     }
 
@@ -162,7 +162,7 @@ Bundle* Bundle::create(const char* path)
     char sig[9];
     if (fread(sig, 1, 9, fp) != 9 || memcmp(sig, "«GPB»\r\n\x1A\n", 9) != 0)
     {
-        LOG_ERROR_VARG("Invalid bundle header: %s", path);
+        GP_ERROR("Invalid bundle header: %s", path);
         fclose(fp);
         return NULL;
     }
@@ -171,7 +171,7 @@ Bundle* Bundle::create(const char* path)
     unsigned char ver[2];
     if (fread(ver, 1, 2, fp) != 2 || ver[0] != BUNDLE_VERSION_MAJOR || ver[1] != BUNDLE_VERSION_MINOR)
     {
-        LOG_ERROR_VARG("Unsupported version (%d.%d) for bundle: %s (expected %d.%d)", (int)ver[0], (int)ver[1], path, BUNDLE_VERSION_MAJOR, BUNDLE_VERSION_MINOR);
+        GP_ERROR("Unsupported version (%d.%d) for bundle: %s (expected %d.%d)", (int)ver[0], (int)ver[1], path, BUNDLE_VERSION_MAJOR, BUNDLE_VERSION_MINOR);
         fclose(fp);
         return NULL;
     }
@@ -257,20 +257,20 @@ Bundle::Reference* Bundle::seekTo(const char* id, unsigned int type)
     Reference* ref = find(id);
     if (ref == NULL)
     {
-        LOG_ERROR_VARG("No object with name '%s' in bundle '%s'.", id, _path.c_str());
+        GP_ERROR("No object with name '%s' in bundle '%s'.", id, _path.c_str());
         return NULL;
     }
 
     if (ref->type != type)
     {
-        LOG_ERROR_VARG("Object '%s' in bundle '%s' has type %d (expected type %d).", id, _path.c_str(), (int)ref->type, (int)type);
+        GP_ERROR("Object '%s' in bundle '%s' has type %d (expected type %d).", id, _path.c_str(), (int)ref->type, (int)type);
         return NULL;
     }
 
     // Seek to the offset of this object
     if (fseek(_file, ref->offset, SEEK_SET) != 0)
     {
-        LOG_ERROR_VARG("Failed to seek to object '%s' in bundle '%s'.", id, _path.c_str());
+        GP_ERROR("Failed to seek to object '%s' in bundle '%s'.", id, _path.c_str());
         return NULL;
     }
 
@@ -288,7 +288,7 @@ Bundle::Reference* Bundle::seekToFirstType(unsigned int type)
             // Found a match
             if (fseek(_file, ref->offset, SEEK_SET) != 0)
             {
-                LOG_ERROR_VARG("Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
+                GP_ERROR("Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
                 return NULL;
             }
             return ref;
@@ -363,7 +363,7 @@ Scene* Bundle::loadScene(const char* id)
     {
         Node* node = scene->findNode(xref.c_str() + 1, true);
         Camera* camera = node->getCamera();
-        assert(camera);
+        GP_ASSERT(camera);
         scene->setActiveCamera(camera);
     }
 
@@ -372,19 +372,19 @@ Scene* Bundle::loadScene(const char* id)
     if (!read(&red))
     {
         SAFE_RELEASE(scene);
-        LOG_ERROR_VARG("Failed to read scene ambient %s color in pakcage %s", "red", _path.c_str());
+        GP_ERROR("Failed to read scene ambient %s color in pakcage %s", "red", _path.c_str());
         return NULL;
     }
     if (!read(&green))
     {
         SAFE_RELEASE(scene);
-        LOG_ERROR_VARG("Failed to read scene ambient %s color in pakcage %s", "green", _path.c_str());
+        GP_ERROR("Failed to read scene ambient %s color in pakcage %s", "green", _path.c_str());
         return NULL;
     }
     if (!read(&blue))
     {
         SAFE_RELEASE(scene);
-        LOG_ERROR_VARG("Failed to read scene ambient %s color in pakcage %s", "blue", _path.c_str());
+        GP_ERROR("Failed to read scene ambient %s color in pakcage %s", "blue", _path.c_str());
         return NULL;
     }
     scene->setAmbientColor(red, green, blue);
@@ -398,7 +398,7 @@ Scene* Bundle::loadScene(const char* id)
             // Found a match
             if (fseek(_file, ref->offset, SEEK_SET) != 0)
             {
-                LOG_ERROR_VARG("Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
+                GP_ERROR("Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
                 return NULL;
             }
             readAnimations(scene);
@@ -417,7 +417,7 @@ Node* Bundle::loadNode(const char* id)
 
 Node* Bundle::loadNode(const char* id, Scene* sceneContext)
 {
-    assert(id);
+    GP_ASSERT(id);
 
     clearLoadSession();
 
@@ -435,7 +435,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
         {
             if (fseek(_file, ref->offset, SEEK_SET) != 0)
             {
-                LOG_ERROR_VARG("Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
+                GP_ERROR("Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
                 SAFE_DELETE(_trackedNodes);
                 return NULL;
             }
@@ -444,7 +444,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
             unsigned int animationCount;
             if (!read(&animationCount))
             {
-                LOG_ERROR_VARG("Failed to read %s for %s: %s", "animationCount", "Animations");
+                GP_ERROR("Failed to read %s for %s: %s", "animationCount", "Animations");
                 SAFE_DELETE(_trackedNodes);
                 return NULL;
             }
@@ -457,7 +457,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
                 unsigned int animationChannelCount;
                 if (!read(&animationChannelCount))
                 {
-                    LOG_ERROR_VARG("Failed to read %s for %s: %s", "animationChannelCount", "animation", id.c_str());
+                    GP_ERROR("Failed to read %s for %s: %s", "animationChannelCount", "animation", id.c_str());
                     SAFE_DELETE(_trackedNodes);
                     return NULL;
                 }
@@ -469,7 +469,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
                     std::string targetId = readString(_file);
                     if (targetId.empty())
                     {
-                        LOG_ERROR_VARG("Failed to read %s for %s: %s", "targetId", "animation", id.c_str());
+                        GP_ERROR("Failed to read %s for %s: %s", "targetId", "animation", id.c_str());
                         SAFE_DELETE(_trackedNodes);
                         return NULL;
                     }
@@ -482,7 +482,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
                         unsigned int targetAttribute;
                         if (!read(&targetAttribute))
                         {
-                            LOG_ERROR_VARG("Failed to read %s for %s: %s", "targetAttribute", "animation", id.c_str());
+                            GP_ERROR("Failed to read %s for %s: %s", "targetAttribute", "animation", id.c_str());
                             SAFE_DELETE(_trackedNodes);
                             return NULL;
                         }
@@ -490,7 +490,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
                         AnimationTarget* target = iter->second;
                         if (!target)
                         {
-                            LOG_ERROR_VARG("Failed to read %s for %s: %s", "animation target", targetId.c_str(), id.c_str());
+                            GP_ERROR("Failed to read %s for %s: %s", "animation target", targetId.c_str(), id.c_str());
                             SAFE_DELETE(_trackedNodes);
                             return NULL;
                         }
@@ -516,7 +516,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
 
 Node* Bundle::loadNode(const char* id, Scene* sceneContext, Node* nodeContext)
 {
-    assert(id);
+    GP_ASSERT(id);
 
     Node* node = NULL;
 
@@ -734,7 +734,7 @@ Camera* Bundle::readCamera()
     unsigned char cameraType;
     if (!read(&cameraType))
     {
-        LOG_ERROR_VARG("Failed to load camera type in bundle '%s'.", _path.c_str());
+        GP_ERROR("Failed to load camera type in bundle '%s'.", _path.c_str());
     }
 
     if (cameraType == 0)
@@ -746,21 +746,21 @@ Camera* Bundle::readCamera()
     float aspectRatio;
     if (!read(&aspectRatio))
     {
-        LOG_ERROR_VARG("Failed to load camera aspectRatio in bundle '%s'.", _path.c_str());
+        GP_ERROR("Failed to load camera aspectRatio in bundle '%s'.", _path.c_str());
     }
 
     // near plane
     float nearPlane;
     if (!read(&nearPlane))
     {
-        LOG_ERROR_VARG("Failed to load camera near plane in bundle '%s'.", _path.c_str());
+        GP_ERROR("Failed to load camera near plane in bundle '%s'.", _path.c_str());
     }
 
     // far plane
     float farPlane;
     if (!read(&farPlane))
     {
-        LOG_ERROR_VARG("Failed to load camera far plane in bundle '%s'.", _path.c_str());
+        GP_ERROR("Failed to load camera far plane in bundle '%s'.", _path.c_str());
     }
 
     Camera* camera = NULL;
@@ -770,7 +770,7 @@ Camera* Bundle::readCamera()
         float fieldOfView;
         if (!read(&fieldOfView))
         {
-            LOG_ERROR_VARG("Failed to load camera field of view in bundle '%s'.", _path.c_str());
+            GP_ERROR("Failed to load camera field of view in bundle '%s'.", _path.c_str());
         }
 
         camera = Camera::createPerspective(fieldOfView, aspectRatio, nearPlane, farPlane);
@@ -781,20 +781,20 @@ Camera* Bundle::readCamera()
         float zoomX;
         if (!read(&zoomX))
         {
-            LOG_ERROR_VARG("Failed to load camera zoomX in bundle '%s'.", _path.c_str());
+            GP_ERROR("Failed to load camera zoomX in bundle '%s'.", _path.c_str());
         }
 
         float zoomY;
         if (!read(&zoomY))
         {
-            LOG_ERROR_VARG("Failed to load camera zoomY in bundle '%s'.", _path.c_str());
+            GP_ERROR("Failed to load camera zoomY in bundle '%s'.", _path.c_str());
         }
 
         camera = Camera::createOrthographic(zoomX, zoomY, aspectRatio, nearPlane, farPlane);
     }
     else
     {
-        LOG_ERROR_VARG("Failed to load camera type in bundle '%s'. Invalid camera type.", _path.c_str());
+        GP_ERROR("Failed to load camera type in bundle '%s'. Invalid camera type.", _path.c_str());
     }
     return camera;
 }
@@ -804,7 +804,7 @@ Light* Bundle::readLight()
     unsigned char type;
     if (!read(&type))
     {
-        LOG_ERROR_VARG("Failed to load light %s in bundle '%s'.", "type", _path.c_str());
+        GP_ERROR("Failed to load light %s in bundle '%s'.", "type", _path.c_str());
     }
 
     if (type == 0)
@@ -816,7 +816,7 @@ Light* Bundle::readLight()
     float red, blue, green;
     if (!read(&red) || !read(&blue) || !read(&green))
     {
-        LOG_ERROR_VARG("Failed to load light %s in bundle '%s'.", "color", _path.c_str());
+        GP_ERROR("Failed to load light %s in bundle '%s'.", "color", _path.c_str());
     }
     Vector3 color(red, blue, green);
 
@@ -830,7 +830,7 @@ Light* Bundle::readLight()
         float range;
         if (!read(&range))
         {
-            LOG_ERROR_VARG("Failed to load point light %s in bundle '%s'.", "point", _path.c_str());
+            GP_ERROR("Failed to load point light %s in bundle '%s'.", "point", _path.c_str());
         }
         light = Light::createPoint(color, range);
     }
@@ -839,13 +839,13 @@ Light* Bundle::readLight()
         float range, innerAngle, outerAngle;
         if (!read(&range) || !read(&innerAngle) || !read(&outerAngle))
         {
-            LOG_ERROR_VARG("Failed to load spot light %s in bundle '%s'.", "spot", _path.c_str());
+            GP_ERROR("Failed to load spot light %s in bundle '%s'.", "spot", _path.c_str());
         }
         light = Light::createSpot(color, range, innerAngle, outerAngle);
     }
     else
     {
-        LOG_ERROR_VARG("Failed to load light %s in bundle '%s'.", "type", _path.c_str());
+        GP_ERROR("Failed to load light %s in bundle '%s'.", "type", _path.c_str());
     }
     return light;
 }
@@ -867,7 +867,7 @@ Model* Bundle::readModel(const char* nodeId)
             unsigned char hasSkin;
             if (!read(&hasSkin))
             {
-                LOG_ERROR_VARG("Failed to load hasSkin in bundle '%s'.", _path.c_str());
+                GP_ERROR("Failed to load hasSkin in bundle '%s'.", _path.c_str());
                 return NULL;
             }
             if (hasSkin)
@@ -882,7 +882,7 @@ Model* Bundle::readModel(const char* nodeId)
             unsigned int materialCount;
             if (!read(&materialCount))
             {
-                LOG_ERROR_VARG("Failed to load materialCount in bundle '%s'.", _path.c_str());
+                GP_ERROR("Failed to load materialCount in bundle '%s'.", _path.c_str());
                 return NULL;
             }
             if (materialCount > 0)
@@ -904,7 +904,7 @@ MeshSkin* Bundle::readMeshSkin()
     float bindShape[16];
     if (!readMatrix(bindShape))
     {
-        LOG_ERROR_VARG("Failed to load MeshSkin in bundle '%s'.", _path.c_str());
+        GP_ERROR("Failed to load MeshSkin in bundle '%s'.", _path.c_str());
         SAFE_DELETE(meshSkin);
         return NULL;
     }
@@ -917,7 +917,7 @@ MeshSkin* Bundle::readMeshSkin()
     unsigned int jointCount;
     if (!read(&jointCount))
     {
-        LOG_ERROR_VARG("Failed to load MeshSkin in bundle '%s'.", _path.c_str());
+        GP_ERROR("Failed to load MeshSkin in bundle '%s'.", _path.c_str());
         SAFE_DELETE(meshSkin);
         SAFE_DELETE(skinData);
         return NULL;
@@ -940,20 +940,20 @@ MeshSkin* Bundle::readMeshSkin()
     unsigned int jointsBindPosesCount;
     if (!read(&jointsBindPosesCount))
     {
-        LOG_ERROR_VARG("Failed to load MeshSkin in bundle '%s'.", _path.c_str());
+        GP_ERROR("Failed to load MeshSkin in bundle '%s'.", _path.c_str());
         SAFE_DELETE(meshSkin);
         SAFE_DELETE(skinData);
         return NULL;
     }
     if (jointsBindPosesCount > 0)
     {
-        assert(jointCount * 16 == jointsBindPosesCount);
+        GP_ASSERT(jointCount * 16 == jointsBindPosesCount);
         float m[16];
         for (unsigned int i = 0; i < jointCount; i++)
         {
             if (!readMatrix(m))
             {
-                LOG_ERROR_VARG("Failed to load MeshSkin in bundle '%s'.", _path.c_str());
+                GP_ERROR("Failed to load MeshSkin in bundle '%s'.", _path.c_str());
                 SAFE_DELETE(meshSkin);
                 SAFE_DELETE(skinData);
                 return NULL;
@@ -1025,7 +1025,7 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
                         Reference* ref = find(nodeID.c_str());
                         if (ref == NULL)
                         {
-                            LOG_ERROR_VARG("No object with name '%s' in bundle '%s'.", nodeID.c_str(), _path.c_str());
+                            GP_ERROR("No object with name '%s' in bundle '%s'.", nodeID.c_str(), _path.c_str());
                             break;
                         }
 
@@ -1070,7 +1070,7 @@ void Bundle::readAnimation(Scene* scene)
     unsigned int animationChannelCount;
     if (!read(&animationChannelCount))
     {
-        LOG_ERROR_VARG("Failed to read %s for %s: %s", "animationChannelCount", "animation", animationId.c_str());
+        GP_ERROR("Failed to read %s for %s: %s", "animationChannelCount", "animation", animationId.c_str());
         return;
     }
 
@@ -1088,7 +1088,7 @@ void Bundle::readAnimations(Scene* scene)
     unsigned int animationCount;
     if (!read(&animationCount))
     {
-        LOG_ERROR_VARG("Failed to read %s for %s: %s", "animationCount", "Animations");
+        GP_ERROR("Failed to read %s for %s: %s", "animationCount", "Animations");
         return;
     }
 
@@ -1106,7 +1106,7 @@ Animation* Bundle::readAnimationChannel(Scene* scene, Animation* animation, cons
     std::string targetId = readString(_file);
     if (targetId.empty())
     {
-        LOG_ERROR_VARG("Failed to read %s for %s: %s", "targetId", "animation", id);
+        GP_ERROR("Failed to read %s for %s: %s", "targetId", "animation", id);
         return NULL;
     }
 
@@ -1114,7 +1114,7 @@ Animation* Bundle::readAnimationChannel(Scene* scene, Animation* animation, cons
     unsigned int targetAttribute;
     if (!read(&targetAttribute))
     {
-        LOG_ERROR_VARG("Failed to read %s for %s: %s", "targetAttribute", "animation", id);
+        GP_ERROR("Failed to read %s for %s: %s", "targetAttribute", "animation", id);
         return NULL;
     }
 
@@ -1129,7 +1129,7 @@ Animation* Bundle::readAnimationChannel(Scene* scene, Animation* animation, cons
         target = scene->findNode(targetId.c_str());
         if (!target)
         {
-            LOG_ERROR_VARG("Failed to read %s for %s: %s", "animation target", targetId.c_str(), id);
+            GP_ERROR("Failed to read %s for %s: %s", "animation target", targetId.c_str(), id);
             return NULL;
         }
     }
@@ -1155,35 +1155,35 @@ Animation* Bundle::readAnimationChannelData(Animation* animation, const char* id
     // read key times
     if (!readArray(&keyTimesCount, &keyTimes, sizeof(unsigned int)))
     {
-        LOG_ERROR_VARG("Failed to read %s for %s: %s", "keyTimes", "animation", id);
+        GP_ERROR("Failed to read %s for %s: %s", "keyTimes", "animation", id);
         return NULL;
     }
     
     // read key values
     if (!readArray(&valuesCount, &values))
     {
-        LOG_ERROR_VARG("Failed to read %s for %s: %s", "values", "animation", id);
+        GP_ERROR("Failed to read %s for %s: %s", "values", "animation", id);
         return NULL;
     }
     
     // read tangentsIn
     if (!readArray(&tangentsInCount, &tangentsIn))
     {
-        LOG_ERROR_VARG("Failed to read %s for %s: %s", "tangentsIn", "animation", id);
+        GP_ERROR("Failed to read %s for %s: %s", "tangentsIn", "animation", id);
         return NULL;
     }
     
     // read tangent_out
     if (!readArray(&tangentsOutCount, &tangentsOut))
     {
-        LOG_ERROR_VARG("Failed to read %s for %s: %s", "tangentsOut", "animation", id);
+        GP_ERROR("Failed to read %s for %s: %s", "tangentsOut", "animation", id);
         return NULL;
     }
     
     // read interpolations
     if (!readArray(&interpolationCount, &interpolation, sizeof(unsigned int)))
     {
-        LOG_ERROR_VARG("Failed to read %s for %s: %s", "interpolation", "animation", id);
+        GP_ERROR("Failed to read %s for %s: %s", "interpolation", "animation", id);
         return NULL;
     }
 
@@ -1193,7 +1193,7 @@ Animation* Bundle::readAnimationChannelData(Animation* animation, const char* id
     // TODO: Handle other target attributes later.
     if (targetAttribute > 0)
     {
-        assert(keyTimes.size() > 0 && values.size() > 0);
+        GP_ASSERT(keyTimes.size() > 0 && values.size() > 0);
         if (animation == NULL)
         {
             // TODO: This code currently assumes LINEAR only
@@ -1210,7 +1210,7 @@ Animation* Bundle::readAnimationChannelData(Animation* animation, const char* id
 
 Mesh* Bundle::loadMesh(const char* id)
 {
-    return loadMesh(id, false);
+    return loadMesh(id, NULL);
 }
 
 Mesh* Bundle::loadMesh(const char* id, const char* nodeId)
@@ -1236,7 +1236,7 @@ Mesh* Bundle::loadMesh(const char* id, const char* nodeId)
     Mesh* mesh = Mesh::createMesh(meshData->vertexFormat, meshData->vertexCount, false);
     if (mesh == NULL)
     {
-        LOG_ERROR_VARG("Failed to create mesh: %s", id);
+        GP_ERROR("Failed to create mesh: %s", id);
         SAFE_DELETE_ARRAY(meshData);
         return NULL;
     }
@@ -1258,7 +1258,7 @@ Mesh* Bundle::loadMesh(const char* id, const char* nodeId)
         MeshPart* part = mesh->addPart(partData->primitiveType, partData->indexFormat, partData->indexCount, false);
         if (part == NULL)
         {
-            LOG_ERROR_VARG("Failed to create mesh part (i=%d): %s", i, id);
+            GP_ERROR("Failed to create mesh part (i=%d): %s", i, id);
             SAFE_DELETE(meshData);
             return NULL;
         }
@@ -1380,7 +1380,7 @@ Bundle::MeshData* Bundle::readMeshData()
 
 Bundle::MeshData* Bundle::readMeshData(const char* url)
 {
-    assert(url);
+    GP_ASSERT(url);
 
     unsigned int len = strlen(url);
     if (len == 0)
@@ -1426,7 +1426,7 @@ Font* Bundle::loadFont(const char* id)
     std::string family = readString(_file);
     if (family.empty())
     {
-        LOG_ERROR_VARG("Failed to read font family for font: %s", id);
+        GP_ERROR("Failed to read font family for font: %s", id);
         return NULL;
     }
 
@@ -1435,7 +1435,7 @@ Font* Bundle::loadFont(const char* id)
     if (fread(&style, 4, 1, _file) != 1 ||
         fread(&size, 4, 1, _file) != 1)
     {
-        LOG_ERROR_VARG("Failed to read style and/or size for font: %s", id);
+        GP_ERROR("Failed to read style and/or size for font: %s", id);
         return NULL;
     }
 
@@ -1446,13 +1446,13 @@ Font* Bundle::loadFont(const char* id)
     unsigned int glyphCount;
     if (fread(&glyphCount, 4, 1, _file) != 1 || glyphCount == 0)
     {
-        LOG_ERROR_VARG("Failed to read glyph count for font: %s", id);
+        GP_ERROR("Failed to read glyph count for font: %s", id);
         return NULL;
     }
     Font::Glyph* glyphs = new Font::Glyph[glyphCount];
     if (fread(glyphs, sizeof(Font::Glyph), glyphCount, _file) != glyphCount)
     {
-        LOG_ERROR_VARG("Failed to read %d glyphs for font: %s", glyphCount, id);
+        GP_ERROR("Failed to read %d glyphs for font: %s", glyphCount, id);
         SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
@@ -1463,20 +1463,20 @@ Font* Bundle::loadFont(const char* id)
         fread(&height, 4, 1, _file) != 1 ||
         fread(&textureByteCount, 4, 1, _file) != 1)
     {
-        LOG_ERROR_VARG("Failed to read texture attributes for font: %s", id);
+        GP_ERROR("Failed to read texture attributes for font: %s", id);
         SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
     if (textureByteCount != (width * height))
     {
-        LOG_ERROR_VARG("Invalid texture byte for font: %s", id);
+        GP_ERROR("Invalid texture byte for font: %s", id);
         SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
     unsigned char* textureData = new unsigned char[textureByteCount];
     if (fread(textureData, 1, textureByteCount, _file) != textureByteCount)
     {
-        LOG_ERROR_VARG("Failed to read %d texture bytes for font: %s", textureByteCount, id);
+        GP_ERROR("Failed to read %d texture bytes for font: %s", textureByteCount, id);
         SAFE_DELETE_ARRAY(glyphs);
         SAFE_DELETE_ARRAY(textureData);
         return NULL;
@@ -1490,7 +1490,7 @@ Font* Bundle::loadFont(const char* id)
 
     if (texture == NULL)
     {
-        LOG_ERROR_VARG("Failed to create texture for font: %s", id);
+        GP_ERROR("Failed to create texture for font: %s", id);
         SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }

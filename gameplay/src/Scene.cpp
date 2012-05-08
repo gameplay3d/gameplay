@@ -59,7 +59,7 @@ void Scene::setId(const char* id)
 
 Node* Scene::findNode(const char* id, bool recursive, bool exactMatch) const
 {
-    assert(id);
+    GP_ASSERT(id);
 
     // Search immediate children first.
     for (Node* child = getFirstNode(); child != NULL; child = child->getNextSibling())
@@ -89,7 +89,7 @@ Node* Scene::findNode(const char* id, bool recursive, bool exactMatch) const
 
 unsigned int Scene::findNodes(const char* id, std::vector<Node*>& nodes, bool recursive, bool exactMatch) const
 {
-    assert(id);
+    GP_ASSERT(id);
 
     unsigned int count = 0;
 
@@ -129,7 +129,7 @@ Node* Scene::addNode(const char* id)
 
 void Scene::addNode(Node* node)
 {
-    assert(node);
+    GP_ASSERT(node);
 
     if (node->_scene == this)
     {
@@ -180,7 +180,7 @@ void Scene::addNode(Node* node)
 
 void Scene::removeNode(Node* node)
 {
-    assert(node);
+    GP_ASSERT(node);
 
     if (node->_scene != this)
         return;

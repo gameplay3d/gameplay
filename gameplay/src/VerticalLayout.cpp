@@ -45,6 +45,8 @@ Layout::Type VerticalLayout::getType()
 
 void VerticalLayout::update(const Container* container)
 {
+    GP_ASSERT(container);
+
     // Need border, padding.
     Theme::Border border = container->getBorder(container->getState());
     Theme::Padding padding = container->getPadding();
@@ -70,6 +72,7 @@ void VerticalLayout::update(const Container* container)
     while (i != end)
     {
         Control* control = controls.at(i);
+        GP_ASSERT(control);
             
         align(control, container);
 
@@ -78,11 +81,8 @@ void VerticalLayout::update(const Container* container)
 
         yPosition += margin.top;
 
-        //if (control->isDirty() || control->isContainer())
-        {
-            control->setPosition(0, yPosition);
-            control->update(container->getClip(), Vector2::zero());
-        }
+        control->setPosition(0, yPosition);
+        control->update(container->getClip(), Vector2::zero());
 
         yPosition += bounds.height + margin.bottom;
 
