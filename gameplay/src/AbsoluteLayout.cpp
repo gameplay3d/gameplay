@@ -40,15 +40,17 @@ namespace gameplay
 
     void AbsoluteLayout::update(const Container* container)
     {
+        GP_ASSERT(container);
+
         // An AbsoluteLayout does nothing to modify the layout of Controls.
         std::vector<Control*> controls = container->getControls();
         unsigned int controlsCount = controls.size();
         for (unsigned int i = 0; i < controlsCount; i++)
         {
             Control* control = controls[i];
+            GP_ASSERT(control);
 
             align(control, container);
-
             if (control->isDirty() || control->isContainer())
             {
                 control->update(container->getClip());

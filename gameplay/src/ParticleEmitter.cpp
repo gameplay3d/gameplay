@@ -50,24 +50,24 @@ ParticleEmitter::~ParticleEmitter()
 
 ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlending textureBlending, unsigned int particleCountMax)
 {
-    assert(textureFile);
+    GP_ASSERT(textureFile);
 
     Texture* texture = NULL;
     texture = Texture::create(textureFile, true);    
 
     if (!texture)
     {
-        LOG_ERROR_VARG("Error creating ParticleEmitter: Could not read texture file: %s", textureFile);
+        GP_ERROR("Error creating ParticleEmitter: Could not read texture file: %s", textureFile);
         return NULL;
     }
 
     // Use default SpriteBatch material.
     SpriteBatch* batch =  SpriteBatch::create(texture, NULL, particleCountMax);
     texture->release(); // batch owns the texture.
-    assert(batch);
+    GP_ASSERT(batch);
 
     ParticleEmitter* emitter = new ParticleEmitter(batch, particleCountMax);
-    assert(emitter);
+    GP_ASSERT(emitter);
 
     // By default assume only one frame which uses the entire texture.
     emitter->setTextureBlending(textureBlending);
@@ -84,12 +84,12 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
 
 ParticleEmitter* ParticleEmitter::create(const char* url)
 {
-    assert(url);
+    GP_ASSERT(url);
 
     Properties* properties = Properties::create(url);
     if (!properties)
     {
-        LOG_ERROR_VARG("Error loading ParticleEmitter: Could not load file: %s", url);
+        GP_ERROR("Error loading ParticleEmitter: Could not load file: %s", url);
         return NULL;
     }
 
@@ -103,14 +103,14 @@ ParticleEmitter* ParticleEmitter::create(Properties* properties)
 {
     if (!properties || strcmp(properties->getNamespace(), "particle") != 0)
     {
-        LOG_ERROR("Error loading ParticleEmitter: No 'particle' namespace found");
+        GP_ERROR("Error loading ParticleEmitter: No 'particle' namespace found");
         return NULL;
     }
 
     Properties* sprite = properties->getNextNamespace();
     if (!sprite || strcmp(sprite->getNamespace(), "sprite") != 0)
     {
-        LOG_ERROR("Error loading ParticleEmitter: No 'sprite' namespace found");
+        GP_ERROR("Error loading ParticleEmitter: No 'sprite' namespace found");
         return NULL;
     }
 
@@ -119,7 +119,7 @@ ParticleEmitter* ParticleEmitter::create(Properties* properties)
     const char* texturePath = sprite->getString("path");
     if (strlen(texturePath) == 0)
     {
-        LOG_ERROR_VARG("Error loading ParticleEmitter: No texture path specified: %s", texturePath);
+        GP_ERROR("Error loading ParticleEmitter: No texture path specified: %s", texturePath);
         return NULL;
     }
 

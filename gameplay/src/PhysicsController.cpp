@@ -507,7 +507,7 @@ void PhysicsController::addCollisionObject(PhysicsCollisionObject* object)
         break;
 
     default:
-        assert(0); // unexpected (new type?)
+        GP_ASSERT(0); // unexpected (new type?)
         break;
     }
 }
@@ -529,7 +529,7 @@ void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object)
             break;
 
         default:
-            assert(0); // unexpected (new type?)
+            GP_ASSERT(0); // unexpected (new type?)
             break;
         }
     }
@@ -851,7 +851,7 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
             pixelSize = 4;
             break;
         default:
-            LOG_ERROR("Unsupported pixel format for heightmap image.");
+            GP_ERROR("Unsupported pixel format for heightmap image.");
             return NULL;
     }
 
@@ -914,7 +914,7 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
 
 PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& scale)
 {
-    assert(mesh);
+    GP_ASSERT(mesh);
 
     // Only support meshes with triangle list primitive types
     bool triMesh = true;
@@ -936,7 +936,7 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
 
     if (!triMesh)
     {
-        LOG_ERROR("Mesh rigid bodies are currently only supported on meshes with TRIANGLES primitive type.");
+        GP_ERROR("Mesh rigid bodies are currently only supported on meshes with TRIANGLES primitive type.");
         return NULL;
     }
 
@@ -944,7 +944,7 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
     // in order to fetch mesh data for computing mesh rigid body.
     if (strlen(mesh->getUrl()) == 0)
     {
-        LOG_ERROR("Cannot create mesh rigid body for mesh without valid URL.");
+        GP_ERROR("Cannot create mesh rigid body for mesh without valid URL.");
         return NULL;
     }
 
@@ -1122,13 +1122,13 @@ bool PhysicsController::checkConstraintRigidBodies(PhysicsRigidBody* a, PhysicsR
 {
     if (!a->supportsConstraints())
     {
-        WARN_VARG("Rigid body '%s' does not support constraints; unexpected behavior may occur.", a->_node->getId());
+        GP_WARN("Rigid body '%s' does not support constraints; unexpected behavior may occur.", a->_node->getId());
         return false;
     }
     
     if (b && !b->supportsConstraints())
     {
-        WARN_VARG("Rigid body '%s' does not support constraints; unexpected behavior may occur.", b->_node->getId());
+        GP_WARN("Rigid body '%s' does not support constraints; unexpected behavior may occur.", b->_node->getId());
         return false;
     }
 
@@ -1247,12 +1247,12 @@ void PhysicsController::DebugDrawer::drawContactPoint(const btVector3& pointOnB,
 
 void PhysicsController::DebugDrawer::reportErrorWarning(const char* warningString)
 {
-    WARN(warningString);
+    GP_WARN(warningString);
 }
 
 void PhysicsController::DebugDrawer::draw3dText(const btVector3& location, const char* textString)
 {
-    WARN("Physics debug drawing: 3D text is not supported.");
+    GP_WARN("Physics debug drawing: 3D text is not supported.");
 }
 
 void PhysicsController::DebugDrawer::setDebugMode(int mode)

@@ -51,7 +51,7 @@ unsigned int Model::getMeshPartCount() const
 
 Material* Model::getMaterial(int partIndex)
 {
-    assert(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
+    GP_ASSERT(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
 
     Material* m = NULL;
 
@@ -75,7 +75,7 @@ Material* Model::getMaterial(int partIndex)
 
 void Model::setMaterial(Material* material, int partIndex)
 {
-    assert(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
+    GP_ASSERT(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
 
     Material* oldMaterial = NULL;
 

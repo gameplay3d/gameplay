@@ -25,6 +25,8 @@ namespace gameplay
 
     void Label::initialize(Theme::Style* style, Properties* properties)
     {
+        GP_ASSERT(properties);
+
         Control::initialize(style, properties);
 
         const char* text = properties->getString("text");
@@ -38,14 +40,11 @@ namespace gameplay
     {
         if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
         {
-            assert("TEXT_CHANGED event is not applicable to this control.");
-            eventFlags &= ~Listener::TEXT_CHANGED;
+            GP_ERROR("TEXT_CHANGED event is not applicable to this control.");
         }
-
         if ((eventFlags & Listener::VALUE_CHANGED) == Listener::VALUE_CHANGED)
         {
-            assert("VALUE_CHANGED event is not applicable to this control.");
-            eventFlags &= ~Listener::VALUE_CHANGED;
+            GP_ERROR("VALUE_CHANGED event is not applicable to this control.");
         }
 
         Control::addListener(listener, eventFlags);

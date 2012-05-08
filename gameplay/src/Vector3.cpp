@@ -106,7 +106,7 @@ void Vector3::add(const Vector3& v)
 
 void Vector3::add(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     dst->x = v1.x + v2.x;
     dst->y = v1.y + v2.y;
@@ -115,7 +115,7 @@ void Vector3::add(const Vector3& v1, const Vector3& v2, Vector3* dst)
 
 void Vector3::clamp(const Vector3& min, const Vector3& max)
 {
-    assert(!( min.x > max.x || min.y > max.y || min.z > max.z));
+    GP_ASSERT(!( min.x > max.x || min.y > max.y || min.z > max.z));
 
     // Clamp the x value.
     if ( x < min.x )
@@ -138,8 +138,8 @@ void Vector3::clamp(const Vector3& min, const Vector3& max)
 
 void Vector3::clamp(const Vector3& v, const Vector3& min, const Vector3& max, Vector3* dst)
 {
-    assert(dst);
-    assert(!( min.x > max.x || min.y > max.y || min.z > max.z));
+    GP_ASSERT(dst);
+    GP_ASSERT(!( min.x > max.x || min.y > max.y || min.z > max.z));
 
     // Clamp the x value.
     dst->x = v.x;
@@ -175,7 +175,7 @@ void Vector3::cross(const Vector3& v)
 
 void Vector3::cross(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     float x = (v1.y * v2.z) - (v1.z * v2.y);
     float y = (v1.z * v2.x) - (v1.x * v2.z);
@@ -238,7 +238,7 @@ Vector3& Vector3::normalize()
 
 void Vector3::normalize(Vector3* dst) const
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     if (dst != this)
     {
@@ -279,7 +279,7 @@ void Vector3::set(float x, float y, float z)
 
 void Vector3::set(const float* array)
 {
-    assert(array);
+    GP_ASSERT(array);
 
     x = array[0];
     y = array[1];
@@ -309,7 +309,7 @@ void Vector3::subtract(const Vector3& v)
 
 void Vector3::subtract(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     dst->x = v1.x - v2.x;
     dst->y = v1.y - v2.y;

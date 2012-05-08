@@ -21,6 +21,8 @@ CheckBox::~CheckBox()
 
 CheckBox* CheckBox::create(Theme::Style* style, Properties* properties)
 {
+    GP_ASSERT(properties);
+
     CheckBox* checkBox = new CheckBox();
     checkBox->initialize(style, properties);
     properties->getVector2("imageSize", &checkBox->_imageSize);
@@ -57,7 +59,7 @@ void CheckBox::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Control::Listener::TEXT_CHANGED) == Control::Listener::TEXT_CHANGED)
     {
-        assert("TEXT_CHANGED event is not applicable to CheckBox.");
+        GP_ERROR("TEXT_CHANGED event is not applicable to CheckBox.");
         eventFlags &= ~Control::Listener::TEXT_CHANGED;
     }
 
@@ -138,6 +140,9 @@ void CheckBox::update(const Rectangle& clip)
 
 void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
+    GP_ASSERT(spriteBatch);
+    GP_ASSERT(_image);
+
     // Left, v-center.
     // TODO: Set an alignment for icons.
     const Theme::Border& border = getBorder(_state);

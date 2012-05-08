@@ -62,7 +62,7 @@ void Frustum::getMatrix(Matrix* dst) const
 
 void Frustum::getCorners(Vector3* corners) const
 {
-    assert(corners);
+    GP_ASSERT(corners);
 
     Plane::intersection(_near, _left, _top, &corners[0]);
     Plane::intersection(_near, _left, _bottom, &corners[1]);
@@ -107,7 +107,7 @@ void Frustum::set(const Frustum& frustum)
 
 void updatePlane(const Matrix& matrix, Plane* dst)
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     dst->setNormal(Vector3(matrix.m[3] + matrix.m[2], matrix.m[7] + matrix.m[6], matrix.m[11] + matrix.m[10]));
     dst->setDistance(matrix.m[15] + matrix.m[14]);
