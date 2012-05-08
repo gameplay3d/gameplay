@@ -17,28 +17,28 @@ AnimationValue::~AnimationValue()
 
 float AnimationValue::getFloat(unsigned int index) const
 {
-    assert(index < _componentCount);
+    GP_ASSERT(index < _componentCount);
 
     return _value[index];
 }
 
 void AnimationValue::setFloat(unsigned int index, float value)
 {
-    assert(index < _componentCount);
+    GP_ASSERT(index < _componentCount);
 
     _value[index] = value;
 }
 
 void AnimationValue::getFloat(float* value, unsigned int offset, unsigned int length) const
 {
-    assert(value && offset < _componentCount && (offset + length) <= _componentCount);
+    GP_ASSERT(value && offset < _componentCount && (offset + length) <= _componentCount);
 
     memcpy(value + offset, _value, length * sizeof(float));
 }
 
 void AnimationValue::setFloat(float* value, unsigned int offset, unsigned int length)
 {
-    assert(value && offset < _componentCount && (offset + length) <= _componentCount);
+    GP_ASSERT(value && offset < _componentCount && (offset + length) <= _componentCount);
 
     memcpy(_value, value + offset, length * sizeof(float));
 }

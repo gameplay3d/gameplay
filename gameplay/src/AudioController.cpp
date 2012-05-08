@@ -21,7 +21,7 @@ void AudioController::initialize()
     _alcDevice = alcOpenDevice (NULL);
     if (!_alcDevice)
     {
-        LOG_ERROR("AudioController::initialize() error. Unable to open OpenAL device.\n");
+        GP_ERROR("Unable to open OpenAL device.\n");
         return;  
     }
         
@@ -30,7 +30,7 @@ void AudioController::initialize()
     if (!_alcContext || alcErr != ALC_NO_ERROR)
     {
         alcCloseDevice (_alcDevice);
-        LOG_ERROR_VARG("AudioController::initialize() error. Unable to create OpenAL context. Error: %d\n", alcErr);
+        GP_ERROR("Unable to create OpenAL context. Error: %d\n", alcErr);
         return;
     }
     
@@ -38,7 +38,7 @@ void AudioController::initialize()
     alcErr = alcGetError(_alcDevice);
     if (alcErr != ALC_NO_ERROR)
     {
-        LOG_ERROR_VARG("AudioController::initialize() error. Unable to make OpenAL context current. Error: %d\n", alcErr);
+        GP_ERROR("Unable to make OpenAL context current. Error: %d\n", alcErr);
     }
 }
 

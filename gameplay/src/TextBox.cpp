@@ -33,8 +33,7 @@ void TextBox::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Listener::VALUE_CHANGED) == Listener::VALUE_CHANGED)
     {
-        assert("VALUE_CHANGED event is not applicable to TextBox.");
-        eventFlags &= ~Listener::VALUE_CHANGED;
+        GP_ERROR("VALUE_CHANGED event is not applicable to TextBox.");
     }
 
     Control::addListener(listener, eventFlags);
@@ -118,6 +117,7 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     case Keyboard::KEY_DELETE:
                     {
                         Font* font = getFont(_state);
+                        GP_ASSERT(font);
                         unsigned int fontSize = getFontSize(_state);
                         Font::Justify textAlignment = getTextAlignment(_state);
                         bool rightToLeft = getTextRightToLeft(_state);
@@ -134,6 +134,7 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     case Keyboard::KEY_LEFT_ARROW:
                     {
                         Font* font = getFont(_state);
+                        GP_ASSERT(font);
                         unsigned int fontSize = getFontSize(_state);
                         Font::Justify textAlignment = getTextAlignment(_state);
                         bool rightToLeft = getTextRightToLeft(_state);
@@ -148,6 +149,7 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     case Keyboard::KEY_RIGHT_ARROW:
                     {
                         Font* font = getFont(_state);
+                        GP_ASSERT(font);
                         unsigned int fontSize = getFontSize(_state);
                         Font::Justify textAlignment = getTextAlignment(_state);
                         bool rightToLeft = getTextRightToLeft(_state);
@@ -162,6 +164,7 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     case Keyboard::KEY_UP_ARROW:
                     {
                         Font* font = getFont(_state);
+                        GP_ASSERT(font);
                         unsigned int fontSize = getFontSize(_state);
                         Font::Justify textAlignment = getTextAlignment(_state);
                         bool rightToLeft = getTextRightToLeft(_state);
@@ -175,6 +178,7 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     case Keyboard::KEY_DOWN_ARROW:
                     {
                         Font* font = getFont(_state);
+                        GP_ASSERT(font);
                         unsigned int fontSize = getFontSize(_state);
                         Font::Justify textAlignment = getTextAlignment(_state);
                         bool rightToLeft = getTextRightToLeft(_state);
@@ -192,6 +196,7 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
             case Keyboard::KEY_CHAR:
             {
                 Font* font = getFont(_state);
+                GP_ASSERT(font);
                 unsigned int fontSize = getFontSize(_state);
                 Font::Justify textAlignment = getTextAlignment(_state);
                 bool rightToLeft = getTextRightToLeft(_state);
@@ -280,6 +285,7 @@ void TextBox::update(const Rectangle& clip)
     if (_state == FOCUS)
     {
         Font* font = getFont(_state);
+        GP_ASSERT(font);
         unsigned int fontSize = getFontSize(_state);
         Font::Justify textAlignment = getTextAlignment(_state);
         bool rightToLeft = getTextRightToLeft(_state);
@@ -296,10 +302,13 @@ void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     if (_state == FOCUS)
     {
+        GP_ASSERT(_caretImage);
+
         // Draw the cursor at its current location.
         const Rectangle& region = _caretImage->getRegion();
         if (!region.isEmpty())
         {
+            GP_ASSERT(spriteBatch);
             const Theme::UVs uvs = _caretImage->getUVs();
             Vector4 color = _caretImage->getColor();
             color.w *= _opacity;

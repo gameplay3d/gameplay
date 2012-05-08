@@ -56,6 +56,8 @@ namespace gameplay
 
     Container* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
     {
+        GP_ASSERT(properties);
+
         const char* layoutString = properties->getString("layout");
         Container* container = Container::create(getLayoutType(layoutString));
         container->initialize(style, properties);
@@ -66,6 +68,9 @@ namespace gameplay
 
     void Container::addControls(Theme* theme, Properties* properties)
     {
+        GP_ASSERT(theme);
+        GP_ASSERT(properties);
+
         // Add all the controls to this container.
         Properties* controlSpace = properties->getNextNamespace();
         while (controlSpace != NULL)
@@ -74,11 +79,9 @@ namespace gameplay
 
             const char* controlStyleName = controlSpace->getString("style");
             Theme::Style* controlStyle = NULL;
-            if (controlStyleName)
-            {
-                 controlStyle = theme->getStyle(controlStyleName);
-            }
-            assert(controlStyle);
+            GP_ASSERT(controlStyleName);
+            controlStyle = theme->getStyle(controlStyleName);
+            GP_ASSERT(controlStyle);
 
             std::string controlName(controlSpace->getNamespace());
             std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
@@ -110,6 +113,10 @@ namespace gameplay
             {
                 control = TextBox::create(controlStyle, controlSpace);
             }
+            else
+            {
+                GP_ERROR("Failed to create control; unrecognized control name \'%s\'.", controlName.c_str());
+            }
 
             // Add the new control to the form.
             if (control)
@@ -129,6 +136,7 @@ namespace gameplay
 
     unsigned int Container::addControl(Control* control)
     {
+        GP_ASSERT(control);
         _controls.push_back(control);
 
         return _controls.size() - 1;
@@ -136,6 +144,7 @@ namespace gameplay
 
     void Container::insertControl(Control* control, unsigned int index)
     {
+        GP_ASSERT(control);
         std::vector<Control*>::iterator it = _controls.begin() + index;
         _controls.insert(it, control);
     }
@@ -155,18 +164,21 @@ namespace gameplay
             if (strcmp(id, c->getID()) == 0)
             {
                 _controls.erase(it);
+                return;
             }
         }
     }
 
     void Container::removeControl(Control* control)
     {
+        GP_ASSERT(control);
         std::vector<Control*>::iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             if (*it == control)
             {
                 _controls.erase(it);
+                return;
             }
         }
     }
@@ -179,10 +191,12 @@ namespace gameplay
 
     Control* Container::getControl(const char* id) const
     {
+        GP_ASSERT(id);
         std::vector<Control*>::const_iterator it;
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* c = *it;
+            GP_ASSERT(c);
             if (strcmp(id, c->getID()) == 0)
             {
                 return c;
@@ -200,7 +214,7 @@ namespace gameplay
         return NULL;
     }
 
-    std::vector<Control*> Container::getControls() const
+    const std::vector<Control*>& Container::getControls() const
     {
         return _controls;
     }
@@ -214,6 +228,7 @@ namespace gameplay
         for (; itr != end; itr++)
         {
             control = *itr;
+            GP_ASSERT(control);
             Animation* animation = control->getAnimation(id);
             if (animation)
                 return animation;
@@ -234,6 +249,7 @@ namespace gameplay
         // Update this container's viewport.
         Control::update(clip);
 
+        GP_ASSERT(_layout);
         _layout->update(this);
     }
 
@@ -247,6 +263,7 @@ namespace gameplay
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
+            GP_ASSERT(control);
             control->drawBorder(spriteBatch, _clip);
         }
     }
@@ -257,6 +274,7 @@ namespace gameplay
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
+            GP_ASSERT(control);
             control->drawImages(spriteBatch, _clip);
         }
 
@@ -269,6 +287,7 @@ namespace gameplay
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
+            GP_ASSERT(control);
             control->drawText(_clip);
         }
 
@@ -286,6 +305,7 @@ namespace gameplay
             std::vector<Control*>::const_iterator it;
             for (it = _controls.begin(); it < _controls.end(); it++)
             {
+                GP_ASSERT(*it);
                 if ((*it)->isDirty())
                 {
                     return true;
@@ -304,7 +324,6 @@ namespace gameplay
         }
 
         bool eventConsumed = false;
-
         const Theme::Border& border = getBorder(_state);
         const Theme::Padding& padding = getPadding();
         float xPos = border.left + padding.left;
@@ -314,6 +333,7 @@ namespace gameplay
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
+            GP_ASSERT(control);
             if (!control->isEnabled())
             {
                 continue;
@@ -356,6 +376,7 @@ namespace gameplay
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
+            GP_ASSERT(control);
             if (!control->isEnabled())
             {
                 continue;

@@ -39,18 +39,18 @@ namespace gameplay
     Form* Form::create(const char* url)
     {
         // Load Form from .form file.
-        assert(url);
-
         Properties* properties = Properties::create(url);
-        assert(properties);
         if (properties == NULL)
+        {
+            GP_ASSERT(properties);
             return NULL;
+        }
 
         // Check if the Properties is valid and has a valid namespace.
         Properties* formProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
-        assert(formProperties);
         if (!formProperties || !(strcmp(formProperties->getNamespace(), "form") == 0))
         {
+            GP_ASSERT(formProperties);
             SAFE_DELETE(properties);
             return NULL;
         }
@@ -70,17 +70,17 @@ namespace gameplay
         case Layout::LAYOUT_VERTICAL:
             layout = VerticalLayout::create();
             break;
+        default:
+            GP_ERROR("Unsupported layout type \'%d\'.", getLayoutType(layoutString));
         }
 
-        assert(themeFile);
         Theme* theme = Theme::create(themeFile);
-        assert(theme);
+        GP_ASSERT(theme);
 
         Form* form = new Form();
         form->_layout = layout;
         form->_theme = theme;
 
-        //Theme* theme = form->_theme;
         const char* styleName = formProperties->getString("style");
         form->initialize(theme->getStyle(styleName), formProperties);
 
@@ -110,6 +110,7 @@ namespace gameplay
         for (it = __forms.begin(); it < __forms.end(); it++)
         {
             Form* f = *it;
+            GP_ASSERT(f);
             if (strcmp(id, f->getID()) == 0)
             {
                 return f;
@@ -173,6 +174,7 @@ namespace gameplay
             // and if so, render into the framebuffer.
             if (isDirty())
             {
+                GP_ASSERT(_frameBuffer);
                 _frameBuffer->bind();
 
                 Game* game = Game::getInstance();
@@ -180,6 +182,7 @@ namespace gameplay
                 
                 game->setViewport(Rectangle(_bounds.x, _bounds.y, _bounds.width, _bounds.height));
 
+                GP_ASSERT(_theme);
                 draw(_theme->getSpriteBatch(), _clip);
 
                 // Rebind the default framebuffer and game viewport.
@@ -189,16 +192,20 @@ namespace gameplay
                 game->setViewport(prevViewport);
             }
 
+            GP_ASSERT(_quad);
             _quad->draw();
         }
         else
         {
+            GP_ASSERT(_theme);
             draw(_theme->getSpriteBatch(), _clip);
         }
     }
 
     void Form::draw(SpriteBatch* spriteBatch, const Rectangle& clip)
     {
+        GP_ASSERT(spriteBatch);
+
         std::vector<Control*>::const_iterator it;
 
         // Batch for all themed border and background sprites.
@@ -222,6 +229,7 @@ namespace gameplay
         for (it = _controls.begin(); it < _controls.end(); it++)
         {
             Control* control = *it;
+            GP_ASSERT(control);
 
             // Draw this control's border and background.
             control->drawBorder(spriteBatch, clip);
@@ -257,9 +265,13 @@ namespace gameplay
 
         // Create the material
         Material* material = _quad->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+        GP_ASSERT(material);
 
         // Set the common render state block for the material
+        GP_ASSERT(_theme);
+        GP_ASSERT(_theme->getSpriteBatch());
         RenderState::StateBlock* stateBlock = _theme->getSpriteBatch()->getStateBlock();
+        GP_ASSERT(stateBlock);
         stateBlock->setDepthWrite(true);
         material->setStateBlock(stateBlock);
 
@@ -276,11 +288,13 @@ namespace gameplay
         if (!_frameBuffer->getRenderTarget())
         {
             RenderTarget* rt = RenderTarget::create(_id.c_str(), _bounds.width, _bounds.height);
+            GP_ASSERT(rt);
             _frameBuffer->setRenderTarget(rt);
             SAFE_RELEASE(rt);
         }
 
         Texture::Sampler* sampler = Texture::Sampler::create(_frameBuffer->getRenderTarget()->getTexture());
+        GP_ASSERT(sampler);
         sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
         material->getParameter("u_texture")->setValue(sampler);
         material->getParameter("u_textureRepeat")->setValue(Vector2::one());
@@ -297,6 +311,7 @@ namespace gameplay
         for (it = __forms.begin(); it < __forms.end(); it++)
         {
             Form* form = *it;
+            GP_ASSERT(form);
 
             if (form->isEnabled())
             {
@@ -304,6 +319,7 @@ namespace gameplay
                 if (node)
                 {
                     Scene* scene = node->getScene();
+                    GP_ASSERT(scene);
                     Camera* camera = scene->getActiveCamera();
 
                     if (camera)
@@ -389,6 +405,7 @@ namespace gameplay
         for (it = __forms.begin(); it < __forms.end(); it++)
         {
             Form* form = *it;
+            GP_ASSERT(form);
             if (form->isEnabled())
             {
                 form->keyEvent(evt, key);
