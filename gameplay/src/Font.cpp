@@ -124,7 +124,7 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
         __fontEffect = Effect::createFromSource(FONT_VSH, FONT_FSH);
         if (__fontEffect == NULL)
         {
-            LOG_ERROR("Failed to create effect for font.");
+            GP_ERROR("Failed to create effect for font.");
             SAFE_RELEASE(texture);
             return NULL;
         }
@@ -142,7 +142,7 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
 
     if (batch == NULL)
     {
-        LOG_ERROR("Failed to create batch for font.");
+        GP_ERROR("Failed to create batch for font.");
         return NULL;
     }
 
@@ -1823,6 +1823,10 @@ Font::Justify Font::getJustify(const char* justify)
     else if (strcmp(justify, "ALIGN_BOTTOM_RIGHT") == 0)
     {
         return Font::ALIGN_BOTTOM_RIGHT;
+    }
+    else
+    {
+        GP_ERROR("Failed to get corresponding font justification for unsupported value \'%s\'.", justify);
     }
 
     // Default.

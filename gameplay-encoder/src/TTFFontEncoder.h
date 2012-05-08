@@ -18,14 +18,6 @@ public:
     float uvCoords[4];
 };
 
-void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, unsigned char* srcBitmap, int srcWidth, int srcHeight);
-
-void writeUint(FILE* fp, unsigned int i);
-
-void writeFloat(FILE* fp, float f);
-
-void writeString(FILE* fp, const char* str);
-
 int writeFont(const char* filename, unsigned int fontSize, const char* id, bool fontpreview);
 
 }

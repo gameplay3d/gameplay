@@ -1,6 +1,8 @@
 #include "Base.h"
 #include "Form.h"
 #include "AbsoluteLayout.h"
+#include "FlowLayout.h"
+#include "ScrollLayout.h"
 #include "VerticalLayout.h"
 #include "Game.h"
 #include "Theme.h"
@@ -41,18 +43,19 @@ Form::~Form()
 Form* Form::create(const char* url)
 {
     // Load Form from .form file.
-    assert(url);
-
     Properties* properties = Properties::create(url);
-    assert(properties);
     if (properties == NULL)
+    {
+        GP_ASSERT(properties);
         return NULL;
+    }
 
     // Check if the Properties is valid and has a valid namespace.
     Properties* formProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
     assert(formProperties);
     if (!formProperties || !(strcmp(formProperties->getNamespace(), "form") == 0))
     {
+        GP_ASSERT(formProperties);
         SAFE_DELETE(properties);
         return NULL;
     }
@@ -68,21 +71,25 @@ Form* Form::create(const char* url)
         layout = AbsoluteLayout::create();
         break;
     case Layout::LAYOUT_FLOW:
+        layout = FlowLayout::create();
         break;
     case Layout::LAYOUT_VERTICAL:
         layout = VerticalLayout::create();
         break;
+    case Layout::LAYOUT_SCROLL:
+        layout = ScrollLayout::create();
+        break;
+    default:
+        GP_ERROR("Unsupported layout type \'%d\'.", getLayoutType(layoutString));
     }
 
-    assert(themeFile);
     Theme* theme = Theme::create(themeFile);
-    assert(theme);
+    GP_ASSERT(theme);
 
     Form* form = new Form();
     form->_layout = layout;
     form->_theme = theme;
 
-    //Theme* theme = form->_theme;
     const char* styleName = formProperties->getString("style");
     form->initialize(theme->getStyle(styleName), formProperties);
 
@@ -120,6 +127,7 @@ Form* Form::create(const char* url)
     // Create the frame buffer.
     form->_frameBuffer = FrameBuffer::create(form->_id.c_str());
     RenderTarget* rt = RenderTarget::create(form->_id.c_str(), w, h);
+    GP_ASSERT(rt);
     form->_frameBuffer->setRenderTarget(rt);
     SAFE_RELEASE(rt);
 
@@ -140,6 +148,7 @@ Form* Form::getForm(const char* id)
     for (it = __forms.begin(); it < __forms.end(); it++)
     {
         Form* f = *it;
+        GP_ASSERT(f);
         if (strcmp(id, f->getID()) == 0)
         {
             return f;
@@ -207,27 +216,30 @@ void Form::update()
 
 void Form::draw()
 {
-    // The first time a form is drawn, its contents are rendered into a framebuffer.
-    // The framebuffer will only be 
+    /*
+    The first time a form is drawn, its contents are rendered into a framebuffer.
+    The framebuffer will only be drawn into again when the contents of the form change.
 
-    // If this form has a node then it's a 3D form.  The contents will be rendered
-    // into a framebuffer which will be used to texture a quad.  The quad will be
-    // given the same dimensions as the form and must be transformed appropriately
-    // by the user, unless they call setQuad() themselves.
+    If this form has a node then it's a 3D form and the framebuffer will be used
+    to texture a quad.  The quad will be given the same dimensions as the form and
+    must be transformed appropriately by the user, unless they call setQuad() themselves.
 
-    // On the other hand, if this form has not been set on a node it will render
-    // directly to the display.
+    On the other hand, if this form has not been set on a node, SpriteBatch will be used
+    to render the contents of the frambuffer directly to the display.
+    */
 
     // Check whether this form has changed since the last call to draw()
     // and if so, render into the framebuffer.
     if (isDirty())
     {
+        GP_ASSERT(_frameBuffer);
         _frameBuffer->bind();
 
         Game* game = Game::getInstance();
         Rectangle prevViewport = game->getViewport();
         game->setViewport(Rectangle(_bounds.x, _bounds.y, _bounds.width, _bounds.height));
 
+        GP_ASSERT(_theme);
         _theme->setProjectionMatrix(_projectionMatrix);
         draw(_theme->getSpriteBatch(), _viewportClipBounds);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
@@ -241,6 +253,7 @@ void Form::draw()
 
     if (_node)
     {
+        GP_ASSERT(_quad);
         _quad->draw();
     }
     else
@@ -248,6 +261,7 @@ void Form::draw()
         if (!_spriteBatch)
         {
             _spriteBatch = SpriteBatch::create(_frameBuffer->getRenderTarget()->getTexture());
+            GP_ASSERT(_spriteBatch);
         }
 
         _spriteBatch->begin();
@@ -258,6 +272,8 @@ void Form::draw()
 
 void Form::draw(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
+    GP_ASSERT(spriteBatch);
+
     std::vector<Control*>::const_iterator it;
 
     // Batch each font individually.
@@ -282,6 +298,7 @@ void Form::draw(SpriteBatch* spriteBatch, const Rectangle& clip)
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
         Control* control = *it;
+        GP_ASSERT(control);
 
         if (_skin || control->isDirty() || control->_clearBounds.intersects(boundsUnion))
         {
@@ -310,21 +327,27 @@ void Form::initializeQuad(Mesh* mesh)
     // Release current model.
     SAFE_RELEASE(_quad);
 
-    // Create the model
+    // Create the model.
     _quad = Model::create(mesh);
 
-    // Create the material
+    // Create the material.
     Material* material = _quad->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+    GP_ASSERT(material);
 
-    // Set the common render state block for the material
+    // Set the common render state block for the material.
+    GP_ASSERT(_theme);
+    GP_ASSERT(_theme->getSpriteBatch());
     RenderState::StateBlock* stateBlock = _theme->getSpriteBatch()->getStateBlock();
+    GP_ASSERT(stateBlock);
     stateBlock->setDepthWrite(true);
     material->setStateBlock(stateBlock);
 
-    // Bind the WorldViewProjection matrix
+    // Bind the WorldViewProjection matrix.
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
 
+    // Bind the texture.
     Texture::Sampler* sampler = Texture::Sampler::create(_frameBuffer->getRenderTarget()->getTexture());
+    GP_ASSERT(sampler);
     sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
     material->getParameter("u_diffuseTexture")->setValue(sampler);
     material->getParameter("u_diffuseColor")->setValue(Vector4::one());
@@ -340,6 +363,7 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
     for (it = __forms.begin(); it < __forms.end(); it++)
     {
         Form* form = *it;
+        GP_ASSERT(form);
 
         if (form->isEnabled())
         {
@@ -347,6 +371,7 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
             if (node)
             {
                 Scene* scene = node->getScene();
+                GP_ASSERT(scene);
                 Camera* camera = scene->getActiveCamera();
 
                 if (camera)
@@ -432,6 +457,7 @@ void Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
     for (it = __forms.begin(); it < __forms.end(); it++)
     {
         Form* form = *it;
+        GP_ASSERT(form);
         if (form->isEnabled())
         {
             form->keyEvent(evt, key);

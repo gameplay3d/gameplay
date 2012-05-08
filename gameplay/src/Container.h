@@ -112,7 +112,7 @@ public:
      *
      * @return The vector of the controls within this container.
      */
-    std::vector<Control*> getControls() const;
+    const std::vector<Control*>& getControls() const;
 
     /**
      * Gets the first animation in the control with the specified ID.

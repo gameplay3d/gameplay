@@ -42,18 +42,18 @@ Layout::Type AbsoluteLayout::getType()
 
 void AbsoluteLayout::update(const Container* container)
 {
+    GP_ASSERT(container);
+
     // An AbsoluteLayout does nothing to modify the layout of Controls.
     std::vector<Control*> controls = container->getControls();
     unsigned int controlsCount = controls.size();
     for (unsigned int i = 0; i < controlsCount; i++)
     {
         Control* control = controls[i];
+        GP_ASSERT(control);
 
-        if (control->isDirty() || control->isContainer())
-        {
-            align(control, container);
-            control->update(container->getClip(), Vector2::zero());
-        }
+        align(control, container);
+        control->update(container->getClip(), Vector2::zero());
     }
 }
 
