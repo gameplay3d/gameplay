@@ -76,6 +76,13 @@ public:
         float uvs[4];
     };
 
+    class TextBatch
+    {
+    public:
+        SpriteBatch::SpriteVertex* _vertices;
+        unsigned int _vertexCount;
+    };
+
     /**
      * Creates a font from the given bundle.
      *
@@ -124,6 +131,17 @@ public:
      * Ends text batching for this font and renders all drawn text.
      */
     void end();
+
+    /**
+     * Compute vertex coordinates and UVs for a given string.
+     */
+    TextBatch* getTextBatch(const char* text, const Rectangle& area, const Vector4& color, unsigned int size = 0,
+        Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false, const Rectangle* clip = NULL);
+
+    /**
+     * Draw a string from a precomputed StringBatch.
+     */
+    void drawTextBatch(TextBatch* textBatch);
 
     /**
      * Draws the specified text in a solid color, with a scaling factor.
@@ -181,7 +199,7 @@ public:
     /**
      * Get an index into a string corresponding to the character nearest the given location within the clip region.
      */
-    unsigned int getIndexAtLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
+    int getIndexAtLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
                                     Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
 
     /**
@@ -225,7 +243,10 @@ private:
      */
     ~Font();
 
-    unsigned int getIndexOrLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
+    void getMeasurementInfo(const char* text, const Rectangle& area, unsigned int size, Justify justify, bool wrap, bool rightToLeft,
+        std::vector<int>* xPositions, int* yPosition, std::vector<unsigned int>* lineLengths);
+
+    int getIndexOrLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
                                     const int destIndex = -1, Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
 
     unsigned int getTokenWidth(const char* token, unsigned int length, unsigned int size, float scale);

@@ -144,10 +144,10 @@ void PhysicsRigidBody::applyTorqueImpulse(const Vector3& torque)
 PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
 {
     // Check if the properties is valid and has a valid namespace.
-    assert(properties);
+    GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "rigidBody") == 0))
     {
-        WARN("Failed to load rigid body from properties object: must be non-null object and have namespace equal to \'rigidBody\'.");
+        GP_WARN("Failed to load rigid body from properties object: must be non-null object and have namespace equal to \'rigidBody\'.");
         return NULL;
     }
 
@@ -155,7 +155,7 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     PhysicsCollisionShape::Definition* shape = PhysicsCollisionShape::Definition::create(node, properties);
     if (shape == NULL)
     {
-        WARN("Failed to create collision shape during rigid body creation.");
+        GP_WARN("Failed to create collision shape during rigid body creation.");
         return NULL;
     }
 
@@ -227,7 +227,7 @@ float PhysicsRigidBody::getHeight(float x, float y) const
     // This function is only supported for heightfield rigid bodies.
     if (_collisionShape->getType() != PhysicsCollisionShape::SHAPE_HEIGHTFIELD)
     {
-        WARN("Attempting to get the height of a non-heightfield rigid body.");
+        GP_WARN("Attempting to get the height of a non-heightfield rigid body.");
         return 0.0f;
     }
 
@@ -248,7 +248,7 @@ float PhysicsRigidBody::getHeight(float x, float y) const
     // Check that the x, y position is within the bounds.
     if (x < 0.0f || x > w || y < 0.0f || y > h)
     {
-        WARN_VARG("Attempting to get height at point '%f, %f', which is outside the range of the heightfield with width %d and height %d.", x, y, w, h);
+        GP_WARN("Attempting to get height at point '%f, %f', which is outside the range of the heightfield with width %d and height %d.", x, y, w, h);
         return 0.0f;
     }
 

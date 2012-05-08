@@ -64,6 +64,8 @@ private:
 
     void emitterChanged();
 
+    void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
+
     Scene* _scene;
     Node* _particleEmitterNode;
     Node* _cameraParent;
@@ -73,6 +75,7 @@ private:
     int _prevX, _prevY;
     std::vector<ParticleEmitter*> _particleEmitters;
     unsigned int _particleEmitterIndex;
+    Font* _font;
     
     Slider* _startRed;
     Slider* _startGreen;
@@ -101,8 +104,6 @@ private:
     Slider* _burstSize;
     Container* _position;
     Container* _particleProperties;
-    Label* _particlesCount;
-    Label* _fps;
 };
 
 #endif
