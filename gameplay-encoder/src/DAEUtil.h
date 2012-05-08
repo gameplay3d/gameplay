@@ -78,6 +78,15 @@ const domName_arrayRef getSourceNameArray(const domSourceRef& source);
 const domInstance_controller::domSkeletonRef getSkeleton(const domInstance_controllerRef& instanceController);
 
 /**
+ * Returns the root joint node of the given skin.
+ * 
+ * @param skin The COLLADA skin to get the root joint for.
+ * 
+ * @return The COLLADA node or NULL if not found.
+ */
+domNode* getRootJointNode(const domSkin* skin);
+
+/**
  * Returns true if the two given animation channels have equal key time input source.
  * 
  * @param c1 Channel one to compare.
