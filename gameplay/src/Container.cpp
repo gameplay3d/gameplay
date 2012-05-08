@@ -4,421 +4,447 @@
 #include "AbsoluteLayout.h"
 #include "FlowLayout.h"
 #include "VerticalLayout.h"
+#include "ScrollLayout.h"
 #include "Label.h"
 #include "Button.h"
 #include "CheckBox.h"
 #include "RadioButton.h"
 #include "Slider.h"
 #include "TextBox.h"
+#include "Game.h"
 
 namespace gameplay
 {
-    Container::Container() : _layout(NULL)
+
+Container::Container() : _layout(NULL)
+{
+}
+
+Container::Container(const Container& copy)
+{
+}
+
+Container::~Container()
+{
+    std::vector<Control*>::iterator it;
+    for (it = _controls.begin(); it < _controls.end(); it++)
     {
+        SAFE_RELEASE((*it));
     }
 
-    Container::Container(const Container& copy)
+    SAFE_RELEASE(_layout);
+}
+
+Container* Container::create(Layout::Type type)
+{
+    Layout* layout = NULL;
+    switch (type)
     {
+    case Layout::LAYOUT_ABSOLUTE:
+        layout = AbsoluteLayout::create();
+        break;
+    case Layout::LAYOUT_FLOW:
+        layout = FlowLayout::create();
+        break;
+    case Layout::LAYOUT_VERTICAL:
+        layout = VerticalLayout::create();
+        break;
+    case Layout::LAYOUT_SCROLL:
+        layout = ScrollLayout::create();
+        break;
     }
 
-    Container::~Container()
+    Container* container = new Container();
+    container->_layout = layout;
+
+    return container;
+}
+
+Container* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
+{
+    GP_ASSERT(properties);
+
+    const char* layoutString = properties->getString("layout");
+    Container* container = Container::create(getLayoutType(layoutString));
+    container->initialize(style, properties);
+    container->addControls(theme, properties);
+
+    return container;
+}
+
+void Container::addControls(Theme* theme, Properties* properties)
+{
+    GP_ASSERT(theme);
+    GP_ASSERT(properties);
+
+    // Add all the controls to this container.
+    Properties* controlSpace = properties->getNextNamespace();
+    while (controlSpace != NULL)
     {
-        std::vector<Control*>::iterator it;
-        for (it = _controls.begin(); it < _controls.end(); it++)
-        {
-            SAFE_RELEASE((*it));
-        }
-
-        SAFE_RELEASE(_layout);
-    }
-
-    Container* Container::create(Layout::Type type)
-    {
-        Layout* layout = NULL;
-        switch (type)
-        {
-        case Layout::LAYOUT_ABSOLUTE:
-            layout = AbsoluteLayout::create();
-            break;
-        case Layout::LAYOUT_FLOW:
-            layout = FlowLayout::create();
-            break;
-        case Layout::LAYOUT_VERTICAL:
-            layout = VerticalLayout::create();
-            break;
-        }
-
-        Container* container = new Container();
-        container->_layout = layout;
-
-        return container;
-    }
-
-    Container* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
-    {
-        GP_ASSERT(properties);
-
-        const char* layoutString = properties->getString("layout");
-        Container* container = Container::create(getLayoutType(layoutString));
-        container->initialize(style, properties);
-        container->addControls(theme, properties);
-
-        return container;
-    }
-
-    void Container::addControls(Theme* theme, Properties* properties)
-    {
-        GP_ASSERT(theme);
-        GP_ASSERT(properties);
-
-        // Add all the controls to this container.
-        Properties* controlSpace = properties->getNextNamespace();
-        while (controlSpace != NULL)
-        {
-            Control* control = NULL;
-
-            const char* controlStyleName = controlSpace->getString("style");
-            Theme::Style* controlStyle = NULL;
-            GP_ASSERT(controlStyleName);
-            controlStyle = theme->getStyle(controlStyleName);
-            GP_ASSERT(controlStyle);
-
-            std::string controlName(controlSpace->getNamespace());
-            std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
-            if (controlName == "LABEL")
-            {
-                control = Label::create(controlStyle, controlSpace);
-            }
-            else if (controlName == "BUTTON")
-            {
-                control = Button::create(controlStyle, controlSpace);
-            }
-            else if (controlName == "CHECKBOX")
-            {
-                control = CheckBox::create(controlStyle, controlSpace);
-            }
-            else if (controlName == "RADIOBUTTON")
-            {
-                control = RadioButton::create(controlStyle, controlSpace);
-            }
-            else if (controlName == "CONTAINER")
-            {
-                control = Container::create(controlStyle, controlSpace, theme);
-            }
-            else if (controlName == "SLIDER")
-            {
-                control = Slider::create(controlStyle, controlSpace);
-            }
-            else if (controlName == "TEXTBOX")
-            {
-                control = TextBox::create(controlStyle, controlSpace);
-            }
-            else
-            {
-                GP_ERROR("Failed to create control; unrecognized control name \'%s\'.", controlName.c_str());
-            }
-
-            // Add the new control to the form.
-            if (control)
-            {
-                addControl(control);
-            }
-
-            // Get the next control.
-            controlSpace = properties->getNextNamespace();
-        }
-    }
-
-    Layout* Container::getLayout()
-    {
-        return _layout;
-    }
-
-    unsigned int Container::addControl(Control* control)
-    {
-        GP_ASSERT(control);
-        _controls.push_back(control);
-
-        return _controls.size() - 1;
-    }
-
-    void Container::insertControl(Control* control, unsigned int index)
-    {
-        GP_ASSERT(control);
-        std::vector<Control*>::iterator it = _controls.begin() + index;
-        _controls.insert(it, control);
-    }
-
-    void Container::removeControl(unsigned int index)
-    {
-        std::vector<Control*>::iterator it = _controls.begin() + index;
-        _controls.erase(it);
-    }
-
-    void Container::removeControl(const char* id)
-    {
-        std::vector<Control*>::iterator it;
-        for (it = _controls.begin(); it < _controls.end(); it++)
-        {
-            Control* c = *it;
-            if (strcmp(id, c->getID()) == 0)
-            {
-                _controls.erase(it);
-                return;
-            }
-        }
-    }
-
-    void Container::removeControl(Control* control)
-    {
-        GP_ASSERT(control);
-        std::vector<Control*>::iterator it;
-        for (it = _controls.begin(); it < _controls.end(); it++)
-        {
-            if (*it == control)
-            {
-                _controls.erase(it);
-                return;
-            }
-        }
-    }
-
-    Control* Container::getControl(unsigned int index) const
-    {
-        std::vector<Control*>::const_iterator it = _controls.begin() + index;
-        return *it;
-    }
-
-    Control* Container::getControl(const char* id) const
-    {
-        GP_ASSERT(id);
-        std::vector<Control*>::const_iterator it;
-        for (it = _controls.begin(); it < _controls.end(); it++)
-        {
-            Control* c = *it;
-            GP_ASSERT(c);
-            if (strcmp(id, c->getID()) == 0)
-            {
-                return c;
-            }
-            else if (c->isContainer())
-            {
-                Control* cc = ((Container*)c)->getControl(id);
-                if (cc)
-                {
-                    return cc;
-                }
-            }
-        }
-
-        return NULL;
-    }
-
-    const std::vector<Control*>& Container::getControls() const
-    {
-        return _controls;
-    }
-
-    Animation* Container::getAnimation(const char* id) const
-    {
-        std::vector<Control*>::const_iterator itr = _controls.begin();
-        std::vector<Control*>::const_iterator end = _controls.end();
-        
         Control* control = NULL;
-        for (; itr != end; itr++)
-        {
-            control = *itr;
-            GP_ASSERT(control);
-            Animation* animation = control->getAnimation(id);
-            if (animation)
-                return animation;
 
-            if (control->isContainer())
-            {
-                animation = ((Container*)control)->getAnimation(id);
-                if (animation)
-                    return animation;
-            }
+        const char* controlStyleName = controlSpace->getString("style");
+        Theme::Style* controlStyle = NULL;
+        GP_ASSERT(controlStyleName);
+        controlStyle = theme->getStyle(controlStyleName);
+        GP_ASSERT(controlStyle);
+
+        std::string controlName(controlSpace->getNamespace());
+        std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
+        if (controlName == "LABEL")
+        {
+            control = Label::create(controlStyle, controlSpace);
         }
-
-        return NULL;
-    }
-
-    void Container::update(const Rectangle& clip)
-    {
-        // Update this container's viewport.
-        Control::update(clip);
-
-        GP_ASSERT(_layout);
-        _layout->update(this);
-    }
-
-    void Container::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
-    {
-        // First draw our own border.
-        Control::drawBorder(spriteBatch, clip);
-
-        // Now call drawBorder on all controls within this container.
-        std::vector<Control*>::const_iterator it;
-        for (it = _controls.begin(); it < _controls.end(); it++)
+        else if (controlName == "BUTTON")
         {
-            Control* control = *it;
-            GP_ASSERT(control);
-            control->drawBorder(spriteBatch, _clip);
+            control = Button::create(controlStyle, controlSpace);
         }
-    }
-
-    void Container::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
-    {
-        std::vector<Control*>::const_iterator it;
-        for (it = _controls.begin(); it < _controls.end(); it++)
+        else if (controlName == "CHECKBOX")
         {
-            Control* control = *it;
-            GP_ASSERT(control);
-            control->drawImages(spriteBatch, _clip);
+            control = CheckBox::create(controlStyle, controlSpace);
         }
-
-        _dirty = false;
-    }
-
-    void Container::drawText(const Rectangle& clip)
-    {
-        std::vector<Control*>::const_iterator it;
-        for (it = _controls.begin(); it < _controls.end(); it++)
+        else if (controlName == "RADIOBUTTON")
         {
-            Control* control = *it;
-            GP_ASSERT(control);
-            control->drawText(_clip);
+            control = RadioButton::create(controlStyle, controlSpace);
         }
-
-        _dirty = false;
-    }
-
-    bool Container::isDirty()
-    {
-        if (_dirty)
+        else if (controlName == "CONTAINER")
         {
-            return true;
+            control = Container::create(controlStyle, controlSpace, theme);
+        }
+        else if (controlName == "SLIDER")
+        {
+            control = Slider::create(controlStyle, controlSpace);
+        }
+        else if (controlName == "TEXTBOX")
+        {
+            control = TextBox::create(controlStyle, controlSpace);
         }
         else
         {
-            std::vector<Control*>::const_iterator it;
-            for (it = _controls.begin(); it < _controls.end(); it++)
-            {
-                GP_ASSERT(*it);
-                if ((*it)->isDirty())
-                {
-                    return true;
-                }
-            }
+            GP_ERROR("Failed to create control; unrecognized control name \'%s\'.", controlName.c_str());
         }
 
-        return false;
-    }
+        // Add the new control to the form.
+        if (control)
+        {
+            addControl(control);
+        }
 
-    bool Container::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+        // Get the next control.
+        controlSpace = properties->getNextNamespace();
+    }
+}
+
+Layout* Container::getLayout()
+{
+    return _layout;
+}
+
+unsigned int Container::addControl(Control* control)
+{
+    GP_ASSERT(control);
+    _controls.push_back(control);
+
+    return _controls.size() - 1;
+}
+
+void Container::insertControl(Control* control, unsigned int index)
+{
+    GP_ASSERT(control);
+    std::vector<Control*>::iterator it = _controls.begin() + index;
+    _controls.insert(it, control);
+}
+
+void Container::removeControl(unsigned int index)
+{
+    std::vector<Control*>::iterator it = _controls.begin() + index;
+    _controls.erase(it);
+}
+
+void Container::removeControl(const char* id)
+{
+    std::vector<Control*>::iterator it;
+    for (it = _controls.begin(); it < _controls.end(); it++)
     {
-        if (!isEnabled())
+        Control* c = *it;
+        if (strcmp(id, c->getID()) == 0)
         {
-            return false;
+            _controls.erase(it);
+            return;
         }
-
-        bool eventConsumed = false;
-        const Theme::Border& border = getBorder(_state);
-        const Theme::Padding& padding = getPadding();
-        float xPos = border.left + padding.left;
-        float yPos = border.top + padding.top;
-
-        std::vector<Control*>::const_iterator it;
-        for (it = _controls.begin(); it < _controls.end(); it++)
-        {
-            Control* control = *it;
-            GP_ASSERT(control);
-            if (!control->isEnabled())
-            {
-                continue;
-            }
-
-            const Rectangle& bounds = control->getClipBounds();
-            if (control->getState() != Control::NORMAL ||
-                (evt == Touch::TOUCH_PRESS &&
-                 x >= xPos + bounds.x &&
-                 x <= xPos + bounds.x + bounds.width &&
-                 y >= yPos + bounds.y &&
-                 y <= yPos + bounds.y + bounds.height))
-            {
-                // Pass on the event's clip relative to the control.
-                eventConsumed |= control->touchEvent(evt, x - xPos - bounds.x, y - yPos - bounds.y, contactIndex);
-            }
-        }
-
-        if (!isEnabled())
-        {
-            return (_consumeTouchEvents | eventConsumed);
-        }
-
-        switch (evt)
-        {
-        case Touch::TOUCH_PRESS:
-            setState(Control::FOCUS);
-            break;
-        case Touch::TOUCH_RELEASE:
-            setState(Control::NORMAL);
-            break;
-        }
-
-        return (_consumeTouchEvents | eventConsumed);
     }
+}
 
-    void Container::keyEvent(Keyboard::KeyEvent evt, int key)
+void Container::removeControl(Control* control)
+{
+    GP_ASSERT(control);
+    std::vector<Control*>::iterator it;
+    for (it = _controls.begin(); it < _controls.end(); it++)
     {
-        std::vector<Control*>::const_iterator it;
-        for (it = _controls.begin(); it < _controls.end(); it++)
+        if (*it == control)
         {
-            Control* control = *it;
-            GP_ASSERT(control);
-            if (!control->isEnabled())
-            {
-                continue;
-            }
+            _controls.erase(it);
+            return;
+        }
+    }
+}
 
-            if (control->isContainer() || control->getState() == Control::FOCUS)
+Control* Container::getControl(unsigned int index) const
+{
+    std::vector<Control*>::const_iterator it = _controls.begin() + index;
+    return *it;
+}
+
+Control* Container::getControl(const char* id) const
+{
+    GP_ASSERT(id);
+    std::vector<Control*>::const_iterator it;
+    for (it = _controls.begin(); it < _controls.end(); it++)
+    {
+        Control* c = *it;
+        GP_ASSERT(c);
+        if (strcmp(id, c->getID()) == 0)
+        {
+            return c;
+        }
+        else if (c->isContainer())
+        {
+            Control* cc = ((Container*)c)->getControl(id);
+            if (cc)
             {
-                control->keyEvent(evt, key);
+                return cc;
             }
         }
     }
 
-    bool Container::isContainer()
+    return NULL;
+}
+
+const std::vector<Control*>& Container::getControls() const
+{
+    return _controls;
+}
+
+Animation* Container::getAnimation(const char* id) const
+{
+    std::vector<Control*>::const_iterator itr = _controls.begin();
+    std::vector<Control*>::const_iterator end = _controls.end();
+        
+    Control* control = NULL;
+    for (; itr != end; itr++)
+    {
+        control = *itr;
+        GP_ASSERT(control);
+        Animation* animation = control->getAnimation(id);
+        if (animation)
+            return animation;
+
+        if (control->isContainer())
+        {
+            animation = ((Container*)control)->getAnimation(id);
+            if (animation)
+                return animation;
+        }
+    }
+
+    return NULL;
+}
+
+void Container::update(const Rectangle& clip, const Vector2& offset)
+{
+    // Update this container's viewport.
+    Control::update(clip, offset);
+
+    GP_ASSERT(_layout);
+    _layout->update(this);
+}
+
+void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight)
+{
+    if (_skin && needsClear)
+    {
+        GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
+        GL_ASSERT( glClearColor(0, 0, 0, 1) );
+        float clearY = targetHeight - _clearBounds.y - _clearBounds.height;
+        GL_ASSERT( glScissor(_clearBounds.x, clearY,
+            _clearBounds.width, _clearBounds.height) );
+        GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
+        GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
+
+        needsClear = false;
+    }
+
+    Control::drawBorder(spriteBatch, clip);
+
+    std::vector<Control*>::const_iterator it;
+    Rectangle boundsUnion = Rectangle::empty();
+    for (it = _controls.begin(); it < _controls.end(); it++)
+    {
+        Control* control = *it;
+        GP_ASSERT(control);
+        if (!needsClear || control->isDirty() || control->_clearBounds.intersects(boundsUnion))
+        {
+            control->draw(spriteBatch, _viewportClipBounds, needsClear, targetHeight);
+            Rectangle::combine(control->_clearBounds, boundsUnion, &boundsUnion);
+        }
+    }
+
+    _dirty = false;
+}
+
+bool Container::isDirty()
+{
+    if (_dirty)
     {
         return true;
     }
-
-    Layout::Type Container::getLayoutType(const char* layoutString)
+    else
     {
-        if (!layoutString)
+        std::vector<Control*>::const_iterator it;
+        for (it = _controls.begin(); it < _controls.end(); it++)
         {
-            return Layout::LAYOUT_ABSOLUTE;
-        }
-
-        std::string layoutName(layoutString);
-        std::transform(layoutName.begin(), layoutName.end(), layoutName.begin(), (int(*)(int))toupper);
-        if (layoutName == "LAYOUT_ABSOLUTE")
-        {
-            return Layout::LAYOUT_ABSOLUTE;
-        }
-        else if (layoutName == "LAYOUT_VERTICAL")
-        {
-            return Layout::LAYOUT_VERTICAL;
-        }
-        else if (layoutName == "LAYOUT_FLOW")
-        {
-            return Layout::LAYOUT_FLOW;
-        }
-        else
-        {
-            // Default.
-            return Layout::LAYOUT_ABSOLUTE;
+            GP_ASSERT(*it);
+            if ((*it)->isDirty())
+            {
+                return true;
+            }
         }
     }
+
+    return false;
+}
+
+bool Container::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    if (!isEnabled())
+    {
+        return false;
+    }
+
+    bool eventConsumed = false;
+    const Theme::Border& border = getBorder(_state);
+    const Theme::Padding& padding = getPadding();
+    float xPos = border.left + padding.left;
+    float yPos = border.top + padding.top;
+
+    Vector2* offset = NULL;
+    if (_layout->getType() == Layout::LAYOUT_SCROLL)
+    {
+        offset = &((ScrollLayout*)_layout)->_scrollPosition;
+    }
+
+    std::vector<Control*>::const_iterator it;
+    for (it = _controls.begin(); it < _controls.end(); it++)
+    {
+        Control* control = *it;
+        GP_ASSERT(control);
+        if (!control->isEnabled())
+        {
+            continue;
+        }
+
+        const Rectangle& bounds = control->getBounds();
+        float boundsX = bounds.x;
+        float boundsY = bounds.y;
+        if (offset)
+        {
+            boundsX += offset->x;
+            boundsY += offset->y;
+        }
+
+        if (control->getState() != Control::NORMAL ||
+            (evt == Touch::TOUCH_PRESS &&
+                x >= xPos + boundsX &&
+                x <= xPos + boundsX + bounds.width &&
+                y >= yPos + boundsY &&
+                y <= yPos + boundsY + bounds.height))
+        {
+            // Pass on the event's clip relative to the control.
+            eventConsumed |= control->touchEvent(evt, x - xPos - boundsX, y - yPos - boundsY, contactIndex);
+        }
+    }
+
+    if (!isEnabled())
+    {
+        return (_consumeTouchEvents | eventConsumed);
+    }
+
+    switch (evt)
+    {
+    case Touch::TOUCH_PRESS:
+        setState(Control::FOCUS);
+        break;
+    case Touch::TOUCH_RELEASE:
+        setState(Control::NORMAL);
+        break;
+    }
+
+    if (!eventConsumed)
+    {
+        // Pass the event on to the layout.
+        if (_layout->touchEvent(evt, x - xPos, y - yPos, contactIndex))
+        {
+            _dirty = true;
+        }
+    }
+
+    return (_consumeTouchEvents | eventConsumed);
+}
+
+void Container::keyEvent(Keyboard::KeyEvent evt, int key)
+{
+    std::vector<Control*>::const_iterator it;
+    for (it = _controls.begin(); it < _controls.end(); it++)
+    {
+        Control* control = *it;
+        GP_ASSERT(control);
+        if (!control->isEnabled())
+        {
+            continue;
+        }
+
+        if (control->isContainer() || control->getState() == Control::FOCUS)
+        {
+            control->keyEvent(evt, key);
+        }
+    }
+}
+
+bool Container::isContainer()
+{
+    return true;
+}
+
+Layout::Type Container::getLayoutType(const char* layoutString)
+{
+    if (!layoutString)
+    {
+        return Layout::LAYOUT_ABSOLUTE;
+    }
+
+    std::string layoutName(layoutString);
+    std::transform(layoutName.begin(), layoutName.end(), layoutName.begin(), (int(*)(int))toupper);
+    if (layoutName == "LAYOUT_ABSOLUTE")
+    {
+        return Layout::LAYOUT_ABSOLUTE;
+    }
+    else if (layoutName == "LAYOUT_VERTICAL")
+    {
+        return Layout::LAYOUT_VERTICAL;
+    }
+    else if (layoutName == "LAYOUT_FLOW")
+    {
+        return Layout::LAYOUT_FLOW;
+    }
+    else if (layoutName == "LAYOUT_SCROLL")
+    {
+        return Layout::LAYOUT_SCROLL;
+    }
+    else
+    {
+        // Default.
+        return Layout::LAYOUT_ABSOLUTE;
+    }
+}
+
 }

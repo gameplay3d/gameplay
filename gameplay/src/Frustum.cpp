@@ -74,6 +74,24 @@ void Frustum::getCorners(Vector3* corners) const
     Plane::intersection(_far, _left, _top, &corners[7]);
 }
 
+bool Frustum::intersects(const Vector3& point) const
+{
+    if (_near.distance(point) <= 0)
+        return false;
+    if (_far.distance(point) <= 0)
+        return false;
+    if (_left.distance(point) <= 0)
+        return false;
+    if (_right.distance(point) <= 0)
+        return false;
+    if (_top.distance(point) <= 0)
+        return false;
+    if (_bottom.distance(point) <= 0)
+        return false;
+
+    return true;
+}
+
 bool Frustum::intersects(const BoundingSphere& sphere) const
 {
     return sphere.intersects(*this);
@@ -105,23 +123,14 @@ void Frustum::set(const Frustum& frustum)
     _matrix.set(frustum._matrix);
 }
 
-void updatePlane(const Matrix& matrix, Plane* dst)
+void Frustum::updatePlanes()
 {
-    GP_ASSERT(dst);
-
-    dst->setNormal(Vector3(matrix.m[3] + matrix.m[2], matrix.m[7] + matrix.m[6], matrix.m[11] + matrix.m[10]));
-    dst->setDistance(matrix.m[15] + matrix.m[14]);
-
-    Vector3 normal = dst->getNormal();
-    if (!normal.isZero())
-    {
-        float normalizeFactor = 1.0f / sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
-        if (normalizeFactor != 1.0f)
-        {
-            dst->setNormal(Vector3(normal.x * normalizeFactor, normal.y * normalizeFactor, normal.z * normalizeFactor));
-            dst->setDistance(dst->getDistance() * normalizeFactor);
-        }
-    }
+    _near.set(Vector3(_matrix.m[3] + _matrix.m[2], _matrix.m[7] + _matrix.m[6], _matrix.m[11] + _matrix.m[10]), _matrix.m[15] + _matrix.m[14]);
+    _far.set(Vector3(_matrix.m[3] - _matrix.m[2], _matrix.m[7] - _matrix.m[6], _matrix.m[11] - _matrix.m[10]), _matrix.m[15] - _matrix.m[14]);
+    _bottom.set(Vector3(_matrix.m[3] + _matrix.m[1], _matrix.m[7] + _matrix.m[5], _matrix.m[11] + _matrix.m[9]), _matrix.m[15] + _matrix.m[13]);
+    _top.set(Vector3(_matrix.m[3] - _matrix.m[1], _matrix.m[7] - _matrix.m[5], _matrix.m[11] - _matrix.m[9]), _matrix.m[15] - _matrix.m[13]);
+    _left.set(Vector3(_matrix.m[3] + _matrix.m[0], _matrix.m[7] + _matrix.m[4], _matrix.m[11] + _matrix.m[8]), _matrix.m[15] + _matrix.m[12]);
+    _right.set(Vector3(_matrix.m[3] - _matrix.m[0], _matrix.m[7] - _matrix.m[4], _matrix.m[11] - _matrix.m[8]), _matrix.m[15] - _matrix.m[12]);
 }
 
 void Frustum::set(const Matrix& matrix)
@@ -129,12 +138,7 @@ void Frustum::set(const Matrix& matrix)
     _matrix.set(matrix);
 
     // Update the planes.
-    updatePlane(matrix, &_near);
-    updatePlane(matrix, &_far);
-    updatePlane(matrix, &_bottom);
-    updatePlane(matrix, &_top);
-    updatePlane(matrix, &_left);
-    updatePlane(matrix, &_right);
+    updatePlanes();
 }
 
 }

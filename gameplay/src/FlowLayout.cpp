@@ -42,8 +42,7 @@ Layout::Type FlowLayout::getType()
 void FlowLayout::update(const Container* container)
 {
     GP_ASSERT(container);
-
-    const Rectangle& containerBounds = container->getClipBounds();
+    const Rectangle& containerBounds = container->getBounds();
     const Theme::Border& containerBorder = container->getBorder(container->getState());
     const Theme::Padding& containerPadding = container->getPadding();
 
@@ -62,6 +61,8 @@ void FlowLayout::update(const Container* container)
         Control* control = controls.at(i);
         GP_ASSERT(control);
 
+        //align(control, container);
+
         const Rectangle& bounds = control->getBounds();
         const Theme::Margin& margin = control->getMargin();
 
@@ -79,7 +80,7 @@ void FlowLayout::update(const Container* container)
         control->setPosition(xPosition, yPosition);
         if (control->isDirty() || control->isContainer())
         {
-            control->update(container->getClip());
+            control->update(container->getClip(), Vector2::zero());
         }
 
         xPosition += bounds.width + margin.right;
