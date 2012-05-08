@@ -14,7 +14,7 @@ AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long
       _elapsedTime(0), _crossFadeToClip(NULL), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), 
       _beginListeners(NULL), _endListeners(NULL), _listeners(NULL), _listenerItr(NULL)
 {
-    assert(0 <= startTime && startTime <= animation->_duration && 0 <= endTime && endTime <= animation->_duration);
+    GP_ASSERT(0 <= startTime && startTime <= animation->_duration && 0 <= endTime && endTime <= animation->_duration);
     
     unsigned int channelCount = _animation->_channels.size();    
     for (unsigned int i = 0; i < channelCount; i++)
@@ -88,7 +88,7 @@ unsigned long AnimationClip::getElaspedTime() const
 
 void AnimationClip::setRepeatCount(float repeatCount)
 {
-    assert(repeatCount == REPEAT_INDEFINITE || repeatCount > 0.0f);
+    GP_ASSERT(repeatCount == REPEAT_INDEFINITE || repeatCount > 0.0f);
 
     _repeatCount = repeatCount;
 
@@ -209,7 +209,7 @@ void AnimationClip::pause()
 
 void AnimationClip::crossFade(AnimationClip* clip, unsigned long duration)
 {
-    assert(clip);
+    GP_ASSERT(clip);
 
     // Check if the given clip is fading into this clip.
     // We should reset the clip from fading out, and this one from fading in 
@@ -250,8 +250,8 @@ void AnimationClip::crossFade(AnimationClip* clip, unsigned long duration)
 
 void AnimationClip::addListener(AnimationClip::Listener* listener, unsigned long eventTime)
 {
-    assert(listener);
-    assert(eventTime < _activeDuration);
+    GP_ASSERT(listener);
+    GP_ASSERT(eventTime < _activeDuration);
 
     ListenerEvent* listenerEvent = new ListenerEvent(listener, eventTime);
 

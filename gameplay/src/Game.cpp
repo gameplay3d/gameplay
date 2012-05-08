@@ -19,7 +19,7 @@ Game::Game()
       _clearDepth(1.0f), _clearStencil(0),
       _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL)
 {
-    assert(__gameInstance == NULL);
+    GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
     _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
 }
@@ -41,6 +41,7 @@ Game::~Game()
 
 Game* Game::getInstance()
 {
+    GP_ASSERT(__gameInstance);
     return __gameInstance;
 }
 
@@ -288,7 +289,7 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 
 void Game::schedule(long timeOffset, TimeListener* timeListener, void* cookie)
 {
-    assert(timeListener);
+    GP_ASSERT(timeListener);
     TimeEvent timeEvent(getGameTime() + timeOffset, timeListener, cookie);
     _timeEvents->push(timeEvent);
 }

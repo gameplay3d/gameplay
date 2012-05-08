@@ -87,7 +87,7 @@ Node::Type Node::getType() const
 
 void Node::addChild(Node* child)
 {
-    assert(child);
+    GP_ASSERT(child);
 
     if (child->_parent == this)
     {
@@ -285,7 +285,7 @@ unsigned int Node::getChildCount() const
 
 Node* Node::findNode(const char* id, bool recursive, bool exactMatch) const
 {
-    assert(id);
+    GP_ASSERT(id);
 
     // If the node has a model with a mesh skin, search the skin's hierarchy as well.
     Node* rootNode = NULL;
@@ -329,7 +329,7 @@ Node* Node::findNode(const char* id, bool recursive, bool exactMatch) const
 
 unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool recursive, bool exactMatch) const
 {
-    assert(id);
+    GP_ASSERT(id);
     
     unsigned int count = 0;
 
@@ -1027,10 +1027,10 @@ PhysicsCollisionObject* Node::setCollisionObject(const char* url)
 {
     // Load the collision object properties from file.
     Properties* properties = Properties::create(url);
-    assert(properties);
+    GP_ASSERT(properties);
     if (properties == NULL)
     {
-        WARN_VARG("Failed to load collision object file: %s", url);
+        GP_WARN("Failed to load collision object file: %s", url);
         return NULL;
     }
 
@@ -1050,7 +1050,7 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
         strcmp(properties->getNamespace(), "ghostObject") == 0 || 
         strcmp(properties->getNamespace(), "rigidBody") == 0))
     {
-        WARN("Failed to load collision object from properties object: must be non-null object and have namespace equal to \'character\', \'ghostObject\', or \'rigidBody\'.");
+        GP_WARN("Failed to load collision object from properties object: must be non-null object and have namespace equal to \'character\', \'ghostObject\', or \'rigidBody\'.");
         return NULL;
     }
 

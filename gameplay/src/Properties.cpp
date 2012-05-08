@@ -48,11 +48,11 @@ Properties::Properties(FILE* file, const char* name, const char* id, const char*
 
 Properties* Properties::create(const char* url)
 {
-    assert(url);
+    GP_ASSERT(url);
 
     if (!url || strlen(url) == 0)
     {
-        WARN("Attempting to create a Properties object from an empty URL!");
+        GP_WARN("Attempting to create a Properties object from an empty URL!");
         return NULL;
     }
 
@@ -119,7 +119,7 @@ Properties* Properties::create(const char* url)
                 iter = properties->getNextNamespace();
                 if (iter == NULL)
                 {
-                    WARN_VARG("Failed to load Properties object from URL '%s'.", url);
+                    GP_WARN("Failed to load Properties object from URL '%s'.", url);
                     return NULL;
                 }
             }
@@ -173,7 +173,7 @@ void Properties::readProperties(FILE* file)
                 name = strtok(line, " =\t");
                 if (name == NULL)
                 {
-                    LOG_ERROR("Error parsing properties file: value without name.");
+                    GP_ERROR("Error parsing properties file: value without name.");
                     return;
                 }
 
@@ -181,7 +181,7 @@ void Properties::readProperties(FILE* file)
                 value = strtok(NULL, "=");
                 if (value == NULL)
                 {
-                    LOG_ERROR("Error parsing properties file: name without value.");
+                    GP_ERROR("Error parsing properties file: name without value.");
                 }
 
                 // Remove white-space from value.
@@ -214,7 +214,7 @@ void Properties::readProperties(FILE* file)
                 name = trimWhiteSpace(name);
                 if (name == NULL)
                 {
-                    LOG_ERROR("Error parsing properties file: unknown error.");
+                    GP_ERROR("Error parsing properties file: unknown error.");
                 }
                 else if (name[0] == '}')
                 {
@@ -541,7 +541,7 @@ const char* Properties::getId() const
 
 bool Properties::exists(const char* name) const
 {
-    assert(name);
+    GP_ASSERT(name);
     return _properties.find(name) != _properties.end();
 }
 
@@ -654,7 +654,7 @@ int Properties::getInt(const char* name) const
         scanned = sscanf(valueString, "%d", &value);
         if (scanned != 1)
         {
-            LOG_ERROR_VARG("Error parsing property: %s", name);
+            GP_ERROR("Error parsing property: %s", name);
             return 0;
         }
         return value;
@@ -673,7 +673,7 @@ float Properties::getFloat(const char* name) const
         scanned = sscanf(valueString, "%f", &value);
         if (scanned != 1)
         {
-            LOG_ERROR_VARG("Error parsing property: %s", name);
+            GP_ERROR("Error parsing property: %s", name);
             return 0.0f;
         }
         return value;
@@ -692,7 +692,7 @@ long Properties::getLong(const char* name) const
         scanned = sscanf(valueString, "%ld", &value);
         if (scanned != 1)
         {
-            LOG_ERROR_VARG("Error parsing property: %s", name);
+            GP_ERROR("Error parsing property: %s", name);
             return 0L;
         }
         return value;
@@ -703,7 +703,7 @@ long Properties::getLong(const char* name) const
 
 bool Properties::getMatrix(const char* name, Matrix* out) const
 {
-    assert(out);
+    GP_ASSERT(out);
 
     const char* valueString = getString(name);
     if (valueString)
@@ -716,7 +716,7 @@ bool Properties::getMatrix(const char* name, Matrix* out) const
 
         if (scanned != 16)
         {
-            LOG_ERROR_VARG("Error parsing property: %s", name);
+            GP_ERROR("Error parsing property: %s", name);
             out->setIdentity();
             return false;
         }
@@ -731,7 +731,7 @@ bool Properties::getMatrix(const char* name, Matrix* out) const
 
 bool Properties::getVector2(const char* name, Vector2* out) const
 {
-    assert(out);
+    GP_ASSERT(out);
 
     const char* valueString = getString(name);
     if (valueString)
@@ -741,7 +741,7 @@ bool Properties::getVector2(const char* name, Vector2* out) const
         scanned = sscanf(valueString, "%f,%f", &x, &y);
         if (scanned != 2)
         {
-            LOG_ERROR_VARG("Error parsing property: %s", name);
+            GP_ERROR("Error parsing property: %s", name);
             out->set(0.0f, 0.0f);
             return false;
         }
@@ -756,7 +756,7 @@ bool Properties::getVector2(const char* name, Vector2* out) const
 
 bool Properties::getVector3(const char* name, Vector3* out) const
 {
-    assert(out);
+    GP_ASSERT(out);
 
     const char* valueString = getString(name);
     if (valueString)
@@ -766,7 +766,7 @@ bool Properties::getVector3(const char* name, Vector3* out) const
         scanned = sscanf(valueString, "%f,%f,%f", &x, &y, &z);
         if (scanned != 3)
         {
-            LOG_ERROR_VARG("Error parsing property: %s", name);
+            GP_ERROR("Error parsing property: %s", name);
             out->set(0.0f, 0.0f, 0.0f);
             return false;
         }
@@ -781,7 +781,7 @@ bool Properties::getVector3(const char* name, Vector3* out) const
 
 bool Properties::getVector4(const char* name, Vector4* out) const
 {
-    assert(out);
+    GP_ASSERT(out);
 
     const char* valueString = getString(name);
     if (valueString)
@@ -791,7 +791,7 @@ bool Properties::getVector4(const char* name, Vector4* out) const
         scanned = sscanf(valueString, "%f,%f,%f,%f", &x, &y, &z, &w);
         if (scanned != 4)
         {
-            LOG_ERROR_VARG("Error parsing property: %s", name);
+            GP_ERROR("Error parsing property: %s", name);
             out->set(0.0f, 0.0f, 0.0f, 0.0f);
             return false;
         }
@@ -806,7 +806,7 @@ bool Properties::getVector4(const char* name, Vector4* out) const
 
 bool Properties::getQuaternionFromAxisAngle(const char* name, Quaternion* out) const
 {
-    assert(out);
+    GP_ASSERT(out);
 
     const char* valueString = getString(name);
     if (valueString)
@@ -816,7 +816,7 @@ bool Properties::getQuaternionFromAxisAngle(const char* name, Quaternion* out) c
         scanned = sscanf(valueString, "%f,%f,%f,%f", &x, &y, &z, &theta);
         if (scanned != 4)
         {
-            LOG_ERROR_VARG("Error parsing property: %s", name);
+            GP_ERROR("Error parsing property: %s", name);
             out->set(0.0f, 0.0f, 0.0f, 1.0f);
             return false;
         }
@@ -831,7 +831,7 @@ bool Properties::getQuaternionFromAxisAngle(const char* name, Quaternion* out) c
 
 bool Properties::getColor(const char* name, Vector3* out) const
 {
-    assert(out);
+    GP_ASSERT(out);
 
     const char* valueString = getString(name);
     if (valueString)
@@ -840,7 +840,7 @@ bool Properties::getColor(const char* name, Vector3* out) const
             valueString[0] != '#')
         {
             // Not a color string.
-            LOG_ERROR_VARG("Error parsing property: %s", name);
+            GP_ERROR("Error parsing property: %s", name);
             out->set(0.0f, 0.0f, 0.0f);
             return false;
         }
@@ -859,7 +859,7 @@ bool Properties::getColor(const char* name, Vector3* out) const
 
 bool Properties::getColor(const char* name, Vector4* out) const
 {
-    assert(out);
+    GP_ASSERT(out);
 
     const char* valueString = getString(name);
     if (valueString)
@@ -868,7 +868,7 @@ bool Properties::getColor(const char* name, Vector4* out) const
             valueString[0] != '#')
         {
             // Not a color string.
-            LOG_ERROR_VARG("Error parsing property: %s", name);
+            GP_ERROR("Error parsing property: %s", name);
             out->set(0.0f, 0.0f, 0.0f, 0.0f);
             return false;
         }

@@ -62,14 +62,14 @@ bool Quaternion::isZero() const
 
 void Quaternion::createFromRotationMatrix(const Matrix& m, Quaternion* dst)
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     m.getRotation(dst);
 }
 
 void Quaternion::createFromAxisAngle(const Vector3& axis, float angle, Quaternion* dst)
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     float halfAngle = angle * 0.5f;
     float sinHalfAngle = sinf(halfAngle);
@@ -151,7 +151,7 @@ void Quaternion::normalize()
 
 void Quaternion::normalize(Quaternion* dst) const
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     if (this != dst)
     {
@@ -189,7 +189,7 @@ void Quaternion::set(float x, float y, float z, float w)
 
 void Quaternion::set(float* array)
 {
-    assert(array);
+    GP_ASSERT(array);
 
     x = array[0];
     y = array[1];
@@ -225,7 +225,7 @@ void Quaternion::setIdentity()
 
 float Quaternion::toAxisAngle(Vector3* axis) const
 {
-    assert(axis);
+    GP_ASSERT(axis);
 
     Quaternion q(x, y, z, w);
     q.normalize();
@@ -239,8 +239,8 @@ float Quaternion::toAxisAngle(Vector3* axis) const
 
 void Quaternion::lerp(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)
 {
-    assert(dst);
-    assert(!(t < 0.0f || t > 1.0f));
+    GP_ASSERT(dst);
+    GP_ASSERT(!(t < 0.0f || t > 1.0f));
 
     if (t == 0.0f)
     {
@@ -268,8 +268,8 @@ void Quaternion::slerp(const Quaternion& q1, const Quaternion& q2, float t, Quat
 
 void Quaternion::squad(const Quaternion& q1, const Quaternion& q2, const Quaternion& s1, const Quaternion& s2, float t, Quaternion* dst)
 {
-    assert(dst);
-    assert(!(t < 0.0f || t > 1.0f));
+    GP_ASSERT(dst);
+    GP_ASSERT(!(t < 0.0f || t > 1.0f));
 
     Quaternion dstQ(0.0f, 0.0f, 0.0f, 1.0f);
     Quaternion dstS(0.0f, 0.0f, 0.0f, 1.0f);
@@ -285,8 +285,8 @@ void Quaternion::slerp(float q1x, float q1y, float q1z, float q1w, float q2x, fl
     // It contains no division operations, no trig, no inverse trig
     // and no sqrt. Not only does this code tolerate small constraint
     // errors in the input quaternions, it actually corrects for them.
-    assert(dstx && dsty && dstz && dstw);
-    assert(!(t < 0.0f || t > 1.0f));
+    GP_ASSERT(dstx && dsty && dstz && dstw);
+    GP_ASSERT(!(t < 0.0f || t > 1.0f));
 
     if (t == 0.0f)
     {
