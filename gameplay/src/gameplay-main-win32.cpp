@@ -15,7 +15,7 @@ using namespace gameplay;
 extern "C" int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, int cmdShow)
 {
     Game* game = Game::getInstance();
-    assert(game != NULL);
+    GP_ASSERT(game != NULL);
     Platform* platform = Platform::create(game);
     int result = platform->enterMessagePump();
     delete platform;

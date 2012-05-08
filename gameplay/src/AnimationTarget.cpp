@@ -31,8 +31,8 @@ AnimationTarget::~AnimationTarget()
 
 Animation* AnimationTarget::createAnimation(const char* id, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, Curve::InterpolationType type)
 {
-    assert(type != Curve::BEZIER && type != Curve::HERMITE);
-    assert(keyCount >= 1 && keyTimes && keyValues);
+    GP_ASSERT(type != Curve::BEZIER && type != Curve::HERMITE);
+    GP_ASSERT(keyCount >= 1 && keyTimes && keyValues);
 
     Animation* animation = new Animation(id, this, propertyId, keyCount, keyTimes, keyValues, type);
 
@@ -41,7 +41,7 @@ Animation* AnimationTarget::createAnimation(const char* id, int propertyId, unsi
 
 Animation* AnimationTarget::createAnimation(const char* id, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type)
 {
-    assert(keyCount >= 1 && keyTimes && keyValues && keyInValue && keyOutValue);
+    GP_ASSERT(keyCount >= 1 && keyTimes && keyValues && keyInValue && keyOutValue);
     Animation* animation = new Animation(id, this, propertyId, keyCount, keyTimes, keyValues, keyInValue, keyOutValue, type);
 
     return animation;
@@ -49,10 +49,10 @@ Animation* AnimationTarget::createAnimation(const char* id, int propertyId, unsi
 
 Animation* AnimationTarget::createAnimation(const char* id, const char* url)
 {
-    assert(url);
+    GP_ASSERT(url);
     
     Properties* p = Properties::create(url);
-    assert(p);
+    GP_ASSERT(p);
 
     Animation* animation = createAnimation(id, (strlen(p->getNamespace()) > 0) ? p : p->getNextNamespace());
 
@@ -103,27 +103,27 @@ Animation* AnimationTarget::createAnimationFromBy(const char* id, int propertyId
 
 Animation* AnimationTarget::createAnimation(const char* id, Properties* animationProperties)
 {
-    assert(animationProperties);
-    assert(std::strcmp(animationProperties->getNamespace(), "animation") == 0);
+    GP_ASSERT(animationProperties);
+    GP_ASSERT(std::strcmp(animationProperties->getNamespace(), "animation") == 0);
     
     const char* propertyIdStr = animationProperties->getString("property");
-    assert(propertyIdStr);
+    GP_ASSERT(propertyIdStr);
     
     // Get animation target property id
     int propertyId = AnimationTarget::getPropertyId(_targetType, propertyIdStr);
-    assert(propertyId != -1);
+    GP_ASSERT(propertyId != -1);
     
     unsigned int keyCount = animationProperties->getInt("keyCount");
-    assert(keyCount > 0);
+    GP_ASSERT(keyCount > 0);
 
     const char* keyTimesStr = animationProperties->getString("keyTimes");
-    assert(keyTimesStr);
+    GP_ASSERT(keyTimesStr);
     
     const char* keyValuesStr = animationProperties->getString("keyValues");
-    assert(keyValuesStr);
+    GP_ASSERT(keyValuesStr);
     
     const char* curveStr = animationProperties->getString("curve");
-    assert(curveStr);
+    GP_ASSERT(curveStr);
     
     char delimeter = ' ';
     unsigned int startOffset = 0;
@@ -148,7 +148,7 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
     endOffset = (unsigned int)std::string::npos;
     
     int componentCount = getAnimationPropertyComponentCount(propertyId);
-    assert(componentCount > 0);
+    GP_ASSERT(componentCount > 0);
     
     unsigned int components = keyCount * componentCount;
     
@@ -232,7 +232,7 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
     if (pClip && std::strcmp(pClip->getNamespace(), "clip") == 0)
     {
         int frameCount = animationProperties->getInt("frameCount");
-        assert(frameCount > 0);
+        GP_ASSERT(frameCount > 0);
         animation->createClips(animationProperties, (unsigned int) frameCount);
     }
 
@@ -395,7 +395,7 @@ void AnimationTarget::cloneInto(AnimationTarget* target, NodeCloneContext &conte
         for (std::vector<Animation::Channel*>::const_iterator it = _animationChannels->begin(); it != _animationChannels->end(); ++it)
         {
             Animation::Channel* channel = *it;
-            assert(channel->_animation);
+            GP_ASSERT(channel->_animation);
 
             Animation* animation = context.findClonedAnimation(channel->_animation);
             if (animation != NULL)

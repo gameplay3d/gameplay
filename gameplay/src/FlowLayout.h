@@ -6,9 +6,6 @@
 namespace gameplay
 {
 
-/**
- *  Defines a layout that arranges components in a left-to-right or right-to-left flow. 
- */
 class FlowLayout : public Layout
 {
     friend class Form;

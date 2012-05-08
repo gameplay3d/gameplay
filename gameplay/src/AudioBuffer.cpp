@@ -35,7 +35,7 @@ AudioBuffer::~AudioBuffer()
 
 AudioBuffer* AudioBuffer::create(const char* path)
 {
-    assert(path);
+    GP_ASSERT(path);
 
     // Search the cache for a stream from this file.
     unsigned int bufferCount = (unsigned int)__buffers.size();
@@ -58,7 +58,7 @@ AudioBuffer* AudioBuffer::create(const char* path)
     al_error = alGetError();
     if (al_error != AL_NO_ERROR)
     {
-        LOG_ERROR_VARG("AudioBuffer alGenBuffers AL error: %d", al_error);
+        GP_ERROR("AudioBuffer alGenBuffers AL error: %d", al_error);
         alDeleteBuffers(1, &alBuffer);
         return NULL;
     }
@@ -67,7 +67,7 @@ AudioBuffer* AudioBuffer::create(const char* path)
     FILE* file = FileSystem::openFile(path, "rb");
     if (!file)
     {
-        LOG_ERROR_VARG("Invalid audio buffer file: %s", path);
+        GP_ERROR("Invalid audio buffer file: %s", path);
         goto cleanup;
     }
     
@@ -75,7 +75,7 @@ AudioBuffer* AudioBuffer::create(const char* path)
     char header[12];
     if (fread(header, 1, 12, file) != 12)
     {
-        LOG_ERROR_VARG("Invalid audio buffer file: %s", path);
+        GP_ERROR("Invalid audio buffer file: %s", path);
         goto cleanup;
     }
     
@@ -84,7 +84,7 @@ AudioBuffer* AudioBuffer::create(const char* path)
     {
         if (!AudioBuffer::loadWav(file, alBuffer))
         {
-            LOG_ERROR_VARG("Invalid wave file: %s", path);
+            GP_ERROR("Invalid wave file: %s", path);
             goto cleanup;
         }
     }
@@ -92,13 +92,13 @@ AudioBuffer* AudioBuffer::create(const char* path)
     {
         if (!AudioBuffer::loadOgg(file, alBuffer))
         {
-            LOG_ERROR_VARG("Invalid ogg file: %s", path);
+            GP_ERROR("Invalid ogg file: %s", path);
             goto cleanup;
         }
     }
     else
     {
-        LOG_ERROR_VARG("Unsupported audio file: %s", path);
+        GP_ERROR("Unsupported audio file: %s", path);
     }
     
     fclose(file);
@@ -136,7 +136,7 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     // Check for a valid pcm format.
     if (fread(stream, 1, 2, file) != 2 || stream[1] != 0 || stream[0] != 1)
     {
-        LOG_ERROR("Unsupported audio file, not PCM format.");
+        GP_ERROR("Unsupported audio file, not PCM format.");
         return false;
     }
     
@@ -188,7 +188,7 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     }
     else
     {
-        LOG_ERROR_VARG("Incompatible format: (%d, %d)", channels, bits);
+        GP_ERROR("Incompatible format: (%d, %d)", channels, bits);
         return false;
     }
     
@@ -227,7 +227,7 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     // should now be the data section which holds the decoded sample data
     if (memcmp(stream, "data", 4) != 0)
     {
-        LOG_ERROR("WAV file has no data.");
+        GP_ERROR("WAV file has no data.");
         return false;
     }
 
@@ -238,7 +238,7 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     char* data = new char[dataSize];
     if (fread(data, sizeof(char), dataSize, file) != dataSize)
     {
-        LOG_ERROR("WAV file missing data.");
+        GP_ERROR("WAV file missing data.");
         SAFE_DELETE_ARRAY(data);
         return false;
     }
@@ -262,7 +262,7 @@ bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
     if ((result = ov_open(file, &ogg_file, NULL, 0)) < 0)
     {
         fclose(file);
-        LOG_ERROR("Could not open Ogg stream.");
+        GP_ERROR("Could not open Ogg stream.");
         return false;
     }
 
@@ -287,7 +287,7 @@ bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
         else if (result < 0)
         {
             SAFE_DELETE_ARRAY(data);
-            LOG_ERROR("OGG file missing data.");
+            GP_ERROR("OGG file missing data.");
             return false;
         }
         else
@@ -299,7 +299,7 @@ bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
     if (size == 0)
     {
         SAFE_DELETE_ARRAY(data);
-        LOG_ERROR("Unable to read OGG data.");
+        GP_ERROR("Unable to read OGG data.");
         return false;
     }
 

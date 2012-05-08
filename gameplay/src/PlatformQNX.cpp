@@ -404,7 +404,6 @@ extern void printError(const char* format, ...)
     va_list argptr;
     va_start(argptr, format);
     vfprintf(stderr, format, argptr);
-    fprintf(stderr, "\n");
     va_end(argptr);
 }
 
@@ -795,7 +794,7 @@ int Platform::enterMessagePump()
         while (true)
         {
             rc = bps_get_event(&event, 1);
-            assert(rc == BPS_SUCCESS);
+            GP_ASSERT(rc == BPS_SUCCESS);
 
             if (event == NULL)
                 break;
@@ -1073,40 +1072,40 @@ bool Platform::isMultiTouch()
 
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
-	switch(__orientationAngle)
-	{
-	// Landscape based device adjusting for landscape game mode
-	case 0:
-		if (pitch)
-			*pitch = __pitch;
-		if (roll)
-			*roll = -__roll;
-		break;
-	case 180:
-		if (pitch)
-			*pitch = -__pitch;
-		if (roll)
-			*roll = __roll;
-		break;
+    switch(__orientationAngle)
+    {
+    // Landscape based device adjusting for landscape game mode
+    case 0:
+        if (pitch)
+            *pitch = __pitch;
+        if (roll)
+            *roll = -__roll;
+        break;
+    case 180:
+        if (pitch)
+            *pitch = -__pitch;
+        if (roll)
+            *roll = __roll;
+        break;
 
-	// Portrait based device adjusting for landscape game mode
-	case 90:
-		if (pitch)
-			*pitch = -__roll;
-		if (roll)
-			*roll = -__pitch;
-		break;
+    // Portrait based device adjusting for landscape game mode
+    case 90:
+        if (pitch)
+            *pitch = -__roll;
+        if (roll)
+            *roll = -__pitch;
+        break;
 
-	case  270:
-		if (pitch)
-			*pitch = __roll;
-		if (roll)
-			*roll = __pitch;
-		break;
+    case  270:
+        if (pitch)
+            *pitch = __roll;
+        if (roll)
+            *roll = __pitch;
+        break;
 
-	default:
-		break;
-	}
+    default:
+        break;
+    }
 }
 
 void Platform::swapBuffers()

@@ -31,14 +31,14 @@ AudioSource::~AudioSource()
 
 AudioSource* AudioSource::create(const char* url)
 {
-    assert(url);
+    GP_ASSERT(url);
 
     // Load from a .audio file.
     std::string pathStr = url;
     if (pathStr.find(".audio") != pathStr.npos)
     {
         Properties* properties = Properties::create(url);
-        assert(properties);
+        GP_ASSERT(properties);
         if (properties == NULL)
         {
             return NULL;
@@ -61,7 +61,7 @@ AudioSource* AudioSource::create(const char* url)
     if (alGetError() != AL_NO_ERROR)
     {
         SAFE_RELEASE(buffer);
-        LOG_ERROR("AudioSource::createAudioSource - Error generating audio source.");
+        GP_ERROR("AudioSource::createAudioSource - Error generating audio source.");
         return NULL;
     }
     
@@ -71,17 +71,17 @@ AudioSource* AudioSource::create(const char* url)
 AudioSource* AudioSource::create(Properties* properties)
 {
     // Check if the properties is valid and has a valid namespace.
-    assert(properties);
+    GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "audio") == 0))
     {
-        WARN("Failed to load audio source from properties object: must be non-null object and have namespace equal to \'audio\'.");
+        GP_WARN("Failed to load audio source from properties object: must be non-null object and have namespace equal to \'audio\'.");
         return NULL;
     }
 
     const char* path = properties->getString("path");
     if (path == NULL)
     {
-        WARN("Audio file failed to load; the file path was not specified.");
+        GP_WARN("Audio file failed to load; the file path was not specified.");
         return NULL;
     }
 
@@ -89,7 +89,7 @@ AudioSource* AudioSource::create(Properties* properties)
     AudioSource* audio = AudioSource::create(path);
     if (audio == NULL)
     {
-        WARN_VARG("Audio file '%s' failed to load properly.", path);
+        GP_WARN("Audio file '%s' failed to load properly.", path);
         return NULL;
     }
 
@@ -156,7 +156,7 @@ void AudioSource::pause()
         std::set<AudioSource*>::iterator iter = audioController->_playingSources.find(this);
         if (iter != audioController->_playingSources.end())
         {
-            WARN("\n\nRemoving an audio source from the list of playing sources...\n\n\n");
+            GP_WARN("\n\nRemoving an audio source from the list of playing sources...\n\n\n");
             audioController->_playingSources.erase(iter);
         }
     }
@@ -199,7 +199,7 @@ void AudioSource::setLooped(bool looped)
     ALCenum error = alGetError();
     if (error != AL_NO_ERROR)
     {
-        LOG_ERROR_VARG("AudioSource::setLooped Error: %d", error);
+        GP_ERROR("AudioSource::setLooped Error: %d", error);
     }
     _looped = looped;
 }
@@ -279,7 +279,7 @@ AudioSource* AudioSource::clone(NodeCloneContext &context) const
     alGenSources(1, &alSource);
     if (alGetError() != AL_NO_ERROR)
     {
-        LOG_ERROR("AudioSource::createAudioSource - Error generating audio source.");
+        GP_ERROR("AudioSource::createAudioSource - Error generating audio source.");
         return NULL;
     }
     AudioSource* audioClone = new AudioSource(_buffer, alSource);
