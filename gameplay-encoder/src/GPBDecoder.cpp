@@ -62,7 +62,7 @@ void GPBDecoder::readRefs()
 {
     fprintf(_outFile, "<RefTable>\n");
     // read number of refs
-    unsigned int refCount;
+    unsigned int refCount = 0;
     assert(read(&refCount));
     for (size_t i = 0; i < refCount; ++i)
     {
@@ -74,7 +74,7 @@ void GPBDecoder::readRefs()
 void GPBDecoder::readRef()
 {
     std::string xref = readString(_file);
-    unsigned int type, offset;
+    unsigned int type = 0, offset = 0;
     assert(read(&type));
     assert(read(&offset));
     

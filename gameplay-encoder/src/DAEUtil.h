@@ -123,6 +123,15 @@ void moveChannelAndSouresToAnimation(domChannelRef& channel, domAnimationRef& an
  */
 bool isEmptyAnimation(domAnimationRef& animation);
 
+/**
+ * Gets the visual scene from the given COLLADA dom scene.
+ * 
+ * @param COLLADA dom scene.
+ * 
+ * @return The visual scene or NULL if not found.
+ */
+domVisual_scene* getVisualScene(const domCOLLADA::domSceneRef& domScene);
+
 }
 
 #endif
