@@ -167,7 +167,7 @@ void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* scen
             {
                 SceneNodeProperty& snp = sceneNode._properties[j];
                 if (typeFlags & snp._type)
-                    applyNodeProperty(sceneNode, node, sceneProperties, snp);
+                    applyNodeProperty(sceneNode, node, sceneProperties, snp, scene);
             }
         }
         else
@@ -185,13 +185,13 @@ void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* scen
                     continue;
 
                 for (unsigned int k = 0; k < nodeCount; ++k)
-                    applyNodeProperty(sceneNode, nodes[k], sceneProperties, snp);
+                    applyNodeProperty(sceneNode, nodes[k], sceneProperties, snp, scene);
             }
         }
     }
 }
 
-void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp)
+void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp, const Scene* scene)
 {
     if (snp._type == SceneNodeProperty::AUDIO ||
         snp._type == SceneNodeProperty::MATERIAL ||
@@ -300,7 +300,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                 const char* name = NULL;
                 if (np && (name = np->getString("rigidBodyModel")))
                 {
-                    Node* modelNode = node->getScene()->findNode(name);
+                    Node* modelNode = scene->findNode(name);
                     if (!modelNode)
                         GP_WARN("Node '%s' does not exist; attempting to use its model for collision object creation.", name);
                     else
@@ -311,10 +311,10 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                         {
                             // Temporarily set rigidBody model on model so it's used during collision object creation.
                             Model* model = node->getModel();
-                            GP_ASSERT(model);
                         
                             // Up ref count to prevent node from releasing the model when we swap it.
-                            model->addRef(); 
+                            if (model)
+                                model->addRef(); 
                         
                             // Create collision object with new rigidBodyModel set.
                             node->setModel(modelNode->getModel());
@@ -324,7 +324,8 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                             node->setModel(model);
                         
                             // Decrement temporarily added reference.
-                            model->release();
+                            if (model)
+                                model->release();
                         }
                     }
                 }
