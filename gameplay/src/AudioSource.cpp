@@ -12,18 +12,19 @@ namespace gameplay
 AudioSource::AudioSource(AudioBuffer* buffer, ALuint source) 
     : _alSource(source), _buffer(buffer), _looped(true), _gain(1.0f), _pitch(1.0f), _node(NULL)
 {
-    alSourcei(_alSource, AL_BUFFER, buffer->_alBuffer);
-    alSourcei(_alSource, AL_LOOPING, _looped);
-    alSourcef(_alSource, AL_PITCH, _pitch);
-    alSourcef(_alSource, AL_GAIN, _gain);
-    alSourcefv(_alSource, AL_VELOCITY, (const ALfloat*)&_velocity);
+    GP_ASSERT(buffer);
+    AL_CHECK( alSourcei(_alSource, AL_BUFFER, buffer->_alBuffer) );
+    AL_CHECK( alSourcei(_alSource, AL_LOOPING, _looped) );
+    AL_CHECK( alSourcef(_alSource, AL_PITCH, _pitch) );
+    AL_CHECK( alSourcef(_alSource, AL_GAIN, _gain) );
+    AL_CHECK( alSourcefv(_alSource, AL_VELOCITY, (const ALfloat*)&_velocity) );
 }
 
 AudioSource::~AudioSource()
 {
     if (_alSource)
     {
-        alDeleteSources(1, &_alSource);
+        AL_CHECK( alDeleteSources(1, &_alSource) );
         _alSource = 0;
     }
     SAFE_RELEASE(_buffer);
@@ -57,11 +58,11 @@ AudioSource* AudioSource::create(const char* url)
     // Load the audio source.
     ALuint alSource = 0;
 
-    alGenSources(1, &alSource);
-    if (alGetError() != AL_NO_ERROR)
+    AL_CHECK( alGenSources(1, &alSource) );
+    if (AL_LAST_ERROR())
     {
         SAFE_RELEASE(buffer);
-        GP_ERROR("AudioSource::createAudioSource - Error generating audio source.");
+        GP_ERROR("Error generating audio source.");
         return NULL;
     }
     
@@ -74,14 +75,14 @@ AudioSource* AudioSource::create(Properties* properties)
     GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "audio") == 0))
     {
-        GP_WARN("Failed to load audio source from properties object: must be non-null object and have namespace equal to \'audio\'.");
+        GP_ERROR("Failed to load audio source from properties object: must be non-null object and have namespace equal to \'audio\'.");
         return NULL;
     }
 
     const char* path = properties->getString("path");
     if (path == NULL)
     {
-        GP_WARN("Audio file failed to load; the file path was not specified.");
+        GP_ERROR("Audio file failed to load; the file path was not specified.");
         return NULL;
     }
 
@@ -89,20 +90,20 @@ AudioSource* AudioSource::create(Properties* properties)
     AudioSource* audio = AudioSource::create(path);
     if (audio == NULL)
     {
-        GP_WARN("Audio file '%s' failed to load properly.", path);
+        GP_ERROR("Audio file '%s' failed to load properly.", path);
         return NULL;
     }
 
     // Set any properties that the user specified in the .audio file.
-    if (properties->getString("looped") != NULL)
+    if (properties->exists("looped"))
     {
         audio->setLooped(properties->getBool("looped"));
     }
-    if (properties->getString("gain") != NULL)
+    if (properties->exists("gain"))
     {
         audio->setGain(properties->getFloat("gain"));
     }
-    if (properties->getString("pitch") != NULL)
+    if (properties->exists("pitch"))
     {
         audio->setPitch(properties->getFloat("pitch"));
     }
@@ -118,7 +119,7 @@ AudioSource* AudioSource::create(Properties* properties)
 AudioSource::State AudioSource::getState() const
 {
     ALint state;
-    alGetSourcei(_alSource, AL_SOURCE_STATE, &state);
+    AL_CHECK( alGetSourcei(_alSource, AL_SOURCE_STATE, &state) );
 
     switch (state)
     {
@@ -136,29 +137,28 @@ AudioSource::State AudioSource::getState() const
 
 void AudioSource::play()
 {
-    alSourcePlay(_alSource);
+    AL_CHECK( alSourcePlay(_alSource) );
 
     // Add the source to the controller's list of currently playing sources.
     AudioController* audioController = Game::getInstance()->getAudioController();
+    GP_ASSERT(audioController);
     if (audioController->_playingSources.find(this) == audioController->_playingSources.end())
         audioController->_playingSources.insert(this);
 }
 
 void AudioSource::pause()
 {
-    alSourcePause(_alSource);
+    AL_CHECK( alSourcePause(_alSource) );
 
     // Remove the source from the controller's set of currently playing sources
     // if the source is being paused by the user and not the controller itself.
     AudioController* audioController = Game::getInstance()->getAudioController();
+    GP_ASSERT(audioController);
     if (audioController->_pausingSource != this)
     {
         std::set<AudioSource*>::iterator iter = audioController->_playingSources.find(this);
         if (iter != audioController->_playingSources.end())
-        {
-            GP_WARN("\n\nRemoving an audio source from the list of playing sources...\n\n\n");
             audioController->_playingSources.erase(iter);
-        }
     }
 }
 
@@ -172,10 +172,11 @@ void AudioSource::resume()
 
 void AudioSource::stop()
 {
-    alSourceStop(_alSource);
+    AL_CHECK( alSourceStop(_alSource) );
 
     // Remove the source from the controller's set of currently playing sources.
     AudioController* audioController = Game::getInstance()->getAudioController();
+    GP_ASSERT(audioController);
     std::set<AudioSource*>::iterator iter = audioController->_playingSources.find(this);
     if (iter != audioController->_playingSources.end())
         audioController->_playingSources.erase(iter);
@@ -183,7 +184,7 @@ void AudioSource::stop()
 
 void AudioSource::rewind()
 {
-    alSourceRewind(_alSource);
+    AL_CHECK( alSourceRewind(_alSource) );
 }
 
 bool AudioSource::isLooped() const
@@ -193,13 +194,10 @@ bool AudioSource::isLooped() const
 
 void AudioSource::setLooped(bool looped)
 {
-    alGetError();
-    alSourcei(_alSource, AL_LOOPING, (looped) ? AL_TRUE : AL_FALSE);
-
-    ALCenum error = alGetError();
-    if (error != AL_NO_ERROR)
+    AL_CHECK( alSourcei(_alSource, AL_LOOPING, (looped) ? AL_TRUE : AL_FALSE) );
+    if (AL_LAST_ERROR())
     {
-        GP_ERROR("AudioSource::setLooped Error: %d", error);
+        GP_ERROR("Failed to set audio source's looped attribute with error: %d", AL_LAST_ERROR());
     }
     _looped = looped;
 }
@@ -211,7 +209,7 @@ float AudioSource::getGain() const
 
 void AudioSource::setGain(float gain)
 {
-    alSourcef(_alSource, AL_GAIN, gain);
+    AL_CHECK( alSourcef(_alSource, AL_GAIN, gain) );
     _gain = gain;
 }
 
@@ -222,7 +220,7 @@ float AudioSource::getPitch() const
 
 void AudioSource::setPitch(float pitch)
 {
-    alSourcef(_alSource, AL_PITCH, pitch);
+    AL_CHECK( alSourcef(_alSource, AL_PITCH, pitch) );
     _pitch = pitch;
 }
 
@@ -233,7 +231,7 @@ const Vector3& AudioSource::getVelocity() const
 
 void AudioSource::setVelocity(const Vector3& velocity)
 {
-    alSourcefv(_alSource, AL_VELOCITY, (ALfloat*)&velocity);
+    AL_CHECK( alSourcefv(_alSource, AL_VELOCITY, (ALfloat*)&velocity) );
     _velocity = velocity;
 }
 
@@ -269,17 +267,19 @@ void AudioSource::transformChanged(Transform* transform, long cookie)
     if (_node)
     {
         Vector3 translation = _node->getTranslationWorld();
-        alSourcefv(_alSource, AL_POSITION, (const ALfloat*)&translation.x);
+        AL_CHECK( alSourcefv(_alSource, AL_POSITION, (const ALfloat*)&translation.x) );
     }
 }
 
 AudioSource* AudioSource::clone(NodeCloneContext &context) const
 {
+    GP_ASSERT(_buffer);
+
     ALuint alSource = 0;
-    alGenSources(1, &alSource);
-    if (alGetError() != AL_NO_ERROR)
+    AL_CHECK( alGenSources(1, &alSource) );
+    if (AL_LAST_ERROR())
     {
-        GP_ERROR("AudioSource::createAudioSource - Error generating audio source.");
+        GP_ERROR("Error generating audio source.");
         return NULL;
     }
     AudioSource* audioClone = new AudioSource(_buffer, alSource);
