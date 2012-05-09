@@ -18,18 +18,18 @@ AudioController::~AudioController()
 
 void AudioController::initialize()
 {
-    _alcDevice = alcOpenDevice (NULL);
+    _alcDevice = alcOpenDevice(NULL);
     if (!_alcDevice)
     {
         GP_ERROR("Unable to open OpenAL device.\n");
-        return;  
+        return;
     }
-        
+    
     _alcContext = alcCreateContext(_alcDevice, NULL);
     ALCenum alcErr = alcGetError(_alcDevice);
     if (!_alcContext || alcErr != ALC_NO_ERROR)
     {
-        alcCloseDevice (_alcDevice);
+        alcCloseDevice(_alcDevice);
         GP_ERROR("Unable to create OpenAL context. Error: %d\n", alcErr);
         return;
     }
@@ -65,6 +65,7 @@ void AudioController::pause()
     AudioSource* source = NULL;
     while (itr != _playingSources.end())
     {
+        GP_ASSERT(*itr);
         source = *itr;
         _pausingSource = source;
         source->pause();
@@ -83,6 +84,7 @@ void AudioController::resume()
     AudioSource* source = NULL;
     while (itr != _playingSources.end())
     {
+        GP_ASSERT(*itr);
         source = *itr;
         source->resume();
         itr++;
@@ -94,10 +96,10 @@ void AudioController::update(long elapsedTime)
     AudioListener* listener = AudioListener::getInstance();
     if (listener)
     {
-        alListenerf(AL_GAIN, listener->getGain());
-        alListenerfv(AL_ORIENTATION, (ALfloat*)listener->getOrientation());
-        alListenerfv(AL_VELOCITY, (ALfloat*)&listener->getVelocity());
-        alListenerfv(AL_POSITION, (ALfloat*)&listener->getPosition());
+        AL_CHECK( alListenerf(AL_GAIN, listener->getGain()) );
+        AL_CHECK( alListenerfv(AL_ORIENTATION, (ALfloat*)listener->getOrientation()) );
+        AL_CHECK( alListenerfv(AL_VELOCITY, (ALfloat*)&listener->getVelocity()) );
+        AL_CHECK( alListenerfv(AL_POSITION, (ALfloat*)&listener->getPosition()) );
     }
 }
 
