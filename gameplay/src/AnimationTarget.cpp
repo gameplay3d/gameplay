@@ -95,6 +95,8 @@ Animation* AnimationTarget::createAnimationFromBy(const char* id, int propertyId
     float* keyValues = new float[2 * propertyComponentCount];
 
     memcpy(keyValues, from, sizeof(float) * propertyComponentCount);
+
+    convertByValues(propertyId, propertyComponentCount, from, by);
     memcpy(keyValues + propertyComponentCount, by, sizeof(float) * propertyComponentCount);
 
     unsigned long* keyTimes = new unsigned long[2];
@@ -460,6 +462,79 @@ void AnimationTarget::cloneInto(AnimationTarget* target, NodeCloneContext &conte
                 context.registerClonedAnimation(channel->_animation, animation);
             }
         }
+    }
+}
+
+void AnimationTarget::convertByValues(unsigned int propertyId, unsigned int componentCount, float* from, float* by)
+{
+    if (_targetType == AnimationTarget::TRANSFORM)
+    {    
+        switch(propertyId)
+        {
+            case Transform::ANIMATE_SCALE:
+            case Transform::ANIMATE_SCALE_UNIT:
+            case Transform::ANIMATE_SCALE_X:
+            case Transform::ANIMATE_SCALE_Y:
+            case Transform::ANIMATE_SCALE_Z:
+            {
+                convertScaleByValues(from, by, componentCount);
+                break;
+            }
+            case Transform::ANIMATE_TRANSLATE:
+            case Transform::ANIMATE_TRANSLATE_X:
+            case Transform::ANIMATE_TRANSLATE_Y:
+            case Transform::ANIMATE_TRANSLATE_Z:
+            {
+                convertByValues(from, by, componentCount);
+                break;
+            }
+            case Transform::ANIMATE_ROTATE:
+            {
+                convertQuaternionByValues(from, by);
+                break;
+            }
+            case Transform::ANIMATE_ROTATE_TRANSLATE:
+            {
+                convertQuaternionByValues(from, by);
+                convertByValues(from + 4, by + 4, 3);
+                break;
+            }   
+            case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
+            {
+                convertScaleByValues(from, by, 3);
+                convertQuaternionByValues(from + 3, by + 3);
+                convertByValues(from + 7, by + 7, 3);
+                break;
+            }
+        }
+    }
+    else
+    {
+        convertByValues(from, by, componentCount);
+    }
+}
+
+void AnimationTarget::convertQuaternionByValues(float* from, float* by)
+{
+    Quaternion qFrom(from);
+    Quaternion qBy(by);
+    qBy.multiply(qFrom);
+    memcpy(by, (float*)&qBy, sizeof(float) * 4);
+}
+
+void AnimationTarget::convertScaleByValues(float* from, float* by, unsigned int componentCount)
+{
+    for (unsigned int i = 0; i < componentCount; i++)
+    {
+        by[i] *= from[i];
+    }
+}
+
+void AnimationTarget::convertByValues(float* from, float* by, unsigned int componentCount)
+{
+    for (unsigned int i = 0; i < componentCount; i++)
+    {
+        by[i] += from[i];
     }
 }
 
