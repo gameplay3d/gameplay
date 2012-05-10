@@ -193,7 +193,7 @@ public:
      * @param width The width.
      * @param height The height.
      */
-    void setSize(float width, float height);
+    virtual void setSize(float width, float height);
 
     /**
      * Set the bounds of this control, relative to its parent container and including its
@@ -201,7 +201,7 @@ public:
      *
      * @param bounds The new bounds to set.
      */
-    void setBounds(const Rectangle& bounds);
+    virtual void setBounds(const Rectangle& bounds);
 
     /**
      * Get the bounds of this control, relative to its parent container and including its
@@ -258,7 +258,7 @@ public:
      *
      * @param autoWidth Whether to size this control to fit horizontally within its parent container.
      */
-    void setAutoWidth(bool autoWidth);
+    virtual void setAutoWidth(bool autoWidth);
 
     /**
      * Get whether this control's width is set to automatically adjust to
@@ -273,7 +273,7 @@ public:
      *
      * @param autoHeight Whether to size this control to fit vertically within its parent container.
      */
-    void setAutoHeight(bool autoHeight);
+    virtual void setAutoHeight(bool autoHeight);
 
     /**
      * Get whether this control's height is set to automatically adjust to

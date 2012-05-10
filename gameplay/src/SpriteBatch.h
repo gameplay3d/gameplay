@@ -248,6 +248,48 @@ public:
     void draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip);
 
     /**
+     * Adds a single sprite to a SpriteVertex array.
+     * 
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param width The sprite width.
+     * @param height The sprite height
+     * @param u1 Texture coordinate.
+     * @param v1 Texture coordinate.
+     * @param u2 Texture coordinate.
+     * @param v2 Texture coordinate.
+     * @param color The color to tint the sprite. Use white for no tint.
+     * @param clip The clip rectangle.
+     */
+    void addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, SpriteBatch::SpriteVertex* vertices);
+
+    /**
+     * Adds a single sprite to a SpriteVertex array, clipped within a rectangle.
+     * 
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param width The sprite width.
+     * @param height The sprite height
+     * @param u1 Texture coordinate.
+     * @param v1 Texture coordinate.
+     * @param u2 Texture coordinate.
+     * @param v2 Texture coordinate.
+     * @param color The color to tint the sprite. Use white for no tint.
+     * @param clip The clip rectangle.
+     */
+    void addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip, SpriteBatch::SpriteVertex* vertices);
+
+    /**
+     * Draws an array of vertices.
+     *
+     * @param vertices The vertices to draw.
+     * @param vertexCount The number of vertices within the vertex array.
+     * @param indices The vertex indices.
+     * @param indexCount The number of indices within the index array.
+     */
+    void draw(SpriteBatch::SpriteVertex* vertices, unsigned int vertexCount, unsigned short* indices, unsigned int indexCount);
+
+    /**
      * Draws a single sprite.
      * 
      * @param x The x coordinate.
@@ -288,7 +330,7 @@ public:
      * 
      * @return The material.
      */
-    Material* getMaterial();
+    Material* getMaterial() const;
 
     /**
      * Sets a custom projection matrix to use with the sprite batch.
@@ -317,6 +359,13 @@ private:
     SpriteBatch(const SpriteBatch& copy);
 
     const Matrix& getOrthoMatrix() const;
+
+    /**
+     * Clip position and size to fit within clip region.
+     *
+     * @return true if any part of sprite intersects with the clip region and therefore needs drawing, false otherwise.
+     */
+    bool clipSprite(const Rectangle& clip, float& x, float& y, float& width, float& height, float& u1, float& v1, float& u2, float& v2);
 
     MeshBatch* _batch;
     bool _customEffect;
