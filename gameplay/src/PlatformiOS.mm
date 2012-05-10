@@ -487,9 +487,10 @@ int getKey(unichar keyCode);
             break;
 
         case UIInterfaceOrientationPortrait:
+            tx = accelerometerData.acceleration.x;
+            ty = accelerometerData.acceleration.y;
             break;
         }
-        
         tz = accelerometerData.acceleration.z;  
         
         p = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
@@ -842,11 +843,6 @@ bool Platform::isVsync()
 void Platform::setVsync(bool enable)
 {
     __vsync = enable;
-}
-
-int Platform::getOrientationAngle()
-{
-    return 0;
 }
 
 void Platform::getAccelerometerValues(float* pitch, float* roll)
