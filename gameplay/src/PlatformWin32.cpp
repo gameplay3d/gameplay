@@ -247,10 +247,10 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
 
 void UpdateCapture(LPARAM lParam)
 {
-	if ((lParam & MK_LBUTTON) || (lParam & MK_MBUTTON) || (lParam & MK_RBUTTON))
-		SetCapture(__hwnd);
-	else
-		ReleaseCapture();
+    if ((lParam & MK_LBUTTON) || (lParam & MK_MBUTTON) || (lParam & MK_RBUTTON))
+        SetCapture(__hwnd);
+    else
+        ReleaseCapture();
 }
 
 LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -290,7 +290,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
 
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, x, y, 0))
         {
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, x, y, 0);
@@ -306,29 +306,29 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, x, y, 0);
         }
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         return 0;
     }
     case WM_RBUTTONDOWN:
-		UpdateCapture(wParam);
-		lx = GET_X_LPARAM(lParam);
+        UpdateCapture(wParam);
+        lx = GET_X_LPARAM(lParam);
         ly = GET_Y_LPARAM(lParam);
         gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, lx, ly, 0);
         break;
 
     case WM_RBUTTONUP:
         gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         break;
 
     case WM_MBUTTONDOWN:
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         break;
 
     case WM_MBUTTONUP:
         gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         break;
 
     case WM_MOUSEMOVE:
@@ -336,30 +336,30 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
 
-		// Allow Game::mouseEvent a chance to handle (and possibly consume) the event.
-		if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
-		{
-			if ((wParam & MK_LBUTTON) == MK_LBUTTON)
-			{
-				// Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
-				gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0);
-				return 0;
-			}
-			else if ((wParam & MK_RBUTTON) == MK_RBUTTON)
-			{
-				// Update the pitch and roll by adding the scaled deltas.
-				__roll += (float)(x - lx) * ACCELEROMETER_X_FACTOR;
-				__pitch += -(float)(y - ly) * ACCELEROMETER_Y_FACTOR;
+        // Allow Game::mouseEvent a chance to handle (and possibly consume) the event.
+        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
+        {
+            if ((wParam & MK_LBUTTON) == MK_LBUTTON)
+            {
+                // Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
+                gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0);
+                return 0;
+            }
+            else if ((wParam & MK_RBUTTON) == MK_RBUTTON)
+            {
+                // Update the pitch and roll by adding the scaled deltas.
+                __roll += (float)(x - lx) * ACCELEROMETER_X_FACTOR;
+                __pitch += -(float)(y - ly) * ACCELEROMETER_Y_FACTOR;
 
-				// Clamp the values to the valid range.
-				__roll = max(min(__roll, 90.0f), -90.0f);
-				__pitch = max(min(__pitch, 90.0f), -90.0f);
+                // Clamp the values to the valid range.
+                __roll = max(min(__roll, 90.0f), -90.0f);
+                __pitch = max(min(__pitch, 90.0f), -90.0f);
 
-				// Update the last X/Y values.
-				lx = x;
-				ly = y;
-			}
-		}
+                // Update the last X/Y values.
+                lx = x;
+                ly = y;
+            }
+        }
         break;
     }
 
