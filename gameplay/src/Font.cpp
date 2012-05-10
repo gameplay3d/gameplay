@@ -400,9 +400,9 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
     return batch;
 }
 
-void Font::drawText(Text* textBatch)
+void Font::drawText(Text* text)
 {
-    _batch->draw(textBatch->_vertices, textBatch->_vertexCount, textBatch->_indices, textBatch->_indexCount);
+    _batch->draw(text->_vertices, text->_vertexCount, text->_indices, text->_indexCount);
 }
 
 void Font::drawText(const char* text, int x, int y, const Vector4& color, unsigned int size, bool rightToLeft)
