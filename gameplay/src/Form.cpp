@@ -164,6 +164,7 @@ void Form::setSize(float width, float height)
         RenderTarget* rt = RenderTarget::create(_id.c_str(), w, h);
         GP_ASSERT(rt);
         _frameBuffer->setRenderTarget(rt);
+        SAFE_RELEASE(rt);
 
         // Re-create projection matrix.
         Matrix::createOrthographicOffCenter(0, width, height, 0, 0, 1, &_projectionMatrix);

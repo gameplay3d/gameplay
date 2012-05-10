@@ -76,13 +76,29 @@ public:
         float uvs[4];
     };
 
+    /**
+     * Vertex coordinates, UVs and indices can be computed and stored in a Text object.
+     * For static text labels that do not change frequently, this means these computations
+     * need not be performed every frame.
+     */
     class Text
     {
         friend class Font;
 
     public:
+        /**
+         * Constructor.
+         */
         Text(const char* text);
 
+        /**
+         * Destructor.
+         */
+        ~Text();
+
+        /**
+         * Get the string that will be drawn from this Text object.
+         */
         const char* getText();
 
     private:

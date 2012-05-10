@@ -1722,6 +1722,12 @@ Font::Text::Text(const char* text) : _vertexCount(0), _indexCount(0)
     _indices = new unsigned short[((length - 1) * 6) + 4];
 }
 
+Font::Text::~Text()
+{
+    SAFE_DELETE_ARRAY(_vertices);
+    SAFE_DELETE_ARRAY(_indices);
+}
+
 const char* Font::Text::getText()
 {
     return _text.c_str();
