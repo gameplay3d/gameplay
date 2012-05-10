@@ -508,7 +508,11 @@ Platform* Platform::create(Game* game)
 
     int rc = 0;
     int screenFormat = SCREEN_FORMAT_RGBA8888;
-    int screenUsage = SCREEN_USAGE_DISPLAY|SCREEN_USAGE_OPENGL_ES2;
+#if defined(__QNXNTO__) && defined(__X86__)
+    int screenUsage = SCREEN_USAGE_OPENGL_ES2;
+#else
+    int screenUsage = SCREEN_USAGE_DISPLAY|SCREEN_USAGE_OPENGL_ES2; // Physical device copy directly into physical display
+#endif
     int screenSwapInterval = WINDOW_VSYNC ? 1 : 0;
     int screenTransparency = SCREEN_TRANSPARENCY_NONE;
     int angle = atoi(getenv("ORIENTATION"));
@@ -1058,11 +1062,6 @@ void Platform::setVsync(bool enable)
 {
     eglSwapInterval(__eglDisplay, enable ? 1 : 0);
     __vsync = enable;
-}
-
-int Platform::getOrientationAngle()
-{
-    return __orientationAngle;
 }
 
 void Platform::setMultiTouch(bool enabled)

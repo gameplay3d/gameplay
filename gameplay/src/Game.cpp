@@ -5,6 +5,7 @@
 
 // Extern global variables
 GLenum __gl_error_code = GL_NO_ERROR;
+ALenum __al_error_code = AL_NO_ERROR;
 
 namespace gameplay
 {
