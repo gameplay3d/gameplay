@@ -13,23 +13,23 @@ std::string SceneLoader::_path;
 
 Scene* SceneLoader::load(const char* url)
 {
-    assert(url);
+    GP_ASSERT(url);
 
     // Load the scene properties from file.
     Properties* properties = Properties::create(url);
-    assert(properties);
+    GP_ASSERT(properties);
     if (properties == NULL)
     {
-        WARN_VARG("Failed to load scene file: %s", url);
+        GP_WARN("Failed to load scene file: %s", url);
         return NULL;
     }
 
     // Check if the properties object is valid and has a valid namespace.
     Properties* sceneProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
-    assert(sceneProperties);
+    GP_ASSERT(sceneProperties);
     if (!sceneProperties || !(strcmp(sceneProperties->getNamespace(), "scene") == 0))
     {
-        WARN("Failed to load scene from properties object: must be non-null object and have namespace equal to 'scene'.");
+        GP_WARN("Failed to load scene from properties object: must be non-null object and have namespace equal to 'scene'.");
         SAFE_DELETE(properties);
         return NULL;
     }
@@ -159,7 +159,7 @@ void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* scen
             Node* node = scene->findNode(sceneNode._nodeID);
             if (!node)
             {
-                WARN_VARG("Attempting to set a property for node '%s', which does not exist in the scene.", sceneNode._nodeID);
+                GP_WARN("Attempting to set a property for node '%s', which does not exist in the scene.", sceneNode._nodeID);
                 continue;
             }
 
@@ -167,7 +167,7 @@ void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* scen
             {
                 SceneNodeProperty& snp = sceneNode._properties[j];
                 if (typeFlags & snp._type)
-                    applyNodeProperty(sceneNode, node, sceneProperties, snp);
+                    applyNodeProperty(sceneNode, node, sceneProperties, snp, scene);
             }
         }
         else
@@ -185,13 +185,13 @@ void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* scen
                     continue;
 
                 for (unsigned int k = 0; k < nodeCount; ++k)
-                    applyNodeProperty(sceneNode, nodes[k], sceneProperties, snp);
+                    applyNodeProperty(sceneNode, nodes[k], sceneProperties, snp, scene);
             }
         }
     }
 }
 
-void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp)
+void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp, const Scene* scene)
 {
     if (snp._type == SceneNodeProperty::AUDIO ||
         snp._type == SceneNodeProperty::MATERIAL ||
@@ -204,7 +204,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         Properties* p = _propertiesFromFile[snp._file];
         if (!p)
         {
-            WARN_VARG("The referenced node data in file '%s' failed to load.", snp._file.c_str());
+            GP_WARN("The referenced node data in file '%s' failed to load.", snp._file.c_str());
             return;
         }
 
@@ -214,7 +214,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             p = p->getNamespace(snp._id.c_str());
             if (!p)
             {
-                WARN_VARG("The referenced node data at '%s#%s' failed to load.", snp._file.c_str(), snp._id.c_str());
+                GP_WARN("The referenced node data at '%s#%s' failed to load.", snp._file.c_str(), snp._id.c_str());
                 return;
             }
         }
@@ -236,7 +236,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         }
         case SceneNodeProperty::MATERIAL:
             if (!node->getModel())
-                WARN_VARG("Attempting to set a material on node '%s', which has no model.", sceneNode._nodeID);
+                GP_WARN("Attempting to set a material on node '%s', which has no model.", sceneNode._nodeID);
             else
             {
                 Material* material = Material::create(p);
@@ -259,7 +259,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             Properties* p = _propertiesFromFile[snp._file];
             if (!p)
             {
-                WARN_VARG("The referenced node data in file '%s' failed to load.", snp._file.c_str());
+                GP_WARN("The referenced node data in file '%s' failed to load.", snp._file.c_str());
                 return;
             }
 
@@ -269,7 +269,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                 p = p->getNamespace(snp._id.c_str());
                 if (!p)
                 {
-                    WARN_VARG("The referenced node data at '%s#%s' failed to load.", snp._file.c_str(), snp._id.c_str());
+                    GP_WARN("The referenced node data at '%s#%s' failed to load.", snp._file.c_str(), snp._id.c_str());
                     return;
                 }
             }
@@ -283,15 +283,15 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             // Check to make sure the type of the namespace used to load the physics collision object is correct.
             if (snp._type == SceneNodeProperty::CHARACTER && strcmp(p->getNamespace(), "character") != 0)
             {
-                WARN_VARG("Attempting to set a 'character' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
+                GP_WARN("Attempting to set a 'character' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
             }
             else if (snp._type == SceneNodeProperty::GHOSTOBJECT && strcmp(p->getNamespace(), "ghostObject") != 0)
             {
-                WARN_VARG("Attempting to set a 'ghostObject' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
+                GP_WARN("Attempting to set a 'ghostObject' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
             }
             else if (snp._type == SceneNodeProperty::RIGIDBODY && strcmp(p->getNamespace(), "rigidBody") != 0)
             {
-                WARN_VARG("Attempting to set a 'rigidBody' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
+                GP_WARN("Attempting to set a 'rigidBody' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
             }
             else
             {
@@ -300,21 +300,21 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                 const char* name = NULL;
                 if (np && (name = np->getString("rigidBodyModel")))
                 {
-                    Node* modelNode = node->getScene()->findNode(name);
+                    Node* modelNode = scene->findNode(name);
                     if (!modelNode)
-                        WARN_VARG("Node '%s' does not exist; attempting to use its model for collision object creation.", name);
+                        GP_WARN("Node '%s' does not exist; attempting to use its model for collision object creation.", name);
                     else
                     {
                         if (!modelNode->getModel())
-                            WARN_VARG("Node '%s' does not have a model; attempting to use its model for collision object creation.", name);
+                            GP_WARN("Node '%s' does not have a model; attempting to use its model for collision object creation.", name);
                         else
                         {
                             // Temporarily set rigidBody model on model so it's used during collision object creation.
                             Model* model = node->getModel();
-                            assert(model);
                         
                             // Up ref count to prevent node from releasing the model when we swap it.
-                            model->addRef(); 
+                            if (model)
+                                model->addRef(); 
                         
                             // Create collision object with new rigidBodyModel set.
                             node->setModel(modelNode->getModel());
@@ -324,7 +324,8 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                             node->setModel(model);
                         
                             // Decrement temporarily added reference.
-                            model->release();
+                            if (model)
+                                model->release();
                         }
                     }
                 }
@@ -378,7 +379,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             break;
         }
         default:
-            WARN_VARG("Unsupported node property type: %d.", snp._type);
+            GP_WARN("Unsupported node property type: %d.", snp._type);
             break;
         }
     }
@@ -415,7 +416,7 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                     }
                     else
                     {
-                        WARN_VARG("Could not find node '%s' in main scene GPB file.", snp._id.c_str());
+                        GP_WARN("Could not find node '%s' in main scene GPB file.", snp._id.c_str());
                     }
                 }
                 else
@@ -437,7 +438,7 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                     }
                     else
                     {
-                        WARN_VARG("Could not find any nodes matching '%s' in main scene GPB file.", snp._id.c_str());
+                        GP_WARN("Could not find any nodes matching '%s' in main scene GPB file.", snp._id.c_str());
                     }
                 }
             }
@@ -462,7 +463,7 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                         }
                         else
                         {
-                            WARN_VARG("Could not load node '%s' in GPB file '%s'.", snp._id.c_str(), snp._file.c_str());
+                            GP_WARN("Could not load node '%s' in GPB file '%s'.", snp._id.c_str(), snp._file.c_str());
                         }
                     }
                     else
@@ -493,7 +494,7 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                         }
                         if (matchCount == 0)
                         {
-                            WARN_VARG("Could not find any nodes matching '%s' in GPB file '%s'.", snp._id.c_str(), snp._file.c_str());
+                            GP_WARN("Could not find any nodes matching '%s' in GPB file '%s'.", snp._id.c_str(), snp._file.c_str());
                         }
                     }
 
@@ -501,7 +502,7 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                 }
                 else
                 {
-                    WARN_VARG("Failed to load GPB file '%s' for node stitching.", snp._file.c_str());
+                    GP_WARN("Failed to load GPB file '%s' for node stitching.", snp._file.c_str());
                 }
             }
 
@@ -522,7 +523,7 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
         {
             if (strlen(ns->getId()) == 0)
             {
-                WARN("Nodes must have an ID; skipping the current node.");
+                GP_WARN("Nodes must have an ID; skipping the current node.");
                 continue;
             }
 
@@ -595,7 +596,7 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                 }
                 else
                 {
-                    WARN_VARG("Unsupported node property: %s = %s", name, ns->getString());
+                    GP_WARN("Unsupported node property: %s = %s", name, ns->getString());
                 }
             }
         }
@@ -610,20 +611,20 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                     const char* animationID = animation->getId();
                     if (strlen(animationID) == 0)
                     {
-                        WARN("Animations must have an ID; skipping the current animation.");
+                        GP_WARN("Animations must have an ID; skipping the current animation.");
                         continue;
                     }
 
                     const char* url = animation->getString("url");
                     if (!url)
                     {
-                        WARN_VARG("Animations must have a URL; skipping animation '%s'.", animationID);
+                        GP_WARN("Animations must have a URL; skipping animation '%s'.", animationID);
                         continue;
                     }
                     const char* targetID = animation->getString("target");
                     if (!targetID)
                     {
-                        WARN_VARG("Animations must have a target; skipping animation '%s'.", animationID);
+                        GP_WARN("Animations must have a target; skipping animation '%s'.", animationID);
                         continue;
                     }
 
@@ -631,7 +632,7 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                 }
                 else
                 {
-                    WARN_VARG("Unsupported child namespace (of 'animations'): %s", ns->getNamespace());
+                    GP_WARN("Unsupported child namespace (of 'animations'): %s", ns->getNamespace());
                 }
             }
         }
@@ -643,7 +644,7 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
         else
         {
             // TODO: Should we ignore these items? They could be used for generic properties file inheritance.
-            WARN_VARG("Unsupported child namespace (of 'scene'): %s", ns->getNamespace());
+            GP_WARN("Unsupported child namespace (of 'scene'): %s", ns->getNamespace());
         }
     }
 }
@@ -658,7 +659,7 @@ void SceneLoader::createAnimations(const Scene* scene)
         Node* node = scene->findNode(_animations[i]._targetID);
         if (!node)
         {
-            WARN_VARG("Attempting to create an animation targeting node '%s', which does not exist in the scene.", _animations[i]._targetID);
+            GP_WARN("Attempting to create an animation targeting node '%s', which does not exist in the scene.", _animations[i]._targetID);
             continue;
         }
 
@@ -666,7 +667,7 @@ void SceneLoader::createAnimations(const Scene* scene)
         Properties* p = _propertiesFromFile[_animations[i]._file];
         if (!p)
         {
-            WARN_VARG("The referenced animation data in file '%s' failed to load.", _animations[i]._file.c_str());
+            GP_WARN("The referenced animation data in file '%s' failed to load.", _animations[i]._file.c_str());
             continue;
         }
         if (_animations[i]._id.size() > 0)
@@ -674,7 +675,7 @@ void SceneLoader::createAnimations(const Scene* scene)
             p = p->getNamespace(_animations[i]._id.c_str());
             if (!p)
             {
-                WARN_VARG("The referenced animation data at '%s#%s' failed to load.", _animations[i]._file.c_str(), _animations[i]._id.c_str());
+                GP_WARN("The referenced animation data at '%s#%s' failed to load.", _animations[i]._file.c_str(), _animations[i]._id.c_str());
                 continue;
             }
         }
@@ -769,7 +770,7 @@ Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
     Bundle* bundle = Bundle::create(_path.c_str());
     if (!bundle)
     {
-        WARN_VARG("Failed to load scene GPB file '%s'.", _path.c_str());
+        GP_WARN("Failed to load scene GPB file '%s'.", _path.c_str());
         return NULL;
     }
 
@@ -777,7 +778,7 @@ Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
     Scene* scene = bundle->loadScene(NULL);
     if (!scene)
     {
-        WARN_VARG("Failed to load scene from '%s'.", _path.c_str());
+        GP_WARN("Failed to load scene from '%s'.", _path.c_str());
         SAFE_RELEASE(bundle);
         return NULL;
     }
@@ -816,18 +817,18 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
             name = constraint->getString("rigidBodyA");
             if (!name)
             {
-                WARN_VARG("Missing property 'rigidBodyA' for constraint %s", constraint->getId());
+                GP_WARN("Missing property 'rigidBodyA' for constraint %s", constraint->getId());
                 continue;
             }
             Node* rbANode = scene->findNode(name);
             if (!rbANode)
             {
-                WARN_VARG("Node '%s' to be used as 'rigidBodyA' for constraint %s cannot be found.", name, constraint->getId());
+                GP_WARN("Node '%s' to be used as 'rigidBodyA' for constraint %s cannot be found.", name, constraint->getId());
                 continue;
             }
             if (!rbANode->getCollisionObject() || rbANode->getCollisionObject()->getType() != PhysicsCollisionObject::RIGID_BODY)
             {
-                WARN_VARG("Node '%s' to be used as 'rigidBodyA' does not have a rigid body.", name);
+                GP_WARN("Node '%s' to be used as 'rigidBodyA' does not have a rigid body.", name);
                 continue;
             }
             PhysicsRigidBody* rbA = static_cast<PhysicsRigidBody*>(rbANode->getCollisionObject());
@@ -843,12 +844,12 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
                 Node* rbBNode = scene->findNode(name);
                 if (!rbBNode)
                 {
-                    WARN_VARG("Node '%s' to be used as 'rigidBodyB' for constraint %s cannot be found.", name, constraint->getId());
+                    GP_WARN("Node '%s' to be used as 'rigidBodyB' for constraint %s cannot be found.", name, constraint->getId());
                     continue;
                 }
                 if (!rbBNode->getCollisionObject() || rbBNode->getCollisionObject()->getType() != PhysicsCollisionObject::RIGID_BODY)
                 {
-                    WARN_VARG("Node '%s' to be used as 'rigidBodyB' does not have a rigid body.", name);
+                    GP_WARN("Node '%s' to be used as 'rigidBodyB' does not have a rigid body.", name);
                     continue;
                 }
                 rbB = static_cast<PhysicsRigidBody*>(rbBNode->getCollisionObject());
@@ -888,7 +889,7 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
         }
         else
         {
-            WARN_VARG("Unsupported child namespace (of 'physics'): %s", physics->getNamespace());
+            GP_WARN("Unsupported child namespace (of 'physics'): %s", physics->getNamespace());
         }
     }
 }
@@ -900,9 +901,9 @@ void SceneLoader::loadReferencedFiles()
     for (; iter != _propertiesFromFile.end(); iter++)
     {
         Properties* p = Properties::create(iter->first.c_str());
-        assert(p);
+        GP_ASSERT(p);
         if (p == NULL)
-            WARN_VARG("Failed to load referenced file: %s", iter->first.c_str());
+            GP_WARN("Failed to load referenced file: %s", iter->first.c_str());
 
         iter->second = p;
     }
@@ -940,7 +941,7 @@ PhysicsConstraint* SceneLoader::loadSpringConstraint(const Properties* constrain
 {
     if (!rbB)
     {
-        WARN("Spring constraints require two rigid bodies.");
+        GP_WARN("Spring constraints require two rigid bodies.");
         return NULL;
     }
 

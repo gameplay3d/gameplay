@@ -11,7 +11,7 @@ Material* MeshBatch::getMaterial() const
 template <class T>
 void MeshBatch::add(T* vertices, unsigned int vertexCount, unsigned short* indices, unsigned int indexCount)
 {
-    assert(sizeof(T) == _vertexFormat.getVertexSize());
+    GP_ASSERT(sizeof(T) == _vertexFormat.getVertexSize());
     
     unsigned int newVertexCount = _vertexCount + vertexCount;
     unsigned int newIndexCount = _indexCount + indexCount;

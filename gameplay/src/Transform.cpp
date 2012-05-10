@@ -155,21 +155,21 @@ const Quaternion& Transform::getRotation() const
 
 void Transform::getRotation(Quaternion* rotation) const
 {
-    assert(rotation);
+    GP_ASSERT(rotation);
 
     rotation->set(_rotation);
 }
 
 void Transform::getRotation(Matrix* rotation) const
 {
-    assert(rotation);
+    GP_ASSERT(rotation);
 
     Matrix::createRotation(_rotation, rotation);
 }
 
 float Transform::getRotation(Vector3* axis) const
 {
-    assert(axis);
+    GP_ASSERT(axis);
     return _rotation.toAxisAngle(axis);
 }
 
@@ -573,7 +573,7 @@ void Transform::translateForward(float amount)
 
 void Transform::transformPoint(Vector3* point)
 {
-    assert(point);
+    GP_ASSERT(point);
 
     getMatrix();
     _matrix.transformPoint(point);
@@ -581,7 +581,7 @@ void Transform::transformPoint(Vector3* point)
 
 void Transform::transformPoint(const Vector3& point, Vector3* dst)
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     getMatrix();
     _matrix.transformPoint(point, dst);
@@ -589,7 +589,7 @@ void Transform::transformPoint(const Vector3& point, Vector3* dst)
 
 void Transform::transformVector(Vector3* normal)
 {
-    assert(normal);
+    GP_ASSERT(normal);
 
     getMatrix();
     _matrix.transformVector(normal);
@@ -702,7 +702,7 @@ void Transform::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 
 void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight)
 {
-    assert(blendWeight >= 0.0f && blendWeight <= 1.0f);
+    GP_ASSERT(blendWeight >= 0.0f && blendWeight <= 1.0f);
 
     switch (propertyId)
     {

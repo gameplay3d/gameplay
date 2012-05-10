@@ -127,7 +127,7 @@ unsigned int FrameBuffer::getMaxRenderTargets()
 
 void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
 {
-    assert(index < __maxRenderTargets);
+    GP_ASSERT(index < __maxRenderTargets);
 
     if (_renderTargets[index] == target)
     {

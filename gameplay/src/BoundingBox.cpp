@@ -32,7 +32,7 @@ const BoundingBox& BoundingBox::empty()
 
 void BoundingBox::getCorners(Vector3* dst) const
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     // Near face, specified counter-clockwise looking towards the origin from the positive z-axis.
     // Left-top-front.

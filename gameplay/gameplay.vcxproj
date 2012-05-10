@@ -90,6 +90,7 @@
     <ClCompile Include="src\RenderTarget.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SceneLoader.cpp" />
+    <ClCompile Include="src\ScrollLayout.cpp" />
     <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SceneLoader.h" />
     <ClInclude Include="src\ScreenDisplayer.h" />
+    <ClInclude Include="src\ScrollLayout.h" />
     <ClInclude Include="src\Slider.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />
