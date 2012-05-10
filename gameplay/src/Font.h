@@ -76,11 +76,37 @@ public:
         float uvs[4];
     };
 
-    class TextBatch
+    /**
+     * Vertex coordinates, UVs and indices can be computed and stored in a Text object.
+     * For static text labels that do not change frequently, this means these computations
+     * need not be performed every frame.
+     */
+    class Text
     {
+        friend class Font;
+
     public:
+        /**
+         * Constructor.
+         */
+        Text(const char* text);
+
+        /**
+         * Destructor.
+         */
+        ~Text();
+
+        /**
+         * Get the string that will be drawn from this Text object.
+         */
+        const char* getText();
+
+    private:
+        std::string _text;
         SpriteBatch::SpriteVertex* _vertices;
+        unsigned short* _indices;
         unsigned int _vertexCount;
+        unsigned int _indexCount;
     };
 
     /**
@@ -133,15 +159,31 @@ public:
     void end();
 
     /**
-     * Compute vertex coordinates and UVs for a given string.
+     * Create a Text object from a given string.
+     * Vertex coordinates, UVs and indices will be computed and stored in the Text object.
+     * For static text labels that do not change frequently, this means these computations
+     * need not be performed every frame.
+     *
+     * @param text The text to draw.
+     * @param area The viewport area to draw within.  Text will be clipped outside this rectangle.
+     * @param color The color of text.
+     * @param size The size to draw text (0 for default size).
+     * @param justify Justification of text within the viewport.
+     * @param wrap Wraps text to fit within the width of the viewport if true.
+     * @param rightToLeft Whether to draw text from right to left.
+     * @param clip A region to clip text within after applying justification to the viewport area.
+     *
+     * @return A Text object.
      */
-    TextBatch* getTextBatch(const char* text, const Rectangle& area, const Vector4& color, unsigned int size = 0,
+    Text* createText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size = 0,
         Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false, const Rectangle* clip = NULL);
 
     /**
-     * Draw a string from a precomputed StringBatch.
+     * Draw a string from a precomputed Text object.
+     *
+     * @param text The text to draw.
      */
-    void drawTextBatch(TextBatch* textBatch);
+    void drawText(Text* text);
 
     /**
      * Draws the specified text in a solid color, with a scaling factor.
