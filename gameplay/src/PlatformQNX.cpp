@@ -508,7 +508,7 @@ Platform* Platform::create(Game* game)
 
     int rc = 0;
     int screenFormat = SCREEN_FORMAT_RGBA8888;
-#if defined(__QNXNTO__) && defined(__X86__)
+#ifdef __X86__
     int screenUsage = SCREEN_USAGE_OPENGL_ES2;
 #else
     int screenUsage = SCREEN_USAGE_DISPLAY|SCREEN_USAGE_OPENGL_ES2; // Physical device copy directly into physical display
@@ -767,7 +767,7 @@ void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEven
 {
     if (!Game::getInstance()->mouseEvent(mouseEvent, x, y, 0))
     {
-        Game::getInstance()->touchEvent(touchEvent, x, y, 0);
+        Platform::touchEventInternal(touchEvent, x, y, 0);
     }
 }
 
@@ -956,20 +956,20 @@ int Platform::enterMessagePump()
                     break;
                 case NAVIGATOR_WINDOW_STATE:
                 {
-                	navigator_window_state_t state = navigator_event_get_window_state(event);
-                	switch (state)
-                	{
-                	case NAVIGATOR_WINDOW_FULLSCREEN:
-                		_game->resume();
-                		suspended = false;
-                		break;
-                	case NAVIGATOR_WINDOW_THUMBNAIL:
-                	case NAVIGATOR_WINDOW_INVISIBLE:
-                		_game->pause();
-                		suspended = true;
-                		break;
-                	}
-                	break;
+                    navigator_window_state_t state = navigator_event_get_window_state(event);
+                    switch (state)
+                    {
+                    case NAVIGATOR_WINDOW_FULLSCREEN:
+                        _game->resume();
+                        suspended = false;
+                        break;
+                    case NAVIGATOR_WINDOW_THUMBNAIL:
+                    case NAVIGATOR_WINDOW_INVISIBLE:
+                        _game->pause();
+                        suspended = true;
+                        break;
+                    }
+                    break;
                 }
                 case NAVIGATOR_EXIT:
                     _game->exit();
