@@ -185,7 +185,7 @@ public:
      * @param x The x coordinate.
      * @param y The y coordinate.
      */
-    virtual void setPosition(float x, float y);
+    void setPosition(float x, float y);
 
     /**
      * Set the desired size of this control, including its border and padding, before clipping.

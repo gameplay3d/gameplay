@@ -186,6 +186,34 @@ void Form::setBounds(const Rectangle& bounds)
     setSize(bounds.width, bounds.height);
 }
 
+void Form::setAutoWidth(bool autoWidth)
+{
+    if (_autoWidth != autoWidth)
+    {
+        _autoWidth = autoWidth;
+        _dirty = true;
+
+        if (_autoWidth)
+        {
+            setSize(_bounds.width, Game::getInstance()->getWidth());
+        }
+    }
+}
+
+void Form::setAutoHeight(bool autoHeight)
+{
+    if (_autoHeight != autoHeight)
+    {
+        _autoHeight = autoHeight;
+        _dirty = true;
+
+        if (_autoHeight)
+        {
+            setSize(_bounds.width, Game::getInstance()->getHeight());
+        }
+    }
+}
+
 void Form::setQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4)
 {
     Mesh* mesh = Mesh::createQuad(p1, p2, p3, p4);

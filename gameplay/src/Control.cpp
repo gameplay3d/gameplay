@@ -183,7 +183,11 @@ Control::Alignment Control::getAlignment() const
 
 void Control::setAutoWidth(bool autoWidth)
 {
-    _autoWidth = autoWidth;
+    if (_autoWidth != autoWidth)
+    {
+        _autoWidth = autoWidth;
+        _dirty = true;
+    }
 }
 
 bool Control::getAutoWidth() const
@@ -193,7 +197,11 @@ bool Control::getAutoWidth() const
 
 void Control::setAutoHeight(bool autoHeight)
 {
-    _autoHeight = autoHeight;
+    if (_autoHeight != autoHeight)
+    {
+        _autoHeight = autoHeight;
+        _dirty = true;
+    }
 }
 
 void Control::setOpacity(float opacity, unsigned char states)
