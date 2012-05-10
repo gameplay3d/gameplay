@@ -68,6 +68,21 @@ public:
     static Form* getForm(const char* id);
 
     /**
+     * Set the desired size of this form.
+     *
+     * @param width The width.
+     * @param height The height.
+     */
+    virtual void setSize(float width, float height);
+
+    /**
+     * Set the bounds of this form.
+     *
+     * @param bounds The new bounds to set.
+     */
+    virtual void setBounds(const Rectangle& bounds);
+
+    /**
      * Create a 3D quad to texture with this Form.
      *
      * The specified points should describe a triangle strip with the first 3 points

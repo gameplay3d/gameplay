@@ -64,7 +64,7 @@ void Control::initialize(Theme::Style* style, Properties* properties)
         size.x = properties->getFloat("width");
         size.y = properties->getFloat("height");
     }
-    _bounds.set(position.x, position.y, size.x, size.y);
+    setBounds(Rectangle(position.x, position.y, size.x, size.y));
 
     _state = Control::getState(properties->getString("state"));
 
@@ -139,7 +139,11 @@ void Control::setSize(float width, float height)
 
 void Control::setBounds(const Rectangle& bounds)
 {
-    _bounds.set(bounds);
+    if (bounds != _bounds)
+    {
+        _bounds.set(bounds);
+        _dirty = true;
+    }
 }
 
 const Rectangle& Control::getBounds() const
