@@ -93,45 +93,9 @@ Form* Form::create(const char* url)
     const char* styleName = formProperties->getString("style");
     form->initialize(theme->getStyle(styleName), formProperties);
 
-    if (form->_autoWidth)
-    {
-        form->_bounds.width = Game::getInstance()->getWidth();
-    }
-
-    if (form->_autoHeight)
-    {
-        form->_bounds.height = Game::getInstance()->getHeight();
-    }
-
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
 
-        
-    // Width and height must be powers of two to create a texture.
-    int w = (int)form->_bounds.width;
-    int h = (int)form->_bounds.height;
-
-    if (!((w & (w - 1)) == 0))
-    {
-        w = nextHighestPowerOfTwo(w);
-    }
-
-    if (!((h & (h - 1)) == 0))
-    {
-        h = nextHighestPowerOfTwo(h);
-    }
-
-    form->_u2 = form->_bounds.width / (float)w;
-    form->_v1 = form->_bounds.height / (float)h;
-
-    // Create the frame buffer.
-    form->_frameBuffer = FrameBuffer::create(form->_id.c_str());
-    RenderTarget* rt = RenderTarget::create(form->_id.c_str(), w, h);
-    GP_ASSERT(rt);
-    form->_frameBuffer->setRenderTarget(rt);
-    SAFE_RELEASE(rt);
-
-    Matrix::createOrthographicOffCenter(0, form->_bounds.width, form->_bounds.height, 0, 0, 1, &form->_projectionMatrix);
     Game* game = Game::getInstance();
     Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
 
@@ -156,6 +120,98 @@ Form* Form::getForm(const char* id)
     }
         
     return NULL;
+}
+
+void Form::setSize(float width, float height)
+{
+    if (_autoWidth)
+    {
+        width = Game::getInstance()->getWidth();
+    }
+
+    if (_autoHeight)
+    {
+        height = Game::getInstance()->getHeight();
+    }
+
+    if (width != _bounds.width || height != _bounds.height)
+    {
+        // Width and height must be powers of two to create a texture.
+        int w = width;
+        int h = height;
+
+        if (!((w & (w - 1)) == 0))
+        {
+            w = nextHighestPowerOfTwo(w);
+        }
+
+        if (!((h & (h - 1)) == 0))
+        {
+            h = nextHighestPowerOfTwo(h);
+        }
+
+        _u2 = width / (float)w;
+        _v1 = height / (float)h;
+
+        // Create framebuffer if necessary.
+        if (!_frameBuffer)
+        {
+            _frameBuffer = FrameBuffer::create(_id.c_str());
+            GP_ASSERT(_frameBuffer);
+        }
+     
+        // Re-create render target.
+        RenderTarget* rt = RenderTarget::create(_id.c_str(), w, h);
+        GP_ASSERT(rt);
+        _frameBuffer->setRenderTarget(rt);
+        SAFE_RELEASE(rt);
+
+        // Re-create projection matrix.
+        Matrix::createOrthographicOffCenter(0, width, height, 0, 0, 1, &_projectionMatrix);
+
+        // Re-create sprite batch.
+        SAFE_DELETE(_spriteBatch);
+        _spriteBatch = SpriteBatch::create(_frameBuffer->getRenderTarget()->getTexture());
+        GP_ASSERT(_spriteBatch);
+
+        _bounds.width = width;
+        _bounds.height = height;
+        _dirty = true;
+    }
+}
+
+void Form::setBounds(const Rectangle& bounds)
+{
+    setPosition(bounds.x, bounds.y);
+    setSize(bounds.width, bounds.height);
+}
+
+void Form::setAutoWidth(bool autoWidth)
+{
+    if (_autoWidth != autoWidth)
+    {
+        _autoWidth = autoWidth;
+        _dirty = true;
+
+        if (_autoWidth)
+        {
+            setSize(_bounds.width, Game::getInstance()->getWidth());
+        }
+    }
+}
+
+void Form::setAutoHeight(bool autoHeight)
+{
+    if (_autoHeight != autoHeight)
+    {
+        _autoHeight = autoHeight;
+        _dirty = true;
+
+        if (_autoHeight)
+        {
+            setSize(_bounds.width, Game::getInstance()->getHeight());
+        }
+    }
 }
 
 void Form::setQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4)

@@ -14,10 +14,10 @@ class ScreenDisplayer
 {
 public:
 
-	/**
-	 * Constructor.
-	 */
-	ScreenDisplayer();
+    /**
+     * Constructor.
+     */
+    ScreenDisplayer();
 
     /**
      * Displays a screen using the {@link Game#renderOnce} mechanism for at least the given amount of time.

@@ -160,22 +160,22 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
     {
     public:
 
-	    SweepTestCallback(PhysicsCollisionObject* me)
+        SweepTestCallback(PhysicsCollisionObject* me)
             : btCollisionWorld::ClosestConvexResultCallback(btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0)), me(me)
-	    {
-	    }
+        {
+        }
 
-	    btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
-	    {
+        btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+        {
             PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(convexResult.m_hitCollisionObject->getUserPointer());
 
-		    if (object == me)
-			    return 1.0f;
+            if (object == me)
+                return 1.0f;
 
-		    return ClosestConvexResultCallback::addSingleResult(convexResult, normalInWorldSpace);
-	    }
+            return ClosestConvexResultCallback::addSingleResult(convexResult, normalInWorldSpace);
+        }
 
-	    PhysicsCollisionObject* me;
+        PhysicsCollisionObject* me;
     };
 
     PhysicsCollisionShape* shape = object->getCollisionShape();
