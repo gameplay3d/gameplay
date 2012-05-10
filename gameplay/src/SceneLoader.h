@@ -83,7 +83,7 @@ private:
 
     static void applyNodeProperties(const Scene* scene, const Properties* sceneProperties, unsigned int typeFlags);
 
-    static void applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp);
+    static void applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp, const Scene* scene);
 
     static void applyNodeUrls(Scene* scene);
 

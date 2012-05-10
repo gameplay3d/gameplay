@@ -45,7 +45,7 @@ int getKey(unichar keyCode);
 {
     EAGLContext* context;	
     CADisplayLink* displayLink;
-	GLuint defaultFramebuffer;
+    GLuint defaultFramebuffer;
     GLuint colorRenderbuffer;
     GLuint depthRenderbuffer;
     GLint framebufferWidth;
@@ -87,11 +87,11 @@ int getKey(unichar keyCode);
 - (id) initWithFrame:(CGRect)frame
 {
     if ((self = [super initWithFrame:frame]))
-	{
+    {
         // A system version of 3.1 or greater is required to use CADisplayLink. 
-		NSString *reqSysVer = @"3.1";
-		NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
-		if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
+        NSString *reqSysVer = @"3.1";
+        NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
+        if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
         {
             // Log the system version
             NSLog(@"System Version: %@", currSysVer);
@@ -113,12 +113,12 @@ int getKey(unichar keyCode);
         self.contentScaleFactor = scale;
         layer.contentsScale = scale;
         
-		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+        context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         if (!context || ![EAGLContext setCurrentContext:context])
-		{
-			[self release];
-			return nil;
-		}
+        {
+            [self release];
+            return nil;
+        }
 
         if (!defaultFramebuffer)
         {
@@ -135,7 +135,7 @@ int getKey(unichar keyCode);
         depthRenderbuffer = 0;
         framebufferWidth = 0;
         framebufferHeight = 0;
-		swapInterval = 1;        
+        swapInterval = 1;        
         updating = FALSE;
         
         [self createFramebuffer];
@@ -156,11 +156,11 @@ int getKey(unichar keyCode);
     _game->exit();
     [self deleteFramebuffer];
     
-	if ([EAGLContext currentContext] == context)
+    if ([EAGLContext currentContext] == context)
     {
         [EAGLContext setCurrentContext:nil];
     }
-	[context release];
+    [context release];
     [super dealloc];
 }
 
@@ -228,15 +228,15 @@ int getKey(unichar keyCode);
 
 - (void)setSwapInterval:(NSInteger)interval
 {
-	if (interval >= 1)
-	{
-		swapInterval = interval;		
-		if (updating)
-		{
-			[self stopUpdating];
-			[self startUpdating];
-		}
-	}
+    if (interval >= 1)
+    {
+        swapInterval = interval;		
+        if (updating)
+        {
+            [self stopUpdating];
+            [self startUpdating];
+        }
+    }
 }
 
 - (int)swapInterval 
@@ -255,25 +255,25 @@ int getKey(unichar keyCode);
 
 - (void)startUpdating
 {
-	if (!updating)
-	{
+    if (!updating)
+    {
         displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update:)];
         [displayLink setFrameInterval:swapInterval];
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         _game->resume();
-		updating = TRUE;
-	}
+        updating = TRUE;
+    }
 }
 
 - (void)stopUpdating
 {
-	if (updating)
-	{
+    if (updating)
+    {
         _game->pause();
-		[displayLink invalidate];
+        [displayLink invalidate];
         displayLink = nil;
-		updating = FALSE;
-	}
+        updating = FALSE;
+    }
 }
 
 - (void)update:(id)sender
@@ -487,9 +487,10 @@ int getKey(unichar keyCode);
             break;
 
         case UIInterfaceOrientationPortrait:
+            tx = accelerometerData.acceleration.x;
+            ty = accelerometerData.acceleration.y;
             break;
         }
-        
         tz = accelerometerData.acceleration.z;  
         
         p = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
@@ -504,27 +505,27 @@ int getKey(unichar keyCode);
 
 - (void)applicationWillResignActive:(UIApplication*)application
 {    
-	[viewController stopUpdating];
+    [viewController stopUpdating];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication*)application 
 {
-	[viewController stopUpdating];
+    [viewController stopUpdating];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication*)application 
 {	
-	[viewController startUpdating];
+    [viewController startUpdating];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication*)application 
 {
-	[viewController startUpdating];
+    [viewController startUpdating];
 }
 
 - (void)applicationWillTerminate:(UIApplication*)application 
 {	
-	[viewController stopUpdating];
+    [viewController stopUpdating];
 }
 
 - (void)dealloc 
@@ -533,7 +534,7 @@ int getKey(unichar keyCode);
     [viewController release];
     [window release];
     [motionManager release];
-	[super dealloc];
+    [super dealloc];
 }
 
 @end
@@ -775,7 +776,6 @@ extern void printError(const char* format, ...)
     va_list argptr;
     va_start(argptr, format);
     vfprintf(stderr, format, argptr);
-    fprintf(stderr, "\n");
     va_end(argptr);
 }
 

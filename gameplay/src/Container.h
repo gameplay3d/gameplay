@@ -112,7 +112,7 @@ public:
      *
      * @return The vector of the controls within this container.
      */
-    std::vector<Control*> getControls() const;
+    const std::vector<Control*>& getControls() const;
 
     /**
      * Gets the first animation in the control with the specified ID.
@@ -158,7 +158,7 @@ protected:
      *
      * @param clip The clipping rectangle of this container's parent container.
      */
-    virtual void update(const Rectangle& clip);
+    virtual void update(const Rectangle& clip, const Vector2& offset);
 
     /**
      * Draws the themed border and background of this container and all its controls.
@@ -166,7 +166,7 @@ protected:
      * @param spriteBatch The sprite batch containing this container's border images.
      * @param clip The clipping rectangle of this container's parent container.
      */
-    void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
+    //void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip, const Vector2& offset = Vector2::zero());
 
     /**
      * Draws the icons of all controls within this container.
@@ -174,14 +174,14 @@ protected:
      * @param spriteBatch The sprite batch containing this control's icons.
      * @param clip The clipping rectangle of this container's parent container.
      */
-    virtual void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    //virtual void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
     /**
      * Draws the text of all controls within this container.
      *
      * @param clip The clipping rectangle of this container's parent container.
      */
-    virtual void drawText(const Rectangle& clip);
+    //virtual void drawText(const Rectangle& clip);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.
@@ -244,6 +244,8 @@ protected:
 private:
 
     Container(const Container& copy);
+
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
 };
 
 }

@@ -391,4 +391,31 @@ void getAnimationChannels(const domAnimationRef& animationRef, const std::string
     }
 }
 
+domVisual_scene* getVisualScene(const domCOLLADA::domSceneRef& domScene)
+{
+    daeElement* scene = domScene->getInstance_visual_scene()->getUrl().getElement();
+    if (scene->getElementType() == COLLADA_TYPE::VISUAL_SCENE)
+    {
+        return static_cast<domVisual_scene*>(scene);
+    }
+
+    // DAE_FBX sometimes doesn't export an ID. In that case, see if there is only one visual scene and use that.
+    // Most of the time there is only one visual scene.
+    domCOLLADA* root = (domCOLLADA*)domScene->getDocument()->getDomRoot();
+    domLibrary_visual_scenes_Array& visualSceneLibrary = root->getLibrary_visual_scenes_array();
+    size_t visualSceneLibraryCount = visualSceneLibrary.getCount();
+    for (size_t i = 0; i < visualSceneLibraryCount; ++i)
+    {
+        domLibrary_visual_scenesRef scenesRef = visualSceneLibrary.get(i);
+        domVisual_scene_Array visualScenes = scenesRef->getVisual_scene_array();
+        size_t visualSceneCount = visualScenes.getCount();
+        for (size_t j = 0; j < visualSceneCount; ++j)
+        {
+            domVisual_sceneRef visualScene = visualScenes.get(j);
+            return visualScene.cast();
+        }
+    }
+    return NULL;
+}
+
 }

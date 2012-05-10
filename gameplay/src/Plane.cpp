@@ -251,7 +251,7 @@ void Plane::transform(const Matrix& matrix)
         float nx = _normal.x * inverted.m[0] + _normal.y * inverted.m[1] + _normal.z * inverted.m[2] + _distance * inverted.m[3];
         float ny = _normal.x * inverted.m[4] + _normal.y * inverted.m[5] + _normal.z * inverted.m[6] + _distance * inverted.m[7];
         float nz = _normal.x * inverted.m[8] + _normal.y * inverted.m[9] + _normal.z * inverted.m[10] + _distance * inverted.m[11];
-        float d = _normal.x * inverted.m[12]+ _normal.y * inverted.m[13] + _normal.z * inverted.m[14]+ _distance * inverted.m[15];
+        float d = _normal.x * inverted.m[12]+ _normal.y * inverted.m[13] + _normal.z * inverted.m[14] + _distance * inverted.m[15];
         float factor = 1.0f / sqrt(nx * nx + ny * ny + nz * nz);
 
         _normal.x = nx * factor;
@@ -271,7 +271,7 @@ void Plane::normalize()
 
     if (normalizeFactor != 1.0f)
     {
-        _normal.x*= normalizeFactor;
+        _normal.x *= normalizeFactor;
         _normal.y *= normalizeFactor;
         _normal.z *= normalizeFactor;
         _distance *= normalizeFactor;

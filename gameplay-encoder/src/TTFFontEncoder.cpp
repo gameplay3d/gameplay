@@ -23,11 +23,6 @@ static void writeUint(FILE* fp, unsigned int i)
     fwrite(&i, sizeof(unsigned int), 1, fp);
 }
 
-static void writeFloat(FILE* fp, float f)
-{
-    fwrite(&f, sizeof(float), 1, fp);
-}
-
 static void writeString(FILE* fp, const char* str)
 {
     unsigned int len = strlen(str);

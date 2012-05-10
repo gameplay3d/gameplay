@@ -52,7 +52,7 @@ void RenderState::finalize()
 
 MaterialParameter* RenderState::getParameter(const char* name) const
 {
-    assert(name);
+    GP_ASSERT(name);
 
     MaterialParameter* param;
 
@@ -492,13 +492,13 @@ RenderState::Blend parseBlend(const char* value)
     if (upper == "SRC_ALPHA_SATURATE")
         return RenderState::BLEND_SRC_ALPHA_SATURATE;
 
-    WARN_VARG("Warning: Unrecognized blend value (%s), defaulting to BLEND_ONE.", value);
+    GP_WARN("Warning: Unrecognized blend value (%s), defaulting to BLEND_ONE.", value);
     return RenderState::BLEND_ONE;
 }
 
 void RenderState::StateBlock::setState(const char* name, const char* value)
 {
-    assert(name && value);
+    GP_ASSERT(name && value);
 
     if (strcmp(name, "blend") == 0)
     {
@@ -526,7 +526,7 @@ void RenderState::StateBlock::setState(const char* name, const char* value)
     }
     else
     {
-        WARN_VARG("Warning: Invalid render state: %s", name);
+        GP_WARN("Warning: Invalid render state: %s", name);
     }
 }
 

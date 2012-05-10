@@ -416,14 +416,12 @@ extern void printError(const char* format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
-    fprintf(stderr, "\n");
     int sz = vfprintf(stderr, format, argptr);
     if (sz > 0)
     {
-        char* buf = new char[sz + 2];
+        char* buf = new char[sz + 1];
         vsprintf(buf, format, argptr);
-        buf[sz] = '\n';
-        buf[sz+1] = 0;
+        buf[sz] = 0;
         OutputDebugStringA(buf);
         SAFE_DELETE_ARRAY(buf);
     }

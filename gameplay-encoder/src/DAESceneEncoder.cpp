@@ -261,13 +261,7 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
     daeElement* scene = NULL;
     if (domScene && domScene->getInstance_visual_scene())
     {
-        scene = domScene->getInstance_visual_scene()->getUrl().getElement();
-        if (scene->getElementType() != COLLADA_TYPE::VISUAL_SCENE)
-        {
-            // This occured once where Maya exported a Node and Scene element with the same ID.
-            fprintf(stderr,"Error: instance_visual_scene does not reference visual_scene for file:%s\n", filepath.c_str());
-            return;
-        }
+        scene = getVisualScene(domScene);
         if (scene)
         {
             if (nodeId == NULL)

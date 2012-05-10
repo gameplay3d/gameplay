@@ -79,7 +79,7 @@ Effect* Effect::createFromFile(const char* vshPath, const char* fshPath, const c
 
     if (effect == NULL)
     {
-        LOG_ERROR_VARG("Failed to create effect from shaders: %s, %s", vshPath, fshPath);
+        GP_ERROR("Failed to create effect from shaders: %s, %s", vshPath, fshPath);
     }
     else
     {
@@ -130,7 +130,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
             GL_ASSERT( glGetShaderInfoLog(vertexShader, length, NULL, infoLog) );
             infoLog[length-1] = '\0';
         }
-        LOG_ERROR_VARG("Compile failed for vertex shader (%s): %s", vshPath == NULL ? "NULL" : vshPath, infoLog == NULL ? "" : infoLog);
+        GP_ERROR("Compile failed for vertex shader (%s): %s", vshPath == NULL ? "NULL" : vshPath, infoLog == NULL ? "" : infoLog);
         SAFE_DELETE_ARRAY(infoLog);
 
         // Clean up.
@@ -162,7 +162,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
             GL_ASSERT( glGetShaderInfoLog(fragmentShader, length, NULL, infoLog) );
             infoLog[length-1] = '\0';
         }
-        LOG_ERROR_VARG("Compile failed for fragment shader (%s): %s", fshPath == NULL ? "NULL" : fshPath, infoLog == NULL ? "" : infoLog);
+        GP_ERROR("Compile failed for fragment shader (%s): %s", fshPath == NULL ? "NULL" : fshPath, infoLog == NULL ? "" : infoLog);
         SAFE_DELETE_ARRAY(infoLog);
 
         // Clean up.
@@ -193,7 +193,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
             GL_ASSERT( glGetProgramInfoLog(program, length, NULL, infoLog) );
             infoLog[length-1] = '\0';
         }
-        LOG_ERROR_VARG("Linking program failed (%s,%s): %s", vshPath == NULL ? "NULL" : vshPath, fshPath == NULL ? "NULL" : fshPath, infoLog == NULL ? "" : infoLog);
+        GP_ERROR("Linking program failed (%s,%s): %s", vshPath == NULL ? "NULL" : vshPath, fshPath == NULL ? "NULL" : fshPath, infoLog == NULL ? "" : infoLog);
         SAFE_DELETE_ARRAY(infoLog);
 
         // Clean up.
@@ -387,7 +387,7 @@ void Effect::setValue(Uniform* uniform, const Vector4* values, unsigned int coun
 
 void Effect::setValue(Uniform* uniform, const Texture::Sampler* sampler)
 {
-    assert(uniform->_type == GL_SAMPLER_2D);
+    GP_ASSERT(uniform->_type == GL_SAMPLER_2D);
 
     GL_ASSERT( glActiveTexture(GL_TEXTURE0 + uniform->_index) );
 

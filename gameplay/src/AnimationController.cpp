@@ -21,6 +21,7 @@ void AnimationController::stopAllAnimations()
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = *clipIter;
+        GP_ASSERT(clip);
         clip->stop();
         clipIter++;
     }
@@ -68,6 +69,7 @@ void AnimationController::schedule(AnimationClip* clip)
         _state = RUNNING;
     }
 
+    GP_ASSERT(clip);
     clip->addRef();
     _runningClips.push_back(clip);
 }
@@ -103,6 +105,7 @@ void AnimationController::update(long elapsedTime)
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = (*clipIter);
+        GP_ASSERT(clip);
         if (clip->isClipStateBitSet(AnimationClip::CLIP_IS_RESTARTED_BIT))
         {   // If the CLIP_IS_RESTARTED_BIT is set, we should end the clip and 
             // move it from where it is in the running clips list to the back.

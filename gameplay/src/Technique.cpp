@@ -9,7 +9,7 @@ namespace gameplay
 Technique::Technique(const char* id, Material* material)
     : _id(id ? id : ""), _material(material)
 {
-    assert(material);
+    GP_ASSERT(material);
 
     RenderState::_parent = material;
 }
@@ -35,7 +35,7 @@ unsigned int Technique::getPassCount() const
 
 Pass* Technique::getPass(unsigned int index) const
 {
-    assert(index < _passes.size());
+    GP_ASSERT(index < _passes.size());
 
     return _passes[index];
 }
