@@ -53,14 +53,14 @@ Camera::Type Camera::getCameraType() const
 
 float Camera::getFieldOfView() const
 {
-    assert(_type == Camera::PERSPECTIVE);
+    GP_ASSERT(_type == Camera::PERSPECTIVE);
 
     return _fieldOfView;
 }
 
 void Camera::setFieldOfView(float fieldOfView)
 {
-    assert(_type == Camera::PERSPECTIVE);
+    GP_ASSERT(_type == Camera::PERSPECTIVE);
 
     _fieldOfView = fieldOfView;
     _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
@@ -68,14 +68,14 @@ void Camera::setFieldOfView(float fieldOfView)
 
 float Camera::getZoomX() const
 {
-    assert(_type == Camera::ORTHOGRAPHIC);
+    GP_ASSERT(_type == Camera::ORTHOGRAPHIC);
 
     return _zoom[0];
 }
 
 void Camera::setZoomX(float zoomX)
 {
-    assert(_type == Camera::ORTHOGRAPHIC);
+    GP_ASSERT(_type == Camera::ORTHOGRAPHIC);
 
     _zoom[0] = zoomX;
     _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
@@ -83,14 +83,14 @@ void Camera::setZoomX(float zoomX)
 
 float Camera::getZoomY() const
 {
-    assert(_type == Camera::ORTHOGRAPHIC);
+    GP_ASSERT(_type == Camera::ORTHOGRAPHIC);
 
     return _zoom[1];
 }
 
 void Camera::setZoomY(float zoomY)
 {
-    assert(_type == Camera::ORTHOGRAPHIC);
+    GP_ASSERT(_type == Camera::ORTHOGRAPHIC);
 
     _zoom[1] = zoomY;
     _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
@@ -332,7 +332,7 @@ Camera* Camera::clone(NodeCloneContext &context) const
     {
         cameraClone = createOrthographic(getZoomX(), getZoomY(), getAspectRatio(), _nearPlane, _farPlane);
     }
-    assert(cameraClone);
+    GP_ASSERT(cameraClone);
 
     if (Node* node = context.findClonedNode(getNode()))
     {

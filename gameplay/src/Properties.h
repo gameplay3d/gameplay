@@ -95,7 +95,7 @@ namespace gameplay
         // Print the name and ID of the current namespace.
         const char* spacename = properties->getNamespace();
         const char* id = properties->getId();
-        WARN_VARG("Namespace: %s  ID: %s\n{", spacename, id);
+        GP_WARN("Namespace: %s  ID: %s\n{", spacename, id);
  
         // Print all properties in this namespace.
         const char* name = properties->getNextProperty();
@@ -103,10 +103,10 @@ namespace gameplay
         while (name != NULL)
         {
             value = properties->getString(name);
-            WARN_VARG("%s = %s", name, value);
+            GP_WARN("%s = %s", name, value);
             name = properties->getNextProperty();
         }
-        WARN("}\n");
+        GP_WARN("}\n");
  
         // Print the properties of every namespace within this one.
         Properties* space = properties->getNextNamespace();

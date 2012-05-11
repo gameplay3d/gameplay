@@ -81,7 +81,7 @@ const Vector3& Light::getColor() const
     case SPOT:
         return _spot->color;
     default:
-        assert(0);
+        GP_ASSERT(0);
         return Vector3::zero();
 
     }
@@ -105,7 +105,7 @@ void Light::setColor(const Vector3& color)
 
 float Light::getRange()  const
 {
-    assert(_type != DIRECTIONAL);
+    GP_ASSERT(_type != DIRECTIONAL);
 
     switch (_type)
     {
@@ -114,14 +114,14 @@ float Light::getRange()  const
     case SPOT:
         return _spot->range;
     default:
-        assert(0);
+        GP_ASSERT(0);
         return 0.0f;
     }
 }
     
 void Light::setRange(float range)
 {
-    assert(_type != DIRECTIONAL);
+    GP_ASSERT(_type != DIRECTIONAL);
 
     switch (_type)
     {
@@ -138,7 +138,7 @@ void Light::setRange(float range)
 
 float Light::getRangeInverse() const
 {
-    assert(_type != DIRECTIONAL);
+    GP_ASSERT(_type != DIRECTIONAL);
 
     switch (_type)
     {
@@ -147,21 +147,21 @@ float Light::getRangeInverse() const
     case SPOT:
         return _spot->rangeInverse;
     default:
-        assert(0);
+        GP_ASSERT(0);
         return 0.0f;
     }
 }
     
 float Light::getInnerAngle()  const
 {
-    assert(_type == SPOT);
+    GP_ASSERT(_type == SPOT);
 
     return _spot->innerAngle;
 }
 
 void Light::setInnerAngle(float innerAngle)
 {
-    assert(_type == SPOT);
+    GP_ASSERT(_type == SPOT);
 
     _spot->innerAngle = innerAngle;
     _spot->innerAngleCos = cos(innerAngle);
@@ -169,14 +169,14 @@ void Light::setInnerAngle(float innerAngle)
     
 float Light::getOuterAngle()  const
 {
-    assert(_type == SPOT);
+    GP_ASSERT(_type == SPOT);
 
     return _spot->outerAngle;
 }
 
 void Light::setOuterAngle(float outerAngle)
 {
-    assert(_type == SPOT);
+    GP_ASSERT(_type == SPOT);
 
     _spot->outerAngle = outerAngle;
     _spot->outerAngleCos = cos(outerAngle);
@@ -184,14 +184,14 @@ void Light::setOuterAngle(float outerAngle)
     
 float Light::getInnerAngleCos()  const
 {
-    assert(_type == SPOT);
+    GP_ASSERT(_type == SPOT);
 
     return _spot->innerAngleCos;
 }
     
 float Light::getOuterAngleCos()  const
 {
-    assert(_type == SPOT);
+    GP_ASSERT(_type == SPOT);
 
     return _spot->outerAngleCos;
 }
@@ -211,9 +211,9 @@ Light* Light::clone(NodeCloneContext &context) const
         lightClone = createSpot(getColor(), getRange(), getInnerAngle(), getOuterAngle());
         break;
     default:
-        assert(false);
+        GP_ASSERT(false);
     }
-    assert(lightClone);
+    GP_ASSERT(lightClone);
 
     if (Node* node = context.findClonedNode(getNode()))
     {

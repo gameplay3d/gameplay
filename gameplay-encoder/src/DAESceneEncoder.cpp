@@ -261,13 +261,7 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
     daeElement* scene = NULL;
     if (domScene && domScene->getInstance_visual_scene())
     {
-        scene = domScene->getInstance_visual_scene()->getUrl().getElement();
-        if (scene->getElementType() != COLLADA_TYPE::VISUAL_SCENE)
-        {
-            // This occured once where Maya exported a Node and Scene element with the same ID.
-            fprintf(stderr,"Error: instance_visual_scene does not reference visual_scene for file:%s\n", filepath.c_str());
-            return;
-        }
+        scene = getVisualScene(domScene);
         if (scene)
         {
             if (nodeId == NULL)
@@ -366,89 +360,114 @@ void DAESceneEncoder::loadAnimations(const domCOLLADA* dom)
     }
 }
 
-void DAESceneEncoder::loadAnimation(const domAnimationRef animationRef)
+void DAESceneEncoder::loadAnimation(const domAnimationRef animationRef, const char* altId)
 {
+    // Animations can contain other animations.
+    const domAnimation_Array& animationArray = animationRef->getAnimation_array();
+    unsigned int animationCount = animationArray.getCount();
+    
+    if (animationCount == 1)
+    {
+        // DAE_FBX nests 1 animation within another animation for some reason.
+        loadAnimation(animationArray.get(0), animationRef->getId());
+    }
+    else if ( animationCount > 1)
+    {
+        loadAnimation(animationArray.get(0));
+    }
+
     // <channel> points to one <sampler>
     // <sampler> points to multiple <input> elements
-
-    Animation* animation = new Animation();
-    const char* str = animationRef->getId();
-    if (str)
-    {
-        animation->setId(str);
-    }
 
     // <channel>
     const domChannel_Array& channelArray = animationRef->getChannel_array();
     size_t channelArrayCount = channelArray.getCount();
-    for (size_t i = 0; i < channelArrayCount; ++i)
+    if (channelArrayCount > 0)
     {
-        AnimationChannel* animationChannel = new AnimationChannel();
-
-        const domChannelRef& channelRef = channelArray.get(i);
-
-        // <sampler>
-        const domSamplerRef sampler = getSampler(channelRef);
-        assert(sampler);
-
-        // <input>
-        const domInputLocal_Array& inputArray = sampler->getInput_array();
-        size_t inputArrayCount = inputArray.getCount();
-        for (size_t j = 0; j < inputArrayCount; ++j)
+        Animation* animation = new Animation();
+        const char* str = animationRef->getId();
+        if (str)
         {
-            const domInputLocalRef& inputLocal = inputArray.get(j);
+            animation->setId(str);
+        }
+        else if (altId)
+        {
+            animation->setId(altId);
+        }
 
-            // <source>
-            const domSourceRef source = getSource(inputLocal, animationRef);
+        for (size_t i = 0; i < channelArrayCount; ++i)
+        {
+            AnimationChannel* animationChannel = new AnimationChannel();
 
-            std::string semantic = inputLocal->getSemantic();
-            if (equals(semantic, "INTERPOLATION"))
+            const domChannelRef& channelRef = channelArray.get(i);
+
+            // <sampler>
+            const domSamplerRef sampler = getSampler(channelRef);
+            assert(sampler);
+
+            // <input>
+            const domInputLocal_Array& inputArray = sampler->getInput_array();
+            size_t inputArrayCount = inputArray.getCount();
+            for (size_t j = 0; j < inputArrayCount; ++j)
             {
-                // Interpolation source is a list of strings
-                loadInterpolation(source, animationChannel);
-            }
-            else
-            {
-                // The other sources are lists of floats.
-                std::vector<float> floats;
-                copyFloats(source->getFloat_array(), &floats);
-                if (equals(semantic, "INPUT"))
+                const domInputLocalRef& inputLocal = inputArray.get(j);
+
+                // <source>
+                const domSourceRef source = getSource(inputLocal, animationRef);
+
+                std::string semantic = inputLocal->getSemantic();
+                if (equals(semantic, "INTERPOLATION"))
                 {
-                    // TODO: Ensure param name is TIME?
-                    for (std::vector<float>::iterator k = floats.begin(); k != floats.end(); ++k)
+                    // Interpolation source is a list of strings
+                    loadInterpolation(source, animationChannel);
+                }
+                else
+                {
+                    // The other sources are lists of floats.
+                    std::vector<float> floats;
+                    copyFloats(source->getFloat_array(), &floats);
+                    if (equals(semantic, "INPUT"))
                     {
-                        // Convert seconds to milliseconds
-                        *k = *k * 1000.0f;
+                        // TODO: Ensure param name is TIME?
+                        for (std::vector<float>::iterator k = floats.begin(); k != floats.end(); ++k)
+                        {
+                            // Convert seconds to milliseconds
+                            *k = *k * 1000.0f;
+                        }
+                        animationChannel->setKeyTimes(floats);
                     }
-                    animationChannel->setKeyTimes(floats);
+                    else if (equals(semantic, "OUTPUT"))
+                    {
+                        animationChannel->setKeyValues(floats);
+                    }
+                    else if (equals(semantic, "IN_TANGENT"))
+                    {
+                        animationChannel->setTangentsIn(floats);
+                    }
+                    else if (equals(semantic, "OUT_TANGENT"))
+                    {
+                        animationChannel->setTangentsOut(floats);
+                    }
                 }
-                else if (equals(semantic, "OUTPUT"))
+            }
+            
+            // get target attribute enum value
+            if (loadTarget(channelRef, animationChannel))
+            {
+                if (animationChannel->getKeyTimes().size() > 0)
                 {
-                    animationChannel->setKeyValues(floats);
-                }
-                else if (equals(semantic, "IN_TANGENT"))
-                {
-                    animationChannel->setTangentsIn(floats);
-                }
-                else if (equals(semantic, "OUT_TANGENT"))
-                {
-                    animationChannel->setTangentsOut(floats);
+                    animation->add(animationChannel);
                 }
             }
         }
-        // get target attribute enum value
-        if (loadTarget(channelRef, animationChannel))
+        if (animation->getAnimationChannelCount() > 0)
         {
-            animation->add(animationChannel);
+            _gamePlayFile.addAnimation(animation);
         }
-    }
-    if (animation->getAnimationChannelCount() > 0)
-    {
-        _gamePlayFile.addAnimation(animation);
-    }
-    else
-    {
-        delete animation;
+        else
+        {
+            delete animation;
+        }
     }
 }
 
@@ -685,6 +704,11 @@ void DAESceneEncoder::loadScene(const domVisual_scene* visualScene)
 
     const domNode_Array& nodes = visualScene->getNode_array();
     scene->setId(visualScene->getId());
+    if (scene->getId().length() == 0)
+    {
+        scene->setId("__SCENE__");
+    }
+
     size_t childCount = nodes.getCount();
     for (size_t i = 0; i < childCount; ++i)
     {
@@ -989,16 +1013,21 @@ void DAESceneEncoder::loadControllerInstance(const domNode* n, Node* node)
                     domInstance_controller::domSkeleton_Array& skeletons = instanceControllerRef->getSkeleton_array();
                     if (skeletons.getCount() == 0)
                     {
-                        warning("No skeletons found for instance controller: ");
-                        delete model;
-                        continue;
+                        domNode* rootJoint = getRootJointNode(skinElement);
+                        if (rootJoint)
+                        {
+                            loadSkeleton(rootJoint, model->getSkin());
+                            node->setModel(model);
+                        }
                     }
-                    // Load the skeleton for this skin
-                    domInstance_controller::domSkeletonRef skeleton = getSkeleton(instanceControllerRef);
-                    assert(skeleton);
-                    loadSkeleton(skeleton, model->getSkin());
-
-                    node->setModel(model);
+                    else
+                    {
+                        // Load the skeleton for this skin
+                        domInstance_controller::domSkeletonRef skeleton = getSkeleton(instanceControllerRef);
+                        assert(skeleton);
+                        loadSkeleton(skeleton, model->getSkin());
+                        node->setModel(model);
+                    }
                 }
             }
         }
@@ -1182,11 +1211,19 @@ Light* DAESceneEncoder::loadLight(const domLight* lightRef)
             {
                 light->setQuadraticAttenuation((float)quadAtt->getValue());
             }
+
+            // When Maya exports DAE_FBX, the ambient lights are converted into point lights but with not attenuation elements.
+            // If this point light has no attenuation then assume it is ambient.
+            if (!(constAtt.cast() && linearAtt.cast() && quadAtt.cast()))
+            {
+                light->setAmbientLight();
+            }
         }
     }
     _gamePlayFile.addLight(light);
     return light;
 }
+
 
 void DAESceneEncoder::loadSkeleton(domInstance_controller::domSkeleton* skeletonElement, MeshSkin* skin)
 {
@@ -1194,9 +1231,13 @@ void DAESceneEncoder::loadSkeleton(domInstance_controller::domSkeleton* skeleton
     daeString skeletonId = skeletonUri.getID();
     daeSIDResolver resolver(skeletonUri.getElement(), skeletonId);
     domNode* rootNode = daeSafeCast<domNode>(resolver.getElement());
-    
+    loadSkeleton(rootNode, skin);
+}
+
+void DAESceneEncoder::loadSkeleton(domNode* rootNode, MeshSkin* skin)
+{
     // Get the lookup scene id (sid) and joint index.
-    std::string id = std::string(skeletonId);
+    std::string id = std::string(rootNode->getId());
 
     // Has the skeleton (root joint) been loaded yet?
     Node* skeleton = (Node*)_gamePlayFile.getFromRefTable(id);
@@ -1674,6 +1715,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
             {
                 maxOffset = offset;
             }
+            int polyIndexInt = (int) polyInts.get(poly + offset);
             unsigned int polyIndex = (unsigned int) polyInts.get(poly + offset);
 
             switch (polygonInputs[k]->type)
@@ -1774,8 +1816,17 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
                 {
                     // TODO: This assumes (s, t) are first
                     unsigned int stride = (unsigned int)polygonInputs[k]->accessor->getStride();
-                    vertex.texCoord.x = (float)source.get(polyIndex * stride);
-                    vertex.texCoord.y = (float)source.get(polyIndex * stride + 1);
+                    if (polyIndexInt < 0)
+                    {
+                        unsigned int i = (unsigned int)((int)polygonInputs[k]->accessor->getCount()) + polyIndexInt;
+                        vertex.texCoord.x = (float)source.get(i * stride);
+                        vertex.texCoord.y = (float)source.get(i * stride + 1);
+                    }
+                    else
+                    {
+                        vertex.texCoord.x = (float)source.get(polyIndex * stride);
+                        vertex.texCoord.y = (float)source.get(polyIndex * stride + 1);
+                    }
                 }
                 else
                 {
