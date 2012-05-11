@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Platform.h"
 #include "RenderState.h"
+#include "FileSystem.h"
 
 // Extern global variables
 GLenum __gl_error_code = GL_NO_ERROR;
@@ -16,7 +17,7 @@ long Game::_pausedTimeTotal = 0L;
 Game::Game() 
     : _initialized(false), _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
-      _clearDepth(1.0f), _clearStencil(0),
+      _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
       _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL)
 {
     assert(__gameInstance == NULL);
@@ -64,20 +65,15 @@ bool Game::isVsync()
     return Platform::isVsync();
 }
 
-int Game::run(int width, int height)
+int Game::run()
 {
     if (_state != UNINITIALIZED)
         return -1;
 
-    if (width == -1)
-        _width = Platform::getDisplayWidth();
-    else
-        _width = width;
-    
-    if (height == -1)
-        _height = Platform::getDisplayHeight();
-    else
-        _height = height;
+    loadConfig();
+
+    _width = Platform::getDisplayWidth();
+    _height = Platform::getDisplayHeight();
 
     // Start up game systems.
     if (!startup())
@@ -131,7 +127,9 @@ void Game::shutdown()
         SAFE_DELETE(_audioListener);
 
         RenderState::finalize();
-        
+
+        SAFE_DELETE(_properties);
+
         _state = UNINITIALIZED;
     }
 }
@@ -310,6 +308,30 @@ void Game::updateOnce()
     _animationController->update(elapsedTime);
     _physicsController->update(elapsedTime);
     _audioController->update(elapsedTime);
+}
+
+Properties* Game::getConfig() const
+{
+    if (_properties == NULL)
+        const_cast<Game*>(this)->loadConfig();
+
+    return _properties;
+}
+
+void Game::loadConfig()
+{
+    if (_properties == NULL)
+    {
+        // Try to load custom config from file.
+        _properties = Properties::create("game.config");
+        if (_properties == NULL)
+            _properties = new Properties();
+
+        // Load filesystem aliases
+        Properties* aliases = _properties->getNamespace("aliases", true);
+        if (aliases)
+            FileSystem::loadResourceAliases(aliases);
+    }
 }
 
 void Game::fireTimeEvents(long frameTime)

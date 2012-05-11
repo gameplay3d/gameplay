@@ -138,7 +138,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
     NSString* path = [bundlePath stringByAppendingString:@"/Contents/Resources/"];
     FileSystem::setResourcePath([path cStringUsingEncoding:NSASCIIStringEncoding]);
-    _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);
+    _game->run();
     
     [[self window] setLevel: NSFloatingWindowLevel];
     [[self window] makeKeyAndOrderFront: self];

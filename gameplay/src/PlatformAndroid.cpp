@@ -758,7 +758,7 @@ int Platform::enterMessagePump()
         {
             gameplay::initEGL();
             WARN_VARG("Platform::enterMessagePump() - width: %d  height: %d assetsPath: %s", __width, __height, __assetsPath.c_str());
-            _game->run(__width, __height);
+            _game->run();
             initializeGame = false;
         }
         
