@@ -788,7 +788,7 @@ int Platform::enterMessagePump()
     __timeStart = timespec2millis(&__timespec);
     __timeAbsolute = 0L;
 
-    _game->run(__screenWindowSize[0], __screenWindowSize[1]);
+    _game->run();
 
     // Message loop.
     while (true)

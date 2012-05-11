@@ -168,7 +168,6 @@ extern void printError(const char* format, ...);
 #include <png.h>
 
 #define WINDOW_VSYNC        1
-#define WINDOW_FULLSCREEN   0
 
 // Graphics (OpenGL)
 #if defined (__QNX__) || defined(__ANDROID__)
@@ -181,7 +180,6 @@ extern void printError(const char* format, ...);
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
-    #define USE_PVRTC
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
@@ -197,7 +195,6 @@ extern void printError(const char* format, ...);
         #define glIsVertexArray glIsVertexArrayOES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
-        #define USE_PVRTC
         #define USE_VAO
     #elif TARGET_OS_MAC
         #include <OpenGL/gl.h>
