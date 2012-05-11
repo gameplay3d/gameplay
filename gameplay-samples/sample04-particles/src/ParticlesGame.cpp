@@ -341,7 +341,8 @@ void ParticlesGame::finalize()
 {
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_form);
-    
+    SAFE_RELEASE(_font);
+
     for (unsigned int i = 0; i < _particleEmitters.size(); i++)
     {
         SAFE_RELEASE(_particleEmitters[i]);
