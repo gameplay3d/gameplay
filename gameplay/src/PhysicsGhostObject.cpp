@@ -45,7 +45,7 @@ PhysicsGhostObject* PhysicsGhostObject::create(Node* node, Properties* propertie
     GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "ghostObject") == 0))
     {
-        GP_WARN("Failed to load ghost object from properties object: must be non-null object and have namespace equal to \'ghost\'.");
+        GP_WARN("Failed to load ghost object from properties object: must be non-null object and have namespace equal to 'ghost'.");
         return NULL;
     }
 

@@ -90,7 +90,7 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
     GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "character") == 0))
     {
-        GP_WARN("Failed to load physics character from properties object: must be non-null object and have namespace equal to \'character\'.");
+        GP_WARN("Failed to load physics character from properties object: must be non-null object and have namespace equal to 'character'.");
         return NULL;
     }
 

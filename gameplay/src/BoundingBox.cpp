@@ -64,6 +64,8 @@ Vector3 BoundingBox::getCenter() const
 
 void BoundingBox::getCenter(Vector3* dst) const
 {
+    GP_ASSERT(dst);
+
     dst->set(min, max);
     dst->scale(0.5f);
     dst->add(min);
@@ -247,6 +249,10 @@ void BoundingBox::set(const Vector3& min, const Vector3& max)
 
 void updateMinMax(Vector3* point, Vector3* min, Vector3* max)
 {
+    GP_ASSERT(point);
+    GP_ASSERT(min);
+    GP_ASSERT(max);
+
     // Leftmost point.
     if (point->x < min->x)
     {
@@ -292,10 +298,6 @@ void BoundingBox::set(const BoundingBox& box)
 
 void BoundingBox::set(const BoundingSphere& sphere)
 {
-    std::vector<int> v;
-    v.push_back(0);
-    std::vector<int> v2 = v;
-
     const Vector3& center = sphere.center;
     float radius = sphere.radius;
 
