@@ -271,6 +271,7 @@ Theme* Theme::create(const char* url)
                     if (!font)
                     {
                         font = normal->getFont();
+                        font->addRef();
                     }
 
                     unsigned int fontSize;
@@ -349,7 +350,10 @@ Theme* Theme::create(const char* url)
                         focus->setOpacity(opacity);
 
                         if (font)
+                        {
                             theme->_fonts.insert(font);
+                            font->release();
+                        }
                     }
                     else if (strcmp(innerSpacename, "stateActive") == 0)
                     {
@@ -366,7 +370,10 @@ Theme* Theme::create(const char* url)
                         active->setOpacity(opacity);
 
                         if (font)
+                        {
                             theme->_fonts.insert(font);
+                            font->release();
+                        }
                     }
                     else if (strcmp(innerSpacename, "stateDisabled") == 0)
                     {
@@ -383,7 +390,10 @@ Theme* Theme::create(const char* url)
                         disabled->setOpacity(opacity);
 
                         if (font)
+                        {
                             theme->_fonts.insert(font);
+                            font->release();
+                        }
                     }
                 }
 
