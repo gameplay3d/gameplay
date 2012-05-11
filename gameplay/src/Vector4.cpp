@@ -123,64 +123,64 @@ void Vector4::add(const Vector4& v1, const Vector4& v2, Vector4* dst)
 
 void Vector4::clamp(const Vector4& min, const Vector4& max)
 {
-    GP_ASSERT(!( min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
+    GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
 
     // Clamp the x value.
-    if ( x < min.x )
+    if (x < min.x)
         x = min.x;
-    if ( x > max.x )
+    if (x > max.x)
         x = max.x;
 
     // Clamp the y value.
-    if ( y < min.y )
+    if (y < min.y)
         y = min.y;
-    if ( y > max.y )
+    if (y > max.y)
         y = max.y;
 
     // Clamp the z value.
-    if ( z < min.z )
+    if (z < min.z)
         z = min.z;
-    if ( z > max.z )
+    if (z > max.z)
         z = max.z;
 
     // Clamp the z value.
-    if ( w < min.w )
+    if (w < min.w)
         w = min.w;
-    if ( w > max.w )
+    if (w > max.w)
         w = max.w;
 }
 
 void Vector4::clamp(const Vector4& v, const Vector4& min, const Vector4& max, Vector4* dst)
 {
     GP_ASSERT(dst);
-    GP_ASSERT(!( min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
+    GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
 
     // Clamp the x value.
     dst->x = v.x;
-    if ( dst->x < min.x )
+    if (dst->x < min.x)
         dst->x = min.x;
-    if ( dst->x > max.x )
+    if (dst->x > max.x)
         dst->x = max.x;
 
     // Clamp the y value.
     dst->y = v.y;
-    if ( dst->y < min.y )
+    if (dst->y < min.y)
         dst->y = min.y;
-    if ( dst->y > max.y )
+    if (dst->y > max.y)
         dst->y = max.y;
 
     // Clamp the z value.
     dst->z = v.z;
-    if ( dst->z < min.z )
+    if (dst->z < min.z)
         dst->z = min.z;
-    if ( dst->z > max.z )
+    if (dst->z > max.z)
         dst->z = max.z;
 
     // Clamp the w value.
     dst->w = v.w;
-    if ( dst->w < min.w )
+    if (dst->w < min.w)
         dst->w = min.w;
-    if ( dst->w > max.w )
+    if (dst->w > max.w)
         dst->w = max.w;
 }
 
