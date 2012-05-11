@@ -103,10 +103,10 @@ public:
 
     private:
         std::string _text;
-        SpriteBatch::SpriteVertex* _vertices;
-        unsigned short* _indices;
         unsigned int _vertexCount;
+        SpriteBatch::SpriteVertex* _vertices;
         unsigned int _indexCount;
+        unsigned short* _indices;
         Vector4 _color;
     };
 

@@ -116,7 +116,7 @@ theme particleEditor
             skin = mainNormal
             imageList = normalImages
 
-            font = res/arial40.gpb
+            font = res/arial18.gpb
             textColor = #ffffffff
             fontSize = 15
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -152,7 +152,7 @@ theme particleEditor
         stateNormal
         {
             imageList = normalImages
-            font = res/arial40.gpb
+            font = res/arial18.gpb
             textColor = #ffffffff
             fontSize = 15
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -192,7 +192,7 @@ theme particleEditor
         {
             skin = empty
             textColor = #ffffffff
-            font = res/arial40.gpb
+            font = res/arial18.gpb
             fontSize = 25
             textAlignment = ALIGN_TOP_HCENTER
         }

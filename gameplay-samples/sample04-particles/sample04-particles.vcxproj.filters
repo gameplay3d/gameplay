@@ -18,7 +18,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\arial40.gpb">
+    <None Include="res\arial18.gpb">
       <Filter>res</Filter>
     </None>
     <None Include="res\editor.form">
@@ -50,5 +50,8 @@
     </None>
     <None Include="..\..\test\bar-descriptor.xml" />
     <None Include="..\..\test\icon.png" />
+    <None Include="res\arial.ttf">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
 </Project>
