@@ -154,13 +154,15 @@ public:
     };
 
     /**
-     * Creates a particle emitter from a .particle file.
-     *
-     * @param particleFile The .particle file to load.
+     * Creates a particle emitter using the data from the Properties object defined at the specified URL, 
+     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
+     * 
+     * @param url The URL pointing to the Properties object defining the particle emitter.
      * 
      * @return An initialized ParticleEmitter.
      */
-    static ParticleEmitter* create(const char* particleFile);
+    static ParticleEmitter* create(const char* url);
 
     /**
      * Creates a particle emitter from the specified properties object.
@@ -613,6 +615,13 @@ public:
      */
     void draw();
 
+    /**
+     * Gets a BlendMode enum from a corresponding string.
+     */
+    static TextureBlending getTextureBlendingFromString(const char* src);
+
+    void setTextureBlending(TextureBlending blending);
+
 private:
 
     /**
@@ -655,13 +664,6 @@ private:
     void generateColor(const Vector4& base, const Vector4& variance, Vector4* dst);
 
     /**
-     * Gets a BlendMode enum from a corresponding string.
-     */
-    static TextureBlending getTextureBlendingFromString(const char* src);
-
-    void setTextureBlending(TextureBlending blending);
-
-    /**
      * Defines the data for a single particle in the system.
      */
     class Particle
@@ -685,6 +687,7 @@ private:
         float _size;
         unsigned int _frame;
         float _timeOnCurrentFrame;
+        bool _visible;
     };
 
     unsigned int _particleCountMax;

@@ -45,57 +45,6 @@
 namespace gameplay
 {
 
-/**
- * Sprite vertex structure used for batching.
- */
-struct SpriteVertex
-{
-    /**
-     * The x coordinate of the vertex.
-     */
-    float x;
-    
-    /**
-     * The y coordinate of the vertex.
-     */
-    float y;
-    
-    /**
-     * The z coordinate of the vertex.
-     */
-    float z;
-
-    /**
-     * The u component of the (u, v) texture coordinates for the vertex.
-     */
-    float u;
-    
-    /**
-     * The v component of the (u, v) texture coordinates for the vertex.
-     */
-    float v;
-
-    /**
-     * The red color component of the vertex.
-     */
-    float r;
-    
-    /**
-     * The green color component of the vertex.
-     */
-    float g;
-    
-    /**
-     * The blue color component of the vertex.
-     */
-    float b;
-    
-    /**
-     * The alpha component of the vertex.
-     */
-    float a;
-};
-
 // Shared sprite effects
 static Effect* __spriteEffect = NULL;
 
@@ -134,7 +83,7 @@ SpriteBatch* SpriteBatch::create(const char* texturePath, Effect* effect, unsign
 
 SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int initialCapacity)
 {
-    assert(texture != NULL);
+    GP_ASSERT(texture != NULL);
 
     bool customEffect = (effect != NULL);
     if (!customEffect)
@@ -145,7 +94,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
             __spriteEffect = Effect::createFromSource(SPRITE_VSH, SPRITE_FSH);
             if (__spriteEffect == NULL)
             {
-                LOG_ERROR("Unable to load sprite effect.");
+                GP_ERROR("Unable to load sprite effect.");
                 return NULL;
             }
 
@@ -171,7 +120,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
     }
     if (!samplerUniform)
     {
-        LOG_ERROR("No uniform of type GL_SAMPLER_2D found in sprite effect.");
+        GP_ERROR("No uniform of type GL_SAMPLER_2D found in sprite effect.");
         SAFE_RELEASE(effect);
         return NULL;
     }
@@ -303,31 +252,87 @@ void SpriteBatch::draw(const Vector3& position, const Vector3& right, const Vect
     float u1, float v1, float u2, float v2, const Vector4& color, const Vector2& rotationPoint, float rotationAngle)
 {
     // Calculate the vertex positions.
-    Vector3 p[4];
+    //static Vector3 p[4];
+
+    // Pre-optimized:
+    /*
     p[0] = position - 0.5f * width * right - 0.5f * height * forward;
     p[1] = position + 0.5f * width * right - 0.5f * height * forward;
     p[2] = p[0] + height * forward;
     p[3] = p[1] + height * forward;
+    */
+    
+    // Optimized:
+    Vector3 tRight(right);
+    tRight *= width * 0.5f;
+    Vector3 tForward(forward);
+    tForward *= height * 0.5f;
+    
+    Vector3 p0 = position;
+    p0 -= tRight;
+    p0 -= tForward;
+
+    Vector3 p1 = position;
+    p1 += tRight;
+    p1 -= tForward;
+
+    tForward = forward;
+    tForward *= height;
+    Vector3 p2 = p0;
+    p2 += tForward;
+    Vector3 p3 = p1;
+    p3 += tForward;
 
     // Calculate the rotation point.
-    Vector3 rp = p[0] + (rotationPoint.x * width * right) + (rotationPoint.y * height * forward);
+    
+    // Pre-optimized:
+    //Vector3 rp = p[0] + (rotationPoint.x * width * right) + (rotationPoint.y * height * forward);
+
+    // Optimized:
+    Vector3 rp = p0;
+    tRight = right;
+    tRight *= width * rotationPoint.x;
+    tForward *= rotationPoint.y;
+    rp += tRight;
+    rp += tForward;
 
     // Rotate all points the specified amount about the given point (about the up vector).
-    Vector3 u;
+    static Vector3 u;
     Vector3::cross(right, forward, &u);
-    Matrix rotation;
+    static Matrix rotation;
     Matrix::createRotation(u, rotationAngle, &rotation);
+
+    // Pre-optimized:
+    /*
     p[0] = (rotation * (p[0] - rp)) + rp;
     p[1] = (rotation * (p[1] - rp)) + rp;
     p[2] = (rotation * (p[2] - rp)) + rp;
     p[3] = (rotation * (p[3] - rp)) + rp;
+    */
+
+    // Optimized:
+    p0 -= rp;
+    p0 *= rotation;
+    p0 += rp;
+
+    p1 -= rp;
+    p1 *= rotation;
+    p1 += rp;
+
+    p2 -= rp;
+    p2 *= rotation;
+    p2 += rp;
+
+    p3 -= rp;
+    p3 *= rotation;
+    p3 += rp;
 
     // Add the sprite vertex data to the batch.
     static SpriteVertex v[4];
-    ADD_SPRITE_VERTEX(v[0], p[0].x, p[0].y, p[0].z, u1, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[1], p[1].x, p[1].y, p[1].z, u2, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[2], p[2].x, p[2].y, p[2].z, u1, v2, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[3], p[3].x, p[3].y, p[3].z, u2, v2, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[0], p0.x, p0.y, p0.z, u1, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[1], p1.x, p1.y, p1.z, u2, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[2], p2.x, p2.y, p2.z, u1, v2, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[3], p3.x, p3.y, p3.z, u2, v2, color.x, color.y, color.z, color.w);
     
     static const unsigned short indices[4] = { 0, 1, 2, 3 };
     _batch->add(v, 4, const_cast<unsigned short*>(indices), 4);
@@ -340,64 +345,45 @@ void SpriteBatch::draw(float x, float y, float width, float height, float u1, fl
 
 void SpriteBatch::draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip)
 {
-    // Need to clip the rectangle given by { x, y, width, height } into clip by potentially:
-    //  - Moving x to the right.
-    //  - Moving y down.
-    //  - Moving width to the left.
-    //  - Moving height up.
-    //  - A combination of the above.
-    //  - Not drawing at all.
-    //
-    // We need to scale the uvs accordingly as we do this.
+    // Only draw if at least part of the sprite is within the clip region.
+    if (clipSprite(clip, x, y, width, height, u1, v1, u2, v2))
+        draw(x, y, 0, width, height, u1, v1, u2, v2, color);
+}
 
-    // First check to see if we need to draw at all.
-    if (x + width < clip.x || x > clip.x + clip.width ||
-        y + height < clip.y || y > clip.y + clip.height)
+void SpriteBatch::addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, SpriteBatch::SpriteVertex* vertices)
+{
+    GP_ASSERT(vertices);
+
+    const float x2 = x + width;
+    const float y2 = y + height;
+    ADD_SPRITE_VERTEX(vertices[0], x, y, 0, u1, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(vertices[1], x, y2, 0, u1, v2, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(vertices[2], x2, y, 0, u2, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(vertices[3], x2, y2, 0, u2, v2, color.x, color.y, color.z, color.w);
+}
+
+void SpriteBatch::addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip, SpriteBatch::SpriteVertex* vertices)
+{
+    GP_ASSERT(vertices);
+
+    // Only add a sprite if at least part of the sprite is within the clip region.
+    if (clipSprite(clip, x, y, width, height, u1, v1, u2, v2))
     {
-        return;
+        const float x2 = x + width;
+        const float y2 = y + height;
+        ADD_SPRITE_VERTEX(vertices[0], x, y, 0, u1, v1, color.x, color.y, color.z, color.w);
+        ADD_SPRITE_VERTEX(vertices[1], x, y2, 0, u1, v2, color.x, color.y, color.z, color.w);
+        ADD_SPRITE_VERTEX(vertices[2], x2, y, 0, u2, v1, color.x, color.y, color.z, color.w);
+        ADD_SPRITE_VERTEX(vertices[3], x2, y2, 0, u2, v2, color.x, color.y, color.z, color.w);
     }
+}
 
-    const float uvWidth = u2 - u1;
-    const float uvHeight = v2 - v1;
+void SpriteBatch::draw(SpriteBatch::SpriteVertex* vertices, unsigned int vertexCount, unsigned short* indices, unsigned int indexCount)
+{
+    GP_ASSERT(vertices);
+    GP_ASSERT(indices);
 
-    // Moving x to the right.
-    if (x < clip.x)
-    {
-        const float percent = (clip.x - x) / width;
-        x = clip.x;
-        u1 += uvWidth * percent;
-    }
-
-    // Moving y down.
-    if (y < clip.y)
-    {
-        const float percent = (clip.y - y) / height;
-        y = clip.y;
-        v1 += uvHeight * percent;
-    }
-
-    // Moving width to the left.
-    const float clipX2 = clip.x + clip.width;
-    float x2 = x + width;
-    if (x2 > clipX2)
-    {
-        const float percent = (x2 - clipX2) / width;
-        width = clipX2 - x;
-        u2 -= uvWidth * percent;
-    }
-
-    // Moving height up.
-    const float clipY2 = clip.y + clip.height;
-    float y2 = y + height;
-    if (y2 > clipY2)
-    {
-        const float percent = (y2 - clipY2) / height;
-        height = clipY2 - y;
-        v2 -= uvHeight * percent;
-    }
-
-    // Now we can perform a normal draw call.
-    draw(x, y, 0, width, height, u1, v1, u2, v2, color);
+    _batch->add(vertices, vertexCount, indices, indexCount);
 }
 
 void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, bool positionIsCenter)
@@ -435,7 +421,7 @@ RenderState::StateBlock* SpriteBatch::getStateBlock() const
     return _batch->getMaterial()->getStateBlock();
 }
 
-Material* SpriteBatch::getMaterial()
+Material* SpriteBatch::getMaterial() const
 {
     return _batch->getMaterial();
 }
@@ -452,6 +438,64 @@ const Matrix& SpriteBatch::getOrthoMatrix() const
     Game* game = Game::getInstance();
     Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &_projectionMatrix);
     return _projectionMatrix;
+}
+
+bool SpriteBatch::clipSprite(const Rectangle& clip, float& x, float& y, float& width, float& height, float& u1, float& v1, float& u2, float& v2)
+{
+    // Clip the rectangle given by { x, y, width, height } into clip.
+    // We need to scale the uvs accordingly as we do this.
+
+    // First check to see if we need to draw at all.
+    if (x + width < clip.x || x > clip.x + clip.width ||
+        y + height < clip.y || y > clip.y + clip.height)
+    {
+        return false;
+    }
+
+    const float uvWidth = u2 - u1;
+    const float uvHeight = v2 - v1;
+
+    // Moving x to the right.
+    if (x < clip.x)
+    {
+        const float percent = (clip.x - x) / width;
+        const float dx = clip.x - x;
+        x = clip.x;
+        width -= dx;
+        u1 += uvWidth * percent;
+    }
+
+    // Moving y down.
+    if (y < clip.y)
+    {
+        const float percent = (clip.y - y) / height;
+        const float dy = clip.y - y;
+        y = clip.y;
+        height -= dy;
+        v1 += uvHeight * percent;
+    }
+
+    // Moving width to the left.
+    const float clipX2 = clip.x + clip.width;
+    float x2 = x + width;
+    if (x2 > clipX2)
+    {
+        const float percent = (x2 - clipX2) / width;
+        width = clipX2 - x;
+        u2 -= uvWidth * percent;
+    }
+
+    // Moving height up.
+    const float clipY2 = clip.y + clip.height;
+    float y2 = y + height;
+    if (y2 > clipY2)
+    {
+        const float percent = (y2 - clipY2) / height;
+        height = clipY2 - y;
+        v2 -= uvHeight * percent;
+    }
+
+    return true;
 }
 
 }

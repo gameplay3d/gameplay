@@ -87,10 +87,10 @@ PhysicsCharacter::~PhysicsCharacter()
 PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
 {
     // Check if the properties is valid and has a valid namespace.
-    assert(properties);
+    GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "character") == 0))
     {
-        WARN("Failed to load physics character from properties object: must be non-null object and have namespace equal to \'character\'.");
+        GP_WARN("Failed to load physics character from properties object: must be non-null object and have namespace equal to 'character'.");
         return NULL;
     }
 
@@ -98,7 +98,7 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
     PhysicsCollisionShape::Definition* shape = PhysicsCollisionShape::Definition::create(node, properties);
     if (shape == NULL)
     {
-        WARN("Failed to create collision shape during physics character creation.");
+        GP_WARN("Failed to create collision shape during physics character creation.");
         return NULL;
     }
 

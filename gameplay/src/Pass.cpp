@@ -10,7 +10,7 @@ namespace gameplay
 Pass::Pass(const char* id, Technique* technique, Effect* effect) :
     _id(id ? id : ""), _technique(technique), _effect(effect), _vaBinding(NULL)
 {
-    assert(technique);
+    GP_ASSERT(technique);
 
     RenderState::_parent = _technique;
 }
@@ -25,7 +25,7 @@ Pass* Pass::create(const char* id, Technique* technique, const char* vshPath, co
 {
     // Attempt to create/load the effect
     Effect* effect = Effect::createFromFile(vshPath, fshPath, defines);
-    assert(effect);
+    GP_ASSERT(effect);
     if (effect == NULL)
     {
         return NULL;

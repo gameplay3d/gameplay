@@ -112,7 +112,7 @@ protected:
      *
      * @param clip The clipping rectangle of this control's parent container.
      */
-    void update(const Rectangle& clip);
+    void update(const Rectangle& clip, const Vector2& offset);
 
     /**
      * Draw the images associated with this control.
@@ -126,6 +126,7 @@ protected:
      * The current position of the TextBox's caret.
      */
     Vector2 _caretLocation;
+    Vector2 _prevCaretLocation;
 
     /**
      * The index into the TextBox's string that the caret is.

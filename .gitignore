@@ -157,3 +157,12 @@ Thumbs.db
 /gameplay-samples/sample04-particles/Debug
 /gameplay-samples/sample04-particles/DebugMem
 /gameplay-samples/sample03-character/res/gamepad.xcf
+/gameplay-samples/sample04-particles/android/src
+/gameplay-samples/sample04-particles/android/assets
+/gameplay-samples/sample04-particles/android/bin
+/gameplay-samples/sample04-particles/android/gen
+/gameplay-samples/sample04-particles/android/libs
+/gameplay-samples/sample04-particles/android/obj
+/gameplay-samples/sample04-particles/android/proguard.cfg
+/gameplay-samples/sample04-particles/android/local.properties
+/gameplay-samples/sample04-particles/android/project.properties

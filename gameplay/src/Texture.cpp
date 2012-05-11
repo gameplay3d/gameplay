@@ -134,7 +134,7 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
         return texture;
     }
 
-    LOG_ERROR_VARG("Failed to load texture: %s", path);
+    GP_ERROR("Failed to load texture: %s", path);
     return NULL;
 }
 
@@ -212,7 +212,7 @@ Texture* Texture::createCompressedPVRTC(const char* path)
     FILE* file = FileSystem::openFile(path, "rb");
     if (file == NULL)
     {
-        LOG_ERROR_VARG("Failed to load file: %s", path);
+        GP_ERROR("Failed to load file: %s", path);
         return NULL;
     }
 
@@ -246,7 +246,7 @@ Texture* Texture::createCompressedPVRTC(const char* path)
 
     if (data == NULL)
     {
-    	LOG_ERROR_VARG("Failed to read PVR file: %s", path);
+    	GP_ERROR("Failed to read PVR file: %s", path);
     	return NULL;
     }
 
@@ -313,7 +313,7 @@ GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* wid
     if (header.pixelFormat[1] != 0)
     {
         // Unsupported pixel format
-        LOG_ERROR_VARG("Unsupported pixel format in PVR file (MSB == %d != 0): %s", header.pixelFormat[1], path);
+        GP_ERROR("Unsupported pixel format in PVR file (MSB == %d != 0): %s", header.pixelFormat[1], path);
         return NULL;
     }
 
@@ -338,7 +338,7 @@ GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* wid
         break;
     default:
         // Unsupported format
-        LOG_ERROR_VARG("Unsupported pixel format value (%d) in PVR file: %s", header.pixelFormat[0], path);
+        GP_ERROR("Unsupported pixel format value (%d) in PVR file: %s", header.pixelFormat[0], path);
         return NULL;
     }
 
@@ -393,10 +393,10 @@ GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, FILE* file, GLsize
     unsigned int size = sizeof(pvrtc_file_header_legacy);
     pvrtc_file_header_legacy header;
     unsigned int read = (int)fread(&header, 1, size, file);
-    assert(read == size);
+    GP_ASSERT(read == size);
     if (read != size)
     {
-        LOG_ERROR_VARG("Read file header error for pvrtc file: %s (%d < %d)", path, (int)read, (int)size);
+        GP_ERROR("Read file header error for pvrtc file: %s (%d < %d)", path, (int)read, (int)size);
         return NULL;
     }
 
@@ -406,7 +406,7 @@ GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, FILE* file, GLsize
         PVRTCIdentifier[2] != (char)((header.pvrtcTag >> 16) & 0xff) ||
         PVRTCIdentifier[3] != (char)((header.pvrtcTag >> 24) & 0xff))
      {
-        LOG_ERROR_VARG("Invalid PVRTC compressed texture file: %s", path);
+        GP_ERROR("Invalid PVRTC compressed texture file: %s", path);
         return NULL;
     }
 
@@ -421,7 +421,7 @@ GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, FILE* file, GLsize
     }
     else
     {
-        LOG_ERROR_VARG("Invalid PVRTC compressed texture format flags for file: %s", path);
+        GP_ERROR("Invalid PVRTC compressed texture format flags for file: %s", path);
         return NULL;
     }
 
@@ -431,10 +431,10 @@ GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, FILE* file, GLsize
 
     GLubyte* data = new GLubyte[header.dataSize];
     read = (int)fread(data, 1, header.dataSize, file);
-    assert(read == header.dataSize);
+    GP_ASSERT(read == header.dataSize);
     if (read != header.dataSize)
     {
-        LOG_ERROR_VARG("Read file data error for pvrtc file: %s (%d < %d)", path, (int)read, (int)header.dataSize);
+        GP_ERROR("Read file data error for pvrtc file: %s (%d < %d)", path, (int)read, (int)header.dataSize);
         SAFE_DELETE_ARRAY(data);
         return NULL;
     }
@@ -561,7 +561,7 @@ Texture* Texture::createCompressedDDS(const char* path)
 
             if (fread(mipLevels[i].data, 1, mipLevels[i].size, fp) != (unsigned int)mipLevels[i].size)
             {
-                LOG_ERROR_VARG("Failed to load dds compressed texture bytes for texture: %s", path);
+                GP_ERROR("Failed to load dds compressed texture bytes for texture: %s", path);
                 goto cleanup;
             }
 
@@ -696,7 +696,7 @@ Texture::Sampler::~Sampler()
 
 Texture::Sampler* Texture::Sampler::create(Texture* texture)
 {
-    assert(texture != NULL);
+    GP_ASSERT(texture != NULL);
 
     texture->addRef();
     return new Sampler(texture);

@@ -76,7 +76,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
         GL_ASSERT( glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &temp) );
 
         __maxVertexAttribs = temp;
-        assert(__maxVertexAttribs > 0);
+        GP_ASSERT(__maxVertexAttribs > 0);
         if (__maxVertexAttribs <= 0)
         {
             return NULL;
@@ -195,7 +195,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
 
         if (attrib == -1)
         {
-            WARN_VARG("Warning: Vertex element with usage '%s' in mesh '%s' does not correspond to an attribute in effect '%s'.", VertexFormat::toString(e.usage), mesh->getUrl(), effect->getId());
+            //GP_WARN("Warning: Vertex element with usage '%s' in mesh '%s' does not correspond to an attribute in effect '%s'.", VertexFormat::toString(e.usage), mesh->getUrl(), effect->getId());
         }
         else
         {
@@ -216,7 +216,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
 
 void VertexAttributeBinding::setVertexAttribPointer(GLuint indx, GLint size, GLenum type, GLboolean normalize, GLsizei stride, void* pointer)
 {
-    assert(indx < (GLuint)__maxVertexAttribs);
+    GP_ASSERT(indx < (GLuint)__maxVertexAttribs);
 
     if (_handle)
     {

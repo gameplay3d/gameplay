@@ -42,10 +42,10 @@ PhysicsGhostObject::~PhysicsGhostObject()
 PhysicsGhostObject* PhysicsGhostObject::create(Node* node, Properties* properties)
 {
     // Check if the properties is valid and has a valid namespace.
-    assert(properties);
+    GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "ghostObject") == 0))
     {
-        WARN("Failed to load ghost object from properties object: must be non-null object and have namespace equal to \'ghost\'.");
+        GP_WARN("Failed to load ghost object from properties object: must be non-null object and have namespace equal to 'ghost'.");
         return NULL;
     }
 
@@ -53,7 +53,7 @@ PhysicsGhostObject* PhysicsGhostObject::create(Node* node, Properties* propertie
     PhysicsCollisionShape::Definition* shape = PhysicsCollisionShape::Definition::create(node, properties);
     if (shape == NULL)
     {
-        WARN("Failed to create collision shape during ghost object creation.");
+        GP_WARN("Failed to create collision shape during ghost object creation.");
         return NULL;
     }
 

@@ -19,7 +19,6 @@ class AnimationTarget
 {
     friend class Animation;
     friend class AnimationClip;
-    friend class AnimationController;
 
 public:
 
@@ -55,14 +54,16 @@ public:
     Animation* createAnimation(const char* id, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type);
 
     /**
-     * Creates an animation on this target using the data from the given properties object. 
+     * Creates an animation on this target using the data from the Properties object defined at the specified URL, 
+     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
      * 
      * @param id The ID of the animation.
-     * @param animationFile The animation file defining the animation data.
+     * @param url The URL pointing to the Properties object defining the animation data.
      *
      * @return The newly created animation.
      */
-    Animation* createAnimation(const char* id, const char* animationFile);
+    Animation* createAnimation(const char* id, const char* url);
 
     /**
      * Creates an animation on this target using the data from the given properties object. 
@@ -202,11 +203,6 @@ protected:
      */
     TargetType _targetType;
 
-    /**
-     * Bit flag used to indicate which properties on the AnimationTarget are currently animating.
-     */ 
-    unsigned char _animationPropertyBitFlag;
-
 private:
 
     /**
@@ -223,6 +219,26 @@ private:
      *    for the TargetType.
      */
     static int getPropertyId(TargetType type, const char* propertyIdStr);
+
+    /**
+     * Converts by-value animations to to-value animations.
+     */
+    void convertByValues(unsigned int propertyId, unsigned int componentCount, float* from, float* by);
+
+    /**
+     * Converts a Quaternion by-value into a to-value.
+     */
+    void convertQuaternionByValues(float* from, float* by);
+
+    /**
+     * Converts a Scale by-value into a to-value.
+     */
+    void convertScaleByValues(float* from, float* by, unsigned int componentCount);
+
+    /**
+     * Converts a by-value into a to-value.
+     */
+    void convertByValues(float* from, float* by, unsigned int componentCount);
 
     std::vector<Animation::Channel*>* _animationChannels;   // Collection of all animation channels that target the AnimationTarget
     

@@ -78,6 +78,15 @@ const domName_arrayRef getSourceNameArray(const domSourceRef& source);
 const domInstance_controller::domSkeletonRef getSkeleton(const domInstance_controllerRef& instanceController);
 
 /**
+ * Returns the root joint node of the given skin.
+ * 
+ * @param skin The COLLADA skin to get the root joint for.
+ * 
+ * @return The COLLADA node or NULL if not found.
+ */
+domNode* getRootJointNode(const domSkin* skin);
+
+/**
  * Returns true if the two given animation channels have equal key time input source.
  * 
  * @param c1 Channel one to compare.
@@ -113,6 +122,15 @@ void moveChannelAndSouresToAnimation(domChannelRef& channel, domAnimationRef& an
  * @return True if the animation has no children, false otherwise.
  */
 bool isEmptyAnimation(domAnimationRef& animation);
+
+/**
+ * Gets the visual scene from the given COLLADA dom scene.
+ * 
+ * @param COLLADA dom scene.
+ * 
+ * @return The visual scene or NULL if not found.
+ */
+domVisual_scene* getVisualScene(const domCOLLADA::domSceneRef& domScene);
 
 }
 

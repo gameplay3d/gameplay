@@ -34,11 +34,6 @@ ParticleEmitter::ParticleEmitter(SpriteBatch* batch, unsigned int particleCountM
 
     _spriteBatch->getStateBlock()->setDepthWrite(false);
     _spriteBatch->getStateBlock()->setDepthTest(true);
-    /*
-    _spriteBatch->getStateBlock()->setBlend(true);
-    _spriteBatch->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
-    _spriteBatch->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
-    */
 }
 
 ParticleEmitter::~ParticleEmitter()
@@ -50,24 +45,24 @@ ParticleEmitter::~ParticleEmitter()
 
 ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlending textureBlending, unsigned int particleCountMax)
 {
-    assert(textureFile);
+    GP_ASSERT(textureFile);
 
     Texture* texture = NULL;
-    texture = Texture::create(textureFile, true);    
+    texture = Texture::create(textureFile, false);
 
     if (!texture)
     {
-        LOG_ERROR_VARG("Error creating ParticleEmitter: Could not read texture file: %s", textureFile);
+        GP_ERROR("Error creating ParticleEmitter: Could not read texture file: %s", textureFile);
         return NULL;
     }
 
     // Use default SpriteBatch material.
     SpriteBatch* batch =  SpriteBatch::create(texture, NULL, particleCountMax);
     texture->release(); // batch owns the texture.
-    assert(batch);
+    GP_ASSERT(batch);
 
     ParticleEmitter* emitter = new ParticleEmitter(batch, particleCountMax);
-    assert(emitter);
+    GP_ASSERT(emitter);
 
     // By default assume only one frame which uses the entire texture.
     emitter->setTextureBlending(textureBlending);
@@ -82,18 +77,18 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
     return emitter;
 }
 
-ParticleEmitter* ParticleEmitter::create(const char* particleFile)
+ParticleEmitter* ParticleEmitter::create(const char* url)
 {
-    assert(particleFile);
+    GP_ASSERT(url);
 
-    Properties* properties = Properties::create(particleFile);
+    Properties* properties = Properties::create(url);
     if (!properties)
     {
-        LOG_ERROR_VARG("Error loading ParticleEmitter: Could not load file: %s", particleFile);
+        GP_ERROR("Error loading ParticleEmitter: Could not load file: %s", url);
         return NULL;
     }
 
-    ParticleEmitter* particle = create(properties->getNextNamespace());
+    ParticleEmitter* particle = create((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
     SAFE_DELETE(properties);
 
     return particle;
@@ -103,14 +98,14 @@ ParticleEmitter* ParticleEmitter::create(Properties* properties)
 {
     if (!properties || strcmp(properties->getNamespace(), "particle") != 0)
     {
-        LOG_ERROR("Error loading ParticleEmitter: No 'particle' namespace found");
+        GP_ERROR("Error loading ParticleEmitter: No 'particle' namespace found");
         return NULL;
     }
 
     Properties* sprite = properties->getNextNamespace();
     if (!sprite || strcmp(sprite->getNamespace(), "sprite") != 0)
     {
-        LOG_ERROR("Error loading ParticleEmitter: No 'sprite' namespace found");
+        GP_ERROR("Error loading ParticleEmitter: No 'sprite' namespace found");
         return NULL;
     }
 
@@ -119,7 +114,7 @@ ParticleEmitter* ParticleEmitter::create(Properties* properties)
     const char* texturePath = sprite->getString("path");
     if (strlen(texturePath) == 0)
     {
-        LOG_ERROR_VARG("Error loading ParticleEmitter: No texture path specified: %s", texturePath);
+        GP_ERROR("Error loading ParticleEmitter: No texture path specified: %s", texturePath);
         return NULL;
     }
 
@@ -282,6 +277,7 @@ void ParticleEmitter::emit(unsigned int particleCount)
     for (unsigned int i = 0; i < particleCount; i++)
     {
         Particle* p = &_particles[_particleCount];
+        p->_visible = true;
 
         generateColor(_colorStart, _colorStartVar, &p->_colorStart);
         generateColor(_colorEnd, _colorEndVar, &p->_colorEnd);
@@ -784,13 +780,18 @@ void ParticleEmitter::update(long elapsedTime)
         // How many particles should we emit this frame?
         unsigned int emitCount = _timeRunning / _timePerEmission;
             
-        if ((int)_timePerEmission > 0)
+        if (emitCount)
         {
-            _timeRunning %= (int)_timePerEmission;
-        }
+            if ((int)_timePerEmission > 0)
+            {
+                _timeRunning %= (int)_timePerEmission;
+            }
 
-        emit(emitCount);
+            emit(emitCount);
+        }
     }
+
+    const Frustum& frustum = _node->getScene()->getActiveCamera()->getFrustum();
 
     // Now update all currently living particles.
     for (unsigned int particlesIndex = 0; particlesIndex < _particleCount; ++particlesIndex)
@@ -816,6 +817,12 @@ void ParticleEmitter::update(long elapsedTime)
             p->_position.x += p->_velocity.x * elapsedSecs;
             p->_position.y += p->_velocity.y * elapsedSecs;
             p->_position.z += p->_velocity.z * elapsedSecs;
+
+            if (!frustum.intersects(p->_position))
+            {
+                p->_visible = false;
+                continue;
+            }
 
             p->_angle += p->_rotationPerParticleSpeed * elapsedSecs;
 
@@ -896,10 +903,11 @@ void ParticleEmitter::draw()
         _spriteBatch->begin();
 
         // 2D Rotation.
-        Vector2 pivot(0.5f, 0.5f);
+        static const Vector2 pivot(0.5f, 0.5f);
 
         // 3D Rotation so that particles always face the camera.
         const Matrix& cameraWorldMatrix = _node->getScene()->getActiveCamera()->getNode()->getWorldMatrix();
+
         Vector3 right;
         cameraWorldMatrix.getRightVector(&right);
         Vector3 up;
@@ -909,9 +917,12 @@ void ParticleEmitter::draw()
         {
             Particle* p = &_particles[i];
 
-            _spriteBatch->draw(p->_position, right, up, p->_size, p->_size,
-                               _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3],
-                               p->_color, pivot, p->_angle);
+            if (p->_visible)
+            {
+                _spriteBatch->draw(p->_position, right, up, p->_size, p->_size,
+                                   _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3],
+                                   p->_color, pivot, p->_angle);
+            }
         }
 
         // Render.

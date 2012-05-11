@@ -96,7 +96,7 @@ namespace gameplay
         // Print the name and ID of the current namespace.
         const char* spacename = properties->getNamespace();
         const char* id = properties->getId();
-        WARN_VARG("Namespace: %s  ID: %s\n{", spacename, id);
+        GP_WARN("Namespace: %s  ID: %s\n{", spacename, id);
  
         // Print all properties in this namespace.
         const char* name = properties->getNextProperty();
@@ -104,10 +104,10 @@ namespace gameplay
         while (name != NULL)
         {
             value = properties->getString(name);
-            WARN_VARG("%s = %s", name, value);
+            GP_WARN("%s = %s", name, value);
             name = properties->getNextProperty();
         }
-        WARN("}\n");
+        GP_WARN("}\n");
  
         // Print the properties of every namespace within this one.
         Properties* space = properties->getNextNamespace();
@@ -145,11 +145,13 @@ public:
     };
 
     /**
-     * Creates a Properties runtime settings from a specified file path.
-     *
-     * @param filePath The file to create the properties from.
+     * Creates a Properties runtime settings from the specified URL, where the URL is of
+     * the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional).
+     * 
+     * @param url The URL to create the properties from.
      */
-    static Properties* create(const char* filePath);
+    static Properties* create(const char* url);
 
     /**
      * Destructor.
@@ -397,6 +399,9 @@ private:
 
     // Called by resolveInheritance().
     void mergeWith(Properties* overrides);
+
+    // Clones the Properties object.
+    Properties* clone();
 
     std::string _namespace;
     std::string _id;
