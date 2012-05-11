@@ -146,7 +146,7 @@ int getKey(unichar keyCode);
         
         _game = Game::getInstance();
         __timeStart = getMachTimeInMilliseconds();
-        _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);          
+        _game->run();
     }
     return self;
 }
