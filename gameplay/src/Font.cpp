@@ -242,9 +242,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
         }
 
         // Wrap if necessary.
-        if (wrap &&
-            xPos + (int)tokenWidth > area.x + area.width ||
-            (rightToLeft && currentLineLength > lineLength))
+        if (wrap && (xPos + (int)tokenWidth > area.x + area.width || (rightToLeft && currentLineLength > lineLength)))
         {
             yPos += (int)size;
             currentLineLength = tokenLength;
@@ -303,11 +301,11 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
                         if (batch->_vertexCount == 0)
                         {
                             // Simply copy values directly into the start of the index array
-                            //memcpy(_indicesPtr, indices, indexCount * sizeof(unsigned short));
-                            batch->_indices[batch->_vertexCount] = batch->_vertexCount++;
-                            batch->_indices[batch->_vertexCount] = batch->_vertexCount++;
-                            batch->_indices[batch->_vertexCount] = batch->_vertexCount++;
-                            batch->_indices[batch->_vertexCount] = batch->_vertexCount++;
+                            batch->_indices[batch->_vertexCount] = batch->_vertexCount;
+                            batch->_indices[batch->_vertexCount] = batch->_vertexCount + 1;
+                            batch->_indices[batch->_vertexCount] = batch->_vertexCount + 2;
+                            batch->_indices[batch->_vertexCount] = batch->_vertexCount + 3;
+                            batch->_vertexCount += 4;
                             batch->_indexCount += 4;
                         }
                         else
@@ -506,6 +504,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                     xPos += floor(g.width * scale + (float)(size >> 3));
                     break;
                 }
+                break;
             }
         }
 
@@ -586,9 +585,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         }
 
         // Wrap if necessary.
-        if (wrap &&
-            xPos + (int)tokenWidth > area.x + area.width ||
-            (rightToLeft && currentLineLength > lineLength))
+        if (wrap && (xPos + (int)tokenWidth > area.x + area.width || (rightToLeft && currentLineLength > lineLength)))
         {
             yPos += (int)size;
             currentLineLength = tokenLength;
@@ -1353,9 +1350,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
         }
 
         // Wrap if necessary.
-        if (wrap &&
-            xPos + (int)tokenWidth > area.x + area.width ||
-            (rightToLeft && currentLineLength > lineLength))
+        if (wrap && (xPos + (int)tokenWidth > area.x + area.width || (rightToLeft && currentLineLength > lineLength)))
         {
             yPos += size;
             currentLineLength = tokenLength;
@@ -1707,16 +1702,15 @@ Font::Justify Font::getJustify(const char* justify)
     }
     else
     {
-        GP_ERROR("Failed to get corresponding font justification for unsupported value \'%s\'.", justify);
+        GP_ERROR("Failed to get corresponding font justification for unsupported value '%s'.", justify);
     }
 
     // Default.
     return Font::ALIGN_TOP_LEFT;
 }
 
-Font::Text::Text(const char* text) : _vertexCount(0), _indexCount(0)
+Font::Text::Text(const char* text) : _text(text), _vertexCount(0), _vertices(NULL), _indexCount(0), _indices(NULL)
 {
-    _text = text;
     const int length = strlen(text);
     _vertices = new SpriteBatch::SpriteVertex[length * 4];
     _indices = new unsigned short[((length - 1) * 6) + 4];
