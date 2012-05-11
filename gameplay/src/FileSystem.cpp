@@ -12,6 +12,7 @@
 #endif
 
 #ifdef __ANDROID__
+#include <android/asset_manager.h>
 extern AAssetManager* __assetManager;
 #endif
 
@@ -50,7 +51,7 @@ void makepath(std::string path, int mode)
             // Directory does not exist.
             if (mkdir(dirPath.c_str(), 0777) != 0)
             {
-                WARN_VARG("Failed to create directory: '%s'", dirPath.c_str());
+                GP_ERROR("Failed to create directory: '%s'", dirPath.c_str());
                 return;
             }
         }
@@ -192,7 +193,7 @@ bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
 
 FILE* FileSystem::openFile(const char* path, const char* mode)
 {
-    assert(path != NULL);
+    GP_ASSERT(path);
 
     std::string fullPath(__resourcePath);
     fullPath += resolvePath(path);
@@ -206,13 +207,31 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
     if (stat(fullPath.c_str(), &s) != 0)
     {
         AAsset* asset = AAssetManager_open(__assetManager, path, AASSET_MODE_RANDOM);
-        const void* data = AAsset_getBuffer(asset);
-        int length = AAsset_getLength(asset);
-        FILE* file = fopen(fullPath.c_str(), "wb");
-        
-        int ret = fwrite(data, sizeof(unsigned char), length, file);
-        assert(ret == length);
-        fclose(file);
+        if (asset)
+        {
+            const void* data = AAsset_getBuffer(asset);
+            int length = AAsset_getLength(asset);
+            FILE* file = fopen(fullPath.c_str(), "wb");
+            if (file != NULL)
+            {
+                int ret = fwrite(data, sizeof(unsigned char), length, file);
+                if (fclose(file) != 0)
+                {
+                    GP_ERROR("Failed to close file on file system created from APK asset.");
+                    return NULL;
+                }
+                if (ret != length)
+                {
+                    GP_ERROR("Failed to write all data from APK asset to file on file system.");
+                    return NULL;
+                }
+            }
+            else
+            {
+                GP_ERROR("Failed to create file on file system from APK asset.");
+                return NULL;
+            }
+        }
     }
 #endif
     
@@ -239,22 +258,29 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     FILE* file = openFile(filePath, "rb");
     if (file == NULL)
     {
-        LOG_ERROR_VARG("Failed to load file: %s", filePath);
+        GP_ERROR("Failed to load file: %s", filePath);
         return NULL;
     }
 
     // Obtain file length.
-    fseek(file, 0, SEEK_END);
+    if (fseek(file, 0, SEEK_END) != 0)
+    {
+        GP_ERROR("Failed to seek to the end of the file '%s' to obtain the file length.", filePath);
+        return NULL;
+    }
     int size = (int)ftell(file);
-     fseek(file, 0, SEEK_SET);
+    if (fseek(file, 0, SEEK_SET) != 0)
+    {
+        GP_ERROR("Failed to seek to beginning of the file '%s' to begin reading in the entire file.", filePath);
+        return NULL;
+    }
 
     // Read entire file contents.
     char* buffer = new char[size + 1];
     int read = (int)fread(buffer, 1, size, file);
-    assert(read == size);
     if (read != size)
     {
-        LOG_ERROR_VARG("Read error for file: %s (%d < %d)", filePath, (int)read, (int)size);
+        GP_ERROR("Failed to read complete contents of file '%s' (amount read vs. file size: %d < %d).", filePath, (int)read, (int)size);
         SAFE_DELETE_ARRAY(buffer);
         return NULL;
     }
@@ -263,7 +289,11 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     buffer[size] = '\0';
 
     // Close file and return.
-    fclose(file);
+    if (fclose(file) != 0)
+    {
+        GP_ERROR("Failed to close file '%s'.", filePath);
+    }
+
     if (fileSize)
     {
         *fileSize = size; 

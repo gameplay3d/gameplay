@@ -404,7 +404,6 @@ extern void printError(const char* format, ...)
     va_list argptr;
     va_start(argptr, format);
     vfprintf(stderr, format, argptr);
-    fprintf(stderr, "\n");
     va_end(argptr);
 }
 
@@ -509,7 +508,11 @@ Platform* Platform::create(Game* game)
 
     int rc = 0;
     int screenFormat = SCREEN_FORMAT_RGBA8888;
-    int screenUsage = SCREEN_USAGE_DISPLAY|SCREEN_USAGE_OPENGL_ES2;
+#ifdef __X86__
+    int screenUsage = SCREEN_USAGE_OPENGL_ES2;
+#else
+    int screenUsage = SCREEN_USAGE_DISPLAY|SCREEN_USAGE_OPENGL_ES2; // Physical device copy directly into physical display
+#endif
     int screenSwapInterval = WINDOW_VSYNC ? 1 : 0;
     int screenTransparency = SCREEN_TRANSPARENCY_NONE;
     int angle = atoi(getenv("ORIENTATION"));
@@ -764,7 +767,7 @@ void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEven
 {
     if (!Game::getInstance()->mouseEvent(mouseEvent, x, y, 0))
     {
-        Game::getInstance()->touchEvent(touchEvent, x, y, 0);
+        Platform::touchEventInternal(touchEvent, x, y, 0);
     }
 }
 
@@ -778,6 +781,7 @@ int Platform::enterMessagePump()
     int domain;
     mtouch_event_t touchEvent;
     int touchId = 0;
+    bool suspended = false;
 
     // Get the initial time.
     clock_gettime(CLOCK_REALTIME, &__timespec);
@@ -794,7 +798,7 @@ int Platform::enterMessagePump()
         while (true)
         {
             rc = bps_get_event(&event, 1);
-            assert(rc == BPS_SUCCESS);
+            GP_ASSERT(rc == BPS_SUCCESS);
 
             if (event == NULL)
                 break;
@@ -950,6 +954,23 @@ int Platform::enterMessagePump()
                 case NAVIGATOR_SWIPE_DOWN:
                     _game->menu();
                     break;
+                case NAVIGATOR_WINDOW_STATE:
+                {
+                    navigator_window_state_t state = navigator_event_get_window_state(event);
+                    switch (state)
+                    {
+                    case NAVIGATOR_WINDOW_FULLSCREEN:
+                        _game->resume();
+                        suspended = false;
+                        break;
+                    case NAVIGATOR_WINDOW_THUMBNAIL:
+                    case NAVIGATOR_WINDOW_INVISIBLE:
+                        _game->pause();
+                        suspended = true;
+                        break;
+                    }
+                    break;
+                }
                 case NAVIGATOR_EXIT:
                     _game->exit();
                     break;
@@ -957,13 +978,11 @@ int Platform::enterMessagePump()
             }
             else if (domain == sensor_get_domain())
             {
-            	if (bps_event_get_code(event) == SENSOR_AZIMUTH_PITCH_ROLL_READING)
-            	{
-					float azimuth;
-					sensor_event_get_apr(event, &azimuth, &__pitch, &__roll);
-
-
-				   }
+                if (bps_event_get_code(event) == SENSOR_AZIMUTH_PITCH_ROLL_READING)
+                {
+                    float azimuth;
+                    sensor_event_get_apr(event, &azimuth, &__pitch, &__roll);
+                }
             }
         }
 
@@ -971,27 +990,30 @@ int Platform::enterMessagePump()
         if (_game->getState() == Game::UNINITIALIZED)
             break;
 
-        _game->frame();
-
-        // Post the new frame to the display.
-        // Note that there are a couple cases where eglSwapBuffers could fail
-        // with an error code that requires a certain level of re-initialization:
-        //
-        // 1) EGL_BAD_NATIVE_WINDOW - Called when the surface we're currently using
-        //    is invalidated. This would require us to destroy our EGL surface,
-        //    close our OpenKODE window, and start again.
-        //
-        // 2) EGL_CONTEXT_LOST - Power management event that led to our EGL context
-        //    being lost. Requires us to re-create and re-initalize our EGL context
-        //    and all OpenGL ES state.
-        //
-        // For now, if we get these, we'll simply exit.
-        rc = eglSwapBuffers(__eglDisplay, __eglSurface);
-        if (rc != EGL_TRUE)
+        if (!suspended)
         {
-            _game->exit();
-            perror("eglSwapBuffers");
-            break;
+            _game->frame();
+
+            // Post the new frame to the display.
+            // Note that there are a couple cases where eglSwapBuffers could fail
+            // with an error code that requires a certain level of re-initialization:
+            //
+            // 1) EGL_BAD_NATIVE_WINDOW - Called when the surface we're currently using
+            //    is invalidated. This would require us to destroy our EGL surface,
+            //    close our OpenKODE window, and start again.
+            //
+            // 2) EGL_CONTEXT_LOST - Power management event that led to our EGL context
+            //    being lost. Requires us to re-create and re-initalize our EGL context
+            //    and all OpenGL ES state.
+            //
+            // For now, if we get these, we'll simply exit.
+            rc = eglSwapBuffers(__eglDisplay, __eglSurface);
+            if (rc != EGL_TRUE)
+            {
+                _game->exit();
+                perror("eglSwapBuffers");
+                break;
+            }
         }
     }
 
@@ -1042,11 +1064,6 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
-int Platform::getOrientationAngle()
-{
-    return __orientationAngle;
-}
-
 void Platform::setMultiTouch(bool enabled)
 {
     __multiTouch = enabled;
@@ -1059,40 +1076,40 @@ bool Platform::isMultiTouch()
 
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
-	switch(__orientationAngle)
-	{
-	// Landscape based device adjusting for landscape game mode
-	case 0:
-		if (pitch)
-			*pitch = __pitch;
-		if (roll)
-			*roll = -__roll;
-		break;
-	case 180:
-		if (pitch)
-			*pitch = -__pitch;
-		if (roll)
-			*roll = __roll;
-		break;
+    switch(__orientationAngle)
+    {
+    // Landscape based device adjusting for landscape game mode
+    case 0:
+        if (pitch)
+            *pitch = __pitch;
+        if (roll)
+            *roll = -__roll;
+        break;
+    case 180:
+        if (pitch)
+            *pitch = -__pitch;
+        if (roll)
+            *roll = __roll;
+        break;
 
-	// Portrait based device adjusting for landscape game mode
-	case 90:
-		if (pitch)
-			*pitch = -__roll;
-		if (roll)
-			*roll = -__pitch;
-		break;
+    // Portrait based device adjusting for landscape game mode
+    case 90:
+        if (pitch)
+            *pitch = -__roll;
+        if (roll)
+            *roll = -__pitch;
+        break;
 
-	case  270:
-		if (pitch)
-			*pitch = __roll;
-		if (roll)
-			*roll = __pitch;
-		break;
+    case  270:
+        if (pitch)
+            *pitch = __roll;
+        if (roll)
+            *roll = __pitch;
+        break;
 
-	default:
-		break;
-	}
+    default:
+        break;
+    }
 }
 
 void Platform::swapBuffers()

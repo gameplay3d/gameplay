@@ -51,7 +51,7 @@ unsigned int Model::getMeshPartCount() const
 
 Material* Model::getMaterial(int partIndex)
 {
-    assert(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
+    GP_ASSERT(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
 
     Material* m = NULL;
 
@@ -75,7 +75,7 @@ Material* Model::getMaterial(int partIndex)
 
 void Model::setMaterial(Material* material, int partIndex)
 {
-    assert(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
+    GP_ASSERT(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
 
     Material* oldMaterial = NULL;
 
@@ -354,7 +354,7 @@ Model* Model::clone(NodeCloneContext &context)
     Model* model = Model::create(getMesh());
     if (getSkin())
     {
-        model->setSkin(getSkin()->clone());
+        model->setSkin(getSkin()->clone(context));
     }
     Material* materialClone = getMaterial()->clone(context);
     model->setMaterial(materialClone); // TODO: Don't forget material parts

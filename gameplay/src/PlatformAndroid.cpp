@@ -13,38 +13,32 @@
 #include <android/log.h>
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
 
-#define TOUCH_COUNT_MAX     4
-
-using namespace std;
-
+// Externally referenced global variables.
 struct android_app* __state;
 AAssetManager* __assetManager;
-std::string __assetsPath;
-bool __initialized = false;
-bool __destroyed = false;
 
+static bool __initialized;
+static bool __suspended;
 static EGLDisplay __eglDisplay = EGL_NO_DISPLAY;
 static EGLContext __eglContext = EGL_NO_CONTEXT;
 static EGLSurface __eglSurface = EGL_NO_SURFACE;
 static EGLConfig __eglConfig = 0;
-int __width;
-int __height;
-
-struct timespec __timespec;
+static int __width;
+static int __height;
+static struct timespec __timespec;
 static long __timeStart;
 static long __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
-
-ASensorManager* __sensorManager;
-ASensorEventQueue* __sensorEventQueue;
-ASensorEvent __sensorEvent;
-const ASensor* __accelerometerSensor;
-
-static int __orientationAngle = 90; // Landscape by default.
+static ASensorManager* __sensorManager;
+static ASensorEventQueue* __sensorEventQueue;
+static ASensorEvent __sensorEvent;
+static const ASensor* __accelerometerSensor;
+static int __orientationAngle = 90;
 static bool __multiTouch = false;
 static int __primaryTouchId = -1;
-bool __displayKeyboard = false;
+static bool __displayKeyboard = false;
 
+// OpenGL VAO functions.
 static const char* __glExtensions;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray = NULL;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
@@ -54,7 +48,7 @@ PFNGLISVERTEXARRAYOESPROC glIsVertexArray = NULL;
 namespace gameplay
 {
 
-long timespec2millis(struct timespec *a)
+static long timespec2millis(struct timespec *a)
 {
     return a->tv_sec*1000 + a->tv_nsec/1000000;
 }
@@ -67,7 +61,7 @@ extern void printError(const char* format, ...)
     va_end(argptr);
 }
 
-EGLenum checkErrorEGL(const char* msg)
+static EGLenum checkErrorEGL(const char* msg)
 {
     static const char* errmsg[] =
     {
@@ -93,7 +87,7 @@ EGLenum checkErrorEGL(const char* msg)
 }
 
 // Initialized EGL resources.
-bool initEGL()
+static bool initEGL()
 {
     // Hard-coded to 32-bit/OpenGL ES 2.0.
     const EGLint eglConfigAttrs[] =
@@ -122,31 +116,34 @@ bool initEGL()
         EGL_NONE
     };
 
-    // Get the EGL display and initialize.
-    __eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-    if (__eglDisplay == EGL_NO_DISPLAY)
+    if (__eglDisplay == EGL_NO_DISPLAY && __eglContext == EGL_NO_CONTEXT)
     {
-        checkErrorEGL("eglGetDisplay");
-        goto error;
-    }
+        // Get the EGL display and initialize.
+        __eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+        if (__eglDisplay == EGL_NO_DISPLAY)
+        {
+            checkErrorEGL("eglGetDisplay");
+            goto error;
+        }
     
-    if (eglInitialize(__eglDisplay, NULL, NULL) != EGL_TRUE)
-    {
-        checkErrorEGL("eglInitialize");
-        goto error;
-    }
+        if (eglInitialize(__eglDisplay, NULL, NULL) != EGL_TRUE)
+        {
+            checkErrorEGL("eglInitialize");
+            goto error;
+        }
     
-    if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) != EGL_TRUE || eglConfigCount == 0)
-    {
-        checkErrorEGL("eglChooseConfig");
-        goto error;
-    }
+        if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) != EGL_TRUE || eglConfigCount == 0)
+        {
+            checkErrorEGL("eglChooseConfig");
+            goto error;
+        }
     
-    __eglContext = eglCreateContext(__eglDisplay, __eglConfig, EGL_NO_CONTEXT, eglContextAttrs);
-    if (__eglContext == EGL_NO_CONTEXT)
-    {
-        checkErrorEGL("eglCreateContext");
-        goto error;
+        __eglContext = eglCreateContext(__eglDisplay, __eglConfig, EGL_NO_CONTEXT, eglContextAttrs);
+        if (__eglContext == EGL_NO_CONTEXT)
+        {
+            checkErrorEGL("eglCreateContext");
+            goto error;
+        }
     }
     
     // EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
@@ -172,6 +169,9 @@ bool initEGL()
     
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_WIDTH, &__width);
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_HEIGHT, &__height);
+
+    if (__width < __height)
+        __orientationAngle = 0;
     
     // Set vsync.
     eglSwapInterval(__eglDisplay, WINDOW_VSYNC ? 1 : 0);
@@ -191,78 +191,102 @@ bool initEGL()
     return true;
     
 error:
-
     return false;
 }
 
+static void destroyEGLSurface()
+{
+    if (__eglDisplay != EGL_NO_DISPLAY)
+    {
+        eglMakeCurrent(__eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+    }
+
+    if (__eglSurface != EGL_NO_SURFACE)
+    {
+        eglDestroySurface(__eglDisplay, __eglSurface);
+        __eglSurface = EGL_NO_SURFACE;
+    }
+}
+
+static void destroyEGLMain()
+{
+    destroyEGLSurface();
+
+    if (__eglContext != EGL_NO_CONTEXT)
+    {
+        eglDestroyContext(__eglDisplay, __eglContext);
+        __eglContext = EGL_NO_CONTEXT;
+    }
+
+    if (__eglDisplay != EGL_NO_DISPLAY)
+    {
+        eglTerminate(__eglDisplay);
+        __eglDisplay = EGL_NO_DISPLAY;
+    }
+}
+
 // Display the android virtual keyboard.
-void displayKeyboard(android_app* state, bool pShow)
+static void displayKeyboard(android_app* state, bool show)
 { 
-    
-    // The following functions is supposed to show / hide functins from a native activity.. but currently
-    // do not work. 
+    // The following functions is supposed to show / hide functins from a native activity.. but currently do not work. 
     // ANativeActivity_showSoftInput(state->activity, ANATIVEACTIVITY_SHOW_SOFT_INPUT_IMPLICIT);
     // ANativeActivity_hideSoftInput(state->activity, ANATIVEACTIVITY_HIDE_SOFT_INPUT_IMPLICIT_ONLY);
     
     // Show or hide the keyboard by calling the appropriate Java method through JNI instead.
-    // Attaches the current thread to the JVM.
-    jint lResult;
-    jint lFlags = 0;
-    JavaVM* lJavaVM = state->activity->vm;
-    JNIEnv* lJNIEnv = state->activity->env; 
-    JavaVMAttachArgs lJavaVMAttachArgs;
-    lJavaVMAttachArgs.version = JNI_VERSION_1_6;
-    lJavaVMAttachArgs.name = "NativeThread";
-    lJavaVMAttachArgs.group = NULL;
-    lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs); 
-    if (lResult == JNI_ERR)
+    jint result;
+    jint flags = 0;
+    JavaVM* jvm = state->activity->vm;
+    JNIEnv* env;
+    jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
+    jvm->AttachCurrentThread(&env, NULL);
+    if (result == JNI_ERR)
     { 
         return; 
     } 
     // Retrieves NativeActivity. 
     jobject lNativeActivity = state->activity->clazz;
-    jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+    jclass ClassNativeActivity = env->GetObjectClass(lNativeActivity);
 
     // Retrieves Context.INPUT_METHOD_SERVICE.
-    jclass ClassContext = lJNIEnv->FindClass("android/content/Context");
-    jfieldID FieldINPUT_METHOD_SERVICE = lJNIEnv->GetStaticFieldID(ClassContext, "INPUT_METHOD_SERVICE", "Ljava/lang/String;");
-    jobject INPUT_METHOD_SERVICE = lJNIEnv->GetStaticObjectField(ClassContext, FieldINPUT_METHOD_SERVICE);
+    jclass ClassContext = env->FindClass("android/content/Context");
+    jfieldID FieldINPUT_METHOD_SERVICE = env->GetStaticFieldID(ClassContext, "INPUT_METHOD_SERVICE", "Ljava/lang/String;");
+    jobject INPUT_METHOD_SERVICE = env->GetStaticObjectField(ClassContext, FieldINPUT_METHOD_SERVICE);
     
     // Runs getSystemService(Context.INPUT_METHOD_SERVICE).
-    jclass ClassInputMethodManager = lJNIEnv->FindClass("android/view/inputmethod/InputMethodManager");
-    jmethodID MethodGetSystemService = lJNIEnv->GetMethodID(ClassNativeActivity, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
-    jobject lInputMethodManager = lJNIEnv->CallObjectMethod(lNativeActivity, MethodGetSystemService, INPUT_METHOD_SERVICE);
+    jclass ClassInputMethodManager = env->FindClass("android/view/inputmethod/InputMethodManager");
+    jmethodID MethodGetSystemService = env->GetMethodID(ClassNativeActivity, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
+    jobject lInputMethodManager = env->CallObjectMethod(lNativeActivity, MethodGetSystemService, INPUT_METHOD_SERVICE);
     
     // Runs getWindow().getDecorView().
-    jmethodID MethodGetWindow = lJNIEnv->GetMethodID(ClassNativeActivity, "getWindow", "()Landroid/view/Window;");
-    jobject lWindow = lJNIEnv->CallObjectMethod(lNativeActivity, MethodGetWindow);
-    jclass ClassWindow = lJNIEnv->FindClass("android/view/Window");
-    jmethodID MethodGetDecorView = lJNIEnv->GetMethodID(ClassWindow, "getDecorView", "()Landroid/view/View;");
-    jobject lDecorView = lJNIEnv->CallObjectMethod(lWindow, MethodGetDecorView);
-    if (pShow)
+    jmethodID MethodGetWindow = env->GetMethodID(ClassNativeActivity, "getWindow", "()Landroid/view/Window;");
+    jobject lWindow = env->CallObjectMethod(lNativeActivity, MethodGetWindow);
+    jclass ClassWindow = env->FindClass("android/view/Window");
+    jmethodID MethodGetDecorView = env->GetMethodID(ClassWindow, "getDecorView", "()Landroid/view/View;");
+    jobject lDecorView = env->CallObjectMethod(lWindow, MethodGetDecorView);
+    if (show)
     {
         // Runs lInputMethodManager.showSoftInput(...).
-        jmethodID MethodShowSoftInput = lJNIEnv->GetMethodID( ClassInputMethodManager, "showSoftInput", "(Landroid/view/View;I)Z");
-        jboolean lResult = lJNIEnv->CallBooleanMethod(lInputMethodManager, MethodShowSoftInput, lDecorView, lFlags); 
+        jmethodID MethodShowSoftInput = env->GetMethodID( ClassInputMethodManager, "showSoftInput", "(Landroid/view/View;I)Z");
+        jboolean result = env->CallBooleanMethod(lInputMethodManager, MethodShowSoftInput, lDecorView, flags); 
     } 
     else 
     { 
         // Runs lWindow.getViewToken() 
-        jclass ClassView = lJNIEnv->FindClass("android/view/View");
-        jmethodID MethodGetWindowToken = lJNIEnv->GetMethodID(ClassView, "getWindowToken", "()Landroid/os/IBinder;");
-        jobject lBinder = lJNIEnv->CallObjectMethod(lDecorView, MethodGetWindowToken); 
+        jclass ClassView = env->FindClass("android/view/View");
+        jmethodID MethodGetWindowToken = env->GetMethodID(ClassView, "getWindowToken", "()Landroid/os/IBinder;");
+        jobject lBinder = env->CallObjectMethod(lDecorView, MethodGetWindowToken); 
         
         // lInputMethodManager.hideSoftInput(...). 
-        jmethodID MethodHideSoftInput = lJNIEnv->GetMethodID(ClassInputMethodManager, "hideSoftInputFromWindow", "(Landroid/os/IBinder;I)Z"); 
-        jboolean lRes = lJNIEnv->CallBooleanMethod( lInputMethodManager, MethodHideSoftInput, lBinder, lFlags); 
+        jmethodID MethodHideSoftInput = env->GetMethodID(ClassInputMethodManager, "hideSoftInputFromWindow", "(Landroid/os/IBinder;I)Z"); 
+        jboolean lRes = env->CallBooleanMethod( lInputMethodManager, MethodHideSoftInput, lBinder, flags); 
     }
     
     // Finished with the JVM.
-    lJavaVM->DetachCurrentThread(); 
+    jvm->DetachCurrentThread(); 
 }
 
 // Gets the Keyboard::Key enumeration constant that corresponds to the given Android key code.
-Keyboard::Key getKey(int keycode, int metastate)
+static Keyboard::Key getKey(int keycode, int metastate)
 {
     bool shiftOn = (metastate == AMETA_SHIFT_ON);
     
@@ -610,7 +634,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
 }
 
 // Process the next main command.
-static void engine_handle_cmd(struct android_app* app, int32_t cmd) 
+static void engine_handle_cmd(struct android_app* app, int32_t cmd)
 {
     switch (cmd) 
     {
@@ -618,23 +642,47 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
             // The window is being shown, get it ready.
             if (app->window != NULL)
             {
+                initEGL();
                 __initialized = true;
             }
             break;
         case APP_CMD_TERM_WINDOW:
-            {
-                __destroyed = true;
-                break;
-            }
+            destroyEGLSurface();
+            __initialized = false;
+            break;
+        case APP_CMD_DESTROY:
+            Game::getInstance()->exit();
+            destroyEGLMain();
+            __initialized = false;
+            break;
         case APP_CMD_GAINED_FOCUS:
             // When our app gains focus, we start monitoring the accelerometer.
             if (__accelerometerSensor != NULL) 
             {
                 ASensorEventQueue_enableSensor(__sensorEventQueue, __accelerometerSensor);
-                // We'd like to get 60 events per second (in us).
+                // We'd like to get 60 events per second (in microseconds).
                 ASensorEventQueue_setEventRate(__sensorEventQueue, __accelerometerSensor, (1000L/60)*1000);
             }
-            Game::getInstance()->resume();
+
+            if (Game::getInstance()->getState() == Game::UNINITIALIZED)
+            {
+                Game::getInstance()->run();
+            }
+            else
+            {
+                Game::getInstance()->resume();
+            }
+            break;
+        case APP_CMD_RESUME:
+            if (__initialized)
+            {
+                Game::getInstance()->resume();
+            }
+            __suspended = false;
+            break;
+        case APP_CMD_PAUSE:
+            Game::getInstance()->pause();
+            __suspended = true;
             break;
         case APP_CMD_LOST_FOCUS:
             // When our app loses focus, we stop monitoring the accelerometer.
@@ -643,7 +691,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
             {
                 ASensorEventQueue_disableSensor(__sensorEventQueue, __accelerometerSensor);
             }
-            Game::getInstance()->pause();
             break;
     }
 }
@@ -660,28 +707,6 @@ Platform::Platform(const Platform& copy)
 
 Platform::~Platform()
 {
-    if (__eglDisplay != EGL_NO_DISPLAY)
-    {
-        eglMakeCurrent(__eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-    }
-
-    if (__eglSurface != EGL_NO_SURFACE)
-    {
-        eglDestroySurface(__eglDisplay, __eglSurface);
-        __eglSurface = EGL_NO_SURFACE;
-    }
-
-    if (__eglContext != EGL_NO_CONTEXT)
-    {
-        eglDestroyContext(__eglDisplay, __eglContext);
-        __eglContext = EGL_NO_CONTEXT;
-    }
-
-    if (__eglDisplay != EGL_NO_DISPLAY)
-    {
-        eglTerminate(__eglDisplay);
-        __eglDisplay = EGL_NO_DISPLAY;
-    }
 }
 
 Platform* Platform::create(Game* game)
@@ -693,9 +718,15 @@ Platform* Platform::create(Game* game)
 
 int Platform::enterMessagePump()
 {
+    __initialized = false;
+    __suspended = false;
+
     // Get the android application's activity.
     ANativeActivity* activity = __state->activity;
-    JNIEnv* env = activity->env;
+    JavaVM* jvm = __state->activity->vm;
+    JNIEnv* env;
+    jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
+    jvm->AttachCurrentThread(&env, NULL);
 
     // Get the package name for this app from Java.
     jclass clazz = env->GetObjectClass(activity->clazz);
@@ -705,12 +736,13 @@ int Platform::enterMessagePump()
     const char* packageName;
     jboolean isCopy;
     packageName = env->GetStringUTFChars((jstring)result, &isCopy);
+    jvm->DetachCurrentThread();
     
     // Set the default path to store the resources.
-    __assetsPath = "/mnt/sdcard/android/data/";
-    __assetsPath += packageName;
-    __assetsPath += "/";
-    FileSystem::setResourcePath(__assetsPath.c_str());    
+    std::string assetsPath = "/mnt/sdcard/android/data/";
+    assetsPath += packageName;
+    assetsPath += "/";
+    FileSystem::setResourcePath(assetsPath.c_str());    
         
     // Get the asset manager to get the resources from the .apk file.
     __assetManager = __state->activity->assetManager; 
@@ -729,8 +761,6 @@ int Platform::enterMessagePump()
     __timeStart = timespec2millis(&__timespec);
     __timeAbsolute = 0L;
     
-    bool initializeGame = true;
-    
     while (true)
     {
         // Read all pending events.
@@ -738,12 +768,10 @@ int Platform::enterMessagePump()
         int events;
         struct android_poll_source* source;
         
-        bool _shouldPoll = !(__initialized && Game::getInstance()->getState() == Game::UNINITIALIZED) && (Game::getInstance()->getState() != Game::PAUSED);
-        
-        while ((ident=ALooper_pollAll( _shouldPoll ? 0 : -1, NULL, &events, (void**)&source)) >= 0) 
+        while ((ident=ALooper_pollAll(!__suspended ? 0 : -1, NULL, &events, (void**)&source)) >= 0) 
         {
             // Process this event.
-            if (source != NULL) 
+            if (source != NULL)
                 source->process(__state, source);
             
             // If a sensor has data, process it now.
@@ -751,20 +779,14 @@ int Platform::enterMessagePump()
                 ASensorEventQueue_getEvents(__sensorEventQueue, &__sensorEvent, 1);
             
             if (__state->destroyRequested != 0)
-                break;
-        }
-        
-        if (__initialized && initializeGame)
-        {
-            gameplay::initEGL();
-            WARN_VARG("Platform::enterMessagePump() - width: %d  height: %d assetsPath: %s", __width, __height, __assetsPath.c_str());
-            _game->run();
-            initializeGame = false;
+            {
+                return 0;
+            }
         }
         
         // Idle time (no events left to process) is spent rendering.
         // We skip rendering when the app is paused.
-        if (__initialized && _game->getState() != Game::PAUSED)
+        if (__initialized && !__suspended)
         {
             _game->frame();
 
@@ -784,16 +806,22 @@ int Platform::enterMessagePump()
             int rc = eglSwapBuffers(__eglDisplay, __eglSurface);
             if (rc != EGL_TRUE)
             {
-                perror("eglSwapBuffers");
-                _game->exit();
-                break;
+                EGLint error = eglGetError();
+                if (error == EGL_BAD_NATIVE_WINDOW)
+                {
+                    if (__state->window != NULL)
+                    {
+                        destroyEGLSurface();
+                        initEGL();
+                    }
+                    __initialized = true;
+                }
+                else
+                {
+                    perror("eglSwapBuffers");
+                    break;
+                }
             }
-        }
-        
-        // Check if we are exiting.
-        if ((__state->destroyRequested != 0) || (__initialized && Game::getInstance()->getState() == Game::UNINITIALIZED))
-        {
-            break;
         }
             
         // Display the keyboard.
@@ -841,11 +869,6 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
-int Platform::getOrientationAngle()
-{
-    return __orientationAngle;
-}
-
 void Platform::setMultiTouch(bool enabled)
 {
     __multiTouch = enabled;
@@ -863,10 +886,19 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     
     // By default, android accelerometer values are oriented to the portrait mode.
     // flipping the x and y to get the desired landscape mode values.
-    tx = -__sensorEvent.acceleration.y;
-    ty = __sensorEvent.acceleration.x;
-    tz = -__sensorEvent.acceleration.z;
-    
+    if (__orientationAngle == 90)
+    {
+        tx = -__sensorEvent.acceleration.y;
+        ty = __sensorEvent.acceleration.x;
+    }
+    else
+    {
+        // 0
+        tx = __sensorEvent.acceleration.x;
+        ty = __sensorEvent.acceleration.y;
+    }
+    tz = __sensorEvent.acceleration.z;
+
     if (pitch != NULL)
         *pitch = -atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
     if (roll != NULL)

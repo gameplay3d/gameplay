@@ -92,6 +92,23 @@ public:
     static const int ANIMATE_SCALE_ROTATE_TRANSLATE = 17;
 
     /**
+     * Globally suspends all transform changed events.
+     */
+    static void suspendTransformChanged();
+
+    /**
+     * Globally resumes all transform changed events.
+     */
+    static void resumeTransformChanged();
+
+    /** 
+     * Gets whether all transform changed events are suspended.
+     *
+     * @return TRUE if transform changed events are suspended; FALSE if transform changed events are not suspended.
+     */
+    static bool isTransformChangedSuspended();
+
+    /**
      * Listener interface for Transform events.
      */
     class Listener
@@ -760,12 +777,27 @@ protected:
         DIRTY_TRANSLATION = 0x01,
         DIRTY_SCALE = 0x02,
         DIRTY_ROTATION = 0x04,
+        DIRTY_NOTIFY = 0x08
     };
 
     /**
      * Marks this transform as dirty and fires transformChanged().
      */
     void dirty(char matrixDirtyBits);
+
+    /** 
+     * Determines if the specified matrix dirty bit is set.
+     *
+     * @param matrixDirtyBits the matrix dirty bit to check for dirtiness.
+     * @return TRUE if the specified matrix dirty bit is set; FALSE if the specified matrix dirty bit is unset.
+     */
+    bool isDirty(char matrixDirtyBits) const;
+
+    /** 
+     * Adds the specified transform to the list of transforms waiting to be notified of a change.
+     * Sets the DIRTY_NOTIFY bit on the transform.
+     */
+    static void suspendTransformChange(Transform* transform);
 
     /**
      * Called when the transform changes.
@@ -811,21 +843,12 @@ protected:
     std::list<TransformListener>* _listeners;
 
 private:
-    static const char ANIMATION_SCALE_X_BIT = 0x01; 
-    static const char ANIMATION_SCALE_Y_BIT = 0x02; 
-    static const char ANIMATION_SCALE_Z_BIT = 0x04; 
-    static const char ANIMATION_ROTATION_BIT = 0x08;  
-    static const char ANIMATION_TRANSLATION_X_BIT = 0x10; 
-    static const char ANIMATION_TRANSLATION_Y_BIT = 0x20; 
-    static const char ANIMATION_TRANSLATION_Z_BIT = 0x40; 
+   
+    void applyAnimationValueRotation(AnimationValue* value, unsigned int index, float blendWeight);
 
-    void applyAnimationValueScaleX(float sx, float blendWeight);
-    void applyAnimationValueScaleY(float sy, float blendWeight);
-    void applyAnimationValueScaleZ(float sz, float blendWeight);
-    void applyAnimationValueRotation(Quaternion* q, float blendWeight);
-    void applyAnimationValueTranslationX(float tx, float blendWeight);
-    void applyAnimationValueTranslationY(float ty, float blendWeight);
-    void applyAnimationValueTranslationZ(float tz, float blendWeight);
+    static int _suspendTransformChanged;
+    static std::vector<Transform*> _transformsChanged;
+    
 };
 
 }

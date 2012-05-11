@@ -120,7 +120,7 @@ protected:
      *
      * @param clip The clipping rectangle of this control's parent container.
      */
-    void update(const Rectangle& clip);
+    void update(const Rectangle& clip, const Vector2& offset = Vector2::zero());
 
     /**
      * Draw the checkbox icon associated with this control.

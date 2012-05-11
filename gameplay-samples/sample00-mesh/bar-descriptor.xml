@@ -9,7 +9,7 @@
 
     <!-- A universally unique application identifier. Must be unique across all BlackBerry Tablet OS applications.
          Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-    <id>com.rim.sample00_mesh</id>
+    <id>org.gameplay3d.sample00_mesh</id>
 
     <!-- The name that is displayed in the BlackBerry Tablet OS application installer. 
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
@@ -60,9 +60,9 @@
     <asset path="res/duck.gpb">res/duck.gpb</asset>
     <asset path="res/duck.material">res/duck.material</asset>
     <asset path="res/grid.material">res/grid.material</asset>
-    <asset path="${workspace_loc:/gameplay/res/logo_powered_white.png}">res/logo_powered_white.png</asset>
-    <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.fsh}">res/shaders/diffuse-specular.fsh</asset>
-    <asset path="${workspace_loc:/gameplay/res/shaders/diffuse-specular.vsh}">res/shaders/diffuse-specular.vsh</asset>
+    <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
+    <asset path="../../gameplay/res/shaders/diffuse-specular.fsh">res/shaders/diffuse-specular.fsh</asset>
+    <asset path="../../gameplay/res/shaders/diffuse-specular.vsh">res/shaders/diffuse-specular.vsh</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

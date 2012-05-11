@@ -40,10 +40,6 @@ using std::min;
 using std::max;
 using std::modf;
 
-#ifdef __ANDROID__
-#include <android/asset_manager.h>
-#endif
-
 // Common
 #ifndef NULL
 #define NULL     0
@@ -55,50 +51,42 @@ namespace gameplay
 extern void printError(const char* format, ...);
 }
 
-#ifdef __ANDROID__
-#include <android/log.h>
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
-
-// System Errors
-#define LOG_ERROR(x) \
-    { \
-        LOGI(x); \
-        assert(#x == 0); \
-    }
-#define LOG_ERROR_VARG(x, ...) \
-    { \
-        LOGI(x, __VA_ARGS__); \
-        assert(#x == 0); \
-    }
-
-// Warning macro
-#ifdef WARN
-#undef WARN
-#endif
-#define WARN(x) LOGI(x)
-#define WARN_VARG(x, ...) LOGI(x, __VA_ARGS__)
-
+// Assert macros.
+#ifdef _DEBUG
+#ifdef WIN32
+#define GP_FORCE_ASSERTION_FAILURE do { __debugbreak(); } while (0)
 #else
-
-// System Errors
-#define LOG_ERROR(x) \
-    { \
-        printError(x); \
-        assert(#x == 0); \
-    }
-#define LOG_ERROR_VARG(x, ...) \
-    { \
-        printError(x, __VA_ARGS__); \
-        assert(#x == 0); \
-    }
-
-// Warning macro
-#ifdef WARN
-#undef WARN
+#define GP_FORCE_ASSERTION_FAILURE do { assert(0); } while (0)
 #endif
-#define WARN(x) printError(x)
-#define WARN_VARG(x, ...) printError(x, __VA_ARGS__)
+
+#define GP_ASSERT(expression) do { \
+    if (!(expression)) \
+    { \
+        printError("%s -- Assertion '" #expression "' failed.\n", __FUNCTION__); \
+        GP_FORCE_ASSERTION_FAILURE; \
+    } } while (0)
+#else
+#define GP_FORCE_ASSERTION_FAILURE do { (void)sizeof(int); } while (0)
+#define GP_ASSERT(expression) do { (void)sizeof(expression); } while (0)
 #endif
+
+// Error macro.
+#define GP_ERROR(...) do \
+    { \
+        printError("%s -- ", __FUNCTION__); \
+        printError(__VA_ARGS__); \
+        printError("\n"); \
+        GP_FORCE_ASSERTION_FAILURE; \
+        std::exit(-1); \
+    } while (0)
+
+// Warning macro.
+#define GP_WARN(...) do \
+    { \
+        printError("%s -- ", __FUNCTION__); \
+        printError(__VA_ARGS__); \
+        printError("\n"); \
+    } while (0)
 
 // Bullet Physics
 #include <btBulletDynamicsCommon.h>
@@ -163,12 +151,8 @@ extern void printError(const char* format, ...);
     #define NOMINMAX
 #endif
 
-// Audio (OpenAL, OpenSL, OggVorbis)
-#ifdef __ANDROID__
-#include <SLES/OpenSLES.h>
-#include <SLES/OpenSLES_Android.h>
-#else
-#ifdef __QNX__
+// Audio (OpenAL/Vorbis)
+#if defined (__QNX__) || defined(__ANDROID__)
 #include <AL/al.h>
 #include <AL/alc.h>
 #elif WIN32
@@ -179,13 +163,11 @@ extern void printError(const char* format, ...);
 #include <OpenAL/alc.h>
 #endif
 #include <vorbis/vorbisfile.h>
-#endif
 
 // Image
 #include <png.h>
 
 #define WINDOW_VSYNC        1
-#define WINDOW_FULLSCREEN   0
 
 // Graphics (OpenGL)
 #if defined (__QNX__) || defined(__ANDROID__)
@@ -263,11 +245,7 @@ typedef GLuint RenderBufferHandle;
     { \
         gl_code; \
         __gl_error_code = glGetError(); \
-        if (__gl_error_code != GL_NO_ERROR) \
-        { \
-            LOG_ERROR_VARG(#gl_code ": %d", (int)__gl_error_code); \
-        } \
-        assert(__gl_error_code == GL_NO_ERROR); \
+        GP_ASSERT(__gl_error_code == GL_NO_ERROR); \
     }
 #endif
 
@@ -287,7 +265,7 @@ typedef GLuint RenderBufferHandle;
         __gl_error_code = glGetError(); \
         if (__gl_error_code != GL_NO_ERROR) \
         { \
-            LOG_ERROR_VARG(#gl_code ": %d", (int)__gl_error_code); \
+            GP_ERROR(#gl_code ": %d", (int)__gl_error_code); \
         } \
     }
 
@@ -299,6 +277,32 @@ extern GLenum __gl_error_code;
  */
 #define GL_LAST_ERROR() __gl_error_code
 
+/**
+ * Executes the specified AL code and checks the AL error afterwards
+ * to ensure it succeeded.
+ *
+ * The AL_LAST_ERROR macro can be used afterwards to check whether a AL error was
+ * encountered executing the specified code.
+ */
+#define AL_CHECK( al_code ) \
+    { \
+        while (alGetError() != AL_NO_ERROR) ; \
+        al_code; \
+        __al_error_code = alGetError(); \
+        if (__al_error_code != AL_NO_ERROR) \
+        { \
+            GP_ERROR(#al_code ": %d", (int)__al_error_code); \
+        } \
+    }
+
+// Global variable to hold AL errors
+extern ALenum __al_error_code;
+
+/**
+ * Accesses the most recently set global AL error.
+ */
+#define AL_LAST_ERROR() __al_error_code
+
 
 #if defined(WIN32)
     #pragma warning( disable : 4172 )
@@ -307,30 +311,6 @@ extern GLenum __gl_error_code;
     #pragma warning( disable : 4390 )
     #pragma warning( disable : 4800 )
     #pragma warning( disable : 4996 )
-#endif
-
-#ifdef __ANDROID__
-#include <android_native_app_glue.h>
-extern void amain(struct android_app* state);
-#endif
-
-
-// Assert has special behavior on Windows (for Visual Studio).
-#ifdef WIN32
-#ifdef assert
-#undef assert
-#endif
-#ifdef _DEBUG
-#define assert(expression) do { \
-    if (!(expression)) \
-    { \
-        printError("Assertion \'" #expression "\' failed."); \
-        __debugbreak(); \
-    } } while (0)
-
-#else
-#define assert(expression) do { (void)sizeof(expression); } while (0)
-#endif
 #endif
 
 #endif

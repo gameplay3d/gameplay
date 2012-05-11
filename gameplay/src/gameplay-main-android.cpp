@@ -18,15 +18,13 @@ void android_main(struct android_app* state)
     
     __state = state;
     Game* game = Game::getInstance();
-    assert(game != NULL);
+    GP_ASSERT(game != NULL);
     Platform* platform = Platform::create(game);
-    assert(platform != NULL);
     platform->enterMessagePump();
-    Game::getInstance()->exit();
     delete platform;
     
-    // Android specific : the process needs to exit to 
-    // to trigger cleanup of global resources (such as game).
+    // Android specific : the process needs to exit to trigger
+    // cleanup of global and static resources (such as the game).
     exit(0);
 }
 

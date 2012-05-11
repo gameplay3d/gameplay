@@ -36,7 +36,7 @@ MeshBatch* MeshBatch::create(const VertexFormat& vertexFormat, Mesh::PrimitiveTy
 
 MeshBatch* MeshBatch::create(const VertexFormat& vertexFormat, Mesh::PrimitiveType primitiveType, Material* material, bool indexed, unsigned int initialCapacity, unsigned int growSize)
 {
-    assert(material);
+    GP_ASSERT(material);
 
     MeshBatch* batch = new MeshBatch(vertexFormat, primitiveType, material, indexed, initialCapacity, growSize);
 
@@ -73,7 +73,7 @@ void MeshBatch::setCapacity(unsigned int capacity)
 
 bool MeshBatch::resize(unsigned int capacity)
 {
-    assert(capacity > 0);
+    GP_ASSERT(capacity > 0);
     if (capacity == 0)
         return false;
 
@@ -103,7 +103,7 @@ bool MeshBatch::resize(unsigned int capacity)
         vertexCapacity = capacity + 2;
         break;
     default:
-        assert(0); // unexpected
+        GP_ASSERT(0); // unexpected
         break;
     }
 
@@ -112,7 +112,7 @@ bool MeshBatch::resize(unsigned int capacity)
     // for now, which is the same number of vertices as indices.
     unsigned int indexCapacity = vertexCapacity;
 
-    assert(indexCapacity <= USHRT_MAX);
+    GP_ASSERT(indexCapacity <= USHRT_MAX);
     if (indexCapacity > USHRT_MAX)
         return false;
 

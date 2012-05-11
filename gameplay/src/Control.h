@@ -24,6 +24,7 @@ class Control : public Ref, public AnimationTarget
     friend class AbsoluteLayout;
     friend class VerticalLayout;
     friend class FlowLayout;
+    friend class ScrollLayout;
 
 public:
 
@@ -192,7 +193,7 @@ public:
      * @param width The width.
      * @param height The height.
      */
-    void setSize(float width, float height);
+    virtual void setSize(float width, float height);
 
     /**
      * Set the bounds of this control, relative to its parent container and including its
@@ -200,7 +201,7 @@ public:
      *
      * @param bounds The new bounds to set.
      */
-    void setBounds(const Rectangle& bounds);
+    virtual void setBounds(const Rectangle& bounds);
 
     /**
      * Get the bounds of this control, relative to its parent container and including its
@@ -257,7 +258,7 @@ public:
      *
      * @param autoWidth Whether to size this control to fit horizontally within its parent container.
      */
-    void setAutoWidth(bool autoWidth);
+    virtual void setAutoWidth(bool autoWidth);
 
     /**
      * Get whether this control's width is set to automatically adjust to
@@ -272,7 +273,7 @@ public:
      *
      * @param autoHeight Whether to size this control to fit vertically within its parent container.
      */
-    void setAutoHeight(bool autoHeight);
+    virtual void setAutoHeight(bool autoHeight);
 
     /**
      * Get whether this control's height is set to automatically adjust to
@@ -735,14 +736,16 @@ protected:
      * properties, such as its text viewport.
      *
      * @param clip The clipping rectangle of this control's parent container.
+     * @param offset Layout-computed positioning offset to add to the control's position.
      */
-    virtual void update(const Rectangle& clip);
+    virtual void update(const Rectangle& clip, const Vector2& offset);
 
     /**
      * Draw the images associated with this control.
      *
      * @param spriteBatch The sprite batch containing this control's icons.
      * @param clip The clipping rectangle of this control's parent container.
+     * @param offset Layout-computed positioning offset to add to the control's position.
      */
     virtual void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
@@ -750,6 +753,7 @@ protected:
      * Draw this control's text.
      *
      * @param clip The clipping rectangle of this control's parent container.
+     * @param offset Layout-computed positioning offset to add to the control's position.
      */
     virtual void drawText(const Rectangle& clip);
 
@@ -784,8 +788,9 @@ protected:
     /**
      * Get a Theme::ThemeImage from its ID, for a given state.
      *
-     * @param id The ID of the image to retrieve
+     * @param id The ID of the image to retrieve.
      * @param state The state to get this image from.
+     *
      * @return The requested Theme::ThemeImage, or NULL if none was found.
      */
     Theme::ThemeImage* getImage(const char* id, State state);
@@ -819,25 +824,32 @@ protected:
      * Position, relative to parent container's clipping window, and desired size.
      */
     Rectangle _bounds;
-    
+
     /**
-     * The position and size of this control, relative to parent container's bounds, including border and padding, after clipping.
+     * Position, relative to parent container's clipping window, including border and padding, after clipping.
      */
     Rectangle _clipBounds;
-    
+
     /**
-     * The position and size of this control's text area, before clipping.  Used for text alignment.
+     * Absolute bounds, including border and padding, before clipping.
      */
-    Rectangle _textBounds;
-    
+    Rectangle _absoluteBounds;
+
     /**
-     * Clipping window of this control's content, after clipping.
+     * Absolute bounds, including border and padding, after clipping.
      */
-    Rectangle _clip;
-    
+    Rectangle _absoluteClipBounds;
+
     /**
-     * Flag for whether the Control is dirty.
+     * Absolute bounds of content area (i.e. without border and padding), before clipping.
      */
+    Rectangle _viewportBounds;
+
+    /**
+     * Absolute bounds of content area (i.e. without border and padding), after clipping.
+     */
+    Rectangle _viewportClipBounds;
+
     bool _dirty;
     
     /**
@@ -877,26 +889,10 @@ protected:
 
 private:
 
-    static const char ANIMATION_POSITION_X_BIT = 0x01;
-    static const char ANIMATION_POSITION_Y_BIT = 0x02;
-    static const char ANIMATION_SIZE_WIDTH_BIT = 0x04;
-    static const char ANIMATION_SIZE_HEIGHT_BIT = 0x08;
-    static const char ANIMATION_OPACITY_BIT = 0x10;
-
     /*
      * Constructor.
      */    
     Control(const Control& copy);
-    
-    void applyAnimationValuePositionX(float x, float blendWeight);
-    
-    void applyAnimationValuePositionY(float y, float blendWeight);
-    
-    void applyAnimationValueSizeWidth(float width, float blendWeight);
-    
-    void applyAnimationValueSizeHeight(float height, float blendWeight);
-    
-    void applyAnimationValueOpacity();
 
     Theme::Style::Overlay** getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays);
 
@@ -923,9 +919,12 @@ private:
      * @param clip The clipping rectangle of this control's parent container.
      */
     virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
+
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
     
     bool _styleOverridden;
     Theme::Skin* _skin;
+    Rectangle _clearBounds;         // Previous frame's absolute clip bounds, to be cleared if necessary.
 };
 
 }

@@ -6,6 +6,7 @@
 
 // Extern global variables
 GLenum __gl_error_code = GL_NO_ERROR;
+ALenum __al_error_code = AL_NO_ERROR;
 
 namespace gameplay
 {
@@ -20,7 +21,7 @@ Game::Game()
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
       _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL)
 {
-    assert(__gameInstance == NULL);
+    GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
     _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
 }
@@ -42,6 +43,7 @@ Game::~Game()
 
 Game* Game::getInstance()
 {
+    GP_ASSERT(__gameInstance);
     return __gameInstance;
 }
 
@@ -286,7 +288,7 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 
 void Game::schedule(long timeOffset, TimeListener* timeListener, void* cookie)
 {
-    assert(timeListener);
+    GP_ASSERT(timeListener);
     TimeEvent timeEvent(getGameTime() + timeOffset, timeListener, cookie);
     _timeEvents->push(timeEvent);
 }

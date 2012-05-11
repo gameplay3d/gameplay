@@ -50,11 +50,13 @@ class Form : public Container
 public:
 
     /**
-     * Create from properties file.
-     *
-     * @param path Path to the properties file to create a new form from.
+     * Creates a form using the data from the Properties object defined at the specified URL, 
+     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
+     * 
+     * @param url The URL pointing to the Properties object defining the animation data. 
      */
-    static Form* create(const char* path);
+    static Form* create(const char* url);
 
     /**
      * Get a form from its ID.
@@ -64,6 +66,35 @@ public:
      * @return A form with the given ID, or null if one was not found.
      */
     static Form* getForm(const char* id);
+
+    /**
+     * Set the desired size of this form.
+     *
+     * @param width The width.
+     * @param height The height.
+     */
+    virtual void setSize(float width, float height);
+
+    /**
+     * Set the bounds of this form.
+     *
+     * @param bounds The new bounds to set.
+     */
+    virtual void setBounds(const Rectangle& bounds);
+
+    /**
+     * Set this form's width to that of the display.
+     *
+     * @param autoWidth Whether to set this form's width to that of the display.
+     */
+    virtual void setAutoWidth(bool autoWidth);
+
+    /**
+     * Set this form's height to that of the display.
+     *
+     * @param autoHeight Whether to set this form's height to that of the display.
+     */
+    virtual void setAutoHeight(bool autoHeight);
 
     /**
      * Create a 3D quad to texture with this Form.
@@ -155,11 +186,18 @@ private:
      */
     static void keyEventInternal(Keyboard::KeyEvent evt, int key);
 
+    static int nextHighestPowerOfTwo(int x);
+
     Theme* _theme;              // The Theme applied to this Form.
     Model* _quad;               // Quad for rendering this Form in world-space.
     Node* _node;                // Node for transforming this Form in world-space.
     FrameBuffer* _frameBuffer;  // FBO the Form is rendered into for texturing the quad.
     Matrix _projectionMatrix;   // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
+    Matrix _defaultProjectionMatrix;
+    SpriteBatch* _spriteBatch;
+
+    float _u2;
+    float _v1;
 };
 
 }

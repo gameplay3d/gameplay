@@ -89,6 +89,7 @@ void AudioListener::setCamera(Camera* c)
         // Disconnect our current camera.
         if (_camera)
         {
+            GP_ASSERT(_camera->getNode());
             _camera->getNode()->removeListener(this);
             SAFE_RELEASE(_camera);
         }
@@ -98,6 +99,7 @@ void AudioListener::setCamera(Camera* c)
 
         if (_camera)
         {
+            GP_ASSERT(_camera->getNode());
             _camera->addRef();
             _camera->getNode()->addListener(this);
         }

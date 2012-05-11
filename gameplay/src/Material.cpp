@@ -32,19 +32,19 @@ Material::~Material()
     }
 }
 
-Material* Material::create(const char* materialPath)
+Material* Material::create(const char* url)
 {
-    assert(materialPath);
+    GP_ASSERT(url);
 
     // Load the material properties from file
-    Properties* properties = Properties::create(materialPath);
-    assert(properties);
+    Properties* properties = Properties::create(url);
+    GP_ASSERT(properties);
     if (properties == NULL)
     {
         return NULL;
     }
 
-    Material* material = create(properties->getNextNamespace());
+    Material* material = create((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
     SAFE_DELETE(properties);
 
     return material;
@@ -53,7 +53,7 @@ Material* Material::create(const char* materialPath)
 Material* Material::create(Properties* materialProperties)
 {
     // Check if the Properties is valid and has a valid namespace.
-    assert(materialProperties);
+    GP_ASSERT(materialProperties);
     if (!materialProperties || !(strcmp(materialProperties->getNamespace(), "material") == 0))
     {
         return NULL;
@@ -151,7 +151,7 @@ unsigned int Material::getTechniqueCount() const
 
 Technique* Material::getTechnique(unsigned int index) const
 {
-    assert(index < _techniques.size());
+    GP_ASSERT(index < _techniques.size());
 
     return _techniques[index];
 }
@@ -227,9 +227,9 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
 {
     // Fetch shader info required to create the effect of this technique.
     const char* vertexShaderPath = passProperties->getString("vertexShader");
-    assert(vertexShaderPath);
+    GP_ASSERT(vertexShaderPath);
     const char* fragmentShaderPath = passProperties->getString("fragmentShader");
-    assert(fragmentShaderPath);
+    GP_ASSERT(fragmentShaderPath);
     const char* defines = passProperties->getString("defines");
     std::string define;
     if (defines != NULL)

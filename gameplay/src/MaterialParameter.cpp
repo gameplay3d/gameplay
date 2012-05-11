@@ -232,7 +232,7 @@ void MaterialParameter::bind(Effect* effect)
         if (!_uniform)
         {
             // This parameter was not found in the specified effect, so do nothing.
-            WARN_VARG("Warning: Material parameter '%s' not found in effect '%s'.", _name.c_str(), effect->getId());
+            GP_WARN("Warning: Material parameter '%s' not found in effect '%s'.", _name.c_str(), effect->getId());
             return;
         }
     }
@@ -246,7 +246,7 @@ void MaterialParameter::bind(Effect* effect)
         }
         else
         {
-            assert(_value.floatPtrValue);
+            GP_ASSERT(_value.floatPtrValue);
             effect->setValue(_uniform, _value.floatPtrValue, _count);
         }
         break;
@@ -257,32 +257,32 @@ void MaterialParameter::bind(Effect* effect)
         }
         else
         {
-            assert(_value.intPtrValue);
+            GP_ASSERT(_value.intPtrValue);
             effect->setValue(_uniform, _value.intPtrValue, _count);
         }
         break;
     case MaterialParameter::VECTOR2:
-        assert(_value.floatPtrValue);
+        GP_ASSERT(_value.floatPtrValue);
         effect->setValue(_uniform, reinterpret_cast<Vector2*>(_value.floatPtrValue), _count);
         break;
     case MaterialParameter::VECTOR3:
-        assert(_value.floatPtrValue);
+        GP_ASSERT(_value.floatPtrValue);
         effect->setValue(_uniform, reinterpret_cast<Vector3*>(_value.floatPtrValue), _count);
         break;
     case MaterialParameter::VECTOR4:
-        assert(_value.floatPtrValue);
+        GP_ASSERT(_value.floatPtrValue);
         effect->setValue(_uniform, reinterpret_cast<Vector4*>(_value.floatPtrValue), _count);
         break;
     case MaterialParameter::MATRIX:
-        assert(_value.floatPtrValue);
+        GP_ASSERT(_value.floatPtrValue);
         effect->setValue(_uniform, reinterpret_cast<Matrix*>(_value.floatPtrValue), _count);
         break;
     case MaterialParameter::SAMPLER:
-        assert(_value.samplerValue);
+        GP_ASSERT(_value.samplerValue);
         effect->setValue(_uniform, _value.samplerValue);
         break;
     case MaterialParameter::METHOD:
-        assert(_value.method);
+        GP_ASSERT(_value.method);
         _value.method->setValue(effect);
         break;
     }
@@ -383,7 +383,7 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
 
 void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight)
 {
-    assert(blendWeight >= 0.0f && blendWeight <= 1.0f);
+    GP_ASSERT(blendWeight >= 0.0f && blendWeight <= 1.0f);
 
     switch (propertyId)
     {
@@ -394,50 +394,21 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
                 case FLOAT:
                 {
                     if (_count == 1)
-                    {
-                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
-                        {
-                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
-                            _value.floatValue = value->getFloat(0);
-                        }
-                        else
-                        {
-                            _value.floatValue = Curve::lerp(blendWeight, _value.floatValue, value->getFloat(0));
-                        }
-                    }
+                        _value.floatValue = Curve::lerp(blendWeight, _value.floatValue, value->getFloat(0));
                     else
-                    {
                         applyAnimationValue(value, blendWeight, 1);
-                    }                    
                     break;
                 }
                 case INT:
                 {
                     if (_count == 1)
                     {
-                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
-                        {
-                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
-                            _value.intValue = value->getFloat(0);
-                        }
-                        else
-                        {
-                            _value.intValue = Curve::lerp(blendWeight, _value.intValue, value->getFloat(0));
-                        }
+                        _value.intValue = Curve::lerp(blendWeight, _value.intValue, value->getFloat(0));
                     }
                     else
                     {
-                        if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
-                        {
-                            _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
-                            for (unsigned int i = 0; i < _count; i++)
-                                _value.intPtrValue[i] = value->getFloat(i);
-                        }
-                        else
-                        {
-                            for (unsigned int i = 0; i < _count; i++)
-                                _value.intPtrValue[i] = Curve::lerp(blendWeight, _value.intPtrValue[i], value->getFloat(i));
-                        }
+                        for (unsigned int i = 0; i < _count; i++)
+                            _value.intPtrValue[i] = Curve::lerp(blendWeight, _value.intPtrValue[i], value->getFloat(i));
                     }
                     break;
                 }
@@ -466,18 +437,8 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
 void MaterialParameter::applyAnimationValue(AnimationValue* value, float blendWeight, int components)
 {
     unsigned int count = _count * components;
-    if ((_animationPropertyBitFlag & ANIMATION_UNIFORM_BIT) != ANIMATION_UNIFORM_BIT)
-    {
-        _animationPropertyBitFlag |= ANIMATION_UNIFORM_BIT;
-
-        for (unsigned int i = 0; i < count; i++)
-            _value.floatPtrValue[i] = value->getFloat(i);
-    }
-    else
-    {
-        for (unsigned int i = 0; i < count; i++)
-            _value.floatPtrValue[i] = Curve::lerp(blendWeight, _value.floatPtrValue[i], value->getFloat(i));
-    }
+    for (unsigned int i = 0; i < count; i++)
+        _value.floatPtrValue[i] = Curve::lerp(blendWeight, _value.floatPtrValue[i], value->getFloat(i));
 }
 
 void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const

@@ -566,7 +566,6 @@ extern void printError(const char* format, ...)
     va_list argptr;
     va_start(argptr, format);
     vfprintf(stderr, format, argptr);
-    fprintf(stderr, "\n");
     va_end(argptr);
 }
     
@@ -660,11 +659,6 @@ bool Platform::isVsync()
 void Platform::setVsync(bool enable)
 {
     __vsync = enable;
-}
-
-int Platform::getOrientationAngle()
-{
-    return 0;
 }
 
 void Platform::setMultiTouch(bool enabled)

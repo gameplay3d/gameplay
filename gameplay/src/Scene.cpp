@@ -59,7 +59,7 @@ void Scene::setId(const char* id)
 
 Node* Scene::findNode(const char* id, bool recursive, bool exactMatch) const
 {
-    assert(id);
+    GP_ASSERT(id);
 
     // Search immediate children first.
     for (Node* child = getFirstNode(); child != NULL; child = child->getNextSibling())
@@ -89,7 +89,7 @@ Node* Scene::findNode(const char* id, bool recursive, bool exactMatch) const
 
 unsigned int Scene::findNodes(const char* id, std::vector<Node*>& nodes, bool recursive, bool exactMatch) const
 {
-    assert(id);
+    GP_ASSERT(id);
 
     unsigned int count = 0;
 
@@ -119,6 +119,7 @@ unsigned int Scene::findNodes(const char* id, std::vector<Node*>& nodes, bool re
 Node* Scene::addNode(const char* id)
 {
     Node* node = Node::create(id);
+    GP_ASSERT(node);
     addNode(node);
 
     // Call release to decrement the ref count to 1 before returning.
@@ -129,7 +130,7 @@ Node* Scene::addNode(const char* id)
 
 void Scene::addNode(Node* node)
 {
-    assert(node);
+    GP_ASSERT(node);
 
     if (node->_scene == this)
     {
@@ -180,7 +181,7 @@ void Scene::addNode(Node* node)
 
 void Scene::removeNode(Node* node)
 {
-    assert(node);
+    GP_ASSERT(node);
 
     if (node->_scene != this)
         return;
@@ -237,7 +238,7 @@ void Scene::setActiveCamera(Camera* camera)
             // Unbind the active camera from the audio listener
             if (audioListener && (audioListener->getCamera() == _activeCamera))
             {
-                AudioListener::getInstance()->setCamera(NULL);
+                audioListener->setCamera(NULL);
             }
 
             SAFE_RELEASE(_activeCamera);
@@ -251,7 +252,7 @@ void Scene::setActiveCamera(Camera* camera)
 
             if (audioListener && _bindAudioListenerToCamera)
             {
-                AudioListener::getInstance()->setCamera(_activeCamera);
+                audioListener->setCamera(_activeCamera);
             }
         }
     }
@@ -309,6 +310,7 @@ Material* createDebugMaterial()
 
     Effect* effect = Effect::createFromSource(vs_str, fs_str);
     Material* material = Material::create(effect);
+    GP_ASSERT(material && material->getStateBlock());
     material->getStateBlock()->setDepthTest(true);
 
     SAFE_RELEASE(effect);
@@ -359,6 +361,8 @@ struct DebugVertex
 
 void drawDebugLine(MeshBatch* batch, const Vector3& point1, const Vector3& point2, const Vector3& color)
 {
+    GP_ASSERT(batch);
+
     static DebugVertex verts[2];
 
     verts[0].x = point1.x;
@@ -457,12 +461,15 @@ void drawDebugSphere(MeshBatch* batch, const BoundingSphere& sphere)
 
 void drawDebugNode(MeshBatch* batch, Node* node, unsigned int debugFlags)
 {
+    GP_ASSERT(node);
     Model* model = node->getModel();
 
     if ((debugFlags & Scene::DEBUG_BOXES) && model)
     {
+        GP_ASSERT(model->getMesh());
+
         MeshSkin* skin = model->getSkin();
-        if (skin && skin->getRootJoint()->getParent())
+        if (skin && skin->getRootJoint() && skin->getRootJoint()->getParent())
         {
             // For skinned meshes that have a parent node to the skin's root joint,
             // we need to transform the bounding volume by that parent node's transform
@@ -480,11 +487,9 @@ void drawDebugNode(MeshBatch* batch, Node* node, unsigned int debugFlags)
         drawDebugSphere(batch, node->getBoundingSphere());
     }
 
-    Node* child = node->getFirstChild();
-    while (child)
+    for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
         drawDebugNode(batch, child, debugFlags);
-        child = child->getNextSibling();
     }
 }
 
@@ -507,17 +512,19 @@ void Scene::drawDebug(unsigned int debugFlags)
 
     _debugBatch->begin();
 
-    Node* node = _firstNode;
-    while (node)
+    for (Node* node = _firstNode; node != NULL; node = node->_nextSibling)
     {
         drawDebugNode(_debugBatch, node, debugFlags);
-        node = node->_nextSibling;
     }
 
     _debugBatch->end();
 
     if (_activeCamera)
+    {
+        GP_ASSERT(_debugBatch->getMaterial());
+        GP_ASSERT(_debugBatch->getMaterial()->getParameter("u_viewProjectionMatrix"));
         _debugBatch->getMaterial()->getParameter("u_viewProjectionMatrix")->setValue(_activeCamera->getViewProjectionMatrix());
+    }
 
     _debugBatch->draw();
 }

@@ -283,7 +283,7 @@ private:
     /**
      * Updates the animation with the elapsed time.
      */
-    bool update(unsigned long elapsedTime, std::list<AnimationTarget*>* activeTargets);
+    bool update(unsigned long elapsedTime);
 
     /**
      * Handles when the AnimationClip begins.

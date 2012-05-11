@@ -9,8 +9,8 @@
 #include <windowsx.h>
 
 // Default to 720p
-static int __windowWidth = 1280;
-static int __windowHeight = 720;
+static int __width = 1280;
+static int __height = 720;
 
 static long __timeTicksPerMillis;
 static long __timeStart;
@@ -247,10 +247,10 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
 
 void UpdateCapture(LPARAM lParam)
 {
-	if ((lParam & MK_LBUTTON) || (lParam & MK_MBUTTON) || (lParam & MK_RBUTTON))
-		SetCapture(__hwnd);
-	else
-		ReleaseCapture();
+    if ((lParam & MK_LBUTTON) || (lParam & MK_MBUTTON) || (lParam & MK_RBUTTON))
+        SetCapture(__hwnd);
+    else
+        ReleaseCapture();
 }
 
 LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -262,8 +262,8 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
 
     // Scale factors for the mouse movement used to simulate the accelerometer.
-    static const float ACCELEROMETER_X_FACTOR = 90.0f / (float)__windowWidth;
-    static const float ACCELEROMETER_Y_FACTOR = 90.0f / (float)__windowHeight;
+    static const float ACCELEROMETER_X_FACTOR = 90.0f / __width;
+    static const float ACCELEROMETER_Y_FACTOR = 90.0f / __height;
 
     static int lx, ly;
 
@@ -290,7 +290,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
 
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, x, y, 0))
         {
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, x, y, 0);
@@ -306,29 +306,29 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, x, y, 0);
         }
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         return 0;
     }
     case WM_RBUTTONDOWN:
-		UpdateCapture(wParam);
-		lx = GET_X_LPARAM(lParam);
+        UpdateCapture(wParam);
+        lx = GET_X_LPARAM(lParam);
         ly = GET_Y_LPARAM(lParam);
         gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, lx, ly, 0);
         break;
 
     case WM_RBUTTONUP:
         gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         break;
 
     case WM_MBUTTONDOWN:
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         break;
 
     case WM_MBUTTONUP:
         gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         break;
 
     case WM_MOUSEMOVE:
@@ -336,30 +336,30 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
 
-		// Allow Game::mouseEvent a chance to handle (and possibly consume) the event.
-		if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
-		{
-			if ((wParam & MK_LBUTTON) == MK_LBUTTON)
-			{
-				// Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
-				gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0);
-				return 0;
-			}
-			else if ((wParam & MK_RBUTTON) == MK_RBUTTON)
-			{
-				// Update the pitch and roll by adding the scaled deltas.
-				__roll += (float)(x - lx) * ACCELEROMETER_X_FACTOR;
-				__pitch += -(float)(y - ly) * ACCELEROMETER_Y_FACTOR;
+        // Allow Game::mouseEvent a chance to handle (and possibly consume) the event.
+        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
+        {
+            if ((wParam & MK_LBUTTON) == MK_LBUTTON)
+            {
+                // Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
+                gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0);
+                return 0;
+            }
+            else if ((wParam & MK_RBUTTON) == MK_RBUTTON)
+            {
+                // Update the pitch and roll by adding the scaled deltas.
+                __roll += (float)(x - lx) * ACCELEROMETER_X_FACTOR;
+                __pitch += -(float)(y - ly) * ACCELEROMETER_Y_FACTOR;
 
-				// Clamp the values to the valid range.
-				__roll = max(min(__roll, 90.0f), -90.0f);
-				__pitch = max(min(__pitch, 90.0f), -90.0f);
+                // Clamp the values to the valid range.
+                __roll = max(min(__roll, 90.0f), -90.0f);
+                __pitch = max(min(__pitch, 90.0f), -90.0f);
 
-				// Update the last X/Y values.
-				lx = x;
-				ly = y;
-			}
-		}
+                // Update the last X/Y values.
+                lx = x;
+                ly = y;
+            }
+        }
         break;
     }
 
@@ -416,14 +416,12 @@ extern void printError(const char* format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
-    fprintf(stderr, "\n");
     int sz = vfprintf(stderr, format, argptr);
     if (sz > 0)
     {
-        char* buf = new char[sz + 2];
+        char* buf = new char[sz + 1];
         vsprintf(buf, format, argptr);
-        buf[sz] = '\n';
-        buf[sz+1] = 0;
+        buf[sz] = 0;
         OutputDebugStringA(buf);
         SAFE_DELETE_ARRAY(buf);
     }
@@ -462,31 +460,33 @@ Platform* Platform::create(Game* game)
     std::wstring windowName;
     bool fullscreen = false;
 
-    // Parse window game config properties
+    // Read window settings from config
     Properties* config = game->getConfig()->getNamespace("window", true);
     if (config)
     {
+        // Read window title
+        const char* title = config->getString("title");
+        if (title)
+        {
+            int len = MultiByteToWideChar(CP_ACP, 0, title, -1, NULL, 0);
+            wchar_t* wtitle = new wchar_t[len];
+            MultiByteToWideChar(CP_ACP, 0, title, -1, wtitle, len);
+            SAFE_DELETE_ARRAY(wtitle);
+        }
+
         // Read window size
         int width = config->getInt("width");
+        if (width != 0)
+            __width = width;
         int height = config->getInt("height");
-        if (width > 0)
-            __windowWidth = width;
-        if (height > 0)
-            __windowHeight = height;
+        if (height != 0)
+            __height = height;
 
-        // Read window caption
-        const char* title = config->getString("title");
-        int len = MultiByteToWideChar(CP_ACP, 0, title, -1, 0, 0);
-        wchar_t* buf = new wchar_t[len];
-        MultiByteToWideChar(CP_ACP, 0, title, -1, buf, len);
-        windowName = buf;
-        SAFE_DELETE_ARRAY(buf);
-
-        // Was fullscreen mode specified?
+        // Read fullscreen state
         fullscreen = config->getBool("fullscreen");
     }
 
-    RECT rect = { 0, 0, __windowWidth, __windowHeight };
+    RECT rect = { 0, 0, __width, __height };
 
     // Register our window class.
     WNDCLASSEX wc;
@@ -505,46 +505,33 @@ Platform* Platform::create(Game* game)
 
     if (!::RegisterClassEx(&wc))
         goto error;
-    
-    // Set the window style.
-    DWORD style, styleEx;
-    
+
     if (fullscreen)
     {
         DEVMODE dm;
-        memset(&dm, 0, sizeof(DEVMODE));
-        dm.dmSize = sizeof(DEVMODE);
-        dm.dmPelsWidth = __windowWidth;
-        dm.dmPelsHeight = __windowHeight;
-        dm.dmBitsPerPel = 32;
+        memset(&dm, 0, sizeof(dm));
+        dm.dmSize= sizeof(dm);
+        dm.dmPelsWidth	= __width;
+        dm.dmPelsHeight	= __height;
+        dm.dmBitsPerPel	= 32;
         dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
+        // Try To Set Selected Mode And Get Results.  NOTE: CDS_FULLSCREEN Gets Rid Of Start Bar.
         if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
         {
-            // Revert to windowed mode (unsupported resolution?)
             fullscreen = false;
-            printError("Failed to switch to full-screen mode with resolution of %dx%d.", __windowWidth, __windowHeight);
+            GP_ERROR("Failed to start fullscreen with resolution %dx%d.", __width, __height);
         }
     }
 
-    if (fullscreen)
-    {
-        style = WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-        styleEx = WS_EX_APPWINDOW;
-
-        // Hide cursor in fullscreen mode?
-        //ShowCursor(FALSE);
-    }
-    else
-    {
-        //style = WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-        style = WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-        styleEx = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
-    }
+    // Set the window style.
+    DWORD style   = (fullscreen ? WS_POPUP : WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+    //DWORD style   = (fullscreen ? WS_POPUP : WS_OVERLAPPEDWINDOW) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+    DWORD styleEx = (fullscreen ? WS_EX_APPWINDOW : WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
 
     // Adjust the window rectangle so the client size is the requested size.
     AdjustWindowRectEx(&rect, style, FALSE, styleEx);
-    
+
     // Create the native Windows window.
     __hwnd = CreateWindowEx(styleEx, windowClass, windowName.c_str(), style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
 
@@ -552,8 +539,8 @@ Platform* Platform::create(Game* game)
     __hdc = GetDC(__hwnd);
 
     // Center the window
-    const int screenX = (GetSystemMetrics(SM_CXSCREEN) - __windowWidth) / 2;
-    const int screenY = (GetSystemMetrics(SM_CYSCREEN) - __windowHeight) / 2;
+    const int screenX = (GetSystemMetrics(SM_CXSCREEN) - __width) / 2;
+    const int screenY = (GetSystemMetrics(SM_CYSCREEN) - __height) / 2;
     ::SetWindowPos(__hwnd, __hwnd, screenX, screenY, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 
     // Choose pixel format. 32-bit. RGBA.
@@ -661,12 +648,12 @@ void Platform::signalShutdown()
 
 unsigned int Platform::getDisplayWidth()
 {
-    return __windowWidth;
+    return __width;
 }
 
 unsigned int Platform::getDisplayHeight()
 {
-    return __windowHeight;
+    return __height;
 }
     
 long Platform::getAbsoluteTime()
@@ -692,11 +679,6 @@ void Platform::setVsync(bool enable)
 {
      wglSwapIntervalEXT(enable ? 1 : 0);
     __vsync = enable;
-}
-
-int Platform::getOrientationAngle()
-{
-    return 0;
 }
 
 void Platform::setMultiTouch(bool enabled)

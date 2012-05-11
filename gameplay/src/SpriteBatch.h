@@ -25,6 +25,7 @@ namespace gameplay
 class SpriteBatch
 {
     friend class Bundle;
+    friend class Font;
 
 public:
 
@@ -163,7 +164,7 @@ public:
      * @param rotationAngle The rotation angle.
      */
     void draw(const Vector3& position, const Vector3& right, const Vector3& forward, float width, float height, 
-        float u1, float v1, float u2, float v2, const Vector4& color, const Vector2& rotationPoint, float rotationAngle);
+              float u1, float v1, float u2, float v2, const Vector4& color, const Vector2& rotationPoint, float rotationAngle);
 
     /**
      * Draws a single sprite.
@@ -237,7 +238,7 @@ public:
      * 
      * @return The material.
      */
-    Material* getMaterial();
+    Material* getMaterial() const;
 
     /**
      * Sets a custom projection matrix to use with the sprite batch.
@@ -254,6 +255,22 @@ public:
 private:
 
     /**
+     * Sprite vertex structure used for batching.
+     */
+    struct SpriteVertex
+    {
+        float x;        
+        float y;
+        float z;
+        float u;
+        float v;
+        float r;
+        float g;
+        float b;
+        float a;
+    };
+
+    /**
      * Constructor.
      */
     SpriteBatch();
@@ -266,6 +283,55 @@ private:
     SpriteBatch(const SpriteBatch& copy);
 
     const Matrix& getOrthoMatrix() const;
+
+    /**
+     * Adds a single sprite to a SpriteVertex array.
+     * 
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param width The sprite width.
+     * @param height The sprite height
+     * @param u1 Texture coordinate.
+     * @param v1 Texture coordinate.
+     * @param u2 Texture coordinate.
+     * @param v2 Texture coordinate.
+     * @param color The color to tint the sprite. Use white for no tint.
+     * @param clip The clip rectangle.
+     */
+    void addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, SpriteBatch::SpriteVertex* vertices);
+
+    /**
+     * Adds a single sprite to a SpriteVertex array, clipped within a rectangle.
+     * 
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param width The sprite width.
+     * @param height The sprite height
+     * @param u1 Texture coordinate.
+     * @param v1 Texture coordinate.
+     * @param u2 Texture coordinate.
+     * @param v2 Texture coordinate.
+     * @param color The color to tint the sprite. Use white for no tint.
+     * @param clip The clip rectangle.
+     */
+    void addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip, SpriteBatch::SpriteVertex* vertices);
+
+    /**
+     * Draws an array of vertices.
+     *
+     * @param vertices The vertices to draw.
+     * @param vertexCount The number of vertices within the vertex array.
+     * @param indices The vertex indices.
+     * @param indexCount The number of indices within the index array.
+     */
+    void draw(SpriteBatch::SpriteVertex* vertices, unsigned int vertexCount, unsigned short* indices, unsigned int indexCount);
+
+    /**
+     * Clip position and size to fit within clip region.
+     *
+     * @return true if any part of sprite intersects with the clip region and therefore needs drawing, false otherwise.
+     */
+    bool clipSprite(const Rectangle& clip, float& x, float& y, float& width, float& height, float& u1, float& v1, float& u2, float& v2);
 
     MeshBatch* _batch;
     bool _customEffect;

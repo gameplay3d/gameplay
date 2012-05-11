@@ -106,7 +106,6 @@ theme particleEditor
     {
         stateNormal
         {
-            skin = empty
         }
     }
 
@@ -117,7 +116,7 @@ theme particleEditor
             skin = mainNormal
             imageList = normalImages
 
-            font = res/arial40.gpb
+            font = res/arial18.gpb
             textColor = #ffffffff
             fontSize = 15
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -148,17 +147,20 @@ theme particleEditor
         }
     }
 
-    style noBorder : basic
+    style noBorder
     {
         stateNormal
         {
-            skin = empty
+            imageList = normalImages
+            font = res/arial18.gpb
+            textColor = #ffffffff
+            fontSize = 15
             textAlignment = ALIGN_VCENTER_HCENTER
         }
 
         stateActive
         {
-            skin = empty
+            imageList = activeImages
             textAlignment = ALIGN_VCENTER_HCENTER
         }
     }
@@ -190,7 +192,7 @@ theme particleEditor
         {
             skin = empty
             textColor = #ffffffff
-            font = res/arial40.gpb
+            font = res/arial18.gpb
             fontSize = 25
             textAlignment = ALIGN_TOP_HCENTER
         }
