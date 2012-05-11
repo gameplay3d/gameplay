@@ -89,38 +89,38 @@ void Vector2::add(const Vector2& v1, const Vector2& v2, Vector2* dst)
 
 void Vector2::clamp(const Vector2& min, const Vector2& max)
 {
-    GP_ASSERT(!( min.x > max.x || min.y > max.y ));
+    GP_ASSERT(!(min.x > max.x || min.y > max.y ));
 
     // Clamp the x value.
-    if ( x < min.x )
+    if (x < min.x)
         x = min.x;
-    if ( x > max.x )
+    if (x > max.x)
         x = max.x;
 
     // Clamp the y value.
-    if ( y < min.y )
+    if (y < min.y)
         y = min.y;
-    if ( y > max.y )
+    if (y > max.y)
         y = max.y;
 }
 
 void Vector2::clamp(const Vector2& v, const Vector2& min, const Vector2& max, Vector2* dst)
 {
     GP_ASSERT(dst);
-    GP_ASSERT(!( min.x > max.x || min.y > max.y ));
+    GP_ASSERT(!(min.x > max.x || min.y > max.y ));
 
     // Clamp the x value.
     dst->x = v.x;
-    if ( dst->x < min.x )
+    if (dst->x < min.x)
         dst->x = min.x;
-    if ( dst->x > max.x )
+    if (dst->x > max.x)
         dst->x = max.x;
 
     // Clamp the y value.
     dst->y = v.y;
-    if ( dst->y < min.y )
+    if (dst->y < min.y)
         dst->y = min.y;
-    if ( dst->y > max.y )
+    if (dst->y > max.y)
         dst->y = max.y;
 }
 
