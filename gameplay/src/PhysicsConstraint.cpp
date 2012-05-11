@@ -145,7 +145,7 @@ Vector3 PhysicsConstraint::getWorldCenterOfMass(const Model* model)
         else
         {
             // Warn the user that the model has no bounding volume.
-            GP_WARN("Model \'%s\' has no bounding volume - center of mass is defaulting to local coordinate origin.", model->getNode()->getId());
+            GP_WARN("Model '%s' has no bounding volume - center of mass is defaulting to local coordinate origin.", model->getNode()->getId());
             model->getNode()->getWorldMatrix().transformPoint(&center);
         }
     }

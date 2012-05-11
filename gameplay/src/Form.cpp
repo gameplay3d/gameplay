@@ -80,7 +80,7 @@ Form* Form::create(const char* url)
         layout = ScrollLayout::create();
         break;
     default:
-        GP_ERROR("Unsupported layout type \'%d\'.", getLayoutType(layoutString));
+        GP_ERROR("Unsupported layout type '%d'.", getLayoutType(layoutString));
     }
 
     Theme* theme = Theme::create(themeFile);
