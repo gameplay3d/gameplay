@@ -169,6 +169,9 @@ static bool initEGL()
     
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_WIDTH, &__width);
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_HEIGHT, &__height);
+
+    if (__width < __height)
+        __orientationAngle = 0;
     
     // Set vsync.
     eglSwapInterval(__eglDisplay, WINDOW_VSYNC ? 1 : 0);
@@ -866,11 +869,6 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
-int Platform::getOrientationAngle()
-{
-    return __orientationAngle;
-}
-
 void Platform::setMultiTouch(bool enabled)
 {
     __multiTouch = enabled;
@@ -888,10 +886,19 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     
     // By default, android accelerometer values are oriented to the portrait mode.
     // flipping the x and y to get the desired landscape mode values.
-    tx = -__sensorEvent.acceleration.y;
-    ty = __sensorEvent.acceleration.x;
-    tz = -__sensorEvent.acceleration.z;
-    
+    if (__orientationAngle == 90)
+    {
+        tx = -__sensorEvent.acceleration.y;
+        ty = __sensorEvent.acceleration.x;
+    }
+    else
+    {
+        // 0
+        tx = __sensorEvent.acceleration.x;
+        ty = __sensorEvent.acceleration.y;
+    }
+    tz = __sensorEvent.acceleration.z;
+
     if (pitch != NULL)
         *pitch = -atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
     if (roll != NULL)

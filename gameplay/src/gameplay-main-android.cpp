@@ -18,6 +18,7 @@ void android_main(struct android_app* state)
     
     __state = state;
     Game* game = Game::getInstance();
+    GP_ASSERT(game != NULL);
     Platform* platform = Platform::create(game);
     platform->enterMessagePump();
     delete platform;

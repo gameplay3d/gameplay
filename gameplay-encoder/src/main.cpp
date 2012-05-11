@@ -7,7 +7,7 @@
 
 using namespace gameplay;
 
-std::string getFileName(const std::string& filepath)
+static std::string getFileName(const std::string& filepath)
 {
     size_t index1 = filepath.find_last_of('\\');
     size_t index2 = filepath.find_last_of('/');

@@ -21,6 +21,7 @@ void AnimationController::stopAllAnimations()
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = *clipIter;
+        GP_ASSERT(clip);
         clip->stop();
         clipIter++;
     }
@@ -68,6 +69,7 @@ void AnimationController::schedule(AnimationClip* clip)
         _state = RUNNING;
     }
 
+    GP_ASSERT(clip);
     clip->addRef();
     _runningClips.push_back(clip);
 }
@@ -96,11 +98,14 @@ void AnimationController::update(long elapsedTime)
     if (_state != RUNNING)
         return;
 
+    Transform::suspendTransformChanged();
+
     // Loop through running clips and call update() on them.
     std::list<AnimationClip*>::iterator clipIter = _runningClips.begin();
     while (clipIter != _runningClips.end())
     {
         AnimationClip* clip = (*clipIter);
+        GP_ASSERT(clip);
         if (clip->isClipStateBitSet(AnimationClip::CLIP_IS_RESTARTED_BIT))
         {   // If the CLIP_IS_RESTARTED_BIT is set, we should end the clip and 
             // move it from where it is in the running clips list to the back.
@@ -119,6 +124,8 @@ void AnimationController::update(long elapsedTime)
             clipIter++;
         }
     }
+
+    Transform::resumeTransformChanged();
 
     if (_runningClips.empty())
         _state = IDLE;
