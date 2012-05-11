@@ -68,16 +68,16 @@ void Ref::printLeaks()
     // Dump Ref object memory leaks
     if (__refAllocationCount == 0)
     {
-        printError("[memory] All Ref objects successfully cleaned up (no leaks detected).");
+        printError("[memory] All Ref objects successfully cleaned up (no leaks detected).\n");
     }
     else
     {
-        printError("[memory] WARNING: %d Ref objects still active in memory.", __refAllocationCount);
+        printError("[memory] WARNING: %d Ref objects still active in memory.\n", __refAllocationCount);
         for (RefAllocationRecord* rec = __refAllocations; rec != NULL; rec = rec->next)
         {
             Ref* ref = rec->ref;
             const char* type = typeid(*ref).name();
-            printError("[memory] LEAK: Ref object '%s' still active with reference count %d.", (type ? type : ""), ref->getRefCount());
+            printError("[memory] LEAK: Ref object '%s' still active with reference count %d.\n", (type ? type : ""), ref->getRefCount());
         }
     }
 }
@@ -103,7 +103,7 @@ void untrackRef(Ref* ref, void* record)
     RefAllocationRecord* rec = (RefAllocationRecord*)record;
     if (rec->ref != ref)
     {
-        printError("[memory] CORRUPTION: Attempting to free Ref with invalid ref tracking record.");
+        printError("[memory] CORRUPTION: Attempting to free Ref with invalid ref tracking record.\n");
         return;
     }
 
