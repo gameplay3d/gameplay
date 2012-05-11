@@ -22,6 +22,7 @@ Joint* Joint::create(const char* id)
 Node* Joint::cloneSingleNode(NodeCloneContext &context) const
 {
     Joint* copy = Joint::create(getId());
+    GP_ASSERT(copy);
     context.registerClonedNode(this, copy);
     copy->_bindPose = _bindPose;
     copy->_skinCount = _skinCount;
@@ -54,6 +55,7 @@ void Joint::updateJointMatrix(const Matrix& bindShape, Vector4* matrixPalette)
         Matrix::multiply(Node::getWorldMatrix(), getInverseBindPose(), &t);
         Matrix::multiply(t, bindShape, &t);
 
+        GP_ASSERT(matrixPalette);
         matrixPalette[0].set(t.m[0], t.m[4], t.m[8], t.m[12]);
         matrixPalette[1].set(t.m[1], t.m[5], t.m[9], t.m[13]);
         matrixPalette[2].set(t.m[2], t.m[6], t.m[10], t.m[14]);

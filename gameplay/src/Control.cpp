@@ -1273,7 +1273,7 @@ Control::Alignment Control::getAlignment(const char* alignment)
     }
     else
     {
-        GP_ERROR("Failed to get corresponding control alignment for unsupported value \'%s\'.", alignment);
+        GP_ERROR("Failed to get corresponding control alignment for unsupported value '%s'.", alignment);
     }
 
     // Default.

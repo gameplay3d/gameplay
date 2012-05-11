@@ -245,23 +245,21 @@ const Frustum& Camera::getFrustum() const
 
 void Camera::project(const Rectangle& viewport, const Vector3& position, float* x, float* y, float* depth)
 {
-    // Determine viewport coords to use.
-    float vpx = viewport.x;
-    float vpy = viewport.y;
-    float vpw = viewport.width;
-    float vph = viewport.height;
+    GP_ASSERT(x);
+    GP_ASSERT(y);
 
     // Transform the point to clip-space.
     Vector4 clipPos;
     getViewProjectionMatrix().transformVector(Vector4(position.x, position.y, position.z, 1.0f), &clipPos);
 
     // Compute normalized device coordinates.
+    GP_ASSERT(clipPos.w != 0.0f);
     float ndcX = clipPos.x / clipPos.w;
     float ndcY = clipPos.y / clipPos.w;
 
     // Compute screen coordinates by applying our viewport transformation.
-    *x = vpx + (ndcX + 1.0f) * 0.5f * vpw;
-    *y = vpy + (1.0f - (ndcY + 1.0f) * 0.5f) * vph;
+    *x = viewport.x + (ndcX + 1.0f) * 0.5f * viewport.width;
+    *y = viewport.y + (1.0f - (ndcY + 1.0f) * 0.5f) * viewport.height;
     if (depth)
     {
         float ndcZ = clipPos.z / clipPos.w;
@@ -271,18 +269,11 @@ void Camera::project(const Rectangle& viewport, const Vector3& position, float* 
 
 void Camera::unproject(const Rectangle& viewport, float x, float y, float depth, Vector3* dst)
 {
-    // Determine viewport coords to use.
-    float vpx = viewport.x;
-    float vpy = viewport.y;
-    float vpw = viewport.width;
-    float vph = viewport.height;
+    GP_ASSERT(dst);
     
     // Create our screen space position in NDC.
-    Vector4 screen(
-        ((float)x - (float)vpx) / (float)vpw,
-        ((float)(vph - y) - (float)vpy) / (float)vph,
-        depth,
-        1.0f );
+    GP_ASSERT(viewport.width != 0.0f && viewport.height != 0.0f);
+    Vector4 screen((x - viewport.x) / viewport.width, ((viewport.height - y) - viewport.y) / viewport.height, depth, 1.0f);
 
     // Map to range -1 to 1.
     screen.x = screen.x * 2.0f - 1.0f;
@@ -305,6 +296,8 @@ void Camera::unproject(const Rectangle& viewport, float x, float y, float depth,
 
 void Camera::pickRay(const Rectangle& viewport, float x, float y, Ray* dst)
 {
+    GP_ASSERT(dst);
+
     // Get the world-space position at the near clip plane.
     Vector3 nearPoint;
     unproject(viewport, x, y, 0.0f, &nearPoint);

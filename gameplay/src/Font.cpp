@@ -1702,7 +1702,7 @@ Font::Justify Font::getJustify(const char* justify)
     }
     else
     {
-        GP_ERROR("Failed to get corresponding font justification for unsupported value \'%s\'.", justify);
+        GP_ERROR("Failed to get corresponding font justification for unsupported value '%s'.", justify);
     }
 
     // Default.
