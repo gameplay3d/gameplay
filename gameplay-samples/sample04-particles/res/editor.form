@@ -5,30 +5,6 @@ form particleEditor
     autoWidth = true
     autoHeight = true
 
-    // Diagnostics
-    container diagnostics
-    {
-        style = noBorder
-        size = 200, 50
-        alignment = ALIGN_TOP_HCENTER
-        layout = LAYOUT_VERTICAL
-
-        // Number of currently alive particles
-        label particlesCount
-        {
-            style = iconNoBorder
-            autoWidth = true
-            height = 25
-            text = Particles: 0
-        }
-
-        // FPS
-        label FPS : particlesCount
-        {
-            text = FPS: 0
-        }
-    }
-
     container presets
     {
         style = basic

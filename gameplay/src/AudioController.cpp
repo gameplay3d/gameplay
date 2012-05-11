@@ -18,19 +18,19 @@ AudioController::~AudioController()
 
 void AudioController::initialize()
 {
-    _alcDevice = alcOpenDevice (NULL);
+    _alcDevice = alcOpenDevice(NULL);
     if (!_alcDevice)
     {
-        LOG_ERROR("AudioController::initialize() error. Unable to open OpenAL device.\n");
-        return;  
+        GP_ERROR("Unable to open OpenAL device.\n");
+        return;
     }
-        
+    
     _alcContext = alcCreateContext(_alcDevice, NULL);
     ALCenum alcErr = alcGetError(_alcDevice);
     if (!_alcContext || alcErr != ALC_NO_ERROR)
     {
-        alcCloseDevice (_alcDevice);
-        LOG_ERROR_VARG("AudioController::initialize() error. Unable to create OpenAL context. Error: %d\n", alcErr);
+        alcCloseDevice(_alcDevice);
+        GP_ERROR("Unable to create OpenAL context. Error: %d\n", alcErr);
         return;
     }
     
@@ -38,7 +38,7 @@ void AudioController::initialize()
     alcErr = alcGetError(_alcDevice);
     if (alcErr != ALC_NO_ERROR)
     {
-        LOG_ERROR_VARG("AudioController::initialize() error. Unable to make OpenAL context current. Error: %d\n", alcErr);
+        GP_ERROR("Unable to make OpenAL context current. Error: %d\n", alcErr);
     }
 }
 
@@ -65,6 +65,7 @@ void AudioController::pause()
     AudioSource* source = NULL;
     while (itr != _playingSources.end())
     {
+        GP_ASSERT(*itr);
         source = *itr;
         _pausingSource = source;
         source->pause();
@@ -83,6 +84,7 @@ void AudioController::resume()
     AudioSource* source = NULL;
     while (itr != _playingSources.end())
     {
+        GP_ASSERT(*itr);
         source = *itr;
         source->resume();
         itr++;
@@ -94,10 +96,10 @@ void AudioController::update(long elapsedTime)
     AudioListener* listener = AudioListener::getInstance();
     if (listener)
     {
-        alListenerf(AL_GAIN, listener->getGain());
-        alListenerfv(AL_ORIENTATION, (ALfloat*)listener->getOrientation());
-        alListenerfv(AL_VELOCITY, (ALfloat*)&listener->getVelocity());
-        alListenerfv(AL_POSITION, (ALfloat*)&listener->getPosition());
+        AL_CHECK( alListenerf(AL_GAIN, listener->getGain()) );
+        AL_CHECK( alListenerfv(AL_ORIENTATION, (ALfloat*)listener->getOrientation()) );
+        AL_CHECK( alListenerfv(AL_VELOCITY, (ALfloat*)&listener->getVelocity()) );
+        AL_CHECK( alListenerfv(AL_POSITION, (ALfloat*)&listener->getPosition()) );
     }
 }
 

@@ -3,7 +3,7 @@
 namespace gameplay
 {
 
-Slider::Slider()
+Slider::Slider() : _minImage(NULL), _maxImage(NULL), _trackImage(NULL), _markerImage(NULL)
 {
 }
 
@@ -13,6 +13,8 @@ Slider::~Slider()
 
 Slider* Slider::create(Theme::Style* style, Properties* properties)
 {
+    GP_ASSERT(properties);
+
     Slider* slider = new Slider();
     slider->initialize(style, properties);
 
@@ -68,8 +70,7 @@ void Slider::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
     {
-        assert("TEXT_CHANGED event is not applicable to Slider.");
-        eventFlags &= ~Listener::TEXT_CHANGED;
+        GP_ERROR("TEXT_CHANGED event is not applicable to Slider.");
     }
 
     Control::addListener(listener, eventFlags);
@@ -87,21 +88,20 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     case Touch::TOUCH_PRESS:
         _state = Control::ACTIVE;
         // Fall through to calculate new value.
-
     case Touch::TOUCH_MOVE:
     case Touch::TOUCH_RELEASE:
         if (_state == ACTIVE &&
-            x > 0 && x <= _clipBounds.width &&
-            y > 0 && y <= _clipBounds.height)
+            x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
         {
             // Horizontal case.
             const Theme::Border& border = getBorder(_state);
             const Theme::Padding& padding = getPadding();
-            const Rectangle& minCapRegion = getImageRegion("minCap", _state);
-            const Rectangle& maxCapRegion = getImageRegion("maxCap", _state);
+            const Rectangle& minCapRegion = _minImage->getRegion();
+            const Rectangle& maxCapRegion = _maxImage->getRegion();
 
             float markerPosition = ((float)x - maxCapRegion.width - border.left - padding.left) /
-                (_clipBounds.width - border.left - border.right - padding.left - padding.right - minCapRegion.width - maxCapRegion.width);
+                (_bounds.width - border.left - border.right - padding.left - padding.right - minCapRegion.width - maxCapRegion.width);
             
             if (markerPosition > 1.0f)
             {
@@ -141,9 +141,9 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     return Control::touchEvent(evt, x, y, contactIndex);
 }
 
-void Slider::update(const Rectangle& clip)
+void Slider::update(const Rectangle& clip, const Vector2& offset)
 {
-    Label::update(clip);
+    Label::update(clip, offset);
 
     _minImage = getImage("minCap", _state);
     _maxImage = getImage("maxCap", _state);
@@ -153,6 +153,12 @@ void Slider::update(const Rectangle& clip)
 
 void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
+    GP_ASSERT(spriteBatch);
+    GP_ASSERT(_minImage);
+    GP_ASSERT(_maxImage);
+    GP_ASSERT(_markerImage);
+    GP_ASSERT(_trackImage);
+
     // TODO: Vertical slider.
 
     // The slider is drawn in the center of the control (perpendicular to orientation).
@@ -182,23 +188,23 @@ void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     trackColor.w *= _opacity;
 
     // Draw order: track, caps, marker.
-    float midY = clip.y + _clipBounds.y + (_clipBounds.height - border.bottom - padding.bottom) / 2.0f;
-    Vector2 pos(clip.x + _clipBounds.x + border.left + padding.left, midY - trackRegion.height / 2.0f);
-    spriteBatch->draw(pos.x, pos.y, _clipBounds.width, trackRegion.height, track.u1, track.v1, track.u2, track.v2, trackColor, _clip);
+    float midY = _viewportBounds.y + (_viewportBounds.height) * 0.5f;
+    Vector2 pos(_viewportBounds.x, midY - trackRegion.height * 0.5f);
+    spriteBatch->draw(pos.x, pos.y, _viewportBounds.width, trackRegion.height, track.u1, track.v1, track.u2, track.v2, trackColor, _viewportClipBounds);
 
     pos.y = midY - minCapRegion.height * 0.5f;
     pos.x -= minCapRegion.width * 0.5f;
-    spriteBatch->draw(pos.x, pos.y, minCapRegion.width, minCapRegion.height, minCap.u1, minCap.v1, minCap.u2, minCap.v2, minCapColor, _clip);
+    spriteBatch->draw(pos.x, pos.y, minCapRegion.width, minCapRegion.height, minCap.u1, minCap.v1, minCap.u2, minCap.v2, minCapColor, _viewportClipBounds);
         
-    pos.x = clip.x + _clipBounds.x + _clipBounds.width - border.right - padding.right - maxCapRegion.width * 0.5f;
-    spriteBatch->draw(pos.x, pos.y, maxCapRegion.width, maxCapRegion.height, maxCap.u1, maxCap.v1, maxCap.u2, maxCap.v2, maxCapColor, _clip);
+    pos.x = _viewportBounds.x + _viewportBounds.width - maxCapRegion.width * 0.5f;
+    spriteBatch->draw(pos.x, pos.y, maxCapRegion.width, maxCapRegion.height, maxCap.u1, maxCap.v1, maxCap.u2, maxCap.v2, maxCapColor, _viewportClipBounds);
 
     // Percent across.
     float markerPosition = (_value - _min) / (_max - _min);
-    markerPosition *= _clipBounds.width - border.left - padding.left - border.right - padding.right - minCapRegion.width * 0.5f - maxCapRegion.width * 0.5f - markerRegion.width;
-    pos.x = clip.x + _clipBounds.x + border.left + padding.left + minCapRegion.width * 0.5f + markerPosition;
+    markerPosition *= _viewportBounds.width - minCapRegion.width * 0.5f - maxCapRegion.width * 0.5f - markerRegion.width;
+    pos.x = _viewportBounds.x + minCapRegion.width * 0.5f + markerPosition;
     pos.y = midY - markerRegion.height / 2.0f;
-    spriteBatch->draw(pos.x, pos.y, markerRegion.width, markerRegion.height, marker.u1, marker.v1, marker.u2, marker.v2, markerColor, _clip);
+    spriteBatch->draw(pos.x, pos.y, markerRegion.width, markerRegion.height, marker.u1, marker.v1, marker.u2, marker.v2, markerColor, _viewportClipBounds);
 }
 
 }
