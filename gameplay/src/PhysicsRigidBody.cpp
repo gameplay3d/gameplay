@@ -147,7 +147,7 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "rigidBody") == 0))
     {
-        GP_WARN("Failed to load rigid body from properties object: must be non-null object and have namespace equal to \'rigidBody\'.");
+        GP_WARN("Failed to load rigid body from properties object: must be non-null object and have namespace equal to 'rigidBody'.");
         return NULL;
     }
 

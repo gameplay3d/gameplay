@@ -121,7 +121,7 @@ void Container::addControls(Theme* theme, Properties* properties)
         }
         else
         {
-            GP_ERROR("Failed to create control; unrecognized control name \'%s\'.", controlName.c_str());
+            GP_ERROR("Failed to create control; unrecognized control name '%s'.", controlName.c_str());
         }
 
         // Add the new control to the form.

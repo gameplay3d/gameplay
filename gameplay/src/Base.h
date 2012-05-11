@@ -62,7 +62,7 @@ extern void printError(const char* format, ...);
 #define GP_ASSERT(expression) do { \
     if (!(expression)) \
     { \
-        printError("%s -- Assertion \'" #expression "\' failed.\n", __FUNCTION__); \
+        printError("%s -- Assertion '" #expression "' failed.\n", __FUNCTION__); \
         GP_FORCE_ASSERTION_FAILURE; \
     } } while (0)
 #else

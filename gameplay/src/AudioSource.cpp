@@ -75,7 +75,7 @@ AudioSource* AudioSource::create(Properties* properties)
     GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "audio") == 0))
     {
-        GP_ERROR("Failed to load audio source from properties object: must be non-null object and have namespace equal to \'audio\'.");
+        GP_ERROR("Failed to load audio source from properties object: must be non-null object and have namespace equal to 'audio'.");
         return NULL;
     }
 
