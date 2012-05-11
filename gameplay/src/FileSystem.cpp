@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "FileSystem.h"
+#include "Properties.h"
 
 #ifdef WIN32
     #include <windows.h>
@@ -60,6 +61,7 @@ void makepath(std::string path, int mode)
 #endif
 
 static std::string __resourcePath("./");
+static std::map<std::string, std::string> __aliases;
 
 FileSystem::FileSystem()
 {
@@ -77,6 +79,46 @@ void FileSystem::setResourcePath(const char* path)
 const char* FileSystem::getResourcePath()
 {
     return __resourcePath.c_str();
+}
+
+void FileSystem::loadResourceAliases(const char* aliasFilePath)
+{
+    Properties* properties = Properties::create(aliasFilePath);
+    if (properties)
+    {
+        Properties* aliases;
+        while ((aliases = properties->getNextNamespace()) != NULL)
+        {
+            loadResourceAliases(aliases);
+        }
+    }
+    SAFE_DELETE(properties);
+}
+
+void FileSystem::loadResourceAliases(Properties* properties)
+{
+    assert(properties);
+
+    const char* name;
+    while ((name = properties->getNextProperty()) != NULL)
+    {
+        __aliases[name] = properties->getString();
+    }
+}
+
+const char* FileSystem::resolvePath(const char* path)
+{
+    size_t len = strlen(path);
+    if (len > 1 && path[0] == '@')
+    {
+        std::string alias(path + 1);
+        std::map<std::string, std::string>::const_iterator itr = __aliases.find(alias);
+        if (itr == __aliases.end())
+            return path; // no matching alias found
+        return itr->second.c_str();
+    }
+
+    return path;
 }
 
 bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
@@ -150,9 +192,11 @@ bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
 
 FILE* FileSystem::openFile(const char* path, const char* mode)
 {
+    assert(path != NULL);
+
     std::string fullPath(__resourcePath);
-    fullPath += path;
-    
+    fullPath += resolvePath(path);
+
 #ifdef __ANDROID__
     std::string directoryPath = fullPath.substr(0, fullPath.rfind('/'));
     struct stat s;

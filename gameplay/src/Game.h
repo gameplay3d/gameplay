@@ -99,14 +99,21 @@ public:
     inline State getState() const;
 
     /**
-     * Call this method to initialize the game, and begin running the game.
+     * Returns the game configuration object.
      *
-     * @param width The width of the game window to run at. Default is -1 meaning native resolution width.
-     * @param height The height of the game window to run at. Default is -1 meaning native resolution height.
+     * This method returns a Properties object containing the contents
+     * of the game.config file.
+     *
+     * @return The game conifguration Properties object.
+     */
+    Properties* getConfig() const;
+
+    /**
+     * Called to initialize the game, and begin running the game.
      * 
      * @return Zero for normal termination, or non-zero if an error occurred.
      */
-    int run(int width = -1, int height = -1);
+    int run();
 
     /**
      * Pauses the game after being run.
@@ -393,6 +400,11 @@ private:
      */
     void fireTimeEvents(long frameTime);
 
+    /**
+     * Loads the game configuration.
+     */
+    void loadConfig();
+
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
     static long _pausedTimeLast;                // The last time paused.
@@ -406,6 +418,7 @@ private:
     Vector4 _clearColor;                        // The clear color value last used for clearing the color buffer.
     float _clearDepth;                          // The clear depth value last used for clearing the depth buffer.
     int _clearStencil;                          // The clear stencil value last used for clearing the stencil buffer.
+    Properties* _properties;                    // Game configuration properties object.
     AnimationController* _animationController;  // Controls the scheduling and running of animations.
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.

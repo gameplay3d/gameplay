@@ -9,8 +9,8 @@
 #include <windowsx.h>
 
 // Default to 720p
-#define WINDOW_WIDTH    1280
-#define WINDOW_HEIGHT   720
+static int __windowWidth = 1280;
+static int __windowHeight = 720;
 
 static long __timeTicksPerMillis;
 static long __timeStart;
@@ -262,8 +262,8 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
 
     // Scale factors for the mouse movement used to simulate the accelerometer.
-    static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
-    static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
+    static const float ACCELEROMETER_X_FACTOR = 90.0f / (float)__windowWidth;
+    static const float ACCELEROMETER_Y_FACTOR = 90.0f / (float)__windowHeight;
 
     static int lx, ly;
 
@@ -459,9 +459,34 @@ Platform* Platform::create(Game* game)
     __hinstance = ::GetModuleHandle(NULL);
 
     LPCTSTR windowClass = L"gameplay";
-    LPCTSTR windowName = L"";
+    std::wstring windowName;
+    bool fullscreen = false;
 
-    RECT rect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+    // Parse window game config properties
+    Properties* config = game->getConfig()->getNamespace("window", true);
+    if (config)
+    {
+        // Read window size
+        int width = config->getInt("width");
+        int height = config->getInt("height");
+        if (width > 0)
+            __windowWidth = width;
+        if (height > 0)
+            __windowHeight = height;
+
+        // Read window caption
+        const char* title = config->getString("title");
+        int len = MultiByteToWideChar(CP_ACP, 0, title, -1, 0, 0);
+        wchar_t* buf = new wchar_t[len];
+        MultiByteToWideChar(CP_ACP, 0, title, -1, buf, len);
+        windowName = buf;
+        SAFE_DELETE_ARRAY(buf);
+
+        // Was fullscreen mode specified?
+        fullscreen = config->getBool("fullscreen");
+    }
+
+    RECT rect = { 0, 0, __windowWidth, __windowHeight };
 
     // Register our window class.
     WNDCLASSEX wc;
@@ -482,21 +507,53 @@ Platform* Platform::create(Game* game)
         goto error;
     
     // Set the window style.
-    DWORD style   = ( WINDOW_FULLSCREEN ? WS_POPUP : WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-    DWORD styleEx = (WINDOW_FULLSCREEN ? WS_EX_APPWINDOW : WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
+    DWORD style, styleEx;
+    
+    if (fullscreen)
+    {
+        DEVMODE dm;
+        memset(&dm, 0, sizeof(DEVMODE));
+        dm.dmSize = sizeof(DEVMODE);
+        dm.dmPelsWidth = __windowWidth;
+        dm.dmPelsHeight = __windowHeight;
+        dm.dmBitsPerPel = 32;
+        dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+        if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
+        {
+            // Revert to windowed mode (unsupported resolution?)
+            fullscreen = false;
+            printError("Failed to switch to full-screen mode with resolution of %dx%d.", __windowWidth, __windowHeight);
+        }
+    }
+
+    if (fullscreen)
+    {
+        style = WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+        styleEx = WS_EX_APPWINDOW;
+
+        // Hide cursor in fullscreen mode?
+        //ShowCursor(FALSE);
+    }
+    else
+    {
+        //style = WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+        style = WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+        styleEx = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
+    }
 
     // Adjust the window rectangle so the client size is the requested size.
     AdjustWindowRectEx(&rect, style, FALSE, styleEx);
     
     // Create the native Windows window.
-    __hwnd = CreateWindowEx(styleEx, windowClass, windowName, style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
+    __hwnd = CreateWindowEx(styleEx, windowClass, windowName.c_str(), style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
 
     // Get the drawing context.
     __hdc = GetDC(__hwnd);
 
     // Center the window
-    const int screenX = (GetSystemMetrics(SM_CXSCREEN) - WINDOW_WIDTH) / 2;
-    const int screenY = (GetSystemMetrics(SM_CYSCREEN) - WINDOW_HEIGHT) / 2;
+    const int screenX = (GetSystemMetrics(SM_CXSCREEN) - __windowWidth) / 2;
+    const int screenY = (GetSystemMetrics(SM_CYSCREEN) - __windowHeight) / 2;
     ::SetWindowPos(__hwnd, __hwnd, screenX, screenY, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 
     // Choose pixel format. 32-bit. RGBA.
@@ -571,7 +628,7 @@ int Platform::enterMessagePump()
     SwapBuffers(__hdc);
 
     if (_game->getState() != Game::RUNNING)
-        _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);
+        _game->run();
 
     // Enter event dispatch loop.
     MSG msg;
@@ -604,12 +661,12 @@ void Platform::signalShutdown()
 
 unsigned int Platform::getDisplayWidth()
 {
-    return WINDOW_WIDTH;
+    return __windowWidth;
 }
 
 unsigned int Platform::getDisplayHeight()
 {
-    return WINDOW_HEIGHT;
+    return __windowHeight;
 }
     
 long Platform::getAbsoluteTime()
