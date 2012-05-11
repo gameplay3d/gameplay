@@ -459,7 +459,7 @@ Platform* Platform::create(Game* game)
     LPCTSTR windowClass = L"gameplay";
     std::wstring windowName;
     bool fullscreen = false;
-
+    
     // Read window settings from config
     Properties* config = game->getConfig()->getNamespace("window", true);
     if (config)
@@ -471,6 +471,7 @@ Platform* Platform::create(Game* game)
             int len = MultiByteToWideChar(CP_ACP, 0, title, -1, NULL, 0);
             wchar_t* wtitle = new wchar_t[len];
             MultiByteToWideChar(CP_ACP, 0, title, -1, wtitle, len);
+            windowName = wtitle;
             SAFE_DELETE_ARRAY(wtitle);
         }
 
