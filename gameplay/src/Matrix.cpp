@@ -112,12 +112,22 @@ void Matrix::createPerspective(float fieldOfView, float aspectRatio,
                                      float zNearPlane, float zFarPlane, Matrix* dst)
 {
     GP_ASSERT(dst);
+    GP_ASSERT(zFarPlane != zNearPlane);
 
     float f_n = 1.0f / (zFarPlane - zNearPlane);
-    float factor = 1.0f / tanf(MATH_DEG_TO_RAD(fieldOfView) * 0.5f);
+    float theta = MATH_DEG_TO_RAD(fieldOfView) * 0.5f;
+    if (abs(fmod(theta, MATH_PIOVER2)) < MATH_EPSILON)
+    {
+        GP_ERROR("Invalid field of view value (%d) causes attempted calculation tan(%d), which is undefined.", fieldOfView, theta);
+        return;
+    }
+    float divisor = tan(theta);
+    GP_ASSERT(divisor);
+    float factor = 1.0f / divisor;
 
     memset(dst, 0, MATRIX_SIZE);
 
+    GP_ASSERT(aspectRatio);
     dst->m[0] = (1.0f / aspectRatio) * factor;
     dst->m[5] = factor;
     dst->m[10] = (-(zFarPlane + zNearPlane)) * f_n;
@@ -136,6 +146,9 @@ void Matrix::createOrthographicOffCenter(float left, float right, float bottom, 
                                          float zNearPlane, float zFarPlane, Matrix* dst)
 {
     GP_ASSERT(dst);
+    GP_ASSERT(right != left);
+    GP_ASSERT(top != bottom);
+    GP_ASSERT(zFarPlane != zNearPlane);
 
     float r_l = 1.0f / (right - left);
     float t_b = 1.0f / (top - bottom);
@@ -464,35 +477,37 @@ bool Matrix::decompose(Vector3* scale, Quaternion* rotation, Vector3* translatio
     {
         float s = 0.5f / sqrt(trace);
         rotation->w = 0.25f / s;
-        rotation->x = ( yaxis.z - zaxis.y ) * s;
-        rotation->y = ( zaxis.x - xaxis.z ) * s;
-        rotation->z = ( xaxis.y - yaxis.x ) * s;
+        rotation->x = (yaxis.z - zaxis.y) * s;
+        rotation->y = (zaxis.x - xaxis.z) * s;
+        rotation->z = (xaxis.y - yaxis.x) * s;
     }
     else
     {
+        // Note: since xaxis, yaxis, and zaxis are normalized, 
+        // we will never divide by zero in the code below.
         if (xaxis.x > yaxis.y && xaxis.x > zaxis.z)
         {
-            float s = 2.0f * sqrt(1.0f + xaxis.x - yaxis.y - zaxis.z);
-            rotation->w = (yaxis.z - zaxis.y ) / s;
-            rotation->x = 0.25f * s;
-            rotation->y = (yaxis.x + xaxis.y ) / s;
-            rotation->z = (zaxis.x + xaxis.z ) / s;
+            float s = 0.5f / sqrt(1.0f + xaxis.x - yaxis.y - zaxis.z);
+            rotation->w = (yaxis.z - zaxis.y) * s;
+            rotation->x = 0.25f / s;
+            rotation->y = (yaxis.x + xaxis.y) * s;
+            rotation->z = (zaxis.x + xaxis.z) * s;
         }
         else if (yaxis.y > zaxis.z)
         {
-            float s = 2.0f * sqrt(1.0f + yaxis.y - xaxis.x - zaxis.z);
-            rotation->w = (zaxis.x - xaxis.z ) / s;
-            rotation->x = (yaxis.x + xaxis.y ) / s;
-            rotation->y = 0.25f * s;
-            rotation->z = (zaxis.y + yaxis.z ) / s;
+            float s = 0.5f / sqrt(1.0f + yaxis.y - xaxis.x - zaxis.z);
+            rotation->w = (zaxis.x - xaxis.z) * s;
+            rotation->x = (yaxis.x + xaxis.y) * s;
+            rotation->y = 0.25f / s;
+            rotation->z = (zaxis.y + yaxis.z) * s;
         }
         else
         {
-            float s = 2.0f * sqrt(1.0f + zaxis.z - xaxis.x - yaxis.y );
-            rotation->w = (xaxis.y - yaxis.x ) / s;
-            rotation->x = (zaxis.x + xaxis.z ) / s;
-            rotation->y = (zaxis.y + yaxis.z ) / s;
-            rotation->z = 0.25f * s;
+            float s = 0.5f / sqrt(1.0f + zaxis.z - xaxis.x - yaxis.y );
+            rotation->w = (xaxis.y - yaxis.x ) * s;
+            rotation->x = (zaxis.x + xaxis.z ) * s;
+            rotation->y = (zaxis.y + yaxis.z ) * s;
+            rotation->z = 0.25f / s;
         }
     }
 
@@ -545,6 +560,7 @@ void Matrix::getUpVector(Vector3* dst) const
 void Matrix::getDownVector(Vector3* dst) const
 {
     GP_ASSERT(dst);
+    
     dst->x = -m[4];
     dst->y = -m[5];
     dst->z = -m[6];
@@ -719,6 +735,8 @@ void Matrix::negate()
 
 void Matrix::negate(Matrix* dst) const
 {
+    GP_ASSERT(dst);
+
     dst->m[0]  = -m[0];
     dst->m[1]  = -m[1];
     dst->m[2]  = -m[2];
@@ -792,8 +810,6 @@ void Matrix::rotateZ(float angle)
 
 void Matrix::rotateZ(float angle, Matrix* dst) const
 {
-    GP_ASSERT(dst);
-
     Matrix r;
     createRotationZ(angle, &r);
     multiply(*this, r, dst);
@@ -816,8 +832,6 @@ void Matrix::scale(float xScale, float yScale, float zScale)
 
 void Matrix::scale(float xScale, float yScale, float zScale, Matrix* dst) const
 {
-    GP_ASSERT(dst);
-
     Matrix s;
     createScale(xScale, yScale, zScale, &s);
     multiply(*this, s, dst);
@@ -881,6 +895,8 @@ void Matrix::subtract(const Matrix& m)
 
 void Matrix::subtract(const Matrix& m1, const Matrix& m2, Matrix* dst)
 {
+    GP_ASSERT(dst);
+
     dst->m[0]  = m1.m[0]  - m2.m[0];
     dst->m[1]  = m1.m[1]  - m2.m[1];
     dst->m[2]  = m1.m[2]  - m2.m[2];
@@ -901,6 +917,7 @@ void Matrix::subtract(const Matrix& m1, const Matrix& m2, Matrix* dst)
 
 void Matrix::transformPoint(Vector3* point) const
 {
+    GP_ASSERT(point);
     transformVector(point->x, point->y, point->z, 1.0f, point);
 }
 
@@ -911,6 +928,7 @@ void Matrix::transformPoint(const Vector3& point, Vector3* dst) const
 
 void Matrix::transformVector(Vector3* vector) const
 {
+    GP_ASSERT(vector);
     transformVector(vector->x, vector->y, vector->z, 0.0f, vector);
 }
 
@@ -926,11 +944,12 @@ void Matrix::transformVector(float x, float y, float z, float w, Vector3* dst) c
     dst->set(
         x * m[0] + y * m[4] + z * m[8] + w * m[12],
         x * m[1] + y * m[5] + z * m[9] + w * m[13],
-        x * m[2] + y * m[6] + z * m[10] + w * m[14] );
+        x * m[2] + y * m[6] + z * m[10] + w * m[14]);
 }
 
 void Matrix::transformVector(Vector4* vector) const
 {
+    GP_ASSERT(vector);
     transformVector(*vector, vector);
 }
 
@@ -942,7 +961,7 @@ void Matrix::transformVector(const Vector4& vector, Vector4* dst) const
         vector.x * m[0] + vector.y * m[4] + vector.z * m[8] + vector.w * m[12],
         vector.x * m[1] + vector.y * m[5] + vector.z * m[9] + vector.w * m[13],
         vector.x * m[2] + vector.y * m[6] + vector.z * m[10] + vector.w * m[14],
-        vector.x * m[3] + vector.y * m[7] + vector.z * m[11] + vector.w * m[15] );
+        vector.x * m[3] + vector.y * m[7] + vector.z * m[11] + vector.w * m[15]);
 }
 
 void Matrix::translate(float x, float y, float z)
@@ -952,8 +971,6 @@ void Matrix::translate(float x, float y, float z)
 
 void Matrix::translate(float x, float y, float z, Matrix* dst) const
 {
-    GP_ASSERT(dst);
-
     Matrix t;
     createTranslation(x, y, z, &t);
     multiply(*this, t, dst);
