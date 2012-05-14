@@ -271,7 +271,8 @@ Theme* Theme::create(const char* url)
                     if (!font)
                     {
                         font = normal->getFont();
-                        font->addRef();
+                        if (font)
+                            font->addRef();
                     }
 
                     unsigned int fontSize;
