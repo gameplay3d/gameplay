@@ -302,9 +302,9 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
                         {
                             // Simply copy values directly into the start of the index array
                             batch->_indices[batch->_vertexCount] = batch->_vertexCount;
-                            batch->_indices[batch->_vertexCount] = batch->_vertexCount + 1;
-                            batch->_indices[batch->_vertexCount] = batch->_vertexCount + 2;
-                            batch->_indices[batch->_vertexCount] = batch->_vertexCount + 3;
+                            batch->_indices[batch->_vertexCount + 1] = batch->_vertexCount + 1;
+                            batch->_indices[batch->_vertexCount + 2] = batch->_vertexCount + 2;
+                            batch->_indices[batch->_vertexCount + 3] = batch->_vertexCount + 3;
                             batch->_vertexCount += 4;
                             batch->_indexCount += 4;
                         }
