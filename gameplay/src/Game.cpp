@@ -325,9 +325,17 @@ void Game::loadConfig()
     if (_properties == NULL)
     {
         // Try to load custom config from file.
-        _properties = Properties::create("game.config");
-        if (_properties == NULL)
+        // Check if file exists.
+        FILE* file = FileSystem::openFile("game.config", "rb");
+        if (file)
+        {
+            fclose(file);
+            _properties = Properties::create("game.config");
+        }
+        else
+        {
             _properties = new Properties();
+        }
 
         // Load filesystem aliases
         Properties* aliases = _properties->getNamespace("aliases", true);
