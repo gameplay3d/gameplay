@@ -520,7 +520,7 @@ void Properties::rewind()
     _namespacesItr = _namespaces.end();
 }
 
-Properties* Properties::getNamespace(const char* id) const
+Properties* Properties::getNamespace(const char* id, bool searchNames) const
 {
     GP_ASSERT(id);
 
@@ -530,7 +530,7 @@ Properties* Properties::getNamespace(const char* id) const
     for (it = _namespaces.begin(); it < _namespaces.end(); it++)
     {
         ret = *it;
-        if (strcmp(ret->_id.c_str(), id) == 0)
+        if (strcmp(searchNames ? ret->_namespace.c_str() : ret->_id.c_str(), id) == 0)
         {
             return ret;
         }
