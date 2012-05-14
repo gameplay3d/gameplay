@@ -19,6 +19,7 @@ class Control;
 class Layout : public Ref
 {
     friend class Container;
+    friend class Form;
 
 public:
     /**
