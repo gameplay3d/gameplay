@@ -666,7 +666,7 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
 
             if (Game::getInstance()->getState() == Game::UNINITIALIZED)
             {
-                Game::getInstance()->run(__width, __height);
+                Game::getInstance()->run();
             }
             else
             {

@@ -3,12 +3,48 @@
 #include "Texture.h"
 #include "FileSystem.h"
 
+// PVRTC (GL_IMG_texture_compression_pvrtc) : Imagination based gpus
+#ifndef GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG
+#define GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG 0x8C01
+#endif
+#ifndef GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG
+#define GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG 0x8C03
+#endif
+#ifndef GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG
+#define GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG 0x8C00
+#endif
+#ifndef GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG
+#define GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG 0x8C02
+#endif
+
+// S3TC/DXT (GL_EXT_texture_compression_s3tc) : Most desktop/console gpus
+#ifndef GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
+#define GL_COMPRESSED_RGBA_S3TC_DXT1_EXT 0x83F1
+#endif
+#ifndef GL_COMPRESSED_RGBA_S3TC_DXT3_EXT
+#define GL_COMPRESSED_RGBA_S3TC_DXT3_EXT 0x83F2
+#endif
+#ifndef GL_COMPRESSED_RGBA_S3TC_DXT5_EXT
+#define GL_COMPRESSED_RGBA_S3TC_DXT5_EXT 0x83F3
+#endif
+
+// ATC (GL_AMD_compressed_ATC_texture) : Qualcomm/Adreno based gpus
+#ifndef ATC_RGB_AMD
+#define ATC_RGB_AMD 0x8C92
+#endif
+#ifndef ATC_RGBA_EXPLICIT_ALPHA_AMD
+#define ATC_RGBA_EXPLICIT_ALPHA_AMD 0x8C93
+#endif
+#ifndef ATC_RGBA_INTERPOLATED_ALPHA_AMD
+#define ATC_RGBA_INTERPOLATED_ALPHA_AMD 0x87EE
+#endif
+
 namespace gameplay
 {
 
 static std::vector<Texture*> __textureCache;
 
-Texture::Texture() : _handle(0), _mipmapped(false), _cached(false)
+Texture::Texture() : _handle(0), _mipmapped(false), _cached(false), _compressed(false)
 {
 }
 
@@ -60,7 +96,7 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
     Texture* texture = NULL;
 
     // Filter loading based on file extension.
-    const char* ext = strrchr(path, '.');
+    const char* ext = strrchr(FileSystem::resolvePath(path), '.');
     if (ext)
     {
         switch (strlen(ext))
@@ -75,12 +111,13 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
             }
             else if (tolower(ext[1]) == 'p' && tolower(ext[2]) == 'v' && tolower(ext[3]) == 'r')
             {
-#ifdef USE_PVRTC
                 // PowerVR Compressed Texture RGBA
                 texture = createCompressedPVRTC(path);
-#else
-                texture = NULL; // Cannot handle PVRTC if not supported on platform
-#endif
+            }
+            else if (tolower(ext[1]) == 'd' && tolower(ext[2]) == 'd' && tolower(ext[3]) == 's')
+            {
+                // DDS file format (DXT/S3TC) compressed textures
+                texture = createCompressedDDS(path);
             }
             break;
         }
@@ -110,7 +147,7 @@ Texture* Texture::create(Image* image, bool generateMipmaps)
     case Image::RGBA:
         return create(Texture::RGBA, image->getWidth(), image->getHeight(), image->getData(), generateMipmaps);
     }
-    
+
     return NULL;
 }
 
@@ -147,18 +184,195 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     return texture;
 }
 
-#ifdef USE_PVRTC
+// Computes the size of a PVRTC data chunk for a mipmap level of the given size.
+unsigned int computePVRTCDataSize(int width, int height, int bpp)
+{
+    int blockSize;
+    int widthBlocks;
+    int heightBlocks;
+
+    if (bpp == 4)
+    {
+        blockSize = 4 * 4; // Pixel by pixel block size for 4bpp
+        widthBlocks = std::max(width >> 2, 2);
+        heightBlocks = std::max(height >> 2, 2);
+    }
+    else
+    {
+        blockSize = 8 * 4; // Pixel by pixel block size for 2bpp
+        widthBlocks = std::max(width >> 3, 2);
+        heightBlocks = std::max(height >> 2, 2);
+    }
+
+    return widthBlocks * heightBlocks * ((blockSize  * bpp) >> 3);
+}
+
 Texture* Texture::createCompressedPVRTC(const char* path)
+{
+    FILE* file = FileSystem::openFile(path, "rb");
+    if (file == NULL)
+    {
+        GP_ERROR("Failed to load file: %s", path);
+        return NULL;
+    }
+
+    // Read first 4 bytes to determine PVRTC format
+    unsigned int read;
+    unsigned int version;
+    read = fread(&version, sizeof(unsigned int), 1, file);
+    assert(read == 1);
+
+    // Rewind to start of header
+    fseek(file, 0, SEEK_SET);
+
+    // Read texture data
+    GLsizei width, height;
+    GLenum format;
+    GLubyte* data = NULL;
+    unsigned int mipMapCount;
+
+    if (version == 0x03525650)
+    {
+    	// Modern PVR file format.
+    	data = readCompressedPVRTC(path, file, &width, &height, &format, &mipMapCount);
+    }
+    else
+    {
+    	// Legacy PVR file format.
+    	data = readCompressedPVRTCLegacy(path, file, &width, &height, &format, &mipMapCount);
+    }
+
+    fclose(file);
+
+    if (data == NULL)
+    {
+    	GP_ERROR("Failed to read PVR file: %s", path);
+    	return NULL;
+    }
+
+    int bpp = (format == GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG || format == GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG) ? 2 : 4;
+
+    // Generate our texture.
+	GLuint textureId;
+	GL_ASSERT( glGenTextures(1, &textureId) );
+	GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
+	GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipMapCount > 1 ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR) );
+
+	Texture* texture = new Texture();
+	texture->_handle = textureId;
+	texture->_width = width;
+	texture->_height = height;
+	texture->_mipmapped = mipMapCount > 1;
+	texture->_compressed = true;
+
+	// Load the data for each level
+	GLubyte* ptr = data;
+	for (unsigned int level = 0; level < mipMapCount; ++level)
+	{
+		unsigned int dataSize = computePVRTCDataSize(width, height, bpp);
+
+		// Upload data to GL
+		GL_ASSERT( glCompressedTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, dataSize, ptr) );
+
+		width = std::max(width >> 1, 1);
+		height = std::max(height >> 1, 1);
+		ptr += dataSize;
+	}
+
+	// Free data
+	SAFE_DELETE_ARRAY(data);
+
+    return texture;
+}
+
+GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount)
+{
+    struct pvrtc_file_header
+    {
+        unsigned int version;
+        unsigned int flags;
+        unsigned int pixelFormat[2];
+        unsigned int colorSpace;
+        unsigned int channelType;
+        unsigned int height;
+        unsigned int width;
+        unsigned int depth;
+        unsigned int surfaceCount;
+        unsigned int faceCount;
+        unsigned int mipMapCount;
+        unsigned int metaDataSize;
+    };
+
+    unsigned int read;
+
+    // Read header data
+    pvrtc_file_header header;
+    read = fread(&header, sizeof(pvrtc_file_header), 1, file);
+    assert(read == 1);
+
+    if (header.pixelFormat[1] != 0)
+    {
+        // Unsupported pixel format
+        GP_ERROR("Unsupported pixel format in PVR file (MSB == %d != 0): %s", header.pixelFormat[1], path);
+        return NULL;
+    }
+
+    int bpp;
+    switch (header.pixelFormat[0])
+    {
+    case 0:
+        *format = GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
+        bpp = 2;
+        break;
+    case 1:
+        *format = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
+        bpp = 2;
+        break;
+    case 2:
+        *format = GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
+        bpp = 4;
+        break;
+    case 3:
+        *format = GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
+        bpp = 4;
+        break;
+    default:
+        // Unsupported format
+        GP_ERROR("Unsupported pixel format value (%d) in PVR file: %s", header.pixelFormat[0], path);
+        return NULL;
+    }
+
+    *width = (GLsizei)header.width;
+    *height = (GLsizei)header.height;
+    *mipMapCount = header.mipMapCount;
+
+    // Skip meta-data
+    assert( fseek(file, header.metaDataSize, SEEK_CUR) == 0 );
+
+    // Compute total size of data to be read.
+    int w = *width;
+    int h = *height;
+    unsigned int dataSize = 0;
+    for (unsigned int level = 0; level < header.mipMapCount; ++level)
+    {
+        dataSize += computePVRTCDataSize(w, h, bpp);
+    	w = std::max(w>>1, 1);
+    	h = std::max(h>>1, 1);
+    }
+
+    // Read data
+    GLubyte* data = new GLubyte[dataSize];
+    read = fread(data, 1, dataSize, file);
+    assert(read == dataSize);
+
+    return data;
+}
+
+GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount)
 {
     char PVRTCIdentifier[] = "PVR!";
 
-    enum
-    {
-        PVRTC_2 = 24,
-        PVRTC_4
-    };
-
-    struct pvrtc_file_header
+    struct pvrtc_file_header_legacy
     {
         unsigned int size;                  // size of the structure
         unsigned int height;                // height of surface to be created
@@ -173,24 +387,16 @@ Texture* Texture::createCompressedPVRTC(const char* path)
         unsigned int alphaBitMask;          // mask for alpha channel
         unsigned int pvrtcTag;              // magic number identifying pvrtc file
         unsigned int surfaceCount;          // number of surfaces present in the pvrtc
-    } ;
-
-    FILE* file = FileSystem::openFile(path, "rb");
-    if (file == NULL)
-    {
-        GP_ERROR("Failed to load file: %s", path);
-        return NULL;
-    }
+    };
 
     // Read the file header
-    unsigned int size = sizeof(pvrtc_file_header);
-    pvrtc_file_header header;
+    unsigned int size = sizeof(pvrtc_file_header_legacy);
+    pvrtc_file_header_legacy header;
     unsigned int read = (int)fread(&header, 1, size, file);
     GP_ASSERT(read == size);
     if (read != size)
     {
         GP_ERROR("Read file header error for pvrtc file: %s (%d < %d)", path, (int)read, (int)size);
-        fclose(file);
         return NULL;
     }
 
@@ -201,86 +407,223 @@ Texture* Texture::createCompressedPVRTC(const char* path)
         PVRTCIdentifier[3] != (char)((header.pvrtcTag >> 24) & 0xff))
      {
         GP_ERROR("Invalid PVRTC compressed texture file: %s", path);
-        fclose(file);
         return NULL;
     }
 
     // Format flags for GLenum format
-    GLenum format;
-    unsigned int formatFlags = header.formatflags & 0xff;
-    if (formatFlags == PVRTC_4)
+    if (header.bpp == 4)
     {
-        format = header.alphaBitMask ? COMPRESSED_RGBA_PVRTC_4BPP : COMPRESSED_RGB_PVRTC_4BPP;
+        *format = header.alphaBitMask ? GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG : GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
     }
-    else if (formatFlags == PVRTC_2)
+    else if (header.bpp == 2)
     {
-        format = header.alphaBitMask ? COMPRESSED_RGBA_PVRTC_2BPP : COMPRESSED_RGB_PVRTC_2BPP;
+        *format = header.alphaBitMask ? GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG : GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
     }
     else
     {
         GP_ERROR("Invalid PVRTC compressed texture format flags for file: %s", path);
-        fclose(file);
         return NULL;
     }
 
-    unsigned char* data = new unsigned char[header.dataSize];
+    *width = (GLsizei)header.width;
+    *height = (GLsizei)header.height;
+    *mipMapCount = header.mipmapCount + 1; // +1 because mipmapCount does not include the base level
+
+    GLubyte* data = new GLubyte[header.dataSize];
     read = (int)fread(data, 1, header.dataSize, file);
     GP_ASSERT(read == header.dataSize);
     if (read != header.dataSize)
     {
         GP_ERROR("Read file data error for pvrtc file: %s (%d < %d)", path, (int)read, (int)header.dataSize);
         SAFE_DELETE_ARRAY(data);
-        fclose(file);
         return NULL;
     }
-    // Close file
-    fclose(file);
 
-    // Load our texture.
+    return data;
+}
+
+Texture* Texture::createCompressedDDS(const char* path)
+{
+    // DDS file structures
+    struct dds_pixel_format
+    {
+        unsigned int dwSize;
+        unsigned int dwFlags;
+        unsigned int dwFourCC;
+        unsigned int dwRGBBitCount;
+        unsigned int dwRBitMask;
+        unsigned int dwGBitMask;
+        unsigned int dwBBitMask;
+        unsigned int dwABitMask;
+    };
+
+    struct dds_header
+    {
+        unsigned int     dwSize;
+        unsigned int     dwFlags;
+        unsigned int     dwHeight;
+        unsigned int     dwWidth;
+        unsigned int     dwPitchOrLinearSize;
+        unsigned int     dwDepth;
+        unsigned int     dwMipMapCount;
+        unsigned int     dwReserved1[11];
+        dds_pixel_format ddspf;
+        unsigned int     dwCaps;
+        unsigned int     dwCaps2;
+        unsigned int     dwCaps3;
+        unsigned int     dwCaps4;
+        unsigned int     dwReserved2;
+    };
+
+    struct dds_mip_level
+    {
+        GLubyte* data;
+        GLsizei width;
+        GLsizei height;
+        GLsizei size;
+    };
+
+    Texture* texture = NULL;
+
+    // Read DDS file
+    FILE* fp = FileSystem::openFile(path, "rb");
+    if (fp == NULL)
+        return NULL;
+
+    // Validate DDS magic number
+    char code[4];
+    if (fread(code, 1, 4, fp) != 4 || strncmp(code, "DDS ", 4) != 0)
+        return NULL; // not a valid dds file
+
+    // Read DDS header
+    dds_header header;
+    if (fread(&header, sizeof(dds_header), 1, fp) != 1)
+        return NULL;
+
+    if ((header.dwFlags & 0x20000/*DDSD_MIPMAPCOUNT*/) == 0)
+    {
+        // Mipmap count not specified (non-mipmapped texture)
+        header.dwMipMapCount = 1;
+    }
+
+    // Allocate mip level structures
+    dds_mip_level* mipLevels = new dds_mip_level[header.dwMipMapCount];
+    memset(mipLevels, 0, sizeof(dds_mip_level) * header.dwMipMapCount);
+
+    GLenum format, internalFormat;
+    bool compressed = false;
+    GLsizei width = header.dwWidth;
+    GLsizei height = header.dwHeight;
+    int bytesPerBlock;
+
+    if (header.ddspf.dwFlags & 0x4/*DDPF_FOURCC*/)
+    {
+        compressed = true;
+
+        // Compressed
+        switch (header.ddspf.dwFourCC)
+        {
+        case ('D'|('X'<<8)|('T'<<16)|('1'<<24)):
+            format = internalFormat = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+            bytesPerBlock = 8;
+            break;
+        case ('D'|('X'<<8)|('T'<<16)|('3'<<24)):
+            format = internalFormat = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+            bytesPerBlock = 16;
+            break;
+        case ('D'|('X'<<8)|('T'<<16)|('5'<<24)):
+            format = internalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+            bytesPerBlock = 16;
+            break;
+        case ('A'|('T'<<8)|('C'<<16)|(' '<<24)):
+            format = internalFormat = ATC_RGB_AMD;
+            bytesPerBlock = 8;
+            break;
+        case ('A'|('T'<<8)|('C'<<16)|('A'<<24)):
+            format = internalFormat = ATC_RGBA_EXPLICIT_ALPHA_AMD;
+            bytesPerBlock = 16;
+            break;
+        case ('A'|('T'<<8)|('C'<<16)|('I'<<24)):
+            format = internalFormat = ATC_RGBA_INTERPOLATED_ALPHA_AMD;
+            bytesPerBlock = 16;
+            break;
+        default:
+            // Unsupported
+            return NULL;
+        }
+
+        for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+        {
+            mipLevels[i].width = width;
+            mipLevels[i].height = height;
+            mipLevels[i].size =  std::max(1, (width+3) >> 2) * std::max(1, (height+3) >> 2) * bytesPerBlock;
+            mipLevels[i].data = new GLubyte[mipLevels[i].size];
+
+            if (fread(mipLevels[i].data, 1, mipLevels[i].size, fp) != (unsigned int)mipLevels[i].size)
+            {
+                GP_ERROR("Failed to load dds compressed texture bytes for texture: %s", path);
+                goto cleanup;
+            }
+
+            width  = std::max(1, width >> 1);
+            height = std::max(1, height >> 1);
+        }
+    }
+    else if (header.ddspf.dwFlags == 0x40/*DDPF_RGB*/)
+    {
+        // RGB (uncompressed)
+        // Note: Use GL_BGR as internal format to flip bytes.
+        return NULL; // unsupported
+    }
+    else if (header.ddspf.dwFlags == 0x41/*DDPF_RGB|DDPF_ALPHAPIXELS*/)
+    {
+        // RGBA (uncompressed)
+        // Note: Use GL_BGRA as internal format to flip bytes.
+        return NULL; // unsupported
+    }
+    else
+    {
+        // Unsupported
+        return NULL;
+    }
+
+    // Generate GL texture
     GLuint textureId;
     GL_ASSERT( glGenTextures(1, &textureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, header.mipmapCount > 0 ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR ) );
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, header.dwMipMapCount > 1 ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR ) );
 
-    Texture* texture = new Texture();
+    // Create gameplay texture
+    texture = new Texture();
     texture->_handle = textureId;
-    texture->_width = header.width;
-    texture->_height = header.height;
+    texture->_width = header.dwWidth;
+    texture->_height = header.dwHeight;
+    texture->_compressed = compressed;
+    texture->_mipmapped = header.dwMipMapCount > 1;
 
-    // Load the data for each level
-    unsigned int width = header.width;
-    unsigned int height = header.height;
-    unsigned int blockSize = 0;
-    unsigned int widthBlocks = 0;
-    unsigned int heightBlocks = 0;
-    unsigned int bpp = 0;
-    unsigned int dataSize = 0;
-    unsigned char* dataOffset = data;
-
-    for (unsigned int level = 0; level <= header.mipmapCount; level++)
+    // Load texture data
+    for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
     {
-        if (formatFlags == PVRTC_4)
+        if (compressed)
         {
-            dataSize = ( max((int)width, 8) * max((int)height, 8) * 4 + 7) / 8;
+            GL_ASSERT( glCompressedTexImage2D(GL_TEXTURE_2D, i, format, mipLevels[i].width, mipLevels[i].height, 0, mipLevels[i].size, mipLevels[i].data) );
         }
         else
         {
-            dataSize = ( max((int)width, 16) * max((int)height, 8) * 2 + 7) / 8;
+            GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, i, internalFormat, mipLevels[i].width, mipLevels[i].height, 0, format, GL_UNSIGNED_INT, mipLevels[i].data) );
         }
-
-        GL_ASSERT( glCompressedTexImage2D(GL_TEXTURE_2D, level, (GLenum)format, width, height, 0, dataSize, dataOffset) );
-
-        dataOffset += dataSize;
-        width = max((int)width >> 1, 1);
-        height = max((int)height >> 1, 1);
     }
 
-    SAFE_DELETE_ARRAY(data);
+cleanup:
+
+    // Cleanup mip data
+    for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+        SAFE_DELETE_ARRAY(mipLevels[i].data);
+    SAFE_DELETE_ARRAY(mipLevels);
 
     return texture;
 }
-#endif
-    
+
 unsigned int Texture::getWidth() const
 {
     return _width;
@@ -333,6 +676,11 @@ void Texture::generateMipmaps()
 bool Texture::isMipmapped() const
 {
     return _mipmapped;
+}
+
+bool Texture::isCompressed() const
+{
+    return _compressed;
 }
 
 Texture::Sampler::Sampler(Texture* texture)
