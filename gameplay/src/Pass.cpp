@@ -10,8 +10,6 @@ namespace gameplay
 Pass::Pass(const char* id, Technique* technique, Effect* effect) :
     _id(id ? id : ""), _technique(technique), _effect(effect), _vaBinding(NULL)
 {
-    GP_ASSERT(technique);
-
     RenderState::_parent = _technique;
 }
 
@@ -23,15 +21,15 @@ Pass::~Pass()
 
 Pass* Pass::create(const char* id, Technique* technique, const char* vshPath, const char* fshPath, const char* defines)
 {
-    // Attempt to create/load the effect
+    // Attempt to create/load the effect.
     Effect* effect = Effect::createFromFile(vshPath, fshPath, defines);
-    GP_ASSERT(effect);
     if (effect == NULL)
     {
+        GP_ERROR("Failed to create effect for pass.");
         return NULL;
     }
 
-    // Return the new pass
+    // Return the new pass.
     return new Pass(id, technique, effect);
 }
 
@@ -58,7 +56,9 @@ void Pass::setVertexAttributeBinding(VertexAttributeBinding* binding)
 
 void Pass::bind()
 {
-    // Bind our effect
+    GP_ASSERT(_effect);
+
+    // Bind our effect.
     _effect->bind();
 
     // Bind our render state
@@ -83,6 +83,7 @@ void Pass::unbind()
 Pass* Pass::clone(Technique* technique, NodeCloneContext &context) const
 {
     Effect* effect = getEffect();
+    GP_ASSERT(effect);
     effect->addRef();
     Pass* pass = new Pass(getId(), technique, effect);
     RenderState::cloneInto(pass, context);
