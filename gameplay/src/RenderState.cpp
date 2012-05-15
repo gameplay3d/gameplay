@@ -29,11 +29,7 @@ RenderState::~RenderState()
     // Destroy all the material parameters
     for (unsigned int i = 0, count = _parameters.size(); i < count; ++i)
     {
-        MaterialParameter* parameter = _parameters[i];
-        if (parameter)
-        {
-            SAFE_RELEASE(parameter);
-        }
+        SAFE_RELEASE(_parameters[i]);
     }
 }
 
@@ -54,19 +50,19 @@ MaterialParameter* RenderState::getParameter(const char* name) const
 {
     GP_ASSERT(name);
 
+    // Search for an existing parameter with this name.
     MaterialParameter* param;
-
-    // Search for an existing parameter with this name
     for (unsigned int i = 0, count = _parameters.size(); i < count; ++i)
     {
         param = _parameters[i];
+        GP_ASSERT(param);
         if (strcmp(param->getName(), name) == 0)
         {
             return param;
         }
     }
 
-    // Create a new parameter and store it in our list
+    // Create a new parameter and store it in our list.
     param = new MaterialParameter(name);
     _parameters.push_back(param);
 
@@ -75,10 +71,12 @@ MaterialParameter* RenderState::getParameter(const char* name) const
 
 void RenderState::setParameterAutoBinding(const char* name, AutoBinding autoBinding)
 {
-    // Store the auto-binding
+    GP_ASSERT(name);
+
+    // Store the auto-binding.
     if (autoBinding == NONE)
     {
-        // Clear current auto binding
+        // Clear current auto binding.
         std::map<std::string, AutoBinding>::iterator itr = _autoBindings.find(name);
         if (itr != _autoBindings.end())
         {
@@ -87,11 +85,11 @@ void RenderState::setParameterAutoBinding(const char* name, AutoBinding autoBind
     }
     else
     {
-        // Set new auto binding
+        // Set new auto binding.
         _autoBindings[name] = autoBinding;
     }
 
-    // If we have a currently set node binding, apply the auto binding immediately
+    // If we have a currently set node binding, apply the auto binding immediately.
     if (_nodeBinding)
     {
         applyAutoBinding(name, autoBinding);
@@ -100,9 +98,10 @@ void RenderState::setParameterAutoBinding(const char* name, AutoBinding autoBind
 
 void RenderState::setParameterAutoBinding(const char* name, const char* autoBinding)
 {
+    GP_ASSERT(autoBinding);
     AutoBinding value = NONE;
 
-    // Parse the passed in autoBinding string
+    // Parse the passed in autoBinding string.
     if (strcmp(autoBinding, "WORLD_MATRIX") == 0)
     {
         value = WORLD_MATRIX;
@@ -147,6 +146,10 @@ void RenderState::setParameterAutoBinding(const char* name, const char* autoBind
     {
         value = MATRIX_PALETTE;
     }
+    else
+    {
+        // Ignore all other cases (the value was previously set to the default of NONE).
+    }
 
     if (value != NONE)
     {
@@ -185,7 +188,7 @@ void RenderState::setNodeBinding(Node* node)
 
     if (_nodeBinding)
     {
-        // Apply all existing auto-bindings using this node
+        // Apply all existing auto-bindings using this node.
         std::map<std::string, AutoBinding>::const_iterator itr = _autoBindings.begin();
         while (itr != _autoBindings.end())
         {
@@ -197,46 +200,57 @@ void RenderState::setNodeBinding(Node* node)
 
 void RenderState::applyAutoBinding(const char* uniformName, AutoBinding autoBinding)
 {
+    MaterialParameter* param = getParameter(uniformName);
     switch (autoBinding)
     {
     case WORLD_MATRIX:
-        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getWorldMatrix);
+        GP_ASSERT(param);
+        param->bindValue(_nodeBinding, &Node::getWorldMatrix);
         break;
 
     case VIEW_MATRIX:
-        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getViewMatrix);
+        GP_ASSERT(param);
+        param->bindValue(_nodeBinding, &Node::getViewMatrix);
         break;
 
     case PROJECTION_MATRIX:
-        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getProjectionMatrix);
+        GP_ASSERT(param);
+        param->bindValue(_nodeBinding, &Node::getProjectionMatrix);
         break;
 
     case WORLD_VIEW_MATRIX:
-        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getWorldViewMatrix);
+        GP_ASSERT(param);
+        param->bindValue(_nodeBinding, &Node::getWorldViewMatrix);
         break;
 
     case VIEW_PROJECTION_MATRIX:
-        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getViewProjectionMatrix);
+        GP_ASSERT(param);
+        param->bindValue(_nodeBinding, &Node::getViewProjectionMatrix);
         break;
 
     case WORLD_VIEW_PROJECTION_MATRIX:
-        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getWorldViewProjectionMatrix);
+        GP_ASSERT(param);
+        param->bindValue(_nodeBinding, &Node::getWorldViewProjectionMatrix);
         break;
 
     case INVERSE_TRANSPOSE_WORLD_MATRIX:
-        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getInverseTransposeWorldMatrix);
+        GP_ASSERT(param);
+        param->bindValue(_nodeBinding, &Node::getInverseTransposeWorldMatrix);
         break;
 
     case INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX:
-        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getInverseTransposeWorldViewMatrix);
+        GP_ASSERT(param);
+        param->bindValue(_nodeBinding, &Node::getInverseTransposeWorldViewMatrix);
         break;
 
     case CAMERA_WORLD_POSITION:
-        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getActiveCameraTranslationWorld);
+        GP_ASSERT(param);
+        param->bindValue(_nodeBinding, &Node::getActiveCameraTranslationWorld);
         break;
 
     case CAMERA_VIEW_POSITION:
-        getParameter(uniformName)->bindValue(_nodeBinding, &Node::getActiveCameraTranslationView);
+        GP_ASSERT(param);
+        param->bindValue(_nodeBinding, &Node::getActiveCameraTranslationView);
         break;
 
     case MATRIX_PALETTE:
@@ -245,15 +259,22 @@ void RenderState::applyAutoBinding(const char* uniformName, AutoBinding autoBind
             MeshSkin* skin = model ? model->getSkin() : NULL;
             if (skin)
             {
-                getParameter(uniformName)->bindValue(skin, &MeshSkin::getMatrixPalette, &MeshSkin::getMatrixPaletteSize);
+                GP_ASSERT(param);
+                param->bindValue(skin, &MeshSkin::getMatrixPalette, &MeshSkin::getMatrixPaletteSize);
             }
         }
+        break;
+
+    default:
+        GP_ERROR("Unsupported auto binding type (%d).", autoBinding);
         break;
     }
 }
 
 void RenderState::bind(Pass* pass)
 {
+    GP_ASSERT(pass);
+
     // Get the combined modified state bits for our RenderState hierarchy.
     long stateOverrideBits = _state ? _state->_bits : 0;
     RenderState* rs = _parent;
@@ -276,6 +297,7 @@ void RenderState::bind(Pass* pass)
     {
         for (unsigned int i = 0, count = rs->_parameters.size(); i < count; ++i)
         {
+            GP_ASSERT(rs->_parameters[i]);
             rs->_parameters[i]->bind(effect);
         }
 
@@ -291,7 +313,7 @@ RenderState* RenderState::getTopmost(RenderState* below)
     RenderState* rs = this;
     if (rs == below)
     {
-        // Nothing below ourself
+        // Nothing below ourself.
         return NULL;
     }
 
@@ -299,7 +321,7 @@ RenderState* RenderState::getTopmost(RenderState* below)
     {
         if (rs->_parent == below || rs->_parent == NULL)
         {
-            // Stop traversing up here
+            // Stop traversing up here.
             return rs;
         }
         rs = rs->_parent;
@@ -310,6 +332,8 @@ RenderState* RenderState::getTopmost(RenderState* below)
 
 void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context) const
 {
+    GP_ASSERT(renderState);
+
     for (std::map<std::string, AutoBinding>::const_iterator it = _autoBindings.begin(); it != _autoBindings.end(); ++it)
     {
         renderState->setParameterAutoBinding(it->first.c_str(), it->second);
@@ -317,6 +341,7 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
     for (std::vector<MaterialParameter*>::const_iterator it = _parameters.begin(); it != _parameters.end(); ++it)
     {
         const MaterialParameter* param = *it;
+        GP_ASSERT(param);
 
         MaterialParameter* paramCopy = new MaterialParameter(param->getName());
         param->cloneInto(paramCopy);
@@ -368,31 +393,42 @@ void RenderState::StateBlock::bind()
 
 void RenderState::StateBlock::bindNoRestore()
 {
+    GP_ASSERT(_defaultState);
+
     // Update any state that differs from _defaultState and flip _defaultState bits
     if ((_bits & RS_BLEND) && (_blendEnabled != _defaultState->_blendEnabled))
     {
-        _blendEnabled ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
+        if (_blendEnabled)
+            GL_ASSERT( glEnable(GL_BLEND) )
+        else
+            GL_ASSERT( glDisable(GL_BLEND) );
         _defaultState->_blendEnabled = _blendEnabled;
     }
     if ((_bits & RS_BLEND_FUNC) && (_srcBlend != _defaultState->_srcBlend || _dstBlend != _defaultState->_dstBlend))
     {
-        glBlendFunc((GLenum)_srcBlend, (GLenum)_dstBlend);
+        GL_ASSERT( glBlendFunc((GLenum)_srcBlend, (GLenum)_dstBlend) );
         _defaultState->_srcBlend = _srcBlend;
         _defaultState->_dstBlend = _dstBlend;
     }
     if ((_bits & RS_CULL_FACE) && (_cullFaceEnabled != _defaultState->_cullFaceEnabled))
     {
-        _cullFaceEnabled ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
+        if (_cullFaceEnabled)
+            GL_ASSERT( glEnable(GL_CULL_FACE) ) 
+        else
+            GL_ASSERT( glDisable(GL_CULL_FACE) );
         _defaultState->_cullFaceEnabled = _cullFaceEnabled;
     }
     if ((_bits & RS_DEPTH_TEST) && (_depthTestEnabled != _defaultState->_depthTestEnabled))
     {
-        _depthTestEnabled ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+        if (_depthTestEnabled) 
+            GL_ASSERT( glEnable(GL_DEPTH_TEST) ) 
+        else 
+            GL_ASSERT( glDisable(GL_DEPTH_TEST) );
         _defaultState->_depthTestEnabled = _depthTestEnabled;
     }
     if ((_bits & RS_DEPTH_WRITE) && (_depthWriteEnabled != _defaultState->_depthWriteEnabled))
     {
-        glDepthMask(_depthWriteEnabled ? GL_TRUE : GL_FALSE);
+        GL_ASSERT( glDepthMask(_depthWriteEnabled ? GL_TRUE : GL_FALSE) );
         _defaultState->_depthWriteEnabled = _depthWriteEnabled;
     }
 
@@ -401,7 +437,9 @@ void RenderState::StateBlock::bindNoRestore()
 
 void RenderState::StateBlock::restore(long stateOverrideBits)
 {
-    // If there is no state to restore (i.e. no non-default state), do nothing
+    GP_ASSERT(_defaultState);
+
+    // If there is no state to restore (i.e. no non-default state), do nothing.
     if (_defaultState->_bits == 0)
     {
         return;
@@ -410,32 +448,32 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
     // Restore any state that is not overridden and is not default
     if (!(stateOverrideBits & RS_BLEND) && (_defaultState->_bits & RS_BLEND))
     {
-        glDisable(GL_BLEND);
+        GL_ASSERT( glDisable(GL_BLEND) );
         _defaultState->_bits &= ~RS_BLEND;
         _defaultState->_blendEnabled = false;
     }
     if (!(stateOverrideBits & RS_BLEND_FUNC) && (_defaultState->_bits & RS_BLEND_FUNC))
     {
-        glBlendFunc(GL_ONE, GL_ONE);
+        GL_ASSERT( glBlendFunc(GL_ONE, GL_ONE) );
         _defaultState->_bits &= ~RS_BLEND_FUNC;
         _defaultState->_srcBlend = RenderState::BLEND_ONE;
         _defaultState->_dstBlend = RenderState::BLEND_ONE;
     }
     if (!(stateOverrideBits & RS_CULL_FACE) && (_defaultState->_bits & RS_CULL_FACE))
     {
-        glDisable(GL_CULL_FACE);
+        GL_ASSERT( glDisable(GL_CULL_FACE) );
         _defaultState->_bits &= ~RS_CULL_FACE;
         _defaultState->_cullFaceEnabled = false;
     }
     if (!(stateOverrideBits & RS_DEPTH_TEST) && (_defaultState->_bits & RS_DEPTH_TEST))
     {
-        glDisable(GL_DEPTH_TEST);
+        GL_ASSERT( glDisable(GL_DEPTH_TEST) );
         _defaultState->_bits &= ~RS_DEPTH_TEST;
         _defaultState->_depthTestEnabled = false;
     }
     if (!(stateOverrideBits & RS_DEPTH_WRITE) && (_defaultState->_bits & RS_DEPTH_WRITE))
     {
-        glDepthMask(GL_TRUE);
+        GL_ASSERT( glDepthMask(GL_TRUE) );
         _defaultState->_bits &= ~RS_DEPTH_WRITE;
         _defaultState->_depthWriteEnabled = true;
     }
@@ -443,12 +481,14 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
 
 void RenderState::StateBlock::enableDepthWrite()
 {
+    GP_ASSERT(_defaultState);
+
     // Internal method used by Game::clear() to restore depth writing before a
     // clear operation. This is neccessary if the last code to draw before the
     // next frame leaves depth writing disabled.
     if (!_defaultState->_depthWriteEnabled)
     {
-        glDepthMask(GL_TRUE);
+        GL_ASSERT( glDepthMask(GL_TRUE) );
         _defaultState->_bits &= ~RS_DEPTH_WRITE;
         _defaultState->_depthWriteEnabled = true;
     }
@@ -456,6 +496,8 @@ void RenderState::StateBlock::enableDepthWrite()
 
 bool parseBoolean(const char* value)
 {
+    GP_ASSERT(value);
+
     if (strlen(value) == 4)
     {
         return (
@@ -470,35 +512,39 @@ bool parseBoolean(const char* value)
 
 RenderState::Blend parseBlend(const char* value)
 {
-    // Conver the string to uppercase for comparison
+    GP_ASSERT(value);
+
+    // Convert the string to uppercase for comparison.
     std::string upper(value);
     std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
     if (upper == "ZERO")
         return RenderState::BLEND_ZERO;
-    if (upper == "ONE")
+    else if (upper == "ONE")
         return RenderState::BLEND_ONE;
-    if (upper == "SRC_ALPHA")
+    else if (upper == "SRC_ALPHA")
         return RenderState::BLEND_SRC_ALPHA;
-    if (upper == "ONE_MINUS_SRC_ALPHA")
+    else if (upper == "ONE_MINUS_SRC_ALPHA")
         return RenderState::BLEND_ONE_MINUS_SRC_ALPHA;
-    if (upper == "DST_ALPHA")
+    else if (upper == "DST_ALPHA")
         return RenderState::BLEND_DST_ALPHA;
-    if (upper == "ONE_MINUS_DST_ALPHA")
+    else if (upper == "ONE_MINUS_DST_ALPHA")
         return RenderState::BLEND_ONE_MINUS_DST_ALPHA;
-    if (upper == "CONSTANT_ALPHA")
+    else if (upper == "CONSTANT_ALPHA")
         return RenderState::BLEND_CONSTANT_ALPHA;
-    if (upper == "ONE_MINUS_CONSTANT_ALPHA")
+    else if (upper == "ONE_MINUS_CONSTANT_ALPHA")
         return RenderState::BLEND_ONE_MINUS_CONSTANT_ALPHA;
-    if (upper == "SRC_ALPHA_SATURATE")
+    else if (upper == "SRC_ALPHA_SATURATE")
         return RenderState::BLEND_SRC_ALPHA_SATURATE;
-
-    GP_WARN("Warning: Unrecognized blend value (%s), defaulting to BLEND_ONE.", value);
-    return RenderState::BLEND_ONE;
+    else
+    {
+        GP_ERROR("Unsupported blend value (%s). (Will default to BLEND_ONE if errors are treated as warnings)", value);
+        return RenderState::BLEND_ONE;
+    }
 }
 
 void RenderState::StateBlock::setState(const char* name, const char* value)
 {
-    GP_ASSERT(name && value);
+    GP_ASSERT(name);
 
     if (strcmp(name, "blend") == 0)
     {
@@ -526,7 +572,7 @@ void RenderState::StateBlock::setState(const char* name, const char* value)
     }
     else
     {
-        GP_WARN("Warning: Invalid render state: %s", name);
+        GP_ERROR("Unsupported render state string '%s'.", name);
     }
 }
 

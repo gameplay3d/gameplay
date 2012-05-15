@@ -24,11 +24,14 @@ Mesh::Mesh(const Mesh& copy) :
 
 Mesh::~Mesh()
 {
-    for (unsigned int i = 0; i < _partCount; ++i)
+    if (_parts)
     {
-        SAFE_DELETE(_parts[i]);
+        for (unsigned int i = 0; i < _partCount; ++i)
+        {
+            SAFE_DELETE(_parts[i]);
+        }
+        SAFE_DELETE_ARRAY(_parts);
     }
-    SAFE_DELETE_ARRAY(_parts);
 
     if (_vertexBuffer)
     {
@@ -43,12 +46,14 @@ Mesh* Mesh::createMesh(const VertexFormat& vertexFormat, unsigned int vertexCoun
     GL_ASSERT( glGenBuffers(1, &vbo) );
     if (GL_LAST_ERROR())
     {
+        GP_ERROR("Failed to create VBO for mesh with OpenGL error %d.", GL_LAST_ERROR());
         return NULL;
     }
 
     GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, vbo) );
     if (GL_LAST_ERROR())
     {
+        GP_ERROR("Failed to bind VBO for mesh with OpenGL error %d.", GL_LAST_ERROR());
         glDeleteBuffers(1, &vbo);
         return NULL;
     }
@@ -56,6 +61,7 @@ Mesh* Mesh::createMesh(const VertexFormat& vertexFormat, unsigned int vertexCoun
     GL_CHECK( glBufferData(GL_ARRAY_BUFFER, vertexFormat.getVertexSize() * vertexCount, NULL, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW) );
     if (GL_LAST_ERROR())
     {
+        GP_ERROR("Failed to load VBO with vertex data with OpenGL error %d.", GL_LAST_ERROR());
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glDeleteBuffers(1, &vbo);
         return NULL;
@@ -92,6 +98,7 @@ Mesh* Mesh::createQuad(float x, float y, float width, float height)
     Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 3), 4, false);
     if (mesh == NULL)
     {
+        GP_ERROR("Failed to create mesh.");
         return NULL;
     }
 
@@ -124,6 +131,7 @@ Mesh* Mesh::createQuadFullscreen()
     Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 2), 4, false);
     if (mesh == NULL)
     {
+        GP_ERROR("Failed to create mesh.");
         return NULL;
     }
 
@@ -160,6 +168,7 @@ Mesh* Mesh::createQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, 
     Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 3), 4, false);
     if (mesh == NULL)
     {
+        GP_ERROR("Failed to create mesh.");
         return NULL;
     }
 
@@ -171,6 +180,9 @@ Mesh* Mesh::createQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, 
 
 Mesh* Mesh::createLines(Vector3* points, unsigned int pointCount)
 {
+    GP_ASSERT(points);
+    GP_ASSERT(pointCount);
+
     float* vertices = new float[pointCount*3];
     memcpy(vertices, points, pointCount*3*sizeof(float));
 
@@ -181,6 +193,7 @@ Mesh* Mesh::createLines(Vector3* points, unsigned int pointCount)
     Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 1), pointCount, false);
     if (mesh == NULL)
     {
+        GP_ERROR("Failed to create mesh.");
         SAFE_DELETE_ARRAY(vertices);
         return NULL;
     }
@@ -226,6 +239,7 @@ Mesh* Mesh::createBoundingBox(const BoundingBox& box)
     Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 1), 18, false);
     if (mesh == NULL)
     {
+        GP_ERROR("Failed to create mesh.");
         return NULL;
     }
 
@@ -325,6 +339,7 @@ unsigned int Mesh::getPartCount() const
 
 MeshPart* Mesh::getPart(unsigned int index)
 {
+    GP_ASSERT(_parts);
     return _parts[index];
 }
 
