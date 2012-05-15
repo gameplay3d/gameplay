@@ -85,6 +85,7 @@ MeshSkin* MeshSkin::clone(NodeCloneContext &context) const
         for (unsigned int i = 0; i < jointCount; ++i)
         {
             Joint* oldJoint = getJoint(i);
+            GP_ASSERT(oldJoint);
             
             Joint* newJoint = static_cast<Joint*>(skin->_rootJoint->findNode(oldJoint->getId()));
             if (!newJoint)
@@ -101,10 +102,10 @@ MeshSkin* MeshSkin::clone(NodeCloneContext &context) const
 
 void MeshSkin::setJointCount(unsigned int jointCount)
 {
-    // Erase the joints vector and release all joints
+    // Erase the joints vector and release all joints.
     clearJoints();
 
-    // Resize the joints vector and initialize to NULL
+    // Resize the joints vector and initialize to NULL.
     _joints.resize(jointCount);
     for (unsigned int i = 0; i < jointCount; i++)
     {
@@ -147,9 +148,12 @@ void MeshSkin::setJoint(Joint* joint, unsigned int index)
 
 Vector4* MeshSkin::getMatrixPalette() const
 {
+    GP_ASSERT(_matrixPalette);
+
     unsigned int count = _joints.size();
     for (unsigned int i = 0; i < count; i++)
     {
+        GP_ASSERT(_joints[i]);
         _joints[i]->updateJointMatrix(getBindShape(), &_matrixPalette[i * PALETTE_ROWS]);
     }
     return _matrixPalette;

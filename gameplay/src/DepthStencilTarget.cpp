@@ -7,7 +7,7 @@ namespace gameplay
 static std::vector<DepthStencilTarget*> __depthStencilTargets;
 
 DepthStencilTarget::DepthStencilTarget(const char* id, Format format)
-    : _id(id), _format(format), _depthTexture(NULL), _stencilBuffer(0)
+    : _id(id ? id : ""), _format(format), _depthTexture(NULL), _stencilBuffer(0)
 {
 }
 
@@ -38,29 +38,29 @@ DepthStencilTarget* DepthStencilTarget::create(const char* id, Format format, un
         return NULL;
     }
 
-    // Create stencil renderbuffer if format is DEPTH24_STENCIL8
+    // Create stencil renderbuffer if format is DEPTH24_STENCIL8.
     RenderBufferHandle stencilBuffer = 0;
     if (format == DEPTH24_STENCIL8)
     {
-        // Backup the existing render buffer
+        // Backup the existing render buffer.
         GLint currentRbo = 0;
         GL_ASSERT( glGetIntegerv(GL_RENDERBUFFER_BINDING, &currentRbo) );
 
-        // Create the new render buffer
+        // Create the new render buffer.
         GL_ASSERT( glGenRenderbuffers(1, &stencilBuffer) );
         GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, stencilBuffer) );
         GL_ASSERT( glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, width, height) );
 
-        // Restore the old render buffer
+        // Restore the old render buffer.
         GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, currentRbo) );
     }
 
-    // Create the depth stencil target
+    // Create the depth stencil target.
     DepthStencilTarget* depthStencilTarget = new DepthStencilTarget(id, format);
     depthStencilTarget->_depthTexture = depthTexture;
     depthStencilTarget->_stencilBuffer = stencilBuffer;
 
-    // Add it to the cache
+    // Add it to the cache.
     __depthStencilTargets.push_back(depthStencilTarget);
 
     return depthStencilTarget;
@@ -68,11 +68,14 @@ DepthStencilTarget* DepthStencilTarget::create(const char* id, Format format, un
 
 DepthStencilTarget* DepthStencilTarget::getDepthStencilTarget(const char* id)
 {
+    GP_ASSERT(id);
+
     // Search the vector for a matching ID.
     std::vector<DepthStencilTarget*>::const_iterator it;
     for (it = __depthStencilTargets.begin(); it < __depthStencilTargets.end(); it++)
     {
         DepthStencilTarget* dst = *it;
+        GP_ASSERT(dst);
         if (strcmp(id, dst->getID()) == 0)
         {
             return dst;
