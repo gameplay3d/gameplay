@@ -7,7 +7,7 @@ namespace gameplay
 static std::vector<RenderTarget*> __renderTargets;
 
 RenderTarget::RenderTarget(const char* id)
-    : _id(id), _texture(NULL)
+    : _id(id ? id : ""), _texture(NULL)
 {
 }
 
@@ -15,7 +15,7 @@ RenderTarget::~RenderTarget()
 {
     SAFE_RELEASE(_texture);
 
-    // Remove ourself from the cache
+    // Remove ourself from the cache.
     std::vector<RenderTarget*>::iterator it = std::find(__renderTargets.begin(), __renderTargets.end(), this);
     if (it != __renderTargets.end())
     {
@@ -25,10 +25,11 @@ RenderTarget::~RenderTarget()
 
 RenderTarget* RenderTarget::create(const char* id, unsigned int width, unsigned int height)
 {
-    // Create a new texture with the given width
+    // Create a new texture with the given width.
     Texture* texture = Texture::create(Texture::RGBA, width, height, NULL, false);
     if (texture == NULL)
     {
+        GP_ERROR("Failed to create texture for render target.");
         return NULL;
     }
 
@@ -42,11 +43,14 @@ RenderTarget* RenderTarget::create(const char* id, unsigned int width, unsigned 
 
 RenderTarget* RenderTarget::getRenderTarget(const char* id)
 {
+    GP_ASSERT(id);
+
     // Search the vector for a matching ID.
     std::vector<RenderTarget*>::const_iterator it;
     for (it = __renderTargets.begin(); it < __renderTargets.end(); it++)
     {
         RenderTarget* dst = *it;
+        GP_ASSERT(dst);
         if (strcmp(id, dst->getID()) == 0)
         {
             return dst;
