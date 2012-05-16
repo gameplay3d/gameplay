@@ -34,7 +34,7 @@ Game::~Game()
 {
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.
-    delete _timeEvents;
+    SAFE_DELETE(_timeEvents);
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
     Ref::printLeaks();
     printMemoryLeaks();
@@ -114,6 +114,10 @@ void Game::shutdown()
     // Call user finalization.
     if (_state != UNINITIALIZED)
     {
+        GP_ASSERT(_animationController);
+        GP_ASSERT(_audioController);
+        GP_ASSERT(_physicsController);
+
         Platform::signalShutdown();
         finalize();
 
@@ -140,6 +144,10 @@ void Game::pause()
 {
     if (_state == RUNNING)
     {
+        GP_ASSERT(_animationController);
+        GP_ASSERT(_audioController);
+        GP_ASSERT(_physicsController);
+
         _state = PAUSED;
         _pausedTimeLast = Platform::getAbsoluteTime();
         _animationController->pause();
@@ -152,6 +160,10 @@ void Game::resume()
 {
     if (_state == PAUSED)
     {
+        GP_ASSERT(_animationController);
+        GP_ASSERT(_audioController);
+        GP_ASSERT(_physicsController);
+
         _state = RUNNING;
         _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
         _animationController->resume();
@@ -175,6 +187,10 @@ void Game::frame()
 
     if (_state == Game::RUNNING)
     {
+        GP_ASSERT(_animationController);
+        GP_ASSERT(_audioController);
+        GP_ASSERT(_physicsController);
+
         // Update Time.
         static long lastFrameTime = Game::getGameTime();
         long frameTime = Game::getGameTime();
@@ -288,7 +304,7 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 
 void Game::schedule(long timeOffset, TimeListener* timeListener, void* cookie)
 {
-    GP_ASSERT(timeListener);
+    GP_ASSERT(_timeEvents);
     TimeEvent timeEvent(getGameTime() + timeOffset, timeListener, cookie);
     _timeEvents->push(timeEvent);
 }
@@ -300,6 +316,10 @@ bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 void Game::updateOnce()
 {
+    GP_ASSERT(_animationController);
+    GP_ASSERT(_audioController);
+    GP_ASSERT(_physicsController);
+
     // Update Time.
     static long lastFrameTime = Game::getGameTime();
     long frameTime = Game::getGameTime();
@@ -325,22 +345,15 @@ void Game::loadConfig()
     if (_properties == NULL)
     {
         // Try to load custom config from file.
-        // Check if file exists.
-        FILE* file = FileSystem::openFile("game.config", "rb");
-        if (file)
+        if (FileSystem::fileExists("game.config"))
         {
-            fclose(file);
             _properties = Properties::create("game.config");
+            
+            // Load filesystem aliases.
+            Properties* aliases = _properties->getNamespace("aliases", true);
+            if (aliases)
+                FileSystem::loadResourceAliases(aliases);
         }
-        else
-        {
-            _properties = new Properties();
-        }
-
-        // Load filesystem aliases
-        Properties* aliases = _properties->getNamespace("aliases", true);
-        if (aliases)
-            FileSystem::loadResourceAliases(aliases);
     }
 }
 
@@ -353,7 +366,8 @@ void Game::fireTimeEvents(long frameTime)
         {
             break;
         }
-        timeEvent->listener->timeEvent(frameTime - timeEvent->time, timeEvent->cookie);
+        if (timeEvent->listener)
+            timeEvent->listener->timeEvent(frameTime - timeEvent->time, timeEvent->cookie);
         _timeEvents->pop();
     }
 }
