@@ -31,7 +31,8 @@ namespace gameplay
     // This line defines a namespace of type "mynamespace" without an ID:
     mynamespace
     {
-        // This namespace can be retrieved by searching for its ID, "spriteTexture":
+        // This namespace can be retrieved by searching for its ID, "spriteTexture",
+        // or by its name "texture":
         texture spriteTexture 
         {
             fileName = sprite.png
@@ -125,6 +126,8 @@ namespace gameplay
  */
 class Properties
 {
+    friend class Game;
+
 public:
 
     /**
@@ -176,14 +179,18 @@ public:
     void rewind();
 
     /**
-     * Get a specific namespace by ID.  This method will perform a depth-first search
-     * on all namespaces and inner namespaces within this Property.
+     * Get a specific namespace by ID or name. This method will perform
+     * a depth-first search on all namespaces and inner namespaces within
+     * this Property.
      *
-     * @param id The ID of a specific namespace.
+     * @param id The ID or name of the namespace to find.
+     * @param searchNames If true, namespace names are used in the search,
+     *      instead of namespace IDs. By default this parameter is false
+     *      and namespace IDs are searched.
      * 
-     * @return A properties object with the given ID.
+     * @return A properties object with the given ID or name.
      */
-    Properties* getNamespace(const char* id) const;
+    Properties* getNamespace(const char* id, bool searchNames = false) const;
 
     /**
      * Get the name of this Property's namespace.

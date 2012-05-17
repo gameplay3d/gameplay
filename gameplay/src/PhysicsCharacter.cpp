@@ -31,7 +31,8 @@ public:
     btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
     {
         PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(convexResult.m_hitCollisionObject->getUserPointer());
-
+        
+        GP_ASSERT(object);
         if (object == _me || object->getType() == PhysicsCollisionObject::GHOST_OBJECT)
             return 1.0f;
 
@@ -71,26 +72,28 @@ PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Defi
 {
     setMaxSlopeAngle(45.0f);
 
-    // Set the collision flags on the ghost object to indicate it's a character
+    // Set the collision flags on the ghost object to indicate it's a character.
+    GP_ASSERT(_ghostObject);
     _ghostObject->setCollisionFlags(_ghostObject->getCollisionFlags() | btCollisionObject::CF_CHARACTER_OBJECT | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
-    // Register ourselves as an action on the physics world so we are called back during physics ticks
+    // Register ourselves as an action on the physics world so we are called back during physics ticks.
+    GP_ASSERT(Game::getInstance()->getPhysicsController() && Game::getInstance()->getPhysicsController()->_world);
     Game::getInstance()->getPhysicsController()->_world->addAction(this);
 }
 
 PhysicsCharacter::~PhysicsCharacter()
 {
-    // Unregister ourselves as action from world
+    // Unregister ourselves as action from world.
+    GP_ASSERT(Game::getInstance()->getPhysicsController() && Game::getInstance()->getPhysicsController()->_world);
     Game::getInstance()->getPhysicsController()->_world->removeAction(this);
 }
 
 PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
 {
     // Check if the properties is valid and has a valid namespace.
-    GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "character") == 0))
     {
-        GP_WARN("Failed to load physics character from properties object: must be non-null object and have namespace equal to \'character\'.");
+        GP_ERROR("Failed to load physics character from properties object: must be non-null object and have namespace equal to 'character'.");
         return NULL;
     }
 
@@ -98,7 +101,7 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
     PhysicsCollisionShape::Definition* shape = PhysicsCollisionShape::Definition::create(node, properties);
     if (shape == NULL)
     {
-        GP_WARN("Failed to create collision shape during physics character creation.");
+        GP_ERROR("Failed to create collision shape during physics character creation.");
         return NULL;
     }
 
@@ -121,6 +124,10 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
         else if (strcmp(name, "maxSlopeAngle") == 0)
         {
             maxSlopeAngle = properties->getFloat();
+        }
+        else
+        {
+            // Ignore this case (the attributes for the character's collision shape would end up here).
         }
     }
 
@@ -181,21 +188,25 @@ void PhysicsCharacter::setVelocity(const Vector3& velocity)
 
 void PhysicsCharacter::rotate(const Vector3& axis, float angle)
 {
+    GP_ASSERT(_node);
     _node->rotate(axis, angle);
 }
 
 void PhysicsCharacter::rotate(const Quaternion& rotation)
 {
+    GP_ASSERT(_node);
     _node->rotate(rotation);
 }
 
 void PhysicsCharacter::setRotation(const Vector3& axis, float angle)
 {
+    GP_ASSERT(_node);
     _node->setRotation(axis, angle);
 }
 
 void PhysicsCharacter::setRotation(const Quaternion& rotation)
 {
+    GP_ASSERT(_node);
     _node->setRotation(rotation);
 }
 
@@ -228,6 +239,7 @@ void PhysicsCharacter::jump(float height)
     //  v0 == initial velocity (zero for jumping)
     //  a == acceleration (inverse gravity)
     //  s == linear displacement (height)
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
     Vector3 jumpVelocity = -Game::getInstance()->getPhysicsController()->getGravity() * height * 2.0f;
     jumpVelocity.set(
         jumpVelocity.x == 0 ? 0 : std::sqrt(jumpVelocity.x),
@@ -238,20 +250,22 @@ void PhysicsCharacter::jump(float height)
 
 void PhysicsCharacter::updateCurrentVelocity()
 {
+    GP_ASSERT(_node);
+    
     Vector3 temp;
     btScalar velocity2 = 0;
 
-    // Reset velocity vector
+    // Reset velocity vector.
     _normalizedVelocity.setValue(0, 0, 0);
 
-    // Add movement velocity contribution
+    // Add movement velocity contribution.
     if (!_moveVelocity.isZero())
     {
         _normalizedVelocity = _moveVelocity;
         velocity2 = _moveVelocity.length2();
     }
 
-    // Add forward velocity contribution
+    // Add forward velocity contribution.
     if (_forwardVelocity != 0)
     {
         _node->getWorldMatrix().getForwardVector(&temp);
@@ -261,7 +275,7 @@ void PhysicsCharacter::updateCurrentVelocity()
         velocity2 = std::max(std::abs(velocity2), std::abs(_forwardVelocity*_forwardVelocity));
     }
 
-    // Add right velocity contribution
+    // Add right velocity contribution.
     if (_rightVelocity != 0)
     {
         _node->getWorldMatrix().getRightVector(&temp);
@@ -285,6 +299,9 @@ void PhysicsCharacter::updateCurrentVelocity()
 
 void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
 {
+    GP_ASSERT(_ghostObject);
+    GP_ASSERT(_node);
+
     // First check for existing collisions and attempt to respond/fix them.
     // Basically we are trying to move the character so that it does not penetrate
     // any other collision objects in the scene. We need to do this to ensure that
@@ -301,28 +318,28 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
 
             if (++stepCount > 4)
             {
-                // Most likely we are wedged between a number of different collision objects
+                // Most likely we are wedged between a number of different collision objects.
                 break;
             }
         }
     }
 
-    // Update current and target world positions
+    // Update current and target world positions.
     btVector3 startPosition = _ghostObject->getWorldTransform().getOrigin();
     _currentPosition = startPosition;
 
-    // Process movement in the up direction
+    // Process movement in the up direction.
     if (_physicsEnabled)
         stepUp(collisionWorld, deltaTimeStep);
-
-    // Process horizontal movement
+    
+    // Process horizontal movement.
     stepForwardAndStrafe(collisionWorld, deltaTimeStep);
 
-    // Process movement in the down direction
+    // Process movement in the down direction.
     if (_physicsEnabled)
         stepDown(collisionWorld, deltaTimeStep);
 
-    // Set new position
+    // Set new position.
     btVector3 translation = _currentPosition - startPosition;
     _node->translate(translation.x(), translation.y(), translation.z());
 }
@@ -383,6 +400,10 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 
     int maxIter = 10;
 
+    GP_ASSERT(_ghostObject && _ghostObject->getBroadphaseHandle());
+    GP_ASSERT(_collisionShape);
+    GP_ASSERT(collisionWorld);
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
     while (fraction > btScalar(0.01) && maxIter-- > 0)
     {
         start.setOrigin(_currentPosition);
@@ -402,9 +423,11 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
         {
             Vector3 normal(callback.m_hitNormalWorld.x(), callback.m_hitNormalWorld.y(), callback.m_hitNormalWorld.z());
             PhysicsCollisionObject* o = Game::getInstance()->getPhysicsController()->getCollisionObject(callback.m_hitCollisionObject);
+            GP_ASSERT(o);
             if (o->getType() == PhysicsCollisionObject::RIGID_BODY && o->isDynamic())
             {
                 PhysicsRigidBody* rb = static_cast<PhysicsRigidBody*>(o);
+                GP_ASSERT(rb);
                 normal.normalize();
                 rb->applyImpulse(_mass * -normal * velocity.length());
             }
@@ -436,6 +459,11 @@ void PhysicsCharacter::stepForwardAndStrafe(btCollisionWorld* collisionWorld, fl
 
 void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
 {
+    GP_ASSERT(Game::getInstance()->getPhysicsController() && Game::getInstance()->getPhysicsController()->_world);
+    GP_ASSERT(_ghostObject && _ghostObject->getBroadphaseHandle());
+    GP_ASSERT(_collisionShape);
+    GP_ASSERT(collisionWorld);
+
     // Contribute gravity to vertical velocity.
     btVector3 gravity = Game::getInstance()->getPhysicsController()->_world->getGravity();
     _verticalVelocity += (gravity * time);
@@ -444,7 +472,7 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
     btVector3 targetPosition = _currentPosition + (_verticalVelocity * time);
     targetPosition -= btVector3(0, _stepHeight, 0);
 
-    // Perform a convex sweep test between current and target position
+    // Perform a convex sweep test between current and target position.
     btTransform start;
     btTransform end;
     start.setIdentity();
@@ -485,9 +513,11 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
             else
             {
                 PhysicsCollisionObject* o = Game::getInstance()->getPhysicsController()->getCollisionObject(callback.m_hitCollisionObject);
+                GP_ASSERT(o);
                 if (o->getType() == PhysicsCollisionObject::RIGID_BODY && o->isDynamic())
                 {
                     PhysicsRigidBody* rb = static_cast<PhysicsRigidBody*>(o);
+                    GP_ASSERT(rb);
                     normal.normalize();
                     rb->applyImpulse(_mass * -normal * sqrt(BV(normal).dot(_verticalVelocity)));
                 }
@@ -508,14 +538,14 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
     // want to keep increasing the vertical velocity until the character 
     // randomly drops through the floor when it can finally move due to its
     // vertical velocity having such a great magnitude.
-    if (!_verticalVelocity.isZero())
+    if (!_verticalVelocity.isZero() && time > 0.0f)
         _verticalVelocity = ((targetPosition + btVector3(0.0, _stepHeight, 0.0)) - _currentPosition) / time;
 
     _currentPosition = targetPosition;
 }
 
 /*
- * Returns the reflection direction of a ray going 'direction' hitting a surface with normal 'normal'
+ * Returns the reflection direction of a ray going 'direction' hitting a surface with normal 'normal'.
  */
 btVector3 computeReflectionDirection(const btVector3& direction, const btVector3& normal)
 {
@@ -523,7 +553,7 @@ btVector3 computeReflectionDirection(const btVector3& direction, const btVector3
 }
 
 /*
- * Returns the portion of 'direction' that is parallel to 'normal'
+ * Returns the portion of 'direction' that is parallel to 'normal'.
  */
 btVector3 parallelComponent(const btVector3& direction, const btVector3& normal)
 {
@@ -532,7 +562,7 @@ btVector3 parallelComponent(const btVector3& direction, const btVector3& normal)
 }
 
 /*
- * Returns the portion of 'direction' that is perpindicular to 'normal'
+ * Returns the portion of 'direction' that is perpindicular to 'normal'.
  */
 btVector3 perpindicularComponent(const btVector3& direction, const btVector3& normal)
 {
@@ -566,25 +596,30 @@ void PhysicsCharacter::updateTargetPositionFromCollision(btVector3& targetPositi
 
 bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
 {
+    GP_ASSERT(_node);
+    GP_ASSERT(_ghostObject);
+    GP_ASSERT(world && world->getDispatcher());
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
+
     bool collision = false;
-
     btOverlappingPairCache* pairCache = _ghostObject->getOverlappingPairCache();
+    GP_ASSERT(pairCache);
 
-    // Tell the world to dispatch collision events for our ghost object
+    // Tell the world to dispatch collision events for our ghost object.
     world->getDispatcher()->dispatchAllCollisionPairs(pairCache, world->getDispatchInfo(), world->getDispatcher());
 
-    // Store our current world position
+    // Store our current world position.
     Vector3 startPosition;
     _node->getWorldMatrix().getTranslation(&startPosition);
     btVector3 currentPosition = BV(startPosition);
 
-    // Handle all collisions/overlappign pairs
+    // Handle all collisions/overlappign pairs.
     btScalar maxPenetration = btScalar(0.0);
     for (int i = 0, count = pairCache->getNumOverlappingPairs(); i < count; ++i)
     {
         _manifoldArray.resize(0);
 
-        // Query contacts between this overlapping pair (store in _manifoldArray)
+        // Query contacts between this overlapping pair (store in _manifoldArray).
         btBroadphasePair* collisionPair = &pairCache->getOverlappingPairArray()[i];
         if (collisionPair->m_algorithm)
         {
@@ -594,11 +629,12 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
         for (int j = 0, manifoldCount = _manifoldArray.size(); j < manifoldCount; ++j)
         {
             btPersistentManifold* manifold = _manifoldArray[j];
+            GP_ASSERT(manifold);
 
             // Get the direction of the contact points (used to scale normal vector in the correct direction).
             btScalar directionSign = manifold->getBody0() == _ghostObject ? -1.0f : 1.0f;
 
-            // Skip ghost objects
+            // Skip ghost objects.
             PhysicsCollisionObject* object = Game::getInstance()->getPhysicsController()->getCollisionObject(
                 (btCollisionObject*)(manifold->getBody0() == _ghostObject ? manifold->getBody1() : manifold->getBody0()));
             if (!object || object->getType() == PhysicsCollisionObject::GHOST_OBJECT)
@@ -608,20 +644,20 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
             {
                 const btManifoldPoint& pt = manifold->getContactPoint(p);
 
-                // Get penetration distance for this contact point
+                // Get penetration distance for this contact point.
                 btScalar dist = pt.getDistance();
 
                 if (dist < 0.0)
                 {
-                    // A negative distance means the objects are overlapping
+                    // A negative distance means the objects are overlapping.
                     if (dist < maxPenetration)
                     {
-                        // Store collision normal for this point
+                        // Store collision normal for this point.
                         maxPenetration = dist;
                         _collisionNormal = pt.m_normalWorldOnB * directionSign;
                     }
 
-                    // Calculate new position for object, which is translated back along the collision normal
+                    // Calculate new position for object, which is translated back along the collision normal.
                     currentPosition += pt.m_normalWorldOnB * directionSign * dist * 0.2f;
                     collision = true;
                 }
@@ -629,7 +665,7 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
         }
     }
 
-    // Set the new world transformation to apply to fix the collision
+    // Set the new world transformation to apply to fix the collision.
     _node->translate(Vector3(currentPosition.x(), currentPosition.y(), currentPosition.z()) - startPosition);
 
     return collision;

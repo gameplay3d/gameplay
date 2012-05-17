@@ -80,7 +80,7 @@ Form* Form::create(const char* url)
         layout = ScrollLayout::create();
         break;
     default:
-        GP_ERROR("Unsupported layout type \'%d\'.", getLayoutType(layoutString));
+        GP_ERROR("Unsupported layout type '%d'.", getLayoutType(layoutString));
     }
 
     Theme* theme = Theme::create(themeFile);
@@ -93,45 +93,28 @@ Form* Form::create(const char* url)
     const char* styleName = formProperties->getString("style");
     form->initialize(theme->getStyle(styleName), formProperties);
 
-    if (form->_autoWidth)
+    // Alignment
+    if ((form->_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)
     {
-        form->_bounds.width = Game::getInstance()->getWidth();
+        form->_bounds.y = Game::getInstance()->getHeight() - form->_bounds.height;
+    }
+    else if ((form->_alignment & Control::ALIGN_VCENTER) == Control::ALIGN_VCENTER)
+    {
+        form->_bounds.y = Game::getInstance()->getHeight() * 0.5f - form->_bounds.height * 0.5f;
     }
 
-    if (form->_autoHeight)
+    if ((form->_alignment & Control::ALIGN_RIGHT) == Control::ALIGN_RIGHT)
     {
-        form->_bounds.height = Game::getInstance()->getHeight();
+        form->_bounds.x = Game::getInstance()->getWidth() - form->_bounds.width;
+    }
+    else if ((form->_alignment & Control::ALIGN_HCENTER) == Control::ALIGN_HCENTER)
+    {
+        form->_bounds.x = Game::getInstance()->getWidth() * 0.5f - form->_bounds.width * 0.5f;
     }
 
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
 
-        
-    // Width and height must be powers of two to create a texture.
-    int w = (int)form->_bounds.width;
-    int h = (int)form->_bounds.height;
-
-    if (!((w & (w - 1)) == 0))
-    {
-        w = nextHighestPowerOfTwo(w);
-    }
-
-    if (!((h & (h - 1)) == 0))
-    {
-        h = nextHighestPowerOfTwo(h);
-    }
-
-    form->_u2 = form->_bounds.width / (float)w;
-    form->_v1 = form->_bounds.height / (float)h;
-
-    // Create the frame buffer.
-    form->_frameBuffer = FrameBuffer::create(form->_id.c_str());
-    RenderTarget* rt = RenderTarget::create(form->_id.c_str(), w, h);
-    GP_ASSERT(rt);
-    form->_frameBuffer->setRenderTarget(rt);
-    SAFE_RELEASE(rt);
-
-    Matrix::createOrthographicOffCenter(0, form->_bounds.width, form->_bounds.height, 0, 0, 1, &form->_projectionMatrix);
     Game* game = Game::getInstance();
     Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
 
@@ -156,6 +139,98 @@ Form* Form::getForm(const char* id)
     }
         
     return NULL;
+}
+
+void Form::setSize(float width, float height)
+{
+    if (_autoWidth)
+    {
+        width = Game::getInstance()->getWidth();
+    }
+
+    if (_autoHeight)
+    {
+        height = Game::getInstance()->getHeight();
+    }
+
+    if (width != _bounds.width || height != _bounds.height)
+    {
+        // Width and height must be powers of two to create a texture.
+        int w = width;
+        int h = height;
+
+        if (!((w & (w - 1)) == 0))
+        {
+            w = nextHighestPowerOfTwo(w);
+        }
+
+        if (!((h & (h - 1)) == 0))
+        {
+            h = nextHighestPowerOfTwo(h);
+        }
+
+        _u2 = width / (float)w;
+        _v1 = height / (float)h;
+
+        // Create framebuffer if necessary.
+        if (!_frameBuffer)
+        {
+            _frameBuffer = FrameBuffer::create(_id.c_str());
+            GP_ASSERT(_frameBuffer);
+        }
+     
+        // Re-create render target.
+        RenderTarget* rt = RenderTarget::create(_id.c_str(), w, h);
+        GP_ASSERT(rt);
+        _frameBuffer->setRenderTarget(rt);
+        SAFE_RELEASE(rt);
+
+        // Re-create projection matrix.
+        Matrix::createOrthographicOffCenter(0, width, height, 0, 0, 1, &_projectionMatrix);
+
+        // Re-create sprite batch.
+        SAFE_DELETE(_spriteBatch);
+        _spriteBatch = SpriteBatch::create(_frameBuffer->getRenderTarget()->getTexture());
+        GP_ASSERT(_spriteBatch);
+
+        _bounds.width = width;
+        _bounds.height = height;
+        _dirty = true;
+    }
+}
+
+void Form::setBounds(const Rectangle& bounds)
+{
+    setPosition(bounds.x, bounds.y);
+    setSize(bounds.width, bounds.height);
+}
+
+void Form::setAutoWidth(bool autoWidth)
+{
+    if (_autoWidth != autoWidth)
+    {
+        _autoWidth = autoWidth;
+        _dirty = true;
+
+        if (_autoWidth)
+        {
+            setSize(_bounds.width, Game::getInstance()->getWidth());
+        }
+    }
+}
+
+void Form::setAutoHeight(bool autoHeight)
+{
+    if (_autoHeight != autoHeight)
+    {
+        _autoHeight = autoHeight;
+        _dirty = true;
+
+        if (_autoHeight)
+        {
+            setSize(_bounds.width, Game::getInstance()->getHeight());
+        }
+    }
 }
 
 void Form::setQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4)
@@ -210,7 +285,108 @@ void Form::update()
 {
     if (isDirty())
     {
-        Container::update(Rectangle(0, 0, _bounds.width, _bounds.height), Vector2::zero());
+        _clearBounds.set(_absoluteClipBounds);
+
+        // Calculate the clipped bounds.
+        float x = 0;
+        float y = 0;
+        float width = _bounds.width;
+        float height = _bounds.height;
+
+        Rectangle clip(0, 0, _bounds.width, _bounds.height);
+
+        float clipX2 = clip.x + clip.width;
+        float x2 = clip.x + x + width;
+        if (x2 > clipX2)
+            width -= x2 - clipX2;
+
+        float clipY2 = clip.y + clip.height;
+        float y2 = clip.y + y + height;
+        if (y2 > clipY2)
+            height -= y2 - clipY2;
+
+        if (x < 0)
+        {
+            width += x;
+            x = -x;
+        }
+        else
+        {
+            x = 0;
+        }
+
+        if (y < 0)
+        {
+            height += y;
+            y = -y;
+        }
+        else
+        {
+            y = 0;
+        }
+
+        _clipBounds.set(x, y, width, height);
+
+        // Calculate the absolute bounds.
+        x = 0;
+        y = 0;
+        _absoluteBounds.set(x, y, _bounds.width, _bounds.height);
+
+        // Calculate the absolute viewport bounds.
+        // Absolute bounds minus border and padding.
+        const Theme::Border& border = getBorder(_state);
+        const Theme::Padding& padding = getPadding();
+
+        x += border.left + padding.left;
+        y += border.top + padding.top;
+        width = _bounds.width - border.left - padding.left - border.right - padding.right;
+        height = _bounds.height - border.top - padding.top - border.bottom - padding.bottom;
+
+        _viewportBounds.set(x, y, width, height);
+
+        // Calculate the clip area.
+        // Absolute bounds, minus border and padding,
+        // clipped to the parent container's clip area.
+        clipX2 = clip.x + clip.width;
+        x2 = x + width;
+        if (x2 > clipX2)
+            width = clipX2 - x;
+
+        clipY2 = clip.y + clip.height;
+        y2 = y + height;
+        if (y2 > clipY2)
+            height = clipY2 - y;
+
+        if (x < clip.x)
+        {
+            float dx = clip.x - x;
+            width -= dx;
+            x = clip.x;
+        }
+
+        if (y < clip.y)
+        {
+            float dy = clip.y - y;
+            height -= dy;
+            y = clip.y;
+        }
+ 
+        _viewportClipBounds.set(x, y, width, height);
+
+        _absoluteClipBounds.set(x - border.left - padding.left, y - border.top - padding.top,
+            width + border.left + padding.left + border.right + padding.right,
+            height + border.top + padding.top + border.bottom + padding.bottom);
+        if (_clearBounds.isEmpty())
+        {
+            _clearBounds.set(_absoluteClipBounds);
+        }
+
+        // Cache themed attributes for performance.
+        _skin = getSkin(_state);
+        _opacity = getOpacity(_state);
+
+        GP_ASSERT(_layout);
+        _layout->update(this);
     }
 }
 
@@ -237,7 +413,7 @@ void Form::draw()
 
         Game* game = Game::getInstance();
         Rectangle prevViewport = game->getViewport();
-        game->setViewport(Rectangle(_bounds.x, _bounds.y, _bounds.width, _bounds.height));
+        game->setViewport(Rectangle(0, 0, _bounds.width, _bounds.height));
 
         GP_ASSERT(_theme);
         _theme->setProjectionMatrix(_projectionMatrix);

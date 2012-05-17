@@ -22,9 +22,6 @@ ParticlesGame::ParticlesGame() : _scene(NULL)
 
 void ParticlesGame::initialize()
 {
-    // Disable VSync.
-    setVsync(false);
-
     // Display the gameplay splash screen for at least 1 second.
     displayScreen(this, &ParticlesGame::drawSplash, NULL, 1000L);
 
@@ -48,7 +45,7 @@ void ParticlesGame::initialize()
     SAFE_RELEASE(camera);
 
     // Create a font for drawing the framerate.
-    _font = Font::create("res/arial40.gpb");
+    _font = Font::create("res/arial18.gpb");
 
     // Load preset emitters.
     loadEmitters();
@@ -344,7 +341,8 @@ void ParticlesGame::finalize()
 {
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_form);
-    
+    SAFE_RELEASE(_font);
+
     for (unsigned int i = 0; i < _particleEmitters.size(); i++)
     {
         SAFE_RELEASE(_particleEmitters[i]);
@@ -402,7 +400,7 @@ void ParticlesGame::render(long elapsedTime)
     _scene->visit(this, &ParticlesGame::drawScene, (void*)0);
 
     // Draw the framerate and number of live particles.
-    drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, getHeight() - _font->getSize()*2, getFrameRate());
+    drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 170, 10, getFrameRate());
 }
 
 bool ParticlesGame::drawScene(Node* node, void* cookie)

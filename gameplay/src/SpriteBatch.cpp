@@ -83,7 +83,9 @@ SpriteBatch* SpriteBatch::create(const char* texturePath, Effect* effect, unsign
 
 SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int initialCapacity)
 {
-    GP_ASSERT(texture != NULL);
+    GP_ASSERT(texture);
+    GP_ASSERT(texture->getWidth());
+    GP_ASSERT(texture->getHeight());
 
     bool customEffect = (effect != NULL);
     if (!customEffect)
@@ -94,7 +96,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
             __spriteEffect = Effect::createFromSource(SPRITE_VSH, SPRITE_FSH);
             if (__spriteEffect == NULL)
             {
-                GP_ERROR("Unable to load sprite effect.");
+                GP_ERROR("Unable to create default sprite effect.");
                 return NULL;
             }
 
@@ -120,25 +122,33 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
     }
     if (!samplerUniform)
     {
-        GP_ERROR("No uniform of type GL_SAMPLER_2D found in sprite effect.");
+        GP_ERROR("Failed to create sprite batch; required uniform of type GL_SAMPLER_2D not found in sprite effect.");
         SAFE_RELEASE(effect);
         return NULL;
     }
 
-    // Wrap the effect in a material
+    // Wrap the effect in a material.
     Material* material = Material::create(effect); // +ref effect
+    if (!material)
+    {
+        GP_ERROR("Failed to create material for sprite batch.");
+        SAFE_RELEASE(effect);
+        return NULL;
+    }
 
-    // Set initial material state
+    // Set initial material state.
+    GP_ASSERT(material->getStateBlock());
     material->getStateBlock()->setBlend(true);
     material->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
     material->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 
-    // Bind the texture to the material as a sampler
+    // Bind the texture to the material as a sampler.
     Texture::Sampler* sampler = Texture::Sampler::create(texture); // +ref texture
+    GP_ASSERT(material->getParameter(samplerUniform->getName()));
     material->getParameter(samplerUniform->getName())->setValue(sampler);
     SAFE_RELEASE(sampler);
 
-    // Define the vertex format for the batch
+    // Define the vertex format for the batch.
     VertexFormat::Element vertexElements[] =
     {
         VertexFormat::Element(VertexFormat::POSITION, 3),
@@ -147,11 +157,11 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
     };
     VertexFormat vertexFormat(vertexElements, 3);
 
-    // Create the mesh batch
+    // Create the mesh batch.
     MeshBatch* meshBatch = MeshBatch::create(vertexFormat, Mesh::TRIANGLE_STRIP, material, true, initialCapacity > 0 ? initialCapacity : SPRITE_BATCH_DEFAULT_SIZE);
     material->release(); // don't call SAFE_RELEASE since material is used below
 
-    // Create the batch
+    // Create the batch.
     SpriteBatch* batch = new SpriteBatch();
     batch->_customEffect = customEffect;
     batch->_batch = meshBatch;
@@ -159,6 +169,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
     batch->_textureHeightRatio = 1.0f / (float)texture->getHeight();
 
     // Bind an ortho projection to the material by default (user can override with setProjectionMatrix)
+    GP_ASSERT(material->getParameter("u_projectionMatrix"));
     material->getParameter("u_projectionMatrix")->bindValue(batch, &SpriteBatch::getOrthoMatrix);
 
     return batch;
@@ -166,6 +177,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
 
 void SpriteBatch::begin()
 {
+    GP_ASSERT(_batch);
     _batch->begin();
 }
 
@@ -206,6 +218,8 @@ void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& 
 void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color,
                        const Vector2& rotationPoint, float rotationAngle, bool positionIsCenter)
 {
+    GP_ASSERT(_batch);
+
     float x = dst.x;
     float y = dst.y;
 
@@ -251,6 +265,8 @@ void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, 
 void SpriteBatch::draw(const Vector3& position, const Vector3& right, const Vector3& forward, float width, float height,
     float u1, float v1, float u2, float v2, const Vector4& color, const Vector2& rotationPoint, float rotationAngle)
 {
+    GP_ASSERT(_batch);
+
     // Calculate the vertex positions.
     //static Vector3 p[4];
 
@@ -345,6 +361,110 @@ void SpriteBatch::draw(float x, float y, float width, float height, float u1, fl
 
 void SpriteBatch::draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip)
 {
+    // Only draw if at least part of the sprite is within the clip region.
+    if (clipSprite(clip, x, y, width, height, u1, v1, u2, v2))
+        draw(x, y, 0, width, height, u1, v1, u2, v2, color);
+}
+
+void SpriteBatch::addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, SpriteBatch::SpriteVertex* vertices)
+{
+    GP_ASSERT(vertices);
+
+    const float x2 = x + width;
+    const float y2 = y + height;
+    ADD_SPRITE_VERTEX(vertices[0], x, y, 0, u1, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(vertices[1], x, y2, 0, u1, v2, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(vertices[2], x2, y, 0, u2, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(vertices[3], x2, y2, 0, u2, v2, color.x, color.y, color.z, color.w);
+}
+
+void SpriteBatch::addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip, SpriteBatch::SpriteVertex* vertices)
+{
+    GP_ASSERT(vertices);
+
+    // Only add a sprite if at least part of the sprite is within the clip region.
+    if (clipSprite(clip, x, y, width, height, u1, v1, u2, v2))
+    {
+        const float x2 = x + width;
+        const float y2 = y + height;
+        ADD_SPRITE_VERTEX(vertices[0], x, y, 0, u1, v1, color.x, color.y, color.z, color.w);
+        ADD_SPRITE_VERTEX(vertices[1], x, y2, 0, u1, v2, color.x, color.y, color.z, color.w);
+        ADD_SPRITE_VERTEX(vertices[2], x2, y, 0, u2, v1, color.x, color.y, color.z, color.w);
+        ADD_SPRITE_VERTEX(vertices[3], x2, y2, 0, u2, v2, color.x, color.y, color.z, color.w);
+    }
+}
+
+void SpriteBatch::draw(SpriteBatch::SpriteVertex* vertices, unsigned int vertexCount, unsigned short* indices, unsigned int indexCount)
+{
+    GP_ASSERT(_batch);
+    _batch->add(vertices, vertexCount, indices, indexCount);
+}
+
+void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, bool positionIsCenter)
+{
+    GP_ASSERT(_batch);
+
+    // Treat the given position as the center if the user specified it as such.
+    if (positionIsCenter)
+    {
+        x -= 0.5f * width;
+        y -= 0.5f * height;
+    }
+
+    // Write sprite vertex data.
+    const float x2 = x + width;
+    const float y2 = y + height;
+    static SpriteVertex v[4];
+    ADD_SPRITE_VERTEX(v[0], x, y, z, u1, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[1], x, y2, z, u1, v2, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[2], x2, y, z, u2, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[3], x2, y2, z, u2, v2, color.x, color.y, color.z, color.w);
+
+    static unsigned short indices[4] = { 0, 1, 2, 3 };
+
+    _batch->add(v, 4, indices, 4);
+}
+
+void SpriteBatch::end()
+{
+    // Finish and draw the batch.
+    GP_ASSERT(_batch);
+    _batch->end();
+    _batch->draw();
+}
+
+RenderState::StateBlock* SpriteBatch::getStateBlock() const
+{
+    GP_ASSERT(_batch && _batch->getMaterial());
+    return _batch->getMaterial()->getStateBlock();
+}
+
+Material* SpriteBatch::getMaterial() const
+{
+    GP_ASSERT(_batch);
+    return _batch->getMaterial();
+}
+
+void SpriteBatch::setProjectionMatrix(const Matrix& matrix)
+{
+    // Bind the specified matrix to a parameter named 'u_projectionMatrix' (assumed to exist).
+    GP_ASSERT(_batch && _batch->getMaterial() && _batch->getMaterial()->getParameter("u_projectionMatrix"));
+    _batch->getMaterial()->getParameter("u_projectionMatrix")->setValue(matrix);
+}
+
+const Matrix& SpriteBatch::getOrthoMatrix() const
+{
+    // Update matrix with ortho projection and return it.
+    Game* game = Game::getInstance();
+    Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &_projectionMatrix);
+    return _projectionMatrix;
+}
+
+bool SpriteBatch::clipSprite(const Rectangle& clip, float& x, float& y, float& width, float& height, float& u1, float& v1, float& u2, float& v2)
+{
+    GP_ASSERT(width);
+    GP_ASSERT(height);
+
     // Clip the rectangle given by { x, y, width, height } into clip.
     // We need to scale the uvs accordingly as we do this.
 
@@ -352,7 +472,7 @@ void SpriteBatch::draw(float x, float y, float width, float height, float u1, fl
     if (x + width < clip.x || x > clip.x + clip.width ||
         y + height < clip.y || y > clip.y + clip.height)
     {
-        return;
+        return false;
     }
 
     const float uvWidth = u2 - u1;
@@ -398,62 +518,7 @@ void SpriteBatch::draw(float x, float y, float width, float height, float u1, fl
         v2 -= uvHeight * percent;
     }
 
-    // Now we can perform a normal draw call.
-    draw(x, y, 0, width, height, u1, v1, u2, v2, color);
-}
-
-void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, bool positionIsCenter)
-{
-    // Treat the given position as the center if the user specified it as such.
-    if (positionIsCenter)
-    {
-        x -= 0.5f * width;
-        y -= 0.5f * height;
-    }
-
-    // Write sprite vertex data.
-    const float x2 = x + width;
-    const float y2 = y + height;
-    static SpriteVertex v[4];
-    ADD_SPRITE_VERTEX(v[0], x, y, z, u1, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[1], x, y2, z, u1, v2, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[2], x2, y, z, u2, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[3], x2, y2, z, u2, v2, color.x, color.y, color.z, color.w);
-
-    static unsigned short indices[4] = { 0, 1, 2, 3 };
-
-    _batch->add(v, 4, indices, 4);
-}
-
-void SpriteBatch::end()
-{
-    // Finish and draw the batch
-    _batch->end();
-    _batch->draw();
-}
-
-RenderState::StateBlock* SpriteBatch::getStateBlock() const
-{
-    return _batch->getMaterial()->getStateBlock();
-}
-
-Material* SpriteBatch::getMaterial()
-{
-    return _batch->getMaterial();
-}
-
-void SpriteBatch::setProjectionMatrix(const Matrix& matrix)
-{
-    // Bind the specified matrix to a parameter named 'u_projectionMatrix' (assumed to exist).
-    _batch->getMaterial()->getParameter("u_projectionMatrix")->setValue(matrix);
-}
-
-const Matrix& SpriteBatch::getOrthoMatrix() const
-{
-    // Update matrix with ortho projection and return it.
-    Game* game = Game::getInstance();
-    Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &_projectionMatrix);
-    return _projectionMatrix;
+    return true;
 }
 
 }

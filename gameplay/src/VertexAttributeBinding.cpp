@@ -24,9 +24,7 @@ VertexAttributeBinding::~VertexAttributeBinding()
     }
 
     SAFE_RELEASE(_mesh);
-
     SAFE_RELEASE(_effect);
-
     SAFE_DELETE_ARRAY(_attributes);
 
     if (_handle)
@@ -38,11 +36,14 @@ VertexAttributeBinding::~VertexAttributeBinding()
 
 VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, Effect* effect)
 {
+    GP_ASSERT(mesh);
+
     // Search for an existing vertex attribute binding that can be used.
     VertexAttributeBinding* b;
     for (unsigned int i = 0, count = __vertexAttributeBindingCache.size(); i < count; ++i)
     {
         b = __vertexAttributeBindingCache[i];
+        GP_ASSERT(b);
         if (b->_mesh == mesh && b->_effect == effect)
         {
             // Found a match!
@@ -69,6 +70,8 @@ VertexAttributeBinding* VertexAttributeBinding::create(const VertexFormat& verte
 
 VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexFormat& vertexFormat, void* vertexPointer, Effect* effect)
 {
+    GP_ASSERT(effect);
+
     // One-time initialization.
     if (__maxVertexAttribs == 0)
     {
@@ -76,9 +79,9 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
         GL_ASSERT( glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &temp) );
 
         __maxVertexAttribs = temp;
-        GP_ASSERT(__maxVertexAttribs > 0);
         if (__maxVertexAttribs <= 0)
         {
+            GP_ERROR("The maximum number of vertex attributes supported by OpenGL on the current device is 0 or less.");
             return NULL;
         }
     }
@@ -97,6 +100,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
 
         if (b->_handle == 0)
         {
+            GP_ERROR("Failed to create VAO handle.");
             SAFE_DELETE(b);
             return NULL;
         }
@@ -140,7 +144,6 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
     for (unsigned int i = 0, count = vertexFormat.getElementCount(); i < count; ++i)
     {
         const VertexFormat::Element& e = vertexFormat.getElement(i);
-
         gameplay::VertexAttribute attrib;
 
         // Constructor vertex attribute name expected in shader.
@@ -189,6 +192,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
             attrib = effect->getVertexAttribute(name.c_str());
             break;
         default:
+            // This happens whenever vertex data contains extra information (not an error).
             attrib = -1;
             break;
         }
@@ -220,13 +224,14 @@ void VertexAttributeBinding::setVertexAttribPointer(GLuint indx, GLint size, GLe
 
     if (_handle)
     {
-        // Hardware mode
+        // Hardware mode.
         GL_ASSERT( glVertexAttribPointer(indx, size, type, normalize, stride, pointer) );
         GL_ASSERT( glEnableVertexAttribArray(indx) );
     }
     else
     {
-        // Software mode
+        // Software mode.
+        GP_ASSERT(_attributes);
         _attributes[indx].enabled = true;
         _attributes[indx].size = size;
         _attributes[indx].type = type;
@@ -255,6 +260,7 @@ void VertexAttributeBinding::bind()
             GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, 0) );
         }
 
+        GP_ASSERT(_attributes);
         for (unsigned int i = 0; i < __maxVertexAttribs; ++i)
         {
             VertexAttribute& a = _attributes[i];
@@ -282,6 +288,7 @@ void VertexAttributeBinding::unbind()
             GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, 0) );
         }
 
+        GP_ASSERT(_attributes);
         for (unsigned int i = 0; i < __maxVertexAttribs; ++i)
         {
             if (_attributes[i].enabled)

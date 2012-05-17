@@ -8,9 +8,11 @@
 #include <GL/wglew.h>
 #include <windowsx.h>
 
+using gameplay::printError;
+
 // Default to 720p
-#define WINDOW_WIDTH    1280
-#define WINDOW_HEIGHT   720
+static int __width = 1280;
+static int __height = 720;
 
 static long __timeTicksPerMillis;
 static long __timeStart;
@@ -247,23 +249,25 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
 
 void UpdateCapture(LPARAM lParam)
 {
-	if ((lParam & MK_LBUTTON) || (lParam & MK_MBUTTON) || (lParam & MK_RBUTTON))
-		SetCapture(__hwnd);
-	else
-		ReleaseCapture();
+    if ((lParam & MK_LBUTTON) || (lParam & MK_MBUTTON) || (lParam & MK_RBUTTON))
+        SetCapture(__hwnd);
+    else
+        ReleaseCapture();
 }
 
 LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if (hwnd != __hwnd)
     {
-        // Ignore messages that are not for our game window
-        return DefWindowProc(hwnd, msg, wParam, lParam); 
+        // Ignore messages that are not for our game window.
+        return DefWindowProc(hwnd, msg, wParam, lParam);
     }
 
     // Scale factors for the mouse movement used to simulate the accelerometer.
-    static const float ACCELEROMETER_X_FACTOR = 90.0f / WINDOW_WIDTH;
-    static const float ACCELEROMETER_Y_FACTOR = 90.0f / WINDOW_HEIGHT;
+    GP_ASSERT(__width);
+    GP_ASSERT(__height);
+    static const float ACCELEROMETER_X_FACTOR = 90.0f / __width;
+    static const float ACCELEROMETER_Y_FACTOR = 90.0f / __height;
 
     static int lx, ly;
 
@@ -290,7 +294,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
 
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, x, y, 0))
         {
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, x, y, 0);
@@ -306,29 +310,29 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, x, y, 0);
         }
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         return 0;
     }
     case WM_RBUTTONDOWN:
-		UpdateCapture(wParam);
-		lx = GET_X_LPARAM(lParam);
+        UpdateCapture(wParam);
+        lx = GET_X_LPARAM(lParam);
         ly = GET_Y_LPARAM(lParam);
         gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, lx, ly, 0);
         break;
 
     case WM_RBUTTONUP:
         gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         break;
 
     case WM_MBUTTONDOWN:
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         break;
 
     case WM_MBUTTONUP:
         gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
-		UpdateCapture(wParam);
+        UpdateCapture(wParam);
         break;
 
     case WM_MOUSEMOVE:
@@ -336,30 +340,30 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
 
-		// Allow Game::mouseEvent a chance to handle (and possibly consume) the event.
-		if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
-		{
-			if ((wParam & MK_LBUTTON) == MK_LBUTTON)
-			{
-				// Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
-				gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0);
-				return 0;
-			}
-			else if ((wParam & MK_RBUTTON) == MK_RBUTTON)
-			{
-				// Update the pitch and roll by adding the scaled deltas.
-				__roll += (float)(x - lx) * ACCELEROMETER_X_FACTOR;
-				__pitch += -(float)(y - ly) * ACCELEROMETER_Y_FACTOR;
+        // Allow Game::mouseEvent a chance to handle (and possibly consume) the event.
+        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
+        {
+            if ((wParam & MK_LBUTTON) == MK_LBUTTON)
+            {
+                // Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
+                gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0);
+                return 0;
+            }
+            else if ((wParam & MK_RBUTTON) == MK_RBUTTON)
+            {
+                // Update the pitch and roll by adding the scaled deltas.
+                __roll += (float)(x - lx) * ACCELEROMETER_X_FACTOR;
+                __pitch += -(float)(y - ly) * ACCELEROMETER_Y_FACTOR;
 
-				// Clamp the values to the valid range.
-				__roll = max(min(__roll, 90.0f), -90.0f);
-				__pitch = max(min(__pitch, 90.0f), -90.0f);
+                // Clamp the values to the valid range.
+                __roll = max(min(__roll, 90.0f), -90.0f);
+                __pitch = max(min(__pitch, 90.0f), -90.0f);
 
-				// Update the last X/Y values.
-				lx = x;
-				ly = y;
-			}
-		}
+                // Update the last X/Y values.
+                lx = x;
+                ly = y;
+            }
+        }
         break;
     }
 
@@ -374,7 +378,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (wParam == VK_CAPITAL)
             capsOn = !capsOn;
 
-        // Suppress key repeats
+        // Suppress key repeats.
         if ((lParam & 0x40000000) == 0)
             gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown ^ capsOn));
         break;
@@ -387,13 +391,13 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_CHAR:
-        // Suppress key repeats
+        // Suppress key repeats.
         if ((lParam & 0x40000000) == 0)
             gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, wParam);
         break;
 
     case WM_UNICHAR:
-        // Suppress key repeats
+        // Suppress key repeats.
         if ((lParam & 0x40000000) == 0)
             gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, wParam);
         break;
@@ -449,6 +453,8 @@ Platform::~Platform()
 
 Platform* Platform::create(Game* game)
 {
+    GP_ASSERT(game);
+
     FileSystem::setResourcePath("./");
 
     Platform* platform = new Platform(game);
@@ -457,9 +463,40 @@ Platform* Platform::create(Game* game)
     __hinstance = ::GetModuleHandle(NULL);
 
     LPCTSTR windowClass = L"gameplay";
-    LPCTSTR windowName = L"";
+    std::wstring windowName;
+    bool fullscreen = false;
+    
+    // Read window settings from config.
+    if (game->getConfig())
+    {
+        Properties* config = game->getConfig()->getNamespace("window", true);
+        if (config)
+        {
+            // Read window title.
+            const char* title = config->getString("title");
+            if (title)
+            {
+                int len = MultiByteToWideChar(CP_ACP, 0, title, -1, NULL, 0);
+                wchar_t* wtitle = new wchar_t[len];
+                MultiByteToWideChar(CP_ACP, 0, title, -1, wtitle, len);
+                windowName = wtitle;
+                SAFE_DELETE_ARRAY(wtitle);
+            }
 
-    RECT rect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+            // Read window size.
+            int width = config->getInt("width");
+            if (width != 0)
+                __width = width;
+            int height = config->getInt("height");
+            if (height != 0)
+                __height = height;
+
+            // Read fullscreen state.
+            fullscreen = config->getBool("fullscreen");
+        }
+    }
+
+    RECT rect = { 0, 0, __width, __height };
 
     // Register our window class.
     WNDCLASSEX wc;
@@ -477,24 +514,47 @@ Platform* Platform::create(Game* game)
     wc.lpszClassName  = windowClass;
 
     if (!::RegisterClassEx(&wc))
+    {
+        GP_ERROR("Failed to register window class.");
         goto error;
-    
+    }
+
+    if (fullscreen)
+    {
+        DEVMODE dm;
+        memset(&dm, 0, sizeof(dm));
+        dm.dmSize= sizeof(dm);
+        dm.dmPelsWidth	= __width;
+        dm.dmPelsHeight	= __height;
+        dm.dmBitsPerPel	= 32;
+        dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+        // Try to set selected mode and get results. NOTE: CDS_FULLSCREEN gets rid of start bar.
+        if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
+        {
+            fullscreen = false;
+            GP_ERROR("Failed to start game in full-screen mode with resolution %dx%d.", __width, __height);
+            goto error;
+        }
+    }
+
     // Set the window style.
-    DWORD style   = ( WINDOW_FULLSCREEN ? WS_POPUP : WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-    DWORD styleEx = (WINDOW_FULLSCREEN ? WS_EX_APPWINDOW : WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
+    DWORD style   = (fullscreen ? WS_POPUP : WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+    //DWORD style   = (fullscreen ? WS_POPUP : WS_OVERLAPPEDWINDOW) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+    DWORD styleEx = (fullscreen ? WS_EX_APPWINDOW : WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
 
     // Adjust the window rectangle so the client size is the requested size.
     AdjustWindowRectEx(&rect, style, FALSE, styleEx);
-    
+
     // Create the native Windows window.
-    __hwnd = CreateWindowEx(styleEx, windowClass, windowName, style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
+    __hwnd = CreateWindowEx(styleEx, windowClass, windowName.c_str(), style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
 
     // Get the drawing context.
     __hdc = GetDC(__hwnd);
 
     // Center the window
-    const int screenX = (GetSystemMetrics(SM_CXSCREEN) - WINDOW_WIDTH) / 2;
-    const int screenY = (GetSystemMetrics(SM_CYSCREEN) - WINDOW_HEIGHT) / 2;
+    const int screenX = (GetSystemMetrics(SM_CXSCREEN) - __width) / 2;
+    const int screenY = (GetSystemMetrics(SM_CYSCREEN) - __height) / 2;
     ::SetWindowPos(__hwnd, __hwnd, screenX, screenY, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 
     // Choose pixel format. 32-bit. RGBA.
@@ -510,14 +570,25 @@ Platform* Platform::create(Game* game)
 
     int pixelFormat = ChoosePixelFormat(__hdc, &pfd);
 
-    if (pixelFormat == 0 || !SetPixelFormat (__hdc, pixelFormat, &pfd))
+    if (pixelFormat == 0)
+    {
+        GP_ERROR("Failed to choose a pixel format.");
         goto error;
+    }
+    if (!SetPixelFormat (__hdc, pixelFormat, &pfd))
+    {
+        GP_ERROR("Failed to set the pixel format.");
+        goto error;
+    }
 
     HGLRC tempContext = wglCreateContext(__hdc);
     wglMakeCurrent(__hdc, tempContext);
 
     if (GLEW_OK != glewInit())
+    {
+        GP_ERROR("Failed to initialize GLEW.");
         goto error;
+    }
 
     int attribs[] =
     {
@@ -529,17 +600,21 @@ Platform* Platform::create(Game* game)
     if (!(__hrc = wglCreateContextAttribsARB(__hdc, 0, attribs) ) )
     {
         wglDeleteContext(tempContext);
+        GP_ERROR("Failed to create OpenGL context.");
         goto error;
     }
     wglDeleteContext(tempContext);
 
     if (!wglMakeCurrent(__hdc, __hrc) || !__hrc)
+    {
+        GP_ERROR("Failed to make the window current.");
         goto error;
+    }
 
     // Vertical sync.
     wglSwapIntervalEXT(__vsync ? 1 : 0);
 
-    // Show the window
+    // Show the window.
     ShowWindow(__hwnd, SW_SHOW);
 
     return platform;
@@ -551,7 +626,8 @@ error:
 }
 
 int Platform::enterMessagePump()
-{  
+{
+    GP_ASSERT(_game);
     int rc = 0;
 
     // Get the initial time.
@@ -560,6 +636,7 @@ int Platform::enterMessagePump()
     __timeTicksPerMillis = (long)(tps.QuadPart / 1000L);
     LARGE_INTEGER queryTime;
     QueryPerformanceCounter(&queryTime);
+    GP_ASSERT(__timeTicksPerMillis);
     __timeStart = queryTime.QuadPart / __timeTicksPerMillis;
 
     // Set the initial pitch and roll values.
@@ -569,7 +646,7 @@ int Platform::enterMessagePump()
     SwapBuffers(__hdc);
 
     if (_game->getState() != Game::RUNNING)
-        _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);
+        _game->run();
 
     // Enter event dispatch loop.
     MSG msg;
@@ -602,18 +679,19 @@ void Platform::signalShutdown()
 
 unsigned int Platform::getDisplayWidth()
 {
-    return WINDOW_WIDTH;
+    return __width;
 }
 
 unsigned int Platform::getDisplayHeight()
 {
-    return WINDOW_HEIGHT;
+    return __height;
 }
     
 long Platform::getAbsoluteTime()
 {
-       LARGE_INTEGER queryTime;
+    LARGE_INTEGER queryTime;
     QueryPerformanceCounter(&queryTime);
+    GP_ASSERT(__timeTicksPerMillis);
     __timeAbsolute = queryTime.QuadPart / __timeTicksPerMillis;
 
     return __timeAbsolute;
@@ -646,6 +724,9 @@ bool Platform::isMultiTouch()
 
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
+    GP_ASSERT(pitch);
+    GP_ASSERT(roll);
+
     *pitch = __pitch;
     *roll = __roll;
 }
@@ -671,7 +752,7 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
 
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Game::getInstance()->keyEvent(evt, key);
     Form::keyEventInternal(evt, key);
 }
 

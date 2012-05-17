@@ -29,13 +29,7 @@ public:
         RGB     = GL_RGB,
         RGBA    = GL_RGBA,
         ALPHA   = GL_ALPHA,
-        DEPTH   = GL_DEPTH_COMPONENT,
-#ifdef USE_PVRTC
-        COMPRESSED_RGB_PVRTC_4BPP = GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,
-        COMPRESSED_RGBA_PVRTC_4BPP = GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,
-        COMPRESSED_RGB_PVRTC_2BPP = GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,
-        COMPRESSED_RGBA_PVRTC_2BPP = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG
-#endif
+        DEPTH   = GL_DEPTH_COMPONENT
     };
 
     /**
@@ -134,6 +128,9 @@ public:
     /**
      * Creates a texture from the given image resource.
      *
+     * Note that for textures that include mipmap data in the source data (such as most compressed textures),
+     * the generateMipmaps flags should NOT be set to true.
+     *
      * @param path The image resource path.
      * @param generateMipmaps true to auto-generate a full mipmap chain, false otherwise.
      * 
@@ -190,6 +187,11 @@ public:
     bool isMipmapped() const;
 
     /**
+     * Determines if this texture is a compressed teture.
+     */
+    bool isCompressed() const;
+
+    /**
      * Returns the texture handle.
      *
      * @return The texture handle.
@@ -213,16 +215,19 @@ private:
      */
     virtual ~Texture();
 
-#ifdef USE_PVRTC
     static Texture* createCompressedPVRTC(const char* path);
-#endif
-    
+    static Texture* createCompressedDDS(const char* path);
+
+    static GLubyte* readCompressedPVRTC(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
+    static GLubyte* readCompressedPVRTCLegacy(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
+
     std::string _path;
     TextureHandle _handle;
     unsigned int _width;
     unsigned int _height;
     bool _mipmapped;
     bool _cached;
+    bool _compressed;
 };
 
 }
