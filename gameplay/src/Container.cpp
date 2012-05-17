@@ -121,7 +121,7 @@ void Container::addControls(Theme* theme, Properties* properties)
         }
         else
         {
-            GP_ERROR("Failed to create control; unrecognized control name \'%s\'.", controlName.c_str());
+            GP_ERROR("Failed to create control; unrecognized control name '%s'.", controlName.c_str());
         }
 
         // Add the new control to the form.
@@ -264,7 +264,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
     if (_skin && needsClear)
     {
         GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        GL_ASSERT( glClearColor(0, 0, 0, 1) );
+        GL_ASSERT( glClearColor(0, 0, 0, 0) );
         float clearY = targetHeight - _clearBounds.y - _clearBounds.height;
         GL_ASSERT( glScissor(_clearBounds.x, clearY,
             _clearBounds.width, _clearBounds.height) );

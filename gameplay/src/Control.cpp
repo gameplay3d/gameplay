@@ -7,7 +7,7 @@ namespace gameplay
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-        _dirty(true), _consumeTouchEvents(true), _listeners(NULL), _styleOverridden(false)
+    _dirty(true), _consumeTouchEvents(true), _listeners(NULL), _styleOverridden(false), _skin(NULL), _clearBounds(Rectangle::empty())
 {
 }
 
@@ -64,7 +64,7 @@ void Control::initialize(Theme::Style* style, Properties* properties)
         size.x = properties->getFloat("width");
         size.y = properties->getFloat("height");
     }
-    _bounds.set(position.x, position.y, size.x, size.y);
+    setBounds(Rectangle(position.x, position.y, size.x, size.y));
 
     _state = Control::getState(properties->getString("state"));
 
@@ -139,7 +139,11 @@ void Control::setSize(float width, float height)
 
 void Control::setBounds(const Rectangle& bounds)
 {
-    _bounds.set(bounds);
+    if (bounds != _bounds)
+    {
+        _bounds.set(bounds);
+        _dirty = true;
+    }
 }
 
 const Rectangle& Control::getBounds() const
@@ -179,7 +183,11 @@ Control::Alignment Control::getAlignment() const
 
 void Control::setAutoWidth(bool autoWidth)
 {
-    _autoWidth = autoWidth;
+    if (_autoWidth != autoWidth)
+    {
+        _autoWidth = autoWidth;
+        _dirty = true;
+    }
 }
 
 bool Control::getAutoWidth() const
@@ -189,7 +197,11 @@ bool Control::getAutoWidth() const
 
 void Control::setAutoHeight(bool autoHeight)
 {
-    _autoHeight = autoHeight;
+    if (_autoHeight != autoHeight)
+    {
+        _autoHeight = autoHeight;
+        _dirty = true;
+    }
 }
 
 void Control::setOpacity(float opacity, unsigned char states)
@@ -869,7 +881,7 @@ void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCl
     if (needsClear)
     {
         GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        GL_ASSERT( glClearColor(0, 0, 0, 1) );
+        GL_ASSERT( glClearColor(0, 0, 0, 0) );
         GL_ASSERT( glScissor(_clearBounds.x, targetHeight - _clearBounds.y - _clearBounds.height,
             _clearBounds.width, _clearBounds.height) );
         GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
@@ -1261,7 +1273,7 @@ Control::Alignment Control::getAlignment(const char* alignment)
     }
     else
     {
-        GP_ERROR("Failed to get corresponding control alignment for unsupported value \'%s\'.", alignment);
+        GP_ERROR("Failed to get corresponding control alignment for unsupported value '%s'.", alignment);
     }
 
     // Default.

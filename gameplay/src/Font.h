@@ -76,11 +76,38 @@ public:
         float uvs[4];
     };
 
-    class TextBatch
+    /**
+     * Vertex coordinates, UVs and indices can be computed and stored in a Text object.
+     * For static text labels that do not change frequently, this means these computations
+     * need not be performed every frame.
+     */
+    class Text
     {
+        friend class Font;
+
     public:
-        SpriteBatch::SpriteVertex* _vertices;
+        /**
+         * Constructor.
+         */
+        Text(const char* text);
+
+        /**
+         * Destructor.
+         */
+        ~Text();
+
+        /**
+         * Get the string that will be drawn from this Text object.
+         */
+        const char* getText();
+
+    private:
+        std::string _text;
         unsigned int _vertexCount;
+        SpriteBatch::SpriteVertex* _vertices;
+        unsigned int _indexCount;
+        unsigned short* _indices;
+        Vector4 _color;
     };
 
     /**
@@ -133,17 +160,6 @@ public:
     void end();
 
     /**
-     * Compute vertex coordinates and UVs for a given string.
-     */
-    TextBatch* getTextBatch(const char* text, const Rectangle& area, const Vector4& color, unsigned int size = 0,
-        Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false, const Rectangle* clip = NULL);
-
-    /**
-     * Draw a string from a precomputed StringBatch.
-     */
-    void drawTextBatch(TextBatch* textBatch);
-
-    /**
      * Draws the specified text in a solid color, with a scaling factor.
      *
      * @param text The text to draw.
@@ -157,7 +173,7 @@ public:
 
     /**
      * Draws the specified text within a rectangular area, with a specified alignment and scale.
-     * Clips text outside the viewport.  Optionally wraps text to fit within the width of the viewport.
+     * Clips text outside the viewport. Optionally wraps text to fit within the width of the viewport.
      *
      * @param text The text to draw.
      * @param area The viewport area to draw within.  Text will be clipped outside this rectangle.
@@ -170,6 +186,33 @@ public:
      */
     void drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size = 0, 
                   Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false, const Rectangle* clip = NULL);
+
+    /**
+     * Draw a string from a precomputed Text object.
+     *
+     * @param text The text to draw.
+     */
+    void drawText(Text* text);
+
+    /**
+     * Create an immutable Text object from a given string.
+     * Vertex coordinates, UVs and indices will be computed and stored in the Text object.
+     * For static text labels that do not change frequently, this means these computations
+     * need not be performed every frame.
+     *
+     * @param text The text to draw.
+     * @param area The viewport area to draw within.  Text will be clipped outside this rectangle.
+     * @param color The color of text.
+     * @param size The size to draw text (0 for default size).
+     * @param justify Justification of text within the viewport.
+     * @param wrap Wraps text to fit within the width of the viewport if true.
+     * @param rightToLeft Whether to draw text from right to left.
+     * @param clip A region to clip text within after applying justification to the viewport area.
+     *
+     * @return A Text object.
+     */
+    Text* createText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size = 0,
+                     Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false, const Rectangle* clip = NULL);
 
     /**
      * Measures a string's width and height without alignment, wrapping or clipping.
@@ -197,10 +240,10 @@ public:
                      Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool ignoreClip = false);
 
     /**
-     * Get an index into a string corresponding to the character nearest the given location within the clip region.
+     * Get an character index into a string corresponding to the character nearest the given location within the clip region.
      */
     int getIndexAtLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
-                                    Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
+                           Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
 
     /**
      * Get the location of the character at the given index.
@@ -244,10 +287,10 @@ private:
     ~Font();
 
     void getMeasurementInfo(const char* text, const Rectangle& area, unsigned int size, Justify justify, bool wrap, bool rightToLeft,
-        std::vector<int>* xPositions, int* yPosition, std::vector<unsigned int>* lineLengths);
+                            std::vector<int>* xPositions, int* yPosition, std::vector<unsigned int>* lineLengths);
 
     int getIndexOrLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
-                                    const int destIndex = -1, Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
+                           const int destIndex = -1, Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
 
     unsigned int getTokenWidth(const char* token, unsigned int length, unsigned int size, float scale);
 

@@ -57,6 +57,7 @@ const Plane& Frustum::getTop() const
 
 void Frustum::getMatrix(Matrix* dst) const
 {
+    GP_ASSERT(dst);
     dst->set(_matrix);
 }
 
