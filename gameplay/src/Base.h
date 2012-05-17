@@ -77,6 +77,9 @@ extern void printError(const char* format, ...);
 #endif
 
 // Error macro.
+#ifdef GP_ERRORS_AS_WARNINGS
+#define GP_ERROR GP_WARN
+#else
 #define GP_ERROR(...) do \
     { \
         printError("%s -- ", __current__func__); \
@@ -85,6 +88,7 @@ extern void printError(const char* format, ...);
         GP_FORCE_ASSERTION_FAILURE; \
         std::exit(-1); \
     } while (0)
+#endif
 
 // Warning macro.
 #define GP_WARN(...) do \
