@@ -23,6 +23,7 @@ PhysicsMotionState::~PhysicsMotionState()
 
 void PhysicsMotionState::getWorldTransform(btTransform &transform) const
 {
+    GP_ASSERT(_node);
     if (_node->getCollisionObject() && _node->getCollisionObject()->isKinematic())
         updateTransformFromNode();
 
@@ -31,6 +32,8 @@ void PhysicsMotionState::getWorldTransform(btTransform &transform) const
 
 void PhysicsMotionState::setWorldTransform(const btTransform &transform)
 {
+    GP_ASSERT(_node);
+
     _worldTransform = transform * _centerOfMassOffset;
         
     const btQuaternion& rot = _worldTransform.getRotation();
@@ -42,6 +45,8 @@ void PhysicsMotionState::setWorldTransform(const btTransform &transform)
 
 void PhysicsMotionState::updateTransformFromNode() const
 {
+    GP_ASSERT(_node);
+
     // Store the initial world transform (minus the scale) for use by Bullet later on.
     Quaternion rotation;
     const Matrix& m = _node->getWorldMatrix();
