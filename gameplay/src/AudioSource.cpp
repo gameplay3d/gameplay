@@ -32,16 +32,14 @@ AudioSource::~AudioSource()
 
 AudioSource* AudioSource::create(const char* url)
 {
-    GP_ASSERT(url);
-
     // Load from a .audio file.
     std::string pathStr = url;
     if (pathStr.find(".audio") != pathStr.npos)
     {
         Properties* properties = Properties::create(url);
-        GP_ASSERT(properties);
         if (properties == NULL)
         {
+            GP_ERROR("Failed to create audio source from .audio file.");
             return NULL;
         }
 
@@ -75,7 +73,7 @@ AudioSource* AudioSource::create(Properties* properties)
     GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "audio") == 0))
     {
-        GP_ERROR("Failed to load audio source from properties object: must be non-null object and have namespace equal to \'audio\'.");
+        GP_ERROR("Failed to load audio source from properties object: must be non-null object and have namespace equal to 'audio'.");
         return NULL;
     }
 

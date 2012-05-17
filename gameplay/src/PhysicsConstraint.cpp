@@ -22,12 +22,16 @@ PhysicsConstraint::~PhysicsConstraint()
         _b->removeConstraint(this);
 
     // Remove the constraint from the physics world and delete the Bullet object.
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->removeConstraint(this);
     SAFE_DELETE(_constraint);
 }
 
 Vector3 PhysicsConstraint::centerOfMassMidpoint(const Node* a, const Node* b)
 {
+    GP_ASSERT(a);
+    GP_ASSERT(b);
+
     Vector3 tA, tB;
     a->getWorldMatrix().getTranslation(&tA);
     b->getWorldMatrix().getTranslation(&tB);
@@ -45,6 +49,8 @@ Vector3 PhysicsConstraint::centerOfMassMidpoint(const Node* a, const Node* b)
 
 Quaternion PhysicsConstraint::getRotationOffset(const Node* node, const Vector3& point)
 {
+    GP_ASSERT(node);
+
     // Create a translation matrix that translates to the given origin.
     Matrix m;
     Matrix::createTranslation(point, &m);
@@ -64,6 +70,8 @@ Quaternion PhysicsConstraint::getRotationOffset(const Node* node, const Vector3&
 
 Vector3 PhysicsConstraint::getTranslationOffset(const Node* node, const Vector3& point)
 {
+    GP_ASSERT(node);
+
     // Create a translation matrix that translates to the given origin.
     Matrix m;
     Matrix::createTranslation(point, &m);
@@ -92,6 +100,8 @@ Vector3 PhysicsConstraint::getTranslationOffset(const Node* node, const Vector3&
 
 btTransform PhysicsConstraint::getTransformOffset(const Node* node, const Vector3& origin)
 {
+    GP_ASSERT(node);
+
     // Create a translation matrix that translates to the given origin.
     Matrix m;
     Matrix::createTranslation(origin, &m);
@@ -123,8 +133,9 @@ btTransform PhysicsConstraint::getTransformOffset(const Node* node, const Vector
 
 Vector3 PhysicsConstraint::getWorldCenterOfMass(const Model* model)
 {
-    Vector3 center;
+    GP_ASSERT(model && model->getMesh() && model->getNode());
 
+    Vector3 center;
     const BoundingBox& box = model->getMesh()->getBoundingBox();
     if (!(box.min.isZero() && box.max.isZero()))
     {
@@ -145,7 +156,7 @@ Vector3 PhysicsConstraint::getWorldCenterOfMass(const Model* model)
         else
         {
             // Warn the user that the model has no bounding volume.
-            GP_WARN("Model \'%s\' has no bounding volume - center of mass is defaulting to local coordinate origin.", model->getNode()->getId());
+            GP_WARN("Model '%s' has no bounding volume - center of mass is defaulting to local coordinate origin.", model->getNode()->getId());
             model->getNode()->getWorldMatrix().transformPoint(&center);
         }
     }
@@ -155,6 +166,7 @@ Vector3 PhysicsConstraint::getWorldCenterOfMass(const Model* model)
 
 Vector3 PhysicsConstraint::offsetByCenterOfMass(const Node* node, const Vector3& v)
 {
+    GP_ASSERT(node && node->getCollisionObject() && node->getCollisionObject()->getMotionState());
     btVector3 centerOfMassOffset = (node->getCollisionObject()->getMotionState())->_centerOfMassOffset.getOrigin();
     return Vector3(v.x + centerOfMassOffset.x(), v.y + centerOfMassOffset.y(), v.z + centerOfMassOffset.z());
 }

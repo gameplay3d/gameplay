@@ -7,7 +7,7 @@ namespace gameplay
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-        _dirty(true), _consumeTouchEvents(true), _listeners(NULL), _styleOverridden(false)
+    _dirty(true), _consumeTouchEvents(true), _listeners(NULL), _styleOverridden(false), _skin(NULL), _clearBounds(Rectangle::empty())
 {
 }
 
@@ -881,7 +881,7 @@ void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCl
     if (needsClear)
     {
         GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        GL_ASSERT( glClearColor(0, 0, 0, 1) );
+        GL_ASSERT( glClearColor(0, 0, 0, 0) );
         GL_ASSERT( glScissor(_clearBounds.x, targetHeight - _clearBounds.y - _clearBounds.height,
             _clearBounds.width, _clearBounds.height) );
         GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
@@ -1273,7 +1273,7 @@ Control::Alignment Control::getAlignment(const char* alignment)
     }
     else
     {
-        GP_ERROR("Failed to get corresponding control alignment for unsupported value \'%s\'.", alignment);
+        GP_ERROR("Failed to get corresponding control alignment for unsupported value '%s'.", alignment);
     }
 
     // Default.

@@ -80,7 +80,7 @@ Form* Form::create(const char* url)
         layout = ScrollLayout::create();
         break;
     default:
-        GP_ERROR("Unsupported layout type \'%d\'.", getLayoutType(layoutString));
+        GP_ERROR("Unsupported layout type '%d'.", getLayoutType(layoutString));
     }
 
     Theme* theme = Theme::create(themeFile);
@@ -92,6 +92,25 @@ Form* Form::create(const char* url)
 
     const char* styleName = formProperties->getString("style");
     form->initialize(theme->getStyle(styleName), formProperties);
+
+    // Alignment
+    if ((form->_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)
+    {
+        form->_bounds.y = Game::getInstance()->getHeight() - form->_bounds.height;
+    }
+    else if ((form->_alignment & Control::ALIGN_VCENTER) == Control::ALIGN_VCENTER)
+    {
+        form->_bounds.y = Game::getInstance()->getHeight() * 0.5f - form->_bounds.height * 0.5f;
+    }
+
+    if ((form->_alignment & Control::ALIGN_RIGHT) == Control::ALIGN_RIGHT)
+    {
+        form->_bounds.x = Game::getInstance()->getWidth() - form->_bounds.width;
+    }
+    else if ((form->_alignment & Control::ALIGN_HCENTER) == Control::ALIGN_HCENTER)
+    {
+        form->_bounds.x = Game::getInstance()->getWidth() * 0.5f - form->_bounds.width * 0.5f;
+    }
 
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
@@ -266,7 +285,108 @@ void Form::update()
 {
     if (isDirty())
     {
-        Container::update(Rectangle(0, 0, _bounds.width, _bounds.height), Vector2::zero());
+        _clearBounds.set(_absoluteClipBounds);
+
+        // Calculate the clipped bounds.
+        float x = 0;
+        float y = 0;
+        float width = _bounds.width;
+        float height = _bounds.height;
+
+        Rectangle clip(0, 0, _bounds.width, _bounds.height);
+
+        float clipX2 = clip.x + clip.width;
+        float x2 = clip.x + x + width;
+        if (x2 > clipX2)
+            width -= x2 - clipX2;
+
+        float clipY2 = clip.y + clip.height;
+        float y2 = clip.y + y + height;
+        if (y2 > clipY2)
+            height -= y2 - clipY2;
+
+        if (x < 0)
+        {
+            width += x;
+            x = -x;
+        }
+        else
+        {
+            x = 0;
+        }
+
+        if (y < 0)
+        {
+            height += y;
+            y = -y;
+        }
+        else
+        {
+            y = 0;
+        }
+
+        _clipBounds.set(x, y, width, height);
+
+        // Calculate the absolute bounds.
+        x = 0;
+        y = 0;
+        _absoluteBounds.set(x, y, _bounds.width, _bounds.height);
+
+        // Calculate the absolute viewport bounds.
+        // Absolute bounds minus border and padding.
+        const Theme::Border& border = getBorder(_state);
+        const Theme::Padding& padding = getPadding();
+
+        x += border.left + padding.left;
+        y += border.top + padding.top;
+        width = _bounds.width - border.left - padding.left - border.right - padding.right;
+        height = _bounds.height - border.top - padding.top - border.bottom - padding.bottom;
+
+        _viewportBounds.set(x, y, width, height);
+
+        // Calculate the clip area.
+        // Absolute bounds, minus border and padding,
+        // clipped to the parent container's clip area.
+        clipX2 = clip.x + clip.width;
+        x2 = x + width;
+        if (x2 > clipX2)
+            width = clipX2 - x;
+
+        clipY2 = clip.y + clip.height;
+        y2 = y + height;
+        if (y2 > clipY2)
+            height = clipY2 - y;
+
+        if (x < clip.x)
+        {
+            float dx = clip.x - x;
+            width -= dx;
+            x = clip.x;
+        }
+
+        if (y < clip.y)
+        {
+            float dy = clip.y - y;
+            height -= dy;
+            y = clip.y;
+        }
+ 
+        _viewportClipBounds.set(x, y, width, height);
+
+        _absoluteClipBounds.set(x - border.left - padding.left, y - border.top - padding.top,
+            width + border.left + padding.left + border.right + padding.right,
+            height + border.top + padding.top + border.bottom + padding.bottom);
+        if (_clearBounds.isEmpty())
+        {
+            _clearBounds.set(_absoluteClipBounds);
+        }
+
+        // Cache themed attributes for performance.
+        _skin = getSkin(_state);
+        _opacity = getOpacity(_state);
+
+        GP_ASSERT(_layout);
+        _layout->update(this);
     }
 }
 
@@ -293,7 +413,7 @@ void Form::draw()
 
         Game* game = Game::getInstance();
         Rectangle prevViewport = game->getViewport();
-        game->setViewport(Rectangle(_bounds.x, _bounds.y, _bounds.width, _bounds.height));
+        game->setViewport(Rectangle(0, 0, _bounds.width, _bounds.height));
 
         GP_ASSERT(_theme);
         _theme->setProjectionMatrix(_projectionMatrix);

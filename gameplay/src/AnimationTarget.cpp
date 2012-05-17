@@ -123,7 +123,7 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
     const char* propertyIdStr = animationProperties->getString("property");
     if (propertyIdStr == NULL)
     {
-        GP_ERROR("Attribute \'property\' must be specified for an animation.");
+        GP_ERROR("Attribute 'property' must be specified for an animation.");
         return NULL;
     }
     
@@ -138,28 +138,28 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
     unsigned int keyCount = animationProperties->getInt("keyCount");
     if (keyCount == 0)
     {
-        GP_ERROR("Attribute \'keyCount\' must be specified for an animation.");
+        GP_ERROR("Attribute 'keyCount' must be specified for an animation.");
         return NULL;
     }
 
     const char* keyTimesStr = animationProperties->getString("keyTimes");
     if (keyTimesStr == NULL)
     {
-        GP_ERROR("Attribute \'keyTimes\' must be specified for an animation.");
+        GP_ERROR("Attribute 'keyTimes' must be specified for an animation.");
         return NULL;
     }
     
     const char* keyValuesStr = animationProperties->getString("keyValues");
     if (keyValuesStr == NULL)
     {
-        GP_ERROR("Attribute \'keyValues\' must be specified for an animation.");
+        GP_ERROR("Attribute 'keyValues' must be specified for an animation.");
         return NULL;
     }
     
     const char* curveStr = animationProperties->getString("curve");
     if (curveStr == NULL)
     {
-        GP_ERROR("Attribute \'curve\' must be specified for an animation.");
+        GP_ERROR("Attribute 'curve' must be specified for an animation.");
         return NULL;
     }
     

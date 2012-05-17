@@ -68,23 +68,26 @@ void Ref::printLeaks()
     // Dump Ref object memory leaks
     if (__refAllocationCount == 0)
     {
-        printError("[memory] All Ref objects successfully cleaned up (no leaks detected).");
+        printError("[memory] All Ref objects successfully cleaned up (no leaks detected).\n");
     }
     else
     {
-        printError("[memory] WARNING: %d Ref objects still active in memory.", __refAllocationCount);
+        printError("[memory] WARNING: %d Ref objects still active in memory.\n", __refAllocationCount);
         for (RefAllocationRecord* rec = __refAllocations; rec != NULL; rec = rec->next)
         {
             Ref* ref = rec->ref;
+            GP_ASSERT(ref);
             const char* type = typeid(*ref).name();
-            printError("[memory] LEAK: Ref object '%s' still active with reference count %d.", (type ? type : ""), ref->getRefCount());
+            printError("[memory] LEAK: Ref object '%s' still active with reference count %d.\n", (type ? type : ""), ref->getRefCount());
         }
     }
 }
 
 void* trackRef(Ref* ref)
 {
-    // Create memory allocation record
+    GP_ASSERT(ref);
+
+    // Create memory allocation record.
     RefAllocationRecord* rec = (RefAllocationRecord*)malloc(sizeof(RefAllocationRecord));
     rec->ref = ref;
     rec->next = __refAllocations;
@@ -100,14 +103,20 @@ void* trackRef(Ref* ref)
 
 void untrackRef(Ref* ref, void* record)
 {
-    RefAllocationRecord* rec = (RefAllocationRecord*)record;
-    if (rec->ref != ref)
+    if (!record)
     {
-        printError("[memory] CORRUPTION: Attempting to free Ref with invalid ref tracking record.");
+        printError("[memory] ERROR: Attempting to free null ref tracking record.\n");
         return;
     }
 
-    // Link this item out
+    RefAllocationRecord* rec = (RefAllocationRecord*)record;
+    if (rec->ref != ref)
+    {
+        printError("[memory] CORRUPTION: Attempting to free Ref with invalid ref tracking record.\n");
+        return;
+    }
+
+    // Link this item out.
     if (__refAllocations == rec)
         __refAllocations = rec->next;
     if (rec->prev)

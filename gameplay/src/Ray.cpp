@@ -85,20 +85,20 @@ float Ray::intersects(const Frustum& frustum) const
 
     // If the ray's origin is in the negative half-space of one of the frustum's planes
     // and it does not intersect that same plane, then it does not intersect the frustum.
-    if ( (nOD < 0.0f && nD < 0.0f) || (fOD < 0.0f && fD < 0.0f) ||
+    if ((nOD < 0.0f && nD < 0.0f) || (fOD < 0.0f && fD < 0.0f) ||
         (lOD < 0.0f && lD < 0.0f)  || (rOD < 0.0f && rD < 0.0f) ||
-        (bOD < 0.0f && bD < 0.0f)  || (tOD < 0.0f && tD < 0.0f) )
+        (bOD < 0.0f && bD < 0.0f)  || (tOD < 0.0f && tD < 0.0f))
     {
         return Ray::INTERSECTS_NONE;
     }
 
     // Otherwise, the intersection distance is the minimum positive intersection distance.
     float d = (nD > 0.0f) ? nD : 0.0f;
-    d = (fD > 0.0f) ? ( (d == 0.0f) ? fD : min(fD, d) ) : d;
-    d = (lD > 0.0f) ? ( (d == 0.0f) ? lD : min(lD, d) ) : d;
-    d = (rD > 0.0f) ? ( (d == 0.0f) ? rD : min(rD, d) ) : d;
-    d = (tD > 0.0f) ? ( (d == 0.0f) ? bD : min(bD, d) ) : d;
-    d = (bD > 0.0f) ? ( (d == 0.0f) ? tD : min(tD, d) ) : d;
+    d = (fD > 0.0f) ? ((d == 0.0f) ? fD : min(fD, d)) : d;
+    d = (lD > 0.0f) ? ((d == 0.0f) ? lD : min(lD, d)) : d;
+    d = (rD > 0.0f) ? ((d == 0.0f) ? rD : min(rD, d)) : d;
+    d = (tD > 0.0f) ? ((d == 0.0f) ? bD : min(bD, d)) : d;
+    d = (bD > 0.0f) ? ((d == 0.0f) ? tD : min(tD, d)) : d;
 
     return d;
 }
@@ -117,7 +117,7 @@ float Ray::intersects(const Plane& plane) const
     
     // If the dot product of the plane's normal and this ray's direction is zero,
     // then the ray is parallel to the plane and does not intersect it.
-    if ( dot == 0.0f )
+    if (dot == 0.0f)
     {
         return INTERSECTS_NONE;
     }
@@ -156,12 +156,14 @@ void Ray::transform(const Matrix& matrix)
 void Ray::normalize()
 {
     if (_direction.isZero())
+    {
+        GP_ERROR("Invalid ray object; a ray's direction must be non-zero.");
         return;
+    }
 
     // Normalize the ray's direction vector.
     float normalizeFactor = 1.0f / sqrt(_direction.x * _direction.x + _direction.y * _direction.y + _direction.z * _direction.z);
-
-    if ( normalizeFactor != 1.0f )
+    if (normalizeFactor != 1.0f)
     {
         _direction.x *= normalizeFactor;
         _direction.y *= normalizeFactor;

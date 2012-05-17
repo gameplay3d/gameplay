@@ -146,7 +146,7 @@ int getKey(unichar keyCode);
         
         _game = Game::getInstance();
         __timeStart = getMachTimeInMilliseconds();
-        _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);          
+        _game->run();
     }
     return self;
 }
@@ -549,6 +549,7 @@ long getMachTimeInMilliseconds()
         (void) mach_timebase_info(&s_timebase_info);
     
     // mach_absolute_time() returns billionth of seconds, so divide by one million to get milliseconds
+    GP_ASSERT(kOneMillion * s_timebase_info.denom);
     return (long)((mach_absolute_time() * s_timebase_info.numer) / (kOneMillion * s_timebase_info.denom));
 }
 
@@ -773,6 +774,7 @@ namespace gameplay
     
 extern void printError(const char* format, ...)
 {
+    GP_ASSERT(format);
     va_list argptr;
     va_start(argptr, format);
     vfprintf(stderr, format, argptr);
@@ -891,7 +893,7 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
 
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Game::getInstance()->keyEvent(evt, key);
     Form::keyEventInternal(evt, key);
 }
     
