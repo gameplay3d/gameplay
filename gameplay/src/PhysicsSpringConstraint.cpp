@@ -8,6 +8,9 @@ namespace gameplay
 
 PhysicsSpringConstraint::PhysicsSpringConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
+    GP_ASSERT(a && a->_body);
+    GP_ASSERT(b && b->_body);
+
     // Initialize the physics rigid body references since we don't call the PhysicsConstraint constructor that does it properly automatically.
     _a = a;
     _b = b;
@@ -19,6 +22,9 @@ PhysicsSpringConstraint::PhysicsSpringConstraint(PhysicsRigidBody* a, PhysicsRig
 PhysicsSpringConstraint::PhysicsSpringConstraint(PhysicsRigidBody* a, const Quaternion& rotationOffsetA, const Vector3& translationOffsetA,
                                                  PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
 {
+    GP_ASSERT(a && a->_body && a->getNode());
+    GP_ASSERT(b && b->_body && b->getNode());
+
     // Initialize the physics rigid body references since we don't call the PhysicsConstraint constructor that does it properly automatically.
     _a = a;
     _b = b;
@@ -44,6 +50,7 @@ PhysicsSpringConstraint::~PhysicsSpringConstraint()
 
 void PhysicsSpringConstraint::setStrength(SpringProperty property, float strength)
 {
+    GP_ASSERT(_constraint);
     if (strength < MATH_EPSILON)
         ((btGeneric6DofSpringConstraint*)_constraint)->enableSpring(property, false);
     else
@@ -56,6 +63,7 @@ void PhysicsSpringConstraint::setStrength(SpringProperty property, float strengt
 
 void PhysicsSpringConstraint::setDamping(SpringProperty property, float damping)
 {
+    GP_ASSERT(_constraint);
     ((btGeneric6DofSpringConstraint*)_constraint)->setDamping(property, damping);
     ((btGeneric6DofSpringConstraint*)_constraint)->setEquilibriumPoint(property);
 }

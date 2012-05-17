@@ -21,6 +21,7 @@ Properties::Properties(const Properties& copy)
     std::vector<Properties*>::const_iterator it;
     for (it = copy._namespaces.begin(); it < copy._namespaces.end(); it++)
     {
+        GP_ASSERT(*it);
         _namespaces.push_back(new Properties(**it));
     }
     rewind();
@@ -48,11 +49,9 @@ Properties::Properties(FILE* file, const char* name, const char* id, const char*
 
 Properties* Properties::create(const char* url)
 {
-    GP_ASSERT(url);
-
     if (!url || strlen(url) == 0)
     {
-        GP_WARN("Attempting to create a Properties object from an empty URL!");
+        GP_ERROR("Attempting to create a Properties object from an empty URL!");
         return NULL;
     }
 
@@ -82,6 +81,7 @@ Properties* Properties::create(const char* url)
     FILE* file = FileSystem::openFile(fileString.c_str(), "rb");
     if (!file)
     {
+        GP_ERROR("Failed to open file '%s'.", fileString.c_str());
         return NULL;
     }
 
@@ -102,6 +102,12 @@ Properties* Properties::create(const char* url)
         {
             while (true)
             {
+                if (iter == NULL)
+                {
+                    GP_ERROR("Failed to load Properties object from URL '%s'.", url);
+                    return NULL;
+                }
+
                 if (strcmp(iter->getId(), namespacePath[i].c_str()) == 0)
                 {
                     if (i != size - 1)
@@ -117,11 +123,6 @@ Properties* Properties::create(const char* url)
                 }
                 
                 iter = properties->getNextNamespace();
-                if (iter == NULL)
-                {
-                    GP_WARN("Failed to load Properties object from URL '%s'.", url);
-                    return NULL;
-                }
             }
         }
 
@@ -135,6 +136,8 @@ Properties* Properties::create(const char* url)
 
 void Properties::readProperties(FILE* file)
 {
+    GP_ASSERT(file);
+
     char line[2048];
     int c;
     char* name;
@@ -155,6 +158,7 @@ void Properties::readProperties(FILE* file)
         rc = fgets(line, 2048, file);
         if (rc == NULL)
         {
+            GP_ERROR("Error reading line from file.");
             return;
         }
 
@@ -173,7 +177,7 @@ void Properties::readProperties(FILE* file)
                 name = strtok(line, " =\t");
                 if (name == NULL)
                 {
-                    GP_ERROR("Error parsing properties file: value without name.");
+                    GP_ERROR("Error parsing properties file: attribute without name.");
                     return;
                 }
 
@@ -181,7 +185,8 @@ void Properties::readProperties(FILE* file)
                 value = strtok(NULL, "=");
                 if (value == NULL)
                 {
-                    GP_ERROR("Error parsing properties file: name without value.");
+                    GP_ERROR("Error parsing properties file: attribute with name ('%s') but no value.", name);
+                    return;
                 }
 
                 // Remove white-space from value.
@@ -214,7 +219,8 @@ void Properties::readProperties(FILE* file)
                 name = trimWhiteSpace(name);
                 if (name == NULL)
                 {
-                    GP_ERROR("Error parsing properties file: unknown error.");
+                    GP_ERROR("Error parsing properties file: failed to determine a valid token for line '%s'.", line);
+                    return;
                 }
                 else if (name[0] == '}')
                 {
@@ -260,7 +266,8 @@ void Properties::readProperties(FILE* file)
                         else
                         {
                             // Back up from fgetc()
-                            fseek(file, -1, SEEK_CUR);
+                            if (fseek(file, -1, SEEK_CUR) != 0)
+                                GP_ERROR("Failed to seek backwards a single character after testing if the next line starts with '{'.");
 
                             // Store "name value" as a name/value pair, or even just "name".
                             if (value != NULL)
@@ -300,7 +307,12 @@ void Properties::skipWhiteSpace(FILE* file)
     // If we are not at the end of the file, then since we found a
     // non-whitespace character, we put the cursor back in front of it.
     if (c != EOF)
-        fseek(file, -1, SEEK_CUR);
+    {
+        if (fseek(file, -1, SEEK_CUR) != 0)
+        {
+            GP_ERROR("Failed to seek backwards one character after skipping whitespace.");
+        }
+    }
 }
 
 char* Properties::trimWhiteSpace(char *str)
@@ -375,6 +387,7 @@ void Properties::resolveInheritance(const char* id)
                 std::vector<Properties*>::const_iterator itt;
                 for (itt = parent->_namespaces.begin(); itt < parent->_namespaces.end(); itt++)
                 {
+                    GP_ASSERT(*itt);
                     derived->_namespaces.push_back(new Properties(**itt));
                 }
                 derived->rewind();
@@ -404,6 +417,8 @@ void Properties::resolveInheritance(const char* id)
 
 void Properties::mergeWith(Properties* overrides)
 {
+    GP_ASSERT(overrides);
+
     // Overwrite or add each property found in child.
     char* value = new char[255];
     overrides->rewind();
@@ -505,15 +520,17 @@ void Properties::rewind()
     _namespacesItr = _namespaces.end();
 }
 
-Properties* Properties::getNamespace(const char* id) const
+Properties* Properties::getNamespace(const char* id, bool searchNames) const
 {
+    GP_ASSERT(id);
+
     Properties* ret = NULL;
     std::vector<Properties*>::const_iterator it;
     
     for (it = _namespaces.begin(); it < _namespaces.end(); it++)
     {
         ret = *it;
-        if (strcmp(ret->_id.c_str(), id) == 0)
+        if (strcmp(searchNames ? ret->_namespace.c_str() : ret->_id.c_str(), id) == 0)
         {
             return ret;
         }
@@ -547,6 +564,8 @@ bool Properties::exists(const char* name) const
 
 const bool isStringNumeric(const char* str)
 {
+    GP_ASSERT(str);
+
     // The first character may be '-'
     if (*str == '-')
         str++;
@@ -587,7 +606,6 @@ Properties::Type Properties::getType(const char* name) const
 
     // Parse the value to determine the format
     unsigned int commaCount = 0;
-    //unsigned int length = strlen(value);
     char* valuePtr = const_cast<char*>(value);
     while (valuePtr = strchr(valuePtr, ','))
     {
@@ -654,7 +672,7 @@ int Properties::getInt(const char* name) const
         scanned = sscanf(valueString, "%d", &value);
         if (scanned != 1)
         {
-            GP_ERROR("Error parsing property: %s", name);
+            GP_ERROR("Error attempting to parse property '%s' as an integer.", name);
             return 0;
         }
         return value;
@@ -673,7 +691,7 @@ float Properties::getFloat(const char* name) const
         scanned = sscanf(valueString, "%f", &value);
         if (scanned != 1)
         {
-            GP_ERROR("Error parsing property: %s", name);
+            GP_ERROR("Error attempting to parse property '%s' as a float.", name);
             return 0.0f;
         }
         return value;
@@ -692,7 +710,7 @@ long Properties::getLong(const char* name) const
         scanned = sscanf(valueString, "%ld", &value);
         if (scanned != 1)
         {
-            GP_ERROR("Error parsing property: %s", name);
+            GP_ERROR("Error attempting to parse property '%s' as a long integer.", name);
             return 0L;
         }
         return value;
@@ -716,7 +734,7 @@ bool Properties::getMatrix(const char* name, Matrix* out) const
 
         if (scanned != 16)
         {
-            GP_ERROR("Error parsing property: %s", name);
+            GP_ERROR("Error attempting to parse property '%s' as a matrix.", name);
             out->setIdentity();
             return false;
         }
@@ -741,7 +759,7 @@ bool Properties::getVector2(const char* name, Vector2* out) const
         scanned = sscanf(valueString, "%f,%f", &x, &y);
         if (scanned != 2)
         {
-            GP_ERROR("Error parsing property: %s", name);
+            GP_ERROR("Error attempting to parse property '%s' as a two-dimensional vector.", name);
             out->set(0.0f, 0.0f);
             return false;
         }
@@ -766,7 +784,7 @@ bool Properties::getVector3(const char* name, Vector3* out) const
         scanned = sscanf(valueString, "%f,%f,%f", &x, &y, &z);
         if (scanned != 3)
         {
-            GP_ERROR("Error parsing property: %s", name);
+            GP_ERROR("Error attempting to parse property '%s' as a three-dimensional vector.", name);
             out->set(0.0f, 0.0f, 0.0f);
             return false;
         }
@@ -791,7 +809,7 @@ bool Properties::getVector4(const char* name, Vector4* out) const
         scanned = sscanf(valueString, "%f,%f,%f,%f", &x, &y, &z, &w);
         if (scanned != 4)
         {
-            GP_ERROR("Error parsing property: %s", name);
+            GP_ERROR("Error attempting to parse property '%s' as a four-dimensional vector.", name);
             out->set(0.0f, 0.0f, 0.0f, 0.0f);
             return false;
         }
@@ -816,7 +834,7 @@ bool Properties::getQuaternionFromAxisAngle(const char* name, Quaternion* out) c
         scanned = sscanf(valueString, "%f,%f,%f,%f", &x, &y, &z, &theta);
         if (scanned != 4)
         {
-            GP_ERROR("Error parsing property: %s", name);
+            GP_ERROR("Error attempting to parse property '%s' as an axis-angle rotation.", name);
             out->set(0.0f, 0.0f, 0.0f, 1.0f);
             return false;
         }
@@ -840,14 +858,19 @@ bool Properties::getColor(const char* name, Vector3* out) const
             valueString[0] != '#')
         {
             // Not a color string.
-            GP_ERROR("Error parsing property: %s", name);
+            GP_ERROR("Error attempting to parse property '%s' as an RGB color (not specified as a color string).", name);
             out->set(0.0f, 0.0f, 0.0f);
             return false;
         }
 
         // Read the string into an int as hex.
         unsigned int color;
-        sscanf(valueString+1, "%x", &color);
+        if (sscanf(valueString+1, "%x", &color) != 1)
+        {
+            GP_ERROR("Error attempting to parse property '%s' as an RGB color.", name);
+            out->set(0.0f, 0.0f, 0.0f);
+            return false;
+        }
 
         out->set(Vector3::fromColor(color));
         return true;
@@ -868,14 +891,19 @@ bool Properties::getColor(const char* name, Vector4* out) const
             valueString[0] != '#')
         {
             // Not a color string.
-            GP_ERROR("Error parsing property: %s", name);
+            GP_ERROR("Error attempting to parse property '%s' as an RGBA color (not specified as a color string).", name);
             out->set(0.0f, 0.0f, 0.0f, 0.0f);
             return false;
         }
 
         // Read the string into an int as hex.
         unsigned int color;
-        sscanf(valueString+1, "%x", &color);
+        if (sscanf(valueString+1, "%x", &color) != 1)
+        {
+            GP_ERROR("Error attempting to parse property '%s' as an RGBA color.", name);
+            out->set(0.0f, 0.0f, 0.0f, 0.0f);
+            return false;
+        }
 
         out->set(Vector4::fromColor(color));
         return true;
@@ -898,6 +926,7 @@ Properties* Properties::clone()
     unsigned int count = _namespaces.size();
     for (unsigned int i = 0; i < count; i++)
     {
+        GP_ASSERT(_namespaces[i]);
         p->_namespaces.push_back(_namespaces[i]->clone());
     }
     p->_namespacesItr = p->_namespaces.end();

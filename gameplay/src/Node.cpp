@@ -402,11 +402,9 @@ const Matrix& Node::getWorldMatrix() const
 
         // Our world matrix was just updated, so call getWorldMatrix() on all child nodes
         // to force their resolved world matrices to be updated.
-        Node* node = getFirstChild();
-        while (node)
+        for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
         {
-            node->getWorldMatrix();
-            node = node->getNextSibling();
+            child->getWorldMatrix();
         }
     }
 
@@ -546,8 +544,6 @@ Vector3 Node::getForwardVectorView() const
     Vector3 vector;
     getWorldMatrix().getForwardVector(&vector);
     getViewMatrix().transformVector(&vector);
-    //getForwardVector(&vector);
-    //getWorldViewMatrix().transformVector(&vector);
     return vector;
 }
 
@@ -601,8 +597,7 @@ void Node::transformChanged()
     _dirtyBits |= NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS;
 
     // Notify our children that their transform has also changed (since transforms are inherited).
-    Node* n = getFirstChild();
-    while (n)
+    for (Node* n = getFirstChild(); n != NULL; n = n->getNextSibling())
     {
         if (Transform::isTransformChangedSuspended())
         {
@@ -617,7 +612,6 @@ void Node::transformChanged()
         {
             n->transformChanged();
         }
-        n = n->getNextSibling();
     }
 
     Transform::transformChanged();
@@ -647,10 +641,10 @@ Animation* Node::getAnimation(const char* id) const
         MeshSkin* skin = model->getSkin();
         if (skin)
         {
-            Joint* rootJoint = skin->getRootJoint();
-            if (rootJoint)
+            Node* rootNode = skin->_rootNode;
+            if (rootNode)
             {
-                animation = rootJoint->getAnimation(id);
+                animation = rootNode->getAnimation(id);
                 if (animation)
                     return animation;
             }
@@ -665,6 +659,7 @@ Animation* Node::getAnimation(const char* id) const
             std::vector<MaterialParameter*>::iterator itr = material->_parameters.begin();
             for (; itr != material->_parameters.end(); itr++)
             {
+                GP_ASSERT(*itr);
                 animation = ((MaterialParameter*)(*itr))->getAnimation(id);
                 if (animation)
                     return animation;
@@ -682,15 +677,11 @@ Animation* Node::getAnimation(const char* id) const
     }
 
     // Look through this node's children for an animation with the specified ID.
-    unsigned int childCount = this->getChildCount();
-    Node* child = this->getFirstChild();
-    for (unsigned int i = 0; i < childCount; i++)
+    for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
     {
         animation = child->getAnimation(id);
         if (animation)
             return animation;
-
-        child = child->getNextSibling();
     }
     
     return NULL;
@@ -833,6 +824,7 @@ const BoundingSphere& Node::getBoundingSphere() const
                 // since joint parent nodes that are not in the matrix pallette do not need to
                 // be considered as directly transforming vertices on the GPU (they can instead
                 // be applied directly to the bounding volume transformation below).
+                GP_ASSERT(_model->getSkin()->getRootJoint());
                 Node* jointParent = _model->getSkin()->getRootJoint()->getParent();
                 if (jointParent)
                 {
@@ -890,6 +882,7 @@ Node* Node::cloneSingleNode(NodeCloneContext &context) const
 Node* Node::cloneRecursive(NodeCloneContext &context) const
 {
     Node* copy = cloneSingleNode(context);
+    GP_ASSERT(copy);
 
     Node* lastChild = NULL;
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
@@ -900,6 +893,7 @@ Node* Node::cloneRecursive(NodeCloneContext &context) const
     for (Node* child = lastChild; child != NULL; child = child->getPreviousSibling())
     {
         Node* childCopy = child->cloneRecursive(context);
+        GP_ASSERT(childCopy);
         copy->addChild(childCopy);
         childCopy->release();
     }
@@ -908,6 +902,7 @@ Node* Node::cloneRecursive(NodeCloneContext &context) const
 
 void Node::cloneInto(Node* node, NodeCloneContext &context) const
 {
+    GP_ASSERT(node);
     Transform::cloneInto(node, context);
 
     // TODO: Clone the rest of the node data.
@@ -1027,10 +1022,9 @@ PhysicsCollisionObject* Node::setCollisionObject(const char* url)
 {
     // Load the collision object properties from file.
     Properties* properties = Properties::create(url);
-    GP_ASSERT(properties);
     if (properties == NULL)
     {
-        GP_WARN("Failed to load collision object file: %s", url);
+        GP_ERROR("Failed to load collision object file: %s", url);
         return NULL;
     }
 
@@ -1050,7 +1044,7 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
         strcmp(properties->getNamespace(), "ghostObject") == 0 || 
         strcmp(properties->getNamespace(), "rigidBody") == 0))
     {
-        GP_WARN("Failed to load collision object from properties object: must be non-null object and have namespace equal to \'character\', \'ghostObject\', or \'rigidBody\'.");
+        GP_ERROR("Failed to load collision object from properties object: must be non-null object and have namespace equal to 'character', 'ghostObject', or 'rigidBody'.");
         return NULL;
     }
 
@@ -1081,23 +1075,33 @@ NodeCloneContext::~NodeCloneContext()
 
 Animation* NodeCloneContext::findClonedAnimation(const Animation* animation)
 {
+    GP_ASSERT(animation);
+
     AnimationMap::iterator it = _clonedAnimations.find(animation);
     return it != _clonedAnimations.end() ? it->second : NULL;
 }
 
 void NodeCloneContext::registerClonedAnimation(const Animation* original, Animation* clone)
 {
+    GP_ASSERT(original);
+    GP_ASSERT(clone);
+
     _clonedAnimations[original] = clone;
 }
 
 Node* NodeCloneContext::findClonedNode(const Node* node)
 {
+    GP_ASSERT(node);
+
     NodeMap::iterator it = _clonedNodes.find(node);
     return it != _clonedNodes.end() ? it->second : NULL;
 }
 
 void NodeCloneContext::registerClonedNode(const Node* original, Node* clone)
 {
+    GP_ASSERT(original);
+    GP_ASSERT(clone);
+
     _clonedNodes[original] = clone;
 }
 

@@ -51,6 +51,13 @@ namespace gameplay
 extern void printError(const char* format, ...);
 }
 
+// Current function macro.
+#ifdef WIN32
+#define __current__func__ __FUNCTION__
+#else
+#define __current__func__ __func__
+#endif
+
 // Assert macros.
 #ifdef _DEBUG
 #ifdef WIN32
@@ -58,11 +65,10 @@ extern void printError(const char* format, ...);
 #else
 #define GP_FORCE_ASSERTION_FAILURE do { assert(0); } while (0)
 #endif
-
 #define GP_ASSERT(expression) do { \
     if (!(expression)) \
     { \
-        printError("%s -- Assertion \'" #expression "\' failed.\n", __FUNCTION__); \
+        printError("%s -- Assertion '" #expression "' failed.\n", __current__func__); \
         GP_FORCE_ASSERTION_FAILURE; \
     } } while (0)
 #else
@@ -71,19 +77,23 @@ extern void printError(const char* format, ...);
 #endif
 
 // Error macro.
+#ifdef GP_ERRORS_AS_WARNINGS
+#define GP_ERROR GP_WARN
+#else
 #define GP_ERROR(...) do \
     { \
-        printError("%s -- ", __FUNCTION__); \
+        printError("%s -- ", __current__func__); \
         printError(__VA_ARGS__); \
         printError("\n"); \
         GP_FORCE_ASSERTION_FAILURE; \
         std::exit(-1); \
     } while (0)
+#endif
 
 // Warning macro.
 #define GP_WARN(...) do \
     { \
-        printError("%s -- ", __FUNCTION__); \
+        printError("%s -- ", __current__func__); \
         printError(__VA_ARGS__); \
         printError("\n"); \
     } while (0)
@@ -168,7 +178,6 @@ extern void printError(const char* format, ...);
 #include <png.h>
 
 #define WINDOW_VSYNC        1
-#define WINDOW_FULLSCREEN   0
 
 // Graphics (OpenGL)
 #if defined (__QNX__) || defined(__ANDROID__)
@@ -181,7 +190,6 @@ extern void printError(const char* format, ...);
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
-    #define USE_PVRTC
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
@@ -197,7 +205,6 @@ extern void printError(const char* format, ...);
         #define glIsVertexArray glIsVertexArrayOES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
-        #define USE_PVRTC
         #define USE_VAO
     #elif TARGET_OS_MAC
         #include <OpenGL/gl.h>
@@ -244,12 +251,12 @@ typedef GLuint RenderBufferHandle;
 #ifdef NDEBUG
 #define GL_ASSERT( gl_code ) gl_code
 #else
-#define GL_ASSERT( gl_code ) \
+#define GL_ASSERT( gl_code ) do \
     { \
         gl_code; \
         __gl_error_code = glGetError(); \
         GP_ASSERT(__gl_error_code == GL_NO_ERROR); \
-    }
+    } while(0)
 #endif
 
 /**
@@ -261,7 +268,7 @@ typedef GLuint RenderBufferHandle;
  * macro can be used afterwards to check whether a GL error was
  * encountered executing the specified code.
  */
-#define GL_CHECK( gl_code ) \
+#define GL_CHECK( gl_code ) do \
     { \
         while (glGetError() != GL_NO_ERROR) ; \
         gl_code; \
@@ -270,7 +277,7 @@ typedef GLuint RenderBufferHandle;
         { \
             GP_ERROR(#gl_code ": %d", (int)__gl_error_code); \
         } \
-    }
+    } while(0)
 
 // Global variable to hold GL errors
 extern GLenum __gl_error_code;
@@ -287,7 +294,7 @@ extern GLenum __gl_error_code;
  * The AL_LAST_ERROR macro can be used afterwards to check whether a AL error was
  * encountered executing the specified code.
  */
-#define AL_CHECK( al_code ) \
+#define AL_CHECK( al_code ) do \
     { \
         while (alGetError() != AL_NO_ERROR) ; \
         al_code; \
@@ -296,7 +303,7 @@ extern GLenum __gl_error_code;
         { \
             GP_ERROR(#al_code ": %d", (int)__al_error_code); \
         } \
-    }
+    } while(0)
 
 // Global variable to hold AL errors
 extern ALenum __al_error_code;
