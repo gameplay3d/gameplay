@@ -11,9 +11,11 @@ PhysicsGhostObject::PhysicsGhostObject(Node* node, const PhysicsCollisionShape::
 {
     Vector3 centerOfMassOffset;
     PhysicsController* physicsController = Game::getInstance()->getPhysicsController();
+    GP_ASSERT(physicsController);
 
     // Create and set the collision shape for the ghost object.
     _collisionShape = physicsController->createShape(node, shape, &centerOfMassOffset);
+    GP_ASSERT(_collisionShape);
 
     // Create the ghost object.
     _ghostObject = bullet_new<btPairCachingGhostObject>();
@@ -27,13 +29,16 @@ PhysicsGhostObject::PhysicsGhostObject(Node* node, const PhysicsCollisionShape::
     // Add the ghost object to the physics world.
     physicsController->addCollisionObject(this);
 
+    GP_ASSERT(_node);
     _node->addListener(this);
 }
 
 PhysicsGhostObject::~PhysicsGhostObject()
 {
+    GP_ASSERT(_node);
     _node->removeListener(this);
 
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->removeCollisionObject(this);
 
     SAFE_DELETE(_ghostObject);
@@ -42,10 +47,9 @@ PhysicsGhostObject::~PhysicsGhostObject()
 PhysicsGhostObject* PhysicsGhostObject::create(Node* node, Properties* properties)
 {
     // Check if the properties is valid and has a valid namespace.
-    GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "ghostObject") == 0))
     {
-        GP_WARN("Failed to load ghost object from properties object: must be non-null object and have namespace equal to 'ghost'.");
+        GP_ERROR("Failed to load ghost object from properties object: must be non-null object and have namespace equal to 'ghost'.");
         return NULL;
     }
 
@@ -53,7 +57,7 @@ PhysicsGhostObject* PhysicsGhostObject::create(Node* node, Properties* propertie
     PhysicsCollisionShape::Definition* shape = PhysicsCollisionShape::Definition::create(node, properties);
     if (shape == NULL)
     {
-        GP_WARN("Failed to create collision shape during ghost object creation.");
+        GP_ERROR("Failed to create collision shape during ghost object creation.");
         return NULL;
     }
 
@@ -76,6 +80,9 @@ btCollisionObject* PhysicsGhostObject::getCollisionObject() const
 
 void PhysicsGhostObject::transformChanged(Transform* transform, long cookie)
 {
+    GP_ASSERT(_motionState);
+    GP_ASSERT(_ghostObject);
+
     // Update the motion state with the transform from the node.
     _motionState->updateTransformFromNode();
 

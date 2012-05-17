@@ -13,11 +13,15 @@ namespace gameplay
 PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Definition& shape, const Parameters& parameters)
         : PhysicsCollisionObject(node), _body(NULL), _mass(parameters.mass), _constraints(NULL)
 {
-    // Create our collision shape
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
+    GP_ASSERT(_node);
+
+    // Create our collision shape.
     Vector3 centerOfMassOffset;
     _collisionShape = Game::getInstance()->getPhysicsController()->createShape(node, shape, &centerOfMassOffset);
+    GP_ASSERT(_collisionShape && _collisionShape->getShape());
 
-    // Create motion state object
+    // Create motion state object.
     _motionState = new PhysicsMotionState(node, (centerOfMassOffset.lengthSquared() > MATH_EPSILON) ? &centerOfMassOffset : NULL);
 
     // If the mass is non-zero, then the object is dynamic so we calculate the local 
@@ -55,6 +59,10 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Defi
 
 PhysicsRigidBody::~PhysicsRigidBody()
 {
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
+    GP_ASSERT(_collisionShape);
+    GP_ASSERT(_node);
+
     // Clean up all constraints linked to this rigid body.
     if (_constraints)
     {
@@ -94,6 +102,7 @@ void PhysicsRigidBody::applyForce(const Vector3& force, const Vector3* relativeP
     // to make sure that it isn't sleeping and apply the force.
     if (force.lengthSquared() > MATH_EPSILON)
     {
+        GP_ASSERT(_body);
         _body->activate();
         if (relativePosition)
             _body->applyForce(BV(force), BV(*relativePosition));
@@ -108,8 +117,8 @@ void PhysicsRigidBody::applyImpulse(const Vector3& impulse, const Vector3* relat
     // to make sure that it isn't sleeping and apply the impulse.
     if (impulse.lengthSquared() > MATH_EPSILON)
     {
+        GP_ASSERT(_body);
         _body->activate();
-
         if (relativePosition)
         {
             _body->applyImpulse(BV(impulse), BV(*relativePosition));
@@ -125,6 +134,7 @@ void PhysicsRigidBody::applyTorque(const Vector3& torque)
     // to make sure that it isn't sleeping and apply the torque.
     if (torque.lengthSquared() > MATH_EPSILON)
     {
+        GP_ASSERT(_body);
         _body->activate();
         _body->applyTorque(BV(torque));
     }
@@ -136,6 +146,7 @@ void PhysicsRigidBody::applyTorqueImpulse(const Vector3& torque)
     // to make sure that it isn't sleeping and apply the torque impulse.
     if (torque.lengthSquared() > MATH_EPSILON)
     {
+        GP_ASSERT(_body);
         _body->activate();
         _body->applyTorqueImpulse(BV(torque));
     }
@@ -144,10 +155,9 @@ void PhysicsRigidBody::applyTorqueImpulse(const Vector3& torque)
 PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
 {
     // Check if the properties is valid and has a valid namespace.
-    GP_ASSERT(properties);
     if (!properties || !(strcmp(properties->getNamespace(), "rigidBody") == 0))
     {
-        GP_WARN("Failed to load rigid body from properties object: must be non-null object and have namespace equal to 'rigidBody'.");
+        GP_ERROR("Failed to load rigid body from properties object: must be non-null object and have namespace equal to 'rigidBody'.");
         return NULL;
     }
 
@@ -155,7 +165,7 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     PhysicsCollisionShape::Definition* shape = PhysicsCollisionShape::Definition::create(node, properties);
     if (shape == NULL)
     {
-        GP_WARN("Failed to create collision shape during rigid body creation.");
+        GP_ERROR("Failed to create collision shape during rigid body creation.");
         return NULL;
     }
 
@@ -199,6 +209,10 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
         {
             properties->getVector3(NULL, &parameters.gravity);
         }
+        else
+        {
+            // Ignore this case (the attributes for the rigid body's collision shape would end up here).
+        }
     }
 
     // Create the rigid body.
@@ -210,6 +224,8 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
 
 void PhysicsRigidBody::setKinematic(bool kinematic)
 {
+    GP_ASSERT(_body);
+
     if (kinematic)
     {
         _body->setCollisionFlags(_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
@@ -224,12 +240,17 @@ void PhysicsRigidBody::setKinematic(bool kinematic)
 
 float PhysicsRigidBody::getHeight(float x, float y) const
 {
+    GP_ASSERT(_collisionShape);
+
     // This function is only supported for heightfield rigid bodies.
     if (_collisionShape->getType() != PhysicsCollisionShape::SHAPE_HEIGHTFIELD)
     {
-        GP_WARN("Attempting to get the height of a non-heightfield rigid body.");
+        GP_ERROR("Attempting to get the height of a non-heightfield rigid body.");
         return 0.0f;
     }
+
+    GP_ASSERT(_collisionShape->_shapeData.heightfieldData);
+    GP_ASSERT(_node);
 
     // Calculate the correct x, y position relative to the heightfield data.
     if (_collisionShape->_shapeData.heightfieldData->inverseIsDirty)
@@ -241,6 +262,9 @@ float PhysicsRigidBody::getHeight(float x, float y) const
     float w = _collisionShape->_shapeData.heightfieldData->width;
     float h = _collisionShape->_shapeData.heightfieldData->height;
 
+    GP_ASSERT(w - 1);
+    GP_ASSERT(h - 1);
+
     Vector3 v = _collisionShape->_shapeData.heightfieldData->inverse * Vector3(x, 0.0f, y);
     x = (v.x + (0.5f * (w - 1))) * w / (w - 1);
     y = (v.z + (0.5f * (h - 1))) * h / (h - 1);
@@ -248,7 +272,7 @@ float PhysicsRigidBody::getHeight(float x, float y) const
     // Check that the x, y position is within the bounds.
     if (x < 0.0f || x > w || y < 0.0f || y > h)
     {
-        GP_WARN("Attempting to get height at point '%f, %f', which is outside the range of the heightfield with width %d and height %d.", x, y, w, h);
+        GP_ERROR("Attempting to get height at point '%f, %f', which is outside the range of the heightfield with width %d and height %d.", x, y, w, h);
         return 0.0f;
     }
 
@@ -257,6 +281,7 @@ float PhysicsRigidBody::getHeight(float x, float y) const
 
 void PhysicsRigidBody::addConstraint(PhysicsConstraint* constraint)
 {
+    GP_ASSERT(constraint);
     if (_constraints == NULL)
         _constraints = new std::vector<PhysicsConstraint*>();
 
@@ -287,6 +312,7 @@ void PhysicsRigidBody::transformChanged(Transform* transform, long cookie)
 {
     if (getShapeType() == PhysicsCollisionShape::SHAPE_HEIGHTFIELD)
     {
+        GP_ASSERT(_collisionShape && _collisionShape->_shapeData.heightfieldData);
         _collisionShape->_shapeData.heightfieldData->inverseIsDirty = true;
     }
 }
