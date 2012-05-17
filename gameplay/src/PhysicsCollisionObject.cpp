@@ -37,11 +37,13 @@ PhysicsCollisionObject::~PhysicsCollisionObject()
 {
     SAFE_DELETE(_motionState);
 
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->destroyShape(_collisionShape);
 }
 
 PhysicsCollisionShape::Type PhysicsCollisionObject::getShapeType() const
 {
+    GP_ASSERT(getCollisionShape());
     return getCollisionShape()->getType();
 }
 
@@ -68,27 +70,35 @@ bool PhysicsCollisionObject::isKinematic() const
     case CHARACTER:
         return true;
     default:
+        GP_ASSERT(getCollisionObject());
         return getCollisionObject()->isKinematicObject();
     }
 }
 
 bool PhysicsCollisionObject::isDynamic() const
 {
+    GP_ASSERT(getCollisionObject());
     return !getCollisionObject()->isStaticOrKinematicObject();
 }
 
 void PhysicsCollisionObject::addCollisionListener(CollisionListener* listener, PhysicsCollisionObject* object)
 {
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->addCollisionListener(listener, this, object);
 }
 
 void PhysicsCollisionObject::removeCollisionListener(CollisionListener* listener, PhysicsCollisionObject* object)
 {
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->removeCollisionListener(listener, this, object);
 }
 
 bool PhysicsCollisionObject::collidesWith(PhysicsCollisionObject* object) const
 {
+    GP_ASSERT(Game::getInstance()->getPhysicsController() && Game::getInstance()->getPhysicsController()->_world);
+    GP_ASSERT(object && object->getCollisionObject());
+    GP_ASSERT(getCollisionObject());
+
     static CollidesWithCallback callback;
 
     callback.result = false;
