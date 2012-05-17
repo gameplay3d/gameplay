@@ -399,7 +399,7 @@ void RenderState::StateBlock::bindNoRestore()
     if ((_bits & RS_BLEND) && (_blendEnabled != _defaultState->_blendEnabled))
     {
         if (_blendEnabled)
-            GL_ASSERT( glEnable(GL_BLEND) )
+            GL_ASSERT( glEnable(GL_BLEND) );
         else
             GL_ASSERT( glDisable(GL_BLEND) );
         _defaultState->_blendEnabled = _blendEnabled;
@@ -413,7 +413,7 @@ void RenderState::StateBlock::bindNoRestore()
     if ((_bits & RS_CULL_FACE) && (_cullFaceEnabled != _defaultState->_cullFaceEnabled))
     {
         if (_cullFaceEnabled)
-            GL_ASSERT( glEnable(GL_CULL_FACE) ) 
+            GL_ASSERT( glEnable(GL_CULL_FACE) );
         else
             GL_ASSERT( glDisable(GL_CULL_FACE) );
         _defaultState->_cullFaceEnabled = _cullFaceEnabled;
@@ -421,7 +421,7 @@ void RenderState::StateBlock::bindNoRestore()
     if ((_bits & RS_DEPTH_TEST) && (_depthTestEnabled != _defaultState->_depthTestEnabled))
     {
         if (_depthTestEnabled) 
-            GL_ASSERT( glEnable(GL_DEPTH_TEST) ) 
+            GL_ASSERT( glEnable(GL_DEPTH_TEST) );
         else 
             GL_ASSERT( glDisable(GL_DEPTH_TEST) );
         _defaultState->_depthTestEnabled = _depthTestEnabled;

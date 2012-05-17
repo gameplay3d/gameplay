@@ -10,8 +10,8 @@ using namespace gameplay;
 int main(int argc, char** argv)
 {    
     Game* game = Game::getInstance();
-    GP_ASSERT(game != NULL);
     Platform* platform = Platform::create(game);
+    GP_ASSERT(platform);
     int result = platform->enterMessagePump();
 	delete platform;
     return result;

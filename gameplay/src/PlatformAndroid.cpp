@@ -11,7 +11,6 @@
 #include <android_native_app_glue.h>
 
 #include <android/log.h>
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
 
 // Externally referenced global variables.
 struct android_app* __state;
@@ -50,19 +49,22 @@ namespace gameplay
 
 static long timespec2millis(struct timespec *a)
 {
+    GP_ASSERT(a);
     return a->tv_sec*1000 + a->tv_nsec/1000000;
 }
 
 extern void printError(const char* format, ...)
 {
+    GP_ASSERT(format);
     va_list argptr;
     va_start(argptr, format);
-    LOGI(format, argptr);
+    __android_log_vprint(ANDROID_LOG_INFO, "gameplay-native-activity", format, argptr);
     va_end(argptr);
 }
 
 static EGLenum checkErrorEGL(const char* msg)
 {
+    GP_ASSERT(msg);
     static const char* errmsg[] =
     {
         "EGL function succeeded",
@@ -82,7 +84,7 @@ static EGLenum checkErrorEGL(const char* msg)
         "EGL power management event has occurred",
     };
     EGLenum error = eglGetError();
-    LOGI("%s: %s\n", msg, errmsg[error - EGL_SUCCESS]);
+    printError("%s: %s.", msg, errmsg[error - EGL_SUCCESS]);
     return error;
 }
 
@@ -232,17 +234,21 @@ static void displayKeyboard(android_app* state, bool show)
     // ANativeActivity_showSoftInput(state->activity, ANATIVEACTIVITY_SHOW_SOFT_INPUT_IMPLICIT);
     // ANativeActivity_hideSoftInput(state->activity, ANATIVEACTIVITY_HIDE_SOFT_INPUT_IMPLICIT_ONLY);
     
+    GP_ASSERT(state && state->activity && state->activity->vm);
+
     // Show or hide the keyboard by calling the appropriate Java method through JNI instead.
-    jint result;
     jint flags = 0;
     JavaVM* jvm = state->activity->vm;
-    JNIEnv* env;
+    JNIEnv* env = NULL;
     jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
-    jvm->AttachCurrentThread(&env, NULL);
+    jint result = jvm->AttachCurrentThread(&env, NULL);
     if (result == JNI_ERR)
-    { 
+    {
+        GP_ERROR("Failed to retrieve JVM environment to display keyboard.");
         return; 
-    } 
+    }
+    GP_ASSERT(env);
+
     // Retrieves NativeActivity. 
     jobject lNativeActivity = state->activity->clazz;
     jclass ClassNativeActivity = env->GetObjectClass(lNativeActivity);
@@ -564,7 +570,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
         switch (action & AMOTION_EVENT_ACTION_MASK)
         {
             case AMOTION_EVENT_ACTION_DOWN:
-                // Primary pointer down
+                // Primary pointer down.
                 pointerId = AMotionEvent_getPointerId(event, 0);
                 gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, AMotionEvent_getX(event, 0), AMotionEvent_getY(event, 0), pointerId);
                 __primaryTouchId = pointerId;
@@ -578,7 +584,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                 __primaryTouchId = -1;
                 break;
             case AMOTION_EVENT_ACTION_POINTER_DOWN:
-                // Non-primary pointer down
+                // Non-primary pointer down.
                 if (__multiTouch)
                 {
                     pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
@@ -718,15 +724,23 @@ Platform* Platform::create(Game* game)
 
 int Platform::enterMessagePump()
 {
+    GP_ASSERT(__state && __state->activity && __state->activity->vm);
+
     __initialized = false;
     __suspended = false;
 
     // Get the android application's activity.
     ANativeActivity* activity = __state->activity;
     JavaVM* jvm = __state->activity->vm;
-    JNIEnv* env;
+    JNIEnv* env = NULL;
     jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
-    jvm->AttachCurrentThread(&env, NULL);
+    jint res = jvm->AttachCurrentThread(&env, NULL);
+    if (res == JNI_ERR)
+    {
+        GP_ERROR("Failed to retrieve JVM environment when entering message pump.");
+        return -1; 
+    }
+    GP_ASSERT(env);
 
     // Get the package name for this app from Java.
     jclass clazz = env->GetObjectClass(activity->clazz);
@@ -745,7 +759,7 @@ int Platform::enterMessagePump()
     FileSystem::setResourcePath(assetsPath.c_str());    
         
     // Get the asset manager to get the resources from the .apk file.
-    __assetManager = __state->activity->assetManager; 
+    __assetManager = activity->assetManager; 
     
     // Set the event call back functions.
     __state->onAppCmd = engine_handle_cmd;
@@ -893,16 +907,21 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     }
     else
     {
-        // 0
         tx = __sensorEvent.acceleration.x;
         ty = __sensorEvent.acceleration.y;
     }
     tz = __sensorEvent.acceleration.z;
 
     if (pitch != NULL)
+    {
+        GP_ASSERT(tx * tx + tz * tz);
         *pitch = -atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
+    }
     if (roll != NULL)
+    {
+        GP_ASSERT(ty * ty + tz * tz);
         *roll = -atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;
+    }
 }
 
 void Platform::swapBuffers()
