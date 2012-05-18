@@ -155,7 +155,7 @@ public:
      * A kinematic collision object is an object that is not simulated by
      * the physics system and instead has its transform driven manually.
      *
-     * @return Whether the collision object is kinematic.
+     * @return true if the collision object is kinematic.
      */
     bool isKinematic() const;
 
@@ -165,9 +165,23 @@ public:
      * A dynamic collision object is simulated entirely by the physics system,
      * such as with dynamic rigid bodies. 
      *
-     * @return Whether the collision object is dynamic.
+     * @return true if the collision object is dynamic.
      */
     bool isDynamic() const;
+
+    /**
+     * Check if th collision object is enabled.
+     *
+     * @return true if the collision object is enabled.
+     */
+    bool isEnabled() const;
+
+    /**
+     * Sets the collision object be enabled or disabled.
+     *
+     * @param enable true enables the collision object, false diables it.
+     */
+    void setEnabled(bool enable);
 
     /**
      * Adds a collision listener for this collision object.
@@ -190,9 +204,10 @@ public:
      * 
      * @param object The collision object to test for collision with.
      * 
-     * @return True if this object collides with the specified one; false otherwise.
+     * @return true if this object collides with the specified one; false otherwise.
      */
     bool collidesWith(PhysicsCollisionObject* object) const;
+
 
 protected:
 
@@ -215,7 +230,6 @@ protected:
      */
     PhysicsMotionState* getMotionState() const;
 
-    // Common member variables
     /**
      * Pointer to Node contained by this collision object.
      */ 
@@ -230,6 +244,11 @@ protected:
      * The PhysicsCollisionObject's collision shape.
      */
     PhysicsCollisionShape* _collisionShape;
+
+    /**
+     * If the collision object is enabled or not.
+     */
+    bool _enabled;
 
 };
 
