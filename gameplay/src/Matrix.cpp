@@ -982,10 +982,37 @@ void Matrix::transformVector(float x, float y, float z, float w, Vector3* dst) c
 {
     GP_ASSERT(dst);
 
+#ifdef USE_NEON
+
+    asm volatile(
+    	"vld1.32	{d0[0]},		[%0]	\n\t"	// load x
+		"vld1.32	{d0[1]},    	[%1]	\n\t"	// load y
+		"vld1.32	{d1[0]},		[%2]	\n\t"	// load z
+		"vld1.32	{d1[1]},		[%3]	\n\t"	// load w
+		"vld1.32	{d18 - d21},	[%4]!	\n\t"	// load first 8 elements of matrix m0-m7
+		"vld1.32	{d22 - d25},	[%4]!	\n\t"	// load second 8 elements of matrix m8-m15
+
+    	"vmul.f32 q13,  q9, d0[0]			\n\t"	// Q5 =  (m0-m3)*x
+    	"vmla.f32 q13, q10, d0[1]      		\n\t"	// Q5 +=  (m4-m7)*y
+    	"vmla.f32 q13, q11, d1[0]      		\n\t"	// Q5 +=  (m8-m11)*z
+		"vmla.f32 q13, q12, d1[1]      		\n\t"	// Q5 +=  (m12-m15)*w
+
+    	"vst1.32 {d26[0]}, [%5]!        	\n\t"	// store dst->x
+		"vst1.32 {d26[1]}, [%5]!        	\n\t"	// store dst->y
+		"vst1.32 {d27[0]}, [%5]!        	\n\t"	// store dst->z
+		:
+    	: "r"(&x), "r"(&y), "r"(&z), "r"(&w), "r"(m), "r"(dst)
+        : "q0", "q9", "q10","q11", "q12", "q13", "memory"
+    );
+
+#else
+
     dst->set(
         x * m[0] + y * m[4] + z * m[8] + w * m[12],
         x * m[1] + y * m[5] + z * m[9] + w * m[13],
         x * m[2] + y * m[6] + z * m[10] + w * m[14]);
+
+#endif
 }
 
 void Matrix::transformVector(Vector4* vector) const
@@ -1002,11 +1029,11 @@ void Matrix::transformVector(const Vector4& vector, Vector4* dst) const
 
     asm volatile
     (
-    		"vld1.32	{d0, d1}, [%1]		\n\t"   //Q0 = v
-    		"vld1.32    {d18 - d21}, [%0]!  \n\t"   //Q1 = m
-    		"vld1.32    {d22 - d25}, [%0]!  \n\t"   //Q2 = m+8
+    		"vld1.32	{d0, d1}, [%1]		\n\t"   //Q0 = v (x, y, z, w)
+    		"vld1.32    {d18 - d21}, [%0]!  \n\t"   //Q1 = M (m0-m7)
+    		"vld1.32    {d22 - d25}, [%0]!  \n\t"   //Q2 = M (m8-m15)
 
-    		"vmul.f32   q13, q9, d0[0]      \n\t"   //Q5 = Q1*Q0[0]
+    		"vmul.f32   q13, q9, d0[0]      \n\t"   //Q5 =  Q0*Q0[0]
     		"vmla.f32   q13, q10, d0[1]     \n\t"   //Q5 += Q1*Q0[1]
     		"vmla.f32   q13, q11, d1[0]     \n\t"   //Q5 += Q2*Q0[2]
     		"vmla.f32   q13, q12, d1[1]     \n\t"   //Q5 += Q3*Q0[3]
