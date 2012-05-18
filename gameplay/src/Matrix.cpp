@@ -700,7 +700,46 @@ void Matrix::multiply(const Matrix& m)
 
 void Matrix::multiply(const Matrix& m1, const Matrix& m2, Matrix* dst)
 {
-    GP_ASSERT(dst);
+	GP_ASSERT(dst);
+
+#ifdef USE_NEON // if set, neon unit is present.
+
+    asm volatile
+    (
+        "vld1.32	 {d16 - d19}, [%1]!	\n\t"         // load first eight elements of matrix 0
+		"vld1.32     {d20 - d23}, [%1]!   \n\t"         // load second eight elements of matrix 0
+		"vld1.32     {d0 - d3}, [%2]!     \n\t"         // load first eight elements of matrix 1
+		"vld1.32     {d4 - d7}, [%2]!     \n\t"         // load second eight elements of matrix 1
+
+		"vmul.f32    q12, q8, d0[0]     \n\t"         // rslt col0  = (mat0 col0) * (mat1 col0 elt0)
+		"vmul.f32    q13, q8, d2[0]     \n\t"         // rslt col1  = (mat0 col0) * (mat1 col1 elt0)
+		"vmul.f32    q14, q8, d4[0]     \n\t"         // rslt col2  = (mat0 col0) * (mat1 col2 elt0)
+		"vmul.f32    q15, q8, d6[0]     \n\t"         // rslt col3  = (mat0 col0) * (mat1 col3 elt0)
+
+		"vmla.f32    q12, q9, d0[1]     \n\t"         // rslt col0 += (mat0 col1) * (mat1 col0 elt1)
+		"vmla.f32    q13, q9, d2[1]     \n\t"         // rslt col1 += (mat0 col1) * (mat1 col1 elt1)
+		"vmla.f32    q14, q9, d4[1]     \n\t"         // rslt col2 += (mat0 col1) * (mat1 col2 elt1)
+		"vmla.f32    q15, q9, d6[1]     \n\t"         // rslt col3 += (mat0 col1) * (mat1 col3 elt1)
+
+		"vmla.f32    q12, q10, d1[0]    \n\t"         // rslt col0 += (mat0 col2) * (mat1 col0 elt2)
+		"vmla.f32    q13, q10, d3[0]    \n\t"         // rslt col1 += (mat0 col2) * (mat1 col1 elt2)
+		"vmla.f32    q14, q10, d5[0]    \n\t"         // rslt col2 += (mat0 col2) * (mat1 col2 elt2)
+		"vmla.f32    q15, q10, d7[0]    \n\t"         // rslt col3 += (mat0 col2) * (mat1 col2 elt2)
+
+		"vmla.f32    q12, q11, d1[1]    \n\t"         // rslt col0 += (mat0 col3) * (mat1 col0 elt3)
+		"vmla.f32    q13, q11, d3[1]    \n\t"         // rslt col1 += (mat0 col3) * (mat1 col1 elt3)
+		"vmla.f32    q14, q11, d5[1]    \n\t"         // rslt col2 += (mat0 col3) * (mat1 col2 elt3)
+		"vmla.f32    q15, q11, d7[1]    \n\t"         // rslt col3 += (mat0 col3) * (mat1 col3 elt3)
+
+		"vst1.32    {d24 - d27}, [%0]!    \n\t"         // store first eight elements of result
+		"vst1.32    {d28 - d31}, [%0]!    \n\t"         // store second eight elements of result
+        
+        : // output
+        : "r"(dst->m), "r"(m1.m), "r"(m2.m) // input - note *value* of pointer doesn't change.
+        : "memory", "q0", "q1", "q2", "q3", "q8", "q9", "q10", "q11", "q12", "q13", "q14", "q15"
+	);
+
+#else
 
     // Support the case where m1 or m2 is the same array as dst.
     float product[16];
@@ -726,6 +765,8 @@ void Matrix::multiply(const Matrix& m1, const Matrix& m2, Matrix* dst)
     product[15] = m1.m[3] * m2.m[12] + m1.m[7] * m2.m[13] + m1.m[11] * m2.m[14] + m1.m[15] * m2.m[15];
 
     memcpy(dst->m, product, MATRIX_SIZE);
+
+#endif
 }
 
 void Matrix::negate()
@@ -940,7 +981,7 @@ void Matrix::transformVector(const Vector3& vector, Vector3* dst) const
 void Matrix::transformVector(float x, float y, float z, float w, Vector3* dst) const
 {
     GP_ASSERT(dst);
-    
+
     dst->set(
         x * m[0] + y * m[4] + z * m[8] + w * m[12],
         x * m[1] + y * m[5] + z * m[9] + w * m[13],
@@ -957,11 +998,33 @@ void Matrix::transformVector(const Vector4& vector, Vector4* dst) const
 {
     GP_ASSERT(dst);
 
+#ifdef USE_NEON
+
+    asm volatile
+    (
+    		"vld1.32	{d0, d1}, [%1]		\n\t"   //Q0 = v
+    		"vld1.32    {d18 - d21}, [%0]!  \n\t"   //Q1 = m
+    		"vld1.32    {d22 - d25}, [%0]!  \n\t"   //Q2 = m+8
+
+    		"vmul.f32   q13, q9, d0[0]      \n\t"   //Q5 = Q1*Q0[0]
+    		"vmla.f32   q13, q10, d0[1]     \n\t"   //Q5 += Q1*Q0[1]
+    		"vmla.f32   q13, q11, d1[0]     \n\t"   //Q5 += Q2*Q0[2]
+    		"vmla.f32   q13, q12, d1[1]     \n\t"   //Q5 += Q3*Q0[3]
+    		"vst1.32    {d26, d27}, [%2]    \n\t"   //Q4 = m+12
+    		:
+    		: "r"(m), "r"(&vector), "r"(dst)
+    		: "q0", "q9", "q10","q11", "q12", "q13", "memory"
+    );
+
+#else
+
     dst->set(
         vector.x * m[0] + vector.y * m[4] + vector.z * m[8] + vector.w * m[12],
         vector.x * m[1] + vector.y * m[5] + vector.z * m[9] + vector.w * m[13],
         vector.x * m[2] + vector.y * m[6] + vector.z * m[10] + vector.w * m[14],
         vector.x * m[3] + vector.y * m[7] + vector.z * m[11] + vector.w * m[15]);
+
+#endif
 }
 
 void Matrix::translate(float x, float y, float z)

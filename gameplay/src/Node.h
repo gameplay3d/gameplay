@@ -517,7 +517,8 @@ public:
      *        must point to a valid rigid body parameters object containing information
      *        about the rigid body; otherwise, this parmater may be NULL.
      */
-    PhysicsCollisionObject* setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters = NULL);
+    PhysicsCollisionObject* setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape = PhysicsCollisionShape::box(), 
+                                               PhysicsRigidBody::Parameters* rigidBodyParameters = NULL);
 
     /**
      * Sets the physics collision object for this node using the data from the Properties object defined at the specified URL, 

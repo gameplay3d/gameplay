@@ -180,8 +180,20 @@ extern void printError(const char* format, ...);
 #define WINDOW_VSYNC        1
 
 // Graphics (OpenGL)
-#if defined (__QNX__) || defined(__ANDROID__)
-    #include <EGL/egl.h>
+#ifdef __QNX__
+#include <EGL/egl.h>
+    #include <GLES2/gl2.h>
+    #include <GLES2/gl2ext.h>
+    extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
+    extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
+    extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
+    extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
+    #define glClearDepth glClearDepthf
+    #define OPENGL_ES
+    #define USE_PVRTC
+	#define USE_NEON
+#elif __ANDROID__
+	#include <EGL/egl.h>
     #include <GLES2/gl2.h>
     #include <GLES2/gl2ext.h>
     extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
