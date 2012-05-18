@@ -14,9 +14,7 @@ struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
     /**
      * Called with each contact. Needed to implement collidesWith(PhysicsCollisionObject*).
      */
-    btScalar addSingleResult(btManifoldPoint& cp, 
-        const btCollisionObject* a, int partIdA, int indexA, 
-        const btCollisionObject* b, int partIdB, int indexB)
+    btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB)
     {
         result = true;
         return 0.0f;
@@ -29,7 +27,7 @@ struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
 };
 
 PhysicsCollisionObject::PhysicsCollisionObject(Node* node)
-    : _node(node), _motionState(NULL), _collisionShape(NULL)
+    : _node(node), _motionState(NULL), _collisionShape(NULL), _enabled(true)
 {
 }
 
@@ -79,6 +77,33 @@ bool PhysicsCollisionObject::isDynamic() const
 {
     GP_ASSERT(getCollisionObject());
     return !getCollisionObject()->isStaticOrKinematicObject();
+}
+
+bool PhysicsCollisionObject::isEnabled() const
+{
+    GP_ASSERT(getCollisionObject());
+    return _enabled;
+}
+
+void PhysicsCollisionObject::setEnabled(bool enable)
+{
+    GP_ASSERT(getCollisionObject());
+    if (enable)
+    {  
+        if (!_enabled)
+        {
+            Game::getInstance()->getPhysicsController()->addCollisionObject(this);
+            _enabled = true;
+        }
+    }
+    else
+    {
+        if (_enabled)
+        {
+            Game::getInstance()->getPhysicsController()->removeCollisionObject(this);
+            _enabled = false;
+        }
+    }
 }
 
 void PhysicsCollisionObject::addCollisionListener(CollisionListener* listener, PhysicsCollisionObject* object)

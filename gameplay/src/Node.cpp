@@ -1013,6 +1013,9 @@ PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type ty
             _collisionObject = new PhysicsCharacter(this, shape, rigidBodyParameters ? rigidBodyParameters->mass : 1.0f);
         }
         break;
+
+    case PhysicsCollisionObject::NONE:
+        break;  // Already deleted, Just don't add a new collision object back.
     }
 
     return _collisionObject;
