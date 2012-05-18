@@ -81,13 +81,11 @@ bool PhysicsCollisionObject::isDynamic() const
 
 bool PhysicsCollisionObject::isEnabled() const
 {
-    GP_ASSERT(getCollisionObject());
     return _enabled;
 }
 
 void PhysicsCollisionObject::setEnabled(bool enable)
 {
-    GP_ASSERT(getCollisionObject());
     if (enable)
     {  
         if (!_enabled)
