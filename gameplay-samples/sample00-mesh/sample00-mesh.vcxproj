@@ -165,6 +165,7 @@
   <ItemGroup>
     <None Include="..\..\gameplay\res\logo_powered_white.png" />
     <None Include="bar-descriptor.xml" />
+    <None Include="game.config" />
     <None Include="icon.png" />
     <None Include="res\arial.ttf" />
     <None Include="res\arial40.gpb" />
