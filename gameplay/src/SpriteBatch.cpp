@@ -206,9 +206,12 @@ void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& 
 void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color,
                        const Vector2& rotationPoint, float rotationAngle, bool positionIsCenter)
 {
-    float x = dst.x;
-    float y = dst.y;
+    draw(dst.x, dst.y, dst.z, width, height, u1, v1, u2, v2, color, rotationPoint, rotationAngle, positionIsCenter);
+}
 
+void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color,
+          const Vector2& rotationPoint, float rotationAngle, bool positionIsCenter)
+{
     // Treat the given position as the center if the user specified it as such.
     if (positionIsCenter)
     {
@@ -235,13 +238,13 @@ void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, 
     upRight.rotate(pivotPoint, rotationAngle);
     downLeft.rotate(pivotPoint, rotationAngle);
     downRight.rotate(pivotPoint, rotationAngle);
-    
+
     // Write sprite vertex data.
     static SpriteVertex v[4];
-    ADD_SPRITE_VERTEX(v[0], upLeft.x, upLeft.y, dst.z, u1, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[1], upRight.x, upRight.y, dst.z, u1, v2, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[2], downLeft.x, downLeft.y, dst.z, u2, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[3], downRight.x, downRight.y, dst.z, u2, v2, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[0], downLeft.x, downLeft.y, z, u1, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[1], upLeft.x, upLeft.y, z, u1, v2, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[2], downRight.x, downRight.y, z, u2, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[3], upRight.x, upRight.y, z, u2, v2, color.x, color.y, color.z, color.w);
     
     static unsigned short indices[4] = { 0, 1, 2, 3 };
 

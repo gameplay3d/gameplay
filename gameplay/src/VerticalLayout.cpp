@@ -43,7 +43,7 @@ Layout::Type VerticalLayout::getType()
     return Layout::LAYOUT_VERTICAL;
 }
 
-void VerticalLayout::update(const Container* container)
+void VerticalLayout::update(const Container* container, long elapsedTime)
 {
     GP_ASSERT(container);
 
@@ -81,8 +81,8 @@ void VerticalLayout::update(const Container* container)
 
         yPosition += margin.top;
 
-        control->setPosition(0, yPosition);
-        control->update(container->getClip(), Vector2::zero());
+        control->setPosition(margin.left, yPosition);
+        control->update(container->getClip(), Vector2::zero(), elapsedTime);
 
         yPosition += bounds.height + margin.bottom;
 
