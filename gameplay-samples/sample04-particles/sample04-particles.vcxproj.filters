@@ -56,5 +56,6 @@
     <None Include="res\arial15.gpb">
       <Filter>res</Filter>
     </None>
+    <None Include="game.config" />
   </ItemGroup>
 </Project>

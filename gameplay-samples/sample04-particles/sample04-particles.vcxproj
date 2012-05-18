@@ -28,6 +28,7 @@
   <ItemGroup>
     <None Include="..\..\test\bar-descriptor.xml" />
     <None Include="..\..\test\icon.png" />
+    <None Include="game.config" />
     <None Include="res\arial15.gpb" />
     <None Include="res\arial20.gpb" />
     <None Include="res\arial25.gpb" />
