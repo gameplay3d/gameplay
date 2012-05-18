@@ -67,9 +67,9 @@ const char* Label::getText()
     return _text.c_str();
 }
 
-void Label::update(const Rectangle& clip, const Vector2& offset)
+void Label::update(const Rectangle& clip, const Vector2& offset, long elapsedTime)
 {
-    Control::update(clip, offset);
+    Control::update(clip, offset, elapsedTime);
 
     _textBounds.set(_viewportBounds);
 

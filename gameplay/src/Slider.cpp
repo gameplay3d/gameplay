@@ -141,9 +141,9 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     return Control::touchEvent(evt, x, y, contactIndex);
 }
 
-void Slider::update(const Rectangle& clip, const Vector2& offset)
+void Slider::update(const Rectangle& clip, const Vector2& offset, long elapsedTime)
 {
-    Label::update(clip, offset);
+    Label::update(clip, offset, elapsedTime);
 
     _minImage = getImage("minCap", _state);
     _maxImage = getImage("maxCap", _state);
@@ -172,10 +172,10 @@ void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     const Rectangle& markerRegion = _markerImage->getRegion();
     const Rectangle& trackRegion = _trackImage->getRegion();
 
-    const Theme::UVs minCap = _minImage->getUVs();
-    const Theme::UVs maxCap = _maxImage->getUVs();
-    const Theme::UVs marker = _markerImage->getUVs();
-    const Theme::UVs track = _trackImage->getUVs();
+    const Theme::UVs& minCap = _minImage->getUVs();
+    const Theme::UVs& maxCap = _maxImage->getUVs();
+    const Theme::UVs& marker = _markerImage->getUVs();
+    const Theme::UVs& track = _trackImage->getUVs();
 
     Vector4 minCapColor = _minImage->getColor();
     Vector4 maxCapColor = _maxImage->getColor();

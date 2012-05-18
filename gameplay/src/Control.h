@@ -738,7 +738,7 @@ protected:
      * @param clip The clipping rectangle of this control's parent container.
      * @param offset Layout-computed positioning offset to add to the control's position.
      */
-    virtual void update(const Rectangle& clip, const Vector2& offset);
+    virtual void update(const Rectangle& clip, const Vector2& offset, long elapsedTime);
 
     /**
      * Draw the images associated with this control.
@@ -756,6 +756,8 @@ protected:
      * @param offset Layout-computed positioning offset to add to the control's position.
      */
     virtual void drawText(const Rectangle& clip);
+
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
 
     /**
      * Initialize properties common to STATE_ALL Controls.
@@ -919,8 +921,6 @@ private:
      * @param clip The clipping rectangle of this control's parent container.
      */
     virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
     
     bool _styleOverridden;
     Theme::Skin* _skin;

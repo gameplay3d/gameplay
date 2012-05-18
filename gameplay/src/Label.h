@@ -93,7 +93,7 @@ protected:
      * @param clip The clipping rectangle of this label's parent container.
      * @param offset The scroll offset of this label's parent container.
      */
-    void update(const Rectangle& clip, const Vector2& offset);
+    void update(const Rectangle& clip, const Vector2& offset, long elapsedTime);
 
     /**
      * Draw this label's text.

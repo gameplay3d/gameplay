@@ -5,7 +5,7 @@
 namespace gameplay
 {
 
-CheckBox::CheckBox() : _checked(false)
+CheckBox::CheckBox() : _checked(false), _image(NULL)
 {
 }
 
@@ -94,9 +94,9 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     return Button::touchEvent(evt, x, y, contactIndex);
 }
 
-void CheckBox::update(const Rectangle& clip, const Vector2& offset)
+void CheckBox::update(const Rectangle& clip, const Vector2& offset, long elapsedTime)
 {
-    Label::update(clip, offset);
+    Label::update(clip, offset, elapsedTime);
 
     Vector2 size;
     if (_imageSize.isZero())
