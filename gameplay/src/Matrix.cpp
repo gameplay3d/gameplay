@@ -675,6 +675,27 @@ void Matrix::multiply(const Matrix& m, float scalar, Matrix* dst)
 {
     GP_ASSERT(dst);
 
+#ifdef USE_NEON
+
+    asm volatile(
+    	"vld1.32 	{d0[0]},	 	[%0]     	\n\t"
+    	"vld1.32	{q4-q5},  		[%1]!    	\n\t"
+		"vld1.32	{q6-q7},  		[%1]!		\n\t"
+
+    	"vmul.f32 	q8, q4, d0[0]    			\n\t"
+    	"vmul.f32 	q9, q5, d0[0]    			\n\t"
+		"vmul.f32 	q10, q6, d0[0]    			\n\t"
+		"vmul.f32 	q11, q7, d0[0]   		 	\n\t"
+
+    	"vst1.32 	{q8-q9},   		[%2]! 		\n\t"
+		"vst1.32 	{q10-q11}, 		[%2]!		\n\t"
+		:
+		: "r"(&scalar), "r"(m.m), "r"(dst->m)
+		: "q0", "q4", "q5", "q6", "q7", "q8", "q9", "q10", "q11", "memory"
+	);
+
+#else
+
     dst->m[0]  = m.m[0]  * scalar;
     dst->m[1]  = m.m[1]  * scalar;
     dst->m[2]  = m.m[2]  * scalar;
@@ -691,6 +712,8 @@ void Matrix::multiply(const Matrix& m, float scalar, Matrix* dst)
     dst->m[13] = m.m[13] * scalar;
     dst->m[14] = m.m[14] * scalar;
     dst->m[15] = m.m[15] * scalar;
+
+#endif
 }
 
 void Matrix::multiply(const Matrix& m)
@@ -778,6 +801,26 @@ void Matrix::negate(Matrix* dst) const
 {
     GP_ASSERT(dst);
 
+#ifdef USE_NEON
+
+    asm volatile(
+    	"vld1.32 	{q0-q1},  [%1]! 	\n\t" // load m0-m7
+    	"vld1.32 	{q2-q3},  [%1]! 	\n\t" // load m8-m15
+
+    	"vneg.f32 	q4, q0 				\n\t" // negate m0-m3
+    	"vneg.f32 	q5, q1 				\n\t" // negate m4-m7
+		"vneg.f32 	q6, q2 				\n\t" // negate m8-m15
+		"vneg.f32 	q7, q3 				\n\t" // negate m8-m15
+
+    	"vst1.32 	{q4-q5},  [%0]!		\n\t" // store m0-m7
+    	"vst1.32 	{q6-q7},  [%0]!		\n\t" // store m8-m15
+    	:
+    	: "r"(dst->m), "r"(m)
+    	: "q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "memory"
+    );
+
+#else
+
     dst->m[0]  = -m[0];
     dst->m[1]  = -m[1];
     dst->m[2]  = -m[2];
@@ -794,6 +837,8 @@ void Matrix::negate(Matrix* dst) const
     dst->m[13] = -m[13];
     dst->m[14] = -m[14];
     dst->m[15] = -m[15];
+
+#endif
 }
 
 void Matrix::rotate(const Quaternion& q)
@@ -1084,7 +1129,24 @@ void Matrix::transpose()
 void Matrix::transpose(Matrix* dst) const
 {
     GP_ASSERT(dst);
+
+#ifdef USE_NEON
     
+    asm volatile(
+    	"vld4.32 {d0[0], d2[0], d4[0], d6[0]}, [%0]! \n\t"
+		"vld4.32 {d0[1], d2[1], d4[1], d6[1]}, [%0]! \n\t"
+		"vld4.32 {d1[0], d3[0], d5[0], d7[0]}, [%0]! \n\t"
+		"vld4.32 {d1[1], d3[1], d5[1], d7[1]}, [%0]! \n\t"
+
+		"vst1.32 {q0-q1}, [%1]! \n\t"
+		"vst1.32 {q2-q3}, [%1]! \n\t"
+    	:
+    	: "r"(this->m), "r"(dst->m)
+    	: "q0", "q1", "q2", "q3", "memory"
+    );
+
+#else
+
     float t[16] = {
         m[0], m[4], m[8], m[12],
         m[1], m[5], m[9], m[13],
@@ -1092,6 +1154,8 @@ void Matrix::transpose(Matrix* dst) const
         m[3], m[7], m[11], m[15]
     };
     memcpy(dst->m, t, MATRIX_SIZE);
+
+#endif
 }
 
 }
