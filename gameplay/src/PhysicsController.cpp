@@ -38,6 +38,7 @@ PhysicsController::~PhysicsController()
 
 void PhysicsController::addStatusListener(Listener* listener)
 {
+    GP_ASSERT(listener);
     if (!_listeners)
         _listeners = new std::vector<Listener*>();
 
@@ -129,6 +130,9 @@ void PhysicsController::setGravity(const Vector3& gravity)
 
 void PhysicsController::drawDebug(const Matrix& viewProjection)
 {
+    GP_ASSERT(_debugDrawer);
+    GP_ASSERT(_world);
+
     _debugDrawer->begin(viewProjection);
     _world->debugDrawWorld();
     _debugDrawer->end();
@@ -136,6 +140,8 @@ void PhysicsController::drawDebug(const Matrix& viewProjection)
 
 bool PhysicsController::rayTest(const Ray& ray, float distance, PhysicsController::HitResult* result)
 {
+    GP_ASSERT(_world);
+
     btCollisionWorld::ClosestRayResultCallback callback(BV(ray.getOrigin()), BV(distance * ray.getDirection()));
     _world->rayTest(BV(ray.getOrigin()), BV(distance * ray.getDirection()), callback);
     if (callback.hasHit())
@@ -167,6 +173,7 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
 
         btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
         {
+            GP_ASSERT(convexResult.m_hitCollisionObject);
             PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(convexResult.m_hitCollisionObject->getUserPointer());
 
             if (object == me)
@@ -178,12 +185,13 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
         PhysicsCollisionObject* me;
     };
 
+    GP_ASSERT(object && object->getCollisionShape());
     PhysicsCollisionShape* shape = object->getCollisionShape();
     PhysicsCollisionShape::Type type = shape->getType();
     if (type != PhysicsCollisionShape::SHAPE_BOX && type != PhysicsCollisionShape::SHAPE_SPHERE && type != PhysicsCollisionShape::SHAPE_CAPSULE)
         return false; // unsupported type
 
-    // Define the start transform
+    // Define the start transform.
     btTransform start;
     start.setIdentity();
     if (object->getNode())
@@ -199,14 +207,11 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
         start.setRotation(BQ(rotation));
     }
 
-    // Define the end transform
+    // Define the end transform.
     btTransform end(start);
     end.setOrigin(BV(endPosition));
 
-    float d1 = object->getNode()->getTranslationWorld().distance(endPosition);
-    float d2 = start.getOrigin().distance(end.getOrigin());
-
-    // Perform bullet convex sweep test
+    // Perform bullet convex sweep test.
     SweepTestCallback callback(object);
 
     // If the object is represented by a ghost object, use the ghost object's convex sweep test
@@ -224,9 +229,10 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
         break;
     }*/
 
+    GP_ASSERT(_world);
     _world->convexSweepTest(static_cast<btConvexShape*>(shape->getShape()), start, end, callback, _world->getDispatchInfo().m_allowedCcdPenetration);
 
-    // Check for hits and store results
+    // Check for hits and store results.
     if (callback.hasHit())
     {
         if (result)
@@ -246,15 +252,17 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
 btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, 
     const btCollisionObject* b, int partIdB, int indexB)
 {
-    // Get pointers to the PhysicsCollisionObject objects.
-    PhysicsCollisionObject* rbA = Game::getInstance()->getPhysicsController()->getCollisionObject(a);
-    PhysicsCollisionObject* rbB = Game::getInstance()->getPhysicsController()->getCollisionObject(b);
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
 
-    // If the given rigid body pair has collided in the past, then
+    // Get pointers to the PhysicsCollisionObject objects.
+    PhysicsCollisionObject* objectA = Game::getInstance()->getPhysicsController()->getCollisionObject(a);
+    PhysicsCollisionObject* objectB = Game::getInstance()->getPhysicsController()->getCollisionObject(b);
+
+    // If the given collision object pair has collided in the past, then
     // we notify the listeners only if the pair was not colliding
     // during the previous frame. Otherwise, it's a new pair, so add a
     // new entry to the cache with the appropriate listeners and notify them.
-    PhysicsCollisionObject::CollisionPair pair(rbA, rbB);
+    PhysicsCollisionObject::CollisionPair pair(objectA, objectB);
 
     CollisionInfo* collisionInfo;
     if (_collisionStatus.count(pair) > 0)
@@ -263,7 +271,7 @@ btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisi
     }
     else
     {
-        // Add a new collision pair for these objects
+        // Add a new collision pair for these objects.
         collisionInfo = &_collisionStatus[pair];
 
         // Add the appropriate listeners.
@@ -274,6 +282,7 @@ btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisi
             std::vector<PhysicsCollisionObject::CollisionListener*>::const_iterator iter = ci._listeners.begin();
             for (; iter != ci._listeners.end(); iter++)
             {
+                GP_ASSERT(*iter);
                 collisionInfo->_listeners.push_back(*iter);
             }
         }
@@ -284,17 +293,19 @@ btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisi
             std::vector<PhysicsCollisionObject::CollisionListener*>::const_iterator iter = ci._listeners.begin();
             for (; iter != ci._listeners.end(); iter++)
             {
+                GP_ASSERT(*iter);
                 collisionInfo->_listeners.push_back(*iter);
             }
         }
     }
 
-    // Fire collision event
+    // Fire collision event.
     if ((collisionInfo->_status & COLLISION) == 0)
     {
         std::vector<PhysicsCollisionObject::CollisionListener*>::const_iterator iter = collisionInfo->_listeners.begin();
         for (; iter != collisionInfo->_listeners.end(); iter++)
         {
+            GP_ASSERT(*iter);
             if ((collisionInfo->_status & REMOVE) == 0)
             {
                 (*iter)->collisionEvent(PhysicsCollisionObject::CollisionListener::COLLIDING, pair, Vector3(cp.getPositionWorldOnA().x(), cp.getPositionWorldOnA().y(), cp.getPositionWorldOnA().z()),
@@ -323,9 +334,9 @@ void PhysicsController::initialize()
     _world->setGravity(BV(_gravity));
 
     // Register ghost pair callback so bullet detects collisions with ghost objects (used for character collisions).
+    GP_ASSERT(_world->getPairCache());
     _ghostPairCallback = bullet_new<btGhostPairCallback>();
     _world->getPairCache()->setInternalGhostPairCallback(_ghostPairCallback);
-
     _world->getDispatchInfo().m_allowedCcdPenetration = 0.0001f;
 
     // Set up debug drawing.
@@ -356,6 +367,8 @@ void PhysicsController::resume()
 
 void PhysicsController::update(long elapsedTime)
 {
+    GP_ASSERT(_world);
+
     // Update the physics simulation, with a maximum
     // of 10 simulation steps being performed in a given frame.
     //
@@ -372,6 +385,7 @@ void PhysicsController::update(long elapsedTime)
         {
             for (int i = 0; i < _world->getNumCollisionObjects(); i++)
             {
+                GP_ASSERT(_world->getCollisionObjectArray()[i]);
                 if (_world->getCollisionObjectArray()[i]->isActive())
                 {
                     _status = Listener::ACTIVATED;
@@ -384,6 +398,7 @@ void PhysicsController::update(long elapsedTime)
             bool allInactive = true;
             for (int i = 0; i < _world->getNumCollisionObjects(); i++)
             {
+                GP_ASSERT(_world->getCollisionObjectArray()[i]);
                 if (_world->getCollisionObjectArray()[i]->isActive())
                 {
                     allInactive = false;
@@ -400,6 +415,7 @@ void PhysicsController::update(long elapsedTime)
         {
             for (unsigned int k = 0; k < _listeners->size(); k++)
             {
+                GP_ASSERT((*_listeners)[k]);
                 (*_listeners)[k]->statusEvent(_status);
             }
         }
@@ -467,6 +483,10 @@ void PhysicsController::update(long elapsedTime)
 
 void PhysicsController::addCollisionListener(PhysicsCollisionObject::CollisionListener* listener, PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB)
 {
+    GP_ASSERT(listener);
+    
+    // One of the collision objects in the pair must be non-null.
+    GP_ASSERT(objectA || objectB);
     PhysicsCollisionObject::CollisionPair pair(objectA, objectB);
 
     // Add the listener and ensure the status includes that this collision pair is registered.
@@ -477,8 +497,11 @@ void PhysicsController::addCollisionListener(PhysicsCollisionObject::CollisionLi
 
 void PhysicsController::removeCollisionListener(PhysicsCollisionObject::CollisionListener* listener, PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB)
 {
-    // Mark the collision pair for these objects for removal
+    // One of the collision objects in the pair must be non-null.
+    GP_ASSERT(objectA || objectB);
     PhysicsCollisionObject::CollisionPair pair(objectA, objectB);
+
+    // Mark the collision pair for these objects for removal.
     if (_collisionStatus.count(pair) > 0)
     {
         _collisionStatus[pair]._status |= REMOVE;
@@ -487,11 +510,14 @@ void PhysicsController::removeCollisionListener(PhysicsCollisionObject::Collisio
 
 void PhysicsController::addCollisionObject(PhysicsCollisionObject* object)
 {
+    GP_ASSERT(object && object->getCollisionObject());
+    GP_ASSERT(_world);
+
     // Assign user pointer for the bullet collision object to allow efficient
     // lookups of bullet objects -> gameplay objects.
     object->getCollisionObject()->setUserPointer(object);
 
-    // Add the object to the physics world
+    // Add the object to the physics world.
     switch (object->getType())
     {
     case PhysicsCollisionObject::RIGID_BODY:
@@ -507,14 +533,17 @@ void PhysicsController::addCollisionObject(PhysicsCollisionObject* object)
         break;
 
     default:
-        GP_ASSERT(0); // unexpected (new type?)
+        GP_ERROR("Unsupported collision object type (%d).", object->getType());
         break;
     }
 }
 
 void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object)
 {
-    // Remove the collision object from the world
+    GP_ASSERT(object);
+    GP_ASSERT(_world);
+
+    // Remove the collision object from the world.
     if (object->getCollisionObject())
     {
         switch (object->getType())
@@ -529,7 +558,7 @@ void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object)
             break;
 
         default:
-            GP_ASSERT(0); // unexpected (new type?)
+            GP_ERROR("Unsupported collision object type (%d).", object->getType());
             break;
         }
     }
@@ -545,14 +574,20 @@ void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object)
 
 PhysicsCollisionObject* PhysicsController::getCollisionObject(const btCollisionObject* collisionObject) const
 {
-    // Gameplay rigid bodies are stored in the userPointer data of bullet collision objects
+    // Gameplay collision objects are stored in the userPointer data of Bullet collision objects.
+    GP_ASSERT(collisionObject);
     return reinterpret_cast<PhysicsCollisionObject*>(collisionObject->getUserPointer());
 }
 
 void getBoundingBox(Node* node, BoundingBox* out, bool merge = false)
 {
+    GP_ASSERT(node);
+    GP_ASSERT(out);
+
     if (node->getModel())
     {
+        GP_ASSERT(node->getModel()->getMesh());
+
         if (merge)
             out->merge(node->getModel()->getMesh()->getBoundingBox());
         else
@@ -572,8 +607,13 @@ void getBoundingBox(Node* node, BoundingBox* out, bool merge = false)
 
 void getBoundingSphere(Node* node, BoundingSphere* out, bool merge = false)
 {
+    GP_ASSERT(node);
+    GP_ASSERT(out);
+
     if (node->getModel())
     {
+        GP_ASSERT(node->getModel()->getMesh());
+
         if (merge)
             out->merge(node->getModel()->getMesh()->getBoundingSphere());
         else
@@ -593,7 +633,9 @@ void getBoundingSphere(Node* node, BoundingSphere* out, bool merge = false)
 
 void computeCenterOfMass(const Vector3& center, const Vector3& scale, Vector3* centerOfMassOffset)
 {
-    // Update center of mass offset
+    GP_ASSERT(centerOfMassOffset);
+
+    // Update center of mass offset.
     *centerOfMassOffset = center;
     centerOfMassOffset->x *= scale.x;
     centerOfMassOffset->y *= scale.y;
@@ -603,6 +645,8 @@ void computeCenterOfMass(const Vector3& center, const Vector3& scale, Vector3* c
 
 PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsCollisionShape::Definition& shape, Vector3* centerOfMassOffset)
 {
+    GP_ASSERT(node);
+
     PhysicsCollisionShape* collisionShape = NULL;
 
     // Get the node's world scale (we need to apply this during creation since rigid bodies don't scale dynamically).
@@ -615,7 +659,7 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
         {
             if (shape.isExplicit)
             {
-                // Use the passed in box information
+                // Use the passed in box information.
                 collisionShape = createBox(Vector3(shape.data.box.extents), Vector3::one());
 
                 if (shape.centerAbsolute)
@@ -631,7 +675,7 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
             }
             else
             {
-                // Automatically compute bounding box from mesh's bounding box
+                // Automatically compute bounding box from mesh's bounding box.
                 BoundingBox box;
                 getBoundingBox(node, &box);
                 collisionShape = createBox(Vector3(std::abs(box.max.x - box.min.x), std::abs(box.max.y - box.min.y), std::abs(box.max.z - box.min.z)), scale);
@@ -645,7 +689,7 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
         {
             if (shape.isExplicit)
             {
-                // Use the passed in sphere information
+                // Use the passed in sphere information.
                 collisionShape = createSphere(shape.data.sphere.radius, Vector3::one());
 
                 if (shape.centerAbsolute)
@@ -661,7 +705,7 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
             }
             else
             {
-                // Automatically compute bounding sphere from mesh's bounding sphere
+                // Automatically compute bounding sphere from mesh's bounding sphere.
                 BoundingSphere sphere;
                 getBoundingSphere(node, &sphere);
                 collisionShape = createSphere(sphere.radius, scale);
@@ -675,7 +719,7 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
         {
             if (shape.isExplicit)
             {
-                // Use the passed in capsule information
+                // Use the passed in capsule information.
                 collisionShape = createCapsule(shape.data.capsule.radius, shape.data.capsule.height, Vector3::one());
 
                 if (shape.centerAbsolute)
@@ -691,7 +735,7 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
             }
             else
             {
-                // Compute a capsule shape that roughly matches the bounding box of the mesh
+                // Compute a capsule shape that roughly matches the bounding box of the mesh.
                 BoundingBox box;
                 getBoundingBox(node, &box);
                 float radius = std::max((box.max.x - box.min.x) * 0.5f, (box.max.z - box.min.z) * 0.5f);
@@ -705,16 +749,19 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
 
     case PhysicsCollisionShape::SHAPE_HEIGHTFIELD:
         {
-            // Build heightfield rigid body from the passed in shape
+            // Build heightfield rigid body from the passed in shape.
             collisionShape = createHeightfield(node, shape.data.heightfield, centerOfMassOffset);
         }
         break;
 
     case PhysicsCollisionShape::SHAPE_MESH:
         {
-            // Build mesh from passed in shape
+            // Build mesh from passed in shape.
             collisionShape = createMesh(shape.data.mesh, scale);
         }
+        break;
+    default:
+        GP_ERROR("Unsupported collision shape type (%d).", shape.type);
         break;
     }
 
@@ -731,10 +778,11 @@ PhysicsCollisionShape* PhysicsController::createBox(const Vector3& extents, cons
     for (unsigned int i = 0; i < _shapes.size(); ++i)
     {
         shape = _shapes[i];
+        GP_ASSERT(shape);
         if (shape->getType() == PhysicsCollisionShape::SHAPE_BOX)
         {
             btBoxShape* box = static_cast<btBoxShape*>(shape->_shape);
-            if (box->getHalfExtentsWithMargin() == halfExtents)
+            if (box && box->getHalfExtentsWithMargin() == halfExtents)
             {
                 shape->addRef();
                 return shape;
@@ -767,10 +815,11 @@ PhysicsCollisionShape* PhysicsController::createSphere(float radius, const Vecto
     for (unsigned int i = 0; i < _shapes.size(); ++i)
     {
         shape = _shapes[i];
+        GP_ASSERT(shape);
         if (shape->getType() == PhysicsCollisionShape::SHAPE_SPHERE)
         {
             btSphereShape* sphere = static_cast<btSphereShape*>(shape->_shape);
-            if (sphere->getRadius() == scaledRadius)
+            if (sphere && sphere->getRadius() == scaledRadius)
             {
                 shape->addRef();
                 return shape;
@@ -799,10 +848,11 @@ PhysicsCollisionShape* PhysicsController::createCapsule(float radius, float heig
     for (unsigned int i = 0; i < _shapes.size(); i++)
     {
         shape = _shapes[i];
+        GP_ASSERT(shape);
         if (shape->getType() == PhysicsCollisionShape::SHAPE_CAPSULE)
         {
             btCapsuleShape* capsule = static_cast<btCapsuleShape*>(shape->_shape);
-            if (capsule->getRadius() == scaledRadius && capsule->getHalfHeight() == 0.5f * scaledHeight)
+            if (capsule && capsule->getRadius() == scaledRadius && capsule->getHalfHeight() == 0.5f * scaledHeight)
             {
                 shape->addRef();
                 return shape;
@@ -819,6 +869,10 @@ PhysicsCollisionShape* PhysicsController::createCapsule(float radius, float heig
 
 PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* image, Vector3* centerOfMassOffset)
 {
+    GP_ASSERT(node);
+    GP_ASSERT(image);
+    GP_ASSERT(centerOfMassOffset);
+
     // Get the dimensions of the heightfield.
     // If the node has a mesh defined, use the dimensions of the bounding box for the mesh.
     // Otherwise simply use the image dimensions (with a max height of 255).
@@ -851,7 +905,7 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
             pixelSize = 4;
             break;
         default:
-            GP_ERROR("Unsupported pixel format for heightmap image.");
+            GP_ERROR("Unsupported pixel format for heightmap image (%d).", image->getFormat());
             return NULL;
     }
 
@@ -872,9 +926,12 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
     heightfieldData->heightData = NULL;
     heightfieldData->inverseIsDirty = true;
 
-    // Generate the heightmap data needed for physics (one height per world unit).
     unsigned int sizeWidth = width;
     unsigned int sizeHeight = length;
+    GP_ASSERT(sizeWidth);
+    GP_ASSERT(sizeHeight);
+    
+    // Generate the heightmap data needed for physics (one height per world unit).
     heightfieldData->width = sizeWidth + 1;
     heightfieldData->height = sizeHeight + 1;
     heightfieldData->heightData = new float[heightfieldData->width * heightfieldData->height];
@@ -897,13 +954,14 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
     // of its heightfield collision shape; see documentation for the btHeightfieldTerrainShape for more info.
     Vector3 s;
     node->getWorldMatrix().getScale(&s);
+    GP_ASSERT(s.y);
     centerOfMassOffset->set(0.0f, -(maxHeight - (0.5f * (maxHeight - minHeight))) / s.y, 0.0f);
 
-    // Create the bullet terrain shape
+    // Create the bullet terrain shape.
     btHeightfieldTerrainShape* terrainShape = bullet_new<btHeightfieldTerrainShape>(
         heightfieldData->width, heightfieldData->height, heightfieldData->heightData, 1.0f, minHeight, maxHeight, 1, PHY_FLOAT, false);
 
-    // Create our collision shape object and store heightfieldData in it
+    // Create our collision shape object and store heightfieldData in it.
     PhysicsCollisionShape* shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_HEIGHTFIELD, terrainShape);
     shape->_shapeData.heightfieldData = heightfieldData;
 
@@ -916,7 +974,7 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
 {
     GP_ASSERT(mesh);
 
-    // Only support meshes with triangle list primitive types
+    // Only support meshes with triangle list primitive types.
     bool triMesh = true;
     if (mesh->getPartCount() > 0)
     {
@@ -951,10 +1009,11 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
     Bundle::MeshData* data = Bundle::readMeshData(mesh->getUrl());
     if (data == NULL)
     {
+        GP_ERROR("Failed to load mesh data from url '%s'.", mesh->getUrl());
         return NULL;
     }
 
-    // Create mesh data to be populated and store in returned collision shape
+    // Create mesh data to be populated and store in returned collision shape.
     PhysicsCollisionShape::MeshData* shapeMeshData = new PhysicsCollisionShape::MeshData();
     shapeMeshData->vertexData = NULL;
 
@@ -985,6 +1044,7 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
         for (unsigned int i = 0; i < partCount; i++)
         {
             meshPart = data->parts[i];
+            GP_ASSERT(meshPart);
 
             switch (meshPart->indexFormat)
             {
@@ -1000,6 +1060,13 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
                 indexType = PHY_INTEGER;
                 indexStride = 4;
                 break;
+            default:
+                GP_ERROR("Unsupported index format (%d).", meshPart->indexFormat);
+                SAFE_DELETE(meshInterface);
+                SAFE_DELETE_ARRAY(shapeMeshData->vertexData);
+                SAFE_DELETE(shapeMeshData);
+                SAFE_DELETE(data);
+                return NULL;
             }
 
             // Move the index data into the rigid body's local buffer.
@@ -1047,13 +1114,13 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
         meshInterface->addIndexedMesh(indexedMesh, indexedMesh.m_indexType);
     }
 
-    // Create our collision shape object and store shapeMeshData in it
+    // Create our collision shape object and store shapeMeshData in it.
     PhysicsCollisionShape* shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_MESH, bullet_new<btBvhTriangleMeshShape>(meshInterface, true));
     shape->_shapeData.meshData = shapeMeshData;
 
     _shapes.push_back(shape);
 
-    // Free the temporary mesh data now that it's stored in physics system
+    // Free the temporary mesh data now that it's stored in physics system.
     SAFE_DELETE(data);
 
     return shape;
@@ -1065,19 +1132,21 @@ void PhysicsController::destroyShape(PhysicsCollisionShape* shape)
     {
         if (shape->getRefCount() == 1)
         {
-            // Remove shape from shape cache
+            // Remove shape from shape cache.
             std::vector<PhysicsCollisionShape*>::iterator shapeItr = std::find(_shapes.begin(), _shapes.end(), shape);
             if (shapeItr != _shapes.end())
                 _shapes.erase(shapeItr);
         }
 
-        // Release the shape
+        // Release the shape.
         shape->release();
     }
 }
 
 float PhysicsController::calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y)
 {
+    GP_ASSERT(data);
+
     unsigned int x1 = x;
     unsigned int y1 = y;
     unsigned int x2 = x1 + 1;
@@ -1109,6 +1178,10 @@ float PhysicsController::calculateHeight(float* data, unsigned int width, unsign
 
 void PhysicsController::addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint)
 {
+    GP_ASSERT(a);
+    GP_ASSERT(constraint);
+    GP_ASSERT(_world);
+
     a->addConstraint(constraint);
     if (b)
     {
@@ -1120,15 +1193,19 @@ void PhysicsController::addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, 
 
 bool PhysicsController::checkConstraintRigidBodies(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
+    GP_ASSERT(a);
+
     if (!a->supportsConstraints())
     {
-        GP_WARN("Rigid body '%s' does not support constraints; unexpected behavior may occur.", a->_node->getId());
+        GP_ASSERT(a->_node);
+        GP_ERROR("Rigid body '%s' does not support constraints; unexpected behavior may occur.", a->_node->getId());
         return false;
     }
     
     if (b && !b->supportsConstraints())
     {
-        GP_WARN("Rigid body '%s' does not support constraints; unexpected behavior may occur.", b->_node->getId());
+        GP_ASSERT(b->_node);
+        GP_ERROR("Rigid body '%s' does not support constraints; unexpected behavior may occur.", b->_node->getId());
         return false;
     }
 
@@ -1137,6 +1214,9 @@ bool PhysicsController::checkConstraintRigidBodies(PhysicsRigidBody* a, PhysicsR
 
 void PhysicsController::removeConstraint(PhysicsConstraint* constraint)
 {
+    GP_ASSERT(constraint);
+    GP_ASSERT(_world);
+
     // Find the constraint and remove it from the physics world.
     for (int i = _world->getNumConstraints() - 1; i >= 0; i--)
     {
@@ -1180,6 +1260,7 @@ PhysicsController::DebugDrawer::DebugDrawer()
 
     Effect* effect = Effect::createFromSource(vs_str, fs_str);
     Material* material = Material::create(effect);
+    GP_ASSERT(material && material->getStateBlock());
     material->getStateBlock()->setDepthTest(true);
 
     VertexFormat::Element elements[] =
@@ -1200,12 +1281,14 @@ PhysicsController::DebugDrawer::~DebugDrawer()
 
 void PhysicsController::DebugDrawer::begin(const Matrix& viewProjection)
 {
+    GP_ASSERT(_meshBatch);
     _viewProjection = &viewProjection;
     _meshBatch->begin();
 }
 
 void PhysicsController::DebugDrawer::end()
 {
+    GP_ASSERT(_meshBatch && _meshBatch->getMaterial() && _meshBatch->getMaterial()->getParameter("u_viewProjectionMatrix"));
     _meshBatch->end();
     _meshBatch->getMaterial()->getParameter("u_viewProjectionMatrix")->setValue(_viewProjection);
     _meshBatch->draw();
@@ -1213,6 +1296,8 @@ void PhysicsController::DebugDrawer::end()
 
 void PhysicsController::DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor)
 {
+    GP_ASSERT(_meshBatch);
+
     static DebugDrawer::DebugVertex fromVertex, toVertex;
 
     fromVertex.x = from.getX();

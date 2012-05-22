@@ -18,8 +18,11 @@ PhysicsGenericConstraint::PhysicsGenericConstraint(PhysicsRigidBody* a, PhysicsR
     : PhysicsConstraint(a, b), _rotationOffsetA(NULL), _rotationOffsetB(NULL),
     _translationOffsetA(NULL), _translationOffsetB(NULL)
 {
+    GP_ASSERT(a && a->_body && a->getNode());
+
     if (b)
     {
+        GP_ASSERT(b->_body && b->getNode());
         Vector3 origin = centerOfMassMidpoint(a->getNode(), b->getNode());
         _constraint = new btGeneric6DofConstraint(*a->_body, *b->_body, getTransformOffset(a->getNode(), origin), getTransformOffset(b->getNode(), origin), true);
     }
@@ -33,6 +36,8 @@ PhysicsGenericConstraint::PhysicsGenericConstraint(PhysicsRigidBody* a, const Qu
     PhysicsRigidBody* b, const Quaternion& rotationOffsetB, const Vector3& translationOffsetB)
     : PhysicsConstraint(a, b), _rotationOffsetA(NULL), _rotationOffsetB(NULL), _translationOffsetA(NULL), _translationOffsetB(NULL)
 {
+    GP_ASSERT(a && a->_body && a->getNode());
+
     // Take scale into account for the first node's translation offset.
     Vector3 sA;
     a->getNode()->getWorldMatrix().getScale(&sA);
@@ -40,6 +45,8 @@ PhysicsGenericConstraint::PhysicsGenericConstraint(PhysicsRigidBody* a, const Qu
 
     if (b)
     {
+        GP_ASSERT(b->_body && b->getNode());
+
         // Take scale into account for the second node's translation offset.
         Vector3 sB;
         b->getNode()->getWorldMatrix().getScale(&sB);

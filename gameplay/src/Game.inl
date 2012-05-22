@@ -47,6 +47,7 @@ inline PhysicsController* Game::getPhysicsController() const
 template <class T>
 void Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
 {
+    GP_ASSERT(instance);
     (instance->*method)(cookie);
     Platform::swapBuffers();
 }

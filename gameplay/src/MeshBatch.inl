@@ -11,6 +11,7 @@ Material* MeshBatch::getMaterial() const
 template <class T>
 void MeshBatch::add(T* vertices, unsigned int vertexCount, unsigned short* indices, unsigned int indexCount)
 {
+    GP_ASSERT(vertices);
     GP_ASSERT(sizeof(T) == _vertexFormat.getVertexSize());
     
     unsigned int newVertexCount = _vertexCount + vertexCount;
@@ -27,16 +28,20 @@ void MeshBatch::add(T* vertices, unsigned int vertexCount, unsigned short* indic
             return; // failed to grow
     }
     
-    // Copy vertex data
+    // Copy vertex data.
+    GP_ASSERT(_verticesPtr);
     unsigned int vBytes = vertexCount * _vertexFormat.getVertexSize();
     memcpy(_verticesPtr, vertices, vBytes);
     
-    // Copy index data
+    // Copy index data.
     if (_indexed)
     {
+        GP_ASSERT(indices);
+        GP_ASSERT(_indicesPtr);
+
         if (_vertexCount == 0)
         {
-            // Simply copy values directly into the start of the index array
+            // Simply copy values directly into the start of the index array.
             memcpy(_indicesPtr, indices, indexCount * sizeof(unsigned short));
         }
         else
@@ -50,8 +55,8 @@ void MeshBatch::add(T* vertices, unsigned int vertexCount, unsigned short* indic
                 _indicesPtr += 2;
             }
             
-            // Loop through all indices and insert them, their their value offset by
-            // 'vertexCount' so that they are relative to the first newly insertted vertex
+            // Loop through all indices and insert them, with their values offset by
+            // 'vertexCount' so that they are relative to the first newly inserted vertex.
             for (unsigned int i = 0; i < indexCount; ++i)
             {
                 _indicesPtr[i] = indices[i] + _vertexCount;

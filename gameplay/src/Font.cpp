@@ -66,10 +66,13 @@ Font::~Font()
 
 Font* Font::create(const char* path, const char* id)
 {
+    GP_ASSERT(path);
+
     // Search the font cache for a font with the given path and ID.
     for (unsigned int i = 0, count = __fontCache.size(); i < count; ++i)
     {
         Font* f = __fontCache[i];
+        GP_ASSERT(f);
         if (f->_path == path && (id == NULL || f->_id == id))
         {
             // Found a match.
@@ -82,17 +85,18 @@ Font* Font::create(const char* path, const char* id)
     Bundle* bundle = Bundle::create(path);
     if (bundle == NULL)
     {
+        GP_ERROR("Failed to load font bundle '%s'.", path);
         return NULL;
     }
 
     Font* font = NULL;
-
     if (id == NULL)
     {
-        // Get the ID of the first/only object in the bundle (assume it's a Font).
+        // Get the ID of the first object in the bundle (assume it's a Font).
         const char* id;
-        if (bundle->getObjectCount() != 1 || (id = bundle->getObjectID(0)) == NULL)
+        if ((id = bundle->getObjectID(0)) == NULL)
         {
+            GP_ERROR("Failed to load font without explicit id; the first object in the font bundle has a null id.");
             return NULL;
         }
 
@@ -118,6 +122,10 @@ Font* Font::create(const char* path, const char* id)
 
 Font* Font::create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture)
 {
+    GP_ASSERT(family);
+    GP_ASSERT(glyphs);
+    GP_ASSERT(texture);
+
     // Create the effect for the font's sprite batch.
     if (__fontEffect == NULL)
     {
@@ -171,14 +179,21 @@ unsigned int Font::getSize()
 
 void Font::begin()
 {
+    GP_ASSERT(_batch);
     _batch->begin();
 }
 
 Font::Text* Font::createText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify,
     bool wrap, bool rightToLeft, const Rectangle* clip)
 {
+    GP_ASSERT(text);
+    GP_ASSERT(clip);
+    GP_ASSERT(_glyphs);
+    GP_ASSERT(_batch);
+
     if (size == 0)
         size = _size;
+    GP_ASSERT(_size);
     float scale = (float)size / _size;
     const int length = strlen(text);
     int yPos = area.y;
@@ -189,6 +204,8 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
     getMeasurementInfo(text, area, size, justify, wrap, rightToLeft, &xPositions, &yPos, &lineLengths);
 
     Text* batch = new Text(text);
+    GP_ASSERT(batch->_vertices);
+    GP_ASSERT(batch->_indices);
 
     int xPos = area.x;
     std::vector<int>::const_iterator xPositionsIt = xPositions.begin();
@@ -400,6 +417,9 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
 
 void Font::drawText(Text* text)
 {
+    GP_ASSERT(_batch);
+    GP_ASSERT(text->_vertices);
+    GP_ASSERT(text->_indices);
     _batch->draw(text->_vertices, text->_vertexCount, text->_indices, text->_indexCount);
 }
 
@@ -407,6 +427,8 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
 {
     if (size == 0)
         size = _size;
+    GP_ASSERT(_size);
+    GP_ASSERT(text);
     float scale = (float)size / _size;
     const char* cursor = NULL;
 
@@ -469,6 +491,8 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
             iteration = 1;
         }
 
+        GP_ASSERT(_glyphs);
+        GP_ASSERT(_batch);
         for (int i = startIndex; i < length && i >= 0; i += iteration)
         {
             char c = 0;
@@ -521,8 +545,11 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
 
 void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify, bool wrap, bool rightToLeft, const Rectangle* clip)
 {
+    GP_ASSERT(text);
+
     if (size == 0)
         size = _size;
+    GP_ASSERT(_size);
     float scale = (float)size / _size;
     const int length = strlen(text);
     int yPos = area.y;
@@ -612,6 +639,8 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             break;
         }
 
+        GP_ASSERT(_glyphs);
+        GP_ASSERT(_batch);
         for (int i = startIndex; i < (int)tokenLength && i >= 0; i += iteration)
         {
             char c = token[i];
@@ -712,11 +741,17 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
 
 void Font::end()
 {
+    GP_ASSERT(_batch);
     _batch->end();
 }
 
 void Font::measureText(const char* text, unsigned int size, unsigned int* width, unsigned int* height)
 {
+    GP_ASSERT(_size);
+    GP_ASSERT(text);
+    GP_ASSERT(width);
+    GP_ASSERT(height);
+
     float scale = (float)size / _size;
     const int length = strlen(text);
     const char* token = text;
@@ -746,6 +781,10 @@ void Font::measureText(const char* text, unsigned int size, unsigned int* width,
 
 void Font::measureText(const char* text, const Rectangle& clip, unsigned int size, Rectangle* out, Justify justify, bool wrap, bool ignoreClip)
 {
+    GP_ASSERT(_size);
+    GP_ASSERT(text);
+    GP_ASSERT(out);
+
     float scale = (float)size / _size;
     Justify vAlign = static_cast<Justify>(justify & 0xF0);
     if (vAlign == 0)
@@ -1068,6 +1107,10 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
 void Font::getMeasurementInfo(const char* text, const Rectangle& area, unsigned int size, Justify justify, bool wrap, bool rightToLeft,
         std::vector<int>* xPositions, int* yPosition, std::vector<unsigned int>* lineLengths)
 {
+    GP_ASSERT(_size);
+    GP_ASSERT(text);
+    GP_ASSERT(yPosition);
+
     float scale = (float)size / _size;
 
     Justify vAlign = static_cast<Justify>(justify & 0xF0);
@@ -1260,6 +1303,10 @@ void Font::getLocationAtIndex(const char* text, const Rectangle& clip, unsigned 
 int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
                                       const int destIndex, Justify justify, bool wrap, bool rightToLeft)
 {
+    GP_ASSERT(_size);
+    GP_ASSERT(text);
+    GP_ASSERT(outLocation);
+
     unsigned int charIndex = 0;
 
     // Essentially need to measure text until we reach inLocation.
@@ -1371,6 +1418,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
             break;
         }
 
+        GP_ASSERT(_glyphs);
         for (int i = startIndex; i < (int)tokenLength && i >= 0; i += iteration)
         {
             char c = token[i];
@@ -1485,6 +1533,9 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
 
 unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigned int size, float scale)
 {
+    GP_ASSERT(token);
+    GP_ASSERT(_glyphs);
+
     // Calculate width of word or line.
     unsigned int tokenWidth = 0;
     for (unsigned int i = 0; i < length; ++i)
@@ -1514,6 +1565,9 @@ unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigne
 
 unsigned int Font::getReversedTokenLength(const char* token, const char* bufStart)
 {
+    GP_ASSERT(token);
+    GP_ASSERT(bufStart);
+
     const char* cursor = token;
     char c = cursor[0];
     unsigned int length = 0;
@@ -1537,6 +1591,13 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
                           std::vector<int>::const_iterator* xPositionsIt, std::vector<int>::const_iterator xPositionsEnd, unsigned int* charIndex,
                           const Vector2* stopAtPosition, const int currentIndex, const int destIndex)
 {
+    GP_ASSERT(token);
+    GP_ASSERT(*token);
+    GP_ASSERT(xPos);
+    GP_ASSERT(yPos);
+    GP_ASSERT(lineLength);
+    GP_ASSERT(xPositionsIt);
+
     char delimiter = *token[0];
     bool nextLine = true;
     while (delimiter == ' ' ||
@@ -1615,15 +1676,18 @@ void Font::addLineInfo(const Rectangle& area, int lineWidth, int lineLength, Jus
     int hWhitespace = area.width - lineWidth;
     if (hAlign == ALIGN_HCENTER)
     {
+        GP_ASSERT(xPositions);
         (*xPositions).push_back(area.x + hWhitespace / 2);
     }
     else if (hAlign == ALIGN_RIGHT)
     {
+        GP_ASSERT(xPositions);
         (*xPositions).push_back(area.x + hWhitespace);
     }
 
     if (rightToLeft)
     {
+        GP_ASSERT(lineLengths);
         (*lineLengths).push_back(lineLength);
     }
 }
@@ -1709,7 +1773,7 @@ Font::Justify Font::getJustify(const char* justify)
     return Font::ALIGN_TOP_LEFT;
 }
 
-Font::Text::Text(const char* text) : _text(text), _vertexCount(0), _vertices(NULL), _indexCount(0), _indices(NULL)
+Font::Text::Text(const char* text) : _text(text ? text : ""), _vertexCount(0), _vertices(NULL), _indexCount(0), _indices(NULL)
 {
     const int length = strlen(text);
     _vertices = new SpriteBatch::SpriteVertex[length * 4];

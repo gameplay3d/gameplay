@@ -7,10 +7,13 @@ namespace gameplay
 
 Image* Image::create(const char* path)
 {
+    GP_ASSERT(path);
+
     // Open the file.
     FILE* fp = FileSystem::openFile(path, "rb");
     if (fp == NULL)
     {
+        GP_ERROR("Failed to open image file '%s'.", path);
         return NULL;
     }
 
@@ -18,8 +21,11 @@ Image* Image::create(const char* path)
     unsigned char sig[8];
     if (fread(sig, 1, 8, fp) != 8 || png_sig_cmp(sig, 0, 8) != 0)
     {
-        GP_ERROR("Texture is not a valid PNG: %s", path);
-        fclose(fp);
+        GP_ERROR("Failed to load file '%s'; not a valid PNG.", path);
+        if (fclose(fp) != 0)
+        {
+            GP_ERROR("Failed to close image file '%s'.", path);
+        }
         return NULL;
     }
 
@@ -27,7 +33,11 @@ Image* Image::create(const char* path)
     png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (png == NULL)
     {
-        fclose(fp);
+        GP_ERROR("Failed to create PNG structure for reading PNG file '%s'.", path);
+        if (fclose(fp) != 0)
+        {
+            GP_ERROR("Failed to close image file '%s'.", path);
+        }
         return NULL;
     }
 
@@ -35,7 +45,11 @@ Image* Image::create(const char* path)
     png_infop info = png_create_info_struct(png);
     if (info == NULL)
     {
-        fclose(fp);
+        GP_ERROR("Failed to create PNG info structure for PNG file '%s'.", path);
+        if (fclose(fp) != 0)
+        {
+            GP_ERROR("Failed to close image file '%s'.", path);
+        }
         png_destroy_read_struct(&png, NULL, NULL);
         return NULL;
     }
@@ -43,7 +57,11 @@ Image* Image::create(const char* path)
     // Set up error handling (required without using custom error handlers above).
     if (setjmp(png_jmpbuf(png)))
     {
-        fclose(fp);
+        GP_ERROR("Failed to set up error handling for reading PNG file '%s'.", path);
+        if (fclose(fp) != 0)
+        {
+            GP_ERROR("Failed to close image file '%s'.", path);
+        }
         png_destroy_read_struct(&png, &info, NULL);
         return NULL;
     }
@@ -73,8 +91,11 @@ Image* Image::create(const char* path)
         break;
 
     default:
-        GP_ERROR("Unsupported PNG color type (%d) for texture: %s", (int)colorType, path);
-        fclose(fp);
+        GP_ERROR("Unsupported PNG color type (%d) for image file '%s'.", (int)colorType, path);
+        if (fclose(fp) != 0)
+        {
+            GP_ERROR("Failed to close image file '%s'.", path);
+        }
         png_destroy_read_struct(&png, &info, NULL);
         return NULL;
     }
@@ -93,7 +114,10 @@ Image* Image::create(const char* path)
 
     // Clean up.
     png_destroy_read_struct(&png, &info, NULL);
-    fclose(fp);
+    if (fclose(fp) != 0)
+    {
+        GP_ERROR("Failed to close image file '%s'.", path);
+    }
 
     return image;
 }

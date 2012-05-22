@@ -2,13 +2,19 @@
 #include "FileSystem.h"
 #include "Properties.h"
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
 #ifdef WIN32
     #include <windows.h>
     #include <tchar.h>
     #include <stdio.h>
+    #define gp_stat _stat
+    #define gp_stat_struct struct stat
 #else
     #include <dirent.h>
-    #include <sys/stat.h>
+    #define gp_stat stat
+    #define gp_stat_struct struct stat
 #endif
 
 #ifdef __ANDROID__
@@ -19,9 +25,10 @@ extern AAssetManager* __assetManager;
 namespace gameplay
 {
 
+// Creates a file on the file system from the specified asset (Android-specific).
+static void createFileFromAsset(const char* path);
+
 #ifdef __ANDROID__
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
 
 void makepath(std::string path, int mode)
@@ -109,6 +116,8 @@ void FileSystem::loadResourceAliases(Properties* properties)
 
 const char* FileSystem::resolvePath(const char* path)
 {
+    GP_ASSERT(path);
+
     size_t len = strlen(path);
     if (len > 1 && path[0] == '@')
     {
@@ -191,6 +200,32 @@ bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
 #endif
 }
 
+bool FileSystem::fileExists(const char* path)
+{
+    GP_ASSERT(path);
+
+    std::string fullPath(__resourcePath);
+    fullPath += resolvePath(path);
+
+    createFileFromAsset(path);
+
+    gp_stat_struct s;
+// Win32 doesn't support an asset or bundle definitions.
+#ifdef WIN32
+    if (stat(fullPath.c_str(), &s) != 0)
+    {
+        fullPath = __resourcePath;
+        fullPath += "../../gameplay/";
+        fullPath += path;
+        
+        return stat(fullPath.c_str(), &s) == 0;
+    }
+    return true;
+#else
+    return stat(fullPath.c_str(), &s) == 0;
+#endif
+}
+
 FILE* FileSystem::openFile(const char* path, const char* mode)
 {
     GP_ASSERT(path);
@@ -198,42 +233,7 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
     std::string fullPath(__resourcePath);
     fullPath += resolvePath(path);
 
-#ifdef __ANDROID__
-    std::string directoryPath = fullPath.substr(0, fullPath.rfind('/'));
-    struct stat s;
-    if (stat(directoryPath.c_str(), &s) != 0)
-        makepath(directoryPath.c_str(), 0777);
-
-    if (stat(fullPath.c_str(), &s) != 0)
-    {
-        AAsset* asset = AAssetManager_open(__assetManager, path, AASSET_MODE_RANDOM);
-        if (asset)
-        {
-            const void* data = AAsset_getBuffer(asset);
-            int length = AAsset_getLength(asset);
-            FILE* file = fopen(fullPath.c_str(), "wb");
-            if (file != NULL)
-            {
-                int ret = fwrite(data, sizeof(unsigned char), length, file);
-                if (fclose(file) != 0)
-                {
-                    GP_ERROR("Failed to close file on file system created from APK asset.");
-                    return NULL;
-                }
-                if (ret != length)
-                {
-                    GP_ERROR("Failed to write all data from APK asset to file on file system.");
-                    return NULL;
-                }
-            }
-            else
-            {
-                GP_ERROR("Failed to create file on file system from APK asset.");
-                return NULL;
-            }
-        }
-    }
-#endif
+    createFileFromAsset(path);
     
     FILE* fp = fopen(fullPath.c_str(), mode);
     
@@ -299,6 +299,57 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
         *fileSize = size; 
     }
     return buffer;
+}
+
+void createFileFromAsset(const char* path)
+{
+#ifdef __ANDROID__
+    static std::set<std::string> upToDateAssets;
+
+    GP_ASSERT(path);
+    std::string fullPath(__resourcePath);
+    fullPath += FileSystem::resolvePath(path);
+
+    std::string directoryPath = fullPath.substr(0, fullPath.rfind('/'));
+    struct stat s;
+    if (stat(directoryPath.c_str(), &s) != 0)
+        makepath(directoryPath.c_str(), 0777);
+
+    // To ensure that the files on the file system corresponding to the assets in the APK bundle
+    // are always up to date (and in sync), we copy them from the APK to the file system once
+    // for each time the process (game) runs.
+    if (upToDateAssets.find(fullPath) == upToDateAssets.end())
+    {
+        AAsset* asset = AAssetManager_open(__assetManager, path, AASSET_MODE_RANDOM);
+        if (asset)
+        {
+            const void* data = AAsset_getBuffer(asset);
+            int length = AAsset_getLength(asset);
+            FILE* file = fopen(fullPath.c_str(), "wb");
+            if (file != NULL)
+            {
+                int ret = fwrite(data, sizeof(unsigned char), length, file);
+                if (fclose(file) != 0)
+                {
+                    GP_ERROR("Failed to close file on file system created from APK asset '%s'.", path);
+                    return;
+                }
+                if (ret != length)
+                {
+                    GP_ERROR("Failed to write all data from APK asset '%s' to file on file system.", path);
+                    return;
+                }
+            }
+            else
+            {
+                GP_ERROR("Failed to create file on file system from APK asset '%s'.", path);
+                return;
+            }
+
+            upToDateAssets.insert(fullPath);
+        }
+    }
+#endif
 }
 
 }

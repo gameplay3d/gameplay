@@ -21,7 +21,7 @@ PhysicsCollisionShape::~PhysicsCollisionShape()
 {
     if (_shape)
     {
-        // Cleanup shape-specific cached data
+        // Cleanup shape-specific cached data.
         switch (_type)
         {
         case SHAPE_MESH:
@@ -44,7 +44,7 @@ PhysicsCollisionShape::~PhysicsCollisionShape()
             break;
         }
 
-        // Free the bullet shape
+        // Free the bullet shape.
         SAFE_DELETE(_shape);
     }
 }
@@ -69,10 +69,12 @@ PhysicsCollisionShape::Definition::Definition(const Definition& definition)
     switch (type)
     {
     case PhysicsCollisionShape::SHAPE_HEIGHTFIELD:
+        GP_ASSERT(data.heightfield);
         data.heightfield->addRef();
         break;
 
     case PhysicsCollisionShape::SHAPE_MESH:
+        GP_ASSERT(data.mesh);
         data.mesh->addRef();
         break;
     }
@@ -103,10 +105,12 @@ PhysicsCollisionShape::Definition& PhysicsCollisionShape::Definition::operator=(
         switch (type)
         {
         case PhysicsCollisionShape::SHAPE_HEIGHTFIELD:
+            GP_ASSERT(data.heightfield);
             data.heightfield->addRef();
             break;
 
         case PhysicsCollisionShape::SHAPE_MESH:
+            GP_ASSERT(data.mesh);
             data.mesh->addRef();
             break;
         }
@@ -117,14 +121,15 @@ PhysicsCollisionShape::Definition& PhysicsCollisionShape::Definition::operator=(
 
 PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Node* node, Properties* properties)
 {
+    GP_ASSERT(node);
+
     // Check if the properties is valid and has a valid namespace.
-    GP_ASSERT(properties);
     if (!properties || 
         !(strcmp(properties->getNamespace(), "character") == 0 || 
         strcmp(properties->getNamespace(), "ghostObject") == 0 || 
         strcmp(properties->getNamespace(), "rigidBody") == 0))
     {
-        GP_WARN("Failed to load physics collision shape from properties object: must be non-null object and have namespace equal to 'character', 'ghostObject', or 'rigidBody'.");
+        GP_ERROR("Failed to load physics collision shape from properties object: must be non-null object and have namespace equal to 'character', 'ghostObject', or 'rigidBody'.");
         return NULL;
     }
 
@@ -158,7 +163,7 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
                 type = SHAPE_CAPSULE;
             else
             {
-                GP_WARN("Could not create physics collision shape; unsupported value for collision shape type: '%s'.", typeStr.c_str());
+                GP_ERROR("Could not create physics collision shape; unsupported value for collision shape type: '%s'.", typeStr.c_str());
                 return NULL;
             }
 
@@ -190,11 +195,15 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
         {
             centerIsAbsolute = properties->getBool();
         }
+        else
+        {
+            // Ignore this case (these are the properties for the rigid body, character, or ghost object that this collision shape is for).
+        }
     }
 
     if (!typeSpecified)
     {
-        GP_WARN("Missing 'type' specifier for collision shape definition.");
+        GP_ERROR("Missing 'type' specifier for collision shape definition.");
         return NULL;
     }
 
@@ -255,11 +264,11 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
             break;
         case SHAPE_MESH:
         {
-            // Mesh is required on node
+            // Mesh is required on node.
             Mesh* nodeMesh = node->getModel() ? node->getModel()->getMesh() : NULL;
             if (nodeMesh == NULL)
             {
-                GP_WARN("Cannot create mesh rigid body for node without mode/mesh.");
+                GP_ERROR("Cannot create mesh collision object for node without model/mesh.");
                 return NULL;
             }
 
@@ -275,7 +284,7 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
                 case Mesh::LINE_STRIP:
                 case Mesh::POINTS:
                 case Mesh::TRIANGLE_STRIP:
-                    GP_WARN("Mesh rigid bodies are currently only supported on meshes with primitive type equal to TRIANGLES.");
+                    GP_ERROR("Mesh collision objects are currently only supported on meshes with primitive type equal to TRIANGLES.");
                     SAFE_DELETE(shape);
                     break;
             }
@@ -285,14 +294,20 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
         case SHAPE_HEIGHTFIELD:
             if (imagePath == NULL)
             {
-                GP_WARN("Heightfield rigid body requires an image path.");
+                GP_ERROR("Heightfield collision objects require an image path.");
+                SAFE_DELETE(shape);
+                return NULL;
             }
             else
             {
                 // Load the image data from the given file path.
                 Image* image = Image::create(imagePath);
                 if (!image)
+                {
+                    GP_ERROR("Failed create image for heightfield collision object from file '%s'.", imagePath);
+                    SAFE_DELETE(shape);
                     return NULL;
+                }
 
                 // Ensure that the image's pixel format is supported.
                 switch (image->getFormat())
@@ -301,7 +316,9 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
                     case Image::RGBA:
                         break;
                     default:
-                        GP_WARN("Heightmap: pixel format is not supported: %d", image->getFormat());
+                        GP_ERROR("Heightmap: pixel format is not supported: %d.", image->getFormat());
+                        SAFE_RELEASE(image);
+                        SAFE_DELETE(shape);
                         return NULL;
                 }
 
@@ -310,8 +327,9 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
             }
             break;
         default:
-            GP_WARN("Unsupported value for physics collision shape type.");
-            break;
+            GP_ERROR("Unsupported physics collision shape type (%d).", type);
+            SAFE_DELETE(shape);
+            return NULL;
     }
 
     SAFE_DELETE(extents);
@@ -383,6 +401,7 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::capsule(float radius, f
 
 PhysicsCollisionShape::Definition PhysicsCollisionShape::heightfield(Image* image)
 {
+    GP_ASSERT(image);
     image->addRef();
 
     Definition d;
@@ -395,6 +414,7 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::heightfield(Image* imag
 
 PhysicsCollisionShape::Definition PhysicsCollisionShape::mesh(Mesh* mesh)
 {
+    GP_ASSERT(mesh);
     mesh->addRef();
 
     Definition d;
