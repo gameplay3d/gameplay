@@ -170,7 +170,7 @@ protected:
      *
      * @param clip The clipping rectangle of this container's parent container.
      */
-    virtual void update(const Rectangle& clip, const Vector2& offset, long elapsedTime);
+    virtual void update(const Rectangle& clip, const Vector2& offset);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.
@@ -225,7 +225,7 @@ protected:
     /**
      * Update scroll position and velocity.
      */
-    void updateScroll(const Container* container, long elapsedTime);
+    void updateScroll(const Container* container);
 
     bool touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 

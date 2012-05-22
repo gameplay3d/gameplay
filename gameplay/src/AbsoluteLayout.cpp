@@ -40,7 +40,7 @@ Layout::Type AbsoluteLayout::getType()
     return Layout::LAYOUT_ABSOLUTE;
 }
 
-void AbsoluteLayout::update(const Container* container, long elapsedTime)
+void AbsoluteLayout::update(const Container* container)
 {
     GP_ASSERT(container);
 
@@ -53,7 +53,7 @@ void AbsoluteLayout::update(const Container* container, long elapsedTime)
         GP_ASSERT(control);
 
         align(control, container);
-        control->update(container->getClip(), Vector2::zero(), elapsedTime);
+        control->update(container->getClip(), Vector2::zero());
     }
 }
 

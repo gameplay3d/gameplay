@@ -279,7 +279,7 @@ void Form::setNode(Node* node)
     }
 }
 
-void Form::update(long elapsedTime)
+void Form::update()
 {
     if (isDirty())
     {
@@ -403,10 +403,10 @@ void Form::update(long elapsedTime)
         }
 
         GP_ASSERT(_layout);
-        _layout->update(this, elapsedTime);
+        _layout->update(this);
 
         if (_scrollState != SCROLL_NONE)
-            this->updateScroll(this, elapsedTime);
+            this->updateScroll(this);
     }
 }
 

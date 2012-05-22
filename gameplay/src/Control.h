@@ -738,7 +738,7 @@ protected:
      * @param clip The clipping rectangle of this control's parent container.
      * @param offset Layout-computed positioning offset to add to the control's position.
      */
-    virtual void update(const Rectangle& clip, const Vector2& offset, long elapsedTime);
+    virtual void update(const Rectangle& clip, const Vector2& offset);
 
     /**
      * Draw the images associated with this control.

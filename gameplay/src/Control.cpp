@@ -708,7 +708,7 @@ void Control::notifyListeners(Listener::EventType eventType)
     }
 }
 
-void Control::update(const Rectangle& clip, const Vector2& offset, long elapsedTime)
+void Control::update(const Rectangle& clip, const Vector2& offset)
 {
     _clearBounds.set(_absoluteClipBounds);
 

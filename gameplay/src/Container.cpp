@@ -280,10 +280,10 @@ Animation* Container::getAnimation(const char* id) const
     return NULL;
 }
 
-void Container::update(const Rectangle& clip, const Vector2& offset, long elapsedTime)
+void Container::update(const Rectangle& clip, const Vector2& offset)
 {
     // Update this container's viewport.
-    Control::update(clip, offset, elapsedTime);
+    Control::update(clip, offset);
 
     // Get scrollbar images and diminish clipping bounds to make room for scrollbars.
     if ((_scrollState & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL)
@@ -305,10 +305,10 @@ void Container::update(const Rectangle& clip, const Vector2& offset, long elapse
     }
 
     GP_ASSERT(_layout);
-    _layout->update(this, elapsedTime);
+    _layout->update(this);
 
     if (_scrollState != SCROLL_NONE)
-        this->updateScroll(this, elapsedTime);
+        this->updateScroll(this);
 }
 
 void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight)
@@ -572,9 +572,15 @@ Layout::Type Container::getLayoutType(const char* layoutString)
     }
 }
 
-void Container::updateScroll(const Container* container, long elapsedTime)
+void Container::updateScroll(const Container* container)
 {
     GP_ASSERT(container);
+
+    // Update Time.
+    static long lastFrameTime = Game::getGameTime();
+    long frameTime = Game::getGameTime();
+    long elapsedTime = (frameTime - lastFrameTime);
+    lastFrameTime = frameTime;
 
     const Rectangle& containerBounds = container->getBounds();
     const Theme::Border& containerBorder = container->getBorder(container->getState());
@@ -670,7 +676,7 @@ void Container::updateScroll(const Container* container, long elapsedTime)
     for (unsigned int i = 0; i < controlsCount; i++)
     {
         Control* control = controls.at(i);
-        control->update(container->getClip(), _scrollPosition, elapsedTime);
+        control->update(container->getClip(), _scrollPosition);
     }
 }
 
