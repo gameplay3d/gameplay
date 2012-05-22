@@ -388,6 +388,26 @@ void Matrix::add(const Matrix& m1, const Matrix& m2, Matrix* dst)
 {
     GP_ASSERT(dst);
 
+#ifdef USE_NEON
+
+    asm volatile(
+    	"vld1.32 	{q0, q1}, 	[%1]! 	\n\t"
+		"vld1.32 	{q2, q3}, 	[%1]! 	\n\t"
+    	"vld1.32 	{q8, q9}, 	[%2]! 	\n\t"
+		"vld1.32 	{q10, q11}, [%2]! 	\n\t"
+		"vadd.f32   q12, q0, q8 		\n\t"
+    	"vadd.f32   q13, q1, q9			\n\t"
+    	"vadd.f32   q14, q2, q10		\n\t"
+    	"vadd.f32   q15, q3, q11		\n\t"
+    	"vst1.32    {q12, q13}, [%0]!   \n\t"
+		"vst1.32    {q14, q15}, [%0]!   \n\t"
+		:
+        : "r"(dst->m), "r"(m1.m), "r"(m2.m)
+        : "q0", "q1", "q2", "q3", "q8", "q9", "q10", "q11", "q12", "q13", "q14", "q15", "memory"
+    );
+
+#else
+
     dst->m[0]  = m1.m[0]  + m2.m[0];
     dst->m[1]  = m1.m[1]  + m2.m[1];
     dst->m[2]  = m1.m[2]  + m2.m[2];
@@ -404,6 +424,8 @@ void Matrix::add(const Matrix& m1, const Matrix& m2, Matrix* dst)
     dst->m[13] = m1.m[13] + m2.m[13];
     dst->m[14] = m1.m[14] + m2.m[14];
     dst->m[15] = m1.m[15] + m2.m[15];
+
+#endif
 }
 
 bool Matrix::decompose(Vector3* scale, Quaternion* rotation, Vector3* translation) const
@@ -983,6 +1005,27 @@ void Matrix::subtract(const Matrix& m1, const Matrix& m2, Matrix* dst)
 {
     GP_ASSERT(dst);
 
+#ifdef USE_NEON
+
+    asm volatile(
+    	"vld1.32 	{q0, q1}, 	[%1]! 	\n\t"
+		"vld1.32 	{q2, q3}, 	[%1]! 	\n\t"
+    	"vld1.32 	{q8, q9}, 	[%2]! 	\n\t"
+		"vld1.32 	{q10, q11}, [%2]! 	\n\t"
+		"vsub.f32   q12, q0, q8 		\n\t"
+    	"vsub.f32   q13, q1, q9			\n\t"
+    	"vsub.f32   q14, q2, q10		\n\t"
+    	"vsub.f32   q15, q3, q11		\n\t"
+    	"vst1.32    {q12, q13}, [%0]!   \n\t"
+		"vst1.32    {q14, q15}, [%0]!   \n\t"
+		:
+        : "r"(dst->m), "r"(m1.m), "r"(m2.m)
+        : "q0", "q1", "q2", "q3", "q8", "q9", "q10", "q11", "q12", "q13", "q14", "q15", "memory"
+    );
+
+
+#else
+
     dst->m[0]  = m1.m[0]  - m2.m[0];
     dst->m[1]  = m1.m[1]  - m2.m[1];
     dst->m[2]  = m1.m[2]  - m2.m[2];
@@ -999,6 +1042,8 @@ void Matrix::subtract(const Matrix& m1, const Matrix& m2, Matrix* dst)
     dst->m[13] = m1.m[13] - m2.m[13];
     dst->m[14] = m1.m[14] - m2.m[14];
     dst->m[15] = m1.m[15] - m2.m[15];
+
+#endif
 }
 
 void Matrix::transformPoint(Vector3* point) const
