@@ -795,7 +795,7 @@ void ParticleEmitter::update(long elapsedTime)
     }
 
     // Calculate the time passed since last update.
-    float elapsedSecs = (float)elapsedTime / 1000.0f;
+    float elapsedSecs = (float)elapsedTime * 0.001f;
 
     if (_started && _emissionRate)
     {
