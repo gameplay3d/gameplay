@@ -45,6 +45,14 @@ class Container : public Control
 {
 public:
 
+    enum ScrollState
+    {
+        SCROLL_NONE        = 0,
+        SCROLL_HORIZONTAL  = 0x01,
+        SCROLL_VERTICAL    = 0x02,
+        SCROLL_BOTH = SCROLL_HORIZONTAL | SCROLL_VERTICAL
+    };
+
     /**
      * Get this container's layout.
      *
@@ -114,6 +122,10 @@ public:
      */
     const std::vector<Control*>& getControls() const;
 
+    void setScrollState(ScrollState scrollState);
+
+    ScrollState getScrollState() const;
+
     /**
      * Gets the first animation in the control with the specified ID.
      *
@@ -159,29 +171,6 @@ protected:
      * @param clip The clipping rectangle of this container's parent container.
      */
     virtual void update(const Rectangle& clip, const Vector2& offset);
-
-    /**
-     * Draws the themed border and background of this container and all its controls.
-     *
-     * @param spriteBatch The sprite batch containing this container's border images.
-     * @param clip The clipping rectangle of this container's parent container.
-     */
-    //void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip, const Vector2& offset = Vector2::zero());
-
-    /**
-     * Draws the icons of all controls within this container.
-     *
-     * @param spriteBatch The sprite batch containing this control's icons.
-     * @param clip The clipping rectangle of this container's parent container.
-     */
-    //virtual void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    /**
-     * Draws the text of all controls within this container.
-     *
-     * @param clip The clipping rectangle of this container's parent container.
-     */
-    //virtual void drawText(const Rectangle& clip);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.
@@ -231,6 +220,17 @@ protected:
      */
     void addControls(Theme* theme, Properties* properties);
 
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
+
+    /**
+     * Update scroll position and velocity.
+     */
+    void updateScroll(const Container* container);
+
+    bool touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    static ScrollState getScrollState(const char* scrollState);
+
     /**
      * The container's layout.
      */
@@ -241,11 +241,69 @@ protected:
      */
     std::vector<Control*> _controls;
 
+    /**
+     * Scrollbar top cap image.
+     */
+    Theme::ThemeImage* _scrollBarTopCap;
+
+    /**
+     * Vertical scrollbar image.
+     */
+    Theme::ThemeImage* _scrollBarVertical;
+
+    /**
+     * Scrollbar bottom cap image.
+     */
+    Theme::ThemeImage* _scrollBarBottomCap;
+
+    Theme::ThemeImage* _scrollBarLeftCap;
+    Theme::ThemeImage* _scrollBarHorizontal;
+    Theme::ThemeImage* _scrollBarRightCap;
+
+    // Flag representing whether scrolling is enabled, and in which directions.
+    ScrollState _scrollState;
+
+    // Data required when scrolling is enabled.
+
+    /**
+     * x, width: Horizontal scrollbar position and size.
+     * y, height: Vertical scrollbar position and size.
+     */
+    Rectangle _scrollBarBounds;
+
+    // How far this layout has been scrolled in each direction.
+    Vector2 _scrollPosition;
+
+    // Whether the user is currently touching / holding the mouse down
+    // within this layout's container.
+    bool _scrolling;
+
+    // First touch point.
+    int _firstX;
+    int _firstY;
+
+    // Latest touch point.
+    int _lastX;
+    int _lastY;
+
+    // Time recorded on touch down.
+    long _startTimeX;
+    long _startTimeY;
+    long _lastTime;
+
+    // Speed to continue scrolling at after touch release.
+    Vector2 _velocity;
+
+    // Friction dampens velocity.
+    float _friction;
+
+    // Detect a change in scroll direction.
+    bool _goingRight;
+    bool _goingDown;
+
 private:
 
     Container(const Container& copy);
-
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
 };
 
 }
