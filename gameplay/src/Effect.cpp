@@ -42,6 +42,9 @@ Effect::~Effect()
 
 Effect* Effect::createFromFile(const char* vshPath, const char* fshPath, const char* defines)
 {
+    GP_ASSERT(vshPath);
+    GP_ASSERT(fshPath);
+
     // Search the effect cache for an identical effect that is already loaded.
     std::string uniqueId = vshPath;
     uniqueId += ';';
@@ -55,6 +58,7 @@ Effect* Effect::createFromFile(const char* vshPath, const char* fshPath, const c
     if (itr != __effectCache.end())
     {
         // Found an exiting effect with this id, so increase its ref count and return it.
+        GP_ASSERT(itr->second);
         itr->second->addRef();
         return itr->second;
     }
@@ -63,11 +67,13 @@ Effect* Effect::createFromFile(const char* vshPath, const char* fshPath, const c
     char* vshSource = FileSystem::readAll(vshPath);
     if (vshSource == NULL)
     {
+        GP_ERROR("Failed to read vertex shader from file '%s'.", vshPath);
         return NULL;
     }
     char* fshSource = FileSystem::readAll(fshPath);
     if (fshSource == NULL)
     {
+        GP_ERROR("Failed to read fragment shader from file '%s'.", fshPath);
         SAFE_DELETE_ARRAY(vshSource);
         return NULL;
     }
@@ -79,7 +85,7 @@ Effect* Effect::createFromFile(const char* vshPath, const char* fshPath, const c
 
     if (effect == NULL)
     {
-        GP_ERROR("Failed to create effect from shaders: %s, %s", vshPath, fshPath);
+        GP_ERROR("Failed to create effect from shaders '%s', '%s'.", vshPath, fshPath);
     }
     else
     {
@@ -98,6 +104,9 @@ Effect* Effect::createFromSource(const char* vshSource, const char* fshSource, c
 
 Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, const char* fshPath, const char* fshSource, const char* defines)
 {
+    GP_ASSERT(vshSource);
+    GP_ASSERT(fshSource);
+
     const unsigned int SHADER_SOURCE_LENGTH = 3;
     const GLchar* shaderSource[SHADER_SOURCE_LENGTH];
     char* infoLog = NULL;
@@ -130,7 +139,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
             GL_ASSERT( glGetShaderInfoLog(vertexShader, length, NULL, infoLog) );
             infoLog[length-1] = '\0';
         }
-        GP_ERROR("Compile failed for vertex shader (%s): %s", vshPath == NULL ? "NULL" : vshPath, infoLog == NULL ? "" : infoLog);
+        GP_ERROR("Compile failed for vertex shader '%s' with error '%s'.", vshPath == NULL ? "NULL" : vshPath, infoLog == NULL ? "" : infoLog);
         SAFE_DELETE_ARRAY(infoLog);
 
         // Clean up.
@@ -140,14 +149,6 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
     }
 
     // Compile the fragment shader.
-    definesStr = (defines == NULL) ? "" : defines;
-#ifdef OPENGL_ES
-    if (defines && strlen(defines) != 0)
-        definesStr += "\n";
-    definesStr+= OPENGL_ES_DEFINE;
-#endif
-    shaderSource[0] = definesStr.c_str();
-    shaderSource[1] = "\n";
     shaderSource[2] = fshSource;
     GL_ASSERT( fragmentShader = glCreateShader(GL_FRAGMENT_SHADER) );
     GL_ASSERT( glShaderSource(fragmentShader, SHADER_SOURCE_LENGTH, shaderSource, NULL) );
@@ -327,67 +328,87 @@ unsigned int Effect::getUniformCount() const
 
 void Effect::setValue(Uniform* uniform, float value)
 {
+    GP_ASSERT(uniform);
     GL_ASSERT( glUniform1f(uniform->_location, value) );
 }
 
 void Effect::setValue(Uniform* uniform, const float* values, unsigned int count)
 {
+    GP_ASSERT(uniform);
+    GP_ASSERT(values);
     GL_ASSERT( glUniform1fv(uniform->_location, count, values) );
 }
 
 void Effect::setValue(Uniform* uniform, int value)
 {
+    GP_ASSERT(uniform);
     GL_ASSERT( glUniform1i(uniform->_location, value) );
 }
 
 void Effect::setValue(Uniform* uniform, const int* values, unsigned int count)
 {
+    GP_ASSERT(uniform);
+    GP_ASSERT(values);
     GL_ASSERT( glUniform1iv(uniform->_location, count, values) );
 }
 
 void Effect::setValue(Uniform* uniform, const Matrix& value)
 {
+    GP_ASSERT(uniform);
     GL_ASSERT( glUniformMatrix4fv(uniform->_location, 1, GL_FALSE, value.m) );
 }
 
 void Effect::setValue(Uniform* uniform, const Matrix* values, unsigned int count)
 {
+    GP_ASSERT(uniform);
+    GP_ASSERT(values);
     GL_ASSERT( glUniformMatrix4fv(uniform->_location, count, GL_FALSE, (GLfloat*)values) );
 }
 
 void Effect::setValue(Uniform* uniform, const Vector2& value)
 {
+    GP_ASSERT(uniform);
     GL_ASSERT( glUniform2f(uniform->_location, value.x, value.y) );
 }
 
 void Effect::setValue(Uniform* uniform, const Vector2* values, unsigned int count)
 {
+    GP_ASSERT(uniform);
+    GP_ASSERT(values);
     GL_ASSERT( glUniform2fv(uniform->_location, count, (GLfloat*)values) );
 }
 
 void Effect::setValue(Uniform* uniform, const Vector3& value)
 {
+    GP_ASSERT(uniform);
     GL_ASSERT( glUniform3f(uniform->_location, value.x, value.y, value.z) );
 }
 
 void Effect::setValue(Uniform* uniform, const Vector3* values, unsigned int count)
 {
+    GP_ASSERT(uniform);
+    GP_ASSERT(values);
     GL_ASSERT( glUniform3fv(uniform->_location, count, (GLfloat*)values) );
 }
 
 void Effect::setValue(Uniform* uniform, const Vector4& value)
 {
+    GP_ASSERT(uniform);
     GL_ASSERT( glUniform4f(uniform->_location, value.x, value.y, value.z, value.w) );
 }
 
 void Effect::setValue(Uniform* uniform, const Vector4* values, unsigned int count)
 {
+    GP_ASSERT(uniform);
+    GP_ASSERT(values);
     GL_ASSERT( glUniform4fv(uniform->_location, count, (GLfloat*)values) );
 }
 
 void Effect::setValue(Uniform* uniform, const Texture::Sampler* sampler)
 {
+    GP_ASSERT(uniform);
     GP_ASSERT(uniform->_type == GL_SAMPLER_2D);
+    GP_ASSERT(sampler);
 
     GL_ASSERT( glActiveTexture(GL_TEXTURE0 + uniform->_index) );
 

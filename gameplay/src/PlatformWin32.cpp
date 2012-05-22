@@ -8,6 +8,8 @@
 #include <GL/wglew.h>
 #include <windowsx.h>
 
+using gameplay::printError;
+
 // Default to 720p
 static int __width = 1280;
 static int __height = 720;
@@ -257,11 +259,13 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if (hwnd != __hwnd)
     {
-        // Ignore messages that are not for our game window
-        return DefWindowProc(hwnd, msg, wParam, lParam); 
+        // Ignore messages that are not for our game window.
+        return DefWindowProc(hwnd, msg, wParam, lParam);
     }
 
     // Scale factors for the mouse movement used to simulate the accelerometer.
+    GP_ASSERT(__width);
+    GP_ASSERT(__height);
     static const float ACCELEROMETER_X_FACTOR = 90.0f / __width;
     static const float ACCELEROMETER_Y_FACTOR = 90.0f / __height;
 
@@ -374,7 +378,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (wParam == VK_CAPITAL)
             capsOn = !capsOn;
 
-        // Suppress key repeats
+        // Suppress key repeats.
         if ((lParam & 0x40000000) == 0)
             gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, getKey(wParam, shiftDown ^ capsOn));
         break;
@@ -387,13 +391,13 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_CHAR:
-        // Suppress key repeats
+        // Suppress key repeats.
         if ((lParam & 0x40000000) == 0)
             gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, wParam);
         break;
 
     case WM_UNICHAR:
-        // Suppress key repeats
+        // Suppress key repeats.
         if ((lParam & 0x40000000) == 0)
             gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, wParam);
         break;
@@ -449,6 +453,8 @@ Platform::~Platform()
 
 Platform* Platform::create(Game* game)
 {
+    GP_ASSERT(game);
+
     FileSystem::setResourcePath("./");
 
     Platform* platform = new Platform(game);
@@ -460,31 +466,34 @@ Platform* Platform::create(Game* game)
     std::wstring windowName;
     bool fullscreen = false;
     
-    // Read window settings from config
-    Properties* config = game->getConfig()->getNamespace("window", true);
-    if (config)
+    // Read window settings from config.
+    if (game->getConfig())
     {
-        // Read window title
-        const char* title = config->getString("title");
-        if (title)
+        Properties* config = game->getConfig()->getNamespace("window", true);
+        if (config)
         {
-            int len = MultiByteToWideChar(CP_ACP, 0, title, -1, NULL, 0);
-            wchar_t* wtitle = new wchar_t[len];
-            MultiByteToWideChar(CP_ACP, 0, title, -1, wtitle, len);
-            windowName = wtitle;
-            SAFE_DELETE_ARRAY(wtitle);
+            // Read window title.
+            const char* title = config->getString("title");
+            if (title)
+            {
+                int len = MultiByteToWideChar(CP_ACP, 0, title, -1, NULL, 0);
+                wchar_t* wtitle = new wchar_t[len];
+                MultiByteToWideChar(CP_ACP, 0, title, -1, wtitle, len);
+                windowName = wtitle;
+                SAFE_DELETE_ARRAY(wtitle);
+            }
+
+            // Read window size.
+            int width = config->getInt("width");
+            if (width != 0)
+                __width = width;
+            int height = config->getInt("height");
+            if (height != 0)
+                __height = height;
+
+            // Read fullscreen state.
+            fullscreen = config->getBool("fullscreen");
         }
-
-        // Read window size
-        int width = config->getInt("width");
-        if (width != 0)
-            __width = width;
-        int height = config->getInt("height");
-        if (height != 0)
-            __height = height;
-
-        // Read fullscreen state
-        fullscreen = config->getBool("fullscreen");
     }
 
     RECT rect = { 0, 0, __width, __height };
@@ -505,7 +514,10 @@ Platform* Platform::create(Game* game)
     wc.lpszClassName  = windowClass;
 
     if (!::RegisterClassEx(&wc))
+    {
+        GP_ERROR("Failed to register window class.");
         goto error;
+    }
 
     if (fullscreen)
     {
@@ -517,11 +529,12 @@ Platform* Platform::create(Game* game)
         dm.dmBitsPerPel	= 32;
         dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
-        // Try To Set Selected Mode And Get Results.  NOTE: CDS_FULLSCREEN Gets Rid Of Start Bar.
+        // Try to set selected mode and get results. NOTE: CDS_FULLSCREEN gets rid of start bar.
         if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
         {
             fullscreen = false;
-            GP_ERROR("Failed to start fullscreen with resolution %dx%d.", __width, __height);
+            GP_ERROR("Failed to start game in full-screen mode with resolution %dx%d.", __width, __height);
+            goto error;
         }
     }
 
@@ -557,14 +570,25 @@ Platform* Platform::create(Game* game)
 
     int pixelFormat = ChoosePixelFormat(__hdc, &pfd);
 
-    if (pixelFormat == 0 || !SetPixelFormat (__hdc, pixelFormat, &pfd))
+    if (pixelFormat == 0)
+    {
+        GP_ERROR("Failed to choose a pixel format.");
         goto error;
+    }
+    if (!SetPixelFormat (__hdc, pixelFormat, &pfd))
+    {
+        GP_ERROR("Failed to set the pixel format.");
+        goto error;
+    }
 
     HGLRC tempContext = wglCreateContext(__hdc);
     wglMakeCurrent(__hdc, tempContext);
 
     if (GLEW_OK != glewInit())
+    {
+        GP_ERROR("Failed to initialize GLEW.");
         goto error;
+    }
 
     int attribs[] =
     {
@@ -576,17 +600,21 @@ Platform* Platform::create(Game* game)
     if (!(__hrc = wglCreateContextAttribsARB(__hdc, 0, attribs) ) )
     {
         wglDeleteContext(tempContext);
+        GP_ERROR("Failed to create OpenGL context.");
         goto error;
     }
     wglDeleteContext(tempContext);
 
     if (!wglMakeCurrent(__hdc, __hrc) || !__hrc)
+    {
+        GP_ERROR("Failed to make the window current.");
         goto error;
+    }
 
     // Vertical sync.
     wglSwapIntervalEXT(__vsync ? 1 : 0);
 
-    // Show the window
+    // Show the window.
     ShowWindow(__hwnd, SW_SHOW);
 
     return platform;
@@ -598,7 +626,8 @@ error:
 }
 
 int Platform::enterMessagePump()
-{  
+{
+    GP_ASSERT(_game);
     int rc = 0;
 
     // Get the initial time.
@@ -607,6 +636,7 @@ int Platform::enterMessagePump()
     __timeTicksPerMillis = (long)(tps.QuadPart / 1000L);
     LARGE_INTEGER queryTime;
     QueryPerformanceCounter(&queryTime);
+    GP_ASSERT(__timeTicksPerMillis);
     __timeStart = queryTime.QuadPart / __timeTicksPerMillis;
 
     // Set the initial pitch and roll values.
@@ -659,8 +689,9 @@ unsigned int Platform::getDisplayHeight()
     
 long Platform::getAbsoluteTime()
 {
-       LARGE_INTEGER queryTime;
+    LARGE_INTEGER queryTime;
     QueryPerformanceCounter(&queryTime);
+    GP_ASSERT(__timeTicksPerMillis);
     __timeAbsolute = queryTime.QuadPart / __timeTicksPerMillis;
 
     return __timeAbsolute;
@@ -693,6 +724,9 @@ bool Platform::isMultiTouch()
 
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
+    GP_ASSERT(pitch);
+    GP_ASSERT(roll);
+
     *pitch = __pitch;
     *roll = __roll;
 }
@@ -718,7 +752,7 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
 
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Game::getInstance()->keyEvent(evt, key);
     Form::keyEventInternal(evt, key);
 }
 

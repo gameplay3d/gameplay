@@ -93,6 +93,14 @@ public:
     static bool listFiles(const char* dirPath, std::vector<std::string>& files);
 
     /**
+     * Checks if the file at the given path exists.
+     * 
+     * @param path The path to the file.
+     * @return <code>true</code> if the file exists; <code>false</code> otherwise.
+     */
+    static bool fileExists(const char* path);
+
+    /**
      * Opens the specified file.
      *
      * The file at the specified location is opened, relative to the currently set

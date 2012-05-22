@@ -76,6 +76,7 @@ void Ref::printLeaks()
         for (RefAllocationRecord* rec = __refAllocations; rec != NULL; rec = rec->next)
         {
             Ref* ref = rec->ref;
+            GP_ASSERT(ref);
             const char* type = typeid(*ref).name();
             printError("[memory] LEAK: Ref object '%s' still active with reference count %d.\n", (type ? type : ""), ref->getRefCount());
         }
@@ -84,7 +85,9 @@ void Ref::printLeaks()
 
 void* trackRef(Ref* ref)
 {
-    // Create memory allocation record
+    GP_ASSERT(ref);
+
+    // Create memory allocation record.
     RefAllocationRecord* rec = (RefAllocationRecord*)malloc(sizeof(RefAllocationRecord));
     rec->ref = ref;
     rec->next = __refAllocations;
@@ -100,6 +103,12 @@ void* trackRef(Ref* ref)
 
 void untrackRef(Ref* ref, void* record)
 {
+    if (!record)
+    {
+        printError("[memory] ERROR: Attempting to free null ref tracking record.\n");
+        return;
+    }
+
     RefAllocationRecord* rec = (RefAllocationRecord*)record;
     if (rec->ref != ref)
     {
@@ -107,7 +116,7 @@ void untrackRef(Ref* ref, void* record)
         return;
     }
 
-    // Link this item out
+    // Link this item out.
     if (__refAllocations == rec)
         __refAllocations = rec->next;
     if (rec->prev)
