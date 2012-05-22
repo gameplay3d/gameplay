@@ -49,15 +49,13 @@ private:
             AUDIO = 1,
             MATERIAL = 2,
             PARTICLE = 4,
-            CHARACTER = 8,
-            GHOSTOBJECT = 16,
-            RIGIDBODY = 32,
-            TRANSLATE = 64,
-            ROTATE = 128,
-            SCALE = 256,
-            URL = 512,
-            TRANSPARENT = 1024,
-            DYNAMIC = 2048
+            COLLISION_OBJECT = 8,
+            TRANSLATE = 16,
+            ROTATE = 32,
+            SCALE = 64,
+            URL = 128,
+            TRANSPARENT = 256,
+            DYNAMIC = 512
         };
 
         SceneNodeProperty(Type type, std::string file, std::string id, int index) : _type(type), _file(file), _id(id), _index(index) { }

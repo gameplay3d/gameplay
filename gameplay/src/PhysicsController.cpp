@@ -45,6 +45,22 @@ void PhysicsController::addStatusListener(Listener* listener)
     _listeners->push_back(listener);
 }
 
+void PhysicsController::removeStatusListener(Listener* listener)
+{
+    GP_ASSERT(listener);
+    if (!_listeners)
+        return;
+
+    for (std::vector<Listener*>::iterator iter = _listeners->begin(); iter != _listeners->end(); iter++)
+    {
+        if (*iter == listener)
+        {
+            _listeners->erase(iter);
+            return;
+        }
+    }
+}
+
 PhysicsFixedConstraint* PhysicsController::createFixedConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b)
 {
     checkConstraintRigidBodies(a, b);
@@ -1348,6 +1364,12 @@ void PhysicsController::DebugDrawer::setDebugMode(int mode)
 int PhysicsController::DebugDrawer::getDebugMode() const
 {
     return _mode;
+}
+
+PhysicsController::Listener::~Listener()
+{
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
+    Game::getInstance()->getPhysicsController()->removeStatusListener(this);
 }
 
 }
