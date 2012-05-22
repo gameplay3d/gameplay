@@ -61,7 +61,7 @@ Scene* SceneLoader::load(const char* url)
         SceneNodeProperty::TRANSLATE | 
         SceneNodeProperty::TRANSPARENT |
         SceneNodeProperty::DYNAMIC);
-    applyNodeProperties(scene, sceneProperties, SceneNodeProperty::CHARACTER | SceneNodeProperty::GHOSTOBJECT | SceneNodeProperty::RIGIDBODY);
+    applyNodeProperties(scene, sceneProperties, SceneNodeProperty::COLLISION_OBJECT);
     createAnimations(scene);
 
     // Find the physics properties object.
@@ -197,9 +197,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
     if (snp._type == SceneNodeProperty::AUDIO ||
         snp._type == SceneNodeProperty::MATERIAL ||
         snp._type == SceneNodeProperty::PARTICLE ||
-        snp._type == SceneNodeProperty::CHARACTER ||
-        snp._type == SceneNodeProperty::GHOSTOBJECT ||
-        snp._type == SceneNodeProperty::RIGIDBODY)
+        snp._type == SceneNodeProperty::COLLISION_OBJECT)
     {
         // Check to make sure the referenced properties object was loaded properly.
         Properties* p = _propertiesFromFile[snp._file];
@@ -255,9 +253,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             SAFE_RELEASE(particleEmitter);
             break;
         }
-        case SceneNodeProperty::CHARACTER:
-        case SceneNodeProperty::GHOSTOBJECT:
-        case SceneNodeProperty::RIGIDBODY:
+        case SceneNodeProperty::COLLISION_OBJECT:
         {
             // Check to make sure the referenced properties object was loaded properly.
             Properties* p = _propertiesFromFile[snp._file];
@@ -285,19 +281,9 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             }
 
             // Check to make sure the type of the namespace used to load the physics collision object is correct.
-            if (snp._type == SceneNodeProperty::CHARACTER && strcmp(p->getNamespace(), "character") != 0)
+            if (snp._type == SceneNodeProperty::COLLISION_OBJECT && strcmp(p->getNamespace(), "collisionObject") != 0)
             {
-                GP_ERROR("Attempting to set a 'character' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
-                return;
-            }
-            else if (snp._type == SceneNodeProperty::GHOSTOBJECT && strcmp(p->getNamespace(), "ghostObject") != 0)
-            {
-                GP_ERROR("Attempting to set a 'ghostObject' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
-                return;
-            }
-            else if (snp._type == SceneNodeProperty::RIGIDBODY && strcmp(p->getNamespace(), "rigidBody") != 0)
-            {
-                GP_ERROR("Attempting to set a 'rigidBody' (physics collision object attribute) on a node using a '%s' definition.", p->getNamespace());
+                GP_ERROR("Attempting to set a physics collision object on a node using a '%s' definition.", p->getNamespace());
                 return;
             }
             else
@@ -576,17 +562,9 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                 {
                     addSceneNodeProperty(sceneNode, SceneNodeProperty::PARTICLE, ns->getString());
                 }
-                else if (strcmp(name, "character") == 0)
+                else if (strcmp(name, "collisionObject") == 0)
                 {
-                    addSceneNodeProperty(sceneNode, SceneNodeProperty::CHARACTER, ns->getString());
-                }
-                else if (strcmp(name, "ghostObject") == 0)
-                {
-                    addSceneNodeProperty(sceneNode, SceneNodeProperty::GHOSTOBJECT, ns->getString());
-                }
-                else if (strcmp(name, "rigidBody") == 0)
-                {
-                    addSceneNodeProperty(sceneNode, SceneNodeProperty::RIGIDBODY, ns->getString());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::COLLISION_OBJECT, ns->getString());
                 }
                 else if (strcmp(name, "rigidBodyModel") == 0)
                 {

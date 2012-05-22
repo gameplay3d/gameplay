@@ -91,9 +91,22 @@ PhysicsCharacter::~PhysicsCharacter()
 PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
 {
     // Check if the properties is valid and has a valid namespace.
-    if (!properties || !(strcmp(properties->getNamespace(), "character") == 0))
+    if (!properties || !(strcmp(properties->getNamespace(), "collisionObject") == 0))
     {
-        GP_ERROR("Failed to load physics character from properties object: must be non-null object and have namespace equal to 'character'.");
+        GP_ERROR("Failed to load physics character from properties object: must be non-null object and have namespace equal to 'collisionObject'.");
+        return NULL;
+    }
+
+    // Check that the type is specified and correct.
+    const char* type = properties->getString("type");
+    if (!type)
+    {
+        GP_ERROR("Failed to load physics character from properties object; required attribute 'type' is missing.");
+        return NULL;
+    }
+    if (strcmp(type, "CHARACTER") != 0)
+    {
+        GP_ERROR("Failed to load physics character from properties object; attribute 'type' must be equal to 'CHARACTER'.");
         return NULL;
     }
 
