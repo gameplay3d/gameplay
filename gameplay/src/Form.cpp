@@ -2,7 +2,6 @@
 #include "Form.h"
 #include "AbsoluteLayout.h"
 #include "FlowLayout.h"
-#include "ScrollLayout.h"
 #include "VerticalLayout.h"
 #include "Game.h"
 #include "Theme.h"
@@ -76,9 +75,6 @@ Form* Form::create(const char* url)
     case Layout::LAYOUT_VERTICAL:
         layout = VerticalLayout::create();
         break;
-    case Layout::LAYOUT_SCROLL:
-        layout = ScrollLayout::create();
-        break;
     default:
         GP_ERROR("Unsupported layout type '%d'.", getLayoutType(layoutString));
     }
@@ -111,6 +107,8 @@ Form* Form::create(const char* url)
     {
         form->_bounds.x = Game::getInstance()->getWidth() * 0.5f - form->_bounds.width * 0.5f;
     }
+
+    form->_scrollState = getScrollState(formProperties->getString("scroll"));
 
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
@@ -385,8 +383,30 @@ void Form::update()
         _skin = getSkin(_state);
         _opacity = getOpacity(_state);
 
+        // Get scrollbar images and diminish clipping bounds to make room for scrollbars.
+        if ((_scrollState & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL)
+        {
+            _scrollBarLeftCap = getImage("scrollBarLeftCap", _state);
+            _scrollBarHorizontal = getImage("horizontalScrollBar", _state);
+            _scrollBarRightCap = getImage("scrollBarRightCap", _state);
+
+            _viewportClipBounds.height -= _scrollBarHorizontal->getRegion().height;
+        }
+
+        if ((_scrollState & SCROLL_VERTICAL) == SCROLL_VERTICAL)
+        {
+            _scrollBarTopCap = getImage("scrollBarTopCap", _state);
+            _scrollBarVertical = getImage("verticalScrollBar", _state);
+            _scrollBarBottomCap = getImage("scrollBarBottomCap", _state);
+        
+            _viewportClipBounds.width -= _scrollBarVertical->getRegion().width;
+        }
+
         GP_ASSERT(_layout);
         _layout->update(this);
+
+        if (_scrollState != SCROLL_NONE)
+            this->updateScroll(this);
     }
 }
 
@@ -466,22 +486,7 @@ void Form::draw(SpriteBatch* spriteBatch, const Rectangle& clip)
     // Batch for all themed border and background sprites.
     spriteBatch->begin();
 
-    // Draw the form's border and background.
-    // We don't pass the form's position to itself or it will be applied twice!
-    Control::drawBorder(spriteBatch, Rectangle(0, 0, _bounds.width, _bounds.height));
-
-    Rectangle boundsUnion = Rectangle::empty();
-    for (it = _controls.begin(); it < _controls.end(); it++)
-    {
-        Control* control = *it;
-        GP_ASSERT(control);
-
-        if (_skin || control->isDirty() || control->_clearBounds.intersects(boundsUnion))
-        {
-            control->draw(spriteBatch, clip, _skin == NULL, _bounds.height);
-            Rectangle::combine(control->_clearBounds, boundsUnion, &boundsUnion);
-        }
-    }
+    Container::draw(spriteBatch, Rectangle(0, 0, _bounds.width, _bounds.height), _skin == NULL, _bounds.height);
 
     // Done all batching.
     spriteBatch->end();
@@ -494,8 +499,6 @@ void Form::draw(SpriteBatch* spriteBatch, const Rectangle& clip)
             font->end();
         }
     }
-
-    _dirty = false;
 }
 
 void Form::initializeQuad(Mesh* mesh)
