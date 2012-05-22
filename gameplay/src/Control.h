@@ -757,6 +757,8 @@ protected:
      */
     virtual void drawText(const Rectangle& clip);
 
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
+
     /**
      * Initialize properties common to STATE_ALL Controls.
      */
@@ -919,8 +921,6 @@ private:
      * @param clip The clipping rectangle of this control's parent container.
      */
     virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
     
     bool _styleOverridden;
     Theme::Skin* _skin;
