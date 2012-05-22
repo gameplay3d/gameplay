@@ -135,7 +135,7 @@ public:
     /**
      * Updates each control within this form, and positions them according to its layout.
      */
-    void update(long elapsedTime);
+    void update();
 
     /**
      * Draws this form.

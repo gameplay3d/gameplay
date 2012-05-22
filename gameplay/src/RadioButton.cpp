@@ -122,9 +122,9 @@ void RadioButton::clearSelected(const std::string& groupId)
     }
 }
 
-void RadioButton::update(const Rectangle& clip, const Vector2& offset, long elapsedTime)
+void RadioButton::update(const Rectangle& clip, const Vector2& offset)
 {
-    Label::update(clip, offset, elapsedTime);
+    Label::update(clip, offset);
 
     Vector2 size;
     if (_imageSize.isZero())

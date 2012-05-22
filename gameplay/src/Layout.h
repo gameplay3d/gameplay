@@ -68,7 +68,7 @@ protected:
      *
      * @param container The container to update.
      */
-    virtual void update(const Container* container, long elapsedTime) = 0;
+    virtual void update(const Container* container) = 0;
 
     /**
      * Align a control within a container.

@@ -34,7 +34,7 @@ protected:
      *
      * @param container The container to update.
      */
-    void update(const Container* container, long elapsedTime);
+    void update(const Container* container);
 
 private:
 

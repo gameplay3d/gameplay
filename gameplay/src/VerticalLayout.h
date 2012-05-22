@@ -67,7 +67,7 @@ protected:
      *
      * @param container The container to update.
      */
-    void update(const Container* container, long elapsedTime);
+    void update(const Container* container);
 
     /**
      * Flag determining whether this layout will start laying out controls from the bottom of the container.

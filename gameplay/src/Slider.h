@@ -156,7 +156,7 @@ protected:
      * @param clip The clipping rectangle of this slider's parent container.
      * @param offset The scroll offset of this slider's parent container.
      */
-    void update(const Rectangle& clip, const Vector2& offset, long elapsedTime);
+    void update(const Rectangle& clip, const Vector2& offset);
 
     /**
      * The minimum value for the Slider.
