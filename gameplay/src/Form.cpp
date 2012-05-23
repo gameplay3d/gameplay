@@ -86,6 +86,10 @@ Form* Form::create(const char* url)
     form->_layout = layout;
     form->_theme = theme;
 
+    // Get default projection matrix.
+    Game* game = Game::getInstance();
+    Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
+
     const char* styleName = formProperties->getString("style");
     form->initialize(theme->getStyle(styleName), formProperties);
 
@@ -112,9 +116,6 @@ Form* Form::create(const char* url)
 
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
-
-    Game* game = Game::getInstance();
-    Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
 
     SAFE_DELETE(properties);
 
@@ -190,6 +191,19 @@ void Form::setSize(float width, float height)
         SAFE_DELETE(_spriteBatch);
         _spriteBatch = SpriteBatch::create(_frameBuffer->getRenderTarget()->getTexture());
         GP_ASSERT(_spriteBatch);
+
+        // Clear FBO.
+        _frameBuffer->bind();
+        Game* game = Game::getInstance();
+        Rectangle prevViewport = game->getViewport();
+        game->setViewport(Rectangle(0, 0, width, height));
+        _theme->setProjectionMatrix(_projectionMatrix);
+        GL_ASSERT( glClearColor(0, 0, 0, 0) );
+        GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
+        GL_ASSERT( glClearColor(0, 0, 0, 1) );
+        _theme->setProjectionMatrix(_defaultProjectionMatrix);
+        FrameBuffer::bindDefault();
+        game->setViewport(prevViewport);
 
         _bounds.width = width;
         _bounds.height = height;
@@ -437,7 +451,7 @@ void Form::draw()
 
         GP_ASSERT(_theme);
         _theme->setProjectionMatrix(_projectionMatrix);
-        draw(_theme->getSpriteBatch(), _viewportClipBounds);
+        Container::draw(_theme->getSpriteBatch(), Rectangle(0, 0, _bounds.width, _bounds.height), _skin == NULL, _bounds.height);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
 
         // Rebind the default framebuffer and game viewport.
@@ -463,41 +477,6 @@ void Form::draw()
         _spriteBatch->begin();
         _spriteBatch->draw(_bounds.x, _bounds.y, 0, _bounds.width, _bounds.height, 0, _v1, _u2, 0, Vector4::one());
         _spriteBatch->end();
-    }
-}
-
-void Form::draw(SpriteBatch* spriteBatch, const Rectangle& clip)
-{
-    GP_ASSERT(spriteBatch);
-
-    std::vector<Control*>::const_iterator it;
-
-    // Batch each font individually.
-    std::set<Font*>::const_iterator fontIter;
-    for (fontIter = _theme->_fonts.begin(); fontIter != _theme->_fonts.end(); fontIter++)
-    {
-        Font* font = *fontIter;
-        if (font)
-        {
-            font->begin();
-        }
-    }
-
-    // Batch for all themed border and background sprites.
-    spriteBatch->begin();
-
-    Container::draw(spriteBatch, Rectangle(0, 0, _bounds.width, _bounds.height), _skin == NULL, _bounds.height);
-
-    // Done all batching.
-    spriteBatch->end();
-
-    for (fontIter = _theme->_fonts.begin(); fontIter != _theme->_fonts.end(); fontIter++)
-    {
-        Font* font = *fontIter;
-        if (font)
-        {
-            font->end();
-        }
     }
 }
 
