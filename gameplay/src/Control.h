@@ -659,6 +659,10 @@ public:
      */
     Theme::Style* getStyle() const;
 
+    int getZOrder() const;
+
+    void setZOrder(int zOrder);
+
     /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
@@ -888,6 +892,8 @@ protected:
      * The current opacity of the control.
      */
     float _opacity;
+
+    int _zOrder;
 
 private:
 

@@ -191,6 +191,18 @@ void Form::setSize(float width, float height)
         _spriteBatch = SpriteBatch::create(_frameBuffer->getRenderTarget()->getTexture());
         GP_ASSERT(_spriteBatch);
 
+        // Clear FBO.
+        _frameBuffer->bind();
+        Game* game = Game::getInstance();
+        Rectangle prevViewport = game->getViewport();
+        game->setViewport(Rectangle(0, 0, width, height));
+        _theme->setProjectionMatrix(_projectionMatrix);
+        GL_ASSERT( glClearColor(0, 0, 0, 0) );
+        GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
+        GL_ASSERT( glClearColor(0, 0, 0, 1) );
+        _theme->setProjectionMatrix(_defaultProjectionMatrix);
+        FrameBuffer::bindDefault();
+
         _bounds.width = width;
         _bounds.height = height;
         _dirty = true;

@@ -42,6 +42,7 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     _alignment = getAlignment(properties->getString("alignment"));
     _autoWidth = properties->getBool("autoWidth");
     _autoHeight = properties->getBool("autoHeight");
+    _zOrder = properties->getInt("zOrder");
 
     Vector2 position;
     Vector2 size;
@@ -606,6 +607,20 @@ void Control::setConsumeTouchEvents(bool consume)
 bool Control::getConsumeTouchEvents()
 {
     return _consumeTouchEvents;
+}
+
+int Control::getZOrder() const
+{
+    return _zOrder;
+}
+
+void Control::setZOrder(int zOrder)
+{
+    if (zOrder != _zOrder)
+    {
+        _zOrder = zOrder;
+        _dirty = true;
+    }
 }
 
 void Control::addListener(Control::Listener* listener, int eventFlags)
