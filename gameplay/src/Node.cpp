@@ -1042,27 +1042,38 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
     SAFE_DELETE(_collisionObject);
 
     // Check if the properties is valid.
-    if (!properties || 
-        !(strcmp(properties->getNamespace(), "character") == 0 || 
-        strcmp(properties->getNamespace(), "ghostObject") == 0 || 
-        strcmp(properties->getNamespace(), "rigidBody") == 0))
+    if (!properties || !(strcmp(properties->getNamespace(), "collisionObject") == 0))
     {
-        GP_ERROR("Failed to load collision object from properties object: must be non-null object and have namespace equal to 'character', 'ghostObject', or 'rigidBody'.");
+        GP_ERROR("Failed to load collision object from properties object: must be non-null object and have namespace equal to 'collisionObject'.");
         return NULL;
     }
 
-    if (strcmp(properties->getNamespace(), "character") == 0)
+    if (const char* type = properties->getString("type"))
     {
-        _collisionObject = PhysicsCharacter::create(this, properties);
+        if (strcmp(type, "CHARACTER") == 0)
+        {
+            _collisionObject = PhysicsCharacter::create(this, properties);
+        }
+        else if (strcmp(type, "GHOST_OBJECT") == 0)
+        {
+            _collisionObject = PhysicsGhostObject::create(this, properties);
+        }
+        else if (strcmp(type, "RIGID_BODY") == 0)
+        {
+            _collisionObject = PhysicsRigidBody::create(this, properties);
+        }
+        else
+        {
+            GP_ERROR("Unsupported collision object type '%s'.", type);
+            return NULL;
+        }
     }
-    else if (strcmp(properties->getNamespace(), "ghostObject") == 0)
+    else
     {
-        _collisionObject = PhysicsGhostObject::create(this, properties);
+        GP_ERROR("Failed to load collision object from properties object; required attribute 'type' is missing.");
+        return NULL;
     }
-    else if (strcmp(properties->getNamespace(), "rigidBody") == 0)
-    {
-        _collisionObject = PhysicsRigidBody::create(this, properties);
-    }
+    
     return _collisionObject;
 }
 
