@@ -45,7 +45,7 @@ class Container : public Control
 {
 public:
 
-    enum ScrollState
+    enum ScrollBars
     {
         SCROLL_NONE        = 0,
         SCROLL_HORIZONTAL  = 0x01,
@@ -122,9 +122,9 @@ public:
      */
     const std::vector<Control*>& getControls() const;
 
-    void setScrollState(ScrollState scrollState);
+    void setScrollBars(ScrollBars scrollBars);
 
-    ScrollState getScrollState() const;
+    ScrollBars getScrollBars() const;
 
     /**
      * Gets the first animation in the control with the specified ID.
@@ -229,7 +229,7 @@ protected:
 
     bool touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
-    static ScrollState getScrollState(const char* scrollState);
+    static ScrollBars getScrollBars(const char* scrollBars);
 
     /**
      * The container's layout.
@@ -241,27 +241,15 @@ protected:
      */
     std::vector<Control*> _controls;
 
-    /**
-     * Scrollbar top cap image.
-     */
     Theme::ThemeImage* _scrollBarTopCap;
-
-    /**
-     * Vertical scrollbar image.
-     */
     Theme::ThemeImage* _scrollBarVertical;
-
-    /**
-     * Scrollbar bottom cap image.
-     */
     Theme::ThemeImage* _scrollBarBottomCap;
-
     Theme::ThemeImage* _scrollBarLeftCap;
     Theme::ThemeImage* _scrollBarHorizontal;
     Theme::ThemeImage* _scrollBarRightCap;
 
     // Flag representing whether scrolling is enabled, and in which directions.
-    ScrollState _scrollState;
+    ScrollBars _scrollBars;
 
     // Data required when scrolling is enabled.
 
