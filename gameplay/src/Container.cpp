@@ -29,7 +29,7 @@ namespace gameplay
 Container::Container()
     : _layout(NULL), _scrollBarTopCap(NULL), _scrollBarVertical(NULL), _scrollBarBottomCap(NULL),
       _scrollBarLeftCap(NULL), _scrollBarHorizontal(NULL), _scrollBarRightCap(NULL),
-      _scrollBars(SCROLL_NONE), _scrollBarBounds(Rectangle::empty()), _scrollPosition(Vector2::zero()),
+      _scroll(SCROLL_NONE), _scrollBarBounds(Rectangle::empty()), _scrollPosition(Vector2::zero()),
       _scrolling(false), _firstX(0), _firstY(0),
       _lastX(0), _lastY(0),
       _startTimeX(0), _startTimeY(0), _lastTime(0),
@@ -82,7 +82,7 @@ Container* Container::create(Theme::Style* style, Properties* properties, Theme*
     const char* layoutString = properties->getString("layout");
     Container* container = Container::create(getLayoutType(layoutString));
     container->initialize(style, properties);
-    container->_scrollBars = getScrollBars(properties->getString("scroll"));
+    container->_scroll = getScroll(properties->getString("scroll"));
     container->addControls(theme, properties);
 
     return container;
@@ -241,18 +241,18 @@ const std::vector<Control*>& Container::getControls() const
     return _controls;
 }
 
-void Container::setScrollBars(ScrollBars scrollBars)
+void Container::setScroll(Scroll scroll)
 {
-    if (scrollBars != _scrollBars)
+    if (scroll != _scroll)
     {
-        _scrollBars = scrollBars;
+        _scroll = scroll;
         _dirty = true;
     }
 }
 
-Container::ScrollBars Container::getScrollBars() const
+Container::Scroll Container::getScroll() const
 {
-    return _scrollBars;
+    return _scroll;
 }
 
 Animation* Container::getAnimation(const char* id) const
@@ -286,7 +286,7 @@ void Container::update(const Rectangle& clip, const Vector2& offset)
     Control::update(clip, offset);
 
     // Get scrollbar images and diminish clipping bounds to make room for scrollbars.
-    if ((_scrollBars & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL)
+    if ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL)
     {
         _scrollBarLeftCap = getImage("scrollBarLeftCap", _state);
         _scrollBarHorizontal = getImage("horizontalScrollBar", _state);
@@ -295,7 +295,7 @@ void Container::update(const Rectangle& clip, const Vector2& offset)
         _viewportClipBounds.height -= _scrollBarHorizontal->getRegion().height;
     }
 
-    if ((_scrollBars & SCROLL_VERTICAL) == SCROLL_VERTICAL)
+    if ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL)
     {
         _scrollBarTopCap = getImage("scrollBarTopCap", _state);
         _scrollBarVertical = getImage("verticalScrollBar", _state);
@@ -307,7 +307,7 @@ void Container::update(const Rectangle& clip, const Vector2& offset)
     GP_ASSERT(_layout);
     _layout->update(this);
 
-    if (_scrollBars != SCROLL_NONE)
+    if (_scroll != SCROLL_NONE)
         this->updateScroll(this);
 }
 
@@ -341,7 +341,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
         }
     }
 
-    if (_scrollBars != SCROLL_NONE)
+    if (_scroll != SCROLL_NONE)
     {
         // Draw scroll bars.
         Rectangle clipRegion(_viewportClipBounds);
@@ -453,7 +453,7 @@ bool Container::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
     float yPos = border.top + padding.top;
 
     Vector2* offset = NULL;
-    if (_scrollBars != SCROLL_NONE)
+    if (_scroll != SCROLL_NONE)
     {
         offset = &_scrollPosition;
     }
@@ -766,30 +766,30 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
     return false;
 }
 
-Container::ScrollBars Container::getScrollBars(const char* scrollBars)
+Container::Scroll Container::getScroll(const char* scroll)
 {
-    if (!scrollBars)
+    if (!scroll)
         return Container::SCROLL_NONE;
 
-    if (strcmp(scrollBars, "SCROLL_NONE") == 0)
+    if (strcmp(scroll, "SCROLL_NONE") == 0)
     {
         return Container::SCROLL_NONE;
     }
-    else if (strcmp(scrollBars, "SCROLL_HORIZONTAL") == 0)
+    else if (strcmp(scroll, "SCROLL_HORIZONTAL") == 0)
     {
         return Container::SCROLL_HORIZONTAL;
     }
-    else if (strcmp(scrollBars, "SCROLL_VERTICAL") == 0)
+    else if (strcmp(scroll, "SCROLL_VERTICAL") == 0)
     {
         return Container::SCROLL_VERTICAL;
     }
-    else if (strcmp(scrollBars, "SCROLL_BOTH") == 0)
+    else if (strcmp(scroll, "SCROLL_BOTH") == 0)
     {
         return Container::SCROLL_BOTH;
     }
     else
     {
-        GP_ERROR("Failed to get corresponding scroll state for unsupported value '%s'.", scrollBars);
+        GP_ERROR("Failed to get corresponding scroll state for unsupported value '%s'.", scroll);
     }
 
     return Container::SCROLL_NONE;
