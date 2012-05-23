@@ -108,7 +108,7 @@ Form* Form::create(const char* url)
         form->_bounds.x = Game::getInstance()->getWidth() * 0.5f - form->_bounds.width * 0.5f;
     }
 
-    form->_scrollState = getScrollState(formProperties->getString("scroll"));
+    form->_scrollBars = getScrollBars(formProperties->getString("scrollbars"));
 
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
@@ -384,7 +384,7 @@ void Form::update()
         _opacity = getOpacity(_state);
 
         // Get scrollbar images and diminish clipping bounds to make room for scrollbars.
-        if ((_scrollState & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL)
+        if ((_scrollBars & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL)
         {
             _scrollBarLeftCap = getImage("scrollBarLeftCap", _state);
             _scrollBarHorizontal = getImage("horizontalScrollBar", _state);
@@ -393,7 +393,7 @@ void Form::update()
             _viewportClipBounds.height -= _scrollBarHorizontal->getRegion().height;
         }
 
-        if ((_scrollState & SCROLL_VERTICAL) == SCROLL_VERTICAL)
+        if ((_scrollBars & SCROLL_VERTICAL) == SCROLL_VERTICAL)
         {
             _scrollBarTopCap = getImage("scrollBarTopCap", _state);
             _scrollBarVertical = getImage("verticalScrollBar", _state);
@@ -405,7 +405,7 @@ void Form::update()
         GP_ASSERT(_layout);
         _layout->update(this);
 
-        if (_scrollState != SCROLL_NONE)
+        if (_scrollBars != SCROLL_NONE)
             this->updateScroll(this);
     }
 }
