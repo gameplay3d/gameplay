@@ -25,6 +25,7 @@ namespace gameplay
          size        = <width, height>   // Size of the container, measured in pixels.
          width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
          height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
+         scroll      = <Container::Scroll constant>
   
          // All the nested controls within this container.
          container 
@@ -45,7 +46,10 @@ class Container : public Control
 {
 public:
 
-    enum ScrollState
+    /**
+     * The definition for container scrolling.
+     */
+    enum Scroll
     {
         SCROLL_NONE        = 0,
         SCROLL_HORIZONTAL  = 0x01,
@@ -122,9 +126,14 @@ public:
      */
     const std::vector<Control*>& getControls() const;
 
-    void setScrollState(ScrollState scrollState);
+    /**
+     * Sets the scrolling for the container.
+     *
+     * @param scroll The scroll for the 
+     */
+    void setScroll(Scroll scroll);
 
-    ScrollState getScrollState() const;
+    Scroll getScroll() const;
 
     /**
      * Gets the first animation in the control with the specified ID.
@@ -229,7 +238,7 @@ protected:
 
     bool touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
-    static ScrollState getScrollState(const char* scrollState);
+    static Scroll getScroll(const char* scroll);
 
     /**
      * The container's layout.
@@ -241,27 +250,15 @@ protected:
      */
     std::vector<Control*> _controls;
 
-    /**
-     * Scrollbar top cap image.
-     */
     Theme::ThemeImage* _scrollBarTopCap;
-
-    /**
-     * Vertical scrollbar image.
-     */
     Theme::ThemeImage* _scrollBarVertical;
-
-    /**
-     * Scrollbar bottom cap image.
-     */
     Theme::ThemeImage* _scrollBarBottomCap;
-
     Theme::ThemeImage* _scrollBarLeftCap;
     Theme::ThemeImage* _scrollBarHorizontal;
     Theme::ThemeImage* _scrollBarRightCap;
 
     // Flag representing whether scrolling is enabled, and in which directions.
-    ScrollState _scrollState;
+    Scroll _scroll;
 
     // Data required when scrolling is enabled.
 
