@@ -1,6 +1,7 @@
-rigidBody basketball
+collisionObject basketball
 {
-    type = SPHERE
+    type = RIGID_BODY
+    shape = SPHERE
     mass = 1.0
     friction = 0.5
     restitution = 1.0
@@ -8,9 +9,10 @@ rigidBody basketball
     angularDamping = 0.5
 }
 
-rigidBody chair
+collisionObject chair
 {
-    type = BOX
+    type = RIGID_BODY
+    shape = BOX
     mass = 5.0
     friction = 1.0
     restitution = 0.0
@@ -18,9 +20,10 @@ rigidBody chair
     angularDamping = 0.5
 }
 
-rigidBody table
+collisionObject table
 {
-    type = BOX
+    type = RIGID_BODY
+    shape = BOX
     mass = 0.0
     friction = 0.5
     restitution = 0.75
@@ -28,9 +31,10 @@ rigidBody table
     angularDamping = 0.5
 }
 
-rigidBody staticBox
+collisionObject staticBox
 {
-    type = BOX
+    type = RIGID_BODY
+    shape = BOX
     mass = 0.0
     friction = 0.5
     restitution = 0.75
@@ -38,9 +42,10 @@ rigidBody staticBox
     angularDamping = 0.16
 }
 
-rigidBody staticMesh
+collisionObject staticMesh
 {
-    type = MESH
+    type = RIGID_BODY
+    shape = MESH
     mass = 0.0
     friction = 0.5
     restitution = 0.75
@@ -48,9 +53,10 @@ rigidBody staticMesh
     angularDamping = 0.16
 }
 
-character boy
+collisionObject boy
 {
-    type = CAPSULE  
+    type = CHARACTER
+    shape = CAPSULE  
     radius = 1.2
     height = 6.0
     center = 0, 3.0, 0
@@ -60,8 +66,9 @@ character boy
     maxSlopeAngle = 0
 }
 
-ghostObject camera
+collisionObject camera
 {
-    type = SPHERE
+    type = GHOST_OBJECT
+    shape = SPHERE
     radius = 0.5
 }
