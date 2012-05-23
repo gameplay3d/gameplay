@@ -659,9 +659,9 @@ public:
      */
     Theme::Style* getStyle() const;
 
-    int getZOrder() const;
+    int getZIndex() const;
 
-    void setZOrder(int zOrder);
+    void setZIndex(int zOrder);
 
     /**
      * Add a listener to be notified of specific events affecting
@@ -893,7 +893,7 @@ protected:
      */
     float _opacity;
 
-    int _zOrder;
+    int _zIndex;
 
 private:
 

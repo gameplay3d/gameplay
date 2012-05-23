@@ -42,7 +42,15 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     _alignment = getAlignment(properties->getString("alignment"));
     _autoWidth = properties->getBool("autoWidth");
     _autoHeight = properties->getBool("autoHeight");
-    _zOrder = properties->getInt("zOrder");
+
+    if (properties->exists("zIndex"))
+    {
+        _zIndex = properties->getInt("zIndex");
+    }
+    else
+    {
+        _zIndex = -1;
+    }
 
     Vector2 position;
     Vector2 size;
@@ -609,16 +617,16 @@ bool Control::getConsumeTouchEvents()
     return _consumeTouchEvents;
 }
 
-int Control::getZOrder() const
+int Control::getZIndex() const
 {
-    return _zOrder;
+    return _zIndex;
 }
 
-void Control::setZOrder(int zOrder)
+void Control::setZIndex(int zIndex)
 {
-    if (zOrder != _zOrder)
+    if (zIndex != _zIndex)
     {
-        _zOrder = zOrder;
+        _zIndex = zIndex;
         _dirty = true;
     }
 }
@@ -903,8 +911,11 @@ void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCl
         GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
     }
 
+    spriteBatch->begin();
     drawBorder(spriteBatch, clip);
     drawImages(spriteBatch, clip);
+    spriteBatch->end();
+
     drawText(clip);
     _dirty = false;
 }

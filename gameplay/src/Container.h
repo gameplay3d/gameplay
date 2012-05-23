@@ -301,6 +301,8 @@ protected:
 private:
 
     Container(const Container& copy);
+
+    int _zIndexDefault;
 };
 
 // Sort funtion for use with _controls.sort(), based on Z-Order.
