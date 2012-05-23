@@ -145,6 +145,7 @@ void Properties::readProperties(FILE* file)
     char* parentID;
     char* rc;
     char* rcc;
+    char* rccc;
 
     while (true)
     {
@@ -205,6 +206,9 @@ void Properties::readProperties(FILE* file)
             {
                 parentID = NULL;
 
+                // Get the last character on the line (ignoring whitespace).
+                const char* lineEnd = trimWhiteSpace(line) + (strlen(trimWhiteSpace(line)) - 1);
+
                 // This line might begin or end a namespace,
                 // or it might be a key/value pair without '='.
 
@@ -213,6 +217,9 @@ void Properties::readProperties(FILE* file)
 
                 // Check for inheritance: ':'
                 rcc = strchr(line, ':');
+
+                // Check for '}' on same line.
+                rccc = strchr(line, '}');
             
                 // Get the name of the namespace.
                 name = strtok(line, " \t\n{");
@@ -231,6 +238,8 @@ void Properties::readProperties(FILE* file)
                 // Get its ID if it has one.
                 value = strtok(NULL, ":{");
                 value = trimWhiteSpace(value);
+
+                // Get its parent ID if it has one.
                 if (rcc != NULL)
                 {
                     parentID = strtok(NULL, "{");
@@ -239,18 +248,84 @@ void Properties::readProperties(FILE* file)
 
                 if (value != NULL && value[0] == '{')
                 {
+                    // If the namespace ends on this line, seek back to right before the '}' character.
+                    if (rccc && rccc == lineEnd)
+                    {
+                        if (fseek(file, -1, SEEK_CUR) != 0)
+                        {
+                            GP_ERROR("Failed to seek back to before a '}' character in properties file.");
+                            return;
+                        }
+                        while (fgetc(file) != '}')
+                        {
+                            if (fseek(file, -2, SEEK_CUR) != 0)
+                            {
+                                GP_ERROR("Failed to seek back to before a '}' character in properties file.");
+                                return;
+                            }
+                        }
+                        if (fseek(file, -1, SEEK_CUR) != 0)
+                        {
+                            GP_ERROR("Failed to seek back to before a '}' character in properties file.");
+                            return;
+                        }
+                    }
+
                     // New namespace without an ID.
                     Properties* space = new Properties(file, name, NULL, parentID);
                     _namespaces.push_back(space);
+
+                    // If the namespace ends on this line, seek to right after the '}' character.
+                    if (rccc && rccc == lineEnd)
+                    {
+                        if (fseek(file, 1, SEEK_CUR) != 0)
+                        {
+                            GP_ERROR("Failed to seek to immediately after a '}' character in properties file.");
+                            return;
+                        }
+                    }
                 }
                 else
                 {
                     // If '{' appears on the same line.
                     if (rc != NULL)
                     {
+                        // If the namespace ends on this line, seek back to right before the '}' character.
+                        if (rccc && rccc == lineEnd)
+                        {
+                            if (fseek(file, -1, SEEK_CUR) != 0)
+                            {
+                                GP_ERROR("Failed to seek back to before a '}' character in properties file.");
+                                return;
+                            }
+                            while (fgetc(file) != '}')
+                            {
+                                if (fseek(file, -2, SEEK_CUR) != 0)
+                                {
+                                    GP_ERROR("Failed to seek back to before a '}' character in properties file.");
+                                    return;
+                                }
+                            }
+                            if (fseek(file, -1, SEEK_CUR) != 0)
+                            {
+                                GP_ERROR("Failed to seek back to before a '}' character in properties file.");
+                                return;
+                            }
+                        }
+
                         // Create new namespace.
                         Properties* space = new Properties(file, name, value, parentID);
                         _namespaces.push_back(space);
+
+                        // If the namespace ends on this line, seek to right after the '}' character.
+                        if (rccc && rccc == lineEnd)
+                        {
+                            if (fseek(file, 1, SEEK_CUR) != 0)
+                            {
+                                GP_ERROR("Failed to seek to immediately after a '}' character in properties file.");
+                                return;
+                            }
+                        }
                     }
                     else
                     {
