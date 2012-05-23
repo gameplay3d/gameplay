@@ -33,13 +33,12 @@ private:
      */
     struct SceneAnimation
     {
-        SceneAnimation(const char* animationID, const char* targetID, std::string file, std::string id)
-            : _animationID(animationID), _targetID(targetID), _file(file), _id(id) {}
+        SceneAnimation(const char* animationID, const char* targetID, std::string url)
+            : _animationID(animationID), _targetID(targetID), _url(url) {}
 
         const char* _animationID;
         const char* _targetID;
-        std::string _file;
-        std::string _id;
+        std::string _url;
     };
 
     struct SceneNodeProperty
@@ -58,20 +57,18 @@ private:
             DYNAMIC = 512
         };
 
-        SceneNodeProperty(Type type, std::string file, std::string id, int index) : _type(type), _file(file), _id(id), _index(index) { }
+        SceneNodeProperty(Type type, std::string url, int index) : _type(type), _url(url), _index(index) { }
 
         Type _type;
-        std::string _file;
-        std::string _id;
+        std::string _url;
         int _index;
     };
 
     struct SceneNode
     {
-        SceneNode() : _nodeID(""), _exactMatch(true) { }
+        SceneNode() : _nodeID("") { }
 
         const char* _nodeID;
-        bool _exactMatch;
         std::vector<SceneNodeProperty> _properties;
     };
 
@@ -105,13 +102,14 @@ private:
 
     static PhysicsConstraint* loadSpringConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
 
-    static void splitURL(const char* url, std::string* file, std::string* id);
+    static void splitURL(const std::string& url, std::string* file, std::string* id);
     
     
-    static std::map<std::string, Properties*> _propertiesFromFile;      // Holds the properties object for a given file path.
+    static std::map<std::string, Properties*> _properties;              // Holds the properties object for a given URL.
     static std::vector<SceneAnimation> _animations;                     // Holds the animations declared in the .scene file.
     static std::vector<SceneNode> _sceneNodes;                          // Holds all the nodes+properties declared in the .scene file.
-    static std::string _path;                                           // The path of the main GPB for the scene being loaded.
+    static std::string _gpbPath;                                        // The path of the main GPB for the scene being loaded.
+    static std::string _path;                                           // The path of the scene file being loaded.
 };
 
 }

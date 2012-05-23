@@ -6,13 +6,19 @@
 namespace gameplay
 {
 
-std::map<std::string, Properties*> SceneLoader::_propertiesFromFile;
+std::map<std::string, Properties*> SceneLoader::_properties;
 std::vector<SceneLoader::SceneAnimation> SceneLoader::_animations;
 std::vector<SceneLoader::SceneNode> SceneLoader::_sceneNodes;
+std::string SceneLoader::_gpbPath;
 std::string SceneLoader::_path;
 
 Scene* SceneLoader::load(const char* url)
 {
+    // Get the file part of the url that we are loading the scene from.
+    std::string urlStr = url ? url : "";
+    std::string id;
+    splitURL(urlStr, &_path, &id);
+
     // Load the scene properties from file.
     Properties* properties = Properties::create(url);
     if (properties == NULL)
@@ -31,9 +37,9 @@ Scene* SceneLoader::load(const char* url)
     }
 
     // Get the path to the main GPB.
-    _path = sceneProperties->getString("path");
+    _gpbPath = sceneProperties->getString("path");
 
-    // Build the node URL/property and animation reference tables and load the referenced files.
+    // Build the node URL/property and animation reference tables and load the referenced files/store the inline properties objects.
     buildReferenceTables(sceneProperties);
     loadReferencedFiles();
 
@@ -83,17 +89,18 @@ Scene* SceneLoader::load(const char* url)
         loadPhysics(physics, scene);
 
     // Clean up all loaded properties objects.
-    std::map<std::string, Properties*>::iterator iter = _propertiesFromFile.begin();
-    for (; iter != _propertiesFromFile.end(); iter++)
+    std::map<std::string, Properties*>::iterator iter = _properties.begin();
+    for (; iter != _properties.end(); iter++)
     {
-        SAFE_DELETE(iter->second);
+        if (iter->first.find(_path) == iter->first.npos)
+            SAFE_DELETE(iter->second);
     }
 
     // Clean up the .scene file's properties object.
     SAFE_DELETE(properties);
 
     // Clear all temporary data stores.
-    _propertiesFromFile.clear();
+    _properties.clear();
     _animations.clear();
     _sceneNodes.clear();
 
@@ -102,46 +109,28 @@ Scene* SceneLoader::load(const char* url)
 
 void SceneLoader::addSceneAnimation(const char* animationID, const char* targetID, const char* url)
 {
-    // Calculate the file and id from the given url.
-    std::string file;
-    std::string id;
-    splitURL(url, &file, &id);
+    std::string urlStr = url ? url : "";
 
     // If there is a file that needs to be loaded later, add an 
     // empty entry to the properties table to signify it.
-    if (file.length() > 0 && _propertiesFromFile.count(file) == 0)
-        _propertiesFromFile[file] = NULL;
+    if (urlStr.length() > 0 && _properties.count(urlStr) == 0)
+        _properties[urlStr] = NULL;
 
     // Add the animation to the list of animations to be resolved later.
-    _animations.push_back(SceneAnimation(animationID, targetID, file, id));
+    _animations.push_back(SceneAnimation(animationID, targetID, urlStr));
 }
 
 void SceneLoader::addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::Type type, const char* url, int index)
 {
-    // Calculate the file and id from the given url.
-    std::string file;
-    std::string id;
-    splitURL(url, &file, &id);
+    std::string urlStr = url ? url : "";
 
     // If there is a non-GPB file that needs to be loaded later, add an 
     // empty entry to the properties table to signify it.
-    if (file.length() > 0 && file.find(".gpb") == file.npos && _propertiesFromFile.count(file) == 0)
-        _propertiesFromFile[file] = NULL;
-
-    SceneNodeProperty prop(type, file, id, index);
-
-    // Parse for wildcharacter character (only supported on the URL attribute)
-    if (type == SceneNodeProperty::URL)
-    {
-        if (id.length() > 1 && id.at(id.length()-1) == '*')
-        {
-            prop._id = id.substr(0, id.length()-1);
-            sceneNode._exactMatch = false;
-        }
-    }
+    if (urlStr.length() > 0 && urlStr.find(".gpb") == urlStr.npos && _properties.count(urlStr) == 0)
+        _properties[urlStr] = NULL;
 
     // Add the node property to the list of node properties to be resolved later.
-    sceneNode._properties.push_back(prop);
+    sceneNode._properties.push_back(SceneNodeProperty(type, urlStr, index));
 }
 
 void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* sceneProperties, unsigned int typeFlags)
@@ -151,43 +140,19 @@ void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* scen
         SceneNode& sceneNode = _sceneNodes[i];
         GP_ASSERT(sceneNode._nodeID);
 
-        if (sceneNode._exactMatch)
+        // Find the node matching the specified ID.
+        Node* node = scene->findNode(sceneNode._nodeID);
+        if (!node)
         {
-            // Find the node matching the specified ID exactly.
-            Node* node = scene->findNode(sceneNode._nodeID);
-            if (!node)
-            {
-                GP_ERROR("Failed to set property for node '%s', which does not exist in the scene.", sceneNode._nodeID);
-                continue;
-            }
-
-            for (unsigned int j = 0, pcount = sceneNode._properties.size(); j < pcount; ++j)
-            {
-                SceneNodeProperty& snp = sceneNode._properties[j];
-                if (typeFlags & snp._type)
-                    applyNodeProperty(sceneNode, node, sceneProperties, snp, scene);
-            }
+            GP_ERROR("Failed to set property for node '%s', which does not exist in the scene.", sceneNode._nodeID);
+            continue;
         }
-        else
-        {
-            // Find all nodes matching the specified ID.
-            std::vector<Node*> nodes;
-            unsigned int nodeCount = scene->findNodes(sceneNode._nodeID, nodes, true, false);
-            if (nodeCount == 0)
-            {
-                GP_ERROR("Failed to set property for nodes with id matching '%s'; no such nodes exist in the scene.", sceneNode._nodeID);
-                continue;
-            }
-            
-            for (unsigned int j = 0, pcount = sceneNode._properties.size(); j < pcount; ++j)
-            {
-                SceneNodeProperty& snp = sceneNode._properties[j];
-                if ((typeFlags & snp._type) == 0)
-                    continue;
 
-                for (unsigned int k = 0; k < nodeCount; ++k)
-                    applyNodeProperty(sceneNode, nodes[k], sceneProperties, snp, scene);
-            }
+        for (unsigned int j = 0, pcount = sceneNode._properties.size(); j < pcount; ++j)
+        {
+            SceneNodeProperty& snp = sceneNode._properties[j];
+            if (typeFlags & snp._type)
+                applyNodeProperty(sceneNode, node, sceneProperties, snp, scene);
         }
     }
 }
@@ -200,28 +165,11 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         snp._type == SceneNodeProperty::COLLISION_OBJECT)
     {
         // Check to make sure the referenced properties object was loaded properly.
-        Properties* p = _propertiesFromFile[snp._file];
+        Properties* p = _properties[snp._url];
         if (!p)
         {
-            GP_ERROR("The referenced node data in file '%s' failed to load.", snp._file.c_str());
+            GP_ERROR("The referenced node data at url '%s' failed to load.", snp._url.c_str());
             return;
-        }
-
-        // If a specific namespace within the file was specified, load that namespace.
-        if (snp._id.size() > 0)
-        {
-            p = p->getNamespace(snp._id.c_str());
-            if (!p)
-            {
-                GP_ERROR("The referenced node data at '%s#%s' failed to load.", snp._file.c_str(), snp._id.c_str());
-                return;
-            }
-        }
-        else
-        {
-            // Otherwise, use the first namespace.
-            p->rewind();
-            p = p->getNextNamespace();
         }
 
         switch (snp._type)
@@ -255,31 +203,6 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         }
         case SceneNodeProperty::COLLISION_OBJECT:
         {
-            // Check to make sure the referenced properties object was loaded properly.
-            Properties* p = _propertiesFromFile[snp._file];
-            if (!p)
-            {
-                GP_ERROR("The referenced node data in file '%s' failed to load.", snp._file.c_str());
-                return;
-            }
-
-            // If a specific namespace within the file was specified, load that namespace.
-            if (snp._id.size() > 0)
-            {
-                p = p->getNamespace(snp._id.c_str());
-                if (!p)
-                {
-                    GP_ERROR("The referenced node data at '%s#%s' failed to load.", snp._file.c_str(), snp._id.c_str());
-                    return;
-                }
-            }
-            else
-            {
-                // Otherwise, use the first namespace.
-                p->rewind();
-                p = p->getNextNamespace();
-            }
-
             // Check to make sure the type of the namespace used to load the physics collision object is correct.
             if (snp._type == SceneNodeProperty::COLLISION_OBJECT && strcmp(p->getNamespace(), "collisionObject") != 0)
             {
@@ -402,48 +325,24 @@ void SceneLoader::applyNodeUrls(Scene* scene)
             if (snp._type != SceneNodeProperty::URL)
                 continue;
 
-            if (snp._file.empty())
+            std::string file;
+            std::string id;
+            splitURL(snp._url, &file, &id);
+
+            if (file.empty())
             {
                 // The node is from the main GPB and should just be renamed.
 
                 // TODO: Should we do all nodes with this case first to allow users to stitch in nodes with
                 // IDs equal to IDs that were in the original GPB file but were changed in the scene file?
-                if (sceneNode._exactMatch)
+                Node* node = scene->findNode(id.c_str());
+                if (node)
                 {
-                    Node* node = scene->findNode(snp._id.c_str());
-                    if (node)
-                    {
-                        node->setId(sceneNode._nodeID);
-                    }
-                    else
-                    {
-                        GP_ERROR("Could not find node '%s' in main scene GPB file.", snp._id.c_str());
-                    }
+                    node->setId(sceneNode._nodeID);
                 }
                 else
                 {
-                    // Search for nodes using a partial match
-                    std::string partialMatch = snp._id;
-                    std::vector<Node*> nodes;
-                    unsigned int nodeCount = scene->findNodes(snp._id.c_str(), nodes, true, false);
-                    if (nodeCount > 0)
-                    {
-                        GP_ASSERT(sceneNode._nodeID);
-
-                        for (unsigned int k = 0; k < nodeCount; ++k)
-                        {
-                            // Construct a new node ID using _nodeID plus the remainder of the partial match.
-                            Node* node = nodes[k];
-                            GP_ASSERT(node);
-                            std::string newID(sceneNode._nodeID);
-                            newID += (node->getId() + snp._id.length());
-                            node->setId(newID.c_str());
-                        }
-                    }
-                    else
-                    {
-                        GP_ERROR("Could not find any nodes matching '%s' in main scene GPB file.", snp._id.c_str());
-                    }
+                    GP_ERROR("Could not find node '%s' in main scene GPB file.", id.c_str());
                 }
             }
             else
@@ -453,60 +352,26 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                 // TODO: Revisit this to determine if we should cache Bundle objects for the duration of the scene
                 // load to prevent constantly creating/destroying the same externally referenced bundles each time
                 // a url with a file is encountered.
-                Bundle* tmpBundle = Bundle::create(snp._file.c_str());
+                Bundle* tmpBundle = Bundle::create(file.c_str());
                 if (tmpBundle)
                 {
-                    if (sceneNode._exactMatch)
+                    Node* node = tmpBundle->loadNode(id.c_str(), scene);
+                    if (node)
                     {
-                        Node* node = tmpBundle->loadNode(snp._id.c_str(), scene);
-                        if (node)
-                        {
-                            node->setId(sceneNode._nodeID);
-                            scene->addNode(node);
-                            SAFE_RELEASE(node);
-                        }
-                        else
-                        {
-                            GP_ERROR("Could not load node '%s' from GPB file '%s'.", snp._id.c_str(), snp._file.c_str());
-                        }
+                        node->setId(sceneNode._nodeID);
+                        scene->addNode(node);
+                        SAFE_RELEASE(node);
                     }
                     else
                     {
-                        // Search for nodes in the bundle using a partial match
-                        std::string partialMatch = snp._id;
-                        unsigned int objectCount = tmpBundle->getObjectCount();
-                        unsigned int matchCount = 0;
-                        for (unsigned int k = 0; k < objectCount; ++k)
-                        {
-                            const char* objid = tmpBundle->getObjectID(k);
-                            if (strstr(objid, snp._id.c_str()) == objid)
-                            {
-                                // This object ID matches (starts with).
-                                // Try to load this object as a Node.
-                                Node* node = tmpBundle->loadNode(objid);
-                                if (node)
-                                {
-                                    // Construct a new node ID using _nodeID plus the remainder of the partial match.
-                                    std::string newID(sceneNode._nodeID);
-                                    newID += (node->getId() + snp._id.length());
-                                    node->setId(newID.c_str());
-                                    scene->addNode(node);
-                                    SAFE_RELEASE(node);
-                                    matchCount++;
-                                }
-                            }
-                        }
-                        if (matchCount == 0)
-                        {
-                            GP_ERROR("Could not find any nodes matching '%s' in GPB file '%s'.", snp._id.c_str(), snp._file.c_str());
-                        }
+                        GP_ERROR("Could not load node '%s' from GPB file '%s'.", id.c_str(), file.c_str());
                     }
 
                     SAFE_RELEASE(tmpBundle);
                 }
                 else
                 {
-                    GP_ERROR("Failed to load GPB file '%s' for node stitching.", snp._file.c_str());
+                    GP_ERROR("Failed to load GPB file '%s' for node stitching.", file.c_str());
                 }
             }
 
@@ -536,6 +401,42 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
             SceneNode& sceneNode = _sceneNodes[_sceneNodes.size()-1];
             sceneNode._nodeID = ns->getId();
 
+            // Parse the node's sub-namespaces.
+            Properties* subns;
+            std::string propertyUrl = _path + "#" + ns->getId() + "/";
+            while ((subns = ns->getNextNamespace()) != NULL)
+            {
+                if (strcmp(subns->getNamespace(), "audio") == 0)
+                {
+                    propertyUrl += "audio/" + std::string(subns->getId());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::AUDIO, propertyUrl.c_str());
+                    _properties[propertyUrl] = subns;
+                }
+                else if (strcmp(subns->getNamespace(), "material") == 0)
+                {
+                    propertyUrl += "material/" + std::string(subns->getId());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::MATERIAL, propertyUrl.c_str());
+                    _properties[propertyUrl] = subns;
+                }
+                else if (strcmp(subns->getNamespace(), "particle") == 0)
+                {
+                    propertyUrl += "particle/" + std::string(subns->getId());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::PARTICLE, propertyUrl.c_str());
+                    _properties[propertyUrl] = subns;
+                }
+                else if (strcmp(subns->getNamespace(), "collisionObject") == 0)
+                {
+                    propertyUrl += "collisionObject/" + std::string(subns->getId());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::COLLISION_OBJECT, propertyUrl.c_str());
+                    _properties[propertyUrl] = subns;
+                }
+                else
+                {
+                    GP_ERROR("Unsupported child namespace '%s' of 'node' namespace.", subns->getNamespace());
+                }
+            }
+
+            // Parse the node's attributes.
             while ((name = ns->getNextProperty()) != NULL)
             {
                 if (strcmp(name, "url") == 0)
@@ -660,20 +561,11 @@ void SceneLoader::createAnimations(const Scene* scene)
         }
 
         // Check to make sure the referenced properties object was loaded properly.
-        Properties* p = _propertiesFromFile[_animations[i]._file];
+        Properties* p = _properties[_animations[i]._url];
         if (!p)
         {
-            GP_ERROR("The referenced animation data in file '%s' failed to load.", _animations[i]._file.c_str());
+            GP_ERROR("The referenced animation data at url '%s' failed to load.", _animations[i]._url.c_str());
             continue;
-        }
-        if (_animations[i]._id.size() > 0)
-        {
-            p = p->getNamespace(_animations[i]._id.c_str());
-            if (!p)
-            {
-                GP_ERROR("The referenced animation data at '%s#%s' failed to load.", _animations[i]._file.c_str(), _animations[i]._id.c_str());
-                continue;
-            }
         }
 
         node->createAnimation(_animations[i]._animationID, p);
@@ -789,10 +681,10 @@ Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
     GP_ASSERT(sceneProperties);
 
     // Load the main scene from the specified path.
-    Bundle* bundle = Bundle::create(_path.c_str());
+    Bundle* bundle = Bundle::create(_gpbPath.c_str());
     if (!bundle)
     {
-        GP_ERROR("Failed to load scene GPB file '%s'.", _path.c_str());
+        GP_ERROR("Failed to load scene GPB file '%s'.", _gpbPath.c_str());
         return NULL;
     }
 
@@ -800,7 +692,7 @@ Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
     Scene* scene = bundle->loadScene(NULL);
     if (!scene)
     {
-        GP_ERROR("Failed to load scene from '%s'.", _path.c_str());
+        GP_ERROR("Failed to load scene from '%s'.", _gpbPath.c_str());
         SAFE_RELEASE(bundle);
         return NULL;
     }
@@ -930,14 +822,17 @@ void SceneLoader::loadPhysics(Properties* physics, Scene* scene)
 void SceneLoader::loadReferencedFiles()
 {
     // Load all referenced properties files.
-    std::map<std::string, Properties*>::iterator iter = _propertiesFromFile.begin();
-    for (; iter != _propertiesFromFile.end(); iter++)
+    std::map<std::string, Properties*>::iterator iter = _properties.begin();
+    for (; iter != _properties.end(); iter++)
     {
-        Properties* p = Properties::create(iter->first.c_str());
-        if (p == NULL)
-            GP_ERROR("Failed to load referenced file '%s'.", iter->first.c_str());
+        if (iter->second == NULL)
+        {
+            Properties* p = Properties::create(iter->first.c_str());
+            if (p == NULL)
+                GP_ERROR("Failed to load referenced file '%s'.", iter->first.c_str());
 
-        iter->second = p;
+            iter->second = p;
+        }
     }
 }
 
@@ -1043,28 +938,26 @@ PhysicsConstraint* SceneLoader::loadSpringConstraint(const Properties* constrain
     return physicsConstraint;
 }
 
-void SceneLoader::splitURL(const char* url, std::string* file, std::string* id)
+void SceneLoader::splitURL(const std::string& url, std::string* file, std::string* id)
 {
-    if (!url)
+    if (url.empty())
     {
         // This is allowed since many scene node properties do not use the URL.
         return;
     }
 
-    std::string urlString = url;
-
     // Check if the url references a file (otherwise, it only references a node within the main GPB).
-    unsigned int loc = urlString.rfind(".");
-    if (loc != urlString.npos)
+    unsigned int loc = url.rfind(".");
+    if (loc != url.npos)
     {
         // If the url references a specific namespace within the file,
         // set the id out parameter appropriately. Otherwise, set the id out
         // parameter to the empty string so we know to load the first namespace.
-        loc = urlString.rfind("#");
-        if (loc != urlString.npos)
+        loc = url.rfind("#");
+        if (loc != url.npos)
         {
-            *file = urlString.substr(0, loc);
-            *id = urlString.substr(loc + 1);
+            *file = url.substr(0, loc);
+            *id = url.substr(loc + 1);
         }
         else
         {
