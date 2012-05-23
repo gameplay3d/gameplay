@@ -167,14 +167,6 @@ private:
     void initializeQuad(Mesh* mesh);
 
     /**
-     * Draw this form into the current framebuffer.
-     *
-     * @param spriteBatch The sprite batch containing this form's theme texture.
-     * @param clip The form's clipping rectangle.
-     */
-    void draw(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    /**
      * Propagate touch events to enabled forms.
      *
      * @return Whether the touch event was consumed by a form.
