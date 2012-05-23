@@ -34,7 +34,7 @@ Container::Container()
       _lastX(0), _lastY(0),
       _startTimeX(0), _startTimeY(0), _lastTime(0),
       _velocity(Vector2::zero()), _friction(1.0f),
-      _goingRight(false), _goingDown(false)
+      _goingRight(false), _goingDown(false), _zIndexDefault(0)
 {
 }
 
@@ -144,6 +144,11 @@ void Container::addControls(Theme* theme, Properties* properties)
         if (control)
         {
             addControl(control);
+
+            if (control->getZIndex() == -1)
+            {
+                control->setZIndex(_zIndexDefault++);
+            }
         }
 
         // Get the next control.
@@ -304,6 +309,9 @@ void Container::update(const Rectangle& clip, const Vector2& offset)
         _viewportClipBounds.width -= _scrollBarVertical->getRegion().width;
     }
 
+    // Sort controls by Z-Order.
+    std::sort(_controls.begin(), _controls.end(), &sortControlsByZOrder);
+
     GP_ASSERT(_layout);
     _layout->update(this);
 
@@ -326,7 +334,9 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
         needsClear = false;
     }
 
+    spriteBatch->begin();
     Control::drawBorder(spriteBatch, clip);
+    spriteBatch->end();
 
     std::vector<Control*>::const_iterator it;
     Rectangle boundsUnion = Rectangle::empty();
@@ -345,6 +355,8 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
     {
         // Draw scroll bars.
         Rectangle clipRegion(_viewportClipBounds);
+
+        spriteBatch->begin();
 
         if (_scrollBarBounds.height > 0 && (_scrolling || _velocity.y) && _scrollBarTopCap && _scrollBarVertical && _scrollBarBottomCap)
         {
@@ -405,6 +417,8 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
             bounds.width = rightRegion.width;
             spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, rightUVs.u1, rightUVs.v1, rightUVs.u2, rightUVs.v2, rightColor, clipRegion);
         }
+
+        spriteBatch->end();
 
         if (_velocity.isZero())
         {
@@ -793,6 +807,14 @@ Container::Scroll Container::getScroll(const char* scroll)
     }
 
     return Container::SCROLL_NONE;
+}
+
+bool sortControlsByZOrder(Control* c1, Control* c2)
+{
+    if (c1->getZIndex() < c2->getZIndex())
+        return true;
+
+    return false;
 }
 
 }
