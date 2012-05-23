@@ -304,6 +304,8 @@ void Container::update(const Rectangle& clip, const Vector2& offset)
         _viewportClipBounds.width -= _scrollBarVertical->getRegion().width;
     }
 
+    std::sort(_controls.begin(), _controls.end(), &sortControlsByZOrder);
+
     GP_ASSERT(_layout);
     _layout->update(this);
 
@@ -793,6 +795,14 @@ Container::ScrollState Container::getScrollState(const char* scrollState)
     }
 
     return Container::SCROLL_NONE;
+}
+
+bool sortControlsByZOrder(Control* c1, Control* c2)
+{
+    if (c1->getZOrder() < c2->getZOrder())
+        return true;
+
+    return false;
 }
 
 }
