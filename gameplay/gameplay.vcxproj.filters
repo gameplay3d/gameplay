@@ -560,6 +560,9 @@
     <ClInclude Include="src\ScrollLayout.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\MathUtil.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\bumped-specular.vsh">
@@ -657,6 +660,12 @@
     </None>
     <None Include="res\logo_white.png">
       <Filter>res</Filter>
+    </None>
+    <None Include="src\MathUtil.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\MathUtilNeon.inl">
+      <Filter>src</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
