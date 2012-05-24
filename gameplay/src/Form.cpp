@@ -2,7 +2,6 @@
 #include "Form.h"
 #include "AbsoluteLayout.h"
 #include "FlowLayout.h"
-#include "ScrollLayout.h"
 #include "VerticalLayout.h"
 #include "Game.h"
 #include "Theme.h"
@@ -76,9 +75,6 @@ Form* Form::create(const char* url)
     case Layout::LAYOUT_VERTICAL:
         layout = VerticalLayout::create();
         break;
-    case Layout::LAYOUT_SCROLL:
-        layout = ScrollLayout::create();
-        break;
     default:
         GP_ERROR("Unsupported layout type '%d'.", getLayoutType(layoutString));
     }
@@ -89,6 +85,10 @@ Form* Form::create(const char* url)
     Form* form = new Form();
     form->_layout = layout;
     form->_theme = theme;
+
+    // Get default projection matrix.
+    Game* game = Game::getInstance();
+    Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
 
     const char* styleName = formProperties->getString("style");
     form->initialize(theme->getStyle(styleName), formProperties);
@@ -112,11 +112,10 @@ Form* Form::create(const char* url)
         form->_bounds.x = Game::getInstance()->getWidth() * 0.5f - form->_bounds.width * 0.5f;
     }
 
+    form->_scroll = getScroll(formProperties->getString("scroll"));
+
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
-
-    Game* game = Game::getInstance();
-    Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
 
     SAFE_DELETE(properties);
 
@@ -192,6 +191,19 @@ void Form::setSize(float width, float height)
         SAFE_DELETE(_spriteBatch);
         _spriteBatch = SpriteBatch::create(_frameBuffer->getRenderTarget()->getTexture());
         GP_ASSERT(_spriteBatch);
+
+        // Clear FBO.
+        _frameBuffer->bind();
+        Game* game = Game::getInstance();
+        Rectangle prevViewport = game->getViewport();
+        game->setViewport(Rectangle(0, 0, width, height));
+        _theme->setProjectionMatrix(_projectionMatrix);
+        GL_ASSERT( glClearColor(0, 0, 0, 0) );
+        GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
+        GL_ASSERT( glClearColor(0, 0, 0, 1) );
+        _theme->setProjectionMatrix(_defaultProjectionMatrix);
+        FrameBuffer::bindDefault();
+        game->setViewport(prevViewport);
 
         _bounds.width = width;
         _bounds.height = height;
@@ -385,8 +397,30 @@ void Form::update()
         _skin = getSkin(_state);
         _opacity = getOpacity(_state);
 
+        // Get scrollbar images and diminish clipping bounds to make room for scrollbars.
+        if ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL)
+        {
+            _scrollBarLeftCap = getImage("scrollBarLeftCap", _state);
+            _scrollBarHorizontal = getImage("horizontalScrollBar", _state);
+            _scrollBarRightCap = getImage("scrollBarRightCap", _state);
+
+            _viewportClipBounds.height -= _scrollBarHorizontal->getRegion().height;
+        }
+
+        if ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL)
+        {
+            _scrollBarTopCap = getImage("scrollBarTopCap", _state);
+            _scrollBarVertical = getImage("verticalScrollBar", _state);
+            _scrollBarBottomCap = getImage("scrollBarBottomCap", _state);
+        
+            _viewportClipBounds.width -= _scrollBarVertical->getRegion().width;
+        }
+
         GP_ASSERT(_layout);
         _layout->update(this);
+
+        if (_scroll != SCROLL_NONE)
+            this->updateScroll(this);
     }
 }
 
@@ -417,7 +451,7 @@ void Form::draw()
 
         GP_ASSERT(_theme);
         _theme->setProjectionMatrix(_projectionMatrix);
-        draw(_theme->getSpriteBatch(), _viewportClipBounds);
+        Container::draw(_theme->getSpriteBatch(), Rectangle(0, 0, _bounds.width, _bounds.height), _skin == NULL, _bounds.height);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
 
         // Rebind the default framebuffer and game viewport.
@@ -444,58 +478,6 @@ void Form::draw()
         _spriteBatch->draw(_bounds.x, _bounds.y, 0, _bounds.width, _bounds.height, 0, _v1, _u2, 0, Vector4::one());
         _spriteBatch->end();
     }
-}
-
-void Form::draw(SpriteBatch* spriteBatch, const Rectangle& clip)
-{
-    GP_ASSERT(spriteBatch);
-
-    std::vector<Control*>::const_iterator it;
-
-    // Batch each font individually.
-    std::set<Font*>::const_iterator fontIter;
-    for (fontIter = _theme->_fonts.begin(); fontIter != _theme->_fonts.end(); fontIter++)
-    {
-        Font* font = *fontIter;
-        if (font)
-        {
-            font->begin();
-        }
-    }
-
-    // Batch for all themed border and background sprites.
-    spriteBatch->begin();
-
-    // Draw the form's border and background.
-    // We don't pass the form's position to itself or it will be applied twice!
-    Control::drawBorder(spriteBatch, Rectangle(0, 0, _bounds.width, _bounds.height));
-
-    Rectangle boundsUnion = Rectangle::empty();
-    for (it = _controls.begin(); it < _controls.end(); it++)
-    {
-        Control* control = *it;
-        GP_ASSERT(control);
-
-        if (_skin || control->isDirty() || control->_clearBounds.intersects(boundsUnion))
-        {
-            control->draw(spriteBatch, clip, _skin == NULL, _bounds.height);
-            Rectangle::combine(control->_clearBounds, boundsUnion, &boundsUnion);
-        }
-    }
-
-    // Done all batching.
-    spriteBatch->end();
-
-    for (fontIter = _theme->_fonts.begin(); fontIter != _theme->_fonts.end(); fontIter++)
-    {
-        Font* font = *fontIter;
-        if (font)
-        {
-            font->end();
-        }
-    }
-
-    _dirty = false;
 }
 
 void Form::initializeQuad(Mesh* mesh)

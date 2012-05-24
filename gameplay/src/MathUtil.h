@@ -5,9 +5,10 @@ namespace gameplay
 {
 class MathUtil
 {
-	//friend class Matrix;
-	//friend class Vector3;
-public:
+	friend class Matrix;
+	friend class Vector3;
+
+private:
 
 	/** Matrix **/
 	inline static void addMatrix(const float* m, float scalar, float* dst);
@@ -22,7 +23,7 @@ public:
 
 	/** Vector3 **/
 	inline static void crossVector3(const float* v1, const float* v2, float* dst);
-private:
+
 	MathUtil();
 };
 }

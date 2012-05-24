@@ -11,7 +11,7 @@ namespace gameplay
 {
 
 PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Definition& shape, const Parameters& parameters)
-        : PhysicsCollisionObject(node), _body(NULL), _mass(parameters.mass), _constraints(NULL)
+        : PhysicsCollisionObject(node), _body(NULL), _mass(parameters.mass), _constraints(NULL), _inDestructor(false)
 {
     GP_ASSERT(Game::getInstance()->getPhysicsController());
     GP_ASSERT(_node);
@@ -64,6 +64,7 @@ PhysicsRigidBody::~PhysicsRigidBody()
     GP_ASSERT(_node);
 
     // Clean up all constraints linked to this rigid body.
+    _inDestructor = true;
     if (_constraints)
     {
         for (unsigned int i = 0; i < _constraints->size(); ++i)
@@ -73,13 +74,13 @@ PhysicsRigidBody::~PhysicsRigidBody()
         SAFE_DELETE(_constraints);
     }
 
-    // Remove collision object from physics controller
+    // Remove collision object from physics controller.
     Game::getInstance()->getPhysicsController()->removeCollisionObject(this);
 
     // Clean up the rigid body and its related objects.
     SAFE_DELETE(_body);
 
-    // Unregister node listener (only registered for heihgtfield collision shape types)
+    // Unregister node listener (only registered for heihgtfield collision shape types).
     if (_collisionShape->getType() == PhysicsCollisionShape::SHAPE_HEIGHTFIELD)
     {
         _node->removeListener(this);
@@ -155,9 +156,22 @@ void PhysicsRigidBody::applyTorqueImpulse(const Vector3& torque)
 PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
 {
     // Check if the properties is valid and has a valid namespace.
-    if (!properties || !(strcmp(properties->getNamespace(), "rigidBody") == 0))
+    if (!properties || !(strcmp(properties->getNamespace(), "collisionObject") == 0))
     {
-        GP_ERROR("Failed to load rigid body from properties object: must be non-null object and have namespace equal to 'rigidBody'.");
+        GP_ERROR("Failed to load rigid body from properties object: must be non-null object and have namespace equal to 'collisionObject'.");
+        return NULL;
+    }
+
+    // Check that the type is specified and correct.
+    const char* type = properties->getString("type");
+    if (!type)
+    {
+        GP_ERROR("Failed to load physics rigid body from properties object; required attribute 'type' is missing.");
+        return NULL;
+    }
+    if (strcmp(type, "RIGID_BODY") != 0)
+    {
+        GP_ERROR("Failed to load physics rigid body from properties object; attribute 'type' must be equal to 'RIGID_BODY'.");
         return NULL;
     }
 
@@ -290,7 +304,10 @@ void PhysicsRigidBody::addConstraint(PhysicsConstraint* constraint)
 
 void PhysicsRigidBody::removeConstraint(PhysicsConstraint* constraint)
 {
-    if (_constraints)
+    // Ensure that the rigid body has constraints and that we are
+    // not currently in the rigid body's destructor (in this case,
+    // the constraints will be destroyed from there).
+    if (_constraints && !_inDestructor)
     {
         for (unsigned int i = 0; i < _constraints->size(); ++i)
         {
