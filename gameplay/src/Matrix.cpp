@@ -361,48 +361,6 @@ void Matrix::add(float scalar)
 void Matrix::add(float scalar, Matrix* dst)
 {
     GP_ASSERT(dst);
-/*
-#ifdef USE_NEON
-
-    asm volatile(
-    	"vld1.32 {q0, q1}, [%1]! 	\n\t" // M[m0-m7]
-    	"vld1.32 {q2, q3}, [%1] 	\n\t" // M[m8-m15]
-    	"vld1.32 {d8[0]},  [%2] 	\n\t" // s
-    	"vmov.f32 s17, s16          \n\t" // s
-    	"vmov.f32 s18, s16          \n\t" // s
-    	"vmov.f32 s19, s16          \n\t" // s
-    	"vadd.f32 q8, q0, q4  	\n\t" // DST->M[m0-m3] = M[m0-m3] + s
-    	"vadd.f32 q9, q1, q4 	\n\t" // DST->M[m4-m7] = M[m4-m7] + s
-    	"vadd.f32 q10, q2, q4 	\n\t" // DST->M[m8-m11] = M[m8-m11] + s
-    	"vadd.f32 q11, q3, q4 	\n\t" // DST->M[m12-m15] = M[m12-m15] + s
-
-    	"vst1.32 {q8, q9}, [%0]!  \n\t" // DST->M[m0-m7]
-    	"vst1.32 {q10, q11}, [%0]   \n\t" // DST->M[m8-m15]
-    	:
-    	: "r"(dst->m), "r"(m), "r"(&scalar)
-    	: "q0", "q1", "q2", "q3", "q4", "q8", "q9", "q10", "q11", "memory"
-    );
-
-#else
-
-    dst->m[0]  = m[0]  + scalar;
-    dst->m[1]  = m[1]  + scalar;
-    dst->m[2]  = m[2]  + scalar;
-    dst->m[3]  = m[3]  + scalar;
-    dst->m[4]  = m[4]  + scalar;
-    dst->m[5]  = m[5]  + scalar;
-    dst->m[6]  = m[6]  + scalar;
-    dst->m[7]  = m[7]  + scalar;
-    dst->m[8]  = m[8]  + scalar;
-    dst->m[9]  = m[9]  + scalar;
-    dst->m[10] = m[10] + scalar;
-    dst->m[11] = m[11] + scalar;
-    dst->m[12] = m[12] + scalar;
-    dst->m[13] = m[13] + scalar;
-    dst->m[14] = m[14] + scalar;
-    dst->m[15] = m[15] + scalar;
-
-#endif*/
 
     MathUtil::addMatrix(m, scalar, dst->m);
 }
@@ -415,47 +373,6 @@ void Matrix::add(const Matrix& m)
 void Matrix::add(const Matrix& m1, const Matrix& m2, Matrix* dst)
 {
     GP_ASSERT(dst);
-/*
-#ifdef USE_NEON
-
-    asm volatile(
-    	"vld1.32 	{q0, q1}, 	[%1]! 	\n\t" // M1[m0-m7]
-		"vld1.32 	{q2, q3}, 	[%1] 	\n\t" // M1[m8-m15]
-    	"vld1.32 	{q8, q9}, 	[%2]! 	\n\t" // M2[m0-m7]
-		"vld1.32 	{q10, q11}, [%2]  	\n\t" // M2[m8-m15]
-
-    	"vadd.f32   q12, q0, q8 		\n\t" // DST->M[m0-m3] = M1[m0-m3] + M2[m0-m3]
-    	"vadd.f32   q13, q1, q9			\n\t" // DST->M[m4-m7] = M1[m4-m7] + M2[m4-m7]
-    	"vadd.f32   q14, q2, q10		\n\t" // DST->M[m8-m11] = M1[m8-m11] + M2[m8-m11]
-    	"vadd.f32   q15, q3, q11		\n\t" // DST->M[m12-m15] = M1[m12-m15] + M2[m12-m15]
-
-    	"vst1.32    {q12, q13}, [%0]!   \n\t" // DST->M[m0-m7]
-		"vst1.32    {q14, q15}, [%0]    \n\t" // DST->M[m8-m15]
-		:
-        : "r"(dst->m), "r"(m1.m), "r"(m2.m)
-        : "q0", "q1", "q2", "q3", "q8", "q9", "q10", "q11", "q12", "q13", "q14", "q15", "memory"
-    );
-
-#else
-
-    dst->m[0]  = m1.m[0]  + m2.m[0];
-    dst->m[1]  = m1.m[1]  + m2.m[1];
-    dst->m[2]  = m1.m[2]  + m2.m[2];
-    dst->m[3]  = m1.m[3]  + m2.m[3];
-    dst->m[4]  = m1.m[4]  + m2.m[4];
-    dst->m[5]  = m1.m[5]  + m2.m[5];
-    dst->m[6]  = m1.m[6]  + m2.m[6];
-    dst->m[7]  = m1.m[7]  + m2.m[7];
-    dst->m[8]  = m1.m[8]  + m2.m[8];
-    dst->m[9]  = m1.m[9]  + m2.m[9];
-    dst->m[10] = m1.m[10] + m2.m[10];
-    dst->m[11] = m1.m[11] + m2.m[11];
-    dst->m[12] = m1.m[12] + m2.m[12];
-    dst->m[13] = m1.m[13] + m2.m[13];
-    dst->m[14] = m1.m[14] + m2.m[14];
-    dst->m[15] = m1.m[15] + m2.m[15];
-
-#endif*/
 
     MathUtil::addMatrix(m1.m, m2.m, dst->m);
 }
@@ -728,46 +645,7 @@ void Matrix::multiply(float scalar, Matrix* dst) const
 void Matrix::multiply(const Matrix& m, float scalar, Matrix* dst)
 {
     GP_ASSERT(dst);
-/*
-#ifdef USE_NEON
 
-    asm volatile(
-    	"vld1.32 	{d0[0]},	 	[%0]     	\n\t" // M[m0-m7]
-    	"vld1.32	{q4-q5},  		[%1]!    	\n\t" // M[m8-m15]
-		"vld1.32	{q6-q7},  		[%1]		\n\t" // s
-
-    	"vmul.f32 	q8, q4, d0[0]    			\n\t" // DST->M[m0-m3] = M[m0-m3] * s
-    	"vmul.f32 	q9, q5, d0[0]    			\n\t" // DST->M[m4-m7] = M[m4-m7] * s
-		"vmul.f32 	q10, q6, d0[0]    			\n\t" // DST->M[m8-m11] = M[m8-m11] * s
-		"vmul.f32 	q11, q7, d0[0]   		 	\n\t" // DST->M[m12-m15] = M[m12-m15] * s
-
-    	"vst1.32 	{q8-q9},   		[%2]! 		\n\t" // DST->M[m0-m7]
-		"vst1.32 	{q10-q11}, 		[%2]		\n\t" // DST->M[m8-m15]
-		:
-		: "r"(&scalar), "r"(m.m), "r"(dst->m)
-		: "q0", "q4", "q5", "q6", "q7", "q8", "q9", "q10", "q11", "memory"
-	);
-
-#else
-
-    dst->m[0]  = m.m[0]  * scalar;
-    dst->m[1]  = m.m[1]  * scalar;
-    dst->m[2]  = m.m[2]  * scalar;
-    dst->m[3]  = m.m[3]  * scalar;
-    dst->m[4]  = m.m[4]  * scalar;
-    dst->m[5]  = m.m[5]  * scalar;
-    dst->m[6]  = m.m[6]  * scalar;
-    dst->m[7]  = m.m[7]  * scalar;
-    dst->m[8]  = m.m[8]  * scalar;
-    dst->m[9]  = m.m[9]  * scalar;
-    dst->m[10] = m.m[10] * scalar;
-    dst->m[11] = m.m[11] * scalar;
-    dst->m[12] = m.m[12] * scalar;
-    dst->m[13] = m.m[13] * scalar;
-    dst->m[14] = m.m[14] * scalar;
-    dst->m[15] = m.m[15] * scalar;
-
-#endif*/
     MathUtil::multiplyMatrix(m.m, scalar, dst->m);
 }
 
@@ -779,72 +657,6 @@ void Matrix::multiply(const Matrix& m)
 void Matrix::multiply(const Matrix& m1, const Matrix& m2, Matrix* dst)
 {
 	GP_ASSERT(dst);
-/*
-#ifdef USE_NEON // if set, neon unit is present.
-
-    asm volatile
-    (
-        "vld1.32	 {d16 - d19}, [%1]!	  \n\t"       // M1[m0-m7]
-		"vld1.32     {d20 - d23}, [%1]    \n\t"       // M1[m8-m15]
-		"vld1.32     {d0 - d3}, [%2]!     \n\t"       // M2[m0-m7]
-		"vld1.32     {d4 - d7}, [%2]      \n\t"       // M2[m8-m15]
-
-		"vmul.f32    q12, q8, d0[0]     \n\t"         // DST->M[m0-m3] = M1[m0-m3] * M2[m0]
-		"vmul.f32    q13, q8, d2[0]     \n\t"         // DST->M[m4-m7] = M1[m4-m7] * M2[m4]
-		"vmul.f32    q14, q8, d4[0]     \n\t"         // DST->M[m8-m11] = M1[m8-m11] * M2[m8]
-		"vmul.f32    q15, q8, d6[0]     \n\t"         // DST->M[m12-m15] = M1[m12-m15] * M2[m12]
-
-		"vmla.f32    q12, q9, d0[1]     \n\t"         // DST->M[m0-m3] += M1[m0-m3] * M2[m1]
-		"vmla.f32    q13, q9, d2[1]     \n\t"         // DST->M[m4-m7] += M1[m4-m7] * M2[m5]
-		"vmla.f32    q14, q9, d4[1]     \n\t"         // DST->M[m8-m11] += M1[m8-m11] * M2[m9]
-		"vmla.f32    q15, q9, d6[1]     \n\t"         // DST->M[m12-m15] += M1[m12-m15] * M2[m13]
-
-		"vmla.f32    q12, q10, d1[0]    \n\t"         // DST->M[m0-m3] += M1[m0-m3] * M2[m2]
-		"vmla.f32    q13, q10, d3[0]    \n\t"         // DST->M[m4-m7] += M1[m4-m7] * M2[m6]
-		"vmla.f32    q14, q10, d5[0]    \n\t"         // DST->M[m8-m11] += M1[m8-m11] * M2[m10]
-		"vmla.f32    q15, q10, d7[0]    \n\t"         // DST->M[m12-m15] += M1[m12-m15] * M2[m14]
-
-		"vmla.f32    q12, q11, d1[1]    \n\t"         // DST->M[m0-m3] += M1[m0-m3] * M2[m3]
-		"vmla.f32    q13, q11, d3[1]    \n\t"         // DST->M[m4-m7] += M1[m4-m7] * M2[m7]
-		"vmla.f32    q14, q11, d5[1]    \n\t"         // DST->M[m8-m11] += M1[m8-m11] * M2[m11]
-		"vmla.f32    q15, q11, d7[1]    \n\t"         // DST->M[m12-m15] += M1[m12-m15] * M2[m15]
-
-		"vst1.32    {d24 - d27}, [%0]!    \n\t"       // DST->M[m0-m7]
-		"vst1.32    {d28 - d31}, [%0]     \n\t"       // DST->M[m8-m15]
-        
-        : // output
-        : "r"(dst->m), "r"(m1.m), "r"(m2.m) // input - note *value* of pointer doesn't change.
-        : "memory", "q0", "q1", "q2", "q3", "q8", "q9", "q10", "q11", "q12", "q13", "q14", "q15"
-	);
-
-#else
-
-    // Support the case where m1 or m2 is the same array as dst.
-    float product[16];
-
-    product[0]  = m1.m[0] * m2.m[0]  + m1.m[4] * m2.m[1] + m1.m[8]   * m2.m[2]  + m1.m[12] * m2.m[3];
-    product[1]  = m1.m[1] * m2.m[0]  + m1.m[5] * m2.m[1] + m1.m[9]   * m2.m[2]  + m1.m[13] * m2.m[3];
-    product[2]  = m1.m[2] * m2.m[0]  + m1.m[6] * m2.m[1] + m1.m[10]  * m2.m[2]  + m1.m[14] * m2.m[3];
-    product[3]  = m1.m[3] * m2.m[0]  + m1.m[7] * m2.m[1] + m1.m[11]  * m2.m[2]  + m1.m[15] * m2.m[3];
-
-    product[4]  = m1.m[0] * m2.m[4]  + m1.m[4] * m2.m[5] + m1.m[8]   * m2.m[6]  + m1.m[12] * m2.m[7];
-    product[5]  = m1.m[1] * m2.m[4]  + m1.m[5] * m2.m[5] + m1.m[9]   * m2.m[6]  + m1.m[13] * m2.m[7];
-    product[6]  = m1.m[2] * m2.m[4]  + m1.m[6] * m2.m[5] + m1.m[10]  * m2.m[6]  + m1.m[14] * m2.m[7];
-    product[7]  = m1.m[3] * m2.m[4]  + m1.m[7] * m2.m[5] + m1.m[11]  * m2.m[6]  + m1.m[15] * m2.m[7];
-
-    product[8]  = m1.m[0] * m2.m[8]  + m1.m[4] * m2.m[9] + m1.m[8]   * m2.m[10] + m1.m[12] * m2.m[11];
-    product[9]  = m1.m[1] * m2.m[8]  + m1.m[5] * m2.m[9] + m1.m[9]   * m2.m[10] + m1.m[13] * m2.m[11];
-    product[10] = m1.m[2] * m2.m[8]  + m1.m[6] * m2.m[9] + m1.m[10]  * m2.m[10] + m1.m[14] * m2.m[11];
-    product[11] = m1.m[3] * m2.m[8]  + m1.m[7] * m2.m[9] + m1.m[11]  * m2.m[10] + m1.m[15] * m2.m[11];
-
-    product[12] = m1.m[0] * m2.m[12] + m1.m[4] * m2.m[13] + m1.m[8]  * m2.m[14] + m1.m[12] * m2.m[15];
-    product[13] = m1.m[1] * m2.m[12] + m1.m[5] * m2.m[13] + m1.m[9]  * m2.m[14] + m1.m[13] * m2.m[15];
-    product[14] = m1.m[2] * m2.m[12] + m1.m[6] * m2.m[13] + m1.m[10] * m2.m[14] + m1.m[14] * m2.m[15];
-    product[15] = m1.m[3] * m2.m[12] + m1.m[7] * m2.m[13] + m1.m[11] * m2.m[14] + m1.m[15] * m2.m[15];
-
-    memcpy(dst->m, product, MATRIX_SIZE);
-
-#endif*/
 
 	MathUtil::multiplyMatrix(m1.m, m2.m, dst->m);
 }
@@ -857,46 +669,7 @@ void Matrix::negate()
 void Matrix::negate(Matrix* dst) const
 {
     GP_ASSERT(dst);
-/*
-#ifdef USE_NEON
 
-    asm volatile(
-    	"vld1.32 	{q0-q1},  [%1]! 	\n\t" // load m0-m7
-    	"vld1.32 	{q2-q3},  [%1]   	\n\t" // load m8-m15
-
-    	"vneg.f32 	q4, q0 				\n\t" // negate m0-m3
-    	"vneg.f32 	q5, q1 				\n\t" // negate m4-m7
-		"vneg.f32 	q6, q2 				\n\t" // negate m8-m15
-		"vneg.f32 	q7, q3 				\n\t" // negate m8-m15
-
-    	"vst1.32 	{q4-q5},  [%0]!		\n\t" // store m0-m7
-    	"vst1.32 	{q6-q7},  [%0]		\n\t" // store m8-m15
-    	:
-    	: "r"(dst->m), "r"(m)
-    	: "q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "memory"
-    );
-
-#else
-
-    dst->m[0]  = -m[0];
-    dst->m[1]  = -m[1];
-    dst->m[2]  = -m[2];
-    dst->m[3]  = -m[3];
-    dst->m[4]  = -m[4];
-    dst->m[5]  = -m[5];
-    dst->m[6]  = -m[6];
-    dst->m[7]  = -m[7];
-    dst->m[8]  = -m[8];
-    dst->m[9]  = -m[9];
-    dst->m[10] = -m[10];
-    dst->m[11] = -m[11];
-    dst->m[12] = -m[12];
-    dst->m[13] = -m[13];
-    dst->m[14] = -m[14];
-    dst->m[15] = -m[15];
-
-#endif
-*/
     MathUtil::negateMatrix(m, dst->m);
 }
 
@@ -1041,49 +814,7 @@ void Matrix::subtract(const Matrix& m)
 void Matrix::subtract(const Matrix& m1, const Matrix& m2, Matrix* dst)
 {
     GP_ASSERT(dst);
-/*
-#ifdef USE_NEON
 
-    asm volatile(
-    	"vld1.32 	{q0, q1}, 	[%1]! 	\n\t" // M1[m0-m7]
-		"vld1.32 	{q2, q3}, 	[%1] 	\n\t" // M1[m8-m15]
-    	"vld1.32 	{q8, q9}, 	[%2]! 	\n\t" // M2[m0-m7]
-		"vld1.32 	{q10, q11}, [%2] 	\n\t" // M2[m8-m15]
-
-		"vsub.f32   q12, q0, q8 		\n\t" // DST->M[m0-m3] = M1[m0-m3] - M2[m0-m3]
-    	"vsub.f32   q13, q1, q9			\n\t" // DST->M[m4-m7] = M1[m4-m7] - M2[m4-m7]
-    	"vsub.f32   q14, q2, q10		\n\t" // DST->M[m8-m11] = M1[m8-m11] - M2[m8-m11]
-    	"vsub.f32   q15, q3, q11		\n\t" // DST->M[m12-m15] = M1[m12-m15] - M2[m12-m15]
-
-    	"vst1.32    {q12, q13}, [%0]!   \n\t" // DST->M[m0-m7]
-		"vst1.32    {q14, q15}, [%0]    \n\t" // DST->M[m8-m15]
-		:
-        : "r"(dst->m), "r"(m1.m), "r"(m2.m)
-        : "q0", "q1", "q2", "q3", "q8", "q9", "q10", "q11", "q12", "q13", "q14", "q15", "memory"
-    );
-
-
-#else
-
-    dst->m[0]  = m1.m[0]  - m2.m[0];
-    dst->m[1]  = m1.m[1]  - m2.m[1];
-    dst->m[2]  = m1.m[2]  - m2.m[2];
-    dst->m[3]  = m1.m[3]  - m2.m[3];
-    dst->m[4]  = m1.m[4]  - m2.m[4];
-    dst->m[5]  = m1.m[5]  - m2.m[5];
-    dst->m[6]  = m1.m[6]  - m2.m[6];
-    dst->m[7]  = m1.m[7]  - m2.m[7];
-    dst->m[8]  = m1.m[8]  - m2.m[8];
-    dst->m[9]  = m1.m[9]  - m2.m[9];
-    dst->m[10] = m1.m[10] - m2.m[10];
-    dst->m[11] = m1.m[11] - m2.m[11];
-    dst->m[12] = m1.m[12] - m2.m[12];
-    dst->m[13] = m1.m[13] - m2.m[13];
-    dst->m[14] = m1.m[14] - m2.m[14];
-    dst->m[15] = m1.m[15] - m2.m[15];
-
-#endif
-*/
     MathUtil::subtractMatrix(m1.m, m2.m, dst->m);
 }
 
@@ -1112,37 +843,7 @@ void Matrix::transformVector(const Vector3& vector, Vector3* dst) const
 void Matrix::transformVector(float x, float y, float z, float w, Vector3* dst) const
 {
     GP_ASSERT(dst);
-/*
-#ifdef USE_NEON
 
-    asm volatile(
-    	"vld1.32	{d0[0]},		[%0]	\n\t"	// V[x]
-		"vld1.32	{d0[1]},    	[%1]	\n\t"	// V[y]
-		"vld1.32	{d1[0]},		[%2]	\n\t"	// V[z]
-		"vld1.32	{d1[1]},		[%3]	\n\t"	// V[w]
-		"vld1.32	{d18 - d21},	[%4]!	\n\t"	// M[m0-m7]
-		"vld1.32	{d22 - d25},	[%4]	\n\t"	// M[m8-m15]
-
-    	"vmul.f32 q13,  q9, d0[0]			\n\t"	// DST->V = M[m0-m3] * V[x]
-    	"vmla.f32 q13, q10, d0[1]      		\n\t"	// DST->V += M[m4-m7] * V[y]
-    	"vmla.f32 q13, q11, d1[0]      		\n\t"	// DST->V += M[m8-m11] * V[z]
-		"vmla.f32 q13, q12, d1[1]      		\n\t"	// DST->V += M[m12-m15] * V[w]
-
-    	"vst1.32 {d26}, [%5]!        		\n\t"	// DST->V[x, y]
-		"vst1.32 {d27[0]}, [%5]        		\n\t"	// DST->V[z]
-		:
-    	: "r"(&x), "r"(&y), "r"(&z), "r"(&w), "r"(m), "r"(dst)
-        : "q0", "q9", "q10","q11", "q12", "q13", "memory"
-    );
-
-#else
-
-    dst->set(
-        x * m[0] + y * m[4] + z * m[8] + w * m[12],
-        x * m[1] + y * m[5] + z * m[9] + w * m[13],
-        x * m[2] + y * m[6] + z * m[10] + w * m[14]);
-
-#endif*/
     MathUtil::transformVectorMatrix(m, x, y, z, w, (float*)dst);
 }
 
@@ -1155,37 +856,7 @@ void Matrix::transformVector(Vector4* vector) const
 void Matrix::transformVector(const Vector4& vector, Vector4* dst) const
 {
     GP_ASSERT(dst);
-/*
-#ifdef USE_NEON
 
-    asm volatile
-    (
-    		"vld1.32	{d0, d1}, [%1]		\n\t"   // V[x, y, z, w]
-    		"vld1.32    {d18 - d21}, [%0]!  \n\t"   // M[m0-m7]
-    		"vld1.32    {d22 - d25}, [%0]  \n\t"    // M[m8-m15]
-
-    		"vmul.f32   q13, q9, d0[0]      \n\t"   // DST->V = M[m0-m3] * V[x]
-    		"vmla.f32   q13, q10, d0[1]     \n\t"   // DST->V = M[m4-m7] * V[y]
-    		"vmla.f32   q13, q11, d1[0]     \n\t"   // DST->V = M[m8-m11] * V[z]
-    		"vmla.f32   q13, q12, d1[1]     \n\t"   // DST->V = M[m12-m15] * V[w]
-
-    		"vst1.32    {d26, d27}, [%2]    \n\t"   // DST->V
-
-    		:
-    		: "r"(m), "r"(&vector), "r"(dst)
-    		: "q0", "q9", "q10","q11", "q12", "q13", "memory"
-    );
-
-#else
-
-    dst->set(
-        vector.x * m[0] + vector.y * m[4] + vector.z * m[8] + vector.w * m[12],
-        vector.x * m[1] + vector.y * m[5] + vector.z * m[9] + vector.w * m[13],
-        vector.x * m[2] + vector.y * m[6] + vector.z * m[10] + vector.w * m[14],
-        vector.x * m[3] + vector.y * m[7] + vector.z * m[11] + vector.w * m[15]);
-
-#endif
-*/
     MathUtil::transformVectorMatrix(m, (const float*) &vector, (float*)dst);
 }
 
@@ -1220,32 +891,7 @@ void Matrix::transpose(Matrix* dst) const
 {
     GP_ASSERT(dst);
 
-#ifdef USE_NEON
-    
-    asm volatile(
-    	"vld4.32 {d0[0], d2[0], d4[0], d6[0]}, [%0]! \n\t" // DST->M[m0, m4, m8, m12] = M[m0-m3]
-		"vld4.32 {d0[1], d2[1], d4[1], d6[1]}, [%0]! \n\t" // DST->M[m1, m5, m9, m12] = M[m4-m7]
-		"vld4.32 {d1[0], d3[0], d5[0], d7[0]}, [%0]! \n\t" // DST->M[m2, m6, m10, m12] = M[m8-m11]
-		"vld4.32 {d1[1], d3[1], d5[1], d7[1]}, [%0]  \n\t" // DST->M[m3, m7, m11, m12] = M[m12-m15]
-
-		"vst1.32 {q0-q1}, [%1]! \n\t" // DST->M[m0-m7]
-		"vst1.32 {q2-q3}, [%1] \n\t"  // DST->M[m8-m15]
-    	:
-    	: "r"(this->m), "r"(dst->m)
-    	: "q0", "q1", "q2", "q3", "memory"
-    );
-
-#else
-
-    float t[16] = {
-        m[0], m[4], m[8], m[12],
-        m[1], m[5], m[9], m[13],
-        m[2], m[6], m[10], m[14],
-        m[3], m[7], m[11], m[15]
-    };
-    memcpy(dst->m, t, MATRIX_SIZE);
-
-#endif
+    MathUtil::transpose(m, dst->m);
 }
 
 }

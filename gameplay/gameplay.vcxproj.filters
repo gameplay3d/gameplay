@@ -279,9 +279,6 @@
     <ClCompile Include="src\FlowLayout.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ScrollLayout.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">

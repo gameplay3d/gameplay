@@ -83,9 +83,7 @@ SpriteBatch* SpriteBatch::create(const char* texturePath, Effect* effect, unsign
 
 SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int initialCapacity)
 {
-    GP_ASSERT(texture);
-    GP_ASSERT(texture->getWidth());
-    GP_ASSERT(texture->getHeight());
+    GP_ASSERT(texture != NULL);
 
     bool customEffect = (effect != NULL);
     if (!customEffect)
@@ -96,7 +94,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
             __spriteEffect = Effect::createFromSource(SPRITE_VSH, SPRITE_FSH);
             if (__spriteEffect == NULL)
             {
-                GP_ERROR("Unable to create default sprite effect.");
+                GP_ERROR("Unable to load sprite effect.");
                 return NULL;
             }
 
@@ -122,33 +120,25 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
     }
     if (!samplerUniform)
     {
-        GP_ERROR("Failed to create sprite batch; required uniform of type GL_SAMPLER_2D not found in sprite effect.");
+        GP_ERROR("No uniform of type GL_SAMPLER_2D found in sprite effect.");
         SAFE_RELEASE(effect);
         return NULL;
     }
 
-    // Wrap the effect in a material.
+    // Wrap the effect in a material
     Material* material = Material::create(effect); // +ref effect
-    if (!material)
-    {
-        GP_ERROR("Failed to create material for sprite batch.");
-        SAFE_RELEASE(effect);
-        return NULL;
-    }
 
-    // Set initial material state.
-    GP_ASSERT(material->getStateBlock());
+    // Set initial material state
     material->getStateBlock()->setBlend(true);
     material->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
     material->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 
-    // Bind the texture to the material as a sampler.
+    // Bind the texture to the material as a sampler
     Texture::Sampler* sampler = Texture::Sampler::create(texture); // +ref texture
-    GP_ASSERT(material->getParameter(samplerUniform->getName()));
     material->getParameter(samplerUniform->getName())->setValue(sampler);
     SAFE_RELEASE(sampler);
 
-    // Define the vertex format for the batch.
+    // Define the vertex format for the batch
     VertexFormat::Element vertexElements[] =
     {
         VertexFormat::Element(VertexFormat::POSITION, 3),
@@ -157,11 +147,11 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
     };
     VertexFormat vertexFormat(vertexElements, 3);
 
-    // Create the mesh batch.
+    // Create the mesh batch
     MeshBatch* meshBatch = MeshBatch::create(vertexFormat, Mesh::TRIANGLE_STRIP, material, true, initialCapacity > 0 ? initialCapacity : SPRITE_BATCH_DEFAULT_SIZE);
     material->release(); // don't call SAFE_RELEASE since material is used below
 
-    // Create the batch.
+    // Create the batch
     SpriteBatch* batch = new SpriteBatch();
     batch->_customEffect = customEffect;
     batch->_batch = meshBatch;
@@ -169,7 +159,6 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
     batch->_textureHeightRatio = 1.0f / (float)texture->getHeight();
 
     // Bind an ortho projection to the material by default (user can override with setProjectionMatrix)
-    GP_ASSERT(material->getParameter("u_projectionMatrix"));
     material->getParameter("u_projectionMatrix")->bindValue(batch, &SpriteBatch::getOrthoMatrix);
 
     return batch;
@@ -177,7 +166,6 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
 
 void SpriteBatch::begin()
 {
-    GP_ASSERT(_batch);
     _batch->begin();
 }
 
@@ -218,11 +206,12 @@ void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& 
 void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color,
                        const Vector2& rotationPoint, float rotationAngle, bool positionIsCenter)
 {
-    GP_ASSERT(_batch);
+    draw(dst.x, dst.y, dst.z, width, height, u1, v1, u2, v2, color, rotationPoint, rotationAngle, positionIsCenter);
+}
 
-    float x = dst.x;
-    float y = dst.y;
-
+void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color,
+          const Vector2& rotationPoint, float rotationAngle, bool positionIsCenter)
+{
     // Treat the given position as the center if the user specified it as such.
     if (positionIsCenter)
     {
@@ -249,13 +238,13 @@ void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, 
     upRight.rotate(pivotPoint, rotationAngle);
     downLeft.rotate(pivotPoint, rotationAngle);
     downRight.rotate(pivotPoint, rotationAngle);
-    
+
     // Write sprite vertex data.
     static SpriteVertex v[4];
-    ADD_SPRITE_VERTEX(v[0], upLeft.x, upLeft.y, dst.z, u1, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[1], upRight.x, upRight.y, dst.z, u1, v2, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[2], downLeft.x, downLeft.y, dst.z, u2, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[3], downRight.x, downRight.y, dst.z, u2, v2, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[0], downLeft.x, downLeft.y, z, u1, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[1], upLeft.x, upLeft.y, z, u1, v2, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[2], downRight.x, downRight.y, z, u2, v1, color.x, color.y, color.z, color.w);
+    ADD_SPRITE_VERTEX(v[3], upRight.x, upRight.y, z, u2, v2, color.x, color.y, color.z, color.w);
     
     static unsigned short indices[4] = { 0, 1, 2, 3 };
 
@@ -265,8 +254,6 @@ void SpriteBatch::draw(const Vector3& dst, float width, float height, float u1, 
 void SpriteBatch::draw(const Vector3& position, const Vector3& right, const Vector3& forward, float width, float height,
     float u1, float v1, float u2, float v2, const Vector4& color, const Vector2& rotationPoint, float rotationAngle)
 {
-    GP_ASSERT(_batch);
-
     // Calculate the vertex positions.
     //static Vector3 p[4];
 
@@ -396,14 +383,14 @@ void SpriteBatch::addSprite(float x, float y, float width, float height, float u
 
 void SpriteBatch::draw(SpriteBatch::SpriteVertex* vertices, unsigned int vertexCount, unsigned short* indices, unsigned int indexCount)
 {
-    GP_ASSERT(_batch);
+    GP_ASSERT(vertices);
+    GP_ASSERT(indices);
+
     _batch->add(vertices, vertexCount, indices, indexCount);
 }
 
 void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, bool positionIsCenter)
 {
-    GP_ASSERT(_batch);
-
     // Treat the given position as the center if the user specified it as such.
     if (positionIsCenter)
     {
@@ -427,28 +414,24 @@ void SpriteBatch::draw(float x, float y, float z, float width, float height, flo
 
 void SpriteBatch::end()
 {
-    // Finish and draw the batch.
-    GP_ASSERT(_batch);
+    // Finish and draw the batch
     _batch->end();
     _batch->draw();
 }
 
 RenderState::StateBlock* SpriteBatch::getStateBlock() const
 {
-    GP_ASSERT(_batch && _batch->getMaterial());
     return _batch->getMaterial()->getStateBlock();
 }
 
 Material* SpriteBatch::getMaterial() const
 {
-    GP_ASSERT(_batch);
     return _batch->getMaterial();
 }
 
 void SpriteBatch::setProjectionMatrix(const Matrix& matrix)
 {
     // Bind the specified matrix to a parameter named 'u_projectionMatrix' (assumed to exist).
-    GP_ASSERT(_batch && _batch->getMaterial() && _batch->getMaterial()->getParameter("u_projectionMatrix"));
     _batch->getMaterial()->getParameter("u_projectionMatrix")->setValue(matrix);
 }
 
@@ -462,9 +445,6 @@ const Matrix& SpriteBatch::getOrthoMatrix() const
 
 bool SpriteBatch::clipSprite(const Rectangle& clip, float& x, float& y, float& width, float& height, float& u1, float& v1, float& u2, float& v2)
 {
-    GP_ASSERT(width);
-    GP_ASSERT(height);
-
     // Clip the rectangle given by { x, y, width, height } into clip.
     // We need to scale the uvs accordingly as we do this.
 

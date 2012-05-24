@@ -124,12 +124,9 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
     GP_ASSERT(node);
 
     // Check if the properties is valid and has a valid namespace.
-    if (!properties || 
-        !(strcmp(properties->getNamespace(), "character") == 0 || 
-        strcmp(properties->getNamespace(), "ghostObject") == 0 || 
-        strcmp(properties->getNamespace(), "rigidBody") == 0))
+    if (!properties || !(strcmp(properties->getNamespace(), "collisionObject") == 0))
     {
-        GP_ERROR("Failed to load physics collision shape from properties object: must be non-null object and have namespace equal to 'character', 'ghostObject', or 'rigidBody'.");
+        GP_ERROR("Failed to load physics collision shape from properties object: must be non-null object and have namespace equal to 'collisionObject'.");
         return NULL;
     }
 
@@ -141,33 +138,33 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
     float height = -1.0f;
     bool centerIsAbsolute = false;
     const char* imagePath = NULL;
-    bool typeSpecified = false;
+    bool shapeSpecified = false;
 
     // Load the defined properties.
     properties->rewind();
     const char* name;
     while (name = properties->getNextProperty())
     {
-        if (strcmp(name, "type") == 0)
+        if (strcmp(name, "shape") == 0)
         {
-            std::string typeStr = properties->getString();
-            if (typeStr == "BOX")
+            std::string shapeStr = properties->getString();
+            if (shapeStr == "BOX")
                 type = SHAPE_BOX;
-            else if (typeStr == "SPHERE")
+            else if (shapeStr == "SPHERE")
                 type = SHAPE_SPHERE;
-            else if (typeStr == "MESH")
+            else if (shapeStr == "MESH")
                 type = SHAPE_MESH;
-            else if (typeStr == "HEIGHTFIELD")
+            else if (shapeStr == "HEIGHTFIELD")
                 type = SHAPE_HEIGHTFIELD;
-            else if (typeStr == "CAPSULE")
+            else if (shapeStr == "CAPSULE")
                 type = SHAPE_CAPSULE;
             else
             {
-                GP_ERROR("Could not create physics collision shape; unsupported value for collision shape type: '%s'.", typeStr.c_str());
+                GP_ERROR("Could not create physics collision shape; unsupported value for collision shape type: '%s'.", shapeStr.c_str());
                 return NULL;
             }
 
-            typeSpecified = true;
+            shapeSpecified = true;
         }
         else if (strcmp(name, "image") == 0)
         {
@@ -201,9 +198,9 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
         }
     }
 
-    if (!typeSpecified)
+    if (!shapeSpecified)
     {
-        GP_ERROR("Missing 'type' specifier for collision shape definition.");
+        GP_ERROR("Missing 'shape' specifier for collision shape definition.");
         return NULL;
     }
 

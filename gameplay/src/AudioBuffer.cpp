@@ -221,68 +221,86 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
         }
     }
 
-    // Read in the type of the next section of the file.
-    if (fread(stream, 1, 4, file) != 4)
+    // Read in the rest of the file a chunk (section) at a time.
+    while (true)
     {
-        GP_ERROR("Failed to read next section type (fact or data) from wave file.");
-        return false;
-    }
-
-    // Read the fact section if it is there.
-    if (memcmp(stream, "fact", 4) == 0)
-    {
-        if (fread(stream, 1, 4, file) != 4)
+        // Check if we are at the end of the file without reading the data.
+        if (feof(file))
         {
-            GP_ERROR("Failed to read fact section size from wave file.");
-            return false;
-        }
-
-        section_size  = stream[3]<<24;
-        section_size |= stream[2]<<16;
-        section_size |= stream[1]<<8;
-        section_size |= stream[0];
-
-        // Read in the fact section.
-        if (fread(stream, 1, section_size, file) != section_size)
-        {
-            GP_ERROR("Failed to read fact section from wave file.");
+            GP_ERROR("Failed to load wave file; file appears to have no data.");
             return false;
         }
 
         // Read in the type of the next section of the file.
         if (fread(stream, 1, 4, file) != 4)
         {
-            GP_ERROR("Failed to read next section type (should be data) from wave file.");
+            GP_ERROR("Failed to read next section type from wave file.");
             return false;
         }
-    }
 
-    // Should now be the data section which holds the decoded sample data.
-    if (memcmp(stream, "data", 4) != 0)
-    {
-        GP_ERROR("Failed to load wave file; file appears to have no data.");
-        return false;
-    }
+        // Data chunk.
+        if (memcmp(stream, "data", 4) == 0)
+        {
+            // Read how much data is remaining and buffer it up.
+            unsigned int dataSize;
+            if (fread(&dataSize, sizeof(int), 1, file) != 1)
+            {
+                GP_ERROR("Failed to read size of data section from wave file.");
+                return false;
+            }
 
-    // Read how much data is remaining and buffer it up.
-    unsigned int dataSize;
-    if (fread(&dataSize, sizeof(int), 1, file) != 1)
-    {
-        GP_ERROR("Failed to read size of data section from wave file.");
-        return false;
-    }
+            char* data = new char[dataSize];
+            if (fread(data, sizeof(char), dataSize, file) != dataSize)
+            {
+                GP_ERROR("Failed to load wave file; file is missing data.");
+                SAFE_DELETE_ARRAY(data);
+                return false;
+            }
 
-    char* data = new char[dataSize];
-    if (fread(data, sizeof(char), dataSize, file) != dataSize)
-    {
-        GP_ERROR("Failed to load wave file; file is missing data.");
-        SAFE_DELETE_ARRAY(data);
-        return false;
-    }
+            AL_CHECK( alBufferData(buffer, format, data, dataSize, frequency) );
+            SAFE_DELETE_ARRAY(data);
 
-    AL_CHECK( alBufferData(buffer, format, data, dataSize, frequency) );
-    SAFE_DELETE_ARRAY(data);
-    return true;
+            // We've read the data, so return now.
+            return true;
+        }
+        // Other chunk - could be any of the following:
+        // - Fact ("fact")
+        // - Wave List ("wavl")
+        // - Silent ("slnt")
+        // - Cue ("cue ")
+        // - Playlist ("plst")
+        // - Associated Data List ("list")
+        // - Label ("labl")
+        // - Note ("note")
+        // - Labeled Text ("ltxt")
+        // - Sampler ("smpl")
+        // - Instrument ("inst")
+        else
+        {
+            // Store the name of the chunk so we can report errors informatively.
+            char chunk[5] = { 0 };
+            memcpy(chunk, stream, 4);
+
+            // Read the chunk size.
+            if (fread(stream, 1, 4, file) != 4)
+            {
+                GP_ERROR("Failed to read size of '%s' chunk from wave file.", chunk);
+                return false;
+            }
+
+            section_size  = stream[3]<<24;
+            section_size |= stream[2]<<16;
+            section_size |= stream[1]<<8;
+            section_size |= stream[0];
+
+            // Seek past the chunk.
+            if (fseek(file, section_size, SEEK_CUR) != 0)
+            {
+                GP_ERROR("Failed to seek past '%s' chunk in wave file.", chunk);
+                return false;
+            }
+        }
+    }
 }
     
 bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
