@@ -41,7 +41,7 @@ protected:
      *
      * @param container The container to update.
      */
-    void update(const Container* container);
+    void update(const Container* container, const Vector2& offset);
 
 private:
     

@@ -141,9 +141,9 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     return Control::touchEvent(evt, x, y, contactIndex);
 }
 
-void Slider::update(const Rectangle& clip, const Vector2& offset)
+void Slider::update(const Control* container, const Vector2& offset)
 {
-    Label::update(clip, offset);
+    Label::update(container, offset);
 
     _minImage = getImage("minCap", _state);
     _maxImage = getImage("maxCap", _state);

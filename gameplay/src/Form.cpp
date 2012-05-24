@@ -417,10 +417,10 @@ void Form::update()
         }
 
         GP_ASSERT(_layout);
-        _layout->update(this);
-
         if (_scroll != SCROLL_NONE)
-            this->updateScroll(this);
+            updateScroll();
+        else
+            _layout->update(this, Vector2::zero());
     }
 }
 
