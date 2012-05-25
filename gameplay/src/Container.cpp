@@ -325,7 +325,7 @@ void Container::update(const Control* container, const Vector2& offset)
 
 void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight)
 {
-    if (_skin && needsClear)
+    if (needsClear)
     {
         GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
         GL_ASSERT( glClearColor(0, 0, 0, 0) );
@@ -336,6 +336,10 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
         GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
 
         needsClear = false;
+    }
+    else
+    {
+        needsClear = true;
     }
 
     spriteBatch->begin();
