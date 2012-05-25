@@ -323,7 +323,7 @@ void Container::update(const Control* container, const Vector2& offset)
         _layout->update(this, Vector2::zero());
 }
 
-void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight)
+void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
 {
     if (needsClear)
     {
@@ -336,8 +336,9 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
         GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
 
         needsClear = false;
+        cleared = true;
     }
-    else
+    else if (!cleared)
     {
         needsClear = true;
     }
@@ -354,7 +355,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
         GP_ASSERT(control);
         if (!needsClear || control->isDirty() || control->_clearBounds.intersects(boundsUnion))
         {
-            control->draw(spriteBatch, _viewportClipBounds, needsClear, targetHeight);
+            control->draw(spriteBatch, _viewportClipBounds, needsClear, cleared, targetHeight);
             Rectangle::combine(control->_clearBounds, boundsUnion, &boundsUnion);
         }
     }
@@ -526,9 +527,8 @@ bool Container::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
         break;
     }
 
-    if (!eventConsumed)
+    if (!eventConsumed && _scroll != SCROLL_NONE)
     {
-        // Pass the event on to the layout.
         if (touchEventScroll(evt, x - xPos, y - yPos, contactIndex))
         {
             _dirty = true;

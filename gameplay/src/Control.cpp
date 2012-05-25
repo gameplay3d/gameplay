@@ -902,7 +902,7 @@ void Control::drawText(const Rectangle& position)
 {
 }
 
-void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight)
+void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
 {
     if (needsClear)
     {
