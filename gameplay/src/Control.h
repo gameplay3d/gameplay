@@ -659,6 +659,10 @@ public:
      */
     Theme::Style* getStyle() const;
 
+    int getZIndex() const;
+
+    void setZIndex(int zOrder);
+
     /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
@@ -756,6 +760,8 @@ protected:
      * @param offset Layout-computed positioning offset to add to the control's position.
      */
     virtual void drawText(const Rectangle& clip);
+
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
 
     /**
      * Initialize properties common to STATE_ALL Controls.
@@ -887,6 +893,8 @@ protected:
      */
     float _opacity;
 
+    int _zIndex;
+
 private:
 
     /*
@@ -919,8 +927,6 @@ private:
      * @param clip The clipping rectangle of this control's parent container.
      */
     virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
     
     bool _styleOverridden;
     Theme::Skin* _skin;

@@ -146,6 +146,9 @@ public:
     void draw(const Vector3& dst, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color,
               const Vector2& rotationPoint, float rotationAngle, bool positionIsCenter = false);
     
+    void draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color,
+              const Vector2& rotationPoint, float rotationAngle, bool positionIsCenter = false);
+
     /**
      * Draws a single sprite, rotated about the implied up vector.
      * 

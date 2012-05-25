@@ -25,12 +25,12 @@ void Layout::align(Control* control, const Container* container)
 
         if (control->_autoWidth)
         {
-            controlBounds.width = clipWidth;
+            controlBounds.width = clipWidth - controlMargin.left - controlMargin.right;
         }
 
         if (control->_autoHeight)
         {
-            controlBounds.height = clipHeight;
+            controlBounds.height = clipHeight - controlMargin.top - controlMargin.bottom;
         }
 
         // Vertical alignment

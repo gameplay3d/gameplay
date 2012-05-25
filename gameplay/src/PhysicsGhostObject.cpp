@@ -47,9 +47,22 @@ PhysicsGhostObject::~PhysicsGhostObject()
 PhysicsGhostObject* PhysicsGhostObject::create(Node* node, Properties* properties)
 {
     // Check if the properties is valid and has a valid namespace.
-    if (!properties || !(strcmp(properties->getNamespace(), "ghostObject") == 0))
+    if (!properties || !(strcmp(properties->getNamespace(), "collisionObject") == 0))
     {
-        GP_ERROR("Failed to load ghost object from properties object: must be non-null object and have namespace equal to 'ghost'.");
+        GP_ERROR("Failed to load ghost object from properties object: must be non-null object and have namespace equal to 'collisionObject'.");
+        return NULL;
+    }
+
+    // Check that the type is specified and correct.
+    const char* type = properties->getString("type");
+    if (!type)
+    {
+        GP_ERROR("Failed to load ghost object from properties object; required attribute 'type' is missing.");
+        return NULL;
+    }
+    if (strcmp(type, "GHOST_OBJECT") != 0)
+    {
+        GP_ERROR("Failed to load ghost object from properties object; attribute 'type' must be equal to 'GHOST_OBJECT'.");
         return NULL;
     }
 
