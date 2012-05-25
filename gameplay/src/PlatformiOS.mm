@@ -15,6 +15,13 @@
 #import <OpenGLES/ES2/glext.h>
 #import <mach/mach_time.h>
 
+#define UIInterfaceOrientationEnum(x) ([x isEqualToString:@"UIInterfaceOrientationPortrait"]?UIInterfaceOrientationPortrait:                        \
+                                      ([x isEqualToString:@"UIInterfaceOrientationPortraitUpsideDown"]?UIInterfaceOrientationPortraitUpsideDown:    \
+                                      ([x isEqualToString:@"UIInterfaceOrientationLandscapeLeft"]?UIInterfaceOrientationLandscapeLeft:              \
+                                        UIInterfaceOrientationLandscapeRight)))
+#define DeviceOrientedSize(o)         ((o == UIInterfaceOrientationPortrait || o == UIInterfaceOrientationPortraitUpsideDown)?                      \
+                                            CGSizeMake([[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale], [[UIScreen mainScreen] bounds].size.height * [[UIScreen mainScreen] scale]):  \
+                                            CGSizeMake([[UIScreen mainScreen] bounds].size.height * [[UIScreen mainScreen] scale], [[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale]))
 
 using namespace std;
 using namespace gameplay;
@@ -58,6 +65,7 @@ int getKey(unichar keyCode);
 @property (readonly, nonatomic, getter=isUpdating) BOOL updating;
 @property (readonly, nonatomic, getter=getContext) EAGLContext* context;
 
+- (void)startGame;
 - (void)startUpdating;
 - (void)stopUpdating;
 - (void)update:(id)sender;
@@ -144,12 +152,10 @@ int getKey(unichar keyCode);
         NSString* bundlePath = [[[NSBundle mainBundle] bundlePath] stringByAppendingString:@"/"];
         FileSystem::setResourcePath([bundlePath fileSystemRepresentation]); 
         
-        _game = Game::getInstance();
-        __timeStart = getMachTimeInMilliseconds();
-        _game->run();
     }
     return self;
 }
+
 
 - (void) dealloc
 {
@@ -251,6 +257,13 @@ int getKey(unichar keyCode);
         glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
         [context presentRenderbuffer:GL_RENDERBUFFER];
     }
+}
+
+- (void)startGame 
+{
+    _game = Game::getInstance();
+    __timeStart = getMachTimeInMilliseconds();
+    _game->run();  
 }
 
 - (void)startUpdating
@@ -408,12 +421,36 @@ int getKey(unichar keyCode);
     {
         __view = (View*)self.view;
     }
+    // Start the game after assigning __view so Platform object knows about it on game start
+    [(View*)self.view startGame];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientation, currently support landscape only?
-    return UIInterfaceOrientationIsLandscape(interfaceOrientation);
+    // Fetch the supported orientations array
+    NSArray *supportedOrientations = NULL;
+    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) 
+    {
+        supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations~ipad"];    
+    }
+    else if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) 
+    { 
+        supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations~iphone"];
+    }
+    
+    if(supportedOrientations == NULL) 
+    {
+       supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"]; 
+    }
+
+    // If no supported orientations default to v1.0 handling (landscape only)
+    if(supportedOrientations == nil) {
+        return UIInterfaceOrientationIsLandscape(interfaceOrientation);
+    }
+    for(NSString *s in supportedOrientations) {
+        if(interfaceOrientation == UIInterfaceOrientationEnum(s)) return YES;
+    }    
+    return NO;
 }
 
 - (void)startUpdating 
@@ -435,17 +472,20 @@ int getKey(unichar keyCode);
     ViewController* viewController;
     CMMotionManager *motionManager;
 }
+@property (nonatomic, retain) ViewController *viewController;
 @end
 
 
 @implementation AppDelegate
 
+@synthesize viewController;
+
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
     __appDelegate = self;
     [UIApplication sharedApplication].statusBarHidden = YES;
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 
-    
     motionManager = [[CMMotionManager alloc] init];
     if([motionManager isAccelerometerAvailable] == YES) 
     {
@@ -519,7 +559,7 @@ int getKey(unichar keyCode);
 }
 
 - (void)applicationDidBecomeActive:(UIApplication*)application 
-{
+{    
     [viewController startUpdating];
 }
 
@@ -818,12 +858,14 @@ void Platform::signalShutdown()
     
 unsigned int Platform::getDisplayWidth()
 {
-    return WINDOW_WIDTH;
+    CGSize size = DeviceOrientedSize([__appDelegate.viewController interfaceOrientation]);
+    return size.width;
 }
 
 unsigned int Platform::getDisplayHeight()
 {
-    return WINDOW_HEIGHT;
+    CGSize size = DeviceOrientedSize([__appDelegate.viewController interfaceOrientation]);
+    return size.height;
 }
 
 long Platform::getAbsoluteTime()

@@ -4,7 +4,7 @@ scene
 
     node boycharacter
     {
-        character = res/common/scene.physics#boy
+        collisionObject = res/common/scene.physics#boy
     }
 
     node boymesh
@@ -22,107 +22,109 @@ scene
 
     node camera
     {
-        ghostObject = res/common/scene.physics#camera
+        collisionObject = res/common/scene.physics#camera
     }
 
     node tabletop
     {
         material = res/common/scene.material#tabletop
-        rigidBody = res/common/scene.physics#table
+        collisionObject = res/common/scene.physics#table
     }
 
     node tableleg1
     {
         material = res/common/scene.material#tableleg1
-        rigidBody = res/common/scene.physics#table
+        collisionObject = res/common/scene.physics#table
     }
 
     node tableleg2
     {
         material = res/common/scene.material#tableleg2
-        rigidBody = res/common/scene.physics#table
+        collisionObject = res/common/scene.physics#table
     }
 
     node tableleg3
     {
         material = res/common/scene.material#tableleg3
-        rigidBody = res/common/scene.physics#table
+        collisionObject = res/common/scene.physics#table
     }
 
     node tableleg4
     {
         material = res/common/scene.material#tableleg4
-        rigidBody = res/common/scene.physics#table
+        collisionObject = res/common/scene.physics#table
     }
 
-    node greenchair
+    node greenchair1
     {
-        url = greenchair*
         material = res/common/scene.material#green
-        rigidBody = res/common/scene.physics#chair
+        collisionObject = res/common/scene.physics#chair
         dynamic = true
     }
+    node greenchair2 : greenchair1 {}
+    node greenchair3 : greenchair1 {}
 
-    node bluechair
+    node bluechair1
     {
-        url = bluechair*
         material = res/common/scene.material#lightblue
-        rigidBody = res/common/scene.physics#chair
+        collisionObject = res/common/scene.physics#chair
         dynamic = true
     }
+    node bluechair2 : bluechair1 {}
+    node bluechair3 : bluechair1 {}
 
     node playtable
     {
         material = res/common/scene.material#playtable
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node easel
     {
         material = res/common/scene.material#easel
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node storageorganizer
     {
         material = res/common/scene.material#storageorganizer
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node floor
     {
         material = res/common/scene.material#floor
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node wallwest
     {
         material = res/common/scene.material#wallwest
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node walleast
     {
         material = res/common/scene.material#walleast
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node wallnorth
     {
         material = res/common/scene.material#wallnorth
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node wallsouth
     {
         material = res/common/scene.material#wallsouth
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node walloverhang
     {
         material = res/common/scene.material#walloverhang
-        rigidBody = res/common/scene.physics#staticMesh
+        collisionObject = res/common/scene.physics#staticMesh
     }
 
     node windowledge
@@ -133,19 +135,19 @@ scene
     node door
     {
         material = res/common/scene.material#door
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node doorframe
     {
         material = res/common/scene.material#doorframe
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node bookshelf
     {
         material = res/common/scene.material#bookshelf
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node book
@@ -156,7 +158,7 @@ scene
     node toybox
     {
         material = res/common/scene.material#toybox
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node floortiles
@@ -167,20 +169,20 @@ scene
     node basketball
     {
         material = res/common/scene.material#basketball
-        rigidBody = res/common/scene.physics#basketball
+        collisionObject = res/common/scene.physics#basketball
         dynamic = true
     }
 
     node basketballnet
     {
         material = res/common/scene.material#basketballnet
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     node backboard
     {
         material = res/common/scene.material#backboard
-        rigidBody = res/common/scene.physics#staticBox
+        collisionObject = res/common/scene.physics#staticBox
     }
 
     physics

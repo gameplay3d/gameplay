@@ -314,6 +314,7 @@ private:
     btRigidBody* _body;
     float _mass;
     std::vector<PhysicsConstraint*>* _constraints;
+    bool _inDestructor;
 
 };
 
