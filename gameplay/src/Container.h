@@ -229,7 +229,7 @@ protected:
      */
     void addControls(Theme* theme, Properties* properties);
 
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
 
     /**
      * Update scroll position and velocity.

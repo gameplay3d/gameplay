@@ -770,7 +770,7 @@ protected:
      */
     virtual void drawText(const Rectangle& clip);
 
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
 
     /**
      * Initialize properties common to STATE_ALL Controls.
