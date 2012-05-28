@@ -143,6 +143,7 @@
     <ClInclude Include="src\Layout.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Material.h" />
+    <ClInclude Include="src\MathUtil.h" />
     <ClInclude Include="src\MeshBatch.h" />
     <ClInclude Include="src\Mouse.h" />
     <ClInclude Include="src\Pass.h" />
@@ -230,6 +231,8 @@
     <None Include="src\gameplay-main-ios.mm" />
     <None Include="src\gameplay-main-macosx.mm" />
     <None Include="src\Image.inl" />
+    <None Include="src\MathUtil.inl" />
+    <None Include="src\MathUtilNeon.inl" />
     <None Include="src\Matrix.inl" />
     <None Include="src\MeshBatch.inl" />
     <None Include="src\Plane.inl" />
