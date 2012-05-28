@@ -291,9 +291,9 @@ void TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
     _lastKeypress = key;
 }
 
-void TextBox::update(const Rectangle& clip, const Vector2& offset)
+void TextBox::update(const Control* container, const Vector2& offset)
 {
-    Label::update(clip, offset);
+    Label::update(container, offset);
 
     _fontSize = getFontSize(_state);
     _caretImage = getImage("textCaret", _state);
