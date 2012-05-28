@@ -187,7 +187,6 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
     bool wrap, bool rightToLeft, const Rectangle* clip)
 {
     GP_ASSERT(text);
-    GP_ASSERT(clip);
     GP_ASSERT(_glyphs);
     GP_ASSERT(_batch);
 
@@ -628,7 +627,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         }
 
         bool draw = true;
-        if (yPos < area.y)
+        if (yPos < area.y - size)
         {
             // Skip drawing until line break or wrap.
             draw = false;

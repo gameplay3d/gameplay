@@ -731,8 +731,11 @@ void Control::notifyListeners(Listener::EventType eventType)
     }
 }
 
-void Control::update(const Rectangle& clip, const Vector2& offset)
+void Control::update(const Control* container, const Vector2& offset)
 {
+    const Rectangle& clip = container->getClip();
+    const Rectangle& absoluteViewport = container->_viewportBounds;
+
     _clearBounds.set(_absoluteClipBounds);
 
     // Calculate the clipped bounds.
@@ -774,8 +777,8 @@ void Control::update(const Rectangle& clip, const Vector2& offset)
     _clipBounds.set(x, y, width, height);
 
     // Calculate the absolute bounds.
-    x = _bounds.x + offset.x + clip.x;
-    y = _bounds.y + offset.y + clip.y;
+    x = _bounds.x + offset.x + absoluteViewport.x;
+    y = _bounds.y + offset.y + absoluteViewport.y;
     _absoluteBounds.set(x, y, _bounds.width, _bounds.height);
 
     // Calculate the absolute viewport bounds.
@@ -899,7 +902,7 @@ void Control::drawText(const Rectangle& position)
 {
 }
 
-void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight)
+void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
 {
     if (needsClear)
     {
@@ -961,8 +964,11 @@ Theme::ThemeImage* Control::getImage(const char* id, State state)
 {
     Theme::Style::Overlay* overlay = getOverlay(state);
     GP_ASSERT(overlay);
+    
     Theme::ImageList* imageList = overlay->getImageList();
-    GP_ASSERT(imageList);
+    if (!imageList)
+        return NULL;
+
     return imageList->getImage(id);
 }
 

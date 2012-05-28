@@ -177,9 +177,9 @@ protected:
      * Updates each control within this container,
      * and positions them according to the container's layout.
      *
-     * @param clip The clipping rectangle of this container's parent container.
+     * @param container This container's parent container.
      */
-    virtual void update(const Rectangle& clip, const Vector2& offset);
+    virtual void update(const Control* container, const Vector2& offset);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.
@@ -229,12 +229,12 @@ protected:
      */
     void addControls(Theme* theme, Properties* properties);
 
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, float targetHeight);
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
 
     /**
      * Update scroll position and velocity.
      */
-    void updateScroll(const Container* container);
+    void updateScroll();
 
     bool touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
