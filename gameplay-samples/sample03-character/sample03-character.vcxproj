@@ -83,7 +83,7 @@
       <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
-      <Command>copy /Y "$(ProjectDir)game.win32.config" "$(ProjectDir)game.config"</Command>
+      <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copying game.config...</Message>
@@ -110,7 +110,7 @@
       <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
-      <Command>copy /Y "$(ProjectDir)game.win32.config" "$(ProjectDir)game.config"</Command>
+      <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copying game.config...</Message>
@@ -139,7 +139,7 @@
       <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
-      <Command>copy /Y "$(ProjectDir)game.win32.config" "$(ProjectDir)game.config"</Command>
+      <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copying game.config...</Message>
@@ -153,6 +153,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="game.config" />
+    <None Include="game.dxt.config" />
     <None Include="icon.png" />
     <None Include="res\common\boy.animation" />
     <None Include="res\common\scene.material" />
