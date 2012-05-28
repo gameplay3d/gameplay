@@ -3,6 +3,7 @@
 #include "Platform.h"
 #include "RenderState.h"
 #include "FileSystem.h"
+#include "FrameBuffer.h"
 
 // Extern global variables
 GLenum __gl_error_code = GL_NO_ERROR;
@@ -92,8 +93,8 @@ bool Game::startup()
         return false;
 
     setViewport(Rectangle(0.0f, 0.0f, (float)_width, (float)_height));
-
     RenderState::initialize();
+    FrameBuffer::initialize();
 
     _animationController = new AnimationController();
     _animationController->initialize();
