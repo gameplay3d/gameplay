@@ -19,7 +19,7 @@ private:
 	inline static void subtractMatrix(const float* m1, const float* m2, float* dst);
 	inline static void transformVectorMatrix(const float* m, float x, float y, float z, float w, float* dst);
 	inline static void transformVectorMatrix(const float* m, const float* v, float* dst);
-	inline static void transpose(const float* m, float* dst);
+	inline static void transposeMatrix(const float* m, float* dst);
 
 	/** Vector3 **/
 	inline static void crossVector3(const float* v1, const float* v2, float* dst);
