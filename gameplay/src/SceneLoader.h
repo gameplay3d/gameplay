@@ -105,6 +105,7 @@ private:
     static void splitURL(const std::string& url, std::string* file, std::string* id);
     
     
+    static std::map<std::string, Properties*> _propertiesFromFile;      // Holds the properties object for a given file.
     static std::map<std::string, Properties*> _properties;              // Holds the properties object for a given URL.
     static std::vector<SceneAnimation> _animations;                     // Holds the animations declared in the .scene file.
     static std::vector<SceneNode> _sceneNodes;                          // Holds all the nodes+properties declared in the .scene file.
