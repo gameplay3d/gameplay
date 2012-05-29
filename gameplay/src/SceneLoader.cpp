@@ -848,7 +848,7 @@ void SceneLoader::loadReferencedFiles()
                 properties = Properties::create(fileString.c_str());
                 if (properties == NULL)
                 {
-                    GP_ERROR("Failed to load referenced properties file '%s'.", fileString);
+                    GP_ERROR("Failed to load referenced properties file '%s'.", fileString.c_str());
                     continue;
                 }
 
