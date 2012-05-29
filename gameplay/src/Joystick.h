@@ -108,12 +108,13 @@ protected:
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     /**
-     * Called when a joystick's properties change. Updates this joystick's internal rendering properties.
+     * Called when a control's properties change.  Updates this control's internal rendering
+     * properties, such as its text viewport.
      *
-     * @param clip The clipping rectangle of this joystick's parent container.
-     * @param offset The scroll offset of this joystick's parent container.
+     * @param container This control's parent container.
+     * @param offset Positioning offset to add to the control's position.
      */
-    void update(const Rectangle& clip, const Vector2& offset);
+    void update(const Control* container, const Vector2& offset);
 
     /**
      * Draw the images associated with this control.

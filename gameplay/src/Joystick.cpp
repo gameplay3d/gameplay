@@ -158,9 +158,9 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
     return Control::touchEvent(touchEvent, x, y, contactIndex);
 }
 
-void Joystick::update(const Rectangle& clip, const Vector2& offset)
+void Joystick::update(const Control* container, const Vector2& offset)
 {
-    Control::update(clip, offset);
+    Control::update(container, offset);
 }
 
 void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
