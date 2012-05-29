@@ -63,7 +63,7 @@ void Plane::intersection(const Plane& p1, const Plane& p2, const Plane& p3, Vect
                 p1._normal.z * p3._normal.y) + p3._normal.x * (p1._normal.y * p2._normal.z - p1._normal.z * p2._normal.y);
 
     // If the determinant is zero, then the planes do not all intersect.
-    if (det == 0.0f)
+    if (fabs(det) <= MATH_EPSILON)
         return;
 
     // Create 3 points, one on each plane.
@@ -161,7 +161,7 @@ float Plane::intersects(const Frustum& frustum) const
 float Plane::intersects(const Plane& plane) const
 {
     // Check if the planes intersect.
-    if (!isParallel(plane))
+    if ((_normal.x == plane._normal.x && _normal.y == plane._normal.y && _normal.z == plane._normal.z) || !isParallel(plane))
     {
         return Plane::INTERSECTS_INTERSECTING;
     }

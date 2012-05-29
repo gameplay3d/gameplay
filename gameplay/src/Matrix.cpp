@@ -893,7 +893,7 @@ void Matrix::transpose(Matrix* dst) const
 {
     GP_ASSERT(dst);
 
-    MathUtil::transpose(m, dst->m);
+    MathUtil::transposeMatrix(m, dst->m);
 }
 
 }
