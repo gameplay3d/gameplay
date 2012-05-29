@@ -10,6 +10,7 @@
 #include "RadioButton.h"
 #include "Slider.h"
 #include "TextBox.h"
+#include "Joystick.h"
 #include "Game.h"
 
 namespace gameplay
@@ -134,6 +135,10 @@ void Container::addControls(Theme* theme, Properties* properties)
         else if (controlName == "TEXTBOX")
         {
             control = TextBox::create(controlStyle, controlSpace);
+        }
+        else if (controlName == "JOYSTICK")
+        {
+            control = Joystick::create(controlStyle, controlSpace);
         }
         else
         {

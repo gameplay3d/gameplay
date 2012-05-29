@@ -964,8 +964,11 @@ Theme::ThemeImage* Control::getImage(const char* id, State state)
 {
     Theme::Style::Overlay* overlay = getOverlay(state);
     GP_ASSERT(overlay);
+    
     Theme::ImageList* imageList = overlay->getImageList();
-    GP_ASSERT(imageList);
+    if (!imageList)
+        return NULL;
+
     return imageList->getImage(id);
 }
 

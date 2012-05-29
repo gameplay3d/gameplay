@@ -17,7 +17,6 @@
 		42CCD5AA146EC5F000353661 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A9146EC5F000353661 /* libpng.a */; };
 		42CCD5AF146EC62000353661 /* CharacterGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CCD5AD146EC62000353661 /* CharacterGame.cpp */; };
 		42CCD5B1146EC62A00353661 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD5B0146EC62A00353661 /* icon.png */; };
-		42CCD5B4146EC65F00353661 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD5B3146EC65F00353661 /* res */; };
 		42CD0EFF147D93560000361E /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFA147D93560000361E /* libbullet.a */; };
 		42CD0F00147D93560000361E /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFB147D93560000361E /* libogg.a */; };
 		42CD0F01147D93560000361E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0EFC147D93560000361E /* libvorbis.a */; };
@@ -32,7 +31,6 @@
 		5B43D1D014C35F4C008A5D9D /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A9146EC5F000353661 /* libpng.a */; };
 		5B43D1D114C35F4C008A5D9D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A7146EC5DE00353661 /* libz.dylib */; };
 		5B43D1D814C35F4C008A5D9D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD5B0146EC62A00353661 /* icon.png */; };
-		5B43D1D914C35F4C008A5D9D /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD5B3146EC65F00353661 /* res */; };
 		5B43D1E514C36034008A5D9D /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1E314C35F71008A5D9D /* libgameplay.a */; };
 		5B928C6F1513E9B80095E677 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B43D1E314C35F71008A5D9D /* libgameplay.a */; };
 		5BAF205B152F2BDB003E2AC3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2055152F2BDB003E2AC3 /* CoreMotion.framework */; };
@@ -41,6 +39,16 @@
 		5BAF205E152F2BDB003E2AC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2058152F2BDB003E2AC3 /* OpenGLES.framework */; };
 		5BAF205F152F2BDB003E2AC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2059152F2BDB003E2AC3 /* QuartzCore.framework */; };
 		5BAF2060152F2BDB003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF205A152F2BDB003E2AC3 /* UIKit.framework */; };
+		DD9A1A6315703AE0000C6D39 /* common in Resources */ = {isa = PBXBuildFile; fileRef = DD9A1A6215703AE0000C6D39 /* common */; };
+		DD9A1A6415703AE0000C6D39 /* common in Resources */ = {isa = PBXBuildFile; fileRef = DD9A1A6215703AE0000C6D39 /* common */; };
+		DD9A1A6615703AEE000C6D39 /* dxt in Resources */ = {isa = PBXBuildFile; fileRef = DD9A1A6515703AEE000C6D39 /* dxt */; };
+		DD9A1A6815703B14000C6D39 /* pvrtc in Resources */ = {isa = PBXBuildFile; fileRef = DD9A1A6715703B14000C6D39 /* pvrtc */; };
+		DD9A1A6A15703B6A000C6D39 /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = DD9A1A6915703B6A000C6D39 /* shaders */; };
+		DD9A1A6B15703B6A000C6D39 /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = DD9A1A6915703B6A000C6D39 /* shaders */; };
+		DD9A1A6D15703B7E000C6D39 /* logo_powered_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DD9A1A6C15703B7E000C6D39 /* logo_powered_white.png */; };
+		DD9A1A6E15703B7E000C6D39 /* logo_powered_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DD9A1A6C15703B7E000C6D39 /* logo_powered_white.png */; };
+		DD9A1A7015703C11000C6D39 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = DD9A1A6F15703C11000C6D39 /* game.config */; };
+		DD9A1A7115703C11000C6D39 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = DD9A1A6F15703C11000C6D39 /* game.config */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,7 +66,6 @@
 		42CCD5AD146EC62000353661 /* CharacterGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CharacterGame.cpp; path = src/CharacterGame.cpp; sourceTree = SOURCE_ROOT; };
 		42CCD5AE146EC62000353661 /* CharacterGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CharacterGame.h; path = src/CharacterGame.h; sourceTree = SOURCE_ROOT; };
 		42CCD5B0146EC62A00353661 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		42CCD5B3146EC65F00353661 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		42CD0EFA147D93560000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macosx/libbullet.a"; sourceTree = "<group>"; };
 		42CD0EFB147D93560000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macosx/libogg.a"; sourceTree = "<group>"; };
 		42CD0EFC147D93560000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbis.a"; sourceTree = "<group>"; };
@@ -72,6 +79,14 @@
 		5BAF2058152F2BDB003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF2059152F2BDB003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF205A152F2BDB003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		DD9A1A6215703AE0000C6D39 /* common */ = {isa = PBXFileReference; lastKnownFileType = folder; name = common; path = res/common; sourceTree = "<group>"; };
+		DD9A1A6515703AEE000C6D39 /* dxt */ = {isa = PBXFileReference; lastKnownFileType = folder; name = dxt; path = res/dxt; sourceTree = "<group>"; };
+		DD9A1A6715703B14000C6D39 /* pvrtc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = pvrtc; path = res/pvrtc; sourceTree = "<group>"; };
+		DD9A1A6915703B6A000C6D39 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; name = shaders; path = ../../gameplay/res/shaders; sourceTree = "<group>"; };
+		DD9A1A6C15703B7E000C6D39 /* logo_powered_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo_powered_white.png; path = ../../gameplay/res/logo_powered_white.png; sourceTree = "<group>"; };
+		DD9A1A6F15703C11000C6D39 /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
+		DDBBAE861574040C00D39DE7 /* game.dxt.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.dxt.config; sourceTree = "<group>"; };
+		DDBBAE8B1574067600D39DE7 /* game.pvrtc.config */ = {isa = PBXFileReference; lastKnownFileType = text; path = game.pvrtc.config; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,7 +154,10 @@
 				42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */,
 				42C932E61491A1AC0098216A /* sample03-character-macosx.plist */,
 				42CCD5B0146EC62A00353661 /* icon.png */,
-				42CCD5B3146EC65F00353661 /* res */,
+				DD9A1A6F15703C11000C6D39 /* game.config */,
+				DDBBAE861574040C00D39DE7 /* game.dxt.config */,
+				DDBBAE8B1574067600D39DE7 /* game.pvrtc.config */,
+				DD9A1A6115703ABF000C6D39 /* res */,
 				42CCD576146EC4B300353661 /* src */,
 				427D4F4C147DC98E0076760E /* Libraries */,
 				42CCD56F146EC4B300353661 /* Frameworks */,
@@ -199,6 +217,18 @@
 				42CCD5A1146EC5BF00353661 /* OpenAL.framework */,
 			);
 			name = MacOSX;
+			sourceTree = "<group>";
+		};
+		DD9A1A6115703ABF000C6D39 /* res */ = {
+			isa = PBXGroup;
+			children = (
+				DD9A1A6C15703B7E000C6D39 /* logo_powered_white.png */,
+				DD9A1A6915703B6A000C6D39 /* shaders */,
+				DD9A1A6715703B14000C6D39 /* pvrtc */,
+				DD9A1A6515703AEE000C6D39 /* dxt */,
+				DD9A1A6215703AE0000C6D39 /* common */,
+			);
+			name = res;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -272,7 +302,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				42CCD5B1146EC62A00353661 /* icon.png in Resources */,
-				42CCD5B4146EC65F00353661 /* res in Resources */,
+				DD9A1A6315703AE0000C6D39 /* common in Resources */,
+				DD9A1A6615703AEE000C6D39 /* dxt in Resources */,
+				DD9A1A6A15703B6A000C6D39 /* shaders in Resources */,
+				DD9A1A6D15703B7E000C6D39 /* logo_powered_white.png in Resources */,
+				DD9A1A7015703C11000C6D39 /* game.config in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,7 +315,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B43D1D814C35F4C008A5D9D /* icon.png in Resources */,
-				5B43D1D914C35F4C008A5D9D /* res in Resources */,
+				DD9A1A6415703AE0000C6D39 /* common in Resources */,
+				DD9A1A6815703B14000C6D39 /* pvrtc in Resources */,
+				DD9A1A6B15703B6A000C6D39 /* shaders in Resources */,
+				DD9A1A6E15703B7E000C6D39 /* logo_powered_white.png in Resources */,
+				DD9A1A7115703C11000C6D39 /* game.config in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,7 +337,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ncp -rn ${SRCROOT}/game.dxt.config ${SRCROOT}/game.config\ntouch -cm ${SRCROOT}/res";
 		};
 		5B43D1D614C35F4C008A5D9D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -312,7 +350,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ncp -rn ${SRCROOT}/game.pvrtc.config ${SRCROOT}/game.config\ntouch -cm ${SRCROOT}/res";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

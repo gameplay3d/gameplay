@@ -279,6 +279,9 @@
     <ClCompile Include="src\FlowLayout.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Joystick.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -554,7 +557,7 @@
     <ClInclude Include="src\FlowLayout.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\ScrollLayout.h">
+    <ClInclude Include="src\Joystick.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\MathUtil.h">
@@ -662,6 +665,9 @@
       <Filter>src</Filter>
     </None>
     <None Include="src\MathUtilNeon.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Joystick.inl">
       <Filter>src</Filter>
     </None>
   </ItemGroup>
