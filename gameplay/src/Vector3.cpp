@@ -172,42 +172,7 @@ void Vector3::cross(const Vector3& v)
 void Vector3::cross(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
     GP_ASSERT(dst);
-/*
-#ifdef USE_NEON
 
-    asm volatile(
-		"vld1.32 {d1[1]},  [%1] 		\n\t" //
-		"vld1.32 {d0},     [%2]         \n\t" //
-		"vmov.f32 s2, s1                \n\t" // q0 = (v1y, v1z, v1z, v1x)
-
-		"vld1.32 {d2[1]},  [%3]	    	\n\t" //
-		"vld1.32 {d3},     [%4]         \n\t" //
-		"vmov.f32 s4, s7          		\n\t" // q1 = (v2z, v2x, v2y, v2z)
-
-		"vmul.f32 d4, d0, d2  			\n\t" // x = v1y * v2z, y = v1z * v2x
-		"vmls.f32 d4, d1, d3  			\n\t" // x -= v1z * v2y, y-= v1x - v2z
-
-		"vmul.f32 d5, d3, d1[1]			\n\t" // z = v1x * v2y
-		"vmls.f32 d5, d0, d2[1]         \n\t" // z-= v1y * vx
-
-		"vst1.32 {d4}, 	  [%0]!    		\n\t" // V[x, y]
-		"vst1.32 {d5[0]}, [%0]     		\n\t" // V[z]
-		:
-		: "r"(dst), "r"(&v1), "r"(&(v1.y)), "r"(&v2), "r"(&(v2.y))
-		: "q0", "q1", "q2", "memory"
-	);
-
-#else
-
-    float x = (v1.y * v2.z) - (v1.z * v2.y);
-    float y = (v1.z * v2.x) - (v1.x * v2.z);
-    float z = (v1.x * v2.y) - (v1.y * v2.x);
-    dst->x = x;
-    dst->y = y;
-    dst->z = z;
-
-#endif
-*/
     MathUtil::crossVector3((const float*)&v1, (const float*)&v2, (float*)dst);
 }
 

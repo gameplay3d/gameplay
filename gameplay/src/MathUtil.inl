@@ -146,7 +146,7 @@ inline void MathUtil::transformVectorMatrix(const float* m, const float* v, floa
 	dst[3] = v[0] * m[3] + v[1] * m[7] + v[2] * m[11] + v[3] * m[15];
 }
 
-inline void MathUtil::transpose(const float* m, float* dst)
+inline void MathUtil::transposeMatrix(const float* m, float* dst)
 {
 	float t[16] = {
 		m[0], m[4], m[8], m[12],

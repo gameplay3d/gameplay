@@ -185,7 +185,7 @@ inline void MathUtil::transformVectorMatrix(const float* m, const float* v, floa
 	);
 }
 
-inline void MathUtil::transpose(const float* m, float* dst)
+inline void MathUtil::transposeMatrix(const float* m, float* dst)
 {
 	asm volatile(
 		"vld4.32 {d0[0], d2[0], d4[0], d6[0]}, [%1]! 	\n\t" // DST->M[m0, m4, m8, m12] = M[m0-m3]
@@ -225,4 +225,5 @@ inline void MathUtil::crossVector3(const float* v1, const float* v2, float* dst)
 		: "q0", "q1", "q2", "memory"
 	);
 }
+
 }
