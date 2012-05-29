@@ -6,6 +6,11 @@
 namespace gameplay
 {
 
+// Utility functions (shared with Properties).
+extern void calculateNamespacePath(const std::string& urlString, std::string& fileString, std::vector<std::string>& namespacePath);
+extern Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string>& namespacePath);
+    
+std::map<std::string, Properties*> SceneLoader::_propertiesFromFile;
 std::map<std::string, Properties*> SceneLoader::_properties;
 std::vector<SceneLoader::SceneAnimation> SceneLoader::_animations;
 std::vector<SceneLoader::SceneNode> SceneLoader::_sceneNodes;
@@ -89,11 +94,11 @@ Scene* SceneLoader::load(const char* url)
         loadPhysics(physics, scene);
 
     // Clean up all loaded properties objects.
-    std::map<std::string, Properties*>::iterator iter = _properties.begin();
-    for (; iter != _properties.end(); iter++)
+    _properties.clear();
+    std::map<std::string, Properties*>::iterator iter = _propertiesFromFile.begin();
+    for (; iter != _propertiesFromFile.end(); iter++)
     {
-        if (iter->first.find(_path) == iter->first.npos)
-            SAFE_DELETE(iter->second);
+        SAFE_DELETE(iter->second);
     }
 
     // Clean up the .scene file's properties object.
@@ -827,10 +832,36 @@ void SceneLoader::loadReferencedFiles()
     {
         if (iter->second == NULL)
         {
-            Properties* p = Properties::create(iter->first.c_str());
-            if (p == NULL)
-                GP_ERROR("Failed to load referenced file '%s'.", iter->first.c_str());
+            std::string fileString;
+            std::vector<std::string> namespacePath;
+            calculateNamespacePath(iter->first, fileString, namespacePath);
 
+            // Check if the referenced properties file has already been loaded.
+            Properties* properties = NULL;
+            std::map<std::string, Properties*>::iterator pffIter = _propertiesFromFile.find(fileString);
+            if (pffIter != _propertiesFromFile.end())
+            {
+                properties = pffIter->second;
+            }
+            else
+            {
+                properties = Properties::create(fileString.c_str());
+                if (properties == NULL)
+                {
+                    GP_ERROR("Failed to load referenced properties file '%s'.", fileString);
+                    continue;
+                }
+
+                // Add the properties object to the cache.
+                _propertiesFromFile.insert(std::make_pair(fileString, properties));
+            }
+
+            Properties* p = getPropertiesFromNamespacePath(properties, namespacePath);
+            if (!p)
+            {
+                GP_ERROR("Failed to load referenced properties from url '%s'.", iter->first.c_str());
+                continue;
+            }
             iter->second = p;
         }
     }

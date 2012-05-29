@@ -637,6 +637,7 @@ Texture* Texture::createCompressedDDS(const char* path)
             {
                 GP_ERROR("Failed to close file '%s'.", path);
             }
+            SAFE_DELETE_ARRAY(mipLevels);
             return NULL;
         }
 
@@ -676,6 +677,7 @@ Texture* Texture::createCompressedDDS(const char* path)
         {
             GP_ERROR("Failed to close file '%s'.", path);
         }
+        SAFE_DELETE_ARRAY(mipLevels);
         return NULL;
     }
     else if (header.ddspf.dwFlags == 0x41/*DDPF_RGB|DDPF_ALPHAPIXELS*/)
@@ -687,6 +689,7 @@ Texture* Texture::createCompressedDDS(const char* path)
         {
             GP_ERROR("Failed to close file '%s'.", path);
         }
+        SAFE_DELETE_ARRAY(mipLevels);
         return NULL;
     }
     else
@@ -697,6 +700,7 @@ Texture* Texture::createCompressedDDS(const char* path)
         {
             GP_ERROR("Failed to close file '%s'.", path);
         }
+        SAFE_DELETE_ARRAY(mipLevels);
         return NULL;
     }
     
@@ -731,8 +735,15 @@ Texture* Texture::createCompressedDDS(const char* path)
         {
             GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, i, internalFormat, mipLevels[i].width, mipLevels[i].height, 0, format, GL_UNSIGNED_INT, mipLevels[i].data) );
         }
+        
+        // Clean up the texture data.
+        SAFE_DELETE_ARRAY(mipLevels[i].data);
     }
     
+
+    // Clean up mip levels structure.
+    SAFE_DELETE_ARRAY(mipLevels);
+
     return texture;
 }
 
