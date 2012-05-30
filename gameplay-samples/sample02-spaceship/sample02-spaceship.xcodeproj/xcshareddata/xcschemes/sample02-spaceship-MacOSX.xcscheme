@@ -14,7 +14,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "42CCD515146EBF3600353661"
-               BuildableName = "sample02-spaceship.app"
+               BuildableName = "sample02-spaceship-macosx.app"
                BlueprintName = "sample02-spaceship-macosx"
                ReferencedContainer = "container:sample02-spaceship.xcodeproj">
             </BuildableReference>
@@ -32,7 +32,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD515146EBF3600353661"
-            BuildableName = "sample02-spaceship.app"
+            BuildableName = "sample02-spaceship-macosx.app"
             BlueprintName = "sample02-spaceship-macosx"
             ReferencedContainer = "container:sample02-spaceship.xcodeproj">
          </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD515146EBF3600353661"
-            BuildableName = "sample02-spaceship.app"
+            BuildableName = "sample02-spaceship-macosx.app"
             BlueprintName = "sample02-spaceship-macosx"
             ReferencedContainer = "container:sample02-spaceship.xcodeproj">
          </BuildableReference>
