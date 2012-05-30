@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4217006314697FF100A45C02 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4217006214697FF100A45C02 /* Cocoa.framework */; };
 		4220A6E5146B121000CAEB3A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4220A6E4146B121000CAEB3A /* QuartzCore.framework */; };
+		42685616157575030013522F /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5EA14BFE25C00EB0071 /* libgameplay.a */; };
 		42A3C5DE146C96640091C1E4 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42A3C5DD146C96640091C1E4 /* res */; };
 		42A3C5E4146CB7420091C1E4 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A3C5E3146CB7420091C1E4 /* libpng.a */; };
 		42A3C5E6146CB7690091C1E4 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A3C5E5146CB7690091C1E4 /* libz.dylib */; };
@@ -31,7 +32,6 @@
 		5B04C5DA14BFE1A200EB0071 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A3C5E5146CB7690091C1E4 /* libz.dylib */; };
 		5B04C5E114BFE1A200EB0071 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42A3C5DD146C96640091C1E4 /* res */; };
 		5B04C5E214BFE1A200EB0071 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD4B3146D914B00353661 /* icon.png */; };
-		5B5EC7A7156F0C7300546BCB /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5EC7A5156F09D600546BCB /* libgameplay.a */; };
 		5B928C6C1513E9960095E677 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5EA14BFE25C00EB0071 /* libgameplay.a */; };
 		5BAF2034152F2B47003E2AC3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF202E152F2B47003E2AC3 /* CoreMotion.framework */; };
 		5BAF2035152F2B47003E2AC3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF202F152F2B47003E2AC3 /* Foundation.framework */; };
@@ -62,7 +62,6 @@
 		42F68AA61469CDE100E0E3C4 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B04C5E614BFE1A200EB0071 /* sample00-mesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample00-mesh.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B04C5EA14BFE25C00EB0071 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
-		5B5EC7A5156F09D600546BCB /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../Library/Developer/Xcode/DerivedData/gameplay-aypgkisouzzurngguyyosdtohzrc/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 		5BAF202E152F2B47003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF202F152F2B47003E2AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF2030152F2B47003E2AC3 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
@@ -95,7 +94,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B5EC7A7156F0C7300546BCB /* libgameplay.a in Frameworks */,
 				5BAF2034152F2B47003E2AC3 /* CoreMotion.framework in Frameworks */,
 				5BAF2035152F2B47003E2AC3 /* Foundation.framework in Frameworks */,
 				5BAF2036152F2B47003E2AC3 /* OpenAL.framework in Frameworks */,
@@ -109,6 +107,7 @@
 				5B04C5D814BFE1A200EB0071 /* libvorbisfile.a in Frameworks */,
 				5B04C5D914BFE1A200EB0071 /* libpng.a in Frameworks */,
 				5B04C5DA14BFE1A200EB0071 /* libz.dylib in Frameworks */,
+				42685616157575030013522F /* libgameplay.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,7 +117,6 @@
 		4217005314697FF100A45C02 = {
 			isa = PBXGroup;
 			children = (
-				5B5EC7A5156F09D600546BCB /* libgameplay.a */,
 				42F68AA31469CC3000E0E3C4 /* sample00-mesh-macosx.plist */,
 				42458CB514C3AB1600EFFB61 /* sample00-mesh-ios.plist */,
 				42CCD4B3146D914B00353661 /* icon.png */,
@@ -295,7 +293,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 		5B04C5DF14BFE1A200EB0071 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -308,7 +306,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -468,6 +466,7 @@
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-aypgkisouzzurngguyyosdtohzrc/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				OTHER_LDFLAGS = "-ObjC++";
 				PRODUCT_NAME = "sample00-mesh";
@@ -504,6 +503,7 @@
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-aypgkisouzzurngguyyosdtohzrc/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				OTHER_LDFLAGS = "-ObjC++";
 				PRODUCT_NAME = "sample00-mesh";
