@@ -10,6 +10,7 @@ namespace gameplay
 
 static unsigned int __maxRenderTargets = 0;
 static std::vector<FrameBuffer*> __frameBuffers;
+static FrameBufferHandle __defaultHandle = 0;
 
 FrameBuffer::FrameBuffer(const char* id) :
     _id(id ? id : ""), _handle(0), _renderTargets(NULL), _depthStencilTarget(NULL)
@@ -39,6 +40,13 @@ FrameBuffer::~FrameBuffer()
     {
         __frameBuffers.erase(it);
     }
+}
+
+void FrameBuffer::initialize()
+{
+    GLint fbo;
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &fbo);
+    __defaultHandle = (FrameBufferHandle)fbo;
 }
 
 FrameBuffer* FrameBuffer::create(const char* id)
@@ -230,7 +238,7 @@ void FrameBuffer::bind()
 
 void FrameBuffer::bindDefault()
 {
-    GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, 0) );
+    GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __defaultHandle) );
 }
 
 }

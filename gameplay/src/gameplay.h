@@ -87,4 +87,5 @@
 #include "Layout.h"
 #include "AbsoluteLayout.h"
 #include "VerticalLayout.h"
+#include "Joystick.h"
 
