@@ -344,6 +344,8 @@ private:
     Container(const Container& copy);
 
     int _zIndexDefault;
+
+    AnimationClip* _scrollBarOpacityClip;
 };
 
 // Sort funtion for use with _controls.sort(), based on Z-Order.
