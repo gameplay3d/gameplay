@@ -140,10 +140,16 @@ inline void MathUtil::transformVectorMatrix(const float* m, float x, float y, fl
 
 inline void MathUtil::transformVectorMatrix(const float* m, const float* v, float* dst)
 {
-	dst[0] = v[0] * m[0] + v[1] * m[4] + v[2] * m[8] + v[3] * m[12];
-	dst[1] = v[0] * m[1] + v[1] * m[5] + v[2] * m[9] + v[3] * m[13];
-	dst[2] = v[0] * m[2] + v[1] * m[6] + v[2] * m[10] + v[3] * m[14];
-	dst[3] = v[0] * m[3] + v[1] * m[7] + v[2] * m[11] + v[3] * m[15];
+    // Handle case where v == dst.
+    float x = v[0] * m[0] + v[1] * m[4] + v[2] * m[8] + v[3] * m[12];
+	float y = v[0] * m[1] + v[1] * m[5] + v[2] * m[9] + v[3] * m[13];
+    float z = v[0] * m[2] + v[1] * m[6] + v[2] * m[10] + v[3] * m[14];
+    float w = v[0] * m[3] + v[1] * m[7] + v[2] * m[11] + v[3] * m[15];
+
+    dst[0] = x;
+    dst[1] = y;
+	dst[2] = z;
+	dst[3] = w;
 }
 
 inline void MathUtil::transposeMatrix(const float* m, float* dst)

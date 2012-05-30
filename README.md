@@ -1,9 +1,9 @@
-## gameplay v1.2.0
+## gameplay v1.3.0
 An open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
 
 ## Supported Mobile Platforms
-- BlackBerry PlayBook 2.0 (using BlackBerry Native SDK 2)
-- Google Android 2.3 (using Google Android NDK r7, SDK API level 9 and up)
+- BlackBerry 10 and PlayBook 2.0 (using BlackBerry Native SDK)
+- Google Android 2.3+ (using Google Android NDK r7, SDK API level 9+)
 - Apple iOS 5.1 (using Apple XCode 4.3.2)
 
 ## Supported Desktop Platforms
@@ -11,12 +11,12 @@ An open-source, cross-platform 3D native C++ game framework making it easy to le
 - Apple MacOS X (using Apple XCode 4.3.2)
 
 ## Roadmap for 'next' branch
-- Shadows
-- Lua Script Bindings
+- Gamepad support
+- Lua script bindings
+- Vehicle physics
 - Terrain
-- AI
-- Editor
-- Performance/Optimizations
+- Lightmaps
+- Shadows
 
 ## Licence
 The project is open sourced under the Apache 2.0 license.
