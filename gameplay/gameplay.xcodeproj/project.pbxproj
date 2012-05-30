@@ -18,6 +18,12 @@
 		422260D81537790F0011E3AB /* Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 422260D51537790F0011E3AB /* Bundle.h */; };
 		422260D91537790F0011E3AB /* Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 422260D51537790F0011E3AB /* Bundle.h */; };
 		4234D99E14686C52003031B3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4234D99D14686C52003031B3 /* Cocoa.framework */; };
+		4239DDEC157545A1005EA3F6 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4239DDE9157545A1005EA3F6 /* Joystick.cpp */; };
+		4239DDED157545A1005EA3F6 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4239DDE9157545A1005EA3F6 /* Joystick.cpp */; };
+		4239DDEE157545A1005EA3F6 /* Joystick.h in Headers */ = {isa = PBXBuildFile; fileRef = 4239DDEA157545A1005EA3F6 /* Joystick.h */; };
+		4239DDEF157545A1005EA3F6 /* Joystick.h in Headers */ = {isa = PBXBuildFile; fileRef = 4239DDEA157545A1005EA3F6 /* Joystick.h */; };
+		4239DDF4157545C1005EA3F6 /* MathUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 4239DDF1157545C1005EA3F6 /* MathUtil.h */; };
+		4239DDF5157545C1005EA3F6 /* MathUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 4239DDF1157545C1005EA3F6 /* MathUtil.h */; };
 		4251B131152D049B002F6199 /* ScreenDisplayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4251B12E152D049B002F6199 /* ScreenDisplayer.h */; };
 		4251B132152D049B002F6199 /* ScreenDisplayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4251B12E152D049B002F6199 /* ScreenDisplayer.h */; };
 		4251B133152D049B002F6199 /* ThemeStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4251B12F152D049B002F6199 /* ThemeStyle.cpp */; };
@@ -399,6 +405,12 @@
 		422260D51537790F0011E3AB /* Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bundle.h; path = src/Bundle.h; sourceTree = SOURCE_ROOT; };
 		4234D99A14686C52003031B3 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4234D99D14686C52003031B3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		4239DDE9157545A1005EA3F6 /* Joystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Joystick.cpp; path = src/Joystick.cpp; sourceTree = SOURCE_ROOT; };
+		4239DDEA157545A1005EA3F6 /* Joystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Joystick.h; path = src/Joystick.h; sourceTree = SOURCE_ROOT; };
+		4239DDEB157545A1005EA3F6 /* Joystick.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Joystick.inl; path = src/Joystick.inl; sourceTree = SOURCE_ROOT; };
+		4239DDF1157545C1005EA3F6 /* MathUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MathUtil.h; path = src/MathUtil.h; sourceTree = SOURCE_ROOT; };
+		4239DDF2157545C1005EA3F6 /* MathUtil.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = MathUtil.inl; path = src/MathUtil.inl; sourceTree = SOURCE_ROOT; };
+		4239DDF3157545C1005EA3F6 /* MathUtilNeon.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = MathUtilNeon.inl; path = src/MathUtilNeon.inl; sourceTree = SOURCE_ROOT; };
 		4251B12E152D049B002F6199 /* ScreenDisplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScreenDisplayer.h; path = src/ScreenDisplayer.h; sourceTree = SOURCE_ROOT; };
 		4251B12F152D049B002F6199 /* ThemeStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ThemeStyle.cpp; path = src/ThemeStyle.cpp; sourceTree = SOURCE_ROOT; };
 		4251B130152D049B002F6199 /* ThemeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThemeStyle.h; path = src/ThemeStyle.h; sourceTree = SOURCE_ROOT; };
@@ -761,6 +773,9 @@
 				4208DEE814A4079F00D3C511 /* Image.inl */,
 				42CD0DE4147D8FF50000361E /* Joint.cpp */,
 				42CD0DE5147D8FF50000361E /* Joint.h */,
+				4239DDE9157545A1005EA3F6 /* Joystick.cpp */,
+				4239DDEA157545A1005EA3F6 /* Joystick.h */,
+				4239DDEB157545A1005EA3F6 /* Joystick.inl */,
 				4208DEEB14A407B900D3C511 /* Keyboard.h */,
 				5BD52641150F822A004C9099 /* Label.cpp */,
 				5BD52642150F822A004C9099 /* Label.h */,
@@ -772,6 +787,9 @@
 				42CD0DE9147D8FF50000361E /* Material.h */,
 				42CD0DEA147D8FF50000361E /* MaterialParameter.cpp */,
 				42CD0DEB147D8FF50000361E /* MaterialParameter.h */,
+				4239DDF1157545C1005EA3F6 /* MathUtil.h */,
+				4239DDF2157545C1005EA3F6 /* MathUtil.inl */,
+				4239DDF3157545C1005EA3F6 /* MathUtilNeon.inl */,
 				42CD0DEC147D8FF50000361E /* Matrix.cpp */,
 				42CD0DED147D8FF50000361E /* Matrix.h */,
 				42CD0DEE147D8FF50000361E /* Matrix.inl */,
@@ -1064,6 +1082,8 @@
 				4251B135152D049B002F6199 /* ThemeStyle.h in Headers */,
 				422260D81537790F0011E3AB /* Bundle.h in Headers */,
 				426878AE153F4BB300844500 /* FlowLayout.h in Headers */,
+				4239DDEE157545A1005EA3F6 /* Joystick.h in Headers */,
+				4239DDF4157545C1005EA3F6 /* MathUtil.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1161,6 +1181,8 @@
 				4251B136152D049B002F6199 /* ThemeStyle.h in Headers */,
 				422260D91537790F0011E3AB /* Bundle.h in Headers */,
 				426878AF153F4BB300844500 /* FlowLayout.h in Headers */,
+				4239DDEF157545A1005EA3F6 /* Joystick.h in Headers */,
+				4239DDF5157545C1005EA3F6 /* MathUtil.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1317,6 +1339,7 @@
 				4271C08E15337C8200B89DA7 /* Layout.cpp in Sources */,
 				422260D61537790F0011E3AB /* Bundle.cpp in Sources */,
 				426878AC153F4BB300844500 /* FlowLayout.cpp in Sources */,
+				4239DDEC157545A1005EA3F6 /* Joystick.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1409,6 +1432,7 @@
 				4271C08F15337C8200B89DA7 /* Layout.cpp in Sources */,
 				422260D71537790F0011E3AB /* Bundle.cpp in Sources */,
 				426878AD153F4BB300844500 /* FlowLayout.cpp in Sources */,
+				4239DDED157545A1005EA3F6 /* Joystick.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
