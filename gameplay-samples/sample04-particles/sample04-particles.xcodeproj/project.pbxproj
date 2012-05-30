@@ -43,7 +43,7 @@
 
 /* Begin PBXFileReference section */
 		42438B521491AD2000D218B8 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
-		42C932BC1491A0DB0098216A /* sample04-particles-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample04-particles-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C932BC1491A0DB0098216A /* sample04-particles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "sample04-particles.app"; path = "sample04-particles-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C932C01491A0DB0098216A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42C932ED1491A4CB0098216A /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		42C932EF1491A5160098216A /* ParticlesGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticlesGame.cpp; path = src/ParticlesGame.cpp; sourceTree = SOURCE_ROOT; };
@@ -131,7 +131,7 @@
 		42C932BD1491A0DB0098216A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				42C932BC1491A0DB0098216A /* sample04-particles-macosx.app */,
+				42C932BC1491A0DB0098216A /* sample04-particles.app */,
 				5B61612C14CCC24C0073B857 /* sample04-particles-ios.app */,
 			);
 			name = Products;
@@ -205,7 +205,6 @@
 				42C932B91491A0DB0098216A /* Frameworks */,
 				42C933301491A7B50098216A /* ShellScript */,
 				42C932BA1491A0DB0098216A /* Resources */,
-				5BAF20D7152F30C3003E2AC3 /* Copy Gameplay Resources - Run Script */,
 			);
 			buildRules = (
 			);
@@ -213,7 +212,7 @@
 			);
 			name = "sample04-particles-macosx";
 			productName = "sample04-particles";
-			productReference = 42C932BC1491A0DB0098216A /* sample04-particles-macosx.app */;
+			productReference = 42C932BC1491A0DB0098216A /* sample04-particles.app */;
 			productType = "com.apple.product-type.application";
 		};
 		5B61611414CCC24C0073B857 /* sample04-particles-ios */ = {
@@ -224,7 +223,6 @@
 				5B61611714CCC24C0073B857 /* Frameworks */,
 				5B61612414CCC24C0073B857 /* ShellScript */,
 				5B61612514CCC24C0073B857 /* Resources */,
-				5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Reousrces Run Script */,
 			);
 			buildRules = (
 			);
@@ -232,7 +230,7 @@
 			);
 			name = "sample04-particles-ios";
 			productName = "sample04-particles";
-			productReference = 5B61612C14CCC24C0073B857 /* sample04-particles-ios.app */;
+			productReference = 5B61612C14CCC24C0073B857 /* sample04-particles.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -294,7 +292,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 		5B61612414CCC24C0073B857 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -307,35 +305,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
-		};
-		5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Reousrces Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Gameplay Reousrces Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cp -rn ../..//gameplay/res/shaders ${SRCROOT}/res\ncp -rn ../..//gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
-		};
-		5BAF20D7152F30C3003E2AC3 /* Copy Gameplay Resources - Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Gameplay Resources - Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cp -rn ../..//gameplay/res/shaders ${SRCROOT}/res\ncp -rn ../..//gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 
