@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "Vector3.h"
+#include "MathUtil.h"
 
 namespace gameplay
 {
@@ -165,24 +166,14 @@ void Vector3::clamp(const Vector3& v, const Vector3& min, const Vector3& max, Ve
 
 void Vector3::cross(const Vector3& v)
 {
-    float tx = (y * v.z) - (z * v.y);
-    float ty = (z * v.x) - (x * v.z);
-    float tz = (x * v.y) - (y * v.x);
-    x = tx;
-    y = ty;
-    z = tz;
+    cross(*this, v, this);
 }
 
 void Vector3::cross(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
     GP_ASSERT(dst);
 
-    float x = (v1.y * v2.z) - (v1.z * v2.y);
-    float y = (v1.z * v2.x) - (v1.x * v2.z);
-    float z = (v1.x * v2.y) - (v1.y * v2.x);
-    dst->x = x;
-    dst->y = y;
-    dst->z = z;
+    MathUtil::crossVector3((const float*)&v1, (const float*)&v2, (float*)dst);
 }
 
 float Vector3::distance(const Vector3& v) const

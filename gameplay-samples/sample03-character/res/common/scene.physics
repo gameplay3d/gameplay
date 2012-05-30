@@ -1,0 +1,74 @@
+collisionObject basketball
+{
+    type = RIGID_BODY
+    shape = SPHERE
+    mass = 1.0
+    friction = 0.5
+    restitution = 1.0
+    linearDamping = 0.1
+    angularDamping = 0.5
+}
+
+collisionObject chair
+{
+    type = RIGID_BODY
+    shape = BOX
+    mass = 5.0
+    friction = 1.0
+    restitution = 0.0
+    linearDamping = 0.9
+    angularDamping = 0.5
+}
+
+collisionObject table
+{
+    type = RIGID_BODY
+    shape = BOX
+    mass = 0.0
+    friction = 0.5
+    restitution = 0.75
+    linearDamping = 0.1
+    angularDamping = 0.5
+}
+
+collisionObject staticBox
+{
+    type = RIGID_BODY
+    shape = BOX
+    mass = 0.0
+    friction = 0.5
+    restitution = 0.75
+    linearDamping = 0.025
+    angularDamping = 0.16
+}
+
+collisionObject staticMesh
+{
+    type = RIGID_BODY
+    shape = MESH
+    mass = 0.0
+    friction = 0.5
+    restitution = 0.75
+    linearDamping = 0.025
+    angularDamping = 0.16
+}
+
+collisionObject boy
+{
+    type = CHARACTER
+    shape = CAPSULE  
+    radius = 1.2
+    height = 6.0
+    center = 0, 3.0, 0
+    centerAbsolute = true
+    mass = 20.0
+    maxStepHeight = 0
+    maxSlopeAngle = 0
+}
+
+collisionObject camera
+{
+    type = GHOST_OBJECT
+    shape = SPHERE
+    radius = 0.5
+}

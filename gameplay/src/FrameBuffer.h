@@ -19,6 +19,8 @@ namespace gameplay
  */
 class FrameBuffer : public Ref
 {
+    friend class Game;
+
 public:
 
     /**
@@ -117,6 +119,8 @@ private:
      * Destructor.
      */
     ~FrameBuffer();
+
+    static void initialize();
 
     std::string _id;
     FrameBufferHandle _handle;

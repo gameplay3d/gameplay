@@ -112,9 +112,9 @@ protected:
      * Called when a control's properties change.  Updates this control's internal rendering
      * properties, such as its text viewport.
      *
-     * @param clip The clipping rectangle of this control's parent container.
+     * @param container This control's parent container.
      */
-    void update(const Rectangle& clip, const Vector2& offset);
+    void update(const Control* container, const Vector2& offset);
 
     /**
      * Draw the images associated with this control.

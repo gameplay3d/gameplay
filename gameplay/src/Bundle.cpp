@@ -598,10 +598,14 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext, Node* nodeContext)
     if (sceneContext)
     {
         node = sceneContext->findNode(id, true);
+        if (node)
+            node->addRef();
     }
     else if (nodeContext)
     {
         node = nodeContext->findNode(id, true);
+        if (node)
+            node->addRef();
     }
 
     if (node == NULL)
@@ -704,7 +708,7 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
             if (fseek(_file, sizeof(float) * 16, SEEK_CUR) != 0)
             {
                 GP_ERROR("Failed to skip over node transform for node '%s'.", id);
-                return false;
+                return NULL;
             }
             readString(_file);
 
@@ -724,6 +728,7 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
                 }
             }
 
+            iter->second->addRef();
             return iter->second;
         }
         else
@@ -1108,6 +1113,7 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
                     Joint* joint = static_cast<Joint*>(n);
                     joint->setInverseBindPose(skinData->inverseBindPoseMatrices[j]);
                     skinData->skin->setJoint(joint, j);
+                    SAFE_RELEASE(joint);
                 }
             }
         }
@@ -1120,6 +1126,7 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
             GP_ASSERT(node);
             Node* parent = node->getParent();
             
+            std::vector<Node*> loadedNodes;
             while (true)
             {
                 if (parent)
@@ -1165,13 +1172,19 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
                     }
 
                     if (nodeID != rootJoint->getId())
-                        loadNode(nodeID.c_str(), sceneContext, nodeContext);
+                        loadedNodes.push_back(loadNode(nodeID.c_str(), sceneContext, nodeContext));
 
                     break;
                 }
             }
 
             skinData->skin->setRootJoint(rootJoint);
+
+            // Release all the nodes that we loaded since the nodes are now owned by the mesh skin.
+            for (unsigned int i = 0; i < loadedNodes.size(); i++)
+            {
+                SAFE_RELEASE(loadedNodes[i]);
+            }
         }
 
         // Remove the joint hierarchy from the scene since it is owned by the mesh skin.
