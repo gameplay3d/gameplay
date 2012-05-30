@@ -412,7 +412,10 @@ domVisual_scene* getVisualScene(const domCOLLADA::domSceneRef& domScene)
         for (size_t j = 0; j < visualSceneCount; ++j)
         {
             domVisual_sceneRef visualScene = visualScenes.get(j);
-            return visualScene.cast();
+            if (domVisual_scene* v = visualScene.cast())
+            {
+                return v;
+            }
         }
     }
     return NULL;
