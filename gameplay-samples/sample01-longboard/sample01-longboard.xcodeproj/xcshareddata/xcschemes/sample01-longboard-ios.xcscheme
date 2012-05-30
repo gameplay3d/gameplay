@@ -13,10 +13,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5B61611414CCC24C0073B857"
-               BuildableName = "sample04-particles-ios.app"
-               BlueprintName = "sample04-particles-ios"
-               ReferencedContainer = "container:sample04-particles.xcodeproj">
+               BlueprintIdentifier = "5B04C67C14C0EBF900EB0071"
+               BuildableName = "sample01-longboard.app"
+               BlueprintName = "sample01-longboard-ios"
+               ReferencedContainer = "container:sample01-longboard.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -31,10 +31,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5B61611414CCC24C0073B857"
-            BuildableName = "sample04-particles-ios.app"
-            BlueprintName = "sample04-particles-ios"
-            ReferencedContainer = "container:sample04-particles.xcodeproj">
+            BlueprintIdentifier = "5B04C67C14C0EBF900EB0071"
+            BuildableName = "sample01-longboard.app"
+            BlueprintName = "sample01-longboard-ios"
+            ReferencedContainer = "container:sample01-longboard.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -50,10 +50,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5B61611414CCC24C0073B857"
-            BuildableName = "sample04-particles-ios.app"
-            BlueprintName = "sample04-particles-ios"
-            ReferencedContainer = "container:sample04-particles.xcodeproj">
+            BlueprintIdentifier = "5B04C67C14C0EBF900EB0071"
+            BuildableName = "sample01-longboard.app"
+            BlueprintName = "sample01-longboard-ios"
+            ReferencedContainer = "container:sample01-longboard.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -68,10 +68,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5B61611414CCC24C0073B857"
-            BuildableName = "sample04-particles-ios.app"
-            BlueprintName = "sample04-particles-ios"
-            ReferencedContainer = "container:sample04-particles.xcodeproj">
+            BlueprintIdentifier = "5B04C67C14C0EBF900EB0071"
+            BuildableName = "sample01-longboard.app"
+            BlueprintName = "sample01-longboard-ios"
+            ReferencedContainer = "container:sample01-longboard.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
