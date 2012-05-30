@@ -31,7 +31,7 @@ Container::Container()
     : _layout(NULL), _scrollBarTopCap(NULL), _scrollBarVertical(NULL), _scrollBarBottomCap(NULL),
       _scrollBarLeftCap(NULL), _scrollBarHorizontal(NULL), _scrollBarRightCap(NULL),
       _scroll(SCROLL_NONE), _scrollBarBounds(Rectangle::empty()), _scrollPosition(Vector2::zero()),
-      _scrollBarsAlwaysVisible(false), _scrollBarOpacity(1.0f),
+      _scrollBarsAlwaysVisible(false), _scrollBarOpacity(1.0f), _scrollBarOpacityClip(NULL),
       _scrolling(false), _firstX(0), _firstY(0),
       _lastX(0), _lastY(0),
       _startTimeX(0), _startTimeY(0), _lastTime(0),
@@ -166,6 +166,9 @@ void Container::addControls(Theme* theme, Properties* properties)
         // Get the next control.
         controlSpace = properties->getNextNamespace();
     }
+
+    // Sort controls by Z-Order.
+    std::sort(_controls.begin(), _controls.end(), &sortControlsByZOrder);
 }
 
 Layout* Container::getLayout()
@@ -398,17 +401,17 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
             const Rectangle& topRegion = _scrollBarTopCap->getRegion();
             const Theme::UVs& topUVs = _scrollBarTopCap->getUVs();
             Vector4 topColor = _scrollBarTopCap->getColor();
-            topColor.w *= _scrollBarOpacity;
+            topColor.w *= _scrollBarOpacity * _opacity;
 
             const Rectangle& verticalRegion = _scrollBarVertical->getRegion();
             const Theme::UVs& verticalUVs = _scrollBarVertical->getUVs();
             Vector4 verticalColor = _scrollBarVertical->getColor();
-            verticalColor.w *= _scrollBarOpacity;
+            verticalColor.w *= _scrollBarOpacity * _opacity;
 
             const Rectangle& bottomRegion = _scrollBarBottomCap->getRegion();
             const Theme::UVs& bottomUVs = _scrollBarBottomCap->getUVs();
             Vector4 bottomColor = _scrollBarBottomCap->getColor();
-            bottomColor.w *= _scrollBarOpacity;
+            bottomColor.w *= _scrollBarOpacity * _opacity;
 
             clipRegion.width += verticalRegion.width;
 
@@ -431,17 +434,17 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
             const Rectangle& leftRegion = _scrollBarLeftCap->getRegion();
             const Theme::UVs& leftUVs = _scrollBarLeftCap->getUVs();
             Vector4 leftColor = _scrollBarLeftCap->getColor();
-            leftColor.w *= _scrollBarOpacity;
+            leftColor.w *= _scrollBarOpacity * _opacity;
 
             const Rectangle& horizontalRegion = _scrollBarHorizontal->getRegion();
             const Theme::UVs& horizontalUVs = _scrollBarHorizontal->getUVs();
             Vector4 horizontalColor = _scrollBarHorizontal->getColor();
-            horizontalColor.w *= _scrollBarOpacity;
+            horizontalColor.w *= _scrollBarOpacity * _opacity;
 
             const Rectangle& rightRegion = _scrollBarRightCap->getRegion();
             const Theme::UVs& rightUVs = _scrollBarRightCap->getUVs();
             Vector4 rightColor = _scrollBarRightCap->getColor();
-            rightColor.w *= _scrollBarOpacity;
+            rightColor.w *= _scrollBarOpacity * _opacity;
 
             clipRegion.height += horizontalRegion.height;
         
@@ -729,7 +732,8 @@ void Container::updateScroll()
         float to = 0;
         _scrollBarOpacity = 0.99f;
         Animation* animation = createAnimationFromTo("scrollbar-fade-out", ANIMATE_OPACITY, &_scrollBarOpacity, &to, Curve::QUADRATIC_IN_OUT, 500L);
-        animation->getClip()->play();
+        _scrollBarOpacityClip = animation->getClip();
+        _scrollBarOpacityClip->play();
     }
 
     // Position controls within scroll area.
@@ -746,6 +750,12 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
         _velocity.set(0, 0);
         _scrolling = true;
         _startTimeX = _startTimeY = 0;
+        
+        if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
+        {
+            _scrollBarOpacityClip->stop();
+            _scrollBarOpacityClip = NULL;
+        }
         _scrollBarOpacity = 1.0f;
         return true;
 
