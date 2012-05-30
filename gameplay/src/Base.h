@@ -191,7 +191,9 @@ extern void printError(const char* format, ...);
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
     #define USE_PVRTC
-	#define USE_NEON
+    #ifdef __ARM__
+        #define USE_NEON
+    #endif
 #elif __ANDROID__
 	#include <EGL/egl.h>
     #include <GLES2/gl2.h>
