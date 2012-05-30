@@ -57,6 +57,8 @@ public:
         SCROLL_BOTH = SCROLL_HORIZONTAL | SCROLL_VERTICAL
     };
 
+    static const int ANIMATE_SCROLLBAR_OPACITY = 8;
+
     /**
      * Get this container's layout.
      *
@@ -127,13 +129,32 @@ public:
     const std::vector<Control*>& getControls() const;
 
     /**
-     * Sets the scrolling for the container.
+     * Sets the allowed scroll directions for this container.
      *
-     * @param scroll The scroll for the 
+     * @param scroll The allowed scroll directions for this container.
      */
     void setScroll(Scroll scroll);
 
+    /**
+     * Gets the allowed scroll directions for this container.
+     *
+     * @return The allowed scroll directions for this container.
+     */
     Scroll getScroll() const;
+
+    /**
+     * Set whether scrollbars are always visible, or only visible while scrolling.
+     *
+     * @param alwaysVisible Whether scrollbars are always visible.
+     */
+    void setScrollBarsAlwaysVisible(bool alwaysVisible);
+
+    /**
+     * Get whether scrollbars are always visible, or only visible while scrolling.
+     *
+     * @return Whether scrollbars are always visible.
+     */
+    bool getScrollBarsAlwaysVisible() const;
 
     /**
      * Gets the first animation in the control with the specified ID.
@@ -142,6 +163,21 @@ public:
      * @return The first animation with the specified ID.
      */
     Animation* getAnimation(const char* id = NULL) const;
+
+    /**
+     * @see AnimationTarget#getAnimationPropertyComponentCount
+     */
+    unsigned int getAnimationPropertyComponentCount(int propertyId) const;
+
+    /**
+     * @see AnimationTarget#getAnimationProperty
+     */
+    void getAnimationPropertyValue(int propertyId, AnimationValue* value);
+
+    /**
+     * @see AnimationTarget#setAnimationProperty
+     */
+    void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 protected:
 
@@ -270,6 +306,11 @@ protected:
 
     // How far this layout has been scrolled in each direction.
     Vector2 _scrollPosition;
+
+    bool _scrollBarsAlwaysVisible;
+
+    // Used to animate scrollbars fading out.
+    float _scrollBarOpacity;
 
     // Whether the user is currently touching / holding the mouse down
     // within this layout's container.
