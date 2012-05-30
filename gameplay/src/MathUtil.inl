@@ -1,5 +1,3 @@
-#define MATRIX_SIZE ( sizeof(float) * 16)
-
 namespace gameplay
 {
 
