@@ -13,10 +13,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "42C932BB1491A0DB0098216A"
-               BuildableName = "sample04-particles-macosx.app"
-               BlueprintName = "sample04-particles-macosx"
-               ReferencedContainer = "container:sample04-particles.xcodeproj">
+               BlueprintIdentifier = "42CCD515146EBF3600353661"
+               BuildableName = "sample02-spaceship-macosx.app"
+               BlueprintName = "sample02-spaceship-macosx"
+               ReferencedContainer = "container:sample02-spaceship.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -31,10 +31,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "42C932BB1491A0DB0098216A"
-            BuildableName = "sample04-particles-macosx.app"
-            BlueprintName = "sample04-particles-macosx"
-            ReferencedContainer = "container:sample04-particles.xcodeproj">
+            BlueprintIdentifier = "42CCD515146EBF3600353661"
+            BuildableName = "sample02-spaceship-macosx.app"
+            BlueprintName = "sample02-spaceship-macosx"
+            ReferencedContainer = "container:sample02-spaceship.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -50,10 +50,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "42C932BB1491A0DB0098216A"
-            BuildableName = "sample04-particles-macosx.app"
-            BlueprintName = "sample04-particles-macosx"
-            ReferencedContainer = "container:sample04-particles.xcodeproj">
+            BlueprintIdentifier = "42CCD515146EBF3600353661"
+            BuildableName = "sample02-spaceship-macosx.app"
+            BlueprintName = "sample02-spaceship-macosx"
+            ReferencedContainer = "container:sample02-spaceship.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -68,10 +68,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "42C932BB1491A0DB0098216A"
-            BuildableName = "sample04-particles-macosx.app"
-            BlueprintName = "sample04-particles-macosx"
-            ReferencedContainer = "container:sample04-particles.xcodeproj">
+            BlueprintIdentifier = "42CCD515146EBF3600353661"
+            BuildableName = "sample02-spaceship-macosx.app"
+            BlueprintName = "sample02-spaceship-macosx"
+            ReferencedContainer = "container:sample02-spaceship.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
