@@ -57,5 +57,8 @@
       <Filter>res</Filter>
     </None>
     <None Include="game.config" />
+    <None Include="res\editor2.form">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
 </Project>
