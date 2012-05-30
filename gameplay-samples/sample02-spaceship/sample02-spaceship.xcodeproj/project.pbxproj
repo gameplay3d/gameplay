@@ -213,7 +213,7 @@
 			);
 			name = "sample02-spaceship-macosx";
 			productName = "sample02-spaceship";
-			productReference = 42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */;
+			productReference = 42CCD516146EBF3600353661 /* sample02-spaceship.app */;
 			productType = "com.apple.product-type.application";
 		};
 		5B43D19D14C35A0E008A5D9D /* sample02-spaceship-ios */ = {
