@@ -28,6 +28,8 @@ private:
 };
 }
 
+#define MATRIX_SIZE ( sizeof(float) * 16)
+
 #ifdef USE_NEON
 #include "MathUtilNeon.inl"
 #else

@@ -31,6 +31,7 @@ Container::Container()
     : _layout(NULL), _scrollBarTopCap(NULL), _scrollBarVertical(NULL), _scrollBarBottomCap(NULL),
       _scrollBarLeftCap(NULL), _scrollBarHorizontal(NULL), _scrollBarRightCap(NULL),
       _scroll(SCROLL_NONE), _scrollBarBounds(Rectangle::empty()), _scrollPosition(Vector2::zero()),
+      _scrollBarsAlwaysVisible(false), _scrollBarOpacity(1.0f), _scrollBarOpacityClip(NULL),
       _scrolling(false), _firstX(0), _firstY(0),
       _lastX(0), _lastY(0),
       _startTimeX(0), _startTimeY(0), _lastTime(0),
@@ -84,7 +85,13 @@ Container* Container::create(Theme::Style* style, Properties* properties, Theme*
     Container* container = Container::create(getLayoutType(layoutString));
     container->initialize(style, properties);
     container->_scroll = getScroll(properties->getString("scroll"));
+    container->_scrollBarsAlwaysVisible = properties->getBool("scrollBarsAlwaysVisible");
+    if (!container->_scrollBarsAlwaysVisible)
+    {
+        container->_scrollBarOpacity = 0.0f;
+    }
     container->addControls(theme, properties);
+    container->_layout->update(container, container->_scrollPosition);
 
     return container;
 }
@@ -159,6 +166,9 @@ void Container::addControls(Theme* theme, Properties* properties)
         // Get the next control.
         controlSpace = properties->getNextNamespace();
     }
+
+    // Sort controls by Z-Order.
+    std::sort(_controls.begin(), _controls.end(), &sortControlsByZOrder);
 }
 
 Layout* Container::getLayout()
@@ -265,6 +275,20 @@ Container::Scroll Container::getScroll() const
     return _scroll;
 }
 
+void Container::setScrollBarsAlwaysVisible(bool alwaysVisible)
+{
+    if (alwaysVisible != _scrollBarsAlwaysVisible)
+    {
+        _scrollBarsAlwaysVisible = alwaysVisible;
+        _dirty = true;
+    }
+}
+
+bool Container::getScrollBarsAlwaysVisible() const
+{
+    return _scrollBarsAlwaysVisible;
+}
+
 Animation* Container::getAnimation(const char* id) const
 {
     std::vector<Control*>::const_iterator itr = _controls.begin();
@@ -365,26 +389,29 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
         }
     }
 
-    if (_scroll != SCROLL_NONE)
+    if (_scroll != SCROLL_NONE && (_scrollBarOpacity > 0.0f))
     {
         // Draw scroll bars.
         Rectangle clipRegion(_viewportClipBounds);
 
         spriteBatch->begin();
 
-        if (_scrollBarBounds.height > 0 && (_scrolling || _velocity.y))
+        if (_scrollBarBounds.height > 0)
         {
             const Rectangle& topRegion = _scrollBarTopCap->getRegion();
             const Theme::UVs& topUVs = _scrollBarTopCap->getUVs();
             Vector4 topColor = _scrollBarTopCap->getColor();
+            topColor.w *= _scrollBarOpacity * _opacity;
 
             const Rectangle& verticalRegion = _scrollBarVertical->getRegion();
             const Theme::UVs& verticalUVs = _scrollBarVertical->getUVs();
             Vector4 verticalColor = _scrollBarVertical->getColor();
+            verticalColor.w *= _scrollBarOpacity * _opacity;
 
             const Rectangle& bottomRegion = _scrollBarBottomCap->getRegion();
             const Theme::UVs& bottomUVs = _scrollBarBottomCap->getUVs();
             Vector4 bottomColor = _scrollBarBottomCap->getColor();
+            bottomColor.w *= _scrollBarOpacity * _opacity;
 
             clipRegion.width += verticalRegion.width;
 
@@ -402,19 +429,22 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
             spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, bottomUVs.u1, bottomUVs.v1, bottomUVs.u2, bottomUVs.v2, bottomColor, clipRegion);
         }
 
-        if (_scrollBarBounds.width > 0 && (_scrolling || _velocity.x))
+        if (_scrollBarBounds.width > 0)
         {
             const Rectangle& leftRegion = _scrollBarLeftCap->getRegion();
             const Theme::UVs& leftUVs = _scrollBarLeftCap->getUVs();
             Vector4 leftColor = _scrollBarLeftCap->getColor();
+            leftColor.w *= _scrollBarOpacity * _opacity;
 
             const Rectangle& horizontalRegion = _scrollBarHorizontal->getRegion();
             const Theme::UVs& horizontalUVs = _scrollBarHorizontal->getUVs();
             Vector4 horizontalColor = _scrollBarHorizontal->getColor();
+            horizontalColor.w *= _scrollBarOpacity * _opacity;
 
             const Rectangle& rightRegion = _scrollBarRightCap->getRegion();
             const Theme::UVs& rightUVs = _scrollBarRightCap->getUVs();
             Vector4 rightColor = _scrollBarRightCap->getColor();
+            rightColor.w *= _scrollBarOpacity * _opacity;
 
             clipRegion.height += horizontalRegion.height;
         
@@ -696,6 +726,16 @@ void Container::updateScroll()
                          ((-_scrollPosition.y) / totalHeight) * clipHeight,
                          scrollWidth, scrollHeight);
 
+    // If scroll velocity is 0 and scrollbars are not always visible, trigger fade-out animation.
+    if (!_scrolling && _velocity.isZero() && !_scrollBarsAlwaysVisible && _scrollBarOpacity == 1.0f)
+    {
+        float to = 0;
+        _scrollBarOpacity = 0.99f;
+        Animation* animation = createAnimationFromTo("scrollbar-fade-out", ANIMATE_OPACITY, &_scrollBarOpacity, &to, Curve::QUADRATIC_IN_OUT, 500L);
+        _scrollBarOpacityClip = animation->getClip();
+        _scrollBarOpacityClip->play();
+    }
+
     // Position controls within scroll area.
     _layout->update(this, _scrollPosition);
 }
@@ -710,6 +750,13 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
         _velocity.set(0, 0);
         _scrolling = true;
         _startTimeX = _startTimeY = 0;
+        
+        if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
+        {
+            _scrollBarOpacityClip->stop();
+            _scrollBarOpacityClip = NULL;
+        }
+        _scrollBarOpacity = 1.0f;
         return true;
 
     case Touch::TOUCH_MOVE:
@@ -820,6 +867,47 @@ bool sortControlsByZOrder(Control* c1, Control* c2)
         return true;
 
     return false;
+}
+
+unsigned int Container::getAnimationPropertyComponentCount(int propertyId) const
+{
+    switch(propertyId)
+    {
+    case ANIMATE_OPACITY:
+        return 1;
+    default:
+        return Control::getAnimationPropertyComponentCount(propertyId);
+        break;
+    }
+}
+
+void Container::getAnimationPropertyValue(int propertyId, AnimationValue* value)
+{
+    GP_ASSERT(value);
+
+    switch(propertyId)
+    {
+    case ANIMATE_OPACITY:
+        value->setFloat(0, _scrollBarOpacity);
+    default:
+        Control::getAnimationPropertyValue(propertyId, value);
+        break;
+    }
+}
+
+void Container::setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight)
+{
+    GP_ASSERT(value);
+
+    switch(propertyId)
+    {
+    case ANIMATE_OPACITY:
+        _scrollBarOpacity = Curve::lerp(blendWeight, _opacity, value->getFloat(0));
+        _dirty = true;
+    default:
+        Control::setAnimationPropertyValue(propertyId, value, blendWeight);
+        break;
+    }
 }
 
 }
