@@ -185,7 +185,7 @@ void CharacterGame::jump()
 
 bool CharacterGame::isOnFloor() const
 {
-    return (_character->getCurrentVelocity().y == 0);
+    return (std::abs(_character->getCurrentVelocity().y) < MATH_EPSILON);
 }
 
 void CharacterGame::update(long elapsedTime)
