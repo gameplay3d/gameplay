@@ -1,7 +1,6 @@
 form particleEditor
 {
     theme = res/editor.theme
-    style = background
     autoWidth = true
     autoHeight = true
 

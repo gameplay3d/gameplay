@@ -687,17 +687,17 @@ public:
     /**
      * @see AnimationTarget#getAnimationPropertyComponentCount
      */
-    unsigned int getAnimationPropertyComponentCount(int propertyId) const;
+    virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
 
     /**
      * @see AnimationTarget#getAnimationProperty
      */
-    void getAnimationPropertyValue(int propertyId, AnimationValue* value);
+    virtual void getAnimationPropertyValue(int propertyId, AnimationValue* value);
 
     /**
      * @see AnimationTarget#setAnimationProperty
      */
-    void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
+    virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 protected:
 

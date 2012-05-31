@@ -25,7 +25,8 @@ namespace gameplay
          size        = <width, height>   // Size of the container, measured in pixels.
          width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
          height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
-         scroll      = <Container::Scroll constant>
+         scroll      = <Container::Scroll constant> // Whether scrolling is allowed and in which directions.
+         scrollBarsAutoHide = <bool>    // Whether scrollbars fade out when not in use.
   
          // All the nested controls within this container.
          container 
@@ -46,6 +47,9 @@ class Container : public Control
 {
 public:
 
+    /**
+     * Constant used to auto-hide scrollbars.
+     */
     static const int ANIMATE_SCROLLBAR_OPACITY = 8;
 
     /**
@@ -164,17 +168,17 @@ public:
     /**
      * @see AnimationTarget#getAnimationPropertyComponentCount
      */
-    unsigned int getAnimationPropertyComponentCount(int propertyId) const;
+    virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
 
     /**
      * @see AnimationTarget#getAnimationProperty
      */
-    void getAnimationPropertyValue(int propertyId, AnimationValue* value);
+    virtual void getAnimationPropertyValue(int propertyId, AnimationValue* value);
 
     /**
      * @see AnimationTarget#setAnimationProperty
      */
-    void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
+    virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 protected:
 
@@ -272,8 +276,22 @@ protected:
      */
     void updateScroll();
 
+    /**
+     * Applies touch events to scroll state.
+     *
+     * @return Whether the touch event was consumed by scrolling within this container.
+     *
+     * @see Touch::TouchEvent
+     */
     bool touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    /**
+     * Get a Scroll enum from a matching string.
+     *
+     * @param scroll A string representing a Scroll enum.
+     *
+     * @return The Scroll enum value that matches the given string.
+     */
     static Scroll getScroll(const char* scroll);
 
     /**
@@ -286,6 +304,7 @@ protected:
      */
     std::vector<Control*> _controls;
 
+    // Images used to draw scrollbars.
     Theme::ThemeImage* _scrollBarTopCap;
     Theme::ThemeImage* _scrollBarVertical;
     Theme::ThemeImage* _scrollBarBottomCap;
@@ -323,9 +342,9 @@ protected:
     Vector2 _scrollingVelocity;
     // Friction dampens velocity.
     float _scrollingFriction;
-    // Are we scrolling to the right ?
+    // Are we scrolling to the right?
     bool _scrollingRight;
-    // Are we scrolling down ?
+    // Are we scrolling down?
     bool _scrollingDown;
 
 private:
