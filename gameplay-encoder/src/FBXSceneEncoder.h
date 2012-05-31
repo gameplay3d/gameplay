@@ -3,6 +3,8 @@
 
 #ifdef USE_FBX
 
+#define FBXSDK_NEW_API
+
 #include <iostream>
 #include <list>
 #include <vector>
@@ -65,7 +67,7 @@ private:
      * 
      * @param fbxScene The FBX scene to load.
      */
-    void loadScene(KFbxScene* fbxScene);
+    void loadScene(FbxScene* fbxScene);
 
     /**
      * Loads all of the animatiosn from the given FBX scene.
@@ -73,7 +75,7 @@ private:
      * @param fbxScene The scene to load animations from.
      * @param arguments The command line arguments passed to the encoder.
      */
-    void loadAnimations(KFbxScene* fbxScene, const EncoderArguments& arguments);
+    void loadAnimations(FbxScene* fbxScene, const EncoderArguments& arguments);
 
     /**
      * Loads the animations from the given FBX animation layer recursively starting from fbxNode.
@@ -82,7 +84,7 @@ private:
      * @param fbxNode The node to start loading animations from.
      * @param arguments The command line arguments passed to the encoder.
      */
-    void loadAnimationLayer(KFbxAnimLayer* fbxAnimLayer, KFbxNode* fbxNode, const EncoderArguments& arguments);
+    void loadAnimationLayer(FbxAnimLayer* fbxAnimLayer, FbxNode* fbxNode, const EncoderArguments& arguments);
 
     /**
      * Loads animation channels from the given node and adds the channels to the given animation.
@@ -91,14 +93,14 @@ private:
      * @param fbxNode The node to load animation channels from.
      * @param animation The animation to add the channels to.
      */
-    void loadAnimationChannels(KFbxAnimLayer* pAnimLayer, KFbxNode* fbxNode, Animation* animation);
+    void loadAnimationChannels(FbxAnimLayer* pAnimLayer, FbxNode* fbxNode, Animation* animation);
 
     /**
      * Loads the bind shape for all mesh skins that have be loaded so far.
      * 
      * @param fbxScene The FBX scene to read the bind shapes from.
      */
-    void loadBindShapes(KFbxScene* fbxScene);
+    void loadBindShapes(FbxScene* fbxScene);
 
     /**
      * Loads the camera from the given FBX node and adds to it to the given GamePlay node.
@@ -106,7 +108,7 @@ private:
      * @param fbxNode The FBX node to load from.
      * @param node The GamePlay node to add to.
      */
-    void loadCamera(KFbxNode* fbxNode, Node* node);
+    void loadCamera(FbxNode* fbxNode, Node* node);
 
     /**
      * Loads the light from the given FBX node and adds to it to the given GamePlay node.
@@ -114,7 +116,7 @@ private:
      * @param fbxNode The FBX node to load from.
      * @param node The GamePlay node to add to.
      */
-    void loadLight(KFbxNode* fbxNode, Node* node);
+    void loadLight(FbxNode* fbxNode, Node* node);
     
     /**
      * Loads the model from the given FBX node and adds to it to the given GamePlay node.
@@ -122,7 +124,7 @@ private:
      * @param fbxNode The FBX node to load from.
      * @param node The GamePlay node to add to.
      */
-    void loadModel(KFbxNode* fbxNode, Node* node);
+    void loadModel(FbxNode* fbxNode, Node* node);
 
     /**
      * Loads the mesh skin from the given FBX mesh and adds it to the given GamePlay model.
@@ -130,7 +132,7 @@ private:
      * @param fbxMesh The FBX mesh to load the skin from.
      * @param model The model to add the skin to.
      */
-    void loadSkin(KFbxMesh* fbxMesh, Model* model);
+    void loadSkin(FbxMesh* fbxMesh, Model* model);
     
     /**
      * Loads the FBX Node and creates a GamePlay Node.
@@ -139,7 +141,7 @@ private:
      * 
      * @return The newly created Node or NULL if the node could not be loaded.
      */
-    Node* loadNode(KFbxNode* fbxNode);
+    Node* loadNode(FbxNode* fbxNode);
     
     /**
      * Loads the FbxMesh and returns a GamePlay mesh.
@@ -149,7 +151,7 @@ private:
      * 
      * @return The GamePlay mesh that was loaded from the FBX Mesh.
      */
-    Mesh* loadMesh(KFbxMesh* fbxMesh);
+    Mesh* loadMesh(FbxMesh* fbxMesh);
 
     /**
      * Gets the Mesh that was saved with the given ID. Returns NULL if a match is not found.
@@ -158,7 +160,7 @@ private:
      * 
      * @return The mesh that was saved with the ID or NULL if none was found.
      */
-    Mesh* getMesh(size_t meshId);
+    Mesh* getMesh(FbxUInt64 meshId);
 
     /**
      * Saves the Mesh with the given id.
@@ -166,7 +168,7 @@ private:
      * @param meshId The ID of the FbxMesh to use as a key.
      * @param mesh The mesh to save.
      */
-    void saveMesh(size_t meshId, Mesh* mesh);
+    void saveMesh(FbxUInt64 meshId, Mesh* mesh);
     
     /**
      * Prints a message.
@@ -181,14 +183,14 @@ private:
      * @param fbxNode The FBX node to get the transfrom data from
      * @param node The GamePlay Node to copy the transform to.
      */
-    void transformNode(KFbxNode* fbxNode, Node* node);
+    void transformNode(FbxNode* fbxNode, Node* node);
 
     /**
      * Recursively triangules the meshes starting from the given node.
      * 
      * @param fbxNode The node to start triangulating from.
      */
-    static void triangulateRecursive(KFbxNode* fbxNode);
+    static void triangulateRecursive(FbxNode* fbxNode);
 
     /**
      * Prints a warning message.
@@ -210,7 +212,7 @@ private:
     /**
      * The collection of meshes for the purpose of making sure that the same model is not loaded twice. (Mesh instancing)
      */
-    std::map<size_t, Mesh*> _meshes;
+    std::map<FbxUInt64, Mesh*> _meshes;
 
     /**
      * The animation that channels should be added to it the user is using the -groupAnimation command line argument. May be NULL.
