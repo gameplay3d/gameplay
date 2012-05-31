@@ -3,10 +3,6 @@
 #include "Quaternion.h"
 #include "MathUtil.h"
 
-#ifndef MATRIX_SIZE
-#define MATRIX_SIZE     ( sizeof(float) * 16 )
-#endif
-
 namespace gameplay
 {
 

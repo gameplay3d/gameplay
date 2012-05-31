@@ -51,6 +51,21 @@ theme particleEditor
             region = 5, 149, 11, 25
             color = #C3D9BFff
         }
+
+        image scrollBarTopCap
+        {
+            region = 3, 99, 8, 5
+        }
+
+        image verticalScrollBar
+        {
+            region = 3, 104, 8, 19
+        }
+
+        image scrollBarBottomCap
+        {
+            region = 3, 138, 8, 5
+        }
     }
 
     imageList activeImages : normalImages

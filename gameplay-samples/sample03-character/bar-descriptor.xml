@@ -66,7 +66,7 @@
     <asset path="../../gameplay/res/shaders/textured.vsh">res/shaders/textured.vsh</asset>
     <asset path="res/common">res/common</asset>
     <asset path="res/pvrtc">res/pvrtc</asset>
-    <asset path="game.pvr.config">game.config</asset>
+    <asset path="game.pvrtc.config">game.config</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.417937691" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
