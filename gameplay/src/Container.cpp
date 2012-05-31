@@ -16,27 +16,21 @@
 namespace gameplay
 {
 
-    /**
-     * If the user stops scrolling for this amount of time (in millis) before
-     * touch/click release, don't apply inertia.
-     */
-    static const long STOP_TIME = 100L;
-
-    /**
-     * Factor to multiply friction by before applying to velocity.
-     */
-    static const float FRICTION_FACTOR = 5.0f;
+// If the user stops scrolling for this amount of time (in millis) before touch/click release, don't apply inertia.
+static const long SCROLL_INERTIA_DELAY = 100L;
+// Factor to multiply friction by before applying to velocity.
+static const float SCROLL_FRICTION_FACTOR = 5.0f;
 
 Container::Container()
     : _layout(NULL), _scrollBarTopCap(NULL), _scrollBarVertical(NULL), _scrollBarBottomCap(NULL),
       _scrollBarLeftCap(NULL), _scrollBarHorizontal(NULL), _scrollBarRightCap(NULL),
       _scroll(SCROLL_NONE), _scrollBarBounds(Rectangle::empty()), _scrollPosition(Vector2::zero()),
-      _scrollBarsAlwaysVisible(false), _scrollBarOpacity(1.0f), _scrollBarOpacityClip(NULL),
-      _scrolling(false), _firstX(0), _firstY(0),
-      _lastX(0), _lastY(0),
-      _startTimeX(0), _startTimeY(0), _lastTime(0),
-      _velocity(Vector2::zero()), _friction(1.0f),
-      _goingRight(false), _goingDown(false), _zIndexDefault(0)
+      _scrollBarsAutoHide(false), _scrollBarOpacity(1.0f), _scrolling(false),
+       _scrollingFirstX(0), _scrollingFirstY(0),
+      _scrollingLastX(0), _scrollingLastY(0),
+      _scrollingStartTimeX(0), _scrollingStartTimeY(0), _scrollingLastTime(0),
+      _scrollingVelocity(Vector2::zero()), _scrollingFriction(1.0f),
+      _scrollingRight(false), _scrollingDown(false), _scrollBarOpacityClip(NULL), _zIndexDefault(0)
 {
 }
 
@@ -51,7 +45,6 @@ Container::~Container()
     {
         SAFE_RELEASE((*it));
     }
-
     SAFE_RELEASE(_layout);
 }
 
@@ -85,8 +78,8 @@ Container* Container::create(Theme::Style* style, Properties* properties, Theme*
     Container* container = Container::create(getLayoutType(layoutString));
     container->initialize(style, properties);
     container->_scroll = getScroll(properties->getString("scroll"));
-    container->_scrollBarsAlwaysVisible = properties->getBool("scrollBarsAlwaysVisible");
-    if (!container->_scrollBarsAlwaysVisible)
+    container->_scrollBarsAutoHide = properties->getBool("scrollBarsAutoHide");
+    if (container->_scrollBarsAutoHide)
     {
         container->_scrollBarOpacity = 0.0f;
     }
@@ -275,18 +268,18 @@ Container::Scroll Container::getScroll() const
     return _scroll;
 }
 
-void Container::setScrollBarsAlwaysVisible(bool alwaysVisible)
+void Container::setScrollBarsAutoHide(bool autoHide)
 {
-    if (alwaysVisible != _scrollBarsAlwaysVisible)
+    if (autoHide != _scrollBarsAutoHide)
     {
-        _scrollBarsAlwaysVisible = alwaysVisible;
+        _scrollBarsAutoHide = autoHide;
         _dirty = true;
     }
 }
 
-bool Container::getScrollBarsAlwaysVisible() const
+bool Container::isScrollBarsAutoHide() const
 {
-    return _scrollBarsAlwaysVisible;
+    return _scrollBarsAutoHide;
 }
 
 Animation* Container::getAnimation(const char* id) const
@@ -464,7 +457,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
         spriteBatch->end();
 
-        if (_velocity.isZero())
+        if (_scrollingVelocity.isZero())
         {
             _dirty = false;
         }
@@ -671,47 +664,47 @@ void Container::updateScroll()
     float clipHeight = _bounds.height - containerBorder.top - containerBorder.bottom - containerPadding.top - containerPadding.bottom - hHeight;
 
     // Apply and dampen inertia.
-    if (!_scrolling && !_velocity.isZero())
+    if (!_scrolling && !_scrollingVelocity.isZero())
     {
         // Calculate the time passed since last update.
         float elapsedSecs = (float)elapsedTime * 0.001f;
 
-        _scrollPosition.x += _velocity.x * elapsedSecs;
-        _scrollPosition.y += _velocity.y * elapsedSecs;
+        _scrollPosition.x += _scrollingVelocity.x * elapsedSecs;
+        _scrollPosition.y += _scrollingVelocity.y * elapsedSecs;
 
-        float dampening = 1.0f - _friction * FRICTION_FACTOR * elapsedSecs;
-        _velocity.x *= dampening;
-        _velocity.y *= dampening;
+        float dampening = 1.0f - _scrollingFriction * SCROLL_FRICTION_FACTOR * elapsedSecs;
+        _scrollingVelocity.x *= dampening;
+        _scrollingVelocity.y *= dampening;
 
-        if (abs(_velocity.x) < 100.0f)
-            _velocity.x = 0.0f;
-        if (abs(_velocity.y) < 100.0f)
-            _velocity.y = 0.0f;
+        if (abs(_scrollingVelocity.x) < 100.0f)
+            _scrollingVelocity.x = 0.0f;
+        if (abs(_scrollingVelocity.y) < 100.0f)
+            _scrollingVelocity.y = 0.0f;
     }
 
     // Stop scrolling when the far edge is reached.
     if (-_scrollPosition.x > totalWidth - clipWidth)
     {
         _scrollPosition.x = -(totalWidth - clipWidth);
-        _velocity.x = 0;
+        _scrollingVelocity.x = 0;
     }
     
     if (-_scrollPosition.y > totalHeight - clipHeight)
     {
         _scrollPosition.y = -(totalHeight - clipHeight);
-        _velocity.y = 0;
+        _scrollingVelocity.y = 0;
     }
 
     if (_scrollPosition.x > 0)
     {
         _scrollPosition.x = 0;
-        _velocity.x = 0;
+        _scrollingVelocity.x = 0;
     }
 
     if (_scrollPosition.y > 0)
     {
         _scrollPosition.y = 0;
-        _velocity.y = 0;
+        _scrollingVelocity.y = 0;
     }
 
     float scrollWidth = 0;
@@ -727,7 +720,7 @@ void Container::updateScroll()
                          scrollWidth, scrollHeight);
 
     // If scroll velocity is 0 and scrollbars are not always visible, trigger fade-out animation.
-    if (!_scrolling && _velocity.isZero() && !_scrollBarsAlwaysVisible && _scrollBarOpacity == 1.0f)
+    if (!_scrolling && _scrollingVelocity.isZero() && _scrollBarsAutoHide && _scrollBarOpacity == 1.0f)
     {
         float to = 0;
         _scrollBarOpacity = 0.99f;
@@ -745,11 +738,11 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
     switch(evt)
     {
     case Touch::TOUCH_PRESS:
-        _lastX = _firstX = x;
-        _lastY = _firstY = y;
-        _velocity.set(0, 0);
+        _scrollingLastX = _scrollingFirstX = x;
+        _scrollingLastY = _scrollingFirstY = y;
+        _scrollingVelocity.set(0, 0);
         _scrolling = true;
-        _startTimeX = _startTimeY = 0;
+        _scrollingStartTimeX = _scrollingStartTimeY = 0;
         
         if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
         {
@@ -763,38 +756,38 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
         if (_scrolling)
         {
             // Calculate the latest movement delta for the next update to use.
-            int vx = x - _lastX;
-            int vy = y - _lastY;
-            _velocity.set(vx, vy);
+            int vx = x - _scrollingLastX;
+            int vy = y - _scrollingLastY;
+            _scrollingVelocity.set(vx, vy);
             _scrollPosition.x += vx;
             _scrollPosition.y += vy;
-            _lastX = x;
-            _lastY = y;
+            _scrollingLastX = x;
+            _scrollingLastY = y;
 
             // If the user changes direction, reset the start time and position.
             bool goingRight = (vx > 0);
-            if (goingRight != _goingRight)
+            if (goingRight != _scrollingRight)
             {
-                _firstX = x;
-                _goingRight = goingRight;
-                _startTimeX = Game::getAbsoluteTime();
+                _scrollingFirstX = x;
+                _scrollingRight = goingRight;
+                _scrollingStartTimeX = Game::getAbsoluteTime();
             }
 
             bool goingDown = (vy > 0);
-            if (goingDown != _goingDown)
+            if (goingDown != _scrollingDown)
             {
-                _firstY = y;
-                _goingDown = goingDown;
-                _startTimeY = Game::getAbsoluteTime();
+                _scrollingFirstY = y;
+                _scrollingDown = goingDown;
+                _scrollingStartTimeY = Game::getAbsoluteTime();
             }
 
-            if (!_startTimeX)
-                _startTimeX = Game::getAbsoluteTime();
+            if (!_scrollingStartTimeX)
+                _scrollingStartTimeX = Game::getAbsoluteTime();
 
-            if (!_startTimeY)
-                _startTimeY = Game::getAbsoluteTime();
+            if (!_scrollingStartTimeY)
+                _scrollingStartTimeY = Game::getAbsoluteTime();
 
-            _lastTime = Game::getAbsoluteTime();
+            _scrollingLastTime = Game::getAbsoluteTime();
 
             return true;
         }
@@ -802,19 +795,19 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
 
     case Touch::TOUCH_RELEASE:
         _scrolling = false;
-        long timeSinceLastMove = Game::getAbsoluteTime() - _lastTime;
-        if (timeSinceLastMove > STOP_TIME)
+        long timeSinceLastMove = Game::getAbsoluteTime() - _scrollingLastTime;
+        if (timeSinceLastMove > SCROLL_INERTIA_DELAY)
         {
-            _velocity.set(0, 0);
+            _scrollingVelocity.set(0, 0);
             return true;
         }
 
-        int dx = _lastX - _firstX;
-        int dy = _lastY - _firstY;
+        int dx = _scrollingLastX - _scrollingFirstX;
+        int dy = _scrollingLastY - _scrollingFirstY;
 
-        long timeTakenX = Game::getAbsoluteTime() - _startTimeX;
+        long timeTakenX = Game::getAbsoluteTime() - _scrollingStartTimeX;
         float elapsedSecsX = (float)timeTakenX * 0.001f;
-        long timeTakenY = Game::getAbsoluteTime() - _startTimeY;
+        long timeTakenY = Game::getAbsoluteTime() - _scrollingStartTimeY;
         float elapsedSecsY = (float)timeTakenY * 0.001f;
 
         float vx = dx;
@@ -824,7 +817,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
         if (elapsedSecsY > 0)
             vy = (float)dy / elapsedSecsY;
 
-        _velocity.set(vx, vy);
+        _scrollingVelocity.set(vx, vy);
 
         return true;
     }
@@ -877,7 +870,6 @@ unsigned int Container::getAnimationPropertyComponentCount(int propertyId) const
         return 1;
     default:
         return Control::getAnimationPropertyComponentCount(propertyId);
-        break;
     }
 }
 
@@ -889,6 +881,7 @@ void Container::getAnimationPropertyValue(int propertyId, AnimationValue* value)
     {
     case ANIMATE_OPACITY:
         value->setFloat(0, _scrollBarOpacity);
+        break;
     default:
         Control::getAnimationPropertyValue(propertyId, value);
         break;
@@ -904,6 +897,7 @@ void Container::setAnimationPropertyValue(int propertyId, AnimationValue* value,
     case ANIMATE_OPACITY:
         _scrollBarOpacity = Curve::lerp(blendWeight, _opacity, value->getFloat(0));
         _dirty = true;
+        break;
     default:
         Control::setAnimationPropertyValue(propertyId, value, blendWeight);
         break;
