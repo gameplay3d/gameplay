@@ -57,8 +57,15 @@ public:
 
     /**
      * Returns the output path/folder.
+     * Example: "C:/dir"
      */
-    std::string getOutputPath() const;
+    std::string getOutputDirPath() const;
+
+    /**
+     * Returns the output file path.
+     * Example: "C:/dir/scene.gpb"
+     */
+    std::string getOutputFilePath() const;
 
     const std::vector<std::string>& getGroupAnimationNodeId() const;
     const std::vector<std::string>& getGroupAnimationAnimationId() const;
@@ -92,6 +99,9 @@ public:
     const char* getNodeId() const;
     unsigned int getFontSize() const;
 
+
+    static std::string getRealPath(const std::string& filepath);
+
 private:
 
     /**
@@ -103,7 +113,13 @@ private:
      */
     void readOption(const std::vector<std::string>& options, size_t *index);
 
-    static std::string getRealPath(const std::string& filepath);
+    void setInputfilePath(const std::string& inputPath);
+
+    /**
+     * Sets the output file path that the encoder will write to.
+     */
+    void setOutputfilePath(const std::string& outputPath);
+    
 
     /**
      * Replaces all instance of oldChar with newChar in str.
@@ -113,6 +129,7 @@ private:
 private:
     
     std::string _filePath;
+    std::string _fileOutputPath;
     std::string _nodeId;
     std::string _daeOutputPath;
 
@@ -128,6 +145,8 @@ private:
     std::vector<std::string> _heightmapNodeIds;
 
 };
+
+void unittestsEncoderArguments();
 
 }
 

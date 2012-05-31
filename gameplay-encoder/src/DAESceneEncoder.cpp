@@ -54,7 +54,7 @@ void DAESceneEncoder::optimizeCOLLADA(const EncoderArguments& arguments, domCOLL
     {
         if (!_collada->writeTo(arguments.getFilePath(), arguments.getDAEOutputPath()))
         {
-            fprintf(stderr,"Error: COLLADA failed to write the dom for file:%s\n", arguments.getDAEOutputPath().c_str());
+            fprintf(stderr,"Error: COLLADA failed to write the dom for file: %s\n", arguments.getDAEOutputPath().c_str());
         }
     }
 }
@@ -227,10 +227,6 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
 {
     _begin = clock();
     const char* nodeId = arguments.getNodeId();
-    bool text = arguments.textOutputEnabled();
-
-    std::string filenameOnly = getFilenameFromFilePath(filepath);
-    std::string dstPath = filepath.substr(0, filepath.find_last_of('/'));
     
     // Load the collada document
     _collada = new DAE();
@@ -239,7 +235,7 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
     end("Open file");
     if (!_dom)
     {
-        fprintf(stderr,"Error: COLLADA failed to open file:%s\n", filepath.c_str());
+        fprintf(stderr,"Error: COLLADA failed to open file: %s\n", filepath.c_str());
         if (_collada)
         {
             delete _collada;
@@ -309,24 +305,32 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
     loadAnimations(_dom);
     end("loadAnimations");
 
-    std::string dstFilename = dstPath;
-    dstFilename.append(1, '/');
-    dstFilename.append(getFilenameNoExt(filenameOnly));
-
     _gamePlayFile.adjust();
 
-    if (text)
+    // Write the output file
+    std::string outputFilePath = arguments.getOutputFilePath();
+    if (arguments.textOutputEnabled())
     {
-        std::string outFile = dstFilename + ".xml";
-        fprintf(stderr, "Saving debug file: %s\n", outFile.c_str());
-        _gamePlayFile.saveText(outFile);
+        int pos = outputFilePath.find_last_of('.');
+        if (pos > 2)
+        {
+            std::string path = outputFilePath.substr(0, pos);
+            path.append(".xml");
+            fprintf(stderr, "Saving debug file: %s\n", path.c_str());
+            if (!_gamePlayFile.saveText(path))
+            {
+                fprintf(stderr,"Error writing text file: %s\n", path.c_str());
+            }
+        }
     }
     else
     {
-        std::string outFile = dstFilename + ".gpb";
-        fprintf(stderr, "Saving binary file: %s\n", outFile.c_str());
+        fprintf(stderr, "Saving binary file: %s\n", outputFilePath.c_str());
         begin();
-        _gamePlayFile.saveBinary(outFile);
+        if (!_gamePlayFile.saveBinary(outputFilePath))
+        {
+            fprintf(stderr,"Error writing binary file: %s\n", outputFilePath.c_str());
+        }
         end("save binary");
     }
     
