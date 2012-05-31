@@ -124,11 +124,11 @@ form particleEditor
     {
         style = basic
         alignment = ALIGN_TOP_RIGHT
-        width = 190
+        width = 195
         autoHeight = true
         layout = LAYOUT_VERTICAL
         scroll = SCROLL_VERTICAL
-        //scrollBarsAlwaysVisible = true
+        scrollBarsAutoHide = false
 
         // Particle Size
         label titleSize
@@ -300,7 +300,7 @@ form particleEditor
         // Acceleration
         label titleAcceleration : titleSize
         {
-            text = Acceleration
+            text = Accel.
         }
 
         slider accelX : velocityX
