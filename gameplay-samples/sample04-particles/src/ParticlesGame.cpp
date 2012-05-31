@@ -53,7 +53,7 @@ void ParticlesGame::initialize()
     loadEmitters();
 
     // Load the form for editing ParticleEmitters.
-    _form = Form::create("res/editor2.form");
+    _form = Form::create("res/editor.form");
     _form->setConsumeTouchEvents(false);
 
     // Store pointers to UI controls we care about.
