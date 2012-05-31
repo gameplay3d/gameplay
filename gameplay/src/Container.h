@@ -46,6 +46,8 @@ class Container : public Control
 {
 public:
 
+    static const int ANIMATE_SCROLLBAR_OPACITY = 8;
+
     /**
      * The definition for container scrolling.
      */
@@ -127,21 +129,52 @@ public:
     const std::vector<Control*>& getControls() const;
 
     /**
-     * Sets the scrolling for the container.
+     * Sets the allowed scroll directions for this container.
      *
-     * @param scroll The scroll for the 
+     * @param scroll The allowed scroll directions for this container.
      */
     void setScroll(Scroll scroll);
 
+    /**
+     * Gets the allowed scroll directions for this container.
+     *
+     * @return The allowed scroll directions for this container.
+     */
     Scroll getScroll() const;
 
     /**
-     * Gets the first animation in the control with the specified ID.
+     * Set whether scrollbars are always visible, or only visible while scrolling.
      *
-     * @param id The ID of the animation to get. Returns the first animation if ID is NULL.
-     * @return The first animation with the specified ID.
+     * @param alwaysVisible Whether scrollbars are always visible.
+     */
+    void setScrollBarsAutoHide(bool autoHide);
+
+    /**
+     * Whether scrollbars are always visible, or only visible while scrolling.
+     *
+     * @return Whether scrollbars are always visible.
+     */
+    bool isScrollBarsAutoHide() const;
+
+    /**
+     * @see AnimationTarget#getAnimation
      */
     Animation* getAnimation(const char* id = NULL) const;
+
+    /**
+     * @see AnimationTarget#getAnimationPropertyComponentCount
+     */
+    unsigned int getAnimationPropertyComponentCount(int propertyId) const;
+
+    /**
+     * @see AnimationTarget#getAnimationProperty
+     */
+    void getAnimationPropertyValue(int propertyId, AnimationValue* value);
+
+    /**
+     * @see AnimationTarget#setAnimationProperty
+     */
+    void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 protected:
 
@@ -229,6 +262,9 @@ protected:
      */
     void addControls(Theme* theme, Properties* properties);
 
+    /**
+     * Draws a sprite batch for the specified clipping rect 
+     */
     virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
 
     /**
@@ -259,49 +295,44 @@ protected:
 
     // Flag representing whether scrolling is enabled, and in which directions.
     Scroll _scroll;
-
-    // Data required when scrolling is enabled.
-
-    /**
-     * x, width: Horizontal scrollbar position and size.
-     * y, height: Vertical scrollbar position and size.
-     */
+    // Scroll bar bounds
     Rectangle _scrollBarBounds;
-
     // How far this layout has been scrolled in each direction.
     Vector2 _scrollPosition;
-
-    // Whether the user is currently touching / holding the mouse down
-    // within this layout's container.
+    // Should the scrollbars auto hide. Default is false.
+    bool _scrollBarsAutoHide;
+    // Used to animate scrollbars fading out.
+    float _scrollBarOpacity;
+    // Whether the user is currently touching / holding the mouse down within this layout's container.
     bool _scrolling;
-
-    // First touch point.
-    int _firstX;
-    int _firstY;
-
-    // Latest touch point.
-    int _lastX;
-    int _lastY;
-
-    // Time recorded on touch down.
-    long _startTimeX;
-    long _startTimeY;
-    long _lastTime;
-
+    // First scrolling touch x position
+    int _scrollingFirstX;
+    // First scrolling touch y position
+    int _scrollingFirstY;
+    // The last y position when scrolling
+    int _scrollingLastX;
+    // The last x position when scrolling
+    int _scrollingLastY;
+    // Time we started scrolling in the x
+    long _scrollingStartTimeX;
+    // Time we started scrolling in the y
+    long _scrollingStartTimeY;
+    // The last time we were scrolling
+    long _scrollingLastTime;
     // Speed to continue scrolling at after touch release.
-    Vector2 _velocity;
-
+    Vector2 _scrollingVelocity;
     // Friction dampens velocity.
-    float _friction;
-
-    // Detect a change in scroll direction.
-    bool _goingRight;
-    bool _goingDown;
+    float _scrollingFriction;
+    // Are we scrolling to the right ?
+    bool _scrollingRight;
+    // Are we scrolling down ?
+    bool _scrollingDown;
 
 private:
 
     Container(const Container& copy);
 
+    AnimationClip* _scrollBarOpacityClip;
     int _zIndexDefault;
 };
 
