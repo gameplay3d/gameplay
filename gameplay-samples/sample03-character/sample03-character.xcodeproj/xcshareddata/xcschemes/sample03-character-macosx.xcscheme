@@ -14,7 +14,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "42CCD56B146EC4B300353661"
-               BuildableName = "sample03-character.app"
+               BuildableName = "sample03-character-macosx.app"
                BlueprintName = "sample03-character-macosx"
                ReferencedContainer = "container:sample03-character.xcodeproj">
             </BuildableReference>
@@ -32,7 +32,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD56B146EC4B300353661"
-            BuildableName = "sample03-character.app"
+            BuildableName = "sample03-character-macosx.app"
             BlueprintName = "sample03-character-macosx"
             ReferencedContainer = "container:sample03-character.xcodeproj">
          </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD56B146EC4B300353661"
-            BuildableName = "sample03-character.app"
+            BuildableName = "sample03-character-macosx.app"
             BlueprintName = "sample03-character-macosx"
             ReferencedContainer = "container:sample03-character.xcodeproj">
          </BuildableReference>
@@ -69,7 +69,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42CCD56B146EC4B300353661"
-            BuildableName = "sample03-character.app"
+            BuildableName = "sample03-character-macosx.app"
             BlueprintName = "sample03-character-macosx"
             ReferencedContainer = "container:sample03-character.xcodeproj">
          </BuildableReference>

@@ -14,7 +14,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5B04C67C14C0EBF900EB0071"
-               BuildableName = "sample01-longboard.app"
+               BuildableName = "sample01-longboard-ios.app"
                BlueprintName = "sample01-longboard-ios"
                ReferencedContainer = "container:sample01-longboard.xcodeproj">
             </BuildableReference>
@@ -32,7 +32,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5B04C67C14C0EBF900EB0071"
-            BuildableName = "sample01-longboard.app"
+            BuildableName = "sample01-longboard-ios.app"
             BlueprintName = "sample01-longboard-ios"
             ReferencedContainer = "container:sample01-longboard.xcodeproj">
          </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5B04C67C14C0EBF900EB0071"
-            BuildableName = "sample01-longboard.app"
+            BuildableName = "sample01-longboard-ios.app"
             BlueprintName = "sample01-longboard-ios"
             ReferencedContainer = "container:sample01-longboard.xcodeproj">
          </BuildableReference>
@@ -69,7 +69,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5B04C67C14C0EBF900EB0071"
-            BuildableName = "sample01-longboard.app"
+            BuildableName = "sample01-longboard-ios.app"
             BlueprintName = "sample01-longboard-ios"
             ReferencedContainer = "container:sample01-longboard.xcodeproj">
          </BuildableReference>
