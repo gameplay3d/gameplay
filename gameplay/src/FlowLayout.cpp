@@ -78,10 +78,7 @@ void FlowLayout::update(const Container* container, const Vector2& offset)
         yPosition = rowY + margin.top;
 
         control->setPosition(xPosition, yPosition);
-        if (control->isDirty() || control->isContainer())
-        {
-            control->update(container, offset);
-        }
+        control->update(container, offset);
 
         xPosition += bounds.width + margin.right;
 

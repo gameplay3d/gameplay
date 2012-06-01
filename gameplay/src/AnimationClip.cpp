@@ -283,7 +283,7 @@ void AnimationClip::addListener(AnimationClip::Listener* listener, unsigned long
                 if (isClipStateBitSet(CLIP_IS_PLAYING_BIT))
                 {
                     unsigned long currentTime = _elapsedTime % _duration;
-                    GP_ASSERT(**_listenerItr);
+                    GP_ASSERT(**_listenerItr || *_listenerItr == _listeners->end());
                     if ((_speed >= 0.0f && currentTime < eventTime && (*_listenerItr == _listeners->end() || eventTime < (**_listenerItr)->_eventTime)) || 
                         (_speed <= 0 && currentTime > eventTime && (*_listenerItr == _listeners->begin() || eventTime > (**_listenerItr)->_eventTime)))
                         *_listenerItr = itr;
@@ -343,6 +343,7 @@ bool AnimationClip::update(unsigned long elapsedTime)
     if (_repeatCount != REPEAT_INDEFINITE && ((_speed >= 0.0f && _elapsedTime >= (long) _activeDuration) || (_speed <= 0.0f && _elapsedTime <= 0L)))
     {
         resetClipStateBit(CLIP_IS_STARTED_BIT);
+        
         if (_speed >= 0.0f)
         {
             // If _duration == 0, we have a "pose". Just set currentTime to 0.
@@ -415,13 +416,13 @@ bool AnimationClip::update(unsigned long elapsedTime)
         if (isClipStateBitSet(CLIP_IS_FADING_OUT_STARTED_BIT)) // Calculate elapsed time since the fade out begin.
         {
             GP_ASSERT(_crossFadeToClip);
-            _crossFadeOutElapsed = (Game::getGameTime() - _crossFadeToClip->_timeStarted) * abs(_speed); 
+            _crossFadeOutElapsed = (Game::getGameTime() - _crossFadeToClip->_timeStarted) * fabs(_speed); 
             resetClipStateBit(CLIP_IS_FADING_OUT_STARTED_BIT);
         }
         else
         {
             // continue tracking elapsed time.
-            _crossFadeOutElapsed += elapsedTime * abs(_speed);
+            _crossFadeOutElapsed += elapsedTime * fabs(_speed);
         }
 
         if (_crossFadeOutElapsed < _crossFadeOutDuration)

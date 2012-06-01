@@ -1,7 +1,6 @@
 form particleEditor
 {
     theme = res/editor.theme
-    style = background
     autoWidth = true
     autoHeight = true
 
@@ -122,9 +121,9 @@ form particleEditor
 
     container particleProperties
     {
-        style = basic
+        style = particleProps
         alignment = ALIGN_TOP_RIGHT
-        width = 195
+        width = 210
         autoHeight = true
         layout = LAYOUT_VERTICAL
         scroll = SCROLL_VERTICAL

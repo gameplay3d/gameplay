@@ -316,7 +316,7 @@ void SpaceshipGame::update(long elapsedTime)
     _shipGroupNode->setRotation(_initialShipRot);
 
     // Apply ship tilt
-    if (_force.x != 0 && abs(_velocity.x) > 0.1f)
+    if (_force.x != 0 && fabs(_velocity.x) > 0.1f)
     {
         // Compute an angle based on the dot product between the force vector and the Y axis
         Vector2 fn;
