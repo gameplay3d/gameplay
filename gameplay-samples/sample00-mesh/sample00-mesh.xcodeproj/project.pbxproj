@@ -42,7 +42,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4217005E14697FF100A45C02 /* sample00-mesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample00-mesh.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4217005E14697FF100A45C02 /* sample00-mesh-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample00-mesh-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4217006214697FF100A45C02 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4220A6E4146B121000CAEB3A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42458CB514C3AB1600EFFB61 /* sample00-mesh-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample00-mesh-ios.plist"; sourceTree = "<group>"; };
@@ -60,7 +60,7 @@
 		42F68AA31469CC3000E0E3C4 /* sample00-mesh-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample00-mesh-macosx.plist"; sourceTree = SOURCE_ROOT; };
 		42F68AA51469CDE100E0E3C4 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		42F68AA61469CDE100E0E3C4 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		5B04C5E614BFE1A200EB0071 /* sample00-mesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample00-mesh.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B04C5E614BFE1A200EB0071 /* sample00-mesh-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample00-mesh-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B04C5EA14BFE25C00EB0071 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 		5BAF202E152F2B47003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF202F152F2B47003E2AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -131,8 +131,8 @@
 		4217005F14697FF100A45C02 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4217005E14697FF100A45C02 /* sample00-mesh.app */,
-				5B04C5E614BFE1A200EB0071 /* sample00-mesh.app */,
+				4217005E14697FF100A45C02 /* sample00-mesh-macosx.app */,
+				5B04C5E614BFE1A200EB0071 /* sample00-mesh-ios.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -212,8 +212,8 @@
 			dependencies = (
 			);
 			name = "sample00-mesh-macosx";
-			productName = "sample00-mesh";
-			productReference = 4217005E14697FF100A45C02 /* sample00-mesh.app */;
+			productName = "sample00-mesh-macosx";
+			productReference = 4217005E14697FF100A45C02 /* sample00-mesh-macosx.app */;
 			productType = "com.apple.product-type.application";
 		};
 		5B04C5CF14BFE1A200EB0071 /* sample00-mesh-ios */ = {
@@ -230,8 +230,8 @@
 			dependencies = (
 			);
 			name = "sample00-mesh-ios";
-			productName = "sample00-mesh";
-			productReference = 5B04C5E614BFE1A200EB0071 /* sample00-mesh.app */;
+			productName = "sample00-mesh-ios";
+			productReference = 5B04C5E614BFE1A200EB0071 /* sample00-mesh-ios.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -353,6 +353,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -376,6 +377,7 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -404,7 +406,7 @@
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
-				PRODUCT_NAME = "sample00-mesh";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = macosx;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -434,7 +436,7 @@
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
-				PRODUCT_NAME = "sample00-mesh";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = macosx;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -469,7 +471,7 @@
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				OTHER_LDFLAGS = "-ObjC++";
-				PRODUCT_NAME = "sample00-mesh";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SHARED_PRECOMPS_DIR = "";
@@ -506,7 +508,7 @@
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				OTHER_LDFLAGS = "-ObjC++";
-				PRODUCT_NAME = "sample00-mesh";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SHARED_PRECOMPS_DIR = "";
