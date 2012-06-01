@@ -112,18 +112,6 @@ theme particleEditor
         color = #C3D9BFff
     }
 
-    skin empty
-    {
-        region = 0, 0, 1, 1
-    }
-
-    style background
-    {
-        stateNormal
-        {
-        }
-    }
-
     style basic
     {
         stateNormal
@@ -208,7 +196,6 @@ theme particleEditor
 
         stateNormal
         {
-            skin = empty
             textColor = #ffffffff
             font = res/arial18.gpb
             fontSize = 25
