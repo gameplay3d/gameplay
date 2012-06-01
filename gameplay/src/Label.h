@@ -116,7 +116,11 @@ protected:
      * The text color being used to display the label.
      */
     Vector4 _textColor;
-    Rectangle _textBounds;  // The position and size of this control's text area, before clipping.  Used for text alignment.
+
+    /**
+     * The position and size of this control's text area, before clipping.  Used for text alignment.
+     */
+    Rectangle _textBounds;
 
 private:
 

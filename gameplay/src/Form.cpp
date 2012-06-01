@@ -90,8 +90,19 @@ Form* Form::create(const char* url)
     Game* game = Game::getInstance();
     Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
 
+    Theme::Style* style = NULL;
     const char* styleName = formProperties->getString("style");
-    form->initialize(theme->getStyle(styleName), formProperties);
+    if (styleName)
+    {
+        style = theme->getStyle(styleName);
+    }
+    else
+    {
+        Theme::Style::Overlay* overlay = Theme::Style::Overlay::create();
+        style = new Theme::Style(theme, "", 1.0f / theme->_texture->getWidth(), 1.0f / theme->_texture->getHeight(),
+            Theme::Margin::empty(), Theme::Border::empty(), overlay, overlay, overlay, overlay);
+    }
+    form->initialize(style, formProperties);
 
     // Alignment
     if ((form->_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)
@@ -113,9 +124,16 @@ Form* Form::create(const char* url)
     }
 
     form->_scroll = getScroll(formProperties->getString("scroll"));
+    form->_scrollBarsAutoHide = formProperties->getBool("scrollBarsAutoHide");
+    if (form->_scrollBarsAutoHide)
+    {
+        form->_scrollBarOpacity = 0.0f;
+    }
 
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
+
+    form->update();
 
     SAFE_DELETE(properties);
 
@@ -553,7 +571,7 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
                     // to the plane defined by the same vector and the origin.
                     const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
                     const float d = -(a*min.x) - (b*min.y) - (c*min.z);
-                    const float distance = abs(d) /  sqrt(a*a + b*b + c*c);
+                    const float distance = fabs(d) /  sqrt(a*a + b*b + c*c);
                     Plane plane(normal, -distance);
 
                     // Check for collision with plane.
