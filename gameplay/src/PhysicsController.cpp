@@ -694,7 +694,7 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
                 // Automatically compute bounding box from mesh's bounding box.
                 BoundingBox box;
                 getBoundingBox(node, &box);
-                collisionShape = createBox(Vector3(std::abs(box.max.x - box.min.x), std::abs(box.max.y - box.min.y), std::abs(box.max.z - box.min.z)), scale);
+                collisionShape = createBox(Vector3(std::fabs(box.max.x - box.min.x), std::fabs(box.max.y - box.min.y), std::fabs(box.max.z - box.min.z)), scale);
 
                 computeCenterOfMass(box.getCenter(), scale, centerOfMassOffset);
             }

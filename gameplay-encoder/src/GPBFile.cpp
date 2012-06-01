@@ -429,7 +429,7 @@ void GPBFile::decomposeTransformAnimationChannel(Animation* animation, const Ani
 
 static bool isAlmostOne(float value)
 {
-    return std::abs(value - 1.0f) < EPSILON;
+    return std::fabs(value - 1.0f) < EPSILON;
 }
 
 }
