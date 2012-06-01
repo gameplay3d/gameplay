@@ -3,10 +3,6 @@
 #include "Quaternion.h"
 #include "MathUtil.h"
 
-#ifndef MATRIX_SIZE
-#define MATRIX_SIZE     ( sizeof(float) * 16 )
-#endif
-
 namespace gameplay
 {
 
@@ -846,7 +842,7 @@ void Matrix::transformVector(float x, float y, float z, float w, Vector3* dst) c
 {
     GP_ASSERT(dst);
 
-    MathUtil::transformVectorMatrix(m, x, y, z, w, (float*)dst);
+    MathUtil::transformVector4(m, x, y, z, w, (float*)dst);
 }
 
 void Matrix::transformVector(Vector4* vector) const
@@ -859,7 +855,7 @@ void Matrix::transformVector(const Vector4& vector, Vector4* dst) const
 {
     GP_ASSERT(dst);
 
-    MathUtil::transformVectorMatrix(m, (const float*) &vector, (float*)dst);
+    MathUtil::transformVector4(m, (const float*) &vector, (float*)dst);
 }
 
 void Matrix::translate(float x, float y, float z)

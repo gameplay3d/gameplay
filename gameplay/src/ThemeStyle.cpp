@@ -85,7 +85,9 @@ Theme::Style::Overlay* Theme::Style::Overlay::create()
     return overlay;
 }
 
-Theme::Style::Overlay::Overlay() : _skin(NULL), _cursor(NULL), _imageList(NULL), _font(NULL)
+Theme::Style::Overlay::Overlay()
+    : _skin(NULL), _cursor(NULL), _imageList(NULL), _font(NULL),
+    _fontSize(0), _alignment(Font::ALIGN_TOP_LEFT), _textRightToLeft(false), _textColor(Vector4::one()), _opacity(1.0f)
 {
 }
 

@@ -22,6 +22,8 @@ class Theme::Style
 {
     friend class Theme;
     friend class Control;
+    friend class Container;
+    friend class Form;
 
 private:
 
@@ -45,6 +47,8 @@ private:
         friend class Theme;
         friend class Theme::Style;
         friend class Control;
+        friend class Container;
+        friend class Form;
 
     private:
 

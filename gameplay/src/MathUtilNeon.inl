@@ -45,6 +45,27 @@ inline void MathUtil::addMatrix(const float* m1, const float* m2, float* dst)
 	);
 }
 
+inline void MathUtil::subtractMatrix(const float* m1, const float* m2, float* dst)
+{
+	asm volatile(
+		"vld1.32 	{q0, q1}, 	[%1]! 	\n\t" // M1[m0-m7]
+		"vld1.32 	{q2, q3}, 	[%1] 	\n\t" // M1[m8-m15]
+		"vld1.32 	{q8, q9}, 	[%2]! 	\n\t" // M2[m0-m7]
+		"vld1.32 	{q10, q11}, [%2] 	\n\t" // M2[m8-m15]
+
+		"vsub.f32   q12, q0, q8 		\n\t" // DST->M[m0-m3] = M1[m0-m3] - M2[m0-m3]
+		"vsub.f32   q13, q1, q9			\n\t" // DST->M[m4-m7] = M1[m4-m7] - M2[m4-m7]
+		"vsub.f32   q14, q2, q10		\n\t" // DST->M[m8-m11] = M1[m8-m11] - M2[m8-m11]
+		"vsub.f32   q15, q3, q11		\n\t" // DST->M[m12-m15] = M1[m12-m15] - M2[m12-m15]
+
+		"vst1.32    {q12, q13}, [%0]!   \n\t" // DST->M[m0-m7]
+		"vst1.32    {q14, q15}, [%0]    \n\t" // DST->M[m8-m15]
+		:
+		: "r"(dst), "r"(m1), "r"(m2)
+		: "q0", "q1", "q2", "q3", "q8", "q9", "q10", "q11", "q12", "q13", "q14", "q15", "memory"
+	);
+}
+
 inline void MathUtil::multiplyMatrix(const float* m, float scalar, float* dst)
 {
 	asm volatile(
@@ -121,28 +142,23 @@ inline void MathUtil::negateMatrix(const float* m, float* dst)
 	);
 }
 
-inline void MathUtil::subtractMatrix(const float* m1, const float* m2, float* dst)
+inline void MathUtil::transposeMatrix(const float* m, float* dst)
 {
 	asm volatile(
-		"vld1.32 	{q0, q1}, 	[%1]! 	\n\t" // M1[m0-m7]
-		"vld1.32 	{q2, q3}, 	[%1] 	\n\t" // M1[m8-m15]
-		"vld1.32 	{q8, q9}, 	[%2]! 	\n\t" // M2[m0-m7]
-		"vld1.32 	{q10, q11}, [%2] 	\n\t" // M2[m8-m15]
+		"vld4.32 {d0[0], d2[0], d4[0], d6[0]}, [%1]! 	\n\t" // DST->M[m0, m4, m8, m12] = M[m0-m3]
+		"vld4.32 {d0[1], d2[1], d4[1], d6[1]}, [%1]!	\n\t" // DST->M[m1, m5, m9, m12] = M[m4-m7]
+		"vld4.32 {d1[0], d3[0], d5[0], d7[0]}, [%1]!	\n\t" // DST->M[m2, m6, m10, m12] = M[m8-m11]
+		"vld4.32 {d1[1], d3[1], d5[1], d7[1]}, [%1] 	\n\t" // DST->M[m3, m7, m11, m12] = M[m12-m15]
 
-		"vsub.f32   q12, q0, q8 		\n\t" // DST->M[m0-m3] = M1[m0-m3] - M2[m0-m3]
-		"vsub.f32   q13, q1, q9			\n\t" // DST->M[m4-m7] = M1[m4-m7] - M2[m4-m7]
-		"vsub.f32   q14, q2, q10		\n\t" // DST->M[m8-m11] = M1[m8-m11] - M2[m8-m11]
-		"vsub.f32   q15, q3, q11		\n\t" // DST->M[m12-m15] = M1[m12-m15] - M2[m12-m15]
-
-		"vst1.32    {q12, q13}, [%0]!   \n\t" // DST->M[m0-m7]
-		"vst1.32    {q14, q15}, [%0]    \n\t" // DST->M[m8-m15]
+		"vst1.32 {q0-q1}, [%0]! 						\n\t" // DST->M[m0-m7]
+		"vst1.32 {q2-q3}, [%0] 							\n\t" // DST->M[m8-m15]
 		:
-		: "r"(dst), "r"(m1), "r"(m2)
-		: "q0", "q1", "q2", "q3", "q8", "q9", "q10", "q11", "q12", "q13", "q14", "q15", "memory"
+		: "r"(dst), "r"(m)
+		: "q0", "q1", "q2", "q3", "memory"
 	);
 }
 
-inline void MathUtil::transformVectorMatrix(const float* m, float x, float y, float z, float w, float* dst)
+inline void MathUtil::transformVector4(const float* m, float x, float y, float z, float w, float* dst)
 {
 	asm volatile(
 		"vld1.32	{d0[0]},		[%1]	\n\t"	// V[x]
@@ -165,7 +181,7 @@ inline void MathUtil::transformVectorMatrix(const float* m, float x, float y, fl
 	);
 }
 
-inline void MathUtil::transformVectorMatrix(const float* m, const float* v, float* dst)
+inline void MathUtil::transformVector4(const float* m, const float* v, float* dst)
 {
 	asm volatile
 	(
@@ -182,22 +198,6 @@ inline void MathUtil::transformVectorMatrix(const float* m, const float* v, floa
 		:
 		: "r"(dst), "r"(v), "r"(m)
 		: "q0", "q9", "q10","q11", "q12", "q13", "memory"
-	);
-}
-
-inline void MathUtil::transposeMatrix(const float* m, float* dst)
-{
-	asm volatile(
-		"vld4.32 {d0[0], d2[0], d4[0], d6[0]}, [%1]! 	\n\t" // DST->M[m0, m4, m8, m12] = M[m0-m3]
-		"vld4.32 {d0[1], d2[1], d4[1], d6[1]}, [%1]!	\n\t" // DST->M[m1, m5, m9, m12] = M[m4-m7]
-		"vld4.32 {d1[0], d3[0], d5[0], d7[0]}, [%1]!	\n\t" // DST->M[m2, m6, m10, m12] = M[m8-m11]
-		"vld4.32 {d1[1], d3[1], d5[1], d7[1]}, [%1] 	\n\t" // DST->M[m3, m7, m11, m12] = M[m12-m15]
-
-		"vst1.32 {q0-q1}, [%0]! 						\n\t" // DST->M[m0-m7]
-		"vst1.32 {q2-q3}, [%0] 							\n\t"  // DST->M[m8-m15]
-		:
-		: "r"(dst), "r"(m)
-		: "q0", "q1", "q2", "q3", "memory"
 	);
 }
 

@@ -21,13 +21,13 @@ You must then rebuild gameplay-encoder with the follow platform/tooling instruct
 - Edit the project properties of "gameplay-encoder"
 - Add Preprocessor Definition "USE_FBX" (C++/Preprocessor)
 - Add the FBX SDK include directory to Additional Include Directories (C++/General)
-  * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2012.2/include
+  * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.1/include
 - Add the FBX lib directory to the Additional Library Directories (Linker/General)
-  * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2012.2/lib/vs2010/x86
-- Add "fbxsdk-2012.2-mdd.lib" and "wininet.lib" to the Additional Dependencies (Linker/Input)
-  * Example: fbxsdk-2012.2-mdd.lib;wininet.lib
+  * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.1/lib/vs2010/x86
+- Add "fbxsdk-2013.1-mdd.lib" and "wininet.lib" to the Additional Dependencies (Linker/Input)
+  * Example: fbxsdk-2013.1-mdd.lib;wininet.lib
 - Add a post build event to copy the DLL (Build Events/Post-Build Event)
-  * Example: copy /Y "C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\lib\vs2010\x86\fbxsdk-2012.2d.dll" "$(TargetDir)"
+  * Example: copy /Y "C:\Program Files\Autodesk\FBX\FbxSdk\2013.1\lib\vs2010\x86\fbxsdk-2013.1d.dll" "$(TargetDir)"
 - Build gameplay-encoder
 
 ### Building FBX Support on Mac OS X using XCode 4.3.2+
@@ -35,9 +35,9 @@ You must then rebuild gameplay-encoder with the follow platform/tooling instruct
 - Edit the project properties of target "gameplay-encoder".
 - Add Preprocessor Macro "USE_FBX" to both Debug/Release sections. (Build Settings)
 - Add the FBX include directory to Header Search Paths: (Build Settings)
-  * Example: /Applications/Autodesk/FBXSDK20122/include
+  * Example: /Applications/Autodesk/FBXSDK20131/include
 - Add the FBX library and dependency Library/Frameworks: (Build Phases -> Link Binary with Libraries)
-  * Example: /Applications/Autodesk/FBXSDK20122/lib/gcc4/ub/libfbxsdk-2012.2-static.a  (Add Other)
+  * Example: /Applications/Autodesk/FBXSDK20131/lib/gcc4/ub/libfbxsdk-2013.1-static.a  (Add Other)
   * Example: libiconv.dylib, Cocoa.framework, SystemConfiguration.framework
 - Build gameplay-encoder
 

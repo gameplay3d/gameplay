@@ -1,5 +1,3 @@
-#define MATRIX_SIZE ( sizeof(float) * 16)
-
 namespace gameplay
 {
 
@@ -41,6 +39,26 @@ inline void MathUtil::addMatrix(const float* m1, const float* m2, float* dst)
 	dst[13] = m1[13] + m2[13];
 	dst[14] = m1[14] + m2[14];
 	dst[15] = m1[15] + m2[15];
+}
+
+inline void MathUtil::subtractMatrix(const float* m1, const float* m2, float* dst)
+{
+	dst[0]  = m1[0]  - m2[0];
+	dst[1]  = m1[1]  - m2[1];
+	dst[2]  = m1[2]  - m2[2];
+	dst[3]  = m1[3]  - m2[3];
+	dst[4]  = m1[4]  - m2[4];
+	dst[5]  = m1[5]  - m2[5];
+	dst[6]  = m1[6]  - m2[6];
+	dst[7]  = m1[7]  - m2[7];
+	dst[8]  = m1[8]  - m2[8];
+	dst[9]  = m1[9]  - m2[9];
+	dst[10] = m1[10] - m2[10];
+	dst[11] = m1[11] - m2[11];
+	dst[12] = m1[12] - m2[12];
+	dst[13] = m1[13] - m2[13];
+	dst[14] = m1[14] - m2[14];
+	dst[15] = m1[15] - m2[15];
 }
 
 inline void MathUtil::multiplyMatrix(const float* m, float scalar, float* dst)
@@ -111,34 +129,25 @@ inline void MathUtil::negateMatrix(const float* m, float* dst)
 	dst[15] = -m[15];
 }
 
-inline void MathUtil::subtractMatrix(const float* m1, const float* m2, float* dst)
+inline void MathUtil::transposeMatrix(const float* m, float* dst)
 {
-	dst[0]  = m1[0]  - m2[0];
-	dst[1]  = m1[1]  - m2[1];
-	dst[2]  = m1[2]  - m2[2];
-	dst[3]  = m1[3]  - m2[3];
-	dst[4]  = m1[4]  - m2[4];
-	dst[5]  = m1[5]  - m2[5];
-	dst[6]  = m1[6]  - m2[6];
-	dst[7]  = m1[7]  - m2[7];
-	dst[8]  = m1[8]  - m2[8];
-	dst[9]  = m1[9]  - m2[9];
-	dst[10] = m1[10] - m2[10];
-	dst[11] = m1[11] - m2[11];
-	dst[12] = m1[12] - m2[12];
-	dst[13] = m1[13] - m2[13];
-	dst[14] = m1[14] - m2[14];
-	dst[15] = m1[15] - m2[15];
+	float t[16] = {
+		m[0], m[4], m[8], m[12],
+		m[1], m[5], m[9], m[13],
+		m[2], m[6], m[10], m[14],
+		m[3], m[7], m[11], m[15]
+	};
+	memcpy(dst, t, MATRIX_SIZE);
 }
 
-inline void MathUtil::transformVectorMatrix(const float* m, float x, float y, float z, float w, float* dst)
+inline void MathUtil::transformVector4(const float* m, float x, float y, float z, float w, float* dst)
 {
 	dst[0] = x * m[0] + y * m[4] + z * m[8] + w * m[12];
 	dst[1] = x * m[1] + y * m[5] + z * m[9] + w * m[13];
 	dst[2] = x * m[2] + y * m[6] + z * m[10] + w * m[14];
 }
 
-inline void MathUtil::transformVectorMatrix(const float* m, const float* v, float* dst)
+inline void MathUtil::transformVector4(const float* m, const float* v, float* dst)
 {
     // Handle case where v == dst.
     float x = v[0] * m[0] + v[1] * m[4] + v[2] * m[8] + v[3] * m[12];
@@ -150,17 +159,6 @@ inline void MathUtil::transformVectorMatrix(const float* m, const float* v, floa
     dst[1] = y;
 	dst[2] = z;
 	dst[3] = w;
-}
-
-inline void MathUtil::transposeMatrix(const float* m, float* dst)
-{
-	float t[16] = {
-		m[0], m[4], m[8], m[12],
-		m[1], m[5], m[9], m[13],
-		m[2], m[6], m[10], m[14],
-		m[3], m[7], m[11], m[15]
-	};
-	memcpy(dst, t, MATRIX_SIZE);
 }
 
 inline void MathUtil::crossVector3(const float* v1, const float* v2, float* dst)
