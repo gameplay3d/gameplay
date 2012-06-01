@@ -111,6 +111,7 @@ protected:
      * properties, such as its text viewport.
      *
      * @param container This control's parent container.
+     * @param offset Positioning offset to add to the control's position.
      */
     void update(const Control* container, const Vector2& offset);
 
@@ -126,6 +127,10 @@ protected:
      * The current position of the TextBox's caret.
      */
     Vector2 _caretLocation;
+
+    /**
+     * The previous position of the TextBox's caret.
+     */
     Vector2 _prevCaretLocation;
 
     /**
