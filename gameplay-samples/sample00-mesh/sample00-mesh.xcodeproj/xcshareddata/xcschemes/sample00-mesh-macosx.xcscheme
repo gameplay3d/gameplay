@@ -14,7 +14,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4217005D14697FF100A45C02"
-               BuildableName = "sample00-mesh.app"
+               BuildableName = "sample00-mesh-macosx.app"
                BlueprintName = "sample00-mesh-macosx"
                ReferencedContainer = "container:sample00-mesh.xcodeproj">
             </BuildableReference>
@@ -32,7 +32,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4217005D14697FF100A45C02"
-            BuildableName = "sample00-mesh.app"
+            BuildableName = "sample00-mesh-macosx.app"
             BlueprintName = "sample00-mesh-macosx"
             ReferencedContainer = "container:sample00-mesh.xcodeproj">
          </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4217005D14697FF100A45C02"
-            BuildableName = "sample00-mesh.app"
+            BuildableName = "sample00-mesh-macosx.app"
             BlueprintName = "sample00-mesh-macosx"
             ReferencedContainer = "container:sample00-mesh.xcodeproj">
          </BuildableReference>
@@ -69,7 +69,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4217005D14697FF100A45C02"
-            BuildableName = "sample00-mesh.app"
+            BuildableName = "sample00-mesh-macosx.app"
             BlueprintName = "sample00-mesh-macosx"
             ReferencedContainer = "container:sample00-mesh.xcodeproj">
          </BuildableReference>
