@@ -64,10 +64,12 @@ public:
     virtual Type getType() = 0;
 
 protected:
+
     /**
      * Position, resize, and update the controls within a container.
      *
      * @param container The container to update.
+     * @param offset The update offset.
      */
     virtual void update(const Container* container, const Vector2& offset) = 0;
 
