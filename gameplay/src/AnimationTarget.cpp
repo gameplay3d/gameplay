@@ -419,7 +419,6 @@ Animation::Channel* AnimationTarget::getChannel(const char* id) const
     if (_animationChannels)
     {
         std::vector<Animation::Channel*>::iterator itr = _animationChannels->begin();
-        GP_ASSERT(*itr);
 
         if (id == NULL)
             return (*itr);
