@@ -683,9 +683,9 @@ void Container::updateScroll()
         _scrollingVelocity.x *= dampening;
         _scrollingVelocity.y *= dampening;
 
-        if (abs(_scrollingVelocity.x) < 100.0f)
+        if (fabs(_scrollingVelocity.x) < 100.0f)
             _scrollingVelocity.x = 0.0f;
-        if (abs(_scrollingVelocity.y) < 100.0f)
+        if (fabs(_scrollingVelocity.y) < 100.0f)
             _scrollingVelocity.y = 0.0f;
     }
 
