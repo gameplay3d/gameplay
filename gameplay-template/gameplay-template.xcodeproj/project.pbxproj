@@ -43,7 +43,7 @@
 
 /* Begin PBXFileReference section */
 		42438B521491AD2000D218B8 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
-		42C932BC1491A0DB0098216A /* TEMPLATE_PROJECT-MacOSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TEMPLATE_PROJECT-MacOSX.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C932BC1491A0DB0098216A /* TEMPLATE_PROJECT-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TEMPLATE_PROJECT-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C932C01491A0DB0098216A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42C932ED1491A4CB0098216A /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		42C932EF1491A5160098216A /* TemplateGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TemplateGame.cpp; path = src/TemplateGame.cpp; sourceTree = SOURCE_ROOT; };
@@ -60,7 +60,7 @@
 		42C9332A1491A7390098216A /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "GAMEPLAY_PATH/external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42C9332D1491A7810098216A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		5B61611214CCC2200073B857 /* TEMPLATE_PROJECT-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TEMPLATE_PROJECT-macosx.plist"; sourceTree = "<group>"; };
-		5B61612C14CCC24C0073B857 /* TEMPLATE_PROJECT-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TEMPLATE_PROJECT-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B61612C14CCC24C0073B857 /* TEMPLATE_PROJECT-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TEMPLATE_PROJECT-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B61612E14CCC24D0073B857 /* TEMPLATE_PROJECT-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TEMPLATE_PROJECT-ios.plist"; sourceTree = "<group>"; };
 		5BAF2067152F2DDD003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF2068152F2DDD003E2AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -133,8 +133,8 @@
 		42C932BD1491A0DB0098216A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				42C932BC1491A0DB0098216A /* TEMPLATE_PROJECT-MacOSX.app */,
-				5B61612C14CCC24C0073B857 /* TEMPLATE_PROJECT-iOS.app */,
+				42C932BC1491A0DB0098216A /* TEMPLATE_PROJECT-macosx.app */,
+				5B61612C14CCC24C0073B857 /* TEMPLATE_PROJECT-ios.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -209,9 +209,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		42C932BB1491A0DB0098216A /* TEMPLATE_PROJECT-MacOSX */ = {
+		42C932BB1491A0DB0098216A /* TEMPLATE_PROJECT-macosx */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "TEMPLATE_PROJECT-MacOSX" */;
+			buildConfigurationList = 42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "TEMPLATE_PROJECT-macosx" */;
 			buildPhases = (
 				42C932B81491A0DB0098216A /* Sources */,
 				42C932B91491A0DB0098216A /* Frameworks */,
@@ -223,28 +223,28 @@
 			);
 			dependencies = (
 			);
-			name = "TEMPLATE_PROJECT-MacOSX";
+			name = "TEMPLATE_PROJECT-macosx";
 			productName = TEMPLATE_PROJECT;
-			productReference = 42C932BC1491A0DB0098216A /* TEMPLATE_PROJECT-MacOSX.app */;
+			productReference = 42C932BC1491A0DB0098216A /* TEMPLATE_PROJECT-macosx.app */;
 			productType = "com.apple.product-type.application";
 		};
-		5B61611414CCC24C0073B857 /* TEMPLATE_PROJECT-iOS */ = {
+		5B61611414CCC24C0073B857 /* TEMPLATE_PROJECT-ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5B61612914CCC24C0073B857 /* Build configuration list for PBXNativeTarget "TEMPLATE_PROJECT-iOS" */;
+			buildConfigurationList = 5B61612914CCC24C0073B857 /* Build configuration list for PBXNativeTarget "TEMPLATE_PROJECT-ios" */;
 			buildPhases = (
 				5B61611514CCC24C0073B857 /* Sources */,
 				5B61611714CCC24C0073B857 /* Frameworks */,
 				5B61612414CCC24C0073B857 /* ShellScript */,
 				5B61612514CCC24C0073B857 /* Resources */,
-				5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Reousrces Run Script */,
+				5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Resources Run Script */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "TEMPLATE_PROJECT-iOS";
+			name = "TEMPLATE_PROJECT-ios";
 			productName = TEMPLATE_PROJECT;
-			productReference = 5B61612C14CCC24C0073B857 /* TEMPLATE_PROJECT-iOS.app */;
+			productReference = 5B61612C14CCC24C0073B857 /* TEMPLATE_PROJECT-ios.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -267,8 +267,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42C932BB1491A0DB0098216A /* TEMPLATE_PROJECT-MacOSX */,
-				5B61611414CCC24C0073B857 /* TEMPLATE_PROJECT-iOS */,
+				42C932BB1491A0DB0098216A /* TEMPLATE_PROJECT-macosx */,
+				5B61611414CCC24C0073B857 /* TEMPLATE_PROJECT-ios */,
 			);
 		};
 /* End PBXProject section */
@@ -321,7 +321,7 @@
 			shellPath = /bin/sh;
 			shellScript = "touch -cm ${SRCROOT}/res";
 		};
-		5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Reousrces Run Script */ = {
+		5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Resources Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -333,7 +333,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn GAMEPLAY_PATH/gameplay/res/shaders ${SRCROOT}/res\ncp -rn GAMEPLAY_PATH/gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rn GAMEPLAY_PATH/gameplay/res/shaders ${SRCROOT}/res\ncp -rf GAMEPLAY_PATH/gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 		5BAF20D7152F30C3003E2AC3 /* Copy Gameplay Resources - Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -544,7 +544,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "TEMPLATE_PROJECT-MacOSX" */ = {
+		42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "TEMPLATE_PROJECT-macosx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				42C932DB1491A0DB0098216A /* Debug */,
@@ -553,7 +553,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5B61612914CCC24C0073B857 /* Build configuration list for PBXNativeTarget "TEMPLATE_PROJECT-iOS" */ = {
+		5B61612914CCC24C0073B857 /* Build configuration list for PBXNativeTarget "TEMPLATE_PROJECT-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5B61612A14CCC24C0073B857 /* Debug */,

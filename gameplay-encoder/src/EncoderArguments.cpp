@@ -24,25 +24,29 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
 
     if (argc > 1)
     {
-        size_t filePathIndex = argc - 1;
-        if (argv[filePathIndex])
-        {
-            _filePath.assign(getRealPath(argv[filePathIndex]));
-        }
-        
         // read the options
-        std::vector<std::string> options;
-        for (size_t i = 1; i < filePathIndex; ++i)
+        std::vector<std::string> arguments;
+        for (size_t i = 1; i < argc; ++i)
         {
-            options.push_back(argv[i]);
+            arguments.push_back(argv[i]);
         }
-        
-        for (size_t i = 0; i < options.size(); ++i)
+        size_t index = 0;
+        for (size_t i = 0; i < arguments.size(); ++i)
         {
-            if (options[i][0] == '-')
+            if (arguments[i][0] == '-')
             {
-                readOption(options, &i);
+                readOption(arguments, &i);
+                index = i + 1;
             }
+        }
+        if (arguments.size() - index == 2)
+        {
+            setInputfilePath(arguments[index]);
+            setOutputfilePath(arguments[index + 1]);
+        }
+        else if (arguments.size() - index == 1)
+        {
+            setInputfilePath(arguments[index]);
         }
     }
     else
@@ -70,10 +74,42 @@ const char* EncoderArguments::getFilePathPointer() const
     return _filePath.c_str();
 }
 
-std::string EncoderArguments::getOutputPath() const
+std::string EncoderArguments::getOutputDirPath() const
 {
-    int pos = _filePath.find_last_of('/');
-    return (pos == -1 ? _filePath : _filePath.substr(0, pos));
+    if (_fileOutputPath.size() > 0)
+    {
+        int pos = _fileOutputPath.find_last_of('/');
+        return (pos == -1 ? _fileOutputPath : _fileOutputPath.substr(0, pos));
+    }
+    else
+    {
+        int pos = _filePath.find_last_of('/');
+        return (pos == -1 ? _filePath : _filePath.substr(0, pos));
+    }
+}
+
+std::string EncoderArguments::getOutputFilePath() const
+{
+    if (_fileOutputPath.size() > 0)
+    {
+        return _fileOutputPath;
+    }
+    else
+    {
+        int pos = _filePath.find_last_of('.');
+        if (pos > 0)
+        {
+            std::string outputFilePath(_filePath.substr(0, pos));
+            outputFilePath.append(".gpb");
+            return outputFilePath;
+        }
+        else
+        {
+            std::string outputFilePath(_filePath);
+            outputFilePath.append(".gpb");
+            return outputFilePath;
+        }
+    }
 }
 
 const std::string& EncoderArguments::getDAEOutputPath() const
@@ -134,7 +170,7 @@ bool EncoderArguments::fileExists() const
 
 void EncoderArguments::printUsage() const
 {
-    fprintf(stderr,"Usage: gameplay-encoder [options] <filepath>\n\n");
+    fprintf(stderr,"Usage: gameplay-encoder [options] <input filepath> <output filepath>\n\n");
     fprintf(stderr,"Supported file extensions:\n");
     fprintf(stderr,"  .dae\t(COLLADA)\n");
     fprintf(stderr,"  .fbx\t(FBX)\n");
@@ -343,6 +379,43 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
     }
 }
 
+void EncoderArguments::setInputfilePath(const std::string& inputPath)
+{
+    _filePath.assign(getRealPath(inputPath));
+}
+
+void EncoderArguments::setOutputfilePath(const std::string& outputPath)
+{
+    if (outputPath.size() > 0 && outputPath[0] != '\0')
+    {
+        std::string realPath = getRealPath(outputPath);
+        if (endsWith(realPath.c_str(), ".gpb"))
+        {
+            _fileOutputPath.assign(realPath);
+        }
+        else if (endsWith(outputPath.c_str(), "/"))
+        {
+            std::string filenameNoExt = getFilenameNoExt(getFilenameFromFilePath(_filePath));
+
+            _fileOutputPath.assign(outputPath);
+            _fileOutputPath.append(filenameNoExt);
+            _fileOutputPath.append(".gpb");
+        }
+        else
+        {
+            std::string filenameNoExt = getFilenameNoExt(getFilenameFromFilePath(realPath));
+            int pos = realPath.find_last_of("/");
+            if (pos)
+            {
+                _fileOutputPath = realPath.substr(0, pos);
+                _fileOutputPath.append("/");
+                _fileOutputPath.append(filenameNoExt);
+                _fileOutputPath.append(".gpb");
+            }
+        }
+    }
+}
+
 std::string EncoderArguments::getRealPath(const std::string& filepath)
 {
     char path[PATH_MAX + 1]; /* not sure about the "+ 1" */
@@ -359,6 +432,81 @@ void EncoderArguments::replace_char(char* str, char oldChar, char newChar)
         {
             *str = newChar;
         }
+    }
+}
+
+std::string concat(const std::string& a, const char* b)
+{
+    std::string str(a);
+    str.append(b);
+    return str;
+}
+
+
+void unittestsEncoderArguments()
+{
+    std::string dir = EncoderArguments::getRealPath(".");
+    std::string exePath = EncoderArguments::getRealPath(".");
+    exePath.append("/gameplay-encoder.exe");
+    const char* exe = exePath.c_str();
+    {
+        const char* argv[] = {exe, "-groupAnimations", "root", "movements", "C:\\Git\\gaming\\GamePlay\\gameplay-encoder\\res\\seymour.dae"};
+        EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
+        assert(equals(args.getAnimationId("root"), ("movements")));
+        assert(equals(args.getGroupAnimationNodeId()[0], ("root")));
+        assert(equals(args.getOutputFilePath(), "C:/Git/gaming/GamePlay/gameplay-encoder/res/seymour.gpb"));
+    }
+    {
+        // Test with only input file name (relative)
+        const char* argv[] = {exe, "input.dae"};
+        EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
+        assert(equals(args.getFilePath(), concat(dir, "/input.dae")));
+        assert(equals(args.getOutputFilePath(), concat(dir, "/input.gpb")));
+        equals(args.getOutputDirPath(), dir);
+    }
+    {
+        // Test specifying a relative output path
+        const char* argv[] = {exe, "input.dae", "output.gpb"};
+        EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
+        assert(equals(args.getFilePath(), concat(dir, "/input.dae")));
+        assert(equals(args.getOutputFilePath(), concat(dir, "/output.gpb")));
+    }
+    {
+        // Test specifying a relative output path
+        const char* argv[] = {exe, "input.fbx", "output.gpb"};
+        EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
+        assert(equals(args.getFilePath(), concat(dir, "/input.fbx")));
+        assert(equals(args.getOutputFilePath(), concat(dir, "/output.gpb")));
+    }
+    {
+        // Test specifying a relative output path to a directory
+        const char* argv[] = {exe, "input.dae", "stuff/output.gpb"};
+        EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
+        assert(equals(args.getFilePath(), concat(dir, "/input.dae")));
+        assert(equals(args.getOutputFilePath(), concat(dir, "/stuff/output.gpb")));
+    }
+    {
+        // Test parsing some arguments
+        const char* argv[] = {exe, "-dae", "collada.dae", "-t", "input.dae", "output.gpb"};
+        EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
+        assert(equals(args.getFilePath(), concat(dir, "/input.dae")));
+        assert(equals(args.getOutputFilePath(), concat(dir, "/output.gpb")));
+        assert(args.textOutputEnabled());
+        //assert(equals(args.getDAEOutputPath(), concat(dir, "/collada.dae")));
+    }
+    {
+        // Test output file with no file extension
+        const char* argv[] = {exe, "input.dae", "output"};
+        EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
+        assert(equals(args.getFilePath(), concat(dir, "/input.dae")));
+        assert(equals(args.getOutputFilePath(), concat(dir, "/output.gpb")));
+    }
+    {
+        // Test output file with wrong file extension
+        const char* argv[] = {exe, "input.dae", "output.dae"};
+        EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
+        assert(equals(args.getFilePath(), concat(dir, "/input.dae")));
+        assert(equals(args.getOutputFilePath(), concat(dir, "/output.gpb")));
     }
 }
 

@@ -90,8 +90,19 @@ Form* Form::create(const char* url)
     Game* game = Game::getInstance();
     Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
 
+    Theme::Style* style = NULL;
     const char* styleName = formProperties->getString("style");
-    form->initialize(theme->getStyle(styleName), formProperties);
+    if (styleName)
+    {
+        style = theme->getStyle(styleName);
+    }
+    else
+    {
+        Theme::Style::Overlay* overlay = Theme::Style::Overlay::create();
+        style = new Theme::Style(theme, "", 1.0f / theme->_texture->getWidth(), 1.0f / theme->_texture->getHeight(),
+            Theme::Margin::empty(), Theme::Border::empty(), overlay, overlay, overlay, overlay);
+    }
+    form->initialize(style, formProperties);
 
     // Alignment
     if ((form->_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)
@@ -113,9 +124,16 @@ Form* Form::create(const char* url)
     }
 
     form->_scroll = getScroll(formProperties->getString("scroll"));
+    form->_scrollBarsAutoHide = formProperties->getBool("scrollBarsAutoHide");
+    if (form->_scrollBarsAutoHide)
+    {
+        form->_scrollBarOpacity = 0.0f;
+    }
 
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
+
+    form->update();
 
     SAFE_DELETE(properties);
 
@@ -417,10 +435,10 @@ void Form::update()
         }
 
         GP_ASSERT(_layout);
-        _layout->update(this);
-
         if (_scroll != SCROLL_NONE)
-            this->updateScroll(this);
+            updateScroll();
+        else
+            _layout->update(this, Vector2::zero());
     }
 }
 
@@ -451,7 +469,7 @@ void Form::draw()
 
         GP_ASSERT(_theme);
         _theme->setProjectionMatrix(_projectionMatrix);
-        Container::draw(_theme->getSpriteBatch(), Rectangle(0, 0, _bounds.width, _bounds.height), _skin == NULL, _bounds.height);
+        Container::draw(_theme->getSpriteBatch(), Rectangle(0, 0, _bounds.width, _bounds.height), _skin != NULL, false, _bounds.height);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
 
         // Rebind the default framebuffer and game viewport.

@@ -6,6 +6,10 @@
 namespace gameplay
 {
 
+// Utility functions (shared with SceneLoader).
+void calculateNamespacePath(const std::string& urlString, std::string& fileString, std::vector<std::string>& namespacePath);
+Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string>& namespacePath);
+
 Properties::Properties()
 {
 }
@@ -55,28 +59,11 @@ Properties* Properties::create(const char* url)
         return NULL;
     }
 
+    // Calculate the file and full namespace path from the specified url.
     std::string urlString = url;
     std::string fileString;
     std::vector<std::string> namespacePath;
-
-    // If the url references a specific namespace within the file,
-    // calculate the full namespace path to the final namespace.
-    unsigned int loc = urlString.rfind("#");
-    if (loc != urlString.npos)
-    {
-        fileString = urlString.substr(0, loc);
-        std::string namespacePathString = urlString.substr(loc + 1);
-        while ((loc = namespacePathString.find("/")) != namespacePathString.npos)
-        {
-            namespacePath.push_back(namespacePathString.substr(0, loc));
-            namespacePathString = namespacePathString.substr(loc + 1);
-        }
-        namespacePath.push_back(namespacePathString);
-    }
-    else
-    {
-        fileString = url;
-    }
+    calculateNamespacePath(urlString, fileString, namespacePath);
 
     FILE* file = FileSystem::openFile(fileString.c_str(), "rb");
     if (!file)
@@ -86,52 +73,26 @@ Properties* Properties::create(const char* url)
     }
 
     Properties* properties = new Properties(file);
-
     properties->resolveInheritance();
-
     fclose(file);
 
-    // If the url references a specific namespace within the file,
-    // return the specified namespace or notify the user if it cannot be found.
-    Properties* originalProperties = properties;
-    if (namespacePath.size() > 0)
+    // Get the specified properties object.
+    Properties* p = getPropertiesFromNamespacePath(properties, namespacePath);
+    if (!p)
     {
-        unsigned int size = namespacePath.size();
-        Properties* iter = properties->getNextNamespace();
-        for (unsigned int i = 0; i < size;)
-        {
-            while (true)
-            {
-                if (iter == NULL)
-                {
-                    GP_ERROR("Failed to load Properties object from URL '%s'.", url);
-                    return NULL;
-                }
-
-                if (strcmp(iter->getId(), namespacePath[i].c_str()) == 0)
-                {
-                    if (i != size - 1)
-                    {
-                        properties = iter->getNextNamespace();
-                        iter = properties;
-                    }
-                    else
-                        properties = iter;
-
-                    i++;
-                    break;
-                }
-                
-                iter = properties->getNextNamespace();
-            }
-        }
-
-        properties = properties->clone();
-        SAFE_DELETE(originalProperties);
-        return properties;
+        GP_ERROR("Failed to load properties from url '%s'.", url);
+        return NULL;
     }
-    else
-        return properties;
+
+    // If the loaded properties object is not the root namespace,
+    // then we have to clone it and delete the root namespace
+    // so that we don't leak memory.
+    if (p != properties)
+    {
+        p = p->clone();
+        SAFE_DELETE(properties);
+    }
+    return p;
 }
 
 void Properties::readProperties(FILE* file)
@@ -1007,6 +968,73 @@ Properties* Properties::clone()
     p->_namespacesItr = p->_namespaces.end();
 
     return p;
+}
+
+void calculateNamespacePath(const std::string& urlString, std::string& fileString, std::vector<std::string>& namespacePath)
+{
+    // If the url references a specific namespace within the file,
+    // calculate the full namespace path to the final namespace.
+    unsigned int loc = urlString.rfind("#");
+    if (loc != urlString.npos)
+    {
+        fileString = urlString.substr(0, loc);
+        std::string namespacePathString = urlString.substr(loc + 1);
+        while ((loc = namespacePathString.find("/")) != namespacePathString.npos)
+        {
+            namespacePath.push_back(namespacePathString.substr(0, loc));
+            namespacePathString = namespacePathString.substr(loc + 1);
+        }
+        namespacePath.push_back(namespacePathString);
+    }
+    else
+    {
+        fileString = urlString;
+    }
+}
+
+Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string>& namespacePath)
+{
+    // If the url references a specific namespace within the file,
+    // return the specified namespace or notify the user if it cannot be found.
+    Properties* originalProperties = properties;
+    if (namespacePath.size() > 0)
+    {
+        unsigned int size = namespacePath.size();
+        const char* tmp = namespacePath[0].c_str();
+        properties->rewind();
+        Properties* iter = properties->getNextNamespace();
+        for (unsigned int i = 0; i < size;)
+        {
+            while (true)
+            {
+                if (iter == NULL)
+                {
+                    GP_ERROR("Failed to load properties object from url.");
+                    return NULL;
+                }
+
+                if (strcmp(iter->getId(), namespacePath[i].c_str()) == 0)
+                {
+                    if (i != size - 1)
+                    {
+                        properties = iter->getNextNamespace();
+                        iter = properties;
+                    }
+                    else
+                        properties = iter;
+
+                    i++;
+                    break;
+                }
+                
+                iter = properties->getNextNamespace();
+            }
+        }
+
+        return properties;
+    }
+    else
+        return properties;
 }
 
 }
