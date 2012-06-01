@@ -6,6 +6,9 @@
 namespace gameplay
 {
 
+/**
+ * Defines a control representing a joystick (axis).
+ */
 class Joystick : public Control
 {
     friend class Container;
@@ -121,7 +124,6 @@ protected:
      *
      * @param spriteBatch The sprite batch containing this control's icons.
      * @param clip The clipping rectangle of this control's parent container.
-     * @param offset Layout-computed positioning offset to add to the control's position.
      */
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
