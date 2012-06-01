@@ -58,8 +58,11 @@ void Label::setText(const char* text)
 {
     assert(text);
 
-    _text = text;
-    _dirty = true;
+    if (strcmp(text, _text.c_str()) != 0)
+    {
+        _text = text;
+        _dirty = true;
+    }
 }
 
 const char* Label::getText()
