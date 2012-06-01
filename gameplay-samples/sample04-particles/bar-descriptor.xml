@@ -56,7 +56,7 @@
     <asset path="res/arial9.gpb">res/arial9.gpb</asset>
     <asset path="res/arial13.gpb">res/arial13.gpb</asset>
     <asset path="res/arial18.gpb">res/arial18.gpb</asset>
-    <asset path="res/editor2.form">res/editor2.form</asset>
+    <asset path="res/editor.form">res/editor.form</asset>
     <asset path="res/editor.png">res/editor.png</asset>
     <asset path="res/editor.theme">res/editor.theme</asset>
     <asset path="res/explosion.particle">res/explosion.particle</asset>
