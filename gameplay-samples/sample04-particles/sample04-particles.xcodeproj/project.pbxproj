@@ -402,7 +402,6 @@
 					"\"../..//external-deps/bullet/lib/macosx\"",
 					"\"../..//external-deps/oggvorbis/lib/macosx\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -428,7 +427,6 @@
 					"\"../..//external-deps/bullet/lib/macosx\"",
 					"\"../..//external-deps/oggvorbis/lib/macosx\"",
 				);
-				PRODUCT_NAME = "sample04-particles";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
