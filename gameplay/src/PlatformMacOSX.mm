@@ -566,7 +566,10 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
 
 - (void) keyDown: (NSEvent*) event
 {    
-    gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, getKey([event keyCode], [event modifierFlags]));
+    if([event isARepeat] == NO)
+    {
+        gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, getKey([event keyCode], [event modifierFlags]));
+    }
 }
 
 - (void) keyUp: (NSEvent*) event

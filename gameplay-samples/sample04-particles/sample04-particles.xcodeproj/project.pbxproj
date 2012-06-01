@@ -43,7 +43,7 @@
 
 /* Begin PBXFileReference section */
 		42438B521491AD2000D218B8 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
-		42C932BC1491A0DB0098216A /* sample04-particles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample04-particles.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C932BC1491A0DB0098216A /* sample04-particles-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample04-particles-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C932C01491A0DB0098216A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42C932ED1491A4CB0098216A /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		42C932EF1491A5160098216A /* ParticlesGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticlesGame.cpp; path = src/ParticlesGame.cpp; sourceTree = SOURCE_ROOT; };
@@ -60,7 +60,7 @@
 		42C9332A1491A7390098216A /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../..//external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42C9332D1491A7810098216A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		5B61611214CCC2200073B857 /* sample04-particles-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample04-particles-macosx.plist"; sourceTree = "<group>"; };
-		5B61612C14CCC24C0073B857 /* sample04-particles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample04-particles.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B61612C14CCC24C0073B857 /* sample04-particles-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample04-particles-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B61612E14CCC24D0073B857 /* sample04-particles-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "sample04-particles-ios.plist"; sourceTree = "<group>"; };
 		5BAF2067152F2DDD003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF2068152F2DDD003E2AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -131,8 +131,8 @@
 		42C932BD1491A0DB0098216A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				42C932BC1491A0DB0098216A /* sample04-particles.app */,
-				5B61612C14CCC24C0073B857 /* sample04-particles.app */,
+				42C932BC1491A0DB0098216A /* sample04-particles-macosx.app */,
+				5B61612C14CCC24C0073B857 /* sample04-particles-ios.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -212,7 +212,7 @@
 			);
 			name = "sample04-particles-macosx";
 			productName = "sample04-particles";
-			productReference = 42C932BC1491A0DB0098216A /* sample04-particles.app */;
+			productReference = 42C932BC1491A0DB0098216A /* sample04-particles-macosx.app */;
 			productType = "com.apple.product-type.application";
 		};
 		5B61611414CCC24C0073B857 /* sample04-particles-ios */ = {
@@ -230,7 +230,7 @@
 			);
 			name = "sample04-particles-ios";
 			productName = "sample04-particles";
-			productReference = 5B61612C14CCC24C0073B857 /* sample04-particles.app */;
+			productReference = 5B61612C14CCC24C0073B857 /* sample04-particles-ios.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -402,7 +402,6 @@
 					"\"../..//external-deps/bullet/lib/macosx\"",
 					"\"../..//external-deps/oggvorbis/lib/macosx\"",
 				);
-				PRODUCT_NAME = "sample04-particles";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -428,7 +427,6 @@
 					"\"../..//external-deps/bullet/lib/macosx\"",
 					"\"../..//external-deps/oggvorbis/lib/macosx\"",
 				);
-				PRODUCT_NAME = "sample04-particles";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -455,7 +453,6 @@
 					"\"../..//external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"../..//external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 				);
-				PRODUCT_NAME = "sample04-particles";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -485,7 +482,6 @@
 					"\"../..//external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"../..//external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 				);
-				PRODUCT_NAME = "sample04-particles";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
