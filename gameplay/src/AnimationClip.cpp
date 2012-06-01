@@ -375,7 +375,6 @@ bool AnimationClip::update(unsigned long elapsedTime)
     if (_listeners)
     {
         GP_ASSERT(_listenerItr);
-        GP_ASSERT(**_listenerItr);
 
         if (_speed >= 0.0f)
         {
