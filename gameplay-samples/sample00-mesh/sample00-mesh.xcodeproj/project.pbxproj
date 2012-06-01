@@ -212,7 +212,7 @@
 			dependencies = (
 			);
 			name = "sample00-mesh-macosx";
-			productName = "sample00-mesh-macosx";
+			productName = "sample00-mesh";
 			productReference = 4217005E14697FF100A45C02 /* sample00-mesh-macosx.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -230,7 +230,7 @@
 			dependencies = (
 			);
 			name = "sample00-mesh-ios";
-			productName = "sample00-mesh-ios";
+			productName = "sample00-mesh";
 			productReference = 5B04C5E614BFE1A200EB0071 /* sample00-mesh-ios.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -467,8 +467,6 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-aypgkisouzzurngguyyosdtohzrc/Build/Products/Debug\"",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				OTHER_LDFLAGS = "-ObjC++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -504,8 +502,6 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-aypgkisouzzurngguyyosdtohzrc/Build/Products/Debug\"",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				OTHER_LDFLAGS = "-ObjC++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
