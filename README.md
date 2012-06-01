@@ -3,7 +3,7 @@ An open-source, cross-platform 3D native C++ game framework making it easy to le
 
 ## Supported Mobile Platforms
 - BlackBerry 10 and PlayBook 2.0 (using BlackBerry Native SDK)
-- Google Android 2.3+ (using Google Android NDK r7, SDK API level 9+)
+- Google Android 2.3+ (using Google Android NDK, SDK API level 9+)
 - Apple iOS 5.1 (using Apple XCode 4.3.2)
 
 ## Supported Desktop Platforms
@@ -11,8 +11,8 @@ An open-source, cross-platform 3D native C++ game framework making it easy to le
 - Apple MacOS X (using Apple XCode 4.3.2)
 
 ## Roadmap for 'next' branch
-- Gamepad support
 - Lua script bindings
+- Gamepad support
 - Vehicle physics
 - Terrain
 - Lightmaps
