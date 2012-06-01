@@ -185,7 +185,7 @@ extern void printError(const char* format, ...);
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
     #define USE_PVRTC
-    #ifdef __ARM__
+    #ifdef __arm__
         #define USE_NEON
     #endif
 #elif __ANDROID__
@@ -214,6 +214,9 @@ extern void printError(const char* format, ...);
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
         #define USE_VAO
+        #ifdef __arm__
+            #define USE_NEON
+        #endif
     #elif TARGET_OS_MAC
         #include <OpenGL/gl.h>
         #include <OpenGL/glext.h>
