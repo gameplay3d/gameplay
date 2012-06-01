@@ -6,6 +6,7 @@
 - PVRTC, ATC and DXT texture compression support.
 - Performance improvements in user interface forms and text.
 - Performance improvements in animations on transforms.
+- Performance improvements using NEON math for BlackBerry and iOS.
 - Fixes for improvements in error handling throughout all systems.
 - Fixes supporting built-in Maya COLLADA exporter via DAE_FBX export.
 - Fixes for latest FBX SDK 2013 support.
