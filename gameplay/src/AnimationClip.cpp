@@ -342,8 +342,7 @@ bool AnimationClip::update(unsigned long elapsedTime)
     // Check to see if clip is complete.
     if (_repeatCount != REPEAT_INDEFINITE && ((_speed >= 0.0f && _elapsedTime >= (long) _activeDuration) || (_speed <= 0.0f && _elapsedTime <= 0L)))
     {
-        if (!isClipStateBitSet(CLIP_IS_FADING_OUT_BIT))
-            resetClipStateBit(CLIP_IS_STARTED_BIT);
+        resetClipStateBit(CLIP_IS_STARTED_BIT);
         
         if (_speed >= 0.0f)
         {
