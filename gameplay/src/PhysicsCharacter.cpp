@@ -285,7 +285,7 @@ void PhysicsCharacter::updateCurrentVelocity()
         temp.normalize();
         temp *= -_forwardVelocity;
         _normalizedVelocity += btVector3(temp.x, temp.y, temp.z);
-        velocity2 = std::max(std::abs(velocity2), std::abs(_forwardVelocity*_forwardVelocity));
+        velocity2 = std::max(std::fabs(velocity2), std::fabs(_forwardVelocity*_forwardVelocity));
     }
 
     // Add right velocity contribution.
@@ -295,7 +295,7 @@ void PhysicsCharacter::updateCurrentVelocity()
         temp.normalize();
         temp *= _rightVelocity;
         _normalizedVelocity += btVector3(temp.x, temp.y, temp.z);
-        velocity2 = std::max(std::abs(velocity2), std::abs(_rightVelocity*_rightVelocity));
+        velocity2 = std::max(std::fabs(velocity2), std::fabs(_rightVelocity*_rightVelocity));
     }
 
     // Compute final combined movement vectors

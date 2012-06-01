@@ -80,6 +80,7 @@ private:
     MaterialParameter* _materialParameterAlpha;
     unsigned int _keyFlags;
     int _drawDebug;
+    bool _buttonReleased;
 };
 
 #endif

@@ -19,7 +19,7 @@ CharacterGame game;
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL),
       _animation(NULL), _currentClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
-      _keyFlags(0), _drawDebug(0)
+      _keyFlags(0), _drawDebug(0), _buttonReleased(true)
 {
 }
 
@@ -185,7 +185,7 @@ void CharacterGame::jump()
 
 bool CharacterGame::isOnFloor() const
 {
-    return (std::abs(_character->getCurrentVelocity().y) < MATH_EPSILON);
+    return (std::fabs(_character->getCurrentVelocity().y) < MATH_EPSILON);
 }
 
 void CharacterGame::update(long elapsedTime)
@@ -194,8 +194,16 @@ void CharacterGame::update(long elapsedTime)
 
     if (_gamepad->getButtonState(0) == Gamepad::BUTTON_PRESSED)
     {
-        // Jump while the gamepad button is being pressed
-        jump();
+        if (_buttonReleased)
+        {
+            _buttonReleased = false;
+            // Jump while the gamepad button is being pressed
+            jump();
+        }
+    }
+    else
+    {
+        _buttonReleased = true;
     }
 
     if (_gamepad->isJoystickActive(0))
