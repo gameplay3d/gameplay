@@ -758,7 +758,6 @@ protected:
      *
      * @param spriteBatch The sprite batch containing this control's icons.
      * @param clip The clipping rectangle of this control's parent container.
-     * @param offset Layout-computed positioning offset to add to the control's position.
      */
     virtual void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
@@ -766,10 +765,18 @@ protected:
      * Draw this control's text.
      *
      * @param clip The clipping rectangle of this control's parent container.
-     * @param offset Layout-computed positioning offset to add to the control's position.
      */
     virtual void drawText(const Rectangle& clip);
 
+    /**
+     * Draws a sprite batch for the specified clipping rect .
+     *
+     * @param spriteBatch The sprite batch to use.
+     * @param clip The clipping rectangle.
+     * @param needsClear Whether it needs to be cleared.
+     * @param cleared Whether it was previously cleared
+     * @param targetHeight The targets height
+     */
     virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
 
     /**
@@ -865,6 +872,9 @@ protected:
      */
     Rectangle _viewportClipBounds;
 
+    /**
+     * If the control is dirty and need updating.
+     */
     bool _dirty;
     
     /**
@@ -901,7 +911,10 @@ protected:
      * The current opacity of the control.
      */
     float _opacity;
-
+    
+    /**
+     * The z-order of the control.
+     */
     int _zIndex;
 
 private:
