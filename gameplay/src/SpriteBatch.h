@@ -146,6 +146,24 @@ public:
     void draw(const Vector3& dst, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color,
               const Vector2& rotationPoint, float rotationAngle, bool positionIsCenter = false);
     
+    /**
+     * Draws a single sprite, rotated around rotationPoint by rotationAngle.
+     * 
+     * @param x The destination x position.
+     * @param y The destination y position.
+     * @param z The destination z position.
+     * @param width The source width.
+     * @param height The source height.
+     * @param u1 Texture coordinate.
+     * @param v1 Texture coordinate.
+     * @param u2 Texture coordinate.
+     * @param v2 Texture coordinate.
+     * @param color The color to tint the sprite. Use white for no tint.
+     * @param rotationPoint The point to rotate around, relative to dst's x and y values.
+     *                      (e.g. Use Vector2(0.5f, 0.5f) to rotate around the quad's center.)
+     * @param rotationAngle The rotation angle.
+     * @param positionIsCenter Specified whether the given destination is to be the center of the sprite or not (if not, it is treated as the bottom-left).
+     */
     void draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color,
               const Vector2& rotationPoint, float rotationAngle, bool positionIsCenter = false);
 
