@@ -131,6 +131,14 @@ theme particleEditor
         }
     }
 
+    style particleProps : basic
+    {
+        padding
+        {
+            left = 10
+        }
+    }
+
     style buttonStyle : basic
     {
         padding
