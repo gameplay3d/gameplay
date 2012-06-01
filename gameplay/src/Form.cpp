@@ -90,8 +90,19 @@ Form* Form::create(const char* url)
     Game* game = Game::getInstance();
     Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
 
+    Theme::Style* style = NULL;
     const char* styleName = formProperties->getString("style");
-    form->initialize(theme->getStyle(styleName), formProperties);
+    if (styleName)
+    {
+        style = theme->getStyle(styleName);
+    }
+    else
+    {
+        Theme::Style::Overlay* overlay = Theme::Style::Overlay::create();
+        style = new Theme::Style(theme, "", 1.0f / theme->_texture->getWidth(), 1.0f / theme->_texture->getHeight(),
+            Theme::Margin::empty(), Theme::Border::empty(), overlay, overlay, overlay, overlay);
+    }
+    form->initialize(style, formProperties);
 
     // Alignment
     if ((form->_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)
@@ -113,9 +124,16 @@ Form* Form::create(const char* url)
     }
 
     form->_scroll = getScroll(formProperties->getString("scroll"));
+    form->_scrollBarsAutoHide = formProperties->getBool("scrollBarsAutoHide");
+    if (form->_scrollBarsAutoHide)
+    {
+        form->_scrollBarOpacity = 0.0f;
+    }
 
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
+
+    form->update();
 
     SAFE_DELETE(properties);
 

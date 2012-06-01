@@ -102,9 +102,16 @@ void Container::addControls(Theme* theme, Properties* properties)
 
         const char* controlStyleName = controlSpace->getString("style");
         Theme::Style* controlStyle = NULL;
-        GP_ASSERT(controlStyleName);
-        controlStyle = theme->getStyle(controlStyleName);
-        GP_ASSERT(controlStyle);
+        if (controlStyleName)
+        {
+            controlStyle = theme->getStyle(controlStyleName);
+        }
+        else
+        {
+            Theme::Style::Overlay* overlay = Theme::Style::Overlay::create();
+            controlStyle = new Theme::Style(theme, "", 1.0f / theme->_texture->getWidth(), 1.0f / theme->_texture->getHeight(),
+                Theme::Margin::empty(), Theme::Border::empty(), overlay, overlay, overlay, overlay);
+        }
 
         std::string controlName(controlSpace->getNamespace());
         std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
