@@ -3,6 +3,9 @@
 
 namespace gameplay
 {
+/**
+ * Math utility class. Used for internal math optimizations.
+ */
 class MathUtil
 {
 	friend class Matrix;
@@ -10,23 +13,32 @@ class MathUtil
 
 private:
 
-	/** Matrix **/
 	inline static void addMatrix(const float* m, float scalar, float* dst);
+
 	inline static void addMatrix(const float* m1, const float* m2, float* dst);
-	inline static void multiplyMatrix(const float* m, float scalar, float* dst);
-	inline static void multiplyMatrix(const float* m1, const float* m2, float* dst);
-	inline static void negateMatrix(const float* m, float* dst);
+
 	inline static void subtractMatrix(const float* m1, const float* m2, float* dst);
-	inline static void transformVectorMatrix(const float* m, float x, float y, float z, float w, float* dst);
-	inline static void transformVectorMatrix(const float* m, const float* v, float* dst);
+
+	inline static void multiplyMatrix(const float* m, float scalar, float* dst);
+
+	inline static void multiplyMatrix(const float* m1, const float* m2, float* dst);
+
+	inline static void negateMatrix(const float* m, float* dst);
+
 	inline static void transposeMatrix(const float* m, float* dst);
 
-	/** Vector3 **/
+	inline static void transformVector4(const float* m, float x, float y, float z, float w, float* dst);
+
+	inline static void transformVector4(const float* m, const float* v, float* dst);
+
 	inline static void crossVector3(const float* v1, const float* v2, float* dst);
 
 	MathUtil();
 };
+
 }
+
+#define MATRIX_SIZE ( sizeof(float) * 16)
 
 #ifdef USE_NEON
 #include "MathUtilNeon.inl"
@@ -34,4 +46,4 @@ private:
 #include "MathUtil.inl"
 #endif
 
-#endif /* MATHUTIL_H_ */
+#endif
