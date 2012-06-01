@@ -77,7 +77,17 @@ bool endsWith(const char* str, const char* suffix, bool ignoreCase)
     return true;
 }
 
+bool endsWith(const std::string& str, const char* suffix, bool ignoreCase)
+{
+    return endsWith(str.c_str(), suffix, ignoreCase);
+}
+
 bool equals(const std::string& a, const char* b)
+{
+    return (a.compare(b) == 0);
+}
+
+bool equals(const std::string& a, const std::string& b)
 {
     return (a.compare(b) == 0);
 }
@@ -103,7 +113,7 @@ std::string getFilenameFromFilePath(const std::string& filepath)
 {
     if (filepath.find_last_of("/") != std::string::npos)
     {
-        return filepath.substr(filepath.find_last_of("/")+1);
+        return filepath.substr(filepath.find_last_of("/") + 1);
     }
     return "";
 }

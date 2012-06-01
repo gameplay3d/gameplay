@@ -308,7 +308,8 @@ void createFileFromAsset(const char* path)
 
     GP_ASSERT(path);
     std::string fullPath(__resourcePath);
-    fullPath += FileSystem::resolvePath(path);
+    std::string resolvedPath = FileSystem::resolvePath(path);
+    fullPath += resolvedPath;
 
     std::string directoryPath = fullPath.substr(0, fullPath.rfind('/'));
     struct stat s;
@@ -320,7 +321,7 @@ void createFileFromAsset(const char* path)
     // for each time the process (game) runs.
     if (upToDateAssets.find(fullPath) == upToDateAssets.end())
     {
-        AAsset* asset = AAssetManager_open(__assetManager, path, AASSET_MODE_RANDOM);
+        AAsset* asset = AAssetManager_open(__assetManager, resolvedPath.c_str(), AASSET_MODE_RANDOM);
         if (asset)
         {
             const void* data = AAsset_getBuffer(asset);

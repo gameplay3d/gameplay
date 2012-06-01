@@ -39,7 +39,7 @@ Layout::Type FlowLayout::getType()
     return Layout::LAYOUT_FLOW;
 }
 
-void FlowLayout::update(const Container* container)
+void FlowLayout::update(const Container* container, const Vector2& offset)
 {
     GP_ASSERT(container);
     const Rectangle& containerBounds = container->getBounds();
@@ -78,10 +78,7 @@ void FlowLayout::update(const Container* container)
         yPosition = rowY + margin.top;
 
         control->setPosition(xPosition, yPosition);
-        if (control->isDirty() || control->isContainer())
-        {
-            control->update(container->getClip(), Vector2::zero());
-        }
+        control->update(container, offset);
 
         xPosition += bounds.width + margin.right;
 

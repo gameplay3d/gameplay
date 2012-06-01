@@ -1,7 +1,6 @@
 form particleEditor
 {
     theme = res/editor.theme
-    style = background
     autoWidth = true
     autoHeight = true
 
@@ -124,141 +123,277 @@ form particleEditor
     {
         style = basic
         alignment = ALIGN_TOP_RIGHT
-        size = 340, 480
+        width = 195
+        autoHeight = true
+        layout = LAYOUT_VERTICAL
+        scroll = SCROLL_VERTICAL
+        scrollBarsAutoHide = false
 
-        container colorSettings
+        // Particle Size
+        label titleSize
         {
-            style = noBorder
-            layout = LAYOUT_VERTICAL
-            alignment = ALIGN_TOP_LEFT
-            size = 150, 460
-
-            label titleStartColor
-            {
-                style = title
-                size = 150, 30
-                text = Start Color
-            }
-
-            slider startRed
-            {
-                style = noBorder
-                size = 150, 50
-                orientation = HORIZONTAL
-                min = 0
-                max = 1
-                text = Red
-            }
-
-            slider startGreen : startRed
-            {
-                text = Green
-            }
-
-            slider startBlue : startRed
-            {
-                text = Blue
-            }
-
-            slider startAlpha : startRed
-            {
-                text = Alpha
-            }
-
-            label titleEndColor : titleStartColor
-            {
-                text = End Color
-            }
-
-            slider endRed : startRed
-            {
-            }
-
-            slider endGreen : startGreen
-            {
-            }
-
-            slider endBlue : startBlue
-            {
-            }
-
-            slider endAlpha : startAlpha
-            {
-            }
+            style = title
+            size = 150, 30
+            text = Size
         }
 
-        container sizeEnergySettings
+        slider startMin
         {
             style = noBorder
-            alignment = ALIGN_BOTTOM_RIGHT
-            layout = LAYOUT_VERTICAL
-            size = 150, 360
+            size = 150, 50
+            orientation = HORIZONTAL
+            min = 0
+            max = 5
+            value = 1.5
+            step = 0
+            text = Min. Begin Size
+        }
 
-            // Particle Size
-            label titleSize
-            {
-                style = title
-                size = 150, 30
-                text = Size
-            }
+        slider startMax : startMin
+        {
+            text = Max. Begin Size
+        }
 
-            slider startMin
-            {
-                style = noBorder
-                size = 150, 50
-                orientation = HORIZONTAL
-                min = 0
-                max = 5
-                value = 1.5
-                step = 0
-                text = Min. Begin Size
-            }
+        slider endMin : startMin
+        {
+            text = Min. End Size
+        }
 
-            slider startMax : startMin
-            {
-                text = Max. Begin Size
-            }
+        slider endMax : startMin
+        {
+            text = Max. End Size
+        }
 
-            slider endMin : startMin
-            {
-                text = Min. End Size
-            }
+        // Energy
+        label titleEnergy : titleSize
+        {
+            text = Energy
+        }
 
-            slider endMax : startMin
-            {
-                text = Max. End Size
-            }
+        slider energyMin
+        {
+            style = noBorder
+            size = 150, 50
+            orientation = HORIZONTAL
+            min = 0
+            max = 5000
+            text = Min. Energy
+        }
 
-            // Energy
-            label titleEnergy
-            {
-                style = title
-                size = 150, 30
-                text = Energy
-            }
+        slider energyMax : energyMin
+        {
+            text = Max. Energy
+        }
 
-            slider energyMin
-            {
-                style = noBorder
-                size = 150, 50
-                orientation = HORIZONTAL
-                min = 0
-                max = 5000
-                text = Min. Energy
-            }
+        // Start color
+        label titleStartColor : titleSize
+        {
+            text = Start Color
+        }
 
-            slider energyMax : energyMin
-            {
-                text = Max. Energy
-            }
-        }        
-    }
+        slider startRed
+        {
+            style = noBorder
+            size = 150, 50
+            orientation = HORIZONTAL
+            min = 0
+            max = 1
+            text = Red
+        }
 
-    button minimize
-    {
-        style = buttonStyle
-        alignment = ALIGN_TOP_RIGHT
-        size = 50, 50
-        text = -
+        slider startGreen : startRed
+        {
+            text = Green
+        }
+
+        slider startBlue : startRed
+        {
+            text = Blue
+        }
+
+        slider startAlpha : startRed
+        {
+            text = Alpha
+        }
+
+        // End color
+        label titleEndColor : titleSize
+        {
+            text = End Color
+        }
+
+        slider endRed : startRed
+        {
+        }
+
+        slider endGreen : startGreen
+        {
+        }
+
+        slider endBlue : startBlue
+        {
+        }
+
+        slider endAlpha : startAlpha
+        {
+        }
+
+        // Position variance
+        label titlePositionVar : titleSize
+        {
+            text = Position Var.
+        }
+
+        slider posVarX : startRed
+        {
+            min = 0
+            max = 10
+        }
+
+        slider posVarY : posVarX
+        {
+        }
+
+        slider posVarZ : posVarX
+        {
+        }
+
+        // Initial velocity
+        label titleVelocity : titleSize
+        {
+            text = Velocity
+        }
+
+        slider velocityX : posVarX
+        {
+            min = -10
+            max = 10
+        }
+
+        slider velocityY : velocityX
+        {
+        }
+
+        slider velocityZ : velocityX
+        {
+        }
+
+        // Velocity variance
+        label titleVelocityVar : titleSize
+        {
+            text = Velocity Var.
+        }
+
+        slider velocityVarX : posVarX
+        {
+        }
+
+        slider velocityVarY : posVarY
+        {
+        }
+
+        slider velocityVarZ : posVarZ
+        {
+        }
+
+        // Acceleration
+        label titleAcceleration : titleSize
+        {
+            text = Accel.
+        }
+
+        slider accelX : velocityX
+        {
+        }
+
+        slider accelY : accelX
+        {
+        }
+
+        slider accelZ : accelX
+        {
+        }
+
+        // Acceleration variance
+        label titleAccelerationVar : titleSize
+        {
+            text = Accel. Var.
+        }
+
+        slider accelVarX : posVarX
+        {
+        }
+
+        slider accelVarY : posVarX
+        {
+        }
+
+        slider accelVarZ : posVarX
+        {
+        }
+
+        // Local rotation speed
+        label titleSpinSpeed : titleSize
+        {
+            text = Spin Speed
+        }
+
+        slider spinSpeedMin : velocityX
+        {
+        }
+
+        slider spinSpeedMax : spinSpeedMin
+        {
+        }
+
+        // Rotation axis
+        label titleRotationAxis : titleSize
+        {
+            text = Axis Rotation
+        }
+
+        slider axisX : startRed
+        {
+        }
+
+        slider axisY : axisX
+        {
+        }
+
+        slider axisZ : axisX
+        {
+        }
+
+        // Rotation axis variance
+        label titleRotationAxisVar : titleSize
+        {
+            text = Axis Var.
+        }
+
+        slider axisVarX : axisX
+        {
+        }
+
+        slider axisVarY : axisVarX
+        {
+        }
+
+        slider axisVarZ : axisVarX
+        {
+        }
+
+        // Axis rotation speed
+        label titleRotationSpeed : titleSize
+        {
+            text = Rotation Speed
+        }
+
+        slider rotationSpeedMin : velocityX
+        {
+        }
+
+        slider rotationSpeedMax : rotationSpeedMin
+        {
+        }
     }
 }

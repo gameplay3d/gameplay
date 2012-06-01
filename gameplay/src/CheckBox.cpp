@@ -94,9 +94,9 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     return Button::touchEvent(evt, x, y, contactIndex);
 }
 
-void CheckBox::update(const Rectangle& clip, const Vector2& offset)
+void CheckBox::update(const Control* container, const Vector2& offset)
 {
-    Label::update(clip, offset);
+    Label::update(container, offset);
 
     Vector2 size;
     if (_imageSize.isZero())
