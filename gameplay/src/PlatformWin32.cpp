@@ -276,11 +276,6 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     switch (msg)
     {
-    case WM_PAINT:
-        gameplay::Game::getInstance()->frame();
-        SwapBuffers(__hdc);
-        return 0;
-
     case WM_CLOSE:
         DestroyWindow(__hwnd);
         return 0;
@@ -662,6 +657,11 @@ int Platform::enterMessagePump()
                 _game->exit();
                 break;
             }
+        }
+        else
+        {
+            _game->frame();
+            SwapBuffers(__hdc);
         }
 
         // If we are done, then exit.

@@ -60,20 +60,14 @@ extern void printError(const char* format, ...);
 
 // Assert macros.
 #ifdef _DEBUG
-#ifdef WIN32
-#define GP_FORCE_ASSERTION_FAILURE do { __debugbreak(); } while (0)
-#else
-#define GP_FORCE_ASSERTION_FAILURE do { assert(0); } while (0)
-#endif
 #define GP_ASSERT(expression) do { \
     if (!(expression)) \
     { \
         printError("%s -- Assertion '" #expression "' failed.\n", __current__func__); \
-        GP_FORCE_ASSERTION_FAILURE; \
+        assert(expression); \
     } } while (0)
 #else
-#define GP_FORCE_ASSERTION_FAILURE do { (void)sizeof(int); } while (0)
-#define GP_ASSERT(expression) do { (void)sizeof(expression); } while (0)
+#define GP_ASSERT(expression)
 #endif
 
 // Error macro.
@@ -85,7 +79,7 @@ extern void printError(const char* format, ...);
         printError("%s -- ", __current__func__); \
         printError(__VA_ARGS__); \
         printError("\n"); \
-        GP_FORCE_ASSERTION_FAILURE; \
+        assert(0); \
         std::exit(-1); \
     } while (0)
 #endif
