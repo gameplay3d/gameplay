@@ -77,7 +77,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Properties Class Reference</div>  </div>
 </div><!--header-->
@@ -106,7 +107,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a47ac0a6d6779c13c1b47ef3686072aab"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a47ac0a6d6779c13c1b47ef3686072aab">getNextProperty</a> (char **value=NULL)</td></tr>
 <tr class="memitem:ad71da97b8931140e4a3186eaf78ab0a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ad71da97b8931140e4a3186eaf78ab0a9">getNextNamespace</a> ()</td></tr>
 <tr class="memitem:ade9fc061db01646ef889838713c8cead"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ade9fc061db01646ef889838713c8cead">rewind</a> ()</td></tr>
-<tr class="memitem:ab2aeb211de586fd4188c3a7e80cc8252"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ab2aeb211de586fd4188c3a7e80cc8252">getNamespace</a> (const char *id) const </td></tr>
+<tr class="memitem:a8666c66a84f29e93522e8d91c65854e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a8666c66a84f29e93522e8d91c65854e6">getNamespace</a> (const char *id, bool searchNames=false) const </td></tr>
 <tr class="memitem:a706ba911036f9fb2649003d3f98f46e5"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a706ba911036f9fb2649003d3f98f46e5">getNamespace</a> () const </td></tr>
 <tr class="memitem:ad699906717b398c310932d300034815f"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ad699906717b398c310932d300034815f">getId</a> () const </td></tr>
 <tr class="memitem:a7c3020df91523a962369a4a6f8062d51"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a7c3020df91523a962369a4a6f8062d51">exists</a> (const char *name) const </td></tr>
@@ -126,6 +127,10 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a73bd3ee2ada1ce0455e1b0ff06f3debe"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a73bd3ee2ada1ce0455e1b0ff06f3debe">create</a> (const char *url)</td></tr>
+<tr><td colspan="2"><h2><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:aa2fab026580d6f14280c2ffb8063a314"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa2fab026580d6f14280c2ffb8063a314"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Game</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a utility for loading text files in the GamePlay "properties" files and reading primitive types and GamePlay math classes out of them.</p>
@@ -140,7 +145,8 @@ Static Public Member Functions</h2></td></tr>
     // This line defines a namespace of type "mynamespace" without an ID:
     mynamespace
     {
-        // This namespace can be retrieved by searching for its ID, "spriteTexture":
+        // This namespace can be retrieved by searching for its ID, "spriteTexture",
+        // or by its name "texture":
         texture spriteTexture 
         {
             fileName = sprite.png
@@ -168,7 +174,7 @@ Static Public Member Functions</h2></td></tr>
         stringProperty = This is a string.
         vector3Property = 1.0, 5.0, 3.55
         colorProperty = 1.0, 0.4, 0.0, 1.0
-    }</pre></div><p>Retrieving information out of a file like this could be done in two ways. If the available namespaces and name/value pairs are known in advance they can be queried by ID or name. For example, if the namespace "spriteTexture" and its properties are required then they can be retrieved with a call to <a class="el" href="classgameplay_1_1_properties.html#ab2aeb211de586fd4188c3a7e80cc8252">getNamespace()</a> followed by calls to <a class="el" href="classgameplay_1_1_properties.html#a1798681f06e414cc37a377076988f8f8">getString()</a> and <a class="el" href="classgameplay_1_1_properties.html#ac475d236fe4e23192fa19b8d5dbca7e4">getInt()</a>. A namespace is stored and retrieved as a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object. Reading the spriteTexture properties out of the file above in this way could be done with the following code:</p>
+    }</pre></div><p>Retrieving information out of a file like this could be done in two ways. If the available namespaces and name/value pairs are known in advance they can be queried by ID or name. For example, if the namespace "spriteTexture" and its properties are required then they can be retrieved with a call to <a class="el" href="classgameplay_1_1_properties.html#a8666c66a84f29e93522e8d91c65854e6">getNamespace()</a> followed by calls to <a class="el" href="classgameplay_1_1_properties.html#a1798681f06e414cc37a377076988f8f8">getString()</a> and <a class="el" href="classgameplay_1_1_properties.html#ac475d236fe4e23192fa19b8d5dbca7e4">getInt()</a>. A namespace is stored and retrieved as a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object. Reading the spriteTexture properties out of the file above in this way could be done with the following code:</p>
 <div class="fragment"><pre class="fragment">    // Create the top-level Properties object.
     Properties* properties = Properties::create("example.properties");
     // Retrieve the "spriteTexture" namespace.
@@ -186,7 +192,7 @@ Static Public Member Functions</h2></td></tr>
         // Print the name and ID of the current namespace.
         const char* spacename = properties-&gt;getNamespace();
         const char* id = properties-&gt;getId();
-        WARN_VARG("Namespace: %s  ID: %s\n{", spacename, id);
+        GP_WARN("Namespace: %s  ID: %s\n{", spacename, id);
  
         // Print all properties in this namespace.
         const char* name = properties-&gt;getNextProperty();
@@ -194,10 +200,10 @@ Static Public Member Functions</h2></td></tr>
         while (name != NULL)
         {
             value = properties-&gt;getString(name);
-            WARN_VARG("%s = %s", name, value);
+            GP_WARN("%s = %s", name, value);
             name = properties-&gt;getNextProperty();
         }
-        WARN("}\n");
+        GP_WARN("}\n");
  
         // Print the properties of every namespace within this one.
         Properties* space = properties-&gt;getNextNamespace();
@@ -516,28 +522,39 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab2aeb211de586fd4188c3a7e80cc8252"></a>
+<a class="anchor" id="a8666c66a84f29e93522e8d91c65854e6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_properties.html">Properties</a>* <a class="el" href="classgameplay_1_1_properties.html#ab2aeb211de586fd4188c3a7e80cc8252">gameplay::Properties::getNamespace</a> </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_properties.html">Properties</a>* <a class="el" href="classgameplay_1_1_properties.html#a8666c66a84f29e93522e8d91c65854e6">gameplay::Properties::getNamespace</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>searchNames</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Get a specific namespace by ID. This method will perform a depth-first search on all namespaces and inner namespaces within this Property.</p>
+<p>Get a specific namespace by ID or name. This method will perform a depth-first search on all namespaces and inner namespaces within this Property.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">id</td><td>The ID of a specific namespace.</td></tr>
+    <tr><td class="paramname">id</td><td>The ID or name of the namespace to find. </td></tr>
+    <tr><td class="paramname">searchNames</td><td>If true, namespace names are used in the search, instead of namespace IDs. By default this parameter is false and namespace IDs are searched.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns:</dt><dd>A properties object with the given ID. </dd></dl>
+<dl class="section return"><dt>Returns:</dt><dd>A properties object with the given ID or name. </dd></dl>
 
 </div>
 </div>
@@ -546,7 +563,7 @@ Static Public Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* <a class="el" href="classgameplay_1_1_properties.html#ab2aeb211de586fd4188c3a7e80cc8252">gameplay::Properties::getNamespace</a> </td>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_properties.html#a8666c66a84f29e93522e8d91c65854e6">gameplay::Properties::getNamespace</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -816,7 +833,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 18 2012 12:58:21 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 1 2012 22:06:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
