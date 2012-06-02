@@ -93,7 +93,11 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ac3c9fe8cc588bc76a53c5c3841781f73"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#ac3c9fe8cc588bc76a53c5c3841781f73">setResourcePath</a> (const char *path)</td></tr>
 <tr class="memitem:a4a7c4dee6ab58c50ce4cf9043f1529ab"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a4a7c4dee6ab58c50ce4cf9043f1529ab">getResourcePath</a> ()</td></tr>
+<tr class="memitem:a136986ea0a1564698c405df64f13632e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a136986ea0a1564698c405df64f13632e">loadResourceAliases</a> (const char *aliasFilePath)</td></tr>
+<tr class="memitem:a05c6773c471a5378fdda80806df2b220"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a05c6773c471a5378fdda80806df2b220">loadResourceAliases</a> (<a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
+<tr class="memitem:a738a80f4df479ac37fcfe173adad5e90"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a738a80f4df479ac37fcfe173adad5e90">resolvePath</a> (const char *path)</td></tr>
 <tr class="memitem:a697fdbb8456f35f68f6aed8ebacea912"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a697fdbb8456f35f68f6aed8ebacea912">listFiles</a> (const char *dirPath, std::vector&lt; std::string &gt; &amp;files)</td></tr>
+<tr class="memitem:a53513490841cfd6d404932668c731efc"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a53513490841cfd6d404932668c731efc">fileExists</a> (const char *path)</td></tr>
 <tr class="memitem:afe714da6a74a3306a1cd0b3a80b047f0"><td class="memItemLeft" align="right" valign="top">static FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#afe714da6a74a3306a1cd0b3a80b047f0">openFile</a> (const char *path, const char *mode)</td></tr>
 <tr class="memitem:af65e3195958242239fcb8db228a9db0c"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#af65e3195958242239fcb8db228a9db0c">readAll</a> (const char *filePath, int *fileSize=NULL)</td></tr>
 </table>
@@ -118,6 +122,31 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a53513490841cfd6d404932668c731efc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_file_system.html#a53513490841cfd6d404932668c731efc">gameplay::FileSystem::fileExists</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Checks if the file at the given path exists.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>The path to the file. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd><code>true</code> if the file exists; <code>false</code> otherwise. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a4a7c4dee6ab58c50ce4cf9043f1529ab"></a>
 <div class="memitem">
 <div class="memproto">
@@ -169,6 +198,60 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns:</dt><dd>True if successful, false if error. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a136986ea0a1564698c405df64f13632e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_file_system.html#a136986ea0a1564698c405df64f13632e">gameplay::FileSystem::loadResourceAliases</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>aliasFilePath</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Loads a properties file containing a list of filesystem aliases.</p>
+<p>The specified aliases file is a valid properties file that contains one or more namespaces with a list of fielsystem aliases that will be used to establish soft links to files when reading files through this class.</p>
+<p>This can be helpful for managing loading of resources that may change from one platform to another (such as texture formats). An aliases file per-platform can be maintained and asset loading code can refer to the alias name instead of the actual hard file name.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">aliasFilePath</td><td>Path to a properties file containing filesystem aliases. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_properties.html">Properties</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a05c6773c471a5378fdda80806df2b220"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_file_system.html#a136986ea0a1564698c405df64f13632e">gameplay::FileSystem::loadResourceAliases</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td>
+          <td class="paramname"><em>properties</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Loads a set of filesystem aliases from the given <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object.</p>
+<p>The specified properties object contains a single namespace with a list of fielsystem aliases that will be used to establish soft links to files when reading files through this class.</p>
+<p>This can be helpful for managing loading of resources that may change from one platform to another (such as texture formats). An aliases file per-platform can be maintained and asset loading code can refer to the alias name instead of the actual hard file name.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">properties</td><td><a class="el" href="classgameplay_1_1_properties.html">Properties</a> object containing filesystem aliases. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_properties.html">Properties</a> </dd></dl>
 
 </div>
 </div>
@@ -246,6 +329,32 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a738a80f4df479ac37fcfe173adad5e90"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static const char* <a class="el" href="classgameplay_1_1_file_system.html#a738a80f4df479ac37fcfe173adad5e90">gameplay::FileSystem::resolvePath</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Resolves a filesystem path.</p>
+<p>If the specified path is a filesystem alias, the alias will be resolved and the physical file will be returned.</p>
+<p>Note that this method does not convert a relative path to an absolute filesystem path.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>Path to resolve. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ac3c9fe8cc588bc76a53c5c3841781f73"></a>
 <div class="memitem">
 <div class="memproto">
@@ -275,7 +384,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 18 2012 12:58:20 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 1 2012 22:06:22 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

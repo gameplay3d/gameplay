@@ -1,6 +1,7 @@
 var searchData=
 [
   ['technique',['Technique',['../classgameplay_1_1_technique.html',1,'gameplay']]],
+  ['text',['Text',['../classgameplay_1_1_font_1_1_text.html',1,'gameplay::Font']]],
   ['textbox',['TextBox',['../classgameplay_1_1_text_box.html',1,'gameplay']]],
   ['texture',['Texture',['../classgameplay_1_1_texture.html',1,'gameplay']]],
   ['theme',['Theme',['../classgameplay_1_1_theme.html',1,'gameplay']]],
