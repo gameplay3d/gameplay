@@ -165,11 +165,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a33307756955a0e069be33c3116afaa33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a33307756955a0e069be33c3116afaa33">setOrbit</a> (bool orbitPosition, bool orbitVelocity, bool orbitAcceleration)</td></tr>
 <tr class="memitem:a9569f892f7b845211b820980e420aee9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a9569f892f7b845211b820980e420aee9">update</a> (long elapsedTime)</td></tr>
 <tr class="memitem:ae683f3d5eba31607f92997dd7692cbb4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#ae683f3d5eba31607f92997dd7692cbb4">draw</a> ()</td></tr>
+<tr class="memitem:ad66f71968f51245a3ef90a5538fd1afe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#ad66f71968f51245a3ef90a5538fd1afe">setTextureBlending</a> (<a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a> blending)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a0ced7dfcfb5357b96e4a289eef7619e1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a0ced7dfcfb5357b96e4a289eef7619e1">create</a> (const char *url)</td></tr>
 <tr class="memitem:add002898fa33a0fe99e4e76d5a03faf7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#add002898fa33a0fe99e4e76d5a03faf7">create</a> (<a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
 <tr class="memitem:a3c2a530ca2dd1100be4cabd9e900c02e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a3c2a530ca2dd1100be4cabd9e900c02e">create</a> (const char *texturePath, <a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a> textureBlending, unsigned int particleCountMax)</td></tr>
+<tr class="memitem:aaded0a9b392711438ee43a445a899fb5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#aaded0a9b392711438ee43a445a899fb5">getTextureBlendingFromString</a> (const char *src)</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a6db9d28bd448a131448276ee03de1e6d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6db9d28bd448a131448276ee03de1e6d"></a>
@@ -812,6 +814,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 </div>
 <div class="memdoc">
 <p>Gets the maximum offset that a random frame from 0 to maxOffset will be selected. </p>
+
+</div>
+</div>
+<a class="anchor" id="aaded0a9b392711438ee43a445a899fb5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a> <a class="el" href="classgameplay_1_1_particle_emitter.html#aaded0a9b392711438ee43a445a899fb5">gameplay::ParticleEmitter::getTextureBlendingFromString</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets a TextureBlending enum from a corresponding string. </p>
 
 </div>
 </div>
@@ -1528,6 +1548,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ad66f71968f51245a3ef90a5538fd1afe"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_particle_emitter.html#ad66f71968f51245a3ef90a5538fd1afe">gameplay::ParticleEmitter::setTextureBlending</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a>&#160;</td>
+          <td class="paramname"><em>blending</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets a TextureBlending enum from a corresponding string. </p>
+
+</div>
+</div>
 <a class="anchor" id="a6ef02ca0184224111ec82bdb01eff654"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1627,7 +1665,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 18 2012 12:58:20 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 1 2012 22:06:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

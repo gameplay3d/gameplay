@@ -75,7 +75,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a>  </div>
@@ -100,6 +102,13 @@ Inheritance diagram for gameplay::Container:</div>
 
 <p><a href="classgameplay_1_1_container-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a0c3e32288adc78753990d36f95d4de3b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a0c3e32288adc78753990d36f95d4de3b">Scroll</a> { <b>SCROLL_NONE</b> =  0, 
+<b>SCROLL_HORIZONTAL</b> =  0x01, 
+<b>SCROLL_VERTICAL</b> =  0x02, 
+<b>SCROLL_BOTH</b> =  SCROLL_HORIZONTAL | SCROLL_VERTICAL
+ }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9d1e8ad2c17d7311ae587e80b22728b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_layout.html">Layout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a9d1e8ad2c17d7311ae587e80b22728b1">getLayout</a> ()</td></tr>
@@ -110,30 +119,64 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abe0217ec4e443a63f94811a0d14b157d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#abe0217ec4e443a63f94811a0d14b157d">removeControl</a> (<a class="el" href="classgameplay_1_1_control.html">Control</a> *control)</td></tr>
 <tr class="memitem:a29208ac8dee8d5087f0b89a4dfbc343b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a29208ac8dee8d5087f0b89a4dfbc343b">getControl</a> (unsigned int index) const </td></tr>
 <tr class="memitem:ae6a5f55b2f89227b5155c07e77b6a095"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ae6a5f55b2f89227b5155c07e77b6a095">getControl</a> (const char *id) const </td></tr>
-<tr class="memitem:acc0fe02608b30ae0d391ccac8fc877a1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#acc0fe02608b30ae0d391ccac8fc877a1">getControls</a> () const </td></tr>
+<tr class="memitem:a1a102ef03ae1a40d8402f32ae3e38e44"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a1a102ef03ae1a40d8402f32ae3e38e44">getControls</a> () const </td></tr>
+<tr class="memitem:ae9b4719a49f84e9e71aadcbf8757c7e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ae9b4719a49f84e9e71aadcbf8757c7e9">setScroll</a> (<a class="el" href="classgameplay_1_1_container.html#a0c3e32288adc78753990d36f95d4de3b">Scroll</a> scroll)</td></tr>
+<tr class="memitem:a3c5258a887647fa01203824e04a8a882"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_container.html#a0c3e32288adc78753990d36f95d4de3b">Scroll</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a3c5258a887647fa01203824e04a8a882">getScroll</a> () const </td></tr>
+<tr class="memitem:a8bab8623b4fdfa70abb77a640a2c50e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a8bab8623b4fdfa70abb77a640a2c50e0">setScrollBarsAutoHide</a> (bool autoHide)</td></tr>
+<tr class="memitem:a7e7f9a9742c5aedcc8532794eda753f1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a7e7f9a9742c5aedcc8532794eda753f1">isScrollBarsAutoHide</a> () const </td></tr>
 <tr class="memitem:a1f88ffbc4b0fcf37d5e0be9cf76cac22"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a1f88ffbc4b0fcf37d5e0be9cf76cac22">getAnimation</a> (const char *id=NULL) const </td></tr>
+<tr class="memitem:a540ba8ee5dd80383d64f07342ddda2e7"><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a540ba8ee5dd80383d64f07342ddda2e7">getAnimationPropertyComponentCount</a> (int propertyId) const </td></tr>
+<tr class="memitem:a2ede2188d0b9de8eb0b82eb013ebf991"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a2ede2188d0b9de8eb0b82eb013ebf991">getAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value)</td></tr>
+<tr class="memitem:a395c95a45eabb5e4c39eef105526b482"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a395c95a45eabb5e4c39eef105526b482">setAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value, float blendWeight=1.0f)</td></tr>
+<tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:aa39a360add12f22ce9d099d038e40ba1"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#aa39a360add12f22ce9d099d038e40ba1">ANIMATE_SCROLLBAR_OPACITY</a> = 8</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:aaf65bba3cf3e0fe59407bc092a083f74"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#aaf65bba3cf3e0fe59407bc092a083f74">Container</a> ()</td></tr>
 <tr class="memitem:ac0681d3fa8e9df40a745418f99e1f7ea"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ac0681d3fa8e9df40a745418f99e1f7ea">~Container</a> ()</td></tr>
-<tr class="memitem:a4d40b611e7541dbc217129149f96841d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a4d40b611e7541dbc217129149f96841d">update</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
-<tr class="memitem:acf8ed87024389826f063cd219ec02f5b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#acf8ed87024389826f063cd219ec02f5b">drawBorder</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
-<tr class="memitem:a9ecda5fdd2653620ebfd79ed6d8bfcb0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a9ecda5fdd2653620ebfd79ed6d8bfcb0">drawImages</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
-<tr class="memitem:abd2b552aa2349ee470f0ade0623bac47"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#abd2b552aa2349ee470f0ade0623bac47">drawText</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
+<tr class="memitem:a8308d5eb53e115aa12e2a9d45ae3f0f9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a8308d5eb53e115aa12e2a9d45ae3f0f9">update</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
 <tr class="memitem:a1eb7f9e877fd66b22d386d3b5ee07c94"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a1eb7f9e877fd66b22d386d3b5ee07c94">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr class="memitem:accb98214d0f53efcf3583807b8c8eaa1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#accb98214d0f53efcf3583807b8c8eaa1">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr class="memitem:a1c21338c00c1f888ac48ce5c175b13ac"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a1c21338c00c1f888ac48ce5c175b13ac">isContainer</a> ()</td></tr>
 <tr class="memitem:a3300a429936475ce7943427b5f0ea86d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a3300a429936475ce7943427b5f0ea86d">isDirty</a> ()</td></tr>
 <tr class="memitem:af9b23ef23b418aff9af1f382993df37a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#af9b23ef23b418aff9af1f382993df37a">addControls</a> (<a class="el" href="classgameplay_1_1_theme.html">Theme</a> *theme, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
+<tr class="memitem:ab42f7d5f24b9978527c80f972c851cdf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ab42f7d5f24b9978527c80f972c851cdf">draw</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, bool needsClear, bool cleared, float targetHeight)</td></tr>
+<tr class="memitem:ab8a1534d05b3d8e6dc443c50c29ef6da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ab8a1534d05b3d8e6dc443c50c29ef6da">updateScroll</a> ()</td></tr>
+<tr class="memitem:ab54c39d150a8d8f413062b3524a6e70f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ab54c39d150a8d8f413062b3524a6e70f">touchEventScroll</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
 <tr class="memitem:a25bb53009e196aace8513314b02a7543"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a25bb53009e196aace8513314b02a7543">create</a> (<a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a> type)</td></tr>
 <tr class="memitem:afc7c6bde0c3f038b64a66392786b9dce"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#afc7c6bde0c3f038b64a66392786b9dce">create</a> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties, <a class="el" href="classgameplay_1_1_theme.html">Theme</a> *theme)</td></tr>
 <tr class="memitem:aca1db761c35c08abb50a9de47df3fdeb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#aca1db761c35c08abb50a9de47df3fdeb">getLayoutType</a> (const char *layoutString)</td></tr>
+<tr class="memitem:ae6874197f50ab2a1d4ec9ed3a94361a8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_container.html#a0c3e32288adc78753990d36f95d4de3b">Scroll</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ae6874197f50ab2a1d4ec9ed3a94361a8">getScroll</a> (const char *scroll)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a1b3920d09aa80bf7e328eb07f6f85328"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_layout.html">Layout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a1b3920d09aa80bf7e328eb07f6f85328">_layout</a></td></tr>
 <tr class="memitem:a65edbd57dcfb80c80b0cc4b48cbdaff0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgameplay_1_1_control.html">Control</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a65edbd57dcfb80c80b0cc4b48cbdaff0">_controls</a></td></tr>
+<tr class="memitem:a6dbfa660b7e0f5ee870f3dda78edcd5e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a6dbfa660b7e0f5ee870f3dda78edcd5e">_scrollBarTopCap</a></td></tr>
+<tr class="memitem:a0abe7558a876816b4b61d7e4ed7a2b65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a0abe7558a876816b4b61d7e4ed7a2b65">_scrollBarVertical</a></td></tr>
+<tr class="memitem:ad2b66350df3072c21cbac88be1bc9445"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ad2b66350df3072c21cbac88be1bc9445">_scrollBarBottomCap</a></td></tr>
+<tr class="memitem:ad927bea05db8ad35c41eac96389d0f11"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ad927bea05db8ad35c41eac96389d0f11">_scrollBarLeftCap</a></td></tr>
+<tr class="memitem:a84c52a882c4f380cc02e46308e078cf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a84c52a882c4f380cc02e46308e078cf9">_scrollBarHorizontal</a></td></tr>
+<tr class="memitem:a862a4bc578b981002a039a14018e9fa0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a862a4bc578b981002a039a14018e9fa0">_scrollBarRightCap</a></td></tr>
+<tr class="memitem:af4e82c8e840df5efa75ebbc4595766a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_container.html#a0c3e32288adc78753990d36f95d4de3b">Scroll</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#af4e82c8e840df5efa75ebbc4595766a3">_scroll</a></td></tr>
+<tr class="memitem:a15dde536d2fc74aae04b0b8601db0502"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a15dde536d2fc74aae04b0b8601db0502">_scrollBarBounds</a></td></tr>
+<tr class="memitem:ac2a1c3bfc493c608123345342c011145"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ac2a1c3bfc493c608123345342c011145">_scrollPosition</a></td></tr>
+<tr class="memitem:ac3d1bdda416960e718d1e3d5a614206e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ac3d1bdda416960e718d1e3d5a614206e">_scrollBarsAutoHide</a></td></tr>
+<tr class="memitem:ab5805700148606ad7962ab5f26e12437"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ab5805700148606ad7962ab5f26e12437">_scrollBarOpacity</a></td></tr>
+<tr class="memitem:a9d4a8adbe66c0ebdabe4ff0f15255765"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a9d4a8adbe66c0ebdabe4ff0f15255765">_scrolling</a></td></tr>
+<tr class="memitem:a3495919c0df022087fb133415e18eade"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a3495919c0df022087fb133415e18eade">_scrollingFirstX</a></td></tr>
+<tr class="memitem:a13f20dc05f6dc3959c4af0b44f20ed5e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a13f20dc05f6dc3959c4af0b44f20ed5e">_scrollingFirstY</a></td></tr>
+<tr class="memitem:aac9d085d86fb81ced60a5ab92a22b244"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#aac9d085d86fb81ced60a5ab92a22b244">_scrollingLastX</a></td></tr>
+<tr class="memitem:a675d934cd17ea5abc309214f57c5036d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a675d934cd17ea5abc309214f57c5036d">_scrollingLastY</a></td></tr>
+<tr class="memitem:a3fb707c3e51e1a6bc5353d686c643987"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a3fb707c3e51e1a6bc5353d686c643987">_scrollingStartTimeX</a></td></tr>
+<tr class="memitem:a07e80c13884686c178e9809fec40f913"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a07e80c13884686c178e9809fec40f913">_scrollingStartTimeY</a></td></tr>
+<tr class="memitem:af97a4d221a2800ea2ecad00199910204"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#af97a4d221a2800ea2ecad00199910204">_scrollingLastTime</a></td></tr>
+<tr class="memitem:ab4075148c5e2302ff842a43a460fcc73"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ab4075148c5e2302ff842a43a460fcc73">_scrollingVelocity</a></td></tr>
+<tr class="memitem:a7b60e825419a370511fcff1f84e72402"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a7b60e825419a370511fcff1f84e72402">_scrollingFriction</a></td></tr>
+<tr class="memitem:a24dbf4fc7c5388f12b89fecd37eabcff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a24dbf4fc7c5388f12b89fecd37eabcff">_scrollingRight</a></td></tr>
+<tr class="memitem:ad4cf653cc3d60847d6a36122dd175d4a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ad4cf653cc3d60847d6a36122dd175d4a">_scrollingDown</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>A container is a UI control that can contain other controls.</p>
@@ -150,6 +193,8 @@ Protected Attributes</h2></td></tr>
          size        = &lt;width, height&gt;   // Size of the container, measured in pixels.
          width       = &lt;width&gt;   // Can be used in place of 'size', e.g. with 'autoHeight = true'
          height      = &lt;height&gt;  // Can be used in place of 'size', e.g. with 'autoWidth = true'
+         scroll      = &lt;Container::Scroll constant&gt; // Whether scrolling is allowed and in which directions.
+         scrollBarsAutoHide = &lt;bool&gt;    // Whether scrollbars fade out when not in use.
   
          // All the nested controls within this container.
          container 
@@ -163,7 +208,22 @@ Protected Attributes</h2></td></tr>
          checkBox { }
          radioButton { }
          slider { }
-    }</pre></div> </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+    }</pre></div> </div><hr/><h2>Member Enumeration Documentation</h2>
+<a class="anchor" id="a0c3e32288adc78753990d36f95d4de3b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classgameplay_1_1_container.html#a0c3e32288adc78753990d36f95d4de3b">gameplay::Container::Scroll</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The definition for container scrolling. </p>
+
+</div>
+</div>
+<hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aaf65bba3cf3e0fe59407bc092a083f74"></a>
 <div class="memitem">
 <div class="memproto">
@@ -248,7 +308,14 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Adds controls nested within a properties object to this container, searching for styles within the given theme. </p>
+<p>Adds controls nested within a properties object to this container, searching for styles within the given theme.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">theme</td><td>The them to add controls from </td></tr>
+    <tr><td class="paramname">properties</td><td>The properties to use. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -269,10 +336,11 @@ Protected Attributes</h2></td></tr>
 <p>Create an empty container. A container's layout type must be specified at creation time.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">type</td><td>The container's layout type. </td></tr>
+    <tr><td class="paramname">type</td><td>The container's layout type.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns:</dt><dd>The new container. </dd></dl>
 
 </div>
 </div>
@@ -319,12 +387,12 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="acf8ed87024389826f063cd219ec02f5b"></a>
+<a class="anchor" id="ab42f7d5f24b9978527c80f972c851cdf"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_container.html#acf8ed87024389826f063cd219ec02f5b">gameplay::Container::drawBorder</a> </td>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_container.html#ab42f7d5f24b9978527c80f972c851cdf">gameplay::Container::draw</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td>
           <td class="paramname"><em>spriteBatch</em>, </td>
@@ -333,7 +401,25 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
-          <td class="paramname"><em>clip</em>&#160;</td>
+          <td class="paramname"><em>clip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>needsClear</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>cleared</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>targetHeight</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -343,79 +429,19 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Draws the themed border and background of this container and all its controls.</p>
+<p>Draws a sprite batch for the specified clipping rect .</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">spriteBatch</td><td>The sprite batch containing this container's border images. </td></tr>
-    <tr><td class="paramname">clip</td><td>The clipping rectangle of this container's parent container. </td></tr>
+    <tr><td class="paramname">spriteBatch</td><td>The sprite batch to use. </td></tr>
+    <tr><td class="paramname">clip</td><td>The clipping rectangle. </td></tr>
+    <tr><td class="paramname">needsClear</td><td>Whether it needs to be cleared. </td></tr>
+    <tr><td class="paramname">cleared</td><td>Whether it was previously cleared </td></tr>
+    <tr><td class="paramname">targetHeight</td><td>The targets height </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a9ecda5fdd2653620ebfd79ed6d8bfcb0"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_container.html#a9ecda5fdd2653620ebfd79ed6d8bfcb0">gameplay::Container::drawImages</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td>
-          <td class="paramname"><em>spriteBatch</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
-          <td class="paramname"><em>clip</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [protected, virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Draws the icons of all controls within this container.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">spriteBatch</td><td>The sprite batch containing this control's icons. </td></tr>
-    <tr><td class="paramname">clip</td><td>The clipping rectangle of this container's parent container. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a6866910ed0370428aae94dd67acff6a5">gameplay::Control</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="abd2b552aa2349ee470f0ade0623bac47"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_container.html#abd2b552aa2349ee470f0ade0623bac47">gameplay::Container::drawText</a> </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
-          <td class="paramname"><em>clip</em></td><td>)</td>
-          <td><code> [protected, virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Draws the text of all controls within this container.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">clip</td><td>The clipping rectangle of this container's parent container. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a0c38fc0e79ee94779c0a366b5599dff7">gameplay::Control</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#aae210d6d79efcc53ac52feb7ec5d5043">gameplay::Control</a>.</p>
 
 </div>
 </div>
@@ -433,16 +459,59 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the first animation in the control with the specified ID.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">id</td><td>The ID of the animation to get. Returns the first animation if ID is NULL. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns:</dt><dd>The first animation with the specified ID. </dd></dl>
+<dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_animation_target.html#a8b08d7ad0b0fa52d9139dc931053a26f">AnimationTarget::getAnimation</a> </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_animation_target.html#a8b08d7ad0b0fa52d9139dc931053a26f">gameplay::AnimationTarget</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a540ba8ee5dd80383d64f07342ddda2e7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual unsigned int <a class="el" href="classgameplay_1_1_container.html#a540ba8ee5dd80383d64f07342ddda2e7">gameplay::Container::getAnimationPropertyComponentCount</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>propertyId</em></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_animation_target.html#a963d6a3f8e77c59cfb9ac2284d961c31">AnimationTarget::getAnimationPropertyComponentCount</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a6d18739bdbd45718c043afb33245093b">gameplay::Control</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2ede2188d0b9de8eb0b82eb013ebf991"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_container.html#a2ede2188d0b9de8eb0b82eb013ebf991">gameplay::Container::getAnimationPropertyValue</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>propertyId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="section see"><dt>See also:</dt><dd>AnimationTarget::getAnimationProperty </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a3d0ea04fcf78d25124017c40c2846979">gameplay::Control</a>.</p>
 
 </div>
 </div>
@@ -495,12 +564,12 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="acc0fe02608b30ae0d391ccac8fc877a1"></a>
+<a class="anchor" id="a1a102ef03ae1a40d8402f32ae3e38e44"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="classgameplay_1_1_control.html">Control</a>*&gt; <a class="el" href="classgameplay_1_1_container.html#acc0fe02608b30ae0d391ccac8fc877a1">gameplay::Container::getControls</a> </td>
+          <td class="memname">const std::vector&lt;<a class="el" href="classgameplay_1_1_control.html">Control</a>*&gt;&amp; <a class="el" href="classgameplay_1_1_container.html#a1a102ef03ae1a40d8402f32ae3e38e44">gameplay::Container::getControls</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -545,7 +614,56 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets a <a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a> enum from a matching string. </p>
+<p>Gets a <a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a> enum from a matching string.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">layoutString</td><td>The layout string to parse </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a3c5258a887647fa01203824e04a8a882"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_container.html#a0c3e32288adc78753990d36f95d4de3b">Scroll</a> <a class="el" href="classgameplay_1_1_container.html#a3c5258a887647fa01203824e04a8a882">gameplay::Container::getScroll</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the allowed scroll directions for this container.</p>
+<dl class="section return"><dt>Returns:</dt><dd>The allowed scroll directions for this container. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae6874197f50ab2a1d4ec9ed3a94361a8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_container.html#a0c3e32288adc78753990d36f95d4de3b">Scroll</a> <a class="el" href="classgameplay_1_1_container.html#a3c5258a887647fa01203824e04a8a882">gameplay::Container::getScroll</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>scroll</em></td><td>)</td>
+          <td><code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Get a Scroll enum from a matching string.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">scroll</td><td>A string representing a Scroll enum.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>The Scroll enum value that matches the given string. </dd></dl>
 
 </div>
 </div>
@@ -597,7 +715,8 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Returns whether this control is a container. This is true in this case. </p>
+<p>Returns whether this control is a container.</p>
+<dl class="section return"><dt>Returns:</dt><dd>true if this is a container, false if not. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a034218b6ff76dc32d1d3694c362a5dc5">gameplay::Control</a>.</p>
 
@@ -616,9 +735,28 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Returns whether this container or any of its controls have been modified and require an update. </p>
+<p>Returns whether this container or any of its controls have been modified and require an update.</p>
+<dl class="section return"><dt>Returns:</dt><dd>true if this container or any of its controls have been modified and require an update. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a867d58fde43fb1d38614fc8d3b72e4ba">gameplay::Control</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7e7f9a9742c5aedcc8532794eda753f1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_container.html#a7e7f9a9742c5aedcc8532794eda753f1">gameplay::Container::isScrollBarsAutoHide</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Whether scrollbars are always visible, or only visible while scrolling.</p>
+<dl class="section return"><dt>Returns:</dt><dd>Whether scrollbars are always visible. </dd></dl>
 
 </div>
 </div>
@@ -734,6 +872,90 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a395c95a45eabb5e4c39eef105526b482"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_container.html#a395c95a45eabb5e4c39eef105526b482">gameplay::Container::setAnimationPropertyValue</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>propertyId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>blendWeight</em> = <code>1.0f</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="section see"><dt>See also:</dt><dd>AnimationTarget::setAnimationProperty </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a62a89ccb93888f7258287b767cfae107">gameplay::Control</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae9b4719a49f84e9e71aadcbf8757c7e9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_container.html#ae9b4719a49f84e9e71aadcbf8757c7e9">gameplay::Container::setScroll</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_container.html#a0c3e32288adc78753990d36f95d4de3b">Scroll</a>&#160;</td>
+          <td class="paramname"><em>scroll</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the allowed scroll directions for this container.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">scroll</td><td>The allowed scroll directions for this container. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a8bab8623b4fdfa70abb77a640a2c50e0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_container.html#a8bab8623b4fdfa70abb77a640a2c50e0">gameplay::Container::setScrollBarsAutoHide</a> </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>autoHide</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Set whether scrollbars auto hidden when they become static.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">autoHide</td><td>true to auto hide the scrollbars when they become static. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a1eb7f9e877fd66b22d386d3b5ee07c94"></a>
 <div class="memitem">
 <div class="memproto">
@@ -787,16 +1009,77 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4d40b611e7541dbc217129149f96841d"></a>
+<a class="anchor" id="ab54c39d150a8d8f413062b3524a6e70f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_container.html#a4d40b611e7541dbc217129149f96841d">gameplay::Container::update</a> </td>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_container.html#ab54c39d150a8d8f413062b3524a6e70f">gameplay::Container::touchEventScroll</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
-          <td class="paramname"><em>clip</em></td><td>)</td>
-          <td><code> [protected, virtual]</code></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>contactIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Applies touch events to scroll state.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">evt</td><td>The touch event that occurred. </td></tr>
+    <tr><td class="paramname">x</td><td>The x position of the touch in pixels. Left edge is zero. </td></tr>
+    <tr><td class="paramname">y</td><td>The y position of the touch in pixels. Top edge is zero. </td></tr>
+    <tr><td class="paramname">contactIndex</td><td>The order of occurrence for multiple touch contacts starting at zero.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>Whether the touch event was consumed by scrolling within this container.</dd></dl>
+<dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a8308d5eb53e115aa12e2a9d45ae3f0f9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_container.html#a8308d5eb53e115aa12e2a9d45ae3f0f9">gameplay::Container::update</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td>
+          <td class="paramname"><em>container</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
+          <td class="paramname"><em>offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -804,12 +1087,30 @@ Protected Attributes</h2></td></tr>
 <p>Updates each control within this container, and positions them according to the container's layout.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">clip</td><td>The clipping rectangle of this container's parent container. </td></tr>
+    <tr><td class="paramname">container</td><td>This container's parent container. </td></tr>
+    <tr><td class="paramname">offset</td><td>The offset. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a07b9647b370a291e962e478ade0aabcf">gameplay::Control</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a4200259d1a58a6392c6cc0e347150e70">gameplay::Control</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab8a1534d05b3d8e6dc443c50c29ef6da"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_container.html#ab8a1534d05b3d8e6dc443c50c29ef6da">gameplay::Container::updateScroll</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Update scroll position and velocity. </p>
 
 </div>
 </div>
@@ -842,11 +1143,347 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af4e82c8e840df5efa75ebbc4595766a3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_container.html#a0c3e32288adc78753990d36f95d4de3b">Scroll</a> <a class="el" href="classgameplay_1_1_container.html#af4e82c8e840df5efa75ebbc4595766a3">gameplay::Container::_scroll</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Flag representing whether scrolling is enabled, and in which directions. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad2b66350df3072c21cbac88be1bc9445"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a>* <a class="el" href="classgameplay_1_1_container.html#ad2b66350df3072c21cbac88be1bc9445">gameplay::Container::_scrollBarBottomCap</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Scrollbar bottom cap image. </p>
+
+</div>
+</div>
+<a class="anchor" id="a15dde536d2fc74aae04b0b8601db0502"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> <a class="el" href="classgameplay_1_1_container.html#a15dde536d2fc74aae04b0b8601db0502">gameplay::Container::_scrollBarBounds</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Scroll bar bounds </p>
+
+</div>
+</div>
+<a class="anchor" id="a84c52a882c4f380cc02e46308e078cf9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a>* <a class="el" href="classgameplay_1_1_container.html#a84c52a882c4f380cc02e46308e078cf9">gameplay::Container::_scrollBarHorizontal</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Scrollbar horizontal image. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad927bea05db8ad35c41eac96389d0f11"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a>* <a class="el" href="classgameplay_1_1_container.html#ad927bea05db8ad35c41eac96389d0f11">gameplay::Container::_scrollBarLeftCap</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Scrollbar left cap image. </p>
+
+</div>
+</div>
+<a class="anchor" id="ab5805700148606ad7962ab5f26e12437"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_container.html#ab5805700148606ad7962ab5f26e12437">gameplay::Container::_scrollBarOpacity</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Used to animate scrollbars fading out. </p>
+
+</div>
+</div>
+<a class="anchor" id="a862a4bc578b981002a039a14018e9fa0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a>* <a class="el" href="classgameplay_1_1_container.html#a862a4bc578b981002a039a14018e9fa0">gameplay::Container::_scrollBarRightCap</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Scrollbar horizontal image. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac3d1bdda416960e718d1e3d5a614206e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_container.html#ac3d1bdda416960e718d1e3d5a614206e">gameplay::Container::_scrollBarsAutoHide</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Should the scrollbars auto hide. Default is false. </p>
+
+</div>
+</div>
+<a class="anchor" id="a6dbfa660b7e0f5ee870f3dda78edcd5e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a>* <a class="el" href="classgameplay_1_1_container.html#a6dbfa660b7e0f5ee870f3dda78edcd5e">gameplay::Container::_scrollBarTopCap</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Scrollbar top cap image. </p>
+
+</div>
+</div>
+<a class="anchor" id="a0abe7558a876816b4b61d7e4ed7a2b65"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a>* <a class="el" href="classgameplay_1_1_container.html#a0abe7558a876816b4b61d7e4ed7a2b65">gameplay::Container::_scrollBarVertical</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Scrollbar verticle image. </p>
+
+</div>
+</div>
+<a class="anchor" id="a9d4a8adbe66c0ebdabe4ff0f15255765"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_container.html#a9d4a8adbe66c0ebdabe4ff0f15255765">gameplay::Container::_scrolling</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Whether the user is currently touching / holding the mouse down within this layout's container. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad4cf653cc3d60847d6a36122dd175d4a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_container.html#ad4cf653cc3d60847d6a36122dd175d4a">gameplay::Container::_scrollingDown</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Are we scrolling down? </p>
+
+</div>
+</div>
+<a class="anchor" id="a3495919c0df022087fb133415e18eade"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_container.html#a3495919c0df022087fb133415e18eade">gameplay::Container::_scrollingFirstX</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>First scrolling touch x position </p>
+
+</div>
+</div>
+<a class="anchor" id="a13f20dc05f6dc3959c4af0b44f20ed5e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_container.html#a13f20dc05f6dc3959c4af0b44f20ed5e">gameplay::Container::_scrollingFirstY</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>First scrolling touch y position </p>
+
+</div>
+</div>
+<a class="anchor" id="a7b60e825419a370511fcff1f84e72402"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_container.html#a7b60e825419a370511fcff1f84e72402">gameplay::Container::_scrollingFriction</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Friction dampens velocity. </p>
+
+</div>
+</div>
+<a class="anchor" id="af97a4d221a2800ea2ecad00199910204"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long <a class="el" href="classgameplay_1_1_container.html#af97a4d221a2800ea2ecad00199910204">gameplay::Container::_scrollingLastTime</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The last time we were scrolling </p>
+
+</div>
+</div>
+<a class="anchor" id="aac9d085d86fb81ced60a5ab92a22b244"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_container.html#aac9d085d86fb81ced60a5ab92a22b244">gameplay::Container::_scrollingLastX</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The last y position when scrolling </p>
+
+</div>
+</div>
+<a class="anchor" id="a675d934cd17ea5abc309214f57c5036d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_container.html#a675d934cd17ea5abc309214f57c5036d">gameplay::Container::_scrollingLastY</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The last x position when scrolling </p>
+
+</div>
+</div>
+<a class="anchor" id="a24dbf4fc7c5388f12b89fecd37eabcff"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_container.html#a24dbf4fc7c5388f12b89fecd37eabcff">gameplay::Container::_scrollingRight</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Are we scrolling to the right? </p>
+
+</div>
+</div>
+<a class="anchor" id="a3fb707c3e51e1a6bc5353d686c643987"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long <a class="el" href="classgameplay_1_1_container.html#a3fb707c3e51e1a6bc5353d686c643987">gameplay::Container::_scrollingStartTimeX</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Time we started scrolling in the x </p>
+
+</div>
+</div>
+<a class="anchor" id="a07e80c13884686c178e9809fec40f913"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long <a class="el" href="classgameplay_1_1_container.html#a07e80c13884686c178e9809fec40f913">gameplay::Container::_scrollingStartTimeY</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Time we started scrolling in the y </p>
+
+</div>
+</div>
+<a class="anchor" id="ab4075148c5e2302ff842a43a460fcc73"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> <a class="el" href="classgameplay_1_1_container.html#ab4075148c5e2302ff842a43a460fcc73">gameplay::Container::_scrollingVelocity</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Speed to continue scrolling at after touch release. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac2a1c3bfc493c608123345342c011145"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> <a class="el" href="classgameplay_1_1_container.html#ac2a1c3bfc493c608123345342c011145">gameplay::Container::_scrollPosition</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>How far this layout has been scrolled in each direction. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa39a360add12f22ce9d099d038e40ba1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int <a class="el" href="classgameplay_1_1_container.html#aa39a360add12f22ce9d099d038e40ba1">gameplay::Container::ANIMATE_SCROLLBAR_OPACITY</a> = 8<code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Constant used to auto-hide scrollbars. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 18 2012 12:58:20 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 1 2012 22:06:22 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

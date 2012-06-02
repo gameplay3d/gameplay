@@ -96,6 +96,7 @@ Inheritance diagram for gameplay::AnimationTarget:</div>
 <area href="classgameplay_1_1_material_parameter.html" alt="gameplay::MaterialParameter" shape="rect" coords="372,56,548,80"/>
 <area href="classgameplay_1_1_transform.html" alt="gameplay::Transform" shape="rect" coords="744,56,920,80"/>
 <area href="classgameplay_1_1_container.html" alt="gameplay::Container" shape="rect" coords="0,112,176,136"/>
+<area href="classgameplay_1_1_joystick.html" alt="gameplay::Joystick" shape="rect" coords="186,112,362,136"/>
 <area href="classgameplay_1_1_label.html" alt="gameplay::Label" shape="rect" coords="372,112,548,136"/>
 <area href="classgameplay_1_1_node.html" alt="gameplay::Node" shape="rect" coords="744,112,920,136"/>
 <area href="classgameplay_1_1_form.html" alt="gameplay::Form" shape="rect" coords="0,168,176,192"/>
@@ -145,8 +146,6 @@ Friends</h2></td></tr>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></tr>
 <tr class="memitem:ad47388abe0372b9b407ebabb3379a976"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad47388abe0372b9b407ebabb3379a976"></a>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationClip</b></td></tr>
-<tr class="memitem:a7899599edce4988a894c8e7431e7bb85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7899599edce4988a894c8e7431e7bb85"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines an interface allowing animation to target an object for changing its animation properties. </p>
@@ -675,7 +674,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
 </dl>
 <dl class="section return"><dt>Returns:</dt><dd>The property component count of the given property. </dd></dl>
 
-<p>Implemented in <a class="el" href="classgameplay_1_1_transform.html#a842ce88c27aaedb5b43e0ac675ba7b1f">gameplay::Transform</a>, <a class="el" href="classgameplay_1_1_control.html#a50356ff249e9f64a96048109f56a9fed">gameplay::Control</a>, and <a class="el" href="classgameplay_1_1_material_parameter.html#a6f898406a1e9390d7a26dba04e3b71e0">gameplay::MaterialParameter</a>.</p>
+<p>Implemented in <a class="el" href="classgameplay_1_1_transform.html#a842ce88c27aaedb5b43e0ac675ba7b1f">gameplay::Transform</a>, <a class="el" href="classgameplay_1_1_control.html#a6d18739bdbd45718c043afb33245093b">gameplay::Control</a>, <a class="el" href="classgameplay_1_1_container.html#a540ba8ee5dd80383d64f07342ddda2e7">gameplay::Container</a>, and <a class="el" href="classgameplay_1_1_material_parameter.html#a6f898406a1e9390d7a26dba04e3b71e0">gameplay::MaterialParameter</a>.</p>
 
 </div>
 </div>
@@ -712,7 +711,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classgameplay_1_1_transform.html#aa511e1efa7282723e0bfbe38742ec410">gameplay::Transform</a>, <a class="el" href="classgameplay_1_1_control.html#aa3a1e95ee04501acf9f0de66cfa9117d">gameplay::Control</a>, and <a class="el" href="classgameplay_1_1_material_parameter.html#a4128baa81318a61cd6791b0cff9a5ea3">gameplay::MaterialParameter</a>.</p>
+<p>Implemented in <a class="el" href="classgameplay_1_1_transform.html#aa511e1efa7282723e0bfbe38742ec410">gameplay::Transform</a>, <a class="el" href="classgameplay_1_1_control.html#a3d0ea04fcf78d25124017c40c2846979">gameplay::Control</a>, <a class="el" href="classgameplay_1_1_container.html#a2ede2188d0b9de8eb0b82eb013ebf991">gameplay::Container</a>, and <a class="el" href="classgameplay_1_1_material_parameter.html#a4128baa81318a61cd6791b0cff9a5ea3">gameplay::MaterialParameter</a>.</p>
 
 </div>
 </div>
@@ -804,7 +803,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController<
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classgameplay_1_1_transform.html#a444e7a96105255379d13ac2b0523d5e3">gameplay::Transform</a>, <a class="el" href="classgameplay_1_1_control.html#afc405c3a7d7816ef826b8c02aba5397e">gameplay::Control</a>, and <a class="el" href="classgameplay_1_1_material_parameter.html#aaf03d11eb0ad260816f213fdccfac4b4">gameplay::MaterialParameter</a>.</p>
+<p>Implemented in <a class="el" href="classgameplay_1_1_transform.html#a444e7a96105255379d13ac2b0523d5e3">gameplay::Transform</a>, <a class="el" href="classgameplay_1_1_control.html#a62a89ccb93888f7258287b767cfae107">gameplay::Control</a>, <a class="el" href="classgameplay_1_1_container.html#a395c95a45eabb5e4c39eef105526b482">gameplay::Container</a>, and <a class="el" href="classgameplay_1_1_material_parameter.html#aaf03d11eb0ad260816f213fdccfac4b4">gameplay::MaterialParameter</a>.</p>
 
 </div>
 </div>
@@ -830,7 +829,7 @@ TargetType::TRANSFORM </dd></dl>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 18 2012 12:58:20 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 1 2012 22:06:22 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
