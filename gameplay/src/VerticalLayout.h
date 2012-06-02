@@ -66,8 +66,9 @@ protected:
      * the bottom-most edge of the container is reached.
      *
      * @param container The container to update.
+     * @param offset Positioning offset to add to the control's position.
      */
-    void update(const Container* container);
+    void update(const Container* container, const Vector2& offset);
 
     /**
      * Flag determining whether this layout will start laying out controls from the bottom of the container.

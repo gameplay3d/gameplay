@@ -36,6 +36,9 @@ Light::~Light()
     case SPOT:
         SAFE_DELETE(_spot);
         break;
+    default:
+        GP_ERROR("Invalid light type (%d).", _type);
+        break;
     }
 }
 
@@ -75,13 +78,16 @@ const Vector3& Light::getColor() const
     switch (_type)
     {
     case DIRECTIONAL:
+        GP_ASSERT(_directional);
         return _directional->color;
     case POINT:
+        GP_ASSERT(_point);
         return _point->color;
     case SPOT:
+        GP_ASSERT(_spot);
         return _spot->color;
     default:
-        assert(0);
+        GP_ERROR("Unsupported light type (%d).", _type);
         return Vector3::zero();
 
     }
@@ -92,76 +98,95 @@ void Light::setColor(const Vector3& color)
     switch (_type)
     {
     case DIRECTIONAL:
+        GP_ASSERT(_directional);
         _directional->color = color;
         break;
     case POINT:
+        GP_ASSERT(_point);
         _point->color = color;
         break;
     case SPOT:
+        GP_ASSERT(_spot);
         _spot->color = color;
+        break;
+    default:
+        GP_ERROR("Unsupported light type (%d).", _type);
         break;
     }
 }
 
 float Light::getRange()  const
 {
-    assert(_type != DIRECTIONAL);
+    GP_ASSERT(_type != DIRECTIONAL);
 
     switch (_type)
     {
     case POINT:
+        GP_ASSERT(_point);
         return _point->range;
     case SPOT:
+        GP_ASSERT(_spot);
         return _spot->range;
     default:
-        assert(0);
+        GP_ERROR("Unsupported light type (%d).", _type);
         return 0.0f;
     }
 }
     
 void Light::setRange(float range)
 {
-    assert(_type != DIRECTIONAL);
+    GP_ASSERT(_type != DIRECTIONAL);
 
     switch (_type)
     {
     case POINT:
+        GP_ASSERT(_point);
+        GP_ASSERT(range);
+
         _point->range = range;
         _point->rangeInverse = 1.0f / range;
         break;
     case SPOT:
+        GP_ASSERT(_spot);
+        GP_ASSERT(range);
+
         _spot->range = range;
         _spot->rangeInverse = 1.0f / range;
+        break;
+    default:
+        GP_ERROR("Unsupported light type (%d).", _type);
         break;
     }
 }
 
 float Light::getRangeInverse() const
 {
-    assert(_type != DIRECTIONAL);
+    GP_ASSERT(_type != DIRECTIONAL);
 
     switch (_type)
     {
     case POINT:
+        GP_ASSERT(_point);
         return _point->rangeInverse;
     case SPOT:
+        GP_ASSERT(_spot);
         return _spot->rangeInverse;
     default:
-        assert(0);
+        GP_ERROR("Unsupported light type (%d).", _type);
         return 0.0f;
     }
 }
     
 float Light::getInnerAngle()  const
 {
-    assert(_type == SPOT);
+    GP_ASSERT(_type == SPOT);
 
     return _spot->innerAngle;
 }
 
 void Light::setInnerAngle(float innerAngle)
 {
-    assert(_type == SPOT);
+    GP_ASSERT(_type == SPOT);
 
     _spot->innerAngle = innerAngle;
     _spot->innerAngleCos = cos(innerAngle);
@@ -169,14 +194,14 @@ void Light::setInnerAngle(float innerAngle)
     
 float Light::getOuterAngle()  const
 {
-    assert(_type == SPOT);
+    GP_ASSERT(_type == SPOT);
 
     return _spot->outerAngle;
 }
 
 void Light::setOuterAngle(float outerAngle)
 {
-    assert(_type == SPOT);
+    GP_ASSERT(_type == SPOT);
 
     _spot->outerAngle = outerAngle;
     _spot->outerAngleCos = cos(outerAngle);
@@ -184,14 +209,14 @@ void Light::setOuterAngle(float outerAngle)
     
 float Light::getInnerAngleCos()  const
 {
-    assert(_type == SPOT);
+    GP_ASSERT(_type == SPOT);
 
     return _spot->innerAngleCos;
 }
     
 float Light::getOuterAngleCos()  const
 {
-    assert(_type == SPOT);
+    GP_ASSERT(_type == SPOT);
 
     return _spot->outerAngleCos;
 }
@@ -211,9 +236,10 @@ Light* Light::clone(NodeCloneContext &context) const
         lightClone = createSpot(getColor(), getRange(), getInnerAngle(), getOuterAngle());
         break;
     default:
-        assert(false);
+        GP_ERROR("Unsupported light type (%d).", _type);
+        return NULL;
     }
-    assert(lightClone);
+    GP_ASSERT(lightClone);
 
     if (Node* node = context.findClonedNode(getNode()))
     {
@@ -230,12 +256,14 @@ Light::Directional::Directional(const Vector3& color)
 Light::Point::Point(const Vector3& color, float range)
     : color(color), range(range)
 {
+    GP_ASSERT(range);
     rangeInverse = 1.0f / range;
 }
 
 Light::Spot::Spot(const Vector3& color, float range, float innerAngle, float outerAngle)
     : color(color), range(range), innerAngle(innerAngle), outerAngle(outerAngle)
 {
+    GP_ASSERT(range);
     rangeInverse = 1.0f / range;
     innerAngleCos = cos(innerAngle);
     outerAngleCos = cos(outerAngle);

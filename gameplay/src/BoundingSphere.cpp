@@ -158,6 +158,9 @@ bool BoundingSphere::isEmpty() const
 
 void BoundingSphere::merge(const BoundingSphere& sphere)
 {
+    if (sphere.isEmpty())
+        return;
+
     // Calculate the distance between the two centers.
     float vx = center.x - sphere.center.x;
     float vy = center.y - sphere.center.y;
@@ -177,6 +180,7 @@ void BoundingSphere::merge(const BoundingSphere& sphere)
     }
 
     // Calculate the unit vector between the two centers.
+    GP_ASSERT(d != 0.0f);
     float dI = 1.0f / d;
     vx *= dI;
     vy *= dI;
@@ -200,6 +204,9 @@ void BoundingSphere::merge(const BoundingSphere& sphere)
 
 void BoundingSphere::merge(const BoundingBox& box)
 {
+    if (box.isEmpty())
+        return;
+
     const Vector3& min = box.min;
     const Vector3& max = box.max;
 
@@ -240,6 +247,7 @@ void BoundingSphere::merge(const BoundingBox& box)
     }
 
     // Calculate the unit vector between the center and the farthest point.
+    GP_ASSERT(distance != 0.0f);
     float dI = 1.0f / distance;
     v1x *= dI;
     v1y *= dI;

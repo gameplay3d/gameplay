@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "Vector3.h"
+#include "MathUtil.h"
 
 namespace gameplay
 {
@@ -106,7 +107,7 @@ void Vector3::add(const Vector3& v)
 
 void Vector3::add(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     dst->x = v1.x + v2.x;
     dst->y = v1.y + v2.y;
@@ -115,74 +116,64 @@ void Vector3::add(const Vector3& v1, const Vector3& v2, Vector3* dst)
 
 void Vector3::clamp(const Vector3& min, const Vector3& max)
 {
-    assert(!( min.x > max.x || min.y > max.y || min.z > max.z));
+    GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z));
 
     // Clamp the x value.
-    if ( x < min.x )
+    if (x < min.x)
         x = min.x;
-    if ( x > max.x )
+    if (x > max.x)
         x = max.x;
 
     // Clamp the y value.
-    if ( y < min.y )
+    if (y < min.y)
         y = min.y;
-    if ( y > max.y )
+    if (y > max.y)
         y = max.y;
 
     // Clamp the z value.
-    if ( z < min.z )
+    if (z < min.z)
         z = min.z;
-    if ( z > max.z )
+    if (z > max.z)
         z = max.z;
 }
 
 void Vector3::clamp(const Vector3& v, const Vector3& min, const Vector3& max, Vector3* dst)
 {
-    assert(dst);
-    assert(!( min.x > max.x || min.y > max.y || min.z > max.z));
+    GP_ASSERT(dst);
+    GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z));
 
     // Clamp the x value.
     dst->x = v.x;
-    if ( dst->x < min.x )
+    if (dst->x < min.x)
         dst->x = min.x;
-    if ( dst->x > max.x )
+    if (dst->x > max.x)
         dst->x = max.x;
 
     // Clamp the y value.
     dst->y = v.y;
-    if ( dst->y < min.y )
+    if (dst->y < min.y)
         dst->y = min.y;
-    if ( dst->y > max.y )
+    if (dst->y > max.y)
         dst->y = max.y;
 
     // Clamp the z value.
     dst->z = v.z;
-    if ( dst->z < min.z )
+    if (dst->z < min.z)
         dst->z = min.z;
-    if ( dst->z > max.z )
+    if (dst->z > max.z)
         dst->z = max.z;
 }
 
 void Vector3::cross(const Vector3& v)
 {
-    float tx = (y * v.z) - (z * v.y);
-    float ty = (z * v.x) - (x * v.z);
-    float tz = (x * v.y) - (y * v.x);
-    x = tx;
-    y = ty;
-    z = tz;
+    cross(*this, v, this);
 }
 
 void Vector3::cross(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
-    float x = (v1.y * v2.z) - (v1.z * v2.y);
-    float y = (v1.z * v2.x) - (v1.x * v2.z);
-    float z = (v1.x * v2.y) - (v1.y * v2.x);
-    dst->x = x;
-    dst->y = y;
-    dst->z = z;
+    MathUtil::crossVector3((const float*)&v1, (const float*)&v2, (float*)dst);
 }
 
 float Vector3::distance(const Vector3& v) const
@@ -238,7 +229,7 @@ Vector3& Vector3::normalize()
 
 void Vector3::normalize(Vector3* dst) const
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     if (dst != this)
     {
@@ -279,7 +270,7 @@ void Vector3::set(float x, float y, float z)
 
 void Vector3::set(const float* array)
 {
-    assert(array);
+    GP_ASSERT(array);
 
     x = array[0];
     y = array[1];
@@ -309,7 +300,7 @@ void Vector3::subtract(const Vector3& v)
 
 void Vector3::subtract(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
-    assert(dst);
+    GP_ASSERT(dst);
 
     dst->x = v1.x - v2.x;
     dst->y = v1.y - v2.y;

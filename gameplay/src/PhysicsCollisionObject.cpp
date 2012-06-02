@@ -14,9 +14,7 @@ struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
     /**
      * Called with each contact. Needed to implement collidesWith(PhysicsCollisionObject*).
      */
-    btScalar addSingleResult(btManifoldPoint& cp, 
-        const btCollisionObject* a, int partIdA, int indexA, 
-        const btCollisionObject* b, int partIdB, int indexB)
+    btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB)
     {
         result = true;
         return 0.0f;
@@ -29,7 +27,7 @@ struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
 };
 
 PhysicsCollisionObject::PhysicsCollisionObject(Node* node)
-    : _node(node), _motionState(NULL), _collisionShape(NULL)
+    : _node(node), _motionState(NULL), _collisionShape(NULL), _enabled(true)
 {
 }
 
@@ -37,11 +35,13 @@ PhysicsCollisionObject::~PhysicsCollisionObject()
 {
     SAFE_DELETE(_motionState);
 
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->destroyShape(_collisionShape);
 }
 
 PhysicsCollisionShape::Type PhysicsCollisionObject::getShapeType() const
 {
+    GP_ASSERT(getCollisionShape());
     return getCollisionShape()->getType();
 }
 
@@ -68,27 +68,60 @@ bool PhysicsCollisionObject::isKinematic() const
     case CHARACTER:
         return true;
     default:
+        GP_ASSERT(getCollisionObject());
         return getCollisionObject()->isKinematicObject();
     }
 }
 
 bool PhysicsCollisionObject::isDynamic() const
 {
+    GP_ASSERT(getCollisionObject());
     return !getCollisionObject()->isStaticOrKinematicObject();
+}
+
+bool PhysicsCollisionObject::isEnabled() const
+{
+    return _enabled;
+}
+
+void PhysicsCollisionObject::setEnabled(bool enable)
+{
+    if (enable)
+    {  
+        if (!_enabled)
+        {
+            Game::getInstance()->getPhysicsController()->addCollisionObject(this);
+            _enabled = true;
+        }
+    }
+    else
+    {
+        if (_enabled)
+        {
+            Game::getInstance()->getPhysicsController()->removeCollisionObject(this);
+            _enabled = false;
+        }
+    }
 }
 
 void PhysicsCollisionObject::addCollisionListener(CollisionListener* listener, PhysicsCollisionObject* object)
 {
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->addCollisionListener(listener, this, object);
 }
 
 void PhysicsCollisionObject::removeCollisionListener(CollisionListener* listener, PhysicsCollisionObject* object)
 {
+    GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->removeCollisionListener(listener, this, object);
 }
 
 bool PhysicsCollisionObject::collidesWith(PhysicsCollisionObject* object) const
 {
+    GP_ASSERT(Game::getInstance()->getPhysicsController() && Game::getInstance()->getPhysicsController()->_world);
+    GP_ASSERT(object && object->getCollisionObject());
+    GP_ASSERT(getCollisionObject());
+
     static CollidesWithCallback callback;
 
     callback.result = false;

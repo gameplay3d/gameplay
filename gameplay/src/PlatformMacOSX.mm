@@ -15,11 +15,11 @@ using namespace std;
 using namespace gameplay;
 
 // Default to 720p
-#define WINDOW_WIDTH    1280
-#define WINDOW_HEIGHT   720
+static int __width = 1280;
+static int __height = 720;
 
-static const float ACCELEROMETER_FACTOR_X = 90.0f / WINDOW_WIDTH;
-static const float ACCELEROMETER_FACTOR_Y = 90.0f / WINDOW_HEIGHT;
+static float ACCELEROMETER_FACTOR_X = 90.0f / __width;
+static float ACCELEROMETER_FACTOR_Y = 90.0f / __height;
 
 static long __timeStart;
 static long __timeAbsolute;
@@ -33,6 +33,8 @@ static bool __leftMouseDown = false;
 static bool __rightMouseDown = false;
 static bool __otherMouseDown = false;
 static bool __shiftDown = false;
+static char* __title = NULL;
+static bool __fullscreen = false;
 
 
 long getMachTimeInMilliseconds()
@@ -44,6 +46,7 @@ long getMachTimeInMilliseconds()
         (void) mach_timebase_info(&s_timebase_info);
     
     // mach_absolute_time() returns billionth of seconds, so divide by one million to get milliseconds
+    GP_ASSERT(kOneMillion * s_timebase_info.denom);
     return (long)((mach_absolute_time() * s_timebase_info.numer) / (kOneMillion * s_timebase_info.denom));
 }
 
@@ -107,7 +110,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (id) initWithFrame: (NSRect) frame
 {    
-    NSOpenGLPixelFormatAttribute attrs[] = 
+    NSOpenGLPixelFormatAttribute windowedAttrs[] = 
     {
         NSOpenGLPFAAccelerated,
         NSOpenGLPFADoubleBuffer,
@@ -117,6 +120,18 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersionLegacy,
         0
     };
+    NSOpenGLPixelFormatAttribute fullscreenAttrs[] = 
+    {
+        NSOpenGLPFADoubleBuffer,
+        NSOpenGLPFAScreenMask, (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
+        NSOpenGLPFAFullScreen,
+        NSOpenGLPFAColorSize, 32,
+        NSOpenGLPFADepthSize, 24,
+        NSOpenGLPFAAlphaSize, 8,
+        NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersionLegacy,
+        0
+    };
+    NSOpenGLPixelFormatAttribute* attrs = __fullscreen ? fullscreenAttrs : windowedAttrs;
     
     NSOpenGLPixelFormat* pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
     if (!pf)
@@ -135,14 +150,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     [super prepareOpenGL];
     
-    NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
-    NSString* path = [bundlePath stringByAppendingString:@"/Contents/Resources/"];
-    FileSystem::setResourcePath([path cStringUsingEncoding:NSASCIIStringEncoding]);
-    _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);
+    _game->run();
     
-    [[self window] setLevel: NSFloatingWindowLevel];
+    if (__fullscreen)
+        [[self window] setLevel: NSMainMenuWindowLevel+1];
+    else
+        [[self window] setLevel: NSFloatingWindowLevel];
     [[self window] makeKeyAndOrderFront: self];
-    [[self window] setTitle: [NSString stringWithUTF8String: ""]];
+    [[self window] setTitle: [NSString stringWithUTF8String: __title ? __title : ""]];
     
     // Make all the OpenGL calls to setup rendering and build the necessary rendering objects
     [[self openGLContext] makeCurrentContext];
@@ -159,6 +174,10 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
     CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] CGLPixelFormatObj];
     CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, cglContext, cglPixelFormat);
+    
+    GLint dim[2] = {__width, __height};
+    CGLSetParameter(cglContext, kCGLCPSurfaceBackingSize, dim);
+    CGLEnable(cglContext, kCGLCESurfaceBackingSize);
     
     // Activate the display link
     CVDisplayLinkStart(displayLink);
@@ -204,20 +223,20 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     __leftMouseDown = true;
-    [self mouse: Mouse::MOUSE_PRESS_LEFT_BUTTON orTouchEvent: Touch::TOUCH_PRESS x: point.x y: WINDOW_HEIGHT - point.y s: 0];
+    [self mouse: Mouse::MOUSE_PRESS_LEFT_BUTTON orTouchEvent: Touch::TOUCH_PRESS x: point.x y: __height - point.y s: 0];
 }
 
 - (void) mouseUp: (NSEvent*) event
 {
      NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     __leftMouseDown = false;
-    [self mouse: Mouse::MOUSE_RELEASE_LEFT_BUTTON orTouchEvent: Touch::TOUCH_RELEASE x: point.x y: WINDOW_HEIGHT - point.y s: 0];
+    [self mouse: Mouse::MOUSE_RELEASE_LEFT_BUTTON orTouchEvent: Touch::TOUCH_RELEASE x: point.x y: __height - point.y s: 0];
 }
 
 - (void)mouseMoved:(NSEvent *) event 
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
+    Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
@@ -225,7 +244,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
      NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     if (__leftMouseDown)
     {
-        [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE x: point.x y: WINDOW_HEIGHT - point.y s: 0];
+        [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE x: point.x y: __height - point.y s: 0];
     }
 }
 
@@ -234,15 +253,15 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     __rightMouseDown = true;
      NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     __lx = point.x;
-    __ly = WINDOW_HEIGHT - point.y;    
-    _game->mouseEvent(Mouse::MOUSE_PRESS_RIGHT_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
+    __ly = __height - point.y;    
+    _game->mouseEvent(Mouse::MOUSE_PRESS_RIGHT_BUTTON, point.x, __height - point.y, 0);
 }
 
 - (void) rightMouseUp: (NSEvent*) event
 {
    __rightMouseDown = false;
     NSPoint point = [event locationInWindow];
-    _game->mouseEvent(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
+    _game->mouseEvent(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, point.x, __height - point.y, 0);
 }
 
 - (void) rightMouseDragged: (NSEvent*) event
@@ -252,7 +271,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     {
         // Update the pitch and roll by adding the scaled deltas.
         __roll += (float)(point.x - __lx) * ACCELEROMETER_FACTOR_X;
-        __pitch -= -(float)(point.y - (WINDOW_HEIGHT - __ly)) * ACCELEROMETER_FACTOR_Y;
+        __pitch -= -(float)(point.y - (__height - __ly)) * ACCELEROMETER_FACTOR_Y;
     
         // Clamp the values to the valid range.
         __roll = max(min(__roll, 90.0f), -90.0f);
@@ -260,32 +279,32 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
         // Update the last X/Y values.
         __lx = point.x;
-        __ly = (WINDOW_HEIGHT - point.y);
+        __ly = (__height - point.y);
     }
     
     // In right-mouse case, whether __rightMouseDown is true or false
     // this should not matter, mouse move is still occuring
-    _game->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
+    _game->mouseEvent(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
 }
 
 - (void)otherMouseDown: (NSEvent *) event 
 {
     __otherMouseDown = true;
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    _game->mouseEvent(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
+    _game->mouseEvent(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, point.x, __height - point.y, 0);
 }
 
 - (void)otherMouseUp: (NSEvent *) event 
 {
     __otherMouseDown = false;
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    _game->mouseEvent(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, point.x, WINDOW_HEIGHT - point.y, 0);
+    _game->mouseEvent(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, point.x, __height - point.y, 0);
 }
 
 - (void)otherMouseDragged: (NSEvent *) event 
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    _game->mouseEvent(Mouse::MOUSE_MOVE, point.x, WINDOW_HEIGHT - point.y, 0);
+    _game->mouseEvent(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
 }
 
 - (void) mouseEntered: (NSEvent*)event
@@ -296,7 +315,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void)scrollWheel: (NSEvent *) event 
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    Game::getInstance()->mouseEvent(Mouse::MOUSE_WHEEL, point.x, WINDOW_HEIGHT - point.y, (int)([event deltaY] * 10.0f));
+    Game::getInstance()->mouseEvent(Mouse::MOUSE_WHEEL, point.x, __height - point.y, (int)([event deltaY] * 10.0f));
 }
 
 - (void) mouseExited: (NSEvent*)event
@@ -547,7 +566,10 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
 
 - (void) keyDown: (NSEvent*) event
 {    
-    gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, getKey([event keyCode], [event modifierFlags]));
+    if([event isARepeat] == NO)
+    {
+        gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, getKey([event keyCode], [event modifierFlags]));
+    }
 }
 
 - (void) keyUp: (NSEvent*) event
@@ -557,16 +579,28 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
 
 @end
 
+@interface FullscreenWindow : NSWindow
+{ 
+}
+@end
+
+@implementation FullscreenWindow
+- (BOOL)canBecomeKeyWindow
+{
+    return YES;
+}
+@end
+
 
 namespace gameplay
 {
 
 extern void printError(const char* format, ...)
 {
+    GP_ASSERT(format);
     va_list argptr;
     va_start(argptr, format);
     vfprintf(stderr, format, argptr);
-    fprintf(stderr, "\n");
     va_end(argptr);
 }
     
@@ -592,10 +626,40 @@ Platform* Platform::create(Game* game)
 
 int Platform::enterMessagePump()
 {
+    NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
+    NSString* path = [bundlePath stringByAppendingString:@"/Contents/Resources/"];
+    FileSystem::setResourcePath([path cStringUsingEncoding:NSASCIIStringEncoding]);
+    
+    // Read window settings from config.
+    if (_game->getConfig())
+    {
+        Properties* config = _game->getConfig()->getNamespace("window", true);
+        if (config)
+        {
+            // Read window title.
+            __title = const_cast<char *>(config->getString("title"));
+
+            // Read window size.
+            int width = config->getInt("width");
+            if (width != 0)
+                __width = width;
+            int height = config->getInt("height");
+            if (height != 0)
+                __height = height;
+
+            // Read fullscreen state.
+            __fullscreen = config->getBool("fullscreen");
+        }
+    }
+
+    // Set the scale factors for the mouse movement used to simulate the accelerometer.
+    ACCELEROMETER_FACTOR_X = 90.0f / __width;
+    ACCELEROMETER_FACTOR_Y = 90.0f / __height;
+
     NSAutoreleasePool* pool = [NSAutoreleasePool new];
     NSApplication* app = [NSApplication sharedApplication];
     NSRect screenBounds = [[NSScreen mainScreen] frame];
-    NSRect viewBounds = NSMakeRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    NSRect viewBounds = NSMakeRect(0, 0, __width, __height);
     
     __view = [[View alloc] initWithFrame:viewBounds];
     
@@ -604,11 +668,23 @@ int Platform::enterMessagePump()
                                  viewBounds.size.width, 
                                  viewBounds.size.height);
     
-    NSWindow* window = [[NSWindow alloc]
-                        initWithContentRect:centered
-                        styleMask:NSTitledWindowMask | NSClosableWindowMask
-                        backing:NSBackingStoreBuffered
-                        defer:NO];
+    NSWindow* window = NULL;
+    if (__fullscreen)
+    {
+        window = [[FullscreenWindow alloc]
+                   initWithContentRect:screenBounds
+                   styleMask:NSBorderlessWindowMask
+                   backing:NSBackingStoreBuffered
+                   defer:NO];
+    }
+    else
+    {
+        window = [[NSWindow alloc]
+                   initWithContentRect:centered
+                   styleMask:NSTitledWindowMask | NSClosableWindowMask
+                   backing:NSBackingStoreBuffered
+                   defer:NO];
+    }
     
     [window setAcceptsMouseMovedEvents:YES];
     [window setContentView:__view];
@@ -633,12 +709,12 @@ void Platform::signalShutdown()
     
 unsigned int Platform::getDisplayWidth()
 {
-    return WINDOW_WIDTH;
+    return __width;
 }
 
 unsigned int Platform::getDisplayHeight()
 {
-    return WINDOW_HEIGHT;
+    return __height;
 }
 
 long Platform::getAbsoluteTime()
@@ -662,11 +738,6 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
-int Platform::getOrientationAngle()
-{
-    return 0;
-}
-
 void Platform::setMultiTouch(bool enabled)
 {
 }
@@ -678,6 +749,9 @@ bool Platform::isMultiTouch()
     
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
+    GP_ASSERT(pitch);
+    GP_ASSERT(roll);
+
     *pitch = __pitch;
     *roll = __roll;
 }
@@ -703,7 +777,7 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
     
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Game::getInstance()->keyEvent(evt, key);
     Form::keyEventInternal(evt, key);
 }
     

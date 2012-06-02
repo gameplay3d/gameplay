@@ -9,8 +9,6 @@ namespace gameplay
 Technique::Technique(const char* id, Material* material)
     : _id(id ? id : ""), _material(material)
 {
-    assert(material);
-
     RenderState::_parent = material;
 }
 
@@ -35,16 +33,18 @@ unsigned int Technique::getPassCount() const
 
 Pass* Technique::getPass(unsigned int index) const
 {
-    assert(index < _passes.size());
-
+    GP_ASSERT(index < _passes.size());
     return _passes[index];
 }
 
 Pass* Technique::getPass(const char* id) const
 {
+    GP_ASSERT(id);
+
     for (unsigned int i = 0, count = _passes.size(); i < count; ++i)
     {
         Pass* pass = _passes[i];
+        GP_ASSERT(pass);
         if (strcmp(pass->getId(), id) == 0)
         {
             return pass;
@@ -57,11 +57,12 @@ Pass* Technique::getPass(const char* id) const
 Technique* Technique::clone(Material* material, NodeCloneContext &context) const
 {
     Technique* technique = new Technique(getId(), material);
-    technique->_material = material;
     for (std::vector<Pass*>::const_iterator it = _passes.begin(); it != _passes.end(); ++it)
     {
         Pass* pass = *it;
+        GP_ASSERT(pass);
         Pass* passCopy = pass->clone(technique, context);
+        GP_ASSERT(passCopy);
         technique->_passes.push_back(passCopy);
     }
     RenderState::cloneInto(technique, context);

@@ -90,13 +90,6 @@ public:
     static void setVsync(bool enable);
 
     /**
-     * Gets the orientation angle the device is currently in.
-     * 
-     * @return The orientation angle.
-     */
-    static int getOrientationAngle();
-
-    /**
      * Set if multi-touch is enabled on the platform
      */
     static void setMultiTouch(bool enabled);

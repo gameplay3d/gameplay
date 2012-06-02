@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 MaterialParameter::MaterialParameter(const char* name) :
-    _type(MaterialParameter::NONE), _count(1), _dynamic(false), _name(name), _uniform(NULL)
+    _type(MaterialParameter::NONE), _count(1), _dynamic(false), _name(name ? name : ""), _uniform(NULL)
 {
     clearValue();
 }
@@ -34,6 +34,9 @@ void MaterialParameter::clearValue()
         case MaterialParameter::METHOD:
             SAFE_RELEASE(_value.method);
             break;
+        default:
+            // Ignore all other cases.
+            break;
         }
 
         _dynamic = false;
@@ -48,6 +51,9 @@ void MaterialParameter::clearValue()
             {
                 const_cast<Texture::Sampler*>(_value.samplerValue)->release();
             }
+            break;
+        default:
+            // Ignore all other cases.
             break;
         }
     }
@@ -111,6 +117,7 @@ void MaterialParameter::setValue(const Vector2& value)
 
 void MaterialParameter::setValue(const Vector2* values, unsigned int count)
 {
+    GP_ASSERT(values);
     clearValue();
 
     _value.floatPtrValue = const_cast<float*> (&values[0].x);
@@ -134,6 +141,7 @@ void MaterialParameter::setValue(const Vector3& value)
 
 void MaterialParameter::setValue(const Vector3* values, unsigned int count)
 {
+    GP_ASSERT(values);
     clearValue();
 
     _value.floatPtrValue = const_cast<float*> (&values[0].x);
@@ -157,6 +165,7 @@ void MaterialParameter::setValue(const Vector4& value)
 
 void MaterialParameter::setValue(const Vector4* values, unsigned int count)
 {
+    GP_ASSERT(values);
     clearValue();
 
     _value.floatPtrValue = const_cast<float*> (&values[0].x);
@@ -184,6 +193,7 @@ void MaterialParameter::setValue(const Matrix& value)
 
 void MaterialParameter::setValue(const Matrix* values, unsigned int count)
 {
+    GP_ASSERT(values);
     clearValue();
 
     _value.floatPtrValue = const_cast<Matrix&> (values[0]).m;
@@ -223,6 +233,8 @@ Texture::Sampler* MaterialParameter::setValue(const char* texturePath, bool gene
 
 void MaterialParameter::bind(Effect* effect)
 {
+    GP_ASSERT(effect);
+
     // If we had a Uniform cached that is not from the passed in effect,
     // we need to update our uniform to point to the new effect's uniform.
     if (!_uniform || _uniform->getEffect() != effect)
@@ -232,7 +244,7 @@ void MaterialParameter::bind(Effect* effect)
         if (!_uniform)
         {
             // This parameter was not found in the specified effect, so do nothing.
-            WARN_VARG("Warning: Material parameter '%s' not found in effect '%s'.", _name.c_str(), effect->getId());
+            GP_WARN("Warning: Material parameter '%s' not found in effect '%s'.", _name.c_str(), effect->getId());
             return;
         }
     }
@@ -246,7 +258,6 @@ void MaterialParameter::bind(Effect* effect)
         }
         else
         {
-            assert(_value.floatPtrValue);
             effect->setValue(_uniform, _value.floatPtrValue, _count);
         }
         break;
@@ -257,33 +268,30 @@ void MaterialParameter::bind(Effect* effect)
         }
         else
         {
-            assert(_value.intPtrValue);
             effect->setValue(_uniform, _value.intPtrValue, _count);
         }
         break;
     case MaterialParameter::VECTOR2:
-        assert(_value.floatPtrValue);
         effect->setValue(_uniform, reinterpret_cast<Vector2*>(_value.floatPtrValue), _count);
         break;
     case MaterialParameter::VECTOR3:
-        assert(_value.floatPtrValue);
         effect->setValue(_uniform, reinterpret_cast<Vector3*>(_value.floatPtrValue), _count);
         break;
     case MaterialParameter::VECTOR4:
-        assert(_value.floatPtrValue);
         effect->setValue(_uniform, reinterpret_cast<Vector4*>(_value.floatPtrValue), _count);
         break;
     case MaterialParameter::MATRIX:
-        assert(_value.floatPtrValue);
         effect->setValue(_uniform, reinterpret_cast<Matrix*>(_value.floatPtrValue), _count);
         break;
     case MaterialParameter::SAMPLER:
-        assert(_value.samplerValue);
         effect->setValue(_uniform, _value.samplerValue);
         break;
     case MaterialParameter::METHOD:
-        assert(_value.method);
+        GP_ASSERT(_value.method);
         _value.method->setValue(effect);
+        break;
+    default:
+        GP_ERROR("Unsupported material parameter type (%d).", _type);
         break;
     }
 }
@@ -312,6 +320,7 @@ unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyI
                 case VECTOR4:
                     return 4 * _count;
                 default:
+                    GP_ERROR("Unsupported material parameter type (%d).", _type);
                     return 0;
             }
         }
@@ -323,6 +332,7 @@ unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyI
 
 void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 {
+    GP_ASSERT(value);
     switch (propertyId)
     {
         case ANIMATE_UNIFORM:
@@ -336,6 +346,7 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
                     }
                     else
                     {
+                        GP_ASSERT(_value.floatPtrValue);
                         for (unsigned int i = 0; i < _count; i++)
                         {
                             value->setFloat(i, _value.floatPtrValue[i]);
@@ -349,6 +360,7 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
                     }
                     else
                     {
+                        GP_ASSERT(_value.intPtrValue);
                         for (unsigned int i = 0; i < _count; i++)
                         {
                             value->setFloat(i, _value.intPtrValue[i]);
@@ -373,8 +385,15 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
                         value->setFloat(_value.floatPtrValue, i * 4, 4);
                     }
                     break;
-
-                // UNSUPPORTED: NONE, MATRIX, METHOD, SAMPLER 
+                case NONE:
+                case MATRIX:
+                case METHOD:
+                case SAMPLER:
+                    // Unsupported material parameter types for animation.
+                    break;
+                default:
+                    GP_ERROR("Unsupported material parameter type (%d).", _type);
+                    break;
             }
         }
         break;
@@ -383,7 +402,8 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
 
 void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight)
 {
-    assert(blendWeight >= 0.0f && blendWeight <= 1.0f);
+    GP_ASSERT(value);
+    GP_ASSERT(blendWeight >= 0.0f && blendWeight <= 1.0f);
 
     switch (propertyId)
     {
@@ -407,6 +427,7 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
                     }
                     else
                     {
+                        GP_ASSERT(_value.intPtrValue);
                         for (unsigned int i = 0; i < _count; i++)
                             _value.intPtrValue[i] = Curve::lerp(blendWeight, _value.intPtrValue[i], value->getFloat(i));
                     }
@@ -427,7 +448,15 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
                     applyAnimationValue(value, blendWeight, 4);
                     break;
                 }
-                // UNSUPPORTED: NONE, MATRIX, METHOD, SAMPLER 
+                case NONE:
+                case MATRIX:
+                case METHOD:
+                case SAMPLER:
+                    // Unsupported material parameter types for animation.
+                    break;
+                default:
+                    GP_ERROR("Unsupported material parameter type (%d).", _type);
+                    break;
             }
         }
         break;
@@ -436,6 +465,9 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
 
 void MaterialParameter::applyAnimationValue(AnimationValue* value, float blendWeight, int components)
 {
+    GP_ASSERT(value);
+    GP_ASSERT(_value.floatPtrValue);
+
     unsigned int count = _count * components;
     for (unsigned int i = 0; i < count; i++)
         _value.floatPtrValue[i] = Curve::lerp(blendWeight, _value.floatPtrValue[i], value->getFloat(i));
@@ -443,6 +475,7 @@ void MaterialParameter::applyAnimationValue(AnimationValue* value, float blendWe
 
 void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
 {
+    GP_ASSERT(materialParameter);
     materialParameter->_type = _type;
     materialParameter->_count = _count;
     materialParameter->_dynamic = _dynamic;
@@ -462,6 +495,7 @@ void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
         Vector2* value = reinterpret_cast<Vector2*>(_value.floatPtrValue);
         if (_count == 1)
         {
+            GP_ASSERT(value);
             materialParameter->setValue(*value);
         }
         else
@@ -475,6 +509,7 @@ void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
         Vector3* value = reinterpret_cast<Vector3*>(_value.floatPtrValue);
         if (_count == 1)
         {
+            GP_ASSERT(value);
             materialParameter->setValue(*value);
         }
         else
@@ -488,6 +523,7 @@ void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
         Vector4* value = reinterpret_cast<Vector4*>(_value.floatPtrValue);
         if (_count == 1)
         {
+            GP_ASSERT(value);
             materialParameter->setValue(*value);
         }
         else
@@ -501,6 +537,7 @@ void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
         Matrix* value = reinterpret_cast<Matrix*>(_value.floatPtrValue);
         if (_count == 1)
         {
+            GP_ASSERT(value);
             materialParameter->setValue(*value);
         }
         else
@@ -514,7 +551,11 @@ void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
         break;
     case METHOD:
         materialParameter->_value.method = _value.method;
+        GP_ASSERT(materialParameter->_value.method);
         materialParameter->_value.method->addRef();
+        break;
+    default:
+        GP_ERROR("Unsupported material parameter type(%d).", _type);
         break;
     }
 }

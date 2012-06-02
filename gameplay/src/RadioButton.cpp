@@ -26,6 +26,8 @@ RadioButton::~RadioButton()
 
 RadioButton* RadioButton::create(Theme::Style* style, Properties* properties)
 {
+    GP_ASSERT(properties);
+
     RadioButton* radioButton = new RadioButton();
     radioButton->initialize(style, properties);
 
@@ -67,8 +69,7 @@ void RadioButton::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
     {
-        assert("TEXT_CHANGED event is not applicable to RadioButton.");
-        eventFlags &= ~Listener::TEXT_CHANGED;
+        GP_ERROR("TEXT_CHANGED event is not applicable to RadioButton.");
     }
 
     Control::addListener(listener, eventFlags);
@@ -87,8 +88,8 @@ bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
         {
             if (_state == Control::ACTIVE)
             {
-                if (x > 0 && x <= _clipBounds.width &&
-                    y > 0 && y <= _clipBounds.height)
+                if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                    y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
                 {
                     if (!_selected)
                     {
@@ -111,6 +112,7 @@ void RadioButton::clearSelected(const std::string& groupId)
     for (it = __radioButtons.begin(); it < __radioButtons.end(); it++)
     {
         RadioButton* radioButton = *it;
+        GP_ASSERT(radioButton);
         if (groupId == radioButton->_groupId)
         {
             radioButton->_selected = false;
@@ -120,9 +122,9 @@ void RadioButton::clearSelected(const std::string& groupId)
     }
 }
 
-void RadioButton::update(const Rectangle& clip)
+void RadioButton::update(const Control* container, const Vector2& offset)
 {
-    Label::update(clip);
+    Label::update(container, offset);
 
     Vector2 size;
     if (_imageSize.isZero())
@@ -159,11 +161,11 @@ void RadioButton::update(const Rectangle& clip)
 
 void RadioButton::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
+    GP_ASSERT(spriteBatch);
+    GP_ASSERT(_image);
+
     // Left, v-center.
-    // TODO: Set an alignment for radio button images.
-    const Theme::Border& border = getBorder(_state);
-    const Theme::Padding padding = getPadding();
-    
+    // TODO: Set an alignment for radio button images.   
     const Rectangle& region = _image->getRegion();
     const Theme::UVs& uvs = _image->getUVs();
     Vector4 color = _image->getColor();
@@ -179,10 +181,9 @@ void RadioButton::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
         size.set(_imageSize);
     }
 
-    Vector2 pos(clip.x + _bounds.x + border.left + padding.left,
-        clip.y + _bounds.y + (_clipBounds.height - border.bottom - padding.bottom) / 2.0f - size.y / 2.0f);
+    Vector2 pos(_viewportBounds.x, _viewportBounds.y + _viewportBounds.height * 0.5f - size.y * 0.5f);
 
-    spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _clip);
+    spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
 }
 
 }

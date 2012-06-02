@@ -19,7 +19,6 @@ class AnimationTarget
 {
     friend class Animation;
     friend class AnimationClip;
-    friend class AnimationController;
 
 public:
 
@@ -220,6 +219,26 @@ private:
      *    for the TargetType.
      */
     static int getPropertyId(TargetType type, const char* propertyIdStr);
+
+    /**
+     * Converts by-value animations to to-value animations.
+     */
+    void convertByValues(unsigned int propertyId, unsigned int componentCount, float* from, float* by);
+
+    /**
+     * Converts a Quaternion by-value into a to-value.
+     */
+    void convertQuaternionByValues(float* from, float* by);
+
+    /**
+     * Converts a Scale by-value into a to-value.
+     */
+    void convertScaleByValues(float* from, float* by, unsigned int componentCount);
+
+    /**
+     * Converts a by-value into a to-value.
+     */
+    void convertByValues(float* from, float* by, unsigned int componentCount);
 
     std::vector<Animation::Channel*>* _animationChannels;   // Collection of all animation channels that target the AnimationTarget
     

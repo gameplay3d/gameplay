@@ -54,6 +54,13 @@ public:
          * Handles when a physics world status event occurs.
          */
         virtual void statusEvent(EventType type) = 0;
+
+    protected:
+
+        /**
+         * Destructor.
+         */
+        virtual ~Listener();
     };
 
     /**
@@ -88,6 +95,13 @@ public:
      * @param listener The listener to add.
      */
     void addStatusListener(PhysicsController::Listener* listener);
+
+    /**
+     * Removes a listener to the physics controller.
+     * 
+     * @param listener The listener to remove.
+     */
+    void removeStatusListener(Listener* listener);
 
     /**
      * Creates a fixed constraint.

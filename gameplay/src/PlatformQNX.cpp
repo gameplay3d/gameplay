@@ -401,15 +401,16 @@ static int getUnicode(int qnxKeyCode)
 
 extern void printError(const char* format, ...)
 {
+    GP_ASSERT(format);
     va_list argptr;
     va_start(argptr, format);
     vfprintf(stderr, format, argptr);
-    fprintf(stderr, "\n");
     va_end(argptr);
 }
 
 EGLenum checkErrorEGL(const char* msg)
 {
+    GP_ASSERT(msg);
     static const char* errmsg[] =
     {
         "EGL function succeeded",
@@ -509,7 +510,7 @@ Platform* Platform::create(Game* game)
 
     int rc = 0;
     int screenFormat = SCREEN_FORMAT_RGBA8888;
-#if defined(__QNXNTO__) && defined(__X86__)
+#ifdef __X86__
     int screenUsage = SCREEN_USAGE_OPENGL_ES2;
 #else
     int screenUsage = SCREEN_USAGE_DISPLAY|SCREEN_USAGE_OPENGL_ES2; // Physical device copy directly into physical display
@@ -752,6 +753,7 @@ error:
  */
 long timespec2millis(struct timespec *a)
 {
+    GP_ASSERT(a);
     return a->tv_sec*1000 + a->tv_nsec/1000000;
 }
 
@@ -768,12 +770,14 @@ void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEven
 {
     if (!Game::getInstance()->mouseEvent(mouseEvent, x, y, 0))
     {
-        Game::getInstance()->touchEvent(touchEvent, x, y, 0);
+        Platform::touchEventInternal(touchEvent, x, y, 0);
     }
 }
 
 int Platform::enterMessagePump()
 {
+    GP_ASSERT(_game);
+
     int rc;
     int eventType;
     int flags;
@@ -789,7 +793,7 @@ int Platform::enterMessagePump()
     __timeStart = timespec2millis(&__timespec);
     __timeAbsolute = 0L;
 
-    _game->run(__screenWindowSize[0], __screenWindowSize[1]);
+    _game->run();
 
     // Message loop.
     while (true)
@@ -799,7 +803,7 @@ int Platform::enterMessagePump()
         while (true)
         {
             rc = bps_get_event(&event, 1);
-            assert(rc == BPS_SUCCESS);
+            GP_ASSERT(rc == BPS_SUCCESS);
 
             if (event == NULL)
                 break;
@@ -850,7 +854,7 @@ int Platform::enterMessagePump()
                         // A move event will be fired unless a button state changed.
                         bool move = true;
                         bool left_move = false;
-                        //This is a mouse move event, it is applicable to a device with a usb mouse or simulator
+                        // This is a mouse move event, it is applicable to a device with a usb mouse or simulator.
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_BUTTONS, &buttons);
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_SOURCE_POSITION, position);
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_MOUSE_WHEEL, &wheel);
@@ -876,7 +880,7 @@ int Platform::enterMessagePump()
                             mouseOrTouchEvent(Mouse::MOUSE_RELEASE_LEFT_BUTTON, Touch::TOUCH_RELEASE, position[0], position[1]);
                         }
 
-                        // Handle right mouse
+                        // Handle right mouse.
                         if (buttons & SCREEN_RIGHT_MOUSE_BUTTON)
                         {
                             if ((mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON) == 0)
@@ -893,7 +897,7 @@ int Platform::enterMessagePump()
                             Game::getInstance()->mouseEvent(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, position[0], position[1], 0);
                         }
 
-                        // Handle middle mouse
+                        // Handle middle mouse.
                         if (buttons & SCREEN_MIDDLE_MOUSE_BUTTON)
                         {
                             if ((mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON) == 0)
@@ -920,7 +924,7 @@ int Platform::enterMessagePump()
                             Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, position[0], position[1], 0);
                         }
 
-                        // Handle mouse wheel events
+                        // Handle mouse wheel events.
                         if (wheel)
                         {
                             Game::getInstance()->mouseEvent(Mouse::MOUSE_WHEEL, position[0], position[1], -wheel);
@@ -933,7 +937,7 @@ int Platform::enterMessagePump()
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_KEY_FLAGS, &flags);
                         screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_KEY_SYM, &value);
                         gameplay::Keyboard::KeyEvent evt = (flags & KEY_DOWN) ? gameplay::Keyboard::KEY_PRESS :  gameplay::Keyboard::KEY_RELEASE;
-                        // Suppress key repeats
+                        // Suppress key repeats.
                         if ((flags & KEY_REPEAT) == 0)
                         {
                             keyEventInternal(evt, getKey(value));
@@ -957,20 +961,20 @@ int Platform::enterMessagePump()
                     break;
                 case NAVIGATOR_WINDOW_STATE:
                 {
-                	navigator_window_state_t state = navigator_event_get_window_state(event);
-                	switch (state)
-                	{
-                	case NAVIGATOR_WINDOW_FULLSCREEN:
-                		_game->resume();
-                		suspended = false;
-                		break;
-                	case NAVIGATOR_WINDOW_THUMBNAIL:
-                	case NAVIGATOR_WINDOW_INVISIBLE:
-                		_game->pause();
-                		suspended = true;
-                		break;
-                	}
-                	break;
+                    navigator_window_state_t state = navigator_event_get_window_state(event);
+                    switch (state)
+                    {
+                    case NAVIGATOR_WINDOW_FULLSCREEN:
+                        _game->resume();
+                        suspended = false;
+                        break;
+                    case NAVIGATOR_WINDOW_THUMBNAIL:
+                    case NAVIGATOR_WINDOW_INVISIBLE:
+                        _game->pause();
+                        suspended = true;
+                        break;
+                    }
+                    break;
                 }
                 case NAVIGATOR_EXIT:
                     _game->exit();
@@ -1065,11 +1069,6 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
-int Platform::getOrientationAngle()
-{
-    return __orientationAngle;
-}
-
 void Platform::setMultiTouch(bool enabled)
 {
     __multiTouch = enabled;
@@ -1082,40 +1081,43 @@ bool Platform::isMultiTouch()
 
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
-	switch(__orientationAngle)
-	{
-	// Landscape based device adjusting for landscape game mode
-	case 0:
-		if (pitch)
-			*pitch = __pitch;
-		if (roll)
-			*roll = -__roll;
-		break;
-	case 180:
-		if (pitch)
-			*pitch = -__pitch;
-		if (roll)
-			*roll = __roll;
-		break;
+    GP_ASSERT(pitch);
+    GP_ASSERT(roll);
 
-	// Portrait based device adjusting for landscape game mode
-	case 90:
-		if (pitch)
-			*pitch = -__roll;
-		if (roll)
-			*roll = -__pitch;
-		break;
+    switch(__orientationAngle)
+    {
+    // Landscape based device adjusting for landscape game mode
+    case 0:
+        if (pitch)
+            *pitch = __pitch;
+        if (roll)
+            *roll = -__roll;
+        break;
+    case 180:
+        if (pitch)
+            *pitch = -__pitch;
+        if (roll)
+            *roll = __roll;
+        break;
 
-	case  270:
-		if (pitch)
-			*pitch = __roll;
-		if (roll)
-			*roll = __pitch;
-		break;
+    // Portrait based device adjusting for landscape game mode
+    case 90:
+        if (pitch)
+            *pitch = -__roll;
+        if (roll)
+            *roll = -__pitch;
+        break;
 
-	default:
-		break;
-	}
+    case  270:
+        if (pitch)
+            *pitch = __roll;
+        if (roll)
+            *roll = __pitch;
+        break;
+
+    default:
+        break;
+    }
 }
 
 void Platform::swapBuffers()
@@ -1142,7 +1144,7 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
 
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Game::getInstance()->keyEvent(evt, key);
     Form::keyEventInternal(evt, key);
 }
 

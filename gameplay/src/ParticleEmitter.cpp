@@ -30,15 +30,13 @@ ParticleEmitter::ParticleEmitter(SpriteBatch* batch, unsigned int particleCountM
     _node(NULL), _orbitPosition(false), _orbitVelocity(false), _orbitAcceleration(false),
     _timePerEmission(PARTICLE_EMISSION_RATE_TIME_INTERVAL), _timeLast(0L), _timeRunning(0L)
 {
+    GP_ASSERT(particleCountMax);
     _particles = new Particle[particleCountMax];
 
+    GP_ASSERT(_spriteBatch);
+    GP_ASSERT(_spriteBatch->getStateBlock());
     _spriteBatch->getStateBlock()->setDepthWrite(false);
     _spriteBatch->getStateBlock()->setDepthTest(true);
-    /*
-    _spriteBatch->getStateBlock()->setBlend(true);
-    _spriteBatch->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
-    _spriteBatch->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
-    */
 }
 
 ParticleEmitter::~ParticleEmitter()
@@ -50,24 +48,24 @@ ParticleEmitter::~ParticleEmitter()
 
 ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlending textureBlending, unsigned int particleCountMax)
 {
-    assert(textureFile);
-
     Texture* texture = NULL;
-    texture = Texture::create(textureFile, true);    
+    texture = Texture::create(textureFile, false);
 
     if (!texture)
     {
-        LOG_ERROR_VARG("Error creating ParticleEmitter: Could not read texture file: %s", textureFile);
+        GP_ERROR("Failed to create texture for particle emitter.");
         return NULL;
     }
+    GP_ASSERT(texture->getWidth());
+    GP_ASSERT(texture->getHeight());
 
     // Use default SpriteBatch material.
     SpriteBatch* batch =  SpriteBatch::create(texture, NULL, particleCountMax);
     texture->release(); // batch owns the texture.
-    assert(batch);
+    GP_ASSERT(batch);
 
     ParticleEmitter* emitter = new ParticleEmitter(batch, particleCountMax);
-    assert(emitter);
+    GP_ASSERT(emitter);
 
     // By default assume only one frame which uses the entire texture.
     emitter->setTextureBlending(textureBlending);
@@ -84,12 +82,10 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
 
 ParticleEmitter* ParticleEmitter::create(const char* url)
 {
-    assert(url);
-
     Properties* properties = Properties::create(url);
     if (!properties)
     {
-        LOG_ERROR_VARG("Error loading ParticleEmitter: Could not load file: %s", url);
+        GP_ERROR("Failed to create particle emitter from file.");
         return NULL;
     }
 
@@ -103,23 +99,23 @@ ParticleEmitter* ParticleEmitter::create(Properties* properties)
 {
     if (!properties || strcmp(properties->getNamespace(), "particle") != 0)
     {
-        LOG_ERROR("Error loading ParticleEmitter: No 'particle' namespace found");
+        GP_ERROR("Properties object must be non-null and have namespace equal to 'particle'.");
         return NULL;
     }
 
     Properties* sprite = properties->getNextNamespace();
     if (!sprite || strcmp(sprite->getNamespace(), "sprite") != 0)
     {
-        LOG_ERROR("Error loading ParticleEmitter: No 'sprite' namespace found");
+        GP_ERROR("Failed to load particle emitter: required namespace 'sprite' is missing.");
         return NULL;
     }
 
     // Load sprite properties.
     // Path to image file is required.
     const char* texturePath = sprite->getString("path");
-    if (strlen(texturePath) == 0)
+    if (!texturePath || strlen(texturePath) == 0)
     {
-        LOG_ERROR_VARG("Error loading ParticleEmitter: No texture path specified: %s", texturePath);
+        GP_ERROR("Failed to load particle emitter: required image file path ('path') is missing.");
         return NULL;
     }
 
@@ -148,7 +144,6 @@ ParticleEmitter* ParticleEmitter::create(Properties* properties)
     }
 
     bool ellipsoid = properties->getBool("ellipsoid");
-
     float sizeStartMin = properties->getFloat("sizeStartMin");
     float sizeStartMax = properties->getFloat("sizeStartMax");
     float sizeEndMin = properties->getFloat("sizeEndMin");
@@ -191,6 +186,11 @@ ParticleEmitter* ParticleEmitter::create(Properties* properties)
 
     // Apply all properties to a newly created ParticleEmitter.
     ParticleEmitter* emitter = ParticleEmitter::create(texturePath, textureBlending, particleCountMax);
+    if (!emitter)
+    {
+        GP_ERROR("Failed to create particle emitter.");
+        return NULL;
+    }
     emitter->setEmissionRate(emissionRate);
     emitter->setEllipsoid(ellipsoid);
     emitter->setSize(sizeStartMin, sizeStartMax, sizeEndMin, sizeEndMax);
@@ -220,6 +220,7 @@ unsigned int ParticleEmitter::getEmissionRate() const
 
 void ParticleEmitter::setEmissionRate(unsigned int rate)
 {
+    GP_ASSERT(rate);
     _emissionRate = rate;
     _timePerEmission = 1000.0f / (float)_emissionRate;
 }
@@ -248,6 +249,7 @@ bool ParticleEmitter::isActive() const
     if (!_node)
         return false;
 
+    GP_ASSERT(_particles);
     bool active = false;
     for (unsigned int i = 0; i < _particleCount; i++)
     {
@@ -263,6 +265,9 @@ bool ParticleEmitter::isActive() const
 
 void ParticleEmitter::emit(unsigned int particleCount)
 {
+    GP_ASSERT(_node);
+    GP_ASSERT(_particles);
+
     // Limit particleCount so as not to go over _particleCountMax.
     if (particleCount + _particleCount > _particleCountMax)
     {
@@ -282,6 +287,7 @@ void ParticleEmitter::emit(unsigned int particleCount)
     for (unsigned int i = 0; i < particleCount; i++)
     {
         Particle* p = &_particles[_particleCount];
+        p->_visible = true;
 
         generateColor(_colorStart, _colorStartVar, &p->_colorStart);
         generateColor(_colorEnd, _colorEndVar, &p->_colorEnd);
@@ -517,6 +523,9 @@ const Vector3& ParticleEmitter::getRotationAxisVariance() const
 
 void ParticleEmitter::setTextureBlending(TextureBlending textureBlending)
 {
+    GP_ASSERT(_spriteBatch);
+    GP_ASSERT(_spriteBatch->getStateBlock());
+
     switch (textureBlending)
     {
         case BLEND_OPAQUE:
@@ -536,6 +545,9 @@ void ParticleEmitter::setTextureBlending(TextureBlending textureBlending)
             _spriteBatch->getStateBlock()->setBlend(true);
             _spriteBatch->getStateBlock()->setBlendSrc(RenderState::BLEND_ZERO);
             _spriteBatch->getStateBlock()->setBlendDst(RenderState::BLEND_SRC_COLOR);
+            break;
+        default:
+            GP_ERROR("Unsupported texture blending mode (%d).", textureBlending);
             break;
     }
 }
@@ -584,6 +596,9 @@ long ParticleEmitter::getSpriteFrameDuration() const
 
 void ParticleEmitter::setSpriteTexCoords(unsigned int frameCount, float* texCoords)
 {
+    GP_ASSERT(frameCount);
+    GP_ASSERT(texCoords);
+
     _spriteFrameCount = frameCount;
     _spritePercentPerFrame = 1.0f / (float)frameCount;
 
@@ -594,34 +609,30 @@ void ParticleEmitter::setSpriteTexCoords(unsigned int frameCount, float* texCoor
 
 void ParticleEmitter::setSpriteFrameCoords(unsigned int frameCount, Rectangle* frameCoords)
 {
+    GP_ASSERT(frameCount);
+    GP_ASSERT(frameCoords);
+
     _spriteFrameCount = frameCount;
     _spritePercentPerFrame = 1.0f / (float)frameCount;
 
-    float* texCoords = new float[frameCount * 4];
+    SAFE_DELETE_ARRAY(_spriteTextureCoords);
+    _spriteTextureCoords = new float[frameCount * 4];
 
     // Pre-compute texture coordinates from rects.
     for (unsigned int i = 0; i < frameCount; i++)
     {
-        float u1 = _spriteTextureWidthRatio * frameCoords[i].x;
-        float v1 = 1.0f - _spriteTextureHeightRatio * frameCoords[i].y;
-        float u2 = u1 + _spriteTextureWidthRatio * frameCoords[i].width;
-        float v2 = v1 - _spriteTextureHeightRatio * frameCoords[i].height;
-
-        texCoords[i*4] = u1;
-        texCoords[i*4 + 1] = v1;
-        texCoords[i*4 + 2] = u2;
-        texCoords[i*4 + 3] = v2;
+        _spriteTextureCoords[i*4] = _spriteTextureWidthRatio * frameCoords[i].x;
+        _spriteTextureCoords[i*4 + 1] = 1.0f - _spriteTextureHeightRatio * frameCoords[i].y;
+        _spriteTextureCoords[i*4 + 2] = _spriteTextureCoords[i*4] + _spriteTextureWidthRatio * frameCoords[i].width;
+        _spriteTextureCoords[i*4 + 3] = _spriteTextureCoords[i*4 + 1] - _spriteTextureHeightRatio * frameCoords[i].height;
     }
-
-    SAFE_DELETE_ARRAY(_spriteTextureCoords);
-    _spriteTextureCoords = new float[frameCount * 4];
-    memcpy(_spriteTextureCoords, texCoords, frameCount * 4 * sizeof(float));
-
-    SAFE_DELETE_ARRAY(texCoords);
 }
 
 void ParticleEmitter::setSpriteFrameCoords(unsigned int frameCount, int width, int height)
 {
+    GP_ASSERT(width);
+    GP_ASSERT(height);
+
     int x;
     int y;
     Rectangle* frameCoords = new Rectangle[frameCount];
@@ -695,6 +706,8 @@ float ParticleEmitter::generateScalar(float min, float max)
 
 void ParticleEmitter::generateVectorInRect(const Vector3& base, const Vector3& variance, Vector3* dst)
 {
+    GP_ASSERT(dst);
+
     // Scale each component of the variance vector by a random float
     // between -1 and 1, then add this to the corresponding base component.
     dst->x = base.x + variance.x * MATH_RANDOM_MINUS1_1();
@@ -704,6 +717,8 @@ void ParticleEmitter::generateVectorInRect(const Vector3& base, const Vector3& v
 
 void ParticleEmitter::generateVectorInEllipsoid(const Vector3& center, const Vector3& scale, Vector3* dst)
 {
+    GP_ASSERT(dst);
+
     // Generate a point within a unit cube, then reject if the point is not in a unit sphere.
     do
     {
@@ -735,6 +750,8 @@ void ParticleEmitter::generateVector(const Vector3& base, const Vector3& varianc
 
 void ParticleEmitter::generateColor(const Vector4& base, const Vector4& variance, Vector4* dst)
 {
+    GP_ASSERT(dst);
+
     // Scale each component of the variance color by a random float
     // between -1 and 1, then add this to the corresponding base component.
     dst->x = base.x + variance.x * MATH_RANDOM_MINUS1_1();
@@ -745,6 +762,8 @@ void ParticleEmitter::generateColor(const Vector4& base, const Vector4& variance
 
 ParticleEmitter::TextureBlending ParticleEmitter::getTextureBlendingFromString(const char* str)
 {
+    GP_ASSERT(str);
+
     if (strcmp(str, "BLEND_OPAQUE") == 0 || strcmp(str, "OPAQUE") == 0)
     {
         return BLEND_OPAQUE;
@@ -761,8 +780,10 @@ ParticleEmitter::TextureBlending ParticleEmitter::getTextureBlendingFromString(c
     {
         return BLEND_MULTIPLIED;
     }
-
-    return BLEND_TRANSPARENT;
+    else
+    {
+        return BLEND_TRANSPARENT;
+    }
 }
 
 
@@ -774,7 +795,7 @@ void ParticleEmitter::update(long elapsedTime)
     }
 
     // Calculate the time passed since last update.
-    float elapsedSecs = (float)elapsedTime / 1000.0f;
+    float elapsedSecs = (float)elapsedTime * 0.001f;
 
     if (_started && _emissionRate)
     {
@@ -782,17 +803,25 @@ void ParticleEmitter::update(long elapsedTime)
         _timeRunning += elapsedTime;
 
         // How many particles should we emit this frame?
+        GP_ASSERT(_timePerEmission);
         unsigned int emitCount = _timeRunning / _timePerEmission;
             
-        if ((int)_timePerEmission > 0)
+        if (emitCount)
         {
-            _timeRunning %= (int)_timePerEmission;
-        }
+            if ((int)_timePerEmission > 0)
+            {
+                _timeRunning %= (int)_timePerEmission;
+            }
 
-        emit(emitCount);
+            emit(emitCount);
+        }
     }
 
+    GP_ASSERT(_node && _node->getScene() && _node->getScene()->getActiveCamera());
+    const Frustum& frustum = _node->getScene()->getActiveCamera()->getFrustum();
+
     // Now update all currently living particles.
+    GP_ASSERT(_particles);
     for (unsigned int particlesIndex = 0; particlesIndex < _particleCount; ++particlesIndex)
     {
         Particle* p = &_particles[particlesIndex];
@@ -816,6 +845,12 @@ void ParticleEmitter::update(long elapsedTime)
             p->_position.x += p->_velocity.x * elapsedSecs;
             p->_position.y += p->_velocity.y * elapsedSecs;
             p->_position.z += p->_velocity.z * elapsedSecs;
+
+            if (!frustum.intersects(p->_position))
+            {
+                p->_visible = false;
+                continue;
+            }
 
             p->_angle += p->_rotationPerParticleSpeed * elapsedSecs;
 
@@ -886,6 +921,10 @@ void ParticleEmitter::draw()
 
     if (_particleCount > 0)
     {
+        GP_ASSERT(_spriteBatch);
+        GP_ASSERT(_particles);
+        GP_ASSERT(_spriteTextureCoords);
+
         // Set our node's view projection matrix to this emitter's effect.
         if (_node)
         {
@@ -896,10 +935,12 @@ void ParticleEmitter::draw()
         _spriteBatch->begin();
 
         // 2D Rotation.
-        Vector2 pivot(0.5f, 0.5f);
+        static const Vector2 pivot(0.5f, 0.5f);
 
         // 3D Rotation so that particles always face the camera.
+        GP_ASSERT(_node && _node->getScene() && _node->getScene()->getActiveCamera() && _node->getScene()->getActiveCamera()->getNode());
         const Matrix& cameraWorldMatrix = _node->getScene()->getActiveCamera()->getNode()->getWorldMatrix();
+
         Vector3 right;
         cameraWorldMatrix.getRightVector(&right);
         Vector3 up;
@@ -909,9 +950,12 @@ void ParticleEmitter::draw()
         {
             Particle* p = &_particles[i];
 
-            _spriteBatch->draw(p->_position, right, up, p->_size, p->_size,
-                               _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3],
-                               p->_color, pivot, p->_angle);
+            if (p->_visible)
+            {
+                _spriteBatch->draw(p->_position, right, up, p->_size, p->_size,
+                                   _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3],
+                                   p->_color, pivot, p->_angle);
+            }
         }
 
         // Render.

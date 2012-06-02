@@ -39,9 +39,10 @@ Layout::Type FlowLayout::getType()
     return Layout::LAYOUT_FLOW;
 }
 
-void FlowLayout::update(const Container* container)
+void FlowLayout::update(const Container* container, const Vector2& offset)
 {
-    const Rectangle& containerBounds = container->getClipBounds();
+    GP_ASSERT(container);
+    const Rectangle& containerBounds = container->getBounds();
     const Theme::Border& containerBorder = container->getBorder(container->getState());
     const Theme::Padding& containerPadding = container->getPadding();
 
@@ -58,6 +59,9 @@ void FlowLayout::update(const Container* container)
     for (unsigned int i = 0; i < controlsCount; i++)
     {
         Control* control = controls.at(i);
+        GP_ASSERT(control);
+
+        //align(control, container);
 
         const Rectangle& bounds = control->getBounds();
         const Theme::Margin& margin = control->getMargin();
@@ -74,10 +78,7 @@ void FlowLayout::update(const Container* container)
         yPosition = rowY + margin.top;
 
         control->setPosition(xPosition, yPosition);
-        if (control->isDirty() || control->isContainer())
-        {
-            control->update(container->getClip());
-        }
+        control->update(container, offset);
 
         xPosition += bounds.width + margin.right;
 

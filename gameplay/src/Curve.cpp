@@ -119,7 +119,7 @@ void Curve::setPoint(unsigned int index, float time, float* value, Interpolation
 
 void Curve::setPoint(unsigned int index, float time, float* value, InterpolationType type, float* inValue, float* outValue)
 {
-    assert(index < _pointCount && time >= 0.0f && time <= 1.0f && !(index == 0 && time != 0.0f) && !(_pointCount != 1 && index == _pointCount - 1 && time != 1.0f));
+    assert(index < _pointCount && time >= 0.0f && time <= 1.0f && !(_pointCount > 1 && index == 0 && time != 0.0f) && !(_pointCount != 1 && index == _pointCount - 1 && time != 1.0f));
 
     _points[index].time = time;
     _points[index].type = type;
@@ -1123,13 +1123,9 @@ void Curve::interpolateQuaternion(float s, float* from, float* to, float* dst) c
 {
     // Evaluate.
     if (s >= 0)
-    {
         Quaternion::slerp(from[0], from[1], from[2], from[3], to[0], to[1], to[2], to[3], s, dst, dst + 1, dst + 2, dst + 3);
-    }
     else
         Quaternion::slerp(to[0], to[1], to[2], to[3], from[0], from[1], from[2], from[3], s, dst, dst + 1, dst + 2, dst + 3);
-
-    //((Quaternion*) dst)->normalize();
 }
 
 int Curve::determineIndex(float time) const

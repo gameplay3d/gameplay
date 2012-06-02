@@ -15,6 +15,13 @@
 #import <OpenGLES/ES2/glext.h>
 #import <mach/mach_time.h>
 
+#define UIInterfaceOrientationEnum(x) ([x isEqualToString:@"UIInterfaceOrientationPortrait"]?UIInterfaceOrientationPortrait:                        \
+                                      ([x isEqualToString:@"UIInterfaceOrientationPortraitUpsideDown"]?UIInterfaceOrientationPortraitUpsideDown:    \
+                                      ([x isEqualToString:@"UIInterfaceOrientationLandscapeLeft"]?UIInterfaceOrientationLandscapeLeft:              \
+                                        UIInterfaceOrientationLandscapeRight)))
+#define DeviceOrientedSize(o)         ((o == UIInterfaceOrientationPortrait || o == UIInterfaceOrientationPortraitUpsideDown)?                      \
+                                            CGSizeMake([[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale], [[UIScreen mainScreen] bounds].size.height * [[UIScreen mainScreen] scale]):  \
+                                            CGSizeMake([[UIScreen mainScreen] bounds].size.height * [[UIScreen mainScreen] scale], [[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale]))
 
 using namespace std;
 using namespace gameplay;
@@ -45,7 +52,7 @@ int getKey(unichar keyCode);
 {
     EAGLContext* context;	
     CADisplayLink* displayLink;
-	GLuint defaultFramebuffer;
+    GLuint defaultFramebuffer;
     GLuint colorRenderbuffer;
     GLuint depthRenderbuffer;
     GLint framebufferWidth;
@@ -58,6 +65,7 @@ int getKey(unichar keyCode);
 @property (readonly, nonatomic, getter=isUpdating) BOOL updating;
 @property (readonly, nonatomic, getter=getContext) EAGLContext* context;
 
+- (void)startGame;
 - (void)startUpdating;
 - (void)stopUpdating;
 - (void)update:(id)sender;
@@ -87,11 +95,11 @@ int getKey(unichar keyCode);
 - (id) initWithFrame:(CGRect)frame
 {
     if ((self = [super initWithFrame:frame]))
-	{
+    {
         // A system version of 3.1 or greater is required to use CADisplayLink. 
-		NSString *reqSysVer = @"3.1";
-		NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
-		if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
+        NSString *reqSysVer = @"3.1";
+        NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
+        if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
         {
             // Log the system version
             NSLog(@"System Version: %@", currSysVer);
@@ -113,12 +121,12 @@ int getKey(unichar keyCode);
         self.contentScaleFactor = scale;
         layer.contentsScale = scale;
         
-		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+        context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         if (!context || ![EAGLContext setCurrentContext:context])
-		{
-			[self release];
-			return nil;
-		}
+        {
+            [self release];
+            return nil;
+        }
 
         if (!defaultFramebuffer)
         {
@@ -135,7 +143,7 @@ int getKey(unichar keyCode);
         depthRenderbuffer = 0;
         framebufferWidth = 0;
         framebufferHeight = 0;
-		swapInterval = 1;        
+        swapInterval = 1;        
         updating = FALSE;
         
         [self createFramebuffer];
@@ -144,23 +152,21 @@ int getKey(unichar keyCode);
         NSString* bundlePath = [[[NSBundle mainBundle] bundlePath] stringByAppendingString:@"/"];
         FileSystem::setResourcePath([bundlePath fileSystemRepresentation]); 
         
-        _game = Game::getInstance();
-        __timeStart = getMachTimeInMilliseconds();
-        _game->run(WINDOW_WIDTH, WINDOW_HEIGHT);          
     }
     return self;
 }
+
 
 - (void) dealloc
 {
     _game->exit();
     [self deleteFramebuffer];
     
-	if ([EAGLContext currentContext] == context)
+    if ([EAGLContext currentContext] == context)
     {
         [EAGLContext setCurrentContext:nil];
     }
-	[context release];
+    [context release];
     [super dealloc];
 }
 
@@ -228,15 +234,15 @@ int getKey(unichar keyCode);
 
 - (void)setSwapInterval:(NSInteger)interval
 {
-	if (interval >= 1)
-	{
-		swapInterval = interval;		
-		if (updating)
-		{
-			[self stopUpdating];
-			[self startUpdating];
-		}
-	}
+    if (interval >= 1)
+    {
+        swapInterval = interval;		
+        if (updating)
+        {
+            [self stopUpdating];
+            [self startUpdating];
+        }
+    }
 }
 
 - (int)swapInterval 
@@ -253,27 +259,34 @@ int getKey(unichar keyCode);
     }
 }
 
+- (void)startGame 
+{
+    _game = Game::getInstance();
+    __timeStart = getMachTimeInMilliseconds();
+    _game->run();  
+}
+
 - (void)startUpdating
 {
-	if (!updating)
-	{
+    if (!updating)
+    {
         displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update:)];
         [displayLink setFrameInterval:swapInterval];
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         _game->resume();
-		updating = TRUE;
-	}
+        updating = TRUE;
+    }
 }
 
 - (void)stopUpdating
 {
-	if (updating)
-	{
+    if (updating)
+    {
         _game->pause();
-		[displayLink invalidate];
+        [displayLink invalidate];
         displayLink = nil;
-		updating = FALSE;
-	}
+        updating = FALSE;
+    }
 }
 
 - (void)update:(id)sender
@@ -408,12 +421,36 @@ int getKey(unichar keyCode);
     {
         __view = (View*)self.view;
     }
+    // Start the game after assigning __view so Platform object knows about it on game start
+    [(View*)self.view startGame];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientation, currently support landscape only?
-    return UIInterfaceOrientationIsLandscape(interfaceOrientation);
+    // Fetch the supported orientations array
+    NSArray *supportedOrientations = NULL;
+    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) 
+    {
+        supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations~ipad"];    
+    }
+    else if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) 
+    { 
+        supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations~iphone"];
+    }
+    
+    if(supportedOrientations == NULL) 
+    {
+       supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"]; 
+    }
+
+    // If no supported orientations default to v1.0 handling (landscape only)
+    if(supportedOrientations == nil) {
+        return UIInterfaceOrientationIsLandscape(interfaceOrientation);
+    }
+    for(NSString *s in supportedOrientations) {
+        if(interfaceOrientation == UIInterfaceOrientationEnum(s)) return YES;
+    }    
+    return NO;
 }
 
 - (void)startUpdating 
@@ -435,17 +472,20 @@ int getKey(unichar keyCode);
     ViewController* viewController;
     CMMotionManager *motionManager;
 }
+@property (nonatomic, retain) ViewController *viewController;
 @end
 
 
 @implementation AppDelegate
 
+@synthesize viewController;
+
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
     __appDelegate = self;
     [UIApplication sharedApplication].statusBarHidden = YES;
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 
-    
     motionManager = [[CMMotionManager alloc] init];
     if([motionManager isAccelerometerAvailable] == YES) 
     {
@@ -487,9 +527,10 @@ int getKey(unichar keyCode);
             break;
 
         case UIInterfaceOrientationPortrait:
+            tx = accelerometerData.acceleration.x;
+            ty = accelerometerData.acceleration.y;
             break;
         }
-        
         tz = accelerometerData.acceleration.z;  
         
         p = atan(ty / sqrt(tx * tx + tz * tz)) * 180.0f * M_1_PI;
@@ -504,27 +545,27 @@ int getKey(unichar keyCode);
 
 - (void)applicationWillResignActive:(UIApplication*)application
 {    
-	[viewController stopUpdating];
+    [viewController stopUpdating];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication*)application 
 {
-	[viewController stopUpdating];
+    [viewController stopUpdating];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication*)application 
 {	
-	[viewController startUpdating];
+    [viewController startUpdating];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication*)application 
-{
-	[viewController startUpdating];
+{    
+    [viewController startUpdating];
 }
 
 - (void)applicationWillTerminate:(UIApplication*)application 
 {	
-	[viewController stopUpdating];
+    [viewController stopUpdating];
 }
 
 - (void)dealloc 
@@ -533,7 +574,7 @@ int getKey(unichar keyCode);
     [viewController release];
     [window release];
     [motionManager release];
-	[super dealloc];
+    [super dealloc];
 }
 
 @end
@@ -548,6 +589,7 @@ long getMachTimeInMilliseconds()
         (void) mach_timebase_info(&s_timebase_info);
     
     // mach_absolute_time() returns billionth of seconds, so divide by one million to get milliseconds
+    GP_ASSERT(kOneMillion * s_timebase_info.denom);
     return (long)((mach_absolute_time() * s_timebase_info.numer) / (kOneMillion * s_timebase_info.denom));
 }
 
@@ -772,10 +814,10 @@ namespace gameplay
     
 extern void printError(const char* format, ...)
 {
+    GP_ASSERT(format);
     va_list argptr;
     va_start(argptr, format);
     vfprintf(stderr, format, argptr);
-    fprintf(stderr, "\n");
     va_end(argptr);
 }
 
@@ -816,12 +858,14 @@ void Platform::signalShutdown()
     
 unsigned int Platform::getDisplayWidth()
 {
-    return WINDOW_WIDTH;
+    CGSize size = DeviceOrientedSize([__appDelegate.viewController interfaceOrientation]);
+    return size.width;
 }
 
 unsigned int Platform::getDisplayHeight()
 {
-    return WINDOW_HEIGHT;
+    CGSize size = DeviceOrientedSize([__appDelegate.viewController interfaceOrientation]);
+    return size.height;
 }
 
 long Platform::getAbsoluteTime()
@@ -843,11 +887,6 @@ bool Platform::isVsync()
 void Platform::setVsync(bool enable)
 {
     __vsync = enable;
-}
-
-int Platform::getOrientationAngle()
-{
-    return 0;
 }
 
 void Platform::getAccelerometerValues(float* pitch, float* roll)
@@ -896,7 +935,7 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
 
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    gameplay::Game::getInstance()->keyEvent(evt, key);
+    Game::getInstance()->keyEvent(evt, key);
     Form::keyEventInternal(evt, key);
 }
     

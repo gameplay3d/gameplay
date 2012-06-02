@@ -2,6 +2,8 @@
 #define LAYOUT_H_
 
 #include "Ref.h"
+#include "Touch.h"
+#include "Vector2.h"
 
 namespace gameplay
 {
@@ -18,6 +20,7 @@ class Control;
 class Layout : public Ref
 {
     friend class Container;
+    friend class Form;
 
 public:
     /**
@@ -42,7 +45,15 @@ public:
          * Absolute layout: Controls are not modified at all by this layout.
          * They must be positioned and sized manually.
          */
-        LAYOUT_ABSOLUTE
+        LAYOUT_ABSOLUTE,
+
+        /**
+         * Scroll layout: Controls may be placed outside the bounds of the container.
+         * The user can then touch and drag to scroll.  By default controls are placed
+         * based on absolute positions in the .form file, but vertical or horizontal
+         * automatic positioning is an available option.
+         */
+        LAYOUT_SCROLL
     };
 
     /**
@@ -53,12 +64,14 @@ public:
     virtual Type getType() = 0;
 
 protected:
+
     /**
      * Position, resize, and update the controls within a container.
      *
      * @param container The container to update.
+     * @param offset The update offset.
      */
-    virtual void update(const Container* container) = 0;
+    virtual void update(const Container* container, const Vector2& offset) = 0;
 
     /**
      * Align a control within a container.
@@ -67,6 +80,19 @@ protected:
      * @param container The container to align the control within.
      */
     virtual void align(Control* control, const Container* container);
+
+    /**
+     * Touch callback on touch events.  Coordinates are given relative to the container's
+     * content area.
+     *
+     * @param evt The touch event that occurred.
+     * @param x The x position of the touch in pixels. Left edge is zero.
+     * @param y The y position of the touch in pixels. Top edge is zero.
+     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     *
+     * @see Touch::TouchEvent
+     */
+    virtual bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 };
 
 }
