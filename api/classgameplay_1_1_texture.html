@@ -129,6 +129,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6eea0fd7b3b95c1fa5fc03d086c232fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a6eea0fd7b3b95c1fa5fc03d086c232fc">setFilterMode</a> (<a class="el" href="classgameplay_1_1_texture.html#a17d2554f8fb6b579843f5fe348dc887e">Filter</a> minificationFilter, <a class="el" href="classgameplay_1_1_texture.html#a17d2554f8fb6b579843f5fe348dc887e">Filter</a> magnificationFilter)</td></tr>
 <tr class="memitem:a502cf79334ec038207332c1047fff0cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a> ()</td></tr>
 <tr class="memitem:abdfd19cb06395db4fdfaaef5a4bc9452"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#abdfd19cb06395db4fdfaaef5a4bc9452">isMipmapped</a> () const </td></tr>
+<tr class="memitem:a55c4d73438039393baca04b55dccc02b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a55c4d73438039393baca04b55dccc02b">isCompressed</a> () const </td></tr>
 <tr class="memitem:adc521b76e2a09c12c34851da8f4fe600"><td class="memItemLeft" align="right" valign="top">TextureHandle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#adc521b76e2a09c12c34851da8f4fe600">getHandle</a> () const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -212,6 +213,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Sampler</b></td></tr
 </div>
 <div class="memdoc">
 <p>Creates a texture from the given image resource.</p>
+<p>Note that for textures that include mipmap data in the source data (such as most compressed textures), the generateMipmaps flags should NOT be set to true.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">path</td><td>The image resource path. </td></tr>
@@ -366,6 +368,23 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Sampler</b></td></tr
 
 </div>
 </div>
+<a class="anchor" id="a55c4d73438039393baca04b55dccc02b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_texture.html#a55c4d73438039393baca04b55dccc02b">gameplay::Texture::isCompressed</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if this texture is a compressed teture. </p>
+
+</div>
+</div>
 <a class="anchor" id="abdfd19cb06395db4fdfaaef5a4bc9452"></a>
 <div class="memitem">
 <div class="memproto">
@@ -458,7 +477,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Sampler</b></td></tr
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 18 2012 12:58:21 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 1 2012 22:06:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
