@@ -54,6 +54,8 @@ float Plane::distance(const Vector3& point) const
 
 void Plane::intersection(const Plane& p1, const Plane& p2, const Plane& p3, Vector3* point)
 {
+    GP_ASSERT(point);
+
     // The planes' normals must be all normalized (which we guarantee in the Plane class).
     // Calculate the determinant of the matrix (i.e | n1 n2 n3 |).
     float det = p1._normal.x * (p2._normal.y * p3._normal.z -
@@ -61,7 +63,7 @@ void Plane::intersection(const Plane& p1, const Plane& p2, const Plane& p3, Vect
                 p1._normal.z * p3._normal.y) + p3._normal.x * (p1._normal.y * p2._normal.z - p1._normal.z * p2._normal.y);
 
     // If the determinant is zero, then the planes do not all intersect.
-    if (det == 0.0f)
+    if (fabs(det) <= MATH_EPSILON)
         return;
 
     // Create 3 points, one on each plane.
@@ -159,7 +161,7 @@ float Plane::intersects(const Frustum& frustum) const
 float Plane::intersects(const Plane& plane) const
 {
     // Check if the planes intersect.
-    if (!isParallel(plane))
+    if ((_normal.x == plane._normal.x && _normal.y == plane._normal.y && _normal.z == plane._normal.z) || !isParallel(plane))
     {
         return Plane::INTERSECTS_INTERSECTING;
     }
@@ -251,8 +253,10 @@ void Plane::transform(const Matrix& matrix)
         float nx = _normal.x * inverted.m[0] + _normal.y * inverted.m[1] + _normal.z * inverted.m[2] + _distance * inverted.m[3];
         float ny = _normal.x * inverted.m[4] + _normal.y * inverted.m[5] + _normal.z * inverted.m[6] + _distance * inverted.m[7];
         float nz = _normal.x * inverted.m[8] + _normal.y * inverted.m[9] + _normal.z * inverted.m[10] + _distance * inverted.m[11];
-        float d = _normal.x * inverted.m[12]+ _normal.y * inverted.m[13] + _normal.z * inverted.m[14]+ _distance * inverted.m[15];
-        float factor = 1.0f / sqrt(nx * nx + ny * ny + nz * nz);
+        float d = _normal.x * inverted.m[12]+ _normal.y * inverted.m[13] + _normal.z * inverted.m[14] + _distance * inverted.m[15];
+        float divisor = sqrt(nx * nx + ny * ny + nz * nz);
+        GP_ASSERT(divisor);
+        float factor = 1.0f / divisor;
 
         _normal.x = nx * factor;
         _normal.y = ny * factor;
@@ -271,7 +275,7 @@ void Plane::normalize()
 
     if (normalizeFactor != 1.0f)
     {
-        _normal.x*= normalizeFactor;
+        _normal.x *= normalizeFactor;
         _normal.y *= normalizeFactor;
         _normal.z *= normalizeFactor;
         _distance *= normalizeFactor;

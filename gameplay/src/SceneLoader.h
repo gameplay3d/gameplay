@@ -33,13 +33,12 @@ private:
      */
     struct SceneAnimation
     {
-        SceneAnimation(const char* animationID, const char* targetID, std::string file, std::string id)
-            : _animationID(animationID), _targetID(targetID), _file(file), _id(id) {}
+        SceneAnimation(const char* animationID, const char* targetID, std::string url)
+            : _animationID(animationID), _targetID(targetID), _url(url) {}
 
         const char* _animationID;
         const char* _targetID;
-        std::string _file;
-        std::string _id;
+        std::string _url;
     };
 
     struct SceneNodeProperty
@@ -49,31 +48,27 @@ private:
             AUDIO = 1,
             MATERIAL = 2,
             PARTICLE = 4,
-            CHARACTER = 8,
-            GHOSTOBJECT = 16,
-            RIGIDBODY = 32,
-            TRANSLATE = 64,
-            ROTATE = 128,
-            SCALE = 256,
-            URL = 512,
-            TRANSPARENT = 1024,
-            DYNAMIC = 2048
+            COLLISION_OBJECT = 8,
+            TRANSLATE = 16,
+            ROTATE = 32,
+            SCALE = 64,
+            URL = 128,
+            TRANSPARENT = 256,
+            DYNAMIC = 512
         };
 
-        SceneNodeProperty(Type type, std::string file, std::string id, int index) : _type(type), _file(file), _id(id), _index(index) { }
+        SceneNodeProperty(Type type, std::string url, int index) : _type(type), _url(url), _index(index) { }
 
         Type _type;
-        std::string _file;
-        std::string _id;
+        std::string _url;
         int _index;
     };
 
     struct SceneNode
     {
-        SceneNode() : _nodeID(""), _exactMatch(true) { }
+        SceneNode() : _nodeID("") { }
 
         const char* _nodeID;
-        bool _exactMatch;
         std::vector<SceneNodeProperty> _properties;
     };
 
@@ -83,7 +78,7 @@ private:
 
     static void applyNodeProperties(const Scene* scene, const Properties* sceneProperties, unsigned int typeFlags);
 
-    static void applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp);
+    static void applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp, const Scene* scene);
 
     static void applyNodeUrls(Scene* scene);
 
@@ -107,13 +102,15 @@ private:
 
     static PhysicsConstraint* loadSpringConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
 
-    static void splitURL(const char* url, std::string* file, std::string* id);
+    static void splitURL(const std::string& url, std::string* file, std::string* id);
     
     
-    static std::map<std::string, Properties*> _propertiesFromFile;      // Holds the properties object for a given file path.
+    static std::map<std::string, Properties*> _propertiesFromFile;      // Holds the properties object for a given file.
+    static std::map<std::string, Properties*> _properties;              // Holds the properties object for a given URL.
     static std::vector<SceneAnimation> _animations;                     // Holds the animations declared in the .scene file.
     static std::vector<SceneNode> _sceneNodes;                          // Holds all the nodes+properties declared in the .scene file.
-    static std::string _path;                                           // The path of the main GPB for the scene being loaded.
+    static std::string _gpbPath;                                        // The path of the main GPB for the scene being loaded.
+    static std::string _path;                                           // The path of the scene file being loaded.
 };
 
 }

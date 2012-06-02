@@ -44,7 +44,7 @@
 /* Begin PBXFileReference section */
 		42458CB314C3AAF900EFFB61 /* sample01-longboard-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample01-longboard-ios.plist"; sourceTree = "<group>"; };
 		42C932E01491A1640098216A /* sample01-longboard-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample01-longboard-macosx.plist"; sourceTree = "<group>"; };
-		42CCD48E146D80DA00353661 /* sample01-longboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample01-longboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42CCD48E146D80DA00353661 /* sample01-longboard-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample01-longboard-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD492146D80DA00353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42CCD4BD146D91D700353661 /* LongboardGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LongboardGame.cpp; path = src/LongboardGame.cpp; sourceTree = SOURCE_ROOT; };
 		42CCD4BE146D91D700353661 /* LongboardGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LongboardGame.h; path = src/LongboardGame.h; sourceTree = SOURCE_ROOT; };
@@ -60,7 +60,7 @@
 		42CD0EDA147D92CA0000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbis.a"; sourceTree = "<group>"; };
 		42CD0EDB147D92CA0000361E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisenc.a"; sourceTree = "<group>"; };
 		42CD0EDC147D92CA0000361E /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisfile.a"; sourceTree = "<group>"; };
-		5B04C69314C0EBF900EB0071 /* sample01-longboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample01-longboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B04C69314C0EBF900EB0071 /* sample01-longboard-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample01-longboard-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B04C69F14C0EC7B00EB0071 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 		5BAF203B152F2B80003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF203C152F2B80003E2AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -146,8 +146,8 @@
 		42CCD48F146D80DA00353661 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				42CCD48E146D80DA00353661 /* sample01-longboard.app */,
-				5B04C69314C0EBF900EB0071 /* sample01-longboard.app */,
+				42CCD48E146D80DA00353661 /* sample01-longboard-macosx.app */,
+				5B04C69314C0EBF900EB0071 /* sample01-longboard-ios.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -213,7 +213,7 @@
 			);
 			name = "sample01-longboard-macosx";
 			productName = "sample01-longboard";
-			productReference = 42CCD48E146D80DA00353661 /* sample01-longboard.app */;
+			productReference = 42CCD48E146D80DA00353661 /* sample01-longboard-macosx.app */;
 			productType = "com.apple.product-type.application";
 		};
 		5B04C67C14C0EBF900EB0071 /* sample01-longboard-ios */ = {
@@ -231,7 +231,7 @@
 			);
 			name = "sample01-longboard-ios";
 			productName = "sample01-longboard";
-			productReference = 5B04C69314C0EBF900EB0071 /* sample01-longboard.app */;
+			productReference = 5B04C69314C0EBF900EB0071 /* sample01-longboard-ios.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -293,7 +293,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 		5B04C68C14C0EBF900EB0071 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -306,7 +306,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rn ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -400,7 +400,7 @@
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				PRODUCT_NAME = "sample01-longboard";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = macosx;
 				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = app;
@@ -430,7 +430,7 @@
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				PRODUCT_NAME = "sample01-longboard";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = macosx;
 				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = app;
@@ -462,7 +462,7 @@
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				PRODUCT_NAME = "sample01-longboard";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
@@ -497,7 +497,7 @@
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				PRODUCT_NAME = "sample01-longboard";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";

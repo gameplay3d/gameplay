@@ -10,6 +10,7 @@ namespace gameplay
 
 static unsigned int __maxRenderTargets = 0;
 static std::vector<FrameBuffer*> __frameBuffers;
+static FrameBufferHandle __defaultHandle = 0;
 
 FrameBuffer::FrameBuffer(const char* id) :
     _id(id ? id : ""), _handle(0), _renderTargets(NULL), _depthStencilTarget(NULL)
@@ -41,6 +42,13 @@ FrameBuffer::~FrameBuffer()
     }
 }
 
+void FrameBuffer::initialize()
+{
+    GLint fbo;
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &fbo);
+    __defaultHandle = (FrameBufferHandle)fbo;
+}
+
 FrameBuffer* FrameBuffer::create(const char* id)
 {
     // Create GL FBO resource.
@@ -55,7 +63,7 @@ FrameBuffer* FrameBuffer::create(const char* id)
     memset(renderTargets, 0, sizeof(RenderTarget*) * __maxRenderTargets);
 
     // Create the new frame buffer
-    FrameBuffer* frameBuffer = new FrameBuffer(id ? id : "");
+    FrameBuffer* frameBuffer = new FrameBuffer(id);
     frameBuffer->_handle = handle;
     frameBuffer->_renderTargets = renderTargets;
 
@@ -67,21 +75,23 @@ FrameBuffer* FrameBuffer::create(const char* id)
 
 FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned int height)
 {
-    // Create RenderTarget with same ID
+    // Create RenderTarget with same ID.
     RenderTarget* renderTarget = RenderTarget::create(id, width, height);
     if (renderTarget == NULL)
     {
+        GP_ERROR("Failed to create render target for frame buffer.");
         return NULL;
     }
 
-    // Create the frame buffer
+    // Create the frame buffer.
     FrameBuffer* frameBuffer = create(id);
     if (frameBuffer == NULL)
     {
+        GP_ERROR("Failed to create frame buffer.");
         return NULL;
     }
 
-    // Add the render target as the first color attachment
+    // Add the render target as the first color attachment.
     frameBuffer->setRenderTarget(renderTarget);
     SAFE_RELEASE(renderTarget);
 
@@ -90,11 +100,14 @@ FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned in
 
 FrameBuffer* FrameBuffer::getFrameBuffer(const char* id)
 {
+    GP_ASSERT(id);
+
     // Search the vector for a matching ID.
     std::vector<FrameBuffer*>::const_iterator it;
     for (it = __frameBuffers.begin(); it < __frameBuffers.end(); it++)
     {
         FrameBuffer* fb = *it;
+        GP_ASSERT(fb);
         if (strcmp(id, fb->getID()) == 0)
         {
             return fb;
@@ -127,11 +140,12 @@ unsigned int FrameBuffer::getMaxRenderTargets()
 
 void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
 {
-    assert(index < __maxRenderTargets);
+    GP_ASSERT(index < __maxRenderTargets);
+    GP_ASSERT(_renderTargets);
 
     if (_renderTargets[index] == target)
     {
-        // No change
+        // No change.
         return;
     }
 
@@ -152,6 +166,7 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
         // Now set this target as the color attachment corresponding to index.
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
         GLenum attachment = GL_COLOR_ATTACHMENT0 + index;
+        GP_ASSERT(_renderTargets[index]->getTexture());
         GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, _renderTargets[index]->getTexture()->getHandle(), 0) );
 
         // Restore the FBO binding
@@ -161,6 +176,7 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
 
 RenderTarget* FrameBuffer::getRenderTarget(unsigned int index) const
 {
+    GP_ASSERT(_renderTargets);
     if (index < __maxRenderTargets)
     {
         return _renderTargets[index];
@@ -176,24 +192,26 @@ void FrameBuffer::setDepthStencilTarget(DepthStencilTarget* target)
         return; // No change
     }
 
-    // Release our existing depth stencil target
+    // Release our existing depth stencil target.
     SAFE_RELEASE(_depthStencilTarget);
 
     _depthStencilTarget = target;
 
     if (target)
     {
-        // The FrameBuffer now owns this DepthStencilTarget
+        // The FrameBuffer now owns this DepthStencilTarget.
         target->addRef();
 
-        // Store the current FBO binding so we can restore it
+        // Store the current FBO binding so we can restore it.
         GLint currentFbo;
         GL_ASSERT( glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFbo) );
 
         // Now set this target as the color attachment corresponding to index.
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
 
-        // Bind the depth texture
+        // Bind the depth texture.
+        GP_ASSERT(_depthStencilTarget);
+        GP_ASSERT(_depthStencilTarget->getTexture());
         GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthStencilTarget->getTexture()->getHandle(), 0) );
 
         // If the taget has a stencil buffer, bind that as well
@@ -220,7 +238,7 @@ void FrameBuffer::bind()
 
 void FrameBuffer::bindDefault()
 {
-    GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, 0) );
+    GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __defaultHandle) );
 }
 
 }

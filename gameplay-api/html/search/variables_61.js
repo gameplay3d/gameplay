@@ -14,6 +14,7 @@ var searchData=
   ['animate_5fscale_5fx',['ANIMATE_SCALE_X',['../classgameplay_1_1_transform.html#a315f0674a4b6c006afcc6abfc3e135d1',1,'gameplay::Transform']]],
   ['animate_5fscale_5fy',['ANIMATE_SCALE_Y',['../classgameplay_1_1_transform.html#a4664ed966d22b30fa58f105e057f2e19',1,'gameplay::Transform']]],
   ['animate_5fscale_5fz',['ANIMATE_SCALE_Z',['../classgameplay_1_1_transform.html#a9183689549da0021ee5842bb5dd76d65',1,'gameplay::Transform']]],
+  ['animate_5fscrollbar_5fopacity',['ANIMATE_SCROLLBAR_OPACITY',['../classgameplay_1_1_container.html#aa39a360add12f22ce9d099d038e40ba1',1,'gameplay::Container']]],
   ['animate_5fsize',['ANIMATE_SIZE',['../classgameplay_1_1_control.html#ae8d8222fbd641b8f91d527a0813885cb',1,'gameplay::Control']]],
   ['animate_5fsize_5fheight',['ANIMATE_SIZE_HEIGHT',['../classgameplay_1_1_control.html#a6b8b22454ece801671f99b2885c2dec4',1,'gameplay::Control']]],
   ['animate_5fsize_5fwidth',['ANIMATE_SIZE_WIDTH',['../classgameplay_1_1_control.html#acc0572ffcb044ffe6ef36f9d72e08f9b',1,'gameplay::Control']]],

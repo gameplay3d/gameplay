@@ -68,6 +68,35 @@ public:
     static Form* getForm(const char* id);
 
     /**
+     * Set the desired size of this form.
+     *
+     * @param width The width.
+     * @param height The height.
+     */
+    virtual void setSize(float width, float height);
+
+    /**
+     * Set the bounds of this form.
+     *
+     * @param bounds The new bounds to set.
+     */
+    virtual void setBounds(const Rectangle& bounds);
+
+    /**
+     * Set this form's width to that of the display.
+     *
+     * @param autoWidth Whether to set this form's width to that of the display.
+     */
+    virtual void setAutoWidth(bool autoWidth);
+
+    /**
+     * Set this form's height to that of the display.
+     *
+     * @param autoHeight Whether to set this form's height to that of the display.
+     */
+    virtual void setAutoHeight(bool autoHeight);
+
+    /**
      * Create a 3D quad to texture with this Form.
      *
      * The specified points should describe a triangle strip with the first 3 points
@@ -138,14 +167,6 @@ private:
     void initializeQuad(Mesh* mesh);
 
     /**
-     * Draw this form into the current framebuffer.
-     *
-     * @param spriteBatch The sprite batch containing this form's theme texture.
-     * @param clip The form's clipping rectangle.
-     */
-    void draw(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    /**
      * Propagate touch events to enabled forms.
      *
      * @return Whether the touch event was consumed by a form.
@@ -157,11 +178,18 @@ private:
      */
     static void keyEventInternal(Keyboard::KeyEvent evt, int key);
 
+    static int nextHighestPowerOfTwo(int x);
+
     Theme* _theme;              // The Theme applied to this Form.
     Model* _quad;               // Quad for rendering this Form in world-space.
     Node* _node;                // Node for transforming this Form in world-space.
     FrameBuffer* _frameBuffer;  // FBO the Form is rendered into for texturing the quad.
     Matrix _projectionMatrix;   // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
+    Matrix _defaultProjectionMatrix;
+    SpriteBatch* _spriteBatch;
+
+    float _u2;
+    float _v1;
 };
 
 }

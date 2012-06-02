@@ -615,6 +615,16 @@ public:
      */
     void draw();
 
+    /**
+     * Gets a TextureBlending enum from a corresponding string.
+     */
+    static TextureBlending getTextureBlendingFromString(const char* src);
+
+    /**
+     * Sets a TextureBlending enum from a corresponding string.
+     */
+    void setTextureBlending(TextureBlending blending);
+
 private:
 
     /**
@@ -632,36 +642,21 @@ private:
      */
     void setNode(Node* node);
 
-    /**
-     * Generates a scalar within the range defined by min and max.
-     */
+    // Generates a scalar within the range defined by min and max.
     float generateScalar(float min, float max);
 
     long generateScalar(long min, long max);
 
-    /**
-     * Generates a vector within the domain defined by a base vector and its variance.
-     */
+    // Generates a vector within the domain defined by a base vector and its variance.
     void generateVectorInRect(const Vector3& base, const Vector3& variance, Vector3* dst);
 
-    /**
-     * Generates a vector within the ellipsoidal domain defined by a center point and scale vector.
-     */
+    // Generates a vector within the ellipsoidal domain defined by a center point and scale vector.
     void generateVectorInEllipsoid(const Vector3& center, const Vector3& scale, Vector3* dst);
 
     void generateVector(const Vector3& base, const Vector3& variance, Vector3* dst, bool ellipsoid);
 
-    /**
-     * Generates a color within the domain defined by a base vector and its variance.
-     */
+    // Generates a color within the domain defined by a base vector and its variance.
     void generateColor(const Vector4& base, const Vector4& variance, Vector4* dst);
-
-    /**
-     * Gets a BlendMode enum from a corresponding string.
-     */
-    static TextureBlending getTextureBlendingFromString(const char* src);
-
-    void setTextureBlending(TextureBlending blending);
 
     /**
      * Defines the data for a single particle in the system.
@@ -687,6 +682,7 @@ private:
         float _size;
         unsigned int _frame;
         float _timeOnCurrentFrame;
+        bool _visible;
     };
 
     unsigned int _particleCountMax;

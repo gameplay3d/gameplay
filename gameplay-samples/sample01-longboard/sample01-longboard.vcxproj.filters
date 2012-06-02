@@ -41,6 +41,7 @@
     <None Include="..\..\gameplay\res\logo_powered_white.png">
       <Filter>res</Filter>
     </None>
+    <None Include="game.config" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LongboardGame.cpp">

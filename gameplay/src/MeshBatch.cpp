@@ -28,7 +28,10 @@ MeshBatch* MeshBatch::create(const VertexFormat& vertexFormat, Mesh::PrimitiveTy
 {
     Material* material = Material::create(materialPath);
     if (material == NULL)
+    {
+        GP_ERROR("Failed to create material for mesh batch from file '%s'.", materialPath);
         return NULL;
+    }
     MeshBatch* batch = create(vertexFormat, primitiveType, material, indexed, initialCapacity, growSize);
     SAFE_RELEASE(material); // batch now owns the material
     return batch;
@@ -36,7 +39,7 @@ MeshBatch* MeshBatch::create(const VertexFormat& vertexFormat, Mesh::PrimitiveTy
 
 MeshBatch* MeshBatch::create(const VertexFormat& vertexFormat, Mesh::PrimitiveType primitiveType, Material* material, bool indexed, unsigned int initialCapacity, unsigned int growSize)
 {
-    assert(material);
+    GP_ASSERT(material);
 
     MeshBatch* batch = new MeshBatch(vertexFormat, primitiveType, material, indexed, initialCapacity, growSize);
 
@@ -47,13 +50,17 @@ MeshBatch* MeshBatch::create(const VertexFormat& vertexFormat, Mesh::PrimitiveTy
 
 void MeshBatch::updateVertexAttributeBinding()
 {
-    // Update our vertex attribute bindings
+    GP_ASSERT(_material);
+
+    // Update our vertex attribute bindings.
     for (unsigned int i = 0, techniqueCount = _material->getTechniqueCount(); i < techniqueCount; ++i)
     {
         Technique* t = _material->getTechnique(i);
+        GP_ASSERT(t);
         for (unsigned int j = 0, passCount = t->getPassCount(); j < passCount; ++j)
         {
             Pass* p = t->getPass(j);
+            GP_ASSERT(p);
             VertexAttributeBinding* b = VertexAttributeBinding::create(_vertexFormat, _vertices, p->getEffect());
             p->setVertexAttributeBinding(b);
             SAFE_RELEASE(b);
@@ -73,14 +80,16 @@ void MeshBatch::setCapacity(unsigned int capacity)
 
 bool MeshBatch::resize(unsigned int capacity)
 {
-    assert(capacity > 0);
     if (capacity == 0)
+    {
+        GP_ERROR("Invalid resize capacity (0).");
         return false;
+    }
 
     if (capacity == _capacity)
         return true;
 
-    // Store old batch data
+    // Store old batch data.
     unsigned char* oldVertices = _vertices;
     unsigned short* oldIndices = _indices;
 
@@ -103,20 +112,21 @@ bool MeshBatch::resize(unsigned int capacity)
         vertexCapacity = capacity + 2;
         break;
     default:
-        assert(0); // unexpected
-        break;
+        GP_ERROR("Unsupported primitive type for mesh batch (%d).", _primitiveType);
+        return false;
     }
 
     // We have no way of knowing how many vertices will be stored in the batch
     // (we only know how many indices will be stored). Assume the worst case
     // for now, which is the same number of vertices as indices.
     unsigned int indexCapacity = vertexCapacity;
-
-    assert(indexCapacity <= USHRT_MAX);
     if (indexCapacity > USHRT_MAX)
+    {
+        GP_ERROR("Index capacity is greater than the maximum unsigned short value (%d > %d).", indexCapacity, USHRT_MAX);
         return false;
+    }
 
-    // Allocate new data and reset pointers
+    // Allocate new data and reset pointers.
     unsigned int voffset = _verticesPtr - _vertices;
     unsigned int vBytes = vertexCapacity * _vertexFormat.getVertexSize();
     _vertices = new unsigned char[vBytes];
@@ -173,12 +183,18 @@ void MeshBatch::draw()
     // ARRAY_BUFFER will be unbound automatically during pass->bind().
     GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0 ) );
 
-    // Bind the material
+    GP_ASSERT(_material);
+    if (_indexed)
+        GP_ASSERT(_indices);
+
+    // Bind the material.
     Technique* technique = _material->getTechnique();
+    GP_ASSERT(technique);
     unsigned int passCount = technique->getPassCount();
     for (unsigned int i = 0; i < passCount; ++i)
     {
         Pass* pass = technique->getPass(i);
+        GP_ASSERT(pass);
         pass->bind();
 
         if (_indexed)

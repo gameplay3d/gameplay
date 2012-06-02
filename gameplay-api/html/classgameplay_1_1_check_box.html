@@ -114,7 +114,7 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ae95aeaa2e68f926ccaa3909cec501610"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#ae95aeaa2e68f926ccaa3909cec501610">CheckBox</a> ()</td></tr>
 <tr class="memitem:adac87faf82346c6c330dd221e52c5c81"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#adac87faf82346c6c330dd221e52c5c81">~CheckBox</a> ()</td></tr>
 <tr class="memitem:a3849a62e5b3895b684592eacd6dd18b2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#a3849a62e5b3895b684592eacd6dd18b2">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
-<tr class="memitem:aff06d543ab407b578a129bb711c7477d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#aff06d543ab407b578a129bb711c7477d">update</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
+<tr class="memitem:a95c22e5a84d40dcede9994be2b943db3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#a95c22e5a84d40dcede9994be2b943db3">update</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
 <tr class="memitem:ac87db1d15aa3d773b994466d09cb0f7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#ac87db1d15aa3d773b994466d09cb0f7c">drawImages</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -441,16 +441,26 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 
 </div>
 </div>
-<a class="anchor" id="aff06d543ab407b578a129bb711c7477d"></a>
+<a class="anchor" id="a95c22e5a84d40dcede9994be2b943db3"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_check_box.html#aff06d543ab407b578a129bb711c7477d">gameplay::CheckBox::update</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_check_box.html#a95c22e5a84d40dcede9994be2b943db3">gameplay::CheckBox::update</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
-          <td class="paramname"><em>clip</em></td><td>)</td>
-          <td><code> [protected, virtual]</code></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td>
+          <td class="paramname"><em>container</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
+          <td class="paramname"><em>offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -458,12 +468,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 <p>Called when a control's properties change. Updates this control's internal rendering properties, such as its text viewport.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">clip</td><td>The clipping rectangle of this control's parent container. </td></tr>
+    <tr><td class="paramname">container</td><td>This control's parent container. </td></tr>
+    <tr><td class="paramname">offset</td><td>The position offset. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a0983974a9862bb5817b9b47ad6da5148">gameplay::Label</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a7c87574c9c392287b870c94a32aac75a">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -514,7 +525,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 18 2012 12:58:20 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 1 2012 00:43:59 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

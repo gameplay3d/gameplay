@@ -1,25 +1,34 @@
 #include "Base.h"
 #include "FileSystem.h"
+#include "Properties.h"
+
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #ifdef WIN32
     #include <windows.h>
     #include <tchar.h>
     #include <stdio.h>
+    #define gp_stat _stat
+    #define gp_stat_struct struct stat
 #else
     #include <dirent.h>
-    #include <sys/stat.h>
+    #define gp_stat stat
+    #define gp_stat_struct struct stat
 #endif
 
 #ifdef __ANDROID__
+#include <android/asset_manager.h>
 extern AAssetManager* __assetManager;
 #endif
 
 namespace gameplay
 {
 
+// Creates a file on the file system from the specified asset (Android-specific).
+static void createFileFromAsset(const char* path);
+
 #ifdef __ANDROID__
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
 
 void makepath(std::string path, int mode)
@@ -49,7 +58,7 @@ void makepath(std::string path, int mode)
             // Directory does not exist.
             if (mkdir(dirPath.c_str(), 0777) != 0)
             {
-                WARN_VARG("Failed to create directory: '%s'", dirPath.c_str());
+                GP_ERROR("Failed to create directory: '%s'", dirPath.c_str());
                 return;
             }
         }
@@ -60,6 +69,7 @@ void makepath(std::string path, int mode)
 #endif
 
 static std::string __resourcePath("./");
+static std::map<std::string, std::string> __aliases;
 
 FileSystem::FileSystem()
 {
@@ -77,6 +87,48 @@ void FileSystem::setResourcePath(const char* path)
 const char* FileSystem::getResourcePath()
 {
     return __resourcePath.c_str();
+}
+
+void FileSystem::loadResourceAliases(const char* aliasFilePath)
+{
+    Properties* properties = Properties::create(aliasFilePath);
+    if (properties)
+    {
+        Properties* aliases;
+        while ((aliases = properties->getNextNamespace()) != NULL)
+        {
+            loadResourceAliases(aliases);
+        }
+    }
+    SAFE_DELETE(properties);
+}
+
+void FileSystem::loadResourceAliases(Properties* properties)
+{
+    assert(properties);
+
+    const char* name;
+    while ((name = properties->getNextProperty()) != NULL)
+    {
+        __aliases[name] = properties->getString();
+    }
+}
+
+const char* FileSystem::resolvePath(const char* path)
+{
+    GP_ASSERT(path);
+
+    size_t len = strlen(path);
+    if (len > 1 && path[0] == '@')
+    {
+        std::string alias(path + 1);
+        std::map<std::string, std::string>::const_iterator itr = __aliases.find(alias);
+        if (itr == __aliases.end())
+            return path; // no matching alias found
+        return itr->second.c_str();
+    }
+
+    return path;
 }
 
 bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
@@ -148,32 +200,40 @@ bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
 #endif
 }
 
-FILE* FileSystem::openFile(const char* path, const char* mode)
+bool FileSystem::fileExists(const char* path)
 {
-    std::string fullPath(__resourcePath);
-    fullPath += path;
-    
-#ifdef __ANDROID__
-    std::string directoryPath = fullPath.substr(0, fullPath.rfind('/'));
-    struct stat s;
-    if (stat(directoryPath.c_str(), &s) != 0)
-        makepath(directoryPath.c_str(), 0777);
+    GP_ASSERT(path);
 
+    std::string fullPath(__resourcePath);
+    fullPath += resolvePath(path);
+
+    createFileFromAsset(path);
+
+    gp_stat_struct s;
+// Win32 doesn't support an asset or bundle definitions.
+#ifdef WIN32
     if (stat(fullPath.c_str(), &s) != 0)
     {
-        AAsset* asset = AAssetManager_open(__assetManager, path, AASSET_MODE_RANDOM);
-        if (asset)
-        {
-            const void* data = AAsset_getBuffer(asset);
-            int length = AAsset_getLength(asset);
-            FILE* file = fopen(fullPath.c_str(), "wb");
+        fullPath = __resourcePath;
+        fullPath += "../../gameplay/";
+        fullPath += path;
         
-            int ret = fwrite(data, sizeof(unsigned char), length, file);
-            assert(ret == length);
-            fclose(file);
-        }
+        return stat(fullPath.c_str(), &s) == 0;
     }
+    return true;
+#else
+    return stat(fullPath.c_str(), &s) == 0;
 #endif
+}
+
+FILE* FileSystem::openFile(const char* path, const char* mode)
+{
+    GP_ASSERT(path);
+
+    std::string fullPath(__resourcePath);
+    fullPath += resolvePath(path);
+
+    createFileFromAsset(path);
     
     FILE* fp = fopen(fullPath.c_str(), mode);
     
@@ -198,22 +258,29 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     FILE* file = openFile(filePath, "rb");
     if (file == NULL)
     {
-        LOG_ERROR_VARG("Failed to load file: %s", filePath);
+        GP_ERROR("Failed to load file: %s", filePath);
         return NULL;
     }
 
     // Obtain file length.
-    fseek(file, 0, SEEK_END);
+    if (fseek(file, 0, SEEK_END) != 0)
+    {
+        GP_ERROR("Failed to seek to the end of the file '%s' to obtain the file length.", filePath);
+        return NULL;
+    }
     int size = (int)ftell(file);
-     fseek(file, 0, SEEK_SET);
+    if (fseek(file, 0, SEEK_SET) != 0)
+    {
+        GP_ERROR("Failed to seek to beginning of the file '%s' to begin reading in the entire file.", filePath);
+        return NULL;
+    }
 
     // Read entire file contents.
     char* buffer = new char[size + 1];
     int read = (int)fread(buffer, 1, size, file);
-    assert(read == size);
     if (read != size)
     {
-        LOG_ERROR_VARG("Read error for file: %s (%d < %d)", filePath, (int)read, (int)size);
+        GP_ERROR("Failed to read complete contents of file '%s' (amount read vs. file size: %d < %d).", filePath, (int)read, (int)size);
         SAFE_DELETE_ARRAY(buffer);
         return NULL;
     }
@@ -222,12 +289,68 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     buffer[size] = '\0';
 
     // Close file and return.
-    fclose(file);
+    if (fclose(file) != 0)
+    {
+        GP_ERROR("Failed to close file '%s'.", filePath);
+    }
+
     if (fileSize)
     {
         *fileSize = size; 
     }
     return buffer;
+}
+
+void createFileFromAsset(const char* path)
+{
+#ifdef __ANDROID__
+    static std::set<std::string> upToDateAssets;
+
+    GP_ASSERT(path);
+    std::string fullPath(__resourcePath);
+    std::string resolvedPath = FileSystem::resolvePath(path);
+    fullPath += resolvedPath;
+
+    std::string directoryPath = fullPath.substr(0, fullPath.rfind('/'));
+    struct stat s;
+    if (stat(directoryPath.c_str(), &s) != 0)
+        makepath(directoryPath.c_str(), 0777);
+
+    // To ensure that the files on the file system corresponding to the assets in the APK bundle
+    // are always up to date (and in sync), we copy them from the APK to the file system once
+    // for each time the process (game) runs.
+    if (upToDateAssets.find(fullPath) == upToDateAssets.end())
+    {
+        AAsset* asset = AAssetManager_open(__assetManager, resolvedPath.c_str(), AASSET_MODE_RANDOM);
+        if (asset)
+        {
+            const void* data = AAsset_getBuffer(asset);
+            int length = AAsset_getLength(asset);
+            FILE* file = fopen(fullPath.c_str(), "wb");
+            if (file != NULL)
+            {
+                int ret = fwrite(data, sizeof(unsigned char), length, file);
+                if (fclose(file) != 0)
+                {
+                    GP_ERROR("Failed to close file on file system created from APK asset '%s'.", path);
+                    return;
+                }
+                if (ret != length)
+                {
+                    GP_ERROR("Failed to write all data from APK asset '%s' to file on file system.", path);
+                    return;
+                }
+            }
+            else
+            {
+                GP_ERROR("Failed to create file on file system from APK asset '%s'.", path);
+                return;
+            }
+
+            upToDateAssets.insert(fullPath);
+        }
+    }
+#endif
 }
 
 }

@@ -2,9 +2,12 @@
 #include "Game.h"
 #include "Platform.h"
 #include "RenderState.h"
+#include "FileSystem.h"
+#include "FrameBuffer.h"
 
 // Extern global variables
 GLenum __gl_error_code = GL_NO_ERROR;
+ALenum __al_error_code = AL_NO_ERROR;
 
 namespace gameplay
 {
@@ -16,10 +19,10 @@ long Game::_pausedTimeTotal = 0L;
 Game::Game() 
     : _initialized(false), _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
-      _clearDepth(1.0f), _clearStencil(0),
+      _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
       _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL)
 {
-    assert(__gameInstance == NULL);
+    GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
     _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
 }
@@ -32,7 +35,7 @@ Game::~Game()
 {
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.
-    delete _timeEvents;
+    SAFE_DELETE(_timeEvents);
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
     Ref::printLeaks();
     printMemoryLeaks();
@@ -41,6 +44,7 @@ Game::~Game()
 
 Game* Game::getInstance()
 {
+    GP_ASSERT(__gameInstance);
     return __gameInstance;
 }
 
@@ -64,20 +68,15 @@ bool Game::isVsync()
     return Platform::isVsync();
 }
 
-int Game::run(int width, int height)
+int Game::run()
 {
     if (_state != UNINITIALIZED)
         return -1;
 
-    if (width == -1)
-        _width = Platform::getDisplayWidth();
-    else
-        _width = width;
-    
-    if (height == -1)
-        _height = Platform::getDisplayHeight();
-    else
-        _height = height;
+    loadConfig();
+
+    _width = Platform::getDisplayWidth();
+    _height = Platform::getDisplayHeight();
 
     // Start up game systems.
     if (!startup())
@@ -94,8 +93,8 @@ bool Game::startup()
         return false;
 
     setViewport(Rectangle(0.0f, 0.0f, (float)_width, (float)_height));
-
     RenderState::initialize();
+    FrameBuffer::initialize();
 
     _animationController = new AnimationController();
     _animationController->initialize();
@@ -116,6 +115,10 @@ void Game::shutdown()
     // Call user finalization.
     if (_state != UNINITIALIZED)
     {
+        GP_ASSERT(_animationController);
+        GP_ASSERT(_audioController);
+        GP_ASSERT(_physicsController);
+
         Platform::signalShutdown();
         finalize();
 
@@ -131,7 +134,9 @@ void Game::shutdown()
         SAFE_DELETE(_audioListener);
 
         RenderState::finalize();
-        
+
+        SAFE_DELETE(_properties);
+
         _state = UNINITIALIZED;
     }
 }
@@ -140,6 +145,10 @@ void Game::pause()
 {
     if (_state == RUNNING)
     {
+        GP_ASSERT(_animationController);
+        GP_ASSERT(_audioController);
+        GP_ASSERT(_physicsController);
+
         _state = PAUSED;
         _pausedTimeLast = Platform::getAbsoluteTime();
         _animationController->pause();
@@ -152,6 +161,10 @@ void Game::resume()
 {
     if (_state == PAUSED)
     {
+        GP_ASSERT(_animationController);
+        GP_ASSERT(_audioController);
+        GP_ASSERT(_physicsController);
+
         _state = RUNNING;
         _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
         _animationController->resume();
@@ -175,6 +188,10 @@ void Game::frame()
 
     if (_state == Game::RUNNING)
     {
+        GP_ASSERT(_animationController);
+        GP_ASSERT(_audioController);
+        GP_ASSERT(_physicsController);
+
         // Update Time.
         static long lastFrameTime = Game::getGameTime();
         long frameTime = Game::getGameTime();
@@ -288,7 +305,7 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 
 void Game::schedule(long timeOffset, TimeListener* timeListener, void* cookie)
 {
-    assert(timeListener);
+    GP_ASSERT(_timeEvents);
     TimeEvent timeEvent(getGameTime() + timeOffset, timeListener, cookie);
     _timeEvents->push(timeEvent);
 }
@@ -300,6 +317,10 @@ bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 void Game::updateOnce()
 {
+    GP_ASSERT(_animationController);
+    GP_ASSERT(_audioController);
+    GP_ASSERT(_physicsController);
+
     // Update Time.
     static long lastFrameTime = Game::getGameTime();
     long frameTime = Game::getGameTime();
@@ -312,6 +333,31 @@ void Game::updateOnce()
     _audioController->update(elapsedTime);
 }
 
+Properties* Game::getConfig() const
+{
+    if (_properties == NULL)
+        const_cast<Game*>(this)->loadConfig();
+
+    return _properties;
+}
+
+void Game::loadConfig()
+{
+    if (_properties == NULL)
+    {
+        // Try to load custom config from file.
+        if (FileSystem::fileExists("game.config"))
+        {
+            _properties = Properties::create("game.config");
+            
+            // Load filesystem aliases.
+            Properties* aliases = _properties->getNamespace("aliases", true);
+            if (aliases)
+                FileSystem::loadResourceAliases(aliases);
+        }
+    }
+}
+
 void Game::fireTimeEvents(long frameTime)
 {
     while (_timeEvents->size() > 0)
@@ -321,7 +367,8 @@ void Game::fireTimeEvents(long frameTime)
         {
             break;
         }
-        timeEvent->listener->timeEvent(frameTime - timeEvent->time, timeEvent->cookie);
+        if (timeEvent->listener)
+            timeEvent->listener->timeEvent(frameTime - timeEvent->time, timeEvent->cookie);
         _timeEvents->pop();
     }
 }

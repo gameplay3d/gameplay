@@ -51,6 +51,21 @@ theme particleEditor
             region = 5, 149, 11, 25
             color = #C3D9BFff
         }
+
+        image scrollBarTopCap
+        {
+            region = 3, 99, 8, 5
+        }
+
+        image verticalScrollBar
+        {
+            region = 3, 104, 8, 19
+        }
+
+        image scrollBarBottomCap
+        {
+            region = 3, 138, 8, 5
+        }
     }
 
     imageList activeImages : normalImages
@@ -97,19 +112,6 @@ theme particleEditor
         color = #C3D9BFff
     }
 
-    skin empty
-    {
-        region = 0, 0, 1, 1
-    }
-
-    style background
-    {
-        stateNormal
-        {
-            skin = empty
-        }
-    }
-
     style basic
     {
         stateNormal
@@ -117,7 +119,7 @@ theme particleEditor
             skin = mainNormal
             imageList = normalImages
 
-            font = res/arial40.gpb
+            font = res/arial9.gpb
             textColor = #ffffffff
             fontSize = 15
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -126,6 +128,14 @@ theme particleEditor
         stateActive
         {
             imageList = activeImages
+        }
+    }
+
+    style particleProps : basic
+    {
+        padding
+        {
+            left = 10
         }
     }
 
@@ -139,6 +149,7 @@ theme particleEditor
 
         stateNormal
         {
+            font = res/arial13.gpb
             fontSize = 20
         }
 
@@ -148,17 +159,20 @@ theme particleEditor
         }
     }
 
-    style noBorder : basic
+    style noBorder
     {
         stateNormal
         {
-            skin = empty
+            imageList = normalImages
+            font = res/arial9.gpb
+            textColor = #ffffffff
+            fontSize = 15
             textAlignment = ALIGN_VCENTER_HCENTER
         }
 
         stateActive
         {
-            skin = empty
+            imageList = activeImages
             textAlignment = ALIGN_VCENTER_HCENTER
         }
     }
@@ -167,12 +181,14 @@ theme particleEditor
     {
         stateNormal
         {
+            font = res/arial13.gpb
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
         }
 
         stateActive
         {
+            font = res/arial13.gpb
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
         }
@@ -188,9 +204,8 @@ theme particleEditor
 
         stateNormal
         {
-            skin = empty
             textColor = #ffffffff
-            font = res/arial40.gpb
+            font = res/arial18.gpb
             fontSize = 25
             textAlignment = ALIGN_TOP_HCENTER
         }

@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 /**
- *  Defines a layout that arranges components in a left-to-right or right-to-left flow. 
+ * Defines a layout that arranges controls in order, left-to-right, row by row.
  */
 class FlowLayout : public Layout
 {
@@ -36,8 +36,9 @@ protected:
      * Update the controls contained by the specified container.
      *
      * @param container The container to update.
+     * @param offset The offset position.
      */
-    void update(const Container* container);
+    void update(const Container* container, const Vector2& offset);
 
 private:
 

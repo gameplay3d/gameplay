@@ -192,7 +192,7 @@ public:
      * @param width The width.
      * @param height The height.
      */
-    void setSize(float width, float height);
+    virtual void setSize(float width, float height);
 
     /**
      * Set the bounds of this control, relative to its parent container and including its
@@ -200,7 +200,7 @@ public:
      *
      * @param bounds The new bounds to set.
      */
-    void setBounds(const Rectangle& bounds);
+    virtual void setBounds(const Rectangle& bounds);
 
     /**
      * Get the bounds of this control, relative to its parent container and including its
@@ -257,7 +257,7 @@ public:
      *
      * @param autoWidth Whether to size this control to fit horizontally within its parent container.
      */
-    void setAutoWidth(bool autoWidth);
+    virtual void setAutoWidth(bool autoWidth);
 
     /**
      * Get whether this control's width is set to automatically adjust to
@@ -272,7 +272,7 @@ public:
      *
      * @param autoHeight Whether to size this control to fit vertically within its parent container.
      */
-    void setAutoHeight(bool autoHeight);
+    virtual void setAutoHeight(bool autoHeight);
 
     /**
      * Get whether this control's height is set to automatically adjust to
@@ -659,6 +659,20 @@ public:
     Theme::Style* getStyle() const;
 
     /**
+     * Get this control's z-index.
+     *
+     * @return This control's z-index.
+     */
+    int getZIndex() const;
+
+    /**
+     * Set this control's z-index.
+     *
+     * @param zIndex The new z-index.
+     */
+    void setZIndex(int zIndex);
+
+    /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
      * E.g. To listen to touch-press and touch-release events,
@@ -673,17 +687,17 @@ public:
     /**
      * @see AnimationTarget#getAnimationPropertyComponentCount
      */
-    unsigned int getAnimationPropertyComponentCount(int propertyId) const;
+    virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
 
     /**
      * @see AnimationTarget#getAnimationProperty
      */
-    void getAnimationPropertyValue(int propertyId, AnimationValue* value);
+    virtual void getAnimationPropertyValue(int propertyId, AnimationValue* value);
 
     /**
      * @see AnimationTarget#setAnimationProperty
      */
-    void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
+    virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 protected:
 
@@ -734,9 +748,10 @@ protected:
      * Called when a control's properties change.  Updates this control's internal rendering
      * properties, such as its text viewport.
      *
-     * @param clip The clipping rectangle of this control's parent container.
+     * @param container This control's parent container.
+     * @param offset Positioning offset to add to the control's position.
      */
-    virtual void update(const Rectangle& clip);
+    virtual void update(const Control* container, const Vector2& offset);
 
     /**
      * Draw the images associated with this control.
@@ -752,6 +767,17 @@ protected:
      * @param clip The clipping rectangle of this control's parent container.
      */
     virtual void drawText(const Rectangle& clip);
+
+    /**
+     * Draws a sprite batch for the specified clipping rect .
+     *
+     * @param spriteBatch The sprite batch to use.
+     * @param clip The clipping rectangle.
+     * @param needsClear Whether it needs to be cleared.
+     * @param cleared Whether it was previously cleared
+     * @param targetHeight The targets height
+     */
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
 
     /**
      * Initialize properties common to STATE_ALL Controls.
@@ -784,8 +810,9 @@ protected:
     /**
      * Get a Theme::ThemeImage from its ID, for a given state.
      *
-     * @param id The ID of the image to retrieve
+     * @param id The ID of the image to retrieve.
      * @param state The state to get this image from.
+     *
      * @return The requested Theme::ThemeImage, or NULL if none was found.
      */
     Theme::ThemeImage* getImage(const char* id, State state);
@@ -819,24 +846,39 @@ protected:
      * Position, relative to parent container's clipping window, and desired size.
      */
     Rectangle _bounds;
-    
+
     /**
-     * The position and size of this control, relative to parent container's bounds, including border and padding, after clipping.
+     * Position, relative to parent container's clipping window, including border and padding, after clipping.
      */
     Rectangle _clipBounds;
-    
+
     /**
-     * The position and size of this control's text area, before clipping.  Used for text alignment.
+     * Absolute bounds, including border and padding, before clipping.
      */
-    Rectangle _textBounds;
-    
+    Rectangle _absoluteBounds;
+
     /**
-     * Clipping window of this control's content, after clipping.
+     * Absolute bounds, including border and padding, after clipping.
      */
-    Rectangle _clip;
-    
+    Rectangle _absoluteClipBounds;
+
     /**
-     * Flag for whether the Control is dirty.
+     * Absolute bounds of content area (i.e. without border and padding), before clipping.
+     */
+    Rectangle _viewportBounds;
+
+    /**
+     * Absolute bounds of content area (i.e. without border and padding), after clipping.
+     */
+    Rectangle _viewportClipBounds;
+
+    /**
+     * Previous frame's absolute clip bounds, to be cleared if necessary.
+     */
+    Rectangle _clearBounds;         
+
+    /**
+     * If the control is dirty and need updating.
      */
     bool _dirty;
     
@@ -874,6 +916,11 @@ protected:
      * The current opacity of the control.
      */
     float _opacity;
+    
+    /**
+     * The z-order of the control.
+     */
+    int _zIndex;
 
 private:
 

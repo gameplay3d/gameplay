@@ -19,7 +19,7 @@ CharacterGame game;
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL),
       _animation(NULL), _currentClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
-      _keyFlags(0), _drawDebug(0)
+      _keyFlags(0), _drawDebug(0), _buttonReleased(true)
 {
 }
 
@@ -32,10 +32,10 @@ void CharacterGame::initialize()
     displayScreen(this, &CharacterGame::drawSplash, NULL, 1000L);
 
     // Load the font.
-    _font = Font::create("res/arial40.gpb");
+    _font = Font::create("res/common/arial40.gpb");
 
     // Load scene.
-    _scene = Scene::load("res/scene.scene");
+    _scene = Scene::load("res/common/scene.scene");
 
     // Update the aspect ratio for our scene's camera to match the current device resolution.
     _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
@@ -89,7 +89,7 @@ void CharacterGame::initializeCharacter()
 
     // Load character animations.
     _animation = node->getAnimation("movements");
-    _animation->createClips("res/boy.animation");
+    _animation->createClips("res/common/boy.animation");
     _jumpClip = _animation->getClip("jump");
     _jumpClip->addListener(this, _jumpClip->getDuration() - 250);
 
@@ -99,7 +99,7 @@ void CharacterGame::initializeCharacter()
 
 void CharacterGame::initializeGamepad()
 {
-    _gamepad = new Gamepad("res/gamepad.png", 1, 1);
+    _gamepad = new Gamepad("@gamepad", 1, 1);
 
     float scale = getHeight() / 720.0f;
 
@@ -185,7 +185,7 @@ void CharacterGame::jump()
 
 bool CharacterGame::isOnFloor() const
 {
-    return (_character->getCurrentVelocity().y == 0);
+    return (std::fabs(_character->getCurrentVelocity().y) < MATH_EPSILON);
 }
 
 void CharacterGame::update(long elapsedTime)
@@ -194,8 +194,16 @@ void CharacterGame::update(long elapsedTime)
 
     if (_gamepad->getButtonState(0) == Gamepad::BUTTON_PRESSED)
     {
-        // Jump while the gamepad button is being pressed
-        jump();
+        if (_buttonReleased)
+        {
+            _buttonReleased = false;
+            // Jump while the gamepad button is being pressed
+            jump();
+        }
+    }
+    else
+    {
+        _buttonReleased = true;
     }
 
     if (_gamepad->isJoystickActive(0))

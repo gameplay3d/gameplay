@@ -77,9 +77,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Transform Class Reference</div>  </div>
@@ -190,6 +192,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a842ce88c27aaedb5b43e0ac675ba7b1f"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a842ce88c27aaedb5b43e0ac675ba7b1f">getAnimationPropertyComponentCount</a> (int propertyId) const </td></tr>
 <tr class="memitem:aa511e1efa7282723e0bfbe38742ec410"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#aa511e1efa7282723e0bfbe38742ec410">getAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value)</td></tr>
 <tr class="memitem:a444e7a96105255379d13ac2b0523d5e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a444e7a96105255379d13ac2b0523d5e3">setAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value, float blendWeight=1.0f)</td></tr>
+<tr><td colspan="2"><h2><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a06839d9316cef10c73d8f32355a62973"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a06839d9316cef10c73d8f32355a62973">suspendTransformChanged</a> ()</td></tr>
+<tr class="memitem:a9db626711a3620e12051f70d8ec9f325"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a9db626711a3620e12051f70d8ec9f325">resumeTransformChanged</a> ()</td></tr>
+<tr class="memitem:abf085b2b4a7a07e1f85051d50572e280"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#abf085b2b4a7a07e1f85051d50572e280">isTransformChangedSuspended</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:afcd076b42dcf0ec38f95cfc3c5548fad"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#afcd076b42dcf0ec38f95cfc3c5548fad">ANIMATE_SCALE_UNIT</a> = 0</td></tr>
@@ -208,13 +215,18 @@ Static Public Attributes</h2></td></tr>
 Protected Types</h2></td></tr>
 <tr class="memitem:afb33ec484f82efed700b67b879ec06ff"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#afb33ec484f82efed700b67b879ec06ff">MatrixDirtyBits</a> { <b>DIRTY_TRANSLATION</b> =  0x01, 
 <b>DIRTY_SCALE</b> =  0x02, 
-<b>DIRTY_ROTATION</b> =  0x04
+<b>DIRTY_ROTATION</b> =  0x04, 
+<b>DIRTY_NOTIFY</b> =  0x08
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a726f6197a310ccfc9a56dbb2b6801456"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a726f6197a310ccfc9a56dbb2b6801456">dirty</a> (char matrixDirtyBits)</td></tr>
+<tr class="memitem:a3fc1c21149bc48026b41b97d159f70b5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a3fc1c21149bc48026b41b97d159f70b5">isDirty</a> (char matrixDirtyBits) const </td></tr>
 <tr class="memitem:a7d18ec434726facaee1bb233f3ddda56"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a7d18ec434726facaee1bb233f3ddda56">transformChanged</a> ()</td></tr>
 <tr class="memitem:a666310b65bf685fd8f5078bf9da7c7f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a666310b65bf685fd8f5078bf9da7c7f9">cloneInto</a> (<a class="el" href="classgameplay_1_1_transform.html">Transform</a> *transform, <a class="el" href="classgameplay_1_1_node_clone_context.html">NodeCloneContext</a> &amp;context) const </td></tr>
+<tr><td colspan="2"><h2><a name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr class="memitem:a579a593602822ebedd5b3610eaf72119"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a579a593602822ebedd5b3610eaf72119">suspendTransformChange</a> (<a class="el" href="classgameplay_1_1_transform.html">Transform</a> *transform)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:aeeae1936910e4fd9e76b09428418099f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#aeeae1936910e4fd9e76b09428418099f">_scale</a></td></tr>
@@ -1070,6 +1082,49 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a3fc1c21149bc48026b41b97d159f70b5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_transform.html#a3fc1c21149bc48026b41b97d159f70b5">gameplay::Transform::isDirty</a> </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>matrixDirtyBits</em></td><td>)</td>
+          <td> const<code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if the specified matrix dirty bit is set.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">matrixDirtyBits</td><td>the matrix dirty bit to check for dirtiness. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>TRUE if the specified matrix dirty bit is set; FALSE if the specified matrix dirty bit is unset. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abf085b2b4a7a07e1f85051d50572e280"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_transform.html#abf085b2b4a7a07e1f85051d50572e280">gameplay::Transform::isTransformChangedSuspended</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets whether all transform changed events are suspended.</p>
+<dl class="section return"><dt>Returns:</dt><dd>TRUE if transform changed events are suspended; FALSE if transform changed events are not suspended. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a5458202ad2700c3106d0af7663046a04"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1085,6 +1140,23 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Removes a transform listener. </p>
+
+</div>
+</div>
+<a class="anchor" id="a9db626711a3620e12051f70d8ec9f325"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_transform.html#a9db626711a3620e12051f70d8ec9f325">gameplay::Transform::resumeTransformChanged</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Globally resumes all transform changed events. </p>
 
 </div>
 </div>
@@ -2096,6 +2168,41 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a579a593602822ebedd5b3610eaf72119"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_transform.html#a579a593602822ebedd5b3610eaf72119">gameplay::Transform::suspendTransformChange</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_transform.html">Transform</a> *&#160;</td>
+          <td class="paramname"><em>transform</em></td><td>)</td>
+          <td><code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Adds the specified transform to the list of transforms waiting to be notified of a change. Sets the DIRTY_NOTIFY bit on the transform. </p>
+
+</div>
+</div>
+<a class="anchor" id="a06839d9316cef10c73d8f32355a62973"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_transform.html#a06839d9316cef10c73d8f32355a62973">gameplay::Transform::suspendTransformChanged</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Globally suspends all transform changed events. </p>
+
+</div>
+</div>
 <a class="anchor" id="a7d18ec434726facaee1bb233f3ddda56"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2756,7 +2863,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 18 2012 12:58:21 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 1 2012 00:44:00 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

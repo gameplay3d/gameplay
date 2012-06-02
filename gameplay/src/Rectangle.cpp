@@ -110,6 +110,8 @@ bool Rectangle::intersects(const Rectangle& r) const
 
 void Rectangle::combine(const Rectangle& r1, const Rectangle& r2, Rectangle* dst)
 {
+    GP_ASSERT(dst);
+
     dst->x = min(r1.x, r2.x);
     dst->y = min(r1.y, r2.y);
     dst->width = max(r1.x + r1.width, r2.x + r2.width) - dst->x;
