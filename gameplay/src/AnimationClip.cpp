@@ -283,7 +283,7 @@ void AnimationClip::addListener(AnimationClip::Listener* listener, unsigned long
                 if (isClipStateBitSet(CLIP_IS_PLAYING_BIT))
                 {
                     unsigned long currentTime = _elapsedTime % _duration;
-                    GP_ASSERT(**_listenerItr);
+                    GP_ASSERT(**_listenerItr || *_listenerItr == _listeners->end());
                     if ((_speed >= 0.0f && currentTime < eventTime && (*_listenerItr == _listeners->end() || eventTime < (**_listenerItr)->_eventTime)) || 
                         (_speed <= 0 && currentTime > eventTime && (*_listenerItr == _listeners->begin() || eventTime > (**_listenerItr)->_eventTime)))
                         *_listenerItr = itr;
@@ -376,7 +376,6 @@ bool AnimationClip::update(unsigned long elapsedTime)
     if (_listeners)
     {
         GP_ASSERT(_listenerItr);
-        GP_ASSERT(**_listenerItr);
 
         if (_speed >= 0.0f)
         {
