@@ -25,6 +25,8 @@ namespace gameplay
          size        = <width, height>   // Size of the container, measured in pixels.
          width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
          height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
+         scroll      = <Container::Scroll constant> // Whether scrolling is allowed and in which directions.
+         scrollBarsAutoHide = <bool>    // Whether scrollbars fade out when not in use.
   
          // All the nested controls within this container.
          container 
@@ -44,6 +46,22 @@ namespace gameplay
 class Container : public Control
 {
 public:
+
+    /**
+     * Constant used to auto-hide scrollbars.
+     */
+    static const int ANIMATE_SCROLLBAR_OPACITY = 8;
+
+    /**
+     * The definition for container scrolling.
+     */
+    enum Scroll
+    {
+        SCROLL_NONE        = 0,
+        SCROLL_HORIZONTAL  = 0x01,
+        SCROLL_VERTICAL    = 0x02,
+        SCROLL_BOTH = SCROLL_HORIZONTAL | SCROLL_VERTICAL
+    };
 
     /**
      * Get this container's layout.
@@ -112,15 +130,55 @@ public:
      *
      * @return The vector of the controls within this container.
      */
-    std::vector<Control*> getControls() const;
+    const std::vector<Control*>& getControls() const;
 
     /**
-     * Gets the first animation in the control with the specified ID.
+     * Sets the allowed scroll directions for this container.
      *
-     * @param id The ID of the animation to get. Returns the first animation if ID is NULL.
-     * @return The first animation with the specified ID.
+     * @param scroll The allowed scroll directions for this container.
+     */
+    void setScroll(Scroll scroll);
+
+    /**
+     * Gets the allowed scroll directions for this container.
+     *
+     * @return The allowed scroll directions for this container.
+     */
+    Scroll getScroll() const;
+
+    /**
+     * Set whether scrollbars auto hidden when they become static.
+     *
+     * @param autoHide true to auto hide the scrollbars when they become static.
+     */
+    void setScrollBarsAutoHide(bool autoHide);
+
+    /**
+     * Whether scrollbars are always visible, or only visible while scrolling.
+     *
+     * @return Whether scrollbars are always visible.
+     */
+    bool isScrollBarsAutoHide() const;
+
+    /**
+     * @see AnimationTarget#getAnimation
      */
     Animation* getAnimation(const char* id = NULL) const;
+
+    /**
+     * @see AnimationTarget#getAnimationPropertyComponentCount
+     */
+    virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
+
+    /**
+     * @see AnimationTarget#getAnimationProperty
+     */
+    virtual void getAnimationPropertyValue(int propertyId, AnimationValue* value);
+
+    /**
+     * @see AnimationTarget#setAnimationProperty
+     */
+    virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 protected:
 
@@ -138,6 +196,8 @@ protected:
      * Create an empty container.  A container's layout type must be specified at creation time.
      *
      * @param type The container's layout type.
+     *
+     * @return The new container.
      */
     static Container* create(Layout::Type type);
 
@@ -156,32 +216,10 @@ protected:
      * Updates each control within this container,
      * and positions them according to the container's layout.
      *
-     * @param clip The clipping rectangle of this container's parent container.
+     * @param container This container's parent container.
+     * @param offset The offset.
      */
-    virtual void update(const Rectangle& clip);
-
-    /**
-     * Draws the themed border and background of this container and all its controls.
-     *
-     * @param spriteBatch The sprite batch containing this container's border images.
-     * @param clip The clipping rectangle of this container's parent container.
-     */
-    void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    /**
-     * Draws the icons of all controls within this container.
-     *
-     * @param spriteBatch The sprite batch containing this control's icons.
-     * @param clip The clipping rectangle of this container's parent container.
-     */
-    virtual void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    /**
-     * Draws the text of all controls within this container.
-     *
-     * @param clip The clipping rectangle of this container's parent container.
-     */
-    virtual void drawText(const Rectangle& clip);
+    virtual void update(const Control* container, const Vector2& offset);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.
@@ -211,40 +249,194 @@ protected:
 
     /**
      * Gets a Layout::Type enum from a matching string.
+     *
+     * @param layoutString The layout string to parse
      */
     static Layout::Type getLayoutType(const char* layoutString);
 
     /**
      * Returns whether this control is a container.
-     * This is true in this case.
+     * 
+     * @return true if this is a container, false if not.
      */
     bool isContainer();
 
     /**
      * Returns whether this container or any of its controls have been modified and require an update.
+     * 
+     * @return true if this container or any of its controls have been modified and require an update.
      */
     virtual bool isDirty();
 
     /**
      * Adds controls nested within a properties object to this container,
      * searching for styles within the given theme.
+     *
+     * @param theme The them to add controls from
+     * @param properties The properties to use.
      */
     void addControls(Theme* theme, Properties* properties);
+
+    /**
+     * Draws a sprite batch for the specified clipping rect .
+     *
+     * @param spriteBatch The sprite batch to use.
+     * @param clip The clipping rectangle.
+     * @param needsClear Whether it needs to be cleared.
+     * @param cleared Whether it was previously cleared
+     * @param targetHeight The targets height
+     */
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
+
+    /**
+     * Update scroll position and velocity.
+     */
+    void updateScroll();
+
+    /**
+     * Applies touch events to scroll state.
+     *
+     * @param evt The touch event that occurred.
+     * @param x The x position of the touch in pixels. Left edge is zero.
+     * @param y The y position of the touch in pixels. Top edge is zero.
+     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     *
+     * @return Whether the touch event was consumed by scrolling within this container.
+     *
+     * @see Touch::TouchEvent
+     */
+    bool touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    /**
+     * Get a Scroll enum from a matching string.
+     *
+     * @param scroll A string representing a Scroll enum.
+     *
+     * @return The Scroll enum value that matches the given string.
+     */
+    static Scroll getScroll(const char* scroll);
 
     /**
      * The container's layout.
      */
     Layout* _layout;
-
     /**
      * List of controls within the container.
      */
     std::vector<Control*> _controls;
+    /**
+     * Scrollbar top cap image.
+     */
+    Theme::ThemeImage* _scrollBarTopCap;
+    /**
+     * Scrollbar verticle image.
+     */
+    Theme::ThemeImage* _scrollBarVertical;
+    /**
+     * Scrollbar bottom cap image.
+     */
+    Theme::ThemeImage* _scrollBarBottomCap;
+    /**
+     * Scrollbar left cap image.
+     */
+    Theme::ThemeImage* _scrollBarLeftCap;
+    /**
+     * Scrollbar horizontal image.
+     */
+    Theme::ThemeImage* _scrollBarHorizontal;
+    /**
+     * Scrollbar horizontal image.
+     */
+    Theme::ThemeImage* _scrollBarRightCap;
+    /** 
+     * Flag representing whether scrolling is enabled, and in which directions.
+     */
+    Scroll _scroll;
+    /** 
+     * Scroll bar bounds
+     */
+    Rectangle _scrollBarBounds;
+    /** 
+     * How far this layout has been scrolled in each direction.
+     */
+    Vector2 _scrollPosition;
+    /** 
+     * Should the scrollbars auto hide. Default is false.
+     */
+    bool _scrollBarsAutoHide;
+    /** 
+     * Used to animate scrollbars fading out.
+     */
+    float _scrollBarOpacity;
+    /** 
+     * Whether the user is currently touching / holding the mouse down within this layout's container.
+     */
+    bool _scrolling;
+    /** 
+     * First scrolling touch x position
+     */ 
+    int _scrollingFirstX;
+    /** 
+     * First scrolling touch y position
+     */ 
+    int _scrollingFirstY;
+    /** 
+     * The last y position when scrolling
+     */ 
+    int _scrollingLastX;
+    /** 
+     * The last x position when scrolling
+     */ 
+    int _scrollingLastY;
+    /** 
+     * Time we started scrolling in the x
+     */ 
+    long _scrollingStartTimeX;
+    /** 
+     * Time we started scrolling in the y
+     */ 
+    long _scrollingStartTimeY;
+    /** 
+     * The last time we were scrolling
+     */
+    long _scrollingLastTime;
+    /** 
+     * Speed to continue scrolling at after touch release.
+     */ 
+    Vector2 _scrollingVelocity;
+    /** 
+     * Friction dampens velocity.
+     */ 
+    float _scrollingFriction;
+    /** 
+     * Are we scrolling to the right?
+     */ 
+    bool _scrollingRight;
+    /** 
+     * Are we scrolling down?
+     */ 
+    bool _scrollingDown;
 
 private:
 
+    /**
+     * Constructor.
+     */
     Container(const Container& copy);
+
+    AnimationClip* _scrollBarOpacityClip;
+    int _zIndexDefault;
 };
+
+
+/**
+ * Sort funtion for use with _controls.sort(), based on Z-Order.
+ * 
+ * @param c1 The first control
+ * @param c2 The second control
+ * return true if the first controls z index is less than the second.
+ */
+bool sortControlsByZOrder(Control* c1, Control* c2);
 
 }
 

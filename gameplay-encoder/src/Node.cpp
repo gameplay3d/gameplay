@@ -132,7 +132,7 @@ void Node::generateHeightmap()
         {
             DEBUGPRINT_VARG("> Generating heightmap for node: %s\n", getId().c_str());
 
-            std::string heightmapFilename(EncoderArguments::getInstance()->getOutputPath());
+            std::string heightmapFilename(EncoderArguments::getInstance()->getOutputDirPath());
             heightmapFilename += "/heightmap_";
             heightmapFilename += getId();
             heightmapFilename += ".png";

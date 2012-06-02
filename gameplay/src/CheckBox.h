@@ -118,9 +118,10 @@ protected:
      * Called when a control's properties change.  Updates this control's internal rendering
      * properties, such as its text viewport.
      *
-     * @param clip The clipping rectangle of this control's parent container.
+     * @param container This control's parent container.
+     * @param offset The position offset.
      */
-    void update(const Rectangle& clip);
+    void update(const Control* container, const Vector2& offset);
 
     /**
      * Draw the checkbox icon associated with this control.

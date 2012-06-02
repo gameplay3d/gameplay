@@ -29,16 +29,33 @@ GPBFile* GPBFile::getInstance()
     return __instance;
 }
 
-void GPBFile::saveBinary(const std::string& filepath)
+bool GPBFile::saveBinary(const std::string& filepath)
 {
     _file = fopen(filepath.c_str(), "w+b");
+    if (!_file)
+    {
+        return false;
+    }
+    size_t n = 0;
 
     // identifier
     char identifier[] = { '«', 'G', 'P', 'B', '»', '\r', '\n', '\x1A', '\n' };
-    fwrite(identifier, 1, sizeof(identifier), _file);
+    n = fwrite(identifier, 1, sizeof(identifier), _file);
+    if (n != sizeof(identifier))
+    {
+        fclose(_file);
+        return false;
+    }
 
     // version
-    fwrite(GPB_VERSION, 1, sizeof(GPB_VERSION), _file);
+    n = fwrite(GPB_VERSION, 1, sizeof(GPB_VERSION), _file);
+    if (n != sizeof(GPB_VERSION))
+    {
+        fclose(_file);
+        return false;
+    }
+
+    // TODO: Check for errors on all file writing.
 
     // write refs
     _refTable.writeBinary(_file);
@@ -60,13 +77,24 @@ void GPBFile::saveBinary(const std::string& filepath)
     _refTable.updateOffsets(_file);
     
     fclose(_file);
+    return true;
 }
 
-void GPBFile::saveText(const std::string& filepath)
+bool GPBFile::saveText(const std::string& filepath)
 {
     _file = fopen(filepath.c_str(), "w");
+    if (!_file)
+    {
+        return false;
+    }
 
-    fprintf(_file, "<root>\n");
+    if (fprintf(_file, "<root>\n") <= 0)
+    {
+        fclose(_file);
+        return false;
+    }
+
+    // TODO: Check for errors on all file writing.
 
     // write refs
     _refTable.writeText(_file);
@@ -86,6 +114,7 @@ void GPBFile::saveText(const std::string& filepath)
     fprintf(_file, "</root>");
 
     fclose(_file);
+    return true;
 }
 
 void GPBFile::add(Object* obj)
@@ -400,7 +429,7 @@ void GPBFile::decomposeTransformAnimationChannel(Animation* animation, const Ani
 
 static bool isAlmostOne(float value)
 {
-    return std::abs(value - 1.0f) < EPSILON;
+    return std::fabs(value - 1.0f) < EPSILON;
 }
 
 }

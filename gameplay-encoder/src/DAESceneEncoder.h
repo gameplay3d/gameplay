@@ -111,14 +111,16 @@ private:
      * Loads a COLLADA animation element.
      * 
      * @param animationRef The animation dom element to load from.
+     * @param altId   The id string to use if the animation doesn't have an id.
      */
-    void loadAnimation(const domAnimationRef animationRef);
+    void loadAnimation(const domAnimationRef animationRef, const char* altId = NULL);
 
     Camera* loadCamera(const domCamera* cameraRef);
     Light* loadLight(const domLight* lightRef);
     Model* loadSkin(const domSkin* skinElement);
     Model* loadGeometry(const domGeometry* geometry, const domBind_materialRef bindMaterial);
 
+    void loadSkeleton(domNode* rootNode, MeshSkin* skin);
     void loadSkeleton(domInstance_controller::domSkeleton* skeletonElement, MeshSkin* skin);
     
     /**

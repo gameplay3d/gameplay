@@ -118,7 +118,7 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ad3b4ccc06217743fbb7aa4b8f751ba38"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#ad3b4ccc06217743fbb7aa4b8f751ba38">~Slider</a> ()</td></tr>
 <tr class="memitem:afb17c09c56241d08f2e5d41d739e641c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#afb17c09c56241d08f2e5d41d739e641c">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr class="memitem:a00981e76ee43f7d3481a38adc39b8d40"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a00981e76ee43f7d3481a38adc39b8d40">drawImages</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
-<tr class="memitem:a0b1d707805e2e7df46fd4b38a163f778"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a0b1d707805e2e7df46fd4b38a163f778">update</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
+<tr class="memitem:acdcedfbf56339bd486682c5b0b9a157a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#acdcedfbf56339bd486682c5b0b9a157a">update</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
 <tr class="memitem:a7b159ca5aaa5d75ed41825d8f89e8721"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_slider.html">Slider</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a7b159ca5aaa5d75ed41825d8f89e8721">create</a> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
@@ -519,16 +519,26 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 
 </div>
 </div>
-<a class="anchor" id="a0b1d707805e2e7df46fd4b38a163f778"></a>
+<a class="anchor" id="acdcedfbf56339bd486682c5b0b9a157a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_slider.html#a0b1d707805e2e7df46fd4b38a163f778">gameplay::Slider::update</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_slider.html#acdcedfbf56339bd486682c5b0b9a157a">gameplay::Slider::update</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
-          <td class="paramname"><em>clip</em></td><td>)</td>
-          <td><code> [protected, virtual]</code></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td>
+          <td class="paramname"><em>container</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
+          <td class="paramname"><em>offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -536,12 +546,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 <p>Called when a slider's properties change. Updates this slider's internal rendering properties, such as its text viewport.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">clip</td><td>The clipping rectangle of this slider's parent container. </td></tr>
+    <tr><td class="paramname">container</td><td>This slider's parent container. </td></tr>
+    <tr><td class="paramname">offset</td><td>The scroll offset of this slider's parent container. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a0983974a9862bb5817b9b47ad6da5148">gameplay::Label</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a7c87574c9c392287b870c94a32aac75a">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -662,7 +673,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 18 2012 12:58:21 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 1 2012 00:44:00 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

@@ -34,13 +34,11 @@ Material::~Material()
 
 Material* Material::create(const char* url)
 {
-    assert(url);
-
-    // Load the material properties from file
+    // Load the material properties from file.
     Properties* properties = Properties::create(url);
-    assert(properties);
     if (properties == NULL)
     {
+        GP_ERROR("Failed to create material from file.");
         return NULL;
     }
 
@@ -53,9 +51,9 @@ Material* Material::create(const char* url)
 Material* Material::create(Properties* materialProperties)
 {
     // Check if the Properties is valid and has a valid namespace.
-    assert(materialProperties);
     if (!materialProperties || !(strcmp(materialProperties->getNamespace(), "material") == 0))
     {
+        GP_ERROR("Properties object must be non-null and have namespace equal to 'material'.");
         return NULL;
     }
 
@@ -70,16 +68,17 @@ Material* Material::create(Properties* materialProperties)
         {
             if (!loadTechnique(material, techniqueProperties))
             {
+                GP_ERROR("Failed to load technique for material.");
                 SAFE_RELEASE(material);
                 return NULL;
             }
         }
     }
 
-    // Load uniform value parameters for this material
+    // Load uniform value parameters for this material.
     loadRenderState(material, materialProperties);
 
-    // Set the current technique to the first found technique
+    // Set the current technique to the first found technique.
     if (material->getTechniqueCount() > 0)
     {
         material->setTechnique((unsigned int)0);
@@ -90,7 +89,9 @@ Material* Material::create(Properties* materialProperties)
 
 Material* Material::create(Effect* effect)
 {
-    // Create a new material with a single technique and pass for the given effect
+    GP_ASSERT(effect);
+
+    // Create a new material with a single technique and pass for the given effect.
     Material* material = new Material();
 
     Technique* technique = new Technique(NULL, material);
@@ -116,6 +117,7 @@ Material* Material::create(const char* vshPath, const char* fshPath, const char*
     Pass* pass = Pass::create(NULL, technique, vshPath, fshPath, defines);
     if (!pass)
     {
+        GP_ERROR("Failed to create pass for material.");
         SAFE_RELEASE(material);
         return NULL;
     }
@@ -134,6 +136,7 @@ Material* Material::clone(NodeCloneContext &context) const
     for (std::vector<Technique*>::const_iterator it = _techniques.begin(); it != _techniques.end(); ++it)
     {
         const Technique* technique = *it;
+        GP_ASSERT(technique);
         Technique* techniqueClone = technique->clone(material, context);
         material->_techniques.push_back(techniqueClone);
         if (_currentTechnique == technique)
@@ -151,16 +154,17 @@ unsigned int Material::getTechniqueCount() const
 
 Technique* Material::getTechnique(unsigned int index) const
 {
-    assert(index < _techniques.size());
-
+    GP_ASSERT(index < _techniques.size());
     return _techniques[index];
 }
 
 Technique* Material::getTechnique(const char* id) const
 {
+    GP_ASSERT(id);
     for (unsigned int i = 0, count = _techniques.size(); i < count; ++i)
     {
         Technique* t = _techniques[i];
+        GP_ASSERT(t);
         if (strcmp(t->getId(), id) == 0)
         {
             return t;
@@ -195,7 +199,10 @@ void Material::setTechnique(unsigned int index)
 
 bool Material::loadTechnique(Material* material, Properties* techniqueProperties)
 {
-    // Create a new technique
+    GP_ASSERT(material);
+    GP_ASSERT(techniqueProperties);
+
+    // Create a new technique.
     Technique* technique = new Technique(techniqueProperties->getId(), material);
 
     // Go through all the properties and create passes under this technique.
@@ -208,16 +215,17 @@ bool Material::loadTechnique(Material* material, Properties* techniqueProperties
             // Create and load passes.
             if (!loadPass(technique, passProperties))
             {
+                GP_ERROR("Failed to create pass for technique.");
                 SAFE_RELEASE(technique);
                 return false;
             }
         }
     }
 
-    // Load uniform value parameters for this technique
+    // Load uniform value parameters for this technique.
     loadRenderState(technique, techniqueProperties);
 
-    // Add the new technique to the material
+    // Add the new technique to the material.
     material->_techniques.push_back(technique);
 
     return true;
@@ -225,11 +233,14 @@ bool Material::loadTechnique(Material* material, Properties* techniqueProperties
 
 bool Material::loadPass(Technique* technique, Properties* passProperties)
 {
+    GP_ASSERT(passProperties);
+    GP_ASSERT(technique);
+
     // Fetch shader info required to create the effect of this technique.
     const char* vertexShaderPath = passProperties->getString("vertexShader");
-    assert(vertexShaderPath);
+    GP_ASSERT(vertexShaderPath);
     const char* fragmentShaderPath = passProperties->getString("fragmentShader");
-    assert(fragmentShaderPath);
+    GP_ASSERT(fragmentShaderPath);
     const char* defines = passProperties->getString("defines");
     std::string define;
     if (defines != NULL)
@@ -244,17 +255,18 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
         define += "\n";
     }
 
-    // Create the pass
+    // Create the pass.
     Pass* pass = Pass::create(passProperties->getId(), technique, vertexShaderPath, fragmentShaderPath, define.c_str());
     if (!pass)
     {
+        GP_ERROR("Failed to create pass for technique.");
         return false;
     }
 
-    // Load render state
+    // Load render state.
     loadRenderState(pass, passProperties);
 
-    // Add the new pass to the technique
+    // Add the new pass to the technique.
     technique->_passes.push_back(pass);
 
     return true;
@@ -262,6 +274,8 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
 
 bool isMaterialKeyword(const char* str)
 {
+    GP_ASSERT(str);
+
     #define MATERIAL_KEYWORD_COUNT 3
     static const char* reservedKeywords[MATERIAL_KEYWORD_COUNT] =
     {
@@ -283,6 +297,7 @@ Texture::Filter parseTextureFilterMode(const char* str, Texture::Filter defaultV
 {
     if (str == NULL || strlen(str) == 0)
     {
+        GP_ERROR("Texture filter mode string must be non-null and non-empty.");
         return defaultValue;
     }
     else if (strcmp(str, "NEAREST") == 0)
@@ -309,13 +324,18 @@ Texture::Filter parseTextureFilterMode(const char* str, Texture::Filter defaultV
     {
         return Texture::LINEAR_MIPMAP_LINEAR;
     }
-    return defaultValue;
+    else
+    {
+        GP_ERROR("Unsupported texture filter mode string ('%s').", str);
+        return defaultValue;
+    }
 }
 
 Texture::Wrap parseTextureWrapMode(const char* str, Texture::Wrap defaultValue)
 {
     if (str == NULL || strlen(str) == 0)
     {
+        GP_ERROR("Texture wrap mode string must be non-null and non-empty.");
         return defaultValue;
     }
     else if (strcmp(str, "REPEAT") == 0)
@@ -326,12 +346,19 @@ Texture::Wrap parseTextureWrapMode(const char* str, Texture::Wrap defaultValue)
     {
         return Texture::CLAMP;
     }
-    return defaultValue;
+    else
+    {
+        GP_ERROR("Unsupported texture wrap mode string ('%s').", str);
+        return defaultValue;
+    }
 }
 
 void Material::loadRenderState(RenderState* renderState, Properties* properties)
 {
-    // Rewind the properties to start reading from the start
+    GP_ASSERT(renderState);
+    GP_ASSERT(properties);
+
+    // Rewind the properties to start reading from the start.
     properties->rewind();
 
     const char* name;
@@ -343,6 +370,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
         switch (properties->getType())
         {
         case Properties::NUMBER:
+            GP_ASSERT(renderState->getParameter(name));
             renderState->getParameter(name)->setValue(properties->getFloat());
             break;
         case Properties::VECTOR2:
@@ -350,6 +378,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
                 Vector2 vector2;
                 if (properties->getVector2(NULL, &vector2))
                 {
+                    GP_ASSERT(renderState->getParameter(name));
                     renderState->getParameter(name)->setValue(vector2);
                 }
             }
@@ -359,6 +388,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
                 Vector3 vector3;
                 if (properties->getVector3(NULL, &vector3))
                 {
+                    GP_ASSERT(renderState->getParameter(name));
                     renderState->getParameter(name)->setValue(vector3);
                 }
             }
@@ -368,6 +398,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
                 Vector4 vector4;
                 if (properties->getVector4(NULL, &vector4))
                 {
+                    GP_ASSERT(renderState->getParameter(name));
                     renderState->getParameter(name)->setValue(vector4);
                 }
             }
@@ -377,43 +408,51 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
                 Matrix matrix;
                 if (properties->getMatrix(NULL, &matrix))
                 {
+                    GP_ASSERT(renderState->getParameter(name));
                     renderState->getParameter(name)->setValue(matrix);
                 }
             }
             break;
         default:
             {
-                // Assume this is a parameter auto-binding
+                // Assume this is a parameter auto-binding.
                 renderState->setParameterAutoBinding(name, properties->getString());
             }
             break;
         }
     }
 
-    // Iterate through all child namespaces searching for samplers and render state blocks
+    // Iterate through all child namespaces searching for samplers and render state blocks.
     Properties* ns;
     while (ns = properties->getNextNamespace())
     {
         if (strcmp(ns->getNamespace(), "sampler") == 0)
         {
-            // Read the texture uniform name
+            // Read the texture uniform name.
             name = ns->getId();
             if (strlen(name) == 0)
-                continue; // missing texture uniform name
+            {
+                GP_ERROR("Texture sampler is missing required uniform name.");
+                continue;
+            }
 
-            // Get the texture path
+            // Get the texture path.
             const char* path = ns->getString("path");
             if (path == NULL || strlen(path) == 0)
-                continue; // missing texture path
+            {
+                GP_ERROR("Texture sampler '%s' is missing required image file path.", name);
+                continue;
+            }
 
-            // Read texture state (booleans default to 'false' if not present)
+            // Read texture state (booleans default to 'false' if not present).
             bool mipmap = ns->getBool("mipmap");
             Texture::Wrap wrapS = parseTextureWrapMode(ns->getString("wrapS"), Texture::REPEAT);
             Texture::Wrap wrapT = parseTextureWrapMode(ns->getString("wrapT"), Texture::REPEAT);
             Texture::Filter minFilter = parseTextureFilterMode(ns->getString("minFilter"), mipmap ? Texture::NEAREST_MIPMAP_LINEAR : Texture::LINEAR);
             Texture::Filter magFilter = parseTextureFilterMode(ns->getString("magFilter"), Texture::LINEAR);
 
-            // Set the sampler parameter
+            // Set the sampler parameter.
+            GP_ASSERT(renderState->getParameter(name));
             Texture::Sampler* sampler = renderState->getParameter(name)->setValue(path, mipmap);
             if (sampler)
             {
@@ -425,6 +464,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
         {
             while (name = ns->getNextProperty())
             {
+                GP_ASSERT(renderState->getStateBlock());
                 renderState->getStateBlock()->setState(name, ns->getString());
             }
         }

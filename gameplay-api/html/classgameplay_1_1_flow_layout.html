@@ -103,7 +103,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9157f8fb722a45e68a26cff321ddc778"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_flow_layout.html#a9157f8fb722a45e68a26cff321ddc778">getType</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:aa87cbc6ded84c7b1332e82f639645f8f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_flow_layout.html#aa87cbc6ded84c7b1332e82f639645f8f">update</a> (const <a class="el" href="classgameplay_1_1_container.html">Container</a> *container)</td></tr>
+<tr class="memitem:a36e7ffdc54abe900b7c79fa3da53bf93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_flow_layout.html#a36e7ffdc54abe900b7c79fa3da53bf93">update</a> (const <a class="el" href="classgameplay_1_1_container.html">Container</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
 <tr class="memitem:aa3924b20db03e601f032da2d119659ce"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_flow_layout.html">FlowLayout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_flow_layout.html#aa3924b20db03e601f032da2d119659ce">create</a> ()</td></tr>
@@ -115,7 +115,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Form</b></td></tr>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Defines a layout that arranges components in a left-to-right or right-to-left flow. </p>
+<div class="textblock"><p>Defines a layout that arranges controls in order, left-to-right, row by row. </p>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="aa3924b20db03e601f032da2d119659ce"></a>
 <div class="memitem">
@@ -155,16 +155,26 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 
 </div>
 </div>
-<a class="anchor" id="aa87cbc6ded84c7b1332e82f639645f8f"></a>
+<a class="anchor" id="a36e7ffdc54abe900b7c79fa3da53bf93"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_flow_layout.html#aa87cbc6ded84c7b1332e82f639645f8f">gameplay::FlowLayout::update</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_flow_layout.html#a36e7ffdc54abe900b7c79fa3da53bf93">gameplay::FlowLayout::update</a> </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td>
-          <td class="paramname"><em>container</em></td><td>)</td>
-          <td><code> [protected, virtual]</code></td>
+          <td class="paramname"><em>container</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
+          <td class="paramname"><em>offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -173,11 +183,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">container</td><td>The container to update. </td></tr>
+    <tr><td class="paramname">offset</td><td>The offset position. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="classgameplay_1_1_layout.html#a24c2e41aa1d9c22881fbf271dc6e35fa">gameplay::Layout</a>.</p>
+<p>Implements <a class="el" href="classgameplay_1_1_layout.html#a3a68ede9a769da53df4141244e59c8f7">gameplay::Layout</a>.</p>
 
 </div>
 </div>
@@ -185,7 +196,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 18 2012 12:58:20 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 1 2012 00:43:59 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

@@ -9,6 +9,7 @@ Scene::Scene(void) : _cameraNode(NULL)
     _ambientColor[0] = 0.0f;
     _ambientColor[1] = 0.0f;
     _ambientColor[2] = 0.0f;
+    setId("scene");
 }
 
 Scene::~Scene(void)

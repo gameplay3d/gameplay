@@ -18,9 +18,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\arial40.gpb">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\editor.form">
       <Filter>res</Filter>
     </None>
@@ -50,5 +47,15 @@
     </None>
     <None Include="..\..\test\bar-descriptor.xml" />
     <None Include="..\..\test\icon.png" />
+    <None Include="game.config" />
+    <None Include="res\arial9.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\arial13.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\arial18.gpb">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
 </Project>

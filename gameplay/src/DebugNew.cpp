@@ -122,7 +122,7 @@ void* debugAlloc(std::size_t size, const char* file, int line)
         if (!initialized)
         {
             if (!SymInitialize(GetCurrentProcess(), NULL, true))
-                gameplay::printError("Stack trace tracking will not work.");
+                gameplay::printError("Stack trace tracking will not work.\n");
             initialized = true;
         }
     
@@ -181,7 +181,7 @@ void debugFree(void* p)
     // Sanity check: ensure that address in record matches passed in address
     if (rec->address != (unsigned long)p)
     {
-        gameplay::printError("[memory] CORRUPTION: Attempting to free memory address with invalid memory allocation record.");
+        gameplay::printError("[memory] CORRUPTION: Attempting to free memory address with invalid memory allocation record.\n");
         return;
     }
 
@@ -221,7 +221,7 @@ void printStackTrace(MemoryAllocationRecord* rec)
         symbol->MaxNameLength = bufferSize;
         if (!SymGetSymFromAddr64(GetCurrentProcess(), pc, &displacement, symbol))
         {
-            gameplay::printError("[memory] STACK TRACE: <unknown location>");
+            gameplay::printError("[memory] STACK TRACE: <unknown location>\n");
         }
         else
         {
@@ -243,7 +243,7 @@ void printStackTrace(MemoryAllocationRecord* rec)
                     line.SizeOfStruct = sizeof(line);
                     if (!SymGetLineFromAddr64(GetCurrentProcess(), pc, &displacement, &line))
                     {
-                        gameplay::printError("[memory] STACK TRACE: %s - <unknown file>:<unknown line number>", symbol->Name);
+                        gameplay::printError("[memory] STACK TRACE: %s - <unknown file>:<unknown line number>\n", symbol->Name);
                     }
                     else
                     {
@@ -253,7 +253,7 @@ void printStackTrace(MemoryAllocationRecord* rec)
                         else
                             file++;
                         
-                        gameplay::printError("[memory] STACK TRACE: %s - %s:%d", symbol->Name, file, line.LineNumber);
+                        gameplay::printError("[memory] STACK TRACE: %s - %s:%d\n", symbol->Name, file, line.LineNumber);
                     }
                 }
             }
@@ -267,24 +267,24 @@ extern void printMemoryLeaks()
     // Dump general heap memory leaks
     if (__memoryAllocationCount == 0)
     {
-        gameplay::printError("[memory] All HEAP allocations successfully cleaned up (no leaks detected).");
+        gameplay::printError("[memory] All HEAP allocations successfully cleaned up (no leaks detected).\n");
     }
     else
     {
-        gameplay::printError("[memory] WARNING: %d HEAP allocations still active in memory.", __memoryAllocationCount);
+        gameplay::printError("[memory] WARNING: %d HEAP allocations still active in memory.\n", __memoryAllocationCount);
         MemoryAllocationRecord* rec = __memoryAllocations;
         while (rec)
         {
 #ifdef WIN32
             if (rec->trackStackTrace)
             {
-                gameplay::printError("[memory] LEAK: HEAP allocation leak at address %#x of size %d:", rec->address, rec->size);
+                gameplay::printError("[memory] LEAK: HEAP allocation leak at address %#x of size %d:\n", rec->address, rec->size);
                 printStackTrace(rec);
             }
             else
-                gameplay::printError("[memory] LEAK: HEAP allocation leak at address %#x of size %d from line %d in file '%s'.", rec->address, rec->size, rec->line, rec->file);
+                gameplay::printError("[memory] LEAK: HEAP allocation leak at address %#x of size %d from line %d in file '%s'.\n", rec->address, rec->size, rec->line, rec->file);
 #else
-            gameplay::printError("[memory] LEAK: HEAP allocation leak at address %#x of size %d from line %d in file '%s'.", rec->address, rec->size, rec->line, rec->file);
+            gameplay::printError("[memory] LEAK: HEAP allocation leak at address %#x of size %d from line %d in file '%s'.\n", rec->address, rec->size, rec->line, rec->file);
 #endif
             rec = rec->next;
         }

@@ -97,6 +97,7 @@ Classes</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9c9c7800807569809a677be38873170a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a9c9c7800807569809a677be38873170a">addStatusListener</a> (<a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">PhysicsController::Listener</a> *listener)</td></tr>
+<tr class="memitem:ac59f6753cb8c7b6a920082d23579a8a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ac59f6753cb8c7b6a920082d23579a8a9">removeStatusListener</a> (<a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">Listener</a> *listener)</td></tr>
 <tr class="memitem:a547b335f3814fb6c124e2470393812e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_fixed_constraint.html">PhysicsFixedConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a547b335f3814fb6c124e2470393812e2">createFixedConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b=NULL)</td></tr>
 <tr class="memitem:ad7ae74b385f8e9718cc37d57a3423583"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_generic_constraint.html">PhysicsGenericConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ad7ae74b385f8e9718cc37d57a3423583">createGenericConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b=NULL)</td></tr>
 <tr class="memitem:a0c967138ef39fe7f298e72d5a4c3e418"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_generic_constraint.html">PhysicsGenericConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a0c967138ef39fe7f298e72d5a4c3e418">createGenericConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;rotationOffsetA, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translationOffsetA, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b=NULL, const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;rotationOffsetB=<a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a>(), const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translationOffsetB=<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>())</td></tr>
@@ -684,6 +685,30 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsGhostObject</
 
 </div>
 </div>
+<a class="anchor" id="ac59f6753cb8c7b6a920082d23579a8a9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_physics_controller.html#ac59f6753cb8c7b6a920082d23579a8a9">gameplay::PhysicsController::removeStatusListener</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">Listener</a> *&#160;</td>
+          <td class="paramname"><em>listener</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Removes a listener to the physics controller.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">listener</td><td>The listener to remove. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ab085ecda3423f445960150208e5ba1c9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -756,7 +781,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsGhostObject</
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 18 2012 12:58:20 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 1 2012 00:44:00 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

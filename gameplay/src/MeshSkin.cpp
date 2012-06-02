@@ -37,13 +37,13 @@ unsigned int MeshSkin::getJointCount() const
 
 Joint* MeshSkin::getJoint(unsigned int index) const
 {
-    assert(index < _joints.size());
+    GP_ASSERT(index < _joints.size());
     return _joints[index];
 }
 
 Joint* MeshSkin::getJoint(const char* id) const
 {
-    assert(id);
+    GP_ASSERT(id);
 
     for (unsigned int i = 0, count = _joints.size(); i < count; ++i)
     {
@@ -66,7 +66,7 @@ MeshSkin* MeshSkin::clone(NodeCloneContext &context) const
         const unsigned int jointCount = getJointCount();
         skin->setJointCount(jointCount);
 
-        assert(skin->_rootNode == NULL);
+        GP_ASSERT(skin->_rootNode == NULL);
         
         // Check if the root node has already been cloned.
         if (Node* rootNode = context.findClonedNode(_rootNode))
@@ -80,11 +80,12 @@ MeshSkin* MeshSkin::clone(NodeCloneContext &context) const
         }
         
         Node* node = skin->_rootNode->findNode(_rootJoint->getId());
-        assert(node);
+        GP_ASSERT(node);
         skin->_rootJoint = static_cast<Joint*>(node);
         for (unsigned int i = 0; i < jointCount; ++i)
         {
             Joint* oldJoint = getJoint(i);
+            GP_ASSERT(oldJoint);
             
             Joint* newJoint = static_cast<Joint*>(skin->_rootJoint->findNode(oldJoint->getId()));
             if (!newJoint)
@@ -92,7 +93,7 @@ MeshSkin* MeshSkin::clone(NodeCloneContext &context) const
                 if (strcmp(skin->_rootJoint->getId(), oldJoint->getId()) == 0)
                     newJoint = static_cast<Joint*>(skin->_rootJoint);
             }
-            assert(newJoint);
+            GP_ASSERT(newJoint);
             skin->setJoint(newJoint, i);
         }
     }
@@ -101,10 +102,10 @@ MeshSkin* MeshSkin::clone(NodeCloneContext &context) const
 
 void MeshSkin::setJointCount(unsigned int jointCount)
 {
-    // Erase the joints vector and release all joints
+    // Erase the joints vector and release all joints.
     clearJoints();
 
-    // Resize the joints vector and initialize to NULL
+    // Resize the joints vector and initialize to NULL.
     _joints.resize(jointCount);
     for (unsigned int i = 0; i < jointCount; i++)
     {
@@ -128,7 +129,7 @@ void MeshSkin::setJointCount(unsigned int jointCount)
 
 void MeshSkin::setJoint(Joint* joint, unsigned int index)
 {
-    assert(index < _joints.size());
+    GP_ASSERT(index < _joints.size());
 
     if (_joints[index])
     {
@@ -147,9 +148,12 @@ void MeshSkin::setJoint(Joint* joint, unsigned int index)
 
 Vector4* MeshSkin::getMatrixPalette() const
 {
+    GP_ASSERT(_matrixPalette);
+
     unsigned int count = _joints.size();
     for (unsigned int i = 0; i < count; i++)
     {
+        GP_ASSERT(_joints[i]);
         _joints[i]->updateJointMatrix(getBindShape(), &_matrixPalette[i * PALETTE_ROWS]);
     }
     return _matrixPalette;

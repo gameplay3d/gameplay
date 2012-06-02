@@ -12,6 +12,7 @@ namespace gameplay
 Model::Model(Mesh* mesh) :
     _mesh(mesh), _material(NULL), _partCount(0), _partMaterials(NULL), _node(NULL), _skin(NULL)
 {
+    GP_ASSERT(mesh);
     _partCount = mesh->getPartCount();
 }
 
@@ -35,6 +36,7 @@ Model::~Model()
 
 Model* Model::create(Mesh* mesh)
 {
+    GP_ASSERT(mesh);
     mesh->addRef();
     return new Model(mesh);
 }
@@ -46,12 +48,13 @@ Mesh* Model::getMesh() const
 
 unsigned int Model::getMeshPartCount() const
 {
+    GP_ASSERT(_mesh);
     return _mesh->getPartCount();
 }
 
 Material* Model::getMaterial(int partIndex)
 {
-    assert(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
+    GP_ASSERT(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
 
     Material* m = NULL;
 
@@ -75,7 +78,7 @@ Material* Model::getMaterial(int partIndex)
 
 void Model::setMaterial(Material* material, int partIndex)
 {
-    assert(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
+    GP_ASSERT(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
 
     Material* oldMaterial = NULL;
 
@@ -121,11 +124,13 @@ void Model::setMaterial(Material* material, int partIndex)
     // Release existing material and binding.
     if (oldMaterial)
     {
-        for (unsigned int i = 0, tCount = material->getTechniqueCount(); i < tCount; ++i)
+        for (unsigned int i = 0, tCount = oldMaterial->getTechniqueCount(); i < tCount; ++i)
         {
-            Technique* t = material->getTechnique(i);
+            Technique* t = oldMaterial->getTechnique(i);
+            GP_ASSERT(t);
             for (unsigned int j = 0, pCount = t->getPassCount(); j < pCount; ++j)
             {
+                GP_ASSERT(t->getPass(j));
                 t->getPass(j)->setVertexAttributeBinding(NULL);
             }
         }
@@ -138,9 +143,11 @@ void Model::setMaterial(Material* material, int partIndex)
         for (unsigned int i = 0, tCount = material->getTechniqueCount(); i < tCount; ++i)
         {
             Technique* t = material->getTechnique(i);
+            GP_ASSERT(t);
             for (unsigned int j = 0, pCount = t->getPassCount(); j < pCount; ++j)
             {
                 Pass* p = t->getPass(j);
+                GP_ASSERT(p);
                 VertexAttributeBinding* b = VertexAttributeBinding::create(_mesh, p->getEffect());
                 p->setVertexAttributeBinding(b);
                 SAFE_RELEASE(b);
@@ -161,6 +168,7 @@ Material* Model::setMaterial(const char* vshPath, const char* fshPath, const cha
     Material* material = Material::create(vshPath, fshPath, defines);
     if (material == NULL)
     {
+        GP_ERROR("Failed to create material for model.");
         return NULL;
     }
 
@@ -179,6 +187,7 @@ Material* Model::setMaterial(const char* materialPath, int partIndex)
     Material* material = Material::create(materialPath);
     if (material == NULL)
     {
+        GP_ERROR("Failed to create material for model.");
         return NULL;
     }
 
@@ -246,6 +255,8 @@ void Model::setNode(Node* node)
 
 void Model::draw(bool wireframe)
 {
+    GP_ASSERT(_mesh);
+
     unsigned int partCount = _mesh->getPartCount();
     if (partCount == 0)
     {
@@ -253,10 +264,12 @@ void Model::draw(bool wireframe)
         if (_material)
         {
             Technique* technique = _material->getTechnique();
+            GP_ASSERT(technique);
             unsigned int passCount = technique->getPassCount();
             for (unsigned int i = 0; i < passCount; ++i)
             {
                 Pass* pass = technique->getPass(i);
+                GP_ASSERT(pass);
                 pass->bind();
                 GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
                 if (wireframe && (_mesh->getPrimitiveType() == Mesh::TRIANGLES || _mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP))
@@ -280,16 +293,19 @@ void Model::draw(bool wireframe)
         for (unsigned int i = 0; i < partCount; ++i)
         {
             MeshPart* part = _mesh->getPart(i);
+            GP_ASSERT(part);
 
             // Get the material for this mesh part.
             Material* material = getMaterial(i);
             if (material)
             {
                 Technique* technique = material->getTechnique();
+                GP_ASSERT(technique);
                 unsigned int passCount = technique->getPassCount();
                 for (unsigned int j = 0; j < passCount; ++j)
                 {
                     Pass* pass = technique->getPass(j);
+                    GP_ASSERT(pass);
                     pass->bind();
                     GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, part->_indexBuffer) );
                     if (wireframe && (_mesh->getPrimitiveType() == Mesh::TRIANGLES || _mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP))
@@ -307,6 +323,9 @@ void Model::draw(bool wireframe)
                         case Mesh::INDEX32:
                             indexSize = 4;
                             break;
+                        default:
+                            GP_ERROR("Unsupported index format (%d).", part->getIndexFormat());
+                            continue;
                         }
 
                         for (unsigned int k = 0; k < indexCount; k += 3)
@@ -327,6 +346,7 @@ void Model::draw(bool wireframe)
 
 void Model::validatePartCount()
 {
+    GP_ASSERT(_mesh);
     unsigned int partCount = _mesh->getPartCount();
 
     if (_partCount != partCount)
@@ -337,9 +357,12 @@ void Model::validatePartCount()
             Material** oldArray = _partMaterials;
             _partMaterials = new Material*[partCount];
             memset(_partMaterials, 0, sizeof(Material*) * partCount);
-            for (unsigned int i = 0; i < _partCount; ++i)
+            if (oldArray)
             {
-                _partMaterials[i] = oldArray[i];
+                for (unsigned int i = 0; i < _partCount; ++i)
+                {
+                    _partMaterials[i] = oldArray[i];
+                }
             }
             SAFE_DELETE_ARRAY(oldArray);
         }
@@ -352,18 +375,34 @@ void Model::validatePartCount()
 Model* Model::clone(NodeCloneContext &context)
 {
     Model* model = Model::create(getMesh());
+    if (!model)
+    {
+        GP_ERROR("Failed to clone model.");
+        return NULL;
+    }
+
     if (getSkin())
     {
         model->setSkin(getSkin()->clone(context));
     }
-    Material* materialClone = getMaterial()->clone(context);
-    model->setMaterial(materialClone); // TODO: Don't forget material parts
-    materialClone->release();
+    if (getMaterial())
+    {
+        Material* materialClone = getMaterial()->clone(context);
+        if (!materialClone)
+        {
+            GP_ERROR("Failed to clone material for model.");
+            return model;
+        }
+        model->setMaterial(materialClone); // TODO: Don't forget material parts
+        materialClone->release();
+    }
     return model;
 }
 
 void Model::setMaterialNodeBinding(Material *material)
 {
+    GP_ASSERT(material);
+
     if (_node)
     {
         material->setNodeBinding(_node);
@@ -372,6 +411,7 @@ void Model::setMaterialNodeBinding(Material *material)
         for (unsigned int i = 0; i < techniqueCount; ++i)
         {
             Technique* technique = material->getTechnique(i);
+            GP_ASSERT(technique);
             
             technique->setNodeBinding(_node);
 
@@ -379,6 +419,7 @@ void Model::setMaterialNodeBinding(Material *material)
             for (unsigned int j = 0; j < passCount; ++j)
             {
                 Pass* pass = technique->getPass(j);
+                GP_ASSERT(pass);
 
                 pass->setNodeBinding(_node);
             }

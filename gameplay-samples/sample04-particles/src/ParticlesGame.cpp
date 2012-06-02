@@ -1,6 +1,6 @@
 #include "ParticlesGame.h"
 
-// Declare our game instance
+// Declare our game instance.
 ParticlesGame game;
 
 static const std::string _particleFiles[] = 
@@ -13,7 +13,7 @@ static const std::string _particleFiles[] =
 const static unsigned int _particleFilesCount = 3;
 const static float PARTICLE_SIZE_MAX[] = { 5.0f, 30.0f, 30.0f };
 const static float EMIT_RATE_MAX[] = { 500, 100, 100 };
-const float INPUT_SENSITIVITY = 1.0f;
+const float INPUT_SENSITIVITY = 0.05f;
 const Vector4 BACKGROUND_COLOR = Vector4::zero();
 
 ParticlesGame::ParticlesGame() : _scene(NULL)
@@ -44,6 +44,9 @@ void ParticlesGame::initialize()
     _scene->setActiveCamera(camera);
     SAFE_RELEASE(camera);
 
+    // Create a font for drawing the framerate.
+    _font = Font::create("res/arial18.gpb");
+
     // Load preset emitters.
     loadEmitters();
 
@@ -51,6 +54,7 @@ void ParticlesGame::initialize()
     _form = Form::create("res/editor.form");
     _form->setConsumeTouchEvents(false);
 
+    // Store pointers to UI controls we care about.
     _startRed = (Slider*)_form->getControl("startRed");
     _startGreen = (Slider*)_form->getControl("startGreen");
     _startBlue = (Slider*)_form->getControl("startBlue");
@@ -60,7 +64,6 @@ void ParticlesGame::initialize()
     _endBlue = (Slider*)_form->getControl("endBlue");
     _endAlpha = (Slider*)_form->getControl("endAlpha");
     _particleProperties = (Container*)_form->getControl("particleProperties");
-    _minimize = (Button*)_form->getControl("minimize");
     _startMin = (Slider*)_form->getControl("startMin");
     _startMax = (Slider*)_form->getControl("startMax");
     _endMin = (Slider*)_form->getControl("endMin");
@@ -77,9 +80,33 @@ void ParticlesGame::initialize()
     _zoomIn = (Button*)_form->getControl("zoomIn");
     _zoomOut = (Button*)_form->getControl("zoomOut");
     _burstSize = (Slider*)_form->getControl("burstSize");
-    _particlesCount = (Label*)_form->getControl("particlesCount");
-    _fps = (Label*)_form->getControl("FPS");
+    _posVarX = (Slider*)_form->getControl("posVarX");
+    _posVarY = (Slider*)_form->getControl("posVarY");
+    _posVarZ = (Slider*)_form->getControl("posVarZ");
+    _velX = (Slider*)_form->getControl("velocityX");
+    _velY = (Slider*)_form->getControl("velocityY");
+    _velZ = (Slider*)_form->getControl("velocityZ");
+    _velVarX = (Slider*)_form->getControl("velocityVarX");
+    _velVarY = (Slider*)_form->getControl("velocityVarY");
+    _velVarZ = (Slider*)_form->getControl("velocityVarZ");
+    _accelX = (Slider*)_form->getControl("accelX");
+    _accelY = (Slider*)_form->getControl("accelY");
+    _accelZ = (Slider*)_form->getControl("accelZ");
+    _accelVarX = (Slider*)_form->getControl("accelVarX");
+    _accelVarY = (Slider*)_form->getControl("accelVarY");
+    _accelVarZ = (Slider*)_form->getControl("accelVarZ");
+    _spinSpeedMin = (Slider*)_form->getControl("spinSpeedMin");
+    _spinSpeedMax = (Slider*)_form->getControl("spinSpeedMax");
+    _axisX = (Slider*)_form->getControl("axisX");
+    _axisY = (Slider*)_form->getControl("axisY");
+    _axisZ = (Slider*)_form->getControl("axisZ");
+    _axisVarX = (Slider*)_form->getControl("axisVarX");
+    _axisVarY = (Slider*)_form->getControl("axisVarY");
+    _axisVarZ = (Slider*)_form->getControl("axisVarZ");
+    _rotationSpeedMin = (Slider*)_form->getControl("rotationSpeedMin");
+    _rotationSpeedMax = (Slider*)_form->getControl("rotationSpeedMax");
 
+    // Listen for UI events.
     _startRed->addListener(this, Listener::VALUE_CHANGED);
     _startGreen->addListener(this, Listener::VALUE_CHANGED);
     _startBlue->addListener(this, Listener::VALUE_CHANGED);
@@ -88,7 +115,6 @@ void ParticlesGame::initialize()
     _endGreen->addListener(this, Listener::VALUE_CHANGED);
     _endBlue->addListener(this, Listener::VALUE_CHANGED);
     _endAlpha->addListener(this, Listener::VALUE_CHANGED);
-    _minimize->addListener(this, Listener::CLICK);
     _startMin->addListener(this, Listener::VALUE_CHANGED);
     _startMax->addListener(this, Listener::VALUE_CHANGED);
     _endMin->addListener(this, Listener::VALUE_CHANGED);
@@ -107,12 +133,39 @@ void ParticlesGame::initialize()
     _zoomOut->addListener(this, Listener::PRESS);
     _zoomOut->addListener(this, Listener::RELEASE);
     _burstSize->addListener(this, Listener::VALUE_CHANGED);
+    _posVarX->addListener(this, Listener::VALUE_CHANGED);
+    _posVarY->addListener(this, Listener::VALUE_CHANGED);
+    _posVarZ->addListener(this, Listener::VALUE_CHANGED);
+    _velX->addListener(this, Listener::VALUE_CHANGED);
+    _velY->addListener(this, Listener::VALUE_CHANGED);
+    _velZ->addListener(this, Listener::VALUE_CHANGED);
+    _velVarX->addListener(this, Listener::VALUE_CHANGED);
+    _velVarY->addListener(this, Listener::VALUE_CHANGED);
+    _velVarZ->addListener(this, Listener::VALUE_CHANGED);
+    _accelX->addListener(this, Listener::VALUE_CHANGED);
+    _accelY->addListener(this, Listener::VALUE_CHANGED);
+    _accelZ->addListener(this, Listener::VALUE_CHANGED);
+    _accelVarX->addListener(this, Listener::VALUE_CHANGED);
+    _accelVarY->addListener(this, Listener::VALUE_CHANGED);
+    _accelVarZ->addListener(this, Listener::VALUE_CHANGED);
+    _spinSpeedMin->addListener(this, Listener::VALUE_CHANGED);
+    _spinSpeedMax->addListener(this, Listener::VALUE_CHANGED);
+    _axisX->addListener(this, Listener::VALUE_CHANGED);
+    _axisY->addListener(this, Listener::VALUE_CHANGED);
+    _axisZ->addListener(this, Listener::VALUE_CHANGED);
+    _axisVarX->addListener(this, Listener::VALUE_CHANGED);
+    _axisVarY->addListener(this, Listener::VALUE_CHANGED);
+    _axisVarZ->addListener(this, Listener::VALUE_CHANGED);
+    _rotationSpeedMin->addListener(this, Listener::VALUE_CHANGED);
+    _rotationSpeedMax->addListener(this, Listener::VALUE_CHANGED);
     
+    // Apply default emitter values to the UI.
     emitterChanged();
 }
 
 void ParticlesGame::controlEvent(Control* control, EventType evt)
 {
+    // Handle UI events.
     ParticleEmitter* emitter = _particleEmitterNode->getParticleEmitter();
     switch(evt)
     {
@@ -246,6 +299,223 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
             sprintf(txt, "Emission Rate\n\n%.0f", _emissionRate->getValue());
             _emissionRate->setText(txt);
         }
+        else if (control == _posVarX)
+        {
+            Vector3 posVar = emitter->getPositionVariance();
+            posVar.x = _posVarX->getValue();
+            emitter->setPosition(emitter->getPosition(), posVar);
+            char txt[25];
+            sprintf(txt, "X\n\n%.2f", posVar.x);
+            _posVarX->setText(txt);
+        }
+        else if (control == _posVarY)
+        {
+            Vector3 posVar = emitter->getPositionVariance();
+            posVar.y = _posVarY->getValue();
+            emitter->setPosition(emitter->getPosition(), posVar);
+            char txt[25];
+            sprintf(txt, "Y\n\n%.2f", posVar.y);
+            _posVarY->setText(txt);
+        }
+        else if (control == _posVarZ)
+        {
+            Vector3 posVar = emitter->getPositionVariance();
+            posVar.z = _posVarZ->getValue();
+            emitter->setPosition(emitter->getPosition(), posVar);
+            char txt[25];
+            sprintf(txt, "Z\n\n%.2f", posVar.z);
+            _posVarZ->setText(txt);
+        }
+        else if (control == _velX)
+        {
+            Vector3 vel = emitter->getVelocity();
+            vel.x = _velX->getValue();
+            emitter->setVelocity(vel, emitter->getVelocityVariance());
+            char txt[25];
+            sprintf(txt, "X\n\n%.2f", vel.x);
+            _velX->setText(txt);
+        }
+        else if (control == _velY)
+        {
+            Vector3 vel = emitter->getVelocity();
+            vel.y = _velY->getValue();
+            emitter->setVelocity(vel, emitter->getVelocityVariance());
+            char txt[25];
+            sprintf(txt, "Y\n\n%.2f", vel.y);
+            _velY->setText(txt);
+        }
+        else if (control == _velZ)
+        {
+            Vector3 vel = emitter->getVelocity();
+            vel.z = _velZ->getValue();
+            emitter->setVelocity(vel, emitter->getVelocityVariance());
+            char txt[25];
+            sprintf(txt, "Z\n\n%.2f", vel.z);
+            _velZ->setText(txt);
+        }
+        else if (control == _velVarX)
+        {
+            Vector3 velVar = emitter->getVelocityVariance();
+            velVar.x = _velVarX->getValue();
+            emitter->setVelocity(emitter->getVelocity(), velVar);
+            char txt[25];
+            sprintf(txt, "X\n\n%.2f", velVar.x);
+            _velVarX->setText(txt);
+        }
+        else if (control == _velVarY)
+        {
+            Vector3 velVar = emitter->getVelocityVariance();
+            velVar.y = _velVarY->getValue();
+            emitter->setVelocity(emitter->getVelocity(), velVar);
+            char txt[25];
+            sprintf(txt, "Y\n\n%.2f", velVar.y);
+            _velVarY->setText(txt);
+        }
+        else if (control == _velVarZ)
+        {
+            Vector3 velVar = emitter->getVelocityVariance();
+            velVar.z = _velVarZ->getValue();
+            emitter->setVelocity(emitter->getVelocity(), velVar);
+            char txt[25];
+            sprintf(txt, "Z\n\n%.2f", velVar.z);
+            _velVarZ->setText(txt);
+        }
+        else if (control == _accelX)
+        {
+            Vector3 accel = emitter->getAcceleration();
+            accel.x = _accelX->getValue();
+            emitter->setAcceleration(accel, emitter->getAccelerationVariance());
+            char txt[25];
+            sprintf(txt, "X\n\n%.2f", accel.x);
+            _accelX->setText(txt);
+        }
+        else if (control == _accelY)
+        {
+            Vector3 accel = emitter->getAcceleration();
+            accel.y = _accelY->getValue();
+            emitter->setAcceleration(accel, emitter->getAccelerationVariance());
+            char txt[25];
+            sprintf(txt, "Y\n\n%.2f", accel.y);
+            _accelY->setText(txt);
+        }
+        else if (control == _accelZ)
+        {
+            Vector3 accel = emitter->getAcceleration();
+            accel.z = _accelZ->getValue();
+            emitter->setAcceleration(accel, emitter->getAccelerationVariance());
+            char txt[25];
+            sprintf(txt, "Z\n\n%.2f", accel.z);
+            _accelZ->setText(txt);
+        }
+        else if (control == _accelVarX)
+        {
+            Vector3 accelVar = emitter->getAccelerationVariance();
+            accelVar.x = _accelVarX->getValue();
+            emitter->setAcceleration(emitter->getAcceleration(), accelVar);
+            char txt[25];
+            sprintf(txt, "X\n\n%.2f", accelVar.x);
+            _accelVarX->setText(txt);
+        }
+        else if (control == _accelVarY)
+        {
+            Vector3 accelVar = emitter->getAccelerationVariance();
+            accelVar.y = _accelVarY->getValue();
+            emitter->setAcceleration(emitter->getAcceleration(), accelVar);
+            char txt[25];
+            sprintf(txt, "Y\n\n%.2f", accelVar.y);
+            _accelVarY->setText(txt);
+        }
+        else if (control == _accelVarZ)
+        {
+            Vector3 accelVar = emitter->getAccelerationVariance();
+            accelVar.z = _accelVarZ->getValue();
+            emitter->setAcceleration(emitter->getAcceleration(), accelVar);
+            char txt[25];
+            sprintf(txt, "Z\n\n%.2f", accelVar.z);
+            _accelVarZ->setText(txt);
+        }
+        else if (control == _spinSpeedMin)
+        {
+            emitter->setRotationPerParticle(_spinSpeedMin->getValue(), emitter->getRotationPerParticleSpeedMax());
+            char txt[25];
+            sprintf(txt, "Min.\n\n%.2f", _spinSpeedMin->getValue());
+            _spinSpeedMin->setText(txt);
+        }
+        else if (control == _spinSpeedMax)
+        {
+            emitter->setRotationPerParticle(emitter->getRotationPerParticleSpeedMin(), _spinSpeedMax->getValue());
+            char txt[25];
+            sprintf(txt, "Min.\n\n%.2f", _spinSpeedMax->getValue());
+            _spinSpeedMax->setText(txt);
+        }
+        else if (control == _axisX)
+        {
+            Vector3 axis = emitter->getRotationAxis();
+            axis.x = _axisX->getValue();
+            emitter->setRotation(emitter->getRotationSpeedMin(), emitter->getRotationSpeedMax(), axis, emitter->getRotationAxisVariance());
+            char txt[25];
+            sprintf(txt, "X\n\n%.2f", _axisX->getValue());
+            _axisX->setText(txt);
+        }
+        else if (control == _axisY)
+        {
+            Vector3 axis = emitter->getRotationAxis();
+            axis.y = _axisY->getValue();
+            emitter->setRotation(emitter->getRotationSpeedMin(), emitter->getRotationSpeedMax(), axis, emitter->getRotationAxisVariance());
+            char txt[25];
+            sprintf(txt, "Y\n\n%.2f", _axisY->getValue());
+            _axisY->setText(txt);
+        }
+        else if (control == _axisZ)
+        {
+            Vector3 axis = emitter->getRotationAxis();
+            axis.z = _axisZ->getValue();
+            emitter->setRotation(emitter->getRotationSpeedMin(), emitter->getRotationSpeedMax(), axis, emitter->getRotationAxisVariance());
+            char txt[25];
+            sprintf(txt, "Z\n\n%.2f", _axisZ->getValue());
+            _axisZ->setText(txt);
+        }
+        else if (control == _axisVarX)
+        {
+            Vector3 axisVar = emitter->getRotationAxisVariance();
+            axisVar.x = _axisVarX->getValue();
+            emitter->setRotation(emitter->getRotationSpeedMin(), emitter->getRotationSpeedMax(), emitter->getRotationAxis(), axisVar);
+            char txt[25];
+            sprintf(txt, "X\n\n%.2f", _axisVarX->getValue());
+            _axisVarX->setText(txt);
+        }
+        else if (control == _axisVarY)
+        {
+            Vector3 axisVar = emitter->getRotationAxisVariance();
+            axisVar.y = _axisVarY->getValue();
+            emitter->setRotation(emitter->getRotationSpeedMin(), emitter->getRotationSpeedMax(), emitter->getRotationAxis(), axisVar);
+            char txt[25];
+            sprintf(txt, "Y\n\n%.2f", _axisVarY->getValue());
+            _axisVarY->setText(txt);
+        }
+        else if (control == _axisVarZ)
+        {
+            Vector3 axisVar = emitter->getRotationAxisVariance();
+            axisVar.z = _axisVarZ->getValue();
+            emitter->setRotation(emitter->getRotationSpeedMin(), emitter->getRotationSpeedMax(), emitter->getRotationAxis(), axisVar);
+            char txt[25];
+            sprintf(txt, "Z\n\n%.2f", _axisVarZ->getValue());
+            _axisVarZ->setText(txt);
+        }
+        else if (control == _rotationSpeedMin)
+        {
+            emitter->setRotation(_rotationSpeedMin->getValue(), emitter->getRotationSpeedMax(), emitter->getRotationAxis(), emitter->getRotationAxisVariance());
+            char txt[25];
+            sprintf(txt, "Min.\n\n%.2f", _rotationSpeedMin->getValue());
+            _rotationSpeedMin->setText(txt);
+        }
+        else if (control == _rotationSpeedMax)
+        {
+            emitter->setRotation(emitter->getRotationSpeedMin(), _rotationSpeedMax->getValue(), emitter->getRotationAxis(), emitter->getRotationAxisVariance());
+            char txt[25];
+            sprintf(txt, "Max.\n\n%.2f", _rotationSpeedMax->getValue());
+            _rotationSpeedMax->setText(txt);
+        }
         else if (control == _burstSize)
         {
             char txt[25];
@@ -282,6 +552,7 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
     case Listener::CLICK:
         if (control == _reset)
         {
+            // Re-load the current emitter.
             _particleEmitterNode->setParticleEmitter(NULL);
             SAFE_RELEASE(emitter);
             emitter = _particleEmitters[_particleEmitterIndex] = ParticleEmitter::create(_particleFiles[_particleEmitterIndex].c_str());
@@ -289,21 +560,9 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         }
         else if (control == _emit)
         {
+            // Emit a burst of particles.
             unsigned int burstSize = (unsigned int)_burstSize->getValue();
             emitter->emit(burstSize);
-        }
-        else if (control == _minimize)
-        {
-            if (_particleProperties->getWidth() > 0)
-            {
-                _particleProperties->setSize(0, 0);
-                _minimize->setText("+");
-            }
-            else
-            {
-                _particleProperties->setSize(340, 480);
-                _minimize->setText("-");
-            }
         }
         break;
     case Listener::PRESS:
@@ -333,7 +592,8 @@ void ParticlesGame::finalize()
 {
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_form);
-    
+    SAFE_RELEASE(_font);
+
     for (unsigned int i = 0; i < _particleEmitters.size(); i++)
     {
         SAFE_RELEASE(_particleEmitters[i]);
@@ -347,53 +607,51 @@ void ParticlesGame::update(long elapsedTime)
     {
         Vector3 v = _scene->getActiveCamera()->getNode()->getForwardVector();
         v.normalize();
-        v.scale(INPUT_SENSITIVITY);
+        v.scale(INPUT_SENSITIVITY * elapsedTime);
         _scene->getActiveCamera()->getNode()->translate(v);
     }
     if (_aDown)
     {
         Vector3 v = _scene->getActiveCamera()->getNode()->getLeftVector();
         v.normalize();
-        v.scale(INPUT_SENSITIVITY);
+        v.scale(INPUT_SENSITIVITY * elapsedTime);
         _scene->getActiveCamera()->getNode()->translate(v);
     }
     if (_sDown)
     {
         Vector3 v = _scene->getActiveCamera()->getNode()->getBackVector();
         v.normalize();
-        v.scale(INPUT_SENSITIVITY);
+        v.scale(INPUT_SENSITIVITY * elapsedTime);
         _scene->getActiveCamera()->getNode()->translate(v);
     }
     if (_dDown)
     {
         Vector3 v = _scene->getActiveCamera()->getNode()->getRightVector();
         v.normalize();
-        v.scale(INPUT_SENSITIVITY);
+        v.scale(INPUT_SENSITIVITY * elapsedTime);
         _scene->getActiveCamera()->getNode()->translate(v);
     }
 
-    ParticleEmitter* emitter = _particleEmitters[_particleEmitterIndex];
-    emitter->update(elapsedTime);
-
-    char buffer[16];
-    sprintf(buffer, "Particles: %u", emitter->getParticlesCount());
-    _particlesCount->setText(buffer);
-
-    sprintf(buffer, "FPS: %u", getFrameRate());
-    _fps->setText(buffer);
-
+    // Update particles.
+    _particleEmitterNode->getParticleEmitter()->update(elapsedTime);
+    
+    // Update UI.
     _form->update();
 }
 
 void ParticlesGame::render(long elapsedTime)
 {
-    // Clear the color and depth buffers
+    // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, BACKGROUND_COLOR, 1.0f, 0);
 
-    // Visit all the nodes in the scene for drawing
+    // Draw the UI.
+    _form->draw();
+
+    // Visit all the nodes in the scene for drawing.
     _scene->visit(this, &ParticlesGame::drawScene, (void*)0);
 
-    _form->draw();
+    // Draw the framerate and number of live particles.
+    drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 170, 10, getFrameRate());
 }
 
 bool ParticlesGame::drawScene(Node* node, void* cookie)
@@ -408,6 +666,8 @@ bool ParticlesGame::drawScene(Node* node, void* cookie)
 
 void ParticlesGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
+    // Touch events that don't hit the UI
+    // allow the camera to rotate around the particle emitter.
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
@@ -448,6 +708,10 @@ void ParticlesGame::keyEvent(Keyboard::KeyEvent evt, int key)
         {
         case Keyboard::KEY_ESCAPE:
             exit();
+            break;
+        case Keyboard::KEY_B:
+            // Disable blending.
+            _particleEmitterNode->getParticleEmitter()->setTextureBlending(ParticleEmitter::BLEND_OPAQUE);
             break;
         case Keyboard::KEY_W:
             _wDown = true;
@@ -507,15 +771,18 @@ void ParticlesGame::loadEmitters()
 
 void ParticlesGame::emitterChanged()
 {
+    // Stop the current emitter.
     ParticleEmitter* prevEmitter = _particleEmitterNode->getParticleEmitter();
     if (prevEmitter)
     {
         prevEmitter->stop();
     }
 
+    // Set the new emitter on the node.
     ParticleEmitter* emitter = _particleEmitters[_particleEmitterIndex];
     _particleEmitterNode->setParticleEmitter(emitter);
 
+    // The 'explosion' emitter is meant to emit in bursts.
     if (_particleEmitterIndex == 2)
     {
         _started->setChecked(false);
@@ -531,6 +798,7 @@ void ParticlesGame::emitterChanged()
     _scene->getActiveCamera()->getNode()->setTranslation(0.0f, 0.0f, 40.0f);
     _cameraParent->setIdentity();
 
+    // Set the values of UI controls to display the new emitter's settings.
     char txt[25];
 
     _startRed->setValue(emitter->getColorStart().x);
@@ -600,6 +868,113 @@ void ParticlesGame::emitterChanged()
 
     sprintf(txt, "Burst Size\n\n%.0f", _burstSize->getValue());
     _burstSize->setText(txt);
+
+    const Vector3& posVar = emitter->getPositionVariance();
+    _posVarX->setValue(posVar.x);
+    sprintf(txt, "X\n\n%.2f", posVar.x);
+    _posVarX->setText(txt);
+
+    _posVarY->setValue(posVar.y);
+    sprintf(txt, "Y\n\n%.2f", posVar.y);
+    _posVarY->setText(txt);
+
+    _posVarZ->setValue(posVar.z);
+    sprintf(txt, "Z\n\n%.2f", posVar.z);
+    _posVarZ->setText(txt);
+
+    const Vector3& vel = emitter->getVelocity();
+    _velX->setValue(vel.x);
+    sprintf(txt, "X\n\n%.2f", vel.x);
+    _velX->setText(txt);
+
+    _velY->setValue(vel.y);
+    sprintf(txt, "Y\n\n%.2f", vel.y);
+    _velY->setText(txt);
+
+    _velZ->setValue(vel.z);
+    sprintf(txt, "Z\n\n%.2f", vel.z);
+    _velZ->setText(txt);
+
+    const Vector3& velVar = emitter->getVelocityVariance();
+    _velVarX->setValue(velVar.x);
+    sprintf(txt, "X\n\n%.2f", velVar.x);
+    _velVarX->setText(txt);
+
+    _velVarY->setValue(velVar.y);
+    sprintf(txt, "Y\n\n%.2f", velVar.y);
+    _velVarY->setText(txt);
+    
+    _velVarZ->setValue(velVar.z);
+    sprintf(txt, "Z\n\n%.2f", velVar.z);
+    _velVarZ->setText(txt);
+
+    const Vector3& accel = emitter->getAcceleration();
+    _accelX->setValue(accel.x);
+    sprintf(txt, "X\n\n%.2f", accel.x);
+    _accelX->setText(txt);
+
+    _accelY->setValue(accel.y);
+    sprintf(txt, "Y\n\n%.2f", accel.y);
+    _accelY->setText(txt);
+
+    _accelZ->setValue(accel.z);
+    sprintf(txt, "Z\n\n%.2f", accel.z);
+    _accelZ->setText(txt);
+
+    const Vector3& accelVar = emitter->getAccelerationVariance();
+    _accelVarX->setValue(accelVar.x);
+    sprintf(txt, "X\n\n%.2f", accelVar.x);
+    _accelVarX->setText(txt);
+
+    _accelVarY->setValue(accelVar.y);
+    sprintf(txt, "Y\n\n%.2f", accelVar.y);
+    _accelVarY->setText(txt);
+
+    _accelVarZ->setValue(accelVar.z);
+    sprintf(txt, "Z\n\n%.2f", accelVar.z);
+    _accelVarZ->setText(txt);
+
+    _spinSpeedMin->setValue(emitter->getRotationPerParticleSpeedMin());
+    sprintf(txt, "Min.\n\n%.2f", emitter->getRotationPerParticleSpeedMin());
+    _spinSpeedMin->setText(txt);
+
+    _spinSpeedMax->setValue(emitter->getRotationPerParticleSpeedMax());
+    sprintf(txt, "Max.\n\n%.2f", emitter->getRotationPerParticleSpeedMax());
+    _spinSpeedMax->setText(txt);
+
+    const Vector3& axis = emitter->getRotationAxis();
+    _axisX->setValue(axis.x);
+    sprintf(txt, "X\n\n%.2f", axis.x);
+    _axisX->setText(txt);
+
+    _axisY->setValue(axis.y);
+    sprintf(txt, "Y\n\n%.2f", axis.y);
+    _axisY->setText(txt);
+    
+    _axisZ->setValue(axis.z);
+    sprintf(txt, "Z\n\n%.2f", axis.z);
+    _axisZ->setText(txt);
+
+    const Vector3& axisVar = emitter->getRotationAxisVariance();
+    _axisVarX->setValue(axisVar.x);
+    sprintf(txt, "X\n\n%.2f", axisVar.x);
+    _axisVarX->setText(txt);
+
+    _axisVarY->setValue(axisVar.y);
+    sprintf(txt, "Y\n\n%.2f", axisVar.y);
+    _axisVarY->setText(txt);
+
+    _axisVarZ->setValue(axisVar.z);
+    sprintf(txt, "Z\n\n%.2f", axisVar.z);
+    _axisVarZ->setText(txt);
+
+    _rotationSpeedMin->setValue(emitter->getRotationSpeedMin());
+    sprintf(txt, "Min.\n\n%.2f", emitter->getRotationSpeedMin());
+    _rotationSpeedMin->setText(txt);
+
+    _rotationSpeedMax->setValue(emitter->getRotationSpeedMax());
+    sprintf(txt, "Max.\n\n%.2f", emitter->getRotationSpeedMax());
+    _rotationSpeedMax->setText(txt);
 }
 
 void ParticlesGame::drawSplash(void* param)
@@ -610,4 +985,13 @@ void ParticlesGame::drawSplash(void* param)
     batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
     batch->end();
     SAFE_DELETE(batch);
+}
+
+void ParticlesGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
+{
+    char buffer[30];
+    sprintf(buffer, "FPS: %u\nParticles: %u", fps, _particleEmitterNode->getParticleEmitter()->getParticlesCount());
+    font->begin();
+    font->drawText(buffer, x, y, color, font->getSize());
+    font->end();
 }

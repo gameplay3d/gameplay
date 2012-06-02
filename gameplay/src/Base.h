@@ -51,50 +51,41 @@ namespace gameplay
 extern void printError(const char* format, ...);
 }
 
-#ifdef __ANDROID__
-#include <android/log.h>
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
-
-// System Errors
-#define LOG_ERROR(x) \
-    { \
-        LOGI(x); \
-        assert(#x == 0); \
-    }
-#define LOG_ERROR_VARG(x, ...) \
-    { \
-        LOGI(x, __VA_ARGS__); \
-        assert(#x == 0); \
-    }
-
-// Warning macro
-#ifdef WARN
-#undef WARN
-#endif
-#define WARN(x) LOGI(x)
-#define WARN_VARG(x, ...) LOGI(x, __VA_ARGS__)
-
+// Current function macro.
+#ifdef WIN32
+#define __current__func__ __FUNCTION__
 #else
-
-// System Errors
-#define LOG_ERROR(x) \
-    { \
-        printError(x); \
-        assert(#x == 0); \
-    }
-#define LOG_ERROR_VARG(x, ...) \
-    { \
-        printError(x, __VA_ARGS__); \
-        assert(#x == 0); \
-    }
-
-// Warning macro
-#ifdef WARN
-#undef WARN
+#define __current__func__ __func__
 #endif
-#define WARN(x) printError(x)
-#define WARN_VARG(x, ...) printError(x, __VA_ARGS__)
+
+// Assert macros.
+#ifdef _DEBUG
+#define GP_ASSERT(expression) assert(expression)
+#else
+#define GP_ASSERT(expression)
 #endif
+
+// Error macro.
+#ifdef GP_ERRORS_AS_WARNINGS
+#define GP_ERROR GP_WARN
+#else
+#define GP_ERROR(...) do \
+    { \
+        printError("%s -- ", __current__func__); \
+        printError(__VA_ARGS__); \
+        printError("\n"); \
+        assert(0); \
+        std::exit(-1); \
+    } while (0)
+#endif
+
+// Warning macro.
+#define GP_WARN(...) do \
+    { \
+        printError("%s -- ", __current__func__); \
+        printError(__VA_ARGS__); \
+        printError("\n"); \
+    } while (0)
 
 // Bullet Physics
 #include <btBulletDynamicsCommon.h>
@@ -176,11 +167,10 @@ extern void printError(const char* format, ...);
 #include <png.h>
 
 #define WINDOW_VSYNC        1
-#define WINDOW_FULLSCREEN   0
 
 // Graphics (OpenGL)
-#if defined (__QNX__) || defined(__ANDROID__)
-    #include <EGL/egl.h>
+#ifdef __QNX__
+#include <EGL/egl.h>
     #include <GLES2/gl2.h>
     #include <GLES2/gl2ext.h>
     extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
@@ -190,6 +180,19 @@ extern void printError(const char* format, ...);
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
     #define USE_PVRTC
+    #ifdef __arm__
+        #define USE_NEON
+    #endif
+#elif __ANDROID__
+	#include <EGL/egl.h>
+    #include <GLES2/gl2.h>
+    #include <GLES2/gl2ext.h>
+    extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
+    extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
+    extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
+    extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
+    #define glClearDepth glClearDepthf
+    #define OPENGL_ES
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <GL/glew.h>
@@ -205,8 +208,10 @@ extern void printError(const char* format, ...);
         #define glIsVertexArray glIsVertexArrayOES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
-        #define USE_PVRTC
         #define USE_VAO
+        #ifdef __arm__
+            #define USE_NEON
+        #endif
     #elif TARGET_OS_MAC
         #include <OpenGL/gl.h>
         #include <OpenGL/glext.h>
@@ -252,16 +257,12 @@ typedef GLuint RenderBufferHandle;
 #ifdef NDEBUG
 #define GL_ASSERT( gl_code ) gl_code
 #else
-#define GL_ASSERT( gl_code ) \
+#define GL_ASSERT( gl_code ) do \
     { \
         gl_code; \
         __gl_error_code = glGetError(); \
-        if (__gl_error_code != GL_NO_ERROR) \
-        { \
-            LOG_ERROR_VARG(#gl_code ": %d", (int)__gl_error_code); \
-        } \
-        assert(__gl_error_code == GL_NO_ERROR); \
-    }
+        GP_ASSERT(__gl_error_code == GL_NO_ERROR); \
+    } while(0)
 #endif
 
 /**
@@ -273,16 +274,16 @@ typedef GLuint RenderBufferHandle;
  * macro can be used afterwards to check whether a GL error was
  * encountered executing the specified code.
  */
-#define GL_CHECK( gl_code ) \
+#define GL_CHECK( gl_code ) do \
     { \
         while (glGetError() != GL_NO_ERROR) ; \
         gl_code; \
         __gl_error_code = glGetError(); \
         if (__gl_error_code != GL_NO_ERROR) \
         { \
-            LOG_ERROR_VARG(#gl_code ": %d", (int)__gl_error_code); \
+            GP_ERROR(#gl_code ": %d", (int)__gl_error_code); \
         } \
-    }
+    } while(0)
 
 // Global variable to hold GL errors
 extern GLenum __gl_error_code;
@@ -292,6 +293,32 @@ extern GLenum __gl_error_code;
  */
 #define GL_LAST_ERROR() __gl_error_code
 
+/**
+ * Executes the specified AL code and checks the AL error afterwards
+ * to ensure it succeeded.
+ *
+ * The AL_LAST_ERROR macro can be used afterwards to check whether a AL error was
+ * encountered executing the specified code.
+ */
+#define AL_CHECK( al_code ) do \
+    { \
+        while (alGetError() != AL_NO_ERROR) ; \
+        al_code; \
+        __al_error_code = alGetError(); \
+        if (__al_error_code != AL_NO_ERROR) \
+        { \
+            GP_ERROR(#al_code ": %d", (int)__al_error_code); \
+        } \
+    } while(0)
+
+// Global variable to hold AL errors
+extern ALenum __al_error_code;
+
+/**
+ * Accesses the most recently set global AL error.
+ */
+#define AL_LAST_ERROR() __al_error_code
+
 
 #if defined(WIN32)
     #pragma warning( disable : 4172 )
@@ -300,30 +327,6 @@ extern GLenum __gl_error_code;
     #pragma warning( disable : 4390 )
     #pragma warning( disable : 4800 )
     #pragma warning( disable : 4996 )
-#endif
-
-#ifdef __ANDROID__
-#include <android_native_app_glue.h>
-extern void amain(struct android_app* state);
-#endif
-
-
-// Assert has special behavior on Windows (for Visual Studio).
-#ifdef WIN32
-#ifdef assert
-#undef assert
-#endif
-#ifdef _DEBUG
-#define assert(expression) do { \
-    if (!(expression)) \
-    { \
-        printError("Assertion \'" #expression "\' failed."); \
-        __debugbreak(); \
-    } } while (0)
-
-#else
-#define assert(expression) do { (void)sizeof(expression); } while (0)
-#endif
 #endif
 
 #endif

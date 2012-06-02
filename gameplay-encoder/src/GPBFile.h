@@ -49,15 +49,19 @@ public:
      * Saves the GPBFile as a binary file at filepath.
      *
      * @param filepath The file name and path to save to.
+     * 
+     * @return True if successful, false if error.
      */
-    void saveBinary(const std::string& filepath);
+    bool saveBinary(const std::string& filepath);
 
     /**
      * Saves the GPBFile as a text file at filepath. Useful for debugging.
      *
      * @param filepath The file name and path to save to.
+     * 
+     * @return True if successful, false if error.
      */
-    void saveText(const std::string& filepath);
+    bool saveText(const std::string& filepath);
     
     void add(Object* obj);
     void addScene(Scene* scene);
