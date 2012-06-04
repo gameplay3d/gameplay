@@ -79,7 +79,7 @@ public:
      * 
      * @return The total absolute running time (in milliseconds).
      */
-    static long getAbsoluteTime();
+    static double getAbsoluteTime();
 
     /**
      * Gets the total game time (in milliseconds). This is the total accumulated game time (unpaused).
@@ -89,7 +89,7 @@ public:
      * 
      * @return The total game time (in milliseconds).
      */
-    static long getGameTime();
+    static double getGameTime();
 
     /**
      * Gets the game state.
@@ -297,7 +297,7 @@ public:
      * @param timeListener The TimeListener that will receive the event.
      * @param cookie The cookie data that the time event will contain.
      */
-    void schedule(long timeOffset, TimeListener* timeListener, void* cookie = 0);
+    void schedule(float timeOffset, TimeListener* timeListener, void* cookie = 0);
 
 protected:
 
@@ -324,7 +324,7 @@ protected:
      *
      * @param elapsedTime The elapsed game time.
      */
-    virtual void update(long elapsedTime) = 0;
+    virtual void update(float elapsedTime) = 0;
 
     /**
      * Render callback for handling rendering routines.
@@ -334,7 +334,7 @@ protected:
      *
      * @param elapsedTime The elapsed game time.
      */
-    virtual void render(long elapsedTime) = 0;
+    virtual void render(float elapsedTime) = 0;
 
     /**
      * Renders a single frame once and then swaps it to the display.
@@ -363,7 +363,7 @@ private:
     {
     public:
 
-        TimeEvent(long time, TimeListener* timeListener, void* cookie);
+        TimeEvent(double time, TimeListener* timeListener, void* cookie);
         // The comparator is used to determine the order of time events in the priority queue.
         bool operator<(const TimeEvent& v) const;
         
@@ -371,7 +371,7 @@ private:
          * The game time.
          * @see Game::getGameTime()
          */
-        long time;
+        double time;
         TimeListener* listener;
         void* cookie;
     };
@@ -398,7 +398,7 @@ private:
      * 
      * @param frameTime The current game frame time. Used to determine which time events need to be fired.
      */
-    void fireTimeEvents(long frameTime);
+    void fireTimeEvents(double frameTime);
 
     /**
      * Loads the game configuration.
@@ -407,9 +407,9 @@ private:
 
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
-    static long _pausedTimeLast;                // The last time paused.
-    static long _pausedTimeTotal;               // The total time paused.
-    long _frameLastFPS;                         // The last time the frame count was updated.
+    static double _pausedTimeLast;              // The last time paused.
+    static double _pausedTimeTotal;             // The total time paused.
+    double _frameLastFPS;                       // The last time the frame count was updated.
     unsigned int _frameCount;                   // The current frame count.
     unsigned int _frameRate;                    // The current frame rate.
     unsigned int _width;                        // The game's display width.

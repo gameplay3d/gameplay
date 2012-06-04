@@ -381,7 +381,7 @@ void PhysicsController::resume()
     // Unused
 }
 
-void PhysicsController::update(long elapsedTime)
+void PhysicsController::update(float elapsedTime)
 {
     GP_ASSERT(_world);
 
@@ -390,7 +390,7 @@ void PhysicsController::update(long elapsedTime)
     //
     // Note that stepSimulation takes elapsed time in seconds
     // so we divide by 1000 to convert from milliseconds.
-    _world->stepSimulation((float)elapsedTime * 0.001, 10);
+    _world->stepSimulation(elapsedTime * 0.001f, 10);
 
     // If we have status listeners, then check if our status has changed.
     if (_listeners)
