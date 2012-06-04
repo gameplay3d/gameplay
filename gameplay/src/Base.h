@@ -62,12 +62,7 @@ extern void printError(const char* format, ...);
 
 // Assert macros.
 #ifdef _DEBUG
-#define GP_ASSERT(expression) do { \
-    if (!(expression)) \
-    { \
-        printError("%s -- Assertion '" #expression "' failed.\n", __current__func__); \
-        assert(expression); \
-    } } while (0)
+#define GP_ASSERT(expression) assert(expression)
 #else
 #define GP_ASSERT(expression)
 #endif
