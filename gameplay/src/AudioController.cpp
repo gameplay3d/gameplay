@@ -91,7 +91,7 @@ void AudioController::resume()
     }
 }
 
-void AudioController::update(long elapsedTime)
+void AudioController::update(float elapsedTime)
 {
     AudioListener* listener = AudioListener::getInstance();
     if (listener)

@@ -22,8 +22,8 @@
 using namespace std;
 
 struct timespec __timespec;
-static long __timeStart;
-static long __timeAbsolute;
+static double __timeStart;
+static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static screen_context_t __screenContext;
 static screen_window_t __screenWindow;
@@ -751,10 +751,10 @@ error:
 /**
  * Convert the timespec into milliseconds.
  */
-long timespec2millis(struct timespec *a)
+double timespec2millis(struct timespec *a)
 {
     GP_ASSERT(a);
-    return a->tv_sec*1000 + a->tv_nsec/1000000;
+    return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
 }
 
 /**
@@ -1044,16 +1044,16 @@ unsigned int Platform::getDisplayHeight()
     return __screenWindowSize[1];
 }
 
-long Platform::getAbsoluteTime()
+double Platform::getAbsoluteTime()
 {
     clock_gettime(CLOCK_REALTIME, &__timespec);
-    long now = timespec2millis(&__timespec);
+    double now = timespec2millis(&__timespec);
     __timeAbsolute = now - __timeStart;
 
     return __timeAbsolute;
 }
 
-void Platform::setAbsoluteTime(long time)
+void Platform::setAbsoluteTime(double time)
 {
     __timeAbsolute = time;
 }

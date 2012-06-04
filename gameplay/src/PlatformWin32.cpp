@@ -14,9 +14,9 @@ using gameplay::printError;
 static int __width = 1280;
 static int __height = 720;
 
-static long __timeTicksPerMillis;
-static long __timeStart;
-static long __timeAbsolute;
+static double __timeTicksPerMillis;
+static double __timeStart;
+static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static float __roll;
 static float __pitch;
@@ -628,7 +628,7 @@ int Platform::enterMessagePump()
     // Get the initial time.
     LARGE_INTEGER tps;
     QueryPerformanceFrequency(&tps);
-    __timeTicksPerMillis = (long)(tps.QuadPart / 1000L);
+    __timeTicksPerMillis = (double)(tps.QuadPart / 1000L);
     LARGE_INTEGER queryTime;
     QueryPerformanceCounter(&queryTime);
     GP_ASSERT(__timeTicksPerMillis);
@@ -687,7 +687,7 @@ unsigned int Platform::getDisplayHeight()
     return __height;
 }
     
-long Platform::getAbsoluteTime()
+double Platform::getAbsoluteTime()
 {
     LARGE_INTEGER queryTime;
     QueryPerformanceCounter(&queryTime);
@@ -697,7 +697,7 @@ long Platform::getAbsoluteTime()
     return __timeAbsolute;
 }
 
-void Platform::setAbsoluteTime(long time)
+void Platform::setAbsoluteTime(double time)
 {
     __timeAbsolute = time;
 }

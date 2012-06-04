@@ -103,7 +103,7 @@ public:
      *
      * @return The elapsed time of the AnimationClip (in milliseconds).
      */
-    unsigned long getElaspedTime() const;
+    float getElaspedTime() const;
 
     /**
      * Sets the AnimationClip's repeat count. Overrides repeat duration.
@@ -126,7 +126,7 @@ public:
      *
      * Use REPEAT_INDEFINITE to play the AnimationClip indefinitely.
      *
-     * @param duration The active duration that is set on the AnimationClip.
+     * @param duration The active duration that is set on the AnimationClip, in milliseconds.
      */
     void setActiveDuration(unsigned long duration);
 
@@ -140,7 +140,7 @@ public:
     /**
      * Gets the AnimationClip's duration.
      *
-     * @return the AnimationClip's duration.
+     * @return the AnimationClip's duration, in milliseconds.
      */
     unsigned long getDuration() const;
 
@@ -283,7 +283,7 @@ private:
     /**
      * Updates the animation with the elapsed time.
      */
-    bool update(unsigned long elapsedTime);
+    bool update(float elapsedTime);
 
     /**
      * Handles when the AnimationClip begins.
@@ -319,10 +319,10 @@ private:
     float _repeatCount;                                 // The clip's repeat count.
     unsigned long _activeDuration;                      // The active duration of the clip.
     float _speed;                                       // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.
-    unsigned long _timeStarted;                         // The game time when this clip was actually started.
-    long _elapsedTime;                                  // Time elapsed while the clip is running.
+    double _timeStarted;                                // The game time when this clip was actually started.
+    float _elapsedTime;                                 // Time elapsed while the clip is running.
     AnimationClip* _crossFadeToClip;                    // The clip to cross fade to.
-    unsigned long _crossFadeOutElapsed;                 // The amount of time that has elapsed for the crossfade.
+    float _crossFadeOutElapsed;                         // The amount of time that has elapsed for the crossfade.
     unsigned long _crossFadeOutDuration;                // The duration of the cross fade.
     float _blendWeight;                                 // The clip's blendweight.
     std::vector<AnimationValue*> _values;               // AnimationValue holder.
@@ -333,4 +333,5 @@ private:
 };
 
 }
+
 #endif

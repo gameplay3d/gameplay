@@ -231,7 +231,7 @@ void SpaceshipGame::finalize()
     SAFE_RELEASE(_scene);
 }
 
-void SpaceshipGame::update(long elapsedTime)
+void SpaceshipGame::update(float elapsedTime)
 {
     // Calculate elapsed time in seconds
     float t = (float)elapsedTime / 1000.0;
@@ -452,7 +452,7 @@ void SpaceshipGame::resetGame()
     _cameraNode->setTranslation(_initialCameraPos);
 }
 
-void SpaceshipGame::render(long elapsedTime)
+void SpaceshipGame::render(float elapsedTime)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
