@@ -13,8 +13,8 @@ namespace gameplay
 {
 
 static Game* __gameInstance = NULL;
-long Game::_pausedTimeLast = 0L;
-long Game::_pausedTimeTotal = 0L;
+double Game::_pausedTimeLast = 0.0;
+double Game::_pausedTimeTotal = 0.0;
 
 Game::Game() 
     : _initialized(false), _state(UNINITIALIZED), 
@@ -48,12 +48,12 @@ Game* Game::getInstance()
     return __gameInstance;
 }
 
-long Game::getAbsoluteTime()
+double Game::getAbsoluteTime()
 {
     return Platform::getAbsoluteTime();
 }
 
-long Game::getGameTime()
+double Game::getGameTime()
 {
     return Platform::getAbsoluteTime() - _pausedTimeTotal;
 }
@@ -193,9 +193,9 @@ void Game::frame()
         GP_ASSERT(_physicsController);
 
         // Update Time.
-        static long lastFrameTime = Game::getGameTime();
-        long frameTime = Game::getGameTime();
-        long elapsedTime = (frameTime - lastFrameTime);
+        static double lastFrameTime = Game::getGameTime();
+        double frameTime = getGameTime();
+        float elapsedTime = (frameTime - lastFrameTime);
         lastFrameTime = frameTime;
 
         // Update the scheduled and running animations.
@@ -206,11 +206,13 @@ void Game::frame()
     
         // Update the physics.
         _physicsController->update(elapsedTime);
+
         // Application Update.
         update(elapsedTime);
 
         // Audio Rendering.
         _audioController->update(elapsedTime);
+
         // Graphics Rendering.
         render(elapsedTime);
 
@@ -220,7 +222,7 @@ void Game::frame()
         {
             _frameRate = _frameCount;
             _frameCount = 0;
-            _frameLastFPS = Game::getGameTime();
+            _frameLastFPS = getGameTime();
         }
     }
     else
@@ -303,7 +305,7 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 {
 }
 
-void Game::schedule(long timeOffset, TimeListener* timeListener, void* cookie)
+void Game::schedule(float timeOffset, TimeListener* timeListener, void* cookie)
 {
     GP_ASSERT(_timeEvents);
     TimeEvent timeEvent(getGameTime() + timeOffset, timeListener, cookie);
@@ -322,9 +324,9 @@ void Game::updateOnce()
     GP_ASSERT(_physicsController);
 
     // Update Time.
-    static long lastFrameTime = Game::getGameTime();
-    long frameTime = Game::getGameTime();
-    long elapsedTime = (frameTime - lastFrameTime);
+    static double lastFrameTime = getGameTime();
+    double frameTime = getGameTime();
+    float elapsedTime = (frameTime - lastFrameTime);
     lastFrameTime = frameTime;
 
     // Update the internal controllers.
@@ -358,7 +360,7 @@ void Game::loadConfig()
     }
 }
 
-void Game::fireTimeEvents(long frameTime)
+void Game::fireTimeEvents(double frameTime)
 {
     while (_timeEvents->size() > 0)
     {
@@ -373,7 +375,7 @@ void Game::fireTimeEvents(long frameTime)
     }
 }
 
-Game::TimeEvent::TimeEvent(long time, TimeListener* timeListener, void* cookie)
+Game::TimeEvent::TimeEvent(double time, TimeListener* timeListener, void* cookie)
             : time(time), listener(timeListener), cookie(cookie)
 {
 }

@@ -608,7 +608,7 @@ public:
      *
      * @param elapsedTime The amount of time that has passed since the last call to update(), in milliseconds.
      */
-    void update(long elapsedTime);
+    void update(float elapsedTime);
 
     /**
      * Draws the particles currently being emitted.
@@ -733,8 +733,7 @@ private:
     bool _orbitVelocity;
     bool _orbitAcceleration;
     float _timePerEmission;
-    long _timeLast;
-    long _timeRunning;
+    double _timeRunning;
 };
 
 }

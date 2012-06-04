@@ -39,6 +39,8 @@ using std::size_t;
 using std::min;
 using std::max;
 using std::modf;
+using std::fmodf;
+using std::fmodl;
 
 // Common
 #ifndef NULL

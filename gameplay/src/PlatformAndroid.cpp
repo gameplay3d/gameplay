@@ -25,8 +25,8 @@ static EGLConfig __eglConfig = 0;
 static int __width;
 static int __height;
 static struct timespec __timespec;
-static long __timeStart;
-static long __timeAbsolute;
+static double __timeStart;
+static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static ASensorManager* __sensorManager;
 static ASensorEventQueue* __sensorEventQueue;
@@ -47,10 +47,10 @@ PFNGLISVERTEXARRAYOESPROC glIsVertexArray = NULL;
 namespace gameplay
 {
 
-static long timespec2millis(struct timespec *a)
+static double timespec2millis(struct timespec *a)
 {
     GP_ASSERT(a);
-    return a->tv_sec*1000 + a->tv_nsec/1000000;
+    return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
 }
 
 extern void printError(const char* format, ...)
@@ -858,16 +858,16 @@ unsigned int Platform::getDisplayHeight()
     return __height;
 }
     
-long Platform::getAbsoluteTime()
+double Platform::getAbsoluteTime()
 {
     clock_gettime(CLOCK_REALTIME, &__timespec);
-    long now = timespec2millis(&__timespec);
+    double now = timespec2millis(&__timespec);
     __timeAbsolute = now - __timeStart;
 
     return __timeAbsolute;
 }
 
-void Platform::setAbsoluteTime(long time)
+void Platform::setAbsoluteTime(double time)
 {
     __timeAbsolute = time;
 }

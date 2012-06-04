@@ -93,7 +93,7 @@ void AnimationController::unschedule(AnimationClip* clip)
         _state = IDLE;
 }
 
-void AnimationController::update(long elapsedTime)
+void AnimationController::update(float elapsedTime)
 {
     if (_state != RUNNING)
         return;

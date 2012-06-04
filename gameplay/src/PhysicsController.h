@@ -321,7 +321,7 @@ private:
     /**
      * Controller update.
      */
-    void update(long elapsedTime);
+    void update(float elapsedTime);
 
     // Adds the given collision listener for the two given collision objects.
     void addCollisionListener(PhysicsCollisionObject::CollisionListener* listener, PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB);
