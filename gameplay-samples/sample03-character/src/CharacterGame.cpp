@@ -19,12 +19,13 @@ CharacterGame game;
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL),
       _animation(NULL), _currentClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
-      _keyFlags(0), _drawDebug(0)
+      _keyFlags(0), _drawDebug(0), _buttonReleased(true)
 {
 }
 
 void CharacterGame::initialize()
 {
+    setVsync(false);
     // Enable multi-touch (only affects devices that support multi-touch).
     setMultiTouch(true);
 
@@ -185,17 +186,25 @@ void CharacterGame::jump()
 
 bool CharacterGame::isOnFloor() const
 {
-    return (std::abs(_character->getCurrentVelocity().y) < MATH_EPSILON);
+    return (std::fabs(_character->getCurrentVelocity().y) < MATH_EPSILON);
 }
 
-void CharacterGame::update(long elapsedTime)
+void CharacterGame::update(float elapsedTime)
 {
     Vector2 direction;
 
     if (_gamepad->getButtonState(0) == Gamepad::BUTTON_PRESSED)
     {
-        // Jump while the gamepad button is being pressed
-        jump();
+        if (_buttonReleased)
+        {
+            _buttonReleased = false;
+            // Jump while the gamepad button is being pressed
+            jump();
+        }
+    }
+    else
+    {
+        _buttonReleased = true;
     }
 
     if (_gamepad->isJoystickActive(0))
@@ -271,7 +280,7 @@ void CharacterGame::update(long elapsedTime)
         _characterShadowNode->setTranslation(Vector3(hitResult.point.x, hitResult.point.y + 0.1f, hitResult.point.z));
 }
 
-void CharacterGame::render(long elapsedTime)
+void CharacterGame::render(float elapsedTime)
 {
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4(0.41f, 0.48f, 0.54f, 1.0f), 1.0f, 0);
@@ -406,7 +415,7 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     }
 }
 
-void CharacterGame::adjustCamera(long elapsedTime)
+void CharacterGame::adjustCamera(float elapsedTime)
 {
     static float cameraOffset = 0.0f;
 

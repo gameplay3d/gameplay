@@ -600,7 +600,7 @@ void ParticlesGame::finalize()
     }    
 }
 
-void ParticlesGame::update(long elapsedTime)
+void ParticlesGame::update(float elapsedTime)
 {
     // Update camera movement
     if (_wDown)
@@ -639,7 +639,7 @@ void ParticlesGame::update(long elapsedTime)
     _form->update();
 }
 
-void ParticlesGame::render(long elapsedTime)
+void ParticlesGame::render(float elapsedTime)
 {
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, BACKGROUND_COLOR, 1.0f, 0);

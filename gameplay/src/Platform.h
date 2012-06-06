@@ -67,14 +67,14 @@ public:
      *
      * @return The absolute platform time. (in milliseconds)
      */
-    static long getAbsoluteTime();
+    static double getAbsoluteTime();
 
     /**
      * Sets the absolute platform time since the start of the message pump.
      *
      * @param time The time to set (in milliseconds).
      */
-    static void setAbsoluteTime(long time);
+    static void setAbsoluteTime(double time);
 
     /**
      * Gets whether vertical sync is enabled for the game display.

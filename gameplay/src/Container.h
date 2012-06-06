@@ -413,15 +413,15 @@ protected:
     /** 
      * Time we started scrolling in the x
      */ 
-    long _scrollingStartTimeX;
+    double _scrollingStartTimeX;
     /** 
      * Time we started scrolling in the y
      */ 
-    long _scrollingStartTimeY;
+    double _scrollingStartTimeY;
     /** 
      * The last time we were scrolling
      */
-    long _scrollingLastTime;
+    double _scrollingLastTime;
     /** 
      * Speed to continue scrolling at after touch release.
      */ 

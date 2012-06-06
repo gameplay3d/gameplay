@@ -231,7 +231,7 @@ void SpaceshipGame::finalize()
     SAFE_RELEASE(_scene);
 }
 
-void SpaceshipGame::update(long elapsedTime)
+void SpaceshipGame::update(float elapsedTime)
 {
     // Calculate elapsed time in seconds
     float t = (float)elapsedTime / 1000.0;
@@ -316,7 +316,7 @@ void SpaceshipGame::update(long elapsedTime)
     _shipGroupNode->setRotation(_initialShipRot);
 
     // Apply ship tilt
-    if (_force.x != 0 && abs(_velocity.x) > 0.1f)
+    if (_force.x != 0 && fabs(_velocity.x) > 0.1f)
     {
         // Compute an angle based on the dot product between the force vector and the Y axis
         Vector2 fn;
@@ -452,7 +452,7 @@ void SpaceshipGame::resetGame()
     _cameraNode->setTranslation(_initialCameraPos);
 }
 
-void SpaceshipGame::render(long elapsedTime)
+void SpaceshipGame::render(float elapsedTime)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
