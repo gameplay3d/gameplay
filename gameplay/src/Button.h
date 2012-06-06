@@ -71,7 +71,7 @@ protected:
 
 private:
 
-    /*
+    /**
      * Constructor.
      */
     Button(const Button& copy);

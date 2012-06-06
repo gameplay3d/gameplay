@@ -54,17 +54,17 @@ theme particleEditor
 
         image scrollBarTopCap
         {
-            region = 3, 99, 8, 5
+            region = 0, 99, 19, 5
         }
 
         image verticalScrollBar
         {
-            region = 3, 104, 8, 19
+            region = 0, 104, 19, 19
         }
 
         image scrollBarBottomCap
         {
-            region = 3, 138, 8, 5
+            region = 0, 138, 19, 5
         }
     }
 
