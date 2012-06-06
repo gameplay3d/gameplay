@@ -2,7 +2,6 @@
 #include "PhysicsController.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsCharacter.h"
-#include "PhysicsMotionState.h"
 #include "Game.h"
 #include "MeshPart.h"
 #include "Bundle.h"

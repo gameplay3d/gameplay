@@ -3,7 +3,6 @@
 
 #include "Vector3.h"
 #include "PhysicsCollisionShape.h"
-#include "PhysicsMotionState.h"
 
 namespace gameplay
 {
