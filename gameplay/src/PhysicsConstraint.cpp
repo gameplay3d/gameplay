@@ -166,8 +166,8 @@ Vector3 PhysicsConstraint::getWorldCenterOfMass(const Model* model)
 
 Vector3 PhysicsConstraint::offsetByCenterOfMass(const Node* node, const Vector3& v)
 {
-    GP_ASSERT(node && node->getCollisionObject() && node->getCollisionObject()->getMotionState());
-    btVector3 centerOfMassOffset = (node->getCollisionObject()->getMotionState())->_centerOfMassOffset.getOrigin();
+    GP_ASSERT(node && node->getCollisionObject() && node->getCollisionObject()->_motionState);
+    btVector3 centerOfMassOffset = node->getCollisionObject()->_motionState->_centerOfMassOffset.getOrigin();
     return Vector3(v.x + centerOfMassOffset.x(), v.y + centerOfMassOffset.y(), v.z + centerOfMassOffset.z());
 }
 
