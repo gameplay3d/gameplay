@@ -37,14 +37,14 @@ extern const int WINDOW_SCALE = [[UIScreen mainScreen] scale];
 static AppDelegate *__appDelegate = NULL;
 static View* __view = NULL;
 
-static long __timeStart;
-static long __timeAbsolute;
+static double __timeStart;
+static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static float __pitch;
 static float __roll;
 
 
-long getMachTimeInMilliseconds();
+double getMachTimeInMilliseconds();
 
 int getKey(unichar keyCode);
 
@@ -580,17 +580,17 @@ int getKey(unichar keyCode);
 @end
 
 
-long getMachTimeInMilliseconds()
+dobule getMachTimeInMilliseconds()
 {
-    static const int64_t kOneMillion = 1000 * 1000;
+    static const double kOneMillion = 1000 * 1000;
     static mach_timebase_info_data_t s_timebase_info;
     
     if (s_timebase_info.denom == 0) 
         (void) mach_timebase_info(&s_timebase_info);
     
     // mach_absolute_time() returns billionth of seconds, so divide by one million to get milliseconds
-    GP_ASSERT(kOneMillion * s_timebase_info.denom);
-    return (long)((mach_absolute_time() * s_timebase_info.numer) / (kOneMillion * s_timebase_info.denom));
+    GP_ASSERT(s_timebase_info.denom);
+    return ((double)mach_absolute_time() * (double)s_timebase_info.numer) / (kOneMillion * (double)s_timebase_info.denom);
 }
 
 int getKey(unichar keyCode) 
@@ -868,13 +868,13 @@ unsigned int Platform::getDisplayHeight()
     return size.height;
 }
 
-long Platform::getAbsoluteTime()
+dobule Platform::getAbsoluteTime()
 {
     __timeAbsolute = getMachTimeInMilliseconds();
     return __timeAbsolute;
 }
 
-void Platform::setAbsoluteTime(long time)
+void Platform::setAbsoluteTime(double time)
 {
     __timeAbsolute = time;
 }

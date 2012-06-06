@@ -165,6 +165,12 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
 void Joystick::update(const Control* container, const Vector2& offset)
 {
     Control::update(container, offset);
+
+    _clearBounds.x -= _radius;
+    _clearBounds.y -= _radius;
+    float radiusx2 = _radius + _radius;
+    _clearBounds.width += radiusx2;
+    _clearBounds.height += radiusx2;
 }
 
 void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)

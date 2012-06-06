@@ -900,6 +900,11 @@ protected:
     Rectangle _viewportClipBounds;
 
     /**
+     * Previous frame's absolute clip bounds, to be cleared if necessary.
+     */
+    Rectangle _clearBounds;         
+
+    /**
      * If the control is dirty and need updating.
      */
     bool _dirty;
@@ -979,7 +984,6 @@ private:
     
     bool _styleOverridden;
     Theme::Skin* _skin;
-    Rectangle _clearBounds;         // Previous frame's absolute clip bounds, to be cleared if necessary.
 };
 
 }

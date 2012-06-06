@@ -27,7 +27,7 @@ public:
      * @param cookie See {@link Game#renderOnce}.
      * @param time The minimum amount of time to display the screen (in milliseconds).
      */
-    template <typename T> void run(T* instance, void (T::*method) (void*), void* cookie, long time);
+    template <typename T> void run(T* instance, void (T::*method) (void*), void* cookie, unsigned long time);
 
     /**
      * Destructor.
@@ -37,14 +37,14 @@ public:
 private:
 
     long _time;
-    long _startTime;
+    double _startTime;
 };
 
-inline ScreenDisplayer::ScreenDisplayer() : _time(0L), _startTime(0L)
+inline ScreenDisplayer::ScreenDisplayer() : _time(0L), _startTime(0)
 {
 }
 
-template <typename T> void ScreenDisplayer::run(T* instance, void (T::*method) (void*), void* cookie, long time)
+template <typename T> void ScreenDisplayer::run(T* instance, void (T::*method) (void*), void* cookie, unsigned long time)
 {
     _time = time;
     Game::getInstance()->renderOnce(instance, method, cookie);
@@ -53,9 +53,9 @@ template <typename T> void ScreenDisplayer::run(T* instance, void (T::*method) (
 
 inline ScreenDisplayer::~ScreenDisplayer()
 {
-    long elapsedTime = Game::getInstance()->getGameTime() - _startTime;
+    long elapsedTime = (long)(Game::getInstance()->getGameTime() - _startTime);
     if (elapsedTime < _time)
-        Platform::sleep(_time - (Game::getInstance()->getGameTime() - _startTime));
+        Platform::sleep(_time - elapsedTime);
 }
 
 /**
