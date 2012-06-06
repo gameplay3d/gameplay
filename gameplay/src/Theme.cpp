@@ -451,6 +451,25 @@ Theme::Style* Theme::getStyle(const char* name) const
     return NULL;
 }
 
+Theme::Style* Theme::getEmptyStyle()
+{
+    Theme::Style* emptyStyle = getStyle("EMPTY_STYLE");
+
+    if (!emptyStyle)
+    {
+        Theme::Style::Overlay* overlay = Theme::Style::Overlay::create();
+        overlay->addRef();
+        overlay->addRef();
+        overlay->addRef();
+        emptyStyle = new Theme::Style((Theme*)this, "EMPTY_STYLE", 1.0f / _texture->getWidth(), 1.0f / _texture->getHeight(),
+            Theme::Margin::empty(), Theme::Border::empty(), overlay, overlay, overlay, overlay);
+
+        _styles.push_back(emptyStyle);
+    }
+
+    return emptyStyle;
+}
+
 void Theme::setProjectionMatrix(const Matrix& matrix)
 {
     GP_ASSERT(_spriteBatch);
