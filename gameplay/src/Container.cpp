@@ -568,7 +568,7 @@ Layout::Type Container::getLayoutType(const char* layoutString)
 void Container::updateScroll()
 {
     // Update Time.
-    double lastFrameTime = Game::getGameTime();
+    static double lastFrameTime = Game::getGameTime();
     double frameTime = Game::getGameTime();
     float elapsedTime = (float)(frameTime - lastFrameTime);
     lastFrameTime = frameTime;
@@ -699,7 +699,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
     case Touch::TOUCH_MOVE:
         if (_scrolling)
         {
-            long gameTime = Game::getAbsoluteTime();
+            double gameTime = Game::getAbsoluteTime();
 
             // Calculate the latest movement delta for the next update to use.
             int vx = x - _scrollingLastX;
@@ -761,7 +761,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
 
     case Touch::TOUCH_RELEASE:
         _scrolling = false;
-        long gameTime = Game::getAbsoluteTime();
+        double gameTime = Game::getAbsoluteTime();
         float timeSinceLastMove = (float)(gameTime - _scrollingLastTime);
         if (timeSinceLastMove > SCROLL_INERTIA_DELAY)
         {
@@ -774,9 +774,9 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
         int dy = _scrollingLastY - _scrollingFirstY;
 
         float timeTakenX = (float)(gameTime - _scrollingStartTimeX);
-        float elapsedSecsX = (float)timeTakenX * 0.001f;
+        float elapsedSecsX = timeTakenX * 0.001f;
         float timeTakenY = (float)(gameTime - _scrollingStartTimeY);
-        float elapsedSecsY = (float)timeTakenY * 0.001f;
+        float elapsedSecsY = timeTakenY * 0.001f;
 
         float vx = dx;
         float vy = dy;
