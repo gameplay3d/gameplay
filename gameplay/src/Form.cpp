@@ -543,63 +543,20 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
 
         if (form->isEnabled())
         {
-            Node* node = form->_node;
-            if (node)
+            if (form->_node)
             {
-                Scene* scene = node->getScene();
-                GP_ASSERT(scene);
-                Camera* camera = scene->getActiveCamera();
-
-                if (camera)
+                Vector3 point;
+                if (form->projectPoint(x, y, &point))
                 {
-                    // Get info about the form's position.
-                    Matrix m = node->getMatrix();
-                    Vector3 min(0, 0, 0);
-                    m.transformPoint(&min);
-
-                    // Unproject point into world space.
-                    Ray ray;
-                    camera->pickRay(Game::getInstance()->getViewport(), x, y, &ray);
-
-                    // Find the quad's plane.
-                    // We know its normal is the quad's forward vector.
-                    Vector3 normal = node->getForwardVectorWorld();
-
-                    // To get the plane's distance from the origin,
-                    // we'll find the distance from the plane defined
-                    // by the quad's forward vector and one of its points
-                    // to the plane defined by the same vector and the origin.
-                    const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
-                    const float d = -(a*min.x) - (b*min.y) - (c*min.z);
-                    const float distance = abs(d) /  sqrt(a*a + b*b + c*c);
-                    Plane plane(normal, -distance);
-
-                    // Check for collision with plane.
-                    float collisionDistance = ray.intersects(plane);
-                    if (collisionDistance != Ray::INTERSECTS_NONE)
+                    const Rectangle& bounds = form->getBounds();
+                    if (form->getState() == Control::FOCUS ||
+                        (evt == Touch::TOUCH_PRESS &&
+                         point.x >= bounds.x &&
+                         point.x <= bounds.x + bounds.width &&
+                         point.y >= bounds.y &&
+                         point.y <= bounds.y + bounds.height))
                     {
-                        // Multiply the ray's direction vector by collision distance
-                        // and add that to the ray's origin.
-                        Vector3 point = ray.getOrigin() + collisionDistance*ray.getDirection();
-
-                        // Project this point into the plane.
-                        m.invert();
-                        m.transformPoint(&point);
-
-                        // Pass the touch event on.
-                        const Rectangle& bounds = form->getBounds();
-                        if (form->getState() == Control::FOCUS ||
-                            (evt == Touch::TOUCH_PRESS &&
-                                point.x >= bounds.x &&
-                                point.x <= bounds.x + bounds.width &&
-                                point.y >= bounds.y &&
-                                point.y <= bounds.y + bounds.height))
-                        {
-                            if (form->touchEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, contactIndex))
-                            {
-                                return true;
-                            }
-                        }
+                        return form->touchEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, contactIndex);
                     }
                 }
             }
@@ -615,10 +572,7 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
                         y <= bounds.y + bounds.height))
                 {
                     // Pass on the event's position relative to the form.
-                    if (form->touchEvent(evt, x - bounds.x, y - bounds.y, contactIndex))
-                    {
-                        return true;
-                    }
+                    return form->touchEvent(evt, x - bounds.x, y - bounds.y, contactIndex);
                 }
             }
         }
@@ -627,7 +581,7 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
     return false;
 }
 
-void Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
+bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
     std::vector<Form*>::const_iterator it;
     for (it = __forms.begin(); it < __forms.end(); it++)
@@ -636,9 +590,115 @@ void Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
         GP_ASSERT(form);
         if (form->isEnabled())
         {
-            form->keyEvent(evt, key);
+            if (form->keyEvent(evt, key))
+                return true;
         }
     }
+
+    return false;
+}
+
+bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    std::vector<Form*>::const_iterator it;
+    for (it = __forms.begin(); it < __forms.end(); it++)
+    {
+        Form* form = *it;
+        GP_ASSERT(form);
+
+        if (form->isEnabled())
+        {
+            if (form->_node)
+            {
+                Vector3 point;
+                if (form->projectPoint(x, y, &point))
+                {
+                    const Rectangle& bounds = form->getBounds();
+                    if (form->getState() == Control::FOCUS ||
+                        ((evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
+                          evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
+                          evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON ||
+                          evt == Mouse::MOUSE_WHEEL) &&
+                         point.x >= bounds.x &&
+                         point.x <= bounds.x + bounds.width &&
+                         point.y >= bounds.y &&
+                         point.y <= bounds.y + bounds.height))
+                    {
+                        return form->mouseEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, wheelDelta);
+                    }
+                }
+            }
+            else
+            {
+                // Simply compare with the form's bounds.
+                const Rectangle& bounds = form->getBounds();
+                if (form->getState() == Control::FOCUS ||
+                    ((evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
+                      evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
+                      evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON ||
+                      evt == Mouse::MOUSE_WHEEL) &&
+                        x >= bounds.x &&
+                        x <= bounds.x + bounds.width &&
+                        y >= bounds.y &&
+                        y <= bounds.y + bounds.height))
+                {
+                    // Pass on the event's position relative to the form.
+                    return form->mouseEvent(evt, x - bounds.x, y - bounds.y, wheelDelta);
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Form::projectPoint(int x, int y, Vector3* point)
+{
+    Scene* scene = _node->getScene();
+    GP_ASSERT(scene);
+    Camera* camera = scene->getActiveCamera();
+
+    if (camera)
+    {
+        // Get info about the form's position.
+        Matrix m = _node->getMatrix();
+        Vector3 min(0, 0, 0);
+        m.transformPoint(&min);
+
+        // Unproject point into world space.
+        Ray ray;
+        camera->pickRay(Game::getInstance()->getViewport(), x, y, &ray);
+
+        // Find the quad's plane.
+        // We know its normal is the quad's forward vector.
+        Vector3 normal = _node->getForwardVectorWorld();
+
+        // To get the plane's distance from the origin,
+        // we'll find the distance from the plane defined
+        // by the quad's forward vector and one of its points
+        // to the plane defined by the same vector and the origin.
+        const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
+        const float d = -(a*min.x) - (b*min.y) - (c*min.z);
+        const float distance = abs(d) /  sqrt(a*a + b*b + c*c);
+        Plane plane(normal, -distance);
+
+        // Check for collision with plane.
+        float collisionDistance = ray.intersects(plane);
+        if (collisionDistance != Ray::INTERSECTS_NONE)
+        {
+            // Multiply the ray's direction vector by collision distance
+            // and add that to the ray's origin.
+            point->set(ray.getOrigin() + collisionDistance*ray.getDirection());
+
+            // Project this point into the plane.
+            m.invert();
+            m.transformPoint(point);
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 int Form::nextHighestPowerOfTwo(int x)

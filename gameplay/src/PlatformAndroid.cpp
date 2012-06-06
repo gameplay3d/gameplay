@@ -628,11 +628,11 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
             case AKEY_EVENT_ACTION_DOWN:
                 Game::getInstance()->keyEvent(Keyboard::KEY_PRESS, getKey(keycode, metastate));
                 if (int character = getUnicode(keycode, metastate))
-                    Game::getInstance()->keyEvent(Keyboard::KEY_CHAR, character);
+                    gameplay::Platform::keyEventInternal(Keyboard::KEY_CHAR, character);
                 break;
                     
             case AKEY_EVENT_ACTION_UP:
-                Game::getInstance()->keyEvent(Keyboard::KEY_RELEASE, getKey(keycode, metastate));
+                gameplay::Platform::keyEventInternal(Keyboard::KEY_RELEASE, getKey(keycode, metastate));
                 break;
         }
     }
@@ -941,8 +941,24 @@ void Platform::displayKeyboard(bool display)
 void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+}
+
+void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    if (!Form::keyEventInternal(evt, key))
+        Game::getInstance()->keyEvent(evt, key);
+}
+
+bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
+    {
+        return true;
+    }
+    else
+    {
+        return Game::getInstance()->mouseEvent(evt, x, y, wheelDelta);
     }
 }
 

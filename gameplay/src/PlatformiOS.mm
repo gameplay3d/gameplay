@@ -928,17 +928,26 @@ void Platform::displayKeyboard(bool display)
 void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-    }
-}
-
-void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
-{
-    Game::getInstance()->keyEvent(evt, key);
-    Form::keyEventInternal(evt, key);
 }
     
+void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    if (!Form::keyEventInternal(evt, key))
+        Game::getInstance()->keyEvent(evt, key);
+}
+
+bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
+    {
+        return true;
+    }
+    else
+    {
+        return Game::getInstance()->mouseEvent(evt, x, y, wheelDelta);
+    }
+}    
 
 void Platform::sleep(long ms)
 {

@@ -18,6 +18,7 @@ FlowLayout::FlowLayout(const FlowLayout& copy)
 
 FlowLayout::~FlowLayout()
 {
+    __instance = NULL;
 }
 
 FlowLayout* FlowLayout::create()
