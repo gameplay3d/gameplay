@@ -212,6 +212,52 @@ public:
 protected:
 
     /**
+     * Interface between GamePlay and Bullet to keep object transforms synchronized properly.
+     * 
+     * @see btMotionState
+     */
+    class PhysicsMotionState : public btMotionState
+    {
+        friend class PhysicsConstraint;
+
+    public:
+
+        /**
+         * Creates a physics motion state for a rigid body.
+         * 
+         * @param node The node that owns the rigid body that the motion state is being created for.
+         * @param centerOfMassOffset The translation offset to the center of mass of the rigid body.
+         */
+        PhysicsMotionState(Node* node, const Vector3* centerOfMassOffset = NULL);
+
+        /**
+         * Destructor.
+         */
+        virtual ~PhysicsMotionState();
+
+        /**
+         * @see btMotionState#getWorldTransform
+         */
+        virtual void getWorldTransform(btTransform &transform) const;
+
+        /**
+         * @see btMotionState#setWorldTransform
+         */
+        virtual void setWorldTransform(const btTransform &transform);
+
+        /**
+         * Updates the motion state's world transform from the GamePlay Node object's world transform.
+         */
+        void updateTransformFromNode() const;
+
+    private:
+
+        Node* _node;
+        btTransform _centerOfMassOffset;
+        mutable btTransform _worldTransform;
+    };
+
+    /**
      * Constructor.
      */
     PhysicsCollisionObject(Node* node);
@@ -222,13 +268,6 @@ protected:
      * @return The Bullet collision object.
      */
     virtual btCollisionObject* getCollisionObject() const = 0;
-
-    /**
-     * Returns the physics motion state.
-     *
-     * @return The motion state object.
-     */
-    PhysicsMotionState* getMotionState() const;
 
     /**
      * Pointer to Node contained by this collision object.
