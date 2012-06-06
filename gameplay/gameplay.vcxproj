@@ -73,7 +73,6 @@
     <ClCompile Include="src\PhysicsGenericConstraint.cpp" />
     <ClCompile Include="src\PhysicsGhostObject.cpp" />
     <ClCompile Include="src\PhysicsHingeConstraint.cpp" />
-    <ClCompile Include="src\PhysicsMotionState.cpp" />
     <ClCompile Include="src\PhysicsRigidBody.cpp" />
     <ClCompile Include="src\PhysicsSocketConstraint.cpp" />
     <ClCompile Include="src\PhysicsSpringConstraint.cpp" />
@@ -167,7 +166,6 @@
     <ClInclude Include="src\PhysicsGenericConstraint.h" />
     <ClInclude Include="src\PhysicsGhostObject.h" />
     <ClInclude Include="src\PhysicsHingeConstraint.h" />
-    <ClInclude Include="src\PhysicsMotionState.h" />
     <ClInclude Include="src\PhysicsRigidBody.h" />
     <ClInclude Include="src\PhysicsSocketConstraint.h" />
     <ClInclude Include="src\PhysicsSpringConstraint.h" />
