@@ -45,6 +45,8 @@ namespace gameplay
  */
 class Container : public Control
 {
+    friend class DropDownList;
+
 public:
 
     /**
@@ -241,11 +243,27 @@ protected:
      * @param evt The key event that occured.
      * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
      *            If evt is KEY_CHAR then key is the unicode value of the character.
+     *
+     * @return Whether the key event was consumed by this control.
      * 
      * @see Keyboard::KeyEvent
      * @see Keyboard::Key
      */
-    virtual void keyEvent(Keyboard::KeyEvent evt, int key);
+    virtual bool keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * Mouse callback on mouse events.
+     *
+     * @param evt The mouse event that occurred.
+     * @param x The x position of the mouse in pixels. Left edge is zero.
+     * @param y The y position of the mouse in pixels. Top edge is zero.
+     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
+     *
+     * @return True if the mouse event is consumed or false if it is not consumed.
+     *
+     * @see Mouse::MouseEvent
+     */
+    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
      * Gets a Layout::Type enum from a matching string.
@@ -307,6 +325,10 @@ protected:
      */
     bool touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    bool mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+    bool pointerEvent(bool mouse, char evt, int x, int y, int data);
+
     /**
      * Get a Scroll enum from a matching string.
      *
@@ -329,7 +351,7 @@ protected:
      */
     Theme::ThemeImage* _scrollBarTopCap;
     /**
-     * Scrollbar verticle image.
+     * Scrollbar vertical image.
      */
     Theme::ThemeImage* _scrollBarVertical;
     /**
@@ -417,6 +439,16 @@ protected:
      */ 
     bool _scrollingDown;
 
+    /**
+     * Locked to scrolling vertically by grabbing the scrollbar with the mouse.
+     */
+    bool _scrollingMouseVertically;
+
+    /**
+     * Locked to scrolling horizontally by grabbing the scrollbar with the mouse.
+     */
+    bool _scrollingMouseHorizontally;
+
 private:
 
     /**
@@ -426,6 +458,9 @@ private:
 
     AnimationClip* _scrollBarOpacityClip;
     int _zIndexDefault;
+
+    float _totalWidth;
+    float _totalHeight;
 };
 
 

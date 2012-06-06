@@ -295,7 +295,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int y = GET_Y_LPARAM(lParam);
 
         UpdateCapture(wParam);
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, x, y, 0))
+        if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, x, y, 0))
         {
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, x, y, 0);
         }
@@ -306,7 +306,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
 
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, x, y, 0))
+        if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, x, y, 0))
         {
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, x, y, 0);
         }
@@ -317,21 +317,21 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         UpdateCapture(wParam);
         lx = GET_X_LPARAM(lParam);
         ly = GET_Y_LPARAM(lParam);
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, lx, ly, 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON, lx, ly, 0);
         break;
 
     case WM_RBUTTONUP:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         UpdateCapture(wParam);
         break;
 
     case WM_MBUTTONDOWN:
         UpdateCapture(wParam);
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         break;
 
     case WM_MBUTTONUP:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         UpdateCapture(wParam);
         break;
 
@@ -341,7 +341,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int y = GET_Y_LPARAM(lParam);
 
         // Allow Game::mouseEvent a chance to handle (and possibly consume) the event.
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
+        if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
         {
             if ((wParam & MK_LBUTTON) == MK_LBUTTON)
             {
@@ -368,7 +368,11 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
 
     case WM_MOUSEWHEEL:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_WHEEL, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), GET_WHEEL_DELTA_WPARAM(wParam) / 120);
+        tagPOINT point;
+        point.x = GET_X_LPARAM(lParam);
+        point.y = GET_Y_LPARAM(lParam);
+        ScreenToClient(__hwnd, &point);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_WHEEL, point.x, point.y, GET_WHEEL_DELTA_WPARAM(wParam) / 120);
         break;
 
     case WM_KEYDOWN:
@@ -745,15 +749,25 @@ void Platform::displayKeyboard(bool display)
 void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-    }
 }
 
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    Game::getInstance()->keyEvent(evt, key);
-    Form::keyEventInternal(evt, key);
+    if (!Form::keyEventInternal(evt, key))
+        Game::getInstance()->keyEvent(evt, key);
+}
+
+bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
+    {
+        return true;
+    }
+    else
+    {
+        return Game::getInstance()->mouseEvent(evt, x, y, wheelDelta);
+    }
 }
 
 void Platform::sleep(long ms)

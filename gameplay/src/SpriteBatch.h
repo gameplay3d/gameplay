@@ -273,6 +273,8 @@ public:
      */
     void setProjectionMatrix(const Matrix& matrix);
 
+    const Matrix& getProjectionMatrix() const;
+
 private:
 
     /**
@@ -302,8 +304,6 @@ private:
      * @param copy The SpriteBatch to copy.
      */
     SpriteBatch(const SpriteBatch& copy);
-
-    const Matrix& getOrthoMatrix() const;
 
     /**
      * Adds a single sprite to a SpriteVertex array.
