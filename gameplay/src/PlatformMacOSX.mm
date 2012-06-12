@@ -213,7 +213,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) mouse: (Mouse::MouseEvent) mouseEvent orTouchEvent: (Touch::TouchEvent) touchEvent x: (float) x y: (float) y s: (int) s 
 {
-    if (!Game::getInstance()->mouseEvent(mouseEvent, x, y, s))
+    if (!gameplay::Platform::mouseEventInternal(mouseEvent, x, y, s))
     {
         gameplay::Platform::touchEventInternal(touchEvent, x, y, 0);
     }
@@ -236,7 +236,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void)mouseMoved:(NSEvent *) event 
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
@@ -254,14 +254,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
      NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     __lx = point.x;
     __ly = __height - point.y;    
-    _game->mouseEvent(Mouse::MOUSE_PRESS_RIGHT_BUTTON, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_PRESS_RIGHT_BUTTON, point.x, __height - point.y, 0);
 }
 
 - (void) rightMouseUp: (NSEvent*) event
 {
    __rightMouseDown = false;
     NSPoint point = [event locationInWindow];
-    _game->mouseEvent(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, point.x, __height - point.y, 0);
 }
 
 - (void) rightMouseDragged: (NSEvent*) event
@@ -284,27 +284,27 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
     // In right-mouse case, whether __rightMouseDown is true or false
     // this should not matter, mouse move is still occuring
-    _game->mouseEvent(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
 }
 
 - (void)otherMouseDown: (NSEvent *) event 
 {
     __otherMouseDown = true;
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    _game->mouseEvent(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, point.x, __height - point.y, 0);
 }
 
 - (void)otherMouseUp: (NSEvent *) event 
 {
     __otherMouseDown = false;
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    _game->mouseEvent(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, point.x, __height - point.y, 0);
 }
 
 - (void)otherMouseDragged: (NSEvent *) event 
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    _game->mouseEvent(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
 }
 
 - (void) mouseEntered: (NSEvent*)event
@@ -315,7 +315,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void)scrollWheel: (NSEvent *) event 
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    Game::getInstance()->mouseEvent(Mouse::MOUSE_WHEEL, point.x, __height - point.y, (int)([event deltaY] * 10.0f));
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_WHEEL, point.x, __height - point.y, (int)([event deltaY] * 10.0f));
 }
 
 - (void) mouseExited: (NSEvent*)event
@@ -770,17 +770,26 @@ void Platform::displayKeyboard(bool display)
 void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-    }
 }
     
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    Game::getInstance()->keyEvent(evt, key);
-    Form::keyEventInternal(evt, key);
+    if (!Form::keyEventInternal(evt, key))
+        Game::getInstance()->keyEvent(evt, key);
 }
-    
+
+bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
+    {
+        return true;
+    }
+    else
+    {
+        return Game::getInstance()->mouseEvent(evt, x, y, wheelDelta);
+    }
+}
 
 void Platform::sleep(long ms)
 {

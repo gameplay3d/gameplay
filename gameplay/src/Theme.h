@@ -419,6 +419,9 @@ private:
 
     Theme::Style* getStyle(const char* id) const;
 
+    // Used when a control does not specify a style.
+    Theme::Style* getEmptyStyle();
+
     void setProjectionMatrix(const Matrix& matrix);
 
     SpriteBatch* getSpriteBatch() const;

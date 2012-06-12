@@ -104,7 +104,7 @@ protected:
      * @see Keyboard::KeyEvent
      * @see Keyboard::Key
      */
-    void keyEvent(Keyboard::KeyEvent evt, int key);
+    bool keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
      * Called when a control's properties change.  Updates this control's internal rendering

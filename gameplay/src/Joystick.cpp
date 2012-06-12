@@ -22,7 +22,7 @@ Joystick* Joystick::create(Theme::Style* style, Properties* properties)
 {
     Joystick* joystick = new Joystick();
     joystick->initialize(style, properties);
-    joystick->_consumeTouchEvents = false;
+    joystick->_consumeInputEvents = false;
 
     return joystick;
 }
@@ -59,7 +59,7 @@ void Joystick::addListener(Control::Listener* listener, int eventFlags)
         GP_ERROR("TEXT_CHANGED event is not applicable to this control.");
     }
 
-    _consumeTouchEvents = true;
+    _consumeInputEvents = true;
 
     Control::addListener(listener, eventFlags);
 }
