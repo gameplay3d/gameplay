@@ -2,7 +2,6 @@
 #include "PhysicsController.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsCharacter.h"
-#include "PhysicsMotionState.h"
 #include "Game.h"
 #include "MeshPart.h"
 #include "Bundle.h"
@@ -24,13 +23,15 @@ PhysicsController::PhysicsController()
   : _collisionConfiguration(NULL), _dispatcher(NULL),
     _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _ghostPairCallback(NULL),
     _debugDrawer(NULL), _status(PhysicsController::Listener::DEACTIVATED), _listeners(NULL),
-    _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0))
+    _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionCallback(NULL)
 {
     // Default gravity is 9.8 along the negative Y axis.
+    _collisionCallback = new CollisionCallback(this);
 }
 
 PhysicsController::~PhysicsController()
 {
+    SAFE_DELETE(_collisionCallback);
     SAFE_DELETE(_ghostPairCallback);
     SAFE_DELETE(_debugDrawer);
     SAFE_DELETE(_listeners);
@@ -268,14 +269,14 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
     return false;
 }
 
-btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, 
+btScalar PhysicsController::CollisionCallback::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, 
     const btCollisionObject* b, int partIdB, int indexB)
 {
-    GP_ASSERT(Game::getInstance()->getPhysicsController());
+    GP_ASSERT(_pc);
 
     // Get pointers to the PhysicsCollisionObject objects.
-    PhysicsCollisionObject* objectA = Game::getInstance()->getPhysicsController()->getCollisionObject(a);
-    PhysicsCollisionObject* objectB = Game::getInstance()->getPhysicsController()->getCollisionObject(b);
+    PhysicsCollisionObject* objectA = _pc->getCollisionObject(a);
+    PhysicsCollisionObject* objectB = _pc->getCollisionObject(b);
 
     // If the given collision object pair has collided in the past, then
     // we notify the listeners only if the pair was not colliding
@@ -284,20 +285,20 @@ btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisi
     PhysicsCollisionObject::CollisionPair pair(objectA, objectB);
 
     CollisionInfo* collisionInfo;
-    if (_collisionStatus.count(pair) > 0)
+    if (_pc->_collisionStatus.count(pair) > 0)
     {
-        collisionInfo = &_collisionStatus[pair];
+        collisionInfo = &_pc->_collisionStatus[pair];
     }
     else
     {
         // Add a new collision pair for these objects.
-        collisionInfo = &_collisionStatus[pair];
+        collisionInfo = &_pc->_collisionStatus[pair];
 
         // Add the appropriate listeners.
         PhysicsCollisionObject::CollisionPair p1(pair.objectA, NULL);
-        if (_collisionStatus.count(p1) > 0)
+        if (_pc->_collisionStatus.count(p1) > 0)
         {
-            const CollisionInfo& ci = _collisionStatus[p1];
+            const CollisionInfo& ci = _pc->_collisionStatus[p1];
             std::vector<PhysicsCollisionObject::CollisionListener*>::const_iterator iter = ci._listeners.begin();
             for (; iter != ci._listeners.end(); iter++)
             {
@@ -306,9 +307,9 @@ btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisi
             }
         }
         PhysicsCollisionObject::CollisionPair p2(pair.objectB, NULL);
-        if (_collisionStatus.count(p2) > 0)
+        if (_pc->_collisionStatus.count(p2) > 0)
         {
-            const CollisionInfo& ci = _collisionStatus[p2];
+            const CollisionInfo& ci = _pc->_collisionStatus[p2];
             std::vector<PhysicsCollisionObject::CollisionListener*>::const_iterator iter = ci._listeners.begin();
             for (; iter != ci._listeners.end(); iter++)
             {
@@ -474,9 +475,9 @@ void PhysicsController::update(float elapsedTime)
         if ((iter->second._status & REGISTERED) != 0 && (iter->second._status & REMOVE) == 0)
         {
             if (iter->first.objectB)
-                _world->contactPairTest(iter->first.objectA->getCollisionObject(), iter->first.objectB->getCollisionObject(), *this);
+                _world->contactPairTest(iter->first.objectA->getCollisionObject(), iter->first.objectB->getCollisionObject(), *_collisionCallback);
             else
-                _world->contactTest(iter->first.objectA->getCollisionObject(), *this);
+                _world->contactTest(iter->first.objectA->getCollisionObject(), *_collisionCallback);
         }
     }
 

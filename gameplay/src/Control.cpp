@@ -7,7 +7,7 @@ namespace gameplay
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _dirty(true), _consumeTouchEvents(true), _listeners(NULL), _styleOverridden(false), _skin(NULL), _clearBounds(Rectangle::empty())
+    _dirty(true), _consumeInputEvents(true), _listeners(NULL), _styleOverridden(false), _skin(NULL), _clearBounds(Rectangle::empty())
 {
 }
 
@@ -607,14 +607,14 @@ Theme::Style::OverlayType Control::getOverlayType() const
     }
 }
 
-void Control::setConsumeTouchEvents(bool consume)
+void Control::setConsumeInputEvents(bool consume)
 {
-    _consumeTouchEvents = consume;
+    _consumeInputEvents = consume;
 }
     
-bool Control::getConsumeTouchEvents()
+bool Control::getConsumeInputEvents()
 {
-    return _consumeTouchEvents;
+    return _consumeInputEvents;
 }
 
 int Control::getZIndex() const
@@ -692,7 +692,7 @@ bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
     {
     case Touch::TOUCH_PRESS:
         notifyListeners(Listener::PRESS);
-        break;
+        return _consumeInputEvents;
             
     case Touch::TOUCH_RELEASE:
         // Always trigger Listener::RELEASE
@@ -704,14 +704,41 @@ bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
         {
             notifyListeners(Listener::CLICK);
         }
+        return _consumeInputEvents;
+    }
+
+    return false;
+}
+
+bool Control::keyEvent(Keyboard::KeyEvent evt, int key)
+{
+    return false;
+}
+
+bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (!isEnabled())
+    {
+        return false;
+    }
+
+    // By default, mouse events are either interpreted as touch events or ignored.
+    switch (evt)
+    {
+    case Mouse::MOUSE_PRESS_LEFT_BUTTON:
+        return touchEvent(Touch::TOUCH_PRESS, x, y, 0);
+
+    case Mouse::MOUSE_RELEASE_LEFT_BUTTON:
+        return touchEvent(Touch::TOUCH_RELEASE, x, y, 0);
+
+    case Mouse::MOUSE_MOVE:
+        return touchEvent(Touch::TOUCH_MOVE, x, y, 0);
+
+    default:
         break;
     }
 
-    return _consumeTouchEvents;
-}
-
-void Control::keyEvent(Keyboard::KeyEvent evt, int key)
-{
+    return false;
 }
 
 void Control::notifyListeners(Listener::EventType eventType)
