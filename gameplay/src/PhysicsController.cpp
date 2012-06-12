@@ -158,8 +158,11 @@ bool PhysicsController::rayTest(const Ray& ray, float distance, PhysicsControlle
 {
     GP_ASSERT(_world);
 
-    btCollisionWorld::ClosestRayResultCallback callback(BV(ray.getOrigin()), BV(distance * ray.getDirection()));
-    _world->rayTest(BV(ray.getOrigin()), BV(distance * ray.getDirection()), callback);
+    btVector3 rayFromWorld(BV(ray.getOrigin()));
+    btVector3 rayToWorld(rayFromWorld + BV(ray.getDirection() * distance));
+
+    btCollisionWorld::ClosestRayResultCallback callback(rayFromWorld, rayToWorld);
+    _world->rayTest(rayFromWorld, rayToWorld, callback);
     if (callback.hasHit())
     {
         if (result)

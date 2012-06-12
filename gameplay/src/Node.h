@@ -341,13 +341,37 @@ public:
 
     /**
      * Returns the forward vector of the Node in world space.
+     *
+     * @return The forward vector in world space.
      */
     Vector3 getForwardVectorWorld() const;
 
     /**
      *  Returns the forward vector of the Node in view space.
+     *
+     * @param normalize True to return the vector normalized, false (default) otherwise.
+     *
+     * @return The forwward vector in view space.
      */
     Vector3 getForwardVectorView() const;
+
+    /**
+     * Returns the right vector of the Node in world space.
+     *
+     * @param normalize True to return the vector normalized, false (default) otherwise.
+     *
+     * @return The right vector in world space.
+     */
+    Vector3 getRightVectorWorld() const;
+
+    /**
+     * Returns the up vector of the Node in world space.
+     *
+     * @param normalize True to return the vector normalized, false (default) otherwise.
+     *
+     * @return The up vector in world space.
+     */
+    Vector3 getUpVectorWorld() const;
 
     /**
      * Returns the translation vector of the currently active camera for this node's scene.
