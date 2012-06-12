@@ -547,6 +547,20 @@ Vector3 Node::getForwardVectorView() const
     return vector;
 }
 
+Vector3 Node::getRightVectorWorld() const
+{
+    Vector3 vector;
+    getWorldMatrix().getRightVector(&vector);
+    return vector;
+}
+
+Vector3 Node::getUpVectorWorld() const
+{
+    Vector3 vector;
+    getWorldMatrix().getUpVector(&vector);
+    return vector;
+}
+
 Vector3 Node::getActiveCameraTranslationWorld() const
 {
     Scene* scene = getScene();
