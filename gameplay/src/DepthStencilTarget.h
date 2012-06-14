@@ -26,16 +26,14 @@ public:
     enum Format
     {
         /**
-         * A target with 24-bits of depth data.
-         *
-         * This format may be internally stored as a 32-bit buffer with 8 bits of unused data.
+         * A target with depth data.
          */
-        DEPTH24,
+        DEPTH,
 
         /**
-         * A target with 24 bits of depth data and 8 bits stencil data.
+         * A target with depth data and stencil data.
          */
-        DEPTH24_STENCIL8
+        DEPTH_STENCIL
     };
 
     /**
@@ -73,13 +71,6 @@ public:
      */
     Format getFormat() const;
 
-    /**
-     * Returns the depth texture for this DepthStencilTarget.
-     *
-     * @return The depth texture for this DepthStencilTarget.
-     */
-    Texture* getTexture() const;
-
 private:
 
     /**
@@ -94,8 +85,7 @@ private:
 
     std::string _id;
     Format _format;
-    Texture* _depthTexture;
-    RenderBufferHandle _stencilBuffer;
+    RenderBufferHandle _renderBuffer;
 };
 
 }

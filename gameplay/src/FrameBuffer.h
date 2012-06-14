@@ -24,17 +24,9 @@ class FrameBuffer : public Ref
 public:
 
     /**
-     * Creates an empty FrameBuffer and adds it to the list of available FrameBuffers.
-     *
-     * @param id The ID of the new FrameBuffer.  Uniqueness is recommended but not enforced.
-     *
-     * @return A newly created FrameBuffer.
-     */
-    static FrameBuffer* create(const char* id);
-
-    /**
-     * Creates a new FrameBuffer with a RenderTarget of the specified width and height,
+     * Creates a new FrameBuffer with a single RenderTarget of the specified width and height,
      * and adds the FrameBuffer to the list of available FrameBuffers.
+     * You can additionally add a DepthStencilTarget using FrameBuffer::setDepthStencilTarget.
      *
      * @param id The ID of the new FrameBuffer.  Uniqueness is recommended but not enforced.
      * @param width The width of the RenderTarget to be created and attached.
@@ -59,6 +51,20 @@ public:
      * @return The ID of this FrameBuffer.
      */
     const char* getID() const;
+
+    /**
+     * Gets the width of the frame buffer.
+     *
+     * @return The width of the frame buffer.
+     */
+    unsigned int getWidth() const;
+
+    /**
+     * Gets the height of the frame buffer.
+     *
+     * @return The height of the frame buffer.
+     */
+    unsigned int getHeight() const;
 
     /**
      * Get the number of color attachments available on the current hardware.
@@ -109,11 +115,12 @@ public:
     static void bindDefault(); 
      
 private:
- 
+
+
     /**
      * Constructor.
      */
-    FrameBuffer(const char* id);
+    FrameBuffer(const char* id, unsigned int width, unsigned int height);
 
     /**
      * Destructor.
@@ -122,7 +129,11 @@ private:
 
     static void initialize();
 
+    static bool isPowerOfTwo(unsigned int value);
+
     std::string _id;
+    unsigned int _width;
+    unsigned int _height;
     FrameBufferHandle _handle;
     RenderTarget** _renderTargets;
     DepthStencilTarget* _depthStencilTarget;

@@ -178,7 +178,7 @@ private:
      */
     static void keyEventInternal(Keyboard::KeyEvent evt, int key);
 
-    static int nextHighestPowerOfTwo(int x);
+    static unsigned int nextPowerOfTwo(unsigned int v);
 
     Theme* _theme;              // The Theme applied to this Form.
     Model* _quad;               // Quad for rendering this Form in world-space.
