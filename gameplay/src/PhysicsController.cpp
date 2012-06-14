@@ -155,14 +155,63 @@ void PhysicsController::drawDebug(const Matrix& viewProjection)
     _debugDrawer->end();
 }
 
-bool PhysicsController::rayTest(const Ray& ray, float distance, PhysicsController::HitResult* result)
+bool PhysicsController::rayTest(const Ray& ray, float distance, PhysicsController::HitResult* result, PhysicsController::HitFilter* filter)
 {
+    class RayTestCallback : public btCollisionWorld::ClosestRayResultCallback
+    {
+    private:
+
+        HitFilter* filter;
+        HitResult hitResult;
+
+    public:
+
+        RayTestCallback(const btVector3& rayFromWorld, const btVector3& rayToWorld, PhysicsController::HitFilter* filter)
+            : btCollisionWorld::ClosestRayResultCallback(rayFromWorld, rayToWorld), filter(filter)
+        {
+        }
+
+		virtual bool needsCollision(btBroadphaseProxy* proxy0) const
+		{
+            if (!btCollisionWorld::ClosestRayResultCallback::needsCollision(proxy0))
+                return false;
+
+            btCollisionObject* co = reinterpret_cast<btCollisionObject*>(proxy0->m_clientObject);
+            PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(co->getUserPointer());
+            if (object == NULL)
+                return false;
+
+            return filter ? !filter->filter(object) : true;
+        }
+
+        btScalar addSingleResult(btCollisionWorld::LocalRayResult& rayResult, bool normalInWorldSpace)
+        {
+            GP_ASSERT(rayResult.m_collisionObject);
+            PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(rayResult.m_collisionObject->getUserPointer());
+
+            if (object == NULL)
+                return 1.0f; // ignore
+
+            float result = btCollisionWorld::ClosestRayResultCallback::addSingleResult(rayResult, normalInWorldSpace);
+
+            hitResult.object = object;
+            hitResult.point.set(m_hitPointWorld.x(), m_hitPointWorld.y(), m_hitPointWorld.z());
+            hitResult.fraction = m_closestHitFraction;
+            hitResult.normal.set(m_hitNormalWorld.x(), m_hitNormalWorld.y(), m_hitNormalWorld.z());
+
+            if (filter && !filter->hit(hitResult))
+                return 1.0f; // process next collision
+
+            return result; // continue normally
+        }
+    };
+
     GP_ASSERT(_world);
 
     btVector3 rayFromWorld(BV(ray.getOrigin()));
     btVector3 rayToWorld(rayFromWorld + BV(ray.getDirection() * distance));
 
-    btCollisionWorld::ClosestRayResultCallback callback(rayFromWorld, rayToWorld);
+    RayTestCallback callback(rayFromWorld, rayToWorld, filter);
     _world->rayTest(rayFromWorld, rayToWorld, callback);
     if (callback.hasHit())
     {
@@ -180,15 +229,34 @@ bool PhysicsController::rayTest(const Ray& ray, float distance, PhysicsControlle
     return false;
 }
 
-bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3& endPosition, PhysicsController::HitResult* result)
+bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3& endPosition, PhysicsController::HitResult* result, PhysicsController::HitFilter* filter)
 {
     class SweepTestCallback : public btCollisionWorld::ClosestConvexResultCallback
     {
+    private:
+
+        PhysicsCollisionObject* me;
+        PhysicsController::HitFilter* filter;
+        PhysicsController::HitResult hitResult;
+
     public:
 
-        SweepTestCallback(PhysicsCollisionObject* me)
-            : btCollisionWorld::ClosestConvexResultCallback(btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0)), me(me)
+        SweepTestCallback(PhysicsCollisionObject* me, PhysicsController::HitFilter* filter)
+            : btCollisionWorld::ClosestConvexResultCallback(btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0)), me(me), filter(filter)
         {
+        }
+
+		virtual bool needsCollision(btBroadphaseProxy* proxy0) const
+		{
+            if (!btCollisionWorld::ClosestConvexResultCallback::needsCollision(proxy0))
+                return false;
+
+            btCollisionObject* co = reinterpret_cast<btCollisionObject*>(proxy0->m_clientObject);
+            PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(co->getUserPointer());
+            if (object == NULL || object == me)
+                return false;
+
+            return filter ? !filter->filter(object) : true;
         }
 
         btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
@@ -196,13 +264,21 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
             GP_ASSERT(convexResult.m_hitCollisionObject);
             PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(convexResult.m_hitCollisionObject->getUserPointer());
 
-            if (object == me)
+            if (object == NULL)
                 return 1.0f;
 
-            return ClosestConvexResultCallback::addSingleResult(convexResult, normalInWorldSpace);
-        }
+            float result = ClosestConvexResultCallback::addSingleResult(convexResult, normalInWorldSpace);
 
-        PhysicsCollisionObject* me;
+            hitResult.object = object;
+            hitResult.point.set(m_hitPointWorld.x(), m_hitPointWorld.y(), m_hitPointWorld.z());
+            hitResult.fraction = m_closestHitFraction;
+            hitResult.normal.set(m_hitNormalWorld.x(), m_hitNormalWorld.y(), m_hitNormalWorld.z());
+
+            if (filter && !filter->hit(hitResult))
+                return 1.0f;
+
+            return result;
+        }
     };
 
     GP_ASSERT(object && object->getCollisionShape());
@@ -232,7 +308,7 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
     end.setOrigin(BV(endPosition));
 
     // Perform bullet convex sweep test.
-    SweepTestCallback callback(object);
+    SweepTestCallback callback(object, filter);
 
     // If the object is represented by a ghost object, use the ghost object's convex sweep test
     // since it is much faster than the world's version.
@@ -1374,6 +1450,24 @@ PhysicsController::Listener::~Listener()
 {
     GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->removeStatusListener(this);
+}
+
+PhysicsController::HitFilter::HitFilter()
+{
+}
+
+PhysicsController::HitFilter::~HitFilter()
+{
+}
+
+bool PhysicsController::HitFilter::filter(PhysicsCollisionObject* object)
+{
+    return false;
+}
+
+bool PhysicsController::HitFilter::hit(const PhysicsController::HitResult& result)
+{
+    return true;
 }
 
 }

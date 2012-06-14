@@ -90,6 +90,54 @@ public:
     };
 
     /**
+     * Class that can be overridden to provide custom hit test filters for ray
+     * and sweep tests.
+     *
+     * The default implementation of this class returns only the closest object
+     * that intersects a ray of volume.
+     */
+    class HitFilter
+    {
+    public:
+
+        /**
+         * Constructor.
+         */
+        HitFilter();
+
+        /**
+         * Virtual destructor.
+         */
+        virtual ~HitFilter();
+
+        /**
+         * Called before performing a hit test with an object to determine
+         * whether or not the object should be tested.
+         *
+         * @param object Object to be queried.
+         * 
+         * @return True if the object should be filtered out, or false to include the object in the test (default).
+         */
+        virtual bool filter(PhysicsCollisionObject* object);
+
+        /**
+         * Called when a ray or sweep test collides with a collision object.
+         *
+         * Each collision object that is hit during the ray or sweep test is passed
+         * to this method, along with details of the hit result. Returning true to
+         * this method will continue with normal hit test processing, where only
+         * closer objects are returned. Returning false results in this method being
+         * called for all objects that intersect the ray or volume.
+         *
+         * @param result HitResult object containing information about the hit.
+         * 
+         * @return True (default) to continue with defautl behavior where closer
+         *      objects are processed, false to process all intersecting objects.
+         */
+        virtual bool hit(const HitResult& result);
+    };
+
+    /**
      * Adds a listener to the physics controller.
      * 
      * @param listener The listener to add.
@@ -246,10 +294,15 @@ public:
      * 
      * @param ray The ray to test intersection with.
      * @param distance How far along the given ray to test for intersections.
-     * @param result Optional pointer to a HitTest structure to store hit test result information in.
+     * @param result Optional pointer to a HitTest structure to store the hit test result information in.
+     *      When using a default (or no) filter, this will always be the closest object hit. Otherwise, if 
+     *      using a custom filter, it will be the last object passed to the HitFilter::hit method (which
+     *      is not neccessarily the closest or furthest).
+     * @param filter Optional filter pointer used to control which objects are tested.
+     *
      * @return True if the ray test collided with a physics object, false otherwise.
      */
-    bool rayTest(const Ray& ray, float distance, PhysicsController::HitResult* result = NULL);
+    bool rayTest(const Ray& ray, float distance, PhysicsController::HitResult* result = NULL, PhysicsController::HitFilter* filter = NULL);
 
     /**
      * Performs a sweep test of the given collision object on the physics world.
@@ -259,10 +312,15 @@ public:
      *
      * @param object The collision object to test.
      * @param endPosition The end position of the sweep test, in world space.
-     * @param result Optional pointer to a HitTest structure to store hit test result information in.
+     * @param result Optional pointer to a HitTest structure to store the hit test result information in.
+     *      When using a default (or no) filter, this will always be the closest object hit. Otherwise, if 
+     *      using a custom filter, it will be the last object passed to the HitFilter::hit method (which
+     *      is not neccessarily the closest or furthest).
+     * @param filter Optional filter pointer used to control which objects are tested.
+     * 
      * @return True if the object intersects any other physics objects, false otherwise.
      */
-    bool sweepTest(PhysicsCollisionObject* object, const Vector3& endPosition, PhysicsController::HitResult* result = NULL);
+    bool sweepTest(PhysicsCollisionObject* object, const Vector3& endPosition, PhysicsController::HitResult* result = NULL, PhysicsController::HitFilter* filter = NULL);
 
 private:
 
