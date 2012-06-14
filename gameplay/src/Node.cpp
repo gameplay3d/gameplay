@@ -1093,19 +1093,17 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
 
 NodeCloneContext::NodeCloneContext()
 {
-    
 }
 
 NodeCloneContext::~NodeCloneContext()
 {
-
 }
 
 Animation* NodeCloneContext::findClonedAnimation(const Animation* animation)
 {
     GP_ASSERT(animation);
 
-    AnimationMap::iterator it = _clonedAnimations.find(animation);
+    std::map<const Animation*, Animation*>::iterator it = _clonedAnimations.find(animation);
     return it != _clonedAnimations.end() ? it->second : NULL;
 }
 
@@ -1121,7 +1119,7 @@ Node* NodeCloneContext::findClonedNode(const Node* node)
 {
     GP_ASSERT(node);
 
-    NodeMap::iterator it = _clonedNodes.find(node);
+    std::map<const Node*, Node*>::iterator it = _clonedNodes.find(node);
     return it != _clonedNodes.end() ? it->second : NULL;
 }
 
