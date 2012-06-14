@@ -25,8 +25,8 @@ static EGLConfig __eglConfig = 0;
 static int __width;
 static int __height;
 static struct timespec __timespec;
-static long __timeStart;
-static long __timeAbsolute;
+static double __timeStart;
+static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static ASensorManager* __sensorManager;
 static ASensorEventQueue* __sensorEventQueue;
@@ -47,10 +47,10 @@ PFNGLISVERTEXARRAYOESPROC glIsVertexArray = NULL;
 namespace gameplay
 {
 
-static long timespec2millis(struct timespec *a)
+static double timespec2millis(struct timespec *a)
 {
     GP_ASSERT(a);
-    return a->tv_sec*1000 + a->tv_nsec/1000000;
+    return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
 }
 
 extern void printError(const char* format, ...)
@@ -628,11 +628,11 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
             case AKEY_EVENT_ACTION_DOWN:
                 Game::getInstance()->keyEvent(Keyboard::KEY_PRESS, getKey(keycode, metastate));
                 if (int character = getUnicode(keycode, metastate))
-                    Game::getInstance()->keyEvent(Keyboard::KEY_CHAR, character);
+                    gameplay::Platform::keyEventInternal(Keyboard::KEY_CHAR, character);
                 break;
                     
             case AKEY_EVENT_ACTION_UP:
-                Game::getInstance()->keyEvent(Keyboard::KEY_RELEASE, getKey(keycode, metastate));
+                gameplay::Platform::keyEventInternal(Keyboard::KEY_RELEASE, getKey(keycode, metastate));
                 break;
         }
     }
@@ -858,16 +858,16 @@ unsigned int Platform::getDisplayHeight()
     return __height;
 }
     
-long Platform::getAbsoluteTime()
+double Platform::getAbsoluteTime()
 {
     clock_gettime(CLOCK_REALTIME, &__timespec);
-    long now = timespec2millis(&__timespec);
+    double now = timespec2millis(&__timespec);
     __timeAbsolute = now - __timeStart;
 
     return __timeAbsolute;
 }
 
-void Platform::setAbsoluteTime(long time)
+void Platform::setAbsoluteTime(double time)
 {
     __timeAbsolute = time;
 }
@@ -941,8 +941,24 @@ void Platform::displayKeyboard(bool display)
 void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+}
+
+void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    if (!Form::keyEventInternal(evt, key))
+        Game::getInstance()->keyEvent(evt, key);
+}
+
+bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
+    {
+        return true;
+    }
+    else
+    {
+        return Game::getInstance()->mouseEvent(evt, x, y, wheelDelta);
     }
 }
 

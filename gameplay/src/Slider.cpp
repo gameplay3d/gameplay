@@ -134,6 +134,7 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
         if (evt == Touch::TOUCH_RELEASE)
         {
             _state = NORMAL;
+            _dirty = true;
         }
         break;
     }

@@ -47,12 +47,12 @@ protected:
     /**
      * @see Game::update
      */
-    void update(long elapsedTime);
+    void update(float elapsedTime);
 
     /**
      * @see Game::render
      */
-    void render(long elapsedTime);
+    void render(float elapsedTime);
 
 private:
 
@@ -64,7 +64,7 @@ private:
     bool drawScene(Node* node, bool transparent);
     void play(const char* id, bool repeat, float speed = 1.0f);
     void jump();
-    void adjustCamera(long elapsedTime);
+    void adjustCamera(float elapsedTime);
     bool isOnFloor() const;
 
     Font* _font;
