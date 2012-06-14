@@ -77,6 +77,7 @@ Form* Form::create(const char* url)
         break;
     default:
         GP_ERROR("Unsupported layout type '%d'.", getLayoutType(layoutString));
+        break;
     }
 
     Theme* theme = Theme::create(themeFile);
@@ -173,34 +174,17 @@ void Form::setSize(float width, float height)
     if (width != _bounds.width || height != _bounds.height)
     {
         // Width and height must be powers of two to create a texture.
-        int w = width;
-        int h = height;
-
-        if (!((w & (w - 1)) == 0))
-        {
-            w = nextHighestPowerOfTwo(w);
-        }
-
-        if (!((h & (h - 1)) == 0))
-        {
-            h = nextHighestPowerOfTwo(h);
-        }
-
+        unsigned int w = nextPowerOfTwo(width);
+        unsigned int h = nextPowerOfTwo(height);
         _u2 = width / (float)w;
         _v1 = height / (float)h;
 
         // Create framebuffer if necessary.
-        if (!_frameBuffer)
-        {
-            _frameBuffer = FrameBuffer::create(_id.c_str());
-            GP_ASSERT(_frameBuffer);
-        }
-     
-        // Re-create render target.
-        RenderTarget* rt = RenderTarget::create(_id.c_str(), w, h);
-        GP_ASSERT(rt);
-        _frameBuffer->setRenderTarget(rt);
-        SAFE_RELEASE(rt);
+        if (_frameBuffer)
+            SAFE_RELEASE(_frameBuffer)
+        
+        _frameBuffer = FrameBuffer::create(_id.c_str(), w, h);
+        GP_ASSERT(_frameBuffer);
 
         // Re-create projection matrix.
         Matrix::createOrthographicOffCenter(0, width, height, 0, 0, 1, &_projectionMatrix);
@@ -641,15 +625,23 @@ void Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
     }
 }
 
-int Form::nextHighestPowerOfTwo(int x)
+unsigned int Form::nextPowerOfTwo(unsigned int v)
 {
-    x--;
-    x |= x >> 1;
-    x |= x >> 2;
-    x |= x >> 4;
-    x |= x >> 8;
-    x |= x >> 16;
-    return x + 1;
+
+    if (!((v & (v - 1)) == 0))
+    {
+        v--;
+        v |= v >> 1;
+        v |= v >> 2;
+        v |= v >> 4;
+        v |= v >> 8;
+        v |= v >> 16;
+        return v + 1;
+    }
+    else
+    {
+        return v;
+    }
 }
 
 }
