@@ -191,6 +191,15 @@ private:
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
+     * Get the next highest power of two of an integer.  Used when creating framebuffers.
+     *
+     * @param x The number to start with.
+     *
+     * @return The next highest power of two after x, or x if it is already a power of two.
+     */
+    static unsigned int nextPowerOfTwo(unsigned int v);
+
+    /**
      * Unproject a point (from a mouse or touch event) into the scene and then project it onto the form.
      *
      * @param x The x coordinate of the mouse/touch point.
@@ -201,20 +210,11 @@ private:
      */
     bool projectPoint(int x, int y, Vector3* point);
 
-    /**
-     * Get the next highest power of two of an integer.  Used when creating framebuffers.
-     *
-     * @param x The number to start with.
-     *
-     * @return The next highest power of two after x, or x if it is already a power of two.
-     */
-    static int nextHighestPowerOfTwo(int x);
-
-    Theme* _theme;              // The Theme applied to this Form.
-    Model* _quad;               // Quad for rendering this Form in world-space.
-    Node* _node;                // Node for transforming this Form in world-space.
-    FrameBuffer* _frameBuffer;  // FBO the Form is rendered into for texturing the quad.
-    Matrix _projectionMatrix;   // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
+    Theme* _theme;                      // The Theme applied to this Form.
+    Model* _quad;                       // Quad for rendering this Form in world-space.
+    Node* _node;                        // Node for transforming this Form in world-space.
+    FrameBuffer* _frameBuffer;          // FBO the Form is rendered into for texturing the quad.
+    Matrix _projectionMatrix;           // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
     Matrix _defaultProjectionMatrix;
     SpriteBatch* _spriteBatch;
 

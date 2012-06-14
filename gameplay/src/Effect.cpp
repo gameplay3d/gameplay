@@ -420,8 +420,8 @@ void Effect::setValue(Uniform* uniform, const Texture::Sampler* sampler)
 
 void Effect::bind()
 {
-    GL_ASSERT( glUseProgram(_program) );
-
+   glUseProgram(_program) ;
+   GLenum test = glGetError();
     __currentEffect = this;
 }
 
