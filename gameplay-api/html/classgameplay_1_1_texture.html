@@ -78,8 +78,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Texture Class Reference</div>  </div>
 </div><!--header-->
@@ -105,8 +104,7 @@ Classes</h2></td></tr>
 Public Types</h2></td></tr>
 <tr class="memitem:a062414a71169c01a7ae7af0c221d8645"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a062414a71169c01a7ae7af0c221d8645">Format</a> { <b>RGB</b> =  GL_RGB, 
 <b>RGBA</b> =  GL_RGBA, 
-<b>ALPHA</b> =  GL_ALPHA, 
-<b>DEPTH</b> =  GL_DEPTH_COMPONENT
+<b>ALPHA</b> =  GL_ALPHA
  }</td></tr>
 <tr class="memitem:a17d2554f8fb6b579843f5fe348dc887e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a17d2554f8fb6b579843f5fe348dc887e">Filter</a> { <br/>
 &#160;&#160;<b>NEAREST</b> =  GL_NEAREST, 
@@ -123,6 +121,7 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a8b246e020dec41cd8398842640838c93"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_texture.html#a062414a71169c01a7ae7af0c221d8645">Format</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a8b246e020dec41cd8398842640838c93">getFormat</a> () const </td></tr>
 <tr class="memitem:a80bddd8745b36e0c51cf54adbb1a55f6"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a80bddd8745b36e0c51cf54adbb1a55f6">getWidth</a> () const </td></tr>
 <tr class="memitem:a5c84500dc18a15edfc4b6644c6e07673"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a5c84500dc18a15edfc4b6644c6e07673">getHeight</a> () const </td></tr>
 <tr class="memitem:af80fb9c40c8db751c41b2c9e51ba64d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#af80fb9c40c8db751c41b2c9e51ba64d9">setWrapMode</a> (<a class="el" href="classgameplay_1_1_texture.html#a1be9d041e4548acc075d5254c642a4ac">Wrap</a> wrapS, <a class="el" href="classgameplay_1_1_texture.html#a1be9d041e4548acc075d5254c642a4ac">Wrap</a> wrapT)</td></tr>
@@ -136,14 +135,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:abd9c85cfbbba9068ed9b50a64288d609"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#abd9c85cfbbba9068ed9b50a64288d609">create</a> (const char *path, bool <a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a>=false)</td></tr>
 <tr class="memitem:a154ece331771656e95c174d20c35bed7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a154ece331771656e95c174d20c35bed7">create</a> (<a class="el" href="classgameplay_1_1_image.html">Image</a> *image, bool <a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a>=false)</td></tr>
 <tr class="memitem:a0c79e32bab9ddfcba065d2e3c898d5bc"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a0c79e32bab9ddfcba065d2e3c898d5bc">create</a> (<a class="el" href="classgameplay_1_1_texture.html#a062414a71169c01a7ae7af0c221d8645">Format</a> format, unsigned int width, unsigned int height, unsigned char *data, bool <a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a>=false)</td></tr>
-<tr><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a8f5378aba3dfbbf24026a47e1b005214"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8f5378aba3dfbbf24026a47e1b005214"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Sampler</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Represents a texture.</p>
-<p>TODO: Addd support for the following: COMPRESSED_RGBA_ATITC = GL_ATC_RGBA_EXPLICIT_ALPHA_AMD, COMPRESSED_RGBA_DXT1 = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT </p>
+<div class="textblock"><p>Represents a texture. </p>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="a17d2554f8fb6b579843f5fe348dc887e"></a>
 <div class="memitem">
@@ -316,6 +310,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Sampler</b></td></tr
 
 </div>
 </div>
+<a class="anchor" id="a8b246e020dec41cd8398842640838c93"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_texture.html#a062414a71169c01a7ae7af0c221d8645">Format</a> <a class="el" href="classgameplay_1_1_texture.html#a8b246e020dec41cd8398842640838c93">gameplay::Texture::getFormat</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the format of the texture.</p>
+<dl class="section return"><dt>Returns:</dt><dd>The texture format. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="adc521b76e2a09c12c34851da8f4fe600"></a>
 <div class="memitem">
 <div class="memproto">
@@ -347,7 +359,8 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Sampler</b></td></tr
       </table>
 </div>
 <div class="memdoc">
-<p>Returns the texture height. </p>
+<p>Gets the texture height.</p>
+<dl class="section return"><dt>Returns:</dt><dd>The texture height. </dd></dl>
 
 </div>
 </div>
@@ -364,7 +377,8 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Sampler</b></td></tr
       </table>
 </div>
 <div class="memdoc">
-<p>Returns the texture width. </p>
+<p>Gets the texture width.</p>
+<dl class="section return"><dt>Returns:</dt><dd>The texture width. </dd></dl>
 
 </div>
 </div>
@@ -477,7 +491,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Sampler</b></td></tr
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 00:44:00 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jun 14 2012 14:25:06 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
