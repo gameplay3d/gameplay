@@ -9,6 +9,7 @@
 #include "ThemeStyle.h"
 #include "Touch.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 namespace gameplay
 {
@@ -124,7 +125,17 @@ public:
             /**
              * Event triggered when the contents of a text box are modified.
              */
-            TEXT_CHANGED    = 0x10
+            TEXT_CHANGED    = 0x10,
+
+            /**
+             * Event triggered when a control is clicked with the middle mouse button.
+             */
+            MIDDLE_CLICK    = 0x20,
+
+            /**
+             * Event triggered when a control is clicked with the right mouse button.
+             */
+            RIGHT_CLICK     = 0x40,
         };
 
         /**
@@ -630,19 +641,19 @@ public:
     bool isEnabled();
 
     /**
-     * Set whether this control consumes touch events,
+     * Set whether this control consumes input events,
      * preventing them from being passed to the game.
      *
-     * @param consume Whether this control consumes touch events.
+     * @param consume Whether this control consumes input events.
      */
-    void setConsumeTouchEvents(bool consume);
+    void setConsumeInputEvents(bool consume);
 
     /**
      * Get whether this control consumes touch events.
      *
      * @return Whether this control consumes touch events.
      */
-    bool getConsumeTouchEvents();
+    bool getConsumeInputEvents();
 
     /**
      * Set the style this control will use when rendering.
@@ -738,11 +749,27 @@ protected:
      * @param evt The key event that occured.
      * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
      *            If evt is KEY_CHAR then key is the unicode value of the character.
+     *
+     * @return Whether the key event was consumed by this control.
      * 
      * @see Keyboard::KeyEvent
      * @see Keyboard::Key
      */
-    virtual void keyEvent(Keyboard::KeyEvent evt, int key);
+    virtual bool keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * Mouse callback on mouse events.
+     *
+     * @param evt The mouse event that occurred.
+     * @param x The x position of the mouse in pixels. Left edge is zero.
+     * @param y The y position of the mouse in pixels. Top edge is zero.
+     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
+     *
+     * @return True if the mouse event is consumed or false if it is not consumed.
+     *
+     * @see Mouse::MouseEvent
+     */
+    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
      * Called when a control's properties change.  Updates this control's internal rendering
@@ -873,14 +900,19 @@ protected:
     Rectangle _viewportClipBounds;
 
     /**
+     * Previous frame's absolute clip bounds, to be cleared if necessary.
+     */
+    Rectangle _clearBounds;         
+
+    /**
      * If the control is dirty and need updating.
      */
     bool _dirty;
     
     /**
-     * Flag for whether the Control consume's touch events.
+     * Flag for whether the Control consumes input events.
      */
-    bool _consumeTouchEvents;
+    bool _consumeInputEvents;
     
     /**
      * The Control's Alignmnet
@@ -952,7 +984,6 @@ private:
     
     bool _styleOverridden;
     Theme::Skin* _skin;
-    Rectangle _clearBounds;         // Previous frame's absolute clip bounds, to be cleared if necessary.
 };
 
 }

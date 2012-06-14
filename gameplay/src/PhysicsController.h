@@ -16,7 +16,7 @@ namespace gameplay
 /**
  * Defines a class for controlling game physics.
  */
-class PhysicsController : public btCollisionWorld::ContactResultCallback
+class PhysicsController
 {
     friend class Game;
     friend class PhysicsConstraint;
@@ -264,14 +264,30 @@ public:
      */
     bool sweepTest(PhysicsCollisionObject* object, const Vector3& endPosition, PhysicsController::HitResult* result = NULL);
 
-protected:
+private:
 
     /**
-     * Internal function used for Bullet integration (do not use or override).
+     * Internal class used to integrate with Bullet collision callbacks.
      */
-    btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB);    
+    class CollisionCallback : public btCollisionWorld::ContactResultCallback
+    {
+    public:
+        /**
+         * Constructor.
+         * 
+         * @param pc The physics controller that owns the callback.
+         */
+        CollisionCallback(PhysicsController* pc) : _pc(pc) {}
 
-private:
+    protected:
+        /**
+            * Internal function used for Bullet integration (do not use or override).
+            */
+        btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB);    
+
+    private:
+        PhysicsController* _pc;
+    };
 
     // Internal constants for the collision status cache.
     static const int DIRTY;
@@ -321,7 +337,7 @@ private:
     /**
      * Controller update.
      */
-    void update(long elapsedTime);
+    void update(float elapsedTime);
 
     // Adds the given collision listener for the two given collision objects.
     void addCollisionListener(PhysicsCollisionObject::CollisionListener* listener, PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB);
@@ -459,6 +475,7 @@ private:
     std::vector<Listener*>* _listeners;
     Vector3 _gravity;
     std::map<PhysicsCollisionObject::CollisionPair, CollisionInfo> _collisionStatus;
+    CollisionCallback* _collisionCallback;
 
 };
 

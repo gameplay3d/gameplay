@@ -14,9 +14,9 @@ using gameplay::printError;
 static int __width = 1280;
 static int __height = 720;
 
-static long __timeTicksPerMillis;
-static long __timeStart;
-static long __timeAbsolute;
+static double __timeTicksPerMillis;
+static double __timeStart;
+static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static float __roll;
 static float __pitch;
@@ -276,11 +276,6 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     switch (msg)
     {
-    case WM_PAINT:
-        gameplay::Game::getInstance()->frame();
-        SwapBuffers(__hdc);
-        return 0;
-
     case WM_CLOSE:
         DestroyWindow(__hwnd);
         return 0;
@@ -295,7 +290,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int y = GET_Y_LPARAM(lParam);
 
         UpdateCapture(wParam);
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, x, y, 0))
+        if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, x, y, 0))
         {
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, x, y, 0);
         }
@@ -306,7 +301,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
 
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, x, y, 0))
+        if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, x, y, 0))
         {
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, x, y, 0);
         }
@@ -317,21 +312,21 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         UpdateCapture(wParam);
         lx = GET_X_LPARAM(lParam);
         ly = GET_Y_LPARAM(lParam);
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, lx, ly, 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON, lx, ly, 0);
         break;
 
     case WM_RBUTTONUP:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         UpdateCapture(wParam);
         break;
 
     case WM_MBUTTONDOWN:
         UpdateCapture(wParam);
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         break;
 
     case WM_MBUTTONUP:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         UpdateCapture(wParam);
         break;
 
@@ -341,7 +336,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int y = GET_Y_LPARAM(lParam);
 
         // Allow Game::mouseEvent a chance to handle (and possibly consume) the event.
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
+        if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
         {
             if ((wParam & MK_LBUTTON) == MK_LBUTTON)
             {
@@ -368,7 +363,11 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
 
     case WM_MOUSEWHEEL:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_WHEEL, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), GET_WHEEL_DELTA_WPARAM(wParam) / 120);
+        tagPOINT point;
+        point.x = GET_X_LPARAM(lParam);
+        point.y = GET_Y_LPARAM(lParam);
+        ScreenToClient(__hwnd, &point);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_WHEEL, point.x, point.y, GET_WHEEL_DELTA_WPARAM(wParam) / 120);
         break;
 
     case WM_KEYDOWN:
@@ -633,7 +632,7 @@ int Platform::enterMessagePump()
     // Get the initial time.
     LARGE_INTEGER tps;
     QueryPerformanceFrequency(&tps);
-    __timeTicksPerMillis = (long)(tps.QuadPart / 1000L);
+    __timeTicksPerMillis = (double)(tps.QuadPart / 1000L);
     LARGE_INTEGER queryTime;
     QueryPerformanceCounter(&queryTime);
     GP_ASSERT(__timeTicksPerMillis);
@@ -663,6 +662,11 @@ int Platform::enterMessagePump()
                 break;
             }
         }
+        else
+        {
+            _game->frame();
+            SwapBuffers(__hdc);
+        }
 
         // If we are done, then exit.
         if (_game->getState() == Game::UNINITIALIZED)
@@ -687,7 +691,7 @@ unsigned int Platform::getDisplayHeight()
     return __height;
 }
     
-long Platform::getAbsoluteTime()
+double Platform::getAbsoluteTime()
 {
     LARGE_INTEGER queryTime;
     QueryPerformanceCounter(&queryTime);
@@ -697,7 +701,7 @@ long Platform::getAbsoluteTime()
     return __timeAbsolute;
 }
 
-void Platform::setAbsoluteTime(long time)
+void Platform::setAbsoluteTime(double time)
 {
     __timeAbsolute = time;
 }
@@ -745,15 +749,25 @@ void Platform::displayKeyboard(bool display)
 void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-    }
 }
 
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    Game::getInstance()->keyEvent(evt, key);
-    Form::keyEventInternal(evt, key);
+    if (!Form::keyEventInternal(evt, key))
+        Game::getInstance()->keyEvent(evt, key);
+}
+
+bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
+    {
+        return true;
+    }
+    else
+    {
+        return Game::getInstance()->mouseEvent(evt, x, y, wheelDelta);
+    }
 }
 
 void Platform::sleep(long ms)

@@ -20,7 +20,7 @@ Label* Label::create(Theme::Style* style, Properties* properties)
 {
     Label* label = new Label();
     label->initialize(style, properties);
-    label->_consumeTouchEvents = false;
+    label->_consumeInputEvents = false;
 
     return label;
 }
@@ -49,7 +49,7 @@ void Label::addListener(Control::Listener* listener, int eventFlags)
         GP_ERROR("VALUE_CHANGED event is not applicable to this control.");
     }
 
-    _consumeTouchEvents = true;
+    _consumeInputEvents = true;
 
     Control::addListener(listener, eventFlags);
 }

@@ -22,7 +22,7 @@ Joystick* Joystick::create(Theme::Style* style, Properties* properties)
 {
     Joystick* joystick = new Joystick();
     joystick->initialize(style, properties);
-    joystick->_consumeTouchEvents = false;
+    joystick->_consumeInputEvents = false;
 
     return joystick;
 }
@@ -59,7 +59,7 @@ void Joystick::addListener(Control::Listener* listener, int eventFlags)
         GP_ERROR("TEXT_CHANGED event is not applicable to this control.");
     }
 
-    _consumeTouchEvents = true;
+    _consumeInputEvents = true;
 
     Control::addListener(listener, eventFlags);
 }
@@ -94,6 +94,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                 if (_value != value)
                 {
                     _value.set(value);
+                    _dirty = true;
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
@@ -114,6 +115,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                     if (_value != value)
                     {
                         _value.set(value);
+                        _dirty = true;
                         notifyListeners(Control::Listener::VALUE_CHANGED);
                     }
                 }
@@ -126,6 +128,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                     if (_value != value)
                     {
                         _value.set(value);
+                        _dirty = true;
                         notifyListeners(Control::Listener::VALUE_CHANGED);
                     }
                 }
@@ -146,6 +149,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                 if (_value != value)
                 {
                     _value.set(value);
+                    _dirty = true;
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
@@ -161,6 +165,12 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
 void Joystick::update(const Control* container, const Vector2& offset)
 {
     Control::update(container, offset);
+
+    _clearBounds.x -= _radius;
+    _clearBounds.y -= _radius;
+    float radiusx2 = _radius + _radius;
+    _clearBounds.width += radiusx2;
+    _clearBounds.height += radiusx2;
 }
 
 void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
