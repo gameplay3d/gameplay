@@ -10,10 +10,6 @@ class Image;
 
 /**
  * Represents a texture.
- *
- * TODO: Addd support for the following: 
- * COMPRESSED_RGBA_ATITC = GL_ATC_RGBA_EXPLICIT_ALPHA_AMD,
- * COMPRESSED_RGBA_DXT1 = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
  */
 class Texture : public Ref
 {
@@ -28,8 +24,7 @@ public:
     {
         RGB     = GL_RGB,
         RGBA    = GL_RGBA,
-        ALPHA   = GL_ALPHA,
-        DEPTH   = GL_DEPTH_COMPONENT
+        ALPHA   = GL_ALPHA
     };
 
     /**
@@ -116,6 +111,7 @@ public:
     private:
 
         Sampler(Texture* texture);
+
         ~Sampler();
 
         Texture* _texture;
@@ -149,12 +145,23 @@ public:
     static Texture* create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps = false);
 
     /**
-     * Returns the texture width.
+     * Gets the format of the texture.
+     *
+     * @return The texture format.
+     */
+    Format getFormat() const;
+
+    /**
+     * Gets the texture width.
+     *
+     * @return The texture width.
      */
     unsigned int getWidth() const;
 
     /**
-     * Returns the texture height.
+     * Gets the texture height.
+     *
+     * @return The texture height.
      */
     unsigned int getHeight() const;
 
@@ -216,13 +223,16 @@ private:
     virtual ~Texture();
 
     static Texture* createCompressedPVRTC(const char* path);
+
     static Texture* createCompressedDDS(const char* path);
 
     static GLubyte* readCompressedPVRTC(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
+
     static GLubyte* readCompressedPVRTCLegacy(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
 
     std::string _path;
     TextureHandle _handle;
+    Format _format;
     unsigned int _width;
     unsigned int _height;
     bool _mipmapped;

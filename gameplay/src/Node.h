@@ -847,12 +847,8 @@ private:
      */
     NodeCloneContext& operator=(const NodeCloneContext&);
 
-private:
-    typedef std::map<const Animation*, Animation*> AnimationMap;
-    typedef std::map<const Node*, Node*> NodeMap;
-
-    AnimationMap _clonedAnimations;
-    NodeMap _clonedNodes;
+    std::map<const Animation*, Animation*> _clonedAnimations;
+    std::map<const Node*, Node*> _clonedNodes;
 };
 
 }
