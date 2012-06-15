@@ -3,6 +3,7 @@
 
 #include "Touch.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 namespace gameplay
 {
@@ -66,14 +67,14 @@ public:
      *
      * @return The absolute platform time. (in milliseconds)
      */
-    static long getAbsoluteTime();
+    static double getAbsoluteTime();
 
     /**
      * Sets the absolute platform time since the start of the message pump.
      *
      * @param time The time to set (in milliseconds).
      */
-    static void setAbsoluteTime(long time);
+    static void setAbsoluteTime(double time);
 
     /**
      * Gets whether vertical sync is enabled for the game display.
@@ -142,6 +143,21 @@ public:
      * @see Keyboard::Key
      */
     static void keyEventInternal(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * Mouse callback on mouse events. If the game does not consume the mouse move event or left mouse click event
+     * then it is interpreted as a touch event instead.
+     *
+     * @param evt The mouse event that occurred.
+     * @param x The x position of the mouse in pixels. Left edge is zero.
+     * @param y The y position of the mouse in pixels. Top edge is zero.
+     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
+     *
+     * @return True if the mouse event is consumed or false if it is not consumed.
+     *
+     * @see Mouse::MouseEvent
+     */
+    static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
      * Sleeps synchronously for the given amount of time (in milliseconds).

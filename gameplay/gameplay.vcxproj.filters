@@ -192,9 +192,6 @@
     <ClCompile Include="src\PhysicsSpringConstraint.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PhysicsMotionState.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\SceneLoader.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -438,9 +435,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PhysicsController.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PhysicsMotionState.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PhysicsRigidBody.h">
