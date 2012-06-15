@@ -580,7 +580,7 @@ int getKey(unichar keyCode);
 @end
 
 
-dobule getMachTimeInMilliseconds()
+double getMachTimeInMilliseconds()
 {
     static const double kOneMillion = 1000 * 1000;
     static mach_timebase_info_data_t s_timebase_info;
@@ -868,7 +868,7 @@ unsigned int Platform::getDisplayHeight()
     return size.height;
 }
 
-dobule Platform::getAbsoluteTime()
+double Platform::getAbsoluteTime()
 {
     __timeAbsolute = getMachTimeInMilliseconds();
     return __timeAbsolute;
