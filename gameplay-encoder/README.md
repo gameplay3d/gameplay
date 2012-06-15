@@ -1,36 +1,44 @@
 ## gameplay-encoder
 Command-line tool for encoding games assets like true-type fonts and 3D scene files
 into a simple binary-based bundle file format for the gameplay 3D game framework runtime. 
-The 'bin' folder contains a pre-built version of the gameplay-encoder with support built-in support for:
+The 'bin' folder contains pre-built versions of the gameplay-encoder executables for both 
+Windows 7 and MacOS X with support built-in support for:
 
-## TrueType Font Support
-TrueType Fonts conversion is enabled/built-in by default into gameplay-encoder via freetype 2 library.
+## TrueType Font
+TrueType Fonts represent a standard in defining outline fonts and has become the 
+most common format for fonts. The gameplay-encoder reads these fonts and binary encodes 
+them into a texture mapped base representation using a texture atlas and 8-bit alpha
+representation.
 
-## COLLADA Scene Support
-COLLADA is enabled/built-in by default into gameplay-encoder via COLLADA-DOM library.
-Most major 3D DCC tools support the export of COLLADA 1.4.
-We also recommend you download and use OpenCOLADA (http://opencollada.org/)
-for Autodesk Maya and 3DS Max.
+## COLLADA Scene
+COLLADA is a royalty-free XML schema that enables digital asset exchange 
+within the interactive 3D industry. Most major 3D DCC tools support export to COLLADA 1.4.
 
-## FBX Scene Support
-FBX support can easily be enabled in gameplay-encoder but requires an 
-additional installation of Autodesk FBX SDK. (http://www.autodesk.com/fbx).
+## FBX Scene
+Autodesk® FBX® asset exchange technology facilitates higher-fidelity data exchange 
+between several Autodesk content creation packages
+Autodesk® Maya®, Autodesk® 3ds Max®, Autodesk® MotionBuilder®, Autodesk® Mudbox®, and Autodesk® Softimage®
+For more information goto "http://www.autodesk.com/fbx".
 
-You must then rebuild gameplay-encoder with the follow platform/tooling instructions:
+## Building gameplay-encoder
+The gameplay-encoder comes pre-built for both Windows 7 and MacOS X in the 'bin' folder.
+However, to build the gameplay-ecoder yourself just open either the 
+Visual Studio 2010 project "gameplay-encoder.vccproj" on Windows 7 or
+XCode project "gameplay-encoder.xcodeproj" on MacOSX.
 
-### Building FBX Support on Windows 7 using Visual Studio 2010
+### Building with FBX Support on Windows 7 using Visual Studio 2010
 - Download and install the FBX SDK for Window VS2010. (http://www.autodesk.com/fbx)
-- Edit the project properties of "gameplay-encoder"
+- Edit the project properties of "gameplay-encoder" for Debug
 - Add Preprocessor Definition "USE_FBX" (C++/Preprocessor)
 - Add the FBX SDK include directory to Additional Include Directories (C++/General)
   * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.1/include
 - Add the FBX lib directory to the Additional Library Directories (Linker/General)
   * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.1/lib/vs2010/x86
-- Add "fbxsdk-2013.1-md.lib"(Release) and "wininet.lib" to the Additional Dependencies (Linker/Input)
-  * Example: fbxsdk-2013.1-md.lib;wininet.lib
+- Add "fbxsdk-2013.1-mdd.lib"(Release) and "wininet.lib" to the Additional Dependencies (Linker/Input)
+  * Example: fbxsdk-2013.1-mdd.lib;wininet.lib
 - Build gameplay-encoder
 
-### Building FBX Support on Mac OS X using XCode 4.3.2+
+### Building with FBX Support on Mac OS X using XCode 4.3.2+
 - Download and install the FBX SDK for Mac OS X (http://www.autodesk.com/fbx)
 - Edit the project properties of target "gameplay-encoder".
 - Add Preprocessor Macro "USE_FBX" to both Debug/Release sections. (Build Settings)
