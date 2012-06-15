@@ -127,8 +127,6 @@
 		42CD0E98147D8FF60000361E /* PhysicsGenericConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E08147D8FF50000361E /* PhysicsGenericConstraint.h */; };
 		42CD0E99147D8FF60000361E /* PhysicsHingeConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E0A147D8FF50000361E /* PhysicsHingeConstraint.cpp */; };
 		42CD0E9A147D8FF60000361E /* PhysicsHingeConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E0B147D8FF50000361E /* PhysicsHingeConstraint.h */; };
-		42CD0E9B147D8FF60000361E /* PhysicsMotionState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E0C147D8FF50000361E /* PhysicsMotionState.cpp */; };
-		42CD0E9C147D8FF60000361E /* PhysicsMotionState.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E0D147D8FF50000361E /* PhysicsMotionState.h */; };
 		42CD0E9D147D8FF60000361E /* PhysicsRigidBody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E0E147D8FF50000361E /* PhysicsRigidBody.cpp */; };
 		42CD0E9E147D8FF60000361E /* PhysicsRigidBody.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E0F147D8FF50000361E /* PhysicsRigidBody.h */; };
 		42CD0E9F147D8FF60000361E /* PhysicsSocketConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E11147D8FF50000361E /* PhysicsSocketConstraint.cpp */; };
@@ -211,7 +209,6 @@
 		5B04C55414BFCFE100EB0071 /* PhysicsFixedConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E04147D8FF50000361E /* PhysicsFixedConstraint.cpp */; };
 		5B04C55514BFCFE100EB0071 /* PhysicsGenericConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E07147D8FF50000361E /* PhysicsGenericConstraint.cpp */; };
 		5B04C55614BFCFE100EB0071 /* PhysicsHingeConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E0A147D8FF50000361E /* PhysicsHingeConstraint.cpp */; };
-		5B04C55714BFCFE100EB0071 /* PhysicsMotionState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E0C147D8FF50000361E /* PhysicsMotionState.cpp */; };
 		5B04C55814BFCFE100EB0071 /* PhysicsRigidBody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E0E147D8FF50000361E /* PhysicsRigidBody.cpp */; };
 		5B04C55914BFCFE100EB0071 /* PhysicsSocketConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E11147D8FF50000361E /* PhysicsSocketConstraint.cpp */; };
 		5B04C55A14BFCFE100EB0071 /* PhysicsSpringConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E13147D8FF50000361E /* PhysicsSpringConstraint.cpp */; };
@@ -282,7 +279,6 @@
 		5B04C5A714BFCFE100EB0071 /* PhysicsFixedConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E05147D8FF50000361E /* PhysicsFixedConstraint.h */; };
 		5B04C5A814BFCFE100EB0071 /* PhysicsGenericConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E08147D8FF50000361E /* PhysicsGenericConstraint.h */; };
 		5B04C5A914BFCFE100EB0071 /* PhysicsHingeConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E0B147D8FF50000361E /* PhysicsHingeConstraint.h */; };
-		5B04C5AA14BFCFE100EB0071 /* PhysicsMotionState.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E0D147D8FF50000361E /* PhysicsMotionState.h */; };
 		5B04C5AB14BFCFE100EB0071 /* PhysicsRigidBody.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E0F147D8FF50000361E /* PhysicsRigidBody.h */; };
 		5B04C5AC14BFCFE100EB0071 /* PhysicsSocketConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E12147D8FF50000361E /* PhysicsSocketConstraint.h */; };
 		5B04C5AD14BFCFE100EB0071 /* PhysicsSpringConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E14147D8FF50000361E /* PhysicsSpringConstraint.h */; };
@@ -515,8 +511,6 @@
 		42CD0E09147D8FF50000361E /* PhysicsGenericConstraint.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = PhysicsGenericConstraint.inl; path = src/PhysicsGenericConstraint.inl; sourceTree = SOURCE_ROOT; };
 		42CD0E0A147D8FF50000361E /* PhysicsHingeConstraint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsHingeConstraint.cpp; path = src/PhysicsHingeConstraint.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0E0B147D8FF50000361E /* PhysicsHingeConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsHingeConstraint.h; path = src/PhysicsHingeConstraint.h; sourceTree = SOURCE_ROOT; };
-		42CD0E0C147D8FF50000361E /* PhysicsMotionState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsMotionState.cpp; path = src/PhysicsMotionState.cpp; sourceTree = SOURCE_ROOT; };
-		42CD0E0D147D8FF50000361E /* PhysicsMotionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsMotionState.h; path = src/PhysicsMotionState.h; sourceTree = SOURCE_ROOT; };
 		42CD0E0E147D8FF50000361E /* PhysicsRigidBody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsRigidBody.cpp; path = src/PhysicsRigidBody.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0E0F147D8FF50000361E /* PhysicsRigidBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsRigidBody.h; path = src/PhysicsRigidBody.h; sourceTree = SOURCE_ROOT; };
 		42CD0E10147D8FF50000361E /* PhysicsRigidBody.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = PhysicsRigidBody.inl; path = src/PhysicsRigidBody.inl; sourceTree = SOURCE_ROOT; };
@@ -835,8 +829,6 @@
 				42CD0E0B147D8FF50000361E /* PhysicsHingeConstraint.h */,
 				5BBE143C1513E400003FB362 /* PhysicsGhostObject.cpp */,
 				5BBE143D1513E400003FB362 /* PhysicsGhostObject.h */,
-				42CD0E0C147D8FF50000361E /* PhysicsMotionState.cpp */,
-				42CD0E0D147D8FF50000361E /* PhysicsMotionState.h */,
 				42CD0E0E147D8FF50000361E /* PhysicsRigidBody.cpp */,
 				42CD0E0F147D8FF50000361E /* PhysicsRigidBody.h */,
 				42CD0E10147D8FF50000361E /* PhysicsRigidBody.inl */,
@@ -1031,7 +1023,6 @@
 				42CD0E96147D8FF60000361E /* PhysicsFixedConstraint.h in Headers */,
 				42CD0E98147D8FF60000361E /* PhysicsGenericConstraint.h in Headers */,
 				42CD0E9A147D8FF60000361E /* PhysicsHingeConstraint.h in Headers */,
-				42CD0E9C147D8FF60000361E /* PhysicsMotionState.h in Headers */,
 				42CD0E9E147D8FF60000361E /* PhysicsRigidBody.h in Headers */,
 				42CD0EA0147D8FF60000361E /* PhysicsSocketConstraint.h in Headers */,
 				42CD0EA2147D8FF60000361E /* PhysicsSpringConstraint.h in Headers */,
@@ -1131,7 +1122,6 @@
 				5B04C5A714BFCFE100EB0071 /* PhysicsFixedConstraint.h in Headers */,
 				5B04C5A814BFCFE100EB0071 /* PhysicsGenericConstraint.h in Headers */,
 				5B04C5A914BFCFE100EB0071 /* PhysicsHingeConstraint.h in Headers */,
-				5B04C5AA14BFCFE100EB0071 /* PhysicsMotionState.h in Headers */,
 				5B04C5AB14BFCFE100EB0071 /* PhysicsRigidBody.h in Headers */,
 				5B04C5AC14BFCFE100EB0071 /* PhysicsSocketConstraint.h in Headers */,
 				5B04C5AD14BFCFE100EB0071 /* PhysicsSpringConstraint.h in Headers */,
@@ -1293,7 +1283,6 @@
 				42CD0E95147D8FF60000361E /* PhysicsFixedConstraint.cpp in Sources */,
 				42CD0E97147D8FF60000361E /* PhysicsGenericConstraint.cpp in Sources */,
 				42CD0E99147D8FF60000361E /* PhysicsHingeConstraint.cpp in Sources */,
-				42CD0E9B147D8FF60000361E /* PhysicsMotionState.cpp in Sources */,
 				42CD0E9D147D8FF60000361E /* PhysicsRigidBody.cpp in Sources */,
 				42CD0E9F147D8FF60000361E /* PhysicsSocketConstraint.cpp in Sources */,
 				42CD0EA1147D8FF60000361E /* PhysicsSpringConstraint.cpp in Sources */,
@@ -1385,7 +1374,6 @@
 				5B04C55414BFCFE100EB0071 /* PhysicsFixedConstraint.cpp in Sources */,
 				5B04C55514BFCFE100EB0071 /* PhysicsGenericConstraint.cpp in Sources */,
 				5B04C55614BFCFE100EB0071 /* PhysicsHingeConstraint.cpp in Sources */,
-				5B04C55714BFCFE100EB0071 /* PhysicsMotionState.cpp in Sources */,
 				5B04C55814BFCFE100EB0071 /* PhysicsRigidBody.cpp in Sources */,
 				5B04C55914BFCFE100EB0071 /* PhysicsSocketConstraint.cpp in Sources */,
 				5B04C55A14BFCFE100EB0071 /* PhysicsSpringConstraint.cpp in Sources */,
