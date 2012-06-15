@@ -22,8 +22,8 @@
 using namespace std;
 
 struct timespec __timespec;
-static long __timeStart;
-static long __timeAbsolute;
+static double __timeStart;
+static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static screen_context_t __screenContext;
 static screen_window_t __screenWindow;
@@ -751,10 +751,10 @@ error:
 /**
  * Convert the timespec into milliseconds.
  */
-long timespec2millis(struct timespec *a)
+double timespec2millis(struct timespec *a)
 {
     GP_ASSERT(a);
-    return a->tv_sec*1000 + a->tv_nsec/1000000;
+    return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
 }
 
 /**
@@ -768,7 +768,7 @@ long timespec2millis(struct timespec *a)
  */
 void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEvent, int x, int y)
 {
-    if (!Game::getInstance()->mouseEvent(mouseEvent, x, y, 0))
+    if (!gameplay::Platform::mouseEventInternal(mouseEvent, x, y, 0))
     {
         Platform::touchEventInternal(touchEvent, x, y, 0);
     }
@@ -887,14 +887,14 @@ int Platform::enterMessagePump()
                             {
                                 move = false;
                                 mouse_pressed |= SCREEN_RIGHT_MOUSE_BUTTON;
-                                Game::getInstance()->mouseEvent(Mouse::MOUSE_PRESS_RIGHT_BUTTON, position[0], position[1], 0);
+                                gameplay::Platform::mouseEventInternal(Mouse::MOUSE_PRESS_RIGHT_BUTTON, position[0], position[1], 0);
                             }
                         }
                         else if (mouse_pressed & SCREEN_RIGHT_MOUSE_BUTTON)
                         {
                             move = false;
                             mouse_pressed &= ~SCREEN_RIGHT_MOUSE_BUTTON;
-                            Game::getInstance()->mouseEvent(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, position[0], position[1], 0);
+                            gameplay::Platform::mouseEventInternal(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, position[0], position[1], 0);
                         }
 
                         // Handle middle mouse.
@@ -904,14 +904,14 @@ int Platform::enterMessagePump()
                             {
                                 move = false;
                                 mouse_pressed |= SCREEN_MIDDLE_MOUSE_BUTTON;
-                                Game::getInstance()->mouseEvent(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, position[0], position[1], 0);
+                                gameplay::Platform::mouseEventInternal(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, position[0], position[1], 0);
                             }
                         }
                         else if (mouse_pressed & SCREEN_MIDDLE_MOUSE_BUTTON)
                         {
                             move = false;
                             mouse_pressed &= ~SCREEN_MIDDLE_MOUSE_BUTTON;
-                            Game::getInstance()->mouseEvent(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, position[0], position[1], 0);
+                            gameplay::Platform::mouseEventInternal(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, position[0], position[1], 0);
                         }
 
                         // Fire a move event if none of the buttons changed.
@@ -921,13 +921,13 @@ int Platform::enterMessagePump()
                         }
                         else if (move)
                         {
-                            Game::getInstance()->mouseEvent(Mouse::MOUSE_MOVE, position[0], position[1], 0);
+                            gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, position[0], position[1], 0);
                         }
 
                         // Handle mouse wheel events.
                         if (wheel)
                         {
-                            Game::getInstance()->mouseEvent(Mouse::MOUSE_WHEEL, position[0], position[1], -wheel);
+                            gameplay::Platform::mouseEventInternal(Mouse::MOUSE_WHEEL, position[0], position[1], -wheel);
                         }
                         break;
                     }
@@ -1044,16 +1044,16 @@ unsigned int Platform::getDisplayHeight()
     return __screenWindowSize[1];
 }
 
-long Platform::getAbsoluteTime()
+double Platform::getAbsoluteTime()
 {
     clock_gettime(CLOCK_REALTIME, &__timespec);
-    long now = timespec2millis(&__timespec);
+    double now = timespec2millis(&__timespec);
     __timeAbsolute = now - __timeStart;
 
     return __timeAbsolute;
 }
 
-void Platform::setAbsoluteTime(long time)
+void Platform::setAbsoluteTime(double time)
 {
     __timeAbsolute = time;
 }
@@ -1137,15 +1137,25 @@ void Platform::displayKeyboard(bool display)
 void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-    }
 }
 
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    Game::getInstance()->keyEvent(evt, key);
-    Form::keyEventInternal(evt, key);
+    if (!Form::keyEventInternal(evt, key))
+        Game::getInstance()->keyEvent(evt, key);
+}
+
+bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
+    {
+        return true;
+    }
+    else
+    {
+        return Game::getInstance()->mouseEvent(evt, x, y, wheelDelta);
+    }
 }
 
 void Platform::sleep(long ms)

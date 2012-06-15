@@ -188,7 +188,7 @@ bool CharacterGame::isOnFloor() const
     return (std::fabs(_character->getCurrentVelocity().y) < MATH_EPSILON);
 }
 
-void CharacterGame::update(long elapsedTime)
+void CharacterGame::update(float elapsedTime)
 {
     Vector2 direction;
 
@@ -279,7 +279,7 @@ void CharacterGame::update(long elapsedTime)
         _characterShadowNode->setTranslation(Vector3(hitResult.point.x, hitResult.point.y + 0.1f, hitResult.point.z));
 }
 
-void CharacterGame::render(long elapsedTime)
+void CharacterGame::render(float elapsedTime)
 {
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4(0.41f, 0.48f, 0.54f, 1.0f), 1.0f, 0);
@@ -414,7 +414,7 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     }
 }
 
-void CharacterGame::adjustCamera(long elapsedTime)
+void CharacterGame::adjustCamera(float elapsedTime)
 {
     static float cameraOffset = 0.0f;
 

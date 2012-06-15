@@ -179,7 +179,7 @@ void LongboardGame::buildGradient()
     SAFE_RELEASE(gradientMesh);
 }
 
-void LongboardGame::update(long elapsedTime)
+void LongboardGame::update(float elapsedTime)
 {
     // Query the accelerometer values.
     float pitch, roll;
@@ -260,7 +260,7 @@ void LongboardGame::keyEvent(Keyboard::KeyEvent evt, int key)
     }
 }
 
-void LongboardGame::render(long elapsedTime)
+void LongboardGame::render(float elapsedTime)
 {
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR, Vector4::one(), 1.0f, 0);
