@@ -182,7 +182,7 @@ Bundle* Bundle::create(const char* path)
 
     // Read the GPB header info.
     char sig[9];
-    if (fread(sig, 1, 9, fp) != 9 || memcmp(sig, "«GPB»\r\n\x1A\n", 9) != 0)
+    if (fread(sig, 1, 9, fp) != 9 || memcmp(sig, "\xABGPB\xBB\r\n\x1A\n", 9) != 0)
     {
         GP_ERROR("Invalid GPB header for bundle '%s'.", path);
         if (fclose(fp) != 0)
