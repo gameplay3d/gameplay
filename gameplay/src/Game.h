@@ -290,7 +290,7 @@ public:
     inline void getAccelerometerValues(float* pitch, float* roll);
 
     /**
-     * Schedules a time event to be sent to the given TimeListener a given of game milliseconds from now.
+     * Schedules a time event to be sent to the given TimeListener a given number of game milliseconds from now.
      * Game time stops while the game is paused. A time offset of zero will fire the time event in the next frame.
      * 
      * @param timeOffset The number of game milliseconds in the future to schedule the event to be fired.
