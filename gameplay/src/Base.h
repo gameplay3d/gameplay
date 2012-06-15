@@ -209,6 +209,7 @@ extern void printError(const char* format, ...);
         #define glDeleteVertexArrays glDeleteVertexArraysOES
         #define glGenVertexArrays glGenVertexArraysOES
         #define glIsVertexArray glIsVertexArrayOES
+        #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
         #define USE_VAO
