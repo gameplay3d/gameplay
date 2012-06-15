@@ -25,7 +25,6 @@ CharacterGame::CharacterGame()
 
 void CharacterGame::initialize()
 {
-    setVsync(false);
     // Enable multi-touch (only affects devices that support multi-touch).
     setMultiTouch(true);
 

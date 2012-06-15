@@ -1,6 +1,7 @@
 ## gameplay-encoder
 Command-line tool for encoding games assets like true-type fonts and 3D scene files
 into a simple binary-based bundle file format for the gameplay 3D game framework runtime. 
+The 'bin' folder contains a pre-built version of the gameplay-encoder with support built-in support for:
 
 ## TrueType Font Support
 TrueType Fonts conversion is enabled/built-in by default into gameplay-encoder via freetype 2 library.
@@ -14,6 +15,7 @@ for Autodesk Maya and 3DS Max.
 ## FBX Scene Support
 FBX support can easily be enabled in gameplay-encoder but requires an 
 additional installation of Autodesk FBX SDK. (http://www.autodesk.com/fbx).
+
 You must then rebuild gameplay-encoder with the follow platform/tooling instructions:
 
 ### Building FBX Support on Windows 7 using Visual Studio 2010
@@ -24,10 +26,8 @@ You must then rebuild gameplay-encoder with the follow platform/tooling instruct
   * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.1/include
 - Add the FBX lib directory to the Additional Library Directories (Linker/General)
   * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.1/lib/vs2010/x86
-- Add "fbxsdk-2013.1-mdd.lib" and "wininet.lib" to the Additional Dependencies (Linker/Input)
-  * Example: fbxsdk-2013.1-mdd.lib;wininet.lib
-- Add a post build event to copy the DLL (Build Events/Post-Build Event)
-  * Example: copy /Y "C:\Program Files\Autodesk\FBX\FbxSdk\2013.1\lib\vs2010\x86\fbxsdk-2013.1d.dll" "$(TargetDir)"
+- Add "fbxsdk-2013.1-md.lib"(Release) and "wininet.lib" to the Additional Dependencies (Linker/Input)
+  * Example: fbxsdk-2013.1-md.lib;wininet.lib
 - Build gameplay-encoder
 
 ### Building FBX Support on Mac OS X using XCode 4.3.2+
