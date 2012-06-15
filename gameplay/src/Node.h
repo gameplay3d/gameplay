@@ -341,13 +341,37 @@ public:
 
     /**
      * Returns the forward vector of the Node in world space.
+     *
+     * @return The forward vector in world space.
      */
     Vector3 getForwardVectorWorld() const;
 
     /**
      *  Returns the forward vector of the Node in view space.
+     *
+     * @param normalize True to return the vector normalized, false (default) otherwise.
+     *
+     * @return The forwward vector in view space.
      */
     Vector3 getForwardVectorView() const;
+
+    /**
+     * Returns the right vector of the Node in world space.
+     *
+     * @param normalize True to return the vector normalized, false (default) otherwise.
+     *
+     * @return The right vector in world space.
+     */
+    Vector3 getRightVectorWorld() const;
+
+    /**
+     * Returns the up vector of the Node in world space.
+     *
+     * @param normalize True to return the vector normalized, false (default) otherwise.
+     *
+     * @return The up vector in world space.
+     */
+    Vector3 getUpVectorWorld() const;
 
     /**
      * Returns the translation vector of the currently active camera for this node's scene.
@@ -823,12 +847,8 @@ private:
      */
     NodeCloneContext& operator=(const NodeCloneContext&);
 
-private:
-    typedef std::map<const Animation*, Animation*> AnimationMap;
-    typedef std::map<const Node*, Node*> NodeMap;
-
-    AnimationMap _clonedAnimations;
-    NodeMap _clonedNodes;
+    std::map<const Animation*, Animation*> _clonedAnimations;
+    std::map<const Node*, Node*> _clonedNodes;
 };
 
 }

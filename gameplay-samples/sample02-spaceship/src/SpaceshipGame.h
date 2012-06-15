@@ -47,12 +47,12 @@ protected:
     /**
      * @see Game::update
      */
-    void update(long elapsedTime);
+    void update(float elapsedTime);
 
     /**
      * @see Game::render
      */
-    void render(long elapsedTime);
+    void render(float elapsedTime);
 
 private:
 
@@ -128,7 +128,7 @@ private:
 
     // State variables
     bool _finished;
-    long _finishedTime;
+    double _finishedTime;
     bool _pushing;
     Vector2 _pushPoint;
     

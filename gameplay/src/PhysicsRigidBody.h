@@ -72,18 +72,22 @@ public:
         Vector3 anisotropicFriction;
 
         /**
-         * The gravity acceleration factor for the rigid body.
+         * Constructor.
          */
-        Vector3 gravity;
+        Parameters() : mass(0.0f), friction(0.5f), restitution(0.0f),
+            linearDamping(0.0f), angularDamping(0.0f),
+            kinematic(false), anisotropicFriction(Vector3::one())
+        {
+        }
 
         /**
          * Constructor.
          */
-        Parameters(float mass = 0.0f, float friction = 0.5f, float resititution = 0.0f,
+        Parameters(float mass, float friction = 0.5f, float resititution = 0.0f,
             float linearDamping = 0.0f, float angularDamping = 0.0f, bool kinematic = false,
-            const Vector3& anisotropicFriction = Vector3::one(), const Vector3& gravity = Vector3::zero())
+            const Vector3& anisotropicFriction = Vector3::one())
             : mass(mass), friction(friction), restitution(restitution), linearDamping(linearDamping), angularDamping(angularDamping),
-              kinematic(kinematic), anisotropicFriction(anisotropicFriction), gravity(gravity)
+              kinematic(kinematic), anisotropicFriction(anisotropicFriction)
         {
         }
     };

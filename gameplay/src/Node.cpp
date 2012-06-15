@@ -21,7 +21,7 @@ namespace gameplay
 {
 
 Node::Node(const char* id)
-    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
+    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0),
     _nodeFlags(NODE_FLAG_VISIBLE), _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
     _collisionObject(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
@@ -544,6 +544,20 @@ Vector3 Node::getForwardVectorView() const
     Vector3 vector;
     getWorldMatrix().getForwardVector(&vector);
     getViewMatrix().transformVector(&vector);
+    return vector;
+}
+
+Vector3 Node::getRightVectorWorld() const
+{
+    Vector3 vector;
+    getWorldMatrix().getRightVector(&vector);
+    return vector;
+}
+
+Vector3 Node::getUpVectorWorld() const
+{
+    Vector3 vector;
+    getWorldMatrix().getUpVector(&vector);
     return vector;
 }
 
@@ -1079,19 +1093,17 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
 
 NodeCloneContext::NodeCloneContext()
 {
-    
 }
 
 NodeCloneContext::~NodeCloneContext()
 {
-
 }
 
 Animation* NodeCloneContext::findClonedAnimation(const Animation* animation)
 {
     GP_ASSERT(animation);
 
-    AnimationMap::iterator it = _clonedAnimations.find(animation);
+    std::map<const Animation*, Animation*>::iterator it = _clonedAnimations.find(animation);
     return it != _clonedAnimations.end() ? it->second : NULL;
 }
 
@@ -1107,7 +1119,7 @@ Node* NodeCloneContext::findClonedNode(const Node* node)
 {
     GP_ASSERT(node);
 
-    NodeMap::iterator it = _clonedNodes.find(node);
+    std::map<const Node*, Node*>::iterator it = _clonedNodes.find(node);
     return it != _clonedNodes.end() ? it->second : NULL;
 }
 

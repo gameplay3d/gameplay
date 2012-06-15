@@ -52,14 +52,14 @@ void MeshGame::finalize()
     SAFE_RELEASE(_scene);
 }
 
-void MeshGame::update(long elapsedTime)
+void MeshGame::update(float elapsedTime)
 {
     // Rotate model
     if (!_touched)
         _modelNode->rotateY(MATH_DEG_TO_RAD(0.5f));
 }
 
-void MeshGame::render(long elapsedTime)
+void MeshGame::render(float elapsedTime)
 {
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
