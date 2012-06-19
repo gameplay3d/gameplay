@@ -39,8 +39,7 @@ using std::size_t;
 using std::min;
 using std::max;
 using std::modf;
-using std::fmodf;
-using std::fmodl;
+
 
 // Common
 #ifndef NULL
@@ -179,6 +178,7 @@ extern void printError(const char* format, ...);
     extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
+    #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
     #define USE_PVRTC
@@ -193,6 +193,7 @@ extern void printError(const char* format, ...);
     extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
+    #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
 #elif WIN32
@@ -208,6 +209,7 @@ extern void printError(const char* format, ...);
         #define glDeleteVertexArrays glDeleteVertexArraysOES
         #define glGenVertexArrays glGenVertexArraysOES
         #define glIsVertexArray glIsVertexArrayOES
+        #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
         #define USE_VAO
