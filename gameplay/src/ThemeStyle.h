@@ -25,6 +25,15 @@ class Theme::Style
     friend class Container;
     friend class Form;
 
+public:
+
+    /**
+     * Get the theme this style belongs to.
+     *
+     * @return The theme this style belongs to.
+     */
+    Theme* getTheme() const;
+
 private:
 
     /**

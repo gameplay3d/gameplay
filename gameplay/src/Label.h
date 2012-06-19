@@ -34,6 +34,16 @@ class Label : public Control
 public:
 
     /**
+     * Create a new label control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new label.
+     */
+    static Label* create(const char*id, Theme::Style* style);
+
+    /**
      * Set the text for this label to display.
      *
      * @param text The text to display.

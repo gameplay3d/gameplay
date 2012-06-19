@@ -24,6 +24,18 @@ RadioButton::~RadioButton()
     }
 }
 
+RadioButton* RadioButton::create(const char* id, Theme::Style* style)
+{
+    GP_ASSERT(style);
+
+    RadioButton* radioButton = new RadioButton();
+    if (id)
+        radioButton->_id = id;
+    radioButton->setStyle(style);
+
+    return radioButton;
+}
+
 RadioButton* RadioButton::create(Theme::Style* style, Properties* properties)
 {
     GP_ASSERT(properties);

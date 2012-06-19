@@ -135,7 +135,6 @@ namespace gameplay
 class Theme: public Ref
 {
     friend class Control;
-    friend class Container;
     friend class Form;
     friend class Skin;
 
@@ -294,6 +293,35 @@ public:
         Vector4 _color;
     };
 
+    /**
+     * Creates a theme using the data from the Properties object defined at the specified URL, 
+     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
+     * 
+     * @param url The URL pointing to the Properties object defining the theme. 
+     */
+    static Theme* create(const char* url);
+
+    /**
+     * Get a style by its ID.
+     *
+     * @param id The style ID.
+     *
+     * @return The style with the specified ID, or NULL if it does not exist.
+     */
+    Theme::Style* getStyle(const char* id) const;
+
+    /**
+     * Get the empty style.  Used when a control does not specify a style.
+     * This is especially useful for containers that are being used only for
+     * layout and positioning, and have no background or border themselves.
+     * The empty style has no border, background, margin, padding, images, etc..
+     * Any needed properties can be set on the control directly.
+     *
+     * @return The empty style.
+     */
+    Theme::Style* getEmptyStyle();
+
 private:
 
     /**
@@ -405,22 +433,6 @@ private:
      * Destructor.
      */
     ~Theme();
-
-    /**
-     * Creates an instance of a Theme using the data from the Properties object defined at the specified URL, 
-     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
-     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
-     * 
-     * @param url The URL pointing to the Properties object defining the theme.
-     *
-     * @return A new Theme.
-     */
-    static Theme* create(const char* url);
-
-    Theme::Style* getStyle(const char* id) const;
-
-    // Used when a control does not specify a style.
-    Theme::Style* getEmptyStyle();
 
     void setProjectionMatrix(const Matrix& matrix);
 
