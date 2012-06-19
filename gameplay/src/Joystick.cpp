@@ -18,6 +18,18 @@ Joystick::~Joystick()
 {
 }
 
+Joystick* Joystick::create(const char* id, Theme::Style* style)
+{
+    GP_ASSERT(style);
+
+    Joystick* joystick = new Joystick();
+    if (id)
+        joystick->_id = id;
+    joystick->setStyle(style);
+
+    return joystick;
+}
+
 Joystick* Joystick::create(Theme::Style* style, Properties* properties)
 {
     Joystick* joystick = new Joystick();

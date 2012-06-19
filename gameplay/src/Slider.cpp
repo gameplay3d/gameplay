@@ -3,12 +3,27 @@
 namespace gameplay
 {
 
+// Fraction of slider to scroll when mouse scrollwheel is used.
+static const float SCROLL_FRACTION = 0.1f;
+
 Slider::Slider() : _minImage(NULL), _maxImage(NULL), _trackImage(NULL), _markerImage(NULL)
 {
 }
 
 Slider::~Slider()
 {
+}
+
+Slider* Slider::create(const char* id, Theme::Style* style)
+{
+    GP_ASSERT(style);
+
+    Slider* slider = new Slider();
+    if (id)
+        slider->_id = id;
+    slider->setStyle(style);
+
+    return slider;
 }
 
 Slider* Slider::create(Theme::Style* style, Properties* properties)
@@ -133,13 +148,65 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
 
         if (evt == Touch::TOUCH_RELEASE)
         {
-            _state = NORMAL;
+            _state = FOCUS;
             _dirty = true;
         }
         break;
     }
+    
+    if (evt == Touch::TOUCH_MOVE)
+        return _consumeInputEvents;
+    else
+        return Control::touchEvent(evt, x, y, contactIndex);
+}
 
-    return Control::touchEvent(evt, x, y, contactIndex);
+bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (!isEnabled())
+    {
+        return false;
+    }
+
+    switch (evt)
+    {
+        case Mouse::MOUSE_PRESS_LEFT_BUTTON:
+            return touchEvent(Touch::TOUCH_PRESS, x, y, 0);
+
+        case Mouse::MOUSE_MOVE:
+            return touchEvent(Touch::TOUCH_MOVE, x, y, 0);
+
+        case Mouse::MOUSE_RELEASE_LEFT_BUTTON:
+            return touchEvent(Touch::TOUCH_RELEASE, x, y, 0);
+
+        case Mouse::MOUSE_WHEEL:
+        {
+            if (_state == FOCUS)
+            {
+                float total = _max - _min;
+                float oldValue = _value;
+                _value += (total * SCROLL_FRACTION) * wheelDelta;
+            
+                if (_value > _max)
+                    _value = _max;
+                else if (_value < _min)
+                    _value = _min;
+
+                if (_value != oldValue)
+                {
+                    notifyListeners(Listener::VALUE_CHANGED);
+                }
+
+                _dirty = true;
+                return _consumeInputEvents;
+            }
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    return false;
 }
 
 void Slider::update(const Control* container, const Vector2& offset)

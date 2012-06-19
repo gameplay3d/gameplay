@@ -256,17 +256,6 @@ void SpriteBatch::draw(const Vector3& position, const Vector3& right, const Vect
     float u1, float v1, float u2, float v2, const Vector4& color, const Vector2& rotationPoint, float rotationAngle)
 {
     // Calculate the vertex positions.
-    //static Vector3 p[4];
-
-    // Pre-optimized:
-    /*
-    p[0] = position - 0.5f * width * right - 0.5f * height * forward;
-    p[1] = position + 0.5f * width * right - 0.5f * height * forward;
-    p[2] = p[0] + height * forward;
-    p[3] = p[1] + height * forward;
-    */
-    
-    // Optimized:
     Vector3 tRight(right);
     tRight *= width * 0.5f;
     Vector3 tForward(forward);
@@ -288,11 +277,6 @@ void SpriteBatch::draw(const Vector3& position, const Vector3& right, const Vect
     p3 += tForward;
 
     // Calculate the rotation point.
-    
-    // Pre-optimized:
-    //Vector3 rp = p[0] + (rotationPoint.x * width * right) + (rotationPoint.y * height * forward);
-
-    // Optimized:
     Vector3 rp = p0;
     tRight = right;
     tRight *= width * rotationPoint.x;
@@ -306,15 +290,6 @@ void SpriteBatch::draw(const Vector3& position, const Vector3& right, const Vect
     static Matrix rotation;
     Matrix::createRotation(u, rotationAngle, &rotation);
 
-    // Pre-optimized:
-    /*
-    p[0] = (rotation * (p[0] - rp)) + rp;
-    p[1] = (rotation * (p[1] - rp)) + rp;
-    p[2] = (rotation * (p[2] - rp)) + rp;
-    p[3] = (rotation * (p[3] - rp)) + rp;
-    */
-
-    // Optimized:
     p0 -= rp;
     p0 *= rotation;
     p0 += rp;

@@ -684,6 +684,20 @@ public:
     void setZIndex(int zIndex);
 
     /**
+     * Get this control's focus index.
+     *
+     * @return This control's focus index.
+     */
+    int getFocusIndex() const;
+
+    /**
+     * Set this control's focus index.
+     *
+     * @param focusIndex The new focus index.
+     */
+    void setFocusIndex(int focusIndex);
+
+    /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
      * E.g. To listen to touch-press and touch-release events,
@@ -807,9 +821,22 @@ protected:
     virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
 
     /**
-     * Initialize properties common to STATE_ALL Controls.
+     * Initialize properties common to all Controls from a Properties object.
+     *
+     * @param style The style to apply to this control.
+     * @param properties The properties to set on this control.
      */
     virtual void initialize(Theme::Style* style, Properties* properties);
+
+    /**
+     * Initialize properties common to all Controls.
+     *
+     * @param id This control's ID.
+     * @param style The style to apply to this control.
+     * @param position This control's position.
+     * @param size This control's size.
+     */
+    //virtual void initialize(const char* id, Theme::Style* style, const Vector2& position, const Vector2& size);
 
     /**
      * Container and classes that extend it should implement this and return true.
@@ -948,6 +975,11 @@ protected:
      * The z-order of the control.
      */
     int _zIndex;
+
+    /**
+     * The focus order of the control.
+     */
+    int _focusIndex;
 
 private:
 

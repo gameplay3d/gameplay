@@ -14,6 +14,16 @@ class Joystick : public Control
     friend class Container;
 
 public:
+
+    /**
+     * Create a new joystick control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new joystick.
+     */
+    static Joystick* create(const char* id, Theme::Style* style);
     
     /**
      * Add a listener to be notified of specific events affecting

@@ -33,6 +33,18 @@ class Button : public Label
 {
     friend class Container;
 
+public:
+
+    /**
+     * Create a new button control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new button.
+     */
+    static Button* create(const char* id, Theme::Style* style);
+
 protected:
 
     /**

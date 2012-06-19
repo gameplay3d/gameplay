@@ -38,6 +38,17 @@ class RadioButton : public Button
     friend class Container;
 
 public:
+
+    /**
+     * Create a new radio button control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new radio button.
+     */
+    static RadioButton* create(const char* id, Theme::Style* style);
+
     /**
      * Get whether this radio button is currently selected.
      *

@@ -38,6 +38,16 @@ class CheckBox : public Button
 public:
 
     /**
+     * Create a new check box control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new check box.
+     */
+    static CheckBox* create(const char* id, Theme::Style* style);
+
+    /**
      * Gets whether this checkbox is checked.
      *
      * @return Whether this checkbox is checked.

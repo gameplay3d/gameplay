@@ -11,6 +11,7 @@
 #include "Slider.h"
 #include "TextBox.h"
 #include "Joystick.h"
+#include "List.h"
 #include "Game.h"
 
 namespace gameplay
@@ -31,7 +32,7 @@ Container::Container()
       _scrollingVelocity(Vector2::zero()), _scrollingFriction(1.0f),
       _scrollingRight(false), _scrollingDown(false),
       _scrollingMouseVertically(false), _scrollingMouseHorizontally(false),
-      _scrollBarOpacityClip(NULL), _zIndexDefault(0), _totalWidth(0), _totalHeight(0)
+      _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0), _totalWidth(0), _totalHeight(0)
 {
 }
 
@@ -47,6 +48,17 @@ Container::~Container()
         SAFE_RELEASE((*it));
     }
     SAFE_RELEASE(_layout);
+}
+
+Container* Container::create(const char* id, Theme::Style* style, Layout::Type layoutType)
+{
+    GP_ASSERT(style);
+
+    Container* container = Container::create(layoutType);
+    if (id)
+        container->_id = id;
+    container->_style = style;
+    return container;
 }
 
 Container* Container::create(Layout::Type type)
@@ -146,6 +158,10 @@ void Container::addControls(Theme* theme, Properties* properties)
         {
             control = Joystick::create(controlStyle, controlSpace);
         }
+        else if (controlName == "LIST")
+        {
+            control = List::create(controlStyle, controlSpace);
+        }
         else
         {
             GP_ERROR("Failed to create control; unrecognized control name '%s'.", controlName.c_str());
@@ -160,6 +176,15 @@ void Container::addControls(Theme* theme, Properties* properties)
             {
                 control->setZIndex(_zIndexDefault++);
             }
+
+            if (control->getFocusIndex() == -1)
+            {
+                control->setFocusIndex(_focusIndexDefault++);
+            }
+
+            int focusIndex = control->getFocusIndex();
+            if (focusIndex > _focusIndexMax)
+                _focusIndexMax = focusIndex;
         }
 
         // Get the next control.
@@ -395,7 +420,8 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
         spriteBatch->begin();
 
-        if (_scrollBarBounds.height > 0)
+        if (_scrollBarBounds.height > 0 &&
+            ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
         {
             const Rectangle& topRegion = _scrollBarTopCap->getRegion();
             const Theme::UVs& topUVs = _scrollBarTopCap->getUVs();
@@ -428,7 +454,8 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
             spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, bottomUVs.u1, bottomUVs.v1, bottomUVs.u2, bottomUVs.v2, bottomColor, clipRegion);
         }
 
-        if (_scrollBarBounds.width > 0)
+        if (_scrollBarBounds.width > 0 &&
+            ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL))
         {
             const Rectangle& leftRegion = _scrollBarLeftCap->getRegion();
             const Theme::UVs& leftUVs = _scrollBarLeftCap->getUVs();
@@ -518,10 +545,33 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
             continue;
         }
 
-        if (control->isContainer() || control->getState() == Control::FOCUS)
+        if (control->getState() == Control::FOCUS)
         {
             if (control->keyEvent(evt, key))
+            {
                 return _consumeInputEvents;
+            }
+            else if (evt == Keyboard::KEY_CHAR && key == Keyboard::KEY_TAB)
+            {
+                // Shift focus to next control.
+                int focusIndex = control->getFocusIndex() + 1; // Index to search for.
+                if (focusIndex > _focusIndexMax)
+                {
+                    focusIndex = 0;
+                }
+                control->setState(Control::NORMAL);
+
+                std::vector<Control*>::const_iterator itt;
+                for (itt = _controls.begin(); itt < _controls.end(); itt++)
+                {
+                    Control* nextControl = *itt;
+                    if (nextControl->getFocusIndex() == focusIndex)
+                    {
+                        nextControl->setState(Control::FOCUS);
+                        return _consumeInputEvents;
+                    }
+                }
+            }
         }
     }
 
@@ -873,6 +923,12 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
 
         case Mouse::MOUSE_WHEEL:
             _scrollPosition.y += (_totalHeight / 10.0f) * wheelDelta;
+            if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
+            {
+                _scrollBarOpacityClip->stop();
+                _scrollBarOpacityClip = NULL;
+            }
+            _scrollBarOpacity = 1.0f;
             return _consumeInputEvents;
     }
 
@@ -917,7 +973,9 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
             boundsY += offset->y;
         }
 
-        if (control->getState() != Control::NORMAL ||
+        Control::State currentState = control->getState();
+        if ((control->isContainer() && currentState == Control::FOCUS) ||
+            currentState != Control::NORMAL ||
             ((evt == Touch::TOUCH_PRESS ||
               evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
               evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
@@ -941,23 +999,30 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         return (_consumeInputEvents | eventConsumed);
     }
 
-    switch (evt)
-    {
-    case Touch::TOUCH_PRESS:
-        setState(Control::FOCUS);
-        break;
-    case Touch::TOUCH_RELEASE:
-        setState(Control::NORMAL);
-        break;
-    }
-
     if (!eventConsumed && _scroll != SCROLL_NONE)
     {
         if (mouse && mouseEventScroll((Mouse::MouseEvent)evt, x - xPos, y - yPos, data) ||
             (!mouse && touchEventScroll((Touch::TouchEvent)evt, x - xPos, y - yPos, (unsigned int)data)))
         {
             _dirty = true;
+            eventConsumed = true;
         }
+    }
+
+    switch (evt)
+    {
+    case Touch::TOUCH_PRESS:
+        if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+        {
+            setState(Control::FOCUS);
+        }
+        else
+        {
+            setState(Control::NORMAL);
+            return false;
+        }
+        break;
     }
 
     return (_consumeInputEvents | eventConsumed);
