@@ -31,7 +31,7 @@ void luaRegister_RadioButton()
         {"getBounds", lua_RadioButton_getBounds},
         {"getClip", lua_RadioButton_getClip},
         {"getClipBounds", lua_RadioButton_getClipBounds},
-        {"getConsumeTouchEvents", lua_RadioButton_getConsumeTouchEvents},
+        {"getConsumeInputEvents", lua_RadioButton_getConsumeInputEvents},
         {"getCursorColor", lua_RadioButton_getCursorColor},
         {"getCursorRegion", lua_RadioButton_getCursorRegion},
         {"getCursorUVs", lua_RadioButton_getCursorUVs},
@@ -68,7 +68,7 @@ void luaRegister_RadioButton()
         {"setAutoWidth", lua_RadioButton_setAutoWidth},
         {"setBorder", lua_RadioButton_setBorder},
         {"setBounds", lua_RadioButton_setBounds},
-        {"setConsumeTouchEvents", lua_RadioButton_setConsumeTouchEvents},
+        {"setConsumeInputEvents", lua_RadioButton_setConsumeInputEvents},
         {"setCursorColor", lua_RadioButton_setCursorColor},
         {"setCursorRegion", lua_RadioButton_setCursorRegion},
         {"setFont", lua_RadioButton_setFont},
@@ -1088,7 +1088,7 @@ int lua_RadioButton_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getConsumeTouchEvents(lua_State* state)
+int lua_RadioButton_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1101,7 +1101,7 @@ int lua_RadioButton_getConsumeTouchEvents(lua_State* state)
             if (lua_type(state, 1) == LUA_TUSERDATA)
             {
                 RadioButton* instance = getInstance(state);
-                bool result = instance->getConsumeTouchEvents();
+                bool result = instance->getConsumeInputEvents();
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -2796,7 +2796,7 @@ int lua_RadioButton_setBounds(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setConsumeTouchEvents(lua_State* state)
+int lua_RadioButton_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2813,7 +2813,7 @@ int lua_RadioButton_setConsumeTouchEvents(lua_State* state)
                 bool param1 = (luaL_checkint(state, 2) != 0);
 
                 RadioButton* instance = getInstance(state);
-                instance->setConsumeTouchEvents(param1);
+                instance->setConsumeInputEvents(param1);
                 
                 return 0;
             }

@@ -1044,10 +1044,10 @@ int lua_Game_static_getAbsoluteTime(lua_State* state)
     {
         case 0:
         {
-            long result = Game::getAbsoluteTime();
+            double result = Game::getAbsoluteTime();
 
             // Push the return value onto the stack.
-            lua_pushinteger(state, result);
+            lua_pushnumber(state, result);
 
             return 1;
             break;
@@ -1072,10 +1072,10 @@ int lua_Game_static_getGameTime(lua_State* state)
     {
         case 0:
         {
-            long result = Game::getGameTime();
+            double result = Game::getGameTime();
 
             // Push the return value onto the stack.
-            lua_pushinteger(state, result);
+            lua_pushnumber(state, result);
 
             return 1;
             break;

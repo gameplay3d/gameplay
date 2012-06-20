@@ -31,7 +31,7 @@ void luaRegister_Button()
         {"getBounds", lua_Button_getBounds},
         {"getClip", lua_Button_getClip},
         {"getClipBounds", lua_Button_getClipBounds},
-        {"getConsumeTouchEvents", lua_Button_getConsumeTouchEvents},
+        {"getConsumeInputEvents", lua_Button_getConsumeInputEvents},
         {"getCursorColor", lua_Button_getCursorColor},
         {"getCursorRegion", lua_Button_getCursorRegion},
         {"getCursorUVs", lua_Button_getCursorUVs},
@@ -66,7 +66,7 @@ void luaRegister_Button()
         {"setAutoWidth", lua_Button_setAutoWidth},
         {"setBorder", lua_Button_setBorder},
         {"setBounds", lua_Button_setBounds},
-        {"setConsumeTouchEvents", lua_Button_setConsumeTouchEvents},
+        {"setConsumeInputEvents", lua_Button_setConsumeInputEvents},
         {"setCursorColor", lua_Button_setCursorColor},
         {"setCursorRegion", lua_Button_setCursorRegion},
         {"setFont", lua_Button_setFont},
@@ -1085,7 +1085,7 @@ int lua_Button_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_Button_getConsumeTouchEvents(lua_State* state)
+int lua_Button_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1098,7 +1098,7 @@ int lua_Button_getConsumeTouchEvents(lua_State* state)
             if (lua_type(state, 1) == LUA_TUSERDATA)
             {
                 Button* instance = getInstance(state);
-                bool result = instance->getConsumeTouchEvents();
+                bool result = instance->getConsumeInputEvents();
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -2718,7 +2718,7 @@ int lua_Button_setBounds(lua_State* state)
     return 0;
 }
 
-int lua_Button_setConsumeTouchEvents(lua_State* state)
+int lua_Button_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2735,7 +2735,7 @@ int lua_Button_setConsumeTouchEvents(lua_State* state)
                 bool param1 = (luaL_checkint(state, 2) != 0);
 
                 Button* instance = getInstance(state);
-                instance->setConsumeTouchEvents(param1);
+                instance->setConsumeInputEvents(param1);
                 
                 return 0;
             }

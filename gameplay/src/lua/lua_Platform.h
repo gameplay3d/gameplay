@@ -16,6 +16,7 @@ int lua_Platform_static_getDisplayWidth(lua_State* state);
 int lua_Platform_static_isMultiTouch(lua_State* state);
 int lua_Platform_static_isVsync(lua_State* state);
 int lua_Platform_static_keyEventInternal(lua_State* state);
+int lua_Platform_static_mouseEventInternal(lua_State* state);
 int lua_Platform_static_setAbsoluteTime(lua_State* state);
 int lua_Platform_static_setMultiTouch(lua_State* state);
 int lua_Platform_static_setVsync(lua_State* state);

@@ -62,6 +62,7 @@
 #include "lua_PhysicsCollisionShapeDefinition.h"
 #include "lua_PhysicsConstraint.h"
 #include "lua_PhysicsController.h"
+#include "lua_PhysicsControllerHitFilter.h"
 #include "lua_PhysicsControllerHitResult.h"
 #include "lua_PhysicsControllerListener.h"
 #include "lua_PhysicsFixedConstraint.h"

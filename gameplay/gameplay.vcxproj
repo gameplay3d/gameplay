@@ -116,6 +116,7 @@
     <ClCompile Include="src\lua\lua_PhysicsCollisionShapeDefinition.cpp" />
     <ClCompile Include="src\lua\lua_PhysicsConstraint.cpp" />
     <ClCompile Include="src\lua\lua_PhysicsController.cpp" />
+    <ClCompile Include="src\lua\lua_PhysicsControllerHitFilter.cpp" />
     <ClCompile Include="src\lua\lua_PhysicsControllerHitResult.cpp" />
     <ClCompile Include="src\lua\lua_PhysicsControllerListener.cpp" />
     <ClCompile Include="src\lua\lua_PhysicsFixedConstraint.cpp" />
@@ -319,6 +320,7 @@
     <ClInclude Include="src\lua\lua_PhysicsCollisionShapeDefinition.h" />
     <ClInclude Include="src\lua\lua_PhysicsConstraint.h" />
     <ClInclude Include="src\lua\lua_PhysicsController.h" />
+    <ClInclude Include="src\lua\lua_PhysicsControllerHitFilter.h" />
     <ClInclude Include="src\lua\lua_PhysicsControllerHitResult.h" />
     <ClInclude Include="src\lua\lua_PhysicsControllerListener.h" />
     <ClInclude Include="src\lua\lua_PhysicsFixedConstraint.h" />

@@ -31,7 +31,7 @@ void luaRegister_Slider()
         {"getBounds", lua_Slider_getBounds},
         {"getClip", lua_Slider_getClip},
         {"getClipBounds", lua_Slider_getClipBounds},
-        {"getConsumeTouchEvents", lua_Slider_getConsumeTouchEvents},
+        {"getConsumeInputEvents", lua_Slider_getConsumeInputEvents},
         {"getCursorColor", lua_Slider_getCursorColor},
         {"getCursorRegion", lua_Slider_getCursorRegion},
         {"getCursorUVs", lua_Slider_getCursorUVs},
@@ -70,7 +70,7 @@ void luaRegister_Slider()
         {"setAutoWidth", lua_Slider_setAutoWidth},
         {"setBorder", lua_Slider_setBorder},
         {"setBounds", lua_Slider_setBounds},
-        {"setConsumeTouchEvents", lua_Slider_setConsumeTouchEvents},
+        {"setConsumeInputEvents", lua_Slider_setConsumeInputEvents},
         {"setCursorColor", lua_Slider_setCursorColor},
         {"setCursorRegion", lua_Slider_setCursorRegion},
         {"setFont", lua_Slider_setFont},
@@ -1093,7 +1093,7 @@ int lua_Slider_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getConsumeTouchEvents(lua_State* state)
+int lua_Slider_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1106,7 +1106,7 @@ int lua_Slider_getConsumeTouchEvents(lua_State* state)
             if (lua_type(state, 1) == LUA_TUSERDATA)
             {
                 Slider* instance = getInstance(state);
-                bool result = instance->getConsumeTouchEvents();
+                bool result = instance->getConsumeInputEvents();
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -2874,7 +2874,7 @@ int lua_Slider_setBounds(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setConsumeTouchEvents(lua_State* state)
+int lua_Slider_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2891,7 +2891,7 @@ int lua_Slider_setConsumeTouchEvents(lua_State* state)
                 bool param1 = (luaL_checkint(state, 2) != 0);
 
                 Slider* instance = getInstance(state);
-                instance->setConsumeTouchEvents(param1);
+                instance->setConsumeInputEvents(param1);
                 
                 return 0;
             }

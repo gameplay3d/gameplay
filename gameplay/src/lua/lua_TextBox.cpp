@@ -31,7 +31,7 @@ void luaRegister_TextBox()
         {"getBounds", lua_TextBox_getBounds},
         {"getClip", lua_TextBox_getClip},
         {"getClipBounds", lua_TextBox_getClipBounds},
-        {"getConsumeTouchEvents", lua_TextBox_getConsumeTouchEvents},
+        {"getConsumeInputEvents", lua_TextBox_getConsumeInputEvents},
         {"getCursorColor", lua_TextBox_getCursorColor},
         {"getCursorRegion", lua_TextBox_getCursorRegion},
         {"getCursorUVs", lua_TextBox_getCursorUVs},
@@ -67,7 +67,7 @@ void luaRegister_TextBox()
         {"setAutoWidth", lua_TextBox_setAutoWidth},
         {"setBorder", lua_TextBox_setBorder},
         {"setBounds", lua_TextBox_setBounds},
-        {"setConsumeTouchEvents", lua_TextBox_setConsumeTouchEvents},
+        {"setConsumeInputEvents", lua_TextBox_setConsumeInputEvents},
         {"setCursorColor", lua_TextBox_setCursorColor},
         {"setCursorRegion", lua_TextBox_setCursorRegion},
         {"setFont", lua_TextBox_setFont},
@@ -1086,7 +1086,7 @@ int lua_TextBox_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_TextBox_getConsumeTouchEvents(lua_State* state)
+int lua_TextBox_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1099,7 +1099,7 @@ int lua_TextBox_getConsumeTouchEvents(lua_State* state)
             if (lua_type(state, 1) == LUA_TUSERDATA)
             {
                 TextBox* instance = getInstance(state);
-                bool result = instance->getConsumeTouchEvents();
+                bool result = instance->getConsumeInputEvents();
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -2756,7 +2756,7 @@ int lua_TextBox_setBounds(lua_State* state)
     return 0;
 }
 
-int lua_TextBox_setConsumeTouchEvents(lua_State* state)
+int lua_TextBox_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2773,7 +2773,7 @@ int lua_TextBox_setConsumeTouchEvents(lua_State* state)
                 bool param1 = (luaL_checkint(state, 2) != 0);
 
                 TextBox* instance = getInstance(state);
-                instance->setConsumeTouchEvents(param1);
+                instance->setConsumeInputEvents(param1);
                 
                 return 0;
             }

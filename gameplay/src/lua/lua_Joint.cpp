@@ -56,6 +56,7 @@ void luaRegister_Joint()
         {"getProjectionMatrix", lua_Joint_getProjectionMatrix},
         {"getRefCount", lua_Joint_getRefCount},
         {"getRightVector", lua_Joint_getRightVector},
+        {"getRightVectorWorld", lua_Joint_getRightVectorWorld},
         {"getRootNode", lua_Joint_getRootNode},
         {"getRotation", lua_Joint_getRotation},
         {"getScale", lua_Joint_getScale},
@@ -71,6 +72,7 @@ void luaRegister_Joint()
         {"getTranslationZ", lua_Joint_getTranslationZ},
         {"getType", lua_Joint_getType},
         {"getUpVector", lua_Joint_getUpVector},
+        {"getUpVectorWorld", lua_Joint_getUpVectorWorld},
         {"getViewMatrix", lua_Joint_getViewMatrix},
         {"getViewProjectionMatrix", lua_Joint_getViewProjectionMatrix},
         {"getWorldMatrix", lua_Joint_getWorldMatrix},
@@ -2289,6 +2291,44 @@ int lua_Joint_getRightVector(lua_State* state)
     return 0;
 }
 
+int lua_Joint_getRightVectorWorld(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if (lua_type(state, 1) == LUA_TUSERDATA)
+            {
+                Joint* instance = getInstance(state);
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = (void*)new Vector3(instance->getRightVectorWorld());
+                object->owns = true;
+                luaL_getmetatable(state, "Vector3");
+                lua_setmetatable(state, -2);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Joint_getRootNode(lua_State* state)
 {
     // Get the number of parameters.
@@ -2986,6 +3026,44 @@ int lua_Joint_getUpVector(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joint_getUpVectorWorld(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if (lua_type(state, 1) == LUA_TUSERDATA)
+            {
+                Joint* instance = getInstance(state);
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = (void*)new Vector3(instance->getUpVectorWorld());
+                object->owns = true;
+                luaL_getmetatable(state, "Vector3");
+                lua_setmetatable(state, -2);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

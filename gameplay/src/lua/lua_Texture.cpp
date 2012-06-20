@@ -15,6 +15,7 @@ void luaRegister_Texture()
     {
         {"addRef", lua_Texture_addRef},
         {"generateMipmaps", lua_Texture_generateMipmaps},
+        {"getFormat", lua_Texture_getFormat},
         {"getHandle", lua_Texture_getHandle},
         {"getHeight", lua_Texture_getHeight},
         {"getRefCount", lua_Texture_getRefCount},
@@ -133,6 +134,43 @@ int lua_Texture_generateMipmaps(lua_State* state)
                 instance->generateMipmaps();
                 
                 return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Texture_getFormat(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if (lua_type(state, 1) == LUA_TUSERDATA)
+            {
+                Texture* instance = getInstance(state);
+                Texture::Format result = instance->getFormat();
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, lua_stringFromEnum_TextureFormat(result).c_str());
+
+                return 1;
             }
             else
             {

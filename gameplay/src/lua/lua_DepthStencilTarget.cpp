@@ -17,7 +17,6 @@ void luaRegister_DepthStencilTarget()
         {"getFormat", lua_DepthStencilTarget_getFormat},
         {"getID", lua_DepthStencilTarget_getID},
         {"getRefCount", lua_DepthStencilTarget_getRefCount},
-        {"getTexture", lua_DepthStencilTarget_getTexture},
         {"release", lua_DepthStencilTarget_release},
         {NULL, NULL}
     };
@@ -204,44 +203,6 @@ int lua_DepthStencilTarget_getRefCount(lua_State* state)
 
                 // Push the return value onto the stack.
                 lua_pushunsigned(state, result);
-
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_DepthStencilTarget_getTexture(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
-            {
-                DepthStencilTarget* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getTexture();
-                object->owns = false;
-                luaL_getmetatable(state, "Texture");
-                lua_setmetatable(state, -2);
 
                 return 1;
             }

@@ -31,7 +31,7 @@ void luaRegister_Label()
         {"getBounds", lua_Label_getBounds},
         {"getClip", lua_Label_getClip},
         {"getClipBounds", lua_Label_getClipBounds},
-        {"getConsumeTouchEvents", lua_Label_getConsumeTouchEvents},
+        {"getConsumeInputEvents", lua_Label_getConsumeInputEvents},
         {"getCursorColor", lua_Label_getCursorColor},
         {"getCursorRegion", lua_Label_getCursorRegion},
         {"getCursorUVs", lua_Label_getCursorUVs},
@@ -66,7 +66,7 @@ void luaRegister_Label()
         {"setAutoWidth", lua_Label_setAutoWidth},
         {"setBorder", lua_Label_setBorder},
         {"setBounds", lua_Label_setBounds},
-        {"setConsumeTouchEvents", lua_Label_setConsumeTouchEvents},
+        {"setConsumeInputEvents", lua_Label_setConsumeInputEvents},
         {"setCursorColor", lua_Label_setCursorColor},
         {"setCursorRegion", lua_Label_setCursorRegion},
         {"setFont", lua_Label_setFont},
@@ -1085,7 +1085,7 @@ int lua_Label_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_Label_getConsumeTouchEvents(lua_State* state)
+int lua_Label_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1098,7 +1098,7 @@ int lua_Label_getConsumeTouchEvents(lua_State* state)
             if (lua_type(state, 1) == LUA_TUSERDATA)
             {
                 Label* instance = getInstance(state);
-                bool result = instance->getConsumeTouchEvents();
+                bool result = instance->getConsumeInputEvents();
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -2718,7 +2718,7 @@ int lua_Label_setBounds(lua_State* state)
     return 0;
 }
 
-int lua_Label_setConsumeTouchEvents(lua_State* state)
+int lua_Label_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2735,7 +2735,7 @@ int lua_Label_setConsumeTouchEvents(lua_State* state)
                 bool param1 = (luaL_checkint(state, 2) != 0);
 
                 Label* instance = getInstance(state);
-                instance->setConsumeTouchEvents(param1);
+                instance->setConsumeInputEvents(param1);
                 
                 return 0;
             }

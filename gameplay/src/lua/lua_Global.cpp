@@ -193,6 +193,8 @@ void luaRegister_lua_Global()
         sc->registerConstantString("CLICK", "CLICK", scopePath);
         sc->registerConstantString("VALUE_CHANGED", "VALUE_CHANGED", scopePath);
         sc->registerConstantString("TEXT_CHANGED", "TEXT_CHANGED", scopePath);
+        sc->registerConstantString("MIDDLE_CLICK", "MIDDLE_CLICK", scopePath);
+        sc->registerConstantString("RIGHT_CLICK", "RIGHT_CLICK", scopePath);
     }
 
     // Register enumeration Control::State.
@@ -262,8 +264,8 @@ void luaRegister_lua_Global()
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("DepthStencilTarget");
-        sc->registerConstantString("DEPTH24", "DEPTH24", scopePath);
-        sc->registerConstantString("DEPTH24_STENCIL8", "DEPTH24_STENCIL8", scopePath);
+        sc->registerConstantString("DEPTH", "DEPTH", scopePath);
+        sc->registerConstantString("DEPTH_STENCIL", "DEPTH_STENCIL", scopePath);
     }
 
     // Register enumeration Font::Justify.
@@ -685,7 +687,6 @@ void luaRegister_lua_Global()
         sc->registerConstantString("RGB", "RGB", scopePath);
         sc->registerConstantString("RGBA", "RGBA", scopePath);
         sc->registerConstantString("ALPHA", "ALPHA", scopePath);
-        sc->registerConstantString("DEPTH", "DEPTH", scopePath);
     }
 
     // Register enumeration Texture::Wrap.
@@ -1003,6 +1004,10 @@ Control::Listener::EventType lua_enumFromString_ControlListenerEventType(const c
         return Control::Listener::VALUE_CHANGED;
     if (strcmp(s, "TEXT_CHANGED") == 0)
         return Control::Listener::TEXT_CHANGED;
+    if (strcmp(s, "MIDDLE_CLICK") == 0)
+        return Control::Listener::MIDDLE_CLICK;
+    if (strcmp(s, "RIGHT_CLICK") == 0)
+        return Control::Listener::RIGHT_CLICK;
     GP_ERROR("Invalid enumeration value '%s' for enumeration Control::Listener::EventType.", s);
     return Control::Listener::PRESS;
 }
@@ -1019,6 +1024,10 @@ std::string lua_stringFromEnum_ControlListenerEventType(Control::Listener::Event
         return std::string("VALUE_CHANGED");
     if (e == Control::Listener::TEXT_CHANGED)
         return std::string("TEXT_CHANGED");
+    if (e == Control::Listener::MIDDLE_CLICK)
+        return std::string("MIDDLE_CLICK");
+    if (e == Control::Listener::RIGHT_CLICK)
+        return std::string("RIGHT_CLICK");
     GP_ERROR("Invalid enumeration value '%d' for enumeration Control::Listener::EventType.", e);
     return std::string();
 }
@@ -1253,20 +1262,20 @@ std::string lua_stringFromEnum_CurveInterpolationType(Curve::InterpolationType e
 
 DepthStencilTarget::Format lua_enumFromString_DepthStencilTargetFormat(const char* s)
 {
-    if (strcmp(s, "DEPTH24") == 0)
-        return DepthStencilTarget::DEPTH24;
-    if (strcmp(s, "DEPTH24_STENCIL8") == 0)
-        return DepthStencilTarget::DEPTH24_STENCIL8;
+    if (strcmp(s, "DEPTH") == 0)
+        return DepthStencilTarget::DEPTH;
+    if (strcmp(s, "DEPTH_STENCIL") == 0)
+        return DepthStencilTarget::DEPTH_STENCIL;
     GP_ERROR("Invalid enumeration value '%s' for enumeration DepthStencilTarget::Format.", s);
-    return DepthStencilTarget::DEPTH24;
+    return DepthStencilTarget::DEPTH;
 }
 
 std::string lua_stringFromEnum_DepthStencilTargetFormat(DepthStencilTarget::Format e)
 {
-    if (e == DepthStencilTarget::DEPTH24)
-        return std::string("DEPTH24");
-    if (e == DepthStencilTarget::DEPTH24_STENCIL8)
-        return std::string("DEPTH24_STENCIL8");
+    if (e == DepthStencilTarget::DEPTH)
+        return std::string("DEPTH");
+    if (e == DepthStencilTarget::DEPTH_STENCIL)
+        return std::string("DEPTH_STENCIL");
     GP_ERROR("Invalid enumeration value '%d' for enumeration DepthStencilTarget::Format.", e);
     return std::string();
 }
@@ -2643,8 +2652,6 @@ Texture::Format lua_enumFromString_TextureFormat(const char* s)
         return Texture::RGBA;
     if (strcmp(s, "ALPHA") == 0)
         return Texture::ALPHA;
-    if (strcmp(s, "DEPTH") == 0)
-        return Texture::DEPTH;
     GP_ERROR("Invalid enumeration value '%s' for enumeration Texture::Format.", s);
     return Texture::RGB;
 }
@@ -2657,8 +2664,6 @@ std::string lua_stringFromEnum_TextureFormat(Texture::Format e)
         return std::string("RGBA");
     if (e == Texture::ALPHA)
         return std::string("ALPHA");
-    if (e == Texture::DEPTH)
-        return std::string("DEPTH");
     GP_ERROR("Invalid enumeration value '%d' for enumeration Texture::Format.", e);
     return std::string();
 }
