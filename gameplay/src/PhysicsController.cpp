@@ -675,7 +675,7 @@ PhysicsCollisionObject* PhysicsController::getCollisionObject(const btCollisionO
     return reinterpret_cast<PhysicsCollisionObject*>(collisionObject->getUserPointer());
 }
 
-void getBoundingBox(Node* node, BoundingBox* out, bool merge = false)
+static void getBoundingBox(Node* node, BoundingBox* out, bool merge = false)
 {
     GP_ASSERT(node);
     GP_ASSERT(out);
@@ -701,7 +701,7 @@ void getBoundingBox(Node* node, BoundingBox* out, bool merge = false)
     }
 }
 
-void getBoundingSphere(Node* node, BoundingSphere* out, bool merge = false)
+static void getBoundingSphere(Node* node, BoundingSphere* out, bool merge = false)
 {
     GP_ASSERT(node);
     GP_ASSERT(out);
@@ -727,7 +727,7 @@ void getBoundingSphere(Node* node, BoundingSphere* out, bool merge = false)
     }
 }
 
-void computeCenterOfMass(const Vector3& center, const Vector3& scale, Vector3* centerOfMassOffset)
+static void computeCenterOfMass(const Vector3& center, const Vector3& scale, Vector3* centerOfMassOffset)
 {
     GP_ASSERT(centerOfMassOffset);
 

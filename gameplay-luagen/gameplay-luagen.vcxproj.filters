@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="DebugNew.cpp" />
+    <ClCompile Include="Generator.cpp" />
+    <ClCompile Include="ClassBinding.cpp" />
+    <ClCompile Include="FunctionBinding.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Base.h" />
+    <ClInclude Include="DebugNew.h" />
+    <ClInclude Include="ClassBinding.h" />
+    <ClInclude Include="Generator.h" />
+    <ClInclude Include="FunctionBinding.h" />
+    <ClInclude Include="EnumBinding.h" />
+    <ClInclude Include="TypedefBinding.h" />
+  </ItemGroup>
+</Project>

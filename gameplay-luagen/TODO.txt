@@ -1,0 +1,19 @@
+Unsupported:
+============
+- operators
+- templates
+- variable arguments
+- Lua doesn't support as many types as C++ so if there are functions that overload on parameters with types that overlap in Lua, the overloading won't work properly (i.e. char, short, int, long, float, double and all corresponding unsigned variants overlap in Lua).
+
+Normal Priority List:
+=====================
+- Notify users when they generate bindings if a binding will not work due a name clash with a reserved Lua keyword (i.e. "end").
+- Add support for object arrays (i.e. VertexElement*).
+- Add "@script{create}" to the appropriate gameplay functions.
+- Fix memory leaks in gameplay-luagen and in generated code.
+- Add support for passing function pointers (i.e. for material parameter binding) (using the same string mechanism that was used for enums?).
+
+Low Priority List:
+==================
+- Add support for std::vector.
+- Separate threads?

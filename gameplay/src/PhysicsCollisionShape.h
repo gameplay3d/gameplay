@@ -94,10 +94,15 @@ public:
 
         union
         {
+            /** @script{ignore} */
             BoxData box;
+            /** @script{ignore} */
             SphereData sphere;
+            /** @script{ignore} */
             CapsuleData capsule;
+            /** @script{ignore} */
             Image* heightfield;
+            /** @script{ignore} */
             Mesh* mesh;
         } data;
 
@@ -119,6 +124,7 @@ public:
      * Returns the internal bullet physics shape object.
      *
      * @return The bullet shape object.
+     * @script{ignore}
      */
     btCollisionShape* getShape() const
     {
@@ -242,7 +248,9 @@ private:
     // Shape specific cached data
     union
     {
+        /** @script{ignore} */
         MeshData* meshData;
+        /** @script{ignore} */
         HeightfieldData* heightfieldData;
     } _shapeData;
 

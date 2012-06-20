@@ -222,6 +222,11 @@ void Control::setAutoHeight(bool autoHeight)
     }
 }
 
+bool Control::getAutoHeight() const
+{
+    return _autoHeight;
+}
+
 void Control::setOpacity(float opacity, unsigned char states)
 {
     overrideStyle();
@@ -283,13 +288,6 @@ const Rectangle& Control::getSkinRegion(State state) const
     Theme::Style::Overlay* overlay = getOverlay(state);
     GP_ASSERT(overlay);
     return overlay->getSkinRegion();
-}
-
-const Theme::UVs& Control::getSkinUVs(Theme::Skin::SkinArea area, State state) const
-{
-    Theme::Style::Overlay* overlay = getOverlay(state);
-    GP_ASSERT(overlay);
-    return overlay->getSkinUVs(area);
 }
 
 void Control::setSkinColor(const Vector4& color, unsigned char states)

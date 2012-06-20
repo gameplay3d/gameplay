@@ -4,7 +4,7 @@
 MeshGame game;
 
 MeshGame::MeshGame()
-    : _font(NULL), _scene(NULL),_modelNode(NULL), _touched(false), _touchX(0)
+    : _font(NULL), _scene(NULL), _modelNode(NULL), _touched(false), _touchX(0)
 {
 }
 
@@ -17,6 +17,7 @@ void MeshGame::initialize()
     // Display the gameplay splash screen for at least 1 second.
     displayScreen(this, &MeshGame::drawSplash, NULL, 1000L);
 
+    /*
     // Load font
     _font = Font::create("res/arial40.gpb");
 
@@ -32,10 +33,10 @@ void MeshGame::initialize()
     _modelNode->getModel()->setMaterial("res/duck.material");
 
     // Find the light node
-    Node* lightNode = _scene->findNode("directionalLight1");
+    //Node* lightNode = _scene->findNode("directionalLight1");
 
     // Bind the light node's direction into duck's material.
-    _modelNode->getModel()->getMaterial()->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
+    //_modelNode->getModel()->getMaterial()->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
 
     // Update the aspect ratio for our scene's camera to match the current device resolution
     _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
@@ -44,19 +45,24 @@ void MeshGame::initialize()
     Model* model = createGridModel();
     _scene->addNode("grid")->setModel(model);
     model->release();
+    //*/
 }
 
 void MeshGame::finalize()
 {
+    /*
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
+    */
 }
 
 void MeshGame::update(float elapsedTime)
 {
+    /*
     // Rotate model
     if (!_touched)
         _modelNode->rotateY(MATH_DEG_TO_RAD(0.5f));
+    */
 }
 
 void MeshGame::render(float elapsedTime)
@@ -64,11 +70,14 @@ void MeshGame::render(float elapsedTime)
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
+    ScriptController::getInstance()->getPointer<Font>("Font", "_font")->end();
+
     // Visit all the nodes in the scene, drawing the models/mesh.
-    _scene->visit(this, &MeshGame::drawScene);
+    Scene* s = ScriptController::getInstance()->getPointer<Scene>("Scene", "_scene");
+    s->visit(this, &MeshGame::drawScene);
 
     // Draw the fps
-    drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
+    //drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
 }
 
 void MeshGame::keyEvent(Keyboard::KeyEvent evt, int key)
@@ -90,13 +99,15 @@ void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     {
     case Touch::TOUCH_PRESS:
         {
-            _touched = true;
+            ScriptController::getInstance()->setBool("_touched", true);
+            //_touched = true;
             _touchX = x;
         }
         break;
     case Touch::TOUCH_RELEASE:
         {
-            _touched = false;
+            ScriptController::getInstance()->setBool("_touched", false);
+            //_touched = false;
             _touchX = 0;
         }
         break;
@@ -104,6 +115,7 @@ void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
         {
             int deltaX = x - _touchX;
             _touchX = x;
+            Node* _modelNode = ScriptController::getInstance()->getPointer<Node>("Node", "_modelNode");
             _modelNode->rotateY(MATH_DEG_TO_RAD(deltaX * 0.5f));
         }
         break;

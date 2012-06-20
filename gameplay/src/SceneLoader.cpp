@@ -1,4 +1,5 @@
 #include "Base.h"
+#include "AudioSource.h"
 #include "Game.h"
 #include "Bundle.h"
 #include "SceneLoader.h"
@@ -972,7 +973,7 @@ PhysicsConstraint* SceneLoader::loadSpringConstraint(const Properties* constrain
     return physicsConstraint;
 }
 
-void SceneLoader::splitURL(const std::string& url, std::string* file, std::string* id)
+void splitURL(const std::string& url, std::string* file, std::string* id)
 {
     if (url.empty())
     {

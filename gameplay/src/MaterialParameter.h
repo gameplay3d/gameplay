@@ -248,11 +248,17 @@ private:
     
     union
     {
+        /** @script{ignore} */
         float floatValue;
+        /** @script{ignore} */
         int intValue;
+        /** @script{ignore} */
         float* floatPtrValue;
+        /** @script{ignore} */
         int* intPtrValue;
+        /** @script{ignore} */
         const Texture::Sampler* samplerValue;
+        /** @script{ignore} */
         MethodBinding* method;
     } _value;
     

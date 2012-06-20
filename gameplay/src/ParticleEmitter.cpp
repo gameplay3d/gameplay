@@ -356,6 +356,11 @@ void ParticleEmitter::setEllipsoid(bool ellipsoid)
     _ellipsoid = ellipsoid;
 }
 
+bool ParticleEmitter::isEllipsoid() const
+{
+    return _ellipsoid;
+}
+
 void ParticleEmitter::setSize(float startMin, float startMax, float endMin, float endMax)
 {
     _sizeStartMin = startMin;

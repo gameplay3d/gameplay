@@ -7,6 +7,7 @@ var searchData=
   ['end',['end',['../classgameplay_1_1_font.html#a3702f26b3ba60db60e73ad6de5198d05',1,'gameplay::Font::end()'],['../classgameplay_1_1_mesh_batch.html#a496f920ec59e139102ebbbcf69e05056',1,'gameplay::MeshBatch::end()'],['../classgameplay_1_1_sprite_batch.html#aae1b18511d335ed10c027627a5cefe04',1,'gameplay::SpriteBatch::end()']]],
   ['entermessagepump',['enterMessagePump',['../classgameplay_1_1_platform.html#ab5379118d7f39805fb7d62820aa36cd6',1,'gameplay::Platform']]],
   ['evaluate',['evaluate',['../classgameplay_1_1_curve.html#ac8e72bf270f5ac3e93c7137bb3e05823',1,'gameplay::Curve']]],
+  ['executefunction',['executeFunction',['../classgameplay_1_1_script_controller.html#ac87bb43b36ce19521b8fcccc96e7b48f',1,'gameplay::ScriptController::executeFunction(const char *func, const char *args,...)'],['../classgameplay_1_1_script_controller.html#a0b6d7dfaafdfb7c585ffb5641229bd24',1,'gameplay::ScriptController::executeFunction(const Type &amp;type, const char *func, const char *args,...)']]],
   ['exists',['exists',['../classgameplay_1_1_properties.html#a7c3020df91523a962369a4a6f8062d51',1,'gameplay::Properties']]],
   ['exit',['exit',['../classgameplay_1_1_game.html#a00e505fc1ab4e8e1feceb0cdaf13bf03',1,'gameplay::Game']]]
 ];

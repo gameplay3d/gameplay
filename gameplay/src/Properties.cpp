@@ -598,7 +598,7 @@ bool Properties::exists(const char* name) const
     return _properties.find(name) != _properties.end();
 }
 
-const bool isStringNumeric(const char* str)
+static const bool isStringNumeric(const char* str)
 {
     GP_ASSERT(str);
 

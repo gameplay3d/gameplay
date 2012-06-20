@@ -448,13 +448,17 @@ private:
     // Removes the given constraint from the simulated physics world.
     void removeConstraint(PhysicsConstraint* constraint);
     
-    // Draws Bullet debug information.
+    /**
+     * Draws Bullet debug information.
+     * @script{ignore}
+     */
     class DebugDrawer : public btIDebugDraw
     {
     public:
 
         /** 
          * DebugVertex.
+         * @script{ignore}
          */
         struct DebugVertex
         {

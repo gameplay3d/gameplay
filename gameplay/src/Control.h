@@ -83,6 +83,7 @@ public:
     };
 
     /**
+     * @script{ignore}
      * A constant used for setting themed attributes on all control states simultaneously.
      */
     static const unsigned char STATE_ALL = NORMAL | FOCUS | ACTIVE | DISABLED;
@@ -329,16 +330,6 @@ public:
      * @return The texture region of this control's skin.
      */
     const Rectangle& getSkinRegion(State state = NORMAL) const;
-
-    /**
-     * Get the texture coordinates of an area of this control's skin for a given state.
-     *
-     * @param area The area of the skin to get the coordinates of.
-     * @param state The state to get this property from.
-     *
-     * @return The texture coordinates of an area of this control's skin.
-     */
-    const Theme::UVs& getSkinUVs(Theme::Skin::SkinArea area, State state = NORMAL) const;
 
     /**
      * Set the blend color of this control's skin.

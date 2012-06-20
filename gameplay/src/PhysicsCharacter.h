@@ -167,11 +167,13 @@ public:
 
     /**
      * @see btActionInterface::updateAction
+     * @script{ignore}
      */
     void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
 
     /**
      * @see btActionInterface::debugDraw
+     * @script{ignore}
      */
     void debugDraw(btIDebugDraw* debugDrawer);
 

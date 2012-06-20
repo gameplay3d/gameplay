@@ -21,6 +21,15 @@ static const long SCROLL_INERTIA_DELAY = 100L;
 // Factor to multiply friction by before applying to velocity.
 static const float SCROLL_FRICTION_FACTOR = 5.0f;
 
+/**
+ * Sort function for use with _controls.sort(), based on Z-Order.
+ * 
+ * @param c1 The first control
+ * @param c2 The second control
+ * return true if the first controls z index is less than the second.
+ */
+static bool sortControlsByZOrder(Control* c1, Control* c2);
+
 Container::Container()
     : _layout(NULL), _scrollBarTopCap(NULL), _scrollBarVertical(NULL), _scrollBarBottomCap(NULL),
       _scrollBarLeftCap(NULL), _scrollBarHorizontal(NULL), _scrollBarRightCap(NULL),
@@ -1045,7 +1054,7 @@ Container::Scroll Container::getScroll(const char* scroll)
     return Container::SCROLL_NONE;
 }
 
-bool sortControlsByZOrder(Control* c1, Control* c2)
+static bool sortControlsByZOrder(Control* c1, Control* c2)
 {
     if (c1->getZIndex() < c2->getZIndex())
         return true;
