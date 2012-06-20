@@ -31,7 +31,7 @@ void luaRegister_Joystick()
         {"getBounds", lua_Joystick_getBounds},
         {"getClip", lua_Joystick_getClip},
         {"getClipBounds", lua_Joystick_getClipBounds},
-        {"getConsumeTouchEvents", lua_Joystick_getConsumeTouchEvents},
+        {"getConsumeInputEvents", lua_Joystick_getConsumeInputEvents},
         {"getCursorColor", lua_Joystick_getCursorColor},
         {"getCursorRegion", lua_Joystick_getCursorRegion},
         {"getCursorUVs", lua_Joystick_getCursorUVs},
@@ -69,7 +69,7 @@ void luaRegister_Joystick()
         {"setAutoWidth", lua_Joystick_setAutoWidth},
         {"setBorder", lua_Joystick_setBorder},
         {"setBounds", lua_Joystick_setBounds},
-        {"setConsumeTouchEvents", lua_Joystick_setConsumeTouchEvents},
+        {"setConsumeInputEvents", lua_Joystick_setConsumeInputEvents},
         {"setCursorColor", lua_Joystick_setCursorColor},
         {"setCursorRegion", lua_Joystick_setCursorRegion},
         {"setFont", lua_Joystick_setFont},
@@ -1088,7 +1088,7 @@ int lua_Joystick_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_Joystick_getConsumeTouchEvents(lua_State* state)
+int lua_Joystick_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1101,7 +1101,7 @@ int lua_Joystick_getConsumeTouchEvents(lua_State* state)
             if (lua_type(state, 1) == LUA_TUSERDATA)
             {
                 Joystick* instance = getInstance(state);
-                bool result = instance->getConsumeTouchEvents();
+                bool result = instance->getConsumeInputEvents();
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -2835,7 +2835,7 @@ int lua_Joystick_setBounds(lua_State* state)
     return 0;
 }
 
-int lua_Joystick_setConsumeTouchEvents(lua_State* state)
+int lua_Joystick_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2852,7 +2852,7 @@ int lua_Joystick_setConsumeTouchEvents(lua_State* state)
                 bool param1 = (luaL_checkint(state, 2) != 0);
 
                 Joystick* instance = getInstance(state);
-                instance->setConsumeTouchEvents(param1);
+                instance->setConsumeInputEvents(param1);
                 
                 return 0;
             }

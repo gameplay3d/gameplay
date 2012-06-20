@@ -615,6 +615,9 @@
     <ClCompile Include="src\lua\lua_VerticalLayout.cpp">
       <Filter>lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\lua\lua_PhysicsControllerHitFilter.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1224,6 +1227,9 @@
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_VerticalLayout.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_PhysicsControllerHitFilter.h">
       <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>

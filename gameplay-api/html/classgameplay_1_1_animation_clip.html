@@ -72,8 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pub-static-attribs">Static Public Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::AnimationClip Class Reference</div>  </div>
 </div><!--header-->
@@ -103,7 +102,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a12c347102fdd8fdbe8e30804b1833742"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a12c347102fdd8fdbe8e30804b1833742">getAnimation</a> () const </td></tr>
 <tr class="memitem:a66b9cad3b41aba5a1695917489b6f92d"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a66b9cad3b41aba5a1695917489b6f92d">getStartTime</a> () const </td></tr>
 <tr class="memitem:ae0898f2d6b4d3d886d1f2bba8ef0dbd5"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ae0898f2d6b4d3d886d1f2bba8ef0dbd5">getEndTime</a> () const </td></tr>
-<tr class="memitem:a7e69fea3f954c14384937486db6bfe90"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a7e69fea3f954c14384937486db6bfe90">getElaspedTime</a> () const </td></tr>
+<tr class="memitem:a50deae8acd757bdde7c824b7297e95ed"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a50deae8acd757bdde7c824b7297e95ed">getElaspedTime</a> () const </td></tr>
 <tr class="memitem:ab29326cd02dd538d28900b127896ab01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ab29326cd02dd538d28900b127896ab01">setRepeatCount</a> (float repeatCount)</td></tr>
 <tr class="memitem:a006f61a1f72e9428b5d9717530de04c1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a006f61a1f72e9428b5d9717530de04c1">getRepeatCount</a> () const </td></tr>
 <tr class="memitem:ac177842ec1730ce35cd02c47b03f8155"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ac177842ec1730ce35cd02c47b03f8155">setActiveDuration</a> (unsigned long duration)</td></tr>
@@ -129,13 +128,6 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a32c79759c1e6a69d0d10db44579853b6"><td class="memItemLeft" align="right" valign="top">static const unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a32c79759c1e6a69d0d10db44579853b6">REPEAT_INDEFINITE</a> = 0</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a7899599edce4988a894c8e7431e7bb85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7899599edce4988a894c8e7431e7bb85"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController</b></td></tr>
-<tr class="memitem:af47625f50036c466946f960db7320bcf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af47625f50036c466946f960db7320bcf"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -325,16 +317,16 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Gets the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>'s duration.</p>
-<dl class="section return"><dt>Returns:</dt><dd>the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>'s duration. </dd></dl>
+<dl class="section return"><dt>Returns:</dt><dd>the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>'s duration, in milliseconds. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a7e69fea3f954c14384937486db6bfe90"></a>
+<a class="anchor" id="a50deae8acd757bdde7c824b7297e95ed"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned long gameplay::AnimationClip::getElaspedTime </td>
+          <td class="memname">float gameplay::AnimationClip::getElaspedTime </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -497,7 +489,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Use REPEAT_INDEFINITE to play the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> indefinitely.</p>
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
-    <tr><td class="paramname">duration</td><td>The active duration that is set on the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. </td></tr>
+    <tr><td class="paramname">duration</td><td>The active duration that is set on the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>, in milliseconds. </td></tr>
   </table>
   </dd>
 </dl>
@@ -615,7 +607,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 20 2012 14:33:18 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 20 2012 14:49:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

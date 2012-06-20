@@ -68,7 +68,6 @@
 #include "PhysicsGenericConstraint.h"
 #include "PhysicsGhostObject.h"
 #include "PhysicsHingeConstraint.h"
-#include "PhysicsMotionState.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsSocketConstraint.h"
 #include "PhysicsSpringConstraint.h"

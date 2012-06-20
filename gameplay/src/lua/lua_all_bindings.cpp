@@ -67,6 +67,7 @@ void lua_RegisterAllBindings()
     luaRegister_PhysicsCollisionShapeDefinition();
     luaRegister_PhysicsConstraint();
     luaRegister_PhysicsController();
+    luaRegister_PhysicsControllerHitFilter();
     luaRegister_PhysicsControllerHitResult();
     luaRegister_PhysicsControllerListener();
     luaRegister_PhysicsFixedConstraint();

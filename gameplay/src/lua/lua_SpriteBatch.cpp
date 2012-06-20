@@ -17,6 +17,7 @@ void luaRegister_SpriteBatch()
         {"draw", lua_SpriteBatch_draw},
         {"end", lua_SpriteBatch_end},
         {"getMaterial", lua_SpriteBatch_getMaterial},
+        {"getProjectionMatrix", lua_SpriteBatch_getProjectionMatrix},
         {"getStateBlock", lua_SpriteBatch_getStateBlock},
         {"setProjectionMatrix", lua_SpriteBatch_setProjectionMatrix},
         {NULL, NULL}
@@ -1046,6 +1047,44 @@ int lua_SpriteBatch_getMaterial(lua_State* state)
                 object->instance = (void*)instance->getMaterial();
                 object->owns = false;
                 luaL_getmetatable(state, "Material");
+                lua_setmetatable(state, -2);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_SpriteBatch_getProjectionMatrix(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if (lua_type(state, 1) == LUA_TUSERDATA)
+            {
+                SpriteBatch* instance = getInstance(state);
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = (void*)&(instance->getProjectionMatrix());
+                object->owns = false;
+                luaL_getmetatable(state, "Matrix");
                 lua_setmetatable(state, -2);
 
                 return 1;

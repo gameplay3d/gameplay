@@ -736,6 +736,11 @@ Texture* Texture::createCompressedDDS(const char* path)
     return texture;
 }
 
+Texture::Format Texture::getFormat() const
+{
+    return _format;
+}
+
 unsigned int Texture::getWidth() const
 {
     return _width;

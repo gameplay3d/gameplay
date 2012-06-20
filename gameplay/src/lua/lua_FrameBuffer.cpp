@@ -16,9 +16,11 @@ void luaRegister_FrameBuffer()
         {"addRef", lua_FrameBuffer_addRef},
         {"bind", lua_FrameBuffer_bind},
         {"getDepthStencilTarget", lua_FrameBuffer_getDepthStencilTarget},
+        {"getHeight", lua_FrameBuffer_getHeight},
         {"getID", lua_FrameBuffer_getID},
         {"getRefCount", lua_FrameBuffer_getRefCount},
         {"getRenderTarget", lua_FrameBuffer_getRenderTarget},
+        {"getWidth", lua_FrameBuffer_getWidth},
         {"release", lua_FrameBuffer_release},
         {"setDepthStencilTarget", lua_FrameBuffer_setDepthStencilTarget},
         {"setRenderTarget", lua_FrameBuffer_setRenderTarget},
@@ -190,6 +192,43 @@ int lua_FrameBuffer_getDepthStencilTarget(lua_State* state)
     return 0;
 }
 
+int lua_FrameBuffer_getHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if (lua_type(state, 1) == LUA_TUSERDATA)
+            {
+                FrameBuffer* instance = getInstance(state);
+                unsigned int result = instance->getHeight();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_FrameBuffer_getID(lua_State* state)
 {
     // Get the number of parameters.
@@ -319,6 +358,43 @@ int lua_FrameBuffer_getRenderTarget(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_FrameBuffer_getWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if (lua_type(state, 1) == LUA_TUSERDATA)
+            {
+                FrameBuffer* instance = getInstance(state);
+                unsigned int result = instance->getWidth();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -511,28 +587,6 @@ int lua_FrameBuffer_static_create(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 1:
-        {
-            if (lua_type(state, 1) == LUA_TSTRING)
-            {
-                // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 1);
-
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)FrameBuffer::create(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "FrameBuffer");
-                lua_setmetatable(state, -2);
-
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
         case 3:
         {
             if (lua_type(state, 1) == LUA_TSTRING &&
@@ -565,7 +619,7 @@ int lua_FrameBuffer_static_create(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1 or 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }

@@ -2577,7 +2577,7 @@ int lua_ParticleEmitter_update(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                long param1 = (long)luaL_checklong(state, 2);
+                float param1 = (float)luaL_checknumber(state, 2);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->update(param1);

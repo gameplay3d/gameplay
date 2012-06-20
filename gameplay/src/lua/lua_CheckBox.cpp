@@ -31,7 +31,7 @@ void luaRegister_CheckBox()
         {"getBounds", lua_CheckBox_getBounds},
         {"getClip", lua_CheckBox_getClip},
         {"getClipBounds", lua_CheckBox_getClipBounds},
-        {"getConsumeTouchEvents", lua_CheckBox_getConsumeTouchEvents},
+        {"getConsumeInputEvents", lua_CheckBox_getConsumeInputEvents},
         {"getCursorColor", lua_CheckBox_getCursorColor},
         {"getCursorRegion", lua_CheckBox_getCursorRegion},
         {"getCursorUVs", lua_CheckBox_getCursorUVs},
@@ -69,7 +69,7 @@ void luaRegister_CheckBox()
         {"setBorder", lua_CheckBox_setBorder},
         {"setBounds", lua_CheckBox_setBounds},
         {"setChecked", lua_CheckBox_setChecked},
-        {"setConsumeTouchEvents", lua_CheckBox_setConsumeTouchEvents},
+        {"setConsumeInputEvents", lua_CheckBox_setConsumeInputEvents},
         {"setCursorColor", lua_CheckBox_setCursorColor},
         {"setCursorRegion", lua_CheckBox_setCursorRegion},
         {"setFont", lua_CheckBox_setFont},
@@ -1089,7 +1089,7 @@ int lua_CheckBox_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_CheckBox_getConsumeTouchEvents(lua_State* state)
+int lua_CheckBox_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1102,7 +1102,7 @@ int lua_CheckBox_getConsumeTouchEvents(lua_State* state)
             if (lua_type(state, 1) == LUA_TUSERDATA)
             {
                 CheckBox* instance = getInstance(state);
-                bool result = instance->getConsumeTouchEvents();
+                bool result = instance->getConsumeInputEvents();
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -2835,7 +2835,7 @@ int lua_CheckBox_setChecked(lua_State* state)
     return 0;
 }
 
-int lua_CheckBox_setConsumeTouchEvents(lua_State* state)
+int lua_CheckBox_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2852,7 +2852,7 @@ int lua_CheckBox_setConsumeTouchEvents(lua_State* state)
                 bool param1 = (luaL_checkint(state, 2) != 0);
 
                 CheckBox* instance = getInstance(state);
-                instance->setConsumeTouchEvents(param1);
+                instance->setConsumeInputEvents(param1);
                 
                 return 0;
             }

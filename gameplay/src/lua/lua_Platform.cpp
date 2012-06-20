@@ -27,6 +27,7 @@ void luaRegister_Platform()
         {"isMultiTouch", lua_Platform_static_isMultiTouch},
         {"isVsync", lua_Platform_static_isVsync},
         {"keyEventInternal", lua_Platform_static_keyEventInternal},
+        {"mouseEventInternal", lua_Platform_static_mouseEventInternal},
         {"setAbsoluteTime", lua_Platform_static_setAbsoluteTime},
         {"setMultiTouch", lua_Platform_static_setMultiTouch},
         {"setVsync", lua_Platform_static_setVsync},
@@ -217,10 +218,10 @@ int lua_Platform_static_getAbsoluteTime(lua_State* state)
     {
         case 0:
         {
-            long result = Platform::getAbsoluteTime();
+            double result = Platform::getAbsoluteTime();
 
             // Push the return value onto the stack.
-            lua_pushinteger(state, result);
+            lua_pushnumber(state, result);
 
             return 1;
             break;
@@ -427,6 +428,57 @@ int lua_Platform_static_keyEventInternal(lua_State* state)
     return 0;
 }
 
+int lua_Platform_static_mouseEventInternal(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            if (lua_type(state, 1) == LUA_TSTRING &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                Mouse::MouseEvent param1 = (Mouse::MouseEvent)lua_enumFromString_MouseMouseEvent(luaL_checkstring(state, 1));
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 2);
+
+                // Get parameter 3 off the stack.
+                int param3 = (int)luaL_checkint(state, 3);
+
+                // Get parameter 4 off the stack.
+                int param4 = (int)luaL_checkint(state, 4);
+
+                bool result = Platform::mouseEventInternal(param1, param2, param3, param4);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Platform_static_setAbsoluteTime(lua_State* state)
 {
     // Get the number of parameters.
@@ -440,7 +492,7 @@ int lua_Platform_static_setAbsoluteTime(lua_State* state)
             if (lua_type(state, 1) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                long param1 = (long)luaL_checklong(state, 1);
+                double param1 = (double)luaL_checknumber(state, 1);
 
                 Platform::setAbsoluteTime(param1);
                 

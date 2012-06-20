@@ -477,10 +477,10 @@ int lua_AnimationClip_getElaspedTime(lua_State* state)
             if (lua_type(state, 1) == LUA_TUSERDATA)
             {
                 AnimationClip* instance = getInstance(state);
-                unsigned long result = instance->getElaspedTime();
+                float result = instance->getElaspedTime();
 
                 // Push the return value onto the stack.
-                lua_pushunsigned(state, result);
+                lua_pushnumber(state, result);
 
                 return 1;
             }

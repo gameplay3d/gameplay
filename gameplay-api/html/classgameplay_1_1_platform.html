@@ -92,8 +92,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:abbb42d7ac405bad0db3eb642495c84b3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#abbb42d7ac405bad0db3eb642495c84b3">signalShutdown</a> ()</td></tr>
 <tr class="memitem:abf163f9db26aac12f9bb9fca70eb061a"><td class="memItemLeft" align="right" valign="top">static unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#abf163f9db26aac12f9bb9fca70eb061a">getDisplayWidth</a> ()</td></tr>
 <tr class="memitem:ae041cb899960eda243f144dd8d1a917b"><td class="memItemLeft" align="right" valign="top">static unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#ae041cb899960eda243f144dd8d1a917b">getDisplayHeight</a> ()</td></tr>
-<tr class="memitem:aebc82fa22dfec7cc8cba5b28aff04d00"><td class="memItemLeft" align="right" valign="top">static long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aebc82fa22dfec7cc8cba5b28aff04d00">getAbsoluteTime</a> ()</td></tr>
-<tr class="memitem:a45d449a6b5d17f1ed9d75512de8374a1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a45d449a6b5d17f1ed9d75512de8374a1">setAbsoluteTime</a> (long time)</td></tr>
+<tr class="memitem:a59244b6b8ac83ea029339e3974a40282"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a59244b6b8ac83ea029339e3974a40282">getAbsoluteTime</a> ()</td></tr>
+<tr class="memitem:ac4152c4765c6dc0d44b0a78050d17a84"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#ac4152c4765c6dc0d44b0a78050d17a84">setAbsoluteTime</a> (double time)</td></tr>
 <tr class="memitem:aa7936bf90741ee305184f2b38467923b"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aa7936bf90741ee305184f2b38467923b">isVsync</a> ()</td></tr>
 <tr class="memitem:acacf35e2782bd3253a231dd0bd459f64"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#acacf35e2782bd3253a231dd0bd459f64">setVsync</a> (bool enable)</td></tr>
 <tr class="memitem:a3a3f93c158269eb93949ba5d9b550c70"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a3a3f93c158269eb93949ba5d9b550c70">setMultiTouch</a> (bool enabled)</td></tr>
@@ -103,6 +103,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aea3bd12f36c33c33824bc1ccdd4f32f3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aea3bd12f36c33c33824bc1ccdd4f32f3">displayKeyboard</a> (bool display)</td></tr>
 <tr class="memitem:a6812cbda855837531c8631eb4763fdb5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a6812cbda855837531c8631eb4763fdb5">touchEventInternal</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr class="memitem:a8b1b7b370d990cf54d22653b308b9497"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a8b1b7b370d990cf54d22653b308b9497">keyEventInternal</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
+<tr class="memitem:a8c4044ab61f9be5853b3cf9d97530e43"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a8c4044ab61f9be5853b3cf9d97530e43">mouseEventInternal</a> (<a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> evt, int x, int y, int wheelDelta)</td></tr>
 <tr class="memitem:abe8674e191630d8f24a1137ce3929e8c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#abe8674e191630d8f24a1137ce3929e8c">sleep</a> (long ms)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
@@ -206,7 +207,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aebc82fa22dfec7cc8cba5b28aff04d00"></a>
+<a class="anchor" id="a59244b6b8ac83ea029339e3974a40282"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -214,7 +215,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static long gameplay::Platform::getAbsoluteTime </td>
+          <td class="memname">static double gameplay::Platform::getAbsoluteTime </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -417,7 +418,65 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a45d449a6b5d17f1ed9d75512de8374a1"></a>
+<a class="anchor" id="a8c4044ab61f9be5853b3cf9d97530e43"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool gameplay::Platform::mouseEventInternal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wheelDelta</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_mouse.html">Mouse</a> callback on mouse events. If the game does not consume the mouse move event or left mouse click event then it is interpreted as a touch event instead.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">evt</td><td>The mouse event that occurred. </td></tr>
+    <tr><td class="paramname">x</td><td>The x position of the mouse in pixels. Left edge is zero. </td></tr>
+    <tr><td class="paramname">y</td><td>The y position of the mouse in pixels. Top edge is zero. </td></tr>
+    <tr><td class="paramname">wheelDelta</td><td>The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>True if the mouse event is consumed or false if it is not consumed.</dd></dl>
+<dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac4152c4765c6dc0d44b0a78050d17a84"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -427,7 +486,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">static void gameplay::Platform::setAbsoluteTime </td>
           <td>(</td>
-          <td class="paramtype">long&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>time</em></td><td>)</td>
           <td></td>
         </tr>
@@ -643,7 +702,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 20 2012 14:33:20 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 20 2012 14:49:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

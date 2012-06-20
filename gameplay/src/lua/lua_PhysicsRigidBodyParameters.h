@@ -10,7 +10,6 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state);
 int lua_PhysicsRigidBodyParameters_angularDamping(lua_State* state);
 int lua_PhysicsRigidBodyParameters_anisotropicFriction(lua_State* state);
 int lua_PhysicsRigidBodyParameters_friction(lua_State* state);
-int lua_PhysicsRigidBodyParameters_gravity(lua_State* state);
 int lua_PhysicsRigidBodyParameters_kinematic(lua_State* state);
 int lua_PhysicsRigidBodyParameters_linearDamping(lua_State* state);
 int lua_PhysicsRigidBodyParameters_mass(lua_State* state);

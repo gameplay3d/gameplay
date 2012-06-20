@@ -1331,9 +1331,62 @@ int lua_PhysicsController_rayTest(lua_State* state)
             }
             break;
         }
+        case 5:
+        {
+            if (lua_type(state, 1) == LUA_TUSERDATA &&
+                lua_type(state, 2) == LUA_TUSERDATA &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TUSERDATA &&
+                lua_type(state, 5) == LUA_TUSERDATA)
+            {
+                // Get parameter 1 off the stack.
+                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Ray");
+                if (!userdata2)
+                {
+                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Ray' for parameter 2.");
+                    lua_error(state);
+                }
+                Ray* param1 = (Ray*)((ScriptController::LuaObject*)userdata2)->instance;
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 3 off the stack.
+                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "PhysicsControllerHitResult");
+                if (!userdata4)
+                {
+                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsController::HitResult' for parameter 4.");
+                    lua_error(state);
+                }
+                PhysicsController::HitResult* param3 = (PhysicsController::HitResult*)((ScriptController::LuaObject*)userdata4)->instance;
+
+                // Get parameter 4 off the stack.
+                void* userdata5 = ScriptController::getInstance()->getObjectPointer(5, "PhysicsControllerHitFilter");
+                if (!userdata5)
+                {
+                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsController::HitFilter' for parameter 5.");
+                    lua_error(state);
+                }
+                PhysicsController::HitFilter* param4 = (PhysicsController::HitFilter*)((ScriptController::LuaObject*)userdata5)->instance;
+
+                PhysicsController* instance = getInstance(state);
+                bool result = instance->rayTest(*param1, param2, param3, param4);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3 or 4).");
+            lua_pushstring(state, "Invalid number of parameters (expected 3, 4 or 5).");
             lua_error(state);
             break;
         }
@@ -1525,9 +1578,68 @@ int lua_PhysicsController_sweepTest(lua_State* state)
             }
             break;
         }
+        case 5:
+        {
+            if (lua_type(state, 1) == LUA_TUSERDATA &&
+                lua_type(state, 2) == LUA_TUSERDATA &&
+                lua_type(state, 3) == LUA_TUSERDATA &&
+                lua_type(state, 4) == LUA_TUSERDATA &&
+                lua_type(state, 5) == LUA_TUSERDATA)
+            {
+                // Get parameter 1 off the stack.
+                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "PhysicsCollisionObject");
+                if (!userdata2)
+                {
+                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsCollisionObject' for parameter 2.");
+                    lua_error(state);
+                }
+                PhysicsCollisionObject* param1 = (PhysicsCollisionObject*)((ScriptController::LuaObject*)userdata2)->instance;
+
+                // Get parameter 2 off the stack.
+                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector3");
+                if (!userdata3)
+                {
+                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 3.");
+                    lua_error(state);
+                }
+                Vector3* param2 = (Vector3*)((ScriptController::LuaObject*)userdata3)->instance;
+
+                // Get parameter 3 off the stack.
+                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "PhysicsControllerHitResult");
+                if (!userdata4)
+                {
+                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsController::HitResult' for parameter 4.");
+                    lua_error(state);
+                }
+                PhysicsController::HitResult* param3 = (PhysicsController::HitResult*)((ScriptController::LuaObject*)userdata4)->instance;
+
+                // Get parameter 4 off the stack.
+                void* userdata5 = ScriptController::getInstance()->getObjectPointer(5, "PhysicsControllerHitFilter");
+                if (!userdata5)
+                {
+                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsController::HitFilter' for parameter 5.");
+                    lua_error(state);
+                }
+                PhysicsController::HitFilter* param4 = (PhysicsController::HitFilter*)((ScriptController::LuaObject*)userdata5)->instance;
+
+                PhysicsController* instance = getInstance(state);
+                bool result = instance->sweepTest(param1, *param2, param3, param4);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3 or 4).");
+            lua_pushstring(state, "Invalid number of parameters (expected 3, 4 or 5).");
             lua_error(state);
             break;
         }

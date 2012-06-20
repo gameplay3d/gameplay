@@ -32,7 +32,7 @@ void luaRegister_Container()
         {"getBounds", lua_Container_getBounds},
         {"getClip", lua_Container_getClip},
         {"getClipBounds", lua_Container_getClipBounds},
-        {"getConsumeTouchEvents", lua_Container_getConsumeTouchEvents},
+        {"getConsumeInputEvents", lua_Container_getConsumeInputEvents},
         {"getControl", lua_Container_getControl},
         {"getCursorColor", lua_Container_getCursorColor},
         {"getCursorRegion", lua_Container_getCursorRegion},
@@ -72,7 +72,7 @@ void luaRegister_Container()
         {"setAutoWidth", lua_Container_setAutoWidth},
         {"setBorder", lua_Container_setBorder},
         {"setBounds", lua_Container_setBounds},
-        {"setConsumeTouchEvents", lua_Container_setConsumeTouchEvents},
+        {"setConsumeInputEvents", lua_Container_setConsumeInputEvents},
         {"setCursorColor", lua_Container_setCursorColor},
         {"setCursorRegion", lua_Container_setCursorRegion},
         {"setFont", lua_Container_setFont},
@@ -1140,7 +1140,7 @@ int lua_Container_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_Container_getConsumeTouchEvents(lua_State* state)
+int lua_Container_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1153,7 +1153,7 @@ int lua_Container_getConsumeTouchEvents(lua_State* state)
             if (lua_type(state, 1) == LUA_TUSERDATA)
             {
                 Container* instance = getInstance(state);
-                bool result = instance->getConsumeTouchEvents();
+                bool result = instance->getConsumeInputEvents();
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -3019,7 +3019,7 @@ int lua_Container_setBounds(lua_State* state)
     return 0;
 }
 
-int lua_Container_setConsumeTouchEvents(lua_State* state)
+int lua_Container_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3036,7 +3036,7 @@ int lua_Container_setConsumeTouchEvents(lua_State* state)
                 bool param1 = (luaL_checkint(state, 2) != 0);
 
                 Container* instance = getInstance(state);
-                instance->setConsumeTouchEvents(param1);
+                instance->setConsumeInputEvents(param1);
                 
                 return 0;
             }

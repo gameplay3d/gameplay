@@ -10,6 +10,22 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\ClassBinding.cpp" />
+    <ClCompile Include="src\DebugNew.cpp" />
+    <ClCompile Include="src\FunctionBinding.cpp" />
+    <ClCompile Include="src\Generator.cpp" />
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Base.h" />
+    <ClInclude Include="src\ClassBinding.h" />
+    <ClInclude Include="src\DebugNew.h" />
+    <ClInclude Include="src\EnumBinding.h" />
+    <ClInclude Include="src\FunctionBinding.h" />
+    <ClInclude Include="src\Generator.h" />
+    <ClInclude Include="src\TypedefBinding.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CA137C5D-FDE1-4095-926A-59E8472504BF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -80,22 +96,6 @@
       <AdditionalDependencies>tinyxml2.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="FunctionBinding.cpp" />
-    <ClCompile Include="ClassBinding.cpp" />
-    <ClCompile Include="DebugNew.cpp" />
-    <ClCompile Include="Generator.cpp" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Base.h" />
-    <ClInclude Include="FunctionBinding.h" />
-    <ClInclude Include="ClassBinding.h" />
-    <ClInclude Include="DebugNew.h" />
-    <ClInclude Include="EnumBinding.h" />
-    <ClInclude Include="Generator.h" />
-    <ClInclude Include="TypedefBinding.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

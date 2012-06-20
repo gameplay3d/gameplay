@@ -20,6 +20,7 @@ void luaRegister_Pass()
         {"getParameter", lua_Pass_getParameter},
         {"getRefCount", lua_Pass_getRefCount},
         {"getStateBlock", lua_Pass_getStateBlock},
+        {"getVertexAttributeBinding", lua_Pass_getVertexAttributeBinding},
         {"release", lua_Pass_release},
         {"setParameterAutoBinding", lua_Pass_setParameterAutoBinding},
         {"setStateBlock", lua_Pass_setStateBlock},
@@ -319,6 +320,44 @@ int lua_Pass_getStateBlock(lua_State* state)
                 object->instance = (void*)instance->getStateBlock();
                 object->owns = false;
                 luaL_getmetatable(state, "RenderStateStateBlock");
+                lua_setmetatable(state, -2);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Pass_getVertexAttributeBinding(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if (lua_type(state, 1) == LUA_TUSERDATA)
+            {
+                Pass* instance = getInstance(state);
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = (void*)instance->getVertexAttributeBinding();
+                object->owns = false;
+                luaL_getmetatable(state, "VertexAttributeBinding");
                 lua_setmetatable(state, -2);
 
                 return 1;

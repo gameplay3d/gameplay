@@ -10,7 +10,6 @@ int lua_DepthStencilTarget_addRef(lua_State* state);
 int lua_DepthStencilTarget_getFormat(lua_State* state);
 int lua_DepthStencilTarget_getID(lua_State* state);
 int lua_DepthStencilTarget_getRefCount(lua_State* state);
-int lua_DepthStencilTarget_getTexture(lua_State* state);
 int lua_DepthStencilTarget_release(lua_State* state);
 int lua_DepthStencilTarget_static_create(lua_State* state);
 int lua_DepthStencilTarget_static_getDepthStencilTarget(lua_State* state);
