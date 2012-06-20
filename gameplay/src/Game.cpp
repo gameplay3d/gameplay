@@ -4,6 +4,7 @@
 #include "RenderState.h"
 #include "FileSystem.h"
 #include "FrameBuffer.h"
+#include "SceneLoader.h"
 
 GLenum __gl_error_code = GL_NO_ERROR;
 ALenum __al_error_code = AL_NO_ERROR;
@@ -19,7 +20,8 @@ Game::Game()
     : _initialized(false), _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
-      _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL)
+      _animationController(NULL), _audioController(NULL), 
+      _physicsController(NULL), _audioListener(NULL), _scriptController(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
@@ -102,6 +104,94 @@ bool Game::startup()
 
     loadGamepads();
     
+    _scriptController = new ScriptController();
+    _scriptController->initialize();
+
+    // Set the script callback functions.
+    if (_properties)
+    {
+        Properties* scripts = _properties->getNamespace("scripts", true);
+        if (scripts)
+        {
+            const char* name;
+            while ((name = scripts->getNextProperty()) != NULL)
+            {
+                if (strcmp(name, "INITIALIZE") == 0)
+                {
+                    std::string url = scripts->getString();
+                    std::string file;
+                    std::string id;
+                    splitURL(url, &file, &id);
+
+                    if (file.size() <= 0 || id.size() <= 0)
+                    {
+                        GP_ERROR("Invalid INITIALIZE script callback function '%s'.", url.c_str());
+                    }
+                    else
+                    {
+                        _scriptController->loadScript(file.c_str());
+                        _scriptController->registerCallback(ScriptController::INITIALIZE, id);
+                    }
+                }
+                else if (strcmp(name, "UPDATE") == 0)
+                {
+                    std::string url = scripts->getString();
+                    std::string file;
+                    std::string id;
+                    splitURL(url, &file, &id);
+
+                    if (file.size() <= 0 || id.size() <= 0)
+                    {
+                        GP_ERROR("Invalid UPDATE script callback function '%s'.", url.c_str());
+                    }
+                    else
+                    {
+                        _scriptController->loadScript(file.c_str());
+                        _scriptController->registerCallback(ScriptController::UPDATE, id);
+                    }
+                }
+                else if (strcmp(name, "RENDER") == 0)
+                {
+                    std::string url = scripts->getString();
+                    std::string file;
+                    std::string id;
+                    splitURL(url, &file, &id);
+
+                    if (file.size() <= 0 || id.size() <= 0)
+                    {
+                        GP_ERROR("Invalid RENDER script callback function '%s'.", url.c_str());
+                    }
+                    else
+                    {
+                        _scriptController->loadScript(file.c_str());
+                        _scriptController->registerCallback(ScriptController::RENDER, id);
+                    }
+                }
+                else if (strcmp(name, "FINALIZE") == 0)
+                {
+                    std::string url = scripts->getString();
+                    std::string file;
+                    std::string id;
+                    splitURL(url, &file, &id);
+
+                    if (file.size() <= 0 || id.size() <= 0)
+                    {
+                        GP_ERROR("Invalid FINALIZE script callback function '%s'.", url.c_str());
+                    }
+                    else
+                    {
+                        _scriptController->loadScript(file.c_str());
+                        _scriptController->registerCallback(ScriptController::FINALIZE, id);
+                    }
+                }
+                else
+                {
+                    // Ignore everything else.
+                }
+            }
+        }
+    }
+
     _state = RUNNING;
 
     return true;
@@ -118,6 +208,7 @@ void Game::shutdown()
 
         Platform::signalShutdown();
         finalize();
+
         
         for (std::vector<Gamepad*>::iterator itr = _gamepads.begin(); itr != _gamepads.end(); itr++)
         {
@@ -125,6 +216,8 @@ void Game::shutdown()
         }
         _gamepads.clear();
         
+        _scriptController->finalizeGame();
+
         _animationController->finalize();
         SAFE_DELETE(_animationController);
 
@@ -133,6 +226,9 @@ void Game::shutdown()
 
         _physicsController->finalize();
         SAFE_DELETE(_physicsController);
+
+        _scriptController->finalize();
+        SAFE_DELETE(_scriptController);
 
         SAFE_DELETE(_audioListener);
 
@@ -184,6 +280,7 @@ void Game::frame()
     if (!_initialized)
     {
         initialize();
+        _scriptController->initializeGame();
         _initialized = true;
     }
 
@@ -211,12 +308,18 @@ void Game::frame()
         // Application Update.
         update(elapsedTime);
 
+        // Run script update.
+        _scriptController->update(elapsedTime);
+
         // Audio Rendering.
         _audioController->update(elapsedTime);
 
         // Graphics Rendering.
         render(elapsedTime);
-        
+
+        // Run script render.
+        _scriptController->render(elapsedTime);
+
         // Update FPS.
         ++_frameCount;
         if ((Game::getGameTime() - _frameLastFPS) >= 1000)
@@ -231,8 +334,14 @@ void Game::frame()
         // Application Update.
         update(0);
 
+        // Script update.
+        _scriptController->update(0);
+
         // Graphics Rendering.
         render(0);
+
+        // Script render.
+        _scriptController->render(0);
     }
 }
 
@@ -252,6 +361,7 @@ void Game::updateOnce()
     _animationController->update(elapsedTime);
     _physicsController->update(elapsedTime);
     _audioController->update(elapsedTime);
+    _scriptController->update(elapsedTime);
 }
 
 void Game::setViewport(const Rectangle& viewport)

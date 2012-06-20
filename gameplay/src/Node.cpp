@@ -1,4 +1,5 @@
 #include "Base.h"
+#include "AudioSource.h"
 #include "Node.h"
 #include "Scene.h"
 #include "Joint.h"

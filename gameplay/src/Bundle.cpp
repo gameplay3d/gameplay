@@ -128,7 +128,7 @@ bool Bundle::readArray(unsigned int* length, std::vector<T>* values, unsigned in
     return true;
 }
 
-std::string readString(FILE* fp)
+static std::string readString(FILE* fp)
 {
     GP_ASSERT(fp);
 

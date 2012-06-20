@@ -9,6 +9,7 @@ namespace gameplay
 
 /**
  * Internal class used to implement the collidesWith(PhysicsCollisionObject*) function.
+ * @script{ignore}
  */
 struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
 {

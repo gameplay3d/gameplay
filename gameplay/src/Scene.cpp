@@ -278,7 +278,7 @@ void Scene::setAmbientColor(float red, float green, float blue)
     _ambientColor.set(red, green, blue);
 }
 
-Material* createDebugMaterial()
+static Material* createDebugMaterial()
 {
     // Vertex shader for drawing colored lines.
     const char* vs_str = 
@@ -356,7 +356,7 @@ struct DebugVertex
     float a;
 };
 
-void drawDebugLine(MeshBatch* batch, const Vector3& point1, const Vector3& point2, const Vector3& color)
+static void drawDebugLine(MeshBatch* batch, const Vector3& point1, const Vector3& point2, const Vector3& color)
 {
     GP_ASSERT(batch);
 
@@ -384,7 +384,7 @@ void drawDebugLine(MeshBatch* batch, const Vector3& point1, const Vector3& point
 #define DEBUG_BOX_COLOR Vector3(0, 1, 0)
 #define DEBUG_SPHERE_COLOR Vector3(0, 1, 0)
 
-void drawDebugBox(MeshBatch* batch, const BoundingBox& box, const Matrix& matrix)
+static void drawDebugBox(MeshBatch* batch, const BoundingBox& box, const Matrix& matrix)
 {
     // Transform box into world space (since we only store local boxes on mesh)
     BoundingBox worldSpaceBox(box);
@@ -409,7 +409,7 @@ void drawDebugBox(MeshBatch* batch, const BoundingBox& box, const Matrix& matrix
     drawDebugLine(batch, corners[3], corners[4], DEBUG_BOX_COLOR);
 }
 
-void drawDebugSphere(MeshBatch* batch, const BoundingSphere& sphere)
+static void drawDebugSphere(MeshBatch* batch, const BoundingSphere& sphere)
 {
     // Draw three rings for the sphere (one for the x, y and z axes)
     Vector3 pos1, pos2;
@@ -456,7 +456,7 @@ void drawDebugSphere(MeshBatch* batch, const BoundingSphere& sphere)
     }
 }
 
-void drawDebugNode(MeshBatch* batch, Node* node, unsigned int debugFlags)
+static void drawDebugNode(MeshBatch* batch, Node* node, unsigned int debugFlags)
 {
     GP_ASSERT(node);
     Model* model = node->getModel();

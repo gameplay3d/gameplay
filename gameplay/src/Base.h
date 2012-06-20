@@ -167,6 +167,9 @@ extern void printError(const char* format, ...);
 // Image
 #include <png.h>
 
+// Scripting
+#include <lua.hpp>
+
 #define WINDOW_VSYNC        1
 
 // Graphics (OpenGL)

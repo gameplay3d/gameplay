@@ -9,6 +9,7 @@
 #include "AudioController.h"
 #include "AnimationController.h"
 #include "PhysicsController.h"
+#include "ScriptController.h"
 #include "AudioListener.h"
 #include "Rectangle.h"
 #include "Vector4.h"
@@ -367,6 +368,7 @@ public:
      * @param timeOffset The number of game milliseconds in the future to schedule the event to be fired.
      * @param timeListener The TimeListener that will receive the event.
      * @param cookie The cookie data that the time event will contain.
+     * @script{ignore}
      */
     void schedule(float timeOffset, TimeListener* timeListener, void* cookie = 0);
 
@@ -496,6 +498,7 @@ private:
     AnimationController* _animationController;  // Controls the scheduling and running of animations.
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
+    ScriptController* _scriptController;        // Controls the scripting engine.
     AudioListener* _audioListener;              // The audio listener in 3D space.
     std::vector<Gamepad*> _gamepads;            // The connected gamepads.
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.

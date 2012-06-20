@@ -75,6 +75,7 @@ public:
      *      or false if nodes that start with the given ID are returned.
      * 
      * @return The number of matches found.
+     * @script{ignore}
      */
     unsigned int findNodes(const char* id, std::vector<Node*>& nodes, bool recursive = true, bool exactMatch = true) const;
 

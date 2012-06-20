@@ -141,6 +141,7 @@ public:
      * Get the vector of controls within this container.
      *
      * @return The vector of the controls within this container.
+     * @script{ignore}
      */
     const std::vector<Control*>& getControls() const;
 
@@ -477,16 +478,6 @@ private:
     float _totalWidth;
     float _totalHeight;
 };
-
-
-/**
- * Sort funtion for use with _controls.sort(), based on Z-Order.
- * 
- * @param c1 The first control
- * @param c2 The second control
- * return true if the first controls z index is less than the second.
- */
-bool sortControlsByZOrder(Control* c1, Control* c2);
 
 }
 

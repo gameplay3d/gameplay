@@ -101,8 +101,6 @@ private:
     static PhysicsConstraint* loadSocketConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
 
     static PhysicsConstraint* loadSpringConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
-
-    static void splitURL(const std::string& url, std::string* file, std::string* id);
     
     
     static std::map<std::string, Properties*> _propertiesFromFile;      // Holds the properties object for a given file.
@@ -112,6 +110,16 @@ private:
     static std::string _gpbPath;                                        // The path of the main GPB for the scene being loaded.
     static std::string _path;                                           // The path of the scene file being loaded.
 };
+
+/**
+ * Utility function for splitting up a URL of the form 'file#id', where one or both of file and id may be empty.
+ * 
+ * @param url The url to split.
+ * @param file The out parameter containing the file part of the url.
+ * @param id The out parameter containing the id part of the url.
+ * @script{ignore}
+ */
+void splitURL(const std::string& url, std::string* file, std::string* id);
 
 }
 
