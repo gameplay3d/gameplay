@@ -1,3 +1,10 @@
+## v1.4.0
+
+- Pre-built versions gameplay-encoder added to bin folder with TTF, DAE and FBX support built-in.
+- Improved modular shader library with support for #include in shaders.
+- Fixes to FrameBuffer, RenderTarget and DepthStencilTarget.
+- TODO
+
 ## v1.3.0
 
 - Portrait mode games on mobile platforms.

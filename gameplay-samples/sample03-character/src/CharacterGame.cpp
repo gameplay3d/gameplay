@@ -85,7 +85,7 @@ void CharacterGame::initializeCharacter()
     _characterShadowNode = _scene->findNode("boyshadow");
 
     // Store the alpha material parameter from the character's model.
-    _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_globalAlpha");
+    _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_modulateAlpha");
 
     // Load character animations.
     _animation = node->getAnimation("movements");

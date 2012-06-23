@@ -242,21 +242,9 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
     const char* fragmentShaderPath = passProperties->getString("fragmentShader");
     GP_ASSERT(fragmentShaderPath);
     const char* defines = passProperties->getString("defines");
-    std::string define;
-    if (defines != NULL)
-    {
-        define = defines;
-        define.insert(0, "#define ");
-        unsigned int pos;
-        while ((pos = define.find(';')) != std::string::npos)
-        {
-            define.replace(pos, 1, "\n#define ");
-        }
-        define += "\n";
-    }
 
     // Create the pass.
-    Pass* pass = Pass::create(passProperties->getId(), technique, vertexShaderPath, fragmentShaderPath, define.c_str());
+    Pass* pass = Pass::create(passProperties->getId(), technique, vertexShaderPath, fragmentShaderPath, defines);
     if (!pass)
     {
         GP_ERROR("Failed to create pass for technique.");

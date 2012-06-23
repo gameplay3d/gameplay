@@ -3,96 +3,29 @@ precision highp float;
 #endif
 
 // Uniforms
-uniform vec3 u_lightColor;                   // Light color.
-uniform vec3 u_ambientColor;                 // Ambient color.
-uniform sampler2D u_diffuseTexture;          // Diffuse texture.
-uniform sampler2D u_normalMapTexture;        // Normal map texture.
-#if defined(GLOBAL_ALPHA)
-uniform float u_globalAlpha;                    // Global alpha value
+uniform vec3 u_lightColor;                  // Light color.
+uniform vec3 u_ambientColor;                // Ambient color.
+uniform sampler2D u_textureDiffuse;        	// Diffuse texture.
+uniform sampler2D u_textureNormal;       	// Normal map texture.
+
+#if defined(MODULATE_COLOR)
+uniform vec4 u_modulateColor;               // Modulation color
+#endif
+#if defined(MODULATE_ALPHA)
+uniform float u_modulateAlpha;              // Modulation alpha
 #endif
 
 // Inputs
-varying vec2 v_texCoord;                     // Texture Coordinate.
+varying vec2 v_texCoord;                    // Texture Coordinate.
 
-// Common colors
-vec4 _baseColor;                             // Base color
-vec3 _ambientColor;                          // Ambient Color
-vec3 _diffuseColor;                          // Diffuse Color
-
-void lighting(vec3 normalVector, vec3 lightDirection, float attenuation)
-{
-    // Ambient
-    _ambientColor = _baseColor.rgb * u_ambientColor;
-
-    // Diffuse
-    float diffuseIntensity = attenuation * max(0.0, dot(normalVector, lightDirection));
-    diffuseIntensity = max(0.0, diffuseIntensity);
-    _diffuseColor = u_lightColor * _baseColor.rgb * diffuseIntensity;
-}
-
+// Lighting
+#include "lib/lighting.fsh"
 #if defined(POINT_LIGHT)
-
-varying vec3 v_vertexToPointLightDirection;  // Light direction w.r.t current vertex in tangent space.
-varying float v_pointLightAttenuation;       // Attenuation of point light.
-
-void applyLight()
-{
-    // Normalize the vectors.
-    // Fetch normals from the normal map.
-    vec3 normalVector = normalize(texture2D(u_normalMapTexture, v_texCoord).rgb * 2.0 - 1.0);
-    vec3 vertexToPointLightDirection = normalize(v_vertexToPointLightDirection);
-    float pointLightAttenuation = clamp(v_pointLightAttenuation, 0.0, 1.0);
-    
-    // Fetch point light attenuation.
-    lighting(normalVector, vertexToPointLightDirection, pointLightAttenuation);
-}
-
+#include "lib/lighting-point.fsh"
 #elif defined(SPOT_LIGHT)
-
-uniform float u_spotLightInnerAngleCos;       // The bright spot [0.0 - 1.0]
-uniform float u_spotLightOuterAngleCos;       // The soft outer part [0.0 - 1.0]
-varying vec3 v_spotLightDirection;            // Direction of spot light in tangent space.
-varying vec3 v_vertexToSpotLightDirection;    // Direction of the spot light w.r.t current vertex in tangent space.
-varying float v_spotLightAttenuation;         // Attenuation of spot light.
-
-float lerpstep( float lower, float upper, float s)
-{
-    return clamp( ( s - lower ) / ( upper - lower ), 0.0, 1.0 );
-}
-
-void applyLight()
-{
-    // Fetch normals from the normal map.
-    vec3 normalVector = normalize(texture2D(u_normalMapTexture, v_texCoord).xyz * 2.0 - 1.0);
-    vec3 spotLightDirection =normalize(v_spotLightDirection);
-    vec3 vertexToSpotLightDirection = normalize(v_vertexToSpotLightDirection);
-    
-    // "-lightDirection" because light direction points in opposite direction to
-    // to spot direction.
-    // Calculate spot light effect.
-    float spotCurrentAngleCos = max(0.0, dot(spotLightDirection, -vertexToSpotLightDirection));
-    
-    // Intensity of spot depends on the spot light attenuation and the 
-    // part of the cone vertexToSpotLightDirection points to (inner or outer).
-    float spotLightAttenuation = clamp(v_spotLightAttenuation, 0.0, 1.0);
-    spotLightAttenuation *= lerpstep(u_spotLightOuterAngleCos, u_spotLightInnerAngleCos, spotCurrentAngleCos);
-
-    lighting(normalVector, vertexToSpotLightDirection, spotLightAttenuation);
-}
-
+#include "lib/lighting-spot.fsh"
 #else
-
-varying vec3 v_lightDirection;                  // Direction of light in tangent space.
-
-void applyLight()
-{
-    // Normalize vectors.
-    // Fetch normals from the normal map
-    vec3 normalVector = normalize(texture2D(u_normalMapTexture, v_texCoord).xyz * 2.0 - 1.0);
-    vec3 lightDirection = normalize(v_lightDirection);
-
-    lighting(normalVector, -lightDirection, 1.0);
-}
+#include "lib/lighting-directional.fsh"
 #endif
 
 void main()
@@ -100,14 +33,15 @@ void main()
     // Fetch diffuse color from texture.
     _baseColor = texture2D(u_diffuseTexture, v_texCoord);
 
-    // Apply light
-    applyLight();
-
     // Light the pixel
     gl_FragColor.a = _baseColor.a;
-    gl_FragColor.rgb = _ambientColor + _diffuseColor;
+    gl_FragColor.rgb = getLitPixel();
 
-#if defined(GLOBAL_ALPHA)
-    gl_FragColor.a *= u_globalAlpha;
-#endif
+	// Global color modulation
+	#if defined(MODULATE_COLOR)
+	gl_FragColor *= u_modulateColor;
+	#endif
+	#if defined(MODULATE_ALPHA)
+    gl_FragColor.a *= u_modulateAlpha;
+    #endif
 }

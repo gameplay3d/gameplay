@@ -62,13 +62,6 @@ private:
 
     void drawSplash(void* param);
 
-    /**
-     * Creates a grid model.
-     * 
-     * @param lineCount The number of lines wide to create the grid.
-     * 
-     * @return A newly created model that contains the mesh.
-     */
     Model* createGridModel(unsigned int lineCount = 41);
 
     Font* _font;
