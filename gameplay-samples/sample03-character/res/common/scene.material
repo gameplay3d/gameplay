@@ -1,4 +1,67 @@
-material texturedflat
+material texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/textured-unlit.vsh
+            fragmentShader = res/shaders/textured-unlit.fsh
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            
+            sampler u_textureDiffuse
+            {
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material texturedSpecular
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/textured.vsh
+            fragmentShader = res/shaders/textured.fsh
+			defines = SPECULAR
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            u_worldViewMatrix = WORLD_VIEW_MATRIX
+            u_cameraPosition = CAMERA_VIEW_POSITION
+            u_specularExponent = 50
+
+            sampler u_textureDiffuse
+            {
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material texturedTransparent
 {
     technique
     {
@@ -8,72 +71,9 @@ material texturedflat
             fragmentShader = res/shaders/textured.fsh
 
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_diffuseColor = 1.0, 1.0, 1.0, 1.0
-            
-            sampler u_diffuseTexture
-            {
-                mipmap = true
-                wrapS = CLAMP
-                wrapT = CLAMP
-                minFilter = LINEAR_MIPMAP_LINEAR
-                magFilter = LINEAR
-            }
-
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-            }
-        }
-    }
-}
-
-material texturedspecular
-{
-    technique
-    {
-        pass
-        {
-            vertexShader = res/shaders/diffuse-specular.vsh
-            fragmentShader = res/shaders/diffuse-specular.fsh
-
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_worldViewMatrix = WORLD_VIEW_MATRIX
-            u_cameraPosition = CAMERA_VIEW_POSITION
-            u_specularExponent = 50
-
-            sampler u_diffuseTexture
-            {
-                mipmap = true
-                wrapS = CLAMP
-                wrapT = CLAMP
-                minFilter = LINEAR_MIPMAP_LINEAR
-                magFilter = LINEAR
-            }
-
-            renderState
-            {
-                cullFace = true
-                depthTest = true
-            }
-        }
-    }
-}
-
-material texturedtransparent
-{
-    technique
-    {
-        pass
-        {
-            vertexShader = res/shaders/diffuse.vsh
-            fragmentShader = res/shaders/diffuse.fsh
-
-            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 mipmap = true
                 wrapS = CLAMP
@@ -84,11 +84,11 @@ material texturedtransparent
 
             renderState
             {
-                blend = true
-                srcBlend = SRC_ALPHA
-                dstBlend = ONE_MINUS_SRC_ALPHA
                 cullFace = true
                 depthTest = true
+	            blend = true
+                blendSrc = SRC_ALPHA
+                blendDst = ONE_MINUS_SRC_ALPHA
             }
         }
     }
@@ -115,17 +115,17 @@ material colored
     }
 }
 
-material boy : texturedtransparent
+material boy : texturedTransparent
 {
     technique
     {
         pass
         {
-            defines = SKINNING;SKINNING_JOINT_COUNT 31;GLOBAL_ALPHA
+            defines = SKINNING;SKINNING_JOINT_COUNT 31;MODULATE_ALPHA
             u_matrixPalette = MATRIX_PALETTE
-            u_globalAlpha = 1.0
+            u_modulateAlpha = 1.0
 
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @character
             }
@@ -133,13 +133,13 @@ material boy : texturedtransparent
     }
 }
 
-material boyshadow : texturedtransparent
+material boyshadow : texturedTransparent
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @shadow
             }
@@ -147,13 +147,13 @@ material boyshadow : texturedtransparent
     }
 }
 
-material floortiles : texturedflat
+material floortiles : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @floortiles
             }
@@ -161,13 +161,13 @@ material floortiles : texturedflat
     }
 }
 
-material floor : texturedflat
+material floor : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @floor
             }
@@ -175,13 +175,13 @@ material floor : texturedflat
     }
 }
 
-material wallwest : texturedflat
+material wallwest : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @wallwest
             }
@@ -189,13 +189,13 @@ material wallwest : texturedflat
     }
 }
 
-material walleast : texturedflat
+material walleast : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @walleast
             }
@@ -203,13 +203,13 @@ material walleast : texturedflat
     }
 }
 
-material wallnorth : texturedflat
+material wallnorth : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @wallnorth
             }
@@ -217,13 +217,13 @@ material wallnorth : texturedflat
     }
 }
 
-material wallsouth : texturedflat
+material wallsouth : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @wallsouth
             }
@@ -231,13 +231,13 @@ material wallsouth : texturedflat
     }
 }
 
-material walloverhang : texturedflat
+material walloverhang : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @walloverhang
             }
@@ -245,13 +245,13 @@ material walloverhang : texturedflat
     }
 }
 
-material toybox : texturedflat
+material toybox : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @toybox
             }
@@ -265,7 +265,7 @@ material green : colored
     {
         pass
         {
-            u_diffuseColor = 0.65, 0.7, 0, 1
+            u_baseColor = 0.65, 0.7, 0, 1
         }
     }
 }
@@ -276,12 +276,12 @@ material lightblue : colored
     {
         pass
         {
-            u_diffuseColor = 0.38, 0.72, 0.85, 1
+            u_baseColor = 0.38, 0.72, 0.85, 1
         }
     }
 }
 
-material basketball : texturedspecular
+material basketball : texturedSpecular
 {
     technique
     {
@@ -289,7 +289,7 @@ material basketball : texturedspecular
         {
             u_specularExponent = 12
 
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @basketball
                 wrapS = REPEAT
@@ -299,13 +299,13 @@ material basketball : texturedspecular
     }
 }
 
-material playtable : texturedflat
+material playtable : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @playtable
             }
@@ -313,13 +313,13 @@ material playtable : texturedflat
     }
 }
 
-material easel : texturedflat
+material easel : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @easel
             }
@@ -327,13 +327,13 @@ material easel : texturedflat
     }
 }
 
-material door : texturedflat
+material door : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @door
             }
@@ -341,13 +341,13 @@ material door : texturedflat
     }
 }
 
-material basketballnet : texturedflat
+material basketballnet : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @basketballnet
             }
@@ -355,13 +355,13 @@ material basketballnet : texturedflat
     }
 }
 
-material backboard : texturedflat
+material backboard : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @backboard
             }
@@ -369,13 +369,13 @@ material backboard : texturedflat
     }
 }
 
-material doorframe : texturedflat
+material doorframe : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @doorframe
             }
@@ -383,13 +383,13 @@ material doorframe : texturedflat
     }
 }
 
-material windowledge : texturedflat
+material windowledge : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @windowledge
             }
@@ -397,13 +397,13 @@ material windowledge : texturedflat
     }
 }
 
-material bookshelf : texturedflat
+material bookshelf : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @bookshelf
             }
@@ -411,13 +411,13 @@ material bookshelf : texturedflat
     }
 }
 
-material book : texturedflat
+material book : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @book
             }
@@ -425,13 +425,13 @@ material book : texturedflat
     }
 }
 
-material tabletop : texturedflat
+material tabletop : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @tabletop
             }
@@ -439,13 +439,13 @@ material tabletop : texturedflat
     }
 }
 
-material tableleg1 : texturedflat
+material tableleg1 : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @tableleg1
             }
@@ -453,13 +453,13 @@ material tableleg1 : texturedflat
     }
 }
 
-material tableleg2 : texturedflat
+material tableleg2 : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @tableleg2
             }
@@ -467,13 +467,13 @@ material tableleg2 : texturedflat
     }
 }
 
-material tableleg3 : texturedflat
+material tableleg3 : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @tableleg3
             }
@@ -481,13 +481,13 @@ material tableleg3 : texturedflat
     }
 }
 
-material tableleg4 : texturedflat
+material tableleg4 : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @tableleg4
             }
@@ -495,13 +495,13 @@ material tableleg4 : texturedflat
     }
 }
 
-material storageorganizer : texturedflat
+material storageorganizer : texturedUnlit
 {
     technique
     {
         pass
         {
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = @storageorganizer
             }

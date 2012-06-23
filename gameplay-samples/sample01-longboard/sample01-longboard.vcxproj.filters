@@ -26,18 +26,6 @@
     <None Include="res\overlay_gradient.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\quad.fsh">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\quad.vsh">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\textured.fsh">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\textured.vsh">
-      <Filter>res</Filter>
-    </None>
     <None Include="..\..\gameplay\res\logo_powered_white.png">
       <Filter>res</Filter>
     </None>

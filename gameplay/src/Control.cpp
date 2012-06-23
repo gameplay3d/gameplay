@@ -6,8 +6,7 @@ namespace gameplay
 {
 
 Control::Control()
-    : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _dirty(true), _consumeInputEvents(true), _listeners(NULL), _styleOverridden(false), _skin(NULL), _clearBounds(Rectangle::empty())
+    : _id(""), _state(Control::NORMAL), _dirty(true), _consumeInputEvents(true), _listeners(NULL), _style(NULL), _styleOverridden(false), _skin(NULL)
 {
 }
 
@@ -109,12 +108,12 @@ void Control::initialize(Theme::Style* style, Properties* properties)
         else if (spaceName == "MARGIN")
         {
             setMargin(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
-                innerSpace->getFloat("left"), innerSpace->getFloat("right"));
+                      innerSpace->getFloat("left"), innerSpace->getFloat("right"));
         }
         else if (spaceName == "PADDING")
         {
             setPadding(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
-                innerSpace->getFloat("left"), innerSpace->getFloat("right"));
+                       innerSpace->getFloat("left"), innerSpace->getFloat("right"));
         }
 
         innerSpace = properties->getNextNamespace();
@@ -1086,6 +1085,7 @@ void Control::setAnimationPropertyValue(int propertyId, AnimationValue* value, f
         break;
     case ANIMATE_OPACITY:
         _dirty = true;
+        break;
     default:
         break;
     }

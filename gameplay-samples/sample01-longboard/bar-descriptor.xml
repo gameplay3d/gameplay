@@ -58,11 +58,10 @@
     <asset path="res/longboard.wav">res/longboard.wav</asset>
     <asset path="res/longboard_wheels.png">res/longboard_wheels.png</asset>
     <asset path="res/overlay_gradient.png">res/overlay_gradient.png</asset>
-    <asset path="res/quad.fsh">res/quad.fsh</asset>
-    <asset path="res/quad.vsh">res/quad.vsh</asset>
-    <asset path="res/textured.fsh">res/textured.fsh</asset>
-    <asset path="res/textured.vsh">res/textured.vsh</asset>
     <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
+    <asset path="../../gameplay/res/shaders/textured-unlit.fsh">res/shaders/textured-unlit.fsh</asset>
+    <asset path="../../gameplay/res/shaders/textured-unlit.vsh">res/shaders/textured-unlit.vsh</asset>
+    <asset path="../../gameplay/res/shaders/lib">res/shaders/lib</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

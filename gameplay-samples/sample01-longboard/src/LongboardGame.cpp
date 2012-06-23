@@ -82,17 +82,18 @@ void LongboardGame::buildGround()
     _ground = Model::create(groundMesh);
 
     // Create the ground material
-    Material* groundMaterial = _ground->setMaterial("res/textured.vsh", "res/textured.fsh");
+    //Material* groundMaterial = _ground->setMaterial("res/textured.vsh", "res/textured.fsh");
+    Material* groundMaterial = _ground->setMaterial("res/shaders/textured-unlit.vsh", "res/shaders/textured-unlit.fsh", "TEXTURE_REPEAT;TEXTURE_OFFSET");
 
     // Set render state block
     groundMaterial->setStateBlock(_stateBlock);
 
     // Bind ground material parameters
-    Texture::Sampler* groundSampler = groundMaterial->getParameter("u_texture")->setValue("res/asphalt.png", true);
+    Texture::Sampler* groundSampler = groundMaterial->getParameter("u_textureDiffuse")->setValue("res/asphalt.png", true);
     groundSampler->setWrapMode(Texture::REPEAT, Texture::REPEAT);
     groundMaterial->getParameter("u_worldViewProjectionMatrix")->setValue(&_groundWorldViewProjectionMatrix);
-    groundMaterial->getParameter("u_textureRepeat")->setValue(Vector2(WORLD_SIZE/2, WORLD_SIZE/2));
-    groundMaterial->getParameter("u_textureTransform")->setValue(&_groundUVTransform);
+    groundMaterial->getParameter("u_textureRepeat")->setValue(Vector2(WORLD_SIZE / 2, WORLD_SIZE / 2));
+    groundMaterial->getParameter("u_textureOffset")->setValue(&_groundUVTransform);
 
     // Release objects that are owned by mesh instances
     SAFE_RELEASE(groundMesh);
@@ -109,17 +110,17 @@ void LongboardGame::buildBoard()
     _board = Model::create(boardMesh);
 
     // Create the board material
-    Material* boardMaterial = _board->setMaterial("res/textured.vsh", "res/textured.fsh");
+    Material* boardMaterial = _board->setMaterial("res/shaders/textured-unlit.vsh", "res/shaders/textured-unlit.fsh", "TEXTURE_REPEAT;TEXTURE_OFFSET");
 
     // Set render state block
     boardMaterial->setStateBlock(_stateBlock);
 
     // Bind board material parameters
-    Texture::Sampler* boardSampler = boardMaterial->getParameter("u_texture")->setValue("res/longboard.png", true);
+    Texture::Sampler* boardSampler = boardMaterial->getParameter("u_textureDiffuse")->setValue("res/longboard.png", true);
     boardSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
     boardMaterial->getParameter("u_worldViewProjectionMatrix")->setValue(&_boardWorldViewProjectionMatrix);
     boardMaterial->getParameter("u_textureRepeat")->setValue(Vector2::one());
-    boardMaterial->getParameter("u_textureTransform")->setValue(Vector2::zero());
+    boardMaterial->getParameter("u_textureOffset")->setValue(Vector2::zero());
 
     // Release objects that are owned by mesh instances
     SAFE_RELEASE(boardMesh);
@@ -136,17 +137,17 @@ void LongboardGame::buildWheels()
     _wheels = Model::create(wheelsMesh);
 
     // Create the wheels material
-    Material* wheelsMaterial = _wheels->setMaterial("res/textured.vsh", "res/textured.fsh");
+    Material* wheelsMaterial = _wheels->setMaterial("res/shaders/textured-unlit.vsh", "res/shaders/textured-unlit.fsh", "TEXTURE_REPEAT;TEXTURE_OFFSET");
 
     // Set render state block
     wheelsMaterial->setStateBlock(_stateBlock);
 
     // Bind wheels material parameters
-    Texture::Sampler* wheelsSampler = wheelsMaterial->getParameter("u_texture")->setValue("res/longboard_wheels.png", true);
+    Texture::Sampler* wheelsSampler = wheelsMaterial->getParameter("u_textureDiffuse")->setValue("res/longboard_wheels.png", true);
     wheelsSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
     wheelsMaterial->getParameter("u_worldViewProjectionMatrix")->setValue(&_wheelsWorldViewProjectionMatrix);
     wheelsMaterial->getParameter("u_textureRepeat")->setValue(Vector2::one());
-    wheelsMaterial->getParameter("u_textureTransform")->setValue(Vector2::zero());
+    wheelsMaterial->getParameter("u_textureOffset")->setValue(Vector2::zero());
 
     // Load audio sound
     _wheelsSound = AudioSource::create("res/longboard.wav");
@@ -165,14 +166,14 @@ void LongboardGame::buildGradient()
     // Create the wheels model
     _gradient = Model::create(gradientMesh);
 
-    // Create the gradient material
-    Material* gradientMaterial = _gradient->setMaterial("res/quad.vsh", "res/quad.fsh");
+    // Create the gradient material.
+    Material* gradientMaterial = _gradient->setMaterial("res/shaders/textured-unlit.vsh", "res/shaders/textured-unlit.fsh");
 
     // Set render state block
     gradientMaterial->setStateBlock(_stateBlock);
 
     // Bind material parameters
-    Texture::Sampler* gradientSampler = gradientMaterial->getParameter("u_texture")->setValue("res/overlay_gradient.png", false);
+    Texture::Sampler* gradientSampler = gradientMaterial->getParameter("u_textureDiffuse")->setValue("res/overlay_gradient.png", false);
     gradientSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
 
     // Release objects that are owned by mesh instances
