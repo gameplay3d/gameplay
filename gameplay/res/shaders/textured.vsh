@@ -1,78 +1,61 @@
 // Uniforms
-uniform mat4 u_worldViewProjectionMatrix;       // Matrix to transform a position to clip space.
+uniform mat4 u_worldViewProjectionMatrix;           // Matrix to transform a position to clip space
+uniform mat4 u_inverseTransposeWorldViewMatrix;     // Matrix to transform a normal to view space
+#if defined(TEXTURE_REPEAT)
+uniform vec2 u_textureRepeat;
+#endif
+#if defined(TEXTURE_OFFSET)
+uniform vec2 u_textureOffset;
+#endif
 
 // Inputs
-attribute vec4 a_position;                      // Vertex Position (x, y, z, w).
-attribute vec2 a_texCoord;                      // Vertex Texture Coordinate (u, v).
+attribute vec4 a_position;                          // Vertex position                      (x, y, z, w)
+attribute vec3 a_normal;                            // Vertex normal                        (x, y, z)
+attribute vec2 a_texCoord;                          // Vertex texture coordinate            (u, v)
 
 // Outputs
-varying vec2 v_texCoord;                        // Texture coordinate (u, v).
+varying vec3 v_normalVector;                        // Output normal vector in view space   (x, y, z)
+varying vec2 v_texCoord;                            // Output texture coordinate            (u, v)
 
-#if defined(SKINNING)
-
-attribute vec4 a_blendWeights;
-attribute vec4 a_blendIndices;
-
-// 32 4x3 matrices as an array of floats
-uniform vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];
-
-// Common vectors.
-vec4 _skinnedPosition;
-
-void skinPosition(float blendWeight, int matrixIndex)
-{
-    vec4 tmp;
-
-    tmp.x = dot(a_position, u_matrixPalette[matrixIndex]);
-    tmp.y = dot(a_position, u_matrixPalette[matrixIndex + 1]);
-    tmp.z = dot(a_position, u_matrixPalette[matrixIndex + 2]);
-    tmp.w = a_position.w;
-
-    _skinnedPosition += blendWeight * tmp;
-}
-
-vec4 getPosition()
-{
-    _skinnedPosition = vec4(0.0);
-
-    // Transform position to view space using 
-    // matrix palette with four matrices used to transform a vertex.
-
-    float blendWeight = a_blendWeights[0];
-    int matrixIndex = int (a_blendIndices[0]) * 3;
-    skinPosition(blendWeight, matrixIndex);
-
-    blendWeight = a_blendWeights[1];
-    matrixIndex = int(a_blendIndices[1]) * 3;
-    skinPosition(blendWeight, matrixIndex);
-
-    blendWeight = a_blendWeights[2];
-    matrixIndex = int(a_blendIndices[2]) * 3;
-    skinPosition(blendWeight, matrixIndex);
-
-    blendWeight = a_blendWeights[3];
-    matrixIndex = int(a_blendIndices[3]) * 3;
-    skinPosition(blendWeight, matrixIndex);
-
-    return _skinnedPosition;    
-}
-
+// Lighting
+#include "lib/lighting.vsh"
+#if defined(POINT_LIGHT)
+#include "lib/lighting-point.vsh"
+#elif defined(SPOT_LIGHT)
+#include "lib/lighting-spot.vsh"
 #else
+#include "lib/lighting-directional.vsh"
+#endif
 
-vec4 getPosition()
-{
-    return a_position;    
-}
-
+// Attribute Accessors (getPosition(), getNormal(), etc.)
+#if defined(SKINNING)
+#include "lib/attributes-skinning.vsh"
+#else
+#include "lib/attributes.vsh" 
 #endif
 
 void main()
 {
+    // Get the position and normal
     vec4 position = getPosition();
+    vec3 normal = getNormal();
 
     // Transform position to clip space.
     gl_Position = u_worldViewProjectionMatrix * position;
 
-    // Pass on texture coordinate to fragment shader.
+    // Transform normal to view space.
+    mat3 normalMatrix = mat3(u_inverseTransposeWorldViewMatrix[0].xyz, u_inverseTransposeWorldViewMatrix[1].xyz, u_inverseTransposeWorldViewMatrix[2].xyz);
+    v_normalVector = normalMatrix * normal;
+
+    // Apply light.
+    applyLight(position);
+    
+    // Texture transformation
     v_texCoord = a_texCoord;
+    #if defined(TEXTURE_REPEAT)
+    v_texCoord *= u_textureRepeat;
+    #endif
+    #if defined(TEXTURE_OFFSET)
+    v_texCoord += u_textureOffset;
+    #endif
 }

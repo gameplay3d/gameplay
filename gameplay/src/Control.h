@@ -930,14 +930,14 @@ protected:
     bool _autoHeight;
     
     /**
-     * The Control's Theme::Style.
-     */
-    Theme::Style* _style;
-    
-    /**
      * Listeners map of EventType's to a list of Listeners.
      */
     std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
+    
+    /**
+     * The Control's Theme::Style.
+     */
+    Theme::Style* _style;
 
     /**
      * The current opacity of the control.
