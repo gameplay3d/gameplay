@@ -10,6 +10,9 @@
     <Filter Include="res\shaders">
       <UniqueIdentifier>{be0b36f1-49ed-4a06-9f1f-57c654a554fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\shaders\lib">
+      <UniqueIdentifier>{ab587dd0-fd08-4b5e-a38d-7b3a706ab53b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp">
@@ -559,66 +562,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\bumped-specular.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\colored.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\colored.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\colored-specular.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\colored-specular.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\diffuse.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\diffuse.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\diffuse-specular.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\diffuse-specular.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\parallax.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\parallax.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\parallax-specular.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\parallax-specular.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\solid.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\solid.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\textured.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\textured.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\bumped.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\bumped.vsh">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\bumped-specular.fsh">
-      <Filter>res\shaders</Filter>
-    </None>
     <None Include="src\gameplay-main-macosx.mm">
       <Filter>src</Filter>
     </None>
@@ -663,6 +606,66 @@
     </None>
     <None Include="src\Joystick.inl">
       <Filter>src</Filter>
+    </None>
+    <None Include="res\shaders\bumped.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\bumped.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored-unlit.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored-unlit.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\textured.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\textured.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\textured-unlit.fsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\textured-unlit.vsh">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lib-attributes-skinning.vsh">
+      <Filter>res\shaders\lib</Filter>
+    </None>
+    <None Include="res\shaders\lib-lighting.vsh">
+      <Filter>res\shaders\lib</Filter>
+    </None>
+    <None Include="res\shaders\lib-attributes.vsh">
+      <Filter>res\shaders\lib</Filter>
+    </None>
+    <None Include="res\shaders\lib-lighting-directional.fsh">
+      <Filter>res\shaders\lib</Filter>
+    </None>
+    <None Include="res\shaders\lib-lighting-directional.vsh">
+      <Filter>res\shaders\lib</Filter>
+    </None>
+    <None Include="res\shaders\lib-lighting-point.fsh">
+      <Filter>res\shaders\lib</Filter>
+    </None>
+    <None Include="res\shaders\lib-lighting-point.vsh">
+      <Filter>res\shaders\lib</Filter>
+    </None>
+    <None Include="res\shaders\lib-lighting-spot.fsh">
+      <Filter>res\shaders\lib</Filter>
+    </None>
+    <None Include="res\shaders\lib-lighting-spot.vsh">
+      <Filter>res\shaders\lib</Filter>
+    </None>
+    <None Include="res\shaders\lib-lighting.fsh">
+      <Filter>res\shaders\lib</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
