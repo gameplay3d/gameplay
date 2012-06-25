@@ -5,8 +5,8 @@ material duck
         pass 0
         {
             // shaders
-            vertexShader = res/shaders/textured.vsh
-            fragmentShader = res/shaders/textured.fsh
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
             defines = SPECULAR
             
             // uniforms

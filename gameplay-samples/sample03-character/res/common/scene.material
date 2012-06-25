@@ -4,8 +4,8 @@ material texturedUnlit
     {
         pass
         {
-            vertexShader = res/shaders/textured-unlit.vsh
-            fragmentShader = res/shaders/textured-unlit.fsh
+            vertexShader = res/shaders/textured-unlit.vert
+            fragmentShader = res/shaders/textured-unlit.frag
 
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             
@@ -33,8 +33,8 @@ material texturedSpecular
     {
         pass
         {
-            vertexShader = res/shaders/textured.vsh
-            fragmentShader = res/shaders/textured.fsh
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
 			defines = SPECULAR
 
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
@@ -67,8 +67,8 @@ material texturedTransparent
     {
         pass
         {
-            vertexShader = res/shaders/textured.vsh
-            fragmentShader = res/shaders/textured.fsh
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
 
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
@@ -100,8 +100,8 @@ material colored
     {
         pass
         {
-            vertexShader = res/shaders/colored.vsh
-            fragmentShader = res/shaders/colored.fsh
+            vertexShader = res/shaders/colored.vert
+            fragmentShader = res/shaders/colored.frag
 
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
