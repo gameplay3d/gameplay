@@ -112,4 +112,9 @@ void Label::drawText(const Rectangle& clip)
     _dirty = false;
 }
 
+const char* Label::getType() const
+{
+    return "label";
+}
+
 }

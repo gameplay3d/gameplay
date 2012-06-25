@@ -5,11 +5,14 @@ namespace gameplay
 {
 
 Button::Button()
+    : _gamepadButtonIndex(NULL)
 {
 }
 
 Button::~Button()
 {
+    if (_gamepadButtonIndex)
+        SAFE_DELETE(_gamepadButtonIndex);
 }
 
 Button* Button::create(const char* id, Theme::Style* style)
@@ -33,9 +36,7 @@ Button* Button::create(Theme::Style* style, Properties* properties)
 bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!isEnabled())
-    {
         return false;
-    }
 
     switch (evt)
     {
@@ -43,8 +44,12 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
         if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
             y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
         {
+            _contactIndex = (int) contactIndex;
+
             setState(Control::ACTIVE);
+
             notifyListeners(Listener::PRESS);
+
             return _consumeInputEvents;
         }
         else
@@ -54,12 +59,15 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
         break;
 
     case Touch::TOUCH_RELEASE:
+        _contactIndex = INVALID_CONTACT_INDEX;
         notifyListeners(Listener::RELEASE);
         if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
             y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
         {
             setState(Control::FOCUS);
+
             notifyListeners(Listener::CLICK);
+
             return _consumeInputEvents;
         }
         else
@@ -73,6 +81,11 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     }
 
     return false;
+}
+
+const char* Button::getType() const
+{
+    return "button";
 }
 
 }

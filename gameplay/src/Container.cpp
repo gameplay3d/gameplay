@@ -11,7 +11,6 @@
 #include "Slider.h"
 #include "TextBox.h"
 #include "Joystick.h"
-#include "List.h"
 #include "Game.h"
 
 namespace gameplay
@@ -157,10 +156,6 @@ void Container::addControls(Theme* theme, Properties* properties)
         else if (controlName == "JOYSTICK")
         {
             control = Joystick::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "LIST")
-        {
-            control = List::create(controlStyle, controlSpace);
         }
         else
         {
@@ -336,6 +331,11 @@ Animation* Container::getAnimation(const char* id) const
     }
 
     return NULL;
+}
+
+const char* Container::getType() const
+{
+    return "container";
 }
 
 void Container::update(const Control* container, const Vector2& offset)
@@ -578,7 +578,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
     return false;
 }
 
-bool Container::isContainer()
+bool Container::isContainer() const
 {
     return true;
 }
@@ -975,7 +975,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 
         Control::State currentState = control->getState();
         if ((control->isContainer() && currentState == Control::FOCUS) ||
-            currentState != Control::NORMAL ||
+            (currentState != Control::NORMAL && control->_contactIndex == data) ||
             ((evt == Touch::TOUCH_PRESS ||
               evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
               evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
@@ -1001,7 +1001,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 
     if (!eventConsumed && _scroll != SCROLL_NONE)
     {
-        if (mouse && mouseEventScroll((Mouse::MouseEvent)evt, x - xPos, y - yPos, data) ||
+        if ((mouse && mouseEventScroll((Mouse::MouseEvent)evt, x - xPos, y - yPos, data)) ||
             (!mouse && touchEventScroll((Touch::TouchEvent)evt, x - xPos, y - yPos, (unsigned int)data)))
         {
             _dirty = true;

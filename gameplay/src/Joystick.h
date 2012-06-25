@@ -12,6 +12,7 @@ namespace gameplay
 class Joystick : public Control
 {
     friend class Container;
+    friend class Gamepad;
 
 public:
 
@@ -79,6 +80,11 @@ public:
      */
     inline bool isAbsolute() const;
 
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
+
 protected:
     
     /**
@@ -145,11 +151,11 @@ private:
     Joystick(const Joystick& copy);
 
     float _radius;
-    unsigned int _contactIndex;
     bool _absolute;
     Vector2 _displacement;
     Vector2 _value;
     Rectangle _region;
+    int* _gamepadJoystickIndex;
 };
 
 }

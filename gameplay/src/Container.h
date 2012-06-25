@@ -178,6 +178,11 @@ public:
     Animation* getAnimation(const char* id = NULL) const;
 
     /**
+     * @see Control::getType
+     */
+    const char* getType() const;
+
+    /**
      * @see AnimationTarget#getAnimationPropertyComponentCount
      */
     virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
@@ -284,10 +289,10 @@ protected:
 
     /**
      * Returns whether this control is a container.
-     * 
+     *
      * @return true if this is a container, false if not.
      */
-    bool isContainer();
+    bool isContainer() const;
 
     /**
      * Returns whether this container or any of its controls have been modified and require an update.

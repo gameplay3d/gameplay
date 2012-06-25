@@ -86,6 +86,7 @@ FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned in
     frameBuffer->_renderTargets = renderTargets;
 
     frameBuffer->setRenderTarget(renderTarget, 0);
+    SAFE_RELEASE(renderTarget);
 
     __frameBuffers.push_back(frameBuffer);
 

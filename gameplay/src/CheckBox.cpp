@@ -171,4 +171,9 @@ void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
 }
 
+const char* CheckBox::getType() const
+{
+    return "checkBox";
+}
+
 }

@@ -7,6 +7,7 @@
 #include "Mouse.h"
 #include "FileSystem.h"
 #include "Bundle.h"
+#include "Gamepad.h"
 
 // Math
 #include "Rectangle.h"

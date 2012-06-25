@@ -7,7 +7,8 @@ namespace gameplay
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _dirty(true), _consumeInputEvents(true), _listeners(NULL), _styleOverridden(false), _skin(NULL), _clearBounds(Rectangle::empty())
+    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _listeners(NULL), _contactIndex(INVALID_CONTACT_INDEX),
+    _styleOverridden(false), _skin(NULL)
 {
 }
 
@@ -706,9 +707,7 @@ void Control::addSpecificListener(Control::Listener* listener, Listener::EventTy
 bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!isEnabled())
-    {
         return false;
-    }
 
     switch (evt)
     {
@@ -719,17 +718,24 @@ bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
         if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
             y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
         {
+            _contactIndex = (int) contactIndex;
+
             notifyListeners(Listener::PRESS);
+
             return _consumeInputEvents;
         }
         else
         {
             // If this control was in focus, it's not any more.
             _state = NORMAL;
+            _contactIndex = INVALID_CONTACT_INDEX;
         }
         break;
             
     case Touch::TOUCH_RELEASE:
+
+        _contactIndex = INVALID_CONTACT_INDEX;
+
         // Always trigger Listener::RELEASE
         notifyListeners(Listener::RELEASE);
 
@@ -740,6 +746,7 @@ bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
             // Leave this control in the FOCUS state.
             notifyListeners(Listener::CLICK);
         }
+
         return _consumeInputEvents;
     }
 
@@ -991,7 +998,7 @@ bool Control::isDirty()
     return _dirty;
 }
 
-bool Control::isContainer()
+bool Control::isContainer() const
 {
     return false;
 }
@@ -1033,6 +1040,11 @@ Theme::ThemeImage* Control::getImage(const char* id, State state)
         return NULL;
 
     return imageList->getImage(id);
+}
+
+const char* Control::getType() const
+{
+    return "control";
 }
 
 // Implementation of AnimationHandler
@@ -1122,7 +1134,6 @@ void Control::setAnimationPropertyValue(int propertyId, AnimationValue* value, f
         break;
     case ANIMATE_OPACITY:
         _dirty = true;
-    default:
         break;
     }
 }

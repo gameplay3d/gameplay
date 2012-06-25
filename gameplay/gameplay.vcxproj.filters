@@ -279,10 +279,7 @@
     <ClCompile Include="src\Joystick.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\DropDownList.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\List.cpp">
+    <ClCompile Include="src\Gamepad.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -563,10 +560,7 @@
     <ClInclude Include="src\MathUtil.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\DropDownList.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\List.h">
+    <ClInclude Include="src\Gamepad.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
