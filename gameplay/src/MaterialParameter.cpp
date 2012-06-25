@@ -227,7 +227,6 @@ Texture::Sampler* MaterialParameter::setValue(const char* texturePath, bool gene
         }
         return sampler;
     }
-
     return NULL;
 }
 
