@@ -57,6 +57,7 @@ Form* Form::create(const char* id, Theme::Style* style, Layout::Type layoutType)
         break;
     default:
         GP_ERROR("Unsupported layout type '%d'.", layoutType);
+        break;
     }
 
     Form* form = new Form();
@@ -519,6 +520,11 @@ void Form::draw()
         _spriteBatch->draw(_bounds.x, _bounds.y, 0, _bounds.width, _bounds.height, 0, _v1, _u2, 0, Vector4::one());
         _spriteBatch->end();
     }
+}
+
+const char* Form::getType() const
+{
+    return "form";
 }
 
 void Form::initializeQuad(Mesh* mesh)

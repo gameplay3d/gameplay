@@ -25,6 +25,7 @@ class Control : public Ref, public AnimationTarget
     friend class AbsoluteLayout;
     friend class VerticalLayout;
     friend class FlowLayout;
+    friend class Gamepad;
 
 public:
 
@@ -710,6 +711,13 @@ public:
     virtual void addListener(Control::Listener* listener, int eventFlags);
 
     /**
+     * Gets the type of the Control and returns it as a string.
+     *
+     * @return The string of the Control type, all in lower-case.
+     */
+    virtual const char* getType() const;
+
+    /**
      * @see AnimationTarget#getAnimationPropertyComponentCount
      */
     virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
@@ -725,6 +733,11 @@ public:
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 protected:
+
+    /**
+     *  Constant value representing an unset or invalid contact index.
+     */
+    static const int INVALID_CONTACT_INDEX = -1;
 
     /**
      * Constructor.
@@ -843,7 +856,7 @@ protected:
      *
      * @return true if this object is of class Container, false otherwise.
      */
-    virtual bool isContainer();
+    virtual bool isContainer() const;
 
     /**
      * Returns whether this control has been modified and requires an update.
@@ -975,6 +988,11 @@ protected:
      * The z-order of the control.
      */
     int _zIndex;
+
+    /**
+     * The contact index assigned to this control.
+     */
+    int _contactIndex;
 
     /**
      * The focus order of the control.

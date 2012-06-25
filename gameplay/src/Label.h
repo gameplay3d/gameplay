@@ -58,6 +58,11 @@ public:
     const char* getText();
 
     /**
+     * @see Control::getType
+     */
+    const char* getType() const;
+
+    /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
      * E.g. To listen to touch-press and touch-release events,

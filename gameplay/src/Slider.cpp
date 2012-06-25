@@ -275,4 +275,9 @@ void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     spriteBatch->draw(pos.x, pos.y, markerRegion.width, markerRegion.height, marker.u1, marker.v1, marker.u2, marker.v2, markerColor, _viewportClipBounds);
 }
 
+const char* Slider::getType() const
+{
+    return "slider";
+}
+
 }

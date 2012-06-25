@@ -35,7 +35,6 @@
     <ClCompile Include="src\Curve.cpp" />
     <ClCompile Include="src\DebugNew.cpp" />
     <ClCompile Include="src\DepthStencilTarget.cpp" />
-    <ClCompile Include="src\DropDownList.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\FlowLayout.cpp" />
@@ -44,6 +43,7 @@
     <ClCompile Include="src\FrameBuffer.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Gamepad.cpp" />
     <ClCompile Include="src\gameplay-main-android.cpp" />
     <ClCompile Include="src\gameplay-main-qnx.cpp" />
     <ClCompile Include="src\gameplay-main-win32.cpp" />
@@ -53,7 +53,6 @@
     <ClCompile Include="src\Label.cpp" />
     <ClCompile Include="src\Layout.cpp" />
     <ClCompile Include="src\Light.cpp" />
-    <ClCompile Include="src\List.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MeshBatch.cpp" />
     <ClCompile Include="src\Pass.cpp" />
@@ -129,7 +128,6 @@
     <ClInclude Include="src\Curve.h" />
     <ClInclude Include="src\DebugNew.h" />
     <ClInclude Include="src\DepthStencilTarget.h" />
-    <ClInclude Include="src\DropDownList.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FileSystem.h" />
     <ClInclude Include="src\FlowLayout.h" />
@@ -138,6 +136,7 @@
     <ClInclude Include="src\FrameBuffer.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Gamepad.h" />
     <ClInclude Include="src\gameplay.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Joint.h" />
@@ -146,7 +145,6 @@
     <ClInclude Include="src\Label.h" />
     <ClInclude Include="src\Layout.h" />
     <ClInclude Include="src\Light.h" />
-    <ClInclude Include="src\List.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\MathUtil.h" />
     <ClInclude Include="src\MeshBatch.h" />

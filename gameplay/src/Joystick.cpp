@@ -1,12 +1,10 @@
 #include "Base.h"
 #include "Joystick.h"
 
-#define INVALID_CONTACT_INDEX ((unsigned int)-1)
-
 namespace gameplay
 {
 
-Joystick::Joystick() : _contactIndex(INVALID_CONTACT_INDEX), _absolute(true)
+Joystick::Joystick() : _absolute(true), _gamepadJoystickIndex(NULL)
 {
 }
 
@@ -16,6 +14,8 @@ Joystick::Joystick(const Joystick& copy)
 
 Joystick::~Joystick()
 {
+    if (_gamepadJoystickIndex)
+        SAFE_DELETE(_gamepadJoystickIndex);
 }
 
 Joystick* Joystick::create(const char* id, Theme::Style* style)
@@ -51,6 +51,11 @@ void Joystick::initialize(Theme::Style* style, Properties* properties)
         return;
     }
     _radius = properties->getFloat("radius");
+
+    if (properties->exists("absolute"))
+    {
+        setAbsolute(properties->getBool("absolute"));
+    }
 
     Vector4 v;
     if (properties->getVector4("region", &v))
@@ -96,10 +101,12 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                 _region.y = y + _bounds.y - _region.height * 0.5f;
             }
 
-            if ((dx >= -_radius && dx <= _radius) && (dy >= -_radius && dy <= _radius) && 
-                _contactIndex == INVALID_CONTACT_INDEX)
+            if ((dx >= -_radius && dx <= _radius) && (dy >= -_radius && dy <= _radius))
             {
-                _contactIndex = contactIndex;
+                _contactIndex = (int) contactIndex;
+
+                notifyListeners(Listener::PRESS);
+
                 _displacement.set(0.0f, 0.0f);
                 
                 Vector2 value(0.0f, 0.0f);
@@ -111,67 +118,71 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                 }
 
                 _state = ACTIVE;
+
+                return _consumeInputEvents;
             }
+            else
+            {
+                _state = NORMAL;
+            }
+            break;
         }
         case Touch::TOUCH_MOVE:
         {
-            if (_contactIndex == contactIndex)
+            float dx = x - ((!_absolute) ? _region.x - _bounds.x : 0.0f) - _region.width * 0.5f;
+            float dy = -(y - ((!_absolute) ? _region.y - _bounds.y : 0.0f) - _region.height * 0.5f);
+            if (((dx * dx) + (dy * dy)) <= (_radius * _radius))
             {
-                float dx = x - ((!_absolute) ? _region.x - _bounds.x : 0.0f) - _region.width * 0.5f;
-                float dy = -(y - ((!_absolute) ? _region.y - _bounds.y : 0.0f) - _region.height * 0.5f);
-                if (((dx * dx) + (dy * dy)) <= (_radius * _radius))
-                {
-                    GP_ASSERT(_radius);
-                    Vector2 value(dx, dy);
-                    value.scale(1.0f / _radius);
-                    if (_value != value)
-                    {
-                        _value.set(value);
-                        _dirty = true;
-                        notifyListeners(Control::Listener::VALUE_CHANGED);
-                    }
-                }
-                else
-                {
-                    Vector2 value(dx, dy);
-                    value.normalize();
-                    value.scale(_radius);
-                    value.normalize();
-                    if (_value != value)
-                    {
-                        _value.set(value);
-                        _dirty = true;
-                        notifyListeners(Control::Listener::VALUE_CHANGED);
-                    }
-                }
-
-                _displacement.set(dx, dy);
-            }
-        }
-        break;
-        case Touch::TOUCH_RELEASE:
-        {
-            if (_contactIndex == contactIndex)
-            {
-                // Reset displacement and direction vectors.
-                _contactIndex = INVALID_CONTACT_INDEX;
-                _displacement.set(0.0f, 0.0f);
-                
-                Vector2 value(0.0f, 0.0f);
+                GP_ASSERT(_radius);
+                Vector2 value(dx, dy);
+                value.scale(1.0f / _radius);
                 if (_value != value)
                 {
                     _value.set(value);
                     _dirty = true;
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
-
-                _state = NORMAL;
             }
+            else
+            {
+                Vector2 value(dx, dy);
+                value.normalize();
+                value.scale(_radius);
+                value.normalize();
+                if (_value != value)
+                {
+                    _value.set(value);
+                    _dirty = true;
+                    notifyListeners(Control::Listener::VALUE_CHANGED);
+                }
+            }
+
+            _displacement.set(dx, dy);
+
+            return _consumeInputEvents;
         }
-        break;
+        case Touch::TOUCH_RELEASE:
+        {
+            _contactIndex = INVALID_CONTACT_INDEX;
+
+            // Reset displacement and direction vectors.
+            _displacement.set(0.0f, 0.0f);
+
+            Vector2 value(0.0f, 0.0f);
+            if (_value != value)
+            {
+                _value.set(value);
+                _dirty = true;
+                notifyListeners(Control::Listener::VALUE_CHANGED);
+            }
+
+            _state = NORMAL;
+
+            return _consumeInputEvents;
+        }
     }
 
-    return Control::touchEvent(touchEvent, x, y, contactIndex);
+    return false;
 }
 
 void Joystick::update(const Control* container, const Vector2& offset)
@@ -237,5 +248,12 @@ void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     }
     spriteBatch->end();
 }
+
+const char* Joystick::getType() const
+{
+    return "joystick";
+}
+
+
 
 }

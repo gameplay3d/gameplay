@@ -68,6 +68,11 @@ public:
      */
     int getLastKeypress();
 
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
+
 protected:
 
     /**

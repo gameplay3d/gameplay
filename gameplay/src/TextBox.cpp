@@ -64,6 +64,8 @@ bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
         if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
                  y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
         {
+            _contactIndex = (int) contactIndex;
+
             if (_state == NORMAL)
                 Game::getInstance()->displayKeyboard(true);
             else
@@ -74,6 +76,7 @@ bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
         }
         else
         {
+            _contactIndex = INVALID_CONTACT_INDEX;
             _state = NORMAL;
             Game::getInstance()->displayKeyboard(false);
             _dirty = true;
@@ -101,7 +104,7 @@ bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
             _state = NORMAL;
             Game::getInstance()->displayKeyboard(false);
         }
-
+        _contactIndex = INVALID_CONTACT_INDEX;
         _dirty = true;
         break;
     }
@@ -319,6 +322,7 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                 }
 
                 notifyListeners(Listener::TEXT_CHANGED);
+                break;
             }
         }
     }
@@ -376,6 +380,11 @@ void TextBox::setCaretLocation(int x, int y)
     {
         _caretLocation.set(_prevCaretLocation);
     }
+}
+
+const char* TextBox::getType() const
+{
+    return "textBox";
 }
 
 }

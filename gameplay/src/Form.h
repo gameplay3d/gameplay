@@ -156,6 +156,11 @@ public:
      */
     void draw();
 
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
+
 private:
     
     /**

@@ -19,7 +19,7 @@ CharacterGame game;
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL),
       _animation(NULL), _currentClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
-      _keyFlags(0), _drawDebug(0), _buttonReleased(true)
+      _keyFlags(0), _drawDebug(0), _buttonReleased(true), _gamepad(NULL)
 {
 }
 
@@ -99,30 +99,15 @@ void CharacterGame::initializeCharacter()
 
 void CharacterGame::initializeGamepad()
 {
-    _gamepad = new Gamepad("@gamepad", 1, 1);
-
-    float scale = getHeight() / 720.0f;
-
-    // Add a single gamepad joystick
-    _gamepad->setJoystick(0,
-        Rectangle(48.0f * scale, getHeight() - 248.0f * scale, 200.0f * scale, 200.0f * scale), 
-        Rectangle(256, 0, 256, 256),
-        Rectangle(48.0f * scale, getHeight() - 248.0f * scale, 200.0f * scale, 200.0f * scale),
-        Rectangle(0, 0, 256, 256),
-        64.0f);
-
-    // Add a single gamepad button
-    _gamepad->setButton(0,
-        Rectangle(getWidth() - scale * (176.0f), getHeight() - 176.0f * scale, 128.0f * scale, 128.0f * scale),
-        Rectangle(40, 310, 160, 160),
-        Rectangle(300, 310, 160, 160));
+    // Get the gamepad loaded for player1 from game.config.
+    _gamepad = Game::getInstance()->getGamepad(0);
+    GP_ASSERT(_gamepad);
 }
 
 void CharacterGame::finalize()
 {
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_font);
-    SAFE_DELETE(_gamepad);
 }
 
 void CharacterGame::drawSplash(void* param)
@@ -190,53 +175,38 @@ bool CharacterGame::isOnFloor() const
 
 void CharacterGame::update(float elapsedTime)
 {
-    Vector2 direction;
-
-    if (_gamepad->getButtonState(0) == Gamepad::BUTTON_PRESSED)
-    {
-        if (_buttonReleased)
-        {
-            _buttonReleased = false;
-            // Jump while the gamepad button is being pressed
-            jump();
-        }
-    }
-    else
-    {
-        _buttonReleased = true;
-    }
-
-    if (_gamepad->isJoystickActive(0))
-    {
-        // Get joystick direction
-        direction = _gamepad->getJoystickState(0);
-    }
-    else
+    if (!_gamepad->isJoystickActive(0) && !_gamepad->isJoystickActive(1))
     {
         // Construct direction vector from keyboard input
         if (_keyFlags & NORTH)
-            direction.y = 1;
+            _currentDirection.y = 1;
         else if (_keyFlags & SOUTH)
-            direction.y = -1;
-        if (_keyFlags & EAST)
-            direction.x = 1;
-        else if (_keyFlags & WEST)
-            direction.x = -1;
+            _currentDirection.y = -1;
+        else
+            _currentDirection.y = 0;
 
-        direction.normalize();
+        if (_keyFlags & EAST)
+            _currentDirection.x = 1;
+        else if (_keyFlags & WEST)
+            _currentDirection.x = -1;
+        else 
+            _currentDirection.x = 0;
+
+
+        _currentDirection.normalize();
         if ((_keyFlags & RUNNING) == 0)
-            direction *= 0.5f;
+            _currentDirection *= 0.5f;
     }
 
     // Update character animation and velocity
-    if (direction.isZero())
+    if (_currentDirection.isZero())
     {
         play("idle", true);
         _character->setVelocity(Vector3::zero());
     }
     else
     {
-        bool running = (direction.lengthSquared() > 0.75f);
+        bool running = (_currentDirection.lengthSquared() > 0.75f);
         float speed = running ? RUN_SPEED : WALK_SPEED;
 
         play(running ? "running" : "walking", true, 1.0f);
@@ -251,7 +221,7 @@ void CharacterGame::update(float elapsedTime)
         Vector3 currentHeading(-_characterMeshNode->getForwardVectorWorld());
 
         // Construct a new forward vector for the mesh node
-        Vector3 newHeading(cameraForward * direction.y + cameraRight * direction.x);
+        Vector3 newHeading(cameraForward * _currentDirection.y + cameraRight * _currentDirection.x);
 
         // Compute the rotation amount based on the difference between the current and new vectors
         float angle = atan2f(newHeading.x, newHeading.z) - atan2f(currentHeading.x, currentHeading.z);
@@ -301,9 +271,6 @@ void CharacterGame::render(float elapsedTime)
         _scene->drawDebug(Scene::DEBUG_SPHERES);
         break;
     }
-
-    // Draw gamepad for touch devices.
-    _gamepad->draw(Vector4(1.0f, 1.0f, 1.0f, 0.7f));
 
     // Draw FPS
     _font->begin();
@@ -384,33 +351,28 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
 
 void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    // Send the touch event to the gamepad.
-    _gamepad->touchEvent(evt, x, y, contactIndex);
-
-    if (!_gamepad->isJoystickActive(0) || contactIndex != _gamepad->getJoystickContactIndex(0))
+    // This should only be called if the gamepad did not handle the touch event.
+    switch (evt)
     {
-        switch (evt)
+    case Touch::TOUCH_PRESS:
         {
-        case Touch::TOUCH_PRESS:
-            {
-                _rotateX = x;
-            }
-            break;
-        case Touch::TOUCH_RELEASE:
-            {
-                _rotateX = 0;
-            }
-            break;
-        case Touch::TOUCH_MOVE:
-            {
-                int deltaX = x - _rotateX;
-                _rotateX = x;
-                _character->getNode()->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
-            }
-            break;
-        default:
-            break;
+            _rotateX = x;
         }
+        break;
+    case Touch::TOUCH_RELEASE:
+        {
+            _rotateX = 0;
+        }
+        break;
+    case Touch::TOUCH_MOVE:
+        {
+            int deltaX = x - _rotateX;
+            _rotateX = x;
+            _character->getNode()->rotateY(-MATH_DEG_TO_RAD(deltaX * 0.5f));
+        }
+        break;
+    default:
+        break;
     }
 }
 
@@ -484,7 +446,22 @@ void CharacterGame::adjustCamera(float elapsedTime)
     distance = 0;
 }
 
-void CharacterGame::animationEvent(AnimationClip* clip, EventType type)
+void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type)
 {
     clip->crossFade(_currentClip, 150);
+}
+
+void CharacterGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int index)
+{
+    switch(evt)
+    {
+        case Gamepad::BUTTON_EVENT:
+            if (gamepad->getButtonState(index) == Gamepad::BUTTON_PRESSED)
+                jump();
+            break;
+        case Gamepad::JOYSTICK_EVENT:
+            _currentDirection = gamepad->getJoystickValue(index);
+            break;
+    }
+    return;
 }
