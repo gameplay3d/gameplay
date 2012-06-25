@@ -637,34 +637,34 @@
     <None Include="res\shaders\textured-unlit.vsh">
       <Filter>res\shaders</Filter>
     </None>
-    <None Include="res\shaders\lib-attributes-skinning.vsh">
+    <None Include="res\shaders\lib\attributes.vsh">
       <Filter>res\shaders\lib</Filter>
     </None>
-    <None Include="res\shaders\lib-lighting.vsh">
+    <None Include="res\shaders\lib\attributes-skinning.vsh">
       <Filter>res\shaders\lib</Filter>
     </None>
-    <None Include="res\shaders\lib-attributes.vsh">
+    <None Include="res\shaders\lib\lighting.fsh">
       <Filter>res\shaders\lib</Filter>
     </None>
-    <None Include="res\shaders\lib-lighting-directional.fsh">
+    <None Include="res\shaders\lib\lighting.vsh">
       <Filter>res\shaders\lib</Filter>
     </None>
-    <None Include="res\shaders\lib-lighting-directional.vsh">
+    <None Include="res\shaders\lib\lighting-directional.fsh">
       <Filter>res\shaders\lib</Filter>
     </None>
-    <None Include="res\shaders\lib-lighting-point.fsh">
+    <None Include="res\shaders\lib\lighting-directional.vsh">
       <Filter>res\shaders\lib</Filter>
     </None>
-    <None Include="res\shaders\lib-lighting-point.vsh">
+    <None Include="res\shaders\lib\lighting-point.fsh">
       <Filter>res\shaders\lib</Filter>
     </None>
-    <None Include="res\shaders\lib-lighting-spot.fsh">
+    <None Include="res\shaders\lib\lighting-point.vsh">
       <Filter>res\shaders\lib</Filter>
     </None>
-    <None Include="res\shaders\lib-lighting-spot.vsh">
+    <None Include="res\shaders\lib\lighting-spot.fsh">
       <Filter>res\shaders\lib</Filter>
     </None>
-    <None Include="res\shaders\lib-lighting.fsh">
+    <None Include="res\shaders\lib\lighting-spot.vsh">
       <Filter>res\shaders\lib</Filter>
     </None>
   </ItemGroup>

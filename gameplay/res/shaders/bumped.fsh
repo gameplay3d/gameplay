@@ -3,8 +3,6 @@ precision highp float;
 #endif
 
 // Uniforms
-uniform vec3 u_lightColor;                  // Light color.
-uniform vec3 u_ambientColor;                // Ambient color.
 uniform sampler2D u_textureDiffuse;        	// Diffuse texture.
 uniform sampler2D u_textureNormal;       	// Normal map texture.
 
