@@ -1,6 +1,6 @@
 #define LIGHTING
 
-uniform vec3 u_lightDirection;					// Direction of the light.
+uniform vec3 u_lightDirection;					// Light direction.
 
 #if defined(SPECULAR)
 
