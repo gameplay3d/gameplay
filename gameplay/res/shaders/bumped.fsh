@@ -1,3 +1,5 @@
+#define BUMPED
+
 #ifdef OPENGL_ES
 precision highp float;
 #endif
@@ -14,6 +16,7 @@ uniform float u_modulateAlpha;              // Modulation alpha
 #endif
 
 // Inputs
+varying vec3 v_normalVector;                // Normal vector in view space.
 varying vec2 v_texCoord;                    // Texture Coordinate.
 
 // Lighting
@@ -29,7 +32,7 @@ varying vec2 v_texCoord;                    // Texture Coordinate.
 void main()
 {
     // Fetch diffuse color from texture.
-    _baseColor = texture2D(u_diffuseTexture, v_texCoord);
+    _baseColor = texture2D(u_textureDiffuse, v_texCoord);
 
     // Light the pixel
     gl_FragColor.a = _baseColor.a;

@@ -1,9 +1,9 @@
-#if defined(BUMPED)
-
 uniform vec3 u_pointLightPosition;                  // Position
 uniform float u_pointLightRangeInverse;             // Inverse of light range 
 varying vec3 v_vertexToPointLightDirection;         // Direction of point light w.r.t current vertex in tangent space.
 varying float v_pointLightAttenuation;              // Attenuation of point light.
+
+#if defined(BUMPED)
 
 void applyLight(mat3 tangentSpaceTransformMatrix)
 {
@@ -31,10 +31,6 @@ void applyLight(mat3 tangentSpaceTransformMatrix)
 
 #else
 
-uniform vec3 u_pointLightPosition;                  // Position
-uniform float u_pointLightRange;                    // Inverse of light range.
-varying vec4 v_vertexToPointLightDirection;         // Light direction w.r.t current vertex.
-
 void applyLight(vec4 position)
 {
     // World space position.
@@ -47,7 +43,7 @@ void applyLight(vec4 position)
     vertexToPointLightDirection.xyz = lightDirection;
    
     // Attenuation
-    vertexToPointLightDirection.w = 1.0 - dot(lightDirection * u_pointLightRangeInverse, lightDirection * u_pointLightRangeInverse);
+    v_pointLightAttenuation = 1.0 - dot(lightDirection * u_pointLightRangeInverse, lightDirection * u_pointLightRangeInverse);
 
     // Output light direction.
     v_vertexToPointLightDirection =  vertexToPointLightDirection;

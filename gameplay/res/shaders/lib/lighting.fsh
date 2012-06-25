@@ -10,6 +10,7 @@ vec3 _diffuseColor;                             // Diffuse Color.
 #if defined(SPECULAR)
 
 vec3 _specularColor;    						// Specular color.
+
 uniform float u_specularExponent;				// Specular exponent.
 varying vec3 v_cameraDirection;                 // Camera direction.
 

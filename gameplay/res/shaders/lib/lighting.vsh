@@ -1,7 +1,5 @@
 #define LIGHTING
 
-uniform vec3 u_lightDirection;					// Light direction.
-
 #if defined(SPECULAR)
 
 uniform mat4 u_worldViewMatrix;                 // Matrix to tranform a position to view space.
