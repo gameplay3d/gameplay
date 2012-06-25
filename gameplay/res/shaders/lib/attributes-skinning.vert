@@ -1,10 +1,3 @@
-attribute vec4 a_blendWeights;
-attribute vec4 a_blendIndices;
-
-// 32 4x3 matrices as an array of floats
-uniform vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];
-
-// Global 
 vec4 _skinnedPosition;
 #if defined(LIGHTING)
 vec3 _skinnedNormal;
@@ -17,7 +10,6 @@ void skinPosition(float blendWeight, int matrixIndex)
     tmp.y = dot(a_position, u_matrixPalette[matrixIndex + 1]);
     tmp.z = dot(a_position, u_matrixPalette[matrixIndex + 2]);
     tmp.w = a_position.w;
-
     _skinnedPosition += blendWeight * tmp;
 }
 
@@ -51,7 +43,6 @@ void skinTangentSpaceVector(vec3 vector, float blendWeight, int matrixIndex)
     tmp.x = dot(vector, u_matrixPalette[matrixIndex].xyz);
     tmp.y = dot(vector, u_matrixPalette[matrixIndex + 1].xyz);
     tmp.z = dot(vector, u_matrixPalette[matrixIndex + 2].xyz);
-	
     _skinnedNormal += blendWeight * tmp;
 }
 

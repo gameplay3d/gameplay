@@ -1,18 +1,10 @@
-uniform vec3 u_lightDirection;					// Light direction.
-uniform vec3 u_lightColor;                      // Light color.
-uniform vec3 u_ambientColor;                    // Ambient color.
-
-// Variables
-vec4 _baseColor;                                // Base color.
-vec3 _ambientColor;                             // Ambient Color.
-vec3 _diffuseColor;                             // Diffuse Color.
+vec4 _baseColor;
+vec3 _ambientColor;
+vec3 _diffuseColor;
 
 #if defined(SPECULAR)
 
-vec3 _specularColor;    						// Specular color.
-
-uniform float u_specularExponent;				// Specular exponent.
-varying vec3 v_cameraDirection;                 // Camera direction.
+vec3 _specularColor;
 
 vec3 computeLighting(vec3 normalVector, vec3 lightDirection, float attenuation, vec3 cameraDirection)
 {
