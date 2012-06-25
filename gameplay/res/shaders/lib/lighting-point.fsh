@@ -29,10 +29,10 @@ vec3 getLitPixel()
 {
     // Normalize the vectors.
     vec3 normalVector = normalize(v_normalVector);    
-    vec3 vertexToPointLightDirection = normalize(v_vertexToPointLightDirection.xyz);
+    vec3 vertexToPointLightDirection = normalize(v_vertexToPointLightDirection);
     
     // Fetch point light attenuation.
-    float pointLightAttenuation = v_vertexToPointLightDirection.w;
+    float pointLightAttenuation = v_pointLightAttenuation;
     
     #if defined (SPECULAR)
     

@@ -1,3 +1,5 @@
+#define BUMPED
+
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;           // Matrix to transform a position to clip space
 uniform mat4 u_inverseTransposeWorldViewMatrix;     // Matrix to transform a normal to view space
@@ -16,6 +18,7 @@ attribute vec3 a_tangent;                           // Vertex Tangent           
 attribute vec3 a_binormal;                          // Vertex Binormal/Bitangent    (x, y, z)
 
 // Outputs
+varying vec3 v_normalVector;                        // Normal vector in view space.
 varying vec2 v_texCoord;                            // Output Texture Coordinate     (u,v)
 
 // Lighting
@@ -29,7 +32,6 @@ varying vec2 v_texCoord;                            // Output Texture Coordinate
 #endif
 
 // Attribute Accessors (getPosition(), getNormal(), etc.)
-#define BUMPED
 #if defined(SKINNING)
 #include "lib/attributes-skinning.vsh"
 #else
