@@ -16,11 +16,26 @@ Label::~Label()
 {
 }
 
+Label* Label::create(const char* id, Theme::Style* style)
+{
+    GP_ASSERT(style);
+
+    Label* label = new Label();
+    if (id)
+        label->_id = id;
+    label->setStyle(style);
+
+    return label;
+}
+
 Label* Label::create(Theme::Style* style, Properties* properties)
 {
     Label* label = new Label();
     label->initialize(style, properties);
     label->_consumeInputEvents = false;
+    
+    // Ensure that labels cannot receive focus.
+    label->_focusIndex = -2;
 
     return label;
 }
@@ -95,6 +110,11 @@ void Label::drawText(const Rectangle& clip)
     }
 
     _dirty = false;
+}
+
+const char* Label::getType() const
+{
+    return "label";
 }
 
 }

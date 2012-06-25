@@ -39,6 +39,43 @@ Form::~Form()
     }
 }
 
+Form* Form::create(const char* id, Theme::Style* style, Layout::Type layoutType)
+{
+    GP_ASSERT(style);
+
+    Layout* layout;
+    switch (layoutType)
+    {
+    case Layout::LAYOUT_ABSOLUTE:
+        layout = AbsoluteLayout::create();
+        break;
+    case Layout::LAYOUT_FLOW:
+        layout = FlowLayout::create();
+        break;
+    case Layout::LAYOUT_VERTICAL:
+        layout = VerticalLayout::create();
+        break;
+    default:
+        GP_ERROR("Unsupported layout type '%d'.", layoutType);
+        break;
+    }
+
+    Form* form = new Form();
+    if (id)
+        form->_id = id;
+    form->_style = style;
+    form->_layout = layout;
+    form->_theme = style->getTheme();
+
+    // Get default projection matrix.
+    Game* game = Game::getInstance();
+    Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
+
+    __forms.push_back(form);
+
+    return form;
+}
+
 Form* Form::create(const char* url)
 {
     // Load Form from .form file.
@@ -99,9 +136,7 @@ Form* Form::create(const char* url)
     }
     else
     {
-        Theme::Style::Overlay* overlay = Theme::Style::Overlay::create();
-        style = new Theme::Style(theme, "", 1.0f / theme->_texture->getWidth(), 1.0f / theme->_texture->getHeight(),
-            Theme::Margin::empty(), Theme::Border::empty(), overlay, overlay, overlay, overlay);
+        style = theme->getEmptyStyle();
     }
     form->initialize(style, formProperties);
 
@@ -157,6 +192,11 @@ Form* Form::getForm(const char* id)
     }
         
     return NULL;
+}
+
+Theme* Form::getTheme() const
+{
+    return _theme;
 }
 
 void Form::setSize(float width, float height)
@@ -482,6 +522,11 @@ void Form::draw()
     }
 }
 
+const char* Form::getType() const
+{
+    return "form";
+}
+
 void Form::initializeQuad(Mesh* mesh)
 {
     // Release current model.
@@ -519,6 +564,7 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
 {
     // Check for a collision with each Form in __forms.
     // Pass the event on.
+    bool eventConsumed = false;
     std::vector<Form*>::const_iterator it;
     for (it = __forms.begin(); it < __forms.end(); it++)
     {
@@ -540,7 +586,7 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
                          point.y >= bounds.y &&
                          point.y <= bounds.y + bounds.height))
                     {
-                        return form->touchEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, contactIndex);
+                        eventConsumed |= form->touchEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, contactIndex);
                     }
                 }
             }
@@ -556,13 +602,13 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
                         y <= bounds.y + bounds.height))
                 {
                     // Pass on the event's position relative to the form.
-                    return form->touchEvent(evt, x - bounds.x, y - bounds.y, contactIndex);
+                    eventConsumed |= form->touchEvent(evt, x - bounds.x, y - bounds.y, contactIndex);
                 }
             }
         }
     }
 
-    return false;
+    return eventConsumed;
 }
 
 bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
@@ -584,6 +630,8 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
 
 bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
+    bool eventConsumed = false;
+
     std::vector<Form*>::const_iterator it;
     for (it = __forms.begin(); it < __forms.end(); it++)
     {
@@ -608,7 +656,7 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
                          point.y >= bounds.y &&
                          point.y <= bounds.y + bounds.height))
                     {
-                        return form->mouseEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, wheelDelta);
+                        eventConsumed |= form->mouseEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, wheelDelta);
                     }
                 }
             }
@@ -627,13 +675,13 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
                         y <= bounds.y + bounds.height))
                 {
                     // Pass on the event's position relative to the form.
-                    return form->mouseEvent(evt, x - bounds.x, y - bounds.y, wheelDelta);
+                    eventConsumed |= form->mouseEvent(evt, x - bounds.x, y - bounds.y, wheelDelta);
                 }
             }
         }
     }
 
-    return false;
+    return eventConsumed;
 }
 
 bool Form::projectPoint(int x, int y, Vector3* point)

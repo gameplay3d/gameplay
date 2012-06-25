@@ -282,6 +282,9 @@
     <ClCompile Include="src\Joystick.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Gamepad.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -558,6 +561,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\MathUtil.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gamepad.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
