@@ -1,13 +1,5 @@
 #if defined(BUMPED)
 
-uniform vec3 u_spotLightPosition;                   // Position
-uniform float u_spotLightRangeInverse;              // Inverse of light range.
-uniform vec3 u_spotLightDirection;                  // Direction
-
-varying vec3 v_spotLightDirection;                  // Direction of spot light in tangent space.
-varying vec3 v_vertexToSpotLightDirection;          // Direction of the spot light w.r.t current vertex in tangent space.
-varying float v_spotLightAttenuation;               // Attenuation of spot light.
-
 void applyLight(mat3 tangentSpaceTransformMatrix)
 {
     vec4 positionWorldViewSpace = u_worldViewMatrix * a_position;
@@ -36,12 +28,6 @@ void applyLight(mat3 tangentSpaceTransformMatrix)
 }
 
 #else
-
-uniform vec3 u_spotLightPosition;                   // Position
-uniform float u_spotLightRangeInverse;              // Inverse of light range.
-
-varying vec3 v_vertexToSpotLightDirection;          // Light direction w.r.t current vertex.
-varying float v_spotLightAttenuation;               // Attenuation of spot light.
 
 void applyLight(vec4 position)
 {

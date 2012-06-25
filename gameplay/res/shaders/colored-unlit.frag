@@ -17,6 +17,7 @@ uniform vec4 u_modulateColor;               // Modulation color
 uniform float u_modulateAlpha;              // Modulation alpha
 #endif
 
+// Fragment program
 void main()
 {
     // Set base diffuse color

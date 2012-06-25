@@ -1,8 +1,3 @@
-uniform vec3 u_pointLightPosition;                  // Position
-uniform float u_pointLightRangeInverse;             // Inverse of light range 
-varying vec3 v_vertexToPointLightDirection;         // Direction of point light w.r.t current vertex in tangent space.
-varying float v_pointLightAttenuation;              // Attenuation of point light.
-
 #if defined(BUMPED)
 
 void applyLight(mat3 tangentSpaceTransformMatrix)
