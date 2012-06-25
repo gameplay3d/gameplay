@@ -27,7 +27,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\test\icon.png" />
-    <None Include="bar-descriptor.xml" />
+    <None Include="bar-descriptor.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="game.config" />
     <None Include="res\arial13.gpb" />
     <None Include="res\arial18.gpb" />
