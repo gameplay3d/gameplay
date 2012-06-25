@@ -180,13 +180,13 @@ void replaceIncludes(const char* filepath, const char* source, std::string& out)
             if (includedSource == NULL)
             {
                 GP_ERROR("Compile failed for shader '%s' invalid filepath.", filepathStr.c_str());
-                SAFE_DELETE_ARRAY(includedSource);
                 return;
             }
             else
             {
                 // Valid file so lets attempt to see if we need to append anything to it too (recurse...)
                 replaceIncludes(directoryPath.c_str(), includedSource, out);
+                SAFE_DELETE_ARRAY(includedSource);
             }
         }
         else

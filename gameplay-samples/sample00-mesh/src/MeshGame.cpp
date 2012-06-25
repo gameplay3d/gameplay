@@ -219,5 +219,6 @@ Model* MeshGame::createGridModel(unsigned int lineCount)
 
     Model* model = Model::create(mesh);
     model->setMaterial("res/grid.material");
+    SAFE_RELEASE(mesh);
     return model;
 }

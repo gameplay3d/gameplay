@@ -5,8 +5,8 @@ material grid
         pass 0
         {
             // shaders
-            vertexShader = res/shaders/colored-unlit.vsh
-            fragmentShader = res/shaders/colored-unlit.fsh
+            vertexShader = res/shaders/colored-unlit.vert
+            fragmentShader = res/shaders/colored-unlit.frag
 			defines = VERTEX_COLOR
 
              // uniforms

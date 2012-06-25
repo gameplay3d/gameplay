@@ -59,10 +59,10 @@
     <asset path="res/duck.material">res/duck.material</asset>
     <asset path="res/grid.material">res/grid.material</asset>
     <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
-    <asset path="../../gameplay/res/shaders/textured.vsh">res/shaders/textured.vsh</asset>
-    <asset path="../../gameplay/res/shaders/textured.fsh">res/shaders/textured.fsh</asset>
-    <asset path="../../gameplay/res/shaders/colored-unlit.vsh">res/shaders/colored-unlit.vsh</asset>
-    <asset path="../../gameplay/res/shaders/colored-unlit.fsh">res/shaders/colored-unlit.fsh</asset>
+    <asset path="../../gameplay/res/shaders/textured.vert">res/shaders/textured.vert</asset>
+    <asset path="../../gameplay/res/shaders/textured.frag">res/shaders/textured.frag</asset>
+    <asset path="../../gameplay/res/shaders/colored-unlit.vert">res/shaders/colored-unlit.vert</asset>
+    <asset path="../../gameplay/res/shaders/colored-unlit.frag">res/shaders/colored-unlit.frag</asset>
     <asset path="../../gameplay/res/shaders/lib">res/shaders/lib</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
