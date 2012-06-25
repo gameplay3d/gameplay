@@ -43,6 +43,7 @@
     <ClCompile Include="src\FrameBuffer.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Gamepad.cpp" />
     <ClCompile Include="src\gameplay-main-android.cpp" />
     <ClCompile Include="src\gameplay-main-qnx.cpp" />
     <ClCompile Include="src\gameplay-main-win32.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="src\FrameBuffer.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Gamepad.h" />
     <ClInclude Include="src\gameplay.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Joint.h" />
