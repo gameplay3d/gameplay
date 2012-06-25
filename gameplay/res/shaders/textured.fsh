@@ -4,8 +4,6 @@ precision highp float;
 
 // Uniforms
 uniform sampler2D u_textureDiffuse;             // Diffuse texture.
-uniform vec3 u_lightColor;                      // Light color
-uniform vec3 u_ambientColor;                    // Ambient color
 
 #if defined(MODULATE_COLOR)
 uniform vec4 u_modulateColor;               	// Modulation color
