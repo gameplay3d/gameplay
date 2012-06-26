@@ -76,6 +76,16 @@ enum VertexUsage
 
 void fillArray(float values[], float value, size_t length);
 
+/**
+ * Returns the base name of the given path.
+ * Example: "c:/foo/bar/model.dae" returns "model.dae"
+ * 
+ * @param filepath File path.
+ * 
+ * @return Base file name.
+ */
+std::string getBaseName(const std::string& filepath);
+
 #define ISZERO(x) (fabs(x) < 0.000001f)
 
 // Object deletion macro

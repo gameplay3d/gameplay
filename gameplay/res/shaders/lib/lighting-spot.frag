@@ -1,10 +1,3 @@
-uniform float u_spotLightInnerAngleCos;       // The bright spot [0.0 - 1.0]
-uniform float u_spotLightOuterAngleCos;       // The soft outer part [0.0 - 1.0]
-
-varying vec3 v_spotLightDirection;            // Direction of spot light in tangent space.
-varying vec3 v_vertexToSpotLightDirection;    // Direction of the spot light w.r.t current vertex in tangent space.
-varying float v_spotLightAttenuation;         // Attenuation of spot light.
-
 float lerpstep( float lower, float upper, float s)
 {
     return clamp( ( s - lower ) / ( upper - lower ), 0.0, 1.0 );
@@ -19,13 +12,10 @@ vec3 getLitPixel()
     vec3 spotLightDirection = normalize(v_spotLightDirection);
     vec3 vertexToSpotLightDirection = normalize(v_vertexToSpotLightDirection);
     
-    // "-lightDirection" because light direction points in opposite direction to
-    // to spot direction.
-    // Calculate spot light effect.
+    // "-lightDirection" because light direction points in opposite direction to to spot direction.
     float spotCurrentAngleCos = max(0.0, dot(spotLightDirection, -vertexToSpotLightDirection));
     
-    // Intensity of spot depends on the spot light attenuation and the 
-    // part of the cone vertexToSpotLightDirection points to (inner or outer).
+    // Intensity of spot depends on the spot light attenuation and the part of the cone vertexToSpotLightDirection points to (inner or outer).
     float spotLightAttenuation = clamp(v_spotLightAttenuation, 0.0, 1.0);
     spotLightAttenuation *= lerpstep(u_spotLightOuterAngleCos, u_spotLightInnerAngleCos, spotCurrentAngleCos);
 
@@ -51,7 +41,6 @@ vec3 getLitPixel()
     vec3 vertexToSpotLightDirection = normalize(v_vertexToSpotLightDirection);
 
     // "-lightDirection" is used because light direction points in opposite direction to to spot direction.
-    // Calculate spot light effect.
     float spotCurrentAngleCos = max(0.0, dot(spotLightDirection, -vertexToSpotLightDirection));
     
     // Intensity of spot depends on the spot light attenuation and the 

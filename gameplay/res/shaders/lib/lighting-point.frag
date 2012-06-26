@@ -1,6 +1,3 @@
-varying vec3 v_vertexToPointLightDirection;   // Light direction w.r.t current vertex in tangent space.
-varying float v_pointLightAttenuation;        // Attenuation of point light.
-
 #if defined(BUMPED)
 
 vec3 getLitPixel()

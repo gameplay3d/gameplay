@@ -7,7 +7,6 @@ uniform sampler2D u_textureDiffuse;     	// Diffuse texture
 #if defined(TEXTURE_LIGHT)
 uniform sampler2D u_textureLight;     		// Lightmap texture
 #endif
-
 #if defined(MODULATE_COLOR)
 uniform vec4 u_modulateColor;               // Modulation color
 #endif
@@ -18,6 +17,7 @@ uniform float u_modulateAlpha;              // Modulation alpha
 // Inputs
 varying vec2 v_texCoord;                	// Texture coordinate(u, v)
 
+// Fragment Program
 void main()
 {
     // Sample the texture for the color

@@ -1,5 +1,3 @@
-varying vec3 v_lightDirection;                 // Direction of light in tangent space.
-
 #if defined(BUMPED)
 
 vec3 getLitPixel()
