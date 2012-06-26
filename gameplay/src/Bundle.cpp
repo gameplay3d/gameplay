@@ -601,7 +601,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext, Node* nodeContext)
         if (node)
             node->addRef();
     }
-    else if (nodeContext)
+    if (node == NULL && nodeContext)
     {
         node = nodeContext->findNode(id, true);
         if (node)
@@ -675,6 +675,21 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
     GP_ASSERT(id);
     GP_ASSERT(_file);
 
+    // If we are tracking nodes and it's not in the set yet, add it.
+    if (_trackedNodes)
+    {
+        std::map<std::string, Node*>::iterator iter = _trackedNodes->find(id);
+        if (iter != _trackedNodes->end())
+        {
+            // Skip over this node since we previously read it
+            if (!skipNode())
+                return NULL;
+
+            iter->second->addRef();
+            return iter->second;
+        }
+    }
+
     // Read node type.
     unsigned int nodeType;
     if (!read(&nodeType))
@@ -696,43 +711,10 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
         return NULL;
     }
 
-    // If we are tracking nodes and it's not in the set yet, add it.
     if (_trackedNodes)
     {
-        std::map<std::string, Node*>::iterator iter = _trackedNodes->find(id);
-        if (iter != _trackedNodes->end())
-        {
-            SAFE_RELEASE(node);
-
-            // Skip over the node's transform and parent ID.
-            if (fseek(_file, sizeof(float) * 16, SEEK_CUR) != 0)
-            {
-                GP_ERROR("Failed to skip over node transform for node '%s'.", id);
-                return NULL;
-            }
-            readString(_file);
-
-            // Skip over the node's children.
-            unsigned int childrenCount;
-            if (!read(&childrenCount))
-            {
-                GP_ERROR("Failed to skip over node's children count for node '%s'.", id);
-                return NULL;
-            }
-            else if (childrenCount > 0)
-            {
-                for (unsigned int i = 0; i < childrenCount; i++)
-                {
-                    if (!skipNode())
-                        return NULL;
-                }
-            }
-
-            iter->second->addRef();
-            return iter->second;
-        }
-        else
-            _trackedNodes->insert(std::make_pair(id, node));
+        // Add the new node to the list of tracked nodes
+        _trackedNodes->insert(std::make_pair(id, node));
     }
 
     // If no loading context is set, set this node as the loading context.
@@ -751,7 +733,7 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
     }
     setTransform(transform, node);
 
-    // Skip over the parent ID.
+    // Skip the parent ID.
     readString(_file);
 
     // Read children.
@@ -771,23 +753,25 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
             // if we've already loaded this child node during this load session.
             Node* child = NULL;
             id = getIdFromOffset();
+            GP_ASSERT(id);
 
             if (sceneContext)
             {
                 child = sceneContext->findNode(id, true);
             }
-            else if (nodeContext)
+            if (child == NULL && nodeContext)
             {
                 child = nodeContext->findNode(id, true);
             }
-            
-            // If the child node wasn't already loaded, load it.
-            if (!child)
-                child = readNode(sceneContext, nodeContext);
+
+            // If the child was already loaded, skip it, otherwise read it
+            if (child)
+            {
+                skipNode();
+            }
             else
             {
-                // Otherwise, skip over its data in the file.
-                readNode(NULL, NULL);
+                child = readNode(sceneContext, nodeContext);
             }
 
             if (child)
@@ -1142,6 +1126,9 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
                 }
                 else
                 {
+                    // No parent currently set for this joint.
+                    // Lookup its parentID in case it references a node that was not yet loaded as part
+                    // of the mesh skin's joint list.
                     std::string nodeID = node->getId();
 
                     while (true)
@@ -1165,7 +1152,7 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
                         }
                         std::string parentID = readString(_file);
                         
-                        if (parentID.size() > 0)
+                        if (!parentID.empty())
                             nodeID = parentID;
                         else
                             break;
@@ -1180,7 +1167,7 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
 
             skinData->skin->setRootJoint(rootJoint);
 
-            // Release all the nodes that we loaded since the nodes are now owned by the mesh skin.
+            // Release all the nodes that we loaded since the nodes are now owned by the mesh skin/joints.
             for (unsigned int i = 0; i < loadedNodes.size(); i++)
             {
                 SAFE_RELEASE(loadedNodes[i]);
