@@ -171,6 +171,10 @@
 		42CD0EC8147D8FF60000361E /* VertexAttributeBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E41147D8FF50000361E /* VertexAttributeBinding.h */; };
 		42CD0EC9147D8FF60000361E /* VertexFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E42147D8FF50000361E /* VertexFormat.cpp */; };
 		42CD0ECA147D8FF60000361E /* VertexFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E43147D8FF50000361E /* VertexFormat.h */; };
+		42F4B7D715994CED00B5A78D /* Gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42F4B7D515994CED00B5A78D /* Gamepad.cpp */; };
+		42F4B7D815994CED00B5A78D /* Gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42F4B7D515994CED00B5A78D /* Gamepad.cpp */; };
+		42F4B7D915994CED00B5A78D /* Gamepad.h in Headers */ = {isa = PBXBuildFile; fileRef = 42F4B7D615994CED00B5A78D /* Gamepad.h */; };
+		42F4B7DA15994CED00B5A78D /* Gamepad.h in Headers */ = {isa = PBXBuildFile; fileRef = 42F4B7D615994CED00B5A78D /* Gamepad.h */; };
 		5B04C52D14BFCFE100EB0071 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DB1147D8FF50000361E /* Animation.cpp */; };
 		5B04C52E14BFCFE100EB0071 /* AnimationClip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DB3147D8FF50000361E /* AnimationClip.cpp */; };
 		5B04C52F14BFCFE100EB0071 /* AnimationController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DB5147D8FF50000361E /* AnimationController.cpp */; };
@@ -565,6 +569,8 @@
 		42CD0E41147D8FF50000361E /* VertexAttributeBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexAttributeBinding.h; path = src/VertexAttributeBinding.h; sourceTree = SOURCE_ROOT; };
 		42CD0E42147D8FF50000361E /* VertexFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexFormat.cpp; path = src/VertexFormat.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0E43147D8FF50000361E /* VertexFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexFormat.h; path = src/VertexFormat.h; sourceTree = SOURCE_ROOT; };
+		42F4B7D515994CED00B5A78D /* Gamepad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Gamepad.cpp; path = src/Gamepad.cpp; sourceTree = SOURCE_ROOT; };
+		42F4B7D615994CED00B5A78D /* Gamepad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Gamepad.h; path = src/Gamepad.h; sourceTree = SOURCE_ROOT; };
 		5B04C5CA14BFCFE100EB0071 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-ios.mm"; path = "src/gameplay-main-ios.mm"; sourceTree = SOURCE_ROOT; };
 		5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformiOS.mm; path = src/PlatformiOS.mm; sourceTree = SOURCE_ROOT; };
@@ -755,6 +761,8 @@
 				42CD0DDC147D8FF50000361E /* Game.cpp */,
 				42CD0DDD147D8FF50000361E /* Game.h */,
 				42C932AF14919FD10098216A /* Game.inl */,
+				42F4B7D515994CED00B5A78D /* Gamepad.cpp */,
+				42F4B7D615994CED00B5A78D /* Gamepad.h */,
 				5BD5266A150F8257004C9099 /* gameplay.dox */,
 				42CD0DE1147D8FF50000361E /* gameplay.h */,
 				5BB0823814C6FEB10019975F /* gameplay-main-android.cpp */,
@@ -1075,6 +1083,7 @@
 				426878AE153F4BB300844500 /* FlowLayout.h in Headers */,
 				4239DDEE157545A1005EA3F6 /* Joystick.h in Headers */,
 				4239DDF4157545C1005EA3F6 /* MathUtil.h in Headers */,
+				42F4B7D915994CED00B5A78D /* Gamepad.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1173,6 +1182,7 @@
 				426878AF153F4BB300844500 /* FlowLayout.h in Headers */,
 				4239DDEF157545A1005EA3F6 /* Joystick.h in Headers */,
 				4239DDF5157545C1005EA3F6 /* MathUtil.h in Headers */,
+				42F4B7DA15994CED00B5A78D /* Gamepad.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1329,6 +1339,7 @@
 				422260D61537790F0011E3AB /* Bundle.cpp in Sources */,
 				426878AC153F4BB300844500 /* FlowLayout.cpp in Sources */,
 				4239DDEC157545A1005EA3F6 /* Joystick.cpp in Sources */,
+				42F4B7D715994CED00B5A78D /* Gamepad.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1421,6 +1432,7 @@
 				422260D71537790F0011E3AB /* Bundle.cpp in Sources */,
 				426878AD153F4BB300844500 /* FlowLayout.cpp in Sources */,
 				4239DDED157545A1005EA3F6 /* Joystick.cpp in Sources */,
+				42F4B7D815994CED00B5A78D /* Gamepad.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,8 +11,6 @@
 		4239E08815755BDA005EA3F6 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08615755BDA005EA3F6 /* res */; };
 		4239E08C157563C3005EA3F6 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08B157563C3005EA3F6 /* game.config */; };
 		4239E08D157563C3005EA3F6 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08B157563C3005EA3F6 /* game.config */; };
-		42C56365152DE26000888FBE /* Gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C56363152DE26000888FBE /* Gamepad.cpp */; };
-		42C56366152DE26000888FBE /* Gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C56363152DE26000888FBE /* Gamepad.cpp */; };
 		42CCD571146EC4B300353661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD570146EC4B300353661 /* Cocoa.framework */; };
 		42CCD5A2146EC5BF00353661 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A1146EC5BF00353661 /* OpenAL.framework */; };
 		42CCD5A4146EC5C600353661 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A3146EC5C600353661 /* OpenGL.framework */; };
@@ -49,8 +47,6 @@
 		4239E08615755BDA005EA3F6 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		4239E08B157563C3005EA3F6 /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
 		42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-ios.plist"; sourceTree = "<group>"; };
-		42C56363152DE26000888FBE /* Gamepad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Gamepad.cpp; path = src/Gamepad.cpp; sourceTree = SOURCE_ROOT; };
-		42C56364152DE26000888FBE /* Gamepad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Gamepad.h; path = src/Gamepad.h; sourceTree = SOURCE_ROOT; };
 		42C932E61491A1AC0098216A /* sample03-character-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-macosx.plist"; sourceTree = "<group>"; };
 		42CCD56C146EC4B300353661 /* sample03-character-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD570146EC4B300353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -178,8 +174,6 @@
 			children = (
 				42CCD5AD146EC62000353661 /* CharacterGame.cpp */,
 				42CCD5AE146EC62000353661 /* CharacterGame.h */,
-				42C56363152DE26000888FBE /* Gamepad.cpp */,
-				42C56364152DE26000888FBE /* Gamepad.h */,
 			);
 			name = src;
 			path = "sample03-character";
@@ -332,7 +326,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				42CCD5AF146EC62000353661 /* CharacterGame.cpp in Sources */,
-				42C56365152DE26000888FBE /* Gamepad.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,7 +334,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B43D1C814C35F4C008A5D9D /* CharacterGame.cpp in Sources */,
-				42C56366152DE26000888FBE /* Gamepad.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
