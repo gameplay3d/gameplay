@@ -7,7 +7,8 @@ namespace gameplay
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _dirty(true), _consumeInputEvents(true), _listeners(NULL), _styleOverridden(false), _skin(NULL), _clearBounds(Rectangle::empty())
+    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _listeners(NULL), _contactIndex(INVALID_CONTACT_INDEX),
+    _styleOverridden(false), _skin(NULL)
 {
 }
 
@@ -52,6 +53,15 @@ void Control::initialize(Theme::Style* style, Properties* properties)
         _zIndex = -1;
     }
 
+    if (properties->exists("focusIndex"))
+    {
+        _focusIndex = properties->getInt("focusIndex");
+    }
+    else
+    {
+        _focusIndex = -1;
+    }
+
     Vector2 position;
     Vector2 size;
     if (properties->exists("position"))
@@ -74,8 +84,6 @@ void Control::initialize(Theme::Style* style, Properties* properties)
         size.y = properties->getFloat("height");
     }
     setBounds(Rectangle(position.x, position.y, size.x, size.y));
-
-    _state = Control::getState(properties->getString("state"));
 
     const char* id = properties->getId();
     if (id)
@@ -119,6 +127,11 @@ void Control::initialize(Theme::Style* style, Properties* properties)
 
         innerSpace = properties->getNextNamespace();
     }
+}
+
+void initialize(const char* id, Theme::Style* style, const Vector2& position, const Vector2& size)
+{
+
 }
 
 const char* Control::getID() const
@@ -631,6 +644,16 @@ void Control::setZIndex(int zIndex)
     }
 }
 
+int Control::getFocusIndex() const
+{
+    return _focusIndex;
+}
+
+void Control::setFocusIndex(int focusIndex)
+{
+    _focusIndex = focusIndex;
+}
+
 void Control::addListener(Control::Listener* listener, int eventFlags)
 {
     GP_ASSERT(listener);
@@ -684,26 +707,46 @@ void Control::addSpecificListener(Control::Listener* listener, Listener::EventTy
 bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!isEnabled())
-    {
         return false;
-    }
 
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
-        notifyListeners(Listener::PRESS);
-        return _consumeInputEvents;
+        // Controls that don't have an ACTIVE state go to the FOCUS state when pressed.
+        // (Other controls, such as buttons and sliders, become ACTIVE when pressed and go to the FOCUS state on release.)
+        // Labels are never any state other than NORMAL.
+        if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+        {
+            _contactIndex = (int) contactIndex;
+
+            notifyListeners(Listener::PRESS);
+
+            return _consumeInputEvents;
+        }
+        else
+        {
+            // If this control was in focus, it's not any more.
+            _state = NORMAL;
+            _contactIndex = INVALID_CONTACT_INDEX;
+        }
+        break;
             
     case Touch::TOUCH_RELEASE:
+
+        _contactIndex = INVALID_CONTACT_INDEX;
+
         // Always trigger Listener::RELEASE
         notifyListeners(Listener::RELEASE);
 
         // Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
-        if (x > 0 && x <= _bounds.width &&
-            y > 0 && y <= _bounds.height)
+        if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
         {
+            // Leave this control in the FOCUS state.
             notifyListeners(Listener::CLICK);
         }
+
         return _consumeInputEvents;
     }
 
@@ -955,7 +998,7 @@ bool Control::isDirty()
     return _dirty;
 }
 
-bool Control::isContainer()
+bool Control::isContainer() const
 {
     return false;
 }
@@ -997,6 +1040,11 @@ Theme::ThemeImage* Control::getImage(const char* id, State state)
         return NULL;
 
     return imageList->getImage(id);
+}
+
+const char* Control::getType() const
+{
+    return "control";
 }
 
 // Implementation of AnimationHandler
@@ -1086,7 +1134,6 @@ void Control::setAnimationPropertyValue(int propertyId, AnimationValue* value, f
         break;
     case ANIMATE_OPACITY:
         _dirty = true;
-    default:
         break;
     }
 }

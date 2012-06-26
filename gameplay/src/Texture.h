@@ -99,7 +99,9 @@ public:
         void setFilterMode(Filter minificationFilter, Filter magnificationFilter);
 
         /**
-         * Returns the texture for this sampler.
+         * Gets the texture for this sampler.
+         *
+         * @return The texture for this sampler.
          */
         Texture* getTexture() const;
 
