@@ -2,17 +2,17 @@ material box
 {
     technique
     {
-        pass 0
+        pass
         {
             // shaders
-            vertexShader = res/colored.vsh
-            fragmentShader = res/colored.fsh
+            vertexShader = res/colored.vert
+            fragmentShader = res/colored.frag
             
             // uniforms
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             u_ambientColor = 0.2, 0.2, 0.2
-            u_baseColor = 1.0, 1.0, 1.0, 1.0
+            u_diffuseColor = 1.0, 1.0, 1.0, 1.0
 
             // render state
             renderState
