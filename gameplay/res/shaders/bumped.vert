@@ -1,16 +1,27 @@
 #define LIGHTING
 #define BUMPED
 
+// Inputs
+attribute vec4 a_position;									// Vertex Position							(x, y, z, w)
+attribute vec3 a_normal;									// Vertex Normal							(x, y, z)
+attribute vec2 a_texCoord;									// Vertex Texture Coordinate				(u, v)
+attribute vec3 a_tangent;									// Vertex Tangent							(x, y, z)
+attribute vec3 a_binormal;									// Vertex Binormal/Bitangent				(x, y, z)
+#if defined(SKINNING)
+attribute vec4 a_blendWeights;								// Vertex blend weight, up to 4				(0, 1, 2, 3) 
+attribute vec4 a_blendIndices;								// Vertex blend index int u_matrixPalette	(0, 1, 2, 3)
+#endif
+
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;					// Matrix to transform a position to clip space
 uniform mat4 u_inverseTransposeWorldViewMatrix;				// Matrix to transform a normal to view space
 #if defined(SKINNING)
-uniform vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];		// Array of 4x3 matrices as an array of floats
+uniform vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];		// Array of 4x3 matrices
 #endif
 #if defined(SPECULAR)
 uniform mat4 u_worldViewMatrix;								// Matrix to tranform a position to view space
 uniform vec3 u_cameraPosition;                 				// Position of the camera in view space
-#endi
+#endif
 #if defined(TEXTURE_REPEAT)
 uniform vec2 u_textureRepeat;
 #endif
@@ -18,26 +29,22 @@ uniform vec2 u_textureRepeat;
 uniform vec2 u_textureOffset;
 #endif
 #if defined(POINT_LIGHT)
-uniform vec3 u_pointLightPosition;							// Position
+uniform vec3 u_pointLightPosition;							// Position of light
 uniform float u_pointLightRangeInverse;						// Inverse of light range
 #elif defined(SPOT_LIGHT)
-uniform vec3 u_spotLightPosition;							// Position
+uniform vec3 u_spotLightPosition;							// Position of light
 uniform float u_spotLightRangeInverse;						// Inverse of light range
-uniform vec3 u_spotLightDirection;							// Direction
+uniform vec3 u_spotLightDirection;							// Direction of light
 #else
-uniform vec3 u_lightDirection;								// Direction
+uniform vec3 u_lightDirection;								// Direction of light
 #endif
-
-// Inputs
-attribute vec4 a_position;									// Vertex Position              (x, y, z, w)
-attribute vec3 a_normal;									// Vertex Normal                (x, y, z)
-attribute vec2 a_texCoord;									// Vertex Texture Coordinate    (u, v)
-attribute vec3 a_tangent;									// Vertex Tangent               (x, y, z)
-attribute vec3 a_binormal;									// Vertex Binormal/Bitangent    (x, y, z)
 
 // Outputs
 varying vec3 v_normalVector;								// Normal vector in view space
-varying vec2 v_texCoord;									// Output Texture Coordinate     (u,v)
+varying vec2 v_texCoord;									// Texture Coordinate
+#if defined(SPECULAR)
+varying vec3 v_cameraDirection;								// Direction the camera is looking at in tangent space
+#endif
 // Lighting
 #if defined(POINT_LIGHT)
 varying vec3 v_vertexToPointLightDirection;					// Direction of point light w.r.t current vertex in tangent space
@@ -49,7 +56,7 @@ varying float v_spotLightAttenuation;						// Attenuation of spot light
 varying vec3 v_spotLightDirection;							// Direction of spot light in tangent space
 #include "lib/lighting-spot.vert"
 #else
-uniform vec3 u_lightDirection;								// Direction of light
+uniform vec3 v_lightDirection;								// Direction of light
 #include "lib/lighting-directional.vert"
 #endif
 
@@ -60,6 +67,7 @@ uniform vec3 u_lightDirection;								// Direction of light
 #include "lib/attributes.vert" 
 #endif
 
+// Vertex program
 void main()
 {
     // Get the position, normal, tangents and binormals.

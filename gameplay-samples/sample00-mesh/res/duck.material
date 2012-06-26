@@ -18,7 +18,7 @@ material duck
             u_specularExponent = 50
             
             // samplers
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = res/duck-diffuse.png
                 mipmap = true

@@ -82,14 +82,13 @@ void LongboardGame::buildGround()
     _ground = Model::create(groundMesh);
 
     // Create the ground material
-    //Material* groundMaterial = _ground->setMaterial("res/textured.vsh", "res/textured.fsh");
     Material* groundMaterial = _ground->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag", "TEXTURE_REPEAT;TEXTURE_OFFSET");
 
     // Set render state block
     groundMaterial->setStateBlock(_stateBlock);
 
     // Bind ground material parameters
-    Texture::Sampler* groundSampler = groundMaterial->getParameter("u_textureDiffuse")->setValue("res/asphalt.png", true);
+    Texture::Sampler* groundSampler = groundMaterial->getParameter("u_diffuseTexture")->setValue("res/asphalt.png", true);
     groundSampler->setWrapMode(Texture::REPEAT, Texture::REPEAT);
     groundMaterial->getParameter("u_worldViewProjectionMatrix")->setValue(&_groundWorldViewProjectionMatrix);
     groundMaterial->getParameter("u_textureRepeat")->setValue(Vector2(WORLD_SIZE / 2, WORLD_SIZE / 2));
@@ -116,7 +115,7 @@ void LongboardGame::buildBoard()
     boardMaterial->setStateBlock(_stateBlock);
 
     // Bind board material parameters
-    Texture::Sampler* boardSampler = boardMaterial->getParameter("u_textureDiffuse")->setValue("res/longboard.png", true);
+    Texture::Sampler* boardSampler = boardMaterial->getParameter("u_diffuseTexture")->setValue("res/longboard.png", true);
     boardSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
     boardMaterial->getParameter("u_worldViewProjectionMatrix")->setValue(&_boardWorldViewProjectionMatrix);
     boardMaterial->getParameter("u_textureRepeat")->setValue(Vector2::one());
@@ -143,7 +142,7 @@ void LongboardGame::buildWheels()
     wheelsMaterial->setStateBlock(_stateBlock);
 
     // Bind wheels material parameters
-    Texture::Sampler* wheelsSampler = wheelsMaterial->getParameter("u_textureDiffuse")->setValue("res/longboard_wheels.png", true);
+    Texture::Sampler* wheelsSampler = wheelsMaterial->getParameter("u_diffuseTexture")->setValue("res/longboard_wheels.png", true);
     wheelsSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
     wheelsMaterial->getParameter("u_worldViewProjectionMatrix")->setValue(&_wheelsWorldViewProjectionMatrix);
     wheelsMaterial->getParameter("u_textureRepeat")->setValue(Vector2::one());
@@ -173,7 +172,7 @@ void LongboardGame::buildGradient()
     gradientMaterial->setStateBlock(_stateBlock);
 
     // Bind material parameters
-    Texture::Sampler* gradientSampler = gradientMaterial->getParameter("u_textureDiffuse")->setValue("res/overlay_gradient.png", false);
+    Texture::Sampler* gradientSampler = gradientMaterial->getParameter("u_diffuseTexture")->setValue("res/overlay_gradient.png", false);
     gradientSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
 
     // Release objects that are owned by mesh instances

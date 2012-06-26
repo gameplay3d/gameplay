@@ -22,10 +22,11 @@ varying vec3 v_cameraDirection;                 // Camera direction
 #endif
 
 // Uniforms
-uniform sampler2D u_textureDiffuse;             // Diffuse map texture
-uniform vec3 u_lightDirection;					// Light direction
-uniform vec3 u_lightColor;                      // Light color
+uniform sampler2D u_diffuseTexture;             // Diffuse map texture
 uniform vec3 u_ambientColor;                    // Ambient color
+uniform vec3 u_lightColor;                      // Light color
+uniform vec3 u_lightDirection;					// Light direction
+
 #if defined(SPECULAR)
 uniform float u_specularExponent;				// Specular exponent
 #endif
@@ -50,7 +51,7 @@ uniform float u_spotLightOuterAngleCos;			// The soft outer part [0.0 - 1.0]
 void main()
 {
     // Sample the diffuse texture for base color
-    _baseColor = texture2D(u_textureDiffuse, v_texCoord);
+    _baseColor = texture2D(u_diffuseTexture, v_texCoord);
 
     // Light the pixel
     gl_FragColor.a = _baseColor.a;

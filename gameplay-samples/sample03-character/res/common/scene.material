@@ -9,7 +9,7 @@ material texturedUnlit
 
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 mipmap = true
                 wrapS = CLAMP
@@ -43,7 +43,7 @@ material texturedSpecular
             u_cameraPosition = CAMERA_VIEW_POSITION
             u_specularExponent = 50
 
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 mipmap = true
                 wrapS = CLAMP
@@ -73,7 +73,7 @@ material texturedTransparent
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 mipmap = true
                 wrapS = CLAMP
@@ -125,7 +125,7 @@ material boy : texturedTransparent
             u_matrixPalette = MATRIX_PALETTE
             u_modulateAlpha = 1.0
 
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @character
             }
@@ -139,7 +139,7 @@ material boyshadow : texturedTransparent
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @shadow
             }
@@ -153,7 +153,7 @@ material floortiles : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @floortiles
             }
@@ -167,7 +167,7 @@ material floor : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @floor
             }
@@ -181,7 +181,7 @@ material wallwest : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @wallwest
             }
@@ -195,7 +195,7 @@ material walleast : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @walleast
             }
@@ -209,7 +209,7 @@ material wallnorth : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @wallnorth
             }
@@ -223,7 +223,7 @@ material wallsouth : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @wallsouth
             }
@@ -237,7 +237,7 @@ material walloverhang : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @walloverhang
             }
@@ -251,7 +251,7 @@ material toybox : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @toybox
             }
@@ -265,7 +265,7 @@ material green : colored
     {
         pass
         {
-            u_baseColor = 0.65, 0.7, 0, 1
+            u_diffuseColor = 0.65, 0.7, 0, 1
         }
     }
 }
@@ -276,7 +276,7 @@ material lightblue : colored
     {
         pass
         {
-            u_baseColor = 0.38, 0.72, 0.85, 1
+            u_diffuseColor = 0.38, 0.72, 0.85, 1
         }
     }
 }
@@ -289,7 +289,7 @@ material basketball : texturedSpecular
         {
             u_specularExponent = 12
 
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @basketball
                 wrapS = REPEAT
@@ -305,7 +305,7 @@ material playtable : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @playtable
             }
@@ -319,7 +319,7 @@ material easel : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @easel
             }
@@ -333,7 +333,7 @@ material door : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @door
             }
@@ -347,7 +347,7 @@ material basketballnet : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @basketballnet
             }
@@ -361,7 +361,7 @@ material backboard : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @backboard
             }
@@ -375,7 +375,7 @@ material doorframe : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @doorframe
             }
@@ -389,7 +389,7 @@ material windowledge : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @windowledge
             }
@@ -403,7 +403,7 @@ material bookshelf : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @bookshelf
             }
@@ -417,7 +417,7 @@ material book : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @book
             }
@@ -431,7 +431,7 @@ material tabletop : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @tabletop
             }
@@ -445,7 +445,7 @@ material tableleg1 : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @tableleg1
             }
@@ -459,7 +459,7 @@ material tableleg2 : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @tableleg2
             }
@@ -473,7 +473,7 @@ material tableleg3 : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @tableleg3
             }
@@ -487,7 +487,7 @@ material tableleg4 : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @tableleg4
             }
@@ -501,7 +501,7 @@ material storageorganizer : texturedUnlit
     {
         pass
         {
-            sampler u_textureDiffuse
+            sampler u_diffuseTexture
             {
                 path = @storageorganizer
             }
