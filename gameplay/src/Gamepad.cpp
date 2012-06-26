@@ -51,32 +51,22 @@ void Gamepad::getGamepadControls(Form* form)
         Control* control = *itr;
         GP_ASSERT(control);
 
-        if (std::strcmp("container", control->getType()) == 0)
+        if (control->isContainer())
         {
             getGamepadControls((Form*) control);
         }
         else if (std::strcmp("joystick", control->getType()) == 0)
         {
             control->addListener(this, Control::Listener::PRESS | Control::Listener::VALUE_CHANGED | Control::Listener::RELEASE);
-            Joystick* joystick = (Joystick*) control;
-            
-            if (!joystick->_gamepadJoystickIndex)
-                joystick->_gamepadJoystickIndex = new int[1];
-            
-            *joystick->_gamepadJoystickIndex = _joystickCount;
+            control->_data = (void*) new GamepadData(GamepadData::JOYSTICK, _joystickCount);
             _joystickCount++;
         }
         else if (std::strcmp("button", control->getType()) == 0)
         {
             control->addListener(this, Control::Listener::PRESS | Control::Listener::RELEASE);
-            Button* button = (Button*) control;
-            
-            if (!button->_gamepadButtonIndex)
-                button->_gamepadButtonIndex = new int[1];
-
-            *button->_gamepadButtonIndex = _buttonCount;
+            control->_data = (void*) new GamepadData(GamepadData::BUTTON, _buttonCount);
             _buttonCount++;
-        }
+        }   
     }
 }
 
@@ -118,36 +108,41 @@ void Gamepad::render()
 
 void Gamepad::controlEvent(Control* control, Control::Listener::EventType evt)
 {
-    if (_gamepadForm && _gamepadForm->isEnabled())
+    if (_gamepadForm && _gamepadForm->isEnabled() && control->_data)
     {
-        if (std::strcmp("joystick", control->getType()) == 0)
+        switch(((GamepadData*)control->_data)->_controlType)
         {
-            int joystickIndex = *(((Joystick*) control)->_gamepadJoystickIndex);
-            switch(evt)
+            case GamepadData::JOYSTICK:
             {
-                case Control::Listener::PRESS:
-                case Control::Listener::VALUE_CHANGED:
-                    _joystickValues[joystickIndex]->set(((Joystick*)control)->getValue());
-                    break;
-                case Control::Listener::RELEASE:
-                    _joystickValues[joystickIndex]->set(0.0f, 0.0f);
-                    break;
+                int joystickIndex = ((GamepadData*)control->_data)->_controlIndex;
+                switch (evt)
+                {
+                    case Control::Listener::PRESS:
+                    case Control::Listener::VALUE_CHANGED:
+                        _joystickValues[joystickIndex]->set(((Joystick*)control)->getValue());
+                        break;
+                    case Control::Listener::RELEASE:
+                        _joystickValues[joystickIndex]->set(0.0f, 0.0f);
+                        break;
+                }
+                Game::getInstance()->gamepadEvent(JOYSTICK_EVENT, this, joystickIndex);
             }
-            Game::getInstance()->gamepadEvent(JOYSTICK_EVENT, this, joystickIndex);
-        }
-        else if (std::strcmp("button", control->getType()) == 0)
-        {
-            int buttonIndex = *(((Button*) control)->_gamepadButtonIndex);
-            switch(evt)
+            break;
+            case GamepadData::BUTTON:
             {
-                case Control::Listener::PRESS:
-                    *_buttonStates[buttonIndex] = BUTTON_PRESSED;
-                    break;
-                case Control::Listener::RELEASE:
-                    *_buttonStates[buttonIndex] = BUTTON_RELEASED;
-                    break;
+                int buttonIndex = ((GamepadData*)control->_data)->_controlIndex;
+                switch(evt)
+                {
+                    case Control::Listener::PRESS:
+                        *_buttonStates[buttonIndex] = BUTTON_PRESSED;
+                        break;
+                    case Control::Listener::RELEASE:
+                        *_buttonStates[buttonIndex] = BUTTON_RELEASED;
+                        break;
+                }
+                Game::getInstance()->gamepadEvent(BUTTON_EVENT, this, buttonIndex);
             }
-            Game::getInstance()->gamepadEvent(BUTTON_EVENT, this, buttonIndex);
+            break;
         }
     }
 }
@@ -176,6 +171,11 @@ const Vector2& Gamepad::getJoystickValue(unsigned int joystickId) const
 bool Gamepad::isVirtual() const
 {
     return (_gamepadForm && _gamepadForm->isEnabled());
+}
+
+Form* Gamepad::getForm() const
+{
+    return _gamepadForm;
 }
 
 }
