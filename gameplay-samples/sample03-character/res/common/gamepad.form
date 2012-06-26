@@ -1,0 +1,24 @@
+form gamepadForm
+{
+	theme = res/common/gamepad.theme
+    style = none
+    layout = LAYOUT_ABSOLUTE
+	position = 0, 0
+    autoWidth = true
+    autoHeight = true
+
+    joystick joystick0
+	{
+		style = joystickStyle
+		size = 200, 200
+	    alignment = ALIGN_BOTTOM_LEFT
+		radius = 64
+    }
+
+    button button0
+    {
+        style = buttonStyle
+        size = 128, 128
+        alignment = ALIGN_BOTTOM_RIGHT
+    }
+}
