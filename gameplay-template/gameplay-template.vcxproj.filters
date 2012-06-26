@@ -18,10 +18,10 @@
     <None Include="res\box.material">
       <Filter>res</Filter>
     </None>
-    <None Include="res\colored.fsh">
+    <None Include="res\colored.frag">
       <Filter>res</Filter>
     </None>
-    <None Include="res\colored.vsh">
+    <None Include="res\colored.vert">
       <Filter>res</Filter>
     </None>
   </ItemGroup>
