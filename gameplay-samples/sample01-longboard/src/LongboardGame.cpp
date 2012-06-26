@@ -83,7 +83,7 @@ void LongboardGame::buildGround()
 
     // Create the ground material
     //Material* groundMaterial = _ground->setMaterial("res/textured.vsh", "res/textured.fsh");
-    Material* groundMaterial = _ground->setMaterial("res/shaders/textured-unlit.vsh", "res/shaders/textured-unlit.fsh", "TEXTURE_REPEAT;TEXTURE_OFFSET");
+    Material* groundMaterial = _ground->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag", "TEXTURE_REPEAT;TEXTURE_OFFSET");
 
     // Set render state block
     groundMaterial->setStateBlock(_stateBlock);
@@ -110,7 +110,7 @@ void LongboardGame::buildBoard()
     _board = Model::create(boardMesh);
 
     // Create the board material
-    Material* boardMaterial = _board->setMaterial("res/shaders/textured-unlit.vsh", "res/shaders/textured-unlit.fsh", "TEXTURE_REPEAT;TEXTURE_OFFSET");
+    Material* boardMaterial = _board->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag", "TEXTURE_REPEAT;TEXTURE_OFFSET");
 
     // Set render state block
     boardMaterial->setStateBlock(_stateBlock);
@@ -137,7 +137,7 @@ void LongboardGame::buildWheels()
     _wheels = Model::create(wheelsMesh);
 
     // Create the wheels material
-    Material* wheelsMaterial = _wheels->setMaterial("res/shaders/textured-unlit.vsh", "res/shaders/textured-unlit.fsh", "TEXTURE_REPEAT;TEXTURE_OFFSET");
+    Material* wheelsMaterial = _wheels->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag", "TEXTURE_REPEAT;TEXTURE_OFFSET");
 
     // Set render state block
     wheelsMaterial->setStateBlock(_stateBlock);
@@ -167,7 +167,7 @@ void LongboardGame::buildGradient()
     _gradient = Model::create(gradientMesh);
 
     // Create the gradient material.
-    Material* gradientMaterial = _gradient->setMaterial("res/shaders/textured-unlit.vsh", "res/shaders/textured-unlit.fsh");
+    Material* gradientMaterial = _gradient->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag");
 
     // Set render state block
     gradientMaterial->setStateBlock(_stateBlock);
