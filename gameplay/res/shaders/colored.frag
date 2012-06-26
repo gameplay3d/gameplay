@@ -24,9 +24,9 @@ varying vec3 v_cameraDirection;                 // Camera direction
 
 // Uniforms
 uniform vec4 u_diffuseColor;               		// Diffuse color
-uniform vec3 u_lightDirection;					// Light direction
-uniform vec3 u_lightColor;                      // Light color
 uniform vec3 u_ambientColor;                    // Ambient color
+uniform vec3 u_lightColor;                      // Light color
+uniform vec3 u_lightDirection;					// Light direction
 #if defined(SPECULAR)
 uniform float u_specularExponent;				// Specular exponent
 #endif
