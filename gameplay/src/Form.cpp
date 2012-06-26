@@ -290,7 +290,6 @@ void Form::setAutoHeight(bool autoHeight)
 void Form::setQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4)
 {
     Mesh* mesh = Mesh::createQuad(p1, p2, p3, p4);
-
     initializeQuad(mesh);
     SAFE_RELEASE(mesh);
 }
@@ -536,7 +535,7 @@ void Form::initializeQuad(Mesh* mesh)
     _quad = Model::create(mesh);
 
     // Create the material.
-    Material* material = _quad->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+    Material* material = _quad->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag");
     GP_ASSERT(material);
 
     // Set the common render state block for the material.
@@ -555,7 +554,6 @@ void Form::initializeQuad(Mesh* mesh)
     GP_ASSERT(sampler);
     sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
     material->getParameter("u_diffuseTexture")->setValue(sampler);
-    material->getParameter("u_diffuseColor")->setValue(Vector4::one());
 
     SAFE_RELEASE(sampler);
 }

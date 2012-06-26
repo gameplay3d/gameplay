@@ -9,7 +9,7 @@
 #define SPRITE_BATCH_GROW_FACTOR 2.0f
 
 // Macro for adding a sprite to the batch
-#define ADD_SPRITE_VERTEX(vtx, vx, vy, vz, vu, vv, vr, vg, vb, va) \
+#define SPRITE_ADD_VERTEX(vtx, vx, vy, vz, vu, vv, vr, vg, vb, va) \
     vtx.x = vx; vtx.y = vy; vtx.z = vz; \
     vtx.u = vu; vtx.v = vv; \
     vtx.r = vr; vtx.g = vg; vtx.b = vb; vtx.a = va
@@ -45,7 +45,6 @@
 namespace gameplay
 {
 
-// Shared sprite effects
 static Effect* __spriteEffect = NULL;
 
 SpriteBatch::SpriteBatch()
@@ -69,7 +68,9 @@ SpriteBatch::~SpriteBatch()
             __spriteEffect = NULL;
         }
         else
+        {
             __spriteEffect->release();
+        }
     }
 }
 
@@ -97,7 +98,6 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
                 GP_ERROR("Unable to load sprite effect.");
                 return NULL;
             }
-
             effect = __spriteEffect;
         }
         else
@@ -242,10 +242,10 @@ void SpriteBatch::draw(float x, float y, float z, float width, float height, flo
 
     // Write sprite vertex data.
     static SpriteVertex v[4];
-    ADD_SPRITE_VERTEX(v[0], downLeft.x, downLeft.y, z, u1, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[1], upLeft.x, upLeft.y, z, u1, v2, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[2], downRight.x, downRight.y, z, u2, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[3], upRight.x, upRight.y, z, u2, v2, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(v[0], downLeft.x, downLeft.y, z, u1, v1, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(v[1], upLeft.x, upLeft.y, z, u1, v2, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(v[2], downRight.x, downRight.y, z, u2, v1, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(v[3], upRight.x, upRight.y, z, u2, v2, color.x, color.y, color.z, color.w);
     
     static unsigned short indices[4] = { 0, 1, 2, 3 };
 
@@ -308,10 +308,10 @@ void SpriteBatch::draw(const Vector3& position, const Vector3& right, const Vect
 
     // Add the sprite vertex data to the batch.
     static SpriteVertex v[4];
-    ADD_SPRITE_VERTEX(v[0], p0.x, p0.y, p0.z, u1, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[1], p1.x, p1.y, p1.z, u2, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[2], p2.x, p2.y, p2.z, u1, v2, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[3], p3.x, p3.y, p3.z, u2, v2, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(v[0], p0.x, p0.y, p0.z, u1, v1, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(v[1], p1.x, p1.y, p1.z, u2, v1, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(v[2], p2.x, p2.y, p2.z, u1, v2, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(v[3], p3.x, p3.y, p3.z, u2, v2, color.x, color.y, color.z, color.w);
     
     static const unsigned short indices[4] = { 0, 1, 2, 3 };
     _batch->add(v, 4, const_cast<unsigned short*>(indices), 4);
@@ -335,10 +335,10 @@ void SpriteBatch::addSprite(float x, float y, float width, float height, float u
 
     const float x2 = x + width;
     const float y2 = y + height;
-    ADD_SPRITE_VERTEX(vertices[0], x, y, 0, u1, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(vertices[1], x, y2, 0, u1, v2, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(vertices[2], x2, y, 0, u2, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(vertices[3], x2, y2, 0, u2, v2, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(vertices[0], x, y, 0, u1, v1, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(vertices[1], x, y2, 0, u1, v2, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(vertices[2], x2, y, 0, u2, v1, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(vertices[3], x2, y2, 0, u2, v2, color.x, color.y, color.z, color.w);
 }
 
 void SpriteBatch::addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip, SpriteBatch::SpriteVertex* vertices)
@@ -350,10 +350,10 @@ void SpriteBatch::addSprite(float x, float y, float width, float height, float u
     {
         const float x2 = x + width;
         const float y2 = y + height;
-        ADD_SPRITE_VERTEX(vertices[0], x, y, 0, u1, v1, color.x, color.y, color.z, color.w);
-        ADD_SPRITE_VERTEX(vertices[1], x, y2, 0, u1, v2, color.x, color.y, color.z, color.w);
-        ADD_SPRITE_VERTEX(vertices[2], x2, y, 0, u2, v1, color.x, color.y, color.z, color.w);
-        ADD_SPRITE_VERTEX(vertices[3], x2, y2, 0, u2, v2, color.x, color.y, color.z, color.w);
+        SPRITE_ADD_VERTEX(vertices[0], x, y, 0, u1, v1, color.x, color.y, color.z, color.w);
+        SPRITE_ADD_VERTEX(vertices[1], x, y2, 0, u1, v2, color.x, color.y, color.z, color.w);
+        SPRITE_ADD_VERTEX(vertices[2], x2, y, 0, u2, v1, color.x, color.y, color.z, color.w);
+        SPRITE_ADD_VERTEX(vertices[3], x2, y2, 0, u2, v2, color.x, color.y, color.z, color.w);
     }
 }
 
@@ -378,10 +378,10 @@ void SpriteBatch::draw(float x, float y, float z, float width, float height, flo
     const float x2 = x + width;
     const float y2 = y + height;
     static SpriteVertex v[4];
-    ADD_SPRITE_VERTEX(v[0], x, y, z, u1, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[1], x, y2, z, u1, v2, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[2], x2, y, z, u2, v1, color.x, color.y, color.z, color.w);
-    ADD_SPRITE_VERTEX(v[3], x2, y2, z, u2, v2, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(v[0], x, y, z, u1, v1, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(v[1], x, y2, z, u1, v2, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(v[2], x2, y, z, u2, v1, color.x, color.y, color.z, color.w);
+    SPRITE_ADD_VERTEX(v[3], x2, y2, z, u2, v2, color.x, color.y, color.z, color.w);
 
     static unsigned short indices[4] = { 0, 1, 2, 3 };
 
