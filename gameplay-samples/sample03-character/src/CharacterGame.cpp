@@ -192,7 +192,6 @@ void CharacterGame::update(float elapsedTime)
         else 
             _currentDirection.x = 0;
 
-
         _currentDirection.normalize();
         if ((_keyFlags & RUNNING) == 0)
             _currentDirection *= 0.5f;

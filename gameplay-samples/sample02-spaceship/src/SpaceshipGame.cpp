@@ -123,28 +123,28 @@ void SpaceshipGame::initializeSpaceship()
     // Part 0
     _shipNode = _scene->findNode("pSpaceShip");
     material = _shipNode->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR", 0);
-    material->getParameter("u_baseColor")->setValue(Vector4(0.53544f, 0.53544f, 0.53544f, 1.0f));
+    material->getParameter("u_diffuseColor")->setValue(Vector4(0.53544f, 0.53544f, 0.53544f, 1.0f));
     initializeMaterial(material, true, true);
     // Part 1
     material = _shipNode->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR", 1);
-    material->getParameter("u_baseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+    material->getParameter("u_diffuseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
     _shipSpecularParameter = material->getParameter("u_specularExponent");
     initializeMaterial(material, true, true);
     // Part 2
     material = _shipNode->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR", 2);
-    material->getParameter("u_baseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
+    material->getParameter("u_diffuseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
     initializeMaterial(material, true, true);
 
     // Setup spaceship propulsion model
     _propulsionNode = _scene->findNode("pPropulsion");
     material = _propulsionNode->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR");
-    material->getParameter("u_baseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+    material->getParameter("u_diffuseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
     initializeMaterial(material, true, true);
 
     // Glow effect node
     _glowNode = _scene->findNode("pGlow");
     material = _glowNode->getModel()->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag", "MODULATE_COLOR");
-    material->getParameter("u_textureDiffuse")->setValue("res/propulsion_glow.png", true);
+    material->getParameter("u_diffuseTexture")->setValue("res/propulsion_glow.png", true);
     _glowDiffuseParameter = material->getParameter("u_modulateColor");
     initializeMaterial(material, false, false);
 
@@ -167,7 +167,7 @@ void SpaceshipGame::initializeEnvironment()
     {
         Node* pGround = nodes[i];
         material = pGround->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR");
-        material->getParameter("u_baseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
+        material->getParameter("u_diffuseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
         initializeMaterial(material, true, true);
     }
 
@@ -178,7 +178,7 @@ void SpaceshipGame::initializeEnvironment()
     {
         Node* pRoof = nodes[i];
         material = pRoof->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR");
-        material->getParameter("u_baseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
+        material->getParameter("u_diffuseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
         initializeMaterial(material, true, true);
     }
 
@@ -186,7 +186,7 @@ void SpaceshipGame::initializeEnvironment()
     nodes.clear();
     Node* pBackground = _scene->findNode("pBackground");
     material = pBackground->getModel()->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag");
-    material->getParameter("u_textureDiffuse")->setValue("res/background.png", true);
+    material->getParameter("u_diffuseTexture")->setValue("res/background.png", true);
     initializeMaterial(material, true, false);
 }
 
