@@ -72,7 +72,7 @@ inline void Game::displayKeyboard(bool display)
     Platform::displayKeyboard(display);
 }
 
-inline Gamepad* Game::getGamepad(unsigned int playerIndex)
+inline Gamepad* Game::getGamepad(unsigned int playerIndex) const
 {
     GP_ASSERT(playerIndex < _gamepadCount);
 
@@ -80,6 +80,11 @@ inline Gamepad* Game::getGamepad(unsigned int playerIndex)
         return _gamepads[playerIndex];
     else
         return NULL;
+}
+
+inline unsigned int Game::getGamepadCount() const
+{
+    return _gamepadCount;
 }
 
 }

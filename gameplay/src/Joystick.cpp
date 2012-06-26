@@ -4,7 +4,7 @@
 namespace gameplay
 {
 
-Joystick::Joystick() : _absolute(true), _gamepadJoystickIndex(NULL)
+Joystick::Joystick() : _absolute(true)
 {
 }
 
@@ -14,8 +14,6 @@ Joystick::Joystick(const Joystick& copy)
 
 Joystick::~Joystick()
 {
-    if (_gamepadJoystickIndex)
-        SAFE_DELETE(_gamepadJoystickIndex);
 }
 
 Joystick* Joystick::create(const char* id, Theme::Style* style)

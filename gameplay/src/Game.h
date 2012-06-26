@@ -272,8 +272,8 @@ public:
     /**
      * Gamepad callback on gamepad events.
      *
-     * @param evt The gamepad event that occured.
-     * @param gamepad the gamepad the event occured on
+     * @param evt The gamepad event that occurred.
+     * @param gamepad the gamepad the event occurred on
      * @param index The joystick or button index that triggered the event.
      */
     virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int index);
@@ -323,7 +323,14 @@ public:
      *
      * @param playerIndex The player index to get the gamepad for (0 <= playerIndex <= 3) 
      */
-    inline Gamepad* getGamepad(unsigned int playerIndex = 0);
+    inline Gamepad* getGamepad(unsigned int playerIndex = 0) const;
+
+    /**
+     * Gets the number of gamepad's connected to the game.
+     * 
+     * @return the number of gamepad's connected to the game.
+     */
+    inline unsigned int getGamepadCount() const;
 
 protected:
 

@@ -999,6 +999,11 @@ protected:
      */
     int _focusIndex;
 
+    /**
+     * Internal pointer to some data binding.
+     */
+    void* _data;
+
 private:
 
     /*
