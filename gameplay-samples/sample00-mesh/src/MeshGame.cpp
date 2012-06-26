@@ -144,7 +144,7 @@ Model* MeshGame::createGridModel(unsigned int lineCount)
     // There needs to be an odd number of lines
     lineCount |= 1;
     const unsigned int pointCount = lineCount * 4;
-    const unsigned int verticesSize = pointCount * (3 + 3);
+    const unsigned int verticesSize = pointCount * (3 + 3);  // (3 (position(xyz) + 3 color(rgb))
 
     std::vector<float> vertices;
     vertices.resize(verticesSize);
@@ -219,5 +219,6 @@ Model* MeshGame::createGridModel(unsigned int lineCount)
 
     Model* model = Model::create(mesh);
     model->setMaterial("res/grid.material");
+    SAFE_RELEASE(mesh);
     return model;
 }

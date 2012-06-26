@@ -5,8 +5,9 @@ material duck
         pass 0
         {
             // shaders
-            vertexShader = res/shaders/diffuse-specular.vsh
-            fragmentShader = res/shaders/diffuse-specular.fsh
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+            defines = SPECULAR
             
             // uniforms
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
@@ -17,7 +18,7 @@ material duck
             u_specularExponent = 50
             
             // samplers
-            sampler u_diffuseTexture
+            sampler u_textureDiffuse
             {
                 path = res/duck-diffuse.png
                 mipmap = true

@@ -156,17 +156,17 @@
     <None Include="game.dxt.config" />
     <None Include="icon.png" />
     <None Include="res\common\boy.animation" />
+    <None Include="res\common\gamepad.form" />
+    <None Include="res\common\gamepad.theme" />
     <None Include="res\common\scene.material" />
     <None Include="res\common\scene.physics" />
     <None Include="res\common\scene.scene" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CharacterGame.cpp" />
-    <ClCompile Include="src\Gamepad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CharacterGame.h" />
-    <ClInclude Include="src\Gamepad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

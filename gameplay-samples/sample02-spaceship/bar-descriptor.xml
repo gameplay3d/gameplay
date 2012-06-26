@@ -60,12 +60,13 @@
     <asset path="res/background.png">res/background.png</asset>
     <asset path="res/propulsion_glow.png">res/propulsion_glow.png</asset>
     <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
-    <asset path="../../gameplay/res/shaders/colored-specular.fsh">res/shaders/colored-specular.fsh</asset>
-    <asset path="../../gameplay/res/shaders/colored-specular.vsh">res/shaders/colored-specular.vsh</asset>
-    <asset path="../../gameplay/res/shaders/diffuse.fsh">res/shaders/diffuse.fsh</asset>
-    <asset path="../../gameplay/res/shaders/diffuse.vsh">res/shaders/diffuse.vsh</asset>
-    <asset path="../../gameplay/res/shaders/textured.fsh">res/shaders/textured.fsh</asset>
-    <asset path="../../gameplay/res/shaders/textured.vsh">res/shaders/textured.vsh</asset>
+    <asset path="../../gameplay/res/shaders/colored.frag">res/shaders/colored.frag</asset>
+    <asset path="../../gameplay/res/shaders/colored.vert">res/shaders/colored.vert</asset>
+    <asset path="../../gameplay/res/shaders/textured.frag">res/shaders/textured.frag</asset>
+    <asset path="../../gameplay/res/shaders/textured.vert">res/shaders/textured.vert</asset>
+    <asset path="../../gameplay/res/shaders/textured-unlit.frag">res/shaders/textured-unlit.frag</asset>
+    <asset path="../../gameplay/res/shaders/textured-unlit.vert">res/shaders/textured-unlit.vert</asset>
+    <asset path="../../gameplay/res/shaders/lib">res/shaders/lib</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.1898582830" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

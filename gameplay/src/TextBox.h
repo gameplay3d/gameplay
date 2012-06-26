@@ -40,6 +40,16 @@ class TextBox : public Label
 public:
 
     /**
+     * Create a new text box control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new text box.
+     */
+    static TextBox* create(const char* id, Theme::Style* style);
+
+    /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
      * E.g. To listen to touch-press and touch-release events,
@@ -57,6 +67,11 @@ public:
      * @return The last key pressed within this text box.
      */
     int getLastKeypress();
+
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
 
 protected:
 

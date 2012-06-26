@@ -55,9 +55,20 @@ public:
      * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
      * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
      * 
-     * @param url The URL pointing to the Properties object defining the animation data. 
+     * @param url The URL pointing to the Properties object defining the form. 
      */
     static Form* create(const char* url);
+
+    /**
+     * Create a new Form.
+     *
+     * @param id The Form's ID.
+     * @param style The Form's style.
+     * @param layoutType The form's layout type.
+     *
+     * @return The new Form.
+     */
+    static Form* create(const char* id, Theme::Style* style, Layout::Type layoutType = Layout::LAYOUT_ABSOLUTE);
 
     /**
      * Get a form from its ID.
@@ -67,6 +78,8 @@ public:
      * @return A form with the given ID, or null if one was not found.
      */
     static Form* getForm(const char* id);
+
+    Theme* getTheme() const;
 
     /**
      * Set the desired size of this form.
@@ -142,6 +155,11 @@ public:
      * Draws this form.
      */
     void draw();
+
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
 
 private:
     
