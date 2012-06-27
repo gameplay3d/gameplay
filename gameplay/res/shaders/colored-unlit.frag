@@ -7,7 +7,7 @@ precision highp float;
 varying vec3 v_color;						// Input Vertex color ( r g b )
 #endif
 
-uniform vec4 u_baseColor;               	// Base color
+uniform vec4 u_diffuseColor;               	// Diffuse color
 
 // Uniforms
 #if defined(MODULATE_COLOR)
@@ -24,7 +24,7 @@ void main()
     #if defined(VERTEX_COLOR)
 	gl_FragColor.rgb = v_color;
 	#else
-	gl_FragColor = u_baseColor;
+	gl_FragColor = u_diffuseColor;
     #endif
 	
 	// Global color modulation

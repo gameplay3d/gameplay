@@ -8,7 +8,7 @@ float lerpstep( float lower, float upper, float s)
 vec3 getLitPixel()
 {
     // Fetch normals from the normal map.
-    vec3 normalVector = normalize(texture2D(u_textureNormal, v_texCoord).rgb * 2.0 - 1.0);
+    vec3 normalVector = normalize(texture2D(u_normalmapTexture, v_texCoord).rgb * 2.0 - 1.0);
     vec3 spotLightDirection = normalize(v_spotLightDirection);
     vec3 vertexToSpotLightDirection = normalize(v_vertexToSpotLightDirection);
     

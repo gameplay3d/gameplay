@@ -240,9 +240,7 @@ void Form::setSize(float width, float height)
         Rectangle prevViewport = game->getViewport();
         game->setViewport(Rectangle(0, 0, width, height));
         _theme->setProjectionMatrix(_projectionMatrix);
-        GL_ASSERT( glClearColor(0, 0, 0, 0) );
-        GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
-        GL_ASSERT( glClearColor(0, 0, 0, 1) );
+        game->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0, 0);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
         FrameBuffer::bindDefault();
         game->setViewport(prevViewport);
@@ -290,7 +288,6 @@ void Form::setAutoHeight(bool autoHeight)
 void Form::setQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4)
 {
     Mesh* mesh = Mesh::createQuad(p1, p2, p3, p4);
-
     initializeQuad(mesh);
     SAFE_RELEASE(mesh);
 }
@@ -536,7 +533,7 @@ void Form::initializeQuad(Mesh* mesh)
     _quad = Model::create(mesh);
 
     // Create the material.
-    Material* material = _quad->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
+    Material* material = _quad->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag");
     GP_ASSERT(material);
 
     // Set the common render state block for the material.
@@ -545,6 +542,7 @@ void Form::initializeQuad(Mesh* mesh)
     RenderState::StateBlock* stateBlock = _theme->getSpriteBatch()->getStateBlock();
     GP_ASSERT(stateBlock);
     stateBlock->setDepthWrite(true);
+    stateBlock->setDepthTest(false);
     material->setStateBlock(stateBlock);
 
     // Bind the WorldViewProjection matrix.
@@ -555,7 +553,6 @@ void Form::initializeQuad(Mesh* mesh)
     GP_ASSERT(sampler);
     sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
     material->getParameter("u_diffuseTexture")->setValue(sampler);
-    material->getParameter("u_diffuseColor")->setValue(Vector4::one());
 
     SAFE_RELEASE(sampler);
 }

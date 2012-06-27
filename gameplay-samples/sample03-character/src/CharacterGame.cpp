@@ -67,9 +67,9 @@ void CharacterGame::initializeMaterial(Scene* scene, Node* node, Material* mater
     if (node->isDynamic())
     {
         Node* lightNode = scene->findNode("sun");
-        material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
-        material->getParameter("u_lightColor")->bindValue(lightNode->getLight(), &Light::getColor);
         material->getParameter("u_ambientColor")->bindValue(scene, &Scene::getAmbientColor);
+        material->getParameter("u_lightColor")->bindValue(lightNode->getLight(), &Light::getColor);
+        material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
     }
 }
 
@@ -88,7 +88,7 @@ void CharacterGame::initializeCharacter()
     _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_modulateAlpha");
 
     // Load character animations.
-    _animation = node->getAnimation("movements");
+    _animation = node->getAnimation("animations");
     _animation->createClips("res/common/boy.animation");
     _jumpClip = _animation->getClip("jump");
     _jumpClip->addListener(this, _jumpClip->getDuration() - 250);
@@ -191,7 +191,6 @@ void CharacterGame::update(float elapsedTime)
             _currentDirection.x = -1;
         else 
             _currentDirection.x = 0;
-
 
         _currentDirection.normalize();
         if ((_keyFlags & RUNNING) == 0)

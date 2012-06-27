@@ -23,10 +23,10 @@ varying vec3 v_cameraDirection;                 // Camera direction
 #endif
 
 // Uniforms
-uniform vec4 u_baseColor;               		// Base color
-uniform vec3 u_lightDirection;					// Light direction
-uniform vec3 u_lightColor;                      // Light color
+uniform vec4 u_diffuseColor;               		// Diffuse color
 uniform vec3 u_ambientColor;                    // Ambient color
+uniform vec3 u_lightColor;                      // Light color
+uniform vec3 u_lightDirection;					// Light direction
 #if defined(SPECULAR)
 uniform float u_specularExponent;				// Specular exponent
 #endif
@@ -54,7 +54,7 @@ void main()
     #if defined(VERTEX_COLOR)
 	_baseColor.rgb = v_color;
 	#else
-	_baseColor = u_baseColor;
+	_baseColor = u_diffuseColor;
 	#endif
 
     // Light the pixel
