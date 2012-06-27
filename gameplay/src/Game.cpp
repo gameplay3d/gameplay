@@ -20,7 +20,8 @@ Game::Game()
     : _initialized(false), _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
-      _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL)
+      _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL), 
+      _gamepadCount(0), _gamepads(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
@@ -120,7 +121,7 @@ bool Game::startup()
     setViewport(Rectangle(0.0f, 0.0f, (float)_width, (float)_height));
     RenderState::initialize();
     FrameBuffer::initialize();
-
+    
     _animationController = new AnimationController();
     _animationController->initialize();
 
@@ -130,6 +131,8 @@ bool Game::startup()
     _physicsController = new PhysicsController();
     _physicsController->initialize();
 
+    loadGamepad();
+    
     _state = RUNNING;
 
     return true;
@@ -146,6 +149,15 @@ void Game::shutdown()
 
         Platform::signalShutdown();
         finalize();
+
+        if (_gamepads)
+        {
+            for (unsigned int i = 0; i < _gamepadCount; i++)
+            {
+                SAFE_DELETE(_gamepads[i]);
+            }
+            SAFE_DELETE_ARRAY(_gamepads);
+        }
 
         _animationController->finalize();
         SAFE_DELETE(_animationController);
@@ -232,6 +244,12 @@ void Game::frame()
         // Update the physics.
         _physicsController->update(elapsedTime);
 
+        if (_gamepads)
+        {
+            for (unsigned int i = 0; i < _gamepadCount; i++)
+                _gamepads[i]->update();
+        }
+
         // Application Update.
         update(elapsedTime);
 
@@ -240,6 +258,12 @@ void Game::frame()
 
         // Graphics Rendering.
         render(elapsedTime);
+        
+        if (_gamepads)
+        {
+            for (unsigned int i = 0; i < _gamepadCount; i++)
+                _gamepads[i]->render();
+        }
 
         // Update FPS.
         ++_frameCount;
@@ -330,6 +354,10 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 {
 }
 
+void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int index)
+{
+}
+
 void Game::schedule(float timeOffset, TimeListener* timeListener, void* cookie)
 {
     GP_ASSERT(_timeEvents);
@@ -409,6 +437,52 @@ bool Game::TimeEvent::operator<(const TimeEvent& v) const
 {
     // The first element of std::priority_queue is the greatest.
     return time > v.time;
+}
+
+Gamepad* Game::createGamepad(const char* gamepadFormPath)
+{
+    GP_ASSERT(gamepadFormPath);
+
+    Gamepad* gamepad = new Gamepad(gamepadFormPath);
+    GP_ASSERT(gamepad);
+
+    if (!_gamepads)
+    {
+        _gamepadCount++;
+        _gamepads = new Gamepad*[_gamepadCount];
+        _gamepads[0] = gamepad;
+    }
+    else
+    {
+        int oldSize = _gamepadCount;
+        _gamepadCount++;
+        Gamepad** tempGamepads = new Gamepad*[_gamepadCount];
+        memcpy(tempGamepads, _gamepads, sizeof(Gamepad*) * oldSize);
+        tempGamepads[oldSize] = gamepad;
+        
+        SAFE_DELETE_ARRAY(_gamepads);
+        _gamepads = tempGamepads;
+    }
+
+    return gamepad;
+}
+
+void Game::loadGamepad()
+{
+    if (_properties)
+    {
+        // Check if there is a virtual keyboard included in the .config file.
+        // If there is, try to create it and assign it to "player one".
+        Properties* gamepadProperties = _properties->getNamespace("gamepad", true);
+        if (gamepadProperties && gamepadProperties->exists("form"))
+        {
+            const char* gamepadFormPath = gamepadProperties->getString("form");
+            GP_ASSERT(gamepadFormPath);
+
+            Gamepad* gamepad = createGamepad(gamepadFormPath);
+            GP_ASSERT(gamepad);
+        }
+    }
 }
 
 }

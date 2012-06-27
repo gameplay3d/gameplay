@@ -763,6 +763,11 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     *roll = __roll;
 }
 
+bool Platform::hasMouse()
+{
+    return true;
+}
+
 void Platform::setMouseCapture(bool captured)
 {
     if (captured != __mouseCaptured)
@@ -785,11 +790,6 @@ void Platform::setMouseCapture(bool captured)
 
         __mouseCaptured = captured;
     }
-}
-
-bool Platform::hasMouse()
-{
-    return true;
 }
 
 bool Platform::isMouseCaptured()
