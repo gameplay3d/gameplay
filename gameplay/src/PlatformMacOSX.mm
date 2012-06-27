@@ -756,6 +756,33 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     *roll = __roll;
 }
 
+bool Platform::hasMouse()
+{
+    return true;
+}
+
+void Platform::setMouseCapture(bool captured)
+{
+    // TODO: not implemented
+}
+
+bool Platform::isMouseCaptured()
+{
+    // TODO: not implemented
+    return false;
+}
+
+void Platform::setCursorVisible(bool visible)
+{
+    // TODO: not implemented
+}
+
+bool Platform::isCursorVisible()
+{
+    // TODO: not implemented
+    return true;
+}
+
 void Platform::swapBuffers()
 {
     if (__view)
