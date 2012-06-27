@@ -3,10 +3,10 @@ precision highp float;
 #endif
 
 // Uniforms
-uniform vec3 u_lightDirection;       	        // Light direction
-uniform vec3 u_lightColor;                      // Light color
+uniform vec4 u_diffuseColor;                    // Diffuse color
 uniform vec3 u_ambientColor;                    // Ambient color
-uniform vec4 u_baseColor;                    	// Base color
+uniform vec3 u_lightColor;                      // Light color
+uniform vec3 u_lightDirection;       	        // Light direction
 
 // Inputs
 varying vec3 v_normalVector;                    // Normal vector in view space.
@@ -14,7 +14,7 @@ varying vec3 v_normalVector;                    // Normal vector in view space.
 void main()
 {
 	// Base color
-    vec4 baseColor = u_baseColor;
+    vec4 baseColor = u_diffuseColor;
 
     // Normalize the vectors.
     vec3 lightDirection = normalize(u_lightDirection);

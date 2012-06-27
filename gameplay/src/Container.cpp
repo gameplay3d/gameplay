@@ -271,7 +271,6 @@ Control* Container::getControl(const char* id) const
             }
         }
     }
-
     return NULL;
 }
 
@@ -381,13 +380,10 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
     if (needsClear)
     {
         GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        GL_ASSERT( glClearColor(0, 0, 0, 0) );
         float clearY = targetHeight - _clearBounds.y - _clearBounds.height;
-        GL_ASSERT( glScissor(_clearBounds.x, clearY,
-            _clearBounds.width, _clearBounds.height) );
-        GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
+        GL_ASSERT( glScissor(_clearBounds.x, clearY, _clearBounds.width, _clearBounds.height) );
+        Game::getInstance()->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0f, 0);
         GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
-
         needsClear = false;
         cleared = true;
     }
@@ -440,9 +436,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
             clipRegion.width += verticalRegion.width;
 
-            Rectangle bounds(_viewportBounds.x + _viewportBounds.width - verticalRegion.width,
-                             _viewportBounds.y + _scrollBarBounds.y,
-                             topRegion.width, topRegion.height);
+            Rectangle bounds(_viewportBounds.x + _viewportBounds.width - verticalRegion.width, _viewportBounds.y + _scrollBarBounds.y, topRegion.width, topRegion.height);
             spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, topUVs.u1, topUVs.v1, topUVs.u2, topUVs.v2, topColor, clipRegion);
 
             bounds.y += topRegion.height;
@@ -474,9 +468,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
             clipRegion.height += horizontalRegion.height;
         
-            Rectangle bounds(_viewportBounds.x + _scrollBarBounds.x,
-                             _viewportBounds.y + _viewportBounds.height - horizontalRegion.height,
-                             leftRegion.width, leftRegion.height);
+            Rectangle bounds(_viewportBounds.x + _scrollBarBounds.x, _viewportBounds.y + _viewportBounds.height - horizontalRegion.height, leftRegion.width, leftRegion.height);
             spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, leftUVs.u1, leftUVs.v1, leftUVs.u2, leftUVs.v2, leftColor, clipRegion);
 
             bounds.x += leftRegion.width;

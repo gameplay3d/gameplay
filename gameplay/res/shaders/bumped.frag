@@ -1,5 +1,6 @@
 #define LIGHTING
 #define BUMPED
+
 #ifdef OPENGL_ES
 precision highp float;
 #endif
@@ -7,9 +8,6 @@ precision highp float;
 // Inputs
 varying vec3 v_normalVector;					// Normal vector in view space
 varying vec2 v_texCoord;						// Texture Coordinate
-#if defined(SPECULAR)
-varying vec3 v_cameraDirection;                 // Camera direction
-#endif
 #if defined(POINT_LIGHT)
 varying vec3 v_vertexToPointLightDirection;		// Light direction w.r.t current vertex in tangent space.
 varying float v_pointLightAttenuation;			// Attenuation of point light.
@@ -25,11 +23,11 @@ varying vec3 v_cameraDirection;                 // Camera direction
 #endif
 
 // Uniforms
-uniform sampler2D u_textureDiffuse;        		// Diffuse map texture
-uniform sampler2D u_textureNormal;       		// Normal map texture
-uniform vec3 u_lightDirection;					// Light direction
-uniform vec3 u_lightColor;                      // Light color
+uniform sampler2D u_diffuseTexture;        		// Diffuse map texture
+uniform sampler2D u_normalmapTexture;       	// Normalmap texture
 uniform vec3 u_ambientColor;                    // Ambient color
+uniform vec3 u_lightColor;                      // Light color
+uniform vec3 u_lightDirection;					// Light direction
 #if defined(SPECULAR)
 uniform float u_specularExponent;				// Specular exponent.
 #endif
@@ -50,10 +48,11 @@ uniform float u_spotLightOuterAngleCos;			// The soft outer part [0.0 - 1.0]
 #include "lib/lighting-directional.frag"
 #endif
 
+// Fragment program
 void main()
 {
     // Fetch diffuse color from texture.
-    _baseColor = texture2D(u_textureDiffuse, v_texCoord);
+    _baseColor = texture2D(u_diffuseTexture, v_texCoord);
 
     // Light the pixel
     gl_FragColor.a = _baseColor.a;
