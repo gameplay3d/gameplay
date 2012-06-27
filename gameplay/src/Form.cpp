@@ -240,9 +240,7 @@ void Form::setSize(float width, float height)
         Rectangle prevViewport = game->getViewport();
         game->setViewport(Rectangle(0, 0, width, height));
         _theme->setProjectionMatrix(_projectionMatrix);
-        GL_ASSERT( glClearColor(0, 0, 0, 0) );
-        GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
-        GL_ASSERT( glClearColor(0, 0, 0, 1) );
+        game->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0, 0);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
         FrameBuffer::bindDefault();
         game->setViewport(prevViewport);
@@ -544,6 +542,7 @@ void Form::initializeQuad(Mesh* mesh)
     RenderState::StateBlock* stateBlock = _theme->getSpriteBatch()->getStateBlock();
     GP_ASSERT(stateBlock);
     stateBlock->setDepthWrite(true);
+    stateBlock->setDepthTest(false);
     material->setStateBlock(stateBlock);
 
     // Bind the WorldViewProjection matrix.
