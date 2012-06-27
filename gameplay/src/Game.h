@@ -13,7 +13,6 @@
 #include "Rectangle.h"
 #include "Vector4.h"
 #include "TimeListener.h"
-#include "Gamepad.h"
 
 namespace gameplay
 {
@@ -23,7 +22,6 @@ namespace gameplay
  */
 class Game
 {
-
 public:
 
     /**
@@ -76,6 +74,53 @@ public:
      */
     static void setVsync(bool enable);
 
+    /** 
+     * Gets whether the current platform supports mouse input.
+     *
+      * @return true if a mouse is supported, false otherwise.
+      */
+    static bool hasMouse();
+
+    /**
+     * Gets whether mouse input is currently captured.
+     *
+     * @see Platform::isMouseCaptured()
+     */
+    static bool isMouseCaptured();
+
+    /**
+     * Enables or disables mouse capture.
+     *
+     * On platforms that support a mouse, when mouse capture is enabled,
+     * the platform cursor will be hidden and the mouse will be warped
+     * to the center of the screen. While mouse capture is enabled,
+     * all mouse move events will then be delivered as deltas instead
+     * of absolute positions.
+     *
+     * @param captured true to enable mouse capture mode, false to disable it.
+     *
+     * @see Platform::setMouseCapture(bool)
+     */
+    static void setMouseCapture(bool captured);
+
+    /**
+     * Sets the visibility of the platform cursor.
+     *
+     * @param visible true to show the platform cursor, false to hide it.
+     *
+     * @see Platform::setCursorVisible(bool)
+     */
+    static void setCursorVisible(bool visible);
+
+    /**
+     * Determines whether the platform cursor is currently visible.
+     *
+     * @return true if the platform cursor is visible, false otherwise.
+     *
+     * @see Platform::isCursorVisible()
+     */
+    static bool isCursorVisible();
+
     /**
      * Gets the total absolute running time (in milliseconds) since Game::run().
      * 
@@ -99,6 +144,13 @@ public:
      * @return The current game state.
      */
     inline State getState() const;
+
+    /**
+     * Determines if the game has been initialized.
+     *
+     * @return true if the game initialization has completed, false otherwise.
+     */
+    inline bool isInitialized() const;
 
     /**
      * Returns the game configuration object.
@@ -270,15 +322,6 @@ public:
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
-     * Gamepad callback on gamepad events.
-     *
-     * @param evt The gamepad event that occured.
-     * @param gamepad the gamepad the event occured on
-     * @param index The joystick or button index that triggered the event.
-     */
-    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int index);
-
-    /**
      * Sets muli-touch is to be enabled/disabled. Default is disabled.
      *
      * @param enabled true sets multi-touch is enabled, false to be disabled.
@@ -309,21 +352,6 @@ public:
      * @param cookie The cookie data that the time event will contain.
      */
     void schedule(float timeOffset, TimeListener* timeListener, void* cookie = 0);
-
-    /** 
-     * Creates a Gamepad object from a .form file.
-     *
-     * @param playerIndex
-     * @param formPath
-     */
-    Gamepad* createGamepad(const char* gamepadFormPath);
-
-    /**
-     * Gets the gamepad for the specified player index.
-     *
-     * @param playerIndex The player index to get the gamepad for (0 <= playerIndex <= 3) 
-     */
-    inline Gamepad* getGamepad(unsigned int playerIndex = 0);
 
 protected:
 
@@ -431,11 +459,6 @@ private:
      */
     void loadConfig();
 
-    /**
-     * Loads a gamepad from the configuration file.
-     */
-    void loadGamepad();
-
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
     static double _pausedTimeLast;              // The last time paused.
@@ -454,8 +477,6 @@ private:
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
     AudioListener* _audioListener;              // The audio listener in 3D space.
-    unsigned int _gamepadCount;
-    Gamepad** _gamepads;
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents; // Contains the scheduled time events.
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.
