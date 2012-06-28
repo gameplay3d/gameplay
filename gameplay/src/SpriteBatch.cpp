@@ -62,7 +62,7 @@ SpriteBatch::~SpriteBatch()
     SAFE_DELETE(_batch);
     if (!_customEffect)
     {
-        if (__spriteEffect->getRefCount() == 1)
+        if (__spriteEffect && __spriteEffect->getRefCount() == 1)
         {
             __spriteEffect->release();
             __spriteEffect = NULL;
