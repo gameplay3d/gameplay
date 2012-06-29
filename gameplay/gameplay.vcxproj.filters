@@ -637,12 +637,6 @@
     <None Include="res\shaders\colored-unlit.frag">
       <Filter>res\shaders</Filter>
     </None>
-    <None Include="res\shaders\bumped.vert">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\bumped.frag">
-      <Filter>res\shaders</Filter>
-    </None>
     <None Include="res\shaders\lib\lighting.frag">
       <Filter>res\shaders\lib</Filter>
     </None>
@@ -669,6 +663,12 @@
     </None>
     <None Include="res\shaders\lib\attributes-skinning.vert">
       <Filter>res\shaders\lib</Filter>
+    </None>
+    <None Include="res\shaders\textured-bumped.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\textured-bumped.vert">
+      <Filter>res\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
