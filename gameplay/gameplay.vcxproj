@@ -206,8 +206,6 @@
     <None Include="res\logo_powered_black.png" />
     <None Include="res\logo_powered_white.png" />
     <None Include="res\logo_white.png" />
-    <None Include="res\shaders\bumped.frag" />
-    <None Include="res\shaders\bumped.vert" />
     <None Include="res\shaders\colored-unlit.frag" />
     <None Include="res\shaders\colored-unlit.vert" />
     <None Include="res\shaders\colored.frag" />
@@ -221,6 +219,8 @@
     <None Include="res\shaders\lib\lighting-spot.frag" />
     <None Include="res\shaders\lib\lighting-spot.vert" />
     <None Include="res\shaders\lib\lighting.frag" />
+    <None Include="res\shaders\textured-bumped.frag" />
+    <None Include="res\shaders\textured-bumped.vert" />
     <None Include="res\shaders\textured-unlit.frag" />
     <None Include="res\shaders\textured-unlit.vert" />
     <None Include="res\shaders\textured.frag" />

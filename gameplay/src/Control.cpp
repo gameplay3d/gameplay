@@ -977,10 +977,8 @@ void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCl
     if (needsClear)
     {
         GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        GL_ASSERT( glClearColor(0, 0, 0, 0) );
-        GL_ASSERT( glScissor(_clearBounds.x, targetHeight - _clearBounds.y - _clearBounds.height,
-            _clearBounds.width, _clearBounds.height) );
-        GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
+        GL_ASSERT( glScissor(_clearBounds.x, targetHeight - _clearBounds.y - _clearBounds.height, _clearBounds.width, _clearBounds.height) );
+        Game::getInstance()->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0f, 0);
         GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
     }
 

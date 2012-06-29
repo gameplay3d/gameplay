@@ -24,7 +24,10 @@ FrameBuffer::~FrameBuffer()
     {
         for (unsigned int i = 0; i < __maxRenderTargets; ++i)
         {
-            SAFE_RELEASE(_renderTargets[i]);
+            if (_renderTargets[i])
+            {
+                SAFE_RELEASE(_renderTargets[i]);
+            }
         }
         SAFE_DELETE_ARRAY(_renderTargets);
     }

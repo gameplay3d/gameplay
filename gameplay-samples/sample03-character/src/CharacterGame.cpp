@@ -19,7 +19,7 @@ CharacterGame game;
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL),
       _animation(NULL), _currentClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
-      _keyFlags(0), _drawDebug(0), _buttonReleased(true), _gamepad(NULL)
+      _keyFlags(0), _drawDebug(0), _wireframe(false), _buttonReleased(true), _gamepad(NULL)
 {
 }
 
@@ -126,7 +126,7 @@ void CharacterGame::drawSplash(void* param)
 bool CharacterGame::drawScene(Node* node, bool transparent)
 {
     if (node->getModel() && (transparent == node->isTransparent()))
-        node->getModel()->draw();
+        node->getModel()->draw(_wireframe);
 
     return true;
 }
@@ -346,6 +346,14 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
         case Keyboard::KEY_SHIFT:
             _keyFlags |= RUNNING;
             break;
+        case Keyboard::KEY_M:
+        case Keyboard::KEY_CAPITAL_M:
+            _wireframe = !_wireframe;
+            break;
+        case Keyboard::KEY_C:
+        case Keyboard::KEY_CAPITAL_C:
+            clone();
+            break;
         }
     }
     else if (evt == Keyboard::KEY_RELEASE)
@@ -475,4 +483,21 @@ void CharacterGame::adjustCamera(float elapsedTime)
 void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type)
 {
     clip->crossFade(_currentClip, 150);
+}
+
+void CharacterGame::clone()
+{
+    Node* clone = _scene->findNode("boycharacter")->clone();
+    Animation* cloneAnimation = clone->getAnimation();
+
+    // Find the current clip and have the clone play that clip repeatedly.
+    const char* clipId = _currentClip->getID();
+    if (_jumpClip->isPlaying())
+        clipId = _jumpClip->getID();
+    AnimationClip* clip = cloneAnimation->getClip(clipId);
+    clip->setRepeatCount(AnimationClip::REPEAT_INDEFINITE);
+    clip->play();
+
+    _scene->addNode(clone);
+    clone->release();
 }

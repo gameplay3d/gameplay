@@ -253,7 +253,9 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
         }
 
         // Write out the expanded shader file.
-        writeShaderToErrorFile(vshPath, shaderSource[2]);
+        if (vshPath)
+            writeShaderToErrorFile(vshPath, shaderSource[2]);
+
         GP_ERROR("Compile failed for vertex shader '%s' with error '%s'.", vshPath == NULL ? "NULL" : vshPath, infoLog == NULL ? "" : infoLog);
         SAFE_DELETE_ARRAY(infoLog);
 
@@ -290,7 +292,8 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
         }
         
         // Write out the expanded shader file.
-        writeShaderToErrorFile(fshPath, shaderSource[2]);
+        if (fshPath)
+            writeShaderToErrorFile(fshPath, shaderSource[2]);
 
         GP_ERROR("Compile failed for fragment shader (%s): %s", fshPath == NULL ? "NULL" : fshPath, infoLog == NULL ? "" : infoLog);
         SAFE_DELETE_ARRAY(infoLog);
