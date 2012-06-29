@@ -64,8 +64,8 @@
     <target name="-post-compile">
         <copy file="../res/box.gpb" tofile="assets/res/box.gpb"/>
         <copy file="../res/box.material" tofile="assets/res/box.material"/>
-        <copy file="../res/colored.vsh" tofile="assets/res/colored.vsh"/>
-        <copy file="../res/colored.fsh" tofile="assets/res/colored.fsh"/>
+        <copy file="../res/colored.vert" tofile="assets/res/colored.vert"/>
+        <copy file="../res/colored.frag" tofile="assets/res/colored.frag"/>
     </target>
 
     <!-- Import the actual build file.

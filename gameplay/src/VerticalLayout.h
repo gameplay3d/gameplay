@@ -13,10 +13,15 @@ namespace gameplay
  */
 class VerticalLayout : public Layout
 {
-    friend class Form;
-    friend class Container;
 
 public:
+
+    /**
+     * Create a VerticalLayout.
+     *
+     * @return a VerticalLayout object.
+     */
+    static VerticalLayout* create();
 
     /**
      * Set whether this layout will start laying out controls from the bottom of the container.
@@ -51,13 +56,6 @@ protected:
      * Destructor.
      */
     virtual ~VerticalLayout();
-
-    /**
-     * Create a VerticalLayout.
-     *
-     * @return a VerticalLayout object.
-     */
-    static VerticalLayout* create();
 
     /**
      * Update the controls contained by the specified container.

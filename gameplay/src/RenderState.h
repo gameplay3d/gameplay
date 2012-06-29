@@ -213,13 +213,12 @@ public:
         static void enableDepthWrite();
 
         // States
-        bool _blendEnabled;
         bool _cullFaceEnabled;
         bool _depthTestEnabled;
         bool _depthWriteEnabled;
-        Blend _srcBlend;
-        Blend _dstBlend;
-        // State bits
+        bool _blendEnabled;
+        Blend _blendSrc;
+        Blend _blendDst;
         long _bits;
 
         static StateBlock* _defaultState;

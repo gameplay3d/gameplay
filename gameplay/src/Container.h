@@ -45,7 +45,6 @@ namespace gameplay
  */
 class Container : public Control
 {
-    friend class DropDownList;
 
 public:
 
@@ -64,6 +63,17 @@ public:
         SCROLL_VERTICAL    = 0x02,
         SCROLL_BOTH = SCROLL_HORIZONTAL | SCROLL_VERTICAL
     };
+
+    /**
+     * Create a new container.
+     *
+     * @param id The container's ID.
+     * @param style The container's style.
+     * @param layoutType The container's layout type.
+     *
+     * @return The new container.
+     */
+    static Container* create(const char* id, Theme::Style* style, Layout::Type layoutType = Layout::LAYOUT_ABSOLUTE);
 
     /**
      * Get this container's layout.
@@ -166,6 +176,11 @@ public:
      * @see AnimationTarget#getAnimation
      */
     Animation* getAnimation(const char* id = NULL) const;
+
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
 
     /**
      * @see AnimationTarget#getAnimationPropertyComponentCount
@@ -274,10 +289,10 @@ protected:
 
     /**
      * Returns whether this control is a container.
-     * 
+     *
      * @return true if this is a container, false if not.
      */
-    bool isContainer();
+    bool isContainer() const;
 
     /**
      * Returns whether this container or any of its controls have been modified and require an update.
@@ -458,6 +473,8 @@ private:
 
     AnimationClip* _scrollBarOpacityClip;
     int _zIndexDefault;
+    int _focusIndexDefault;
+    int _focusIndexMax;
 
     float _totalWidth;
     float _totalHeight;

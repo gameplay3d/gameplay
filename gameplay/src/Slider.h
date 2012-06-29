@@ -36,6 +36,16 @@ class Slider : public Label
 public:
 
     /**
+     * Create a new slider control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new slider.
+     */
+    static Slider* create(const char* id, Theme::Style* style);
+
+    /**
      * Set the minimum value that can be set on this slider.
      *
      * @param min The new minimum.
@@ -94,6 +104,11 @@ public:
     float getValue();
 
     /**
+     * @see Control::getType
+     */
+    const char* getType() const;
+
+    /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
      * E.g. To listen to touch-press and touch-release events,
@@ -140,6 +155,20 @@ protected:
      * @see Touch::TouchEvent
      */
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    /**
+     * Mouse callback on mouse events.
+     *
+     * @param evt The mouse event that occurred.
+     * @param x The x position of the mouse in pixels. Left edge is zero.
+     * @param y The y position of the mouse in pixels. Top edge is zero.
+     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
+     *
+     * @return True if the mouse event is consumed or false if it is not consumed.
+     *
+     * @see Mouse::MouseEvent
+     */
+    bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
      * Draw the images associated with this control.
