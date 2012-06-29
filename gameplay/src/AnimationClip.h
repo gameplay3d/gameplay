@@ -310,6 +310,15 @@ private:
      */
     void resetClipStateBit(unsigned char bit);
 
+    /**
+     * Clones the animation clip.
+     * 
+     * @param animation The animation that the new clip belongs to.
+     * 
+     * @return The newly created animation clip.
+     */
+    AnimationClip* clone(Animation* animation) const;
+
     std::string _id;                                    // AnimationClip ID.
     Animation* _animation;                              // The Animation this clip is created from.
     unsigned long _startTime;                           // Start time of the clip.
