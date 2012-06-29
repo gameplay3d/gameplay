@@ -99,8 +99,11 @@ void CharacterGame::initializeCharacter()
 
 void CharacterGame::initializeGamepad()
 {
-    // Get the gamepad loaded for player1 from game.config.
-    _gamepad = Game::getInstance()->getGamepad(0);
+    Game* game = Game::getInstance();
+    GP_ASSERT(game);
+    GP_ASSERT(game->getGamepadCount() > 0);
+
+    _gamepad = game->getGamepad();
     GP_ASSERT(_gamepad);
 }
 
@@ -175,7 +178,29 @@ bool CharacterGame::isOnFloor() const
 
 void CharacterGame::update(float elapsedTime)
 {
-    if (!_gamepad->isJoystickActive(0))
+    _gamepad->update();
+
+    if (_gamepad->getButtonState(0) == Gamepad::BUTTON_PRESSED)
+    {
+        if (_buttonReleased)
+        {
+            _buttonReleased = false;
+            // Jump while the gamepad button is being pressed
+            jump();
+        }
+    }
+    else
+    {
+        _buttonReleased = true;
+    }
+
+    _currentDirection.set(Vector2::zero());
+
+    if (_gamepad->isJoystickActive(0))
+    {
+        _currentDirection = _gamepad->getJoystickValue(0);
+    }
+    else
     {
         // Construct direction vector from keyboard input
         if (_keyFlags & NORTH)
@@ -270,6 +295,8 @@ void CharacterGame::render(float elapsedTime)
         _scene->drawDebug(Scene::DEBUG_SPHERES);
         break;
     }
+
+    _gamepad->draw();
 
     // Draw FPS
     _font->begin();
@@ -448,19 +475,4 @@ void CharacterGame::adjustCamera(float elapsedTime)
 void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type)
 {
     clip->crossFade(_currentClip, 150);
-}
-
-void CharacterGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int index)
-{
-    switch(evt)
-    {
-        case Gamepad::BUTTON_EVENT:
-            if (gamepad->getButtonState(index) == Gamepad::BUTTON_PRESSED)
-                jump();
-            break;
-        case Gamepad::JOYSTICK_EVENT:
-            _currentDirection = gamepad->getJoystickValue(index);
-            break;
-    }
-    return;
 }

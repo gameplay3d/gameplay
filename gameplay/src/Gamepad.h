@@ -3,6 +3,7 @@
 
 #include "Form.h"
 #include "Button.h"
+#include "Joystick.h"
 
 namespace gameplay
 {
@@ -10,7 +11,7 @@ namespace gameplay
 /**
  * Defines an interface for handling gamepad input.
  */
-class Gamepad : public Control::Listener
+class Gamepad
 {
     friend class Game;
     friend class Control;
@@ -22,10 +23,8 @@ public:
      */
     enum GamepadEvent
     {
-        CONNECTED_EVENT,
-        DISCONNECTED_EVENT,
-        JOYSTICK_EVENT,
-        BUTTON_EVENT
+        ATTACHED_EVENT,
+        DETACHED_EVENT,
     };
 
     /**
@@ -36,7 +35,21 @@ public:
         BUTTON_PRESSED = gameplay::Button::Listener::PRESS, 
         BUTTON_RELEASED = gameplay::Button::Listener::RELEASE
     };
-    
+
+    /**
+     * Gets the Gamepad's ID.
+     *
+     * @return the Gamepad's ID.
+     */
+    const char* getId() const;
+
+    /**
+     * Gets the number of button on the gamepad.
+     *
+     * @return the number of buttons on the gamepad.
+     */
+    unsigned int getButtonCount() const;
+
     /** 
      * Gets the current state of the specified button.
      *
@@ -44,6 +57,13 @@ public:
      * @return whether the button is currently pressed or not.
      */
     ButtonState getButtonState(unsigned int buttonId) const;
+    
+    /**
+     * Gets the number of joysticks on the gamepad.
+     *
+     * @return the number of joysticks on the gamepad.
+     */
+    unsigned int getJoystickCount() const;
 
     /**
      * Gets whether the specified joystick's state is active or not.
@@ -78,32 +98,22 @@ public:
      */
     Form* getForm() const;
 
-protected:
+    /**
+     * Updates the gamepad.
+     */
+    void update();
 
     /**
-     * @see Control::Listener::controlEvent
+     * Draws the gamepad if it is based on a form and if the form is enabled.
      */
-    void controlEvent(Control* control, Control::Listener::EventType evt);
+    void draw();
 
 private:
-    
-    struct GamepadData
-    {
-        enum {JOYSTICK, BUTTON};
-
-        GamepadData(unsigned int controlType, unsigned int controlIndex)
-            : _controlType(controlType), _controlIndex(controlIndex) {}
-
-        ~GamepadData();
-
-        unsigned int _controlType;
-        unsigned int _controlIndex;
-    };
 
     /**
      * Constructor.
      */
-    Gamepad();
+    Gamepad(const char* id);
     
     /**
      * Constructor.
@@ -111,7 +121,7 @@ private:
      *
      * @param formPath
      */ 
-    Gamepad(const char* formPath);
+    Gamepad(const char* id, const char* formPath);
 
     /**
      * Copy constructor.
@@ -122,27 +132,15 @@ private:
      * Destructor.
      */
     virtual ~Gamepad();
-    
+
     /** 
-     * Gets the Joystick and Button Control object's from the specified form.
+     * Binds the Joystick and Button Control object's from the specified container.
      */
-    void getGamepadControls(Form* form);
+    void bindGamepadControls(Container* container);
 
-    /**
-     * Updates the gamepad.
-     */
-    void update();
-
-    /**
-     * Renders the gamepad if it is based on a form and if the form is enabled.
-     */
-    void render();
-    
-    int _playerIndex;
-    Vector2** _joystickValues;
-    unsigned int _joystickCount;
-    ButtonState** _buttonStates;
-    unsigned int _buttonCount;
+    std::string _id;
+    std::vector<Joystick*> _joysticks;
+    std::vector<Button*> _buttons;
     Form* _gamepadForm;
 };
 
