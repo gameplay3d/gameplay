@@ -54,15 +54,16 @@
     
     <asset path="icon.png">icon.png</asset>
     <asset path="res/arial40.gpb">res/arial40.gpb</asset>
-    <asset path="res/colored.fsh">res/colored.fsh</asset>
-    <asset path="res/colored.vsh">res/colored.vsh</asset>
     <asset path="res/duck-diffuse.png">res/duck-diffuse.png</asset>
     <asset path="res/duck.gpb">res/duck.gpb</asset>
     <asset path="res/duck.material">res/duck.material</asset>
     <asset path="res/grid.material">res/grid.material</asset>
     <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
-    <asset path="../../gameplay/res/shaders/diffuse-specular.fsh">res/shaders/diffuse-specular.fsh</asset>
-    <asset path="../../gameplay/res/shaders/diffuse-specular.vsh">res/shaders/diffuse-specular.vsh</asset>
+    <asset path="../../gameplay/res/shaders/textured.vert">res/shaders/textured.vert</asset>
+    <asset path="../../gameplay/res/shaders/textured.frag">res/shaders/textured.frag</asset>
+    <asset path="../../gameplay/res/shaders/colored-unlit.vert">res/shaders/colored-unlit.vert</asset>
+    <asset path="../../gameplay/res/shaders/colored-unlit.frag">res/shaders/colored-unlit.frag</asset>
+    <asset path="../../gameplay/res/shaders/lib">res/shaders/lib</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

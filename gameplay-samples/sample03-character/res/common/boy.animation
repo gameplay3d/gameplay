@@ -1,4 +1,4 @@
-animation boyAnimation
+animation animations
 {
     frameCount = 1100
 	clip idle

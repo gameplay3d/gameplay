@@ -2,7 +2,6 @@
 #define CHARACTERGAME_H_
 
 #include "gameplay.h"
-#include "Gamepad.h"
 using namespace gameplay;
 
 /**
@@ -30,7 +29,12 @@ public:
     /**
      * @see AnimationClip::Listener::animationEvent
      */
-    void animationEvent(AnimationClip* clip, EventType type);
+    void animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type);
+
+    /**
+     * @see Game::gamepadEvent
+     */
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int index);
 
 protected:
 
@@ -76,11 +80,12 @@ private:
     AnimationClip* _currentClip;
     AnimationClip* _jumpClip;
     int _rotateX;
-    Gamepad* _gamepad;
     MaterialParameter* _materialParameterAlpha;
     unsigned int _keyFlags;
     int _drawDebug;
     bool _buttonReleased;
+    Gamepad* _gamepad;
+    Vector2 _currentDirection;
 };
 
 #endif

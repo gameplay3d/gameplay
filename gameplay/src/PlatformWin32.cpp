@@ -312,7 +312,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         UpdateCapture(wParam);
         lx = GET_X_LPARAM(lParam);
         ly = GET_Y_LPARAM(lParam);
-        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON, lx, ly, 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, lx, ly, 0);
         break;
 
     case WM_RBUTTONUP:

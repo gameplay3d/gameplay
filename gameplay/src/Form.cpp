@@ -10,12 +10,35 @@
 #include "CheckBox.h"
 #include "Scene.h"
 
+#define FORM_VSH \
+    "uniform mat4 u_worldViewProjectionMatrix;\n" \
+    "attribute vec3 a_position;\n" \
+    "attribute vec2 a_texCoord;\n" \
+    "varying vec2 v_texCoord;\n" \
+    "void main()\n" \
+    "{\n" \
+        "gl_Position = u_worldViewProjectionMatrix * vec4(a_position, 1);\n" \
+        "v_texCoord = a_texCoord;\n" \
+    "}\n"
+
+#define FORM_FSH \
+    "#ifdef OPENGL_ES\n" \
+    "precision highp float;\n" \
+    "#endif\n" \
+    "varying vec2 v_texCoord;\n" \
+    "uniform sampler2D u_texture;\n" \
+    "void main()\n" \
+    "{\n" \
+        "gl_FragColor = texture2D(u_texture, v_texCoord);\n" \
+    "}\n"
+
 namespace gameplay
 {
 
+static Effect* __formEffect = NULL;
 static std::vector<Form*> __forms;
 
-Form::Form() : _theme(NULL), _quad(NULL), _node(NULL), _frameBuffer(NULL), _spriteBatch(NULL)
+Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL), _nodeQuad(NULL), _nodeMaterial(NULL) , _u2(0), _v1(0)
 {
 }
 
@@ -25,11 +48,19 @@ Form::Form(const Form& copy)
 
 Form::~Form()
 {
-    SAFE_RELEASE(_quad);
     SAFE_RELEASE(_node);
+    SAFE_DELETE(_spriteBatch);
     SAFE_RELEASE(_frameBuffer);
     SAFE_RELEASE(_theme);
-    SAFE_DELETE(_spriteBatch);
+
+    if (__formEffect)
+    {
+        if (__formEffect->getRefCount() == 1)
+        {
+            __formEffect->release();
+            __formEffect = NULL;
+        }
+    }
 
     // Remove this Form from the global list.
     std::vector<Form*>::iterator it = std::find(__forms.begin(), __forms.end(), this);
@@ -37,6 +68,43 @@ Form::~Form()
     {
         __forms.erase(it);
     }
+}
+
+Form* Form::create(const char* id, Theme::Style* style, Layout::Type layoutType)
+{
+    GP_ASSERT(style);
+
+    Layout* layout;
+    switch (layoutType)
+    {
+    case Layout::LAYOUT_ABSOLUTE:
+        layout = AbsoluteLayout::create();
+        break;
+    case Layout::LAYOUT_FLOW:
+        layout = FlowLayout::create();
+        break;
+    case Layout::LAYOUT_VERTICAL:
+        layout = VerticalLayout::create();
+        break;
+    default:
+        GP_ERROR("Unsupported layout type '%d'.", layoutType);
+        break;
+    }
+
+    Form* form = new Form();
+    if (id)
+        form->_id = id;
+    form->_style = style;
+    form->_layout = layout;
+    form->_theme = style->getTheme();
+
+    // Get default projection matrix.
+    Game* game = Game::getInstance();
+    Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
+
+    __forms.push_back(form);
+
+    return form;
 }
 
 Form* Form::create(const char* url)
@@ -99,9 +167,7 @@ Form* Form::create(const char* url)
     }
     else
     {
-        Theme::Style::Overlay* overlay = Theme::Style::Overlay::create();
-        style = new Theme::Style(theme, "", 1.0f / theme->_texture->getWidth(), 1.0f / theme->_texture->getHeight(),
-            Theme::Margin::empty(), Theme::Border::empty(), overlay, overlay, overlay, overlay);
+        style = theme->getEmptyStyle();
     }
     form->initialize(style, formProperties);
 
@@ -155,8 +221,12 @@ Form* Form::getForm(const char* id)
             return f;
         }
     }
-        
     return NULL;
+}
+
+Theme* Form::getTheme() const
+{
+    return _theme;
 }
 
 void Form::setSize(float width, float height)
@@ -194,15 +264,13 @@ void Form::setSize(float width, float height)
         _spriteBatch = SpriteBatch::create(_frameBuffer->getRenderTarget()->getTexture());
         GP_ASSERT(_spriteBatch);
 
-        // Clear FBO.
-        _frameBuffer->bind();
+        // Clear the framebuffer black
         Game* game = Game::getInstance();
+        _frameBuffer->bind();
         Rectangle prevViewport = game->getViewport();
         game->setViewport(Rectangle(0, 0, width, height));
         _theme->setProjectionMatrix(_projectionMatrix);
-        GL_ASSERT( glClearColor(0, 0, 0, 0) );
-        GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
-        GL_ASSERT( glClearColor(0, 0, 0, 1) );
+        game->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0, 0);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
         FrameBuffer::bindDefault();
         game->setViewport(prevViewport);
@@ -247,52 +315,83 @@ void Form::setAutoHeight(bool autoHeight)
     }
 }
 
-void Form::setQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4)
+Effect* createEffect()
 {
-    Mesh* mesh = Mesh::createQuad(p1, p2, p3, p4);
-
-    initializeQuad(mesh);
-    SAFE_RELEASE(mesh);
-}
-
-void Form::setQuad(float x, float y, float width, float height)
-{
-    float x2 = x + width;
-    float y2 = y + height;
-
-    float vertices[] =
+    Effect* effect = NULL;
+    if (__formEffect == NULL)
     {
-        x, y2, 0,   0, _v1,
-        x, y, 0,    0, 0,
-        x2, y2, 0,  _u2, _v1,
-        x2, y, 0,   _u2, 0
-    };
-
-    VertexFormat::Element elements[] =
+        __formEffect = Effect::createFromSource(FORM_VSH, FORM_FSH);
+        if (__formEffect == NULL)
+        {
+            GP_ERROR("Unable to load form effect.");
+            return NULL;
+        }
+        effect = __formEffect;
+    }
+    else
     {
-        VertexFormat::Element(VertexFormat::POSITION, 3),
-        VertexFormat::Element(VertexFormat::TEXCOORD0, 2)
-    };
-    Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 2), 4, false);
-    assert(mesh);
-
-    mesh->setPrimitiveType(Mesh::TRIANGLE_STRIP);
-    mesh->setVertexData(vertices, 0, 4);
-
-    initializeQuad(mesh);
-    SAFE_RELEASE(mesh);
+        effect = __formEffect;
+    }
+    return effect;
 }
 
 void Form::setNode(Node* node)
 {
-    _node = node;
-        
-    if (_node)
+    // If the user wants a custom node then we need to create a 3D quad
+    if (node && node != _node)
     {
         // Set this Form up to be 3D by initializing a quad.
-        setQuad(0.0f, 0.0f, _bounds.width, _bounds.height);
-        _node->setModel(_quad);
+        float x2 = _bounds.width;
+        float y2 = _bounds.height;
+        float vertices[] =
+        {
+            0, y2, 0,   0, _v1,
+            0, 0, 0,    0, 0,
+            x2, y2, 0,  _u2, _v1,
+            x2, 0, 0,   _u2, 0
+        };
+        VertexFormat::Element elements[] =
+        {
+            VertexFormat::Element(VertexFormat::POSITION, 3),
+            VertexFormat::Element(VertexFormat::TEXCOORD0, 2)
+        };
+        Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 2), 4, false);
+        GP_ASSERT(mesh);
+        mesh->setPrimitiveType(Mesh::TRIANGLE_STRIP);
+        mesh->setVertexData(vertices, 0, 4);
+
+        _nodeQuad = Model::create(mesh);
+        SAFE_RELEASE(mesh);
+        GP_ASSERT(_nodeQuad);
+
+        // Create the effect and material
+        Effect* effect = createEffect();
+        GP_ASSERT(effect);
+        _nodeMaterial = Material::create(effect);
+
+        GP_ASSERT(_nodeMaterial);
+        _nodeQuad->setMaterial(_nodeMaterial);
+        _nodeMaterial->release();
+        node->setModel(_nodeQuad);
+        _nodeQuad->release();
+
+        // Bind the WorldViewProjection matrix.
+        _nodeMaterial->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
+
+        // Bind the texture from the framebuffer and set the texture to clamp
+        Texture::Sampler* sampler = Texture::Sampler::create(_frameBuffer->getRenderTarget()->getTexture());
+        GP_ASSERT(sampler);
+        sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
+        _nodeMaterial->getParameter("u_texture")->setValue(sampler);
+        sampler->release();
+
+        RenderState::StateBlock* rsBlock = _nodeMaterial->getStateBlock();
+        rsBlock->setDepthWrite(true);
+        rsBlock->setBlend(true);
+        rsBlock->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
+        rsBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
     }
+    _node = node;
 }
 
 void Form::update()
@@ -346,8 +445,7 @@ void Form::update()
         y = 0;
         _absoluteBounds.set(x, y, _bounds.width, _bounds.height);
 
-        // Calculate the absolute viewport bounds.
-        // Absolute bounds minus border and padding.
+        // Calculate the absolute viewport bounds. Absolute bounds minus border and padding.
         const Theme::Border& border = getBorder(_state);
         const Theme::Padding& padding = getPadding();
 
@@ -358,9 +456,7 @@ void Form::update()
 
         _viewportBounds.set(x, y, width, height);
 
-        // Calculate the clip area.
-        // Absolute bounds, minus border and padding,
-        // clipped to the parent container's clip area.
+        // Calculate the clip area. Absolute bounds, minus border and padding, clipped to the parent container's clip area.
         clipX2 = clip.x + clip.width;
         x2 = x + width;
         if (x2 > clipX2)
@@ -428,20 +524,15 @@ void Form::update()
 
 void Form::draw()
 {
-    /*
-    The first time a form is drawn, its contents are rendered into a framebuffer.
-    The framebuffer will only be drawn into again when the contents of the form change.
+    // The first time a form is drawn, its contents are rendered into a framebuffer.
+    // The framebuffer will only be drawn into again when the contents of the form change.
+    // If this form has a node then it's a 3D form and the framebuffer will be used
+    // to texture a quad.  The quad will be given the same dimensions as the form and
+    // must be transformed appropriately by the user, unless they call setQuad() themselves.
+    // On the other hand, if this form has not been set on a node, SpriteBatch will be used
+    // to render the contents of the frambuffer directly to the display.
 
-    If this form has a node then it's a 3D form and the framebuffer will be used
-    to texture a quad.  The quad will be given the same dimensions as the form and
-    must be transformed appropriately by the user, unless they call setQuad() themselves.
-
-    On the other hand, if this form has not been set on a node, SpriteBatch will be used
-    to render the contents of the frambuffer directly to the display.
-    */
-
-    // Check whether this form has changed since the last call to draw()
-    // and if so, render into the framebuffer.
+    // Check whether this form has changed since the last call to draw() and if so, render into the framebuffer.
     if (isDirty())
     {
         GP_ASSERT(_frameBuffer);
@@ -463,62 +554,36 @@ void Form::draw()
         game->setViewport(prevViewport);
     }
 
+    // Draw either with a 3D quad or sprite batch
     if (_node)
     {
-        GP_ASSERT(_quad);
-        _quad->draw();
+         // If we have the node set, then draw a 3D quad model
+        _nodeQuad->draw();
     }
     else
     {
+        // Otherwise we draw the framebuffer in ortho space with a spritebatch.
         if (!_spriteBatch)
         {
             _spriteBatch = SpriteBatch::create(_frameBuffer->getRenderTarget()->getTexture());
             GP_ASSERT(_spriteBatch);
         }
-
         _spriteBatch->begin();
         _spriteBatch->draw(_bounds.x, _bounds.y, 0, _bounds.width, _bounds.height, 0, _v1, _u2, 0, Vector4::one());
         _spriteBatch->end();
     }
 }
 
-void Form::initializeQuad(Mesh* mesh)
+const char* Form::getType() const
 {
-    // Release current model.
-    SAFE_RELEASE(_quad);
-
-    // Create the model.
-    _quad = Model::create(mesh);
-
-    // Create the material.
-    Material* material = _quad->setMaterial("res/shaders/textured.vsh", "res/shaders/textured.fsh");
-    GP_ASSERT(material);
-
-    // Set the common render state block for the material.
-    GP_ASSERT(_theme);
-    GP_ASSERT(_theme->getSpriteBatch());
-    RenderState::StateBlock* stateBlock = _theme->getSpriteBatch()->getStateBlock();
-    GP_ASSERT(stateBlock);
-    stateBlock->setDepthWrite(true);
-    material->setStateBlock(stateBlock);
-
-    // Bind the WorldViewProjection matrix.
-    material->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
-
-    // Bind the texture.
-    Texture::Sampler* sampler = Texture::Sampler::create(_frameBuffer->getRenderTarget()->getTexture());
-    GP_ASSERT(sampler);
-    sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
-    material->getParameter("u_diffuseTexture")->setValue(sampler);
-    material->getParameter("u_diffuseColor")->setValue(Vector4::one());
-
-    SAFE_RELEASE(sampler);
+    return "form";
 }
 
 bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     // Check for a collision with each Form in __forms.
     // Pass the event on.
+    bool eventConsumed = false;
     std::vector<Form*>::const_iterator it;
     for (it = __forms.begin(); it < __forms.end(); it++)
     {
@@ -540,7 +605,7 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
                          point.y >= bounds.y &&
                          point.y <= bounds.y + bounds.height))
                     {
-                        return form->touchEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, contactIndex);
+                        eventConsumed |= form->touchEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, contactIndex);
                     }
                 }
             }
@@ -556,13 +621,12 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
                         y <= bounds.y + bounds.height))
                 {
                     // Pass on the event's position relative to the form.
-                    return form->touchEvent(evt, x - bounds.x, y - bounds.y, contactIndex);
+                    eventConsumed |= form->touchEvent(evt, x - bounds.x, y - bounds.y, contactIndex);
                 }
             }
         }
     }
-
-    return false;
+    return eventConsumed;
 }
 
 bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
@@ -578,12 +642,13 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
                 return true;
         }
     }
-
     return false;
 }
 
 bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
+    bool eventConsumed = false;
+
     std::vector<Form*>::const_iterator it;
     for (it = __forms.begin(); it < __forms.end(); it++)
     {
@@ -608,7 +673,7 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
                          point.y >= bounds.y &&
                          point.y <= bounds.y + bounds.height))
                     {
-                        return form->mouseEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, wheelDelta);
+                        eventConsumed |= form->mouseEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, wheelDelta);
                     }
                 }
             }
@@ -627,13 +692,12 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
                         y <= bounds.y + bounds.height))
                 {
                     // Pass on the event's position relative to the form.
-                    return form->mouseEvent(evt, x - bounds.x, y - bounds.y, wheelDelta);
+                    eventConsumed |= form->mouseEvent(evt, x - bounds.x, y - bounds.y, wheelDelta);
                 }
             }
         }
     }
-
-    return false;
+    return eventConsumed;
 }
 
 bool Form::projectPoint(int x, int y, Vector3* point)
@@ -653,14 +717,11 @@ bool Form::projectPoint(int x, int y, Vector3* point)
         Ray ray;
         camera->pickRay(Game::getInstance()->getViewport(), x, y, &ray);
 
-        // Find the quad's plane.
-        // We know its normal is the quad's forward vector.
+        // Find the quad's plane.  We know its normal is the quad's forward vector.
         Vector3 normal = _node->getForwardVectorWorld();
 
-        // To get the plane's distance from the origin,
-        // we'll find the distance from the plane defined
-        // by the quad's forward vector and one of its points
-        // to the plane defined by the same vector and the origin.
+        // To get the plane's distance from the origin, we'll find the distance from the plane defined
+        // by the quad's forward vector and one of its points to the plane defined by the same vector and the origin.
         const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
         const float d = -(a*min.x) - (b*min.y) - (c*min.z);
         const float distance = abs(d) /  sqrt(a*a + b*b + c*c);
@@ -670,8 +731,7 @@ bool Form::projectPoint(int x, int y, Vector3* point)
         float collisionDistance = ray.intersects(plane);
         if (collisionDistance != Ray::INTERSECTS_NONE)
         {
-            // Multiply the ray's direction vector by collision distance
-            // and add that to the ray's origin.
+            // Multiply the ray's direction vector by collision distance and add that to the ray's origin.
             point->set(ray.getOrigin() + collisionDistance*ray.getDirection());
 
             // Project this point into the plane.
@@ -681,13 +741,11 @@ bool Form::projectPoint(int x, int y, Vector3* point)
             return true;
         }
     }
-
     return false;
 }
 
 unsigned int Form::nextPowerOfTwo(unsigned int v)
 {
-
     if (!((v & (v - 1)) == 0))
     {
         v--;

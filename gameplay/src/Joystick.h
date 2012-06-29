@@ -12,8 +12,19 @@ namespace gameplay
 class Joystick : public Control
 {
     friend class Container;
+    friend class Gamepad;
 
 public:
+
+    /**
+     * Create a new joystick control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new joystick.
+     */
+    static Joystick* create(const char* id, Theme::Style* style);
     
     /**
      * Add a listener to be notified of specific events affecting
@@ -68,6 +79,11 @@ public:
      * @return <code>true</code> if absolute positioning is enabled; <code>false</code> otherwise.
      */
     inline bool isAbsolute() const;
+
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
 
 protected:
     
@@ -135,11 +151,11 @@ private:
     Joystick(const Joystick& copy);
 
     float _radius;
-    unsigned int _contactIndex;
     bool _absolute;
     Vector2 _displacement;
     Vector2 _value;
     Rectangle _region;
+    int* _gamepadJoystickIndex;
 };
 
 }
