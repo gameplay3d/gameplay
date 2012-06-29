@@ -70,6 +70,7 @@ private:
     void jump();
     void adjustCamera(float elapsedTime);
     bool isOnFloor() const;
+    void clone();
 
     Font* _font;
     Scene* _scene;
@@ -83,6 +84,7 @@ private:
     MaterialParameter* _materialParameterAlpha;
     unsigned int _keyFlags;
     int _drawDebug;
+    bool _wireframe;
     bool _buttonReleased;
     Gamepad* _gamepad;
     Vector2 _currentDirection;
