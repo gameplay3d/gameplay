@@ -1,49 +1,31 @@
 #include "Base.h"
 #include "Gamepad.h"
-#include "Joystick.h"
 #include "Game.h"
 
 namespace gameplay
 {
 
-Gamepad::Gamepad()
-    : _playerIndex(-1), _joystickValues(NULL), _joystickCount(0), _buttonStates(NULL), _buttonCount(0), _gamepadForm(NULL)
+Gamepad::Gamepad(const char* id)
+    : _id(id), _gamepadForm(NULL)
 {
 }
 
-Gamepad::Gamepad(const char* formPath)
-    : _playerIndex(-1), _joystickValues(NULL), _joystickCount(0), _buttonStates(NULL), _buttonCount(0), _gamepadForm(NULL)
+Gamepad::Gamepad(const char* id, const char* formPath)
+    : _id(id), _gamepadForm(NULL)
 {
     GP_ASSERT(formPath);
 
     _gamepadForm = Form::create(formPath);
     GP_ASSERT(_gamepadForm);
-
+    
     _gamepadForm->setConsumeInputEvents(false);
 
-    getGamepadControls(_gamepadForm);
-
-    if (_joystickCount > 0)
-    {
-        _joystickValues = new Vector2*[_joystickCount];
-        for (unsigned int i = 0; i < _joystickCount; i++)
-        {
-            _joystickValues[i] = new Vector2();
-        }
-    }
-    if (_buttonCount > 0)
-    {
-        _buttonStates = new ButtonState*[_buttonCount];
-        for (unsigned int i = 0; i < _buttonCount; i++)
-        {
-            _buttonStates[i] = new ButtonState();
-        }
-    }
+    bindGamepadControls(_gamepadForm);
 }
 
-void Gamepad::getGamepadControls(Form* form)
+void Gamepad::bindGamepadControls(Container* container)
 {
-    std::vector<Control*> controls = form->getControls();
+    std::vector<Control*> controls = container->getControls();
     std::vector<Control*>::iterator itr = controls.begin();
 
     for (; itr != controls.end(); itr++)
@@ -51,53 +33,42 @@ void Gamepad::getGamepadControls(Form* form)
         Control* control = *itr;
         GP_ASSERT(control);
 
-        if (std::strcmp("container", control->getType()) == 0)
+        if (control->isContainer())
         {
-            getGamepadControls((Form*) control);
+            bindGamepadControls((Container*) control);
         }
         else if (std::strcmp("joystick", control->getType()) == 0)
         {
-            control->addListener(this, Control::Listener::PRESS | Control::Listener::VALUE_CHANGED | Control::Listener::RELEASE);
-            Joystick* joystick = (Joystick*) control;
-            
-            if (!joystick->_gamepadJoystickIndex)
-                joystick->_gamepadJoystickIndex = new int[1];
-            
-            *joystick->_gamepadJoystickIndex = _joystickCount;
-            _joystickCount++;
+            control->addRef();
+            _joysticks.push_back((Joystick*) control);
         }
         else if (std::strcmp("button", control->getType()) == 0)
         {
-            control->addListener(this, Control::Listener::PRESS | Control::Listener::RELEASE);
-            Button* button = (Button*) control;
-            
-            if (!button->_gamepadButtonIndex)
-                button->_gamepadButtonIndex = new int[1];
-
-            *button->_gamepadButtonIndex = _buttonCount;
-            _buttonCount++;
-        }
+            control->addRef();
+            _buttons.push_back((Button*) control);
+        }   
     }
 }
 
 Gamepad::~Gamepad()
 {
-    if (_joystickValues)
+    for (std::vector<Joystick*>::iterator itr = _joysticks.begin(); itr != _joysticks.end(); itr++)
     {
-        for (unsigned int i = 0; i < _joystickCount; i++)
-            SAFE_DELETE(_joystickValues[i]);
-        SAFE_DELETE_ARRAY(_joystickValues);
+        SAFE_RELEASE((*itr));
     }
 
-    if (_buttonStates)
+    for (std::vector<Button*>::iterator itr = _buttons.begin(); itr!= _buttons.end(); itr++)
     {
-        for (unsigned int i = 0; i < _buttonCount; i++)
-           SAFE_DELETE(_buttonStates[i]);
-        SAFE_DELETE_ARRAY(_buttonStates);
+        SAFE_RELEASE((*itr));
     }
 
     if (_gamepadForm)
         SAFE_RELEASE(_gamepadForm);
+}
+
+const char* Gamepad::getId() const
+{
+    return _id.c_str();
 }
 
 void Gamepad::update()
@@ -108,7 +79,7 @@ void Gamepad::update()
     }
 }
 
-void Gamepad::render()
+void Gamepad::draw()
 {
     if (_gamepadForm && _gamepadForm->isEnabled())
     {
@@ -116,66 +87,45 @@ void Gamepad::render()
     }
 }
 
-void Gamepad::controlEvent(Control* control, Control::Listener::EventType evt)
+unsigned int Gamepad::getButtonCount() const
 {
-    if (_gamepadForm && _gamepadForm->isEnabled())
-    {
-        if (std::strcmp("joystick", control->getType()) == 0)
-        {
-            int joystickIndex = *(((Joystick*) control)->_gamepadJoystickIndex);
-            switch(evt)
-            {
-                case Control::Listener::PRESS:
-                case Control::Listener::VALUE_CHANGED:
-                    _joystickValues[joystickIndex]->set(((Joystick*)control)->getValue());
-                    break;
-                case Control::Listener::RELEASE:
-                    _joystickValues[joystickIndex]->set(0.0f, 0.0f);
-                    break;
-            }
-            Game::getInstance()->gamepadEvent(JOYSTICK_EVENT, this, joystickIndex);
-        }
-        else if (std::strcmp("button", control->getType()) == 0)
-        {
-            int buttonIndex = *(((Button*) control)->_gamepadButtonIndex);
-            switch(evt)
-            {
-                case Control::Listener::PRESS:
-                    *_buttonStates[buttonIndex] = BUTTON_PRESSED;
-                    break;
-                case Control::Listener::RELEASE:
-                    *_buttonStates[buttonIndex] = BUTTON_RELEASED;
-                    break;
-            }
-            Game::getInstance()->gamepadEvent(BUTTON_EVENT, this, buttonIndex);
-        }
-    }
+    return _buttons.size();
 }
 
 Gamepad::ButtonState Gamepad::getButtonState(unsigned int buttonId) const
 {
-    GP_ASSERT(buttonId < _buttonCount);
+    GP_ASSERT(buttonId < _buttons.size());
 
-    return *_buttonStates[buttonId];
+    return _buttons[buttonId]->getState() == Control::ACTIVE ? BUTTON_PRESSED : BUTTON_RELEASED;
+}
+
+unsigned int Gamepad::getJoystickCount() const
+{
+    return _joysticks.size();
 }
 
 bool Gamepad::isJoystickActive(unsigned int joystickId) const
 {
-    GP_ASSERT(joystickId < _joystickCount);
+    GP_ASSERT(joystickId < _joysticks.size());
 
-    return !(_joystickValues[joystickId]->isZero());
+    return !_joysticks[joystickId]->getValue().isZero();
 }
 
 const Vector2& Gamepad::getJoystickValue(unsigned int joystickId) const
 {
-    GP_ASSERT(joystickId < _joystickCount);
+    GP_ASSERT(joystickId < _joysticks.size());
 
-    return *_joystickValues[joystickId];
+    return _joysticks[joystickId]->getValue();
 }
 
 bool Gamepad::isVirtual() const
 {
-    return (_gamepadForm && _gamepadForm->isEnabled());
+    return true;
+}
+
+Form* Gamepad::getForm() const
+{
+    return _gamepadForm;
 }
 
 }

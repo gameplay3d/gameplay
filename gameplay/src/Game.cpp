@@ -20,8 +20,7 @@ Game::Game()
     : _initialized(false), _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
-      _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL), 
-      _gamepadCount(0), _gamepads(NULL)
+      _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
@@ -124,16 +123,13 @@ void Game::shutdown()
 
         Platform::signalShutdown();
         finalize();
-
-        if (_gamepads)
+        
+        for (std::vector<Gamepad*>::iterator itr = _gamepads.begin(); itr != _gamepads.end(); itr++)
         {
-            for (unsigned int i = 0; i < _gamepadCount; i++)
-            {
-                SAFE_DELETE(_gamepads[i]);
-            }
-            SAFE_DELETE_ARRAY(_gamepads);
+            SAFE_DELETE((*itr));
         }
-
+        _gamepads.clear();
+        
         _animationController->finalize();
         SAFE_DELETE(_animationController);
 
@@ -218,13 +214,7 @@ void Game::frame()
     
         // Update the physics.
         _physicsController->update(elapsedTime);
-
-        if (_gamepads)
-        {
-            for (unsigned int i = 0; i < _gamepadCount; i++)
-                _gamepads[i]->update();
-        }
-
+        
         // Application Update.
         update(elapsedTime);
 
@@ -234,12 +224,6 @@ void Game::frame()
         // Graphics Rendering.
         render(elapsedTime);
         
-        if (_gamepads)
-        {
-            for (unsigned int i = 0; i < _gamepadCount; i++)
-                _gamepads[i]->render();
-        }
-
         // Update FPS.
         ++_frameCount;
         if ((Game::getGameTime() - _frameLastFPS) >= 1000)
@@ -329,7 +313,7 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 {
 }
 
-void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int index)
+void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 {
 }
 
@@ -414,30 +398,14 @@ bool Game::TimeEvent::operator<(const TimeEvent& v) const
     return time > v.time;
 }
 
-Gamepad* Game::createGamepad(const char* gamepadFormPath)
+Gamepad* Game::createGamepad(const char* gamepadId, const char* gamepadFormPath)
 {
     GP_ASSERT(gamepadFormPath);
 
-    Gamepad* gamepad = new Gamepad(gamepadFormPath);
+    Gamepad* gamepad = new Gamepad(gamepadId, gamepadFormPath);
     GP_ASSERT(gamepad);
 
-    if (!_gamepads)
-    {
-        _gamepadCount++;
-        _gamepads = new Gamepad*[_gamepadCount];
-        _gamepads[0] = gamepad;
-    }
-    else
-    {
-        int oldSize = _gamepadCount;
-        _gamepadCount++;
-        Gamepad** tempGamepads = new Gamepad*[_gamepadCount];
-        memcpy(tempGamepads, _gamepads, sizeof(Gamepad*) * oldSize);
-        tempGamepads[oldSize] = gamepad;
-        
-        SAFE_DELETE_ARRAY(_gamepads);
-        _gamepads = tempGamepads;
-    }
+    _gamepads.push_back(gamepad);
 
     return gamepad;
 }
@@ -448,13 +416,13 @@ void Game::loadGamepad()
     {
         // Check if there is a virtual keyboard included in the .config file.
         // If there is, try to create it and assign it to "player one".
-        Properties* gamepadProperties = _properties->getNamespace("gamepad", true);
+        Properties* gamepadProperties = _properties->getNamespace("gamepads", true);
         if (gamepadProperties && gamepadProperties->exists("form"))
         {
             const char* gamepadFormPath = gamepadProperties->getString("form");
             GP_ASSERT(gamepadFormPath);
 
-            Gamepad* gamepad = createGamepad(gamepadFormPath);
+            Gamepad* gamepad = createGamepad(gamepadProperties->getId(), gamepadFormPath);
             GP_ASSERT(gamepad);
         }
     }

@@ -3,40 +3,72 @@
 
 #include "Form.h"
 #include "Button.h"
+#include "Joystick.h"
 
 namespace gameplay
 {
 
 /**
- * Defines an interface for handling gamepad support.
+ * Defines an interface for handling gamepad input.
  */
-class Gamepad : public Control::Listener
+class Gamepad
 {
     friend class Game;
+    friend class Control;
 
 public:
 
+    /**
+     *  Gamepad events.
+     */
     enum GamepadEvent
     {
-        JOYSTICK_EVENT,
-        BUTTON_EVENT
+        ATTACHED_EVENT,
+        DETACHED_EVENT,
     };
 
+    /**
+     * Gamepad button states.
+     */
     enum ButtonState
     {
         BUTTON_PRESSED = gameplay::Button::Listener::PRESS, 
         BUTTON_RELEASED = gameplay::Button::Listener::RELEASE
     };
-    
+
+    /**
+     * Gets the Gamepad's ID.
+     *
+     * @return the Gamepad's ID.
+     */
+    const char* getId() const;
+
+    /**
+     * Gets the number of button on the gamepad.
+     *
+     * @return the number of buttons on the gamepad.
+     */
+    unsigned int getButtonCount() const;
+
     /** 
      * Gets the current state of the specified button.
+     *
+     * @param buttonId The index of the button on the gamepad to get the state for.
+     * @return whether the button is currently pressed or not.
      */
     ButtonState getButtonState(unsigned int buttonId) const;
+    
+    /**
+     * Gets the number of joysticks on the gamepad.
+     *
+     * @return the number of joysticks on the gamepad.
+     */
+    unsigned int getJoystickCount() const;
 
     /**
      * Gets whether the specified joystick's state is active or not.
      * 
-     * @param joystickId The unique integer ID of the joystick to set.
+     * @param joystickId The index of the joystick on the gamepad to get state for.
      * @return Whether the given joystick is active or not.
      */
     bool isJoystickActive(unsigned int joystickId) const;
@@ -49,22 +81,39 @@ public:
      */
     const Vector2& getJoystickValue(unsigned int joystickId) const;
 
-    /** 
-     * Listener for Control events on the gamepads Joystick or Buttons.
-     */
-    void controlEvent(Control* control, Control::Listener::EventType evt);
-
     /**
-     * Returns whether the gamepad is represented with a UI form or not.
+     * Returns whether the gamepad is currently represented with a UI form or not.
+     *
+     * @return true if the gamepad is currently represented by a UI form; false if the gamepad is
+     *      not represented by a UI form
      */
     bool isVirtual() const;
+
+    /**
+     * Gets the Form used to represent this gamepad.
+     *
+     * Note: What if the user decides to add gamepad controls (joysticks, buttons) to the gamepad form? How do we handle new/deleted controls?
+     *
+     * @return the Form used to represent this gamepad. NULL if the gamepad is not reprented with a Form.
+     */
+    Form* getForm() const;
+
+    /**
+     * Updates the gamepad.
+     */
+    void update();
+
+    /**
+     * Draws the gamepad if it is based on a form and if the form is enabled.
+     */
+    void draw();
 
 private:
 
     /**
      * Constructor.
      */
-    Gamepad();
+    Gamepad(const char* id);
     
     /**
      * Constructor.
@@ -72,7 +121,7 @@ private:
      *
      * @param formPath
      */ 
-    Gamepad(const char* formPath);
+    Gamepad(const char* id, const char* formPath);
 
     /**
      * Copy constructor.
@@ -83,28 +132,15 @@ private:
      * Destructor.
      */
     virtual ~Gamepad();
-    
+
     /** 
-     * Gets the Joystick and Button Control object's from the specified form.
+     * Binds the Joystick and Button Control object's from the specified container.
      */
-    void getGamepadControls(Form* form);
+    void bindGamepadControls(Container* container);
 
-    /**
-     * Updates the gamepad.
-     */
-    void update();
-
-    /**
-     * Renders the gamepad if it is based on a form and if the form is enabled.
-     */
-    void render();
-
-    int _playerIndex;
-    Vector2** _joystickValues;
-    unsigned int _joystickCount;
-    ButtonState** _buttonStates;
-    unsigned int _buttonCount;
-
+    std::string _id;
+    std::vector<Joystick*> _joysticks;
+    std::vector<Button*> _buttons;
     Form* _gamepadForm;
 };
 
