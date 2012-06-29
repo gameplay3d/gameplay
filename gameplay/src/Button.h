@@ -32,6 +32,19 @@ namespace gameplay
 class Button : public Label
 {
     friend class Container;
+    friend class Gamepad;
+
+public:
+
+    /**
+     * Create a new button control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new button.
+     */
+    static Button* create(const char* id, Theme::Style* style);
 
 protected:
 
@@ -69,12 +82,19 @@ protected:
      */
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
+
 private:
 
     /**
      * Constructor.
      */
     Button(const Button& copy);
+
+    int* _gamepadButtonIndex;
 };
 
 }

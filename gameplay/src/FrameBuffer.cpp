@@ -24,7 +24,10 @@ FrameBuffer::~FrameBuffer()
     {
         for (unsigned int i = 0; i < __maxRenderTargets; ++i)
         {
-            SAFE_RELEASE(_renderTargets[i]);
+            if (_renderTargets[i])
+            {
+                SAFE_RELEASE(_renderTargets[i]);
+            }
         }
         SAFE_DELETE_ARRAY(_renderTargets);
     }
@@ -86,6 +89,7 @@ FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned in
     frameBuffer->_renderTargets = renderTargets;
 
     frameBuffer->setRenderTarget(renderTarget, 0);
+    SAFE_RELEASE(renderTarget);
 
     __frameBuffers.push_back(frameBuffer);
 

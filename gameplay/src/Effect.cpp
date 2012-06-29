@@ -2,7 +2,7 @@
 #include "Effect.h"
 #include "FileSystem.h"
 
-#define OPENGL_ES_DEFINE  "#define OPENGL_ES"
+#define OPENGL_ES_DEFINE  "#define OPENGL_ES\n"
 
 namespace gameplay
 {
@@ -102,6 +102,111 @@ Effect* Effect::createFromSource(const char* vshSource, const char* fshSource, c
     return createFromSource(NULL, vshSource, NULL, fshSource, defines);
 }
 
+
+void replaceDefines(const char* defines, std::string& out)
+{
+    if (defines && strlen(defines) != 0)
+    {
+        out = defines;
+        unsigned int pos;
+        out.insert(0, "#define ");
+        while ((pos = out.find(';')) != std::string::npos)
+        {
+            out.replace(pos, 1, "\n#define ");
+        }
+        out += "\n";
+    }
+#ifdef OPENGL_ES
+    out.insert(0, OPENGL_ES_DEFINE);
+#endif
+}
+
+void replaceIncludes(const char* filepath, const char* source, std::string& out)
+{
+    // Replace the #include "xxxx.xxx" with the sourced file contents of "filepath/xxxx.xxx"
+    std::string str = source;
+    size_t lastPos = 0;
+    size_t headPos = 0;
+    size_t tailPos = 0;
+    size_t fileLen = str.length();
+    tailPos = fileLen;
+    while (headPos < fileLen)
+    {
+        lastPos = headPos;
+        if (headPos == 0)
+        {
+            // find the first "#include"
+            headPos = str.find("#include");
+        }
+        else
+        {
+            // find the next "#include"
+            headPos = str.find("#include", headPos + 1);
+        }
+
+        // If "#include" is found
+        if (headPos != std::string::npos)
+        {
+            // append from our last position for the legth (head - last position) 
+            out.append(str.substr(lastPos,  headPos - lastPos));
+
+            // find the start quote "
+            size_t startQuote = str.find("\"", headPos) + 1;
+            if (startQuote == std::string::npos)
+            {
+                // We have started an "#include" but missing the leading quote "
+                GP_ERROR("Compile failed for shader '%s' missing leading \".", filepath);
+                return;
+            }
+            // find the end quote "
+            size_t endQuote = str.find("\"", startQuote);
+            if (endQuote == std::string::npos)
+            {
+                // We have a start quote but missing the trailing quote "
+                GP_ERROR("Compile failed for shader '%s' missing trailing \".", filepath);
+                return;
+            }
+
+            // jump the head position past the end quote
+            headPos = endQuote + 1;
+            
+            // File path to include and 'stitch' in the value in the quotes to the file path and source it.
+            std::string filepathStr = filepath;
+            std::string directoryPath = filepathStr.substr(0, filepathStr.rfind('/') + 1);
+            size_t len = endQuote - (startQuote);
+            std::string includeStr = str.substr(startQuote, len);
+            directoryPath.append(includeStr);
+            const char* includedSource = FileSystem::readAll(directoryPath.c_str());
+            if (includedSource == NULL)
+            {
+                GP_ERROR("Compile failed for shader '%s' invalid filepath.", filepathStr.c_str());
+                return;
+            }
+            else
+            {
+                // Valid file so lets attempt to see if we need to append anything to it too (recurse...)
+                replaceIncludes(directoryPath.c_str(), includedSource, out);
+                SAFE_DELETE_ARRAY(includedSource);
+            }
+        }
+        else
+        {
+            // Append the remaining
+            out.append(str.c_str(), lastPos, tailPos);
+        }
+    }
+}
+
+void writeShaderToErrorFile(const char* filePath, const char* source)
+{
+    std::string path = filePath;
+    path += ".err";
+    FILE* file = FileSystem::openFile(path.c_str(), "wb");
+    int err = ferror(file);
+    fwrite(source, 1, strlen(source), file);
+    fclose(file);
+}
+
 Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, const char* fshPath, const char* fshSource, const char* defines)
 {
     GP_ASSERT(vshSource);
@@ -116,16 +221,23 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
     GLint length;
     GLint success;
 
-    // Compile vertex shader.
-    std::string definesStr = (defines == NULL) ? "" : defines;
-#ifdef OPENGL_ES
-    if (defines && strlen(defines) != 0)
-        definesStr += "\n";
-    definesStr+= OPENGL_ES_DEFINE;
-#endif
+    // Replace all comma seperated definitions with #define prefix and \n suffix
+    std::string definesStr = "";
+    replaceDefines(defines, definesStr);
+    
     shaderSource[0] = definesStr.c_str();
     shaderSource[1] = "\n";
-    shaderSource[2] = vshSource;
+    std::string vshSourceStr = "";
+    if (vshPath)
+    {
+        // Replace the #include "xxxxx.xxx" with the sources that come from file paths
+        replaceIncludes(vshPath, vshSource, vshSourceStr);
+        if (vshSource && strlen(vshSource) != 0)
+            vshSourceStr += "\n";
+            
+        //writeShaderToErrorFile(vshPath, vshSourceStr.c_str());   // Debugging
+    }
+    shaderSource[2] = vshPath ? vshSourceStr.c_str() :  vshSource;
     GL_ASSERT( vertexShader = glCreateShader(GL_VERTEX_SHADER) );
     GL_ASSERT( glShaderSource(vertexShader, SHADER_SOURCE_LENGTH, shaderSource, NULL) );
     GL_ASSERT( glCompileShader(vertexShader) );
@@ -139,6 +251,11 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
             GL_ASSERT( glGetShaderInfoLog(vertexShader, length, NULL, infoLog) );
             infoLog[length-1] = '\0';
         }
+
+        // Write out the expanded shader file.
+        if (vshPath)
+            writeShaderToErrorFile(vshPath, shaderSource[2]);
+
         GP_ERROR("Compile failed for vertex shader '%s' with error '%s'.", vshPath == NULL ? "NULL" : vshPath, infoLog == NULL ? "" : infoLog);
         SAFE_DELETE_ARRAY(infoLog);
 
@@ -149,7 +266,17 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
     }
 
     // Compile the fragment shader.
-    shaderSource[2] = fshSource;
+    std::string fshSourceStr;
+    if (fshPath)
+    {
+        // Replace the #include "xxxxx.xxx" with the sources that come from file paths
+        replaceIncludes(fshPath, fshSource, fshSourceStr);
+        if (fshSource && strlen(fshSource) != 0)
+            fshSourceStr += "\n";
+
+        //writeShaderToErrorFile(fshPath, fshSourceStr.c_str()); // Debugging
+    }
+    shaderSource[2] = fshPath ? fshSourceStr.c_str() : fshSource;
     GL_ASSERT( fragmentShader = glCreateShader(GL_FRAGMENT_SHADER) );
     GL_ASSERT( glShaderSource(fragmentShader, SHADER_SOURCE_LENGTH, shaderSource, NULL) );
     GL_ASSERT( glCompileShader(fragmentShader) );
@@ -163,6 +290,11 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
             GL_ASSERT( glGetShaderInfoLog(fragmentShader, length, NULL, infoLog) );
             infoLog[length-1] = '\0';
         }
+        
+        // Write out the expanded shader file.
+        if (fshPath)
+            writeShaderToErrorFile(fshPath, shaderSource[2]);
+
         GP_ERROR("Compile failed for fragment shader (%s): %s", fshPath == NULL ? "NULL" : fshPath, infoLog == NULL ? "" : infoLog);
         SAFE_DELETE_ARRAY(infoLog);
 

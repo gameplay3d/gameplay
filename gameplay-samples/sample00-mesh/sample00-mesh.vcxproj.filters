@@ -35,12 +35,6 @@
     <None Include="res\grid.material">
       <Filter>res</Filter>
     </None>
-    <None Include="res\line.fsh">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\line.vsh">
-      <Filter>res</Filter>
-    </None>
     <None Include="game.config" />
   </ItemGroup>
   <ItemGroup>
