@@ -78,7 +78,12 @@ public:
      * @return A form with the given ID, or null if one was not found.
      */
     static Form* getForm(const char* id);
-
+    
+    /**
+     * Gets the theme for the form.
+     *
+     * @return The theme for the form.
+     */
     Theme* getTheme() const;
 
     /**
@@ -109,30 +114,6 @@ public:
      * @param autoHeight Whether to set this form's height to that of the display.
      */
     virtual void setAutoHeight(bool autoHeight);
-
-    /**
-     * Create a 3D quad to texture with this Form.
-     *
-     * The specified points should describe a triangle strip with the first 3 points
-     * forming a triangle wound in counter-clockwise direction, with the second triangle
-     * formed from the last three points in clockwise direction.
-     *
-     * @param p1 The first point.
-     * @param p2 The second point.
-     * @param p3 The third point.
-     * @param p4 The fourth point.
-     */
-    void setQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4);
-
-    /**
-     * Create a 2D quad to texture with this Form.
-     *
-     * @param x The x coordinate.
-     * @param y The y coordinate.
-     * @param width The width of the quad.
-     * @param height The height of the quad.
-     */
-    void setQuad(float x, float y, float width, float height);
 
     /**
      * Attach this form to a node.
@@ -229,15 +210,15 @@ private:
     bool projectPoint(int x, int y, Vector3* point);
 
     Theme* _theme;                      // The Theme applied to this Form.
-    Model* _quad;                       // Quad for rendering this Form in world-space.
-    Node* _node;                        // Node for transforming this Form in world-space.
-    FrameBuffer* _frameBuffer;          // FBO the Form is rendered into for texturing the quad.
-    Matrix _projectionMatrix;           // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
-    Matrix _defaultProjectionMatrix;
+    FrameBuffer* _frameBuffer;          // FBO the Form is rendered into for texturing the quad. 
     SpriteBatch* _spriteBatch;
-
+    Node* _node;                        // Node for transforming this Form in world-space.
+    Model* _nodeQuad;                   // Quad for rendering this Form in 3d space.
+    Material* _nodeMaterial;            // Material for rendering this Form in 3d space.
     float _u2;
     float _v1;
+    Matrix _projectionMatrix;           // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
+    Matrix _defaultProjectionMatrix;   
 };
 
 }

@@ -32,6 +32,7 @@ Scene::~Scene()
 
     // Remove all nodes from the scene
     removeAllNodes();
+    SAFE_DELETE(_debugBatch);
 }
 
 Scene* Scene::createScene()
