@@ -3,7 +3,12 @@
 - Pre-built versions gameplay-encoder added to bin folder with TTF, DAE and FBX support built-in.
 - Improved modular shader library with support for #include in shaders.
 - Fixes to FrameBuffer, RenderTarget and DepthStencilTarget.
-- TODO
+- Fixes node cloning.
+- Adds the ability to clone the boy in sample03-character by pressing 'c'.
+- Improvements to gameplay-encoder.
+  - Prompts user for font size if not specified.
+  - Fixes output file path when encoding fonts.
+  - Adds "-g" argument for grouping animations.
 
 ## v1.3.0
 
