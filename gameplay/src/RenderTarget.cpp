@@ -51,7 +51,7 @@ RenderTarget* RenderTarget::getRenderTarget(const char* id)
     {
         RenderTarget* dst = *it;
         GP_ASSERT(dst);
-        if (strcmp(id, dst->getID()) == 0)
+        if (strcmp(id, dst->getId()) == 0)
         {
             return dst;
         }
@@ -60,7 +60,7 @@ RenderTarget* RenderTarget::getRenderTarget(const char* id)
     return NULL;
 }
 
-const char* RenderTarget::getID() const
+const char* RenderTarget::getId() const
 {
     return _id.c_str();
 }
