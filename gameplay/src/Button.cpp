@@ -5,14 +5,11 @@ namespace gameplay
 {
 
 Button::Button()
-    : _gamepadButtonIndex(NULL)
 {
 }
 
 Button::~Button()
 {
-    if (_gamepadButtonIndex)
-        SAFE_DELETE(_gamepadButtonIndex);
 }
 
 Button* Button::create(const char* id, Theme::Style* style)

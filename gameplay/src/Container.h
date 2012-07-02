@@ -178,6 +178,11 @@ public:
     Animation* getAnimation(const char* id = NULL) const;
 
     /**
+     * @see Control::isContainer
+     */
+    bool isContainer() const;
+
+    /**
      * @see Control::getType
      */
     const char* getType() const;
@@ -286,14 +291,7 @@ protected:
      * @param layoutString The layout string to parse
      */
     static Layout::Type getLayoutType(const char* layoutString);
-
-    /**
-     * Returns whether this control is a container.
-     *
-     * @return true if this is a container, false if not.
-     */
-    bool isContainer() const;
-
+    
     /**
      * Returns whether this container or any of its controls have been modified and require an update.
      * 

@@ -25,7 +25,6 @@ class Control : public Ref, public AnimationTarget
     friend class AbsoluteLayout;
     friend class VerticalLayout;
     friend class FlowLayout;
-    friend class Gamepad;
 
 public:
 
@@ -188,7 +187,7 @@ public:
      *
      * @return This control's ID.
      */
-    const char* getID() const;
+    const char* getId() const;
 
     /**
      * Set the position of this control relative to its parent container.
@@ -699,6 +698,20 @@ public:
     void setFocusIndex(int focusIndex);
 
     /**
+     * Returns whether this Control object is a Container or not.
+     *
+     * @return true if this object is of class Container, false otherwise.
+     */
+    virtual bool isContainer() const;
+
+    /**
+     * Gets the type of the Control and returns it as a string.
+     *
+     * @return The string of the Control type, all in lower-case.
+     */
+    virtual const char* getType() const;
+
+    /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
      * E.g. To listen to touch-press and touch-release events,
@@ -709,13 +722,6 @@ public:
      * @param eventFlags The events to listen for.
      */
     virtual void addListener(Control::Listener* listener, int eventFlags);
-
-    /**
-     * Gets the type of the Control and returns it as a string.
-     *
-     * @return The string of the Control type, all in lower-case.
-     */
-    virtual const char* getType() const;
 
     /**
      * @see AnimationTarget#getAnimationPropertyComponentCount
@@ -840,23 +846,6 @@ protected:
      * @param properties The properties to set on this control.
      */
     virtual void initialize(Theme::Style* style, Properties* properties);
-
-    /**
-     * Initialize properties common to all Controls.
-     *
-     * @param id This control's ID.
-     * @param style The style to apply to this control.
-     * @param position This control's position.
-     * @param size This control's size.
-     */
-    //virtual void initialize(const char* id, Theme::Style* style, const Vector2& position, const Vector2& size);
-
-    /**
-     * Container and classes that extend it should implement this and return true.
-     *
-     * @return true if this object is of class Container, false otherwise.
-     */
-    virtual bool isContainer() const;
 
     /**
      * Returns whether this control has been modified and requires an update.
