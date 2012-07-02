@@ -25,7 +25,7 @@ class Game
 {
 
 public:
-
+    
     /**
      * The game states.
      */
@@ -272,11 +272,10 @@ public:
     /**
      * Gamepad callback on gamepad events.
      *
-     * @param evt The gamepad event that occured.
-     * @param gamepad the gamepad the event occured on
-     * @param index The joystick or button index that triggered the event.
+     * @param evt The gamepad event that occurred.
+     * @param gamepad the gamepad the event occurred on
      */
-    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int index);
+    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
     /**
      * Sets muli-touch is to be enabled/disabled. Default is disabled.
@@ -309,21 +308,20 @@ public:
      * @param cookie The cookie data that the time event will contain.
      */
     void schedule(float timeOffset, TimeListener* timeListener, void* cookie = 0);
-
-    /** 
-     * Creates a Gamepad object from a .form file.
-     *
-     * @param playerIndex
-     * @param formPath
+    
+    /**
+     * Gets the number of gamepad's connected to the game.
+     * 
+     * @return The number of gamepad's connected to the game.
      */
-    Gamepad* createGamepad(const char* gamepadFormPath);
+    inline unsigned int getGamepadCount() const;
 
     /**
-     * Gets the gamepad for the specified player index.
+     * Gets the gamepad at the specified index.
      *
-     * @param playerIndex The player index to get the gamepad for (0 <= playerIndex <= 3) 
+     * @param index The index to get the gamepad for (0 <= index <= Game::getGamepadCount) 
      */
-    inline Gamepad* getGamepad(unsigned int playerIndex = 0);
+    inline Gamepad* getGamepad(unsigned int index = 0) const;
 
 protected:
 
@@ -431,6 +429,14 @@ private:
      */
     void loadConfig();
 
+    /** 
+     * Creates a Gamepad object from a .form file.
+     *
+     * @param playerIndex
+     * @param formPath
+     */
+    Gamepad* createGamepad(const char* gamepadId, const char* gamepadFormPath);
+
     /**
      * Loads a gamepad from the configuration file.
      */
@@ -454,8 +460,7 @@ private:
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
     AudioListener* _audioListener;              // The audio listener in 3D space.
-    unsigned int _gamepadCount;
-    Gamepad** _gamepads;
+    std::vector<Gamepad*> _gamepads;
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents; // Contains the scheduled time events.
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.

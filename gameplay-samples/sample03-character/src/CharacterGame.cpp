@@ -99,8 +99,11 @@ void CharacterGame::initializeCharacter()
 
 void CharacterGame::initializeGamepad()
 {
-    // Get the gamepad loaded for player1 from game.config.
-    _gamepad = Game::getInstance()->getGamepad(0);
+    Game* game = Game::getInstance();
+    GP_ASSERT(game);
+    GP_ASSERT(game->getGamepadCount() > 0);
+
+    _gamepad = game->getGamepad();
     GP_ASSERT(_gamepad);
 }
 
@@ -155,7 +158,6 @@ void CharacterGame::play(const char* id, bool repeat, float speed)
     {
         clip->play();
     }
-
     _currentClip = clip;
 }
 
@@ -175,7 +177,29 @@ bool CharacterGame::isOnFloor() const
 
 void CharacterGame::update(float elapsedTime)
 {
-    if (!_gamepad->isJoystickActive(0))
+    _gamepad->update(elapsedTime);
+
+    if (_gamepad->getButtonState(0) == Gamepad::BUTTON_PRESSED)
+    {
+        if (_buttonReleased)
+        {
+            _buttonReleased = false;
+            // Jump while the gamepad button is being pressed
+            jump();
+        }
+    }
+    else
+    {
+        _buttonReleased = true;
+    }
+
+    _currentDirection.set(Vector2::zero());
+
+    if (_gamepad->isJoystickActive(0))
+    {
+        _currentDirection = _gamepad->getJoystickValue(0);
+    }
+    else
     {
         // Construct direction vector from keyboard input
         if (_keyFlags & NORTH)
@@ -270,6 +294,8 @@ void CharacterGame::render(float elapsedTime)
         _scene->drawDebug(Scene::DEBUG_SPHERES);
         break;
     }
+
+    _gamepad->draw();
 
     // Draw FPS
     _font->begin();
@@ -458,30 +484,15 @@ void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener:
     clip->crossFade(_currentClip, 150);
 }
 
-void CharacterGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int index)
-{
-    switch(evt)
-    {
-        case Gamepad::BUTTON_EVENT:
-            if (gamepad->getButtonState(index) == Gamepad::BUTTON_PRESSED)
-                jump();
-            break;
-        case Gamepad::JOYSTICK_EVENT:
-            _currentDirection = gamepad->getJoystickValue(index);
-            break;
-    }
-    return;
-}
-
 void CharacterGame::clone()
 {
     Node* clone = _scene->findNode("boycharacter")->clone();
     Animation* cloneAnimation = clone->getAnimation();
 
     // Find the current clip and have the clone play that clip repeatedly.
-    const char* clipId = _currentClip->getID();
+    const char* clipId = _currentClip->getId();
     if (_jumpClip->isPlaying())
-        clipId = _jumpClip->getID();
+        clipId = _jumpClip->getId();
     AnimationClip* clip = cloneAnimation->getClip(clipId);
     clip->setRepeatCount(AnimationClip::REPEAT_INDEFINITE);
     clip->play();

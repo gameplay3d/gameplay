@@ -62,7 +62,7 @@ public:
      *
      * @return The ID of this DepthStencilTarget.
      */
-    const char* getID() const;
+    const char* getId() const;
 
     /**
      * Returns the format of the DepthStencilTarget.

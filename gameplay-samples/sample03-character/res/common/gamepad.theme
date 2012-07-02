@@ -36,13 +36,6 @@ theme gamepad
 		region = 40, 310, 160, 160
 	}
 
-	style none 
-    {
-        stateNormal 
-        {
-        } 
-    }
-	
 	style joystickStyle
 	{
 		stateNormal

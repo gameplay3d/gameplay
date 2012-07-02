@@ -155,7 +155,6 @@ private:
     Vector2 _displacement;
     Vector2 _value;
     Rectangle _region;
-    int* _gamepadJoystickIndex;
 };
 
 }

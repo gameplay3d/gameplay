@@ -94,7 +94,6 @@ private:
      */
     Button(const Button& copy);
 
-    int* _gamepadButtonIndex;
 };
 
 }

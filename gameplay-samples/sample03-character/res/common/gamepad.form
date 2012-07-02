@@ -1,13 +1,12 @@
 form gamepadForm
 {
 	theme = res/common/gamepad.theme
-    style = none
     layout = LAYOUT_ABSOLUTE
 	position = 0, 0
     autoWidth = true
     autoHeight = true
 
-    joystick joystick0
+    joystick
 	{
 		style = joystickStyle
 		size = 200, 200
@@ -15,7 +14,7 @@ form gamepadForm
 		radius = 64
     }
 
-    button button0
+    button
     {
         style = buttonStyle
         size = 128, 128

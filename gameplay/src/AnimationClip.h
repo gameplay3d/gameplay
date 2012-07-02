@@ -75,7 +75,7 @@ public:
      *
      * @return The AnimationClip's ID.
      */
-    const char* getID() const;
+    const char* getId() const;
 
     /**
      * Gets the Animation that this AnimationClip was created from.

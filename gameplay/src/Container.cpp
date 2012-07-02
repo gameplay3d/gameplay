@@ -222,7 +222,7 @@ void Container::removeControl(const char* id)
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
         Control* c = *it;
-        if (strcmp(id, c->getID()) == 0)
+        if (strcmp(id, c->getId()) == 0)
         {
             _controls.erase(it);
             return;
@@ -258,7 +258,7 @@ Control* Container::getControl(const char* id) const
     {
         Control* c = *it;
         GP_ASSERT(c);
-        if (strcmp(id, c->getID()) == 0)
+        if (strcmp(id, c->getId()) == 0)
         {
             return c;
         }
