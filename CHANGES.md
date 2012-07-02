@@ -2,13 +2,14 @@
 
 - Pre-built versions gameplay-encoder added to bin folder with TTF, DAE and FBX support built-in.
 - Improved modular shader library with support for #include in shaders.
-- Fixes to FrameBuffer, RenderTarget and DepthStencilTarget.
+- Adds Gamepad class for virtual gamepad support.
+- Adds the ability for cloning and wireframe the boy in sample03-character.
+- Fixes to gameplay-encoder to prompt user for font size if not specified.
+- Fixes to add "-g" as short form argument for grouping animations.
 - Fixes node cloning.
-- Adds the ability to clone the boy in sample03-character by pressing 'c'.
-- Improvements to gameplay-encoder.
-  - Prompts user for font size if not specified.
-  - Fixes output file path when encoding fonts.
-  - Adds "-g" argument for grouping animations.
+- Fixes to gameplay-encoder for output file path when encoding fonts.
+- Fixes to FrameBuffer, RenderTarget and DepthStencilTarget.
+
 
 ## v1.3.0
 
