@@ -1129,37 +1129,37 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
                     // No parent currently set for this joint.
                     // Lookup its parentID in case it references a node that was not yet loaded as part
                     // of the mesh skin's joint list.
-                    std::string nodeID = node->getId();
+                    std::string nodeId = node->getId();
 
                     while (true)
                     {
                         // Get the node's type.
-                        Reference* ref = find(nodeID.c_str());
+                        Reference* ref = find(nodeId.c_str());
                         if (ref == NULL)
                         {
-                            GP_ERROR("No object with name '%s' in bundle '%s'.", nodeID.c_str(), _path.c_str());
+                            GP_ERROR("No object with name '%s' in bundle '%s'.", nodeId.c_str(), _path.c_str());
                             return;
                         }
 
                         // Seek to the current node in the file so we can get it's parent ID.
-                        seekTo(nodeID.c_str(), ref->type);
+                        seekTo(nodeId.c_str(), ref->type);
 
                         // Skip over the node type (1 unsigned int) and transform (16 floats) and read the parent id.
                         if (fseek(_file, sizeof(unsigned int) + sizeof(float)*16, SEEK_CUR) != 0)
                         {
-                            GP_ERROR("Failed to skip over node type and transform for node '%s' in bundle '%s'.", nodeID.c_str(), _path.c_str());
+                            GP_ERROR("Failed to skip over node type and transform for node '%s' in bundle '%s'.", nodeId.c_str(), _path.c_str());
                             return;
                         }
                         std::string parentID = readString(_file);
                         
                         if (!parentID.empty())
-                            nodeID = parentID;
+                            nodeId = parentID;
                         else
                             break;
                     }
 
-                    if (nodeID != rootJoint->getId())
-                        loadedNodes.push_back(loadNode(nodeID.c_str(), sceneContext, nodeContext));
+                    if (nodeId != rootJoint->getId())
+                        loadedNodes.push_back(loadNode(nodeId.c_str(), sceneContext, nodeContext));
 
                     break;
                 }

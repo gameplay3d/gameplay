@@ -50,7 +50,7 @@ public:
      *
      * @return The ID of this FrameBuffer.
      */
-    const char* getID() const;
+    const char* getId() const;
 
     /**
      * Gets the width of the frame buffer.

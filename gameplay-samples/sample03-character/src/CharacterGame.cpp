@@ -158,7 +158,6 @@ void CharacterGame::play(const char* id, bool repeat, float speed)
     {
         clip->play();
     }
-
     _currentClip = clip;
 }
 
@@ -178,7 +177,7 @@ bool CharacterGame::isOnFloor() const
 
 void CharacterGame::update(float elapsedTime)
 {
-    _gamepad->update();
+    _gamepad->update(elapsedTime);
 
     if (_gamepad->getButtonState(0) == Gamepad::BUTTON_PRESSED)
     {
@@ -491,9 +490,9 @@ void CharacterGame::clone()
     Animation* cloneAnimation = clone->getAnimation();
 
     // Find the current clip and have the clone play that clip repeatedly.
-    const char* clipId = _currentClip->getID();
+    const char* clipId = _currentClip->getId();
     if (_jumpClip->isPlaying())
-        clipId = _jumpClip->getID();
+        clipId = _jumpClip->getId();
     AnimationClip* clip = cloneAnimation->getClip(clipId);
     clip->setRepeatCount(AnimationClip::REPEAT_INDEFINITE);
     clip->play();
