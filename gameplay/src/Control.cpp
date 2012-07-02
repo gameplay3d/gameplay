@@ -134,7 +134,7 @@ void initialize(const char* id, Theme::Style* style, const Vector2& position, co
 
 }
 
-const char* Control::getID() const
+const char* Control::getId() const
 {
     return _id.c_str();
 }

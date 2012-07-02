@@ -187,7 +187,7 @@ public:
      *
      * @return This control's ID.
      */
-    const char* getID() const;
+    const char* getId() const;
 
     /**
      * Set the position of this control relative to its parent container.

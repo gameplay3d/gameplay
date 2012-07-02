@@ -46,7 +46,7 @@ DepthStencilTarget* DepthStencilTarget::getDepthStencilTarget(const char* id)
     {
         DepthStencilTarget* dst = *it;
         GP_ASSERT(dst);
-        if (strcmp(id, dst->getID()) == 0)
+        if (strcmp(id, dst->getId()) == 0)
         {
             return dst;
         }
@@ -54,7 +54,7 @@ DepthStencilTarget* DepthStencilTarget::getDepthStencilTarget(const char* id)
     return NULL;
 }
 
-const char* DepthStencilTarget::getID() const
+const char* DepthStencilTarget::getId() const
 {
     return _id.c_str();
 }
