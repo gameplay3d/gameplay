@@ -101,7 +101,7 @@ public:
     /**
      * Updates the gamepad.
      */
-    void update();
+    void update(float elapsedTime);
 
     /**
      * Draws the gamepad if it is based on a form and if the form is enabled.

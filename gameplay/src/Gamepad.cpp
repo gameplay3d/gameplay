@@ -71,11 +71,11 @@ const char* Gamepad::getId() const
     return _id.c_str();
 }
 
-void Gamepad::update()
+void Gamepad::update(float elapsedTime)
 {
     if (_gamepadForm && _gamepadForm->isEnabled())
     {
-        _gamepadForm->update();
+        _gamepadForm->update(elapsedTime);
     }
 }
 
