@@ -200,7 +200,7 @@ Form* Form::create(const char* url)
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
 
-    form->update();
+    form->update(0.0f);
 
     SAFE_DELETE(properties);
 
@@ -216,7 +216,7 @@ Form* Form::getForm(const char* id)
     {
         Form* f = *it;
         GP_ASSERT(f);
-        if (strcmp(id, f->getID()) == 0)
+        if (strcmp(id, f->getId()) == 0)
         {
             return f;
         }
@@ -394,7 +394,7 @@ void Form::setNode(Node* node)
     _node = node;
 }
 
-void Form::update()
+void Form::update(float elapsedTime)
 {
     if (isDirty())
     {
