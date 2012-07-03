@@ -99,6 +99,11 @@ private:
      */
     ~VertexAttributeBinding();
 
+    /**
+     * Hidden copy assignment operator.
+     */
+    VertexAttributeBinding& operator=(const VertexAttributeBinding&);
+
     static VertexAttributeBinding* create(Mesh* mesh, const VertexFormat& vertexFormat, void* vertexPointer, Effect* effect);
 
     void setVertexAttribPointer(GLuint indx, GLint size, GLenum type, GLboolean normalize, GLsizei stride, void* pointer);

@@ -70,6 +70,11 @@ private:
      */
     ~Image();
 
+    /**
+     * Hidden copy assignment operator.
+     */
+    Image& operator=(const Image&);
+
     unsigned char* _data;
     Format _format;
     unsigned int _height;

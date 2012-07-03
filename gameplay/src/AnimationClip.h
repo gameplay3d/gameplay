@@ -256,6 +256,11 @@ private:
          */
         ~ListenerEvent();
 
+        /**
+         * Hidden copy assignment operator.
+         */
+        ListenerEvent& operator=(const ListenerEvent&);
+
         Listener* _listener;        // This listener to call back when this event is triggered.
         unsigned long _eventTime;   // The time at which the listener will be called back at during the playback of the AnimationClip.
     };
@@ -279,6 +284,11 @@ private:
      * Destructor.
      */
     ~AnimationClip();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    AnimationClip& operator=(const AnimationClip&);
 
     /**
      * Updates the animation with the elapsed time.
