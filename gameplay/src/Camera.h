@@ -247,6 +247,11 @@ private:
     virtual ~Camera();
 
     /**
+     * Hidden copy assignment operator.
+     */
+    Camera& operator=(const Camera&);
+
+    /**
      * Clones the camera and returns a new camera.
      * 
      * @param context The clone context.

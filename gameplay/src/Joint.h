@@ -91,7 +91,7 @@ private:
     Joint(const Joint& copy);
 
     /**
-     * Copy assignment operator.
+     * Hidden copy assignment operator.
      */
     Joint& operator=(const Joint&);
 
