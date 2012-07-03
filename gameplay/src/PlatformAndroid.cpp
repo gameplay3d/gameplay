@@ -924,6 +924,34 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     }
 }
 
+bool Platform::hasMouse()
+{
+    // not supported
+    return false;
+}
+
+void Platform::setMouseCapture(bool captured)
+{
+    // not supported
+}
+
+bool Platform::isMouseCaptured()
+{
+    // not supported
+    return false;
+}
+
+void Platform::setCursorVisible(bool visible)
+{
+    // not supported
+}
+
+bool Platform::isCursorVisible()
+{
+    // not supported
+    return false;
+}
+
 void Platform::swapBuffers()
 {
     if (__eglDisplay && __eglSurface)
