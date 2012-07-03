@@ -91,7 +91,10 @@ public:
     static void setVsync(bool enable);
 
     /**
-     * Set if multi-touch is enabled on the platform
+     * Set if multi-touch is enabled on the platform.
+     *
+     * Note that this method does nothing on platforms that do not
+     * support multi-touch.
      */
     static void setMultiTouch(bool enabled);
 
@@ -99,6 +102,54 @@ public:
     * Is multi-touch mode enabled.
     */
     static bool isMultiTouch();
+
+    /**
+     * Whether the platform has mouse support.
+     */
+    static bool hasMouse();
+    
+    /**
+     * Enables or disabled mouse capture.
+     *
+     * When mouse capture is enabled, the platform cursor is hidden
+     * and mouse event points are delivered as position deltas instead
+     * of absolute positions.
+     *
+     * This is useful for games that wish to provide uninhibited mouse
+     * movement, such as when implementing free/mouse look in an FPS
+     * game.
+     *
+     * Disabling mouse capture moves the mouse back to the center of the
+     * screen and shows the platform cursor.
+     *
+     * Note that this method does nothing on platforms that do not
+     * support a mouse.
+     *
+     * @param captured True to enable mouse capture, false to disable it.
+     */
+    static void setMouseCapture(bool captured);
+
+    /**
+     * Determines if mouse capture is currently enabled.
+     */
+    static bool isMouseCaptured();
+
+    /**
+     * Sets the visibility of the platform cursor.
+     *
+     * On platforms that support a visible cursor, this method
+     * toggles the visibility of the cursor.
+     *
+     * @param visible true to show the platform cursor, false to hide it.
+     */
+    static void setCursorVisible(bool visible);
+
+    /**
+     * Determines whether the platform cursor is currently visible.
+     *
+     * @return true if the platform cursor is visible, false otherwise.
+     */
+    static bool isCursorVisible();
 
     /**
      * Gets the platform accelerometer values.
