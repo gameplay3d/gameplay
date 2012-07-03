@@ -42,7 +42,7 @@ public:
      *
      * @return The ID of this RenderTarget.
      */
-    const char* getID() const;
+    const char* getId() const;
 
     /**
      * Get the backing texture of this RenderTarget.

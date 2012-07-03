@@ -4,7 +4,7 @@ precision highp float;
 
 // Uniforms
 uniform sampler2D u_diffuseTexture;     	// Diffuse texture
-#if defined(TEXTURE_LIGHT)
+#if defined(TEXTURE_LIGHTMAP)
 uniform sampler2D u_lightmapTexture;     	// Lightmap texture
 #endif
 #if defined(MODULATE_COLOR)
@@ -22,8 +22,8 @@ void main()
 {
     // Sample the texture for the color
     gl_FragColor = texture2D(u_diffuseTexture, v_texCoord);
-	#if defined(TEXTURE_LIGHT)
-	vec4 lightColor = texture2D(u_lightTexture, v_texCoord);
+	#if defined(TEXTURE_LIGHTMAP)
+	vec4 lightColor = texture2D(u_lightmapTexture, v_texCoord);
 	gl_FragColor.a *= lightColor.a;
 	#endif
 	// Global color modulation

@@ -64,7 +64,7 @@ AnimationClip::ListenerEvent::~ListenerEvent()
 {
 }
 
-const char* AnimationClip::getID() const
+const char* AnimationClip::getId() const
 {
     return _id.c_str();
 }
@@ -548,6 +548,31 @@ void AnimationClip::setClipStateBit(unsigned char bit)
 void AnimationClip::resetClipStateBit(unsigned char bit)
 {
     _stateBits &= ~bit;
+}
+
+AnimationClip* AnimationClip::clone(Animation* animation) const
+{
+    // Don't clone the elapsed time, listeners or crossfade information.
+    AnimationClip* newClip = new AnimationClip(getId(), animation, getStartTime(), getEndTime());
+    newClip->setRepeatCount(getRepeatCount());
+    newClip->setSpeed(getSpeed());
+    newClip->setRepeatCount(getRepeatCount());
+    newClip->setBlendWeight(getBlendWeight());
+    
+    size_t size = _values.size();
+    newClip->_values.resize(size, NULL);
+    for (size_t i = 0; i < size; ++i)
+    {
+        if (newClip->_values[i] == NULL)
+        {
+            newClip->_values[i] = new AnimationValue(*_values[i]);
+        }
+        else
+        {
+            *newClip->_values[i] = *_values[i];
+        }
+    }
+    return newClip;
 }
 
 }
