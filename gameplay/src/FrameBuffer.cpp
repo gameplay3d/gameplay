@@ -24,7 +24,10 @@ FrameBuffer::~FrameBuffer()
     {
         for (unsigned int i = 0; i < __maxRenderTargets; ++i)
         {
-            SAFE_RELEASE(_renderTargets[i]);
+            if (_renderTargets[i])
+            {
+                SAFE_RELEASE(_renderTargets[i]);
+            }
         }
         SAFE_DELETE_ARRAY(_renderTargets);
     }
@@ -103,7 +106,7 @@ FrameBuffer* FrameBuffer::getFrameBuffer(const char* id)
     {
         FrameBuffer* fb = *it;
         GP_ASSERT(fb);
-        if (strcmp(id, fb->getID()) == 0)
+        if (strcmp(id, fb->getId()) == 0)
         {
             return fb;
         }
@@ -111,7 +114,7 @@ FrameBuffer* FrameBuffer::getFrameBuffer(const char* id)
     return NULL;
 }
 
-const char* FrameBuffer::getID() const
+const char* FrameBuffer::getId() const
 {
     return _id.c_str();
 }

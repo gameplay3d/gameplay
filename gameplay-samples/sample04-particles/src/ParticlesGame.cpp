@@ -636,7 +636,7 @@ void ParticlesGame::update(float elapsedTime)
     _particleEmitterNode->getParticleEmitter()->update(elapsedTime);
     
     // Update UI.
-    _form->update();
+    _form->update(elapsedTime);
 }
 
 void ParticlesGame::render(float elapsedTime)

@@ -853,6 +853,7 @@ void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const
     transform->_scale.set(_scale);
     transform->_rotation.set(_rotation);
     transform->_translation.set(_translation);
+    transform->dirty(DIRTY_TRANSLATION | DIRTY_ROTATION | DIRTY_SCALE);
 }
 
 void Transform::applyAnimationValueRotation(AnimationValue* value, unsigned int index, float blendWeight)
