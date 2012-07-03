@@ -9,6 +9,11 @@ inline Game::State Game::getState() const
     return _state;
 }
 
+inline bool Game::isInitialized() const
+{
+    return _initialized;
+}
+
 inline unsigned int Game::getFrameRate() const
 {
     return _frameRate;
