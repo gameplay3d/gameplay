@@ -23,7 +23,6 @@ namespace gameplay
  */
 class Game
 {
-
 public:
     
     /**
@@ -273,9 +272,9 @@ public:
     AudioListener* getAudioListener();
 
     /**
-     * Menu callback on menu events.
+     * Menu callback on menu events for platforms with special menu keys or gestures.
      */
-    virtual void menu();
+    virtual void menuEvent();
     
     /**
      * Shows or hides the virtual keyboard (if supported).
@@ -332,6 +331,20 @@ public:
     virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
     /**
+     * Gets the number of gamepad's connected to the game.
+     * 
+     * @return The number of gamepad's connected to the game.
+     */
+    inline unsigned int getGamepadCount() const;
+
+    /**
+     * Gets the gamepad at the specified index.
+     *
+     * @param index The index to get the gamepad for: 0 <= index <= Game::getGamepadCount()
+     */
+    inline Gamepad* getGamepad(unsigned int index) const;
+
+    /**
      * Sets muli-touch is to be enabled/disabled. Default is disabled.
      *
      * @param enabled true sets multi-touch is enabled, false to be disabled.
@@ -362,20 +375,6 @@ public:
      * @param cookie The cookie data that the time event will contain.
      */
     void schedule(float timeOffset, TimeListener* timeListener, void* cookie = 0);
-    
-    /**
-     * Gets the number of gamepad's connected to the game.
-     * 
-     * @return The number of gamepad's connected to the game.
-     */
-    inline unsigned int getGamepadCount() const;
-
-    /**
-     * Gets the gamepad at the specified index.
-     *
-     * @param index The index to get the gamepad for (0 <= index <= Game::getGamepadCount) 
-     */
-    inline Gamepad* getGamepad(unsigned int index = 0) const;
 
 protected:
 
@@ -434,21 +433,14 @@ protected:
 private:
 
     /**
-     * TimeEvent represents the event that is sent to TimeListeners as a result of 
-     * calling Game::schedule().
+     * TimeEvent represents the event that is sent to TimeListeners as a result of calling Game::schedule().
      */
     class TimeEvent
     {
     public:
 
         TimeEvent(double time, TimeListener* timeListener, void* cookie);
-        // The comparator is used to determine the order of time events in the priority queue.
         bool operator<(const TimeEvent& v) const;
-        
-        /**
-         * The game time.
-         * @see Game::getGameTime()
-         */
         double time;
         TimeListener* listener;
         void* cookie;
@@ -462,7 +454,7 @@ private:
     Game(const Game& copy);
 
     /**
-     * Starts core game.
+     * Starts the game.
      */
     bool startup();
 
@@ -483,18 +475,15 @@ private:
      */
     void loadConfig();
 
+    /**
+     * Loads the gamepads from the configuration file.
+     */
+    void loadGamepads();
+
     /** 
      * Creates a Gamepad object from a .form file.
-     *
-     * @param playerIndex
-     * @param formPath
      */
     Gamepad* createGamepad(const char* gamepadId, const char* gamepadFormPath);
-
-    /**
-     * Loads a gamepad from the configuration file.
-     */
-    void loadGamepad();
 
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
@@ -514,8 +503,8 @@ private:
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
     AudioListener* _audioListener;              // The audio listener in 3D space.
-    std::vector<Gamepad*> _gamepads;
-    std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents; // Contains the scheduled time events.
+    std::vector<Gamepad*> _gamepads;            // The connected gamepads.
+    std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.
 
