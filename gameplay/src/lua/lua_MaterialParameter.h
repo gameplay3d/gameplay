@@ -7,6 +7,7 @@ namespace gameplay
 // Lua bindings for MaterialParameter.
 int lua_MaterialParameter__gc(lua_State* state);
 int lua_MaterialParameter_addRef(lua_State* state);
+int lua_MaterialParameter_bindValue(lua_State* state);
 int lua_MaterialParameter_createAnimation(lua_State* state);
 int lua_MaterialParameter_createAnimationFromBy(lua_State* state);
 int lua_MaterialParameter_createAnimationFromTo(lua_State* state);

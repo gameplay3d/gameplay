@@ -451,7 +451,7 @@ public:
      * @param v The pointer variable.
      * @script{ignore}
      */
-    template<typename T>void setPointer(const char* type, const char* name, T* v);
+    template<typename T>void setObjectPointer(const char* type, const char* name, T* v);
 
     /**
      * Registers the given library with Lua.

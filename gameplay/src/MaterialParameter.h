@@ -11,6 +11,7 @@
 
 namespace gameplay
 {
+    class Node;
 
 /**
  * Defines a material parameter.
@@ -150,6 +151,37 @@ public:
      */
     template <class ClassType, class ParameterType>
     void bindValue(ClassType* classInstance, ParameterType (ClassType::*valueMethod)() const, unsigned int (ClassType::*countMethod)() const);
+
+    /**
+     * Binds the return value of the supported class method for the given node to this material parameter.
+     * 
+     * Note: intended for use from Lua scripts.
+     * 
+     * @param node The node containing the the member method to bind.
+     * @param binding The name of the class method to bind (in the format '&class::method').
+     *      Note: this name must be one of the following supported methods:
+     *      - "&Node::getBackVector"
+     *      - "&Node::getDownVector"
+     *      - "&Node::getTranslationWorld"
+     *      - "&Node::getTranslationView"
+     *      - "&Node::getForwardVector"
+     *      - "&Node::getForwardVectorWorld"
+     *      - "&Node::getForwardVectorView"
+     *      - "&Node::getLeftVector"
+     *      - "&Node::getRightVector"
+     *      - "&Node::getRightVectorWorld"
+     *      - "&Node::getUpVector"
+     *      - "&Node::getUpVectorWorld"
+     *      - "&Node::getActiveCameraTranslationWorld"
+     *      - "&Node::getActiveCameraTranslationView"
+     *      - "&Node::getScaleX"
+     *      - "&Node::getScaleY"
+     *      - "&Node::getScaleZ"
+     *      - "&Node::getTranslationX"
+     *      - "&Node::getTranslationY"
+     *      - "&Node::getTranslationZ"
+     */
+    void bindValue(Node* node, const char* binding);
 
     /**
      * @see AnimationTarget#getAnimationPropertyComponentCount
