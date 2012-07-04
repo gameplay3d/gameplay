@@ -383,10 +383,10 @@ void SpriteBatch::draw(float x, float y, float z, float width, float height, flo
     _batch->add(v, 4, indices, 4);
 }
 
-void SpriteBatch::end()
+void SpriteBatch::finish()
 {
     // Finish and draw the batch
-    _batch->end();
+    _batch->finish();
     _batch->draw();
 }
 

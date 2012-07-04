@@ -41,7 +41,7 @@ int lua_AudioBuffer__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "AudioBuffer");
                 luaL_argcheck(state, userdata != NULL, 1, "'AudioBuffer' expected.");
@@ -81,7 +81,7 @@ int lua_AudioBuffer_addRef(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 AudioBuffer* instance = getInstance(state);
                 instance->addRef();
@@ -115,7 +115,7 @@ int lua_AudioBuffer_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 AudioBuffer* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -152,7 +152,7 @@ int lua_AudioBuffer_release(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 AudioBuffer* instance = getInstance(state);
                 instance->release();

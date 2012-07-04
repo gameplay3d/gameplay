@@ -86,6 +86,7 @@
     <ClCompile Include="src\lua\lua_FrameBuffer.cpp" />
     <ClCompile Include="src\lua\lua_Frustum.cpp" />
     <ClCompile Include="src\lua\lua_Game.cpp" />
+    <ClCompile Include="src\lua\lua_Gamepad.cpp" />
     <ClCompile Include="src\lua\lua_Global.cpp" />
     <ClCompile Include="src\lua\lua_Image.cpp" />
     <ClCompile Include="src\lua\lua_Joint.cpp" />
@@ -290,6 +291,7 @@
     <ClInclude Include="src\lua\lua_FrameBuffer.h" />
     <ClInclude Include="src\lua\lua_Frustum.h" />
     <ClInclude Include="src\lua\lua_Game.h" />
+    <ClInclude Include="src\lua\lua_Gamepad.h" />
     <ClInclude Include="src\lua\lua_Global.h" />
     <ClInclude Include="src\lua\lua_Image.h" />
     <ClInclude Include="src\lua\lua_Joint.h" />

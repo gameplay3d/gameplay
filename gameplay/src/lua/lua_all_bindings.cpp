@@ -38,6 +38,7 @@ void lua_RegisterAllBindings()
     luaRegister_FrameBuffer();
     luaRegister_Frustum();
     luaRegister_Game();
+    luaRegister_Gamepad();
     luaRegister_Image();
     luaRegister_Joint();
     luaRegister_Joystick();

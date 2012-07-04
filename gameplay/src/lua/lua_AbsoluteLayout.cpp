@@ -42,7 +42,7 @@ int lua_AbsoluteLayout__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "AbsoluteLayout");
                 luaL_argcheck(state, userdata != NULL, 1, "'AbsoluteLayout' expected.");
@@ -82,7 +82,7 @@ int lua_AbsoluteLayout_addRef(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 AbsoluteLayout* instance = getInstance(state);
                 instance->addRef();
@@ -116,7 +116,7 @@ int lua_AbsoluteLayout_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 AbsoluteLayout* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -153,7 +153,7 @@ int lua_AbsoluteLayout_getType(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 AbsoluteLayout* instance = getInstance(state);
                 Layout::Type result = instance->getType();
@@ -190,7 +190,7 @@ int lua_AbsoluteLayout_release(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 AbsoluteLayout* instance = getInstance(state);
                 instance->release();

@@ -3,6 +3,7 @@
 
 #include "Node.h"
 #include "MeshBatch.h"
+#include "ScriptController.h"
 
 namespace gameplay
 {
@@ -193,6 +194,20 @@ public:
     void visit(T* instance, bool (T::*visitMethod)(Node*,C), C cookie);
 
     /**
+     * Visits each node in the scene and calls the specified Lua function.
+     *
+     * Calling this method invokes the specified Lua function for each node
+     * in the scene hierarchy.
+     *
+     * The visitMethod parameter must be a string containing the name of a
+     * valid Lua function that has a boolean return type and accepts a 
+     * single parameter of type Node*.
+     *
+     * @param visitMethod The name of the Lua function to call for each node in the scene.
+     */
+    inline void visit(const char* visitMethod);
+
+    /**
      * Draws debugging information (bounding volumes, etc.) for the scene.
      *
      * @param debugFlags Bitwise combination of debug flags from mthe DebugFlags 
@@ -234,6 +249,11 @@ private:
     template <class T, class C>
     bool visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), C cookie);
 
+    /**
+     * Visits the given node and all of its children recursively.
+     */
+    inline bool visitNode(Node* node, const char* visitMethod);
+
     std::string _id;
     Camera* _activeCamera;
     Node* _firstNode;
@@ -261,6 +281,15 @@ void Scene::visit(T* instance, bool (T::*visitMethod)(Node*,C), C cookie)
     for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
     {
         if (!visitNode(node, instance, visitMethod, cookie))
+            return;
+    }
+}
+
+inline void Scene::visit(const char* visitMethod)
+{
+    for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
+    {
+        if (!visitNode(node, visitMethod))
             return;
     }
 }
@@ -293,6 +322,22 @@ bool Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), 
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
         if (!visitNode(child, instance, visitMethod, cookie))
+            return false;
+    }
+
+    return true;
+}
+
+inline bool Scene::visitNode(Node* node, const char* visitMethod)
+{
+    // Invoke the visit method for this node.
+    if (!ScriptController::getInstance()->executeFunction<bool>(visitMethod, "<Node>", node))
+        return false;
+
+    // Recurse for all children.
+    for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
+    {
+        if (!ScriptController::getInstance()->executeFunction<bool>(visitMethod, "<Node>", child))
             return false;
     }
 

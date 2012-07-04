@@ -62,7 +62,7 @@ int lua_Quaternion__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "Quaternion");
                 luaL_argcheck(state, userdata != NULL, 1, "'Quaternion' expected.");
@@ -102,11 +102,19 @@ int lua_Quaternion__init(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)new Quaternion();
-            object->owns = true;
-            luaL_getmetatable(state, "Quaternion");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)new Quaternion();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "Quaternion");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -118,49 +126,61 @@ int lua_Quaternion__init(lua_State* state)
                 // Get parameter 1 off the stack.
                 float* param1 = ScriptController::getInstance()->getFloatPointer(1);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Quaternion(param1);
-                object->owns = true;
-                luaL_getmetatable(state, "Quaternion");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Quaternion(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Quaternion");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Matrix");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 1.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata1)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(1, "Matrix", true);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Quaternion(*param1);
-                object->owns = true;
-                luaL_getmetatable(state, "Quaternion");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Quaternion(*param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Quaternion");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Quaternion");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 1.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata1)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(1, "Quaternion", true);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Quaternion(*param1);
-                object->owns = true;
-                luaL_getmetatable(state, "Quaternion");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Quaternion(*param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Quaternion");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -173,26 +193,28 @@ int lua_Quaternion__init(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector3");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Quaternion(*param1, param2);
-                object->owns = true;
-                luaL_getmetatable(state, "Quaternion");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Quaternion(*param1, param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Quaternion");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -222,11 +244,19 @@ int lua_Quaternion__init(lua_State* state)
                 // Get parameter 4 off the stack.
                 float param4 = (float)luaL_checknumber(state, 4);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Quaternion(param1, param2, param3, param4);
-                object->owns = true;
-                luaL_getmetatable(state, "Quaternion");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Quaternion(param1, param2, param3, param4);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Quaternion");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -257,7 +287,7 @@ int lua_Quaternion_conjugate(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Quaternion* instance = getInstance(state);
                 instance->conjugate();
@@ -273,17 +303,11 @@ int lua_Quaternion_conjugate(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", false);
 
                 Quaternion* instance = getInstance(state);
                 instance->conjugate(param1);
@@ -317,7 +341,7 @@ int lua_Quaternion_inverse(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Quaternion* instance = getInstance(state);
                 bool result = instance->inverse();
@@ -336,17 +360,11 @@ int lua_Quaternion_inverse(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", false);
 
                 Quaternion* instance = getInstance(state);
                 bool result = instance->inverse(param1);
@@ -383,7 +401,7 @@ int lua_Quaternion_isIdentity(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Quaternion* instance = getInstance(state);
                 bool result = instance->isIdentity();
@@ -420,7 +438,7 @@ int lua_Quaternion_isZero(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Quaternion* instance = getInstance(state);
                 bool result = instance->isZero();
@@ -457,17 +475,11 @@ int lua_Quaternion_multiply(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 Quaternion* instance = getInstance(state);
                 instance->multiply(*param1);
@@ -501,7 +513,7 @@ int lua_Quaternion_normalize(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Quaternion* instance = getInstance(state);
                 instance->normalize();
@@ -517,17 +529,11 @@ int lua_Quaternion_normalize(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", false);
 
                 Quaternion* instance = getInstance(state);
                 instance->normalize(param1);
@@ -561,7 +567,7 @@ int lua_Quaternion_set(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
@@ -572,34 +578,22 @@ int lua_Quaternion_set(lua_State* state)
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Quaternion* instance = getInstance(state);
                 instance->set(*param1);
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 Quaternion* instance = getInstance(state);
                 instance->set(*param1);
@@ -615,18 +609,12 @@ int lua_Quaternion_set(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -645,7 +633,7 @@ int lua_Quaternion_set(lua_State* state)
         }
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -695,7 +683,7 @@ int lua_Quaternion_setIdentity(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Quaternion* instance = getInstance(state);
                 instance->setIdentity();
@@ -729,30 +717,18 @@ int lua_Quaternion_static_createFromAxisAngle(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector3");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Quaternion");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 3.");
-                    lua_error(state);
-                }
-                Quaternion* param3 = (Quaternion*)((ScriptController::LuaObject*)userdata3)->instance;
+                Quaternion* param3 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", false);
 
                 Quaternion::createFromAxisAngle(*param1, param2, param3);
                 
@@ -785,26 +761,14 @@ int lua_Quaternion_static_createFromRotationMatrix(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Matrix");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 1.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata1)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(1, "Matrix", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param2 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", false);
 
                 Quaternion::createFromRotationMatrix(*param1, param2);
                 
@@ -837,11 +801,19 @@ int lua_Quaternion_static_identity(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)&(Quaternion::identity());
-            object->owns = false;
-            luaL_getmetatable(state, "Quaternion");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)&(Quaternion::identity());
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Quaternion");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -866,40 +838,22 @@ int lua_Quaternion_static_lerp(lua_State* state)
     {
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TUSERDATA)
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Quaternion");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 1.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata1)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(1, "Quaternion", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param2 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 4 off the stack.
-                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "Quaternion");
-                if (!userdata4)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 4.");
-                    lua_error(state);
-                }
-                Quaternion* param4 = (Quaternion*)((ScriptController::LuaObject*)userdata4)->instance;
+                Quaternion* param4 = ScriptController::getInstance()->getObjectPointer<Quaternion>(4, "Quaternion", false);
 
                 Quaternion::lerp(*param1, *param2, param3, param4);
                 
@@ -932,36 +886,18 @@ int lua_Quaternion_static_multiply(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Quaternion");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 1.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata1)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(1, "Quaternion", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param2 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Quaternion");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 3.");
-                    lua_error(state);
-                }
-                Quaternion* param3 = (Quaternion*)((ScriptController::LuaObject*)userdata3)->instance;
+                Quaternion* param3 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", false);
 
                 Quaternion::multiply(*param1, *param2, param3);
                 
@@ -994,40 +930,22 @@ int lua_Quaternion_static_slerp(lua_State* state)
     {
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TUSERDATA)
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Quaternion");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 1.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata1)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(1, "Quaternion", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param2 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 4 off the stack.
-                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "Quaternion");
-                if (!userdata4)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 4.");
-                    lua_error(state);
-                }
-                Quaternion* param4 = (Quaternion*)((ScriptController::LuaObject*)userdata4)->instance;
+                Quaternion* param4 = ScriptController::getInstance()->getObjectPointer<Quaternion>(4, "Quaternion", false);
 
                 Quaternion::slerp(*param1, *param2, param3, param4);
                 
@@ -1060,60 +978,30 @@ int lua_Quaternion_static_squad(lua_State* state)
     {
         case 6:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
-                lua_type(state, 4) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
                 lua_type(state, 5) == LUA_TNUMBER &&
-                lua_type(state, 6) == LUA_TUSERDATA)
+                (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Quaternion");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 1.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata1)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(1, "Quaternion", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param2 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Quaternion");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 3.");
-                    lua_error(state);
-                }
-                Quaternion* param3 = (Quaternion*)((ScriptController::LuaObject*)userdata3)->instance;
+                Quaternion* param3 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 4 off the stack.
-                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "Quaternion");
-                if (!userdata4)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 4.");
-                    lua_error(state);
-                }
-                Quaternion* param4 = (Quaternion*)((ScriptController::LuaObject*)userdata4)->instance;
+                Quaternion* param4 = ScriptController::getInstance()->getObjectPointer<Quaternion>(4, "Quaternion", true);
 
                 // Get parameter 5 off the stack.
                 float param5 = (float)luaL_checknumber(state, 5);
 
                 // Get parameter 6 off the stack.
-                void* userdata6 = ScriptController::getInstance()->getObjectPointer(6, "Quaternion");
-                if (!userdata6)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 6.");
-                    lua_error(state);
-                }
-                Quaternion* param6 = (Quaternion*)((ScriptController::LuaObject*)userdata6)->instance;
+                Quaternion* param6 = ScriptController::getInstance()->getObjectPointer<Quaternion>(6, "Quaternion", false);
 
                 Quaternion::squad(*param1, *param2, *param3, *param4, param5, param6);
                 
@@ -1146,11 +1034,19 @@ int lua_Quaternion_static_zero(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)&(Quaternion::zero());
-            object->owns = false;
-            luaL_getmetatable(state, "Quaternion");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)&(Quaternion::zero());
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Quaternion");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -1175,17 +1071,11 @@ int lua_Quaternion_toAxisAngle(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Quaternion* instance = getInstance(state);
                 float result = instance->toAxisAngle(param1);

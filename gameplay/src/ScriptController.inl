@@ -28,14 +28,7 @@ template<> void ScriptController::executeFunction<void>(const char* func, const 
 
 template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, ...)
 {
-    va_list list;
-    va_start(list, args);
-    executeFunctionHelper(1, func, args, list);
-
-    bool value = (luaL_checkint(_lua, -1) != 0);
-    lua_pop(_lua, -1);
-    va_end(list);
-    return value;
+    SCRIPT_EXECUTE_FUNCTION_PARAM(bool, luaCheckBool);
 }
 
 template<> char ScriptController::executeFunction<char>(const char* func, const char* args, ...)
@@ -105,7 +98,67 @@ template<typename T> T* ScriptController::executeFunction(const Type& type, cons
     return value;
 }
 
-template<typename T>T* ScriptController::getPointer(const char* type, const char* name)
+template<typename T>T* ScriptController::getObjectPointer(int index, const char* type, bool nonNull)
+{
+    if (lua_type(_lua, index) == LUA_TNIL)
+    {
+        if (nonNull)
+        {
+            GP_ERROR("Attempting to pass NULL for required non-NULL parameter at index %d (likely a reference or by-value parameter).", index);
+        }
+
+        return NULL;
+    }
+
+    void* p = lua_touserdata(_lua, index);
+    if (p != NULL)
+    {
+        if (lua_getmetatable(_lua, index))
+        {
+            // Check if it matches the type's metatable.
+            luaL_getmetatable(_lua, type);
+            if (lua_rawequal(_lua, -1, -2))
+            {
+                lua_pop(_lua, 2);
+                T* ptr = (T*)((ScriptController::LuaObject*)p)->instance;
+                if (ptr == NULL && nonNull)
+                {
+                    GP_ERROR("Attempting to pass NULL for required non-NULL parameter at index %d (likely a reference or by-value parameter).", index);
+                }
+                return ptr;
+            }
+            lua_pop(_lua, 1);
+
+            // Check if it matches any of the derived types' metatables.
+            const std::vector<std::string>& types = _hierarchy[type];
+            for (unsigned int i = 0, count = types.size(); i < count; i++)
+            {
+                luaL_getmetatable(_lua, types[i].c_str());
+                if (lua_rawequal(_lua, -1, -2))
+                {
+                    lua_pop(_lua, 2);
+                    T* ptr = (T*)((ScriptController::LuaObject*)p)->instance;
+                    if (ptr == NULL && nonNull)
+                    {
+                        GP_ERROR("Attempting to pass NULL for required non-NULL parameter at index %d (likely a reference or by-value parameter).", index);
+                    }
+                    return ptr;
+                }
+                lua_pop(_lua, 1);
+            }
+            
+            lua_pop(_lua, 1);
+        }
+    }
+
+    if (nonNull)
+    {
+        GP_ERROR("Failed to retrieve a valid object pointer of type '%s' for parameter %d.", type, index);
+    }
+    return NULL;
+}
+
+template<typename T>T* ScriptController::getObjectPointer(const char* type, const char* name)
 {
     lua_getglobal(_lua, name);
     void* userdata = luaL_checkudata(_lua, -1, type);

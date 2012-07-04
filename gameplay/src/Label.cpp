@@ -102,7 +102,7 @@ void Label::drawText(const Rectangle& clip)
     {
         _font->begin();
         _font->drawText(_text.c_str(), _textBounds, _textColor, getFontSize(_state), getTextAlignment(_state), true, getTextRightToLeft(_state), &_viewportClipBounds);
-        _font->end();
+        _font->finish();
     }
 
     _dirty = false;

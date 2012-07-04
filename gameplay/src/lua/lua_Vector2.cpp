@@ -67,7 +67,7 @@ int lua_Vector2__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "Vector2");
                 luaL_argcheck(state, userdata != NULL, 1, "'Vector2' expected.");
@@ -107,11 +107,19 @@ int lua_Vector2__init(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)new Vector2();
-            object->owns = true;
-            luaL_getmetatable(state, "Vector2");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)new Vector2();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "Vector2");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -123,30 +131,40 @@ int lua_Vector2__init(lua_State* state)
                 // Get parameter 1 off the stack.
                 float* param1 = ScriptController::getInstance()->getFloatPointer(1);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Vector2(param1);
-                object->owns = true;
-                luaL_getmetatable(state, "Vector2");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Vector2(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Vector2");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector2");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Vector2(*param1);
-                object->owns = true;
-                luaL_getmetatable(state, "Vector2");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Vector2(*param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Vector2");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -168,40 +186,44 @@ int lua_Vector2__init(lua_State* state)
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Vector2(param1, param2);
-                object->owns = true;
-                luaL_getmetatable(state, "Vector2");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Vector2(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Vector2");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector2");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param2 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Vector2(*param1, *param2);
-                object->owns = true;
-                luaL_getmetatable(state, "Vector2");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Vector2(*param1, *param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Vector2");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -232,17 +254,11 @@ int lua_Vector2_add(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 instance->add(*param1);
@@ -276,27 +292,15 @@ int lua_Vector2_clamp(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector2");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector2* param2 = (Vector2*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(3, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 instance->clamp(*param1, *param2);
@@ -330,17 +334,11 @@ int lua_Vector2_distance(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 float result = instance->distance(*param1);
@@ -377,17 +375,11 @@ int lua_Vector2_distanceSquared(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 float result = instance->distanceSquared(*param1);
@@ -424,17 +416,11 @@ int lua_Vector2_dot(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 float result = instance->dot(*param1);
@@ -471,7 +457,7 @@ int lua_Vector2_isOne(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Vector2* instance = getInstance(state);
                 bool result = instance->isOne();
@@ -508,7 +494,7 @@ int lua_Vector2_isZero(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Vector2* instance = getInstance(state);
                 bool result = instance->isZero();
@@ -545,7 +531,7 @@ int lua_Vector2_length(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Vector2* instance = getInstance(state);
                 float result = instance->length();
@@ -582,7 +568,7 @@ int lua_Vector2_lengthSquared(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Vector2* instance = getInstance(state);
                 float result = instance->lengthSquared();
@@ -619,7 +605,7 @@ int lua_Vector2_negate(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Vector2* instance = getInstance(state);
                 instance->negate();
@@ -653,14 +639,22 @@ int lua_Vector2_normalize(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Vector2* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->normalize());
-                object->owns = false;
-                luaL_getmetatable(state, "Vector2");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->normalize());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector2");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -673,17 +667,11 @@ int lua_Vector2_normalize(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", false);
 
                 Vector2* instance = getInstance(state);
                 instance->normalize(param1);
@@ -717,18 +705,12 @@ int lua_Vector2_rotate(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -765,7 +747,7 @@ int lua_Vector2_scale(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -776,17 +758,11 @@ int lua_Vector2_scale(lua_State* state)
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 instance->scale(*param1);
@@ -820,7 +796,7 @@ int lua_Vector2_set(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
@@ -831,17 +807,11 @@ int lua_Vector2_set(lua_State* state)
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 instance->set(*param1);
@@ -857,7 +827,7 @@ int lua_Vector2_set(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -872,27 +842,15 @@ int lua_Vector2_set(lua_State* state)
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector2");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector2* param2 = (Vector2*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(3, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 instance->set(*param1, *param2);
@@ -926,36 +884,18 @@ int lua_Vector2_static_add(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector2");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param2 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector2");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector2* param3 = (Vector2*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector2* param3 = ScriptController::getInstance()->getObjectPointer<Vector2>(3, "Vector2", false);
 
                 Vector2::add(*param1, *param2, param3);
                 
@@ -988,26 +928,14 @@ int lua_Vector2_static_angle(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector2");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param2 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 float result = Vector2::angle(*param1, *param2);
 
@@ -1043,46 +971,22 @@ int lua_Vector2_static_clamp(lua_State* state)
     {
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
-                lua_type(state, 4) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector2");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param2 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector2");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector2* param3 = (Vector2*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector2* param3 = ScriptController::getInstance()->getObjectPointer<Vector2>(3, "Vector2", true);
 
                 // Get parameter 4 off the stack.
-                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "Vector2");
-                if (!userdata4)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 4.");
-                    lua_error(state);
-                }
-                Vector2* param4 = (Vector2*)((ScriptController::LuaObject*)userdata4)->instance;
+                Vector2* param4 = ScriptController::getInstance()->getObjectPointer<Vector2>(4, "Vector2", false);
 
                 Vector2::clamp(*param1, *param2, *param3, param4);
                 
@@ -1115,26 +1019,14 @@ int lua_Vector2_static_dot(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector2");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param2 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 float result = Vector2::dot(*param1, *param2);
 
@@ -1170,11 +1062,19 @@ int lua_Vector2_static_one(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)&(Vector2::one());
-            object->owns = false;
-            luaL_getmetatable(state, "Vector2");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)&(Vector2::one());
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Vector2");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -1199,36 +1099,18 @@ int lua_Vector2_static_subtract(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector2");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param2 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector2");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector2* param3 = (Vector2*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector2* param3 = ScriptController::getInstance()->getObjectPointer<Vector2>(3, "Vector2", false);
 
                 Vector2::subtract(*param1, *param2, param3);
                 
@@ -1261,11 +1143,19 @@ int lua_Vector2_static_unitX(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)&(Vector2::unitX());
-            object->owns = false;
-            luaL_getmetatable(state, "Vector2");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)&(Vector2::unitX());
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Vector2");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -1290,11 +1180,19 @@ int lua_Vector2_static_unitY(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)&(Vector2::unitY());
-            object->owns = false;
-            luaL_getmetatable(state, "Vector2");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)&(Vector2::unitY());
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Vector2");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -1319,11 +1217,19 @@ int lua_Vector2_static_zero(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)&(Vector2::zero());
-            object->owns = false;
-            luaL_getmetatable(state, "Vector2");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)&(Vector2::zero());
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Vector2");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -1348,17 +1254,11 @@ int lua_Vector2_subtract(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector2");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector2' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector2* param1 = (Vector2*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 instance->subtract(*param1);

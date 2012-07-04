@@ -41,7 +41,7 @@ int lua_Ref_addRef(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Ref* instance = getInstance(state);
                 instance->addRef();
@@ -75,7 +75,7 @@ int lua_Ref_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Ref* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -112,7 +112,7 @@ int lua_Ref_release(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Ref* instance = getInstance(state);
                 instance->release();

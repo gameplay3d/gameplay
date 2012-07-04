@@ -14,7 +14,7 @@ void luaRegister_RenderTarget()
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_RenderTarget_addRef},
-        {"getID", lua_RenderTarget_getID},
+        {"getId", lua_RenderTarget_getId},
         {"getRefCount", lua_RenderTarget_getRefCount},
         {"getTexture", lua_RenderTarget_getTexture},
         {"release", lua_RenderTarget_release},
@@ -48,7 +48,7 @@ int lua_RenderTarget__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "RenderTarget");
                 luaL_argcheck(state, userdata != NULL, 1, "'RenderTarget' expected.");
@@ -88,7 +88,7 @@ int lua_RenderTarget_addRef(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 RenderTarget* instance = getInstance(state);
                 instance->addRef();
@@ -112,7 +112,7 @@ int lua_RenderTarget_addRef(lua_State* state)
     return 0;
 }
 
-int lua_RenderTarget_getID(lua_State* state)
+int lua_RenderTarget_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -122,10 +122,10 @@ int lua_RenderTarget_getID(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 RenderTarget* instance = getInstance(state);
-                const char* result = instance->getID();
+                const char* result = instance->getId();
 
                 // Push the return value onto the stack.
                 lua_pushstring(state, result);
@@ -159,7 +159,7 @@ int lua_RenderTarget_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 RenderTarget* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -196,14 +196,22 @@ int lua_RenderTarget_getTexture(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 RenderTarget* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getTexture();
-                object->owns = false;
-                luaL_getmetatable(state, "Texture");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getTexture();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Texture");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -234,7 +242,7 @@ int lua_RenderTarget_release(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 RenderTarget* instance = getInstance(state);
                 instance->release();
@@ -268,12 +276,12 @@ int lua_RenderTarget_static_create(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 1);
+                const char* param1 = ScriptController::getInstance()->getString(1, false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -281,11 +289,19 @@ int lua_RenderTarget_static_create(lua_State* state)
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)RenderTarget::create(param1, param2, param3);
-                object->owns = false;
-                luaL_getmetatable(state, "RenderTarget");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)RenderTarget::create(param1, param2, param3);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "RenderTarget");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -316,16 +332,24 @@ int lua_RenderTarget_static_getRenderTarget(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 1);
+                const char* param1 = ScriptController::getInstance()->getString(1, false);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)RenderTarget::getRenderTarget(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "RenderTarget");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)RenderTarget::getRenderTarget(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "RenderTarget");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }

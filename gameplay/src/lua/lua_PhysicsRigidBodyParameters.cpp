@@ -46,7 +46,7 @@ int lua_PhysicsRigidBodyParameters__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsRigidBodyParameters");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsRigidBodyParameters' expected.");
@@ -86,11 +86,19 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)new PhysicsRigidBody::Parameters();
-            object->owns = true;
-            luaL_getmetatable(state, "PhysicsRigidBodyParameters");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)new PhysicsRigidBody::Parameters();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "PhysicsRigidBodyParameters");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -102,11 +110,19 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 1);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new PhysicsRigidBody::Parameters(param1);
-                object->owns = true;
-                luaL_getmetatable(state, "PhysicsRigidBodyParameters");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new PhysicsRigidBody::Parameters(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "PhysicsRigidBodyParameters");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -128,11 +144,19 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new PhysicsRigidBody::Parameters(param1, param2);
-                object->owns = true;
-                luaL_getmetatable(state, "PhysicsRigidBodyParameters");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new PhysicsRigidBody::Parameters(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "PhysicsRigidBodyParameters");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -158,11 +182,19 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 3);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3);
-                object->owns = true;
-                luaL_getmetatable(state, "PhysicsRigidBodyParameters");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "PhysicsRigidBodyParameters");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -192,11 +224,19 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
                 // Get parameter 4 off the stack.
                 float param4 = (float)luaL_checknumber(state, 4);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3, param4);
-                object->owns = true;
-                luaL_getmetatable(state, "PhysicsRigidBodyParameters");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3, param4);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "PhysicsRigidBodyParameters");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -230,11 +270,19 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
                 // Get parameter 5 off the stack.
                 float param5 = (float)luaL_checknumber(state, 5);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3, param4, param5);
-                object->owns = true;
-                luaL_getmetatable(state, "PhysicsRigidBodyParameters");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3, param4, param5);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "PhysicsRigidBodyParameters");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -272,11 +320,19 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
                 // Get parameter 6 off the stack.
                 bool param6 = (luaL_checkint(state, 6) != 0);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3, param4, param5, param6);
-                object->owns = true;
-                luaL_getmetatable(state, "PhysicsRigidBodyParameters");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3, param4, param5, param6);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "PhysicsRigidBodyParameters");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -295,7 +351,7 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER &&
                 lua_type(state, 5) == LUA_TNUMBER &&
                 lua_type(state, 6) == LUA_TBOOLEAN &&
-                lua_type(state, 7) == LUA_TUSERDATA)
+                (lua_type(state, 7) == LUA_TUSERDATA || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 1);
@@ -316,19 +372,21 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
                 bool param6 = (luaL_checkint(state, 6) != 0);
 
                 // Get parameter 7 off the stack.
-                void* userdata7 = ScriptController::getInstance()->getObjectPointer(7, "Vector3");
-                if (!userdata7)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 7.");
-                    lua_error(state);
-                }
-                Vector3* param7 = (Vector3*)((ScriptController::LuaObject*)userdata7)->instance;
+                Vector3* param7 = ScriptController::getInstance()->getObjectPointer<Vector3>(7, "Vector3", true);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3, param4, param5, param6, *param7);
-                object->owns = true;
-                luaL_getmetatable(state, "PhysicsRigidBodyParameters");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3, param4, param5, param6, *param7);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "PhysicsRigidBodyParameters");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -391,24 +449,26 @@ int lua_PhysicsRigidBodyParameters_anisotropicFriction(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-        if (!userdata2)
-        {
-            lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-            lua_error(state);
-        }
-        Vector3* param2 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+        Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
         instance->anisotropicFriction = *param2;
         return 0;
     }
     else
     {
-        ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-        object->instance = (void*)new Vector3(instance->anisotropicFriction);
-        object->owns = true;
-        luaL_getmetatable(state, "Vector3");
-        lua_setmetatable(state, -2);
+        void* returnPtr = (void*)new Vector3(instance->anisotropicFriction);
+        if (returnPtr)
+        {
+            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+            object->instance = returnPtr;
+            object->owns = true;
+            luaL_getmetatable(state, "Vector3");
+            lua_setmetatable(state, -2);
+        }
+        else
+        {
+            lua_pushnil(state);
+        }
 
         return 1;
     }

@@ -39,7 +39,7 @@ int lua_AnimationController_stopAllAnimations(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 AnimationController* instance = getInstance(state);
                 instance->stopAllAnimations();

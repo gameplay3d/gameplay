@@ -47,7 +47,7 @@ int lua_ThemeUVs__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "ThemeUVs");
                 luaL_argcheck(state, userdata != NULL, 1, "'ThemeUVs' expected.");
@@ -87,11 +87,19 @@ int lua_ThemeUVs__init(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)new Theme::UVs();
-            object->owns = true;
-            luaL_getmetatable(state, "ThemeUVs");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)new Theme::UVs();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "ThemeUVs");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -115,11 +123,19 @@ int lua_ThemeUVs__init(lua_State* state)
                 // Get parameter 4 off the stack.
                 float param4 = (float)luaL_checknumber(state, 4);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Theme::UVs(param1, param2, param3, param4);
-                object->owns = true;
-                luaL_getmetatable(state, "ThemeUVs");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Theme::UVs(param1, param2, param3, param4);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "ThemeUVs");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -150,11 +166,19 @@ int lua_ThemeUVs_static_empty(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)&(Theme::UVs::empty());
-            object->owns = false;
-            luaL_getmetatable(state, "ThemeUVs");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)&(Theme::UVs::empty());
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "ThemeUVs");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;

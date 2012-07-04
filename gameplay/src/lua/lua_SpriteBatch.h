@@ -8,7 +8,7 @@ namespace gameplay
 int lua_SpriteBatch__gc(lua_State* state);
 int lua_SpriteBatch_begin(lua_State* state);
 int lua_SpriteBatch_draw(lua_State* state);
-int lua_SpriteBatch_end(lua_State* state);
+int lua_SpriteBatch_finish(lua_State* state);
 int lua_SpriteBatch_getMaterial(lua_State* state);
 int lua_SpriteBatch_getProjectionMatrix(lua_State* state);
 int lua_SpriteBatch_getStateBlock(lua_State* state);

@@ -961,7 +961,7 @@ void ParticleEmitter::draw()
         }
 
         // Render.
-        _spriteBatch->end();
+        _spriteBatch->finish();
     }
 }
 

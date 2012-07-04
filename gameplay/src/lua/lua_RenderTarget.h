@@ -7,7 +7,7 @@ namespace gameplay
 // Lua bindings for RenderTarget.
 int lua_RenderTarget__gc(lua_State* state);
 int lua_RenderTarget_addRef(lua_State* state);
-int lua_RenderTarget_getID(lua_State* state);
+int lua_RenderTarget_getId(lua_State* state);
 int lua_RenderTarget_getRefCount(lua_State* state);
 int lua_RenderTarget_getTexture(lua_State* state);
 int lua_RenderTarget_release(lua_State* state);

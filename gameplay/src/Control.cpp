@@ -979,7 +979,7 @@ void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCl
     spriteBatch->begin();
     drawBorder(spriteBatch, clip);
     drawImages(spriteBatch, clip);
-    spriteBatch->end();
+    spriteBatch->finish();
 
     drawText(clip);
     _dirty = false;

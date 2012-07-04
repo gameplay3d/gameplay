@@ -7,11 +7,14 @@ Unsupported:
 
 Normal Priority List:
 =====================
-- Notify users when they generate bindings if a binding will not work due a name clash with a reserved Lua keyword (i.e. "end").
 - Add support for object arrays (i.e. VertexElement*).
 - Add "@script{create}" to the appropriate gameplay functions.
 - Fix memory leaks in gameplay-luagen and in generated code.
+
 - Add support for passing function pointers (i.e. for material parameter binding) (using the same string mechanism that was used for enums?).
+- Add support for function callback parameters using Lua functions (i.e. scene->visit("myLuaFunction")).
+- Add support for touch/key/mouse event callbacks.
+- Add support for listener callbacks.
 
 Low Priority List:
 ==================

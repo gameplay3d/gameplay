@@ -47,7 +47,7 @@ int lua_ThemeSideRegions__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "ThemeSideRegions");
                 luaL_argcheck(state, userdata != NULL, 1, "'ThemeSideRegions' expected.");
@@ -87,11 +87,19 @@ int lua_ThemeSideRegions__init(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)new Theme::SideRegions();
-            object->owns = true;
-            luaL_getmetatable(state, "ThemeSideRegions");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)new Theme::SideRegions();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "ThemeSideRegions");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -203,11 +211,19 @@ int lua_ThemeSideRegions_static_empty(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)&(Theme::SideRegions::empty());
-            object->owns = false;
-            luaL_getmetatable(state, "ThemeSideRegions");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)&(Theme::SideRegions::empty());
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "ThemeSideRegions");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;

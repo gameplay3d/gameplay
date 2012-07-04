@@ -17,6 +17,7 @@
 #include "C:/git/gameplay/gameplay/src/BoundingBox.h"
 #include "C:/git/gameplay/gameplay/src/BoundingSphere.h"
 #include "C:/git/gameplay/gameplay/src/Image.h"
+#include "C:/git/gameplay/gameplay/src/Joystick.h"
 #include "C:/git/gameplay/gameplay/src/Matrix.h"
 #include "C:/git/gameplay/gameplay/src/MeshBatch.h"
 #include "C:/git/gameplay/gameplay/src/PhysicsConstraint.h"
@@ -44,7 +45,9 @@
 #include "FrameBuffer.h"
 #include "Frustum.h"
 #include "Game.h"
+#include "Gamepad.h"
 #include "Image.h"
+#include "Joystick.h"
 #include "Keyboard.h"
 #include "Label.h"
 #include "Layout.h"
@@ -131,6 +134,10 @@ Game::ClearFlags lua_enumFromString_GameClearFlags(const char* s);
 std::string lua_stringFromEnum_GameClearFlags(Game::ClearFlags e);
 Game::State lua_enumFromString_GameState(const char* s);
 std::string lua_stringFromEnum_GameState(Game::State e);
+Gamepad::ButtonState lua_enumFromString_GamepadButtonState(const char* s);
+std::string lua_stringFromEnum_GamepadButtonState(Gamepad::ButtonState e);
+Gamepad::GamepadEvent lua_enumFromString_GamepadGamepadEvent(const char* s);
+std::string lua_stringFromEnum_GamepadGamepadEvent(Gamepad::GamepadEvent e);
 Image::Format lua_enumFromString_ImageFormat(const char* s);
 std::string lua_stringFromEnum_ImageFormat(Image::Format e);
 Keyboard::Key lua_enumFromString_KeyboardKey(const char* s);

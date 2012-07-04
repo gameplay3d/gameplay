@@ -1419,7 +1419,7 @@ void PhysicsController::DebugDrawer::begin(const Matrix& viewProjection)
 void PhysicsController::DebugDrawer::end()
 {
     GP_ASSERT(_meshBatch && _meshBatch->getMaterial() && _meshBatch->getMaterial()->getParameter("u_viewProjectionMatrix"));
-    _meshBatch->end();
+    _meshBatch->finish();
     _meshBatch->getMaterial()->getParameter("u_viewProjectionMatrix")->setValue(_viewProjection);
     _meshBatch->draw();
 }

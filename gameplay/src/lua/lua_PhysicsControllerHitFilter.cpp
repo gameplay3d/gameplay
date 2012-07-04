@@ -41,7 +41,7 @@ int lua_PhysicsControllerHitFilter__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsControllerHitFilter");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsControllerHitFilter' expected.");
@@ -81,11 +81,19 @@ int lua_PhysicsControllerHitFilter__init(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)new PhysicsController::HitFilter();
-            object->owns = true;
-            luaL_getmetatable(state, "PhysicsControllerHitFilter");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)new PhysicsController::HitFilter();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "PhysicsControllerHitFilter");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -110,17 +118,11 @@ int lua_PhysicsControllerHitFilter_filter(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "PhysicsCollisionObject");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsCollisionObject' for parameter 2.");
-                    lua_error(state);
-                }
-                PhysicsCollisionObject* param1 = (PhysicsCollisionObject*)((ScriptController::LuaObject*)userdata2)->instance;
+                PhysicsCollisionObject* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
                 PhysicsController::HitFilter* instance = getInstance(state);
                 bool result = instance->filter(param1);
@@ -157,17 +159,11 @@ int lua_PhysicsControllerHitFilter_hit(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "PhysicsControllerHitResult");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsController::HitResult' for parameter 2.");
-                    lua_error(state);
-                }
-                PhysicsController::HitResult* param1 = (PhysicsController::HitResult*)((ScriptController::LuaObject*)userdata2)->instance;
+                PhysicsController::HitResult* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsController::HitResult>(2, "PhysicsControllerHitResult", true);
 
                 PhysicsController::HitFilter* instance = getInstance(state);
                 bool result = instance->hit(*param1);

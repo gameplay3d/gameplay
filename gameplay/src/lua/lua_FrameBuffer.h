@@ -10,7 +10,7 @@ int lua_FrameBuffer_addRef(lua_State* state);
 int lua_FrameBuffer_bind(lua_State* state);
 int lua_FrameBuffer_getDepthStencilTarget(lua_State* state);
 int lua_FrameBuffer_getHeight(lua_State* state);
-int lua_FrameBuffer_getID(lua_State* state);
+int lua_FrameBuffer_getId(lua_State* state);
 int lua_FrameBuffer_getRefCount(lua_State* state);
 int lua_FrameBuffer_getRenderTarget(lua_State* state);
 int lua_FrameBuffer_getWidth(lua_State* state);
