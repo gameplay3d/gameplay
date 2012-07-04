@@ -756,6 +756,11 @@ protected:
     virtual ~Control();
 
     /**
+     * Hidden copy assignment operator.
+     */
+    Control& operator=(const Control&);
+
+    /**
      * Get the overlay type corresponding to this control's current state.
      *
      * @return The overlay type corresponding to this control's current state.

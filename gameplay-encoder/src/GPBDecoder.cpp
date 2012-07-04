@@ -40,9 +40,10 @@ void GPBDecoder::readBinary(const std::string& filepath)
 bool GPBDecoder::validateHeading()
 {
     const size_t HEADING_SIZE = 9;
-    const char identifier[] = { '«', 'G', 'P', 'B', '»', '\r', '\n', '\x1A', '\n' };
+    const char identifier[] = "\xABGPB\xBB\r\n\x1A\n";
 
     char heading[HEADING_SIZE];
+    fread(heading, sizeof(unsigned char), HEADING_SIZE, _file);
     for (size_t i = 0; i < HEADING_SIZE; ++i)
     {
         if (heading[i] != identifier[i])

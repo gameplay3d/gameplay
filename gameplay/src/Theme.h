@@ -348,6 +348,11 @@ private:
 
         ~ImageList();
 
+        /**
+         * Hidden copy assignment operator.
+         */
+        ImageList& operator=(const ImageList&);
+
         static ImageList* create(float tw, float th, Properties* properties);
 
         std::string _id;
@@ -407,6 +412,11 @@ private:
         
         ~Skin();
 
+        /**
+         * Hidden copy assignment operator.
+         */
+        Skin& operator=(const Skin&);
+
         static Skin* create(const char* id, float tw, float th, const Rectangle& region, const Theme::Border& border, const Vector4& color);
 
         void setRegion(const Rectangle& region, float tw, float th);
@@ -433,6 +443,11 @@ private:
      * Destructor.
      */
     ~Theme();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Theme& operator=(const Theme&);
 
     void setProjectionMatrix(const Matrix& matrix);
 

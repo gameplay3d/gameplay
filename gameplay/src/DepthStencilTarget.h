@@ -83,6 +83,11 @@ private:
      */
     ~DepthStencilTarget();
 
+    /**
+     * Hidden copy assignment operator.
+     */
+    DepthStencilTarget& operator=(const DepthStencilTarget&);
+
     std::string _id;
     Format _format;
     RenderBufferHandle _renderBuffer;

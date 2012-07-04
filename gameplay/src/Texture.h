@@ -116,6 +116,11 @@ public:
 
         ~Sampler();
 
+        /**
+         * Hidden copy assignment operator.
+         */
+        Sampler& operator=(const Sampler&);
+
         Texture* _texture;
         Wrap _wrapS;
         Wrap _wrapT;
@@ -223,6 +228,11 @@ private:
      * Destructor.
      */
     virtual ~Texture();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Texture& operator=(const Texture&);
 
     static Texture* createCompressedPVRTC(const char* path);
 

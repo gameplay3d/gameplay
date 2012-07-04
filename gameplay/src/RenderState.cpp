@@ -361,7 +361,7 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
 
 RenderState::StateBlock::StateBlock()
     : _cullFaceEnabled(false), _depthTestEnabled(false), _depthWriteEnabled(false),
-      _blendEnabled(false), _blendSrc(RenderState::BLEND_ONE), _blendDst(RenderState::BLEND_ONE),
+      _blendEnabled(false), _blendSrc(RenderState::BLEND_ONE), _blendDst(RenderState::BLEND_ZERO),
       _bits(0L)
 {
 }
@@ -455,10 +455,10 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
     }
     if (!(stateOverrideBits & RS_BLEND_FUNC) && (_defaultState->_bits & RS_BLEND_FUNC))
     {
-        GL_ASSERT( glBlendFunc(GL_ONE, GL_ONE) );
+        GL_ASSERT( glBlendFunc(GL_ONE, GL_ZERO) );
         _defaultState->_bits &= ~RS_BLEND_FUNC;
         _defaultState->_blendSrc = RenderState::BLEND_ONE;
-        _defaultState->_blendDst = RenderState::BLEND_ONE;
+        _defaultState->_blendDst = RenderState::BLEND_ZERO;
     }
     if (!(stateOverrideBits & RS_CULL_FACE) && (_defaultState->_bits & RS_CULL_FACE))
     {
@@ -593,8 +593,9 @@ void RenderState::StateBlock::setBlend(bool enabled)
 void RenderState::StateBlock::setBlendSrc(Blend blend)
 {
     _blendSrc = blend;
-    if (_blendSrc == BLEND_ONE && _blendDst == BLEND_ONE)
+    if (_blendSrc == BLEND_ONE && _blendDst == BLEND_ZERO)
     {
+        // Default blend func
         _bits &= ~RS_BLEND_FUNC;
     }
     else
@@ -606,8 +607,9 @@ void RenderState::StateBlock::setBlendSrc(Blend blend)
 void RenderState::StateBlock::setBlendDst(Blend blend)
 {
     _blendDst = blend;
-    if (_blendSrc == BLEND_ONE && _blendDst == BLEND_ONE)
+    if (_blendSrc == BLEND_ONE && _blendDst == BLEND_ZERO)
     {
+        // Default blend func
         _bits &= ~RS_BLEND_FUNC;
     }
     else

@@ -69,6 +69,11 @@ private:
             
         ~Overlay();
 
+        /**
+         * Hidden copy assignment operator.
+         */
+        Overlay& operator=(const Overlay&);
+
         static Overlay* create();
 
         OverlayType getType();
@@ -185,6 +190,11 @@ private:
      * Destructor.
      */
     ~Style();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Style& operator=(const Style&);
 
     /**
      * Returns the Id of this Style.

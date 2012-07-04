@@ -24,6 +24,9 @@ static HINSTANCE __hinstance = 0;
 static HWND __hwnd = 0;
 static HDC __hdc = 0;
 static HGLRC __hrc = 0;
+static bool __mouseCaptured = false;
+static POINT __mouseCapturePoint = { 0, 0 };
+static bool __cursorVisible = true;
 
 static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
 {
@@ -255,9 +258,18 @@ void UpdateCapture(LPARAM lParam)
         ReleaseCapture();
 }
 
+void WarpMouse(int clientX, int clientY)
+{
+    POINT p = { clientX, clientY };
+    ClientToScreen(__hwnd, &p);
+    SetCursorPos(p.x, p.y);
+}
+
 LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    if (hwnd != __hwnd)
+    static gameplay::Game* game = gameplay::Game::getInstance();
+
+    if (!game->isInitialized() || hwnd != __hwnd)
     {
         // Ignore messages that are not for our game window.
         return DefWindowProc(hwnd, msg, wParam, lParam);
@@ -334,6 +346,21 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
+
+        if (__mouseCaptured)
+        {
+            // If the incoming position is the mouse capture point, ignore this event
+            // since this is the event that warped the cursor back.
+            if (x == __mouseCapturePoint.x && y == __mouseCapturePoint.y)
+                break;
+
+            // Convert to deltas
+            x -= __mouseCapturePoint.x;
+            y -= __mouseCapturePoint.y;
+
+            // Warp mouse back to center of screen.
+            WarpMouse(__mouseCapturePoint.x, __mouseCapturePoint.y);
+        }
 
         // Allow Game::mouseEvent a chance to handle (and possibly consume) the event.
         if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
@@ -690,7 +717,7 @@ unsigned int Platform::getDisplayHeight()
 {
     return __height;
 }
-    
+
 double Platform::getAbsoluteTime()
 {
     LARGE_INTEGER queryTime;
@@ -719,6 +746,7 @@ void Platform::setVsync(bool enable)
 
 void Platform::setMultiTouch(bool enabled)
 {
+    // not supported
 }
 
 bool Platform::isMultiTouch()
@@ -733,6 +761,54 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
 
     *pitch = __pitch;
     *roll = __roll;
+}
+
+bool Platform::hasMouse()
+{
+    return true;
+}
+
+void Platform::setMouseCapture(bool captured)
+{
+    if (captured != __mouseCaptured)
+    {
+        if (captured)
+        {
+            // Hide the cursor and warp it to the center of the screen
+            __mouseCapturePoint.x = getDisplayWidth() / 2;
+            __mouseCapturePoint.y = getDisplayHeight() / 2;
+
+            ShowCursor(FALSE);
+            WarpMouse(__mouseCapturePoint.x, __mouseCapturePoint.y);
+        }
+        else
+        {
+            // Restore cursor
+            WarpMouse(__mouseCapturePoint.x, __mouseCapturePoint.y);
+            ShowCursor(TRUE);
+        }
+
+        __mouseCaptured = captured;
+    }
+}
+
+bool Platform::isMouseCaptured()
+{
+    return __mouseCaptured;
+}
+
+void Platform::setCursorVisible(bool visible)
+{
+    if (visible != __cursorVisible)
+    {
+        ShowCursor(visible ? TRUE : FALSE);
+        __cursorVisible = visible;
+    }
+}
+
+bool Platform::isCursorVisible()
+{
+    return __cursorVisible;
 }
 
 void Platform::swapBuffers()
