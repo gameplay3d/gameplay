@@ -177,6 +177,11 @@ private:
      * Destructor.
      */
     ~MaterialParameter();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    MaterialParameter& operator=(const MaterialParameter&);
     
     /**
      * Interface implemented by templated method bindings for simple storage and iteration.
@@ -191,6 +196,11 @@ private:
          * Destructor.
          */
         virtual ~MethodBinding() { }
+
+        /**
+         * Hidden copy assignment operator.
+         */
+        MethodBinding& operator=(const MethodBinding&);
     };
 
     /**

@@ -158,6 +158,11 @@ private:
     ~Model();
 
     /**
+     * Hidden copy assignment operator.
+     */
+    Model& operator=(const Model&);
+
+    /**
      * Sets the MeshSkin for this model.
      * 
      * @param skin The MeshSkin for this model.

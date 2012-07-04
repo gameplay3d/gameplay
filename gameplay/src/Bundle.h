@@ -152,6 +152,11 @@ private:
     ~Bundle();
 
     /**
+     * Hidden copy assignment operator.
+     */
+    Bundle& operator=(const Bundle&);
+
+    /**
      * Finds a reference by ID.
      */
     Reference* find(const char* id) const;

@@ -127,6 +127,11 @@ private:
      */
     ~FrameBuffer();
 
+    /**
+     * Hidden copy assignment operator.
+     */
+    FrameBuffer& operator=(const FrameBuffer&);
+
     static void initialize();
 
     static bool isPowerOfTwo(unsigned int value);
