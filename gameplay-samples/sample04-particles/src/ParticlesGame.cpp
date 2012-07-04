@@ -562,7 +562,7 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         {
             // Emit a burst of particles.
             unsigned int burstSize = (unsigned int)_burstSize->getValue();
-            emitter->emit(burstSize);
+            emitter->emitOnce(burstSize);
         }
         break;
     case Listener::PRESS:
@@ -786,7 +786,7 @@ void ParticlesGame::emitterChanged()
     if (_particleEmitterIndex == 2)
     {
         _started->setChecked(false);
-        emitter->emit(20);
+        emitter->emitOnce(20);
     }
     else
     {
