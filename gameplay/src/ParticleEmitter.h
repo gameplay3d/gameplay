@@ -235,7 +235,7 @@ public:
      *
      * @param particleCount The number of particles to emit immediately.
      */
-    void emit(unsigned int particleCount);
+    void emitOnce(unsigned int particleCount);
 
     /**
      * Gets the current number of particles.
