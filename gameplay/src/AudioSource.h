@@ -159,6 +159,11 @@ private:
     virtual ~AudioSource();
 
     /**
+     * Hidden copy assignment operator.
+     */
+    AudioSource& operator=(const AudioSource&);
+
+    /**
      * Sets the node for this audio source.
      */
     void setNode(Node* node);
