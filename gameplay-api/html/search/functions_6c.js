@@ -12,5 +12,6 @@ var searchData=
   ['loadnode',['loadNode',['../classgameplay_1_1_bundle.html#a2a7bd47e0486bcef1ef13dd8ac19d74b',1,'gameplay::Bundle']]],
   ['loadresourcealiases',['loadResourceAliases',['../classgameplay_1_1_file_system.html#a136986ea0a1564698c405df64f13632e',1,'gameplay::FileSystem::loadResourceAliases(const char *aliasFilePath)'],['../classgameplay_1_1_file_system.html#a05c6773c471a5378fdda80806df2b220',1,'gameplay::FileSystem::loadResourceAliases(Properties *properties)']]],
   ['loadscene',['loadScene',['../classgameplay_1_1_bundle.html#a65abb43ffc98583b6c97ba1e5b986479',1,'gameplay::Bundle']]],
-  ['loadscript',['loadScript',['../classgameplay_1_1_script_controller.html#afea32a38787fe174ffc8ceee3269648e',1,'gameplay::ScriptController']]]
+  ['loadscript',['loadScript',['../classgameplay_1_1_script_controller.html#afea32a38787fe174ffc8ceee3269648e',1,'gameplay::ScriptController']]],
+  ['luacheckbool',['luaCheckBool',['../classgameplay_1_1_script_controller.html#a6dc60615510a1afd243d17113a7c5314',1,'gameplay::ScriptController']]]
 ];

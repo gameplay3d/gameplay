@@ -26,7 +26,7 @@ var searchData=
   ['removenode',['removeNode',['../classgameplay_1_1_scene.html#ac092ea4bd0f8f7e6dc4b629b1472cdd1',1,'gameplay::Scene']]],
   ['removestatuslistener',['removeStatusListener',['../classgameplay_1_1_physics_controller.html#ac59f6753cb8c7b6a920082d23579a8a9',1,'gameplay::PhysicsController']]],
   ['render',['render',['../classgameplay_1_1_game.html#aa6d136ae96b6a86ef217fa965be47c29',1,'gameplay::Game']]],
-  ['renderonce',['renderOnce',['../classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151',1,'gameplay::Game']]],
+  ['renderonce',['renderOnce',['../classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151',1,'gameplay::Game::renderOnce(T *instance, void(T::*method)(void *), void *cookie)'],['../classgameplay_1_1_game.html#a682bf5d3640869d39103802cfe4fa484',1,'gameplay::Game::renderOnce(const char *function)']]],
   ['renderstate',['RenderState',['../classgameplay_1_1_render_state.html#afacb2597a715aee6a83427e1d0c5bbca',1,'gameplay::RenderState']]],
   ['resolvepath',['resolvePath',['../classgameplay_1_1_file_system.html#a738a80f4df479ac37fcfe173adad5e90',1,'gameplay::FileSystem']]],
   ['resume',['resume',['../classgameplay_1_1_audio_source.html#a895920e4520c05ecbf393806bc2ef9f0',1,'gameplay::AudioSource::resume()'],['../classgameplay_1_1_game.html#a363c5ac0d99fc937dead943351f574c1',1,'gameplay::Game::resume()']]],

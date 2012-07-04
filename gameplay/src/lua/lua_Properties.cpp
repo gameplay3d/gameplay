@@ -584,7 +584,7 @@ int lua_Properties_getNamespace(lua_State* state)
                 const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                bool param2 = (luaL_checkint(state, 3) != 0);
+                bool param2 = ScriptController::luaCheckBool(state, 3);
 
                 Properties* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getNamespace(param1, param2);

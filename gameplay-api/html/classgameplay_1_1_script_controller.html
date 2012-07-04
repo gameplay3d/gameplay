@@ -185,6 +185,7 @@ template&lt;&gt; </td></tr>
 <tr class="heading"><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a030b91c2498c9f1ed186d47c355ea165"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_script_controller.html">ScriptController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a030b91c2498c9f1ed186d47c355ea165">getInstance</a> ()</td></tr>
+<tr class="memitem:a6dc60615510a1afd243d17113a7c5314"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a6dc60615510a1afd243d17113a7c5314">luaCheckBool</a> (lua_State *state, int n)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Controls and manages all scripts. </p>
@@ -1005,6 +1006,49 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a6dc60615510a1afd243d17113a7c5314"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool gameplay::ScriptController::luaCheckBool </td>
+          <td>(</td>
+          <td class="paramtype">lua_State *&#160;</td>
+          <td class="paramname"><em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Checks that the parameter at the given stack position is a boolean and returns it.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>The Lua state. </td></tr>
+    <tr><td class="paramname">n</td><td>The stack index. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>The boolean (if successful; otherwise it logs an error).  </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a8fabd96d6cf977b71bf23125f2e9d41a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1735,7 +1779,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 4 2012 12:24:43 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 4 2012 15:00:22 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

@@ -203,6 +203,7 @@
     <ClCompile Include="src\RenderTarget.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SceneLoader.cpp" />
+    <ClCompile Include="src\ScreenDisplayer.cpp" />
     <ClCompile Include="src\ScriptController.cpp" />
     <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />

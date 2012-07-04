@@ -712,7 +712,7 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
             o << "ScriptController::getInstance()->getBoolPointer(" << paramIndex << ");\n";
         else
-            o << "(luaL_checkint(state, " << paramIndex << ") != 0);\n";
+            o << "ScriptController::luaCheckBool(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_CHAR:
         o << "(char)luaL_checkint(state, " << paramIndex << ");\n";

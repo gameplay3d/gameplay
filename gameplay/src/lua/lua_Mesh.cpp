@@ -160,7 +160,7 @@ int lua_Mesh_addPart(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                bool param4 = (luaL_checkint(state, 5) != 0);
+                bool param4 = ScriptController::luaCheckBool(state, 5);
 
                 Mesh* instance = getInstance(state);
                 void* returnPtr = (void*)instance->addPart(param1, param2, param3, param4);
@@ -1026,7 +1026,7 @@ int lua_Mesh_static_createMesh(lua_State* state)
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 3 off the stack.
-                bool param3 = (luaL_checkint(state, 3) != 0);
+                bool param3 = ScriptController::luaCheckBool(state, 3);
 
                 void* returnPtr = (void*)Mesh::createMesh(*param1, param2, param3);
                 if (returnPtr)

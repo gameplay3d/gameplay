@@ -1715,7 +1715,7 @@ int lua_ParticleEmitter_setEllipsoid(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setEllipsoid(param1);
@@ -1835,13 +1835,13 @@ int lua_ParticleEmitter_setOrbit(lua_State* state)
                 lua_type(state, 4) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 // Get parameter 2 off the stack.
-                bool param2 = (luaL_checkint(state, 3) != 0);
+                bool param2 = ScriptController::luaCheckBool(state, 3);
 
                 // Get parameter 3 off the stack.
-                bool param3 = (luaL_checkint(state, 4) != 0);
+                bool param3 = ScriptController::luaCheckBool(state, 4);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setOrbit(param1, param2, param3);
@@ -2063,7 +2063,7 @@ int lua_ParticleEmitter_setSpriteAnimated(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setSpriteAnimated(param1);
@@ -2247,7 +2247,7 @@ int lua_ParticleEmitter_setSpriteLooped(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setSpriteLooped(param1);

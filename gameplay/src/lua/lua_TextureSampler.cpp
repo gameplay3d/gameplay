@@ -417,7 +417,7 @@ int lua_TextureSampler_static_create(lua_State* state)
                 const char* param1 = ScriptController::getInstance()->getString(1, false);
 
                 // Get parameter 2 off the stack.
-                bool param2 = (luaL_checkint(state, 2) != 0);
+                bool param2 = ScriptController::luaCheckBool(state, 2);
 
                 void* returnPtr = (void*)Texture::Sampler::create(param1, param2);
                 if (returnPtr)

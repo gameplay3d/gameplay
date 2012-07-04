@@ -156,6 +156,7 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:aa6d136ae96b6a86ef217fa965be47c29"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aa6d136ae96b6a86ef217fa965be47c29">render</a> (float elapsedTime)=0</td></tr>
 <tr class="memitem:a65345d6dcfe7b0562fd8a98ec79b0151"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a65345d6dcfe7b0562fd8a98ec79b0151"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">renderOnce</a> (T *instance, void(T::*method)(void *), void *cookie)</td></tr>
+<tr class="memitem:a682bf5d3640869d39103802cfe4fa484"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a682bf5d3640869d39103802cfe4fa484">renderOnce</a> (const char *function)</td></tr>
 <tr class="memitem:abff1327e3158e34922d8ecb8f01d9960"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#abff1327e3158e34922d8ecb8f01d9960">updateOnce</a> ()</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
@@ -1117,6 +1118,32 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a682bf5d3640869d39103802cfe4fa484"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Game::renderOnce </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>function</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Renders a single frame once and then swaps it to the display. This calls the given Lua function, which should take no parameters and return nothing (void).</p>
+<p>This is useful for rendering splash screens. </p>
+
+</div>
+</div>
 <a class="anchor" id="a363c5ac0d99fc937dead943351f574c1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1390,7 +1417,7 @@ template&lt;class T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 4 2012 12:24:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 4 2012 15:00:20 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

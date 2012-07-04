@@ -216,7 +216,7 @@ var searchData=
   ['sphere',['sphere',['../structgameplay_1_1_physics_collision_shape_1_1_definition.html#afefdc941f14078d3a98d7d55c21cd969',1,'gameplay::PhysicsCollisionShape::Definition::sphere()'],['../classgameplay_1_1_physics_collision_shape.html#a3bbeec6cc969bdbf6fef7c26705b7a9c',1,'gameplay::PhysicsCollisionShape::sphere()'],['../classgameplay_1_1_physics_collision_shape.html#a6264c07f4a720887e713ad4ad770bc1f',1,'gameplay::PhysicsCollisionShape::sphere(float radius, const Vector3 &amp;center=Vector3::zero(), bool absolute=false)']]],
   ['spritebatch',['SpriteBatch',['../classgameplay_1_1_sprite_batch.html',1,'gameplay']]],
   ['squad',['squad',['../classgameplay_1_1_quaternion.html#ab1d8058b377596c3c24d2d3a65272a89',1,'gameplay::Quaternion']]],
-  ['start',['start',['../classgameplay_1_1_particle_emitter.html#ae2c361f40c23e62670341e5455fd3856',1,'gameplay::ParticleEmitter']]],
+  ['start',['start',['../classgameplay_1_1_particle_emitter.html#ae2c361f40c23e62670341e5455fd3856',1,'gameplay::ParticleEmitter::start()'],['../classgameplay_1_1_screen_displayer.html#a182137e224548f3530b8ff0ae7b50992',1,'gameplay::ScreenDisplayer::start()']]],
   ['state',['State',['../classgameplay_1_1_audio_source.html#a53fd1787d6625fc16b765be2b3c2a7ae',1,'gameplay::AudioSource::State()'],['../classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4',1,'gameplay::Control::State()'],['../classgameplay_1_1_game.html#ab92abc94a6896257f0155f42533cda4c',1,'gameplay::Game::State()']]],
   ['state_5fall',['STATE_ALL',['../classgameplay_1_1_control.html#a8768cfcc0e44dc168ea8d4445d8a0078',1,'gameplay::Control']]],
   ['stateblock',['StateBlock',['../classgameplay_1_1_render_state_1_1_state_block.html',1,'gameplay::RenderState']]],

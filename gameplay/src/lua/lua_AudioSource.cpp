@@ -623,7 +623,7 @@ int lua_AudioSource_setLooped(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 AudioSource* instance = getInstance(state);
                 instance->setLooped(param1);

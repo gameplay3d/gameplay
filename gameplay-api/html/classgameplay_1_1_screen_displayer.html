@@ -70,7 +70,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::ScreenDisplayer Class Reference</div>  </div>
 </div><!--header-->
@@ -83,9 +84,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa6d4ffa6f52aa633fb06c6b7ce8d0485"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_screen_displayer.html#aa6d4ffa6f52aa633fb06c6b7ce8d0485">ScreenDisplayer</a> ()</td></tr>
+<tr class="memitem:a76dee39b9bc2c43641131f3c899406b5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_screen_displayer.html#a76dee39b9bc2c43641131f3c899406b5">~ScreenDisplayer</a> ()</td></tr>
 <tr class="memitem:a37ce9ab5b71f0256d59e86cbacf6728e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a37ce9ab5b71f0256d59e86cbacf6728e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_screen_displayer.html#a37ce9ab5b71f0256d59e86cbacf6728e">run</a> (T *instance, void(T::*method)(void *), void *cookie, unsigned long time)</td></tr>
-<tr class="memitem:a76dee39b9bc2c43641131f3c899406b5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_screen_displayer.html#a76dee39b9bc2c43641131f3c899406b5">~ScreenDisplayer</a> ()</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a182137e224548f3530b8ff0ae7b50992"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_screen_displayer.html#a182137e224548f3530b8ff0ae7b50992">start</a> (const char *function, unsigned long time)</td></tr>
+<tr class="memitem:ad8d81b3035b04d545286eba9534c9cad"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_screen_displayer.html#ad8d81b3035b04d545286eba9534c9cad">finish</a> ()</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Used for displaying screens (i.e. splash or level loading screens). </p>
@@ -93,9 +99,6 @@ Public Member Functions</h2></td></tr>
 <a class="anchor" id="aa6d4ffa6f52aa633fb06c6b7ce8d0485"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">gameplay::ScreenDisplayer::ScreenDisplayer </td>
@@ -104,11 +107,6 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p>Constructor. </p>
 
@@ -117,9 +115,6 @@ Public Member Functions</h2></td></tr>
 <a class="anchor" id="a76dee39b9bc2c43641131f3c899406b5"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">gameplay::ScreenDisplayer::~ScreenDisplayer </td>
@@ -128,17 +123,37 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p>Destructor. </p>
 
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="ad8d81b3035b04d545286eba9534c9cad"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void gameplay::ScreenDisplayer::finish </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Finishes running the current screen displayer.</p>
+<p>Note: this is intended for use from Lua scripts. </p>
+
+</div>
+</div>
 <a class="anchor" id="a37ce9ab5b71f0256d59e86cbacf6728e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -189,10 +204,53 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a182137e224548f3530b8ff0ae7b50992"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void gameplay::ScreenDisplayer::start </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>time</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Starts a new screen displayer running; draws a screen using the <a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">Game#renderOnce</a> mechanism for at least the given amount of time.</p>
+<p>Note: this is intended for use from Lua scripts.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">function</td><td>See <a class="el" href="classgameplay_1_1_game.html#a682bf5d3640869d39103802cfe4fa484">Game#renderOnce(const char*)</a>. </td></tr>
+    <tr><td class="paramname">time</td><td>The minimum amount of time to display the screen (in milliseconds). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 4 2012 12:24:43 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 4 2012 15:00:22 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

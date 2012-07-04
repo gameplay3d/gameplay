@@ -237,7 +237,7 @@ int lua_RenderStateStateBlock_setBlend(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 RenderState::StateBlock* instance = getInstance(state);
                 instance->setBlend(param1);
@@ -351,7 +351,7 @@ int lua_RenderStateStateBlock_setCullFace(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 RenderState::StateBlock* instance = getInstance(state);
                 instance->setCullFace(param1);
@@ -389,7 +389,7 @@ int lua_RenderStateStateBlock_setDepthTest(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 RenderState::StateBlock* instance = getInstance(state);
                 instance->setDepthTest(param1);
@@ -427,7 +427,7 @@ int lua_RenderStateStateBlock_setDepthWrite(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 RenderState::StateBlock* instance = getInstance(state);
                 instance->setDepthWrite(param1);

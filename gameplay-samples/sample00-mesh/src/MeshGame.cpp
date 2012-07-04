@@ -14,10 +14,10 @@ MeshGame::~MeshGame()
 
 void MeshGame::initialize()
 {
+    /*
     // Display the gameplay splash screen for at least 1 second.
     displayScreen(this, &MeshGame::drawSplash, NULL, 1000L);
 
-    /*
     // Load font
     _font = Font::create("res/arial40.gpb");
 
@@ -33,10 +33,10 @@ void MeshGame::initialize()
     _modelNode->getModel()->setMaterial("res/duck.material");
 
     // Find the light node
-    //Node* lightNode = _scene->findNode("directionalLight1");
+    Node* lightNode = _scene->findNode("directionalLight1");
 
     // Bind the light node's direction into duck's material.
-    //_modelNode->getModel()->getMaterial()->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
+    _modelNode->getModel()->getMaterial()->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
 
     // Update the aspect ratio for our scene's camera to match the current device resolution
     _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
@@ -147,6 +147,7 @@ void MeshGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, u
 }
 */
 
+/*
 void MeshGame::drawSplash(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
@@ -156,6 +157,7 @@ void MeshGame::drawSplash(void* param)
     batch->finish();
     SAFE_DELETE(batch);
 }
+*/
 
 Model* MeshGame::createGridModel(unsigned int lineCount)
 {

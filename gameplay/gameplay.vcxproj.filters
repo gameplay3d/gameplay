@@ -624,6 +624,9 @@
     <ClCompile Include="src\Gamepad.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\ScreenDisplayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
