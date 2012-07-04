@@ -119,6 +119,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9c098d36fefdd80c1697bd0217e9925f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#a9c098d36fefdd80c1697bd0217e9925f">bindValue</a> (ClassType *classInstance, ParameterType(ClassType::*valueMethod)() const)</td></tr>
 <tr class="memitem:a702904543343dcdd3936acaaada48c73"><td class="memTemplParams" colspan="2">template&lt;class ClassType , class ParameterType &gt; </td></tr>
 <tr class="memitem:a702904543343dcdd3936acaaada48c73"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#a702904543343dcdd3936acaaada48c73">bindValue</a> (ClassType *classInstance, ParameterType(ClassType::*valueMethod)() const, unsigned int(ClassType::*countMethod)() const)</td></tr>
+<tr class="memitem:a8804c984c4c03b1dccf73f1f15170f8e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#a8804c984c4c03b1dccf73f1f15170f8e">bindValue</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node, const char *binding)</td></tr>
 <tr class="memitem:a6f898406a1e9390d7a26dba04e3b71e0"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#a6f898406a1e9390d7a26dba04e3b71e0">getAnimationPropertyComponentCount</a> (int propertyId) const </td></tr>
 <tr class="memitem:a4128baa81318a61cd6791b0cff9a5ea3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#a4128baa81318a61cd6791b0cff9a5ea3">getAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value)</td></tr>
 <tr class="memitem:aaf03d11eb0ad260816f213fdccfac4b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#aaf03d11eb0ad260816f213fdccfac4b4">setAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value, float blendWeight=1.0f)</td></tr>
@@ -241,6 +242,66 @@ template&lt;class ClassType , class ParameterType &gt; </div>
     <tr><td class="paramname">classInstance</td><td>The instance of the class containing the member method to bind. </td></tr>
     <tr><td class="paramname">valueMethod</td><td>A pointer to the class method to bind (in the format '&amp;class::method'). </td></tr>
     <tr><td class="paramname">countMethod</td><td>A pointer to a method that returns the number of entries in the array returned by valueMethod. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a8804c984c4c03b1dccf73f1f15170f8e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::MaterialParameter::bindValue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>binding</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Binds the return value of the supported class method for the given node to this material parameter.</p>
+<p>Note: intended for use from Lua scripts.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>The node containing the the member method to bind. </td></tr>
+    <tr><td class="paramname">binding</td><td>The name of the class method to bind (in the format '&amp;class::method'). Note: this name must be one of the following supported methods:<ul>
+<li>"&amp;Node::getBackVector"</li>
+<li>"&amp;Node::getDownVector"</li>
+<li>"&amp;Node::getTranslation"</li>
+<li>"&amp;Node::getTranslationWorld"</li>
+<li>"&amp;Node::getTranslationView"</li>
+<li>"&amp;Node::getForwardVector"</li>
+<li>"&amp;Node::getForwardVectorWorld"</li>
+<li>"&amp;Node::getForwardVectorView"</li>
+<li>"&amp;Node::getLeftVector"</li>
+<li>"&amp;Node::getRightVector"</li>
+<li>"&amp;Node::getRightVectorWorld"</li>
+<li>"&amp;Node::getUpVector"</li>
+<li>"&amp;Node::getUpVectorWorld"</li>
+<li>"&amp;Node::getActiveCameraTranslationWorld"</li>
+<li>"&amp;Node::getActiveCameraTranslationView"</li>
+<li>"&amp;Node::getRotation"</li>
+<li>"&amp;Node::getScale"</li>
+<li>"&amp;Node::getScaleX"</li>
+<li>"&amp;Node::getScaleY"</li>
+<li>"&amp;Node::getScaleZ"</li>
+<li>"&amp;Node::getTranslationX"</li>
+<li>"&amp;Node::getTranslationY"</li>
+<li>"&amp;Node::getTranslationZ" </li>
+</ul>
+</td></tr>
   </table>
   </dd>
 </dl>
@@ -783,7 +844,7 @@ template&lt;class ClassType , class ParameterType &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 4 2012 15:00:20 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 4 2012 16:22:11 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

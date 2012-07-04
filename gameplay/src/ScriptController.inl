@@ -167,7 +167,7 @@ template<typename T>T* ScriptController::getObjectPointer(const char* type, cons
     return (T*)((ScriptController::LuaObject*)userdata)->instance;
 }
 
-template<typename T>void ScriptController::setPointer(const char* type, const char* name, T* v)
+template<typename T>void ScriptController::setObjectPointer(const char* type, const char* name, T* v)
 {
     ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
     object->instance = (void*)v;

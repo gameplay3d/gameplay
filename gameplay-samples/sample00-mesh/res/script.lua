@@ -22,7 +22,7 @@ function init()
     local lightNode = _scene:findNode("directionalLight1")
 
     -- Bind the light node's direction into duck's material.
-    --_modelNode:getModel():getMaterial():getParameter("u_lightDirection"):bindValue(lightNode, &Node::getForwardVectorView);
+    _modelNode:getModel():getMaterial():getParameter("u_lightDirection"):bindValue(lightNode, "&Node::getForwardVectorView");
 
     -- Update the aspect ratio for our scene's camera to match the current device resolution
     local game = Game.getInstance()

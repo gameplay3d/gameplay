@@ -14,6 +14,7 @@ void luaRegister_MaterialParameter()
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_MaterialParameter_addRef},
+        {"bindValue", lua_MaterialParameter_bindValue},
         {"createAnimation", lua_MaterialParameter_createAnimation},
         {"createAnimationFromBy", lua_MaterialParameter_createAnimationFromBy},
         {"createAnimationFromTo", lua_MaterialParameter_createAnimationFromTo},
@@ -112,6 +113,48 @@ int lua_MaterialParameter_addRef(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_MaterialParameter_bindValue(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(2, "Node", false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = ScriptController::getInstance()->getString(3, false);
+
+                MaterialParameter* instance = getInstance(state);
+                instance->bindValue(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
