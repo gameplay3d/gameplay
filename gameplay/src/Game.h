@@ -418,6 +418,14 @@ protected:
     void renderOnce(T* instance, void (T::*method)(void*), void* cookie);
 
     /**
+     * Renders a single frame once and then swaps it to the display.
+     * This calls the given Lua function, which should take no parameters and return nothing (void).
+     *
+     * This is useful for rendering splash screens.
+     */
+    inline void renderOnce(const char* function);
+
+    /**
      * Updates the game's internal systems (audio, animation, physics) once.
      * 
      * Note: This does not call the user-defined Game::update() function.

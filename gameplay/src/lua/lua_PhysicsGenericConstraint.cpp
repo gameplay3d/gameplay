@@ -436,7 +436,7 @@ int lua_PhysicsGenericConstraint_setEnabled(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 PhysicsGenericConstraint* instance = getInstance(state);
                 instance->setEnabled(param1);

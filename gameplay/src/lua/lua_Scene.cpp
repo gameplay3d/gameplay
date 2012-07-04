@@ -228,7 +228,7 @@ int lua_Scene_bindAudioListenerToCamera(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 Scene* instance = getInstance(state);
                 instance->bindAudioListenerToCamera(param1);
@@ -340,7 +340,7 @@ int lua_Scene_findNode(lua_State* state)
                 const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                bool param2 = (luaL_checkint(state, 3) != 0);
+                bool param2 = ScriptController::luaCheckBool(state, 3);
 
                 Scene* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findNode(param1, param2);
@@ -377,10 +377,10 @@ int lua_Scene_findNode(lua_State* state)
                 const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                bool param2 = (luaL_checkint(state, 3) != 0);
+                bool param2 = ScriptController::luaCheckBool(state, 3);
 
                 // Get parameter 3 off the stack.
-                bool param3 = (luaL_checkint(state, 4) != 0);
+                bool param3 = ScriptController::luaCheckBool(state, 4);
 
                 Scene* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findNode(param1, param2, param3);

@@ -326,7 +326,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 const char* param3 = ScriptController::getInstance()->getString(3, false);
 
                 // Get parameter 4 off the stack.
-                bool param4 = (luaL_checkint(state, 4) != 0);
+                bool param4 = ScriptController::luaCheckBool(state, 4);
 
                 void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4);
                 if (returnPtr)
@@ -359,7 +359,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 Material* param3 = ScriptController::getInstance()->getObjectPointer<Material>(3, "Material", false);
 
                 // Get parameter 4 off the stack.
-                bool param4 = (luaL_checkint(state, 4) != 0);
+                bool param4 = ScriptController::luaCheckBool(state, 4);
 
                 void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4);
                 if (returnPtr)
@@ -402,7 +402,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 const char* param3 = ScriptController::getInstance()->getString(3, false);
 
                 // Get parameter 4 off the stack.
-                bool param4 = (luaL_checkint(state, 4) != 0);
+                bool param4 = ScriptController::luaCheckBool(state, 4);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -439,7 +439,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 Material* param3 = ScriptController::getInstance()->getObjectPointer<Material>(3, "Material", false);
 
                 // Get parameter 4 off the stack.
-                bool param4 = (luaL_checkint(state, 4) != 0);
+                bool param4 = ScriptController::luaCheckBool(state, 4);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -486,7 +486,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 const char* param3 = ScriptController::getInstance()->getString(3, false);
 
                 // Get parameter 4 off the stack.
-                bool param4 = (luaL_checkint(state, 4) != 0);
+                bool param4 = ScriptController::luaCheckBool(state, 4);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -527,7 +527,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 Material* param3 = ScriptController::getInstance()->getObjectPointer<Material>(3, "Material", false);
 
                 // Get parameter 4 off the stack.
-                bool param4 = (luaL_checkint(state, 4) != 0);
+                bool param4 = ScriptController::luaCheckBool(state, 4);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);

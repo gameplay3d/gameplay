@@ -524,6 +524,16 @@ public:
      */
     void setGlobalHierarchy(std::map<std::string, std::vector<std::string> > hierarchy);
 
+    /**
+     * Checks that the parameter at the given stack position is a boolean and returns it.
+     * 
+     * @param state The Lua state.
+     * @param n The stack index.
+     * @return The boolean (if successful; otherwise it logs an error).
+     * @script{ignore}
+     */
+    static bool luaCheckBool(lua_State* state, int n);
+
 private:
 
     /**
@@ -615,15 +625,6 @@ private:
      * @param function The name of the function within the Lua script to call.
      */
     void registerCallback(ScriptCallback callback, std::string function);
-
-    /**
-     * Checks that the parameter at the given stack position is a boolean and returns it.
-     * 
-     * @param state The Lua state.
-     * @param n The stack index.
-     * @return The boolean (if successful; otherwise it logs an error).
-     */
-    static bool luaCheckBool(lua_State* state, int n);
 
     lua_State* _lua;
     unsigned int _returnCount;

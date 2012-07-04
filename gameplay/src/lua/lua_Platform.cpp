@@ -187,7 +187,7 @@ int lua_Platform_static_displayKeyboard(lua_State* state)
             if (lua_type(state, 1) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 1) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 1);
 
                 Platform::displayKeyboard(param1);
                 
@@ -530,7 +530,7 @@ int lua_Platform_static_setMultiTouch(lua_State* state)
             if (lua_type(state, 1) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 1) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 1);
 
                 Platform::setMultiTouch(param1);
                 
@@ -566,7 +566,7 @@ int lua_Platform_static_setVsync(lua_State* state)
             if (lua_type(state, 1) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 1) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 1);
 
                 Platform::setVsync(param1);
                 

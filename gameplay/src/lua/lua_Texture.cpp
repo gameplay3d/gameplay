@@ -606,7 +606,7 @@ int lua_Texture_static_create(lua_State* state)
                 const char* param1 = ScriptController::getInstance()->getString(1, false);
 
                 // Get parameter 2 off the stack.
-                bool param2 = (luaL_checkint(state, 2) != 0);
+                bool param2 = ScriptController::luaCheckBool(state, 2);
 
                 void* returnPtr = (void*)Texture::create(param1, param2);
                 if (returnPtr)
@@ -631,7 +631,7 @@ int lua_Texture_static_create(lua_State* state)
                 Image* param1 = ScriptController::getInstance()->getObjectPointer<Image>(1, "Image", false);
 
                 // Get parameter 2 off the stack.
-                bool param2 = (luaL_checkint(state, 2) != 0);
+                bool param2 = ScriptController::luaCheckBool(state, 2);
 
                 void* returnPtr = (void*)Texture::create(param1, param2);
                 if (returnPtr)
@@ -719,7 +719,7 @@ int lua_Texture_static_create(lua_State* state)
                 unsigned char* param4 = ScriptController::getInstance()->getUnsignedCharPointer(4);
 
                 // Get parameter 5 off the stack.
-                bool param5 = (luaL_checkint(state, 5) != 0);
+                bool param5 = ScriptController::luaCheckBool(state, 5);
 
                 void* returnPtr = (void*)Texture::create(param1, param2, param3, param4, param5);
                 if (returnPtr)

@@ -521,6 +521,12 @@ void ScriptController::render(long elapsedTime)
 
 void ScriptController::executeFunctionHelper(int resultCount, const char* func, const char* args, va_list& list)
 {
+    if (func == NULL)
+    {
+        GP_ERROR("Lua function name must be non-null.");
+        return;
+    }
+
     const char* sig = args;
 
     int argumentCount = 0;

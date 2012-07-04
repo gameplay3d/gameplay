@@ -2839,7 +2839,7 @@ int lua_Joystick_setAbsolute(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 Joystick* instance = getInstance(state);
                 instance->setAbsolute(param1);
@@ -2985,7 +2985,7 @@ int lua_Joystick_setAutoHeight(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 Joystick* instance = getInstance(state);
                 instance->setAutoHeight(param1);
@@ -3023,7 +3023,7 @@ int lua_Joystick_setAutoWidth(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 Joystick* instance = getInstance(state);
                 instance->setAutoWidth(param1);
@@ -3185,7 +3185,7 @@ int lua_Joystick_setConsumeInputEvents(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 Joystick* instance = getInstance(state);
                 instance->setConsumeInputEvents(param1);
@@ -4217,7 +4217,7 @@ int lua_Joystick_setTextRightToLeft(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 Joystick* instance = getInstance(state);
                 instance->setTextRightToLeft(param1);
@@ -4238,7 +4238,7 @@ int lua_Joystick_setTextRightToLeft(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);

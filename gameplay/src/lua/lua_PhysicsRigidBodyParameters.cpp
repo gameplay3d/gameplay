@@ -318,7 +318,7 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
                 float param5 = (float)luaL_checknumber(state, 5);
 
                 // Get parameter 6 off the stack.
-                bool param6 = (luaL_checkint(state, 6) != 0);
+                bool param6 = ScriptController::luaCheckBool(state, 6);
 
                 void* returnPtr = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3, param4, param5, param6);
                 if (returnPtr)
@@ -369,7 +369,7 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
                 float param5 = (float)luaL_checknumber(state, 5);
 
                 // Get parameter 6 off the stack.
-                bool param6 = (luaL_checkint(state, 6) != 0);
+                bool param6 = ScriptController::luaCheckBool(state, 6);
 
                 // Get parameter 7 off the stack.
                 Vector3* param7 = ScriptController::getInstance()->getObjectPointer<Vector3>(7, "Vector3", true);
@@ -516,7 +516,7 @@ int lua_PhysicsRigidBodyParameters_kinematic(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        bool param2 = (luaL_checkint(state, 2) != 0);
+        bool param2 = ScriptController::luaCheckBool(state, 2);
 
         instance->kinematic = param2;
         return 0;

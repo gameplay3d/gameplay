@@ -326,7 +326,7 @@ int lua_PhysicsCollisionShape_static_box(lua_State* state)
                 Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                bool param3 = (luaL_checkint(state, 3) != 0);
+                bool param3 = ScriptController::luaCheckBool(state, 3);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box(*param1, *param2, param3));
                 if (returnPtr)
@@ -477,7 +477,7 @@ int lua_PhysicsCollisionShape_static_capsule(lua_State* state)
                 Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                bool param4 = (luaL_checkint(state, 4) != 0);
+                bool param4 = ScriptController::luaCheckBool(state, 4);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::capsule(param1, param2, *param3, param4));
                 if (returnPtr)
@@ -712,7 +712,7 @@ int lua_PhysicsCollisionShape_static_sphere(lua_State* state)
                 Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                bool param3 = (luaL_checkint(state, 3) != 0);
+                bool param3 = ScriptController::luaCheckBool(state, 3);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::sphere(param1, *param2, param3));
                 if (returnPtr)

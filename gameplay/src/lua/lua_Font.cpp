@@ -319,7 +319,7 @@ int lua_Font_createText(lua_State* state)
                 Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
                 // Get parameter 6 off the stack.
-                bool param6 = (luaL_checkint(state, 7) != 0);
+                bool param6 = ScriptController::luaCheckBool(state, 7);
 
                 Font* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createText(param1, *param2, *param3, param4, param5, param6);
@@ -372,10 +372,10 @@ int lua_Font_createText(lua_State* state)
                 Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
                 // Get parameter 6 off the stack.
-                bool param6 = (luaL_checkint(state, 7) != 0);
+                bool param6 = ScriptController::luaCheckBool(state, 7);
 
                 // Get parameter 7 off the stack.
-                bool param7 = (luaL_checkint(state, 8) != 0);
+                bool param7 = ScriptController::luaCheckBool(state, 8);
 
                 Font* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createText(param1, *param2, *param3, param4, param5, param6, param7);
@@ -429,10 +429,10 @@ int lua_Font_createText(lua_State* state)
                 Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
                 // Get parameter 6 off the stack.
-                bool param6 = (luaL_checkint(state, 7) != 0);
+                bool param6 = ScriptController::luaCheckBool(state, 7);
 
                 // Get parameter 7 off the stack.
-                bool param7 = (luaL_checkint(state, 8) != 0);
+                bool param7 = ScriptController::luaCheckBool(state, 8);
 
                 // Get parameter 8 off the stack.
                 Rectangle* param8 = ScriptController::getInstance()->getObjectPointer<Rectangle>(9, "Rectangle", false);
@@ -671,7 +671,7 @@ int lua_Font_drawText(lua_State* state)
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
 
                 // Get parameter 6 off the stack.
-                bool param6 = (luaL_checkint(state, 7) != 0);
+                bool param6 = ScriptController::luaCheckBool(state, 7);
 
                 Font* instance = getInstance(state);
                 instance->drawText(param1, param2, param3, *param4, param5, param6);
@@ -702,7 +702,7 @@ int lua_Font_drawText(lua_State* state)
                 Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
                 // Get parameter 6 off the stack.
-                bool param6 = (luaL_checkint(state, 7) != 0);
+                bool param6 = ScriptController::luaCheckBool(state, 7);
 
                 Font* instance = getInstance(state);
                 instance->drawText(param1, *param2, *param3, param4, param5, param6);
@@ -743,10 +743,10 @@ int lua_Font_drawText(lua_State* state)
                 Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
                 // Get parameter 6 off the stack.
-                bool param6 = (luaL_checkint(state, 7) != 0);
+                bool param6 = ScriptController::luaCheckBool(state, 7);
 
                 // Get parameter 7 off the stack.
-                bool param7 = (luaL_checkint(state, 8) != 0);
+                bool param7 = ScriptController::luaCheckBool(state, 8);
 
                 Font* instance = getInstance(state);
                 instance->drawText(param1, *param2, *param3, param4, param5, param6, param7);
@@ -788,10 +788,10 @@ int lua_Font_drawText(lua_State* state)
                 Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
                 // Get parameter 6 off the stack.
-                bool param6 = (luaL_checkint(state, 7) != 0);
+                bool param6 = ScriptController::luaCheckBool(state, 7);
 
                 // Get parameter 7 off the stack.
-                bool param7 = (luaL_checkint(state, 8) != 0);
+                bool param7 = ScriptController::luaCheckBool(state, 8);
 
                 // Get parameter 8 off the stack.
                 Rectangle* param8 = ScriptController::getInstance()->getObjectPointer<Rectangle>(9, "Rectangle", false);
@@ -972,7 +972,7 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
 
                 // Get parameter 7 off the stack.
-                bool param7 = (luaL_checkint(state, 8) != 0);
+                bool param7 = ScriptController::luaCheckBool(state, 8);
 
                 Font* instance = getInstance(state);
                 int result = instance->getIndexAtLocation(param1, *param2, param3, *param4, param5, param6, param7);
@@ -1020,10 +1020,10 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
 
                 // Get parameter 7 off the stack.
-                bool param7 = (luaL_checkint(state, 8) != 0);
+                bool param7 = ScriptController::luaCheckBool(state, 8);
 
                 // Get parameter 8 off the stack.
-                bool param8 = (luaL_checkint(state, 9) != 0);
+                bool param8 = ScriptController::luaCheckBool(state, 9);
 
                 Font* instance = getInstance(state);
                 int result = instance->getIndexAtLocation(param1, *param2, param3, *param4, param5, param6, param7, param8);
@@ -1164,7 +1164,7 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
 
                 // Get parameter 7 off the stack.
-                bool param7 = (luaL_checkint(state, 8) != 0);
+                bool param7 = ScriptController::luaCheckBool(state, 8);
 
                 Font* instance = getInstance(state);
                 instance->getLocationAtIndex(param1, *param2, param3, param4, param5, param6, param7);
@@ -1209,10 +1209,10 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
 
                 // Get parameter 7 off the stack.
-                bool param7 = (luaL_checkint(state, 8) != 0);
+                bool param7 = ScriptController::luaCheckBool(state, 8);
 
                 // Get parameter 8 off the stack.
-                bool param8 = (luaL_checkint(state, 9) != 0);
+                bool param8 = ScriptController::luaCheckBool(state, 9);
 
                 Font* instance = getInstance(state);
                 instance->getLocationAtIndex(param1, *param2, param3, param4, param5, param6, param7, param8);
@@ -1481,7 +1481,7 @@ int lua_Font_measureText(lua_State* state)
                 Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
                 // Get parameter 6 off the stack.
-                bool param6 = (luaL_checkint(state, 7) != 0);
+                bool param6 = ScriptController::luaCheckBool(state, 7);
 
                 Font* instance = getInstance(state);
                 instance->measureText(param1, *param2, param3, param4, param5, param6);
@@ -1522,10 +1522,10 @@ int lua_Font_measureText(lua_State* state)
                 Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
                 // Get parameter 6 off the stack.
-                bool param6 = (luaL_checkint(state, 7) != 0);
+                bool param6 = ScriptController::luaCheckBool(state, 7);
 
                 // Get parameter 7 off the stack.
-                bool param7 = (luaL_checkint(state, 8) != 0);
+                bool param7 = ScriptController::luaCheckBool(state, 8);
 
                 Font* instance = getInstance(state);
                 instance->measureText(param1, *param2, param3, param4, param5, param6, param7);

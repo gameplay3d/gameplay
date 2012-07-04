@@ -815,7 +815,7 @@ int lua_Node_findNode(lua_State* state)
                 const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                bool param2 = (luaL_checkint(state, 3) != 0);
+                bool param2 = ScriptController::luaCheckBool(state, 3);
 
                 Node* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findNode(param1, param2);
@@ -852,10 +852,10 @@ int lua_Node_findNode(lua_State* state)
                 const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                bool param2 = (luaL_checkint(state, 3) != 0);
+                bool param2 = ScriptController::luaCheckBool(state, 3);
 
                 // Get parameter 3 off the stack.
-                bool param3 = (luaL_checkint(state, 4) != 0);
+                bool param3 = ScriptController::luaCheckBool(state, 4);
 
                 Node* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findNode(param1, param2, param3);
@@ -4673,7 +4673,7 @@ int lua_Node_setDynamic(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 Node* instance = getInstance(state);
                 instance->setDynamic(param1);
@@ -5411,7 +5411,7 @@ int lua_Node_setTransparent(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 Node* instance = getInstance(state);
                 instance->setTransparent(param1);
@@ -5449,7 +5449,7 @@ int lua_Node_setVisible(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = (luaL_checkint(state, 2) != 0);
+                bool param1 = ScriptController::luaCheckBool(state, 2);
 
                 Node* instance = getInstance(state);
                 instance->setVisible(param1);

@@ -512,7 +512,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 float param10 = (float)luaL_checknumber(state, 11);
 
                 // Get parameter 11 off the stack.
-                bool param11 = (luaL_checkint(state, 12) != 0);
+                bool param11 = ScriptController::luaCheckBool(state, 12);
 
                 SpriteBatch* instance = getInstance(state);
                 instance->draw(*param1, param2, param3, param4, param5, param6, param7, *param8, *param9, param10, param11);
@@ -563,7 +563,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 Vector4* param10 = ScriptController::getInstance()->getObjectPointer<Vector4>(11, "Vector4", true);
 
                 // Get parameter 11 off the stack.
-                bool param11 = (luaL_checkint(state, 12) != 0);
+                bool param11 = ScriptController::luaCheckBool(state, 12);
 
                 SpriteBatch* instance = getInstance(state);
                 instance->draw(param1, param2, param3, param4, param5, param6, param7, param8, param9, *param10, param11);
@@ -750,7 +750,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 float param12 = (float)luaL_checknumber(state, 13);
 
                 // Get parameter 13 off the stack.
-                bool param13 = (luaL_checkint(state, 14) != 0);
+                bool param13 = ScriptController::luaCheckBool(state, 14);
 
                 SpriteBatch* instance = getInstance(state);
                 instance->draw(param1, param2, param3, param4, param5, param6, param7, param8, param9, *param10, *param11, param12, param13);
